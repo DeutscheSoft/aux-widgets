@@ -1,0 +1,23 @@
+{
+  "name": "toolkit",
+  "version": "2.0.0",
+  "description": "toolkit Audio Widget Library",
+  "main": "src/index.js",
+  "directories": {
+    "doc": "doc",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.deutschesoft.eu:toolkit"
+  },
+  "author": "",
+  "private": true,
+  "devDependencies": {
+    "http-server": "^0.11.1",
+    "mocha": "^6.1.4"
+  }
+}
