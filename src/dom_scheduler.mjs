@@ -16,18 +16,6 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w) {
-function Scheduler() {
-    this.Q_next = this.Q = [];
-    this.Q_tmp = [];
-    this.tmp = [];
-    this.debug = 0;
-    this.after_frame_cbs = [];
-    this.frame_count = 0;
-    this.current_priority = -1;
-    this.current_cycle = 0;
-};
 function low_add(Q, o, prio) {
     prio = prio << 1;
     var q = Q[prio];
@@ -62,6 +50,16 @@ function low_has(Q, o, prio) {
     }
     return false;
 }
+export function Scheduler() {
+    this.Q_next = this.Q = [];
+    this.Q_tmp = [];
+    this.tmp = [];
+    this.debug = 0;
+    this.after_frame_cbs = [];
+    this.frame_count = 0;
+    this.current_priority = -1;
+    this.current_cycle = 0;
+};
 Scheduler.prototype = {
     run : function() {
         var Q = this.Q;
@@ -173,7 +171,7 @@ Scheduler.prototype = {
         }
     },
 };
-function DOMScheduler() {
+export function DOMScheduler() {
     Scheduler.call(this);
     this.will_render = false;
     this.running = false;
@@ -213,6 +211,3 @@ DOMScheduler.prototype.after_frame = function(fun) {
     this.will_render = true;
     window.requestAnimationFrame(this.bound_run);
 };
-w.Scheduler = Scheduler;
-w.DOMScheduler = DOMScheduler;
-})(this);
