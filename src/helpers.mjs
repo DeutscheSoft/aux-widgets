@@ -25,28 +25,8 @@
  * There are also a couple of utility functions which provide
  * compatibility for older browsers.
  */
-var TK;
-
 (function(w) {
 
-var has_class, add_class, remove_class, toggle_class;
-// IE9
-function get_class_name(e) {
-  if (HTMLElement.prototype.isPrototypeOf(e)) {
-      return e.className;
-  } else {
-      return e.getAttribute("class") || "";
-  }
-}
-function set_class_name(e, s) {
-  if (HTMLElement.prototype.isPrototypeOf(e)) {
-      e.className = s;
-  } else {
-      e.setAttribute("class", s);
-  }
-}
-
-if ('classList' in document.createElement("_") && 'classList' in make_svg('text')) {
   /**
    * Returns true if the node has the given class.
    * @param {HTMLElement|SVGElement} node - The DOM node.
@@ -54,98 +34,52 @@ if ('classList' in document.createElement("_") && 'classList' in make_svg('text'
    * @returns {boolean}
    * @function TK.has_class
    */
-  has_class = function (e, cls) { return e.classList.contains(cls); }
-  /**
-   * Adds a CSS class to a DOM node.
-   *
-   * @param {HTMLElement|SVGElement} node - The DOM node.
-   * @param {...*} names - The class names.
-   * @function TK.add_class
-   */
-  add_class = function (e) {
-      var i;
-      e = e.classList;
-      for (i = 1; i < arguments.length; i++) {
-          var a = arguments[i].split(" ");
-          for (var j = 0; j < a.length; j++)
-              e.add(a[j]);
-      }
-  }
-  /**
-   * Removes a CSS class from a DOM node.
-   * @param {HTMLElement|SVGElement} node - The DOM node.
-   * @param {...*} names - The class names.
-   * @function TK.remove_class
-   */
-  remove_class = function (e) {
-      var i;
-      e = e.classList;
-      for (i = 1; i < arguments.length; i++)
-          e.remove(arguments[i]);
-  }
-  /**
-   * Toggles a CSS class from a DOM node.
-   * @param {HTMLElement|SVGElement} node - The DOM node.
-   * @param {string} name - The class name.
-   * @function TK.toggle_class
-   */
-  toggle_class = function (e, cls, cond) {
-      /* The second argument to toggle is not implemented in IE,
-       * so we never use it */
-      if (arguments.length >= 3) {
-          if (cond) {
-              add_class(e, cls);
-          } else {
-              remove_class(e, cls);
-          }
-      } else e.classList.toggle(cls);
-  };
-} else {
-  has_class = function (e, cls) {
-    return get_class_name(e).split(" ").indexOf(cls) !== -1;
-  };
-  add_class = function (e) {
-    var i, cls;
-    var a = get_class_name(e).split(" ");
-
+function has_class(e, cls) { return e.classList.contains(cls); }
+/**
+ * Adds a CSS class to a DOM node.
+ *
+ * @param {HTMLElement|SVGElement} node - The DOM node.
+ * @param {...*} names - The class names.
+ * @function TK.add_class
+ */
+function add_class(e) {
+    var i;
+    e = e.classList;
     for (i = 1; i < arguments.length; i++) {
-        cls = arguments[i];
-        if (a.indexOf(cls) === -1) {
-          a.push(cls);
-        }
+        var a = arguments[i].split(" ");
+        for (var j = 0; j < a.length; j++)
+            e.add(a[j]);
     }
-    set_class_name(e, a.join(" "));
-  };
-  remove_class = function(e) {
-    var j, cls, i;
-    var a = get_class_name(e).split(" ");
-
-    for (j = 1; j < arguments.length; j++) {
-        cls = arguments[j];
-        i = a.indexOf(cls);
-
-        if (i !== -1) {
-          do {
-            a.splice(i, 1);
-            i = a.indexOf(cls);
-          } while (i !== -1);
-
-        }
-    }
-
-    set_class_name(e, a.join(" "));
-  };
-  toggle_class = function(e, cls, cond) {
-      if (arguments.length < 3) {
-          cond = !has_class(e, cls);
-      }
-      if (cond) {
-          add_class(e, cls);
-      } else {
-          remove_class(e, cls);
-      }
-  };
 }
+/**
+ * Removes a CSS class from a DOM node.
+ * @param {HTMLElement|SVGElement} node - The DOM node.
+ * @param {...*} names - The class names.
+ * @function TK.remove_class
+ */
+function remove_class(e) {
+    var i;
+    e = e.classList;
+    for (i = 1; i < arguments.length; i++)
+        e.remove(arguments[i]);
+}
+/**
+ * Toggles a CSS class from a DOM node.
+ * @param {HTMLElement|SVGElement} node - The DOM node.
+ * @param {string} name - The class name.
+ * @function TK.toggle_class
+ */
+function toggle_class(e, cls, cond) {
+    /* The second argument to toggle is not implemented in IE,
+     * so we never use it */
+    if (arguments.length >= 3) {
+        if (cond) {
+            add_class(e, cls);
+        } else {
+            remove_class(e, cls);
+        }
+    } else e.classList.toggle(cls);
+};
 
 var data_store;
 var data;
@@ -1306,51 +1240,4 @@ TK = w.toolkit = w.TK = {
     },
     print_widget_tree: print_widget_tree,
 };
-
-// POLYFILLS
-
-if (Array.isArray === void(0)) {
-    Array.isArray = function(obj) {
-        return Object.prototype.toString.call(obj) === '[object Array]';
-    }
-};
-
-if (Object.assign === void(0)) {
-  Object.defineProperty(Object, 'assign', {
-    enumerable: false,
-    configurable: true,
-    writable: true,
-    value: function(target) {
-      'use strict';
-      if (target === void(0) || target === null) {
-        throw new TypeError('Cannot convert first argument to object');
-      }
-
-      var to = Object(target);
-      for (var i = 1; i < arguments.length; i++) {
-        var nextSource = arguments[i];
-        if (nextSource === void(0) || nextSource === null) {
-          continue;
-        }
-        nextSource = Object(nextSource);
-
-        var keysArray = Object.keys(Object(nextSource));
-        for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
-          var nextKey = keysArray[nextIndex];
-          var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
-          if (desc !== void(0) && desc.enumerable) {
-            to[nextKey] = nextSource[nextKey];
-          }
-        }
-      }
-      return to;
-    }
-  });
-}
-
-if (!('remove' in Element.prototype)) {
-    Element.prototype.remove = function() {
-        this.parentNode.removeChild(this);
-    };
-}
 })(this);
