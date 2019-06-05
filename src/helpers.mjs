@@ -16,25 +16,18 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
 
-/** @namespace TK
- *
- * @description This is the namespace of the Toolkit library.
- * It contains all Toolkit classes and constant.
- * There are also a couple of utility functions which provide
- * compatibility for older browsers.
+import { DOMScheduler } from './dom_scheduler.mjs';
+
+/**
+ * Returns true if the node has the given class.
+ * @param {HTMLElement|SVGElement} node - The DOM node.
+ * @param {string} name - The class name.
+ * @returns {boolean}
+ * @function TK.has_class
  */
-(function(w) {
-
-  /**
-   * Returns true if the node has the given class.
-   * @param {HTMLElement|SVGElement} node - The DOM node.
-   * @param {string} name - The class name.
-   * @returns {boolean}
-   * @function TK.has_class
-   */
 function has_class(e, cls) { return e.classList.contains(cls); }
+
 /**
  * Adds a CSS class to a DOM node.
  *
@@ -1101,143 +1094,149 @@ function remove_passive_event_listener(e, type, cb) {
   remove_event_listener(e, type, cb, passive_options);
 }
 
-TK = w.toolkit = w.TK = {
-    // ELEMENTS
-    S: new w.DOMScheduler(),
-    is_dom_node: is_dom_node,
-    get_id: get_id,
-    get_class: get_class,
-    get_tag: get_tag,
-    element : element,
-    empty: empty,
-    set_text : set_text,
-    set_content : set_content,
-    has_class : has_class,
-    remove_class : remove_class,
-    add_class : add_class,
-    toggle_class : toggle_class,
-    is_class_name : is_class_name,
+const S = new DOMScheduler();
 
-    insert_after: insert_after,
-    insert_before: insert_before,
+const browser = function() {
+    /**
+     * Returns the name of the browser
+     * @returns {string}
+     * @function TK.browser
+     */
+    var ua = navigator.userAgent, tem, M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+    if (/trident/i.test(M[1])) {
+        tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
+        return { name : 'IE', version : (tem[1]||'') };
+    }
+    if (M[1] === 'Chrome') {
+        tem = ua.match(/\bOPR\/(\d+)/)
+        if (tem!=null)
+            return { name : 'Opera', version : tem[1] };
+    }
+    M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+    if ((tem = ua.match(/version\/(\d+)/i)) !== null) { M.splice(1, 1, tem[1]); }
+    return { name : M[0], version : M[1] };
+}();
+
+const supports_transform = 'transform' in document.createElement("div").style;
+
+function assign_warn(a) {
+    for (var i = 1; i < arguments.length; i++) {
+        var b = arguments[i];
+        for (var key in b) if (b.hasOwnProperty(key)) {
+            if (a[key] === b[key]) {
+                TK.warn("overwriting identical", key, "(", a[key], ")");
+            } else if (a[key]) {
+                TK.warn("overwriting", key, "(", a[key], "vs", b[key], ")");
+            }
+            a[key] = b[key];
+        }
+    }
+
+    return a;
+}
+
+export {
+    // ELEMENTS
+    S,
+    is_dom_node,
+    get_id,
+    get_class,
+    get_tag,
+    element,
+    empty,
+    set_text,
+    set_content,
+    has_class,
+    remove_class,
+    add_class,
+    toggle_class,
+    is_class_name,
+
+    insert_after,
+    insert_before,
 
     // WINDOW
 
-    width: width,
-    height: height,
+    width,
+    height,
 
     // DIMENSIONS
 
-    scroll_top: scroll_top,
-    scroll_left: scroll_left,
-    scroll_all_top: scroll_all_top,
-    scroll_all_left: scroll_all_left,
+    scroll_top,
+    scroll_left,
+    scroll_all_top,
+    scroll_all_left,
 
-    position_top: position_top,
-    position_left: position_left,
+    position_top,
+    position_left,
 
-    fixed: fixed,
+    fixed,
 
-    outer_width : outer_width,
+    outer_width,
 
-    outer_height : outer_height,
+    outer_height,
 
-    inner_width: inner_width,
+    inner_width,
 
-    inner_height: inner_height,
+    inner_height,
 
-    box_sizing: box_sizing,
+    box_sizing,
 
-    css_space: css_space,
+    css_space,
 
     // CSS AND CLASSES
 
-    set_styles : set_styles,
-    set_style: set_style,
-    get_style: get_style,
-    get_duration: get_duration,
+    set_styles,
+    set_style,
+    get_style,
+    get_duration,
 
     // STRINGS
 
-    unique_id: unique_id,
+    unique_id,
 
-    FORMAT : FORMAT,
+    FORMAT,
 
-    sprintf : sprintf,
-    html : html,
+    sprintf,
+    html,
 
-    escapeHTML : escapeHTML,
+    escapeHTML,
 
     // OS AND BROWSER CAPABILITIES
 
-    is_touch: is_touch,
-    os: os,
-
-    browser: function () {
-        /**
-         * Returns the name of the browser
-         * @returns {string}
-         * @function TK.browser
-         */
-        var ua = navigator.userAgent, tem, M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
-        if (/trident/i.test(M[1])) {
-            tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
-            return { name : 'IE', version : (tem[1]||'') };
-        }
-        if (M[1] === 'Chrome') {
-            tem = ua.match(/\bOPR\/(\d+)/)
-            if (tem!=null)
-                return { name : 'Opera', version : tem[1] };
-        }
-        M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
-        if ((tem = ua.match(/version\/(\d+)/i)) !== null) { M.splice(1, 1, tem[1]); }
-        return { name : M[0], version : M[1] };
-    }(),
+    is_touch,
+    os,
+    browser,
     
-    supports_transform: function () { return 'transform' in document.createElement("div").style; }(),
+    supports_transform,
 
     // SVG
 
-    make_svg: make_svg,
-    seat_all_svg: seat_all_svg,
-    seat_svg: seat_svg,
+    make_svg,
+    seat_all_svg,
+    seat_svg,
 
 
     // EVENTS
 
-    delayed_callback : delayed_callback,
-    add_event_listener: add_active_event_listener,
-    remove_event_listener: remove_active_event_listener,
-    add_passive_event_listener: add_passive_event_listener,
-    remove_passive_event_listener: remove_passive_event_listener,
+    delayed_callback,
+    add_active_event_listener,
+    remove_active_event_listener,
+    add_passive_event_listener,
+    remove_passive_event_listener,
 
     // OTHER
 
-    data: data,
-    store: store,
-    retrieve: retrieve,
-    merge: merge,
-    object_and: object_and,
-    object_sub: object_sub,
-    to_array: to_array,
-    warn: warn,
-    error: error,
-    log: log,
-    assign_warn: function(a) {
-        for (var i = 1; i < arguments.length; i++) {
-            var b = arguments[i];
-            for (var key in b) if (b.hasOwnProperty(key)) {
-                if (a[key] === b[key]) {
-                    TK.warn("overwriting identical", key, "(", a[key], ")");
-                } else if (a[key]) {
-                    TK.warn("overwriting", key, "(", a[key], "vs", b[key], ")");
-                }
-                a[key] = b[key];
-            }
-        }
-
-        return a;
-    },
-    print_widget_tree: print_widget_tree,
+    data,
+    store,
+    retrieve,
+    merge,
+    object_and,
+    object_sub,
+    to_array,
+    warn,
+    error,
+    log,
+    assign_warn,
+    print_widget_tree,
 };
-})(this);
