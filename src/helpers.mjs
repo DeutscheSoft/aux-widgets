@@ -1219,6 +1219,8 @@ export {
 
     // EVENTS
 
+    add_event_listener,
+    remove_event_listener,
     delayed_callback,
     add_active_event_listener,
     remove_active_event_listener,

@@ -16,9 +16,9 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-
-(function(w, TK){
+import { S, toggle_class, set_styles, add_class, remove_class, warn, has_class, set_style, get_style, unique_id } from './../helpers.mjs';
+import { define_class } from './../widget_helpers.mjs';
+import { Base } from './../implements/base.mjs';
 
 function Invalid(options) {
     for (var key in options) this[key] = true;
@@ -53,7 +53,7 @@ function redraw(fun) {
     /**
      * Is fired when a redraw is executed.
      * 
-     * @event TK.Widget#redraw
+     * @event Widget#redraw
      */
     this.fire_event("redraw");
     fun.call(this);
@@ -67,7 +67,7 @@ function dblclick (e) {
      * Is fired after a double click appeared. Set `dblclick` to 0 to
      * disable click event handling.
      * 
-     * @event TK.Widget#doubleclick
+     * @event Widget#doubleclick
      * 
      * @param {string} event - The browsers `MouseEvent`.
      * 
@@ -85,15 +85,15 @@ function dblclick (e) {
     }
 }
 
-TK.Widget = TK.class({
+export const Widget = define_class({
     /**
-     * TK.Widget is the base class for all widgets drawing DOM elements. It
+     * Widget is the base class for all widgets drawing DOM elements. It
      * provides basic functionality like delegating events, setting options and
      * firing some events.Widget implements AudioMath, Options and Events.
      *
-     * @class TK.Widget
+     * @class Widget
      * 
-     * @extends TK.Base
+     * @extends Base
      * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
@@ -108,47 +108,47 @@ TK.Widget = TK.class({
      * @property {Boolean} [options.dblclick=400] - Set a time in milliseconds for triggering double click event. If 0, no double click events are fired.
      */
     /**
-     * The <code>set</code> event is emitted when an option was set using the {@link TK.Widget#set}
+     * The <code>set</code> event is emitted when an option was set using the {@link Widget#set}
      * method. The arguments are the option name and its new value.
      *
      * Note that this happens both for user interaction and programmatical option changes.
      *
-     * @event TK.Widget#set
+     * @event Widget#set
      */
     /**
      * The <code>redraw</code> event is emitted when a widget is redrawn. This can be used
      * to do additional DOM modifications to a Widget.
      *
-     * @event TK.Widget#redraw
+     * @event Widget#redraw
      */
     /**
      * The <code>resize</code> event is emitted whenever a widget is being resized. This event can
      * be used to e.g. measure its new size. Note that some widgets do internal adjustments after
-     * the <code>resize</code> event. If that is relevant, the {@link TK.Widget#resized} event can
+     * the <code>resize</code> event. If that is relevant, the {@link Widget#resized} event can
      * be used, instead.
      *
-     * @event TK.Widget#resize
+     * @event Widget#resize
      */
     /**
      * The <code>resized</code> event is emitted after each rendering frame, which was triggered by
      * a resize event.
      *
-     * @event TK.Widget#resized
+     * @event Widget#resized
      */
     /**
      * The <code>hide</code> event is emitted when a widget is hidden and is not rendered anymore.
      * This happens both with browser visibility changes and also internally when using layout widgets
-     * such as {@link TK.Pager}.
+     * such as {@link Pager}.
      *
-     * @event TK.Widget#hide
+     * @event Widget#hide
      */
     /**
      * The <code>show</code> event is emitted when a widget is shown and is being rendered. This is the
-     * counterpart to {@link TK.Widget#hide}.
+     * counterpart to {@link Widget#hide}.
      *
-     * @event TK.Widget#show
+     * @event Widget#show
      */
-    Extends : TK.Base,
+    Extends : Base,
     _class: "Widget",
     _options: {
         // A CSS class to add to the main element
@@ -197,10 +197,10 @@ TK.Widget = TK.class({
     initialize: function (options) {
         // Main actions every widget needs to take
         if (!options) options = {};
-        /** @property {HTMLElement} TK.Widget#element - The main element. */
+        /** @property {HTMLElement} Widget#element - The main element. */
         if (options.element)
             this.element = options.element;
-        TK.Base.prototype.initialize.call(this, options);
+        Base.prototype.initialize.call(this, options);
         this.__classified = null;
         this.__stylized = null;
         this.__delegated = null;
@@ -227,7 +227,7 @@ TK.Widget = TK.class({
         for (var key in this.options) {
             if (!this._options[key]) {
                 if (key.charCodeAt(0) !== 95)
-                    TK.warn("%O %s: unknown option %s", this, this._class, key);
+                    warn("%O %s: unknown option %s", this, this._class, key);
             } else this.invalid[key] = true;
         }
     },
@@ -241,7 +241,7 @@ TK.Widget = TK.class({
         }
 
         if (warn.length) {
-            TK.warn("found", warn.length, "invalid in", this, ":", warn);
+            warn("found", warn.length, "invalid in", this, ":", warn);
         }
     },
 
@@ -276,14 +276,14 @@ TK.Widget = TK.class({
     },
 
     schedule_resize: function() {
-        TK.S.add(this.__resize, 0);
+        S.add(this.__resize, 0);
     },
 
     resize: function() {
         /**
          * Is fired when a resize is requested.
          * 
-         * @event TK.Widget#resize
+         * @event Widget#resize
          */
         this.fire_event("resize");
 
@@ -293,24 +293,24 @@ TK.Widget = TK.class({
         /**
          * Is fired after the resize was executed and the DOM is updated.
          * 
-         * @event TK.Widget#resized
+         * @event Widget#resized
          */
         if (this.has_event_listeners("resized")) {
-            TK.S.after_frame(this.fire_event.bind(this, "resized"));
+            S.after_frame(this.fire_event.bind(this, "resized"));
         }
     },
 
     trigger_draw: function() {
         if (!this.needs_redraw) {
             this.needs_redraw = true;
-            if (this._drawn) TK.S.add(this._redraw, 1);
+            if (this._drawn) S.add(this._redraw, 1);
         }
     },
 
     trigger_draw_next : function() {
         if (!this.needs_redraw) {
             this.needs_redraw = true;
-            if (this._drawn) TK.S.add_next(this._redraw, 1);
+            if (this._drawn) S.add_next(this._redraw, 1);
         }
     },
 
@@ -319,7 +319,7 @@ TK.Widget = TK.class({
         /**
          * Is fired when a widget is initialized.
          * 
-         * @event TK.Widget#initialized
+         * @event Widget#initialized
          */
         this.fire_event("initialized");
         this.trigger_draw();
@@ -352,17 +352,17 @@ TK.Widget = TK.class({
         if (E) {
             if (I.active) {
                 I.active = false;
-                TK.toggle_class(E, "toolkit-inactive", !O.active);
+                toggle_class(E, "toolkit-inactive", !O.active);
             }
 
             if (I.disabled) {
                 I.disabled = false;
-                TK.toggle_class(E, "toolkit-disabled", O.disabled);
+                toggle_class(E, "toolkit-disabled", O.disabled);
             }
 
             if (I.styles) {
                 I.styles = false;
-                if (O.styles) TK.set_styles(E, O.styles);
+                if (O.styles) set_styles(E, O.styles);
             }
         }
 
@@ -372,7 +372,7 @@ TK.Widget = TK.class({
             if (O.needs_resize) {
                 O.needs_resize = false;
 
-                TK.S.after_frame(this._schedule_resize);
+                S.after_frame(this._schedule_resize);
             }
         }
 
@@ -388,10 +388,10 @@ TK.Widget = TK.class({
         /**
          * Is fired when a widget is destroyed.
          * 
-         * @event TK.Widget#destroy
+         * @event Widget#destroy
          */
         if (this.is_destructed()) {
-          TK.warn("destroy called twice on ", this);
+          warn("destroy called twice on ", this);
           return;
         }
         this.fire_event("destroy");
@@ -399,7 +399,7 @@ TK.Widget = TK.class({
         this.disable_draw();
         if (this.parent) this.parent.remove_child(this);
 
-        TK.Base.prototype.destroy.call(this);
+        Base.prototype.destroy.call(this);
 
         this._redraw = null;
         this.__resize = null;
@@ -419,7 +419,7 @@ TK.Widget = TK.class({
         /**
          * Is fired when a widget gets delegated.
          * 
-         * @event TK.Widget#initialized
+         * @event Widget#initialized
          * 
          * @param {HTMLElement} element - The element all native DOM events are delegated to.
          */
@@ -427,24 +427,24 @@ TK.Widget = TK.class({
         return element;
     },
     add_class: function (cls) {
-        TK.add_class(this.__classified, cls);
+        add_class(this.__classified, cls);
     },
     remove_class: function (cls) {
-        TK.remove_class(this.__classified, cls);
+        remove_class(this.__classified, cls);
     },
     has_class: function (cls) {
-        return TK.has_class(this.__classified, cls);
+        return has_class(this.__classified, cls);
     },
     classify: function (element) {
         // Takes a DOM element and adds its CSS functionality to the
         // widget instance
         this.__classified = element;
         if (this.options.class && element)
-            TK.add_class(element, this.options.class);
+            add_class(element, this.options.class);
         /**
          * Is fired when a widget is classified.
          * 
-         * @event TK.Widget#classified
+         * @event Widget#classified
          * 
          * @param {HTMLElement} element - The element which receives all further class changes.
          */
@@ -452,34 +452,34 @@ TK.Widget = TK.class({
         return element;
     },
     set_style: function (name, value) {
-        TK.set_style(this.__stylized, name, value);
+        set_style(this.__stylized, name, value);
     },
     /**
      * Sets a CSS style property in this widgets DOM element.
      *
-     * @method TK.Widget#set_style
+     * @method Widget#set_style
      */
     set_styles: function (styles) {
-        TK.set_styles(this.__stylized, styles);
+        set_styles(this.__stylized, styles);
     },
     /**
      * Returns the computed style of this widgets DOM element.
      *
-     * @method TK.Widget#get_style
+     * @method Widget#get_style
      */
     get_style: function (name) {
-        return TK.get_style(this.__stylized, name);
+        return get_style(this.__stylized, name);
     },
     stylize: function (element) {
         // Marks a DOM element as receiver for the "styles" options
         this.__stylized = element;
         if (this.options.styles) {
-            TK.set_styles(element, this.options.styles);
+            set_styles(element, this.options.styles);
         }
         /**
          * Is fired when a widget is stylized.
          * 
-         * @event TK.Widget#stylized
+         * @event Widget#stylized
          * 
          * @param {HTMLElement} element - The element which receives all further style changes.
          */
@@ -493,17 +493,17 @@ TK.Widget = TK.class({
          * If delegate is true, basic events will be delegated from the element to the widget instance
          * if classify is true, CSS functions will be bound to the widget instance.
          *
-         * @method TK.Widget#widgetize
-         * @emits TK.Widget#widgetize
+         * @method Widget#widgetize
+         * @emits Widget#widgetize
          */
         var O = this.options;
         
         // classify?
-        TK.add_class(element, "toolkit-widget");
+        add_class(element, "toolkit-widget");
         if (typeof O.id !== "string") {
             O.id = element.getAttribute("id");
             if (!O.id) {
-                O.id = TK.unique_id()
+                O.id = unique_id()
                 element.setAttribute("id", O.id);
             }
         } else element.setAttribute("id", O.id);
@@ -511,7 +511,7 @@ TK.Widget = TK.class({
         if (O.class) {
             var c = O.class.split(" ");
             for (var i = 0; i < c.length; i++)
-                TK.add_class(element, c[i]);
+                add_class(element, c[i]);
         }
         if (O.container)
             O.container.appendChild(element);
@@ -525,7 +525,7 @@ TK.Widget = TK.class({
         /**
          * Is fired when a widget is widgetized.
          * 
-         * @event TK.Widget#widgetize
+         * @event Widget#widgetize
          * 
          * @param {HTMLElement} element - The element which got widgetized.
          */
@@ -537,7 +537,7 @@ TK.Widget = TK.class({
     /**
      * Sets an option.
      *
-     * @method TK.Widget#set
+     * @method Widget#set
      * 
      * @param {string} key - The option name.
      * @param value - The option value.
@@ -546,8 +546,8 @@ TK.Widget = TK.class({
         /* These options are special and need to be handled immediately, in order
          * to preserve correct ordering */
         if (key === "class" && this.__classified) {
-            if (this.options.class) TK.remove_class(this.__classified, this.options.class);
-            if (value) TK.add_class(this.__classified, value);
+            if (this.options.class) remove_class(this.__classified, this.options.class);
+            if (value) add_class(this.__classified, value);
         }
         if (this._options[key]) {
             this.invalid[key] = true;
@@ -555,9 +555,9 @@ TK.Widget = TK.class({
                 this.value_time[key] = Date.now();
             this.trigger_draw();
         } else if (key.charCodeAt(0) !== 95) {
-            TK.warn("%O: %s.set(%s, %O): unknown option.", this, this._class, key, value);
+            warn("%O: %s.set(%s, %O): unknown option.", this, this._class, key, value);
         }
-        TK.Base.prototype.set.call(this, key, value);
+        Base.prototype.set.call(this, key, value);
         return value;
     },
     track_option: function(key) {
@@ -567,20 +567,20 @@ TK.Widget = TK.class({
     /**
      * Schedules this widget for drawing.
      *
-     * @method TK.Widget#enable_draw
+     * @method Widget#enable_draw
      * 
-     * @emits TK.Widget#show
+     * @emits Widget#show
      */
     enable_draw: function () {
         if (this._drawn) return;
         this._drawn = true;
         if (this.needs_redraw) {
-            TK.S.add(this._redraw, 1);
+            S.add(this._redraw, 1);
         }
         /**
          * Is fired when a widget gets enabled for drawing.
          * 
-         * @event TK.Widget#show
+         * @event Widget#show
          */
         this.fire_event("show");
         this.fire_event("visibility", true);
@@ -590,28 +590,28 @@ TK.Widget = TK.class({
     /**
      * Stop drawing this widget.
      *
-     * @method TK.Widget#enable_draw
+     * @method Widget#enable_draw
      * 
-     * @emits TK.Widget#hide
+     * @emits Widget#hide
      */
     disable_draw: function () {
         if (!this._drawn) return;
         this._drawn = false;
         if (this.needs_redraw) {
-            TK.S.remove(this._redraw, 1);
-            TK.S.remove_next(this._redraw, 1);
+            S.remove(this._redraw, 1);
+            S.remove_next(this._redraw, 1);
         }
         /**
          * Is fired when a widget is hidden and not rendered anymore.
          * 
-         * @event TK.Widget#hide
+         * @event Widget#hide
          */
         /**
          * Is fired when the visibility state changes. The first argument
          * is the visibility state, which is either <code>true</code>
          * or <code>false</code>.
          * 
-         * @event TK.Widget#visibility
+         * @event Widget#visibility
          */
         this.fire_event("hide");
         this.fire_event("visibility", false);
@@ -622,16 +622,16 @@ TK.Widget = TK.class({
      * Make the widget visible. This does not modify the DOM, instead it will only schedule
      * the widget for rendering.
      *
-     * @method TK.Widget#show
+     * @method Widget#show
      */
     show: function () {
         this.enable_draw();
     },
     /**
      * This is an alias for hide, which may be overloaded.
-     * See {@link TK.Container} for an example.
+     * See {@link Container} for an example.
      *
-     * @method TK.Widget#force_show
+     * @method Widget#force_show
      */
     force_show: function() {
         this.enable_draw();
@@ -639,18 +639,18 @@ TK.Widget = TK.class({
     /**
      * Make the widget hidden. This does not modify the DOM, instead it will stop rendering
      * this widget. Options changed after calling hide will only be rendered (i.e. applied
-     * to the DOM) when the widget is made visible again using {@link TK.Widget#show}.
+     * to the DOM) when the widget is made visible again using {@link Widget#show}.
      *
-     * @method TK.Widget#hide
+     * @method Widget#hide
      */
     hide: function () {
         this.disable_draw();
     },
     /**
      * This is an alias for hide, which may be overloaded.
-     * See {@link TK.Container} for an example.
+     * See {@link Container} for an example.
      *
-     * @method TK.Widget#force_hide
+     * @method Widget#force_hide
      */
     force_hide: function () {
         this.disable_draw();
@@ -660,7 +660,7 @@ TK.Widget = TK.class({
     /**
      * Returns the current hidden status.
      *
-     * @method TK.Widget#hidden
+     * @method Widget#hidden
      */
     hidden: function() {
         return !this._drawn;
@@ -669,10 +669,10 @@ TK.Widget = TK.class({
         return this._drawn;
     },
     /**
-     * TK.Toggle the hidden status. This is equivalent to calling hide() or show(), depending on
+     * Toggle the hidden status. This is equivalent to calling hide() or show(), depending on
      * the current hidden status of this widget.
      *
-     * @method TK.Widget#toggle_hidden
+     * @method Widget#toggle_hidden
      */
     toggle_hidden: function() {
         if (this.hidden()) this.show();
@@ -687,11 +687,11 @@ TK.Widget = TK.class({
     /**
      * Registers a widget as a child widget. This method is used to build up the widget tree. It does not modify the DOM tree.
      *
-     * @method TK.Widget#add_child
+     * @method Widget#add_child
      * 
-     * @param {TK.Widget} child - The child to add.
+     * @param {Widget} child - The child to add.
      * 
-     * @see TK.Container#append_child
+     * @see Container#append_child
      */
     add_child: function(child) {
         var C = this.children;
@@ -709,9 +709,9 @@ TK.Widget = TK.class({
      * Removes a child widget. Note that this method only modifies
      * the widget tree and does not change the DOM.
      *
-     * @method TK.Widget#remove_child
+     * @method Widget#remove_child
      * 
-     * @param {TK.Widget} child - The child to remove.
+     * @param {Widget} child - The child to remove.
      */
     remove_child : function(child) {
         child.disable_draw();
@@ -727,9 +727,9 @@ TK.Widget = TK.class({
     /**
      * Removes an array of children.
      *
-     * @method TK.Widget#remove_children
+     * @method Widget#remove_children
      * 
-     * @param {Array.<TK.Widget>} a - An array of Widgets.
+     * @param {Array.<Widget>} a - An array of Widgets.
      */
     remove_children : function(a) {
         a.map(this.remove_child, this);
@@ -737,9 +737,9 @@ TK.Widget = TK.class({
     /**
      * Registers an array of widgets as children.
      *
-     * @method TK.Widget#add_children
+     * @method Widget#add_children
      * 
-     * @param {Array.<TK.Widget>} a - An array of Widgets.
+     * @param {Array.<Widget>} a - An array of Widgets.
      */
     add_children : function (a) {
         a.map(this.add_child, this);
@@ -748,7 +748,7 @@ TK.Widget = TK.class({
     /**
      * Returns an array of all visible children.
      *
-     * @method TK.Widget#visible_children
+     * @method Widget#visible_children
      */
     visible_children: function(a) {
         if (!a) a = [];
@@ -763,7 +763,7 @@ TK.Widget = TK.class({
     /**
      * Returns an array of all children.
      *
-     * @method TK.Widget#all_children
+     * @method Widget#all_children
      */
     all_children: function(a) {
         if (!a) a = [];
@@ -775,16 +775,3 @@ TK.Widget = TK.class({
         return a;
     },
 });
-
-TK.Module = TK.class({
-    Extends: TK.Base,
-    initialize: function(widget, options) {
-        this.parent = widget;
-        TK.Base.prototype.initialize.call(this, options);
-    },
-    destroy: function() {
-        this.parent = null;
-        TK.Base.prototype.destroy.call(this);
-    },
-});
-})(this, this.TK);
