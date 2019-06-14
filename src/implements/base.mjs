@@ -1,5 +1,5 @@
 import { toggle_class, element, warn, remove_event_listener, add_event_listener } from './../helpers.mjs';
-import { define_class } from './../widget_helpers.mjs';
+import { define_class, add_event, remove_event } from './../widget_helpers.mjs';
 
 /*
  * This file is part of Toolkit.
@@ -34,33 +34,6 @@ function dispatch_events(self, handlers, args) {
             if (v !== void(0)) return v;
         }
     } else return call_handler(self, handlers, args);
-}
-function add_event(to, event, fun) {
-    var tmp = to[event];
-
-    if (!tmp) {
-        to[event] = fun;
-    } else if (Array.isArray(tmp)) {
-        tmp.push(fun);
-    } else {
-        to[event] = [ tmp, fun ];
-    }
-}
-function remove_event(from, event, fun) {
-    var tmp = from[event];
-    if (!tmp) return;
-    if (Array.isArray(tmp)) {
-        for (var i = 0; i < tmp.length; i++) {
-            if (tmp[i] === fun) {
-                tmp[i] = tmp[tmp.length-1];
-                tmp.length --;
-            }
-        }
-        if (tmp.length === 1) from[event] = tmp[0];
-        else if (tmp.length === 0) delete from[event];
-    } else if (tmp === fun) {
-        delete from[event];
-    }
 }
 function arrayify(x) {
     if (!Array.isArray(x)) x = [ x ];

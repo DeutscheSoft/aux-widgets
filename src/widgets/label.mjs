@@ -16,15 +16,18 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
-TK.Label = TK.class({
+
+import { element, add_class, is_class_name, remove_class } from './../helpers.mjs';
+import { define_class } from './../widget_helpers.mjs';
+import { Widget } from './widget.mjs';
+
+export const Label = define_class({
     /**
-     * TK.Label is a simple text field displaying strings.
+     * Label is a simple text field displaying strings.
      *
-     * @class TK.Label
+     * @class Label
      * 
-     * @extends TK.Widget
+     * @extends Widget
      * 
      * @property {Object} options
      * 
@@ -32,8 +35,8 @@ TK.Label = TK.class({
      * @param {Function|null} [options.format=null] - Optional format function.
      */
     _class: "Label",
-    Extends: TK.Widget,
-    _options: Object.assign(Object.create(TK.Widget.prototype._options), {
+    Extends: Widget,
+    _options: Object.assign(Object.create(Widget.prototype._options), {
         label: "string",
         format: "function|object"
     }),
@@ -43,12 +46,12 @@ TK.Label = TK.class({
     },
     initialize: function (options) {
         var E;
-        TK.Widget.prototype.initialize.call(this, options);
-        /** @member {HTMLDivElement} TK.Label#element - The main DIV container.
+        Widget.prototype.initialize.call(this, options);
+        /** @member {HTMLDivElement} Label#element - The main DIV container.
          * Has class <code>toolkit-label</code>.
          */
-        if (!(E = this.element)) this.element = E = TK.element("div");
-        TK.add_class(E, "toolkit-label");
+        if (!(E = this.element)) this.element = E = element("div");
+        add_class(E, "toolkit-label");
         this._text = document.createTextNode("");
         E.appendChild(this._text);
         this.widgetize(E, true, true, true);
@@ -58,7 +61,7 @@ TK.Label = TK.class({
         var I = this.invalid;
         var O = this.options;
 
-        TK.Widget.prototype.redraw.call(this);
+        Widget.prototype.redraw.call(this);
 
         if (I.label || I.format) {
             I.label = I.format = false;
@@ -66,4 +69,3 @@ TK.Label = TK.class({
         }
     },
 });
-})(this, this.TK);

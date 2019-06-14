@@ -1,4 +1,4 @@
-import { warn } from './helpers.mjs';
+import { warn, error, FORMAT } from './helpers.mjs';
 
 // TODO:
 // * the refcount logic is not correct since it ignores the fact
@@ -6,6 +6,59 @@ import { warn } from './helpers.mjs';
 //    - be called more than once without effect
 //    - can be called with different values of capture
 //   this is a proof of concept at the moment
+
+function parse_attribute(type, x) {
+  const types = type.split('|');
+
+  if (types.length > 1)
+  {
+    for (let i = 0; i < types.length; i++)
+    {
+      try
+      {
+        return parse_attribute(types[i], x);
+      }
+      catch (e)
+      {
+        warn(e);
+      }
+    }
+
+    throw new Error('Could not find any matching format in ' + type);
+  }
+  else
+  {
+    switch (type) {
+    case "js":
+      return new Function([], "return ("+x+");").call(this);
+    case "json":
+      return JSON.parse(x);
+    case "html":
+      return TK.html(x);
+    case "string":
+      return x;
+    case "number":
+      return parseFloat(x);
+    case "int":
+      return parseInt(x);
+    case "sprintf":
+      return FORMAT(x);
+    case "regexp":
+      return new RegExp(x);
+    case "bool":
+    case "boolean":
+      x = x.trim();
+      if (x === "true") {
+        return true;
+      } else if (x === "false") {
+        return false;
+      }
+      throw new Error("Malformed 'bool': ", x);
+    default:
+      throw new Error("unsupported type " + type);
+    }
+  }
+}
 
 export function component_from_widget(Widget)
 {
@@ -43,7 +96,10 @@ export function component_from_widget(Widget)
     {
       this.tk_events_paused = true;
       try {
-        this.widget.set(name, JSON.parse(newValue));
+        const widget = this.widget;
+        const type = widget._options[name];
+        const value = parse_attribute(type, newValue);
+        widget.set(name, value);
       } catch (e) {
         warn('Setting attribute generated an error:', e);
       }

@@ -16,16 +16,19 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
- 
-"use strict";
-(function(w, TK){
+import { element, add_class, toggle_class } from './../helpers.mjs';
+import { define_class } from './../widget_helpers.mjs';
+import { ChildWidget } from './../child_widget.mjs';
+import { Widget } from './widget.mjs';
+import { Icon } from './icon.mjs';
+import { Label } from './label.mjs';
 
-TK.Button = TK.class({
+export const Button = define_class({
     /**
-     * TK.Button is a simple, clickable widget to trigger funcions. It fires a
-     * couple of click-related events and consists of a {@link TK.Label} and a {@link TK.Icon}.
+     * Button is a simple, clickable widget to trigger funcions. It fires a
+     * couple of click-related events and consists of a {@link Label} and a {@link Icon}.
      * Buttons are used as a base to build different other widgets from, too,
-     * e.g. {@link TK.Toggle}, {@link TK.ConfirmButton} and {@link TK.Select}.
+     * e.g. {@link Toggle}, {@link ConfirmButton} and {@link Select}.
      * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
@@ -39,13 +42,13 @@ TK.Button = TK.class({
      *   of label and icon. <code>vertical</code> means icon above the label,
      *   <code>horizontal</code> places the icon left to the label.
      * 
-     * @extends TK.Widget
+     * @extends Widget
      * 
-     * @class TK.Button
+     * @class Button
      */
     _class: "Button",
-    Extends: TK.Widget,
-    _options: Object.assign(Object.create(TK.Widget.prototype._options), {
+    Extends: Widget,
+    _options: Object.assign(Object.create(Widget.prototype._options), {
         label: "string|boolean",
         icon: "string|boolean",
         state: "boolean",
@@ -59,53 +62,54 @@ TK.Button = TK.class({
     },
     initialize: function (options) {
         var E;
-        TK.Widget.prototype.initialize.call(this, options);
+        Widget.prototype.initialize.call(this, options);
         /**
-         * @member {HTMLDivElement} TK.Button#element - The main DIV element.
+         * @member {HTMLDivElement} Button#element - The main DIV element.
          *   Has class <code>toolkit-button</code>.
          */
-        if (!(E = this.element)) this.element = E = TK.element("div");
-        TK.add_class(E, "toolkit-button");
+        if (!(E = this.element)) this.element = E = element("div");
+        add_class(E, "toolkit-button");
         this.widgetize(E, true, true, true);
     },
     destroy: function () {
-        TK.Widget.prototype.destroy.call(this);
+        Widget.prototype.destroy.call(this);
     },
 
     redraw: function() {
-        TK.Widget.prototype.redraw.call(this);
+        Widget.prototype.redraw.call(this);
         var I = this.invalid;
         var O = this.options;
         var E = this.element;
         
         if (I.layout) {
             I.layout = false;
-            TK.toggle_class(E, "toolkit-vertical", O.layout === "vertical");
-            TK.toggle_class(E, "toolkit-horizontal", O.layout !== "vertical");
+            toggle_class(E, "toolkit-vertical", O.layout === "vertical");
+            toggle_class(E, "toolkit-horizontal", O.layout !== "vertical");
         }
 
         if (I.state) {
             I.state = false;
-            TK.toggle_class(E, "toolkit-active", O.state);
+            toggle_class(E, "toolkit-active", O.state);
         }
     },
 });
+
 /**
- * @member {TK.Icon} TK.Button#icon - The {@link TK.Icon} widget.
+ * @member {Icon} Button#icon - The {@link Icon} widget.
  */
-TK.ChildWidget(TK.Button, "icon", {
-    create: TK.Icon,
+ChildWidget(Button, "icon", {
+    create: Icon,
     option: "icon",
     inherit_options: true,
     toggle_class: true,
 });
+
 /**
- * @member {TK.Label} TK.Button#label - The {@link TK.Label} of the button.
+ * @member {Label} Button#label - The {@link Label} of the button.
  */
-TK.ChildWidget(TK.Button, "label", {
-    create: TK.Label,
+ChildWidget(Button, "label", {
+    create: Label,
     option: "label",
     inherit_options: true,
     toggle_class: true,
 });
-})(this, this.TK);

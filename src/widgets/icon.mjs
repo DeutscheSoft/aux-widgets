@@ -17,17 +17,18 @@
  * Boston, MA  02110-1301  USA
  */
 
-"use strict";
-(function(w, TK){
+import { element, add_class, is_class_name, remove_class } from './../helpers.mjs';
+import { define_class } from './../widget_helpers.mjs';
+import { Widget } from './widget.mjs';
     
-TK.Icon = TK.class({
+export const Icon = define_class({
     /**
-     * TK.Icon represents a <code>&lt;DIV></code> element showing either
+     * Icon represents a <code>&lt;DIV></code> element showing either
      * icons from the toolkit font or dedicated image files.
      *
-     * @class TK.Icon
+     * @class Icon
      * 
-     * @extends TK.Widget
+     * @extends Widget
      *
      * @param {Object} [options={ }] - An object containing initial options.
      * 
@@ -35,8 +36,8 @@ TK.Icon = TK.class({
      *   a string which is interpreted as class name (if <code>[A-Za-z0-9_\-]</code>) or URI.
      */
     _class: "Icon",
-    Extends: TK.Widget,
-    _options: Object.assign(Object.create(TK.Widget.prototype._options), {
+    Extends: Widget,
+    _options: Object.assign(Object.create(Widget.prototype._options), {
         icon: "string",
     }),
     options: {
@@ -44,12 +45,12 @@ TK.Icon = TK.class({
     },
     initialize: function (options) {
         var E;
-        TK.Widget.prototype.initialize.call(this, options);
+        Widget.prototype.initialize.call(this, options);
         /** 
-         * @member {HTMLDivElement} TK.Container#element - The main DIV element. Has class <code>toolkit-container</code> 
+         * @member {HTMLDivElement} Container#element - The main DIV element. Has class <code>toolkit-container</code> 
          */
-        if (!(E = this.element)) this.element = E = TK.element("div");
-        TK.add_class(E, "toolkit-icon"); 
+        if (!(E = this.element)) this.element = E = element("div");
+        add_class(E, "toolkit-icon"); 
         this.widgetize(E, true, true, true);
         this._icon_old = [];
     },
@@ -58,21 +59,21 @@ TK.Icon = TK.class({
         var I = this.invalid;
         var E = this.element;
 
-        TK.Widget.prototype.redraw.call(this);
+        Widget.prototype.redraw.call(this);
         
         if (I.icon) {
             I.icon = false;
             var old = this._icon_old;
             for (var i = 0; i < old.length; i++) {
-                if (old[i] && TK.is_class_name(old[i])) {
-                    TK.remove_class(E, old[i]);
+                if (old[i] && is_class_name(old[i])) {
+                    remove_class(E, old[i]);
                 }
             }
             this._icon_old = [];
-            if (TK.is_class_name(O.icon)) {
+            if (is_class_name(O.icon)) {
                 E.style["background-image"] = null;
                 if (O.icon)
-                    TK.add_class(E, O.icon);
+                    add_class(E, O.icon);
             } else if (O.icon) {
                 E.style["background-image"] = "url(\"" + O.icon + "\")";
             }
@@ -82,7 +83,6 @@ TK.Icon = TK.class({
         if (key == "icon") {
             this._icon_old.push(this.options.icon);
         }
-        return TK.Widget.prototype.set.call(this, key, val);
+        return Widget.prototype.set.call(this, key, val);
     },
 });
-})(this, this.TK);
