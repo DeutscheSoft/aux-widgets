@@ -16,8 +16,9 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+import { add_class, remove_class } from './../helpers.mjs';
+import { define_class } from './../widget_helpers.mjs';
+import { Button } from './button.mjs';
 
 /* Abstract toggle logic */
 
@@ -142,15 +143,15 @@ function is_class_name (str) {
     return !class_regex.test(str);
 }
 
-TK.Toggle = TK.class({
+export const Toggle = define_class({
     /**
      * A toggle button. The toggle button can either be pressed (which means that it will
      * switch its state as long as it is pressed) or toggled permanently. Its behavior is
      * controlled by the two options <code>press</code> and <code>toggle</code>.
      *
-     * @class TK.Toggle
+     * @class Toggle
      * 
-     * @extends TK.Button
+     * @extends Button
      *
      * @param {Object} [options={ }] - An object containing initial options.
      * 
@@ -168,8 +169,8 @@ TK.Toggle = TK.class({
      *   when the button toggle state is <code>true</code>.
      */
     _class: "Toggle",
-    Extends: TK.Button,
-    _options: Object.assign(Object.create(TK.Button.prototype._options), {
+    Extends: Button,
+    _options: Object.assign(Object.create(Button.prototype._options), {
         label_active: "string",
         icon_active: "string",
         press: "int",
@@ -191,12 +192,12 @@ TK.Toggle = TK.class({
     },
     
     initialize: function (options) {
-        TK.Button.prototype.initialize.call(this, options);
+        Button.prototype.initialize.call(this, options);
         /**
-         * @member {HTMLDivElement} TK.Toggle#element - The main DIV container.
+         * @member {HTMLDivElement} Toggle#element - The main DIV container.
          *   Has class <code>toolkit-toggle</code>.
          */
-        TK.add_class(this.element, "toolkit-toggle");
+        add_class(this.element, "toolkit-toggle");
         this.__press_start_time = 0;
         this.__touch_id = false;
         this.__delayed_to = -1;
@@ -213,24 +214,23 @@ TK.Toggle = TK.class({
             if (tmp)
                 this.icon.set("icon", tmp || "");
         }
-        TK.Button.prototype.redraw.call(this);
+        Button.prototype.redraw.call(this);
     },
     /**
      * Toggle the button state.
      *
-     * @method TK.Toggle#toggle
+     * @method Toggle#toggle
      * 
-     * @emits TK.Toggle#toggled
+     * @emits Toggle#toggled
      */
     toggle: function () {
         toggle.call(this, this.options);
         /**
          * Is fired when the button was toggled.
          * 
-         * @event TK.Toggle#toggled
+         * @event Toggle#toggled
          * 
-         * @param {boolean} state - The state of the {@link TK.Toggle}.
+         * @param {boolean} state - The state of the {@link Toggle}.
          */
     },
 });
-})(this, this.TK);
