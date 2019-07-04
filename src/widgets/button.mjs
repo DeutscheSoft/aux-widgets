@@ -58,7 +58,7 @@ export const Button = define_class({
         label:            false,
         icon:            false,
         state:            false,
-        layout:           "vertical"
+        layout:           "horizontal"
     },
     initialize: function (options) {
         var E;
