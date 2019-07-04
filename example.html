@@ -9,8 +9,14 @@
     <link rel="stylesheet" href="toolkit/styles/2013.css" />
   </head>
   <body>
-    <tk-button label='click me'></tk-button>
-    <tk-toggle label='toggle me'></tk-toggle>
+    <h2>Button</h2>
+    <tk-button label="click me" icon=gear layout=horizontal></tk-button>
+    <tk-button label="click me" icon=gear state=true layout=horizontal></tk-button>
+    
+    <h2>Toggle</h2>
+    <tk-toggle label='toggle me' icon=warning icon_active=success></tk-toggle>
+    <tk-toggle label='toggle me w/ leisure' icon=warning icon_active=success delay=1000></tk-toggle>
+    <tk-toggle label='press or toggle me' label_active="release or toggle me" icon=warning icon_active=success press=250></tk-toggle>
 
 
   </body>
