@@ -6,18 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script type=module src="src/components/button.mjs"></script>
     <script type=module src="src/components/toggle.mjs"></script>
+    <script type=module src="src/components/confirmbutton.mjs"></script>
     <link rel="stylesheet" href="toolkit/styles/2013.css" />
   </head>
   <body>
     <h2>Button</h2>
-    <tk-button label="click me" icon=gear layout=horizontal></tk-button>
-    <tk-button label="click me" icon=gear state=true layout=horizontal></tk-button>
+    <tk-button label="Click me" icon=gear layout=horizontal></tk-button>
+    <tk-button label="Click me" icon=gear state=true layout=horizontal></tk-button>
     
     <h2>Toggle</h2>
-    <tk-toggle label='toggle me' icon=warning icon_active=success></tk-toggle>
-    <tk-toggle label='toggle me w/ leisure' icon=warning icon_active=success delay=1000></tk-toggle>
-    <tk-toggle label='press or toggle me' label_active="release or toggle me" icon=warning icon_active=success press=250></tk-toggle>
+    <tk-toggle label='Toggle me' icon=warning icon_active=success></tk-toggle>
+    <tk-toggle label='Toggle me at leisure' icon=warning icon_active=success delay=1000></tk-toggle>
+    <tk-toggle label='Press or toggle me' label_active="Release or toggle me" icon=warning icon_active=success press=250></tk-toggle>
 
+    <h2>ConfirmButton</h2>
+    <tk-confirmbutton label="Do something dangerous" icon="warning" label_confirm="Are you sure?" icon_confirm="questionmark"></tk-confirmbutton>
 
   </body>
   

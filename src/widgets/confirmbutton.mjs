@@ -16,9 +16,9 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-
-"use strict";
-(function(w, TK){
+import { add_class } from "./../helpers.mjs"
+import { define_class } from "./../widget_helpers.mjs"
+import { Button } from "./button.mjs"
 
 var reset = function (e) {
   if (!this.options.state) return;
@@ -83,7 +83,7 @@ var state_reset = function () {
  * Is fired when the button was hit two times with at least
  *   <code>interrupt</code> milliseconds between both clicks.
  * 
- * @event TK.ConfirmButton#confirmed
+ * @event ConfirmButton#confirmed
  */
          
 var clicked = function (e) {
@@ -99,7 +99,7 @@ var clicked = function (e) {
   }
 }
   
-TK.ConfirmButton = TK.class({
+export const ConfirmButton = define_class({
   /**
    * ConfirmButton needs to clicks/taps until the <code>confirmed</code>
    * event is fired. After the first click/tap dedicated label and icon
@@ -107,9 +107,9 @@ TK.ConfirmButton = TK.class({
    * After the first click a timeout set via <code>timeout</code> the
    * button resets to its default settings if no second click/tap happens.
    *
-   * @class TK.ConfirmButton
+   * @class ConfirmButton
    * 
-   * @extends TK.Button
+   * @extends Button
    *
    * @param {Object} [options={ }] - An object containing initial options.
    * 
@@ -117,12 +117,12 @@ TK.ConfirmButton = TK.class({
    * @property {Number} [options.timeout=2000] - Defines a time in milliseconds after the button resets to defaults if no second click happens.
    * @property {Number} [options.interrupt=0] - This is the minimum time in milliseconds between two clicks to fire the <code>confirmed</code> event.
    * @property {String} [options.label_confirm] - The label to be used while in active state.
-   * @property {String} [options.label_confirm] - The icon to be used while in active state.
+   * @property {String} [options.icon_confirm] - The icon to be used while in active state.
    */
   _class: "ConfirmButton",
-  Extends: TK.Button,
+  Extends: Button,
   
-  _options: Object.assign(Object.create(TK.Button.prototype._options), {
+  _options: Object.assign(Object.create(Button.prototype._options), {
     confirm: "boolean",
     timeout: "number",
     interupt: "number",
@@ -138,8 +138,8 @@ TK.ConfirmButton = TK.class({
   },
   
   initialize: function (options) {
-    TK.Button.prototype.initialize.call(this, options);
-    TK.add_class(this.element, "toolkit-confirm-button");
+    Button.prototype.initialize.call(this, options);
+    add_class(this.element, "toolkit-confirm-button");
     this.add_event("click", clicked.bind(this));
     this.__temp = {
       label: "",
@@ -154,8 +154,6 @@ TK.ConfirmButton = TK.class({
     if (key == "confirm" && value == false) {
       this.set("state", false);
     }
-    TK.Button.prototype.set.call(this, key, value);
+    Button.prototype.set.call(this, key, value);
   }
 });
-
-})(this, this.TK);
