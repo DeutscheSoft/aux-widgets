@@ -62,8 +62,11 @@ function parse_attribute(type, x) {
 
 export function component_from_widget(Widget)
 {
-  const attributes = Object.keys(Widget.prototype._options);
-
+  const attributes = [];
+  const skip = ["class", "id"];
+  for (var i in Widget.prototype._options)
+    attributes.push(i);
+    
   return class extends HTMLElement
   {
     constructor()
@@ -99,7 +102,10 @@ export function component_from_widget(Widget)
         const widget = this.widget;
         const type = widget._options[name];
         const value = parse_attribute(type, newValue);
-        widget.set(name, value);
+        if (skip.indexOf(name) >= 0)
+          widget.options[name] = value;
+        else
+          widget.set(name, value);
       } catch (e) {
         warn('Setting attribute generated an error:', e);
       }
