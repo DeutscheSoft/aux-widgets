@@ -16,9 +16,11 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
+import { define_class } from './../widget_helpers.mjs';
+import { warn, make_svg, add_class } from '../helpers.mjs';
+import { ResponseHandler } from './responsehandler.mjs';
+import { EqBand } from '../modules/eqband.mjs';
  
-"use strict";
-(function(w, TK){
 function fast_draw_plinear(X, Y) {
     var ret = [];
     var i, len = X.length;
@@ -97,7 +99,7 @@ function draw_graph (graph, bands) {
         }
 
         if (!isFinite(Y[i])) {
-            TK.warn("Singular filter in Equalizer.");
+            warn("Singular filter in Equalizer.");
             graph.set("dots", void(0));
             return;
         }
@@ -120,9 +122,9 @@ function hide_bands() {
         this.remove_child(b[i]);
     }
 }
-TK.Equalizer = TK.class({
+export const Equalizer = define_class({
     /**
-     * TK.Equalizer is a TK.ResponseHandler adding some EqBands instead of
+     * Equalizer is a ResponseHandler adding some EqBands instead of
      * simple ResponseHandles.
      *
      * @property {Object} options
@@ -134,13 +136,13 @@ TK.Equalizer = TK.class({
      *   steep, oversample n times in order to not miss a notch filter.
      * @param {Number} [options.threshold=5] - Steepness of slope to oversample,
      *   i.e. y pixels difference per x pixel
-     * @class TK.Equalizer
+     * @class Equalizer
      * 
-     * @extends TK.ResponseHandler
+     * @extends ResponseHandler
      */
     _class: "Equalizer",
-    Extends: TK.ResponseHandler,
-    _options: Object.assign(Object.create(TK.ResponseHandler.prototype._options), {
+    Extends: ResponseHandler,
+    _options: Object.assign(Object.create(ResponseHandler.prototype._options), {
         accuracy: "number",
         oversampling: "number",
         threshold: "number",
@@ -167,25 +169,25 @@ TK.Equalizer = TK.class({
     
     initialize: function (options) {
         /**
-         * @member {Array} TK.Equalizer#bands - Array of {@link TK.EqBand} instances.
+         * @member {Array} Equalizer#bands - Array of {@link EqBand} instances.
          */
         this.bands = [];
-        TK.ResponseHandler.prototype.initialize.call(this, options);
+        ResponseHandler.prototype.initialize.call(this, options);
         /**
-         * @member {HTMLDivElement} TK.Equalizer#element - The main DIV container.
+         * @member {HTMLDivElement} Equalizer#element - The main DIV container.
          *   Has class <code>toolkit-equalizer</code>.
          */
-        TK.add_class(this.element, "toolkit-equalizer");
+        add_class(this.element, "toolkit-equalizer");
         
         /**
-         * @member {SVGGroup} TK.Equalizer#_bands - The SVG group containing all the bands SVG elements.
+         * @member {SVGGroup} Equalizer#_bands - The SVG group containing all the bands SVG elements.
          *   Has class <code>toolkit-eqbands</code>.
          */
-        this._bands = TK.make_svg("g", {"class": "toolkit-eqbands"});
+        this._bands = make_svg("g", {"class": "toolkit-eqbands"});
         this.svg.appendChild(this._bands);
         
         /**
-         * @member {TK.Graph} TK.Equalizer#baseline - The graph drawing the zero line.
+         * @member {Graph} Equalizer#baseline - The graph drawing the zero line.
          *   Has class <code>toolkit-baseline</code> 
          */
         this.baseline = this.add_graph({
@@ -201,12 +203,12 @@ TK.Equalizer = TK.class({
     destroy: function () {
         this.empty(); // Arne: ??? <- Markus: removes all graphs, defined in Chart
         this._bands.remove();
-        TK.ResponseHandler.prototype.destroy.call(this);
+        ResponseHandler.prototype.destroy.call(this);
     },
     redraw: function () {
         var I = this.invalid;
         var O = this.options;
-        TK.ResponseHandler.prototype.redraw.call(this);
+        ResponseHandler.prototype.redraw.call(this);
         if (I.validate("bands", "accuracy")) {
             if (this.baseline) {
                 var f = [];
@@ -230,22 +232,22 @@ TK.Equalizer = TK.class({
     },
     resize: function () {
         invalidate_bands.call(this);
-        TK.ResponseHandler.prototype.resize.call(this);
+        ResponseHandler.prototype.resize.call(this);
     },
     /*
      * Add a new band to the equalizer. Options is an object containing
-     * options for the {@link TK.EqBand}
+     * options for the {@link EqBand}
      * 
-     * @method TK.Equalizer#add_band
+     * @method Equalizer#add_band
      * 
-     * @param {Object} [options={ }] - An object containing initial options. - The options for the {@link TK.EqBand}.
-     * @param {Object} [type=TK.EqBand] - A widget class to be used for the new band.
+     * @param {Object} [options={ }] - An object containing initial options. - The options for the {@link EqBand}.
+     * @param {Object} [type=EqBand] - A widget class to be used for the new band.
      * 
-     * @emits TK.Equalizer#bandadded
+     * @emits Equalizer#bandadded
      */
     add_band: function (options, type) {
         var b;
-        type = type || TK.EqBand;
+        type = type || EqBand;
         if (type.prototype.isPrototypeOf(options)) {
           b = options;
         } else {
@@ -266,9 +268,9 @@ TK.Equalizer = TK.class({
         /**
          * Is fired when a new band was added.
          * 
-         * @event TK.Equalizer#bandadded
+         * @event Equalizer#bandadded
          * 
-         * @param {TK.Band} band - The {@link TK.EqBand} which was added.
+         * @param {EqBand} band - The {@link EqBand} which was added.
          */
         this.fire_event("bandadded", b);
         if (this.options.show_bands)
@@ -277,13 +279,13 @@ TK.Equalizer = TK.class({
         return b;
     },
     /*
-     * Add multiple new {@link TK.EqBand} to the equalizer. Options is an array
-     * of objects containing options for the new instances of {@link TK.EqBand}
+     * Add multiple new {@link EqBand} to the equalizer. Options is an array
+     * of objects containing options for the new instances of {@link EqBand}
      * 
-     * @method TK.Equalizer#add_bands
+     * @method Equalizer#add_bands
      * 
-     * @param {Array<Object>} options - An array of options objects for the {@link TK.EqBand}.
-     * @param {Object} [type=TK.EqBand] - A widget class to be used for the new band.
+     * @param {Array<Object>} options - An array of options objects for the {@link EqBand}.
+     * @param {Object} [type=EqBand] - A widget class to be used for the new band.
      */
     add_bands: function (bands, type) {
         for (var i = 0; i < bands.length; i++)
@@ -292,11 +294,11 @@ TK.Equalizer = TK.class({
     /*
      * Remove a band from the widget.
      * 
-     * @method TK.Equalizer#remove_handle
+     * @method Equalizer#remove_handle
      * 
-     * @param {TK.EqBand} band - The {@link TK.EqBand} to remove.
+     * @param {EqBand} band - The {@link EqBand} to remove.
      * 
-     * @emits TK.Equalizer#bandremoved
+     * @emits Equalizer#bandremoved
      */
     remove_band: function (h) {
         for (var i = 0; i < this.bands.length; i++) {
@@ -308,9 +310,9 @@ TK.Equalizer = TK.class({
                 /**
                  * Is fired when a band was removed.
                  * 
-                 * @event TK.Equalizer#bandremoved
+                 * @event Equalizer#bandremoved
                  * 
-                 * @param {TK.EqBand} band - The {@link TK.EqBand} which was removed.
+                 * @param {EqBand} band - The {@link EqBand} which was removed.
                  */
                 this.fire_event("bandremoved", h);
                 h.destroy();
@@ -319,12 +321,12 @@ TK.Equalizer = TK.class({
         }
     },
     /*
-     * Remove multiple {@link TK.EqBand} from the equalizer. Options is an array
-     * of {@link TK.EqBand} instances.
+     * Remove multiple {@link EqBand} from the equalizer. Options is an array
+     * of {@link EqBand} instances.
      * 
-     * @method TK.Equalizer#remove_bands
+     * @method Equalizer#remove_bands
      * 
-     * @param {Array<TK.EqBand>} bands - An array of {@link TK.EqBand} instances.
+     * @param {Array<EqBand>} bands - An array of {@link EqBand} instances.
      */
     remove_bands: function () {
         while (this.bands.length) {
@@ -334,11 +336,10 @@ TK.Equalizer = TK.class({
         /**
          * Is fired when all bands are removed.
          * 
-         * @event TK.Equalizer#emptied
+         * @event Equalizer#emptied
          */
         this.fire_event("emptied");
         invalidate_bands.call(this);
     },
     _draw_graph: draw_graph,
 });
-})(this, this.TK);

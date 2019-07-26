@@ -16,8 +16,17 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+import { define_class, ChildElement } from './../widget_helpers.mjs';
+import {
+    empty, css_space, make_svg, get_style, warn, S, element, add_class,
+    inner_width, toggle_class
+  } from '../helpers.mjs';
+import { Widget } from './widget.mjs';
+import { Ranges } from '../implements/ranges.mjs';
+import { Graph } from '../modules/graph.mjs';
+import { ResponseHandle } from '../modules/responsehandle.mjs';
+import { ChildWidget } from '../child_widget.mjs';
+import { Grid } from '../modules/grid.mjs';
     
 function calculate_overlap(X, Y) {
     /* no overlap, return 0 */
@@ -59,20 +68,20 @@ function draw_key() {
     while (_key.firstChild !== _key.lastChild)
         _key.removeChild(_key.lastChild);
 
-    TK.empty(_key.firstChild);
+    empty(_key.firstChild);
 
     var O = this.options;
     
     var disp = "none";
-    var gpad = TK.css_space(_key, "padding");
-    var gmarg = TK.css_space(_key, "margin");
+    var gpad = css_space(_key, "padding");
+    var gmarg = css_space(_key, "margin");
     var c   = 0;
     var w   = 0;
     var top = 0;
     var lines = [];
     for (var i = 0; i < this.graphs.length; i++) {
         if (this.graphs[i].get("key") !== false) {
-            var t = TK.make_svg("tspan", {"class": "toolkit-label",
+            var t = make_svg("tspan", {"class": "toolkit-label",
                                      style: "dominant-baseline: central;"
             });
             t.textContent = this.graphs[i].get("key");
@@ -80,11 +89,11 @@ function draw_key() {
             _key.firstChild.appendChild(t);
             
             if (!bb) bb = _key.getBoundingClientRect();
-            top += c ? parseInt(TK.get_style(t, "line-height")) : gpad.top;
+            top += c ? parseInt(get_style(t, "line-height")) : gpad.top;
             t.setAttribute("y", top + bb.height / 2);
             
             lines.push({
-                x:       (parseInt(TK.get_style(t, "margin-right")) || 0),
+                x:       (parseInt(get_style(t, "margin-right")) || 0),
                 y:       Math.round(top),
                 width:   Math.round(bb.width),
                 height:  Math.round(bb.height),
@@ -98,7 +107,7 @@ function draw_key() {
         }
     }
     for (var i = 0; i < lines.length; i++) {
-        var b = TK.make_svg("rect", {
+        var b = make_svg("rect", {
             "class": lines[i]["class"] + " toolkit-rect",
             color:   lines[i].color,
             style:   lines[i].style,
@@ -150,7 +159,7 @@ function draw_key() {
             }
             break;
         default:
-            TK.warn("Unsupported key", O.key);
+            warn("Unsupported key", O.key);
     }
     _key.setAttribute("transform", "translate(" + __key.x1 + "," + __key.y1 + ")");
     _key_bg.setAttribute("x", __key.x1);
@@ -165,11 +174,11 @@ function draw_title() {
     _title.textContent = this.options.title;
 
     /* FORCE_RELAYOUT */
-    TK.S.add(function() {
-        var mtop    = parseInt(TK.get_style(_title, "margin-top") || 0);
-        var mleft   = parseInt(TK.get_style(_title, "margin-left") || 0);
-        var mbottom = parseInt(TK.get_style(_title, "margin-bottom") || 0);
-        var mright  = parseInt(TK.get_style(_title, "margin-right") || 0);
+    S.add(function() {
+        var mtop    = parseInt(get_style(_title, "margin-top") || 0);
+        var mleft   = parseInt(get_style(_title, "margin-left") || 0);
+        var mbottom = parseInt(get_style(_title, "margin-bottom") || 0);
+        var mright  = parseInt(get_style(_title, "margin-right") || 0);
         var bb      = _title.getBoundingClientRect();
         var x,y,anchor, range_x = this.range_x, range_y = this.range_y;
         switch (this.options.title_position) {
@@ -219,9 +228,9 @@ function draw_title() {
                 y = range_y.options.basis - mtop - bb.height / 2;
                 break;
             default:
-                TK.warn("Unsupported title_position", this.options.title_position);
+                warn("Unsupported title_position", this.options.title_position);
         }
-        TK.S.add(function() {
+        S.add(function() {
             _title.setAttribute("text-anchor", anchor);
             _title.setAttribute("x", x);
             _title.setAttribute("y", y);
@@ -230,12 +239,12 @@ function draw_title() {
 }
 
 /**
- * TK.Chart is an SVG image containing one or more Graphs. There are functions
- * to add and remove graphs. TK.Chart extends {@link TK.Widget} and contains a
+ * Chart is an SVG image containing one or more Graphs. There are functions
+ * to add and remove graphs. Chart extends {@link Widget} and contains a
  * Grid and two Ranges.
  *
- * @class TK.Chart
- * @extends TK.Widget
+ * @class Chart
+ * @extends Widget
  *
  * @param {Object} [options={ }] - An object containing initial options.
  * 
@@ -259,26 +268,26 @@ function draw_title() {
  *   <code>{pos:x[, color: "colorstring"[,class: "classname"[, label:"labeltext"]]]}</code>
  * @property {Array<Object>} [options.grid_y=[]] - An array containing objects with the following optional members:
  *   <code>{pos:y[, color: "colorstring"[,class: "classname"[, label:"labeltext"]]]}</code>
- * @property {Function|Object} [options.range_x={}] - Either a function returning a {@link TK.Range}
- *   or an object containing options for a new {@link TK.Range}
- * @property {Function|Object} [options.range_y={}] - Either a function returning a {@link TK.Range}
- *   or an object containing options for a new {@link TK.Range}
+ * @property {Function|Object} [options.range_x={}] - Either a function returning a {@link Range}
+ *   or an object containing options for a new {@link Range}
+ * @property {Function|Object} [options.range_y={}] - Either a function returning a {@link Range}
+ *   or an object containing options for a new {@link Range}
  * @param {Number} [options.importance_label=4] - Multiplicator of square pixels on hit testing labels to gain importance.
  * @param {Number} [options.importance_handle=1] - Multiplicator of square pixels on hit testing handles to gain importance.
  * @param {Number} [options.importance_border=50] - Multiplicator of square pixels on hit testing borders to gain importance.
- * @param {Object|Function} [options.range_z={ scale: "linear", min: 0, max: 1 }] - Options for z {@link TK.Range}.
- * @param {Array} [options.handles=[]] - An array of options for creating {@link TK.ResponseHandle} on init.
+ * @param {Object|Function} [options.range_z={ scale: "linear", min: 0, max: 1 }] - Options for z {@link Range}.
+ * @param {Array} [options.handles=[]] - An array of options for creating {@link ResponseHandle} on init.
  * @param {Bollean} [options.show_handles=true] - Show or hide all handles.
  */
 function geom_set(value, key) {
     this.set_style(key, value+"px");
-    TK.error("using deprecated '"+key+"' options");
+    error("using deprecated '"+key+"' options");
 }
-TK.Chart = TK.class({
+export const Chart = define_class({
     _class: "Chart",
-    Extends: TK.Widget,
-    Implements: TK.Ranges,
-    _options: Object.assign(Object.create(TK.Widget.prototype._options), {
+    Extends: Widget,
+    Implements: Ranges,
+    _options: Object.assign(Object.create(Widget.prototype._options), {
         width: "int",
         height: "int",
         _width: "int",
@@ -303,10 +312,10 @@ TK.Chart = TK.class({
         grid_x: [],
         grid_y: [],
         range_x: {}, // an object with options for a range for the x axis
-                     // or a function returning a TK.Range instance (only on init)
+                     // or a function returning a Range instance (only on init)
         range_y: {}, // an object with options for a range for the y axis
-                     // or a function returning a TK.Range instance (only on init)
-        range_z: { scale: "linear", min: 0, max: 1 }, // TK.Range z options
+                     // or a function returning a Range instance (only on init)
+        range_z: { scale: "linear", min: 0, max: 1 }, // Range z options
         key: false,  // key draws a description for the graphs at the given
                      // position, use false for no key
         key_size: {x:20, y:10}, // size of the key rects
@@ -339,20 +348,20 @@ TK.Chart = TK.class({
     initialize: function (options) {
         var E, S;
         /**
-         * @member {Array} TK.Chart#graphs - An array containing all SVG paths acting as graphs.
+         * @member {Array} Chart#graphs - An array containing all SVG paths acting as graphs.
          */
         this.graphs = [];
         /**
-         * @member {Array} TK.Chart#handles - An array containing all {@link TK.ResponseHandle} instances.
+         * @member {Array} Chart#handles - An array containing all {@link ResponseHandle} instances.
          */
         this.handles = [];
-        TK.Widget.prototype.initialize.call(this, options);
+        Widget.prototype.initialize.call(this, options);
         
         /**
-         * @member {TK.Range} TK.Chart#range_x - The {@link TK.Range} for the x axis. 
+         * @member {Range} Chart#range_x - The {@link Range} for the x axis. 
          */
         /**
-         * @member {TK.Range} TK.Chart#range_y - The {@link TK.Range} for the y axis.
+         * @member {Range} Chart#range_y - The {@link Range} for the y axis.
          */
         this.add_range(this.options.range_x, "range_x");
         this.add_range(this.options.range_y, "range_y");
@@ -360,14 +369,14 @@ TK.Chart = TK.class({
         this.range_y.set("reverse", true, true, true);
         
         /**
-         * @member {HTMLDivElement} TK.Chart#element - The main DIV container.
+         * @member {HTMLDivElement} Chart#element - The main DIV container.
          *   Has class <code>toolkit-chart</code>.
          */
-        if (!(E = this.element)) this.element = E = TK.element("div");
-        TK.add_class(E, "toolkit-chart");
+        if (!(E = this.element)) this.element = E = element("div");
+        add_class(E, "toolkit-chart");
         this.widgetize(E, true, true, true);
         
-        this.svg = S = TK.make_svg("svg");
+        this.svg = S = make_svg("svg");
 
         if (!this.options.width)
             this.options.width = this.range_x.options.basis;
@@ -375,17 +384,17 @@ TK.Chart = TK.class({
             this.options.height = this.range_y.options.basis;
         
         /** 
-         * @member {SVGGroup} TK.Chart#_graphs - The group containing all graphs.
+         * @member {SVGGroup} Chart#_graphs - The group containing all graphs.
          *      Has class <code>toolkit-graphs</code>.
          */
-        this._graphs = TK.make_svg("g", {"class": "toolkit-graphs"});
+        this._graphs = make_svg("g", {"class": "toolkit-graphs"});
         S.appendChild(this._graphs);
         E.appendChild(S);
         
         if (this.options.width) this.set("width", this.options.width);
         if (this.options.height) this.set("height", this.options.height);
         
-        this._handles = TK.make_svg("g", {"class": "toolkit-response-handles toolkit-handles"});
+        this._handles = make_svg("g", {"class": "toolkit-response-handles toolkit-handles"});
         this.svg.appendChild(this._handles);
         this.svg.onselectstart = function () { return false; };
         this.add_handles(this.options.handles);
@@ -395,11 +404,11 @@ TK.Chart = TK.class({
         var O = this.options;
         var S = this.svg;
 
-        TK.Widget.prototype.resize.call(this);
+        Widget.prototype.resize.call(this);
 
-        var tmp = TK.css_space(S, "border", "padding");
-        var w = TK.inner_width(E) - tmp.left - tmp.right;
-        var h = TK.inner_height(E) - tmp.top - tmp.bottom;
+        var tmp = css_space(S, "border", "padding");
+        var w = inner_width(E) - tmp.left - tmp.right;
+        var h = inner_height(E) - tmp.top - tmp.bottom;
 
         if (w > 0 && O._width !== w) {
             this.set("_width", w);
@@ -419,7 +428,7 @@ TK.Chart = TK.class({
         var E = this.svg;
         var O = this.options;
 
-        TK.Widget.prototype.redraw.call(this);
+        Widget.prototype.redraw.call(this);
 
         if (I.validate("ranges", "_width", "_height", "range_x", "range_y")) {
             /* we need to redraw both key and title, because
@@ -460,44 +469,44 @@ TK.Chart = TK.class({
         }
         this._graphs.remove();
         this._handles.remove();
-        TK.Widget.prototype.destroy.call(this);
+        Widget.prototype.destroy.call(this);
     },
     add_child: function(child) {
-        if (child instanceof TK.Graph) {
+        if (child instanceof Graph) {
             this.add_graph(child);
             return;
         }
 
-        TK.Widget.prototype.add_child.call(this, child);
+        Widget.prototype.add_child.call(this, child);
     },
     remove_child: function(child) {
-        if (child instanceof TK.Graph) {
+        if (child instanceof Graph) {
             this.remove_graph(child);
             return;
         }
 
-        TK.Widget.prototype.remove_child.call(this, child);
+        Widget.prototype.remove_child.call(this, child);
     },
     /**
      * Add a graph to the chart.
      *
-     * @method TK.Chart#add_graph
+     * @method Chart#add_graph
      * 
      * @param {Object} graph - The graph to add. This can be either an
-     *  instance of {@link TK.Graph} or an object of options to
-     *  {@link TK.Graph}.
+     *  instance of {@link Graph} or an object of options to
+     *  {@link Graph}.
      * 
-     * @returns {Object} The instance of {@link TK.Graph}.
+     * @returns {Object} The instance of {@link Graph}.
      * 
-     * @emits TK.Chart#graphadded
+     * @emits Chart#graphadded
      */
     add_graph: function (options) {
         var g;
 
-        if (TK.Graph.prototype.isPrototypeOf(options)) {
+        if (Graph.prototype.isPrototypeOf(options)) {
             g = options;
         } else {
-            g = new TK.Graph(options);
+            g = new Graph(options);
         }
 
         g.set("container", this._graphs);
@@ -515,26 +524,26 @@ TK.Chart = TK.class({
          * Is fired when a graph was added. Arguments are the graph
          * and its position in the array.
          * 
-         * @event TK.Chart#graphadded
+         * @event Chart#graphadded
          * 
-         * @param {TK.Graph} graph - The {@link TK.Graph} which was added.
-         * @param {int} id - The ID of the added {@link TK.Graph}.
+         * @param {Graph} graph - The {@link Graph} which was added.
+         * @param {int} id - The ID of the added {@link Graph}.
          */
         this.fire_event("graphadded", g, this.graphs.length - 1);
 
         this.invalid.graphs = true;
         this.trigger_draw();
-        TK.Widget.prototype.add_child.call(this, g);
+        Widget.prototype.add_child.call(this, g);
         return g;
     },
     /**
      * Remove a graph from the chart.
      *
-     * @method TK.Chart#remove_graph
+     * @method Chart#remove_graph
      * 
-     * @param {TK.Graph} graph - The {@link TK.Graph} to remove.
+     * @param {Graph} graph - The {@link Graph} to remove.
      * 
-     * @emits TK.Chart#graphremoved
+     * @emits Chart#graphremoved
      */
     remove_graph: function (g) {
         var i;
@@ -543,15 +552,15 @@ TK.Chart = TK.class({
              * Is fired when a graph was removed. Arguments are the graph
              * and its position in the array.
              * 
-             * @event TK.Chart#graphremoved
+             * @event Chart#graphremoved
              * 
-             * @param {TK.Graph} graph - The {@link TK.Graph} which was removed.
-             * @param {int} id - The ID of the removed {@link TK.Graph}.
+             * @param {Graph} graph - The {@link Graph} which was removed.
+             * @param {int} id - The ID of the removed {@link Graph}.
              */
             this.fire_event("graphremoved", g, i);
             g.destroy();
             this.graphs.splice(i, 1);
-            TK.Widget.prototype.remove_child.call(this, g);
+            Widget.prototype.remove_child.call(this, g);
             this.invalid.graphs = true;
             this.trigger_draw();
         }
@@ -559,33 +568,33 @@ TK.Chart = TK.class({
     /**
      * Remove all graphs from the chart.
      *
-     * @method TK.Chart#empty
+     * @method Chart#empty
      * 
-     * @emits TK.Chart#emptied
+     * @emits Chart#emptied
      */
     empty: function () {
         this.graphs.map(this.remove_graph, this);
         /**
          * Is fired when all graphs are removed from the chart.
          * 
-         * @event TK.Chart#emptied
+         * @event Chart#emptied
          */
         this.fire_event("emptied");
     },
     
     /*
      * Add a new handle to the widget. Options is an object containing
-     * options for the {@link TK.ResponseHandle}.
+     * options for the {@link ResponseHandle}.
      * 
-     * @method TK.ResponseHandler#add_handle
+     * @method ResponseHandler#add_handle
      * 
-     * @param {Object} [options={ }] - An object containing initial options. - The options for the {@link TK.ResponseHandle}.
-     * @param {Object} [type=TK.ResponseHandle] - A widget class to be used as the new handle.
+     * @param {Object} [options={ }] - An object containing initial options. - The options for the {@link ResponseHandle}.
+     * @param {Object} [type=ResponseHandle] - A widget class to be used as the new handle.
      * 
-     * @emits TK.ResponseHandler#handleadded
+     * @emits ResponseHandler#handleadded
      */
     add_handle: function (options, type) {
-        type = type || TK.ResponseHandle;
+        type = type || ResponseHandle;
         options.container = this._handles;
         if (options.range_x === void(0))
             options.range_x = function () { return this.range_x; }.bind(this);
@@ -603,21 +612,21 @@ TK.Chart = TK.class({
         /**
          * Is fired when a new handle was added.
          * 
-         * @param {TK.ResponseHandle} handle - The {@link TK.ResponseHandle} which was added.
+         * @param {ResponseHandle} handle - The {@link ResponseHandle} which was added.
          * 
-         * @event TK.ResponseHandler#handleadded
+         * @event ResponseHandler#handleadded
          */
         this.fire_event("handleadded", h);
         return h;
     },
     /*
-     * Add multiple new {@link TK.ResponseHandle} to the widget. Options is an array
-     * of objects containing options for the new instances of {@link TK.ResponseHandle}.
+     * Add multiple new {@link ResponseHandle} to the widget. Options is an array
+     * of objects containing options for the new instances of {@link ResponseHandle}.
      * 
-     * @method TK.ResponseHandler#add_handles
+     * @method ResponseHandler#add_handles
      * 
-     * @param {Array<Object>} options - An array of options objects for the {@link TK.ResponseHandle}.
-     * @param {Object} [type=TK.ResponseHandle] - A widget class to be used for the new handles.
+     * @param {Array<Object>} options - An array of options objects for the {@link ResponseHandle}.
+     * @param {Object} [type=ResponseHandle] - A widget class to be used for the new handles.
      */
     add_handles: function (handles, type) {
         for (var i = 0; i < handles.length; i++)
@@ -626,11 +635,11 @@ TK.Chart = TK.class({
     /*
      * Remove a handle from the widget.
      * 
-     * @method TK.ResponseHandler#remove_handle
+     * @method ResponseHandler#remove_handle
      * 
-     * @param {TK.ResponseHandle} handle - The {@link TK.ResponseHandle} to remove.
+     * @param {ResponseHandle} handle - The {@link ResponseHandle} to remove.
      * 
-     * @emits TK.ResponseHandler#handleremoved
+     * @emits ResponseHandler#handleremoved
      */
     remove_handle: function (handle) {
         // remove a handle from the widget.
@@ -643,7 +652,7 @@ TK.Chart = TK.class({
                 /**
                  * Is fired when a handle was removed.
                  * 
-                 * @event TK.ResponseHandler#handleremoved
+                 * @event ResponseHandler#handleremoved
                  */
                 this.fire_event("handleremoved");
                 break;
@@ -651,12 +660,12 @@ TK.Chart = TK.class({
         }
     },
     /*
-     * Remove multiple {@link TK.ResponseHandle} from the widget. Options is an array
-     * of {@link TK.ResponseHandle} instances.
+     * Remove multiple {@link ResponseHandle} from the widget. Options is an array
+     * of {@link ResponseHandle} instances.
      * 
-     * @method TK.ResponseHandler#remove_handles
+     * @method ResponseHandler#remove_handles
      * 
-     * @param {Array<TK.ResponseHandle>} handles - An array of {@link TK.ResponseHandle} instances.
+     * @param {Array<ResponseHandle>} handles - An array of {@link ResponseHandle} instances.
      */
     remove_handles: function () {
         // remove all handles from the widget.
@@ -667,7 +676,7 @@ TK.Chart = TK.class({
         /**
          * Is fired when all handles are removed.
          * 
-         * @event TK.ResponseHandler#emptied
+         * @event ResponseHandler#emptied
          */
         this.fire_event("emptied")
     },
@@ -725,8 +734,8 @@ TK.Chart = TK.class({
         return {intersect: a, count: c};
     },
 });
-TK.ChildWidget(TK.Chart, "grid", {
-    create: TK.Grid,
+ChildWidget(Chart, "grid", {
+    create: Grid,
     show: true,
     append: function() {
         this.svg.insertBefore(this.grid.element, this.svg.firstChild);
@@ -744,21 +753,21 @@ TK.ChildWidget(TK.Chart, "grid", {
 });
 function key_hover_cb(ev) {
     var b = ev.type === "mouseenter";
-    TK.toggle_class(this, "toolkit-hover", b);
+    toggle_class(this, "toolkit-hover", b);
     /* this.nextSibling is the key */
-    TK.toggle_class(this.nextSibling, "toolkit-hover", b);
+    toggle_class(this.nextSibling, "toolkit-hover", b);
 }
 /**
- * @member {SVGRect} TK.Chart#_key_background - The rectangle of the key.
+ * @member {SVGRect} Chart#_key_background - The rectangle of the key.
  *      Has class <code>toolkit-background</code>.
  */
-TK.ChildElement(TK.Chart, "key_background", {
+ChildElement(Chart, "key_background", {
     option: "key",
     display_check: function(v) {
         return !!v;
     },
     create: function() {
-        var k = TK.make_svg("rect", {"class": "toolkit-background"});
+        var k = make_svg("rect", {"class": "toolkit-background"});
         k.addEventListener("mouseenter", key_hover_cb);
         k.addEventListener("mouseleave", key_hover_cb);
         return k;
@@ -768,17 +777,17 @@ TK.ChildElement(TK.Chart, "key_background", {
     },
 });
 /**
- * @member {SVGGroup} TK.Chart#_key - The group containing all descriptions.
+ * @member {SVGGroup} Chart#_key - The group containing all descriptions.
  *      Has class <code>toolkit-key</code>.
  */
-TK.ChildElement(TK.Chart, "key", {
+ChildElement(Chart, "key", {
     option: "key",
     display_check: function(v) {
         return !!v;
     },
     create: function() {
-        var key = TK.make_svg("g", {"class": "toolkit-key"});
-        key.appendChild(TK.make_svg("text", {"class": "toolkit-key-text"}));
+        var key = make_svg("g", {"class": "toolkit-key"});
+        key.appendChild(make_svg("text", {"class": "toolkit-key-text"}));
         return key;
     },
     append: function() {
@@ -786,16 +795,16 @@ TK.ChildElement(TK.Chart, "key", {
     },
 });
 /**
- * @member {SVGText} TK.Chart#_title - The title of the chart.
+ * @member {SVGText} Chart#_title - The title of the chart.
  *      Has class <code>toolkit-title</code>.
  */
-TK.ChildElement(TK.Chart, "title", {
+ChildElement(Chart, "title", {
     option: "title",
     display_check: function(v) {
         return typeof(v) === "string" && v.length;
     },
     create: function() {
-        return TK.make_svg("text", {
+        return make_svg("text", {
             "class": "toolkit-title",
             style: "dominant-baseline: central;"
         });
@@ -805,4 +814,3 @@ TK.ChildElement(TK.Chart, "title", {
         svg.insertBefore(this._title, svg.firstChild);
     },
 });
-})(this, this.TK);

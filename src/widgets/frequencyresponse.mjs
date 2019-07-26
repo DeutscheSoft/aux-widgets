@@ -16,8 +16,10 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+import { define_class } from './../widget_helpers.mjs';
+import { Chart } from './chart.mjs';
+import { add_class } from '../helpers.mjs';
+
 function calculate_grid(range, step) {
     var min = range.get("min");
     var max = range.get("max");
@@ -40,31 +42,32 @@ function calculate_grid(range, step) {
 
     return grid;
 }
-TK.FrequencyResponse = TK.class({
+
+export const FrequencyResponse = define_class({
     /**
-     * TK.FrequencyResponse is a TK.Chart drawing frequencies on the x axis and dB
-     * values on the y axis. This widget automatically draws a TK.Grid depending
+     * FrequencyResponse is a Chart drawing frequencies on the x axis and dB
+     * values on the y axis. This widget automatically draws a Grid depending
      * on the ranges.
      *
-     * @class TK.FrequencyResponse
+     * @class FrequencyResponse
      * 
-     * @extends TK.Chart
+     * @extends Chart
      * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
      * @property {Number} [options.db_grid=12] - Distance in decibels between y axis grid lines.
-     * @property {Object} [options.range_x={min:20, max:20000, scale:"frequency"}] - Either a function returning a {@link TK.Range}
-     *   or an object containing options for a new {@link TK.Range}
-     * @property {Object} [options.range_y={min:-36, max: 36, scale: "linear"}] - Either a function returning a {@link TK.Range}
-     *   or an object containing options for a new {@link TK.Range}
+     * @property {Object} [options.range_x={min:20, max:20000, scale:"frequency"}] - Either a function returning a {@link Range}
+     *   or an object containing options for a new {@link Range}
+     * @property {Object} [options.range_y={min:-36, max: 36, scale: "linear"}] - Either a function returning a {@link Range}
+     *   or an object containing options for a new {@link Range}
      * @property {Array<Object>} [options.grid_x=[{pos:    20, label: "20 Hz"}, {pos:    30}, {pos:    40}, {pos:    50}, {pos:    60}, {pos:    70}, {pos:    80}, {pos:    90}, {pos:   100, label: "100 Hz"}, {pos:   200}, {pos:   300}, {pos:   400}, {pos:   500}, {pos:   600}, {pos:   700}, {pos:   800}, {pos:   900}, {pos:  1000, label: "1000 Hz"}, {pos:  2000}, {pos:  3000}, {pos:  4000}, {pos:  5000}, {pos:  6000}, {pos:  7000}, {pos:  8000}, {pos:  9000}, {pos: 10000, label: "10000 Hz"}, {pos: 20000, label: "20000 Hz"}]] - An array containing objects with the following optional members:
      *   <code>{pos:y[, color: "colorstring"[,class: "classname"[, label:"labeltext"]]]}</code>
-     * @property {String} [options.scale="linear"] - The type of the decibels scale. See {@link TK.Range} for more details.
+     * @property {String} [options.scale="linear"] - The type of the decibels scale. See {@link Range} for more details.
      * @param {Number} [options.depth=0] - The depth of the z axis (<code>basis</code> of options.range_z)
      */
     _class: "FrequencyResponse",
-    Extends: TK.Chart,
-    _options: Object.assign(Object.create(TK.Chart.prototype._options), {
+    Extends: Chart,
+    _options: Object.assign(Object.create(Chart.prototype._options), {
         db_grid: "number",
         grid_x: "array",
         scale: "boolean",
@@ -72,8 +75,8 @@ TK.FrequencyResponse = TK.class({
     }),
     options: {
         db_grid: 12,                                         // dB grid distance
-        range_x: {min:20, max:20000, scale:"frequency"},   // TK.Range x options
-        range_y: {min:-36, max: 36, scale: "linear"}, // TK.Range y options
+        range_x: {min:20, max:20000, scale:"frequency"},   // Range x options
+        range_y: {min:-36, max: 36, scale: "linear"}, // Range y options
         range_z: {min:0.1, max:10, scale:"linear"},
         grid_x:  [
                     {pos:    20, label: "20Hz"},
@@ -117,14 +120,17 @@ TK.FrequencyResponse = TK.class({
         },
     },
     initialize: function (options) {
+        Chart.prototype.initialize.call(this, options);
+
+        options = this.options;
+
         if (options.scale)
             this.set("scale", options.scale, true);
-        TK.Chart.prototype.initialize.call(this, options);
         /**
-         * @member {HTMLDivElement} TK.FrequencyResponse#element - The main DIV container.
+         * @member {HTMLDivElement} FrequencyResponse#element - The main DIV container.
          *   Has class <code>toolkit-frequency-response</code>.
          */
-        TK.add_class(this.element, "toolkit-frequency-response");
+        add_class(this.element, "toolkit-frequency-response");
         // do not overwrite custom grids, please
         if (this.options.db_grid && !this.options.grid_y.length)
             this.set("db_grid", this.options.db_grid);
@@ -145,7 +151,6 @@ TK.FrequencyResponse = TK.class({
             I.ranges = true;
         }
 
-        TK.Chart.prototype.redraw.call(this);
+        Chart.prototype.redraw.call(this);
     },
 });
-})(this, this.TK);

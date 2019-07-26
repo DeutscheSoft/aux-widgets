@@ -17,35 +17,35 @@
  * Boston, MA  02110-1301  USA
  */
  
-"use strict";
-(function(w, TK){
+import { define_class } from './../widget_helpers.mjs';
+import { FrequencyResponse } from './frequencyresponse.mjs';
+import { add_class } from '../helpers.mjs';
     
-TK.ResponseHandler = TK.class({
+export const ResponseHandler = define_class({
     /**
-     * TK.ResponseHandler is a TK.FrequencyResponse adding some ResponseHandles. It is
+     * ResponseHandler is a FrequencyResponse adding some ResponseHandles. It is
      * meant as a universal user interface for equalizers and the like.
      * 
      * This class is deprecated since all relevant functionality went into
-     * the base class TK.Graph. Use TK.FrequencyResponse instead.
+     * the base class Graph. Use FrequencyResponse instead.
      *
-     * @class TK.ResponseHandler
+     * @class ResponseHandler
      * 
-     * @extends TK.FrequencyResponse
+     * @extends FrequencyResponse
      */
     _class: "ResponseHandler",
-    Extends: TK.FrequencyResponse,
+    Extends: FrequencyResponse,
     initialize: function (options) {
-        TK.FrequencyResponse.prototype.initialize.call(this, options);
+        FrequencyResponse.prototype.initialize.call(this, options);
         /**
-         * @member {HTMLDivElement} TK.ResponseHandler#element - The main DIV container.
+         * @member {HTMLDivElement} ResponseHandler#element - The main DIV container.
          *   Has class <code>toolkit-response-handler</code>.
          */
-        TK.add_class(this.element, "toolkit-response-handler");
+        add_class(this.element, "toolkit-response-handler");
         /**
-         * @member {SVGImage} TK.ResponseHandler#_handles - An SVG group element containing all {@link TK.ResponseHandle} graphics.
+         * @member {SVGImage} ResponseHandler#_handles - An SVG group element containing all {@link ResponseHandle} graphics.
          *   Has class <code>toolkit-response-handles</code>.
          */
-        TK.add_class(this._handles, "toolkit-response-handles");
+        add_class(this._handles, "toolkit-response-handles");
     },
 });
-})(this, this.TK);

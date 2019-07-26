@@ -16,8 +16,13 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK) {
+import { define_class } from './../widget_helpers.mjs';
+import { Widget } from '../widgets/widget.mjs';
+import { Ranges } from '../implements/ranges.mjs';
+import {
+    make_svg, add_class, remove_class, error
+  } from '../helpers.mjs';
+
 function range_change_cb() {
     this.invalidate_all();
     this.trigger_draw();
@@ -41,7 +46,7 @@ function transform_dots(dots) {
             return ret;
         } else return dots;
     } else {
-        TK.error("Unsupported option 'dots':", dots);
+        error("Unsupported option 'dots':", dots);
         return "";
     }
 }
@@ -98,7 +103,7 @@ function _start(d, s) {
             );
             break;
         default:
-            TK.error("Unsupported mode:", m);
+            error("Unsupported mode:", m);
             /* FALL THROUGH */
         case "line":
             // fill nothing
@@ -131,7 +136,7 @@ function _end(d, s) {
             s.push(" " + t + " " + svg_round(x + 1) + " " + svg_round((-m + 1) * h) + " Z");
             break;
         default:
-            TK.error("Unsupported mode:", m);
+            error("Unsupported mode:", m);
             /* FALL THROUGH */
         case "line":
             // fill nothing
@@ -139,21 +144,21 @@ function _end(d, s) {
     }
 }
     
-TK.Graph = TK.class({
+export const Graph = define_class({
     /**
-     * TK.Graph is a single SVG path element. It provides
+     * Graph is a single SVG path element. It provides
      * some functions to easily draw paths inside Charts and other
      * derivates.
      *
-     * @class TK.Graph
+     * @class Graph
      * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
      * @property {Function|Object} options.range_x - Callback function
-     *   returning a {@link TK.Range} module for x axis or an object with options
+     *   returning a {@link Range} module for x axis or an object with options
      *   for a new {@link Range}.
      * @property {Function|Object} options.range_y - Callback function
-     *   returning a {@link TK.Range} module for y axis or an object with options
+     *   returning a {@link Range} module for y axis or an object with options
      *   for a new {@link Range}.
      * @property {Array<Object>|String} options.dots=[] - The dots of the path.
      *   Can be a ready-to-use SVG-path-string or an array of objects like
@@ -184,14 +189,14 @@ TK.Graph = TK.class({
      * @property {String|Boolean} [options.key=false] - Show a description
      *   for this graph in the charts key, <code>false</code> to turn it off.
      * 
-     * @extends TK.Widget
+     * @extends Widget
      * 
-     * @mixes TK.Ranges
+     * @mixes Ranges
      */
     _class: "Graph",
-    Extends: TK.Widget,
-    Implements: TK.Ranges,
-    _options: Object.assign(Object.create(TK.Widget.prototype._options), {
+    Extends: Widget,
+    Implements: Ranges,
+    _options: Object.assign(Object.create(Widget.prototype._options), {
         dots: "array",
         type: "string",
         mode: "string",
@@ -216,14 +221,14 @@ TK.Graph = TK.class({
     },
     
     initialize: function (options) {
-        TK.Widget.prototype.initialize.call(this, options);
-        /** @member {SVGPath} TK.Graph#element - The SVG path. Has class <code>toolkit-graph</code> 
+        Widget.prototype.initialize.call(this, options);
+        /** @member {SVGPath} Graph#element - The SVG path. Has class <code>toolkit-graph</code> 
          */
-        this.element = this.widgetize(TK.make_svg("path"), true, true, true);
-        TK.add_class(this.element, "toolkit-graph");
-        /** @member {TK.Range} TK.Graph#range_x - The range for the x axis. 
+        this.element = this.widgetize(make_svg("path"), true, true, true);
+        add_class(this.element, "toolkit-graph");
+        /** @member {Range} Graph#range_x - The range for the x axis. 
          */
-        /** @member {TK.Range} TK.Graph#range_y - The range for the y axis.
+        /** @member {Range} Graph#range_y - The range for the y axis.
          */
         if (this.options.range_x) this.set("range_x", this.options.range_x);
         if (this.options.range_y) this.set("range_y", this.options.range_y);
@@ -244,9 +249,9 @@ TK.Graph = TK.class({
 
         if (I.mode) {
             I.mode = false;
-            TK.remove_class(E, "toolkit-filled");
-            TK.remove_class(E, "toolkit-outline");
-            TK.add_class(E, O.mode === "line" ?  "toolkit-outline" : "toolkit-filled");
+            remove_class(E, "toolkit-filled");
+            remove_class(E, "toolkit-outline");
+            add_class(E, O.mode === "line" ?  "toolkit-outline" : "toolkit-filled");
         }
 
         if (I.validate("dots", "type", "width", "height")) {
@@ -311,14 +316,14 @@ TK.Graph = TK.class({
                         s.push(" S" + x[i] + "," + y[i] + " " + x[i] + "," + y[i]);
                     break;
                 default:
-                    TK.error("Unsupported graph type", O.type);
+                    error("Unsupported graph type", O.type);
                 }
                 
                 _end.call(this, dots, s);
                 E.setAttribute("d", s.join(""));
             }
         }
-        TK.Widget.prototype.redraw.call(this);
+        Widget.prototype.redraw.call(this);
     },
     
     // GETTER & SETTER
@@ -326,7 +331,7 @@ TK.Graph = TK.class({
         if (key === "dots") {
             value = transform_dots(value);
         }
-        TK.Widget.prototype.set.call(this, key, value);
+        Widget.prototype.set.call(this, key, value);
         switch (key) {
             case "range_x":
             case "range_y":
@@ -342,11 +347,10 @@ TK.Graph = TK.class({
             case "dots":
                 /**
                  * Is fired when the graph changes
-                 * @event TK.Graph#graphchanged
+                 * @event Graph#graphchanged
                  */
                 this.fire_event("graphchanged");
                 break;
         }
     }
 });
-})(this, this.TK);
