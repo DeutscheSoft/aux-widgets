@@ -35,10 +35,6 @@ function dispatch_events(self, handlers, args) {
         }
     } else return call_handler(self, handlers, args);
 }
-function arrayify(x) {
-    if (!Array.isArray(x)) x = [ x ];
-    return x;
-}
 var __native_events = {
     // mouse
     mouseenter : true,

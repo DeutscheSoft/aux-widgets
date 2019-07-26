@@ -16,22 +16,24 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK) {
-TK.Range = TK.class({
+import { define_class } from './../widget_helpers.mjs';
+import { Base } from '../implements/base.mjs';
+import { Ranged } from '../implements/ranged.mjs';
+
+export const Range = define_class({
     /**
-    * TK.Range is used for calculating linear scales from
+    * Range is used for calculating linear scales from
     * different values. They are useful to build coordinate systems,
     * calculate pixel positions for different scale types and the like.
-    * TK.Range is used e.g. in {@link TK.Scale}, {@link TK.MeterBase} and {@link TK.Graph} to draw
+    * Range is used e.g. in {@link Scale}, {@link MeterBase} and {@link Graph} to draw
     * elements on a certain position according to a value on an
     * arbitrary scale.
     * 
-    * @class TK.Range
+    * @class Range
     * 
-    * @extends TK.Base
+    * @extends Base
     * 
-    * @mixes TK.Ranged
+    * @mixes Ranged
     * 
     * @param {Object} [options={ }] - An object containing initial options.
     * 
@@ -72,9 +74,9 @@ TK.Range = TK.class({
     *   Otherwise the value has to reach the next snap until it is hold there
     *   again.
      */
-    Extends : TK.Base,
+    Extends : Base,
     _class: "Range",
-    Implements: [TK.Ranged],
+    Implements: [Ranged],
     _options: {
         scale: "string|function",
         reverse: "boolean",
@@ -100,4 +102,3 @@ TK.Range = TK.class({
         round:      false 
     },
 });
-})(this, this.TK);

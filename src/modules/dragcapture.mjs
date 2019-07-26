@@ -16,8 +16,10 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+import { define_class } from './../widget_helpers.mjs';
+import { Module } from './module.mjs';
+import { add_event_listener, remove_event_listener } from '../helpers.mjs';
+
 var document = window.document;
 
 /* this has no global symbol */
@@ -56,7 +58,7 @@ function startcapture(state) {
     /**
      * Capturing started.
      * 
-     * @event TK.Drag#startcapture
+     * @event Drag#startcapture
      * 
      * @param {object} state - An internal state object.
      * @param {DOMEvent} start - The event object of the initial event.
@@ -78,7 +80,7 @@ function movecapture(ev) {
     /**
      * A movement was captured.
      * 
-     * @event TK.Drag#movecapture
+     * @event Drag#movecapture
      * 
      * @param {DOMEvent} event - The event object of the current move event.
      */
@@ -95,7 +97,7 @@ function stopcapture(ev) {
     /**
      * Capturing stopped..
      * 
-     * @event TK.Drag#stopcapture
+     * @event Drag#stopcapture
      * 
      * @param {object} state - An internal state object.
      * @param {DOMEvent} event - The event object of the current event.
@@ -282,8 +284,8 @@ var static_events = {
         },
         function(elem, old) {
             /* NOTE: this works around a bug in chrome (#673102) */
-            if (old) TK.remove_event_listener(get_parents(old), "touchstart", dummy);
-            if (elem) TK.add_event_listener(get_parents(elem), "touchstart", dummy);
+            if (old) remove_event_listener(get_parents(old), "touchstart", dummy);
+            if (elem) add_event_listener(get_parents(elem), "touchstart", dummy);
         }
     ],
     touchstart: touchstart,
@@ -293,25 +295,25 @@ var static_events = {
     mousedown: mousedown,
 };
 
-TK.DragCapture = TK.class({
+export const DragCapture = define_class({
     
     /**
-     * TK.DragCapture is a low-level class for tracking drag events on
+     * DragCapture is a low-level class for tracking drag events on
      *   both, touch and mouse events. It can be used for implementing drag'n'drop
-     *   functionality as well as dragging the value of e.g. {@link TK.Fader} or
-     *   {@link TK.Knob}. {@link TK.DragValue} derives from TK.DragCapture.
+     *   functionality as well as dragging the value of e.g. {@link Fader} or
+     *   {@link Knob}. {@link DragValue} derives from DragCapture.
      * 
-     * @extends TK.Module
+     * @extends Module
      *
      * @param {Object} widget - The parent widget making use of DragValue.
      * @param {Object} [options={ }] - An object containing initial options.
      * 
      * @param {HTMLElement} [options.node] - The DOM element receiving the drag events. If not set the widgets element is used.
      * 
-     * @class TK.DragCapture
+     * @class DragCapture
      */
      
-    Extends: TK.Module,
+    Extends: Module,
     _class: "DragCapture",
     _options: {
         node: "object",
@@ -322,13 +324,13 @@ TK.DragCapture = TK.class({
     },
     static_events: static_events,
     initialize: function(widget, O) {
-        TK.Module.prototype.initialize.call(this, widget, O);
+        Module.prototype.initialize.call(this, widget, O);
         this.drag_state = null;
         if (O.node === void(0)) O.node = widget.element;
         this.set("node", O.node);
     },
     destroy: function() {
-        TK.Base.prototype.destroy.call(this);
+        Module.prototype.destroy.call(this);
         stopcapture.call(this);
     },
     cancel_drag: stopcapture,
@@ -342,4 +344,3 @@ TK.DragCapture = TK.class({
         return this.drag_state !== null && this.drag_state.is_dragged_by(ev);
     },
 });
-})(this, this.TK);

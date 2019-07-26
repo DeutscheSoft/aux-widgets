@@ -16,8 +16,10 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+import { define_class } from './../widget_helpers.mjs';
+import { Base } from '../implements/base.mjs';
+import { error } from '../helpers.mjs';
+
 /* These formulae for 'standard' biquad filter coefficients are
  * from
  *  "Cookbook formulae for audio EQ biquad filter coefficients"
@@ -297,27 +299,25 @@ function BiquadFilterN(trafos) {
     return factory;
 }
 
-function BiquadFilter() {
+export function BiquadFilter() {
     if (arguments.length === 1) return BiquadFilter1(arguments[0]);
 
     return BiquadFilterN.call(this, Array.prototype.slice.call(arguments));
 }
-
-TK.BiquadFilter = BiquadFilter;
 
 function reset() {
     this.freq2gain = null;
     /**
      * Is fired when a filters drawing function is reset.
      * 
-     * @event TK.Filter#reset
+     * @event Filter#reset
      */
     this.fire_event("reset");
 }
 
-TK.Filter = TK.class({
+export const Filter = define_class({
     /**
-     * TK.Filter provides the math for calculating a gain from
+     * Filter provides the math for calculating a gain from
      * a given frequency for different types of biquad filters.
      *
      * @param {Object} [options={ }] - An object containing initial options.
@@ -330,25 +330,25 @@ TK.Filter = TK.class({
      * @property {Number} [options.q=1] - The initial Q of the filter.
      * @property {Number} [options.sample_rate=44100] - The sample rate.
      *
-     * @mixin TK.Filter
+     * @mixin Filter
      * 
-     * @extends TK.Base
+     * @extends Base
      * 
-     * @mixes TK.AudioMath
-     * @mixes TK.Notes
+     * @mixes AudioMath
+     * @mixes Notes
      */
      
      /**
       * Returns the gain for a given frequency
       * 
-      * @method TK.Filter#freq2gain
+      * @method Filter#freq2gain
       * 
       * @param {number} frequency - The frequency to calculate the gain for.
       * 
       * @returns {number} gain - The gain at the given frequency.
       */ 
     _class: "Filter",
-    Extends: TK.Base,
+    Extends: Base,
     _options: {
         type: "string|function",
         freq: "number",
@@ -378,13 +378,13 @@ TK.Filter = TK.class({
             m = standard_biquads[O.type];
 
             if (!m) {
-                TK.error("Unknown standard filter: "+O.type);
+                error("Unknown standard filter: "+O.type);
                 return;
             }
         } else if (typeof(O.type) === "function") {
             m = O.type;
         } else {
-            TK.error("Unsupported option 'type'.");
+            error("Unsupported option 'type'.");
             return;
         }
         this.freq2gain = m(window, O).freq2gain;
@@ -395,7 +395,3 @@ TK.Filter = TK.class({
     },
     reset: reset,
 });
-
-TK.Filters = Filters;
-
-})(this, this.TK);

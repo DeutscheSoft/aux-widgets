@@ -16,10 +16,13 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
 
-var type_to_mode = {
+import { define_class } from './../widget_helpers.mjs';
+import { Filter } from './filter.mjs';
+import { ResponseHandle } from './responsehandle.mjs';
+import { add_class, warn } from '../helpers.mjs';
+
+const type_to_mode = {
     parametric: "circular",
     notch: "line-vertical",
     lowpass1: "block-right",
@@ -34,7 +37,7 @@ var type_to_mode = {
     "high-shelf": "line-vertical",
 };
 
-var type_to_pref = {
+const type_to_pref = {
     parametric: ["left", "top", "right", "bottom"],
     notch: ["left", "right", "top", "bottom"],
     lowpass1: ["left", "top-left", "bottom-left", "right", "top-right", "bottom-right", "top", "bottom"],
@@ -49,14 +52,14 @@ var type_to_pref = {
     "high-shelf": ["left", "right", "top", "bottom"],
 };
 
-TK.EqBand = TK.class({
+export const EqBand = define_class({
     /**
-     * An TK.EqBand extends a {@link TK.ResponseHandle} and holds a
-     * dependent {@link TK.Filter}. It is used as a fully functional representation
-     * of a single equalizer band in {@link TK.Equalizer} TK.EqBand needs a {@link TK.Chart} 
+     * An EqBand extends a {@link ResponseHandle} and holds a
+     * dependent {@link Filter}. It is used as a fully functional representation
+     * of a single equalizer band in {@link Equalizer} EqBand needs a {@link Chart} 
      * or any other derivate to be drawn in.
      *
-     * @class TK.EqBand
+     * @class EqBand
      * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
@@ -65,17 +68,17 @@ TK.EqBand = TK.class({
      *   <code>low-shelf</code>, <code>high-shelf</code>, <code>lowpass[n]</code> or
      *   <code>highpass[n]</code>.
      * @property {Number} options.freq - Frequency setting. This is an alias for the option <code>x</code>
-     *   defined by {@link TK.ResponseHandle}.
+     *   defined by {@link ResponseHandle}.
      * @property {Number} options.gain - Gain setting. This is an alias for the option <code>y</code>
-     *   defined by {@link TK.ResponseHandle}.
+     *   defined by {@link ResponseHandle}.
      * @property {Number} options.q - Quality setting. This is an alias for the option <code>z</code>
-     *   defined by {@link TK.ResponseHandle}.
+     *   defined by {@link ResponseHandle}.
      *
-     * @extends TK.ResponseHandle
+     * @extends ResponseHandle
      */
     _class: "EqBand",
-    Extends: TK.ResponseHandle,
-    _options: Object.assign(Object.create(TK.ResponseHandle.prototype._options), {
+    Extends: ResponseHandle,
+    _options: Object.assign(Object.create(ResponseHandle.prototype._options), {
         type: "string|function",
         gain: "number",
         freq: "number",
@@ -100,13 +103,15 @@ TK.EqBand = TK.class({
     
     initialize: function (options) {
         /**
-         * @member {TK.Filter} TK.EqBand#filter - The filter providing the graphical calculations. 
+         * @member {Filter} EqBand#filter - The filter providing the graphical calculations. 
          */
-        this.filter = new TK.Filter({
+        ResponseHandle.prototype.initialize.call(this, options);
+
+        options = this.options;
+
+        this.filter = new Filter({
             type: options.type,
         });
-        
-        TK.ResponseHandle.prototype.initialize.call(this, options);
         
         if (options.mode) var _m = options.mode;
         this.set("type", this.options.type);
@@ -126,10 +131,10 @@ TK.EqBand = TK.class({
             this.set("q", options.q);
         
         /** 
-         * @member {HTMLDivElement} TK.EqBand#element - The main SVG group.
+         * @member {HTMLDivElement} EqBand#element - The main SVG group.
          *   Has class <code>toolkit-eqband</code>.
          */
-        TK.add_class(this.element, "toolkit-eqband");
+        add_class(this.element, "toolkit-eqband");
         
         this.filter.reset();
     },
@@ -137,7 +142,7 @@ TK.EqBand = TK.class({
     /**
      * Calculate the gain for a given frequency in Hz.
      *
-     * @method TK.EqBand#freq2gain
+     * @method EqBand#freq2gain
      * 
      * @param {number} freq - The frequency.
      * 
@@ -155,7 +160,7 @@ TK.EqBand = TK.class({
                     var mode = type_to_mode[value];
                     var pref = type_to_pref[value];
                     if (!mode) {
-                        TK.warn("Unsupported type:", value);
+                        warn("Unsupported type:", value);
                         return;
                     }
                     this.set("mode", mode);
@@ -179,7 +184,6 @@ TK.EqBand = TK.class({
                 value = this.range_z.snap(value);
                 break;
         }
-        return TK.ResponseHandle.prototype.set.call(this, key, value);
+        return ResponseHandle.prototype.set.call(this, key, value);
     }
 });
-})(this, this.TK);

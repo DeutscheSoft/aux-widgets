@@ -16,10 +16,20 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
+
+import { define_class } from './../widget_helpers.mjs';
+import { Widget } from './../widgets/widget.mjs';
+import { GlobalCursor } from '../implements/globalcursor.mjs';
+import { Ranges } from '../implements/ranges.mjs';
+import { Warning } from '../implements/warning.mjs';
+import {
+  FORMAT, warn, make_svg, add_event_listener, remove_event_listener,
+  set_text, S, remove_class, add_class, toggle_class
+} from '../helpers.mjs';
+
+import { DragCapture } from '../modules/dragcapture.mjs';
  
-"use strict";
-(function(w, TK){
-var MODES = [
+const MODES = [
     "circular",
     "line-horizontal",
     "line-vertical",
@@ -46,10 +56,10 @@ function scrollwheel(e) {
 
     if (this.__sto) window.clearTimeout(this.__sto);
     this.set("dragging", true);
-    TK.add_class(this.element, "toolkit-active");
+    add_class(this.element, "toolkit-active");
     this.__sto = window.setTimeout(function () {
         this.set("dragging", false);
-        TK.remove_class(this.element, "toolkit-active");
+        remove_class(this.element, "toolkit-active");
         this.fire_event("zchangeended", this.options.z);
     }.bind(this), 250);
     var s = this.range_z.get("step") * direction;
@@ -70,7 +80,7 @@ function ROT(a) {
     return [ +Math.sin(+a), +Math.cos(+a) ];
 }
 
-var ZHANDLE_POSITION_circular = {
+const ZHANDLE_POSITION_circular = {
     "top":          ROT(Math.PI),
     "center":       [1e-10, 1e-10],
     "top-right":    ROT(Math.PI*3/4),
@@ -94,14 +104,14 @@ function get_zhandle_position_movable(O, X) {
     ];
 }
 
-var Z_HANDLE_SIZE_corner = [ 1, 1, 0, 0 ];
-var Z_HANDLE_SIZE_horiz = [ 1, 0, 0, 1 ];
-var Z_HANDLE_SIZE_vert = [ 0, 1, 1, 0 ];
+const Z_HANDLE_SIZE_corner = [ 1, 1, 0, 0 ];
+const Z_HANDLE_SIZE_horiz = [ 1, 0, 0, 1 ];
+const Z_HANDLE_SIZE_vert = [ 0, 1, 1, 0 ];
 
 function Z_HANDLE_SIZE(pos) {
     switch (pos) {
     default:
-        TK.warn("Unsupported z_handle position:", pos);
+        warn("Unsupported z_handle position:", pos);
     case "top-right":
     case "bottom-right":
     case "bottom-left":
@@ -141,7 +151,7 @@ function get_zhandle_size(O, X) {
     return [width, height];
 }
 
-var Z_HANDLE_POS = {
+const Z_HANDLE_POS = {
     "top":          [ 0, -1 ],
     "top-right":    [ 1, -1 ],
     "right":        [ 1, 0 ],
@@ -173,7 +183,7 @@ function mode_to_handle(mode) {
     return mode;
 }
 
-var LABEL_ALIGN = {
+const LABEL_ALIGN = {
     "line-vertical": {
         "top":      "middle",
         "bottom":   "middle",
@@ -230,7 +240,7 @@ function get_label_align(O, pos) {
  * The third pair is a multiplier for the margin
 */ 
 
-var LABEL_POSITION = {
+const LABEL_POSITION = {
     "line-vertical": {
         top:                 [ 0, -1, 0, 0, 0, 1 ],
         right:               [ 1, 0, 0, -1/2, 1, 0 ],
@@ -320,7 +330,7 @@ function create_zhandle() {
 
     if (this._zhandle) remove_zhandle.call(this);
 
-    E = TK.make_svg(
+    E = make_svg(
         O.mode === "circular" ? "circle" : "rect", {
             "class": "toolkit-z-handle",
         }
@@ -333,13 +343,13 @@ function create_zhandle() {
 
 function create_line1() {
     if (this._line1) remove_line1.call(this);
-    this._line1 = TK.make_svg("path", {
+    this._line1 = make_svg("path", {
         "class": "toolkit-line toolkit-line-1"
     });
 }
 function create_line2() {
     if (this._line2) remove_line2.call(this);
-    this._line2 = TK.make_svg("path", {
+    this._line2 = make_svg("path", {
         "class": "toolkit-line toolkit-line-2"
     });
 }
@@ -356,7 +366,7 @@ function remove_line2() {
 
 /* Prints a line, making sure that an offset of 0.5 px aligns them on
  * pixel boundaries */
-var format_line = TK.FORMAT("M %.0f.5 %.0f.5 L %.0f.5 %.0f.5");
+const format_line = FORMAT("M %.0f.5 %.0f.5 L %.0f.5 %.0f.5");
 
 /* calculates the actual label positions based on given alignment
  * and dimensions */
@@ -481,7 +491,7 @@ function redraw_handle(O, X) {
             if (X[3] - X[1] < tmp) X[1] = X[3] - tmp;
             break;
         default:
-            TK.warn("Unsupported mode:", O.mode);
+            warn("Unsupported mode:", O.mode);
         }
 
         /* Draw the rectangle */
@@ -563,21 +573,21 @@ function prevent_default(e) {
 
 function create_label() {
     var E;
-    this._label = E = TK.make_svg("text", {
+    this._label = E = make_svg("text", {
         "class": "toolkit-label"
     });
-    TK.add_event_listener(E, "mousewheel", this._scrollwheel);
-    TK.add_event_listener(E, "DOMMouseScroll",  this._scrollwheel);
-    TK.add_event_listener(E, 'contextmenu', prevent_default);
+    add_event_listener(E, "mousewheel", this._scrollwheel);
+    add_event_listener(E, "DOMMouseScroll",  this._scrollwheel);
+    add_event_listener(E, 'contextmenu', prevent_default);
 }
 
 function remove_label() {
     var E = this._label;
     this._label = null;
     E.remove();
-    TK.remove_event_listener(E, "mousewheel",      this._scrollwheel);
-    TK.remove_event_listener(E, "DOMMouseScroll",  this._scrollwheel);
-    TK.remove_event_listener(E, 'contextmenu', prevent_default);
+    remove_event_listener(E, "mousewheel",      this._scrollwheel);
+    remove_event_listener(E, "DOMMouseScroll",  this._scrollwheel);
+    remove_event_listener(E, 'contextmenu', prevent_default);
 
     this.label = [0,0,0,0];
 }
@@ -590,12 +600,12 @@ function create_handle() {
 
     if (this._handle) remove_handle.call(this);
     
-    E = TK.make_svg(O.mode === "circular" ? "circle" : "rect",
+    E = make_svg(O.mode === "circular" ? "circle" : "rect",
                     { class: "toolkit-handle" });
-    TK.add_event_listener(E, "mousewheel",     this._scrollwheel);
-    TK.add_event_listener(E, "DOMMouseScroll", this._scrollwheel);
-    TK.add_event_listener(E, 'selectstart', prevent_default);
-    TK.add_event_listener(E, 'contextmenu', prevent_default);
+    add_event_listener(E, "mousewheel",     this._scrollwheel);
+    add_event_listener(E, "DOMMouseScroll", this._scrollwheel);
+    add_event_listener(E, 'selectstart', prevent_default);
+    add_event_listener(E, 'contextmenu', prevent_default);
     this._handle = E;
     this.element.appendChild(E);
 }
@@ -605,10 +615,10 @@ function remove_handle() {
     if (!E) return;
     this._handle = null;
     E.remove();
-    TK.remove_event_listener(E, "mousewheel",     this._scrollwheel);
-    TK.remove_event_listener(E, "DOMMouseScroll", this._scrollwheel);
-    TK.remove_event_listener(E, "selectstart", prevent_default);
-    TK.remove_event_listener(E, 'contextmenu', prevent_default);
+    remove_event_listener(E, "mousewheel",     this._scrollwheel);
+    remove_event_listener(E, "DOMMouseScroll", this._scrollwheel);
+    remove_event_listener(E, "selectstart", prevent_default);
+    remove_event_listener(E, 'contextmenu', prevent_default);
 }
 
 function redraw_label(O, X) {
@@ -621,18 +631,18 @@ function redraw_label(O, X) {
     var c = this._label.childNodes;
 
     while (c.length < a.length) {
-        this._label.appendChild(TK.make_svg("tspan", {dy:"1.0em"}));
+        this._label.appendChild(make_svg("tspan", {dy:"1.0em"}));
     }
     while (c.length > a.length) {
         this._label.removeChild(this._label.lastChild);
     }
     for (var i = 0; i < a.length; i++) {
-        TK.set_text(c[i], a[i]);
+        set_text(c[i], a[i]);
     }
 
     if (!this._label.parentNode) this.element.appendChild(this._label);
 
-    TK.S.add(function() {
+    S.add(function() {
         var w = 0;
         for (var i = 0; i < a.length; i++) {
             w = Math.max(w, c[i].getComputedTextLength());
@@ -647,7 +657,7 @@ function redraw_label(O, X) {
             return;
         }
 
-        TK.S.add(function() {
+        S.add(function() {
             var label_size = [ w, bbox.height ];
 
             var i;
@@ -756,7 +766,7 @@ function redraw_lines(O, X) {
             }
             break;
         default:
-            TK.warn("Unsupported mode", pref[i]);
+            warn("Unsupported mode", pref[i]);
     }
 
     if (this._line1 && !this._line1.parentNode) this.element.appendChild(this._line1);
@@ -767,15 +777,15 @@ function set_main_class(O) {
     var E = this.element;
     var i;
 
-    for (i = 0; i < MODES.length; i++) TK.remove_class(E, "toolkit-"+MODES[i]);
+    for (i = 0; i < MODES.length; i++) remove_class(E, "toolkit-"+MODES[i]);
 
-    TK.remove_class(E, "toolkit-line");
-    TK.remove_class(E, "toolkit-block");
+    remove_class(E, "toolkit-line");
+    remove_class(E, "toolkit-block");
 
     switch (O.mode) {
     case "line-vertical":
     case "line-horizontal":
-        TK.add_class(E, "toolkit-line");
+        add_class(E, "toolkit-line");
     case "circular":
         break;
     case "block-left":
@@ -783,25 +793,25 @@ function set_main_class(O) {
     case "block-top":
     case "block-bottom":
     case "block":
-        TK.add_class(E, "toolkit-block");
+        add_class(E, "toolkit-block");
         break;
     default:
-        TK.warn("Unsupported mode:", O.mode);
+        warn("Unsupported mode:", O.mode);
         return;
     }
 
-    TK.add_class(E, "toolkit-"+O.mode);
+    add_class(E, "toolkit-"+O.mode);
 }
 
 function startdrag() {
     this.draw_once(function() {
         var e = this.element;
         var p = e.parentNode;
-        TK.add_class(e, "toolkit-active");
+        add_class(e, "toolkit-active");
         this.set("dragging", true);
 
         /* TODO: move this into the parent */
-        TK.add_class(this.parent.element, "toolkit-dragging");
+        add_class(this.parent.element, "toolkit-dragging");
 
         this.global_cursor("move");
 
@@ -813,11 +823,11 @@ function startdrag() {
 function enddrag() {
     this.draw_once(function() {
         var e = this.element;
-        TK.remove_class(e, "toolkit-active");
+        remove_class(e, "toolkit-active");
         this.set("dragging", false);
 
         /* TODO: move this into the parent */
-        TK.remove_class(this.parent.element, "toolkit-dragging");
+        remove_class(this.parent.element, "toolkit-dragging");
 
         this.remove_cursor("move");
     });
@@ -825,22 +835,22 @@ function enddrag() {
 
 /**
  * Class which represents a draggable SVG element, which can be used to represent and change
- * a value inside of a {@link TK.ResponseHandler} and is drawn inside of a chart.
+ * a value inside of a {@link ResponseHandler} and is drawn inside of a chart.
  *
- * @class TK.ResponseHandle
+ * @class ResponseHandle
  * 
- * @extends TK.Widget
+ * @extends Widget
  *
  * @param {Object} [options={ }] - An object containing initial options.
  * 
- * @property {Function|Object} options.range_x - Callback returning a {@link TK.Range}
- *   for the x-axis or an object with options for a {@link TK.Range}. This is usually
+ * @property {Function|Object} options.range_x - Callback returning a {@link Range}
+ *   for the x-axis or an object with options for a {@link Range}. This is usually
  *   the <code>x_range</code> of the parent chart.
- * @property {Function|Object} options.range_y - Callback returning a {@link TK.Range}
- *   for the y-axis or an object with options for a {@link TK.Range}. This is usually
+ * @property {Function|Object} options.range_y - Callback returning a {@link Range}
+ *   for the y-axis or an object with options for a {@link Range}. This is usually
  *   the <code>y_range</code> of the parent chart.
- * @property {Function|Object} options.range_z - Callback returning a {@link TK.Range}
- *   for the z-axis or an object with options for a {@link TK.Range}.
+ * @property {Function|Object} options.range_z - Callback returning a {@link Range}
+ *   for the z-axis or an object with options for a {@link Range}.
  * @property {String} [options.mode="circular"] - Type of the handle. Can be one of
  *   <code>circular</code>, <code>line-vertical</code>, <code>line-horizontal</code>,
  *   <code>block-left</code>, <code>block-right</code>, <code>block-top</code> or
@@ -874,19 +884,19 @@ function enddrag() {
  * @property {Boolean} [options.show_axis=false] - If set to true, draws additional lines at
  *   the coordinate values.
  *
- * @mixes TK.Ranges
- * @mixes TK.Warning
- * @mixes TK.GlobalCursor
+ * @mixes Ranges
+ * @mixes Warning
+ * @mixes GlobalCursor
  */
 
 /**
- * @member {SVGText} TK.ResponseHandle#_label - The label. Has class <code>toolkit-label</code>.
+ * @member {SVGText} ResponseHandle#_label - The label. Has class <code>toolkit-label</code>.
  */
 /**
- * @member {SVGPath} TK.ResponseHandle#_line1 - The first line. Has class <code>toolkit-line toolkit-line-1</code>.
+ * @member {SVGPath} ResponseHandle#_line1 - The first line. Has class <code>toolkit-line toolkit-line-1</code>.
  */
 /**
- * @member {SVGPath} TK.ResponseHandle#_line2 - The first line. Has class <code>toolkit-line toolkit-line-2</code>.
+ * @member {SVGPath} ResponseHandle#_line2 - The first line. Has class <code>toolkit-line toolkit-line-2</code>.
  */
 
 function set_min(value, key) {
@@ -905,16 +915,16 @@ function set_max(value, key) {
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
  * The event is emitted for the options <code>x</code>, <code>y</code> and <code>z</code>.
  *
- * @event TK.ResponseHandle#useraction
+ * @event ResponseHandle#useraction
  * 
  * @param {string} name - The name of the option which was changed due to the users action.
  * @param {mixed} value - The new value of the option.
  */
-TK.ResponseHandle = TK.class({
+export const ResponseHandle = define_class({
     _class: "ResponseHandle",
-    Extends: TK.Widget,
-    Implements: [TK.GlobalCursor, TK.Ranges, TK.Warning],
-    _options: Object.assign(Object.create(TK.Widget.prototype._options), TK.Ranges.prototype._options, {
+    Extends: Widget,
+    Implements: [GlobalCursor, Ranges, Warning],
+    _options: Object.assign(Object.create(Widget.prototype._options), Ranges.prototype._options, {
         range_x: "mixed",
         range_y: "mixed",
         range_z: "mixed",
@@ -959,7 +969,7 @@ TK.ResponseHandle = TK.class({
         // that have a low impact on intersection
         mode:             "circular",
         preferences:      ["left", "top", "right", "bottom"],
-        label:            TK.FORMAT("%s\n%d Hz\n%.2f dB\nQ: %.2f"),
+        label:            FORMAT("%s\n%d Hz\n%.2f dB\nQ: %.2f"),
         x:                0,
         y:                0,
         z:                0,
@@ -1031,17 +1041,17 @@ TK.ResponseHandle = TK.class({
         this.handle = [0,0,0,0];
         this._zwheel = false;
         this.__sto = 0;
-        TK.Widget.prototype.initialize.call(this, options);
+        Widget.prototype.initialize.call(this, options);
         var O = this.options;
         
         /**
-         * @member {TK.Range} TK.ResponseHandle#range_x - The {@link TK.Range} for the x axis.
+         * @member {Range} ResponseHandle#range_x - The {@link Range} for the x axis.
          */
         /**
-         * @member {TK.Range} TK.ResponseHandle#range_y - The {@link TK.Range} for the y axis.
+         * @member {Range} ResponseHandle#range_y - The {@link Range} for the y axis.
          */
         /**
-         * @member {TK.Range} TK.ResponseHandle#range_z - The {@link TK.Range} for the z axis.
+         * @member {Range} ResponseHandle#range_z - The {@link Range} for the z axis.
          */
         this.add_range(O.range_x, "range_x");
         this.add_range(O.range_y, "range_y");
@@ -1056,23 +1066,23 @@ TK.ResponseHandle = TK.class({
         this.range_y.add_event("set", set_cb);
         this.range_z.add_event("set", set_cb);
 
-        var E = TK.make_svg("g");
+        var E = make_svg("g");
         
         /**
-         * @member {SVGGroup} TK.ResponseHandle#element - The main SVG group containing all handle elements. Has class <code>toolkit-response-handle</code>.
+         * @member {SVGGroup} ResponseHandle#element - The main SVG group containing all handle elements. Has class <code>toolkit-response-handle</code>.
          */
         this.element = E;
 
         this.widgetize(E, true, true);
 
-        TK.add_class(E, "toolkit-response-handle");
+        add_class(E, "toolkit-response-handle");
         /**
-         * @member {SVGCircular} TK.ResponseHandle#_handle - The main handle.
+         * @member {SVGCircular} ResponseHandle#_handle - The main handle.
          *      Has class <code>toolkit-handle</code>.
          */
         
         /**
-         * @member {SVGCircular} TK.ResponseHandle#_zhandle - The handle for manipulating z axis.
+         * @member {SVGCircular} ResponseHandle#_zhandle - The handle for manipulating z axis.
          *      Has class <code>toolkit-z-handle</code>.
          */
 
@@ -1080,7 +1090,7 @@ TK.ResponseHandle = TK.class({
 
         this._handle = this._zhandle = this._line1 = this._line2 = this._label = null;
 
-        this.z_drag = new TK.DragCapture(this, {
+        this.z_drag = new DragCapture(this, {
             node: null,
             onstartcapture: function(state) {
                 var self = this.parent;
@@ -1104,7 +1114,7 @@ TK.ResponseHandle = TK.class({
                  * Is fired when the user grabs the z-handle. The argument is the
                  * actual z value.
                  * 
-                 * @event TK.ResponseHandle#zchangestarted
+                 * @event ResponseHandle#zchangestarted
                  * 
                  * @param {number} z - The z value.
                  */
@@ -1135,7 +1145,7 @@ TK.ResponseHandle = TK.class({
                  * Is fired when the user releases the z-handle. The argument is the
                  * actual z value.
                  * 
-                 * @event TK.ResponseHandle#zchangeended
+                 * @event ResponseHandle#zchangeended
                  * 
                  * @param {number} z - The z value.
                  */
@@ -1143,7 +1153,7 @@ TK.ResponseHandle = TK.class({
                 enddrag.call(self);
             },
         });
-        this.pos_drag = new TK.DragCapture(this, {
+        this.pos_drag = new DragCapture(this, {
             node: this.element,
             onstartcapture: function(state) {
                 var self = this.parent;
@@ -1183,7 +1193,7 @@ TK.ResponseHandle = TK.class({
                  * <li>pos_y: the position in pixels on the y axis</li>
                  * </ul>
                  * 
-                 * @event TK.ResponseHandle#handlegrabbed
+                 * @event ResponseHandle#handlegrabbed
                  * 
                  * @param {Object} positions - An object containing all relevant positions of the pointer.
                  */
@@ -1226,7 +1236,7 @@ TK.ResponseHandle = TK.class({
                  * <li>pos_y: the position in pixels on the y axis</li>
                  * </ul>
                  * 
-                 * @event TK.ResponseHandle#handlereleased
+                 * @event ResponseHandle#handlereleased
                  * 
                  * @param {Object} positions - An object containing all relevant positions of the pointer.
                  */
@@ -1256,7 +1266,7 @@ TK.ResponseHandle = TK.class({
     },
 
     redraw: function () {
-        TK.Widget.prototype.redraw.call(this);
+        Widget.prototype.redraw.call(this);
         var O = this.options;
         var I = this.invalid;
 
@@ -1272,11 +1282,11 @@ TK.ResponseHandle = TK.class({
 
         if (I.hover) {
             I.hover = false;
-            TK.toggle_class(this.element, "toolkit-hover", O.hover);
+            toggle_class(this.element, "toolkit-hover", O.hover);
         }
         if (I.dragging) {
             I.dragging = false;
-            TK.toggle_class(this.element, "toolkit-dragging", O.dragging);
+            toggle_class(this.element, "toolkit-dragging", O.dragging);
         }
 
         if (I.active || I.disabled) {
@@ -1284,7 +1294,7 @@ TK.ResponseHandle = TK.class({
             // TODO: this is not very nice, we should really use the options
             // for that. 1) set "active" from the mouse handlers 2) set disabled instead
             // of active
-            TK.toggle_class(this.element, "toolkit-disabled", !O.active || O.disabled);
+            toggle_class(this.element, "toolkit-disabled", !O.active || O.disabled);
         }
 
         var moved = I.validate("x", "y", "z", "mode", "active", "show_handle");
@@ -1315,7 +1325,7 @@ TK.ResponseHandle = TK.class({
         switch (key) {
         case "z_handle":
             if (value !== false && !ZHANDLE_POSITION_circular[value]) {
-                TK.warn("Unsupported z_handle option:", value);
+                warn("Unsupported z_handle option:", value);
                 value = false;
             }
             if (value !== false) create_zhandle.call(this);
@@ -1342,7 +1352,7 @@ TK.ResponseHandle = TK.class({
             break;
         }
 
-        return TK.Widget.prototype.set.call(this, key, value);
+        return Widget.prototype.set.call(this, key, value);
     },
     destroy: function () {
         remove_zhandle.call(this);
@@ -1350,7 +1360,6 @@ TK.ResponseHandle = TK.class({
         remove_line2.call(this);
         remove_label.call(this);
         remove_handle.call(this);
-        TK.Widget.prototype.destroy.call(this);
+        Widget.prototype.destroy.call(this);
     },
 });
-})(this, this.TK);

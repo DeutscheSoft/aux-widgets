@@ -16,8 +16,10 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+import { define_class } from './../widget_helpers.mjs';
+import { AudioMath } from './audiomath.mjs';
+import { error, warn } from './../helpers.mjs';
+
 function LinearSnapModule(stdlib, foreign) {
     var min = +foreign.min;
     var max = +foreign.max;
@@ -59,7 +61,7 @@ function LinearSnapModule(stdlib, foreign) {
     /**
      * Returns the nearest value on the grid which is bigger than <code>value</code>.
      *
-     * @method TK.Ranged#snap_up
+     * @method Ranged#snap_up
      *
      * @param {number} value - The value to snap.
      *
@@ -73,7 +75,7 @@ function LinearSnapModule(stdlib, foreign) {
     /**
      * Returns the nearest value on the grid which is smaller than <code>value</code>.
      *
-     * @method TK.Ranged#snap_down
+     * @method Ranged#snap_down
      *
      * @param {number} value - The value to snap.
      *
@@ -88,7 +90,7 @@ function LinearSnapModule(stdlib, foreign) {
      * Returns the nearest value on the grid. Its rounding behavior is similar to that
      * of <code>Math.round</code>.
      *
-     * @method TK.Ranged#snap
+     * @method Ranged#snap
      *
      * @param {number} value - The value to snap.
      *
@@ -349,7 +351,7 @@ function TRAFO_LINEAR(stdlib, foreign) {
         /**
          * Transforms a value from the coordinate system to the interval <code>0</code>...<code>basis</code>.
          *
-         * @method TK.Ranged#val2based
+         * @method Ranged#val2based
          *
          * @param {number} value
          * @param {number} [basis=1]
@@ -360,7 +362,7 @@ function TRAFO_LINEAR(stdlib, foreign) {
         /**
          * Transforms a value from the interval <code>0</code>...<code>basis</code> to the coordinate system.
          *
-         * @method TK.Ranged#based2val
+         * @method Ranged#based2val
          *
          * @param {number} value
          * @param {number} [basis=1]
@@ -369,9 +371,9 @@ function TRAFO_LINEAR(stdlib, foreign) {
          */
         based2val:based2val,
         /**
-         * This is an alias for {@link TK.Ranged#val2px}.
+         * This is an alias for {@link Ranged#val2px}.
          *
-         * @method TK.Ranged#val2px
+         * @method Ranged#val2px
          *
          * @param {number} value
          *
@@ -379,9 +381,9 @@ function TRAFO_LINEAR(stdlib, foreign) {
          */
         val2px:val2px,
         /**
-         * This is an alias for {@link TK.Ranged#px2val}.
+         * This is an alias for {@link Ranged#px2val}.
          *
-         * @method TK.Ranged#px2val
+         * @method Ranged#px2val
          *
          * @param {number} value
          *
@@ -391,7 +393,7 @@ function TRAFO_LINEAR(stdlib, foreign) {
         /**
          * Calls {@link based2val} with <code>basis = 1</code>.
          *
-         * @method TK.Ranged#val2coef
+         * @method Ranged#val2coef
          *
          * @param {number} value
          *
@@ -401,7 +403,7 @@ function TRAFO_LINEAR(stdlib, foreign) {
         /**
          * Calls {@link based2val} with <code>basis = 1</code>.
          *
-         * @method TK.Ranged#coef2val
+         * @method Ranged#coef2val
          *
          * @param {number} value
          *
@@ -411,8 +413,8 @@ function TRAFO_LINEAR(stdlib, foreign) {
     };
 }
 function TRAFO_LOG(stdlib, foreign) {
-    var db2scale = stdlib.TK.AudioMath.db2scale;
-    var scale2db = stdlib.TK.AudioMath.scale2db;
+    var db2scale = AudioMath.db2scale;
+    var scale2db = AudioMath.scale2db;
     var reverse = foreign.reverse|0;
     var min = +foreign.min;
     var max = +foreign.max;
@@ -447,8 +449,8 @@ function TRAFO_LOG(stdlib, foreign) {
     };
 }
 function TRAFO_FREQ(stdlib, foreign) {
-    var freq2scale = stdlib.TK.AudioMath.freq2scale;
-    var scale2freq = stdlib.TK.AudioMath.scale2freq;
+    var freq2scale = AudioMath.freq2scale;
+    var scale2freq = AudioMath.scale2freq;
     var reverse = foreign.reverse|0;
     var min = +foreign.min;
     var max = +foreign.max;
@@ -488,47 +490,47 @@ function update_transformation() {
     var module;
 
     if (typeof scale === "function") {
-        module = TRAFO_FUNCTION(w, O);
+        module = TRAFO_FUNCTION(window, O);
     } else if (Array.isArray(scale)) {
         var i = 0;
         if (scale.length % 2) {
-            TK.error("Malformed piecewise-linear scale.");
+            error("Malformed piecewise-linear scale.");
         }
 
         for (i = 0; i < scale.length/2 - 1; i++) {
             if (!(scale[i] >= 0 && scale[i] <= 1))
-                TK.error("piecewise-linear x value not in [0,1].");
+                error("piecewise-linear x value not in [0,1].");
             if (!(scale[i] < scale[i+1]))
-                TK.error("piecewise-linear array not sorted.");
+                error("piecewise-linear array not sorted.");
         }
         for (i = scale.length/2; i < scale.length - 1; i++) {
             if (!(scale[i] < scale[i+1]))
-                TK.error("piecewise-linear array not sorted.");
+                error("piecewise-linear array not sorted.");
         }
 
-        module = TRAFO_PIECEWISE(w, O, new Float64Array(scale).buffer);
+        module = TRAFO_PIECEWISE(window, O, new Float64Array(scale).buffer);
     } else switch (scale) {
         case "linear":
-            module = TRAFO_LINEAR(w, O);
+            module = TRAFO_LINEAR(window, O);
             break;
         case "decibel":
             O.trafo_reverse = 1;
-            module = TRAFO_LOG(w, O);
+            module = TRAFO_LOG(window, O);
             break;
         case "log2":
             O.trafo_reverse = 0;
-            module = TRAFO_LOG(w, O);
+            module = TRAFO_LOG(window, O);
             break;
         case "frequency":
             O.trafo_reverse = 0;
-            module = TRAFO_FREQ(w, O);
+            module = TRAFO_FREQ(window, O);
             break;
         case "frequency-reverse":
             O.trafo_reverse = 1;
-            module = TRAFO_FREQ(w, O);
+            module = TRAFO_FREQ(window, O);
             break;
         default:
-            TK.warn("Unsupported scale", scale);
+            warn("Unsupported scale", scale);
     }
 
     Object.assign(this, module);
@@ -550,28 +552,28 @@ function set_cb(key, value) {
     }
 }
 /**
- * @callback TK.Ranged~scale_cb
+ * @callback Ranged~scale_cb
  *
  * @param {number} value - The value to be transformed.
- * @param {Object} [options={ }] - An object containing initial options. - The options of the corresponding {@link TK.Ranged} object.
+ * @param {Object} [options={ }] - An object containing initial options. - The options of the corresponding {@link Ranged} object.
  * @param {boolean} [inverse=false] - Determines if the value is to be transformed from or
  *   to the coordinate system.
  *
  * @returns {number} The transformed value.
  */
-TK.Ranged = TK.class({
+export const Ranged = define_class({
     /**
-     * TK.Ranged combines functionality for two distinct purposes.
-     * Firstly, TK.Ranged can be used to snap values to a virtual grid.
+     * Ranged combines functionality for two distinct purposes.
+     * Firstly, Ranged can be used to snap values to a virtual grid.
      * This grid is defined by the options <code>snap</code>,
      * <code>step</code>, <code>min</code>, <code>max</code> and <code>base</code>.
-     * The second feature of TK.anged is that it allows transforming values between coordinate systems.
+     * The second feature of anged is that it allows transforming values between coordinate systems.
      * This can be used to transform values from and to linear scales in which they are displayed on the
      * screen. It is used inside of Toolkit to translate values (e.g. in Hz or dB) to pixel positions or
-     * percentages, for instance in widgets such as {@link TK.Scale}, {@link TK.MeterBase} or
-     * {@link TK.Graph}.
+     * percentages, for instance in widgets such as {@link Scale}, {@link MeterBase} or
+     * {@link Graph}.
      *
-     * TK.Ranged features several types of coordinate systems which are often used in audio applications.
+     * Ranged features several types of coordinate systems which are often used in audio applications.
      * They can be configured using the <code>options.scale</code> option, possible values are:
      * <ul>
      *  <li><code>linear</code> for linear coordinates,
@@ -581,7 +583,7 @@ TK.Ranged = TK.class({
      *  <li><code>frequency-reverse"</code> for linear coordinates.
      * </ul>
      * If <code>options.scale</code> is a function, it is used as the coordinate transformation.
-     * Its signature is {@link TK.Ranged~scale_cb}. This allows the definition of custom
+     * Its signature is {@link Ranged~scale_cb}. This allows the definition of custom
      * coordinate transformations, which go beyond the standard types.
      *
      * @param {Object} [options={ }] - An object containing initial options.
@@ -590,7 +592,7 @@ TK.Ranged = TK.class({
      *  The type of the scale. Either one of <code>linear</code>, <code>decibel</code>, <code>log2</code>,
      *  <code>frequency</code> or <code>frequency-reverse</code>; or an array containing a
      *  piece-wise linear scale;
-     *  or a callback function of type {@link TK.Ranged~scale_cb}.
+     *  or a callback function of type {@link Ranged~scale_cb}.
      * @property {Boolean} [options.reverse=false] - Reverse the scale of the range.
      * @property {Number} [options.basis=1] - The size of the linear scale. Set to pixel width or height
      * if used for drawing purposes or to 100 for percentages.
@@ -609,14 +611,14 @@ TK.Ranged = TK.class({
      *  In order to define grids with non-uniform spacing, set <code>options.snap</code> to an Array
      *  of grid points.
      * @property {Number} [options.base=0] - Base point. Used e.g. to mark 0dB on a fader from -96dB to 12dB.
-     * @property {Number} [options.step=0] - Step size. Used for instance by {@link TK.ScrollValue}
+     * @property {Number} [options.step=0] - Step size. Used for instance by {@link ScrollValue}
      *  as the step size.
      * @property {Number} [options.shift_up=4] - Multiplier for increased stepping speed, e.g. used by
-     *  {@link TK.ScrollValue} when simultaneously pressing 'shift'.
+     *  {@link ScrollValue} when simultaneously pressing 'shift'.
      * @property {Number} [options.shift_down=0.25] - Multiplier for descresed stepping speed, e.g. used by
-     *  {@link TK.ScrollValue} when simultaneously pressing 'shift' and 'ctrl'.
+     *  {@link ScrollValue} when simultaneously pressing 'shift' and 'ctrl'.
      *
-     * @mixin TK.Ranged
+     * @mixin Ranged
      */
 
     _class: "Ranged",
@@ -631,7 +633,7 @@ TK.Ranged = TK.class({
         shift_up:       4,
         shift_down:     0.25,
         snap:           0,
-        round:          true, /* default for TK.Range, no dedicated option */
+        round:          true, /* default for Range, no dedicated option */
         log_factor:     1,
         trafo_reverse:  false, /* used internally, no documentation */
     },
@@ -655,10 +657,9 @@ TK.Ranged = TK.class({
         initialized: function() {
             var O = this.options;
             if (!(O.min <= O.max))
-                TK.warn("Ranged needs min <= max. min: ", O.min, ", max:", O.max, ", options:", O);
+                warn("Ranged needs min <= max. min: ", O.min, ", max:", O.max, ", options:", O);
             update_snap.call(this);
             update_transformation.call(this);
         },
     },
 });
-})(this, this.TK);

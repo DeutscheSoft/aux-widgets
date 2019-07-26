@@ -157,6 +157,11 @@ export function ChildElement(widget, name, config) {
     }
 }
 
+function arrayify(x) {
+    if (!Array.isArray(x)) x = [ x ];
+    return x;
+}
+
 function merge_static_events(a, b) {
     var event;
     if (!a) return b;

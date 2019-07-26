@@ -16,32 +16,35 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+import { define_class } from './../widget_helpers.mjs';
+import {
+  add_class, remove_class
+} from '../helpers.mjs';
+
 /**
- * TK.GlobalCursor adds global cursor classes to ensure
+ * GlobalCursor adds global cursor classes to ensure
  * one of the <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">standard cursors</a>
  * is shown in the overall application.
  *
- * @mixin TK.GlobalCursor
+ * @mixin GlobalCursor
  */
-TK.GlobalCursor = TK.class({
+export const GlobalCursor = define_class({
     _class: "GlobalCursor",
     /**
      * Adds a class <code>"toolkit-cursor-" + cursor</code> to the <code>document.body</code> to show a specific cursor.
      * 
-     * @method TK.GlobalCursor#global_cursor
+     * @method GlobalCursor#global_cursor
      * 
      * @param {string} cursor - The name of the <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">cursor</a> to show.
      * 
-     * @emits TK.GlobalCursor#globalcursor
+     * @emits GlobalCursor#globalcursor
      */
     global_cursor: function (cursor) {
-        TK.add_class(document.body, "toolkit-cursor-" + cursor);
+        add_class(document.body, "toolkit-cursor-" + cursor);
         /**
          * Is fired when a cursor gets set.
          * 
-         * @event TK.GlobalCursor#globalcursor
+         * @event GlobalCursor#globalcursor
          * 
          * @param {string} cursor - The name of the <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">cursor</a> to show. 
          */
@@ -50,22 +53,21 @@ TK.GlobalCursor = TK.class({
     /**
      * Removes the class from <code>document.body</code> node.
      *
-     * @method TK.GlobalCursor#remove_cursor
+     * @method GlobalCursor#remove_cursor
      * 
      * @param {string} cursor - The name of the <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">cursor</a> to remome.
      * 
-     * @emits TK.GlobalCursor#cursorremoved
+     * @emits GlobalCursor#cursorremoved
      */
     remove_cursor: function (cursor) {
-        TK.remove_class(document.body, "toolkit-cursor-" + cursor);
+        remove_class(document.body, "toolkit-cursor-" + cursor);
         /**
          * Is fired when a cursor is removed.
          * 
-         * @event TK.GlobalCursor#cursorremoved
+         * @event GlobalCursor#cursorremoved
          * 
          * @param {string} cursor - The name of the <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">cursor</a> to remove.
          */
         this.fire_event("cursorremoved", cursor);
     }
 });
-})(this, this.TK);
