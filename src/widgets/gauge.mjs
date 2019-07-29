@@ -16,8 +16,12 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+import { define_class } from './../widget_helpers.mjs';
+import { Widget } from './widget.mjs';
+import { Circular } from '../modules/circular.mjs';
+import { FORMAT, element, add_class, make_svg, object_and, object_sub } from '../helpers.mjs';
+import { S } from '../dom_scheduler.mjs';
+
 function _get_coords_single(deg, inner, pos) {
     deg = deg * Math.PI / 180;
     return {
@@ -25,22 +29,22 @@ function _get_coords_single(deg, inner, pos) {
         y: Math.sin(deg) * inner + pos
     }
 }
-var format_translate = TK.FORMAT("translate(%f, %f)");
-var format_viewbox = TK.FORMAT("0 0 %d %d");
+var format_translate = FORMAT("translate(%f, %f)");
+var format_viewbox = FORMAT("0 0 %d %d");
 /**
- * TK.Gauge draws a single {@link TK.Circular} into a SVG image. It inherits
- * all options of {@link TK.Circular}.
+ * Gauge draws a single {@link Circular} into a SVG image. It inherits
+ * all options of {@link Circular}.
  *
- * @class TK.Gauge
+ * @class Gauge
  * 
- * @extends TK.Widget
+ * @extends Widget
  *
  * @param {Object} [options={ }] - An object containing initial options.
  * 
- * @property {Number} [options.x=0] - Displacement of the {@link TK.Circular}
+ * @property {Number} [options.x=0] - Displacement of the {@link Circular}
  *   in horizontal direction. This allows drawing gauges which are only
  *   represented by a segment of a circle.
- * @property {Number} [options.y=0] - Displacement of the {@link TK.Circular}
+ * @property {Number} [options.y=0] - Displacement of the {@link Circular}
  *   in vertical direction.
  * @property {Object} [options.title] - Optional gauge title.
  * @property {Number} [options.title.pos] - Position inside of the circle in
@@ -50,61 +54,64 @@ var format_viewbox = TK.FORMAT("0 0 %d %d");
  * @property {String} [options.title.align] - Alignment of the title, either
  *   <code>inner</code> or <code>outer</code>.
  */
-TK.Gauge = TK.class({
+export const Gauge = define_class({
     _class: "Gauge",
-    Extends: TK.Widget,
-    _options: Object.assign(Object.create(TK.Circular.prototype._options), {
+    Extends: Widget,
+    _options: Object.assign(Object.create(Circular.prototype._options), {
         width:  "number",
         height: "number",
         title: "object",
     }),
-    options: Object.assign({}, TK.Circular.prototype.options, {
+    options: Object.assign({}, Circular.prototype.options, {
         width:  120, // width of the element
         height: 120, // height of the svg
         size:   120,
         title: {pos: 90, margin: 0, align: "inner", title:""}
     }),
     initialize: function (options) {
-        if (typeof options.title === "string")
-            options.title = {title: options.title};
-        TK.Widget.prototype.initialize.call(this, options);
+        Widget.prototype.initialize.call(this, options);
+
         var O = this.options;
         var E, S;
-        if (!(E = this.element)) this.element = E = TK.element("div");
+
+        if (typeof O.title === "string")
+            this.set('title', O.title);
+
+        if (!(E = this.element)) this.element = E = element("div");
         
         /**
-         * @member {SVGImage} TK.Gauge#svg - The main SVG image.
+         * @member {SVGImage} Gauge#svg - The main SVG image.
          */
-        this.svg = S = TK.make_svg("svg");
+        this.svg = S = make_svg("svg");
         
         /**
-         * @member {HTMLDivElement} TK.Gauge#element - The main DIV container.
+         * @member {HTMLDivElement} Gauge#element - The main DIV container.
          *   Has class <code>toolkit-gauge</code>.
          */
-        TK.add_class(E, "toolkit-gauge");
+        add_class(E, "toolkit-gauge");
         this.widgetize(E, true, true, true);
         
         /**
-         * @member {SVGText} TK.Gauge#_title - The title of the gauge.
+         * @member {SVGText} Gauge#_title - The title of the gauge.
          *   Has class <code>toolkit-title</code>.
          */
-        this._title = TK.make_svg("text", {"class": "toolkit-title"});
+        this._title = make_svg("text", {"class": "toolkit-title"});
         S.appendChild(this._title);
 
-        var co = TK.object_and(O, TK.Circular.prototype._options);
-        co = TK.object_sub(co, TK.Widget.prototype._options);
+        var co = object_and(O, Circular.prototype._options);
+        co = object_sub(co, Widget.prototype._options);
         co.container = S;
         
         /**
-         * @member {TK.Circular} TK.Gauge#circular - The {@link TK.Circular} module.
+         * @member {Circular} Gauge#circular - The {@link Circular} module.
          */
-        this.circular = new TK.Circular(co);
+        this.circular = new Circular(co);
         this.add_child(this.circular);
         this.widgetize(this.element);
         E.appendChild(S);
     },
     resize: function() {
-        TK.Widget.prototype.resize.call(this);
+        Widget.prototype.resize.call(this);
         this.invalid.title = true;
         this.trigger_draw();
     },
@@ -112,7 +119,7 @@ TK.Gauge = TK.class({
         var I = this.invalid, O = this.options;
         var S = this.svg;
 
-        TK.Widget.prototype.redraw.call(this);
+        Widget.prototype.redraw.call(this);
 
         if (I.validate("width", "height")) {
             S.setAttribute("viewBox", format_viewbox(O.width, O.height));
@@ -123,7 +130,7 @@ TK.Gauge = TK.class({
             _title.textContent = O.title.title;
 
             if (O.title.title) {
-                TK.S.add(function() {
+                S.add(function() {
                     var t = O.title;
                     var outer   = O.size / 2;
                     var margin  = t.margin;
@@ -141,14 +148,14 @@ TK.Gauge = TK.class({
                     mx += O.x;
                     my += O.y;
                            
-                    TK.S.add(function() {
+                    S.add(function() {
                         _title.setAttribute("transform", format_translate(coords.x + mx, coords.y + my));
                         _title.setAttribute("text-anchor", "middle");
                     }.bind(this), 1);
                     /**
                      * Is fired when the title changed.
                      * 
-                     * @event TK.Gauge#titledrawn
+                     * @event Gauge#titledrawn
                      */
                     this.fire_event("titledrawn");
                 }.bind(this));
@@ -162,10 +169,9 @@ TK.Gauge = TK.class({
             if (typeof value === "string") value = {title: value};
             value = Object.assign(this.options.title, value);
         }
-        // TK.Circular does the snapping
-        if (!TK.Widget.prototype._options[key] && TK.Circular.prototype._options[key])
+        // Circular does the snapping
+        if (!Widget.prototype._options[key] && Circular.prototype._options[key])
             value = this.circular.set(key, value);
-        return TK.Widget.prototype.set.call(this, key, value);
+        return Widget.prototype.set.call(this, key, value);
     }
 });
-})(this, this.TK);
