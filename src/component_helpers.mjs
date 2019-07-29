@@ -10,6 +10,19 @@ import { warn, error, FORMAT } from './helpers.mjs';
 function parse_attribute(type, x) {
   const types = type.split('|');
 
+  {
+    const pos = x.indexOf(':');
+
+    if (pos !== -1)
+    {
+      try
+      {
+        return parse_attribute(x.substr(0, pos), x.substr(pos+1));
+      }
+      catch (err) { }
+    }
+  }
+
   if (types.length > 1)
   {
     for (let i = 0; i < types.length; i++)
@@ -60,24 +73,127 @@ function parse_attribute(type, x) {
   }
 }
 
-export function component_from_widget(Widget)
+function attributes_from_widget(Widget)
 {
   const attributes = [];
-  const skip = ["class", "id"];
+  const skip = ["class", "id", "container", "element"];
+
   for (var i in Widget.prototype._options)
-    attributes.push(i);
-    
-  return class extends HTMLElement
   {
+    if (skip.indexOf(i) == -1)
+      attributes.push(i);
+  }
+
+  return attributes;
+}
+
+class ComponentBase extends HTMLElement
+{
+  constructor(widget)
+  {
+    super();
+    this.tk_events_counts = new Map();
+    this.tk_events_handlers = new Map();
+    this.tk_events_paused = false;
+    this.widget = null;
+  }
+
+  attributeChangedCallback(name, oldValue, newValue)
+  {
+    this.tk_events_paused = true;
+    try {
+      const widget = this.widget;
+      const type = widget._options[name];
+      const value = parse_attribute(type, newValue);
+      widget.set(name, value);
+    } catch (e) {
+      warn('Setting attribute generated an error:', e);
+    }
+    this.tk_events_paused = false;
+  }
+
+  addEventListener(type, listener, ...args)
+  {
+    if (type.startsWith('tk:'))
+    {
+      const counts = this.tk_events_counts;
+
+      if (counts.has(type))
+      {
+        counts.set(counts.get(type) + 1);
+      }
+      else
+      {
+        const tk_type = type.substr(3);
+
+        counts.set(type, 1);
+
+        const cb = (...args) => {
+          if (this.tk_events_paused) return;
+          this.dispatchEvent(new CustomEvent(type, { detail: { args: args } }));
+        };
+
+        this.tk_events_handlers.set(type, cb);
+        this.widget.add_event(tk_type, cb);
+      }
+    }
+
+    super.addEventListener(type, listener, ...args);
+  }
+
+  removeEventListener(type, listener, ...args)
+  {
+    if (type.startsWith('tk:'))
+    {
+      const counts = this.tk_events_counts;
+
+      if (counts.has(type))
+      {
+        const v = counts.get(type);
+
+        if (v <= 1)
+        {
+          // remove handler
+          const tk_type = type.substr(3);
+          const handlers = this.tk_events_handlers;
+
+          handlers.delete(type);
+          counts.delete(type);
+
+          this.widget.remove_event(tk_type, handlers.get(type));
+        }
+        else
+        {
+          counts.set(v - 1);
+        }
+      }
+      else
+      {
+        warn('calling removeEventListener on %o twice!', this);
+      }
+    }
+
+    super.removeEventListener(type, listener, ...args);
+  }
+}
+
+export function component_from_widget(Widget)
+{
+  const attributes = attributes_from_widget(Widget);
+
+  return class extends ComponentBase
+  {
+    static get observedAttributes()
+    {
+      return attributes;
+    }
+
     constructor()
     {
       super();
       this.widget = new Widget({
         element: this,
       });
-      this.tk_events_counts = new Map();
-      this.tk_events_handlers = new Map();
-      this.tk_events_paused = false;
     }
 
     connectedCallback()
@@ -89,91 +205,66 @@ export function component_from_widget(Widget)
     {
       this.widget.disable_draw();
     }
+  }
+}
 
+export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove_cb)
+{
+  const attributes = attributes_from_widget(Widget);
+
+  if (!append_cb) append_cb = (parent, child) => {
+    parent.add_child(child);
+  };
+
+  if (!remove_cb) remove_cb = (parent, child) => {
+    parent.remove_child(child);
+  };
+
+  return class extends ComponentBase
+  {
     static get observedAttributes()
     {
       return attributes;
     }
 
-    attributeChangedCallback(name, oldValue, newValue)
+    constructor()
     {
-      this.tk_events_paused = true;
-      try {
-        const widget = this.widget;
-        const type = widget._options[name];
-        const value = parse_attribute(type, newValue);
-        if (skip.indexOf(name) >= 0)
-          widget.options[name] = value;
-        else
-          widget.set(name, value);
-      } catch (e) {
-        warn('Setting attribute generated an error:', e);
-      }
-      this.tk_events_paused = false;
+      super();
+      this.widget = new Widget();
+      this.parent = null;
+      this.setAttribute('hidden', '');
     }
 
-    addEventListener(type, listener, ...args)
+    connectedCallback()
     {
-      if (type.startsWith('tk:'))
+      const parent = this.parentNode.widget;
+
+      if (parent instanceof ParentWidget)
       {
-        const counts = this.tk_events_counts;
-
-        if (counts.has(type))
-        {
-          counts.set(counts.get(type) + 1);
-        }
-        else
-        {
-          const tk_type = type.substr(3);
-        
-          counts.set(type, 1);
-
-          const cb = (...args) => {
-            if (this.tk_events_paused) return;
-            this.dispatchEvent(new CustomEvent(type, { detail: { args: args } }));
-          };
-
-          this.tk_events_handlers.set(type, cb);
-          this.widget.add_event(tk_type, cb);
-        }
+        this.parent = parent;
+        parent.add_band(this.widget);
       }
-
-      super.addEventListener(type, listener, ...args);
+      else
+      {
+        error('Missing parent widget.');
+      }
     }
 
-    removeEventListener(type, listener, ...args)
+    disconnectedCallback()
     {
-      if (type.startsWith('tk:'))
+      const parent = this.parent;
+
+      if (parent)
       {
-        const counts = this.tk_events_counts;
-
-        if (counts.has(type))
-        {
-          const v = counts.get(type);
-
-          if (v <= 1)
-          {
-            // remove handler
-            const tk_type = type.substr(3);
-            const handlers = this.tk_events_handlers;
-
-            handlers.delete(type);
-            counts.delete(type);
-
-            this.widget.remove_event(tk_type, handlers.get(type));
-          }
-          else
-          {
-            counts.set(v - 1);
-          }
-        }
-        else
-        {
-          warn('calling removeEventListener on %o twice!', this);
-        }
+        remove_cb(parent, this.widget);
+        parent.remove_child(this.widget);
+        this.parent = null;
       }
+    }
 
-      super.removeEventListener(type, listener, ...args);
+    static get observedAttributes()
+    {
+      return attributes;
     }
   }
 }

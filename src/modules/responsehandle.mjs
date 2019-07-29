@@ -20,13 +20,13 @@
 import { define_class } from './../widget_helpers.mjs';
 import { Widget } from './../widgets/widget.mjs';
 import { GlobalCursor } from '../implements/globalcursor.mjs';
-import { Ranges } from '../implements/ranges.mjs';
 import { Warning } from '../implements/warning.mjs';
 import { S } from '../dom_scheduler.mjs';
 import {
   FORMAT, warn, make_svg, add_event_listener, remove_event_listener,
   set_text, remove_class, add_class, toggle_class
 } from '../helpers.mjs';
+import { Range } from './range.mjs';
 
 import { DragCapture } from '../modules/dragcapture.mjs';
  
@@ -55,6 +55,8 @@ function scrollwheel(e) {
         direction = -1;
     } else return;
 
+    var range_z = this.options.range_z;
+
     if (this.__sto) window.clearTimeout(this.__sto);
     this.set("dragging", true);
     add_class(this.element, "toolkit-active");
@@ -63,11 +65,11 @@ function scrollwheel(e) {
         remove_class(this.element, "toolkit-active");
         this.fire_event("zchangeended", this.options.z);
     }.bind(this), 250);
-    var s = this.range_z.get("step") * direction;
+    var s = range_z.get("step") * direction;
     if (e.ctrlKey && e.shiftKey)
-        s *= this.range_z.get("shift_down");
+        s *= range_z.get("shift_down");
     else if (e.shiftKey)
-        s *= this.range_z.get("shift_up");
+        s *= range_z.get("shift_up");
     this.userset("z", this.get("z") + s);
     if (!this._zwheel)
         this.fire_event("zchangestarted", this.options.z);
@@ -390,9 +392,9 @@ function redraw_handle(O, X) {
         return;
     }
 
-    var range_x = this.range_x;
-    var range_y = this.range_y;
-    var range_z = this.range_z;
+    var range_x = O.range_x;
+    var range_y = O.range_y;
+    var range_z = O.range_z;
 
     if (!range_x.options.basis || !range_y.options.basis) return;
 
@@ -724,9 +726,9 @@ function redraw_lines(O, X) {
     }
 
     var pos = this.label;
-    var range_x = this.range_x;
-    var range_y = this.range_y;
-    var range_z = this.range_z;
+    var range_x = O.range_x;
+    var range_y = O.range_y;
+    var range_z = O.range_z;
 
     var x = range_x.val2px(O.x);
     var y = range_y.val2px(O.y);
@@ -885,7 +887,6 @@ function enddrag() {
  * @property {Boolean} [options.show_axis=false] - If set to true, draws additional lines at
  *   the coordinate values.
  *
- * @mixes Ranges
  * @mixes Warning
  * @mixes GlobalCursor
  */
@@ -911,6 +912,11 @@ function set_max(value, key) {
     var O = this.options;
     if (value !== false && O[name] > value) this.set(name, value);
 }
+
+function set_range(range, key) {
+    var name = key.substr(6);
+    this.set(name, range.snap(this.get(name)));
+}
          
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -924,8 +930,8 @@ function set_max(value, key) {
 export const ResponseHandle = define_class({
     _class: "ResponseHandle",
     Extends: Widget,
-    Implements: [GlobalCursor, Ranges, Warning],
-    _options: Object.assign(Object.create(Widget.prototype._options), Ranges.prototype._options, {
+    Implements: [GlobalCursor, Warning],
+    _options: Object.assign(Object.create(Widget.prototype._options), {
         range_x: "mixed",
         range_y: "mixed",
         range_z: "mixed",
@@ -1023,6 +1029,9 @@ export const ResponseHandle = define_class({
         set_x_max: set_max,
         set_y_max: set_max,
         set_z_max: set_max,
+        set_range_x: set_range,
+        set_range_y: set_range,
+        set_range_z: set_range,
         mouseenter: function() {
             this.set("hover", true);
         },
@@ -1035,6 +1044,7 @@ export const ResponseHandle = define_class({
                 this.z_drag.cancel_drag();
             }
         },
+        set_range_x: set_range,
     },
 
     initialize: function (options) {
@@ -1054,18 +1064,14 @@ export const ResponseHandle = define_class({
         /**
          * @member {Range} ResponseHandle#range_z - The {@link Range} for the z axis.
          */
-        this.add_range(O.range_x, "range_x");
-        this.add_range(O.range_y, "range_y");
-        this.add_range(O.range_z, "range_z");
+        this.set('range_x', O.range_x);
+        this.set('range_y', O.range_y);
+        this.set('range_z', O.range_z);
 
         var set_cb = function() {
             this.invalid.x = true;
             this.trigger_draw();
         }.bind(this);
-
-        this.range_x.add_event("set", set_cb);
-        this.range_y.add_event("set", set_cb);
-        this.range_z.add_event("set", set_cb);
 
         var E = make_svg("g");
         
@@ -1097,7 +1103,7 @@ export const ResponseHandle = define_class({
                 var self = this.parent;
                 var O = self.options;
                 if (!O.active) return;
-                state.z = self.range_z.val2px(O.z);
+                state.z = O.range_z.val2px(O.z);
 
                 /* the main handle is active,
                  * this is a z gesture */
@@ -1135,7 +1141,7 @@ export const ResponseHandle = define_class({
                 /* ignore small movements */
                 if (O.min_drag > 0 && O.min_drag > d) return;
 
-                var range_z = self.range_z;
+                var range_z = O.range_z;
                 var z = range_z.px2val(state.z + d);
 
                 self.userset("z", z);
@@ -1182,8 +1188,8 @@ export const ResponseHandle = define_class({
                     return false;
                 }
 
-                state.x = self.range_x.val2px(O.x);
-                state.y = self.range_y.val2px(O.y);
+                state.x = O.range_x.val2px(O.x);
+                state.y = O.range_y.val2px(O.y);
                 /**
                  * Is fired when the main handle is grabbed by the user.
                  * The argument is an object with the following members:
@@ -1218,8 +1224,8 @@ export const ResponseHandle = define_class({
                 if (self.z_drag.dragging()) return;
 
                 var v = state.vdistance();
-                var range_x = self.range_x;
-                var range_y = self.range_y;
+                var range_x = O.range_x;
+                var range_y = O.range_y;
                 var x = range_x.px2val(state.x + v[0]);
                 var y = range_y.px2val(state.y + v[1]);
 
@@ -1246,8 +1252,8 @@ export const ResponseHandle = define_class({
                 self.fire_event("handlereleased", {
                     x:     O.x,
                     y:     O.y,
-                    pos_x: self.range_x.val2px(O.x),
-                    pos_y: self.range_y.val2px(O.y),
+                    pos_x: O.range_x.val2px(O.x),
+                    pos_y: O.range_y.val2px(O.y),
                 });
                 enddrag.call(self);
                 self.z_drag.set("node", self._zhandle);
@@ -1271,9 +1277,9 @@ export const ResponseHandle = define_class({
         var O = this.options;
         var I = this.invalid;
 
-        var range_x = this.range_x;
-        var range_y = this.range_y;
-        var range_z = this.range_z;
+        var range_x = O.range_x;
+        var range_y = O.range_y;
+        var range_z = O.range_z;
 
         /* These are the coordinates of the corners (x1, y1, x2, y2)
          * NOTE: x,y are not necessarily in the midde. */
@@ -1332,23 +1338,48 @@ export const ResponseHandle = define_class({
             if (value !== false) create_zhandle.call(this);
             break;
         case "x":
-            value = this.range_x.snap(value);
+            value = O.range_x.snap(value);
             if (O.x_min !== false && value < O.x_min) value = O.x_min;
             if (O.x_max !== false && value > O.x_max) value = O.x_max;
             break;
         case "y":
-            value = this.range_y.snap(value);
+            value = O.range_y.snap(value);
             if (O.y_min !== false && value < O.y_min) value = O.y_min;
             if (O.y_max !== false && value > O.y_max) value = O.y_max;
             break;
         case "z":
-            value = this.range_z.snap(value);
+            value = O.range_z.snap(value);
             if (O.z_min !== false && value < O.z_min) {
                 value = O.z_min;
                 this.warning(this.element);
             } else if (O.z_max !== false && value > O.z_max) {
                 value = O.z_max;
                 this.warning(this.element);
+            }
+            break;
+
+        case 'range_x':
+        case 'range_y':
+        case 'range_z':
+            {
+              if (typeof(value) === 'function')
+              {
+                value = value();
+              }
+              else if (typeof(value) === 'object' && Object.getPrototypeOf(value) === Object.prototype)
+              {
+                value = new Range(value);
+              }
+              else if (!(value instanceof Range))
+              {
+                throw new Error("Bad argument.\n");
+              }
+
+              // FIXME: solve this better
+              value.add_event('set', function() {
+                                this.invalid.x = true;
+                                this.trigger_draw();
+                              }.bind(this));
             }
             break;
         }

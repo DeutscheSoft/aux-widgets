@@ -250,17 +250,22 @@ export const Equalizer = define_class({
         type = type || EqBand;
         if (type.prototype.isPrototypeOf(options)) {
           b = options;
+          b.set('range_x', this.range_x);
+          b.set('range_y', this.range_y);
+          b.set('range_z', this.range_z);
+          b.set('intersect', this.intersect.bind(this));
+          this._bands.appendChild(b.element);
         } else {
-          options.container = this._bands;
           if (options.range_x === void(0))
-              options.range_x = function () { return this.range_x; }.bind(this);
+              options.range_x = this.range_x;
           if (options.range_y === void(0))
-              options.range_y = function () { return this.range_y; }.bind(this);
+              options.range_y = this.range_y;
           if (options.range_z === void(0))
-              options.range_z = function () { return this.range_z; }.bind(this);
-          
+              options.range_z = this.range_z;
           options.intersect = this.intersect.bind(this);
+
           b = new type(options);
+          this._bands.appendChild(b.element);
         }
         
         this.bands.push(b);
@@ -315,7 +320,7 @@ export const Equalizer = define_class({
                  * @param {EqBand} band - The {@link EqBand} which was removed.
                  */
                 this.fire_event("bandremoved", h);
-                h.destroy();
+                invalidate_bands.call(this);
                 break;
             }
         }

@@ -175,13 +175,13 @@ export const EqBand = define_class({
                 value = this.filter.set(key, value);
                 break;
             case "x":
-                value = this.range_x.snap(value);
+                value = this.options.range_x.snap(value);
                 break;
             case "y":
-                value = this.range_y.snap(value);
+                value = this.options.range_y.snap(value);
                 break;
             case "z":
-                value = this.range_z.snap(value);
+                value = this.options.range_z.snap(value);
                 break;
         }
         return ResponseHandle.prototype.set.call(this, key, value);
