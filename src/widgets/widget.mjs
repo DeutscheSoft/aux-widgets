@@ -90,7 +90,7 @@ export const Widget = define_class({
     /**
      * Widget is the base class for all widgets drawing DOM elements. It
      * provides basic functionality like delegating events, setting options and
-     * firing some events.Widget implements AudioMath, Options and Events.
+     * firing some events.
      *
      * @class Widget
      * 
