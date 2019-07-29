@@ -16,8 +16,18 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+import { define_class } from '../widget_helpers.mjs';
+import { ChildWidget } from '../child_widget.mjs';
+import { Widget } from './widget.mjs';
+import { Label } from './label.mjs';
+import { Gradient } from '../implements/gradient.mjs';
+import { Scale } from '../modules/scale.mjs';
+import {
+    element, add_class, get_style, toggle_class, remove_class, insert_after,
+    inner_width, inner_height, FORMAT
+  } from '../helpers.mjs';
+import { S } from '../dom_scheduler.mjs';
+
 function vert(O) {
     return O.layout === "left" || O.layout === "right";
 }
@@ -111,11 +121,11 @@ function subtract_intervals(a, b) {
 
     return ret;
 }
-TK.MeterBase = TK.class({
+export const MeterBase = define_class({
     /**
-     * TK.MeterBase is a base class to build different meters such as TK.LevelMeter.
-     * TK.MeterBase uses TK.Gradient and has a TK.Scale widget. TK.MeterBase inherits all
-     * options from TK.Scale. Note that the two options <code>format_labels</code> and
+     * MeterBase is a base class to build different meters such as LevelMeter.
+     * MeterBase uses Gradient and has a Scale widget. MeterBase inherits all
+     * options from Scale. Note that the two options <code>format_labels</code> and
      * <code>scale_base</code> have different names here.
      *
      * Note that level meters with high update frequencies can be very demanding when it comes
@@ -124,9 +134,9 @@ TK.MeterBase = TK.class({
      * meter positions are reduced. This widget will take advantage of that and avoid rendering those
      * changes to the meter level, which fall into the same segment.
      *
-     * @class TK.MeterBase
+     * @class MeterBase
      * 
-     * @extends TK.Widget
+     * @extends Widget
      *
      * @param {Object} [options={ }] - An object containing initial options.
      * 
@@ -147,21 +157,21 @@ TK.MeterBase = TK.class({
      * @property {Boolean} [options.show_title=false] - If set to <code>true</code> a title is displayed.
      * @property {Boolean} [options.show_label=false] - If set to <code>true</code> a label is displayed.
      * @property {Boolean} [options.show_scale=true] - If set to <code>true</code> the scale is displayed.
-     * @property {Function} [options.format_label=TK.FORMAT("%.2f")] - Function for formatting the 
+     * @property {Function} [options.format_label=FORMAT("%.2f")] - Function for formatting the 
      *   label.
-     * @property {Number} [options.scale_base=false] - Base of the meter scale, see {@link TK.Scale}.
+     * @property {Number} [options.scale_base=false] - Base of the meter scale, see {@link Scale}.
      * @property {Boolean} [options.show_labels=true] - If <code>true</code>, display labels in the
      *   scale.
-     * @property {Function} [options.format_labels=TK.FORMAT("%.2f")] - Function for formatting the 
+     * @property {Function} [options.format_labels=FORMAT("%.2f")] - Function for formatting the 
      *   scale labels. This is passed to the Scale as option <code>labels</code>.
      *
      */
     
     _class: "MeterBase",
-    Extends: TK.Widget,
-    Implements: [TK.Gradient],
-    _options: Object.assign(Object.create(TK.Widget.prototype._options),
-                            TK.Gradient.prototype._options, TK.Scale.prototype._options, {
+    Extends: Widget,
+    Implements: [Gradient],
+    _options: Object.assign(Object.create(Widget.prototype._options),
+                            Gradient.prototype._options, Scale.prototype._options, {
         layout: "string",
         segment: "number",
         value: "number",
@@ -185,10 +195,10 @@ TK.MeterBase = TK.class({
         label:           false,
         title:           false,
         show_labels:     true,
-        format_label:    TK.FORMAT("%.2f"),
+        format_label:    FORMAT("%.2f"),
         levels:          [1, 5, 10],     // array of steps where to draw labels
         scale_base:       false,
-        format_labels:    TK.FORMAT("%.2f"),
+        format_labels:   FORMAT("%.2f"),
         background:      false,
         gradient:        false
     },
@@ -198,9 +208,9 @@ TK.MeterBase = TK.class({
              * Is fired when the label changed.
              * The argument is the actual label value.
              * 
-             * @event TK.MeterBase#labelchanged
+             * @event MeterBase#labelchanged
              * 
-             * @param {string} label - The label of the {@link TK.MeterBase}.
+             * @param {string} label - The label of the {@link MeterBase}.
              */
             this.fire_event("labelchanged", value);
         },
@@ -209,9 +219,9 @@ TK.MeterBase = TK.class({
              * Is fired when the title changed.
              * The argument is the actual title.
              * 
-             * @event TK.MeterBase#titlechanged
+             * @event MeterBase#titlechanged
              * 
-             * @param {string} title - The title of the {@link TK.MeterBase}.
+             * @param {string} title - The title of the {@link MeterBase}.
              */
             this.fire_event("titlechanged", value);
         },
@@ -225,9 +235,9 @@ TK.MeterBase = TK.class({
              * Is fired when the value changed.
              * The argument is the actual value.
              * 
-             * @event TK.MeterBase#valuechanged
+             * @event MeterBase#valuechanged
              * 
-             * @param {number} value - The value of the {@link TK.MeterBase}.
+             * @param {number} value - The value of the {@link MeterBase}.
              */
             this.fire_event("valuechanged", value);
         },
@@ -240,7 +250,7 @@ TK.MeterBase = TK.class({
              * Is fired when the base value changed.
              * The argument is the actual base value.
              * 
-             * @event TK.MeterBase#basechanged
+             * @event MeterBase#basechanged
              * 
              * @param {number} base - The value of the base.
              */
@@ -259,23 +269,23 @@ TK.MeterBase = TK.class({
     
     initialize: function (options) {
         var E;
-        TK.Widget.prototype.initialize.call(this, options);
+        Widget.prototype.initialize.call(this, options);
         var O = this.options;
         /**
-         * @member {HTMLDivElement} TK.MeterBase#element - The main DIV container.
+         * @member {HTMLDivElement} MeterBase#element - The main DIV container.
          *   Has class <code>toolkit-meter-base</code>.
          */
-        if (!(E = this.element)) this.element = E = TK.element("div");
-        TK.add_class(E, "toolkit-meter-base");
+        if (!(E = this.element)) this.element = E = element("div");
+        add_class(E, "toolkit-meter-base");
         this.widgetize(E, false, true, true);
         
-        this._bar    = TK.element("div", "toolkit-bar");
+        this._bar    = element("div", "toolkit-bar");
         /**
-         * @member {HTMLCanvas} TK.MeterBase#_canvas - The canvas element drawing the mask.
+         * @member {HTMLCanvas} MeterBase#_canvas - The canvas element drawing the mask.
          *   Has class <code>toolkit-mask</code>.
          */
         this._canvas = document.createElement("canvas");
-        TK.add_class(this._canvas, "toolkit-mask");
+        add_class(this._canvas, "toolkit-mask");
 
         this._fillstyle = false;
         
@@ -284,7 +294,7 @@ TK.MeterBase = TK.class({
         this._bar.appendChild(this._canvas);
         
         /**
-         * @member {HTMLDivElement} TK.MeterBase#_bar - The DIV element containing the masks
+         * @member {HTMLDivElement} MeterBase#_bar - The DIV element containing the masks
          *      and drawing the background. Has class <code>toolkit-bar</code>.
          */
         this.delegate(this._bar);
@@ -297,7 +307,7 @@ TK.MeterBase = TK.class({
 
     destroy: function () {
         this._bar.remove();
-        TK.Widget.prototype.destroy.call(this);
+        Widget.prototype.destroy.call(this);
     },
     redraw: function () {
         var I = this.invalid;
@@ -306,9 +316,9 @@ TK.MeterBase = TK.class({
 
         if (this._fillstyle === false) {
             this._canvas.style.removeProperty("background-color");
-            TK.S.add(function() {
-                this._fillstyle = TK.get_style(this._canvas, "background-color");
-                TK.S.add(function() {
+            S.add(function() {
+                this._fillstyle = get_style(this._canvas, "background-color");
+                S.add(function() {
                     this._canvas.style.setProperty("background-color", "transparent", "important");
                     this.trigger_draw();
                 }.bind(this), 3);
@@ -317,38 +327,38 @@ TK.MeterBase = TK.class({
 
         if (I.reverse) {
             I.reverse = false;
-            TK.toggle_class(E, "toolkit-reverse", O.reverse);
+            toggle_class(E, "toolkit-reverse", O.reverse);
         }
         if (I.gradient || I.background) {
             I.gradient = I.background = false;
             this.draw_gradient(this._bar, O.gradient, O.background);
         }
 
-        TK.Widget.prototype.redraw.call(this);
+        Widget.prototype.redraw.call(this);
         
         if (I.layout) {
             I.layout = false;
-            TK.remove_class(E, "toolkit-vertical",
+            remove_class(E, "toolkit-vertical",
                             "toolkit-horizontal", "toolkit-left",
                             "toolkit-right", "toolkit-top", "toolkit-bottom");
             var scale = this.scale ? this.scale.element : null;
             var bar = this._bar;
             switch (O.layout) {
                 case "left":
-                    TK.add_class(E, "toolkit-vertical", "toolkit-left");
-                    if (scale) TK.insert_after(scale, bar);
+                    add_class(E, "toolkit-vertical", "toolkit-left");
+                    if (scale) insert_after(scale, bar);
                     break;
                 case "right":
-                    TK.add_class(E, "toolkit-vertical", "toolkit-right");
-                    if (scale) TK.insert_after(bar, scale);
+                    add_class(E, "toolkit-vertical", "toolkit-right");
+                    if (scale) insert_after(bar, scale);
                     break;
                 case "top":
-                    TK.add_class(E, "toolkit-horizontal", "toolkit-top");
-                    if (scale) TK.insert_after(scale, bar);
+                    add_class(E, "toolkit-horizontal", "toolkit-top");
+                    if (scale) insert_after(scale, bar);
                     break;
                 case "bottom":
-                    TK.add_class(E, "toolkit-horizontal", "toolkit-bottom");
-                    if (scale) TK.insert_after(bar, scale);
+                    add_class(E, "toolkit-horizontal", "toolkit-bottom");
+                    if (scale) insert_after(bar, scale);
                     break;
                 default:
                     throw("unsupported layout");
@@ -373,9 +383,9 @@ TK.MeterBase = TK.class({
 
     resize: function() {
         var O = this.options;
-        TK.Widget.prototype.resize.call(this);
-        var w = TK.inner_width(this._bar);
-        var h = TK.inner_height(this._bar);
+        Widget.prototype.resize.call(this);
+        var w = inner_width(this._bar);
+        var h = inner_height(this._bar);
         this.set("_width", w);
         this.set("_height", h);
         var i = vert(O) ? h : w;
@@ -480,10 +490,10 @@ TK.MeterBase = TK.class({
     
 });
 /**
- * @member {TK.Scale} TK.MeterBase#scale - The {@link TK.Scale} module of the meter.
+ * @member {Scale} MeterBase#scale - The {@link Scale} module of the meter.
  */
-TK.ChildWidget(TK.MeterBase, "scale", {
-    create: TK.Scale,
+ChildWidget(MeterBase, "scale", {
+    create: Scale,
     map_options: {
         format_labels: "labels",
         scale_base: "base",
@@ -500,11 +510,11 @@ TK.ChildWidget(TK.MeterBase, "scale", {
     },
 });
 /**
- * @member {TK.Label} TK.MeterBase#title - The DIV element displaying the title.
+ * @member {Label} MeterBase#title - The DIV element displaying the title.
  *   Has class <code>toolkit-title</code>.
  */
-TK.ChildWidget(TK.MeterBase, "title", {
-    create: TK.Label,
+ChildWidget(MeterBase, "title", {
+    create: Label,
     show: false,
     option: "title",
     default_options: { "class" : "toolkit-title" },
@@ -512,12 +522,11 @@ TK.ChildWidget(TK.MeterBase, "title", {
     toggle_class: true,
 });
 /**
- * @member {TK.Label} TK.MeterBase#label - The DIV element of the label.
+ * @member {Label} MeterBase#label - The DIV element of the label.
  */
-TK.ChildWidget(TK.MeterBase, "label", {
-    create: TK.Label,
+ChildWidget(MeterBase, "label", {
+    create: Label,
     show: false,
     default_options: { "class" : "toolkit-value" },
     toggle_class: true,
 });
-})(this, this.TK);

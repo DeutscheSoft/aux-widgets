@@ -16,15 +16,17 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
-TK.Gradient = TK.class({
+import { define_class } from '../widget_helpers.mjs';
+import { Ranged } from './ranged.mjs';
+import { sprintf, browser } from '../helpers.mjs';
+
+export const Gradient = define_class({
     /**
-     * TK.Gradient provides a function to set the background of a
+     * Gradient provides a function to set the background of a
      * DOM element to a CSS gradient according on the users browser and version.
-     * TK.Gradient needs a {@link TK.Range} to be implemented on.
+     * Gradient needs a {@link Range} to be implemented on.
      *
-     * @mixin TK.Gradient
+     * @mixin Gradient
      * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
@@ -37,8 +39,8 @@ TK.Gradient = TK.class({
      *   If set to false the css style color is used.
      */
     _class: "Gradient",
-    Implements: TK.Ranged,
-    _options: Object.assign(TK.Ranged.prototype._options, {
+    Implements: Ranged,
+    _options: Object.assign(Ranged.prototype._options, {
         gradient: "mixed",
         background: "mixed",
     }),
@@ -55,20 +57,20 @@ TK.Gradient = TK.class({
          * options. Fallback is used if no gradient can be created.
          * If fallback is omitted, <code>options.background</code> is used. if no range
          * is set Gradient assumes that the implementing instance has
-         * {@link TK.Range} functionality.
+         * {@link Range} functionality.
          *
-         * @method TK.Gradient#draw_gradient
+         * @method Gradient#draw_gradient
          * 
          * @param {DOMNode} element - The DOM node to apply the gradient to.
          * @param {Object} [gradient=this.options.gradient] - Gradient definition for the background, e.g. <code>{"-96": "rgb(30,87,153)", "-0.001": "rgb(41,137,216)", "0": "rgb(32,124,202)", "24": "rgb(125,185,232)"}</code>.
          * @param {string} [fallback=this.options.background] - If no gradient can be applied, use this as background color string.
-         * @param {TK.Range} [range=this] - If a specific range is set, it is used for the calculations. If not, we expect the widget itself provides {@link TK.Ranged} functionality.
+         * @param {Range} [range=this] - If a specific range is set, it is used for the calculations. If not, we expect the widget itself provides {@link Ranged} functionality.
          * 
          * @returns {string} A string to be used as background CSS.
          *
-         * @mixes TK.Ranged
+         * @mixes Ranged
          * 
-         * @emits TK.Gradient#backgroundchanged
+         * @emits Gradient#backgroundchanged
          */
         
         //  {"-96": "rgb(30,87,153)", "-0.001": "rgb(41,137,216)", "0": "rgb(32,124,202)", "24": "rgb(125,185,232)"}
@@ -146,49 +148,49 @@ TK.Gradient = TK.class({
                 if (!ms_first) ms_first = gradient[i];
                 ms_last = gradient[keys[i] + ""];
                 
-                m_svg     += TK.sprintf(c_svg, ps, gradient[keys[i] + ""]);
-                m_regular += TK.sprintf(c_regular, gradient[keys[i] + ""], ps);
-                m_webkit  += TK.sprintf(c_webkit, ps, gradient[keys[i] + ""]);
+                m_svg     += sprintf(c_svg, ps, gradient[keys[i] + ""]);
+                m_regular += sprintf(c_regular, gradient[keys[i] + ""], ps);
+                m_webkit  += sprintf(c_webkit, ps, gradient[keys[i] + ""]);
             }
             m_regular = m_regular.substr(0, m_regular.length -2);
             m_webkit  = m_regular.substr(0, m_webkit.length -2);
             
-            if (TK.browser.name === "IE" && TK.browser.version <= 8)
-                    bg = (TK.sprintf(s_ms, ms_last, ms_first, this._vert() ? 0:1));
+            if (browser.name === "IE" && browser.version <= 8)
+                    bg = (sprintf(s_ms, ms_last, ms_first, this._vert() ? 0:1));
                 
-            else if (TK.browser.name === "IE" && TK.browser.version === 9)
-                bg = (TK.sprintf(s_svg, this.options.id,
+            else if (browser.name === "IE" && browser.version === 9)
+                bg = (sprintf(s_svg, this.options.id,
                       d_ms["s"+this.options.layout],
                       m_svg, this.options.id));
             
-            else if (TK.browser.name === "IE" && TK.browser.version >= 10)
-                bg = (TK.sprintf(s_regular, "-ms-",
+            else if (browser.name === "IE" && browser.version >= 10)
+                bg = (sprintf(s_regular, "-ms-",
                       d_regular["s" + this.options.layout],
                       m_regular));
             
-            else if (TK.browser.name=="Firefox")
-                bg = (TK.sprintf(s_regular, "-moz-",
+            else if (browser.name=="Firefox")
+                bg = (sprintf(s_regular, "-moz-",
                       d_regular["s"+this.options.layout],
                       m_regular));
             
-            else if (TK.browser.name === "Opera" && TK.browser.version >= 11)
-                bg = (TK.sprintf(s_regular, "-o-",
+            else if (browser.name === "Opera" && browser.version >= 11)
+                bg = (sprintf(s_regular, "-o-",
                       d_regular["s"+this.options.layout],
                       m_regular));
             
-            else if (TK.browser.name === "Chrome" && TK.browser.version < 10
-                  || TK.browser.name === "Safari" && TK.browser.version < 5.1)
-                bg = (TK.sprintf(s_webkit,
+            else if (browser.name === "Chrome" && browser.version < 10
+                  || browser.name === "Safari" && browser.version < 5.1)
+                bg = (sprintf(s_webkit,
                       d_webkit["s"+this.options.layout],
                       m_regular));
             
-            else if (TK.browser.name === "Chrome" || TK.browser.name === "Safari")
-                bg = (TK.sprintf(s_regular, "-webkit-",
+            else if (browser.name === "Chrome" || browser.name === "Safari")
+                bg = (sprintf(s_regular, "-webkit-",
                       d_regular["s"+this.options.layout],
                       m_regular));
             
             else
-                bg = (TK.sprintf(s_regular, "",
+                bg = (sprintf(s_regular, "",
                       d_w3c["s"+this.options.layout],
                       m_regular));
         }
@@ -198,7 +200,7 @@ TK.Gradient = TK.class({
             /**
              * Is fired when the gradient was created.
              *
-             * @event TK.Gradient#backgroundchanged
+             * @event Gradient#backgroundchanged
              * 
              * @param {HTMLElement} element - The element which background has changed.
              * @param {string} background - The background of the element as CSS color string.
@@ -208,4 +210,3 @@ TK.Gradient = TK.class({
         return bg;
     }
 });
-})(this, this.TK);
