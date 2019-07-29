@@ -7,70 +7,78 @@ import { warn, error, FORMAT } from './helpers.mjs';
 //    - can be called with different values of capture
 //   this is a proof of concept at the moment
 
-function parse_attribute(type, x) {
-  const types = type.split('|');
+function low_parse_attribute(type, x) {
+  switch (type) {
+  case "js":
+    return new Function([], "return ("+x+");").call(this);
+  case "json":
+    return JSON.parse(x);
+  case "html":
+    return TK.html(x);
+  case "string":
+    return x;
+  case "number":
+    return parseFloat(x);
+  case "int":
+    return parseInt(x);
+  case "sprintf":
+    return FORMAT(x);
+  case "regexp":
+    return new RegExp(x);
+  case "bool":
+  case "boolean":
+    x = x.trim();
+    if (x === "true") {
+      return true;
+    } else if (x === "false") {
+      return false;
+    }
+    throw new Error("Malformed 'bool': ", x);
+  case "array":
+    try {
+      return low_parse_attribute('json', x);
+    } catch (err) {}
+    return low_parse_attribute('js', x);
+  default:
+    throw new Error("unsupported type " + type);
+  }
+}
 
+function parse_attribute(type, value)
+{
   {
-    const pos = x.indexOf(':');
+    const pos = value.indexOf(':');
 
     if (pos !== -1)
     {
       try
       {
-        return parse_attribute(x.substr(0, pos), x.substr(pos+1));
+        return low_parse_attribute(value.substr(0, pos), value.substr(pos+1));
       }
       catch (err) { }
     }
-  }
 
-  if (types.length > 1)
-  {
-    for (let i = 0; i < types.length; i++)
+    const types = type.split('|');
+
+    if (types.length > 1)
     {
-      try
+      for (let i = 0; i < types.length; i++)
       {
-        return parse_attribute(types[i], x);
+        try
+        {
+          return low_parse_attribute(types[i], value);
+        }
+        catch (e)
+        {
+          warn(e);
+        }
       }
-      catch (e)
-      {
-        warn(e);
-      }
-    }
 
-    throw new Error('Could not find any matching format in ' + type);
-  }
-  else
-  {
-    switch (type) {
-    case "js":
-      return new Function([], "return ("+x+");").call(this);
-    case "json":
-      return JSON.parse(x);
-    case "html":
-      return TK.html(x);
-    case "string":
-      return x;
-    case "number":
-      return parseFloat(x);
-    case "int":
-      return parseInt(x);
-    case "sprintf":
-      return FORMAT(x);
-    case "regexp":
-      return new RegExp(x);
-    case "bool":
-    case "boolean":
-      x = x.trim();
-      if (x === "true") {
-        return true;
-      } else if (x === "false") {
-        return false;
-      }
-      throw new Error("Malformed 'bool': ", x);
-    default:
-      throw new Error("unsupported type " + type);
+      throw new Error('Could not find any matching format in ' + type);
     }
   }
+
+  return low_parse_attribute(type, value);
 }
 
 function attributes_from_widget(Widget)
