@@ -1094,8 +1094,6 @@ function remove_passive_event_listener(e, type, cb) {
   remove_event_listener(e, type, cb, passive_options);
 }
 
-const S = new DOMScheduler();
-
 const browser = function() {
     /**
      * Returns the name of the browser
@@ -1137,7 +1135,6 @@ function assign_warn(a) {
 
 export {
     // ELEMENTS
-    S,
     is_dom_node,
     get_id,
     get_class,

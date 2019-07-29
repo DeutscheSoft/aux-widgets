@@ -1,6 +1,5 @@
-import { DOMScheduler } from './dom_scheduler.mjs';
+import { DOMScheduler, S } from './dom_scheduler.mjs';
 import {
-    S,
     is_dom_node,
     get_id,
     get_class,

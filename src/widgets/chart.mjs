@@ -17,9 +17,10 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class, ChildElement } from './../widget_helpers.mjs';
+import { S } from '../dom_scheduler.mjs';
 import {
-    empty, css_space, make_svg, get_style, warn, S, element, add_class,
-    inner_width, toggle_class
+    empty, css_space, make_svg, get_style, warn, element, add_class,
+    inner_width, toggle_class, inner_height
   } from '../helpers.mjs';
 import { Widget } from './widget.mjs';
 import { Ranges } from '../implements/ranges.mjs';

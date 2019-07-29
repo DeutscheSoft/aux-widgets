@@ -16,7 +16,8 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
  * Boston, MA  02110-1301  USA
  */
-import { S, toggle_class, set_styles, add_class, remove_class, warn, has_class, set_style, get_style, unique_id } from './../helpers.mjs';
+import { S } from '../dom_scheduler.mjs';
+import { toggle_class, set_styles, add_class, remove_class, warn, has_class, set_style, get_style, unique_id } from './../helpers.mjs';
 import { define_class } from './../widget_helpers.mjs';
 import { Base } from './../implements/base.mjs';
 

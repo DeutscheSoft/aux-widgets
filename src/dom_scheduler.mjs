@@ -16,6 +16,8 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
+import { warn, log } from './helpers.mjs';
+
 function low_add(Q, o, prio) {
     prio = prio << 1;
     var q = Q[prio];
@@ -50,7 +52,7 @@ function low_has(Q, o, prio) {
     }
     return false;
 }
-export function Scheduler() {
+function Scheduler() {
     this.Q_next = this.Q = [];
     this.Q_tmp = [];
     this.tmp = [];
@@ -97,7 +99,7 @@ Scheduler.prototype = {
 
                 for (var j = 0; j < len; j++) {
                     try { q[j](); } catch (e) {
-                        TK.warn(q[j], "threw an error", e);
+                        warn(q[j], "threw an error", e);
                     }
                     q[j] = null;
                     calls++;
@@ -120,7 +122,7 @@ Scheduler.prototype = {
         if (debug) {
             t = performance.now() - t;
             if (t > debug)
-                TK.log("DOMScheduler did %d runs and %d calls: %f ms", runs, calls, t);
+                log("DOMScheduler did %d runs and %d calls: %f ms", runs, calls, t);
         }
 
         this.running = false;
@@ -162,7 +164,7 @@ Scheduler.prototype = {
     },
     describe_now: function() {
         if (this.running) {
-            return TK.sprintf("<frame: %d, prio: %d, cycle: %d>",
+            return sprintf("<frame: %d, prio: %d, cycle: %d>",
                               this.get_frame_count(),
                               this.get_current_priority(),
                               this.get_current_cycle());
@@ -171,7 +173,7 @@ Scheduler.prototype = {
         }
     },
 };
-export function DOMScheduler() {
+function DOMScheduler() {
     Scheduler.call(this);
     this.will_render = false;
     this.running = false;
@@ -211,3 +213,10 @@ DOMScheduler.prototype.after_frame = function(fun) {
     this.will_render = true;
     window.requestAnimationFrame(this.bound_run);
 };
+
+export { Scheduler, DOMScheduler };
+
+/**
+ * Global DOM Scheduler.
+ */
+export const S = new DOMScheduler();
