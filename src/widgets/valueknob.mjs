@@ -16,18 +16,23 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
+import { define_class } from '../widget_helpers.mjs';
+import { ChildWidget } from '../child_widget.mjs';
+import { Widget } from './widget.mjs';
+import { Knob } from './knob.mjs';
+import { Value } from './value.mjs';
+import { Label } from './label.mjs';
+import { FORMAT, add_class, element } from '../helpers.mjs';
+
  /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
  * The event is emitted for the option <code>value</code>.
  *
- * @event TK.ValueKnob#useraction
+ * @event ValueKnob#useraction
  * 
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
- 
-"use strict";
-(function(w, TK){
 function value_clicked() {
     var self = this.parent;
     var knob = self.knob;
@@ -36,7 +41,7 @@ function value_clicked() {
     /**
      * Is fired when the user starts editing the value manually.
      * 
-     * @event TK.ValueButton#valueedit
+     * @event ValueButton#valueedit
      * 
      * @param {number} value - The value of the widget.
      */
@@ -50,39 +55,39 @@ function value_done() {
     /**
      * Is fired when the user finished editing the value manually.
      * 
-     * @event TK.ValueButton#valueset
+     * @event ValueButton#valueset
      * 
      * @param {number} value - The value of the widget.
      */
     self.fire_event("valueset", this.options.value);
 }
-TK.ValueKnob = TK.class({
+export const ValueKnob = define_class({
     /**
-     * This widget combines a {@link TK.Knob}, a {@link TK.Label}  and a {@link TK.Value} whose
+     * This widget combines a {@link Knob}, a {@link Label}  and a {@link Value} whose
      * value is synchronized.
      *
-     * @class TK.ValueKnob
+     * @class ValueKnob
      * 
-     * @extends TK.Widget
+     * @extends Widget
      * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
-     * @property {Function} [options.value_format=TK.FORMAT("%.2f")] - Callback to format the value.
+     * @property {Function} [options.value_format=FORMAT("%.2f")] - Callback to format the value.
      * @property {Number} [options.value_size=5] - Amount of digits for the value input.
      */
     _class: "ValueKnob",
-    Extends: TK.Widget,
-    _options: Object.create(TK.Widget.prototype._options),
+    Extends: Widget,
+    _options: Object.create(Widget.prototype._options),
     options: { },
     initialize: function (options) {
-        TK.Widget.prototype.initialize.call(this, options);
+        Widget.prototype.initialize.call(this, options);
         var E;
         /**
-         * @member {HTMLDivElement} TK.ValueKnob#element - The main DIV container.
+         * @member {HTMLDivElement} ValueKnob#element - The main DIV container.
          *   Has class <code>toolkit-valueknob</code>.
          */
-        if (!(E = this.element)) this.element = E = TK.element("div");
-        TK.add_class(E, "toolkit-valueknob");
+        if (!(E = this.element)) this.element = E = element("div");
+        add_class(E, "toolkit-valueknob");
 
         this.widgetize(E, true, true, true);
     },
@@ -94,14 +99,14 @@ TK.ValueKnob = TK.class({
         if (key === "value" && this.knob)
             value = this.knob.set("value", value);
 
-        return TK.Widget.prototype.set.call(this, key, value);
+        return Widget.prototype.set.call(this, key, value);
     },
 });
 /**
- * @member {TK.Label} TK.ValueKnob#label - The TK.Label widget.
+ * @member {Label} ValueKnob#label - The Label widget.
  */
-TK.ChildWidget(TK.ValueKnob, "label", {
-    create: TK.Label,
+ChildWidget(ValueKnob, "label", {
+    create: Label,
     option: "title",
     toggle_class: true,
     map_options: {
@@ -109,19 +114,19 @@ TK.ChildWidget(TK.ValueKnob, "label", {
     },
 });
 /**
- * @member {TK.Knob} TK.ValueKnob#knob - The TK.Knob widget.
+ * @member {Knob} ValueKnob#knob - The Knob widget.
  */
-TK.ChildWidget(TK.ValueKnob, "knob", {
-    create: TK.Knob,
+ChildWidget(ValueKnob, "knob", {
+    create: Knob,
     show: true,
     inherit_options: true,
     toggle_class: true,
 });
 /**
- * @member {TK.Value} TK.ValueKnob#value - The TK.Value widget.
+ * @member {Value} ValueKnob#value - The Value widget.
  */
-TK.ChildWidget(TK.ValueKnob, "value", {
-    create: TK.Value,
+ChildWidget(ValueKnob, "value", {
+    create: Value,
     show: true,
     inherit_options: true,
     map_options: {
@@ -135,4 +140,3 @@ TK.ChildWidget(TK.ValueKnob, "value", {
     },
     toggle_class: true,
 });
-})(this, this.TK);

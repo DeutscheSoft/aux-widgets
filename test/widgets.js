@@ -11,6 +11,7 @@ import { Gauge } from '../src/widgets/gauge.mjs';
 import { Fader } from '../src/widgets/fader.mjs';
 import { Select } from '../src/widgets/select.mjs';
 import { ValueButton } from '../src/widgets/valuebutton.mjs';
+import { ValueKnob } from '../src/widgets/valueknob.mjs';
 
 import { compare, object_minus } from './helpers.mjs';
 
@@ -29,6 +30,7 @@ describe('Widgets', () => {
        new Fader();
        new Select();
        new ValueButton();
+       new ValueKnob();
 
        done();
     });
