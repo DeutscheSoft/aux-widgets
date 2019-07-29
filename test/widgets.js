@@ -16,6 +16,7 @@ import { MeterBase } from '../src/widgets/meterbase.mjs';
 import { LevelMeter } from '../src/widgets/levelmeter.mjs';
 import { MultiMeter } from '../src/widgets/multimeter.mjs';
 import { Notifications } from '../src/widgets/notifications.mjs';
+import { Clock } from '../src/widgets/clock.mjs';
 
 import { compare, object_minus } from './helpers.mjs';
 
@@ -39,6 +40,7 @@ describe('Widgets', () => {
        new LevelMeter();
        new MultiMeter();
        new Notifications();
+       new Clock();
 
        done();
     });

@@ -16,8 +16,13 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+import { define_class } from '../widget_helpers.mjs';
+import { Widget } from './widget.mjs';
+import { Circular } from '../modules/circular.mjs';
+import { set_text, element, add_class, get_style, make_svg } from '../helpers.mjs';
+import { S } from '../dom_scheduler.mjs';
+
+
 function draw_time(force) {
     var tmp, drawn;
     var O = this.options;
@@ -49,17 +54,17 @@ function draw_time(force) {
                 O.months,
                 O.days];
     if ((tmp = O.label.apply(this, args)) !== this.__label || force) {
-        TK.set_text(this._label, tmp);
+        set_text(this._label, tmp);
         this.__label = tmp;
         drawn = true;
     }
     if ((tmp = O.label_upper.apply(this, args)) !== this.__upper || force) {
-        TK.set_text(this._label_upper, tmp);
+        set_text(this._label_upper, tmp);
         this.__upper = tmp;
         drawn = true;
     }
     if ((tmp = O.label_lower.apply(this, args)) !== this.__lower || force) {
-        TK.set_text(this._label_lower, tmp);
+        set_text(this._label_lower, tmp);
         this.__lower = tmp;
         drawn = true;
     }
@@ -70,7 +75,7 @@ function draw_time(force) {
          * 
          * @param {Date} time - The time which was drawn.
          * 
-         * @event TK.Clock#timedrawn
+         * @event Clock#timedrawn
          */
         this.fire_event("timedrawn", O.time);
 }
@@ -80,33 +85,33 @@ function set_labels() {
     var s = O.label(new Date(2000, 8, 30, 24, 59, 59, 999), 2000, 8,
                                                30, 6, 24, 59, 59, 999, 999,
                                                O.months, O.days);
-    TK.set_text(E, s);
+    set_text(E, s);
     
     E.setAttribute("transform", "");
 
     /* FORCE_RELAYOUT */
     
-    TK.S.add(function() {
+    S.add(function() {
         var bb = E.getBoundingClientRect();
         if (bb.width === 0) return; // we are hidden
-        var mleft   = parseInt(TK.get_style(E, "margin-left")) || 0;
-        var mright  = parseInt(TK.get_style(E, "margin-right")) || 0;
-        var mtop    = parseInt(TK.get_style(E, "margin-top")) || 0;
-        var mbottom = parseInt(TK.get_style(E, "margin-bottom")) || 0;
+        var mleft   = parseInt(get_style(E, "margin-left")) || 0;
+        var mright  = parseInt(get_style(E, "margin-right")) || 0;
+        var mtop    = parseInt(get_style(E, "margin-top")) || 0;
+        var mbottom = parseInt(get_style(E, "margin-bottom")) || 0;
         var space   = O.size - mleft - mright - this._margin * 2;
         var scale   = space / bb.width;
         var pos     = O.size / 2;
         
-        TK.S.add(function() {
+        S.add(function() {
             E.setAttribute("transform", "translate(" + pos + "," + pos + ") "
                 + "scale(" + scale + ")");
 
             /* FORCE_RELAYOUT */
             
-            TK.S.add(function() {
+            S.add(function() {
                 bb = E.getBoundingClientRect();
                 
-                TK.S.add(function() {
+                S.add(function() {
                     this._label_upper.setAttribute("transform", "translate(" + pos + "," + (pos - bb.height / 2 - mtop) + ") "
                         + "scale(" + (scale * O.label_scale) + ")");
                     this._label_lower.setAttribute("transform", "translate(" + pos + "," + (pos + bb.height / 2 + mtop) + ") "
@@ -147,19 +152,19 @@ function onhide() {
     }
 }
 
-TK.Clock = TK.class({
+export const Clock = define_class({
     /**
-     * TK.Clock shows a customized clock with circulars displaying hours, minutes
+     * Clock shows a customized clock with circulars displaying hours, minutes
      * and seconds. It has three free formatable labels.
      *
-     * @class TK.Clock
+     * @class Clock
      * 
-     * @extends TK.Widget
+     * @extends Widget
      * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
      * @property {Integer} [options.thickness=10] - Thickness of the rings in percent of the maximum dimension.
-     * @property {Integer} [options.margin=0] - Margin between the {@link TK.Circular} in percent of the maximum dimension.
+     * @property {Integer} [options.margin=0] - Margin between the {@link Circular} in percent of the maximum dimension.
      * @property {Integer} [options.size=200] - Width and height of the widget.
      * @property {Boolean} [options.show_seconds=true] - Show seconds ring.
      * @property {Boolean} [options.show_minutes=true] - Show minutes ring.
@@ -177,8 +182,8 @@ TK.Clock = TK.class({
      * @property {Date} [options.time=10] - test
      */
     _class: "Clock",
-    Extends: TK.Widget,
-    _options: Object.assign(Object.create(TK.Widget.prototype._options), {
+    Extends: Widget,
+    _options: Object.assign(Object.create(Widget.prototype._options), {
         thickness:    "int",
         margin:       "int",
         size:         "int",
@@ -236,42 +241,42 @@ TK.Clock = TK.class({
     initialize: function (options) {
         var E, S;
         /**
-         * @member {Object} TK.Clock#circulars - An object holding all three TK.Circular as members <code>seconds</code>, <code>minutes</code> and <code>hours</code>.
+         * @member {Object} Clock#circulars - An object holding all three Circular as members <code>seconds</code>, <code>minutes</code> and <code>hours</code>.
          */
         this.circulars = {};
         this._margin = -1;
-        TK.Widget.prototype.initialize.call(this, options);
+        Widget.prototype.initialize.call(this, options);
         this.options.time = new Date();
         /**
-         * @member {HTMLDivElement} TK.Clock#element - The main DIV element. Has class <code>toolkit-clock</code> 
+         * @member {HTMLDivElement} Clock#element - The main DIV element. Has class <code>toolkit-clock</code> 
          */
-        if (!(E = this.element)) this.element = E = TK.element("div");
+        if (!(E = this.element)) this.element = E = element("div");
         /**
-         * @member {SVGImage} TK.Clock#svg - The main SVG image.
+         * @member {SVGImage} Clock#svg - The main SVG image.
          */
-        this.svg = S = TK.make_svg("svg");
+        this.svg = S = make_svg("svg");
         this.widgetize(E, true, true, true);
-        TK.add_class(E, "toolkit-clock");
+        add_class(E, "toolkit-clock");
         
         /**
-         * @member {SVGText} TK.Clock#_label - The center label showing the time. Has class<code>toolkit-label</code>
+         * @member {SVGText} Clock#_label - The center label showing the time. Has class<code>toolkit-label</code>
          */
-        this._label       = TK.make_svg("text", {
+        this._label       = make_svg("text", {
             "class":       "toolkit-label",
             "text-anchor": "middle",
             "style":       "dominant-baseline: central;"
         });
         /**
-         * @member {SVGText} TK.Clock#_label_upper - The upper label showing the day. Has class<code>toolkit-label-upper</code>
+         * @member {SVGText} Clock#_label_upper - The upper label showing the day. Has class<code>toolkit-label-upper</code>
          */
-        this._label_upper = TK.make_svg("text", {
+        this._label_upper = make_svg("text", {
             "class": "toolkit-label-upper",
             "text-anchor": "middle",
             "style":       "dominant-baseline: central;"
         });
-        /** @member {SVGText} TK.Clock#_label_lower - The lower label showing the date. Has class<code>toolkit-label-lower</code>
+        /** @member {SVGText} Clock#_label_lower - The lower label showing the date. Has class<code>toolkit-label-lower</code>
          */
-        this._label_lower = TK.make_svg("text", {
+        this._label_lower = make_svg("text", {
             "class": "toolkit-label-lower",
             "text-anchor": "middle",
             "style":       "dominant-baseline: central;"
@@ -289,11 +294,11 @@ TK.Clock = TK.class({
             min: 0
         };
 
-        this.circulars.seconds = new TK.Circular(Object.assign({}, circ_options,
+        this.circulars.seconds = new Circular(Object.assign({}, circ_options,
             {max: 60, "class": "toolkit-seconds"}));
-        this.circulars.minutes = new TK.Circular(Object.assign({}, circ_options,
+        this.circulars.minutes = new Circular(Object.assign({}, circ_options,
             {max: 60, "class": "toolkit-minutes"}));
-        this.circulars.hours   = new TK.Circular(Object.assign({}, circ_options,
+        this.circulars.hours   = new Circular(Object.assign({}, circ_options,
             {max: 12, "class": "toolkit-hours"}));
 
         this.add_child(this.circulars.seconds);
@@ -307,7 +312,7 @@ TK.Clock = TK.class({
     redraw: function () {
         var I = this.invalid, O = this.options;
 
-        TK.Widget.prototype.redraw.call(this);
+        Widget.prototype.redraw.call(this);
 
         if (I.size) {
             var tmp = O.size;
@@ -360,7 +365,6 @@ TK.Clock = TK.class({
         this.circulars.hours.destroy();
         if (this.__to)
             window.clearTimeout(this.__to);
-        TK.Widget.prototype.destroy.call(this);
+        Widget.prototype.destroy.call(this);
     },
 });
-})(this, this.TK);
