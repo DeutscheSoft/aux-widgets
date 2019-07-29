@@ -8,6 +8,7 @@ import { Knob } from '../src/widgets/knob.mjs';
 import { State } from '../src/widgets/state.mjs';
 import { Slider } from '../src/widgets/slider.mjs';
 import { Gauge } from '../src/widgets/gauge.mjs';
+import { Fader } from '../src/widgets/fader.mjs';
 
 import { compare, object_minus } from './helpers.mjs';
 
@@ -23,6 +24,7 @@ describe('Widgets', () => {
        new State();
        new Slider();
        new Gauge();
+       new Fader();
 
        done();
     });

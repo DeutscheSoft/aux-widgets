@@ -16,8 +16,15 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK) {
+import { define_class, ChildElement } from '../widget_helpers.mjs';
+import { Widget } from '../widgets/widget.mjs';
+import { Ranged } from '../implements/ranged.mjs';
+import {
+    set_content, add_class, outer_width, FORMAT, element, remove_class, warn, toggle_class,
+    empty, inner_height, inner_width, supports_transform
+  } from '../helpers.mjs';
+import { S } from '../dom_scheduler.mjs';
+
 function get_base(O) {
     return Math.max(Math.min(O.max, O.base), O.min);
 }
@@ -157,14 +164,14 @@ function create_label(value, position) {
         elem.style.left = position.toFixed(1) + "px";
     }
 
-    TK.set_content(elem, O.labels(value));
+    set_content(elem, O.labels(value));
 
     if (get_base(O) === value)
-        TK.add_class(elem, "toolkit-base");
+        add_class(elem, "toolkit-base");
     else if (O.max === value)
-        TK.add_class(elem, "toolkit-max");
+        add_class(elem, "toolkit-max");
     else if (O.min === value)
-        TK.add_class(elem, "toolkit-min");
+        add_class(elem, "toolkit-min");
 
     return elem;
 }
@@ -180,11 +187,11 @@ function create_dot(value, position) {
     }
     
     if (get_base(O) === value)
-        TK.add_class(elem, "toolkit-base");
+        add_class(elem, "toolkit-base");
     else if (O.max === value)
-        TK.add_class(elem, "toolkit-max");
+        add_class(elem, "toolkit-max");
     else if (O.min === value)
-        TK.add_class(elem, "toolkit-min");
+        add_class(elem, "toolkit-min");
 
     return elem;
 }
@@ -194,8 +201,8 @@ function measure_dimensions(data) {
     var height = [];
 
     for (var i = 0; i < nodes.length; i++) {
-        width.push(TK.outer_width(nodes[i]));
-        height.push(TK.outer_height(nodes[i]));
+        width.push(outer_width(nodes[i]));
+        height.push(outer_height(nodes[i]));
     }
 
     data.width = width;
@@ -206,9 +213,9 @@ function handle_end(O, labels, i) {
     var v = labels.values[i];
 
     if (v === O.min) {
-        TK.add_class(node, "toolkit-min");
+        add_class(node, "toolkit-min");
     } else if (v === O.max) {
-        TK.add_class(node, "toolkit-max");
+        add_class(node, "toolkit-max");
     } else return;
 }
 function generate_scale(from, to, include_from, show_to) {
@@ -267,7 +274,7 @@ function generate_scale(from, to, include_from, show_to) {
         create_dom_nodes.call(this, labels, create_label.bind(this));
 
         if (labels.values.length && labels.values[0] === get_base(O)) {
-            TK.add_class(labels.nodes[0], "toolkit-base");
+            add_class(labels.nodes[0], "toolkit-base");
         }
     }
 
@@ -281,7 +288,7 @@ function generate_scale(from, to, include_from, show_to) {
             };
             create_dom_nodes.call(this, markers, create_dot.bind(this));
             for (var i = 0; i < markers.nodes.length; i++)
-                TK.add_class(markers.nodes[i], "toolkit-marker");
+                add_class(markers.nodes[i], "toolkit-marker");
         }
 
         if (O.show_labels && labels.values.length > 1) {
@@ -299,9 +306,9 @@ function generate_scale(from, to, include_from, show_to) {
     };
 
     if (O.show_labels && O.avoid_collisions)
-        TK.S.add(function() {
+        S.add(function() {
             measure_dimensions(labels);
-            TK.S.add(render_cb.bind(this), 3);
+            S.add(render_cb.bind(this), 3);
         }.bind(this), 2);
     else render_cb.call(this);
 }
@@ -316,27 +323,27 @@ function mark_markers(labels, dots) {
         if (a[i] < b[j]) i++;
         else if (a[i] > b[j]) j++;
         else {
-            TK.add_class(nodes[j], "toolkit-marker");
+            add_class(nodes[j], "toolkit-marker");
             i++;
             j++;
         }
     }
 }
 /**
- * TK.Scale can be used to draw scales. It is used in {@link TK.MeterBase} and
- * {@link TK.Fader}. TK.Scale draws labels and markers based on its parameters
+ * Scale can be used to draw scales. It is used in {@link MeterBase} and
+ * {@link Fader}. Scale draws labels and markers based on its parameters
  * and the available space. Scales can be drawn both vertically and horizontally.
- * Scale mixes in {@link TK.Ranged} and inherits all its options.
+ * Scale mixes in {@link Ranged} and inherits all its options.
  *
- * @extends TK.Widget
+ * @extends Widget
  * 
- * @mixes TK.Ranged
+ * @mixes Ranged
  * 
- * @class TK.Scale
+ * @class Scale
  *
  * @param {Object} [options={ }] - An object containing initial options.
  * 
- * @property {String} [options.layout="right"] - The layout of the TK.Scale. <code>right</code> and
+ * @property {String} [options.layout="right"] - The layout of the Scale. <code>right</code> and
  *   <code>left</code> are vertical layouts with the labels being drawn right and left of the scale,
  *   respectively. <code>top</code> and <code>bottom</code> are horizontal layouts for which the 
  *   labels are drawn on top and below the scale, respectively.
@@ -344,7 +351,7 @@ function mark_markers(labels, dots) {
  * @property {Array<Number>} [options.levels=[1]] - Array of steps for labels and markers.
  * @property {Number} [options.base=false]] - Base of the scale. If set to <code>false</code> it will
  *   default to the minimum value.
- * @property {Function} [options.labels=TK.FORMAT("%.2f")] - Formatting function for the labels.
+ * @property {Function} [options.labels=FORMAT("%.2f")] - Formatting function for the labels.
  * @property {Integer} [options.gap_dots=4] - Minimum gap in pixels between two adjacent markers.
  * @property {Integer} [options.gap_labels=40] - Minimum gap in pixels between two adjacent labels.
  * @property {Boolean} [options.show_labels=true] - If <code>true</code>, labels are drawn.
@@ -365,12 +372,12 @@ function mark_markers(labels, dots) {
  * @property {Number|Boolean} [options.pointer=false] - The value to set the pointers position to.
  * @property {Number|Boolean} [options.bar=false] - The value to set the bars height to.
  */
-TK.Scale = TK.class({
+export const Scale = define_class({
     _class: "Scale",
     
-    Extends: TK.Widget,
-    Implements: [TK.Ranged],
-    _options: Object.assign(Object.create(TK.Widget.prototype._options), TK.Ranged.prototype._options, {
+    Extends: Widget,
+    Implements: [Ranged],
+    _options: Object.assign(Object.create(Widget.prototype._options), Ranged.prototype._options, {
         layout: "string",
         division: "number",
         levels: "array",
@@ -395,7 +402,7 @@ TK.Scale = TK.class({
         division:         1,
         levels:           [1],
         base:             false,
-        labels:           TK.FORMAT("%.2f"),
+        labels:           FORMAT("%.2f"),
         avoid_collisions: false,
         gap_dots:         4,
         gap_labels:       40,
@@ -412,17 +419,17 @@ TK.Scale = TK.class({
     
     initialize: function (options) {
         var E;
-        TK.Widget.prototype.initialize.call(this, options);
+        Widget.prototype.initialize.call(this, options);
         /**
-         * @member {HTMLDivElement} TK.Scale#element - The main DIV element. Has class <code>toolkit-scale</code> 
+         * @member {HTMLDivElement} Scale#element - The main DIV element. Has class <code>toolkit-scale</code> 
          */
-        if (!(E = this.element)) this.element = E = TK.element("div");
-        TK.add_class(E, "toolkit-scale");
+        if (!(E = this.element)) this.element = E = element("div");
+        add_class(E, "toolkit-scale");
         this.element = this.widgetize(E, true, true, true);
     },
 
     redraw: function () {
-        TK.Widget.prototype.redraw.call(this);
+        Widget.prototype.redraw.call(this);
 
         var I = this.invalid;
         var O = this.options;
@@ -430,34 +437,34 @@ TK.Scale = TK.class({
 
         if (I.layout) {
             I.layout = false;
-            TK.remove_class(E, "toolkit-vertical", "toolkit-horizontal", "toolkit-top",
+            remove_class(E, "toolkit-vertical", "toolkit-horizontal", "toolkit-top",
                             "toolkit-bottom", "toolkit-right", "toolkit-left");
             switch (O.layout) {
             case "left":
-                TK.add_class(E, "toolkit-vertical", "toolkit-left");
+                add_class(E, "toolkit-vertical", "toolkit-left");
                 break;
             case "right":
-                TK.add_class(E, "toolkit-vertical", "toolkit-right");
+                add_class(E, "toolkit-vertical", "toolkit-right");
                 break;
             case "top":
-                TK.add_class(E, "toolkit-horizontal", "toolkit-top");
+                add_class(E, "toolkit-horizontal", "toolkit-top");
                 break;
             case "bottom":
-                TK.add_class(E, "toolkit-horizontal", "toolkit-bottom");
+                add_class(E, "toolkit-horizontal", "toolkit-bottom");
                 break;
             default:
-                TK.warn("Unsupported layout setting:", O.layout);
+                warn("Unsupported layout setting:", O.layout);
             }
         }
 
         if (I.reverse) {
           /* NOTE: reverse will be validated below */
-          TK.toggle_class(E, "toolkit-reverse", O.reverse);
+          toggle_class(E, "toolkit-reverse", O.reverse);
         }
 
         if (I.validate("base", "show_base", "gap_labels", "min", "show_min", "division", "max", "show_markers",
                        "fixed_dots", "fixed_labels", "levels", "basis", "scale", "reverse", "show_labels")) {
-            TK.empty(E);
+            empty(E);
 
             if (O.fixed_dots && O.fixed_labels) {
                 var labels;
@@ -493,15 +500,15 @@ TK.Scale = TK.class({
     },
     
     resize: function () {
-        TK.Widget.prototype.resize.call(this);
+        Widget.prototype.resize.call(this);
         var O = this.options;
-        this.set("basis", vert(O) ? TK.inner_height(this.element)
-                                  : TK.inner_width(this.element) );
+        this.set("basis", vert(O) ? inner_height(this.element)
+                                  : inner_width(this.element) );
     },
     
     // GETTER & SETTER
     set: function (key, value) {
-        TK.Widget.prototype.set.call(this, key, value);
+        Widget.prototype.set.call(this, key, value);
         switch (key) {
             case "division":
             case "levels":
@@ -512,9 +519,9 @@ TK.Scale = TK.class({
                 /**
                  * Gets fired when an option the rendering depends on was changed
                  * 
-                 * @event TK.Scale#scalechanged
+                 * @event Scale#scalechanged
                  * 
-                 * @param {string} key - The name of the option which changed the {@link TK.Scale}.
+                 * @param {string} key - The name of the option which changed the {@link Scale}.
                  * @param {mixed} value - The value of the option.
                  */
                 this.fire_event("scalechanged", key, value)
@@ -524,23 +531,23 @@ TK.Scale = TK.class({
 });
 
 /**
- * @member {HTMLDivElement} TK.Fader#_pointer - The DIV element of the pointer. It can be used to e.g. visualize the value set in the backend.
+ * @member {HTMLDivElement} Fader#_pointer - The DIV element of the pointer. It can be used to e.g. visualize the value set in the backend.
  */
-TK.ChildElement(TK.Scale, "pointer", {
+ChildElement(Scale, "pointer", {
     show: false,
     toggle_class: true,
     option: "pointer",
-    draw_options: Object.keys(TK.Ranged.prototype._options).concat([ "pointer", "basis" ]),
+    draw_options: Object.keys(Ranged.prototype._options).concat([ "pointer", "basis" ]),
     draw: function(O) {
         if (this._pointer) {
             var tmp = this.val2px(this.snap(O.pointer)) + "px";
             if (vert(O)) {
-                if (TK.supports_transform)
+                if (supports_transform)
                     this._pointer.style.transform = "translateY(-"+tmp+")";
                 else
                     this._pointer.style.bottom = tmp;
             } else {
-                if (TK.supports_transform)
+                if (supports_transform)
                     this._pointer.style.transform = "translateX("+tmp+")";
                 else
                     this._pointer.style.left = tmp;
@@ -550,13 +557,13 @@ TK.ChildElement(TK.Scale, "pointer", {
 });
 
 /**
- * @member {HTMLDivElement} TK.Fader#_bar - The DIV element of the bar. It can be used to e.g. visualize the value set in the backend or to draw a simple levelmeter.
+ * @member {HTMLDivElement} Fader#_bar - The DIV element of the bar. It can be used to e.g. visualize the value set in the backend or to draw a simple levelmeter.
  */
-TK.ChildElement(TK.Scale, "bar", {
+ChildElement(Scale, "bar", {
     show: false,
     toggle_class: true,
     option: "bar",
-    draw_options: Object.keys(TK.Ranged.prototype._options).concat([ "bar", "basis" ]),
+    draw_options: Object.keys(Ranged.prototype._options).concat([ "bar", "basis" ]),
     draw: function(O) {
         if (this._bar) {
             var tmp = this.val2px(this.snap(O.bar)) + "px";
@@ -567,5 +574,3 @@ TK.ChildElement(TK.Scale, "bar", {
         }
     },
 });
-
-})(this, this.TK);

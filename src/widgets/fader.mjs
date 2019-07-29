@@ -21,13 +21,28 @@
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
  * The event is emitted for the option <code>value</code>.
  *
- * @event TK.Fader#useraction
+ * @event Fader#useraction
  * 
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-"use strict";
-(function(w, TK){
+import { define_class } from './../widget_helpers.mjs';
+import { Widget } from './widget.mjs';
+import { Ranged } from '../implements/ranged.mjs';
+import { Warning } from '../implements/warning.mjs';
+import { GlobalCursor } from '../implements/globalcursor.mjs';
+import { Scale } from '../modules/scale.mjs';
+import { DragValue } from '../modules/dragvalue.mjs';
+import { ScrollValue } from '../modules/scrollvalue.mjs';
+import { Value } from './value.mjs';
+import { Label } from './label.mjs';
+import { tooltip } from './tooltips.mjs';
+import {
+    set_text, element, add_class, toggle_class, remove_class, supports_transform,
+    css_space, outer_height, inner_height, outer_width, inner_width
+  } from '../helpers.mjs';
+import { ChildWidget } from '../child_widget.mjs';
+import { S } from '../dom_scheduler.mjs';
 
 function vert(O) {
     return O.layout === "left" || O.layout === "right";
@@ -51,14 +66,14 @@ function tooltip_by_position(ev, tt) {
         return;
     }
     var val = this.snap(get_value.call(this, ev));
-    TK.set_text(tt, this.options.tooltip(val));
+    set_text(tt, this.options.tooltip(val));
 }
 function tooltip_by_value(ev, tt) {
-    TK.set_text(tt, this.options.tooltip(this.options.value));
+    set_text(tt, this.options.tooltip(this.options.value));
 }
 function mouseenter (ev) {
     if (!this.options.tooltip) return;
-    TK.tooltip.add(1, this.tooltip_by_position);
+    tooltip.add(1, this.tooltip_by_position);
 }
 function clicked(ev) {
     var value;
@@ -67,31 +82,31 @@ function clicked(ev) {
     if (this.label.element.contains(ev.target)) return;
     if (this.scale.element.contains(ev.target)) return;
     value = this.userset("value", get_value.call(this, ev));
-    if (this.options.tooltip && TK.tooltip._entry)
-        TK.set_text(TK.tooltip._entry, this.options.tooltip(this.options.value));
+    if (this.options.tooltip && tooltip._entry)
+        set_text(tooltip._entry, this.options.tooltip(this.options.value));
 }
 function mouseleave (ev) {
-    TK.tooltip.remove(1, this.tooltip_by_position);
+    tooltip.remove(1, this.tooltip_by_position);
 }
 function startdrag(ev) {
     if (!this.options.tooltip) return;
-    TK.tooltip.add(0, this.tooltip_by_value);
+    tooltip.add(0, this.tooltip_by_value);
 }
 function stopdrag(ev) {
-    TK.tooltip.remove(0, this.tooltip_by_value);
+    tooltip.remove(0, this.tooltip_by_value);
 }
 function scrolling(ev) {
     if (!this.options.tooltip) return;
-    TK.set_text(TK.tooltip._entry, this.options.tooltip(this.options.value));
+    set_text(tooltip._entry, this.options.tooltip(this.options.value));
 }
 function dblclick(ev) {
     this.userset("value", this.options.reset);
     /**
      * Is fired when the handle receives a double click.
      * 
-     * @event TK.Fader#doubleclick
+     * @event Fader#doubleclick
      * 
-     * @param {number} value - The value of the {@link TK.Fader}.
+     * @param {number} value - The value of the {@link Fader}.
      */
     this.fire_event("doubleclick", this.options.value);
 }
@@ -112,8 +127,8 @@ function activate_tooltip() {
 
 function deactivate_tooltip() {
     if (!this.tooltip_by_position) return;
-    TK.tooltip.remove(0, this.tooltip_by_value);
-    TK.tooltip.remove(1, this.tooltip_by_position);
+    tooltip.remove(0, this.tooltip_by_value);
+    tooltip.remove(1, this.tooltip_by_position);
     this.remove_event("mouseenter", mouseenter);
     this.remove_event("mouseleave", mouseleave);
     this.drag.remove_event("startdrag", this.__startdrag);
@@ -121,15 +136,15 @@ function deactivate_tooltip() {
     this.scroll.remove_event("scrolling", this.__scrolling);
 }
 /**
- * TK.Fader is a fader widget. It is implemented as a slidable control which
- * can be both dragged and scrolled. TK.Fader implements {@link TK.Ranged},
- * {@link TK.Warning} and {@link TL.GlobalCursor} and inherits its options.
- * Additionally it contains an instance of {@link TK.Scale} whose options
+ * Fader is a fader widget. It is implemented as a slidable control which
+ * can be both dragged and scrolled. Fader implements {@link Ranged},
+ * {@link Warning} and {@link TL.GlobalCursor} and inherits its options.
+ * Additionally it contains an instance of {@link Scale} whose options
  * it inherits, aswell.
  *
- * @class TK.Fader
+ * @class Fader
  * 
- * @extends TK.Widget
+ * @extends Widget
  *
  * @param {Object} [options={ }] - An object containing initial options.
  * 
@@ -143,15 +158,15 @@ function deactivate_tooltip() {
  * @property {Boolean} [options.bind_dblclick=true] - If true, a <code>dblclick</code>
  *   on the fader will reset the fader value to <code>options.reset</code>.
  * @property {Number} [options.reset=options.value] - The reset value, which is used by
- *   the <code>dblclick</code> event and the {@link TK.Fader#reset} method.
+ *   the <code>dblclick</code> event and the {@link Fader#reset} method.
  * @property {Boolean} [options.show_scale=true] - If true, a scale is drawn.
  */
-TK.Fader = TK.class({
+export const Fader = define_class({
     _class: "Fader",
-    Extends: TK.Widget,
-    Implements: [TK.Ranged, TK.Warning, TK.GlobalCursor],
-    _options: Object.assign(Object.create(TK.Widget.prototype._options),
-                            TK.Ranged.prototype._options, TK.Scale.prototype._options, {
+    Extends: Widget,
+    Implements: [Ranged, Warning, GlobalCursor],
+    _options: Object.assign(Object.create(Widget.prototype._options),
+                            Ranged.prototype._options, Scale.prototype._options, {
         value:    "number",
         division: "number",
         levels:   "array",
@@ -199,28 +214,28 @@ TK.Fader = TK.class({
     },
     initialize: function (options) {
         this.__tt = false;
-        TK.Widget.prototype.initialize.call(this, options);
+        Widget.prototype.initialize.call(this, options);
 
         var E, O = this.options;
         
         /**
-         * @member {HTMLDivElement} TK.Fader#element - The main DIV container.
+         * @member {HTMLDivElement} Fader#element - The main DIV container.
          *   Has class <code>toolkit-fader</code>.
          */
-        if (!(E = this.element)) this.element = E = TK.element("div");
-        TK.add_class(E, "toolkit-fader");
+        if (!(E = this.element)) this.element = E = element("div");
+        add_class(E, "toolkit-fader");
         this.widgetize(E, true, true, true);
 
         /**
-         * @member {HTMLDivElement} TK.Fader#_track - The track for the handle. Has class <code>toolkit-track</code>.
+         * @member {HTMLDivElement} Fader#_track - The track for the handle. Has class <code>toolkit-track</code>.
          */
-        this._track = TK.element("div", "toolkit-track");
+        this._track = element("div", "toolkit-track");
         this.element.appendChild(this._track);
         
         /**
-         * @member {HTMLDivElement} TK.Fader#_handle - The handle of the fader. Has class <code>toolkit-handle</code>.
+         * @member {HTMLDivElement} Fader#_handle - The handle of the fader. Has class <code>toolkit-handle</code>.
          */
-        this._handle = TK.element("div", "toolkit-handle");
+        this._handle = element("div", "toolkit-handle");
         this._handle_size = 0;
         this._track.appendChild(this._handle);
 
@@ -230,20 +245,20 @@ TK.Fader = TK.class({
         if (O.direction === void(0))
             O.direction = vert(O) ? "vertical" : "horizontal";
         /**
-         * @member {TK.DragValue} TK.Fader#drag - Instance of {@link TK.DragValue} used for the handle
+         * @member {DragValue} Fader#drag - Instance of {@link DragValue} used for the handle
          *   interaction.
          */
-        this.drag = new TK.DragValue(this, {
+        this.drag = new DragValue(this, {
             node:    this._handle,
             classes: this.element,
             direction: O.direction,
             limit: true,
         });
         /**
-         * @member {TK.ScrollValue} TK.Fader#scroll - Instance of {@link TK.ScrollValue} used for the
+         * @member {ScrollValue} Fader#scroll - Instance of {@link ScrollValue} used for the
          *   handle interaction.
          */
-        this.scroll = new TK.ScrollValue(this, {
+        this.scroll = new ScrollValue(this, {
             node:    this.element,
             classes: this.element,
             limit: true,
@@ -255,7 +270,7 @@ TK.Fader = TK.class({
     },
 
     redraw: function () {
-        TK.Widget.prototype.redraw.call(this);
+        Widget.prototype.redraw.call(this);
         var I = this.invalid;
         var O = this.options;
         var E = this.element;
@@ -264,18 +279,18 @@ TK.Fader = TK.class({
 
         if (I.show_scale) {
             I.show_scale = false;
-            TK.toggle_class(this.element, "toolkit-has-scale", O.show_scale);
+            toggle_class(this.element, "toolkit-has-scale", O.show_scale);
         }
 
         if (I.layout) {
             I.layout = false;
             value = O.layout;
-            TK.remove_class(E, "toolkit-vertical", "toolkit-horizontal", "toolkit-left",
+            remove_class(E, "toolkit-vertical", "toolkit-horizontal", "toolkit-left",
                             "toolkit-right", "toolkit-top", "toolkit-bottom");
-            TK.add_class(E, vert(O) ? "toolkit-vertical" : "toolkit-horizontal");
-            TK.add_class(E, "toolkit-"+value);
+            add_class(E, vert(O) ? "toolkit-vertical" : "toolkit-horizontal");
+            add_class(E, "toolkit-"+value);
             
-            if (TK.supports_transform)
+            if (supports_transform)
                 this._handle.style.transform = null;
             else {
                 if (vert(O))
@@ -286,19 +301,19 @@ TK.Fader = TK.class({
             I.value = false;
         }
 
-        if (I.validate.apply(I, Object.keys(TK.Ranged.prototype._options)) || I.value) {
+        if (I.validate.apply(I, Object.keys(Ranged.prototype._options)) || I.value) {
             I.value = false;
             // TODO: value is snapped already in set(). This is not enough for values which are set during
             // initialization.
             tmp = this.val2px(this.snap(O.value)) + "px"
 
             if (vert(O)) {
-                if (TK.supports_transform)
+                if (supports_transform)
                     this._handle.style.transform = "translateY(-"+tmp+")";
                 else
                     this._handle.style.bottom = tmp;
             } else {
-                if (TK.supports_transform)
+                if (supports_transform)
                     this._handle.style.transform = "translateX("+tmp+")";
                 else
                     this._handle.style.left = tmp;
@@ -310,31 +325,31 @@ TK.Fader = TK.class({
         var T = this._track, H = this._handle;
         var basis;
 
-        TK.Widget.prototype.resize.call(this);
+        Widget.prototype.resize.call(this);
         
-        this._padding = TK.css_space(T, "padding", "border");
+        this._padding = css_space(T, "padding", "border");
         
         if (vert(O)) {
-            this._handle_size = TK.outer_height(H, true);
-            basis = TK.inner_height(T) - this._handle_size;
+            this._handle_size = outer_height(H, true);
+            basis = inner_height(T) - this._handle_size;
         } else {
-            this._handle_size = TK.outer_width(H, true);
-            basis = TK.inner_width(T) - this._handle_size;
+            this._handle_size = outer_width(H, true);
+            basis = inner_width(T) - this._handle_size;
         }
 
         this.set("basis", basis);
     },
     destroy: function () {
         this._handle.remove();
-        TK.Widget.prototype.destroy.call(this);
-        TK.tooltip.remove(0, this.tooltip_by_value);
-        TK.tooltip.remove(1, this.tooltip_by_position);
+        Widget.prototype.destroy.call(this);
+        tooltip.remove(0, this.tooltip_by_value);
+        tooltip.remove(1, this.tooltip_by_position);
     },
 
     /**
      * Resets the fader value to <code>options.reset</code>.
      *
-     * @method TK.Fader#reset
+     * @method Fader#reset
      */
     reset: function() {
         this.set("value", this.options.reset);
@@ -348,7 +363,7 @@ TK.Fader = TK.class({
             value = this.snap(value);
         }
 
-        return TK.Widget.prototype.set.call(this, key, value);
+        return Widget.prototype.set.call(this, key, value);
     },
     userset: function (key, value) {
         if (key == "value") {
@@ -356,15 +371,15 @@ TK.Fader = TK.class({
                 this.warning(this.element);
             value = this.snap(value);
         }
-        return TK.Widget.prototype.userset.call(this, key, value);
+        return Widget.prototype.userset.call(this, key, value);
     }
 });
 /**
- * @member {TK.Scale} TK.Fader#scale - If <code>option.show_scale</code> is true,
- *   <code>scale</code> will be the corresponding instance of {@link TK.Scale}.
+ * @member {Scale} Fader#scale - If <code>option.show_scale</code> is true,
+ *   <code>scale</code> will be the corresponding instance of {@link Scale}.
  */
-TK.ChildWidget(TK.Fader, "scale", {
-    create: TK.Scale,
+ChildWidget(Fader, "scale", {
+    create: Scale,
     show: true,
     inherit_options: true,
     static_events: {
@@ -372,7 +387,7 @@ TK.ChildWidget(TK.Fader, "scale", {
             /**
              * Is fired when the scale was changed.
              * 
-             * @event TK.Fader#scalechanged
+             * @event Fader#scalechanged
              * 
              * @param {string} key - The key of the option.
              * @param {mixed} value - The value to which it was set.
@@ -383,11 +398,11 @@ TK.ChildWidget(TK.Fader, "scale", {
     },
 });
 /**
- * @member {TK.Label} TK.Fader#label - If <code>option.show_label</code> is true,
- *   <code>label</code> will be the corresponding instance of {@link TK.Scale}.
+ * @member {Label} Fader#label - If <code>option.show_label</code> is true,
+ *   <code>label</code> will be the corresponding instance of {@link Scale}.
  */
-TK.ChildWidget(TK.Fader, "label", {
-    create: TK.Label,
+ChildWidget(Fader, "label", {
+    create: Label,
     show: false,
     toggle_class: true,
     option: "label",
@@ -395,8 +410,8 @@ TK.ChildWidget(TK.Fader, "label", {
         label: "label",
     },
 });
-TK.ChildWidget(TK.Fader, "value", {
-    create: TK.Value,
+ChildWidget(Fader, "value", {
+    create: Value,
     show: false,
     static_events: {
         "valueset" : function (v) { this.parent.set("value", v); }
@@ -407,5 +422,3 @@ TK.ChildWidget(TK.Fader, "value", {
     },
     toggle_class: true,
 });
-
-})(this, this.TK);

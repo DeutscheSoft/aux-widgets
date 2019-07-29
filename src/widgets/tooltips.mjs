@@ -16,8 +16,10 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+
+import { element } from '../helpers.mjs';
+import { S } from '../dom_scheduler.mjs';
+
 function get_event(event) {
     // return the right event if touch surface is used
     // with multiple fingers
@@ -25,15 +27,15 @@ function get_event(event) {
           ? event.touches[0] : event;
 }
 /**
- * TK.Tooltip and GlobalTooltip is a small text field following the mouse.
+ * Tooltip and GlobalTooltip is a small text field following the mouse.
  * 
- * @class TK.Tooltip
+ * @class Tooltip
  */
-TK.GlobalTooltip = function() {
-    var overlay = TK.element("div", "toolkit-tooltip");
-    var table   = TK.element("div", "toolkit-table");
-    var row     = TK.element("div", "toolkit-row");
-    var cell    = TK.element("div", "toolkit-cell");
+export function GlobalTooltip() {
+    var overlay = element("div", "toolkit-tooltip");
+    var table   = element("div", "toolkit-table");
+    var row     = element("div", "toolkit-row");
+    var cell    = element("div", "toolkit-cell");
 
     var tmp = row.cloneNode();
 
@@ -102,7 +104,7 @@ TK.GlobalTooltip = function() {
 
     function onmove_mouse(e) {
         if (!ev) {
-            TK.S.add(redraw, 1);
+            S.add(redraw, 1);
         }
         ev = e;
     }
@@ -117,7 +119,7 @@ TK.GlobalTooltip = function() {
     /**
      * Hide the tooltips
      * 
-     * @method TK.Tooltip#hide
+     * @method Tooltip#hide
      */
     function hide() {
         document.removeEventListener("mousemove", onmove_mouse);
@@ -128,7 +130,7 @@ TK.GlobalTooltip = function() {
     /**
      * Show the tooltips
      * 
-     * @method TK.Tooltip#show
+     * @method Tooltip#show
      */
     function show() {
         if (!overlay.parentNode)
@@ -141,7 +143,7 @@ TK.GlobalTooltip = function() {
     /**
      * Add a new tooltip.
      * 
-     * @method TK.Tooltip#add
+     * @method Tooltip#add
      * 
      * @param {int} priority - The priority of the tooltip. States its position in the list.
      * @param {Function} onmove - The function which sets the text of the tooltip while moving the mouse.
@@ -155,7 +157,7 @@ TK.GlobalTooltip = function() {
     /**
      * Remove a tooltip.
      * 
-     * @method TK.Tooltip#remove
+     * @method Tooltip#remove
      * 
      * @param {int} priority - The priority of the tooltip.
      * @param {Function} onmove - The function which sets the text of the tooltip while moving the mouse.
@@ -179,25 +181,24 @@ TK.GlobalTooltip = function() {
     this.trigger = onmove_touch;
     
     /**
-     * @member {HTMLDivElement} TK.Tooltip#element - The overlay containing the tooltip table.
+     * @member {HTMLDivElement} Tooltip#element - The overlay containing the tooltip table.
      *   Has class <code>toolkit-tooltip</code>.
      */
     this.element = overlay;
     /** 
-     * @member {HTMLDivElement} TK.Tooltip#_table - The table containing the tooltips.
+     * @member {HTMLDivElement} Tooltip#_table - The table containing the tooltips.
      *   Has class <code>toolkit-table</code>.
      */
     this._table = table;
     /**
-     * @member {HTMLDivElement} TK.Tooltip#_entry - The element containing the tooltip text.
+     * @member {HTMLDivElement} Tooltip#_entry - The element containing the tooltip text.
      *   Has class <code>toolkit-entry</code>.
      */
     this._entry = entry;
 };
-TK.GlobalTooltip.prototype = {
+GlobalTooltip.prototype = {
     destroy: function() {
         this.hide();
     },
 };
-TK.tooltip = new TK.GlobalTooltip();
-})(this, TK);
+export const tooltip = new GlobalTooltip();

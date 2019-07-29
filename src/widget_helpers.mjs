@@ -117,7 +117,6 @@ export function ChildElement(widget, name, config) {
 
     var append = config.append;
     var create = config.create;
-    var toggle_class = !!config.toggle_class;
 
     if (create === void(0)) create = function() { return element("div", "toolkit-"+name); }
     if (append === void(0)) append = function() { this.element.appendChild(this[index]); }
@@ -133,7 +132,7 @@ export function ChildElement(widget, name, config) {
             this[index] = null;
             C.remove();
         }
-        if (toggle_class) toggle_class(this.element, "toolkit-has-"+name, value);
+        if (config.toggle_class) toggle_class(this.element, "toolkit-has-"+name, value);
         this.trigger_resize();
     });
 
