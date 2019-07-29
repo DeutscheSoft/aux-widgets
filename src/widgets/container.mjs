@@ -16,8 +16,11 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+import { define_class } from './../widget_helpers.mjs';
+import { Widget } from './widget.mjs';
+import { S } from '../dom_scheduler.mjs';
+import { element, add_class, warn, remove_class, get_duration, empty, set_content } from '../helpers.mjs';
+
 function after_hiding() {
     this.__hide_id = false;
     if (this.options.display_state === "hiding")
@@ -32,12 +35,12 @@ function enable_draw_self() {
     if (this._drawn) return;
     this._drawn = true;
     if (this.needs_redraw) {
-        TK.S.add(this._redraw, 1);
+        S.add(this._redraw, 1);
     }
     /**
      * Is fired when the container is shown.
      * 
-     * @event TK.Container#show
+     * @event Container#show
      */
     this.fire_event("show");
 }
@@ -50,13 +53,13 @@ function disable_draw_self() {
     if (!this._drawn) return;
     this._drawn = false;
     if (this.needs_redraw) {
-        TK.S.remove(this._redraw, 1);
-        TK.S.remove_next(this._redraw, 1);
+        S.remove(this._redraw, 1);
+        S.remove_next(this._redraw, 1);
     }
     /**
      * Is fired when the container is hidden.
      * 
-     * @event TK.Container#hide
+     * @event Container#hide
      */
     this.fire_event("hide");
 }
@@ -65,23 +68,23 @@ function disable_draw_children() {
     var H = this.hidden_children;
     if (C) for (var i = 0; i < C.length; i++) if (!H[i]) C[i].disable_draw();
 }
-TK.Container = TK.class({
+export const Container = define_class({
     /**
-     * TK.Container represents a <code>&lt;DIV></code> element.
+     * Container represents a <code>&lt;DIV></code> element.
      *
      * Container have four different display states: <code>show</code>, <code>hide</code>,
      * <code>showing</code> and <code>hiding</code>. Each of these states has a corresponding
      * CSS class called <code>toolkit-show</code>, <code>toolkit-hide</code>, <code>toolkit-showing</code>
      * and <code>toolkit-hiding</code>, respectively. The display state can be controlled using
-     * the methods {@link TK.Container#show}, {@link TK.Container#hide} and {@link TK.Widget#toggle_hidden}.
+     * the methods {@link Container#show}, {@link Container#hide} and {@link Widget#toggle_hidden}.
      *
      * A container can keep track of the display states of its children.
-     * The display state of a child can be changed using {@link TK.Container#hide_child},
-     * {@link TK.Container#show_child} and {@link TK.Container#toggle_child}.
+     * The display state of a child can be changed using {@link Container#hide_child},
+     * {@link Container#show_child} and {@link Container#toggle_child}.
      *
-     * @class TK.Container
+     * @class Container
      * 
-     * @extends TK.Widget
+     * @extends Widget
      *
      * @param {Object} [options={ }] - An object containing initial options.
      * 
@@ -99,8 +102,8 @@ TK.Container = TK.class({
      * @property {Array<Object>} [options.children=[]] - Add child widgets on init. Will not be maintained on runtime! Just for convenience purposes on init.
      */
     _class: "Container",
-    Extends: TK.Widget,
-    _options: Object.assign(Object.create(TK.Widget.prototype._options), {
+    Extends: Widget,
+    _options: Object.assign(Object.create(Widget.prototype._options), {
         content: "string",
         display_state: "string",
         hiding_duration: "int",
@@ -113,30 +116,30 @@ TK.Container = TK.class({
     },
     initialize: function (options) {
         var E;
-        TK.Widget.prototype.initialize.call(this, options);
+        Widget.prototype.initialize.call(this, options);
         this.hidden_children = [];
         /** 
-         * @member {HTMLDivElement} TK.Container#element - The main DIV element. Has class <code>toolkit-container</code> 
+         * @member {HTMLDivElement} Container#element - The main DIV element. Has class <code>toolkit-container</code> 
          */
-        if (!(E = this.element)) this.element = E = TK.element("div");
-        TK.add_class(E, "toolkit-container"); 
+        if (!(E = this.element)) this.element = E = element("div");
+        add_class(E, "toolkit-container"); 
         this.widgetize(E, true, true, true);
 
         this.__after_hiding = after_hiding.bind(this);
         this.__after_showing = after_showing.bind(this);
         this.__hide_id = false;
-        TK.add_class(E, "toolkit-show");
+        add_class(E, "toolkit-show");
         
         if (this.options.children.length)
             this.append_children(this.options.children);
     },
     
     /**
-     * Calls {@link TK.Container#append_child} for an array of widgets.
+     * Calls {@link Container#append_child} for an array of widgets.
      * 
-     * @method TK.Container#append_children
+     * @method Container#append_children
      *
-     * @param {Array.<TK.Widget>} children - The child widgets to append.
+     * @param {Array.<Widget>} children - The child widgets to append.
      */
     append_children : function (a) {
         a.map(this.append_child, this);
@@ -145,22 +148,22 @@ TK.Container = TK.class({
      * Appends <code>child.element</code> to the container element and
      * registers <code>child</code> as a child widget.
      * 
-     * @method TK.Container#append_child
+     * @method Container#append_child
      *
-     * @param {TK.Widget} child - The child widget to append.
+     * @param {Widget} child - The child widget to append.
      */
     append_child : function(child) {
         child.set("container", this.element);
         this.add_child(child);
     },
     set_parent : function(parent) {
-        if (parent && !(parent instanceof TK.Container)) {
-            TK.warn("Container %o should not be child of non-container %o", this, parent);
+        if (parent && !(parent instanceof Container)) {
+            warn("Container %o should not be child of non-container %o", this, parent);
         }
-        TK.Widget.prototype.set_parent.call(this, parent);
+        Widget.prototype.set_parent.call(this, parent);
     },
     add_child : function(child) {
-        TK.Widget.prototype.add_child.call(this, child);
+        Widget.prototype.add_child.call(this, child);
         var H = this.hidden_children;
         if (!H) this.hidden_children = H = [];
         H.push(false);
@@ -191,7 +194,7 @@ TK.Container = TK.class({
     /** 
      * Starts the transition of the <code>display_state</code> to <code>hide</code>.
      *
-     * @method TK.Container#hide
+     * @method Container#hide
      *
      */
     hide: function () {
@@ -204,10 +207,10 @@ TK.Container = TK.class({
     },
     /** 
      * Immediately switches the display state of this container to <code>hide</code>.
-     * Unlike {@link TK.Container#hide} this method does not perform the hiding transition
+     * Unlike {@link Container#hide} this method does not perform the hiding transition
      * and immediately modifies the DOM by setting the <code>toolkit-hide</code> class.
      *
-     * @method TK.Container#force_hide
+     * @method Container#force_hide
      *
      */
     force_hide: function () {
@@ -216,13 +219,13 @@ TK.Container = TK.class({
         this.disable_draw();
         var E = this.element;
         O.display_state = "hide";
-        TK.add_class(E, "toolkit-hide");
-        TK.remove_class(E, "toolkit-hiding", "toolkit-showing", "toolkit-show");
+        add_class(E, "toolkit-hide");
+        remove_class(E, "toolkit-hiding", "toolkit-showing", "toolkit-show");
     },
     /** 
      * Starts the transition of the <code>display_state</code> to <code>show</code>.
      *
-     * @method TK.Container#show
+     * @method Container#show
      *
      */
     show: function() {
@@ -233,10 +236,10 @@ TK.Container = TK.class({
     },
     /** 
      * Immediately switches the display state of this container to <code>show</code>.
-     * Unlike {@link TK.Container#hide} this method does not perform the hiding transition
+     * Unlike {@link Container#hide} this method does not perform the hiding transition
      * and immediately modifies the DOM by setting the <code>toolkit-show</code> class.
      *
-     * @method TK.Container#force_show
+     * @method Container#force_show
      *
      */
     force_show: function() {
@@ -245,8 +248,8 @@ TK.Container = TK.class({
         this.enable_draw();
         var E = this.element;
         O.display_state = "show";
-        TK.add_class(E, "toolkit-show");
-        TK.remove_class(E, "toolkit-hiding", "toolkit-showing", "toolkit-hide");
+        add_class(E, "toolkit-show");
+        remove_class(E, "toolkit-hiding", "toolkit-showing", "toolkit-hide");
     },
     show_nodraw: function() {
         var O = this.options;
@@ -271,7 +274,7 @@ TK.Container = TK.class({
      * Switches the hidden state of a child to <code>hidden</code>.
      * The argument is either the child index or the child itself.
      *
-     * @method TK.Container#hide_child
+     * @method Container#hide_child
      * @param {Object|integer} child - Child or its index.
      *
      */
@@ -292,7 +295,7 @@ TK.Container = TK.class({
      * Switches the hidden state of a child to <code>shown</code>.
      * The argument is either the child index or the child itself.
      *
-     * @method TK.Container#show_child
+     * @method Container#show_child
      * @param {Object|integer} child - Child or its index.
      *
      */
@@ -316,7 +319,7 @@ TK.Container = TK.class({
      * Toggles the hidden state of a child.
      * The argument is either the child index or the child itself.
      *
-     * @method TK.Container#toggle_child
+     * @method Container#toggle_child
      * @param {Object|integer} child - Child or its index.
      *
      */
@@ -346,7 +349,7 @@ TK.Container = TK.class({
 
     hidden: function() {
         var state = this.options.display_state;
-        return TK.Widget.prototype.hidden.call(this) || state === "hiding" || state === "hide";
+        return Widget.prototype.hidden.call(this) || state === "hiding" || state === "hide";
     },
 
     redraw: function() {
@@ -354,12 +357,12 @@ TK.Container = TK.class({
         var I = this.invalid;
         var E = this.element;
 
-        TK.Widget.prototype.redraw.call(this);
+        Widget.prototype.redraw.call(this);
 
         if (I.display_state) {
             I.display_state = false;
             var time;
-            TK.remove_class(E, "toolkit-hiding", "toolkit-hide", "toolkit-showing", "toolkit-show");
+            remove_class(E, "toolkit-hiding", "toolkit-hide", "toolkit-showing", "toolkit-show");
 
             if (this.__hide_id) {
                 window.clearTimeout(this.__hide_id);
@@ -368,32 +371,32 @@ TK.Container = TK.class({
 
             switch (O.display_state) {
             case "hiding":
-                TK.add_class(E, "toolkit-hiding");
-                time = O.hiding_duration || TK.get_duration(E);
+                add_class(E, "toolkit-hiding");
+                time = O.hiding_duration || get_duration(E);
                 if (time > 0) {
                     this.__hide_id = window.setTimeout(this.__after_hiding, time);
                     break;
                 }
                 this.set("display_state", "hide");
-                TK.remove_class(E, "toolkit-hiding");
+                remove_class(E, "toolkit-hiding");
                 /* FALL THROUGH */
             case "hide":
-                TK.add_class(E, "toolkit-hide");
+                add_class(E, "toolkit-hide");
                 disable_draw_self.call(this);
                 break;
             case "showing":
-                TK.add_class(E, "toolkit-showing");
-                time = O.showing_duration || TK.get_duration(E);
+                add_class(E, "toolkit-showing");
+                time = O.showing_duration || get_duration(E);
                 if (time > 0) {
                     this.__hide_id = window.setTimeout(this.__after_showing, time);
                     enable_draw_children.call(this);
                     break;
                 }
                 this.set("display_state", "show");
-                TK.remove_class(E, "toolkit-showing");
+                remove_class(E, "toolkit-showing");
                 /* FALL THROUGH */
             case "show":
-                TK.add_class(E, "toolkit-show");
+                add_class(E, "toolkit-show");
                 enable_draw_children.call(this);
                 break;
             }
@@ -401,10 +404,9 @@ TK.Container = TK.class({
 
         if (I.content) {
             I.content = false;
-            TK.empty(E);
+            empty(E);
 
-            if (O.content) TK.set_content(E, O.content);
+            if (O.content) set_content(E, O.content);
         }
     },
 });
-})(this, this.TK);

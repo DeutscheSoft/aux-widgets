@@ -16,8 +16,14 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+import { define_class, add_static_event } from '../widget_helpers.mjs';
+import { ChildWidget } from '../child_widget.mjs';
+import { LevelMeter } from './levelmeter.mjs';
+import { Label } from './label.mjs';
+import { Container } from './container.mjs';
+import {
+    FORMAT, add_class, toggle_class, element, set_text, object_sub, remove_class
+  } from '../helpers.mjs';
 
 function add_meters (cnt, options) {
     for (var i = 0; i < cnt; i++)
@@ -27,7 +33,7 @@ function add_meter (options) {
     var l = this.meters.length;
     var O = options;
     var opt = extract_child_options(O, l);
-    var m = new TK.LevelMeter(opt);
+    var m = new LevelMeter(opt);
 
     this.meters.push(m);
     this.append_child(m);
@@ -57,15 +63,15 @@ function remove_meter (meter) {
 }
     
     
-TK.MultiMeter = TK.class({
+export const MultiMeter = define_class({
     /**
-     * TK.MultiMeter is a collection of {@link TK.LevelMeter}s to show levels of full channels
-     * containing multiple audio streams. It offers all options of {@link TK.LevelMeter} and
-     * {@link TK.MeterBase} which are passed to all instantiated level meters.
+     * MultiMeter is a collection of {@link LevelMeter}s to show levels of full channels
+     * containing multiple audio streams. It offers all options of {@link LevelMeter} and
+     * {@link MeterBase} which are passed to all instantiated level meters.
      *
-     * @class TK.MultiMeter
+     * @class MultiMeter
      * 
-     * @extends TK.Container
+     * @extends Container
      * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
@@ -80,11 +86,11 @@ TK.MultiMeter = TK.class({
      * @property {Array<Number>} [options.bottoms=[]] - An Array containing values for bottom for the level meters. Their order is the same as the meters.
      */
     _class: "MultiMeter",
-    Extends: TK.Container,
+    Extends: Container,
     
     /* TODO: The following sucks cause we need to maintain it according to
     LevelMeters and MeterBases options. */
-    _options: Object.assign(Object.create(TK.Container.prototype._options), {
+    _options: Object.assign(Object.create(Container.prototype._options), {
         count: "int",
         title: "boolean|string",
         titles: "array",
@@ -99,12 +105,12 @@ TK.MultiMeter = TK.class({
         show_scale: true,
     },
     initialize: function (options) {
-        TK.Container.prototype.initialize.call(this, options, true);
+        Container.prototype.initialize.call(this, options, true);
         /**
-         * @member {HTMLDivElement} TK.MultiMeter#element - The main DIV container.
+         * @member {HTMLDivElement} MultiMeter#element - The main DIV container.
          *   Has class <code>toolkit-multi-meter</code>.
          */
-        TK.add_class(this.element, "toolkit-multi-meter");
+        add_class(this.element, "toolkit-multi-meter");
         this.meters = [];
         var O = this.options;
     },
@@ -122,25 +128,25 @@ TK.MultiMeter = TK.class({
                 add_meter.call(this, O);
             E.setAttribute("class", E.getAttribute("class").replace(/toolkit-count-[0-9]*/g, ""));
             E.setAttribute("class", E.getAttribute("class").replace(/ +/g, " "));
-            TK.add_class(E, "toolkit-count-" + O.count);
+            add_class(E, "toolkit-count-" + O.count);
         }
         
         if (I.layout || I.count) {
             I.count = I.layout = false;
-            TK.remove_class(E, "toolkit-vertical", "toolkit-horizontal", "toolkit-left",
+            remove_class(E, "toolkit-vertical", "toolkit-horizontal", "toolkit-left",
                             "toolkit-right", "toolkit-top", "toolkit-bottom");
             switch (O.layout) {
                 case "left":
-                    TK.add_class(E, "toolkit-vertical", "toolkit-left");
+                    add_class(E, "toolkit-vertical", "toolkit-left");
                     break;
                 case "right":
-                    TK.add_class(E, "toolkit-vertical", "toolkit-right");
+                    add_class(E, "toolkit-vertical", "toolkit-right");
                     break;
                 case "top":
-                    TK.add_class(E, "toolkit-horizontal", "toolkit-top");
+                    add_class(E, "toolkit-horizontal", "toolkit-top");
                     break;
                 case "bottom":
-                    TK.add_class(E, "toolkit-horizontal", "toolkit-bottom");
+                    add_class(E, "toolkit-horizontal", "toolkit-bottom");
                     break;
                 default:
                     throw("unsupported layout");
@@ -163,15 +169,15 @@ TK.MultiMeter = TK.class({
             }
         }
         
-        TK.Container.prototype.redraw.call(this);
+        Container.prototype.redraw.call(this);
     },
 });
 
 /**
- * @member {HTMLDivElement} TK.MultiMeter#_title - The DIV element of the {@link TK.Label} module.
+ * @member {HTMLDivElement} MultiMeter#_title - The DIV element of the {@link Label} module.
  */
-TK.ChildWidget(TK.MultiMeter, "title", {
-    create: TK.Label,
+ChildWidget(MultiMeter, "title", {
+    create: Label,
     show: false,
     option: "title",
     default_options: { "class" : "toolkit-title" },
@@ -182,7 +188,7 @@ TK.ChildWidget(TK.MultiMeter, "title", {
 
 
 /*
- * This could be moved into TK.ChildWidgets(),
+ * This could be moved into ChildWidgets(),
  * which could in similar ways be used in the buttonarray,
  * pager, etc.
  *
@@ -207,24 +213,24 @@ function map_child_option(value, key) {
     }
 }
 
-TK.add_static_event(TK.MultiMeter, "set_titles", function(value, key) {
+add_static_event(MultiMeter, "set_titles", function(value, key) {
     map_child_option.call(this, value, "title");
 });
 
-for (var key in TK.object_sub(TK.LevelMeter.prototype._options, TK.Container.prototype._options)) {
-    if (TK.MultiMeter.prototype._options[key]) continue;
-    var type = TK.LevelMeter.prototype._options[key];
+for (var key in object_sub(LevelMeter.prototype._options, Container.prototype._options)) {
+    if (MultiMeter.prototype._options[key]) continue;
+    var type = LevelMeter.prototype._options[key];
     if (type.search("array") !== -1) {
-        TK.MultiMeter.prototype._options[key] = type;
+        MultiMeter.prototype._options[key] = type;
         mapped_options[key] = key;
-        TK.add_static_event(TK.MultiMeter, "set_"+key, map_child_option_simple);
+        add_static_event(MultiMeter, "set_"+key, map_child_option_simple);
     } else {
-        TK.MultiMeter.prototype._options[key] = "array|"+type;
+        MultiMeter.prototype._options[key] = "array|"+type;
         mapped_options[key] = key;
-        TK.add_static_event(TK.MultiMeter, "set_"+key, map_child_option);
+        add_static_event(MultiMeter, "set_"+key, map_child_option);
     }
-    if (key in TK.LevelMeter.prototype.options)
-        TK.MultiMeter.prototype.options[key] = TK.LevelMeter.prototype.options[key];
+    if (key in LevelMeter.prototype.options)
+        MultiMeter.prototype.options[key] = LevelMeter.prototype.options[key];
 }
 
 function extract_child_options(O, i) {
@@ -234,7 +240,7 @@ function extract_child_options(O, i) {
         var ckey = mapped_options[key];
         if (!O.hasOwnProperty(key)) continue;
         value = O[key];
-        type = TK.LevelMeter.prototype._options[key] || "";
+        type = LevelMeter.prototype._options[key] || "";
         if (Array.isArray(value) && type.search("array") === -1) {
             if (i < value.length) o[ckey] = value[i];
         } else {
@@ -244,4 +250,3 @@ function extract_child_options(O, i) {
 
     return o;
 }
-})(this, this.TK);
