@@ -16,23 +16,27 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
+
+import { define_class } from './../widget_helpers.mjs';
+import { element, add_class, remove_class, inner_height, inner_width, toggle_class } from './../helpers.mjs';
+import { Container } from './container.mjs';
+import { Button } from './button.mjs';
+
  /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
  * The event is emitted for the option <code>show</code>.
  *
- * @event TK.Knob#useraction
+ * @event ButtonArray#useraction
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
  
-"use strict";
-(function(w, TK){
 function hide_arrows() {
     if (!this._prev.parentNode) return;
     if (this._prev.parentNode) this._prev.remove();
     if (this._next.parentNode) this._next.remove();
     var E = this.element;
-    TK.remove_class(E, "toolkit-over");
+    remove_class(E, "toolkit-over");
     this.trigger_resize();
 }
 function show_arrows() {
@@ -40,7 +44,7 @@ function show_arrows() {
     var E = this.element;
     E.insertBefore(this._prev, this._clip);
     E.appendChild(this._next);
-    TK.add_class(E, "toolkit-over");
+    add_class(E, "toolkit-over");
     this.trigger_resize();
 }
 function prev_clicked(e) {
@@ -69,10 +73,10 @@ function easeInOut (t, b, c, d) {
 
 var zero = { width: 0, height: 0};
 
-TK.ButtonArray = TK.class({
+export const ButtonArray = define_class({
     /**
-     * TK.ButtonArray is a list of buttons ({@link TK.Button}) layouted
-     * either vertically or horizontally. TK.ButtonArray automatically
+     * ButtonArray is a list of buttons ({@link Button}) layouted
+     * either vertically or horizontally. ButtonArray automatically
      * adds arrow buttons if the overal width is smaller than the buttons
      * list.
      *
@@ -86,22 +90,22 @@ TK.ButtonArray = TK.class({
      *   added automatically
      * @property {String} [options.direction="horizontal"] - The direction of
      *   the button list, either "horizontal" or "vertical".
-     * @property {Integer|TK.Button} [options.show=-1] - The {@link TK.Button} to scroll
+     * @property {Integer|Button} [options.show=-1] - The {@link Button} to scroll
      *   to, either the button index starting from zero or the button object
      *   itself.
      * @property {Number} [options.scroll=0] - Offer scrollbars and "real"
      *   scrolling. This reduces performance because movement is done in JS
      *   instead of (probably accelerated) CSS transitions. 0 for standard
      *   behavior, n > 0 is handled as milliseconds for transitions.
-     * @property {Object} [options.button_class=TK.Button] - A class to be used for instantiating the buttons.
+     * @property {Object} [options.button_class=Button] - A class to be used for instantiating the buttons.
      * 
-     * @class TK.ButtonArray
+     * @class ButtonArray
      * 
-     * @extends TK.Container
+     * @extends Container
      */
     _class: "ButtonArray",
-    Extends: TK.Container,
-    _options: Object.assign(Object.create(TK.Container.prototype._options), {
+    Extends: Container,
+    _options: Object.assign(Object.create(Container.prototype._options), {
         buttons: "array",
         auto_arrows: "boolean",
         direction: "string",
@@ -117,7 +121,7 @@ TK.ButtonArray = TK.class({
         show: -1,
         resized: false,
         scroll: 0,
-        button_class: TK.Button,
+        button_class: Button,
     },
     static_events: {
         set_buttons: function(value) {
@@ -137,10 +141,10 @@ TK.ButtonArray = TK.class({
                 /**
                  * Is fired when a button is activated.
                  * 
-                 * @event TK.ButtonArray#changed
+                 * @event ButtonArray#changed
                  * 
-                 * @param {TK.Button} button - The {@link TK.Button} which was clicked.
-                 * @param {int} id - the ID of the clicked {@link TK.Button}.
+                 * @param {Button} button - The {@link Button} which was clicked.
+                 * @param {int} id - the ID of the clicked {@link Button}.
                  */
                 this.fire_event("changed", button, value);
             }
@@ -148,38 +152,38 @@ TK.ButtonArray = TK.class({
     },
     initialize: function (options) {
         /**
-         * @member {Array} TK.ButtonArray#buttons - An array holding all {@link TK.Button}s.
+         * @member {Array} ButtonArray#buttons - An array holding all {@link Button}s.
          */
         this.buttons = [];
-        TK.Container.prototype.initialize.call(this, options);
+        Container.prototype.initialize.call(this, options);
         /**
-         * @member {HTMLDivElement} TK.ButtonArray#element - The main DIV container.
+         * @member {HTMLDivElement} ButtonArray#element - The main DIV container.
          *   Has class <code>toolkit-buttonarray</code>.
          */
-        TK.add_class(this.element, "toolkit-buttonarray");
+        add_class(this.element, "toolkit-buttonarray");
         /**
-         * @member {HTMLDivElement} TK.ButtonArray#_clip - A clipping area containing the list of {@link TK.Button}s.
+         * @member {HTMLDivElement} ButtonArray#_clip - A clipping area containing the list of {@link Button}s.
          *    Has class <code>toolkit-clip</code>.
          */
-        this._clip      = TK.element("div", "toolkit-clip");
+        this._clip      = element("div", "toolkit-clip");
         /**
-         * @member {HTMLDivElement} TK.ButtonArray#_container - A container for all the {@link TK.Button}s.
+         * @member {HTMLDivElement} ButtonArray#_container - A container for all the {@link Button}s.
          *    Has class <code>toolkit-container</code>.
          */
-        this._container = TK.element("div", "toolkit-container");
+        this._container = element("div", "toolkit-container");
         this.element.appendChild(this._clip);
         this._clip.appendChild(this._container);
         
         var vert = this.get("direction") === "vertical";
         
         /**
-         * @member {TK.Button} TK.ButtonArray#prev - The previous arrow {@link TK.Button} instance.
+         * @member {Button} ButtonArray#prev - The previous arrow {@link Button} instance.
          */
-        this.prev = new TK.Button({class: "toolkit-previous", dblclick:400});
+        this.prev = new Button({class: "toolkit-previous", dblclick:400});
         /**
-         * @member {TK.Button} TK.ButtonArray#next - The next arrow {@link TK.Button} instance.
+         * @member {Button} ButtonArray#next - The next arrow {@link Button} instance.
          */
-        this.next = new TK.Button({class: "toolkit-next", dblclick:400});
+        this.next = new Button({class: "toolkit-next", dblclick:400});
         
         this.prev.add_event("click", prev_clicked.bind(this));
         this.prev.add_event("doubleclick", prev_dblclicked.bind(this));
@@ -187,11 +191,11 @@ TK.ButtonArray = TK.class({
         this.next.add_event("doubleclick", next_dblclicked.bind(this));
         
         /**
-         * @member {HTMLDivElement} TK.ButtonArray#_prev - The HTMLDivElement of the previous {@link TK.Button}.
+         * @member {HTMLDivElement} ButtonArray#_prev - The HTMLDivElement of the previous {@link Button}.
          */
         this._prev = this.prev.element;
         /**
-         * @member {HTMLDivElement} TK.ButtonArray#_next - The HTMLDivElement of the next {@link TK.Button}.
+         * @member {HTMLDivElement} ButtonArray#_next - The HTMLDivElement of the next {@link Button}.
          */
         this._next = this.next.element;
         
@@ -209,8 +213,8 @@ TK.ButtonArray = TK.class({
         var s = {
             container: this._container.getBoundingClientRect(),
             clip: {
-                height: TK.inner_height(this._clip),
-                width: TK.inner_width(this._clip),
+                height: inner_height(this._clip),
+                width: inner_width(this._clip),
             },
             buttons: [],
             buttons_pos: [],
@@ -227,16 +231,16 @@ TK.ButtonArray = TK.class({
             s.buttons_pos[i] = { left: e.offsetLeft, top: e.offsetTop };
         }
 
-        TK.Container.prototype.resize.call(this);
+        Container.prototype.resize.call(this);
     },
     
     /**
      * Adds an array of buttons to the end of the list.
      *
-     * @method TK.ButtonArray#add_buttons
+     * @method ButtonArray#add_buttons
      * 
      * @param {Array.<string|object>} options - An Array containing objects
-     *   with options for the buttons (see {@link TK.Button} for more
+     *   with options for the buttons (see {@link Button} for more
      *   information) or strings for the buttons labels.
      */
     add_buttons: function (options) {
@@ -245,16 +249,16 @@ TK.ButtonArray = TK.class({
     },
     
     /**
-     * Adds a {@link TK.Button} to the TK.ButtonArray.
+     * Adds a {@link Button} to the ButtonArray.
      *
-     * @method TK.ButtonArray#add_button
+     * @method ButtonArray#add_button
      * 
      * @param {Object|string} options - An object containing options for the
-     *   {@link TK.Button} to add or a string for the label.
-     * @param {integer} [position] - The position to add the {@link TK.Button}
-     *   to. If avoided the {@link TK.Button} is added to the end of the list.
+     *   {@link Button} to add or a string for the label.
+     * @param {integer} [position] - The position to add the {@link Button}
+     *   to. If avoided the {@link Button} is added to the end of the list.
      * 
-     * @returns {TK.Button} The {@link TK.Button} instance.
+     * @returns {Button} The {@link Button} instance.
      */
     add_button: function (options, position) {
         if (typeof options === "string")
@@ -278,11 +282,11 @@ TK.ButtonArray = TK.class({
         this.trigger_resize();
         b.add_event("click", button_clicked.bind(this, b));
         /**
-         * A {@link TK.Button} was added to the TK.ButtonArray.
+         * A {@link Button} was added to the ButtonArray.
          *
-         * @event TK.ButtonArray#added
+         * @event ButtonArray#added
          * 
-         * @param {TK.Button} button - The {@link TK.Button} which was added to TK.ButtonArray.
+         * @param {Button} button - The {@link Button} which was added to ButtonArray.
          */
         if (b === this.current())
             b.set("state", true);
@@ -291,11 +295,11 @@ TK.ButtonArray = TK.class({
         return b;
     },
     /**
-     * Removes a {@link TK.Button} from the TK.ButtonArray.
+     * Removes a {@link Button} from the ButtonArray.
      *
-     * @method TK.ButtonArray#remove_button
+     * @method ButtonArray#remove_button
      * 
-     * @param {integer|TK.Button} button - button index or the {@link TK.Button}
+     * @param {integer|Button} button - button index or the {@link Button}
      *   instance.
      */
     remove_button: function (button) {
@@ -304,11 +308,11 @@ TK.ButtonArray = TK.class({
         if (button < 0 || button >= this.buttons.length)
             return;
         /**
-         * A {@link TK.Button} was removed from the TK.ButtonArray.
+         * A {@link Button} was removed from the ButtonArray.
          *
-         * @event TK.ButtonArray#removed
+         * @event ButtonArray#removed
          * 
-         * @param {TK.Button} button - The {@link TK.Button} instance which was removed.
+         * @param {Button} button - The {@link Button} instance which was removed.
          */
         this.fire_event("removed", this.buttons[button]);
         if (this.current() && button <= this.options.show) {
@@ -328,19 +332,19 @@ TK.ButtonArray = TK.class({
         this.next.destroy();
         this._container.remove();
         this._clip.remove();
-        TK.Container.prototype.destroy.call(this);
+        Container.prototype.destroy.call(this);
     },
 
     redraw: function() {
-        TK.Container.prototype.redraw.call(this);
+        Container.prototype.redraw.call(this);
         var I = this.invalid;
         var O = this.options;
         var S = this._sizes;
 
         if (I.direction) {
             var E = this.element;
-            TK.remove_class(E, "toolkit-vertical", "toolkit-horizontal");
-            TK.add_class(E, "toolkit-"+O.direction);
+            remove_class(E, "toolkit-vertical", "toolkit-horizontal");
+            add_class(E, "toolkit-"+O.direction);
         }
 
         if (I.validate("direction", "auto_arrows") || I.resized) {
@@ -421,9 +425,9 @@ TK.ButtonArray = TK.class({
     /**
      * The currently active button.
      *
-     * @method TK.ButtonArray#current
+     * @method ButtonArray#current
      * 
-     * @returns {TK.Button} The active {@link TK.Button} or null.
+     * @returns {Button} The active {@link Button} or null.
      */
     current: function() {
         var n = this.options.show;
@@ -444,14 +448,13 @@ TK.ButtonArray = TK.class({
             if (button) button.set("state", false);
         }
         if (key == "scroll") {
-            TK[value>0?"add_class":"remove_class"](this.element, "toolkit-scroll");
+            toggle_class(this.element, "toolkit-scroll", value > 0);
             this.trigger_resize();
         }
-        return TK.Container.prototype.set.call(this, key, value);
+        return Container.prototype.set.call(this, key, value);
     },
     get: function (key) {
         if (key === "buttons") return this.buttons;
-        return TK.Container.prototype.get.call(this, key);
+        return Container.prototype.get.call(this, key);
     }
 });
-})(this, this.TK);
