@@ -16,29 +16,36 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
+import { define_class } from '../widget_helpers.mjs';
+import { ChildWidget } from '../child_widget.mjs';
+import { Button } from './button.mjs';
+import { Value } from './value.mjs';
+import { Warning } from '../implements/warning.mjs';
+import { Ranged } from '../implements/ranged.mjs';
+import { DragValue } from '../modules/dragvalue.mjs';
+import { Scale } from '../modules/scale.mjs';
+import { ScrollValue } from '../modules/scrollvalue.mjs';
+import { FORMAT, add_class } from '../helpers.mjs';
  
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
  * The event is emitted for the option <code>value</code>.
  *
- * @event TK.ValueButton#useraction
+ * @event ValueButton#useraction
  * 
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
- 
-"use strict";
-(function(w, TK){
-TK.ValueButton = TK.class({
+export const ValueButton = define_class({
     /**
-     * This widget combines a {@link TK.Button}, a {@link TK.Scale} and a {@link TK.Value}.
-     * TK.ValueButton uses {@link TK.DragValue} and {@link TK.ScrollValue}
+     * This widget combines a {@link Button}, a {@link Scale} and a {@link Value}.
+     * ValueButton uses {@link DragValue} and {@link ScrollValue}
      * for setting its value.
-     * It inherits all options of {@link TK.DragValue} and {@link TK.Scale}.
+     * It inherits all options of {@link DragValue} and {@link Scale}.
      *
-     * @class TK.ValueButton
+     * @class ValueButton
      * 
-     * @extends TK.Button
+     * @extends Button
      * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
@@ -56,9 +63,9 @@ TK.ValueButton = TK.class({
      * @property {Number} [options.basis=300] - Distance to drag between <code>min</code> and <code>max</code>.
      */
     _class: "ValueButton",
-    Extends: TK.Button,
-    Implements: [TK.Warning, TK.Ranged],
-    _options: Object.assign(Object.create(TK.Button.prototype._options), TK.Ranged.prototype._options, {
+    Extends: Button,
+    Implements: [Warning, Ranged],
+    _options: Object.assign(Object.create(Button.prototype._options), Ranged.prototype._options, {
         value: "number",
         value_format: "function",
         value_size: "number",
@@ -78,7 +85,7 @@ TK.ValueButton = TK.class({
         blind_angle:    20,
         snap:           0.01,
         basis: 300,
-        labels: TK.FORMAT("%d"),
+        labels: FORMAT("%d"),
     },
     static_events: {
         set_drag_direction: function(value) {
@@ -92,27 +99,27 @@ TK.ValueButton = TK.class({
         },
     },
     initialize: function (options) {
-        TK.Button.prototype.initialize.call(this, options);
+        Button.prototype.initialize.call(this, options);
         
         /**
-         * @member {HTMLDivElement} TK.ValueButton#element - The main DIV container.
+         * @member {HTMLDivElement} ValueButton#element - The main DIV container.
          *   Has class <code>toolkit-valuebutton</code>.
          */
-        TK.add_class(this.element, "toolkit-valuebutton");
+        add_class(this.element, "toolkit-valuebutton");
         
         /**
-         * @member {TK.DragValue} TK.ValueButton#drag - The DragValue module.
+         * @member {DragValue} ValueButton#drag - The DragValue module.
          */
-        this.drag = new TK.DragValue(this, {
+        this.drag = new DragValue(this, {
             node:      this.element,
             direction: this.options.drag_direction,
             rotation: this.options.rotation,
             blind_angle: this.options.blind_angle,
         });
         /**
-         * @member {TK.ScrollValue} TK.ValueButton#scroll - The ScrollValue module.
+         * @member {ScrollValue} ValueButton#scroll - The ScrollValue module.
          */
-        this.scroll = new TK.ScrollValue(this, {
+        this.scroll = new ScrollValue(this, {
             node: this.element,
         });
         
@@ -124,7 +131,7 @@ TK.ValueButton = TK.class({
              * Is fired when the user doubleclicks the valuebutton in order to to reset to initial value.
              * The Argument is the new value.
              * 
-             * @event TK.ValueButton#doubleclick
+             * @event ValueButton#doubleclick
              * 
              * @param {number} value - The value of the widget.
              */
@@ -135,7 +142,7 @@ TK.ValueButton = TK.class({
         this.drag.destroy();
         this.scroll.destroy();
         this.scale.destroy();
-        TK.Button.prototype.destroy.call(this);
+        Button.prototype.destroy.call(this);
     },
     // GETTERS & SETTERS
     set: function (key, value) {
@@ -146,7 +153,7 @@ TK.ValueButton = TK.class({
                 value = this.snap(value);
                 break;
         }
-        return TK.Button.prototype.set.call(this, key, value);
+        return Button.prototype.set.call(this, key, value);
     }
 });
 function value_clicked() {
@@ -156,7 +163,7 @@ function value_clicked() {
     /**
      * Is fired when the user starts editing the value manually
      * 
-     * @event TK.ValueButton#valueedit
+     * @event ValueButton#valueedit
      * 
      * @param {number} value - The value of the widget.
      */
@@ -169,17 +176,17 @@ function value_done() {
     /**
      * Is fired when the user finished editing the value manually
      * 
-     * @event TK.ValueButton#valueset
+     * @event ValueButton#valueset
      * 
      * @param {number} value - The value of the widget.
      */
     self.fire_event("valueset", self.options.value);
 }
 /**
- * @member {TK.Value} TK.ValueButton#value - The value widget for editing the value manually.
+ * @member {Value} ValueButton#value - The value widget for editing the value manually.
  */
-TK.ChildWidget(TK.ValueButton, "value", {
-    create: TK.Value,
+ChildWidget(ValueButton, "value", {
+    create: Value,
     show: true,
     map_options: {
         value: "value",
@@ -197,10 +204,10 @@ TK.ChildWidget(TK.ValueButton, "value", {
 });
 
 /**
- * @member {TK.Scale} TK.ValueButton#scale - The scale widget showing the value.
+ * @member {Scale} ValueButton#scale - The scale widget showing the value.
  */
-TK.ChildWidget(TK.ValueButton, "scale", {
-    create: TK.Scale,
+ChildWidget(ValueButton, "scale", {
+    create: Scale,
     show: true,
     toggle_class: true,
     inherit_options: true,
@@ -214,5 +221,3 @@ TK.ChildWidget(TK.ValueButton, "scale", {
         },
     },
 });
-
-})(this, this.TK);
