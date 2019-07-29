@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class } from './../widget_helpers.mjs';
-import { AudioMath } from './audiomath.mjs';
+import { db2scale, scale2db, freq2scale, scale2freq } from './audiomath.mjs';
 import { error, warn } from './../helpers.mjs';
 
 function LinearSnapModule(stdlib, foreign) {
@@ -413,8 +413,6 @@ function TRAFO_LINEAR(stdlib, foreign) {
     };
 }
 function TRAFO_LOG(stdlib, foreign) {
-    var db2scale = AudioMath.db2scale;
-    var scale2db = AudioMath.scale2db;
     var reverse = foreign.reverse|0;
     var min = +foreign.min;
     var max = +foreign.max;
@@ -449,8 +447,6 @@ function TRAFO_LOG(stdlib, foreign) {
     };
 }
 function TRAFO_FREQ(stdlib, foreign) {
-    var freq2scale = AudioMath.freq2scale;
-    var scale2freq = AudioMath.scale2freq;
     var reverse = foreign.reverse|0;
     var min = +foreign.min;
     var max = +foreign.max;
