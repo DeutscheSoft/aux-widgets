@@ -334,7 +334,6 @@ export const Filter = define_class({
      * 
      * @extends Base
      * 
-     * @mixes AudioMath
      * @mixes Notes
      */
      
