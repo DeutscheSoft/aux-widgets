@@ -18,7 +18,7 @@
  */
 import { define_class } from './../widget_helpers.mjs';
 import { Widget } from './widget.mjs';
-import { FORMAT, element, add_class, remove_class } from './../helpers.mjs';
+import { FORMAT, element, add_class, remove_class, os } from './../helpers.mjs';
  
  /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -32,7 +32,7 @@ import { FORMAT, element, add_class, remove_class } from './../helpers.mjs';
 function value_clicked(e) {
     var O = this.options;
     // TODO: FIXME by finishing the dedicated keyboard widget
-    if (toolkit.os() === "Android") {
+    if (os() === "Android") {
         e.preventDefault();
         //e.stopPropagation();
         return false;
