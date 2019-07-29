@@ -187,6 +187,7 @@ TK.ChildWidget(TK.MultiMeter, "title", {
  * pager, etc.
  *
  */
+ 
 var mapped_options = {
     titles: "title",
     layout: "layout",
@@ -227,13 +228,14 @@ for (var key in TK.object_sub(TK.LevelMeter.prototype._options, TK.Container.pro
 }
 
 function extract_child_options(O, i) {
-    var o = {}, value;
+    var o = {}, value, type;
 
     for (var key in mapped_options) {
         var ckey = mapped_options[key];
         if (!O.hasOwnProperty(key)) continue;
         value = O[key];
-        if (Array.isArray(value)) {
+        type = TK.LevelMeter.prototype._options[key] || "";
+        if (Array.isArray(value) && type.search("array") === -1) {
             if (i < value.length) o[ckey] = value[i];
         } else {
             o[ckey] = value;

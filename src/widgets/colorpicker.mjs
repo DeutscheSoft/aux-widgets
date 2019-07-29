@@ -19,52 +19,10 @@
 "use strict";
 (function (w, TK) {
 
-
-/* TODO: switch to native DragCapture */
-
-function Drag (node, callback) {
-    this.node = node;
-    this.callback = callback;
-    this.active = false;
-    this.rect = null;
-    
-    node.addEventListener("mousedown", this.down.bind(this));
-    this._move = this.move.bind(this);
-    this._up = this.up.bind(this);
-}
-
-Drag.prototype = {
-    down: function (e) {
-        this.active = true;
-        this.rect = this.node.getBoundingClientRect();
-        document.addEventListener("mousemove", this._move);
-        document.addEventListener("mouseup", this._up);
-    },
-    up: function (e) {
-        if (!this.active) return;
-        this.move(e);
-        this.active = false;
-        document.removeEventListener("mousemove", this._move);
-        document.removeEventListener("mouseup", this._up);
-    },
-    move: function (e) {
-        if (!this.active) return;
-        e.preventDefault();
-        e = this.get_event(e);
-        if (this.callback)
-            this.callback(Math.max(0, Math.min(1, (e.pageX - this.rect.left) / this.rect.width)),
-                          Math.max(0, Math.min(1, (e.pageY - this.rect.top) / this.rect.height)));
-    },
-    get_event: function(e) {
-        if (e.hasOwnProperty("touches") && touches.length)
-            return e.touches[0];
-        return e;
-    }
-}
-Drag.prototype.constructor = Drag;
+var color_options = [ "rgb", "hsl", "hex", "hue", "saturation", "lightness", "red", "green", "blue" ];
 
 var checkinput = function (e) {
-    var I = this._color;
+    var I = this.hex._input;
     if (e.keyCode && e.keyCode == 13) {
         apply.call(this);
         return;
@@ -82,7 +40,6 @@ var checkinput = function (e) {
     }
     if (I.value.length == 6) {
         this.set("hex", I.value);
-        fevent.call(this, "colorset");
     }
 }
 var cancel = function () {
@@ -91,54 +48,66 @@ var cancel = function () {
      * 
      * @event TK.ColorPicker#cancel
      */
-    this.fire_event("cancel");
+    fevent.call(this, "cancel");
 }
 var apply = function () {
-    fevent.call(this, "apply");
     /**
      * Is fired whenever the apply button gets clicked or return is hit on input.
      * 
-     * @event TK.ColorPicker#cancel
-     * 
-     * @param {object} rgb - Object with members r, g and b (0..255)
-     * @param {object} hsl - Object with members h, s and l (0..1)
-     * @param {string} hex - Hexadecimal representation
+     * @event TK.ColorPicker#apply
+     * @param {object} colors - Object containing all color objects: `rgb`, `hsl`, `hex`, `hue`, `saturation`, `lightness`, `red`, `green`, `blue`
      */
+    fevent.call(this, "apply", true);
 }
 
-var set_color_at = function (x, y) {
-    this.set("hsl", {h:x, s:this.options.hsl.s, l:y});
-    fevent.call(this, "colorset");
-    /**
-     * Is fired whenever the color is changed via gradient or saturation fader.
-     * 
-     * @event TK.ColorPicker#colorset
-     * 
-     * @param {object} rgb - Object with members r, g and b (0..255)
-     * @param {object} hsl - Object with members h, s and l (0..1)
-     * @param {string} hex - Hexadecimal representation
-     */
-}
-    
-var set_saturation = function (s) {
-    this.set("hsl", {h:this.options.hsl.h,
-                     s:s,
-                     l:this.options.hsl.l});
-    fevent.call(this, "colorset");
+var fevent = function (e, useraction) {
+    var O = this.options;
+    if (useraction) {
+        this.fire_event("userset", "rgb", O.rgb);
+        this.fire_event("userset", "hsl", O.hsl);
+        this.fire_event("userset", "hex", O.hex);
+        this.fire_event("userset", "hue", O.hue);
+        this.fire_event("userset", "saturation", O.saturation);
+        this.fire_event("userset", "lightness", O.lightness);
+        this.fire_event("userset", "red", O.red);
+        this.fire_event("userset", "green", O.green);
+        this.fire_event("userset", "blue", O.blue);
+    }
+    this.fire_event(e, {
+        rgb: O.rgb,
+        hsl: O.hsl,
+        hex: O.hex,
+        hue: O.hue,
+        saturation: O.saturation,
+        lightness: O.lightness,
+        red: O.red,
+        green: O.green,
+        blue: O.blue,
+    });
 }
 
-var fevent = function (e) {
-    this.fire_event(e, this.options.rgb,
-                       this.options.hsl,
-                       this.options.hex);
+var color_atoms = { "hue":"hsl", "saturation":"hsl", "lightness":"hsl", "red":"rgb", "green":"rgb", "blue":"rgb" };
+
+function set_atoms (key, value) {
+    var O = this.options;
+    var atoms = Object.keys(color_atoms);
+    for ( var i = 0; i < atoms.length; i++) {
+        var atom = atoms[i];
+        if (key !== atom) {
+            O[atom] = O[color_atoms[atom]][atom.substr(0,1)]
+            this[atom].set("value", O[atom]);
+        }
+    }
+    if (key !== "hex")
+        O.hex = this.rgb2hex(O.rgb);
 }
+
 
 /**
- * TK.ColorPicker provides an easy way to choose a color by clicking in
- * a HSL image and selecting a saturation.
+ * TK.ColorPicker provides a collection of widgets to select a color in
+ * RGB or HSL color space.
  * 
- * @mixin TK.Colors
- * 
+ * @implements TK.Colors
  * 
  */
 
@@ -152,12 +121,24 @@ TK.ColorPicker = TK.class({
     _options: Object.assign(Object.create(TK.Container.prototype._options), {
         hsl: "object",
         rgb: "object",
-        hex: "string"
+        hex: "string",
+        hue: "number",
+        saturation: "number",
+        lightness: "number",
+        red: "number",
+        green: "number",
+        blue: "number",
     }),
     options: {
         hsl: {h:0, s:0.5, l:0},
         rgb: {r:0, g:0, b:0},
         hex: "000000",
+        hue: 0,
+        saturation: 0.5,
+        lightness:  0,
+        red: 0,
+        green: 0,
+        blue: 0,
     },
     initialize: function (options) {
         TK.Container.prototype.initialize.call(this, options);
@@ -167,44 +148,39 @@ TK.ColorPicker = TK.class({
          */
         TK.add_class(E, "toolkit-color-picker");
         
-        this._gradient = TK.element("div", "toolkit-gradient-hsl");
-        E.appendChild(this._gradient);
-        
-        this._grayscale = TK.element("div", "toolkit-grayscale");
-        E.appendChild(this._grayscale);
-        
-        this._crosshair = TK.element("div", "toolkit-crosshair");
-        E.appendChild(this._crosshair);
-        this._indicator = TK.element("div", "toolkit-indicator");
-        this._crosshair.appendChild(this._indicator);
-        
-        this._color = TK.element("input", "toolkit-color");
-        E.appendChild(this._color);
-        this._color.setAttribute("type", "text");
-        
-        this.cancel = new TK.Button({
-            container:E, "class":"toolkit-cancel", "label":"Cancel"});
-        this.apply = new TK.Button({
-            container:E, "class":"toolkit-apply", "label":"Apply"});
-            
-        this.saturation = new TK.Fader({
-            container:E, "class":"toolkit-saturation",
-            min:0, max:1, value:0.5, show_scale:false});
-        
-        this.add_children([this.cancel, this.apply, this.saturation]);
-        
-        this._color.onkeyup = checkinput.bind(this);
-        this._color.onpaste = checkinput.bind(this);
-
-        this.saturation.add_event("useraction", (function (key, value) {
-                set_saturation.call(this, value);
-        }).bind(this));
-        
-        this.cancel.add_event("click", cancel.bind(this));
-        this.apply.add_event("click", apply.bind(this));
-        
-        this.colordrag = new Drag(
-            this._grayscale, set_color_at.bind(this));
+        this.range_x = new TK.Range({
+            min: 0,
+            max: 1,
+        });
+        this.range_y = new TK.Range({
+            min: 0,
+            max: 1,
+            reverse: true,
+        });
+        this.drag_x = new TK.DragValue(this, {
+            range: (function () { return this.range_x; }).bind(this),
+            get: function () { return this.parent.options.hue; },
+            set: function (v) { this.parent.userset("hue", this.parent.range_x.snap(v)); },
+            direction: "horizontal",
+            onstartcapture: function (e) {
+                if (e.start.target.classList.contains("toolkit-indicator")) return;
+                var ev = e.stouch ? e.stouch : e.start;
+                var x = ev.clientX - this.parent._canvas.getBoundingClientRect().left;
+                this.parent.set("hue", this.options.range().px2val(x));
+            }
+        });
+        this.drag_y = new TK.DragValue(this, {
+            range: (function () { return this.range_y; }).bind(this),
+            get: function () { return this.parent.options.lightness; },
+            set: function (v) { this.parent.userset("lightness", this.parent.range_y.snap(v)); },
+            direction: "vertical",
+            onstartcapture: function (e) {
+                if (e.start.target.classList.contains("toolkit-indicator")) return;
+                var ev = e.stouch ? e.stouch : e.start;
+                var y = ev.clientY - this.parent._canvas.getBoundingClientRect().top;
+                this.parent.set("lightness", 1 - this.options.range().px2val(y));
+            }
+        });
         
         if (options.rgb)
             this.set("rgb", options.rgb);
@@ -213,49 +189,288 @@ TK.ColorPicker = TK.class({
         if (options.hsl)
             this.set("hsl", options.hsl);
     },
+    resize: function () {
+        var rect = this._canvas.getBoundingClientRect();
+        this.range_x.set("basis", rect.width);
+        this.range_y.set("basis", rect.height);
+    },
     redraw: function () {
         TK.Container.prototype.redraw.call(this);
         var I = this.invalid;
         var O = this.options;
         var E = this.element;
-        if (I.rgb || I.hsl || I.hex) {
-            I.rgb = I.hsl = I.hex = false;
-            this.options.hsl.s = Math.max(1e-10, Math.min(1, this.options.hsl.s));
-            var C = O.rgb;
-            var S = O.hsl.s;
-            var bw = this.rgb2bw(C);
-            this._color.style.backgroundColor = "rgb(" +
-                parseInt(C.r) + "," +
-                parseInt(C.g) + "," + 
-                parseInt(C.b) + ")";
-            this._color.style.color = bw;
-            this._color.value = O.hex;
+        if (I.validate("rgb", "hsl", "hex", "hue", "saturation", "lightness", "red", "green", "blue")) {
+            var bw = this.rgb2bw(O.rgb);
+            var bg = "rgb("+parseInt(O.red)+","+parseInt(O.green)+","+parseInt(O.blue)+")";
+            this.hex._input.style.backgroundColor = bg;
+            this.hex._input.style.color = bw;
+            this.hex._input.value = O.hex;
             
-            this.saturation.set("value", S);
-            this._grayscale.style.opacity = 1 - S;
-            
-            this._indicator.style.left = (O.hsl.h * 100) + "%";
-            this._indicator.style.top  = (O.hsl.l * 100) + "%";
+            this._indicator.style.left = (O.hue * 100) + "%";
+            this._indicator.style.top  = (O.lightness * 100) + "%";
+            this._indicator.style.backgroundColor = bg;
             this._indicator.style.color = bw;
+            
+            this._grayscale.style.opacity = 1 - O.saturation;
         }
     },
     set: function (key, value) {
-        switch (key) {
-            case "rgb":
-                this.options.hsl = this.rgb2hsl(value);
-                this.options.hex = this.rgb2hex(value);
-                break;
-            case "hsl":
-                this.options.rgb = this.hsl2rgb(value);
-                this.options.hex = this.rgb2hex(this.options.rgb);
-                break;
-            case "hex":
-                this.options.rgb = this.hex2rgb(value);
-                this.options.hsl = this.rgb2hsl(this.options.rgb);
-                break;
-                
+        var O = this.options;
+        if (color_options.indexOf(key) > -1) {
+            switch (key) {
+                case "rgb":
+                    O.hsl = this.rgb2hsl(value);
+                    break;
+                case "hsl":
+                    O.rgb = this.hsl2rgb(value);
+                    break;
+                case "hex":
+                    O.rgb = this.hex2rgb(value);
+                    O.hsl = this.rgb2hsl(O.rgb);
+                    break;
+                case "hue":
+                    O.hsl = {h:Math.min(1,Math.max(0,value)), s:O.saturation, l:O.lightness};
+                    O.rgb = this.hsl2rgb(O.hsl);
+                    break;
+                case "saturation":
+                    O.hsl = {h:O.hue, s:Math.min(1,Math.max(0,value)), l:O.lightness};
+                    O.rgb = this.hsl2rgb(O.hsl);
+                    break;
+                case "lightness":
+                    O.hsl = {h:O.hue, s:O.saturation, l:Math.min(1,Math.max(0,value))};
+                    O.rgb = this.hsl2rgb(O.hsl);
+                    break;
+                case "red":
+                    O.rgb = {r:Math.min(255,Math.max(0,value)), g:O.green, b:O.blue};
+                    O.hsl = this.rgb2hsl(O.rgb);
+                    break;
+                case "green":
+                    O.rgb = {r:O.red, g:Math.min(255,Math.max(0,value)), b:O.blue};
+                    O.hsl = this.rgb2hsl(O.rgb);
+                    break;
+                case "blue":
+                    O.rgb = {r:O.red, g:O.green, b:Math.min(255,Math.max(0,value))};
+                    O.hsl = this.rgb2hsl(O.rgb);
+                    break;
+            }
+            set_atoms.call(this, key, value);
         }
         return TK.Container.prototype.set.call(this, key, value);
     }
 });
+
+TK.ChildElement(TK.ColorPicker, "canvas", {
+    show: true,
+    append: function () {
+        this.element.appendChild(this._canvas);
+        this.drag_x.set("node", this._canvas);
+        this.drag_y.set("node", this._canvas);
+    },
+});
+TK.ChildElement(TK.ColorPicker, "grayscale", {
+    show: true,
+    append: function () {
+        this._canvas.appendChild(this._grayscale);
+    },
+});
+TK.ChildElement(TK.ColorPicker, "indicator", {
+    show: true,
+    append: function () {
+        this._canvas.appendChild(this._indicator);
+    },
+});
+
+TK.ChildWidget(TK.ColorPicker, "hex", {
+    create: TK.Value,
+    show: true,
+    static_events: {
+        "userset": function (key, val) {
+            if (key == "value") this.parent.userset("hex", val);
+        },
+        "keyup": function (e) { checkinput.call(this.parent, e); },
+        "paste": function (e) { checkinput.call(this.parent, e); },
+    },
+    default_options: {
+        format: TK.FORMAT("%s"),
+        "class": "toolkit-hex",
+        set: function (v) {
+            var p=0, tmp;
+            if (v[0] == "#")
+                v = v.substring(1);
+            while (v.length < 6) {
+                tmp = v.slice(0, p+1);
+                tmp += v[p];
+                tmp += v.slice(p+1);
+                v = tmp;
+                p+=2;
+            }
+            return v;
+        },
+        size: 7,
+        maxlength: 7,
+    },
+    map_options: {
+        "hex" : "value"
+    },
+    inherit_options: true,
+});
+
+TK.ChildWidget(TK.ColorPicker, "hue", {
+    create: TK.ValueKnob,
+    option: "show_hsl",
+    show: true,
+    static_events: {
+        "userset": function (key, val) {
+            if (key == "value") this.parent.userset("hue", val);
+        },
+    },
+    default_options: {
+        title: "Hue",
+        min: 0,
+        max: 1,
+        "class": "toolkit-hue",
+    },
+    map_options: {
+        "hue" : "value"
+    },
+    inherit_options: true,
+    blacklist_options: ["x", "y", "value"],
+});
+TK.ChildWidget(TK.ColorPicker, "saturation", {
+    create: TK.ValueKnob,
+    show: true,
+    static_events: {
+        "userset": function (key, val) {
+            if (key == "value") this.parent.userset("saturation", val);
+        },
+    },
+    default_options: {
+        title: "Saturation",
+        min: 0,
+        max: 1,
+        "class": "toolkit-saturation",
+    },
+    map_options: {
+        "saturation" : "value"
+    },
+    inherit_options: true,
+    blacklist_options: ["x", "y", "value"],
+});
+TK.ChildWidget(TK.ColorPicker, "lightness", {
+    create: TK.ValueKnob,
+    option: "show_hsl",
+    show: true,
+    static_events: {
+        "userset": function (key, val) {
+            if (key == "value") this.parent.userset("lightness", val);
+        },
+    },
+    default_options: {
+        title: "Lightness",
+        min: 0,
+        max: 1,
+        "class": "toolkit-lightness",
+    },
+    map_options: {
+        "lightness" : "value"
+    },
+    inherit_options: true,
+    blacklist_options: ["x", "y", "value"],
+});
+
+TK.ChildWidget(TK.ColorPicker, "red", {
+    create: TK.ValueKnob,
+    option: "show_rgb",
+    show: true,
+    static_events: {
+        "userset": function (key, val) {
+            if (key == "value") this.parent.userset("red", val);
+        },
+    },
+    default_options: {
+        title: "Red",
+        min: 0,
+        max: 255,
+        snap: 1,
+        value_format: function (v) { return parseInt(v); },
+        set: function (v) { return Math.round(v); },
+        "class": "toolkit-red",
+    },
+    map_options: {
+        "red" : "value"
+    },
+    inherit_options: true,
+    blacklist_options: ["x", "y", "value"],
+});
+TK.ChildWidget(TK.ColorPicker, "green", {
+    create: TK.ValueKnob,
+    option: "show_rgb",
+    show: true,
+    static_events: {
+        "userset": function (key, val) {
+            if (key == "value") this.parent.userset("green", val);
+        },
+    },
+    default_options: {
+        title: "Green",
+        min: 0,
+        max: 255,
+        snap: 1,
+        value_format: function (v) { return parseInt(v); },
+        set: function (v) { return Math.round(v); },
+        "class": "toolkit-green",
+    },
+    map_options: {
+        "green" : "value"
+    },
+    inherit_options: true,
+    blacklist_options: ["x", "y", "value"],
+});
+TK.ChildWidget(TK.ColorPicker, "blue", {
+    create: TK.ValueKnob,
+    option: "show_rgb",
+    show: true,
+    static_events: {
+        "userset": function (key, val) {
+            if (key == "value") this.parent.userset("blue", val);
+        },
+    },
+    default_options: {
+        title: "Blue",
+        min: 0,
+        max: 255,
+        snap: 1,
+        value_format: function (v) { return parseInt(v); },
+        set: function (v) { return Math.round(v); },
+        "class": "toolkit-blue",
+    },
+    map_options: {
+        "blue" : "value"
+    },
+    inherit_options: true,
+    blacklist_options: ["x", "y", "value"],
+});
+TK.ChildWidget(TK.ColorPicker, "apply", {
+    create: TK.Button,
+    show: true,
+    static_events: {
+        "click": function () { apply.call(this.parent); },
+    },
+    default_options: {
+        "label" : "Apply",
+        "class": "toolkit-apply",
+    },
+});
+TK.ChildWidget(TK.ColorPicker, "cancel", {
+    create: TK.Button,
+    show: true,
+    static_events: {
+        "click": function () { cancel.call(this.parent); },
+    },
+    default_options: {
+        "label" : "Cancel",
+        "class" : "toolkit-cancel",
+    },
+});
+    
 })(this, this.TK);

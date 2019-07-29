@@ -60,6 +60,10 @@ function value_typing(e) {
     if (O.set === false) return;
     if (!this.__editing) return;
     switch (e.keyCode) {
+        default:
+            if (O.editmode == "immediate")
+                this.userset("value", O.set ? O.set(this._input.value) : this._input.value);
+            break;
         case 27:
             // ESC
             value_done.call(this);
@@ -139,6 +143,9 @@ function submit_cb(e) {
  *   A function which is called to parse user input.
  * @property {boolean} [options.auto_select=false] - Select the entire text in the entry field if clicked (new in v1.3).
  * @property {boolean} [options.readonly=false] - Sets the readonly attribute (new in v1.3).
+ * @property {string} [options.placeholder=""] - Sets the placeholder attribute (new in v1.3).
+ * @property {string} [options.type="text"] - Sets the type attribute. Type can be either `text` or `password` (new in v1.3).
+ * @property {string} [options.editmode="onenter"] - Sets the event to trigger the userset event. Can be one out of `onenter` or `immediate`.
  * 
  */
 TK.Value = TK.class({
@@ -151,7 +158,10 @@ TK.Value = TK.class({
         maxlength: "int",
         set: "object|function|boolean",
         auto_select: "boolean",
-        readonly: "boolean"
+        readonly: "boolean",
+        placeholder: "string",
+        type: "string",
+        editmode: "string",
     }),
     options: {
         value: 0,
@@ -163,7 +173,10 @@ TK.Value = TK.class({
         // the value treated by the parent widget.
         set: function (val) { return parseFloat(val || 0); },
         auto_select: false,
-        readonly: false
+        readonly: false,
+        placeholder: "",
+        type: "text",
+        editmode: "onenter",
     },
     static_events: {
         submit: submit_cb,
@@ -213,6 +226,12 @@ TK.Value = TK.class({
             if (O.maxlength) E.setAttribute("maxlength", O.maxlength);
             else E.removeAttribute("maxlength");
         }
+        
+        if (I.placeholder) {
+            I.placeholder = 0;
+            if (O.placeholder) E.setAttribute("placeholder", O.placeholder);
+            else E.removeAttribute("placeholder");
+        }
 
         if ((I.value || I.format) && !this.__editing) {
             I.format = I.value = false;
@@ -225,6 +244,11 @@ TK.Value = TK.class({
                 E.setAttribute("readonly", "readonly");
             else
                 E.removeAttribute("readonly");
+        }
+        
+        if (I.type) {
+            I.type = 0;
+            E.setAttribute("type", O.type);
         }
     },
     

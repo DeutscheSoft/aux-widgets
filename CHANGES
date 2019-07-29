@@ -1,4 +1,4 @@
-Changes since version 1.4
+Changes since version 1.2
 --------------------------------------
 
 Style Changes
@@ -6,6 +6,36 @@ Style Changes
 
 * Flex-Layout: The following widgets have a changed layout based on flex-box and grid:
   * Fader (new DOM element: _track as container for _handle)
+
+Fixes
+=====
+
+* TK.element: object argument wasn't handled as attributes but as styles
+  opposed to what the documentation says. This might break backward compatibility
+  in some cases.
+* TK.DragValue: new option `limit` to keep value to be set between `min` and `max`.
+  added to `TK.Knob` and `TK.Fader` by default which disables `toolkit-warning`-class
+  by default in favour of less nervous lower and upper ends in those widgets.
+  
+Features
+========
+
+* TK.Value: New options
+  * `type` sets the type attribute of the input child
+  * `placeholder` sets the placeholder attribute of the input child
+  * `editmode` sets whether the userset event fires on hitting enter (`onenter`) or immediately after every key press (`immediate`)
+* TK.Dialog was officially added (including docs, CSS and AWML abilities)
+* TK.Color: new universal conversion functions taking any kind of color parameter or model
+
+New
+===
+
+* TK.ColorPicker and TK.ColorPickerDialog officially went into master.
+
+Changes
+=======
+
+* TK.Pager: drop option `overlap` due to new flex layout was already missing since 1.3 but not removed.
 
 
 Changes since version 1.1
