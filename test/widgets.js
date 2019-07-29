@@ -3,6 +3,7 @@ import { EqBand } from '../src/modules/eqband.mjs';
 import { Chart } from '../src/widgets/chart.mjs';
 import { ResponseHandler } from '../src/widgets/responsehandler.mjs';
 import { Equalizer } from '../src/widgets/equalizer.mjs';
+import { Value } from '../src/widgets/value.mjs';
 
 import { compare, object_minus } from './helpers.mjs';
 
@@ -13,6 +14,7 @@ describe('Widgets', () => {
        new Chart();
        new ResponseHandler();
        new Equalizer();
+       new Value();
 
        done();
     });

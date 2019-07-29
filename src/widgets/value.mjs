@@ -16,19 +16,19 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
+import { define_class } from './../widget_helpers.mjs';
+import { Widget } from './widget.mjs';
+import { FORMAT, element, add_class, remove_class } from './../helpers.mjs';
  
  /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
  * The event is emitted for the option <code>value</code>.
  *
- * @event TK.Value#useraction
+ * @event Value#useraction
  * 
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
- 
-"use strict";
-(function(w, TK){
 function value_clicked(e) {
     var O = this.options;
     // TODO: FIXME by finishing the dedicated keyboard widget
@@ -40,7 +40,7 @@ function value_clicked(e) {
     // TODO
     if (O.set === false) return;
     if (this.__editing) return false;
-    TK.add_class(this.element, "toolkit-active");
+    add_class(this.element, "toolkit-active");
     this._input.setAttribute("value", O.value);
     this.__editing = true;
     this._input.focus();
@@ -49,7 +49,7 @@ function value_clicked(e) {
     /**
      * Is fired when the value was clicked.
      * 
-     * @event TK.Value#valueclicked
+     * @event Value#valueclicked
      * 
      * @param {number} value - The value of the widget.
      */
@@ -70,7 +70,7 @@ function value_typing(e) {
             /**
              * Is fired when the ESC key was pressed while editing the value.
              * 
-             * @event TK.Value#valueescape
+             * @event Value#valueescape
              * 
              * @param {string} value - The new value of the widget.
              */
@@ -83,7 +83,7 @@ function value_typing(e) {
             /**
              * Is fired after the value has been set and editing has ended.
              * 
-             * @event TK.Value#valueset
+             * @event Value#valueset
              * 
              * @param {string} value - The new value of the widget.
              */
@@ -96,7 +96,7 @@ function value_typing(e) {
     /**
      * Is fired when the user hits a key while editing the value.
      * 
-     * @event TK.Value#valuetyping
+     * @event Value#valuetyping
      * 
      * @param {DOMEvent} event - The native DOM event.
      * @param {string} value - The new value of the widget.
@@ -106,12 +106,12 @@ function value_typing(e) {
 function value_done() {
     if (!this.__editing) return;
     this.__editing = false;
-    TK.remove_class(this.element, "toolkit-active");
+    remove_class(this.element, "toolkit-active");
     this._input.blur();
     /**
      * Is fired when editing of the value ends.
      * 
-     * @event TK.Value#valuedone
+     * @event Value#valuedone
      * 
      * @param {string} value - The new value of the widget.
      */
@@ -125,17 +125,17 @@ function submit_cb(e) {
     return false;
 }
 /**
- * TK.Value is a formatted text field displaying numbers and providing
+ * Value is a formatted text field displaying numbers and providing
  * a input field for editing the value.
  *
- * @class TK.Value
+ * @class Value
  * 
- * @extends TK.Widget
+ * @extends Widget
  *
  * @param {Object} [options={ }] - An object containing initial options.
  * 
  * @property {Number} [options.value=0] - The value.
- * @property {Function} [options.format=TK.FORMAT("%.2f")] - A formatting
+ * @property {Function} [options.format=FORMAT("%.2f")] - A formatting
  *   function used to display the value.
  * @property {Integer} [options.size=5] - Size attribute of the INPUT element.
  * @property {Integer} [options.maxlength] - Maxlength attribute of the INPUT element.
@@ -148,10 +148,10 @@ function submit_cb(e) {
  * @property {string} [options.editmode="onenter"] - Sets the event to trigger the userset event. Can be one out of `onenter` or `immediate`.
  * 
  */
-TK.Value = TK.class({
+export const Value = define_class({
     _class: "Value",
-    Extends: TK.Widget,
-    _options: Object.assign(Object.create(TK.Widget.prototype._options), {
+    Extends: Widget,
+    _options: Object.assign(Object.create(Widget.prototype._options), {
         value: "number|string",
         format: "function",
         size: "number",
@@ -165,7 +165,7 @@ TK.Value = TK.class({
     }),
     options: {
         value: 0,
-        format: TK.FORMAT("%.2f"),
+        format: FORMAT("%.2f"),
         size: 5,
         container: false,
         // set a callback function if value is editable or
@@ -184,21 +184,21 @@ TK.Value = TK.class({
     },
     initialize: function (options) {
         var E;
-        TK.Widget.prototype.initialize.call(this, options);
+        Widget.prototype.initialize.call(this, options);
         /**
-         * @member {HTMLDivElement} TK.Value#element - The main DIV container.
+         * @member {HTMLDivElement} Value#element - The main DIV container.
          *   Has class <code>toolkit-value</code>.
          */
-        if (!(E = this.element)) this.element = E = TK.element("div");
-        TK.add_class(E, "toolkit-value");
+        if (!(E = this.element)) this.element = E = element("div");
+        add_class(E, "toolkit-value");
         
         this.widgetize(E, true, true, true);
         
         /**
-         * @member {HTMLInputElement} TK.Value#_input - The text input.
+         * @member {HTMLInputElement} Value#_input - The text input.
          *   Has class <code>toolkit-input</code>.
          */
-        this._input  = TK.element("input", "toolkit-input");
+        this._input  = element("input", "toolkit-input");
         this._input.type = "text";
         E.appendChild(this._input);
 
@@ -214,7 +214,7 @@ TK.Value = TK.class({
         var O = this.options;
         var E = this._input;
 
-        TK.Widget.prototype.redraw.call(this);
+        Widget.prototype.redraw.call(this);
 
         if (I.size) {
             I.size = 0;
@@ -256,7 +256,6 @@ TK.Value = TK.class({
         this._input.removeEventListener("keyup", this._value_typing);
         this._input.removeEventListener("blur", this._value_done);
         this._input.remove();
-        TK.Widget.prototype.destroy.call(this);
+        Widget.prototype.destroy.call(this);
     },
 });
-})(this, this.TK);
