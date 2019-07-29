@@ -16,8 +16,14 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+import { define_class, ChildElement } from '../widget_helpers.mjs';
+import { ChildWidget } from '../child_widget.mjs';
+import { MeterBase } from './meterbase.mjs';
+import { State } from './state.mjs';
+import {
+    FORMAT, add_class, toggle_class, element, set_text
+  } from '../helpers.mjs';
+
 function vert(O) {
     return O.layout === "left" || O.layout === "right";
 }
@@ -74,16 +80,16 @@ function bottom_timeout() {
         this.__bto = null;
 }
     
-TK.LevelMeter = TK.class({
+export const LevelMeter = define_class({
     /**
-     * TK.LevelMeter is a fully functional display of numerical values. They are
-     * enhanced {@link TK.MeterBase}'s containing a clip LED, a peak pin with value label
+     * LevelMeter is a fully functional display of numerical values. They are
+     * enhanced {@link MeterBase}'s containing a clip LED, a peak pin with value label
      * and hold markers. In addition, LevelMeter has an optional falling animation,
      * top and bottom peak values and more.
      *
-     * @class TK.LevelMeter
+     * @class LevelMeter
      * 
-     * @extends TK.MeterBase
+     * @extends MeterBase
      *
      * @param {Object} [options={ }] - An object containing initial options.
      * 
@@ -96,7 +102,7 @@ TK.LevelMeter = TK.class({
      * @property {Boolean} [options.clip=false] - If clipping is enabled, this option is set to
      *   <code>true</code> when clipping happens. When automatic clipping is disabled, it can be set to
      *   <code>true</code> to set the clipping state.
-     * @property {Object} [options.clip_options={}] - Additional options for the {@link TK.State} clip LED.
+     * @property {Object} [options.clip_options={}] - Additional options for the {@link State} clip LED.
      * @property {Boolean} [options.show_hold=false] - If set to <code>true</code>, show the hold value LED.
      * @property {Integer} [options.hold_size=1] - Size of the hold value LED in the number of segments.
      * @property {Number|boolean} [options.auto_hold=false] - If set to <code>false</code> the automatic
@@ -110,7 +116,7 @@ TK.LevelMeter = TK.class({
      * @property {Integer|Boolean} [options.peak_label=false] - If set to <code>false</code> the automatic peak
      *   label is disabled, if set to <code>n</code> the peak label is reset after <code>n</code> ms and
      *   if set to <code>-1</code> it remains forever.
-     * @property {Function} [options.format_peak=TK.FORMAT("%.2f")] - Formatting function for the peak label.
+     * @property {Function} [options.format_peak=FORMAT("%.2f")] - Formatting function for the peak label.
      * @property {Number} [options.falling=0] - If set to a positive number, activates the automatic falling
      *   animation. The meter level will fall by this amount per frame.
      * @property {Number} [options.falling_fps=24] - This is the number of frames of the falling animation.
@@ -121,8 +127,8 @@ TK.LevelMeter = TK.class({
      *   and external falling are combined.
      */
     _class: "LevelMeter",
-    Extends: TK.MeterBase,
-    _options: Object.assign(Object.create(TK.MeterBase.prototype._options), {
+    Extends: MeterBase,
+    _options: Object.assign(Object.create(MeterBase.prototype._options), {
         falling: "number",
         falling_fps: "number",
         falling_init: "number",
@@ -154,7 +160,7 @@ TK.LevelMeter = TK.class({
         auto_peak:    false,
         peak_label:   false,
         auto_hold:    false,
-        format_peak: TK.FORMAT("%.2f"),
+        format_peak: FORMAT("%.2f"),
         clip_options: {}
     },
     static_events: {
@@ -191,7 +197,7 @@ TK.LevelMeter = TK.class({
     initialize: function (options) {
         /* track the age of the value option */
         this.track_option("value");
-        TK.MeterBase.prototype.initialize.call(this, options);
+        MeterBase.prototype.initialize.call(this, options);
         this._reset_label = this.reset_label.bind(this);
         this._reset_clip = this.reset_clip.bind(this);
         this._reset_peak = this.reset_peak.bind(this);
@@ -199,10 +205,10 @@ TK.LevelMeter = TK.class({
         this._reset_bottom = this.reset_bottom.bind(this);
         
         /**
-         * @member {HTMLDivElement} TK.LevelMeter#element - The main DIV container.
+         * @member {HTMLDivElement} LevelMeter#element - The main DIV container.
          *   Has class <code>toolkit-level-meter</code>.
          */
-        TK.add_class(this.element, "toolkit-level-meter");
+        add_class(this.element, "toolkit-level-meter");
 
         var O = this.options;
         
@@ -223,7 +229,7 @@ TK.LevelMeter = TK.class({
 
         if (I.show_hold) {
             I.show_hold = false;
-            TK.toggle_class(E, "toolkit-has-hold", O.show_hold);
+            toggle_class(E, "toolkit-has-hold", O.show_hold);
         }
 
         if (I.top || I.bottom) {
@@ -236,22 +242,22 @@ TK.LevelMeter = TK.class({
         if (I.base)
           I.value = true;
 
-        TK.MeterBase.prototype.redraw.call(this);
+        MeterBase.prototype.redraw.call(this);
 
         if (I.clip) {
             I.clip = false;
-            TK.toggle_class(E, "toolkit-clipping", O.clip);
+            toggle_class(E, "toolkit-clipping", O.clip);
         }
     },
     destroy: function () {
-        TK.MeterBase.prototype.destroy.call(this);
+        MeterBase.prototype.destroy.call(this);
     },
     /**
      * Resets the peak label.
      * 
-     * @method TK.LevelMeter#reset_peak
+     * @method LevelMeter#reset_peak
      * 
-     * @emits TK.LevelMeter#resetpeak
+     * @emits LevelMeter#resetpeak
      */
     reset_peak: function () {
         if (this.__pto) clearTimeout(this.__pto);
@@ -260,16 +266,16 @@ TK.LevelMeter = TK.class({
         /**
          * Is fired when the peak was reset.
          * 
-         * @event TK.LevelMeter#resetpeak
+         * @event LevelMeter#resetpeak
          */
         this.fire_event("resetpeak");
     },
     /**
      * Resets the label.
      * 
-     * @method TK.LevelMeter#reset_label
+     * @method LevelMeter#reset_label
      * 
-     * @emits TK.LevelMeter#resetlabel
+     * @emits LevelMeter#resetlabel
      */
     reset_label: function () {
         if (this.__lto) clearTimeout(this.__lto);
@@ -278,16 +284,16 @@ TK.LevelMeter = TK.class({
         /**
          * Is fired when the label was reset.
          * 
-         * @event TK.LevelMeter#resetlabel
+         * @event LevelMeter#resetlabel
          */
         this.fire_event("resetlabel");
     },
     /**
      * Resets the clipping LED.
      * 
-     * @method TK.LevelMeter#reset_clip
+     * @method LevelMeter#reset_clip
      * 
-     * @emits TK.LevelMeter#resetclip
+     * @emits LevelMeter#resetclip
      */
     reset_clip: function () {
         if (this.__cto) clearTimeout(this.__cto);
@@ -296,52 +302,52 @@ TK.LevelMeter = TK.class({
         /**
          * Is fired when the clipping LED was reset.
          * 
-         * @event TK.LevelMeter#resetclip
+         * @event LevelMeter#resetclip
          */
         this.fire_event("resetclip");
     },
     /**
      * Resets the top hold.
      * 
-     * @method TK.LevelMeter#reset_top
+     * @method LevelMeter#reset_top
      * 
-     * @emits TK.LevelMeter#resettop
+     * @emits LevelMeter#resettop
      */
     reset_top: function () {
         this.set("top", this.effective_value());
         /**
          * Is fired when the top hold was reset.
          * 
-         * @event TK.LevelMeter#resettop
+         * @event LevelMeter#resettop
          */
         this.fire_event("resettop");
     },
     /*
      * Resets the bottom hold.
      * 
-     * @method TK.LevelMeter#reset_bottom
+     * @method LevelMeter#reset_bottom
      * 
-     * @emits TK.LevelMeter#resetbottom
+     * @emits LevelMeter#resetbottom
      */
     reset_bottom: function () {
         this.set("bottom", this.effective_value());
         /**
          * Is fired when the bottom hold was reset.
          * 
-         * @event TK.LevelMeter#resetbottom
+         * @event LevelMeter#resetbottom
          */
         this.fire_event("resetbottom");
     },
     /*
      * Resets all hold features.
      * 
-     * @method TK.LevelMeter#reset_all
+     * @method LevelMeter#reset_all
      * 
-     * @emits TK.LevelMeter#resetpeak
-     * @emits TK.LevelMeter#resetlabel
-     * @emits TK.LevelMeter#resetclip
-     * @emits TK.LevelMeter#resettop
-     * @emits TK.LevelMeter#resetbottom
+     * @emits LevelMeter#resetpeak
+     * @emits LevelMeter#resetlabel
+     * @emits LevelMeter#resetclip
+     * @emits LevelMeter#resettop
+     * @emits LevelMeter#resetbottom
      */
     reset_all: function () {
         this.reset_label();
@@ -401,7 +407,7 @@ TK.LevelMeter = TK.class({
             }
         }
 
-        i = TK.MeterBase.prototype.calculate_meter.call(this, to, value, i);
+        i = MeterBase.prototype.calculate_meter.call(this, to, value, i);
 
         if (!O.show_hold) return i;
 
@@ -475,17 +481,17 @@ TK.LevelMeter = TK.class({
         } else if (key === "top" || key === "bottom") {
             value = this.snap(value);
         }
-        return TK.MeterBase.prototype.set.call(this, key, value);
+        return MeterBase.prototype.set.call(this, key, value);
     }
 });
 
 /**
- * @member {TK.State} TK.LevelMeter#clip - The {@link TK.State} instance for the clipping LED.
- * @member {HTMLDivElement} TK.LevelMeter#clip.element - The DIV element of the clipping LED.
+ * @member {State} LevelMeter#clip - The {@link State} instance for the clipping LED.
+ * @member {HTMLDivElement} LevelMeter#clip.element - The DIV element of the clipping LED.
  *   Has class <code>toolkit-clip</code>.
  */
-TK.ChildWidget(TK.LevelMeter, "clip", {
-    create: TK.State,
+ChildWidget(LevelMeter, "clip", {
+    create: State,
     show: false,
     map_options: {
         clip: "state",
@@ -496,14 +502,14 @@ TK.ChildWidget(TK.LevelMeter, "clip", {
     toggle_class: true,
 });
 /**
- * @member {HTMLDivElement} TK.LevelMeter#_peak - The DIV element for the peak marker.
+ * @member {HTMLDivElement} LevelMeter#_peak - The DIV element for the peak marker.
  *   Has class <code>toolkit-peak</code>.
  */
-TK.ChildElement(TK.LevelMeter, "peak", {
+ChildElement(LevelMeter, "peak", {
     show: false,
     create: function() {
-        var peak = TK.element("div","toolkit-peak");
-        peak.appendChild(TK.element("div","toolkit-peak-label"));
+        var peak = element("div","toolkit-peak");
+        peak.appendChild(element("div","toolkit-peak-label"));
         return peak;
     },
     append: function() {
@@ -514,7 +520,7 @@ TK.ChildElement(TK.LevelMeter, "peak", {
     draw: function (O) {
         if (!this._peak) return;
         var n = this._peak.firstChild;
-        TK.set_text(n, O.format_peak(O.peak));
+        set_text(n, O.format_peak(O.peak));
         if (O.peak > O.min && O.peak < O.max && O.show_peak) {
             this._peak.style.display = "block";
             var pos = 0;
@@ -533,9 +539,8 @@ TK.ChildElement(TK.LevelMeter, "peak", {
         /**
          * Is fired when the peak was drawn.
          * 
-         * @event TK.LevelMeter#drawpeak
+         * @event LevelMeter#drawpeak
          */
         this.fire_event("drawpeak");
     },
 });
-})(this, this.TK);

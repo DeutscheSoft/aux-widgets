@@ -13,6 +13,7 @@ import { Select } from '../src/widgets/select.mjs';
 import { ValueButton } from '../src/widgets/valuebutton.mjs';
 import { ValueKnob } from '../src/widgets/valueknob.mjs';
 import { MeterBase } from '../src/widgets/meterbase.mjs';
+import { LevelMeter } from '../src/widgets/levelmeter.mjs';
 
 import { compare, object_minus } from './helpers.mjs';
 
@@ -33,6 +34,7 @@ describe('Widgets', () => {
        new ValueButton();
        new ValueKnob();
        new MeterBase();
+       new LevelMeter();
 
        done();
     });
