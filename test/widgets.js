@@ -4,6 +4,7 @@ import { Chart } from '../src/widgets/chart.mjs';
 import { ResponseHandler } from '../src/widgets/responsehandler.mjs';
 import { Equalizer } from '../src/widgets/equalizer.mjs';
 import { Value } from '../src/widgets/value.mjs';
+import { Knob } from '../src/widgets/knob.mjs';
 
 import { compare, object_minus } from './helpers.mjs';
 
@@ -15,6 +16,7 @@ describe('Widgets', () => {
        new ResponseHandler();
        new Equalizer();
        new Value();
+       new Knob();
 
        done();
     });

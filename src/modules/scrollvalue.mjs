@@ -16,19 +16,21 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK) {
+import { define_class } from '../widget_helpers.mjs';
+import { warn, add_class, remove_class } from '../helpers.mjs';
+import { Module } from './module.mjs';
+
 function scroll_timeout() {
     /**
      * Is fired when scrolling ended.
      * 
-     * @event TK.ScrollValue#scrollended
+     * @event ScrollValue#scrollended
      */
     fire_event.call(this, "scrollended");
     this._wheel = false;
     this.__sto = false;
     this.set("scrolling", false);
-    TK.remove_class(this.options.classes, "toolkit-scrolling");
+    remove_class(this.options.classes, "toolkit-scrolling");
 }
 function scrollwheel(e) {
     var O = this.options;
@@ -48,11 +50,11 @@ function scrollwheel(e) {
         window.clearTimeout(this.__sto);
     } else {
         this._raw_value = v = O.get.call(this);
-        TK.add_class(O.classes, "toolkit-scrolling");
+        add_class(O.classes, "toolkit-scrolling");
         /**
          * Is fired when scrolling starts.
          * 
-         * @event TK.ScrollValue#scrollstarted
+         * @event ScrollValue#scrollstarted
          * 
          * @param {DOMEvent} event - The native DOM event.
          */
@@ -83,7 +85,7 @@ function scrollwheel(e) {
     /**
      * Is fired while scrolling happens.
      * 
-     * @event TK.ScrollValue#scrolling
+     * @event ScrollValue#scrolling
      * 
      * @param {DOMEvent} event - The native DOM event.
      */
@@ -104,20 +106,20 @@ function fire_event(title, event) {
     if (e) e.fire_event(title, event, O.get.call(this), O.node, this, O.range.call(this));
 }
 /**
- * TK.ScrollValue enables the scroll wheel for setting a value of an
- * object. For instance, it is used by {@link TK.Knob} to allow turning
+ * ScrollValue enables the scroll wheel for setting a value of an
+ * object. For instance, it is used by {@link Knob} to allow turning
  * the knob using the scroll wheel.
  *
- * @class TK.ScrollValue
+ * @class ScrollValue
  * 
- * @extends TK.Module
+ * @extends Module
  * 
  * @param {Object} [options={ }] - An object containing initial options.
  * 
  * @property {HTMLElement} options.node - The element receiving the scroll event.
  * @property {Function} [options.get=function () { return this.parent.options.value; }] - Callback returning the value.
  * @property {Function} [options.set=function (v) { return this.parent.userset("value", v); }] - Callback setting the value.
- * @property {Function} [options.range=function () { return this.parent; }] - A function returning a {@link TK.Range} instance or options for a new one.
+ * @property {Function} [options.range=function () { return this.parent; }] - A function returning a {@link Range} instance or options for a new one.
  * @property {Function|Boolean} [options.events=false] - A function returning
  *   an element receiving events or <code>false</code> to fire events on the main element.
  * @property {HTMLElement|Boolean} [options.classes=false] - Element receiving
@@ -127,9 +129,9 @@ function fire_event(title, event) {
  *   containing values for x, y and z defining the direction of scrolling.
  * @property {Boolean} [options.limit=false] - Limit the returned value to min and max of the range.
  */
-TK.ScrollValue = TK.class({
+export const ScrollValue = define_class({
     _class: "ScrollValue",
-    Extends: TK.Module,
+    Extends: Module,
     _options: {
         get: "function",
         set: "function",
@@ -152,7 +154,7 @@ TK.ScrollValue = TK.class({
         limit: false,
     },
     initialize: function (widget, options) {
-        TK.Module.prototype.initialize.call(this, widget, options);
+        Module.prototype.initialize.call(this, widget, options);
         this._wheel = false;
         this._raw_value = 0.0;
         this.set("node", this.options.node);
@@ -168,7 +170,6 @@ TK.ScrollValue = TK.class({
     },
     set: function (key, value) {
         if ((key === "classes") && !value) value = this.options.node;
-        return TK.Module.prototype.set.call(this, key, value);
+        return Module.prototype.set.call(this, key, value);
     }
 })
-})(this, this.TK);

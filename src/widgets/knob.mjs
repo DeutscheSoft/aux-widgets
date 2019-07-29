@@ -21,21 +21,25 @@
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
  * The event is emitted for the option <code>value</code>.
  *
- * @event TK.Knob#useraction
+ * @event Knob#useraction
  * 
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
+import { define_class } from '../widget_helpers.mjs';
+import { Widget } from './widget.mjs';
+import { Circular } from '../modules/circular.mjs';
+import { DragValue } from '../modules/dragvalue.mjs';
+import { ScrollValue } from '../modules/scrollvalue.mjs';
+import { FORMAT, element, add_class, remove_class, make_svg, object_and, object_sub } from '../helpers.mjs';
      
-"use strict";
-(function(w, TK){
-var format_viewbox = TK.FORMAT("0 0 %d %d");
+var format_viewbox = FORMAT("0 0 %d %d");
 function dblclick() {
     this.userset("value", this.options.reset);
     /**
      * Is fired when the knob receives a double click in order to reset to initial value.
      * 
-     * @event TK.Knob#doubleclick
+     * @event Knob#doubleclick
      * 
      * @param {number} value - The value of the widget.
      */
@@ -45,15 +49,15 @@ function module_range() {
     return this.parent.circular;
 }
 /**
- * TK.Knob is a {@link TK.Circular} inside of an SVG and which can be
+ * Knob is a {@link Circular} inside of an SVG and which can be
  * modified both by dragging and scrolling.
- * TK.Knob uses {@link TK.DragValue} and {@link TK.ScrollValue}
+ * Knob uses {@link DragValue} and {@link ScrollValue}
  * for setting its value.
- * It inherits all options of {@link TK.Circular} and {@link TK.DragValue}.
+ * It inherits all options of {@link Circular} and {@link DragValue}.
  *
- * @class TK.Knob
+ * @class Knob
  * 
- * @extends TK.Widget
+ * @extends Widget
  *
  * @param {Object} [options={ }] - An object containing initial options.
  * 
@@ -77,11 +81,11 @@ function module_range() {
  * @property {Number} [options.basis=300] - Distance to drag between <code>min</code> and <code>max</code>.
 
  */
-TK.Knob = TK.class({
+export const Knob = define_class({
     _class: "Knob",
-    Extends: TK.Widget,
-    _options: Object.assign(Object.create(TK.Widget.prototype._options), TK.Circular.prototype._options,
-                            TK.DragValue.prototype._options, {
+    Extends: Widget,
+    _options: Object.assign(Object.create(Widget.prototype._options), Circular.prototype._options,
+                            DragValue.prototype._options, {
         size: "number",
         hand: "object",
         margin: "number",
@@ -97,7 +101,7 @@ TK.Knob = TK.class({
         blind_angle: "number",
         reset: "number",
     }),
-    options: Object.assign({}, TK.Circular.prototype.options, {
+    options: Object.assign({}, Circular.prototype.options, {
         size: 100,
         hand: {width: 1, length: 12, margin: 24},
         margin: 13,
@@ -117,37 +121,37 @@ TK.Knob = TK.class({
         dblclick: dblclick,
     },
     initialize: function (options) {
-        TK.Widget.prototype.initialize.call(this, options);
+        Widget.prototype.initialize.call(this, options);
         options = this.options;
         var E, S;
         /**
-         * @member {HTMLDivElement} TK.Knob#element - The main DIV container.
+         * @member {HTMLDivElement} Knob#element - The main DIV container.
          *   Has class <code>toolkit-knob</code>.
          */
-        if (!(E = this.element)) this.element = E = TK.element("div")
-        TK.add_class(E, "toolkit-knob");
+        if (!(E = this.element)) this.element = E = element("div")
+        add_class(E, "toolkit-knob");
 
         /**
-         * @member {SVGImage} TK.Knob#svg - The main SVG image.
+         * @member {SVGImage} Knob#svg - The main SVG image.
          */
-        this.svg = S = TK.make_svg("svg");
+        this.svg = S = make_svg("svg");
         
-        var co = TK.object_and(options, TK.Circular.prototype._options);
-        co = TK.object_sub(co, TK.Widget.prototype._options);
+        var co = object_and(options, Circular.prototype._options);
+        co = object_sub(co, Widget.prototype._options);
         co.container = S;
 
         /**
-         * @member {TK.Circular} TK.Knob#circular - The {@link TK.Circular} module.
+         * @member {Circular} Knob#circular - The {@link Circular} module.
          */
-        this.circular = new TK.Circular(co);
+        this.circular = new Circular(co);
 
         this.widgetize(E, true, true, true);
         
         /**
-         * @member {TK.DragValue} TK.Knob#drag - Instance of {@link TK.DragValue} used for the
+         * @member {DragValue} Knob#drag - Instance of {@link DragValue} used for the
          *   interaction.
          */
-        this.drag = new TK.DragValue(this, {
+        this.drag = new DragValue(this, {
             node:    S,
             range:   module_range,
             direction: options.direction,
@@ -156,10 +160,10 @@ TK.Knob = TK.class({
             limit: true,
         });
         /**
-         * @member {TK.ScrollValue} TK.Knob#scroll - Instance of {@link TK.ScrollValue} used for the
+         * @member {ScrollValue} Knob#scroll - Instance of {@link ScrollValue} used for the
          *   interaction.
          */
-        this.scroll = new TK.ScrollValue(this, {
+        this.scroll = new ScrollValue(this, {
             node:    S,
             range:   module_range,
             limit: true,
@@ -180,7 +184,7 @@ TK.Knob = TK.class({
         this.drag.destroy();
         this.scroll.destroy();
         this.circular.destroy();
-        TK.Widget.prototype.destroy.call(this);
+        Widget.prototype.destroy.call(this);
     },
 
     redraw: function() {
@@ -192,23 +196,23 @@ TK.Knob = TK.class({
             this.svg.setAttribute("viewBox", format_viewbox(O.size, O.size));
         }
 
-        TK.Widget.prototype.redraw.call(this);
+        Widget.prototype.redraw.call(this);
     },
     /**
-     * This is an alias for {@link TK.Circular#add_label} of the internal
+     * This is an alias for {@link Circular#add_label} of the internal
      * circular instance.
      *
-     * @method TK.Knob#add_label
+     * @method Knob#add_label
      */
     add_label: function(x) {
         return this.circular.add_label(x);
     },
 
     /**
-     * This is an alias for {@link TK.Circular#remove_label} of the internal
+     * This is an alias for {@link Circular#remove_label} of the internal
      * circular instance.
      *
-     * @method TK.Knob#remove_label
+     * @method Knob#remove_label
      */
     remove_label: function(x) {
         this.circular.remove_label(x);
@@ -218,14 +222,13 @@ TK.Knob = TK.class({
         if (key === "base") {
             if (value === false) value = this.options.min;
         }
-        // TK.Circular does the snapping
-        if (!TK.Widget.prototype._options[key]) {
-            if (TK.Circular.prototype._options[key])
+        // Circular does the snapping
+        if (!Widget.prototype._options[key]) {
+            if (Circular.prototype._options[key])
                 value = this.circular.set(key, value);
-            if (TK.DragValue.prototype._options[key])
+            if (DragValue.prototype._options[key])
                 this.drag.set(key, value);
         }
-        return TK.Widget.prototype.set.call(this, key, value);
+        return Widget.prototype.set.call(this, key, value);
     },
 });
-})(this, this.TK);

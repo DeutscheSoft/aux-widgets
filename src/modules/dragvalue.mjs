@@ -16,8 +16,11 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+import { define_class } from '../widget_helpers.mjs';
+import { DragCapture } from './dragcapture.mjs';
+import { GlobalCursor } from '../implements/globalcursor.mjs';
+import { warn, add_class, remove_class } from '../helpers.mjs';
+import { S } from '../dom_scheduler.mjs';
 
 function start_drag(value) {
     if (!value) return;
@@ -28,7 +31,7 @@ function start_drag(value) {
     /**
      * Is fired when a user starts dragging.
      *
-     * @event TK.DragValue#startdrag
+     * @event DragValue#startdrag
      *
      * @param {DOMEvent} event - The native DOM event.
      */
@@ -88,7 +91,7 @@ function movecapture_abs(O, range, state) {
         dist = -state.vdistance()[1];
         break;
     default:
-        TK.warn("Unsupported direction:", O.direction);
+        warn("Unsupported direction:", O.direction);
     case "horizontal":
         dist = state.vdistance()[0];
         break;
@@ -137,7 +140,7 @@ function stop_drag(state, ev) {
     /**
      * Is fired when a user stops dragging.
      *
-     * @event TK.DragValue#stopdrag
+     * @event DragValue#stopdrag
      *
      * @param {DOMEvent} event - The native DOM event.
      */
@@ -151,22 +154,22 @@ function angle_diff(a, b) {
     var d = (Math.abs(a - b) + 360) % 360;
     return d > 180 ? 360 - d : d;
 }
-TK.DragValue = TK.class({
+export const DragValue = define_class({
     /**
-     * TK.DragValue enables dragging an element and setting a
-     * value according to the dragged distance. TK.DragValue is for example
-     * used in {@link TK.Knob} and {@link TK.ValueButton}.
+     * DragValue enables dragging an element and setting a
+     * value according to the dragged distance. DragValue is for example
+     * used in {@link Knob} and {@link ValueButton}.
      *
-     * @class TK.DragValue
+     * @class DragValue
      *
      * @param {Object} [options={ }] - An object containing initial options.
      *
      * @property {Element} options.node - The DOM node used for dragging.
      *   All DOM events are registered with this Element.
      * @property {Function} [options.range] - A function returning a
-     *  {@link TK.Range} object for
+     *  {@link Range} object for
      *  calculating the value. Returns its parent (usually having
-     *  {@link TK.Ranged}-features) by default.
+     *  {@link Ranged}-features) by default.
      * @property {Function} [options.events] - Returns an element firing the
      *   events <code>startdrag</code>, <code>dragging</code> and <code>stopdrag</code>.
      *   By default it returns <code>this.parent</code>.
@@ -180,7 +183,7 @@ TK.DragValue = TK.class({
      * @property {String} [options.direction="polar"] - Direction for changing the value.
      *   Can be <code>polar</code>, <code>vertical</code> or <code>horizontal</code>.
      * @property {Boolean} [options.active=true] - If false, dragging is deactivated.
-     * @property {Boolean} [options.cursor=false] - If true, a {@link TK.GlobalCursor} is set while dragging.
+     * @property {Boolean} [options.cursor=false] - If true, a {@link GlobalCursor} is set while dragging.
      * @property {Number} [options.blind_angle=20] - If options.direction is <code>polar</code>,
      *   this is the angle of separation between positive and negative value changes
      * @property {Number} [options.rotation=45] - Defines the angle of the center of the positive value
@@ -189,20 +192,20 @@ TK.DragValue = TK.class({
      * @property {Boolean} [options.reverse=false] - If true, the difference of pointer travel is inverted.
      * @property {Boolean} [options.limit=false] - Limit the returned value to min and max of the range.
      *
-     * @extends TK.Module
+     * @extends DragCapture
      *
-     * @mixes TK.GlobalCursor
+     * @mixes GlobalCursor
      */
     /**
      * Is fired while a user is dragging.
      *
-     * @event TK.DragValue#startdrag
+     * @event DragValue#startdrag
      *
      * @param {DOMEvent} event - The native DOM event.
      */
     _class: "DragValue",
-    Extends: TK.DragCapture,
-    Implements: TK.GlobalCursor,
+    Extends: DragCapture,
+    Implements: GlobalCursor,
     _options: {
         get: "function",
         set: "function",
@@ -247,9 +250,9 @@ TK.DragValue = TK.class({
         },
         movecapture: movecapture,
         startdrag: function(ev) {
-            TK.S.add(function() {
+            S.add(function() {
                 var O = this.options;
-                TK.add_class(O.classes || O.node, "toolkit-dragging");
+                add_class(O.classes || O.node, "toolkit-dragging");
                 if (O.cursor) {
                     if (O.direction === "vertical") {
                         this.global_cursor("row-resize");
@@ -260,9 +263,9 @@ TK.DragValue = TK.class({
             }.bind(this), 1);
         },
         stopdrag: function() {
-            TK.S.add(function() {
+            S.add(function() {
                 var O = this.options;
-                TK.remove_class(O.classes || O.node, "toolkit-dragging");
+                remove_class(O.classes || O.node, "toolkit-dragging");
 
                 if (O.cursor) {
                     if (O.direction === "vertical") {
@@ -275,11 +278,10 @@ TK.DragValue = TK.class({
         },
     },
     initialize: function (widget, options) {
-        TK.DragCapture.prototype.initialize.call(this, widget, options);
+        DragCapture.prototype.initialize.call(this, widget, options);
         this.start_pos = 0;
         var O = this.options;
         this.set("rotation", O.rotation);
         this.set("blind_angle", O.blind_angle);
     },
 });
-})(this, this.TK);

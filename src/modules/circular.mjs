@@ -16,12 +16,18 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function (w, TK) {
+import { define_class } from '../widget_helpers.mjs';
+import { FORMAT, error, empty, make_svg, add_class, get_style } from '../helpers.mjs';
+import { S } from '../dom_scheduler.mjs';
+import { Warning } from '../implements/warning.mjs';
+import { Ranged } from '../implements/ranged.mjs';
+import { ChildElement } from '../widget_helpers.mjs';
+import { Widget } from '../widgets/widget.mjs';
+
 function interpret_label(x) {
     if (typeof x === "object") return x;
     if (typeof x === "number") return { pos: x };
-    TK.error("Unsupported label type ", x);
+    error("Unsupported label type ", x);
 }
 var __rad = Math.PI / 180;
 function _get_coords(deg, inner, outer, pos) {
@@ -47,13 +53,13 @@ function _get_coords_single(deg, inner, pos) {
         y: Math.sin(deg) * inner + pos
     }
 }
-var format_path = TK.FORMAT("M %f,%f " +
+var format_path = FORMAT("M %f,%f " +
                             "A %f,%f 0 %d,%d %f,%f " +
                             "L %f,%f " +
                             "A %f,%f 0 %d,%d %f,%f z");
-var format_translate = TK.FORMAT("translate(%f, %f)");
-var format_translate_rotate = TK.FORMAT("translate(%f %f) rotate(%f %f %f)");
-var format_rotate = TK.FORMAT("rotate(%f %f %f)");
+var format_translate = FORMAT("translate(%f, %f)");
+var format_translate_rotate = FORMAT("translate(%f %f) rotate(%f %f %f)");
+var format_rotate = FORMAT("rotate(%f %f %f)");
 
 function draw_dots() {
     // depends on dots, dot, min, max, size
@@ -62,10 +68,10 @@ function draw_dots() {
     var dots = O.dots;
     var dot = O.dot;
     var angle = O.angle;
-    TK.empty(_dots);
+    empty(_dots);
     for (var i = 0; i < dots.length; i++) {
         var m = dots[i];
-        var r = TK.make_svg("rect", {"class": "toolkit-dot"});
+        var r = make_svg("rect", {"class": "toolkit-dot"});
         
         var length = m.length === void(0)
                    ? dot.length : m.length;
@@ -76,7 +82,7 @@ function draw_dots() {
         var pos    = Math.min(O.max, Math.max(O.min, m.pos));
         // TODO: consider adding them all at once
         _dots.appendChild(r);
-        if (m["class"]) TK.add_class(r, m["class"]);
+        if (m["class"]) add_class(r, m["class"]);
         if (m.color) r.style.fill = m.color;
                  
         r.setAttribute("x", O.size - length - margin);
@@ -91,7 +97,7 @@ function draw_dots() {
     }
     /**
      * Is fired when dots are (re)drawn.
-     * @event TK.Circular#dotsdrawn
+     * @event Circular#dotsdrawn
      */
     this.fire_event("dotsdrawn");
 }
@@ -101,7 +107,7 @@ function draw_markers() {
     var O = this.options;
     var markers = O.markers;
     var marker = O.marker;
-    TK.empty(this._markers);
+    empty(this._markers);
     
     var stroke  = this._get_stroke();
     var outer   = O.size / 2;
@@ -128,10 +134,10 @@ function draw_markers() {
         else
             to = Math.min(O.max, Math.max(O.min, m.to));
         
-        var s = TK.make_svg("path", {"class": "toolkit-marker"});
+        var s = make_svg("path", {"class": "toolkit-marker"});
         this._markers.appendChild(s);
         
-        if (m["class"]) TK.add_class(s, m["class"]);
+        if (m["class"]) add_class(s, m["class"]);
         if (m.color) s.style.fill = m.color;
         if (!m.nosnap) {
             from = this.snap(from);
@@ -144,7 +150,7 @@ function draw_markers() {
     }
     /**
      * Is fired when markers are (re)drawn.
-     * @event TK.Circular#markersdrawn
+     * @event Circular#markersdrawn
      */
     this.fire_event("markersdrawn");
 }
@@ -153,7 +159,7 @@ function draw_labels() {
     var _labels = this._labels;
     var O = this.options;
     var labels = O.labels;
-    TK.empty(this._labels);
+    empty(this._labels);
 
     if (!labels.length) return;
     
@@ -165,11 +171,11 @@ function draw_labels() {
 
     for (i = 0; i < labels.length; i++) {
         l = labels[i];
-        p = TK.make_svg("text", {"class": "toolkit-label",
+        p = make_svg("text", {"class": "toolkit-label",
                                  style: "dominant-baseline: central;"
         });
         
-        if (l["class"]) TK.add_class(p, l["class"]);
+        if (l["class"]) add_class(p, l["class"]);
         if (l.color) p.style.fill = l.color;
 
                  
@@ -185,7 +191,7 @@ function draw_labels() {
     }
     /* FORCE_RELAYOUT */
 
-    TK.S.add(function() {
+    S.add(function() {
         var i, p;
         for (i = 0; i < labels.length; i++) {
             l = labels[i];
@@ -205,14 +211,14 @@ function draw_labels() {
             positions[i] = format_translate(coords.x + mx, coords.y + my);
         }
 
-        TK.S.add(function() {
+        S.add(function() {
             for (i = 0; i < labels.length; i++) {
                 p = a[i];
                 p.setAttribute("transform", positions[i]);
             }
             /**
              * Is fired when labels are (re)drawn.
-             * @event TK.Circular#labelsdrawn
+             * @event Circular#labelsdrawn
              */
             this.fire_event("labelsdrawn");
         }.bind(this), 1);
@@ -252,14 +258,14 @@ function draw_slice(a_from, a_to, r_inner, r_outer, pos, slice) {
                            r_inner, r_inner, large, !sweep, from.x2, from.y2);
     slice.setAttribute("d", path);
 }
-TK.Circular = TK.class({
+export const Circular = define_class({
     /**
-     * TK.Circular is a SVG group element containing two paths for displaying
-     * numerical values in a circular manner. TK.Circular is able to draw labels,
-     * dots and markers and can show a hand. TK.Circular e.g. is implemented by
-     * {@link TK.Clock} to draw the hours, minutes and seconds.
+     * Circular is a SVG group element containing two paths for displaying
+     * numerical values in a circular manner. Circular is able to draw labels,
+     * dots and markers and can show a hand. Circular e.g. is implemented by
+     * {@link Clock} to draw the hours, minutes and seconds.
      * 
-     * @class TK.Circular
+     * @class Circular
      * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
@@ -317,16 +323,16 @@ TK.Circular = TK.class({
      *   are to be places. Members are the position <code>pos</code> in the value range and optionally
      *   <code>color</code>, <code>class</code> and any of the properties of <code>options.label</code>.
      * 
-     * @extends TK.Widget
+     * @extends Widget
      * 
-     * @mixes TK.Warning
+     * @mixes Warning
      * 
-     * @mixes TK.Ranged
+     * @mixes Ranged
      */
     _class: "Circular",
-    Extends: TK.Widget,
-    Implements: [TK.Warning, TK.Ranged],
-    _options: Object.assign(Object.create(TK.Widget.prototype._options), TK.Ranged.prototype._options, {
+    Extends: Widget,
+    Implements: [Warning, Ranged],
+    _options: Object.assign(Object.create(Widget.prototype._options), Ranged.prototype._options, {
         value: "number",
         value_hand: "number",
         value_ring: "number",
@@ -357,7 +363,7 @@ TK.Circular = TK.class({
         initialized: function() {
             // calculate the stroke here once. this happens before
             // the initial redraw
-            TK.S.after_frame(this._get_stroke.bind(this));
+            S.after_frame(this._get_stroke.bind(this));
             this.set("value", this.options.value);
         },
     },
@@ -386,35 +392,35 @@ TK.Circular = TK.class({
     },
     
     initialize: function (options) {
-        TK.Widget.prototype.initialize.call(this, options);
+        Widget.prototype.initialize.call(this, options);
         var E;
         
         /**
-         * @member {SVGImage} TK.Circular#element - The main SVG element.
+         * @member {SVGImage} Circular#element - The main SVG element.
          *      Has class <code>toolkit-circular</code> 
          */
-        this.element = E = TK.make_svg("g", {"class": "toolkit-circular"});
+        this.element = E = make_svg("g", {"class": "toolkit-circular"});
         this.widgetize(E, true, true, true);
         
         /**
-         * @member {SVGPath} TK.Circular#_base - The base of the ring.
+         * @member {SVGPath} Circular#_base - The base of the ring.
          *      Has class <code>toolkit-base</code> 
          */
-        this._base = TK.make_svg("path", {"class": "toolkit-base"});
+        this._base = make_svg("path", {"class": "toolkit-base"});
         E.appendChild(this._base);
         
         /**
-         * @member {SVGPath} TK.Circular#_value - The ring showing the value.
+         * @member {SVGPath} Circular#_value - The ring showing the value.
          *      Has class <code>toolkit-value</code> 
          */
-        this._value = TK.make_svg("path", {"class": "toolkit-value"});
+        this._value = make_svg("path", {"class": "toolkit-value"});
         E.appendChild(this._value);
         
         /**
-         * @member {SVGRect} TK.Circular#_hand - The hand of the knob.
+         * @member {SVGRect} Circular#_hand - The hand of the knob.
          *      Has class <code>toolkit-hand</code> 
          */
-        this._hand = TK.make_svg("rect", {"class": "toolkit-hand"});
+        this._hand = make_svg("rect", {"class": "toolkit-hand"});
         E.appendChild(this._hand);
 
         if (this.options.labels)
@@ -424,11 +430,11 @@ TK.Circular = TK.class({
     resize: function () {
         this.invalid.labels = true;
         this.trigger_draw();
-        TK.Widget.prototype.resize.call(this);
+        Widget.prototype.resize.call(this);
     },
     
     redraw: function () {
-        TK.Widget.prototype.redraw.call(this);
+        Widget.prototype.redraw.call(this);
         var I = this.invalid;
         var O = this.options;
         var E = this.element;
@@ -503,12 +509,12 @@ TK.Circular = TK.class({
         this._markers.remove();
         this._base.remove();
         this._value.remove();
-        TK.Widget.prototype.destroy.call(this);
+        Widget.prototype.destroy.call(this);
     },
     _get_stroke: function () {
         if (this.hasOwnProperty("_stroke")) return this._stroke;
-        var strokeb = parseInt(TK.get_style(this._base, "stroke-width")) || 0;
-        var strokev = parseInt(TK.get_style(this._value, "stroke-width")) || 0;
+        var strokeb = parseInt(get_style(this._base, "stroke-width")) || 0;
+        var strokev = parseInt(get_style(this._value, "stroke-width")) || 0;
         this._stroke = Math.max(strokeb, strokev);
         return this._stroke;
     },
@@ -516,7 +522,7 @@ TK.Circular = TK.class({
     /**
      * Adds a label.
      *
-     * @method TK.Circular#add_label
+     * @method Circular#add_label
      * @param label - The label.
      * @returns label
      */
@@ -540,7 +546,7 @@ TK.Circular = TK.class({
     /**
      * Removes a label.
      *
-     * @method TK.Circular#remove_label
+     * @method Circular#remove_label
      * @param label - The label.
      * @returns label
      */
@@ -582,43 +588,42 @@ TK.Circular = TK.class({
             break;
         }
 
-        return TK.Widget.prototype.set.call(this, key, value);
+        return Widget.prototype.set.call(this, key, value);
     }
 });
 /**
- * @member {SVGGroup} TK.Circular#_markers - A group containing all markers.
+ * @member {SVGGroup} Circular#_markers - A group containing all markers.
  *      Has class <code>toolkit-markers</code> 
  */
-TK.ChildElement(TK.Circular, "markers", {
+ChildElement(Circular, "markers", {
     //option: "markers",
     //display_check: function(v) { return !!v.length; },
     show: true,
     create: function() {
-        return TK.make_svg("g", {"class": "toolkit-markers"});
+        return make_svg("g", {"class": "toolkit-markers"});
     },
 });
 /** 
- * @member {SVGGroup} TK.Circular#_dots - A group containing all dots.
+ * @member {SVGGroup} Circular#_dots - A group containing all dots.
  *      Has class <code>toolkit-dots</code> 
  */
-TK.ChildElement(TK.Circular, "dots", {
+ChildElement(Circular, "dots", {
     //option: "dots",
     //display_check: function(v) { return !!v.length; },
     show: true,
     create: function() {
-        return TK.make_svg("g", {"class": "toolkit-dots"});
+        return make_svg("g", {"class": "toolkit-dots"});
     },
 });
 /**
- * @member {SVGGroup} TK.Circular#_labels - A group containing all labels.
+ * @member {SVGGroup} Circular#_labels - A group containing all labels.
  *      Has class <code>toolkit-labels</code> 
  */
-TK.ChildElement(TK.Circular, "labels", {
+ChildElement(Circular, "labels", {
     //option: "labels",
     //display_check: function(v) { return !!v.length; },
     show: true,
     create: function() {
-        return TK.make_svg("g", {"class": "toolkit-labels"});
+        return make_svg("g", {"class": "toolkit-labels"});
     },
 });
-})(this, this.TK);
