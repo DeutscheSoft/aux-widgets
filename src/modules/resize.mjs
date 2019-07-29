@@ -16,8 +16,12 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+import { define_class } from './../widget_helpers.mjs';
+import { add_class, remove_class } from '../helpers.mjs';
+import { Range } from './range.mjs';
+import { DragValue } from './dragvalue.mjs';
+import { Base } from '../implements/base.mjs';
+
 function dragstart(e, drag) {
     var O = this.options;
     if (!O.active) return;
@@ -31,7 +35,7 @@ function dragstart(e, drag) {
     /**
      * Is fired when resizing starts.
      * 
-     * @event TK.Resize#resizestart
+     * @event Resize#resizestart
      * 
      * @param {DOMEvent} event - The native DOM event.
      */
@@ -42,7 +46,7 @@ function dragend(e, drag) {
     /**
      * Is fired when resizing stops.
      * 
-     * @event TK.Resize#resizestop
+     * @event Resize#resizestop
      * 
      * @param {DOMEvent} event - The native DOM event.
      */
@@ -63,7 +67,7 @@ function dragging(e, drag) {
     /**
      * Is fired when resizing is in progress.
      * 
-     * @event TK.Resize#resizing
+     * @event Resize#resizing
      * 
      * @param {DOMEvent} event - The native DOM event.
      * @param {int} width - The new width of the element.
@@ -75,8 +79,8 @@ function set_handle() {
     var h = this.options.handle;
     if (this.drag)
         this.drag.destroy();
-    var range = new TK.Range({});
-    this.drag = new TK.DragValue(this, { node: h,
+    var range = new Range({});
+    this.drag = new DragValue(this, { node: h,
         range: function () { return range; },
         onStartdrag  : dragstart.bind(this),
         onStopdrag   : dragend.bind(this),
@@ -84,12 +88,12 @@ function set_handle() {
     });
 }
 /**
- * TK.Resize allows resizing of elements. It does that by continuously resizing an
+ * Resize allows resizing of elements. It does that by continuously resizing an
  * element while the user drags a handle.
  *
- * @class TK.Resize
+ * @class Resize
  * 
- * @extends TK.Base
+ * @extends Base
  * 
  * @param {Object} [options={ }] - An object containing initial options.
  * 
@@ -102,10 +106,10 @@ function set_handle() {
  * @property {Object} [options.max={x: -1, y: -1}] - Object containing x
  *   and y determining maximum size. A value of -1 means no maximum.
  */
-TK.Resize = TK.class({
-    // TK.Resize enables resizing of elements on the screen.
+export const Resize = define_class({
+    // Resize enables resizing of elements on the screen.
     _class: "Resize",
-    Extends: TK.Base,
+    Extends: Base,
     _options: {
         handle : "object",
         active : "boolean",
@@ -121,7 +125,7 @@ TK.Resize = TK.class({
         max       : {x: -1, y: -1}
     },
     initialize: function (options) {
-        TK.Base.prototype.initialize.call(this, options);
+        Base.prototype.initialize.call(this, options);
         this.set("handle", this.options.handle);
     },
     // GETTERS & SETTERS
@@ -130,7 +134,6 @@ TK.Resize = TK.class({
             if (!value) value = this.options.node;
             set_handle.call(this);
         }
-        TK.Base.prototype.set.call(this, key, value);
+        Base.prototype.set.call(this, key, value);
     }
 });
-})(this, this.TK);

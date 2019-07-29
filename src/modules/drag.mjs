@@ -16,8 +16,11 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+import { define_class } from './../widget_helpers.mjs';
+import { Range } from './range.mjs';
+import { DragValue } from './dragvalue.mjs';
+import { Base } from '../implements/base.mjs';
+import { add_class, remove_class } from '../helpers.mjs';
     
 function extract_matrix (t) {
     var a = t.indexOf("matrix(");
@@ -46,11 +49,11 @@ function startdrag(e, drag) {
         this._xpos = O.node.offsetLeft;
         this._ypos = O.node.offsetTop;
     }
-    TK.add_class(O.node, "toolkit-dragging");
+    add_class(O.node, "toolkit-dragging");
     /** 
      * The user started dragging this item.
      * 
-     * @event TK.Drag#dragstart
+     * @event Drag#dragstart
      * 
      * @param {DOMEvent} event - The native DOM event.
      */
@@ -58,11 +61,11 @@ function startdrag(e, drag) {
 function stopdrag(e, drag) {
     if (!this.options.active) return;
     if (e.button !== void(0) && e.button > 0) return;
-    TK.remove_class(this.options.node, "toolkit-dragging");
+    remove_class(this.options.node, "toolkit-dragging");
     /**
      * The user stopped dragging this item.
      * 
-     * @event TK.Drag#dragstop
+     * @event Drag#dragstop
      * 
      * @param {DOMEvent} event - The native DOM event.
      */
@@ -96,7 +99,7 @@ function dragging(e, drag) {
     /**
      * The user is dragging this item.
      *
-     * @event TK.Drag#dragging
+     * @event Drag#dragging
      * 
      * @param {DOMEvent} event - The native DOM event.
      */
@@ -105,8 +108,8 @@ function set_handle() {
     var h = this.options.handle;
     if (this.drag)
         this.drag.destroy();
-    var range = new TK.Range({});
-    this.drag = new TK.DragValue(this, {
+    var range = new Range({});
+    this.drag = new DragValue(this, {
         node: h,
         range: function () { return range; },
         get: function() { return 0; },
@@ -114,7 +117,7 @@ function set_handle() {
     });
 }
 /**
- * TK.Drag enables dragging of absolutely positioned
+ * Drag enables dragging of absolutely positioned
  * elements on the screen.
  * 
  * @param {Object} [options={ }] - An object containing initial options.
@@ -127,13 +130,13 @@ function set_handle() {
  * @property {Number} [options.initial=2] - Number of pixels the user has to move until dragging starts.
  * @property {Boolean} [options.transform=false] - Use CSS transformations instead of absolute positioning.
  * 
- * @extends TK.Base
+ * @extends Base
  * 
- * @class TK.Drag
+ * @class Drag
  */
-TK.Drag = TK.class({
+export const Drag = define_class({
     _class: "Drag",
-    Extends: TK.Base,
+    Extends: Base,
     _options: {
         node    : "object",
         handle  : "object",
@@ -158,7 +161,7 @@ TK.Drag = TK.class({
         stopdrag: stopdrag,
     },
     initialize: function (options) {
-        TK.Base.prototype.initialize.call(this, options);
+        Base.prototype.initialize.call(this, options);
         this.set("handle", this.options.handle);
         this.set("node", this.options.node);
     },
@@ -169,7 +172,7 @@ TK.Drag = TK.class({
         if (key === "handle" && !value)
             value = this.options.node;
 
-        TK.Base.prototype.set.call(this, key, value);
+        Base.prototype.set.call(this, key, value);
 
         if (key === "handle")
             set_handle.call(this);
@@ -177,4 +180,3 @@ TK.Drag = TK.class({
             this.drag.set("initial", value);
     }
 });
-})(this, this.TK);
