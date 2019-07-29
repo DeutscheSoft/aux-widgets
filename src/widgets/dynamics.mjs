@@ -16,27 +16,29 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+import { define_class } from './../widget_helpers.mjs';
+import { Chart } from './chart.mjs';
+import { error, add_class, remove_class, css_space, inner_width, inner_height, warn } from '../helpers.mjs';
+
 function range_set(value, key) {
     this.range_x.set(key, value);
     this.range_y.set(key, value);
 }
-TK.Dynamics = TK.class({
+export const Dynamics = define_class({
     /**
-     * TK.Dynamics are based on Charts and display the characteristics of dynamic
-     * processors. They are square widgets drawing a TK.Grid automatically based on
+     * Dynamics are based on Charts and display the characteristics of dynamic
+     * processors. They are square widgets drawing a Grid automatically based on
      * the range.
      *
-     * @class TK.Dynamics
+     * @class Dynamics
      * 
-     * @extends TK.Chart
+     * @extends Chart
      * 
      * @property {Object} options
      * 
      * @param {Number} [options.min=-96] - Minimum decibels to display.
      * @param {Number} [options.max=24] - Maximum decibels to display.
-     * @param {String} [options.scale="linear"] - Scale of the display, see {@link TK.Range} for details.
+     * @param {String} [options.scale="linear"] - Scale of the display, see {@link Range} for details.
      * @param {String} [options.type=false] - Type of the dynamics: <code>compressor</code>, <code>expander</code>, <code>gate</code>, <code>limiter</code> or <code>false</code> to draw your own graph.
      * @param {Number} [options.threshold=0] - Threshold of the dynamics.
      * @param {Number} [options.ratio=1] - Ratio of the dynamics.
@@ -44,12 +46,12 @@ TK.Dynamics = TK.class({
      * @param {Number} [options.range=0] - Range of the dynamics. Only used in type <code>expander</code>. The maximum gain reduction.
      * @param {Number} [options.gain=0] - Input gain of the dynamics.
      * @param {Number} [options.reference=0] - Input reference of the dynamics.
-     * @param {Function} [options.grid_labels=function (val) { return val + (!val ? "dB":""); }] - Callback to format the labels of the {@link TK.Grid}.
+     * @param {Function} [options.grid_labels=function (val) { return val + (!val ? "dB":""); }] - Callback to format the labels of the {@link Grid}.
      * @param {Number} [options.db_grid=12] - Draw a grid line every [n] decibels.
      */
     _class: "Dynamics",
-    Extends: TK.Chart,
-    _options: Object.assign(Object.create(TK.Chart.prototype._options), {
+    Extends: Chart,
+    _options: Object.assign(Object.create(Chart.prototype._options), {
         size: "number",
         min:  "number",
         max:  "number",
@@ -83,7 +85,7 @@ TK.Dynamics = TK.class({
     },
     static_events: {
         set_size: function(value) {
-            TK.error("using deprecated 'size' option");
+            error("using deprecated 'size' option");
             this.set("width", value);
             this.set("height", value);
         },
@@ -92,19 +94,19 @@ TK.Dynamics = TK.class({
         set_scale: range_set,
     },
     initialize: function (options) {
-        TK.Chart.prototype.initialize.call(this, options, true);
+        Chart.prototype.initialize.call(this, options, true);
         var O = this.options;
         /**
-         * @member {HTMLDivElement} TK.Dynamics#element - The main DIV container.
+         * @member {HTMLDivElement} Dynamics#element - The main DIV container.
          *   Has class <code>toolkit-dynamics</code>.
          */
-        TK.add_class(this.element, "toolkit-dynamics");
+        add_class(this.element, "toolkit-dynamics");
         this.set("scale", O.scale);
         if (O.size) this.set("size", O.size);
         this.set("min", O.min);
         this.set("max", O.max);
         /**
-         * @member {TK.Graph} TK.Dynamics#steady - The graph drawing the zero line. Has class <code>toolkit-steady</code> 
+         * @member {Graph} Dynamics#steady - The graph drawing the zero line. Has class <code>toolkit-steady</code> 
          */
         this.steady = this.add_graph({
             dots: [{x:O.min, y:O.min},
@@ -118,7 +120,7 @@ TK.Dynamics = TK.class({
         var O = this.options;
         var I = this.invalid;
         
-        TK.Chart.prototype.redraw.call(this);
+        Chart.prototype.redraw.call(this);
 
         if (I.validate("size", "min", "max", "scale")) {
             var grid_x = [];
@@ -151,8 +153,8 @@ TK.Dynamics = TK.class({
         
         if (I.type) {
             if (O._last_type)
-                TK.remove_class(this.element, "toolkit-" + O._last_type);
-            TK.add_class(this.element, "toolkit-" + O.type);
+                remove_class(this.element, "toolkit-" + O._last_type);
+            add_class(this.element, "toolkit-" + O.type);
         }
 
         if (I.validate("ratio", "threshold", "range", "makeup", "gain", "reference")) {
@@ -166,11 +168,11 @@ TK.Dynamics = TK.class({
         var S = this.svg;
 
         /* bypass the Chart resize logic here */
-        TK.Widget.prototype.resize.call(this);
+        Chart.prototype.resize.call(this);
 
-        var tmp = TK.css_space(S, "border", "padding");
-        var w = TK.inner_width(E) - tmp.left - tmp.right;
-        var h = TK.inner_height(E) - tmp.top - tmp.bottom;
+        var tmp = css_space(S, "border", "padding");
+        var w = inner_width(E) - tmp.left - tmp.right;
+        var h = inner_height(E) - tmp.top - tmp.bottom;
 
         var s = Math.min(h, w);
 
@@ -274,14 +276,13 @@ TK.Dynamics = TK.class({
                             y: max + makeup});
                 break;
             default:
-                TK.warn("Unsupported type", O.type);
+                warn("Unsupported type", O.type);
         }
         this.graph.set("dots", curve);
     },
     set: function (key, val) {
         if (key == "type")
             this.options._last_type = this.options.type;
-        return TK.Chart.prototype.set.call(this, key, val);
+        return Chart.prototype.set.call(this, key, val);
     },
 });
-})(this, this.TK);
