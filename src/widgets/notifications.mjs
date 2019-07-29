@@ -16,28 +16,30 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function (w, TK) {
+import { define_class } from '../widget_helpers.mjs';
+import { Container } from './container.mjs';
+import { Notification } from './notification.mjs';
+import { add_class } from '../helpers.mjs';
 
 /**
- * TK.Notifications is a {@link TK.Container} for displaying {@link TK.Notification}
+ * Notifications is a {@link Container} for displaying {@link Notification}
  * popups.
  * 
- * @class TK.Notifications
+ * @class Notifications
  * 
- * @extends TK.Container
+ * @extends Container
  * 
  * @param {Object} [options={ }] - An object containing initial options.
  * 
- * @property {String} [options.stack="end"] - Where does a new {@link TK.Notification} appear - "end" or "start"
+ * @property {String} [options.stack="end"] - Where does a new {@link Notification} appear - "end" or "start"
  */
 
-TK.Notifications = TK.class({
+export const Notifications = define_class({
     
     _class: "Notifications",
-    Extends: TK.Container,
+    Extends: Container,
     
-    _options: Object.assign(TK.Container.prototype._options, {
+    _options: Object.assign(Container.prototype._options, {
       stack: "string",
     }),
     options: {
@@ -45,20 +47,20 @@ TK.Notifications = TK.class({
     },
     
     initialize: function (options) {
-        TK.Container.prototype.initialize.call(this, options);
-        TK.add_class(this.element, "toolkit-notifications");
+        Container.prototype.initialize.call(this, options);
+        add_class(this.element, "toolkit-notifications");
     },
     
     notify: function (options) {
     /**
      * Resets the peak label.
      * 
-     * @method TK.Notification#notify
+     * @method Notification#notify
      * 
-     * @param {Object} [options={ }] - An object containing initial options. - Options for the {@link TK.Notification} to add
+     * @param {Object} [options={ }] - An object containing initial options. - Options for the {@link Notification} to add
      * 
      */
-      var n = new TK.Notification(options);
+      var n = new Notification(options);
       this.add_child(n);
       if (this.options.stack == "start")
         this.element.insertBefore(n.element, this.element.firstChild);
@@ -67,5 +69,3 @@ TK.Notifications = TK.class({
       return n;
     }
 });
-    
-})(this, this.TK);

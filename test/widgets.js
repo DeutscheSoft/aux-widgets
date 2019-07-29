@@ -15,6 +15,7 @@ import { ValueKnob } from '../src/widgets/valueknob.mjs';
 import { MeterBase } from '../src/widgets/meterbase.mjs';
 import { LevelMeter } from '../src/widgets/levelmeter.mjs';
 import { MultiMeter } from '../src/widgets/multimeter.mjs';
+import { Notifications } from '../src/widgets/notifications.mjs';
 
 import { compare, object_minus } from './helpers.mjs';
 
@@ -37,6 +38,7 @@ describe('Widgets', () => {
        new MeterBase();
        new LevelMeter();
        new MultiMeter();
+       new Notifications();
 
        done();
     });

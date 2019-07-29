@@ -16,8 +16,13 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function (w, TK) {
+import { define_class } from '../widget_helpers.mjs';
+import { ChildWidget } from '../child_widget.mjs';
+import { Container } from './container.mjs';
+import { Button } from './button.mjs';
+import { Icon } from './icon.mjs';
+import { add_class } from '../helpers.mjs';
+import { S } from '../dom_scheduler.mjs';
 
 function close_clicked (e) {
   this.fire_event("closeclicked");
@@ -25,7 +30,7 @@ function close_clicked (e) {
 }
 
 function after_hide() {
-  TK.S.after_frame(function() {
+  S.after_frame(function() {
     if (this.is_destructed()) return;
     this.destroy();
   }.bind(this));
@@ -43,11 +48,11 @@ function timeout() {
 }
 
 /**
- * TK.Notification is a {@link TK.Container} to be used in {@link TK.Notifications}.
+ * Notification is a {@link Container} to be used in {@link Notifications}.
  * 
- * @class TK.Notification
+ * @class Notification
  * 
- * @extends TK.Container
+ * @extends Container
  * 
  * @param {Object} [options={ }] - An object containing initial options.
  * 
@@ -57,12 +62,12 @@ function timeout() {
  * @property {Boolean} [options.show_close=false] - Show a close button.
  */
  
-TK.Notification = TK.class({
+export const Notification = define_class({
     
   _class: "Notification",
-  Extends: TK.Container,
+  Extends: Container,
   
-  _options: Object.assign(TK.Container.prototype._options, {
+  _options: Object.assign(Container.prototype._options, {
     timeout: "number",
     icon: "string",
     show_close: "boolean",
@@ -74,9 +79,9 @@ TK.Notification = TK.class({
   },
   
   initialize: function (options) {
-    TK.Container.prototype.initialize.call(this, options);
+    Container.prototype.initialize.call(this, options);
     var O = this.options;
-    TK.add_class(this.element, "toolkit-notification");
+    add_class(this.element, "toolkit-notification");
     this._timeout = void(0);
     this.set("timeout", O.timeout);
   },
@@ -84,7 +89,7 @@ TK.Notification = TK.class({
     var I = this.invalid;
     var O = this.options;
     var i = I.content;
-    TK.Container.prototype.redraw.call(this);
+    Container.prototype.redraw.call(this);
     if (i && this.icon)
       this.element.insertBefore(this.icon.element, this.element.firstChild);
     if (i && this.close)
@@ -95,10 +100,10 @@ TK.Notification = TK.class({
   destroy: function() {
     if (this._timeout !== void(0))
       window.clearTimeout(this._timeout);
-    TK.Container.prototype.destroy.call(this);
+    Container.prototype.destroy.call(this);
   },
   set: function(key, val) {
-    TK.Container.prototype.set.call(this, key, val);
+    Container.prototype.set.call(this, key, val);
     if (key === "timeout") {
       if (this._timeout !== void(0))
         window.clearTimeout(this._timeout);
@@ -109,10 +114,10 @@ TK.Notification = TK.class({
 });
 
 /**
- * @member {TK.Button} TK.Notification#close - The TK.Button for closing the notification.
+ * @member {Button} Notification#close - The Button for closing the notification.
  */
-TK.ChildWidget(TK.Notification, "close", {
-  create: TK.Button,
+ChildWidget(Notification, "close", {
+  create: Button,
   show: false,
   toggle_class: true,
   static_events: {
@@ -125,10 +130,10 @@ TK.ChildWidget(TK.Notification, "close", {
 });
 
 /**
- * @member {TK.Icon} TK.Notification#icon - The TK.Icon widget.
+ * @member {Icon} Notification#icon - The Icon widget.
  */
-TK.ChildWidget(TK.Notification, "icon", {
-  create: TK.Icon,
+ChildWidget(Notification, "icon", {
+  create: Icon,
   show: false,
   toggle_class: true,
   option: "icon",
@@ -136,5 +141,3 @@ TK.ChildWidget(TK.Notification, "icon", {
     icon: "icon",
   },
 });
-
-})(this, this.TK);
