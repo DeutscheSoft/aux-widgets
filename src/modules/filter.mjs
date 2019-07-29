@@ -333,8 +333,6 @@ export const Filter = define_class({
      * @mixin Filter
      * 
      * @extends Base
-     * 
-     * @mixes Notes
      */
      
      /**
