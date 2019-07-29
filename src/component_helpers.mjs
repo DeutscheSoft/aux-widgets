@@ -242,7 +242,7 @@ export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove
       if (parent instanceof ParentWidget)
       {
         this.parent = parent;
-        parent.add_band(this.widget);
+        append_cb(parent, this.widget);
       }
       else
       {
@@ -257,7 +257,6 @@ export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove
       if (parent)
       {
         remove_cb(parent, this.widget);
-        parent.remove_child(this.widget);
         this.parent = null;
       }
     }
