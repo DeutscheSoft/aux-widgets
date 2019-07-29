@@ -16,8 +16,18 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function (w, TK) {
+import { define_class, ChildElement, add_static_event } from '../widget_helpers.mjs';
+import { ChildWidget } from '../child_widget.mjs';
+import { Container } from './container.mjs';
+import { Value } from './value.mjs';
+import { ValueKnob } from './valueknob.mjs';
+import { Button } from './button.mjs';
+import { Colors } from './colors.mjs';
+import { Range } from '../modules/range.mjs';
+import { DragValue } from '../modules/dragvalue.mjs';
+import {
+    FORMAT, add_class
+  } from '../helpers.mjs';
 
 var color_options = [ "rgb", "hsl", "hex", "hue", "saturation", "lightness", "red", "green", "blue" ];
 
@@ -46,7 +56,7 @@ var cancel = function () {
     /**
      * Is fired whenever the cancel button gets clicked or ESC is hit on input.
      * 
-     * @event TK.ColorPicker#cancel
+     * @event ColorPicker#cancel
      */
     fevent.call(this, "cancel");
 }
@@ -54,7 +64,7 @@ var apply = function () {
     /**
      * Is fired whenever the apply button gets clicked or return is hit on input.
      * 
-     * @event TK.ColorPicker#apply
+     * @event ColorPicker#apply
      * @param {object} colors - Object containing all color objects: `rgb`, `hsl`, `hex`, `hue`, `saturation`, `lightness`, `red`, `green`, `blue`
      */
     fevent.call(this, "apply", true);
@@ -104,21 +114,21 @@ function set_atoms (key, value) {
 
 
 /**
- * TK.ColorPicker provides a collection of widgets to select a color in
+ * ColorPicker provides a collection of widgets to select a color in
  * RGB or HSL color space.
  * 
- * @implements TK.Colors
+ * @implements Colors
  * 
  */
 
 
-TK.ColorPicker = TK.class({
+export const ColorPicker = define_class({
     
     _class: "ColorPicker",
-    Extends: TK.Container,
-    Implements: [TK.Colors],
+    Extends: Container,
+    Implements: [Colors],
     
-    _options: Object.assign(Object.create(TK.Container.prototype._options), {
+    _options: Object.assign(Object.create(Container.prototype._options), {
         hsl: "object",
         rgb: "object",
         hex: "string",
@@ -141,23 +151,25 @@ TK.ColorPicker = TK.class({
         blue: 0,
     },
     initialize: function (options) {
-        TK.Container.prototype.initialize.call(this, options);
+        Container.prototype.initialize.call(this, options);
+        options = this.options;
+
         var E = this.element;
-        /** @member {HTMLDivElement} TK.Label#element - The main DIV container.
+        /** @member {HTMLDivElement} Label#element - The main DIV container.
          * Has class <code>toolkit-color-picker-hsl</code>.
          */
-        TK.add_class(E, "toolkit-color-picker");
+        add_class(E, "toolkit-color-picker");
         
-        this.range_x = new TK.Range({
+        this.range_x = new Range({
             min: 0,
             max: 1,
         });
-        this.range_y = new TK.Range({
+        this.range_y = new Range({
             min: 0,
             max: 1,
             reverse: true,
         });
-        this.drag_x = new TK.DragValue(this, {
+        this.drag_x = new DragValue(this, {
             range: (function () { return this.range_x; }).bind(this),
             get: function () { return this.parent.options.hue; },
             set: function (v) { this.parent.userset("hue", this.parent.range_x.snap(v)); },
@@ -169,7 +181,7 @@ TK.ColorPicker = TK.class({
                 this.parent.set("hue", this.options.range().px2val(x));
             }
         });
-        this.drag_y = new TK.DragValue(this, {
+        this.drag_y = new DragValue(this, {
             range: (function () { return this.range_y; }).bind(this),
             get: function () { return this.parent.options.lightness; },
             set: function (v) { this.parent.userset("lightness", this.parent.range_y.snap(v)); },
@@ -182,12 +194,6 @@ TK.ColorPicker = TK.class({
             }
         });
         
-        if (options.rgb)
-            this.set("rgb", options.rgb);
-        if (options.hex)
-            this.set("hex", options.hex);
-        if (options.hsl)
-            this.set("hsl", options.hsl);
     },
     resize: function () {
         var rect = this._canvas.getBoundingClientRect();
@@ -195,7 +201,7 @@ TK.ColorPicker = TK.class({
         this.range_y.set("basis", rect.height);
     },
     redraw: function () {
-        TK.Container.prototype.redraw.call(this);
+        Container.prototype.redraw.call(this);
         var I = this.invalid;
         var O = this.options;
         var E = this.element;
@@ -255,11 +261,11 @@ TK.ColorPicker = TK.class({
             }
             set_atoms.call(this, key, value);
         }
-        return TK.Container.prototype.set.call(this, key, value);
+        return Container.prototype.set.call(this, key, value);
     }
 });
 
-TK.ChildElement(TK.ColorPicker, "canvas", {
+ChildElement(ColorPicker, "canvas", {
     show: true,
     append: function () {
         this.element.appendChild(this._canvas);
@@ -267,21 +273,21 @@ TK.ChildElement(TK.ColorPicker, "canvas", {
         this.drag_y.set("node", this._canvas);
     },
 });
-TK.ChildElement(TK.ColorPicker, "grayscale", {
+ChildElement(ColorPicker, "grayscale", {
     show: true,
     append: function () {
         this._canvas.appendChild(this._grayscale);
     },
 });
-TK.ChildElement(TK.ColorPicker, "indicator", {
+ChildElement(ColorPicker, "indicator", {
     show: true,
     append: function () {
         this._canvas.appendChild(this._indicator);
     },
 });
 
-TK.ChildWidget(TK.ColorPicker, "hex", {
-    create: TK.Value,
+ChildWidget(ColorPicker, "hex", {
+    create: Value,
     show: true,
     static_events: {
         "userset": function (key, val) {
@@ -291,7 +297,7 @@ TK.ChildWidget(TK.ColorPicker, "hex", {
         "paste": function (e) { checkinput.call(this.parent, e); },
     },
     default_options: {
-        format: TK.FORMAT("%s"),
+        format: FORMAT("%s"),
         "class": "toolkit-hex",
         set: function (v) {
             var p=0, tmp;
@@ -315,8 +321,8 @@ TK.ChildWidget(TK.ColorPicker, "hex", {
     inherit_options: true,
 });
 
-TK.ChildWidget(TK.ColorPicker, "hue", {
-    create: TK.ValueKnob,
+ChildWidget(ColorPicker, "hue", {
+    create: ValueKnob,
     option: "show_hsl",
     show: true,
     static_events: {
@@ -336,8 +342,8 @@ TK.ChildWidget(TK.ColorPicker, "hue", {
     inherit_options: true,
     blacklist_options: ["x", "y", "value"],
 });
-TK.ChildWidget(TK.ColorPicker, "saturation", {
-    create: TK.ValueKnob,
+ChildWidget(ColorPicker, "saturation", {
+    create: ValueKnob,
     show: true,
     static_events: {
         "userset": function (key, val) {
@@ -356,8 +362,8 @@ TK.ChildWidget(TK.ColorPicker, "saturation", {
     inherit_options: true,
     blacklist_options: ["x", "y", "value"],
 });
-TK.ChildWidget(TK.ColorPicker, "lightness", {
-    create: TK.ValueKnob,
+ChildWidget(ColorPicker, "lightness", {
+    create: ValueKnob,
     option: "show_hsl",
     show: true,
     static_events: {
@@ -378,8 +384,8 @@ TK.ChildWidget(TK.ColorPicker, "lightness", {
     blacklist_options: ["x", "y", "value"],
 });
 
-TK.ChildWidget(TK.ColorPicker, "red", {
-    create: TK.ValueKnob,
+ChildWidget(ColorPicker, "red", {
+    create: ValueKnob,
     option: "show_rgb",
     show: true,
     static_events: {
@@ -402,8 +408,8 @@ TK.ChildWidget(TK.ColorPicker, "red", {
     inherit_options: true,
     blacklist_options: ["x", "y", "value"],
 });
-TK.ChildWidget(TK.ColorPicker, "green", {
-    create: TK.ValueKnob,
+ChildWidget(ColorPicker, "green", {
+    create: ValueKnob,
     option: "show_rgb",
     show: true,
     static_events: {
@@ -426,8 +432,8 @@ TK.ChildWidget(TK.ColorPicker, "green", {
     inherit_options: true,
     blacklist_options: ["x", "y", "value"],
 });
-TK.ChildWidget(TK.ColorPicker, "blue", {
-    create: TK.ValueKnob,
+ChildWidget(ColorPicker, "blue", {
+    create: ValueKnob,
     option: "show_rgb",
     show: true,
     static_events: {
@@ -450,8 +456,8 @@ TK.ChildWidget(TK.ColorPicker, "blue", {
     inherit_options: true,
     blacklist_options: ["x", "y", "value"],
 });
-TK.ChildWidget(TK.ColorPicker, "apply", {
-    create: TK.Button,
+ChildWidget(ColorPicker, "apply", {
+    create: Button,
     show: true,
     static_events: {
         "click": function () { apply.call(this.parent); },
@@ -461,8 +467,8 @@ TK.ChildWidget(TK.ColorPicker, "apply", {
         "class": "toolkit-apply",
     },
 });
-TK.ChildWidget(TK.ColorPicker, "cancel", {
-    create: TK.Button,
+ChildWidget(ColorPicker, "cancel", {
+    create: Button,
     show: true,
     static_events: {
         "click": function () { cancel.call(this.parent); },
@@ -472,5 +478,11 @@ TK.ChildWidget(TK.ColorPicker, "cancel", {
         "class" : "toolkit-cancel",
     },
 });
-    
-})(this, this.TK);
+
+// This has to happen after all children are initialized
+add_static_event(ColorPicker, "initialized", function() {
+    var O = this.options;
+    if (O.rgb) this.set("rgb", O.rgb);
+    if (O.hex) this.set("hex", O.hex);
+    if (O.hsl) this.set("hsl", O.hsl);
+  });

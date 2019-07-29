@@ -16,8 +16,150 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+import { define_class } from '../widget_helpers.mjs';
+
+const color_names = {
+    "lightcoral" : "f08080",
+    "salmon" : "fa8072",
+    "darksalmon" : "e9967a",
+    "lightsalmon" : "ffa07a",
+    "crimson" : "dc143c",
+    "red" : "ff0000",
+    "firebrick" : "b22222",
+    "darkred" : "8b0000",
+    "pink" : "ffc0cb",
+    "lightpink" : "ffb6c1",
+    "hotpink" : "ff69b4",
+    "deeppink" : "ff1493",
+    "mediumvioletred" : "c71585",
+    "palevioletred" : "db7093",
+    "coral" : "ff7f50",
+    "tomato" : "ff6347",
+    "orangered" : "ff4500",
+    "darkorange" : "ff8c00",
+    "orange" : "ffa500",
+    "gold" : "ffd700",
+    "yellow" : "ffff00",
+    "lightyellow" : "ffffe0",
+    "lemonchiffon" : "fffacd",
+    "lightgoldenrodyellow" : "fafad2",
+    "papayawhip" : "ffefd5",
+    "moccasin" : "ffe4b5",
+    "peachpuff" : "ffdab9",
+    "palegoldenrod" : "eee8aa",
+    "khaki" : "f0e68c",
+    "darkkhaki" : "bdb76b",
+    "lavender" : "e6e6fa",
+    "thistle" : "d8bfd8",
+    "plum" : "dda0dd",
+    "violet" : "ee82ee",
+    "orchid" : "da70d6",
+    "fuchsia" : "ff00ff",
+    "magenta" : "ff00ff",
+    "mediumorchid" : "ba55d3",
+    "mediumpurple" : "9370db",
+    "amethyst" : "9966cc",
+    "blueviolet" : "8a2be2",
+    "darkviolet" : "9400d3",
+    "darkorchid" : "9932cc",
+    "darkmagenta" : "8b008b",
+    "purple" : "800080",
+    "indigo" : "4b0082",
+    "slateblue" : "6a5acd",
+    "darkslateblue" : "483d8b",
+    "mediumslateblue" : "7b68ee",
+    "greenyellow" : "adff2f",
+    "chartreuse" : "7fff00",
+    "lawngreen" : "7cfc00",
+    "lime" : "00ff00",
+    "limegreen" : "32cd32",
+    "palegreen" : "98fb98",
+    "lightgreen" : "90ee90",
+    "mediumspringgreen" : "00fa9a",
+    "springgreen" : "00ff7f",
+    "mediumseagreen" : "3cb371",
+    "seagreen" : "2e8b57",
+    "forestgreen" : "228b22",
+    "green" : "008000",
+    "darkgreen" : "006400",
+    "yellowgreen" : "9acd32",
+    "olivedrab" : "6b8e23",
+    "olive" : "808000",
+    "darkolivegreen" : "556b2f",
+    "mediumaquamarine" : "66cdaa",
+    "darkseagreen" : "8fbc8f",
+    "lightseagreen" : "20b2aa",
+    "darkcyan" : "008b8b",
+    "teal" : "008080",
+    "aqua" : "00ffff",
+    "cyan" : "00ffff",
+    "lightcyan" : "e0ffff",
+    "paleturquoise" : "afeeee",
+    "aquamarine" : "7fffd4",
+    "turquoise" : "40e0d0",
+    "mediumturquoise" : "48d1cc",
+    "darkturquoise" : "00ced1",
+    "cadetblue" : "5f9ea0",
+    "steelblue" : "4682b4",
+    "lightsteelblue" : "b0c4de",
+    "powderblue" : "b0e0e6",
+    "lightblue" : "add8e6",
+    "skyblue" : "87ceeb",
+    "lightskyblue" : "87cefa",
+    "deepskyblue" : "00bfff",
+    "dodgerblue" : "1e90ff",
+    "cornflowerblue" : "6495ed",
+    "royalblue" : "4169e1",
+    "blue" : "0000ff",
+    "mediumblue" : "0000cd",
+    "darkblue" : "00008b",
+    "navy" : "000080",
+    "midnightblue" : "191970",
+    "cornsilk" : "fff8dc",
+    "blanchedalmond" : "ffebcd",
+    "bisque" : "ffe4c4",
+    "navajowhite" : "ffdead",
+    "wheat" : "f5deb3",
+    "burlywood" : "deb887",
+    "tan" : "d2b48c",
+    "rosybrown" : "bc8f8f",
+    "sandybrown" : "f4a460",
+    "goldenrod" : "daa520",
+    "darkgoldenrod" : "b8860b",
+    "peru" : "cd853f",
+    "chocolate" : "d2691e",
+    "saddlebrown" : "8b4513",
+    "sienna" : "a0522d",
+    "brown" : "a52a2a",
+    "maroon" : "800000",
+    "white" : "ffffff",
+    "snow" : "fffafa",
+    "honeydew" : "f0fff0",
+    "mintcream" : "f5fffa",
+    "azure" : "f0ffff",
+    "aliceblue" : "f0f8ff",
+    "ghostwhite" : "f8f8ff",
+    "whitesmoke" : "f5f5f5",
+    "seashell" : "fff5ee",
+    "beige" : "f5f5dc",
+    "oldlace" : "fdf5e6",
+    "floralwhite" : "fffaf0",
+    "ivory" : "fffff0",
+    "antiquewhite" : "faebd7",
+    "linen" : "faf0e6",
+    "lavenderblush" : "fff0f5",
+    "mistyrose" : "ffe4e1",
+    "gainsboro" : "dcdcdc",
+    "lightgrey" : "d3d3d3",
+    "silver" : "c0c0c0",
+    "darkgray" : "a9a9a9",
+    "gray" : "808080",
+    "dimgray" : "696969",
+    "lightslategray" : "778899",
+    "slategray" : "708090",
+    "darkslategray" : "2f4f4f",
+    "black" : "000000"
+}
 
 /* helpers */
 
@@ -288,7 +430,7 @@ var color2gray = function () {
 
 
 /**
- * TK.Colors provides a couple of functions for easy-to-use color calculations
+ * Colors provides a couple of functions for easy-to-use color calculations
  * and conversions. Functions requiring RGB or HSL color definitions as
  * argument (all `rgb2x` and `hsl2x`) can be called with different types of arguments
  * to make using them more convenient. Examples:
@@ -303,15 +445,15 @@ var color2gray = function () {
  * <li>(240,128,128)</li>
  * <li>({"r":240,"g":128,"b":128})</li></ul>
  * 
- * @mixin TK.Colors
+ * @mixin Colors
  */
 
-TK.Colors = TK.class({
+export const Colors = define_class({
     /**
      * Returns an object containing red ('r'), green ('g') and blue ('b')
      * from any type of valid color.
      * 
-     * @method TK.Colors#color2rgb
+     * @method Colors#color2rgb
      * 
      * @param {number|array|object|string} 1st_value - red (0..255) or hue (0..1) or object with members `r, g, b` or `h, s, l` or array of RGB or HSL or color name or hex string.
      * @param {number} [2nd_value] - green (0..255) or saturation (0..1)
@@ -325,7 +467,7 @@ TK.Colors = TK.class({
      * Returns an object containing hue ('h'), saturation ('s') and lightness ('l')
      * from any type of valid color.
      * 
-     * @method TK.Colors#color2hsl
+     * @method Colors#color2hsl
      * 
      * @param {number|array|object|string} 1st_value - red (0..255) or hue (0..1) or object with members `r, g, b` or `h, s, l` or array of RGB or HSL or color name or hex string.
      * @param {number} [2nd_value] - green (0..255) or saturation (0..1)
@@ -339,7 +481,7 @@ TK.Colors = TK.class({
      * Returns a hex color string
      * from any type of valid color.
      * 
-     * @method TK.Colors#color2hex
+     * @method Colors#color2hex
      * 
      * @param {number|array|object|string} 1st_value - red (0..255) or hue (0..1) or object with members `r, g, b` or `h, s, l` or array of RGB or HSL or color name or hex string.
      * @param {number} [2nd_value] - green (0..255) or saturation (0..1)
@@ -353,7 +495,7 @@ TK.Colors = TK.class({
      * Returns a hex color string either black or white at highest contrast compared to the argument
      * from any type of valid color.
      * 
-     * @method TK.Colors#color2bw
+     * @method Colors#color2bw
      * 
      * @param {number|array|object|string} 1st_value - red (0..255) or hue (0..1) or object with members `r, g, b` or `h, s, l` or array of RGB or HSL or color name or hex string.
      * @param {number} [2nd_value] - green (0..255) or saturation (0..1)
@@ -367,7 +509,7 @@ TK.Colors = TK.class({
      * Returns a hex color string either black or white at lowest contrast compared to the argument
      * from any type of valid color.
      * 
-     * @method TK.Colors#color2wb
+     * @method Colors#color2wb
      * 
      * @param {number|array|object|string} 1st_value - red (0..255) or hue (0..1) or object with members `r, g, b` or `h, s, l` or array of RGB or HSL or color name or hex string.
      * @param {number} [2nd_value] - green (0..255) or saturation (0..1)
@@ -381,7 +523,7 @@ TK.Colors = TK.class({
      * Returns a hex color string of the grayscaled argument
      * from any type of valid color.
      * 
-     * @method TK.Colors#color2gray
+     * @method Colors#color2gray
      * 
      * @param {number|array|object|string} 1st_value - red (0..255) or hue (0..1) or object with members `r, g, b` or `h, s, l` or array of RGB or HSL or color name or hex string.
      * @param {number} [2nd_value] - green (0..255) or saturation (0..1)
@@ -397,7 +539,7 @@ TK.Colors = TK.class({
      * Returns an object containing hue ('h'), saturation ('s') and lightness ('l')
      * from a RGB color.
      * 
-     * @method TK.Colors#rgb2hsl
+     * @method Colors#rgb2hsl
      * 
      * @param {number|array|object|string} 1st_value - red (0..255) or object with members `r, g, b` or array of RGB or color name or hex string.
      * @param {number} [2nd_value] - green (0..255) or saturation (0..1)
@@ -411,7 +553,7 @@ TK.Colors = TK.class({
      * Returns a hex color string
      * from a RGB color.
      * 
-     * @method TK.Colors#rgb2hex
+     * @method Colors#rgb2hex
      * 
      * @param {number|array|object|string} 1st_value - red (0..255) or object with members `r, g, b` or array of RGB or color name or hex string.
      * @param {number} [2nd_value] - green (0..255) or saturation (0..1)
@@ -425,7 +567,7 @@ TK.Colors = TK.class({
      * Returns a hex color string either black or white at highest contrast compared to the argument
      * from a RGB color.
      * 
-     * @method TK.Colors#rgb2bw
+     * @method Colors#rgb2bw
      * 
      * @param {number|array|object|string} 1st_value - red (0..255) or object with members `r, g, b` or array of RGB or color name or hex string.
      * @param {number} [2nd_value] - green (0..255) or saturation (0..1)
@@ -439,7 +581,7 @@ TK.Colors = TK.class({
      * Returns a hex color string either black or white at lowest contrast compared to the argument
      * from a RGB color.
      * 
-     * @method TK.Colors#rgb2wb
+     * @method Colors#rgb2wb
      * 
      * @param {number|array|object|string} 1st_value - red (0..255) or object with members `r, g, b` or array of RGB or color name or hex string.
      * @param {number} [2nd_value] - green (0..255) or saturation (0..1)
@@ -453,7 +595,7 @@ TK.Colors = TK.class({
      * Returns a hex color string of the grayscaled argument
      * from a RGB color.
      * 
-     * @method TK.Colors#rgb2gray
+     * @method Colors#rgb2gray
      * 
      * @param {number|array|object|string} 1st_value - red (0..255) or object with members `r, g, b` or array of RGB or color name or hex string.
      * @param {number} [2nd_value] - green (0..255) or saturation (0..1)
@@ -469,7 +611,7 @@ TK.Colors = TK.class({
      * Returns an object containing red ('r'), green ('g') and blue ('b')
      * from a HSL color.
      * 
-     * @method TK.Colors#hsl2rgb
+     * @method Colors#hsl2rgb
      * 
      * @param {number|array|object} 1st_value - hue (0..1) or object with members `h, s, l` or array of HSL.
      * @param {number} [2nd_value] - saturation (0..1)
@@ -483,7 +625,7 @@ TK.Colors = TK.class({
      * Returns a hex color string
      * from a HSL color.
      * 
-     * @method TK.Colors#hsl2hex
+     * @method Colors#hsl2hex
      * 
      * @param {number|array|object} 1st_value - hue (0..1) or object with members `h, s, l` or array of HSL.
      * @param {number} [2nd_value] - saturation (0..1)
@@ -497,7 +639,7 @@ TK.Colors = TK.class({
      * Returns a hex color string either black or white at highest contrast compared to the argument
      * from a HSL color.
      * 
-     * @method TK.Colors#hsl2bw
+     * @method Colors#hsl2bw
      * 
      * @param {number|array|object} 1st_value - hue (0..1) or object with members `h, s, l` or array of HSL.
      * @param {number} [2nd_value] - saturation (0..1)
@@ -511,7 +653,7 @@ TK.Colors = TK.class({
      * Returns a hex color string either black or white at lowest contrast compared to the argument
      * from a HSL color.
      * 
-     * @method TK.Colors#hsl2wb
+     * @method Colors#hsl2wb
      * 
      * @param {number|array|object} 1st_value - hue (0..1) or object with members `h, s, l` or array of HSL.
      * @param {number} [2nd_value] - saturation (0..1)
@@ -525,7 +667,7 @@ TK.Colors = TK.class({
      * Returns a hex color string of the grayscaled argument
      * from a HSL color.
      * 
-     * @method TK.Colors#hsl2gray
+     * @method Colors#hsl2gray
      * 
      * @param {number|array|object} 1st_value - hue (0..1) or object with members `h, s, l` or array of HSL.
      * @param {number} [2nd_value] - saturation (0..1)
@@ -541,7 +683,7 @@ TK.Colors = TK.class({
      * Returns an object containing red ('r'), green ('g') and blue ('b')
      * from a hex color string.
      * 
-     * @method TK.Colors#hex2rgb
+     * @method Colors#hex2rgb
      * 
      * @param {string} hex - Hex color string.
      * 
@@ -553,7 +695,7 @@ TK.Colors = TK.class({
      * Returns an object containing hue ('h'), saturation ('s') and lightness ('l')
      * from a hex color string.
      * 
-     * @method TK.Colors#hex2hsl
+     * @method Colors#hex2hsl
      * 
      * @param {string} hex - Hex color string.
      * 
@@ -565,7 +707,7 @@ TK.Colors = TK.class({
      * Returns a hex color string either black or white at highest contrast compared to the argument
      * from a hex color string.
      * 
-     * @method TK.Colors#hex2bw
+     * @method Colors#hex2bw
      * 
      * @param {string} hex - Hex color string.
      * 
@@ -577,7 +719,7 @@ TK.Colors = TK.class({
      * Returns a hex color string either black or white at lowest contrast compared to the argument
      * from a hex color string.
      * 
-     * @method TK.Colors#hex2wb
+     * @method Colors#hex2wb
      * 
      * @param {string} hex - Hex color string.
      * 
@@ -589,7 +731,7 @@ TK.Colors = TK.class({
      * Returns a hex color string of the grayscaled argument
      * from a hex color string.
      * 
-     * @method TK.Colors#hex2gray
+     * @method Colors#hex2gray
      * 
      * @param {string} hex - Hex color string.
      * 
@@ -603,7 +745,7 @@ TK.Colors = TK.class({
      * Returns an object containing red ('r'), green ('g') and blue ('b')
      * from a color name.
      * 
-     * @method TK.Colors#name2rgb
+     * @method Colors#name2rgb
      * 
      * @param {string} color - Color name.
      * 
@@ -615,7 +757,7 @@ TK.Colors = TK.class({
      * Returns an object containing hue ('h'), saturation ('s') and lightness ('l')
      * from a color name.
      * 
-     * @method TK.Colors#name2hsl
+     * @method Colors#name2hsl
      * 
      * @param {string} color - Color name.
      * 
@@ -627,7 +769,7 @@ TK.Colors = TK.class({
      * Returns a hex color string
      * from a color name.
      * 
-     * @method TK.Colors#name2hex
+     * @method Colors#name2hex
      * 
      * @param {string} color - Color name.
      * 
@@ -639,7 +781,7 @@ TK.Colors = TK.class({
      * Returns a hex color string either black or white at highest contrast compared to the argument
      * from a color name.
      * 
-     * @method TK.Colors#name2bw
+     * @method Colors#name2bw
      * 
      * @param {string} color - Color name.
      * 
@@ -651,7 +793,7 @@ TK.Colors = TK.class({
      * Returns a hex color string either black or white at lowest contrast compared to the argument
      * from a color name.
      * 
-     * @method TK.Colors#name2wb
+     * @method Colors#name2wb
      * 
      * @param {string} color - Color name.
      * 
@@ -663,7 +805,7 @@ TK.Colors = TK.class({
      * Returns a hex color string of the grayscaled argument
      * from a color name.
      * 
-     * @method TK.Colors#name2gray
+     * @method Colors#name2gray
      * 
      * @param {string} color - Color name.
      * 
@@ -673,147 +815,3 @@ TK.Colors = TK.class({
     
 });
 
-var color_names = {
-    "lightcoral" : "f08080",
-    "salmon" : "fa8072",
-    "darksalmon" : "e9967a",
-    "lightsalmon" : "ffa07a",
-    "crimson" : "dc143c",
-    "red" : "ff0000",
-    "firebrick" : "b22222",
-    "darkred" : "8b0000",
-    "pink" : "ffc0cb",
-    "lightpink" : "ffb6c1",
-    "hotpink" : "ff69b4",
-    "deeppink" : "ff1493",
-    "mediumvioletred" : "c71585",
-    "palevioletred" : "db7093",
-    "coral" : "ff7f50",
-    "tomato" : "ff6347",
-    "orangered" : "ff4500",
-    "darkorange" : "ff8c00",
-    "orange" : "ffa500",
-    "gold" : "ffd700",
-    "yellow" : "ffff00",
-    "lightyellow" : "ffffe0",
-    "lemonchiffon" : "fffacd",
-    "lightgoldenrodyellow" : "fafad2",
-    "papayawhip" : "ffefd5",
-    "moccasin" : "ffe4b5",
-    "peachpuff" : "ffdab9",
-    "palegoldenrod" : "eee8aa",
-    "khaki" : "f0e68c",
-    "darkkhaki" : "bdb76b",
-    "lavender" : "e6e6fa",
-    "thistle" : "d8bfd8",
-    "plum" : "dda0dd",
-    "violet" : "ee82ee",
-    "orchid" : "da70d6",
-    "fuchsia" : "ff00ff",
-    "magenta" : "ff00ff",
-    "mediumorchid" : "ba55d3",
-    "mediumpurple" : "9370db",
-    "amethyst" : "9966cc",
-    "blueviolet" : "8a2be2",
-    "darkviolet" : "9400d3",
-    "darkorchid" : "9932cc",
-    "darkmagenta" : "8b008b",
-    "purple" : "800080",
-    "indigo" : "4b0082",
-    "slateblue" : "6a5acd",
-    "darkslateblue" : "483d8b",
-    "mediumslateblue" : "7b68ee",
-    "greenyellow" : "adff2f",
-    "chartreuse" : "7fff00",
-    "lawngreen" : "7cfc00",
-    "lime" : "00ff00",
-    "limegreen" : "32cd32",
-    "palegreen" : "98fb98",
-    "lightgreen" : "90ee90",
-    "mediumspringgreen" : "00fa9a",
-    "springgreen" : "00ff7f",
-    "mediumseagreen" : "3cb371",
-    "seagreen" : "2e8b57",
-    "forestgreen" : "228b22",
-    "green" : "008000",
-    "darkgreen" : "006400",
-    "yellowgreen" : "9acd32",
-    "olivedrab" : "6b8e23",
-    "olive" : "808000",
-    "darkolivegreen" : "556b2f",
-    "mediumaquamarine" : "66cdaa",
-    "darkseagreen" : "8fbc8f",
-    "lightseagreen" : "20b2aa",
-    "darkcyan" : "008b8b",
-    "teal" : "008080",
-    "aqua" : "00ffff",
-    "cyan" : "00ffff",
-    "lightcyan" : "e0ffff",
-    "paleturquoise" : "afeeee",
-    "aquamarine" : "7fffd4",
-    "turquoise" : "40e0d0",
-    "mediumturquoise" : "48d1cc",
-    "darkturquoise" : "00ced1",
-    "cadetblue" : "5f9ea0",
-    "steelblue" : "4682b4",
-    "lightsteelblue" : "b0c4de",
-    "powderblue" : "b0e0e6",
-    "lightblue" : "add8e6",
-    "skyblue" : "87ceeb",
-    "lightskyblue" : "87cefa",
-    "deepskyblue" : "00bfff",
-    "dodgerblue" : "1e90ff",
-    "cornflowerblue" : "6495ed",
-    "royalblue" : "4169e1",
-    "blue" : "0000ff",
-    "mediumblue" : "0000cd",
-    "darkblue" : "00008b",
-    "navy" : "000080",
-    "midnightblue" : "191970",
-    "cornsilk" : "fff8dc",
-    "blanchedalmond" : "ffebcd",
-    "bisque" : "ffe4c4",
-    "navajowhite" : "ffdead",
-    "wheat" : "f5deb3",
-    "burlywood" : "deb887",
-    "tan" : "d2b48c",
-    "rosybrown" : "bc8f8f",
-    "sandybrown" : "f4a460",
-    "goldenrod" : "daa520",
-    "darkgoldenrod" : "b8860b",
-    "peru" : "cd853f",
-    "chocolate" : "d2691e",
-    "saddlebrown" : "8b4513",
-    "sienna" : "a0522d",
-    "brown" : "a52a2a",
-    "maroon" : "800000",
-    "white" : "ffffff",
-    "snow" : "fffafa",
-    "honeydew" : "f0fff0",
-    "mintcream" : "f5fffa",
-    "azure" : "f0ffff",
-    "aliceblue" : "f0f8ff",
-    "ghostwhite" : "f8f8ff",
-    "whitesmoke" : "f5f5f5",
-    "seashell" : "fff5ee",
-    "beige" : "f5f5dc",
-    "oldlace" : "fdf5e6",
-    "floralwhite" : "fffaf0",
-    "ivory" : "fffff0",
-    "antiquewhite" : "faebd7",
-    "linen" : "faf0e6",
-    "lavenderblush" : "fff0f5",
-    "mistyrose" : "ffe4e1",
-    "gainsboro" : "dcdcdc",
-    "lightgrey" : "d3d3d3",
-    "silver" : "c0c0c0",
-    "darkgray" : "a9a9a9",
-    "gray" : "808080",
-    "dimgray" : "696969",
-    "lightslategray" : "778899",
-    "slategray" : "708090",
-    "darkslategray" : "2f4f4f",
-    "black" : "000000"
-}
-
-})(this, this.TK);
