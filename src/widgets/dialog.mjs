@@ -16,8 +16,10 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function (w, TK) {
+import { define_class } from '../widget_helpers.mjs';
+import { Container } from './container.mjs';
+import { translate_anchor } from '../implements/anchor.mjs';
+import { add_class } from '../helpers.mjs';
 
 function autoclose_cb(e) {
   var curr = e.target;
@@ -47,18 +49,17 @@ function deactivate_autoclose() {
   this._autoclose_active = false;
 }
 
-TK.Dialog = TK.class({
+export const Dialog = define_class({
 /**
- * TK.Dialog provides a hovering area which can be closed by clicking/tapping
+ * Dialog provides a hovering area which can be closed by clicking/tapping
  * anywhere on the screen. It can be automatically pushed to the topmost
  * DOM position as a child of an AWML-ROOT or the BODY element. On close
- * it can be removed from the DOM. The {@link TK.Anchor}-functionality
+ * it can be removed from the DOM. The {@link Anchor}-functionality
  * makes positioning the dialog window straight forward.
  *
- * @class TK.Dialog
+ * @class Dialog
  * 
- * @extends TK.Container
- * @implments TK.Anchor
+ * @extends Container
  *
  * @param {Object} [options={ }] - An object containing initial options.
  * 
@@ -72,9 +73,8 @@ TK.Dialog = TK.class({
  * 
  */
     _class: "Dialog",
-    Extends: TK.Container,
-    Implements: TK.Anchor,
-    _options: Object.assign(Object.create(TK.Container.prototype._options), {
+    Extends: Container,
+    _options: Object.assign(Object.create(Container.prototype._options), {
         visible: "boolean",
         anchor: "string",
         x: "number",
@@ -141,8 +141,8 @@ TK.Dialog = TK.class({
       },
     },
     initialize: function (options) {
-        TK.Container.prototype.initialize.call(this, options);
-        TK.add_class(this.element, "toolkit-dialog");
+        Container.prototype.initialize.call(this, options);
+        add_class(this.element, "toolkit-dialog");
         var O = this.options;
         /* This cannot be a default option because document.body
          * is not defined there */
@@ -160,7 +160,7 @@ TK.Dialog = TK.class({
           this.reposition();
     },
     redraw: function () {
-        TK.Container.prototype.redraw.call(this);
+        Container.prototype.redraw.call(this);
         var I = this.invalid;
         var O = this.options;
         var E = this.element;
@@ -171,7 +171,7 @@ TK.Dialog = TK.class({
             var box = this.element.getBoundingClientRect();
             I.x = I.y = I.anchor = false;
             var box = E.getBoundingClientRect();
-            var pos = this.translate_anchor(O.anchor, O.x, O.y, -box.width, -box.height);
+            var pos = translate_anchor(O.anchor, O.x, O.y, -box.width, -box.height);
             pos.x = Math.min(sw - box.width, Math.max(0, pos.x));
             pos.y = Math.min(sh - box.height, Math.max(0, pos.y));
             E.style.left = pos.x + "px"
@@ -181,7 +181,7 @@ TK.Dialog = TK.class({
     /**
      * Open the dialog. Optionally set x and y position regarding the `anchor`.
      *
-     * @method TK.Dialog#open
+     * @method Dialog#open
      * 
      * @param {Number} [x] - New X-position of the dialog.
      * @param {Number} [y] - New Y-position of the dialog.
@@ -198,7 +198,7 @@ TK.Dialog = TK.class({
     /**
      * Close the dialog. The DOM node is removed from DOM if `auto_remove` is set to `true`.
      *
-     * @method TK.Dialog#close
+     * @method Dialog#close
      */
     close: function () {
         this.userset("visible", false);
@@ -206,7 +206,7 @@ TK.Dialog = TK.class({
     /**
      * Reposition the dialog to the current `x` and `y` position.
      *
-     * @method TK.Dialog#reposition
+     * @method Dialog#reposition
      */
     reposition: function () {
         var O = this.options;
@@ -214,6 +214,3 @@ TK.Dialog = TK.class({
         this.set("y", O.y);
     }
 });
-    
-    
-})(this, this.TK);

@@ -16,8 +16,11 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function (w, TK) {
+import { define_class } from '../widget_helpers.mjs';
+import { ChildWidget } from '../child_widget.mjs';
+import { Dialog } from './dialog.mjs';
+import { ColorPicker } from './colorpicker.mjs';
+import { add_class } from '../helpers.mjs';
 
 function cancel () {
     var self = this.parent;
@@ -31,22 +34,22 @@ function apply (color) {
     self.close();
 }
 
-TK.ColorPickerDialog = TK.class({
+export const ColorPickerDialog = define_class({
     
     _class: "ColorPickerDialog",
-    Extends: TK.Dialog,
+    Extends: Dialog,
     
     initialize: function (options) {
-        TK.Dialog.prototype.initialize.call(this, options);
-        TK.add_class(this.element, "toolkit-color-picker-dialog");
+        Dialog.prototype.initialize.call(this, options);
+        add_class(this.element, "toolkit-color-picker-dialog");
     },
 });
     
 /**
- * @member {TK.ColorPicker} TK.ColorPickerDialog#colorpicker - The TK.ColorPicker widget.
+ * @member {ColorPicker} ColorPickerDialog#colorpicker - The ColorPicker widget.
  */
-TK.ChildWidget(TK.ColorPickerDialog, "colorpicker", {
-    create: TK.ColorPicker,
+ChildWidget(ColorPickerDialog, "colorpicker", {
+    create: ColorPicker,
     show: true,
     inherit_options: true,
     userset_delegate: true,
@@ -55,5 +58,3 @@ TK.ChildWidget(TK.ColorPickerDialog, "colorpicker", {
         apply: apply,
     },
 });
-    
-})(this, this.TK);

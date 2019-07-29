@@ -19,6 +19,7 @@ import { Notifications } from '../src/widgets/notifications.mjs';
 import { Clock } from '../src/widgets/clock.mjs';
 import { Dynamics } from '../src/widgets/dynamics.mjs';
 import { ColorPicker } from '../src/widgets/colorpicker.mjs';
+import { ColorPickerDialog } from '../src/widgets/colorpickerdialog.mjs';
 
 import { compare, object_minus } from './helpers.mjs';
 
@@ -45,6 +46,7 @@ describe('Widgets', () => {
        new Clock();
        new Dynamics();
        new ColorPicker();
+       new ColorPickerDialog();
 
        done();
     });
