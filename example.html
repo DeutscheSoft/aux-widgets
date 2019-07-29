@@ -14,6 +14,7 @@
     <script type=module src="src/components/slider.mjs"></script>
     <script type=module src="src/components/gauge.mjs"></script>
     <script type=module src="src/components/fader.mjs"></script>
+    <script type=module src="src/components/select.mjs"></script>
     <link rel="stylesheet" href="toolkit/styles/2013.css" />
   </head>
   <body>
@@ -55,6 +56,12 @@
 
     <h2>Fader</h2>
     <tk-fader min=0 max=100 style='height: 300px'></tk-fader>
+
+    <h2>Select</h2>
+    <tk-select label='click me'>
+      <tk-selectentry label='hello 1' value='json:{}'></tk-selectentry>
+      <tk-selectentry label='hello 2' value='json:{}'></tk-selectentry>
+    </tk-select>
 
   </body>
   
