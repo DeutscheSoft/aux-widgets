@@ -6,6 +6,7 @@ import { Equalizer } from '../src/widgets/equalizer.mjs';
 import { Value } from '../src/widgets/value.mjs';
 import { Knob } from '../src/widgets/knob.mjs';
 import { State } from '../src/widgets/state.mjs';
+import { Slider } from '../src/widgets/slider.mjs';
 
 import { compare, object_minus } from './helpers.mjs';
 
@@ -19,6 +20,7 @@ describe('Widgets', () => {
        new Value();
        new Knob();
        new State();
+       new Slider();
 
        done();
     });

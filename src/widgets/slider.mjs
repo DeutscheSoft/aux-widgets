@@ -21,20 +21,25 @@
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
  * The event is emitted for the option <code>value</code>.
  *
- * @event TK.Slider#useraction
+ * @event Slider#useraction
  * 
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
+import { define_class } from '../widget_helpers.mjs';
+import { Widget } from './widget.mjs';
+import { DragValue } from '../modules/dragvalue.mjs';
+import { ScrollValue } from '../modules/scrollvalue.mjs';
+import { Ranged } from '../implements/ranged.mjs';
+import { Warning } from '../implements/warning.mjs';
+import { element, add_class, warn, outer_width } from '../helpers.mjs';
      
-"use strict";
-(function(w, TK){
 function dblclick() {
     this.userset("value", this.options.reset);
     /**
      * Is fired when the slider receives a double click in order to reset to initial value.
      * 
-     * @event TK.Slider#doubleclick
+     * @event Slider#doubleclick
      * 
      * @param {number} value - The value of the widget.
      */
@@ -52,7 +57,7 @@ function set_background(horiz, vert, size) {
     E.style["background-size"] = size;
 }
 /**
- * TK.Slider is a {@link TK.Widget} moving its background image
+ * Slider is a {@link Widget} moving its background image
  * according to its value. It can be used to show strips of
  * e.g. 3D-rendered faders or knobs. It's important to set the
  * width and height of the widget in CSS according to the frames in
@@ -62,13 +67,13 @@ function set_background(horiz, vert, size) {
  * the background image is as wide as the widget and the height of the
  * image keeps the ratio intact. The height should be height of widget
  * times the amount of frames.
- * TK.Slider uses {@link TK.DragValue} and {@link TK.ScrollValue}
+ * Slider uses {@link DragValue} and {@link ScrollValue}
  * for setting its value.
- * It inherits all options of {@link TK.DragValue}.
+ * It inherits all options of {@link DragValue}.
  *
- * @class TK.Slider
+ * @class Slider
  * 
- * @extends TK.Widget
+ * @extends Widget
  *
  * @param {Object} [options={ }] - An object containing initial options.
  * 
@@ -79,13 +84,13 @@ function set_background(horiz, vert, size) {
  * @property {String} options.image - The image containing all frames for the slider.
  * 
  */
-TK.Slider = TK.class({
+export const Slider = define_class({
     _class: "Slider",
-    Extends: TK.Widget,
-    Implements: [TK.Ranged, TK.Warning],
-    _options: Object.assign(Object.create(TK.Widget.prototype._options),
-                            TK.Ranged.prototype._options,
-                            TK.DragValue.prototype._options, {
+    Extends: Widget,
+    Implements: [Ranged, Warning],
+    _options: Object.assign(Object.create(Widget.prototype._options),
+                            Ranged.prototype._options,
+                            DragValue.prototype._options, {
         value: "number",
         frames: "int",
         alignment: "string",
@@ -109,20 +114,22 @@ TK.Slider = TK.class({
         dblclick: dblclick,
     },
     initialize: function (options) {
-        TK.Widget.prototype.initialize.call(this, options);
+        Widget.prototype.initialize.call(this, options);
+        options = this.options;
+
         var E;
         /**
-         * @member {HTMLDivElement} TK.Slider#element - The main DIV container.
+         * @member {HTMLDivElement} Slider#element - The main DIV container.
          *   Has class <code>toolkit-slider</code>.
          */
-        if (!(E = this.element)) this.element = E = TK.element("div");
-        TK.add_class(E, "toolkit-slider");
+        if (!(E = this.element)) this.element = E = element("div");
+        add_class(E, "toolkit-slider");
         this.widgetize(E, true, true, true);
         /**
-         * @member {TK.DragValue} TK.Knob#drag - Instance of {@link TK.DragValue} used for
+         * @member {DragValue} Knob#drag - Instance of {@link DragValue} used for
          *   interaction.
          */
-        this.drag = new TK.DragValue(this, {
+        this.drag = new DragValue(this, {
             node:    E,
             classes: E,
             direction: this.options.direction,
@@ -130,10 +137,10 @@ TK.Slider = TK.class({
             blind_angle: this.options.blind_angle,
         });
         /**
-         * @member {TK.ScrollValue} TK.Knob#scroll - Instance of {@link TK.ScrollValue} used for
+         * @member {ScrollValue} Knob#scroll - Instance of {@link ScrollValue} used for
          *   interaction.
          */
-        this.scroll = new TK.ScrollValue(this, {
+        this.scroll = new ScrollValue(this, {
             node:    E,
             classes: E,
         });
@@ -145,7 +152,7 @@ TK.Slider = TK.class({
     destroy: function () {
         this.drag.destroy();
         this.scroll.destroy();
-        TK.Widget.prototype.destroy.call(this);
+        Widget.prototype.destroy.call(this);
     },
 
     redraw: function() {
@@ -167,7 +174,7 @@ TK.Slider = TK.class({
             var frame = Math.round(Math.max(0, O.frames - 1) * coef);
             switch (O.alignment) {
                 default:
-                    TK.warn("Unknown alignment, only 'vertical' and 'horizontal' are allowed");
+                    warn("Unknown alignment, only 'vertical' and 'horizontal' are allowed");
                     break;
                 case "vertical":
                     set_background.call(this, 0, frame * O._width, "100% auto");
@@ -178,12 +185,12 @@ TK.Slider = TK.class({
             }
         }
         
-        TK.Widget.prototype.redraw.call(this);
+        Widget.prototype.redraw.call(this);
     },
     
     resize: function () {
-        this.set("_width", TK.outer_width(this.element));
-        this.set("_height", TK.outer_height(this.element));
+        this.set("_width", outer_width(this.element));
+        this.set("_height", outer_height(this.element));
     },
 
     set: function(key, value) {
@@ -194,9 +201,8 @@ TK.Slider = TK.class({
                 value = this.snap(value);
                 break;
         }
-        if (TK.DragValue.prototype._options[key])
+        if (DragValue.prototype._options[key])
             this.drag.set(key, value);
-        return TK.Widget.prototype.set.call(this, key, value);
+        return Widget.prototype.set.call(this, key, value);
     },
 });
-})(this, this.TK);
