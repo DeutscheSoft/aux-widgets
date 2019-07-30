@@ -21,21 +21,24 @@
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
  * The event is emitted for the option <code>show</code>.
  *
- * @event TK.Pager#useraction
+ * @event Pager#useraction
  * 
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
+import { define_class, ChildElement } from '../widget_helpers.mjs';
+import { ChildWidget } from '../child_widget.mjs';
+import { add_class, remove_class, warn, is_dom_node } from '../helpers.mjs';
+import { Container } from './container.mjs';
+import { ButtonArray } from './buttonarray.mjs';
  
-"use strict";
-(function(w, TK){
-TK.Pager = TK.class({
+export const Pager = define_class({
     /**
-     * TK.Pager, also known as Notebook in other UI toolkits, provides
+     * Pager, also known as Notebook in other UI toolkits, provides
      * multiple containers for displaying contents which are switchable
-     * via a {@link TK.ButtonArray}.
+     * via a {@link ButtonArray}.
      * 
-     * @class TK.Pager
+     * @class Pager
      * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
@@ -46,10 +49,10 @@ TK.Pager = TK.class({
      *   a button and content is either a HTML string or a HTMLElement node.
      * @property {Integer} [options.show=-1] - The page to show
      *
-     * @extends TK.Container
+     * @extends Container
      * 
      * @example
-     * var pager = new TK.Pager({
+     * var pager = new Pager({
      *  pages: [
      *   {
      *     label: "Empty Page 1",
@@ -63,8 +66,8 @@ TK.Pager = TK.class({
      * });
      */
     _class: "Pager",
-    Extends: TK.Container,
-    _options: Object.assign(Object.create(TK.Container.prototype._options), {
+    Extends: Container,
+    _options: Object.assign(Object.create(Container.prototype._options), {
         position:  "string",
         direction: "string",
         pages:     "array",
@@ -88,10 +91,10 @@ TK.Pager = TK.class({
                 /**
                  * The page was switched.
                  * 
-                 * @param {TK.Container} page - The {@link TK.Container} instance of the newly selected page.
+                 * @param {Container} page - The {@link Container} instance of the newly selected page.
                  * @param {number} id - The ID of the page.
                  * 
-                 * @event TK.Pager#changed
+                 * @event Pager#changed
                  */
                 this.fire_event("changed", page, value);
             }
@@ -115,53 +118,53 @@ TK.Pager = TK.class({
     
     initialize: function (options) {
         this.pages = [];
-        TK.Container.prototype.initialize.call(this, options);
+        Container.prototype.initialize.call(this, options);
         /**
          * The main DIV element. Has the class <code>toolkit-pager</code>.
          *
-         * @member TK.Pager#element
+         * @member Pager#element
          */
-        TK.add_class(this.element, "toolkit-pager");
+        add_class(this.element, "toolkit-pager");
     },
     
     initialized: function () {
-        TK.Container.prototype.initialized.call(this);
+        Container.prototype.initialized.call(this);
         this.add_pages(this.options.pages);
         this.set("position", this.options.position);
         this.set("show", this.options.show);
     },
     
     redraw: function () {
-        TK.Container.prototype.redraw.call(this);
+        Container.prototype.redraw.call(this);
         var O = this.options;
         var I = this.invalid;
         var E = this.element;
 
         if (I.direction) {
             I.direction = false;
-            TK.remove_class(E, "toolkit-forward", "toolkit-backward");
-            TK.add_class(E, "toolkit-" + O.direction);
+            remove_class(E, "toolkit-forward", "toolkit-backward");
+            add_class(E, "toolkit-" + O.direction);
         }
         
         if (I.position) {
             I.position = false;
-            TK.remove_class(E, "toolkit-top", "toolkit-right", "toolkit-bottom",
+            remove_class(E, "toolkit-top", "toolkit-right", "toolkit-bottom",
                             "toolkit-left", "toolkit-vertical", "toolkit-horizontal");
             switch (O.position) {
                 case "top":
-                    TK.add_class(E, "toolkit-top", "toolkit-vertical");
+                    add_class(E, "toolkit-top", "toolkit-vertical");
                     break;
                 case "bottom":
-                    TK.add_class(E, "toolkit-bottom", "toolkit-vertical");
+                    add_class(E, "toolkit-bottom", "toolkit-vertical");
                     break;
                 case "left":
-                    TK.add_class(E, "toolkit-left", "toolkit-horizontal");
+                    add_class(E, "toolkit-left", "toolkit-horizontal");
                     break;
                 case "right":
-                    TK.add_class(E, "toolkit-right", "toolkit-horizontal");
+                    add_class(E, "toolkit-right", "toolkit-horizontal");
                     break;
                 default:
-                    TK.warn("Unsupported position", O.position);
+                    warn("Unsupported position", O.position);
             }
             I.layout = true;
         }
@@ -181,16 +184,16 @@ TK.Pager = TK.class({
     /**
      * Adds an array of pages.
      *
-     * @method TK.Pager#add_pages
+     * @method Pager#add_pages
      * 
      * @param {Array} options -
      *   An Array containing objects with options for the page and its button.
      *   Members are a string label for the corresponding button and content,
-     *   which can be either a DOM node, a HTML string or a {@link TK.Container}
+     *   which can be either a DOM node, a HTML string or a {@link Container}
      *   widget.
      * 
      * @example
-     * var p = new TK.Pager();
+     * var p = new Pager();
      * p.add_pages([
      *   {
      *     label: "Page 1",
@@ -205,16 +208,16 @@ TK.Pager = TK.class({
     },
     
     /**
-     * Adds a {@link TK.Container} to the pager and a {@link TK.Button} to the pagers {@link TK.ButtonArray}.
+     * Adds a {@link Container} to the pager and a {@link Button} to the pagers {@link ButtonArray}.
      *
-     * @method TK.Pager#add_page
+     * @method Pager#add_page
      *
-     * @param {string|Object} button - A string with the {@link TK.Button} s label or an object cotaining options for the {@link Button}
-     * @param {TK.Widget|Class|string} content - The content of the page. Either a {@link TK.Container} (or derivate) widget,
-     *   a class (needs option "options" to be set) or a string which get embedded in a new {@link TK.Container}
-     * @param {Object} [options={ }] - An object containing initial options. - An object containing options for the {@link TK.Container} to add as a page
+     * @param {string|Object} button - A string with the {@link Button} s label or an object cotaining options for the {@link Button}
+     * @param {Widget|Class|string} content - The content of the page. Either a {@link Container} (or derivate) widget,
+     *   a class (needs option "options" to be set) or a string which get embedded in a new {@link Container}
+     * @param {Object} [options={ }] - An object containing initial options. - An object containing options for the {@link Container} to add as a page
      * @param {integer|undefined} position - The position to add the new page to. If undefined, the page is added at the end.
-     * @emits TK.Pager#added
+     * @emits Pager#added
      */
     add_page: function (button, content, position, options) {
         var p;
@@ -222,10 +225,10 @@ TK.Pager = TK.class({
             button = {label: button};
         this.buttonarray.add_button(button, position);
 
-        if (typeof content === "string" || TK.is_dom_node(content)) {
+        if (typeof content === "string" || is_dom_node(content)) {
             if (!options) options = {}; 
             options.content = content;
-            p = new TK.Container(options);
+            p = new Container(options);
         } else if (typeof content === "function") {
             // assume here content is a subclass of Container
             p = new content(options);
@@ -247,11 +250,11 @@ TK.Pager = TK.class({
             this._clip.appendChild(p.element);
         }
         /**
-         * A page was added to the TK.Pager.
+         * A page was added to the Pager.
          *
-         * @event TK.Pager#added
+         * @event Pager#added
          * 
-         * @param {TK.Container} page - The {@link TK.Container} which was added as a page.
+         * @param {Container} page - The {@link Container} which was added as a page.
          */
         this.fire_event("added", p);
 
@@ -274,13 +277,13 @@ TK.Pager = TK.class({
     },
 
     /**
-     * Removes a page from the TK.Pager.
+     * Removes a page from the Pager.
      * 
-     * @method TK.Pager#remove_page
+     * @method Pager#remove_page
      * 
-     * @param {integer|TK.Container} page - The container to remove. Either a position or the {@link TK.Container} widget generated by <code>add_page</code>.
+     * @param {integer|Container} page - The container to remove. Either a position or the {@link Container} widget generated by <code>add_page</code>.
      * 
-     * @emits TK.Pager#removed
+     * @emits Pager#removed
      */
     remove_page: function (page) {
         if (typeof page === "object")
@@ -301,9 +304,9 @@ TK.Pager = TK.class({
         /**
          * A page was removed from the Pager
          *
-         * @event TK.Pager#removed
+         * @event Pager#removed
          * 
-         * @param {TK.Container} page - The {@link TK.Container} which was removed.
+         * @param {Container} page - The {@link Container} which was removed.
          */
         this.fire_event("removed", p);
     },
@@ -312,7 +315,7 @@ TK.Pager = TK.class({
         /**
          * Returns the currently displayed page or null.
          * 
-         * @method TK.Pager#current
+         * @method Pager#current
          */
         var n = this.options.show;
         if (n >= 0 && n < this.pages.length) {
@@ -325,7 +328,7 @@ TK.Pager = TK.class({
      * Opens the first page of the pager. Returns <code>true</code> if a
      * first page exists, <code>false</code> otherwise.
      *
-     * @method TK.Pager#first
+     * @method Pager#first
      */
     first: function() {
         if (this.pages.length) {
@@ -338,7 +341,7 @@ TK.Pager = TK.class({
      * Opens the last page of the pager. Returns <code>true</code> if a
      * last page exists, <code>false</code> otherwise.
      *
-     * @method TK.Pager#last
+     * @method Pager#last
      */
     last: function() {
         if (this.pages.length) {
@@ -352,7 +355,7 @@ TK.Pager = TK.class({
      * Opens the next page of the pager. Returns <code>true</code> if a
      * next page exists, <code>false</code> otherwise.
      *
-     * @method TK.Pager#next
+     * @method Pager#next
      */
     next: function() {
         var c = this.options.show;
@@ -362,7 +365,7 @@ TK.Pager = TK.class({
      * Opens the previous page of the pager. Returns <code>true</code> if a
      * previous page exists, <code>false</code> otherwise.
      *
-     * @method TK.Pager#prev
+     * @method Pager#prev
      */
     prev: function() {
         var c = this.options.show;
@@ -389,21 +392,21 @@ TK.Pager = TK.class({
 
             this.buttonarray.set("show", value);
         }
-        return TK.Container.prototype.set.call(this, key, value);
+        return Container.prototype.set.call(this, key, value);
     },
     get: function (key) {
         if (key === "pages") return this.pages;
-        return TK.Container.prototype.get.call(this, key);
+        return Container.prototype.get.call(this, key);
     }
 });
 
 /**
- * The {@link TK.ButtonArray} instance acting as the menu.
+ * The {@link ButtonArray} instance acting as the menu.
  *
- * @member TK.Pager#buttonarray
+ * @member Pager#buttonarray
  */
-TK.ChildWidget(TK.Pager, "buttonarray", {
-    create: TK.ButtonArray,
+ChildWidget(Pager, "buttonarray", {
+    create: ButtonArray,
     show: true,
     map_options: {
         show: "show",
@@ -417,11 +420,9 @@ TK.ChildWidget(TK.Pager, "buttonarray", {
 });
 
 /**
- * @member {HTMLDivElement} TK.Pager#_clip - The clipping area containing the pages.
+ * @member {HTMLDivElement} Pager#_clip - The clipping area containing the pages.
  *   Has class <code>toolkit-clip</code>.
  */
-TK.ChildElement(TK.Pager, "clip", {
+ChildElement(Pager, "clip", {
     show: true,
 });
-    
-})(this, this.TK);

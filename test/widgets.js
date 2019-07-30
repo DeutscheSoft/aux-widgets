@@ -24,40 +24,47 @@ import { Window } from '../src/widgets/window.mjs';
 import { ButtonArray } from '../src/widgets/buttonarray.mjs';
 import { Crossover, CrossoverBand } from '../src/widgets/crossover.mjs';
 import { Expander } from '../src/widgets/expander.mjs';
+import { Pager } from '../src/widgets/pager.mjs';
 
 import { compare, object_minus } from './helpers.mjs';
 
-describe('Widgets', () => {
-    it('create', (done) => {
-       new ResponseHandle();
-       new EqBand();
-       new Chart();
-       new ResponseHandler();
-       new Equalizer();
-       new Value();
-       new Knob();
-       new State();
-       new Slider();
-       new Gauge();
-       new Fader();
-       new Select();
-       new ValueButton();
-       new ValueKnob();
-       new MeterBase();
-       new LevelMeter();
-       new MultiMeter();
-       new Notifications();
-       new Clock();
-       new Dynamics();
-       new ColorPicker();
-       new ColorPickerDialog();
-       new Window();
-       new ButtonArray();
-       new Crossover();
-       new Expander();
+const widgets = [
+   ResponseHandle,
+   EqBand,
+   Chart,
+   ResponseHandler,
+   Equalizer,
+   Value,
+   Knob,
+   State,
+   Slider,
+   Gauge,
+   Fader,
+   Select,
+   ValueButton,
+   ValueKnob,
+   MeterBase,
+   LevelMeter,
+   MultiMeter,
+   Notifications,
+   Clock,
+   Dynamics,
+   ColorPicker,
+   ColorPickerDialog,
+   Window,
+   ButtonArray,
+   Crossover,
+   Expander,
+   Pager,
+];
 
+describe('Widgets', () => {
+  widgets.map((w) => {
+    it('create '+ w.prototype._class, (done) => {
+       new w();
        done();
     });
+  });
 });
 
 describe('Equalizer', () => {
