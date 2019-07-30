@@ -80,7 +80,7 @@ Scheduler.prototype = {
 
             this.current_cycle = runs;
 
-            if (runs > 20) throw("something is not right");
+            if (runs > 20) throw new Error("something is not right");
 
             empty = true;
 

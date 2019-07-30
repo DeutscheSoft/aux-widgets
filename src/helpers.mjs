@@ -94,7 +94,7 @@ if ('WeakMap' in window) {
     data_store = [];
     var data_keys = [];
     data = function(e) {
-        if (typeof(e) !== "object") throw("Cannot store data for non-objects.");
+        if (typeof(e) !== "object") throw new Error("Cannot store data for non-objects.");
         var k = data_keys.indexOf(e);
         var r;
         if (k === -1) {
@@ -228,7 +228,7 @@ function element(tag) {
             }
         } else if (typeof v === "string") {
             add_class(n, v);
-        } else throw("unsupported argument to element");
+        } else throw new Error("unsupported argument to element");
     }
     return n;
 }
@@ -656,7 +656,7 @@ function FORMAT(fmt) {
             s += "JSON.stringify("+argname+")";
             break;
         default:
-            throw("unknown format:"+res[0]);
+            throw new Error("unknown format:"+res[0]);
             break;
         }
         argnum++;
@@ -726,7 +726,7 @@ function sprintf(fmt) {
             s = JSON.stringify(s);
             break;
         default:
-            throw("Unsupported format.");
+            throw new Error("Unsupported format.");
         }
 
         ret.push(s);

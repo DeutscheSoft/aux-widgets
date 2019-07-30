@@ -361,7 +361,7 @@ export const MeterBase = define_class({
                     if (scale) insert_after(bar, scale);
                     break;
                 default:
-                    throw("unsupported layout");
+                    throw new Error("unsupported layout");
             }
         }
 

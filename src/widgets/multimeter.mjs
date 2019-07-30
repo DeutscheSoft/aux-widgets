@@ -149,7 +149,7 @@ export const MultiMeter = define_class({
                     add_class(E, "toolkit-horizontal", "toolkit-bottom");
                     break;
                 default:
-                    throw("unsupported layout");
+                    throw new Error("unsupported layout");
             }
             switch (O.layout) {
                 case "top":

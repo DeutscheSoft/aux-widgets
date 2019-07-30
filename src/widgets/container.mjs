@@ -284,7 +284,7 @@ export const Container = define_class({
 
         if (typeof i !== "number") {
             i = C.indexOf(i);
-            if (i === -1) throw("Cannot find child.");
+            if (i === -1) throw new Error("Cannot find child.");
         }
 
         H[i] = true;
@@ -305,7 +305,7 @@ export const Container = define_class({
 
         if (typeof i !== "number") {
             i = C.indexOf(i);
-            if (i === -1) throw("Cannot find child.");
+            if (i === -1) throw new Error("Cannot find child.");
         }
 
         if (H[i]) {
@@ -329,7 +329,7 @@ export const Container = define_class({
 
         if (typeof i !== "number") {
             i = C.indexOf(i);
-            if (i === -1) throw("Cannot find child.");
+            if (i === -1) throw new Error("Cannot find child.");
         }
         if (H[i]) this.show_child(i);
         else this.hide_child(i);
