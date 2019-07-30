@@ -16,8 +16,10 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+import { define_class } from '../widget_helpers.mjs';
+import { Container } from './container.mjs';
+import { add_class } from '../helpers.mjs';
+
 function visibility_change() {
     if (document.hidden) {
         this.disable_draw();
@@ -32,14 +34,14 @@ function resized() {
     }
 }
 /**
- * @extends TK.Container
+ * @extends Container
  * 
- * @class TK.Root
+ * @class Root
  */
-TK.Root = TK.class({
-    Extends: TK.Container,
+export const Root = define_class({
+    Extends: Container,
     _class: "Root",
-    _options: Object.create(TK.Container.prototype._options),
+    _options: Object.create(Container.prototype._options),
     static_events: {
         initialized: function () {
             window.addEventListener("resize", this._resize_cb);
@@ -57,15 +59,14 @@ TK.Root = TK.class({
         },
     },
     initialize: function (options) {
-        TK.Container.prototype.initialize.call(this, options);
+        Container.prototype.initialize.call(this, options);
         /**
-         * @member {HTMLDivElement} TK.Root#element - The main DIV container.
+         * @member {HTMLDivElement} Root#element - The main DIV container.
          *   Has class <code>toolkit-root</code>.
          */
-        TK.add_class(this.element, "toolkit-root");
+        add_class(this.element, "toolkit-root");
         this._resize_cb = resized.bind(this);
         this._visibility_cb = visibility_change.bind(this);
         this.resize_event = false;
     },
 });
-})(this, this.TK);
