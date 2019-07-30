@@ -16,10 +16,77 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
- 
-"use strict";
-(function(w, TK){
+import { define_class } from '../widget_helpers.mjs';
+import { error, add_class, sprintf } from '../helpers.mjs';
+import { Equalizer } from './equalizer.mjs';
+import { EqBand } from '../modules/eqband.mjs';
+import { Filter } from '../modules/filter.mjs';
 
+export const CrossoverBand = define_class({
+    /**
+     * CrossoverBand is a {@link EqBand} with an additional filter.
+     * 
+     * @class CrossoverBand
+     * 
+     * @extends EqBand
+     */
+    _class: "CrossoverBand",
+    Extends: EqBand,
+    _options: Object.assign(Object.create(EqBand.prototype._options), {
+        lower: "string",
+        upper: "string",
+    }),
+    options: {
+        lower: "lowpass3",
+        upper: "highpass3",
+        label: function (t, x, y, z) { return sprintf("%.2f Hz", x); },
+        mode: "line-vertical",
+        preferences: [ "top-right", "right", "bottom-right", "top-left", "left", "bottom-left"],
+    },
+    initialize: function (options) {
+        /**
+         * @member {Filter} CrossoverBand#upper - The filter providing the graphical calculations for the upper graph. 
+         */
+        this.upper = new Filter();
+        /**
+         * @member {Filter} CrossoverBand#lower - The filter providing the graphical calculations for the lower graph. 
+         */
+        this.lower = new Filter();
+        EqBand.prototype.initialize.call(this, options);
+        /** 
+         * @member {HTMLDivElement} CrossoverBand#element - The main SVG group.
+         *   Has class <code>toolkit-crossoverband</code>.
+         */
+        add_class(this.element, "toolkit-crossoverband");
+        
+        this.set("lower", this.options.lower);
+        this.set("upper", this.options.upper);
+    },
+    set: function (key, val) {
+        switch (key) {
+            case"lower":
+                this.filter = this.lower;
+                var r = EqBand.prototype.set.call(this, "type", val);
+                this.set("mode", "line-vertical");
+                return r;
+            case "upper":
+                this.filter = this.upper;
+                var r = EqBand.prototype.set.call(this, "type", val);
+                this.set("mode", "line-vertical");
+                return r;
+            case "freq":
+            case "gain":
+            case "q":
+                if (this.lower)
+                    this.filter = this.lower;
+                val = EqBand.prototype.set.call(this, key, val);
+                this.filter = this.upper;
+                return EqBand.prototype.set.call(this, key, val);
+        }
+        return EqBand.prototype.set.call(this, key, val);
+    },
+});
+ 
 function invalidate_bands() {
     this.invalid.bands = true;
     this.trigger_draw();
@@ -42,7 +109,7 @@ function set_freq (band) {
     if (this.options.leap) return;
     var i = this.bands.indexOf(band);
     if (i < 0) {
-        TK.error("Band no member of crossover");
+        error("Band no member of crossover");
         return;
     }
     _set_freq.call(this, i, band);
@@ -57,15 +124,15 @@ function _set_freq (i, band) {
         this.bands[i+1].set("x_min", freq + dist);
 }
 
-TK.Crossover = TK.class({
+export const Crossover = define_class({
     /**
-     * TK.Crossover is a {@link TK.Equalizer} displaying the response
-     * of a multi-band crossover filter. TK.Crossover  uses {@link TK.CrossoverBand}
+     * Crossover is a {@link Equalizer} displaying the response
+     * of a multi-band crossover filter. Crossover  uses {@link CrossoverBand}
      * as response handles.
      * 
-     * @class TK.Crossover
+     * @class Crossover
      * 
-     * @extends TK.Equalizer
+     * @extends Equalizer
      * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
@@ -75,8 +142,8 @@ TK.Crossover = TK.class({
      *   band is at 1kHz.
      */
     _class: "Crossover",
-    Extends: TK.Equalizer,
-    _options: Object.assign(Object.create(TK.Equalizer.prototype._options), {
+    Extends: Equalizer,
+    _options: Object.assign(Object.create(Equalizer.prototype._options), {
         leap: "boolean",
         distance: "number",
     }),
@@ -86,16 +153,21 @@ TK.Crossover = TK.class({
         distance: 0,
     },
     initialize: function (options) {
-        TK.Equalizer.prototype.initialize.call(this, options);
+        Equalizer.prototype.initialize.call(this, options);
         /**
-         * @member {HTMLDivElement} TK.Equalizer#element - The main DIV container.
+         * @member {HTMLDivElement} Equalizer#element - The main DIV container.
          *   Has class <code>toolkit-response-handler</code>.
          */
-        TK.add_class(this.element, "toolkit-crossover");
+        add_class(this.element, "toolkit-crossover");
+
+        var self = this;
+        this.set_freq_cb = function(f) {
+          set_freq.call(self, this);
+        };
     },
     resize: function () {
         invalidate_bands.call(this);
-        TK.Equalizer.prototype.resize.call(this);
+        Equalizer.prototype.resize.call(this);
     },
     redraw: function () {
         var I = this.invalid;
@@ -114,90 +186,22 @@ TK.Crossover = TK.class({
             }
             this._draw_graph(this.graphs[lastg], [this.bands[lastb].upper.get_freq2gain()]);
         }
-        TK.Equalizer.prototype.redraw.call(this);
+        Equalizer.prototype.redraw.call(this);
     },
     add_band: function (options, type) {
-        type = type || TK.CrossoverBand;
+        type = type || CrossoverBand;
         this.add_graph();
-        var r = TK.Equalizer.prototype.add_band.call(this, options, type);
-        var that = this;
-        r.add_event("set_freq", function (f) {
-            set_freq.call(that, this);
-        });
+        var r = Equalizer.prototype.add_band.call(this, options, type);
+        r.add_event("set_freq", this.set_freq_cb);
         limit_bands.call(this);
         return r;
     },
     remove_band: function (band) {
         this.remove_graph(this.graphs[this.graphs.length-1]);
-        var r = TK.Equalizer.prototype.remove_band.call(this, options);
+        var r = Equalizer.prototype.remove_band.call(this, options);
+        r.remove_event("set_freq", this.set_freq_cb);
         limit_bands.call(this);
         return r;
     },
 });
 
-TK.CrossoverBand = TK.class({
-    /**
-     * TK.CrossoverBand is a {@link TK.EqBand} with an additional filter.
-     * 
-     * @class TK.CrossoverBand
-     * 
-     * @extends TK.EqBand
-     */
-    _class: "CrossoverBand",
-    Extends: TK.EqBand,
-    _options: Object.assign(Object.create(TK.EqBand.prototype._options), {
-        lower: "string",
-        upper: "string",
-    }),
-    options: {
-        lower: "lowpass3",
-        upper: "highpass3",
-        label: function (t, x, y, z) { return TK.sprintf("%.2f Hz", x); },
-        mode: "line-vertical",
-        preferences: [ "top-right", "right", "bottom-right", "top-left", "left", "bottom-left"],
-    },
-    initialize: function (options) {
-        /**
-         * @member {TK.Filter} TK.CrossoverBand#upper - The filter providing the graphical calculations for the upper graph. 
-         */
-        this.upper = new TK.Filter();
-        /**
-         * @member {TK.Filter} TK.CrossoverBand#lower - The filter providing the graphical calculations for the lower graph. 
-         */
-        this.lower = new TK.Filter();
-        TK.EqBand.prototype.initialize.call(this, options);
-        /** 
-         * @member {HTMLDivElement} TK.CrossoverBand#element - The main SVG group.
-         *   Has class <code>toolkit-crossoverband</code>.
-         */
-        TK.add_class(this.element, "toolkit-crossoverband");
-        
-        this.set("lower", this.options.lower);
-        this.set("upper", this.options.upper);
-    },
-    set: function (key, val) {
-        switch (key) {
-            case"lower":
-                this.filter = this.lower;
-                var r = TK.EqBand.prototype.set.call(this, "type", val);
-                this.set("mode", "line-vertical");
-                return r;
-            case "upper":
-                this.filter = this.upper;
-                var r = TK.EqBand.prototype.set.call(this, "type", val);
-                this.set("mode", "line-vertical");
-                return r;
-            case "freq":
-            case "gain":
-            case "q":
-                if (this.lower)
-                    this.filter = this.lower;
-                val = TK.EqBand.prototype.set.call(this, key, val);
-                this.filter = this.upper;
-                return TK.EqBand.prototype.set.call(this, key, val);
-        }
-        return TK.EqBand.prototype.set.call(this, key, val);
-    },
-});
-
-})(this, this.TK);

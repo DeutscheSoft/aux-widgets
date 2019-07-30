@@ -22,6 +22,7 @@ import { ColorPicker } from '../src/widgets/colorpicker.mjs';
 import { ColorPickerDialog } from '../src/widgets/colorpickerdialog.mjs';
 import { Window } from '../src/widgets/window.mjs';
 import { ButtonArray } from '../src/widgets/buttonarray.mjs';
+import { Crossover, CrossoverBand } from '../src/widgets/crossover.mjs';
 
 import { compare, object_minus } from './helpers.mjs';
 
@@ -51,16 +52,38 @@ describe('Widgets', () => {
        new ColorPickerDialog();
        new Window();
        new ButtonArray();
+       new Crossover();
 
        done();
     });
 });
+
 describe('Equalizer', () => {
   it('creating bands', (done) => {
     const eq = new Equalizer();
 
     const b1 = eq.add_band({});
     const b2 = eq.add_band(new EqBand());
+
+    const o1 = object_minus(b1.options, [ "id" ]);
+    const o2 = object_minus(b2.options, [ "id" ]);
+
+    if (!compare(o1, o2))
+    {
+      console.error(b1.options, b2.options);
+      throw new Error('Options mismatch.');
+    }
+
+    done();
+  });
+});
+
+describe('Crossover', () => {
+  it('creating bands', (done) => {
+    const eq = new Crossover();
+
+    const b1 = eq.add_band({});
+    const b2 = eq.add_band(new CrossoverBand());
 
     const o1 = object_minus(b1.options, [ "id" ]);
     const o2 = object_minus(b2.options, [ "id" ]);
