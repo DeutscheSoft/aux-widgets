@@ -1,5 +1,25 @@
-(function (w, TK) {
-"use strict"
+/*
+ * This file is part of Toolkit.
+ *
+ * Toolkit is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * Toolkit is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU General
+ * Public License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ */
+import { define_class } from '../widget_helpers.mjs';
+import { Dialog } from './dialog.mjs';
+import { Taggable } from './taggable.mjs';
+import { add_class, element, remove_class } from '../helpers.mjs';
 
 function keyup (e) {
     if (e.keyCode != 13) return;
@@ -20,13 +40,13 @@ function new_tag_from_input () {
         this.close();
 }
 
-TK.Tagger = TK.class({
+export const Tagger = define_class({
     
     _class: "Tagger",
-    Extends: TK.Dialog,
-    Implements: TK.Taggable,
+    Extends: Dialog,
+    Implements: Taggable,
     
-    _options: Object.assign(Object.create(TK.Dialog.prototype._options), {
+    _options: Object.assign(Object.create(Dialog.prototype._options), {
         closenew: "boolean",
         add: "boolean",
     }),
@@ -36,47 +56,47 @@ TK.Tagger = TK.class({
         add: true,
     },
     initialize: function (options) {
-        TK.Dialog.prototype.initialize.call(this, options);
-        TK.add_class(this.element, "toolkit-tagger");
+        Dialog.prototype.initialize.call(this, options);
+        add_class(this.element, "toolkit-tagger");
         
-        TK.Taggable.prototype.initialize.call(this);
+        Taggable.prototype.initialize.call(this);
         this.append_child(this.tags);
         this.add_event("addtag", new_tag_from_input.bind(this));
         
         this.set("add", this.options.add);
     },
     destroy: function (options) {
-        TK.Taggable.prototype.destroy.call(this);
-        TK.Dialog.prototype.destroy.call(this);
+        Taggable.prototype.destroy.call(this);
+        Dialog.prototype.destroy.call(this);
     },
     redraw: function () {
-        TK.Dialog.prototype.redraw.call(this);
+        Dialog.prototype.redraw.call(this);
         var I = this.invalid;
         var O = this.options;
         if (I.add) {
             I.add = false;
             if (O.add) {
                 if (!this._input) {
-                    this._input = TK.element("input", "toolkit-input");
+                    this._input = element("input", "toolkit-input");
                     this._input.addEventListener("keyup", keyup.bind(this), true);
                     this._input.type = "text";
                     this._input.placeholder = "New tag";
                     this.element.appendChild(this._input);
                 }
                 this.add.set("container", this.element);
-                TK.add_class(this.element, "toolkit-has-input");
+                add_class(this.element, "toolkit-has-input");
             } else if (!O.add) {
                 if (this._input) {
                     this.element.removeChild(this._input);
                     this._input = null;
                 }
                 this.add.set("container", false);
-                TK.remove_class(this.element, "toolkit-has-input");
+                remove_class(this.element, "toolkit-has-input");
             }
         }
     },
     add_tag: function (tag, options) {
-        var t = TK.Taggable.prototype.add_tag.call(this, tag, options);
+        var t = Taggable.prototype.add_tag.call(this, tag, options);
         if (!t) return;
         t.node.label.add_event("click", (function (that, tag) {
             return function (e) {
@@ -88,12 +108,10 @@ TK.Tagger = TK.class({
         return t;
     },
     remove_tag: function (tag, node, purge) {
-      TK.Taggable.prototype.remove_tag.call(this, tag, node, purge);
+      Taggable.prototype.remove_tag.call(this, tag, node, purge);
       if (!this.taglist.length)
         this.close();
       if (this.options.visible)
           this.reposition();
     },
 });
-
-})(this, this.TK);

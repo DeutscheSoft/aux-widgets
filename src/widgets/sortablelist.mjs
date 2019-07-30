@@ -16,13 +16,17 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function (w, TK) {
+import { define_class } from '../widget_helpers.mjs';
+import { DragCapture } from '../modules/dragcapture.mjs';
+import { List } from './list.mjs';
+import { Container } from './container.mjs';
+import { SortableListItem } from './sortablelistitem.mjs';
+import { add_class } from '../helpers.mjs';
 
 /* TODO */
 
 var build_dragcapture = function () {
-    this.dragcapture = new TK.DragCapture(this, {
+    this.dragcapture = new DragCapture(this, {
         state: true,
         onstartcapture: function (state) {
             console.log(state, "start");
@@ -37,25 +41,25 @@ var build_dragcapture = function () {
     });
 }
 
-TK.SortableList = TK.class({
+export const SortableList = define_class({
     
     _class: "SortableList",
-    Extends: TK.List,
+    Extends: List,
     
-    _options: Object.assign(Object.create(TK.Container.prototype._options), {
+    _options: Object.assign(Object.create(Container.prototype._options), {
         sortable: "boolean",
     }),
     options: {
         sortable: false,
-        item_class: TK.SortableListItem,
+        item_class: SortableListItem,
     },
     initialize: function (options) {
-        TK.List.prototype.initialize.call(this, options);
-        this.element.add_class("toolkit-sortable-list");
+        List.prototype.initialize.call(this, options);
+        add_class(this.element, "toolkit-sortable-list");
     },
     add_item: function (item, pos) {
         var O = this.options;
-        var item = TK.List.prototype.add_item.call(this, item, pos);
+        var item = List.prototype.add_item.call(this, item, pos);
         item.set("sortable", O.sortable);
     },
     set: function (key, value) {
@@ -68,9 +72,6 @@ TK.SortableList = TK.class({
                     build_dragcapture.call(this);
                 break;
         }
-        return TK.List.prototype.set.call(this, key, value);
+        return List.prototype.set.call(this, key, value);
     }
 });
-    
-    
-})(this, this.TK);

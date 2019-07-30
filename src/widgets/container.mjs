@@ -130,7 +130,7 @@ export const Container = define_class({
         this.__hide_id = false;
         add_class(E, "toolkit-show");
         
-        if (this.options.children.length)
+        if (this.options.children)
             this.append_children(this.options.children);
     },
     

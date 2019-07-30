@@ -16,8 +16,11 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function (w, TK) {
+import { define_class } from '../widget_helpers.mjs';
+import { Widget } from './widget.mjs';
+import { Colors } from './colors.mjs';
+import { TagNode } from './tagnode.mjs';
+import { ColorPickerDialog } from './colorpickerdialog.mjs';
 
 function remove (e, node) {
     this.fire_event("remove", node);
@@ -27,7 +30,7 @@ function remove (e, node) {
 
 function colorize (e) {
     var that = this;
-    var c = new TK.ColorPickerDialog({
+    var c = new ColorPickerDialog({
         autoclose: true,
         hex: this.options.color,
         onapply: function (rgb, hsl, hex) { 
@@ -45,12 +48,12 @@ function colorize (e) {
     w.c = c;
 }
 
-TK.Tag = TK.class({
+export const Tag = define_class({
     _class: "Tag",
-    Extends: TK.Widget,
-    Implements: TK.Colors,
+    Extends: Widget,
+    Implements: Colors,
     
-    _options: Object.assign(Object.create(TK.Widget.prototype._options), {
+    _options: Object.assign(Object.create(Widget.prototype._options), {
         color: "string|null",
         tag: "string",
         async: "boolean",
@@ -60,17 +63,17 @@ TK.Tag = TK.class({
         color: null,
         tag: "",
         async: false,
-        node_class: TK.TagNode,
+        node_class: TagNode,
     },
     initialize: function (options) {
-        TK.Widget.prototype.initialize.call(this, options);
+        Widget.prototype.initialize.call(this, options);
         this.nodes = [];
     },
     destroy: function () {
         var l = this.nodes.length;
         for (var i = 0; i < l; i++)
             this.remove_node(this.nodes[i]);
-        TK.Widget.prototype.destroy.call(this);
+        Widget.prototype.destroy.call(this);
     },
     
     redraw: function () {
@@ -91,7 +94,7 @@ TK.Tag = TK.class({
             for (var i = 0; i < this.nodes.length; i++)
                 this.nodes[i].children[0].textContent = O.tag;
         }
-        TK.Widget.prototype.redraw.call(this);
+        Widget.prototype.redraw.call(this);
     },
     remove_node: function (node) {
         var O = this.options;
@@ -128,8 +131,6 @@ TK.Tag = TK.class({
                     this.nodes[i].set("tag", this.options.tag);
                 break;
         }
-        return TK.Widget.prototype.set.call(this, key, value);
+        return Widget.prototype.set.call(this, key, value);
     }
 });
-
-})(this, this.TK);

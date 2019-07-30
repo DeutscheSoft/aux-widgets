@@ -16,20 +16,20 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function (w, TK) {
+import { define_class } from '../widget_helpers.mjs';
+import { TreeItem } from './treeitem.mjs';
+import { Taggable } from './taggable.mjs';
+import { add_class } from '../helpers.mjs';
 
-TK.TaggableTreeItem = TK.class({
+export const TaggableTreeItem = define_class({
     
     _class: "TaggableTreeItem",
-    Extends: TK.TreeItem,
-    Implements: TK.Taggable,
+    Extends: TreeItem,
+    Implements: Taggable,
     
     initialize: function (options) {
-        TK.TreeItem.prototype.initialize.call(this, options);
-        TK.Taggable.prototype.initialize.call(this);
-        TK.add_class(this.element, "toolkit-taggable-tree-item");
+        TreeItem.prototype.initialize.call(this, options);
+        Taggable.prototype.initialize.call(this);
+        add_class(this.element, "toolkit-taggable-tree-item");
     },
 });
-    
-})(this, this.TK);

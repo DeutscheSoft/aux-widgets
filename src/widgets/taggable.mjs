@@ -16,8 +16,11 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function (w, TK) {
+import { define_class } from '../widget_helpers.mjs';
+import { Tag } from './tag.mjs';
+import { Tags } from './tags.mjs';
+import { Container } from './container.mjs';
+import { Button } from './button.mjs';
 
 function add (e) {
     this.fire_event("addtag", e);
@@ -29,7 +32,7 @@ function remove (e, tagnode) {
         this.remove_tag(tagnode.tag, tagnode);
 }
 
-TK.Taggable = TK.class({
+export const Taggable = define_class({
     _options: {
         tags: "array",
         backend: "object",
@@ -45,7 +48,7 @@ TK.Taggable = TK.class({
         add_label: "✚",
         show_add: true,
         async: false,
-        tag_class: TK.Tag,
+        tag_class: Tag,
         tag_options: {},
     },
     static_events: {
@@ -58,14 +61,14 @@ TK.Taggable = TK.class({
         var O = this.options;
         this.taglist = [];
         if (!O.backend)
-            O.backend = new TK.Tags({});
+            O.backend = new Tags({});
             
-        this.tags = new TK.Container({
+        this.tags = new Container({
             "class" : "toolkit-tags"
         });
         this.append_child(this.tags);
         
-        this.add = new TK.Button({
+        this.add = new Button({
             container: this.element,
             label: O.add_label,
             "class": "toolkit-add",
@@ -151,5 +154,3 @@ TK.Taggable = TK.class({
         this.options.backend.find_tag.call(this, tag);
     },
 });
-
-})(this, TK)

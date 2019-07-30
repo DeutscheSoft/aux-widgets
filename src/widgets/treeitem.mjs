@@ -16,11 +16,16 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function (w, TK) {
+import { define_class } from '../widget_helpers.mjs';
+import { ListItem } from './listitem.mjs';
+import { List } from './list.mjs';
+import { Container } from './container.mjs';
+import { Button } from './button.mjs';
+import { has_class, toggle_class, add_class, get_duration } from '../helpers.mjs';
+import { S } from '../dom_scheduler.mjs';
 
 var toggle_collapsed = function () {
-    set_collapsed.call(this, !TK.has_class(this.element, "toolkit-collapsed"));
+    set_collapsed.call(this, !has_class(this.element, "toolkit-collapsed"));
 }
 var set_collapsed = function (c) {
     this.set("collapsed", c);
@@ -31,12 +36,12 @@ var reset_size = function (state) {
     //this.element.style.height = null;
 }
 
-TK.TreeItem = TK.class({
+export const TreeItem = define_class({
     
     _class: "TreeItem",
-    Extends: TK.ListItem,
+    Extends: ListItem,
     
-    _options: Object.assign(Object.create(TK.Widget.prototype._options), {
+    _options: Object.assign(Object.create(ListItem.prototype._options), {
         collapsed: "boolean",
         collapsable: "boolean",
         force_collapsable: "boolean",
@@ -47,19 +52,19 @@ TK.TreeItem = TK.class({
         force_collapsable: false,
     },
     initialize: function (options) {
-        this.list = new TK.List({
+        this.list = new List({
             "onset_display_state": reset_size
         });
-        this.flex = new TK.Container({"class":"toolkit-flex"});
+        this.flex = new Container({"class":"toolkit-flex"});
         
-        TK.ListItem.prototype.initialize.call(this, options);
-        TK.add_class(this.element, "toolkit-tree-item");
+        ListItem.prototype.initialize.call(this, options);
+        add_class(this.element, "toolkit-tree-item");
         
-        TK.ListItem.prototype.append_child.call(this, this.flex);
-        TK.ListItem.prototype.add_child.call(this, this.list);
+        ListItem.prototype.append_child.call(this, this.flex);
+        ListItem.prototype.add_child.call(this, this.list);
         this.flex.show();
         
-        this.collapse = new TK.Button({"class":"toolkit-collapse"});
+        this.collapse = new Button({"class":"toolkit-collapse"});
         this.append_child(this.collapse);
         this.collapse.add_event("click", toggle_collapsed.bind(this));
         
@@ -71,7 +76,7 @@ TK.TreeItem = TK.class({
     append_child: function (child) {
         this.invalid._list = true;
         this.trigger_resize();
-        if (TK.ListItem.prototype.isPrototypeOf(child)) {
+        if (ListItem.prototype.isPrototypeOf(child)) {
             return this.list.append_child(child);
         } else {
             return this.flex.append_child(child);
@@ -79,14 +84,14 @@ TK.TreeItem = TK.class({
     },
     add_child : function(child) {
         this.trigger_resize();
-        if (TK.ListItem.prototype.isPrototypeOf(child)) {
+        if (ListItem.prototype.isPrototypeOf(child)) {
             return this.list.add_child(child);
         } else {
             return this.flex.add_child(child);
         }
     },
     remove_child : function(child) {
-        if (TK.ListItem.prototype.isPrototypeOf(child)) {
+        if (ListItem.prototype.isPrototypeOf(child)) {
             var r = this.list.remove_child(child);
             return r;
         } else {
@@ -96,7 +101,7 @@ TK.TreeItem = TK.class({
         this.trigger_resize();
     },
     redraw: function () {
-        TK.ListItem.prototype.redraw.call(this);
+        ListItem.prototype.redraw.call(this);
         var I = this.invalid;
         var O = this.options;
         var E = this.element;
@@ -118,7 +123,7 @@ TK.TreeItem = TK.class({
                 F.appendChild(this.collapse.element);
             else if (this.collapse.element.parentElement == E)
                 F.removeChild(this.collapse.element);
-            TK.toggle_class(E, "toolkit-force-collapsable", O.force_collapsable);
+            toggle_class(E, "toolkit-force-collapsable", O.force_collapsable);
         }
         if (I.collapsed) {
             I.collapsed = false;
@@ -130,16 +135,16 @@ TK.TreeItem = TK.class({
             } else {
                 var list = this.list.element;
                 /* This is a train */
-                TK.S.add(function() {
+                S.add(function() {
                   var h0 = list.offsetHeight;
-                  var duration = TK.get_duration(list);
-                  TK.S.add(function() {
+                  var duration = get_duration(list);
+                  S.add(function() {
                     s["height"] = "auto";
-                    TK.S.add(function() {
+                    S.add(function() {
                       var h = list.offsetHeight;
-                      TK.S.add(function() {
+                      S.add(function() {
                         s["height"] = h0 + "px";
-                        TK.S.add_next(function () {
+                        S.add_next(function () {
                           s["height"] = h + "px";
 
                           setTimeout(function () {
@@ -151,7 +156,7 @@ TK.TreeItem = TK.class({
                   }, 1);
                 });
             }
-            TK.toggle_class(E, "toolkit-collapsed", O.collapsed);
+            toggle_class(E, "toolkit-collapsed", O.collapsed);
         }
         I._list = I.collapsable = I.force_collapsable = false;
     },
@@ -166,8 +171,6 @@ TK.TreeItem = TK.class({
                     this.list.hide();
                 break;
         }
-        return TK.ListItem.prototype.set.call(this, key, value);
+        return ListItem.prototype.set.call(this, key, value);
     }
 });
-
-})(this, this.TK);

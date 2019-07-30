@@ -16,29 +16,30 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function (w, TK) {
+import { define_class } from '../widget_helpers.mjs';
+import { Widget } from './widget.mjs';
+import { Tag } from './tag.mjs';
 
-TK.Tags = TK.class({
+export const Tags = define_class({
     
-    Extends: TK.Widget,
+    Extends: Widget,
     
-    _options: Object.assign(Object.create(TK.Widget.prototype._options), {
+    _options: Object.assign(Object.create(Widget.prototype._options), {
         tag_class: "object",
     }),
     options: {
-        tag_class: TK.Tag,
+        tag_class: Tag,
     },
     
     initialize: function (options) {
         this.tags = new Map();
         this.tag_to_name = new Map();
-        TK.Widget.prototype.initialize.call(this, options);
+        Widget.prototype.initialize.call(this, options);
     },
     tag_to_string: function (tag) {
         if (typeof tag == "string") {
             return tag
-        } else if (TK.Tag.prototype.isPrototypeOf(tag)) {
+        } else if (Tag.prototype.isPrototypeOf(tag)) {
             if (!tag.is_destructed()) {
               return tag.options.tag;
             } else {
@@ -83,5 +84,3 @@ TK.Tags = TK.class({
         this.tag_to_name = new Map();
     },
 });
-
-})(this, this.TK);

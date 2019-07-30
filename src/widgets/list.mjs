@@ -16,19 +16,20 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function (w, TK) {
+import { define_class } from '../widget_helpers.mjs';
+import { Container } from './container.mjs';
+import { element } from '../helpers.mjs';
 
-TK.List = TK.class({
-    _options: Object.assign(Object.create(TK.Container.prototype._options), {
+export const List = define_class({
+    _options: Object.assign(Object.create(Container.prototype._options), {
       sort: "function",
     }),
     _class: "List",
-    Extends: TK.Container,
+    Extends: Container,
     
     initialize: function (options) {
-        this.element = TK.element("ul", "toolkit-list");
-        TK.Container.prototype.initialize.call(this, options);
+        this.element = element("ul", "toolkit-list");
+        Container.prototype.initialize.call(this, options);
     },
     static_events: {
       set_sort: function(f) {
@@ -42,7 +43,7 @@ TK.List = TK.class({
       },
     },
     append_child: function(w) {
-      TK.Container.prototype.append_child.call(this, w);
+      Container.prototype.append_child.call(this, w);
       var O = this.options;
       var C = this.children;
       if (O.sort) {
@@ -53,5 +54,3 @@ TK.List = TK.class({
       }
     },
 });
-    
-})(this, this.TK);

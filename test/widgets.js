@@ -25,6 +25,14 @@ import { ButtonArray } from '../src/widgets/buttonarray.mjs';
 import { Crossover, CrossoverBand } from '../src/widgets/crossover.mjs';
 import { Expander } from '../src/widgets/expander.mjs';
 import { Pager } from '../src/widgets/pager.mjs';
+import { List } from '../src/widgets/list.mjs';
+import { ListItem } from '../src/widgets/listitem.mjs';
+import { TaggableListItem } from '../src/widgets/taggablelistitem.mjs';
+import { SortableList } from '../src/widgets/sortablelist.mjs';
+import { SortableListItem } from '../src/widgets/sortablelistitem.mjs';
+import { TreeItem } from '../src/widgets/treeitem.mjs';
+import { TaggableTreeItem } from '../src/widgets/taggabletreeitem.mjs';
+import { Tagger } from '../src/widgets/tagger.mjs';
 
 import { compare, object_minus } from './helpers.mjs';
 
@@ -56,6 +64,14 @@ const widgets = [
    Crossover,
    Expander,
    Pager,
+   List,
+   ListItem,
+   TaggableListItem,
+   SortableList,
+   SortableListItem,
+   TreeItem,
+   TaggableTreeItem,
+   Tagger,
 ];
 
 describe('Widgets', () => {

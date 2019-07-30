@@ -16,31 +16,31 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function (w, TK) {
+import { define_class } from '../widget_helpers.mjs';
+import { ListItem } from './listitem.mjs';
+import { Button } from './button.mjs';
+import { add_class } from '../helpers.mjs';
 
 var build_sorter = function () {
-    this.sorter = new TK.Button({"class":"toolkit-sorter",container:this.element});
+    this.sorter = new Button({"class":"toolkit-sorter",container:this.element});
     this.add_child(this.sorter);
 }
 
-TK.SortableListItem = TK.class({
-    
+export const SortableListItem = define_class({
     _class: "SortableListItem",
-    Extends: TK.ListItem,
-    
-    _options: Object.assign(Object.create(TK.ListItem.prototype._options), {
+    Extends: ListItem,
+    _options: Object.assign(Object.create(ListItem.prototype._options), {
         sortable: "boolean",
     }),
     options: {
         sortable: false,
     },
     initialize: function (options) {
-        TK.ListItem.prototype.initialize.call(this, options);
-        this.element.add_class("toolkit-sortable-list-item");
+        ListItem.prototype.initialize.call(this, options);
+        add_class(this.element, "toolkit-sortable-list-item");
     },
     redraw: function () {
-        TK.ListItem.prototype.redraw.call(this);
+        ListItem.prototype.redraw.call(this);
         var I = this.invalid;
         var O = this.options;
         if (I.sortable) {
@@ -57,9 +57,6 @@ TK.SortableListItem = TK.class({
         }
     },
     set: function (key, value) {
-        return TK.ListItem.prototype.set.call(this, key, value);
+        return ListItem.prototype.set.call(this, key, value);
     }
 });
-    
-    
-})(this, this.TK);

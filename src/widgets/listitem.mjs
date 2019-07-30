@@ -16,18 +16,16 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function (w, TK) {
+import { define_class } from '../widget_helpers.mjs';
+import { Container } from './container.mjs';
+import { element } from '../helpers.mjs';
 
-TK.ListItem = TK.class({
-    
+export const ListItem = define_class({
     _class: "ListItem",
-    Extends: TK.Container,
+    Extends: Container,
     
     initialize: function (options) {
-        this.element = TK.element("li", "toolkit-list-item");
-        TK.Container.prototype.initialize.call(this, options);
+        this.element = element("li", "toolkit-list-item");
+        Container.prototype.initialize.call(this, options);
     },
 });
-    
-})(this, this.TK);

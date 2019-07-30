@@ -16,15 +16,20 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function (w, TK) {
+import { define_class } from '../widget_helpers.mjs';
+import { ChildWidget } from '../child_widget.mjs';
+import { Container } from './container.mjs';
+import { Label } from './label.mjs';
+import { Button } from './button.mjs';
+import { ConfirmButton } from './confirmbutton.mjs';
+import { Colors } from './colors.mjs';
 
-TK.TagNode = TK.class({
+export const TagNode = define_class({
   
-  Extends: TK.Container,
-  Implements: TK.Colors,
+  Extends: Container,
+  Implements: Colors,
   
-  _options: Object.assign(Object.create(TK.Container.prototype._options), {
+  _options: Object.assign(Object.create(Container.prototype._options), {
     label: "string",
     color: "string|null",
     confirm: "boolean",
@@ -36,14 +41,14 @@ TK.TagNode = TK.class({
   },
   
   initialize: function (options, tag) {
-    TK.Container.prototype.initialize.call(this, options);
+    Container.prototype.initialize.call(this, options);
     this.tag = tag;
     this.add_class("toolkit-tag");
     
   },
   
   redraw: function () {
-    TK.Container.prototype.redraw.call(this);
+    Container.prototype.redraw.call(this);
     var I = this.invalid;
     var O = this.options;
     if (I.color) {
@@ -57,16 +62,16 @@ TK.TagNode = TK.class({
   }
 });
 
-TK.ChildWidget(TK.TagNode, "label", {
-    create: TK.Label,
+ChildWidget(TagNode, "label", {
+    create: Label,
     show: true,
     map_options: {
         tag: "label",
     },
     toggle_class: true,
 });
-TK.ChildWidget(TK.TagNode, "colorize", {
-    create: TK.Button,
+ChildWidget(TagNode, "colorize", {
+    create: Button,
     show: false,
     toggle_class: true,
     static_events: {
@@ -76,8 +81,8 @@ TK.ChildWidget(TK.TagNode, "colorize", {
         class: "toolkit-colorize"
     },
 });
-TK.ChildWidget(TK.TagNode, "remove", {
-    create: TK.ConfirmButton,
+ChildWidget(TagNode, "remove", {
+    create: ConfirmButton,
     show: true,
     toggle_class: true,
     static_events: {
@@ -89,5 +94,3 @@ TK.ChildWidget(TK.TagNode, "remove", {
         confirm: false,
     },
 });
-
-})(this, this.TK);
