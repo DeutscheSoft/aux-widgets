@@ -23,6 +23,7 @@ import { ColorPickerDialog } from '../src/widgets/colorpickerdialog.mjs';
 import { Window } from '../src/widgets/window.mjs';
 import { ButtonArray } from '../src/widgets/buttonarray.mjs';
 import { Crossover, CrossoverBand } from '../src/widgets/crossover.mjs';
+import { Expander } from '../src/widgets/expander.mjs';
 
 import { compare, object_minus } from './helpers.mjs';
 
@@ -53,6 +54,7 @@ describe('Widgets', () => {
        new Window();
        new ButtonArray();
        new Crossover();
+       new Expander();
 
        done();
     });

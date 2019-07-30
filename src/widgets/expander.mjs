@@ -16,8 +16,12 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+import { define_class } from '../widget_helpers.mjs';
+import { ChildWidget } from '../child_widget.mjs';
+import { Container } from './container.mjs';
+import { Button } from './button.mjs';
+import { add_class } from '../helpers.mjs';
+
 function toggle(e) {
     var self = this.parent;
     e.preventDefault();
@@ -115,22 +119,21 @@ function update_visibility() {
         /**
          * Is fired when the expander expands.
          * 
-         * @event TK.Expander#expand
+         * @event Expander#expand
          */
     } else {
         /**
          * Is fired when the expander collapses.
          * 
-         * @event TK.Expander#collapse
+         * @event Expander#collapse
          */
         this.fire_event("collapse");
     }
 }
 var expander_groups = { };
-w.eg = expander_groups;
-TK.Expander = TK.class({
+export const Expander = define_class({
     /**
-     * TK.Expander is a container which can be toggled between two different states,
+     * Expander is a container which can be toggled between two different states,
      * expanded and collapsed. It can be used to implement overlay popups, but it is
      * not limited to that application.
      * In expanded mode the container has the class <code>toolkit-expanded</code>.
@@ -141,9 +144,9 @@ TK.Expander = TK.class({
      * will be shown in collapsed state. This feature can be used to make interfaces
      * more reactive.
      * 
-     * @class TK.Expander
+     * @class Expander
      * 
-     * @extends TK.Container
+     * @extends Container
      *
      * @param {Object} [options={ }] - An object containing initial options.
      * 
@@ -156,10 +159,10 @@ TK.Expander = TK.class({
      *   can be open at one time.
      * @property {Boolean} [options.group_default=false] - If set, this expander is expanded
      *   if all other group members are collapsed.
-     * @param {String} [options.icon=""] - Icon of the {@link TK.Button} which toggles expand state.
+     * @param {String} [options.icon=""] - Icon of the {@link Button} which toggles expand state.
      */
     _class: "Expander",
-    _options: Object.assign(Object.create(TK.Container.prototype._options), {
+    _options: Object.assign(Object.create(Container.prototype._options), {
         expanded: "boolean",
         always_expanded: "boolean",
         group: "string",
@@ -181,11 +184,11 @@ TK.Expander = TK.class({
             if (value) add_to_group.call(this, value);
         }
     },
-    Extends: TK.Container,
+    Extends: Container,
     /*
      * Toggles the collapsed state of the widget.
      * 
-     * @method TK.Expander#toggle
+     * @method Expander#toggle
      */
     toggle: function() {
         toggle.call(this);
@@ -194,7 +197,7 @@ TK.Expander = TK.class({
         var I = this.invalid;
         var O = this.options;
 
-        TK.Container.prototype.redraw.call(this);
+        Container.prototype.redraw.call(this);
 
         if (I.always_expanded) {
             this[O.always_expanded ? "add_class" : "remove_class"]("toolkit-always-expanded");
@@ -208,12 +211,12 @@ TK.Expander = TK.class({
         }
     },
     initialize: function (options) {
-        TK.Container.prototype.initialize.call(this, options);
+        Container.prototype.initialize.call(this, options);
         /**
-         * @member {HTMLDivElement} TK.Expander#element - The main DIV container.
+         * @member {HTMLDivElement} Expander#element - The main DIV container.
          *   Has class <code>toolkit-expander</code>.
          */
-        TK.add_class(this.element, "toolkit-expander");
+        add_class(this.element, "toolkit-expander");
 
         this._update_visibility = update_visibility.bind(this);
 
@@ -224,13 +227,13 @@ TK.Expander = TK.class({
         
     },
     add_child: function(child) {
-        TK.Container.prototype.add_child.call(this, child);
+        Container.prototype.add_child.call(this, child);
         if (!is_visible.call(this, child)) this.hide_child(child);
         child.add_event("set__expanded", this._update_visibility);
         child.add_event("set__collapsed", this._update_visibility);
     },
     remove_child: function(child) {
-        TK.Container.prototype.remove_child.call(this, child);
+        Container.prototype.remove_child.call(this, child);
         child.remove_event("set__expanded", this._update_visibility);
         child.remove_event("set__collapsed", this._update_visibility);
     },
@@ -245,14 +248,14 @@ TK.Expander = TK.class({
             if (!value && this.options.group_default)
                 remove_group_default.call(this, this.options.group);
         }
-        return TK.Container.prototype.set.call(this, key, value);
+        return Container.prototype.set.call(this, key, value);
     },
 });
 /**
- * @member {TK.Button} TK.Expander#button - The button for toggling the state of the expander.
+ * @member {Button} Expander#button - The button for toggling the state of the expander.
  */
-TK.ChildWidget(TK.Expander, "button", {
-    create: TK.Button,
+ChildWidget(Expander, "button", {
+    create: Button,
     show: true,
     map_options: {
         label: "label",
@@ -267,4 +270,3 @@ TK.ChildWidget(TK.Expander, "button", {
         click: toggle,
     },
 });
-})(this, this.TK);
