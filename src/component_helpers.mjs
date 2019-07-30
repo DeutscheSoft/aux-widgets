@@ -1,4 +1,4 @@
-import { warn, error, FORMAT } from './helpers.mjs';
+import { warn, error, FORMAT, html } from './helpers.mjs';
 
 // TODO:
 // * the refcount logic is not correct since it ignores the fact
@@ -14,7 +14,7 @@ function low_parse_attribute(type, x) {
   case "json":
     return JSON.parse(x);
   case "html":
-    return TK.html(x);
+    return html(x);
   case "string":
     return x;
   case "number":
