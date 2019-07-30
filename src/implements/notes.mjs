@@ -21,7 +21,7 @@ const notes = [ "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" 
 /**
  * Returns a note name for a MIDI note number.
  * 
- * @method TK.Notes#midi2note
+ * @method midi2note
  * 
  * @param {int} note - The MIDI note to translate.
  * 
@@ -33,7 +33,7 @@ export function midi2note(num) {
 /**
  * Returns a frequency of a MIDI note number.
  * 
- * @method TK.Notes#midi2freq
+ * @method midi2freq
  * 
  * @param {int} note - The MIDI note to translate.
  * 
@@ -46,7 +46,7 @@ export function midi2freq(num, base) {
 /**
  * Returns a MIDI note number for a frequency.
  * 
- * @method TK.Notes#freq2midi
+ * @method freq2midi
  * 
  * @param {number} frequency - The frequency to translate.
  * @param {number} [base] - The frequency of A440.
@@ -61,7 +61,7 @@ export function freq2midi(freq, base) {
 /**
  * Returns the percents a frequency misses a real note by.
  * 
- * @method TK.Notes#freq2cents
+ * @method freq2cents
  * 
  * @param {number} frequency - The frequency to translate.
  * @param {number} [base] - The frequency of A440.
@@ -78,7 +78,7 @@ export function freq2cents(freq, base) {
 /**
  * Returns a note name for a frequency.
  * 
- * @method TK.Notes#freq2note
+ * @method freq2note
  * 
  * @param {number} frequency - The frequency to translate.
  * @param {number} [base] - The frequency of A440.
