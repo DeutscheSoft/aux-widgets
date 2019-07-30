@@ -24,7 +24,7 @@ import { DOMScheduler } from './dom_scheduler.mjs';
  * @param {HTMLElement|SVGElement} node - The DOM node.
  * @param {string} name - The class name.
  * @returns {boolean}
- * @function TK.has_class
+ * @function has_class
  */
 function has_class(e, cls) { return e.classList.contains(cls); }
 
@@ -33,7 +33,7 @@ function has_class(e, cls) { return e.classList.contains(cls); }
  *
  * @param {HTMLElement|SVGElement} node - The DOM node.
  * @param {...*} names - The class names.
- * @function TK.add_class
+ * @function add_class
  */
 function add_class(e) {
     var i;
@@ -48,7 +48,7 @@ function add_class(e) {
  * Removes a CSS class from a DOM node.
  * @param {HTMLElement|SVGElement} node - The DOM node.
  * @param {...*} names - The class names.
- * @function TK.remove_class
+ * @function remove_class
  */
 function remove_class(e) {
     var i;
@@ -60,7 +60,7 @@ function remove_class(e) {
  * Toggles a CSS class from a DOM node.
  * @param {HTMLElement|SVGElement} node - The DOM node.
  * @param {string} name - The class name.
- * @function TK.toggle_class
+ * @function toggle_class
  */
 function toggle_class(e, cls, cond) {
     /* The second argument to toggle is not implemented in IE,
@@ -115,7 +115,7 @@ if ('getComputedStyle' in window) {
    * @param {string} property - The CSS property name.
    * @returns {string}
    *
-   * @function TK.get_style
+   * @function get_style
    */
   get_style = function(e, style) {
     return window.getComputedStyle(e).getPropertyValue(style);
@@ -131,7 +131,7 @@ function is_class_name (str) {
     /**
      * Returns true ii a string could be a class name.
      * @param {string} string - The string to test
-     * @function TK.is_class_name
+     * @function is_class_name
      * @returns {boolean}
      */
     return !class_regex.test(str);
@@ -142,7 +142,7 @@ function get_max_time(string) {
    * Returns the maximum value (float)  of a comma separated string. It is used
    * to find the longest CSS animation in a set of multiple animations.
    * @param {string} string - The comma separated string.
-   * @function TK.get_max_time
+   * @function get_max_time
    * @returns {number}
    * @example
    * get_max_time(get_style(DOMNode, "animation-duration"));
@@ -168,7 +168,7 @@ function get_duration(element) {
    /**
    * Returns the longest animation duration of CSS animations and transitions.
    * @param {HTMLElement} element - The element to evalute the animation duration for.
-   * @function TK.get_duration
+   * @function get_duration
    * @returns {number}
    */
     return Math.max(get_max_time(get_style(element, "animation-duration"))
@@ -181,7 +181,7 @@ function get_id(id) {
     /**
      * Returns the DOM node with the given ID. Shorthand for document.getElementById.
      * @param {string} id - The ID to search for
-     * @function TK.get_id
+     * @function get_id
      * @returns {HTMLElement}
      */
     return document.getElementById(id);
@@ -193,7 +193,7 @@ function get_class(cls, element) {
      * @param {string} class - The name of the class
      * @param {DOMNode} element - Limit search to child nodes of this element. Optional.
      * @returns {NodeList}
-     * @function TK.get_class
+     * @function get_class
      */
     return (element ? element : document).getElementsByClassName(cls);
 }
@@ -204,7 +204,7 @@ function get_tag(tag, element) {
      * @param {string} tag - The name of the tag
      * @param {DOMNode} element - Limit search to child nodes of this element. Optional.
      * @returns {NodeList}
-     * @function TK.get_tag
+     * @function get_tag
      */
     return (element ? element : document).getElementsByTagName(tag);
 }
@@ -215,7 +215,7 @@ function element(tag) {
      * @param {...object} attributes - Optional mapping of attributes for the new node
      * @param {...string} class - Optional class name for the new node
      * @returns HTMLElement
-     * @function TK.element
+     * @function element
      */
     var n = document.createElement(tag);
     var i, v, j;
@@ -228,7 +228,7 @@ function element(tag) {
             }
         } else if (typeof v === "string") {
             add_class(n, v);
-        } else throw("unsupported argument to TK.element");
+        } else throw("unsupported argument to element");
     }
     return n;
 }
@@ -236,7 +236,7 @@ function empty(element) {
     /**
      * Removes all child nodes from an HTMLElement.
      * @param {HTMLElement} element - The element to clean up
-     * @function TK.empty
+     * @function empty
      */
     while (element.lastChild) element.removeChild(element.lastChild);
 }
@@ -245,7 +245,7 @@ function set_text(element, text) {
      * Sets a string as new exclusive text node of an HTMLElement.
      * @param {HTMLElement} element - The element to clean up
      * @param {string} text - The string to set as text content
-     * @function TK.set_text
+     * @function set_text
      */
     if (element.childNodes.length === 1 && typeof element.childNodes[0].data === "string")
         element.childNodes[0].data = text;
@@ -257,7 +257,7 @@ function html(string) {
      * Returns a documentFragment containing the result of a string parsed as HTML.
      * @param {string} html - A string to parse as HTML
      * @returns {HTMLFragment}
-     * @function TK.html
+     * @function html
      */
     /* NOTE: setting innerHTML on a document fragment is not supported */
     var e = document.createElement("div");
@@ -271,12 +271,12 @@ function set_content(element, content) {
      * Sets the (exclusive) content of an HTMLElement.
      * @param {HTMLElement} element - The element receiving the content
      * @param{string|HTMLElement} content - A string or HTMLElement to set as content
-     * @function TK.set_content
+     * @function set_content
      */
     if (is_dom_node(content)) {
         empty(element);
         if (content.parentNode) {
-            TK.warn("set_content: possible reuse of a DOM node. cloning\n");
+            warn("set_content: possible reuse of a DOM node. cloning\n");
             content = content.cloneNode(true);
         }
         element.appendChild(content);
@@ -289,7 +289,7 @@ function insert_after(newnode, refnode) {
      * Inserts one HTMLELement after another in the DOM tree.
      * @param {HTMLElement} newnode - The new node to insert into the DOM tree
      * @param {HTMLElement} refnode - The reference element to add the new element after
-     * @function TK.insert_after
+     * @function insert_after
      */
     if (refnode.parentNode)
         refnode.parentNode.insertBefore(newnode, refnode.nextSibling);
@@ -299,7 +299,7 @@ function insert_before(newnode, refnode) {
      * Inserts one HTMLELement before another in the DOM tree.
      * @param {HTMLElement} newnode - The new node to insert into the DOM tree
      * @param {HTMLElement} refnode - The reference element to add the new element before
-     * @function TK.insert_before
+     * @function insert_before
      */
     if (refnode.parentNode)
         refnode.parentNode.insertBefore(newnode, refnode);
@@ -308,7 +308,7 @@ function width() {
     /**
      * Returns the width of the viewport.
      * @returns {number}
-     * @function TK.width
+     * @function width
      */
     return Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0, document.body.clientWidth || 0);
 }
@@ -316,7 +316,7 @@ function height() {
     /**
      * Returns the height of the viewport.
      * @returns {number}
-     * @function TK.height
+     * @function height
      */
     return Math.max(document.documentElement.clientHeight, window.innerHeight || 0, document.body.clientHeight || 0);
 }
@@ -325,7 +325,7 @@ function scroll_top(element) {
      * Returns the amount of CSS pixels the document or an optional element is scrolled from top.
      * @param {HTMLElement} element - The element to evaluate. Optional.
      * @returns {number}
-     * @functionTK.scroll_top
+     * @function scroll_top
      */
     if (element)
         return element.scrollTop;
@@ -336,7 +336,7 @@ function scroll_left(element) {
      * Returns the amount of CSS pixels the document or an optional element is scrolled from left.
      * @param {HTMLElement} element - The element to evaluate. Optional.
      * @returns {number}
-     * @functionTK.scroll_left
+     * @function scroll_left
      */
     if (element)
         return element.scrollLeft;
@@ -347,7 +347,7 @@ function scroll_all_top(element) {
      * Returns the sum of CSS pixels an element and all of its parents are scrolled from top.
      * @param {HTMLElement} element - The element to evaluate
      * @returns {number}
-     * @functionTK.scroll_all_top
+     * @function scroll_all_top
      */
     var v = 0;
     while (element = element.parentNode) v += element.scrollTop || 0;
@@ -358,7 +358,7 @@ function scroll_all_left(element) {
      * Returns the sum of CSS pixels an element and all of its parents are scrolled from left.
      * @param {HTMLElement} element - The element to evaluate
      * @returns {number}
-     * @functionTK.scroll_all_left
+     * @function scroll_all_left
      */
     var v = 0;
     while (element = element.parentNode) v += element.scrollLeft || 0;
@@ -371,7 +371,7 @@ function position_top(e, rel) {
      * @param {HTMLElement} element - The element to evaluate
      * @param {HTMLElement} relation - The element to use as reference. Optional.
      * @returns {number}
-     * @function TK.position_top
+     * @function position_top
      */
     var top    = parseInt(e.getBoundingClientRect().top);
     var f  = fixed(e) ? 0 : scroll_top();
@@ -384,7 +384,7 @@ function position_left(e, rel) {
      * @param {HTMLElement} element - The element to evaluate
      * @param {HTMLElement} relation - The element to use as reference. Optional.
      * @returns {number}
-     * @function TK.position_left
+     * @function position_left
      */
     var left   = parseInt(e.getBoundingClientRect().left);
     var f = fixed(e) ? 0 : scroll_left();
@@ -395,7 +395,7 @@ function fixed(e) {
      * Returns if an element is positioned fixed to the viewport
      * @param {HTMLElement} element - the element to evaluate
      * @returns {boolean}
-     * @function TK.fixed
+     * @function fixed
      */
     return getComputedStyle(e).getPropertyValue("position") === "fixed";
 }
@@ -407,7 +407,7 @@ function outer_width(element, margin, width) {
      * @param {boolean} margin - Determine if margin is included
      * @param {number} width - If defined the elements outer width is set to this value
      * @returns {number}
-     * @functionTK.outer_width
+     * @function outer_width
      */
     var m = 0;
     if (margin) {
@@ -438,7 +438,7 @@ function outer_height(element, margin, height) {
      * @param {boolean} margin - Determine if margin is included
      * @param {number} height - If defined the elements outer height is set to this value
      * @returns {number}
-     * @functionTK.outer_height
+     * @function outer_height
      */
     var m = 0;
     if (margin) {
@@ -468,7 +468,7 @@ function inner_width(element, width) {
      * @param {HTMLElement} element - the element to evaluate / manipulate
      * @param {number} width - If defined the elements inner width is set to this value
      * @returns {number}
-     * @functionTK.inner_width
+     * @function inner_width
      */
     var css = css_space(element, "padding", "border");
     var x = css.left + css.right;
@@ -491,7 +491,7 @@ function inner_height(element, height) {
      * @param {HTMLElement} element - the element to evaluate / manipulate
      * @param {number} height - If defined the elements outer height is set to this value
      * @returns {number}
-     * @functionTK.inner_height
+     * @function inner_height
      */
     var css = css_space(element, "padding", "border");
     var y = css.top + css.bottom;
@@ -512,7 +512,7 @@ function box_sizing(element) {
      * Returns the box-sizing method of an HTMLElement.
      * @param {HTMLElement} element - The element to evaluate
      * @returns {string}
-     * @functionTK.box_sizing
+     * @function box_sizing
      */
     var cs = getComputedStyle(element, null);
     if (cs.getPropertyValue("box-sizing")) return cs.getPropertyValue("box-sizing");
@@ -527,9 +527,9 @@ function css_space(element) {
      * @param {HTMLElement} element - The element to evaluate
      * @param{...string} The CSS attributes to take into account
      * @returns {object} An object with the members "top", "bottom", "lfet", "right"
-     * @function TK.css_space
+     * @function css_space
      * @example
-     * TK.css_space(element, "padding", "border");
+     * css_space(element, "padding", "border");
      */
     var cs = getComputedStyle(element, null);
     var o = {top: 0, right: 0, bottom: 0, left: 0};
@@ -552,9 +552,9 @@ function set_styles(elem, styles) {
      * Set multiple CSS styles onto an HTMLElement.
      * @param {HTMLElement} element - the element to add the styles to
      * @param {object} styles - A mapping containing all styles to add
-     * @function TK.set_styles
+     * @function set_styles
      * @example
-     * TK.set_styles(element, {"width":"100px", "height":"100px"});
+     * set_styles(element, {"width":"100px", "height":"100px"});
      */
     var key, v;
     var s = elem.style;
@@ -564,7 +564,7 @@ function set_styles(elem, styles) {
             delete s[key];
         } else {
             if (typeof v === "number") {
-                TK.warn("TK.set_styles: use of implicit px conversion is _deprecated_ and will be removed in the future.");
+                warn("set_styles: use of implicit px conversion is _deprecated_ and will be removed in the future.");
                 v = v.toFixed(3) + "px";
             }
             s[key] = v;
@@ -578,13 +578,13 @@ function set_style(e, style, value) {
      * @param {HTMLElement} element - The element to set the style to
      * @param {string} style - The CSS attribute to set
      * @param {string|number} value - The value to set the CSS attribute to
-     * @function TK.set_style
+     * @function set_style
      */
     if (typeof value === "number") {
         /* By default, numbers are transformed to px. I believe this is a very _dangerous_ default
          * behavior, because it breaks other number like properties _without_ warning.
          * this is now deprecated. */
-        TK.warn("TK.set_style: use of implicit px conversion is _deprecated_ and will be removed in the future.");
+        warn("set_style: use of implicit px conversion is _deprecated_ and will be removed in the future.");
         value = value.toFixed(3) + "px";
     }
     e.style[style] = value;
@@ -594,7 +594,7 @@ function unique_id() {
     /**
      * Generate a unique ID string.
      * @returns {string}
-     * @function TK.unique_id
+     * @function unique_id
      */
     var id;
     do { id = "tk-" + _id_cnt++; } while (document.getElementById(id));
@@ -607,10 +607,10 @@ function unique_id() {
  *
  * @returns {function} A formatting function.
  * @param {string} fmt - The format string.
- * @function TK.FORMAT
+ * @function FORMAT
  * @example
- * var f = TK.FORMAT("%.2f Hz");
- * @see TK.sprintf
+ * var f = FORMAT("%.2f Hz");
+ * @see sprintf
  */
 function FORMAT(fmt) {
     var args = [];
@@ -674,10 +674,10 @@ function FORMAT(fmt) {
  * @returns {function} A formatting function.
  * @param {string} fmt - The format string.
  * @param {...*} args - The format arguments.
- * @function TK.sprintf
+ * @function sprintf
  * @example
- * TK.sprintf("%d Hz", 440);
- * @see TK.FORMAT
+ * sprintf("%d Hz", 440);
+ * @see FORMAT
  */
 function sprintf(fmt) {
     var arg_len = arguments.length;
@@ -746,7 +746,7 @@ function escapeHTML(text) {
      * Escape an HTML string to be displayed as text.
      * @param {string} html - The HTML code to escape
      * @returns {string}
-     * @function TK.escapeHTML
+     * @function escapeHTML
      */
     var map = {
         '&' : '&amp;',
@@ -762,7 +762,7 @@ function is_touch() {
     /**
      * Check if a device is touch-enabled.
      * @returns {boolean}
-     * @function TK.is_touch
+     * @function is_touch
      */
     return 'ontouchstart' in window // works on most browsers
       || 'onmsgesturechange' in window; // works on ie10
@@ -771,7 +771,7 @@ function os() {
     /**
      * Return the operating system
      * @returns {string}
-     * @function TK.os
+     * @function os
      */
     var ua = navigator.userAgent.toLowerCase();
     if (ua.indexOf("android") > -1)
@@ -806,7 +806,7 @@ function seat_all_svg(parent) {
      * Searches for all SVG that don't have the class "svg-fixed" and re-positions them
      * in order to avoid blurry lines.
      * @param {HTMLElement} parent - If set only children of parent are searched
-     * @function TK.seat_all_svg
+     * @function seat_all_svg
      */
     var a = get_tag("svg", parent);
     for (var i = 0; i < a.length; i++) {
@@ -818,7 +818,7 @@ function seat_svg(e) {
     /**
      * Move SVG for some sub-pixel if their position in viewport is not int.
      * @param {SVGElement} svg - The SVG to manipulate
-     * @function TK.seat_svg
+     * @function seat_svg
      */
     if (retrieve(e, "margin-left") === null) {
         store(e, "margin-left", parseFloat(get_style(e, "margin-left")));
@@ -875,7 +875,7 @@ function store(e, key, val) {
      * @param {object} object - The object to store the data
      * @param {string} key - The key to identify the memory
      * @param {*} data - The data to store
-     * @function TK.store
+     * @function store
      */
     data(e)[key] = val;
 }
@@ -884,7 +884,7 @@ function retrieve(e, key) {
      * Retrieve a piece of data from an object.
      * @param {object} object - The object to retrieve the data from
      * @param {string} key - The key to identify the memory
-     * @function TK.retrieve
+     * @function retrieve
      * @returns {*}
      */
     return data(e)[key];
@@ -895,7 +895,7 @@ function merge(dst) {
      * will be merged into the first one.
      * @param {...object} object - The objects to merge
      * @returns {object}
-     * @function TK.merge
+     * @function merge
      */
     //console.log("merging", src, "into", dst);
     var key, i, src;
@@ -913,7 +913,7 @@ function object_and(orig, filter) {
      * @param {object} origin - The object to filter
      * @param {object} filter - The object containing the white list
      * @returns {object} The filtered result
-     * @function TK.object_and
+     * @function object_and
      */
     var ret = {};
     for (var key in orig) {
@@ -927,7 +927,7 @@ function object_sub(orig, filter) {
      * @param {object} origin - The object to filter
      * @param {object} filter - The object containing the black list
      * @returns {object} The filtered result
-     * @function TK.object_sub
+     * @function object_sub
      */
     var ret = {};
     for (var key in orig) {
@@ -940,7 +940,7 @@ function to_array(collection) {
      * Convert any collection (like NodeList) into an array.
      * @param {collection} collection - The collection to convert into an array
      * @returns {array}
-     * @functionTK.to_array
+     * @function to_array
      */
     var ret = new Array(collection.length);
     var i;
@@ -966,7 +966,7 @@ function is_dom_node(o) {
  * it can safely be used in browsers which do not support it.
  *
  * @param {...*} args
- * @function TK.error
+ * @function error
  */
 function error() {
     if (!window.console) return;
@@ -980,7 +980,7 @@ function error() {
  * it can safely be used in browsers which do not support it.
  *
  * @param {...*} args
- * @function TK.warn
+ * @function warn
  */
 function warn() {
     if (!window.console) return;
@@ -993,7 +993,7 @@ function warn() {
  * it can safely be used in browsers which do not support it.
  *
  * @param {...*} args
- * @function TK.log
+ * @function log
  */
 function log() {
     if (!window.console) return;
@@ -1101,7 +1101,7 @@ const browser = function() {
     /**
      * Returns the name of the browser
      * @returns {string}
-     * @function TK.browser
+     * @function browser
      */
     var ua = navigator.userAgent, tem, M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
     if (/trident/i.test(M[1])) {
@@ -1125,9 +1125,9 @@ function assign_warn(a) {
         var b = arguments[i];
         for (var key in b) if (b.hasOwnProperty(key)) {
             if (a[key] === b[key]) {
-                TK.warn("overwriting identical", key, "(", a[key], ")");
+                warn("overwriting identical", key, "(", a[key], ")");
             } else if (a[key]) {
-                TK.warn("overwriting", key, "(", a[key], "vs", b[key], ")");
+                warn("overwriting", key, "(", a[key], "vs", b[key], ")");
             }
             a[key] = b[key];
         }
