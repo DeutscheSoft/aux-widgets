@@ -16,37 +16,40 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-"use strict";
-(function(w, TK){
+import { define_class } from '../widget_helpers.mjs';
+import { ChildWidget } from '../child_widget.mjs';
+import { Label } from './label.mjs';
+import { Container } from './container.mjs';
+import { add_class } from '../helpers.mjs';
+
 /**
- * Frame is a {@link TK.Container} with a {@link TK.Label} on top.
+ * Frame is a {@link Container} with a {@link Label} on top.
  * 
- * @extends TK.Container
+ * @extends Container
  * 
- * @class TK.Frame
+ * @class Frame
  */
-TK.Frame = TK.class({
-    Extends: TK.Container,
+export const Frame = define_class({
+    Extends: Container,
     _class: "Frame",
-    _options: Object.create(TK.Container.prototype._options),
+    _options: Object.create(Container.prototype._options),
     initialize: function (options) {
-        TK.Container.prototype.initialize.call(this, options);
+        Container.prototype.initialize.call(this, options);
         /**
-         * @member {HTMLDivElement} TK.Frame#element - The main DIV container.
+         * @member {HTMLDivElement} Frame#element - The main DIV container.
          *   Has class <code>toolkit-frame</code>.
          */
-        TK.add_class(this.element, "toolkit-frame");
+        add_class(this.element, "toolkit-frame");
     },
 });
 /**
- * @member {TK.Label} TK.Frame#label - The {@link TK.Label} of the frame.
+ * @member {Label} Frame#label - The {@link Label} of the frame.
  */
-TK.ChildWidget(TK.Frame, "label", {
-    create: TK.Label,
+ChildWidget(Frame, "label", {
+    create: Label,
     option: "label",
     inherit_options: true,
     default_options: {
         class: "toolkit-frame-label"
     },
 });
-})(this, this.TK);

@@ -33,6 +33,7 @@ import { SortableListItem } from '../src/widgets/sortablelistitem.mjs';
 import { TreeItem } from '../src/widgets/treeitem.mjs';
 import { TaggableTreeItem } from '../src/widgets/taggabletreeitem.mjs';
 import { Tagger } from '../src/widgets/tagger.mjs';
+import { Frame } from '../src/widgets/frame.mjs';
 
 import { compare, object_minus } from './helpers.mjs';
 
@@ -72,6 +73,7 @@ const widgets = [
    TreeItem,
    TaggableTreeItem,
    Tagger,
+   Frame,
 ];
 
 describe('Widgets', () => {
