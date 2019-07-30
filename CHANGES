@@ -1,3 +1,12 @@
+Changes since version 1.3
+--------------------------------------
+
+Refactoring
+===========
+
+* All code is now organized into es6 modules
+* Dropped support for IE
+
 Changes since version 1.2
 --------------------------------------
 
