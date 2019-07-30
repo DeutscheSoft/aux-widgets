@@ -18,9 +18,7 @@
  */
 import { S } from '../dom_scheduler.mjs';
 import { define_class } from './../widget_helpers.mjs';
-import {
-    make_svg, add_class, get_style, empty
-  } from '../helpers.mjs';
+import { make_svg, add_class, get_style, empty } from '../utils/dom.mjs';
 import { Widget } from '../widgets/widget.mjs';
 import { Ranges } from '../implements/ranges.mjs';
 

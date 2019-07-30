@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { element } from '../helpers.mjs';
+import { element } from '../utils/dom.mjs';
 import { S } from '../dom_scheduler.mjs';
 
 function get_event(event) {

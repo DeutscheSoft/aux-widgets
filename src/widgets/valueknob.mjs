@@ -22,7 +22,8 @@ import { Widget } from './widget.mjs';
 import { Knob } from './knob.mjs';
 import { Value } from './value.mjs';
 import { Label } from './label.mjs';
-import { FORMAT, add_class, element } from '../helpers.mjs';
+import { add_class, element } from '../utils/dom.mjs';
+import { FORMAT } from '../utils/sprintf.mjs';
 
  /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.

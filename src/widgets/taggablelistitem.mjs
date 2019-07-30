@@ -19,7 +19,7 @@
 import { define_class } from '../widget_helpers.mjs';
 import { ListItem } from './listitem.mjs';
 import { Taggable } from './taggable.mjs';
-import { add_class } from '../helpers.mjs';
+import { add_class } from '../utils/dom.mjs';
 
 export const TaggableListItem = define_class({
     _class: "TaggableListItem",

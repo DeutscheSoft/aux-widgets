@@ -17,7 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class } from './../widget_helpers.mjs';
-import { warn, make_svg, add_class } from '../helpers.mjs';
+import { make_svg, add_class } from '../utils/dom.mjs';
+import { warn } from '../utils/log.mjs';
 import { ResponseHandler } from './responsehandler.mjs';
 import { EqBand } from '../modules/eqband.mjs';
  

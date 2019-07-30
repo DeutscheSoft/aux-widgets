@@ -25,7 +25,8 @@ import { Ranged } from '../implements/ranged.mjs';
 import { DragValue } from '../modules/dragvalue.mjs';
 import { Scale } from '../modules/scale.mjs';
 import { ScrollValue } from '../modules/scrollvalue.mjs';
-import { FORMAT, add_class } from '../helpers.mjs';
+import { add_class } from '../utils/dom.mjs';
+import { FORMAT } from '../utils/sprintf.mjs';
  
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.

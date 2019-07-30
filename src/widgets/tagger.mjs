@@ -19,7 +19,7 @@
 import { define_class } from '../widget_helpers.mjs';
 import { Dialog } from './dialog.mjs';
 import { Taggable } from './taggable.mjs';
-import { add_class, element, remove_class } from '../helpers.mjs';
+import { add_class, element, remove_class } from '../utils/dom.mjs';
 
 function keyup (e) {
     if (e.keyCode != 13) return;

@@ -18,7 +18,7 @@
  */
 import { define_class } from '../widget_helpers.mjs';
 import { Widget } from './widget.mjs';
-import { element, add_class } from '../helpers.mjs';
+import { element, add_class } from '../utils/dom.mjs';
 
 /**
  * The State widget is a multi-functional adaption of a traditional LED. It

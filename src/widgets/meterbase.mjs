@@ -24,8 +24,10 @@ import { Gradient } from '../implements/gradient.mjs';
 import { Scale } from '../modules/scale.mjs';
 import {
     element, add_class, get_style, toggle_class, remove_class, insert_after,
-    inner_width, inner_height, FORMAT
-  } from '../helpers.mjs';
+    inner_width, inner_height
+  } from '../utils/dom.mjs';
+
+import { FORMAT } from '../utils/sprintf.mjs';
 import { S } from '../dom_scheduler.mjs';
 
 function vert(O) {

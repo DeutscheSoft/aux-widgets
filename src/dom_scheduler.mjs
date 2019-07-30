@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-import { warn, log } from './helpers.mjs';
+import { warn, log } from './utils/log.mjs';
 
 function low_add(Q, o, prio) {
     prio = prio << 1;

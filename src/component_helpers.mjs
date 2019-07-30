@@ -1,4 +1,6 @@
-import { warn, error, FORMAT, html } from './helpers.mjs';
+import { warn, error } from './utils/log.mjs';
+import { FORMAT } from './utils/sprintf.mjs';
+import { html } from './utils/dom.mjs';
 
 // TODO:
 // * the refcount logic is not correct since it ignores the fact

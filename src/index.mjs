@@ -1,4 +1,5 @@
 import { DOMScheduler, S } from './dom_scheduler.mjs';
+
 import {
     is_dom_node,
     get_id,
@@ -35,35 +36,34 @@ import {
     get_style,
     get_duration,
     unique_id,
-    FORMAT,
-    sprintf,
     html,
-    escapeHTML,
     is_touch,
-    os,
-    browser,
     supports_transform,
     make_svg,
+  } from './utils/dom.mjs';
+
+import {
     seat_all_svg,
     seat_svg,
-    delayed_callback,
+  } from './utils/svg.mjs';
+
+import {
+    os,
+    browser,
+  } from './utils/browser_detection.mjs';
+
+import {
     add_active_event_listener,
     remove_active_event_listener,
     add_passive_event_listener,
     remove_passive_event_listener,
-    data,
-    store,
-    retrieve,
-    merge,
-    object_and,
-    object_sub,
-    to_array,
-    warn,
-    error,
-    log,
-    assign_warn,
-    print_widget_tree
-} from './helpers.mjs';
+  } from './utils/events.mjs';
+
+import { merge, object_and, object_sub, to_array, } from './utils/object.mjs';
+
+import { warn, error, log, print_widget_tree } from './utils/log.mjs';
+
+import { FORMAT, sprintf } from './utils/sprintf.mjs';
 
 export {
   DOMScheduler,
@@ -106,7 +106,6 @@ export {
   FORMAT,
   sprintf,
   html,
-  escapeHTML,
   is_touch,
   os,
   browser,
@@ -114,14 +113,10 @@ export {
   make_svg,
   seat_all_svg,
   seat_svg,
-  delayed_callback,
   add_active_event_listener,
   remove_active_event_listener,
   add_passive_event_listener,
   remove_passive_event_listener,
-  data,
-  store,
-  retrieve,
   merge,
   object_and,
   object_sub,
@@ -129,6 +124,5 @@ export {
   warn,
   error,
   log,
-  assign_warn,
   print_widget_tree
 };

@@ -19,7 +19,7 @@
 import { define_class } from '../widget_helpers.mjs';
 import { Widget } from './widget.mjs';
 import { Circular } from '../modules/circular.mjs';
-import { set_text, element, add_class, get_style, make_svg } from '../helpers.mjs';
+import { set_text, element, add_class, get_style, make_svg } from '../utils/dom.mjs';
 import { S } from '../dom_scheduler.mjs';
 
 

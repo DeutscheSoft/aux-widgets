@@ -18,7 +18,8 @@
  */
 import { define_class } from './../widget_helpers.mjs';
 import { Chart } from './chart.mjs';
-import { error, add_class, remove_class, css_space, inner_width, inner_height, warn } from '../helpers.mjs';
+import { add_class, remove_class, css_space, inner_width, inner_height } from '../utils/dom.mjs';
+import { error, warn } from '../utils/log.mjs';
 
 function range_set(value, key) {
     this.range_x.set(key, value);

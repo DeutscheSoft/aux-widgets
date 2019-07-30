@@ -18,7 +18,7 @@
  */
 import { define_class } from './../widget_helpers.mjs';
 import { Module } from './module.mjs';
-import { add_event_listener, remove_event_listener } from '../helpers.mjs';
+import { add_event_listener, remove_event_listener } from '../utils/events.mjs';
 
 var document = window.document;
 

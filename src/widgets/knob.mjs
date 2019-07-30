@@ -31,7 +31,9 @@ import { Widget } from './widget.mjs';
 import { Circular } from '../modules/circular.mjs';
 import { DragValue } from '../modules/dragvalue.mjs';
 import { ScrollValue } from '../modules/scrollvalue.mjs';
-import { FORMAT, element, add_class, remove_class, make_svg, object_and, object_sub } from '../helpers.mjs';
+import { element, add_class, remove_class, make_svg } from '../utils/dom.mjs';
+import { FORMAT } from '../utils/sprintf.mjs';
+import { object_and, object_sub } from '../utils/object.mjs';
      
 var format_viewbox = FORMAT("0 0 %d %d");
 function dblclick() {

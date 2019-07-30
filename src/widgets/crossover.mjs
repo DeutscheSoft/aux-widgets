@@ -17,7 +17,9 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class } from '../widget_helpers.mjs';
-import { error, add_class, sprintf } from '../helpers.mjs';
+import { add_class } from '../utils/dom.mjs';
+import { error } from '../utils/log.mjs';
+import { sprintf } from '../utils/sprintf.mjs';
 import { Equalizer } from './equalizer.mjs';
 import { EqBand } from '../modules/eqband.mjs';
 import { Filter } from '../modules/filter.mjs';

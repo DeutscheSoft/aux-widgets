@@ -17,7 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class } from '../widget_helpers.mjs';
-import { warn, add_class, remove_class } from '../helpers.mjs';
+import { add_class, remove_class } from '../utils/dom.mjs';
+import { warn } from '../utils/log.mjs';
 import { Module } from './module.mjs';
 
 function scroll_timeout() {

@@ -18,7 +18,7 @@
  */
 
 import { define_class } from './../widget_helpers.mjs';
-import { element, add_class, remove_class, inner_height, inner_width, toggle_class } from './../helpers.mjs';
+import { element, add_class, remove_class, inner_height, inner_width, toggle_class } from './../utils/dom.mjs';
 import { Container } from './container.mjs';
 import { Button } from './button.mjs';
 

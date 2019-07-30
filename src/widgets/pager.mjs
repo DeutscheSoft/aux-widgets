@@ -28,7 +28,8 @@
  */
 import { define_class, ChildElement } from '../widget_helpers.mjs';
 import { ChildWidget } from '../child_widget.mjs';
-import { add_class, remove_class, warn, is_dom_node } from '../helpers.mjs';
+import { add_class, remove_class, is_dom_node } from '../utils/dom.mjs';
+import { warn } from '../utils/log.mjs';
 import { Container } from './container.mjs';
 import { ButtonArray } from './buttonarray.mjs';
  

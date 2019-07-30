@@ -17,7 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 import { S } from '../dom_scheduler.mjs';
-import { toggle_class, set_styles, add_class, remove_class, warn, has_class, set_style, get_style, unique_id } from './../helpers.mjs';
+import { toggle_class, set_styles, add_class, remove_class, has_class, set_style, get_style, unique_id } from './../utils/dom.mjs';
+import { warn } from './../utils/log.mjs';
 import { define_class } from './../widget_helpers.mjs';
 import { Base } from './../implements/base.mjs';
 

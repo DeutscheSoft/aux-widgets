@@ -29,7 +29,7 @@ import { translate_anchor } from '../implements/anchor.mjs';
 import {
     add_class, remove_class, outer_width, outer_height, position_left, position_top, width,
     inner_width, inner_height, element, height, toggle_class, set_content
-  } from '../helpers.mjs';
+  } from '../utils/dom.mjs';
  
 function header_action() {
     var that = this.parent;

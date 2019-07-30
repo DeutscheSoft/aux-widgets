@@ -19,7 +19,7 @@
 import { define_class } from '../widget_helpers.mjs';
 import { Container } from './container.mjs';
 import { translate_anchor } from '../implements/anchor.mjs';
-import { add_class } from '../helpers.mjs';
+import { add_class } from '../utils/dom.mjs';
 
 function autoclose_cb(e) {
   var curr = e.target;

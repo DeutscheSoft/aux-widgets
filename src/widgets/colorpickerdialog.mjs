@@ -20,7 +20,7 @@ import { define_class } from '../widget_helpers.mjs';
 import { ChildWidget } from '../child_widget.mjs';
 import { Dialog } from './dialog.mjs';
 import { ColorPicker } from './colorpicker.mjs';
-import { add_class } from '../helpers.mjs';
+import { add_class } from '../utils/dom.mjs';
 
 function cancel () {
     var self = this.parent;

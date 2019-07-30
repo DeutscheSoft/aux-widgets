@@ -18,7 +18,8 @@
  */
 import { define_class } from '../widget_helpers.mjs';
 import { Ranged } from './ranged.mjs';
-import { sprintf, browser } from '../helpers.mjs';
+import { sprintf } from '../utils/sprintf.mjs';
+import { browser } from '../utils/browser_detection.mjs';
 
 export const Gradient = define_class({
     /**

@@ -17,9 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class } from './../widget_helpers.mjs';
-import {
-  add_class, remove_class
-} from '../helpers.mjs';
+import { add_class, remove_class } from '../utils/dom.mjs';
 
 /**
  * GlobalCursor adds global cursor classes to ensure

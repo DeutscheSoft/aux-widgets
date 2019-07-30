@@ -25,9 +25,8 @@ import { Button } from './button.mjs';
 import { Colors } from './colors.mjs';
 import { Range } from '../modules/range.mjs';
 import { DragValue } from '../modules/dragvalue.mjs';
-import {
-    FORMAT, add_class
-  } from '../helpers.mjs';
+import { add_class } from '../utils/dom.mjs';
+import { FORMAT } from '../utils/sprintf.mjs';
 
 var color_options = [ "rgb", "hsl", "hex", "hue", "saturation", "lightness", "red", "green", "blue" ];
 

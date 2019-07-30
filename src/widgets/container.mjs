@@ -19,7 +19,8 @@
 import { define_class } from './../widget_helpers.mjs';
 import { Widget } from './widget.mjs';
 import { S } from '../dom_scheduler.mjs';
-import { element, add_class, warn, remove_class, get_duration, empty, set_content } from '../helpers.mjs';
+import { element, add_class, remove_class, get_duration, empty, set_content } from '../utils/dom.mjs';
+import { warn } from '../utils/log.mjs';
 
 function after_hiding() {
     this.__hide_id = false;

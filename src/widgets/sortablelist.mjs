@@ -21,7 +21,7 @@ import { DragCapture } from '../modules/dragcapture.mjs';
 import { List } from './list.mjs';
 import { Container } from './container.mjs';
 import { SortableListItem } from './sortablelistitem.mjs';
-import { add_class } from '../helpers.mjs';
+import { add_class } from '../utils/dom.mjs';
 
 /* TODO */
 

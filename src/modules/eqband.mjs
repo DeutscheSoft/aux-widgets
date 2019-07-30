@@ -20,7 +20,8 @@
 import { define_class } from './../widget_helpers.mjs';
 import { Filter } from './filter.mjs';
 import { ResponseHandle } from './responsehandle.mjs';
-import { add_class, warn } from '../helpers.mjs';
+import { add_class } from '../utils/dom.mjs';
+import { warn } from '../utils/log.mjs';
 
 const type_to_mode = {
     parametric: "circular",

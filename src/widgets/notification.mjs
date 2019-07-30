@@ -21,7 +21,7 @@ import { ChildWidget } from '../child_widget.mjs';
 import { Container } from './container.mjs';
 import { Button } from './button.mjs';
 import { Icon } from './icon.mjs';
-import { add_class } from '../helpers.mjs';
+import { add_class } from '../utils/dom.mjs';
 import { S } from '../dom_scheduler.mjs';
 
 function close_clicked (e) {

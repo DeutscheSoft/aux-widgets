@@ -22,10 +22,10 @@ import { Widget } from './../widgets/widget.mjs';
 import { GlobalCursor } from '../implements/globalcursor.mjs';
 import { Warning } from '../implements/warning.mjs';
 import { S } from '../dom_scheduler.mjs';
-import {
-  FORMAT, warn, make_svg, add_event_listener, remove_event_listener,
-  set_text, remove_class, add_class, toggle_class
-} from '../helpers.mjs';
+import { FORMAT } from '../utils/sprintf.mjs';
+import { warn } from '../utils/log.mjs';
+import { add_event_listener, remove_event_listener } from '../utils/events.mjs';
+import { make_svg, set_text, remove_class, add_class, toggle_class } from '../utils/dom.mjs';
 import { Range } from './range.mjs';
 
 import { DragCapture } from '../modules/dragcapture.mjs';

@@ -19,9 +19,10 @@
 import { define_class, ChildElement } from './../widget_helpers.mjs';
 import { S } from '../dom_scheduler.mjs';
 import {
-    empty, css_space, make_svg, get_style, warn, element, add_class,
+    empty, css_space, make_svg, get_style, element, add_class,
     inner_width, toggle_class, inner_height
-  } from '../helpers.mjs';
+  } from '../utils/dom.mjs';
+import { warn } from '../utils/log.mjs';
 import { Widget } from './widget.mjs';
 import { Ranges } from '../implements/ranges.mjs';
 import { Graph } from '../modules/graph.mjs';

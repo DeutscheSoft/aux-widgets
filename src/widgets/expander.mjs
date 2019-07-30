@@ -20,7 +20,7 @@ import { define_class } from '../widget_helpers.mjs';
 import { ChildWidget } from '../child_widget.mjs';
 import { Container } from './container.mjs';
 import { Button } from './button.mjs';
-import { add_class } from '../helpers.mjs';
+import { add_class } from '../utils/dom.mjs';
 
 function toggle(e) {
     var self = this.parent;

@@ -1,5 +1,5 @@
 import { define_class, add_static_event } from './widget_helpers.mjs';
-import { toggle_class } from './helpers.mjs';
+import { toggle_class } from './utils/dom.mjs';
 import { Widget } from './widgets/widget.mjs';
 
 function get_child_options(parent, name, options, config) {

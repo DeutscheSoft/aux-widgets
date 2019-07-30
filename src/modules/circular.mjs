@@ -17,7 +17,9 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class } from '../widget_helpers.mjs';
-import { FORMAT, error, empty, make_svg, add_class, get_style } from '../helpers.mjs';
+import { FORMAT } from '../utils/sprintf.mjs';
+import { error } from '../utils/log.mjs';
+import { empty, make_svg, add_class, get_style } from '../utils/dom.mjs';
 import { S } from '../dom_scheduler.mjs';
 import { Warning } from '../implements/warning.mjs';
 import { Ranged } from '../implements/ranged.mjs';

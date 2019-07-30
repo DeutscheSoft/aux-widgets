@@ -18,7 +18,7 @@
  */
 import { define_class } from './../widget_helpers.mjs';
 import { Chart } from './chart.mjs';
-import { add_class } from '../helpers.mjs';
+import { add_class } from '../utils/dom.mjs';
 
 function calculate_grid(range, step) {
     var min = range.get("min");

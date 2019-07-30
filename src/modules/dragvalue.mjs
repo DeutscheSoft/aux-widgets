@@ -19,7 +19,8 @@
 import { define_class } from '../widget_helpers.mjs';
 import { DragCapture } from './dragcapture.mjs';
 import { GlobalCursor } from '../implements/globalcursor.mjs';
-import { warn, add_class, remove_class } from '../helpers.mjs';
+import { warn } from '../utils/log.mjs';
+import { add_class, remove_class } from '../utils/dom.mjs';
 import { S } from '../dom_scheduler.mjs';
 
 function start_drag(value) {

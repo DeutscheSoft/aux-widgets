@@ -1,4 +1,6 @@
-import { toggle_class, element, warn, remove_event_listener, add_event_listener } from './../helpers.mjs';
+import { toggle_class, element } from './../utils/dom.mjs';
+import { warn } from './../utils/log.mjs';
+import { remove_event_listener, add_event_listener } from './../utils/events.mjs';
 import { define_class, add_event, remove_event } from './../widget_helpers.mjs';
 
 /*

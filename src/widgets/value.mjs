@@ -18,7 +18,9 @@
  */
 import { define_class } from './../widget_helpers.mjs';
 import { Widget } from './widget.mjs';
-import { FORMAT, element, add_class, remove_class, os } from './../helpers.mjs';
+import { element, add_class, remove_class } from './../utils/dom.mjs';
+import { FORMAT } from './../utils/sprintf.mjs';
+import { os } from './../utils/browser_detection.mjs';
  
  /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.

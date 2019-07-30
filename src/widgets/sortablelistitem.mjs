@@ -19,7 +19,7 @@
 import { define_class } from '../widget_helpers.mjs';
 import { ListItem } from './listitem.mjs';
 import { Button } from './button.mjs';
-import { add_class } from '../helpers.mjs';
+import { add_class } from '../utils/dom.mjs';
 
 var build_sorter = function () {
     this.sorter = new Button({"class":"toolkit-sorter",container:this.element});

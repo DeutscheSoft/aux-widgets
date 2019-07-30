@@ -18,7 +18,7 @@
  */
 import { define_class } from '../widget_helpers.mjs';
 import { Container } from './container.mjs';
-import { element } from '../helpers.mjs';
+import { element } from '../utils/dom.mjs';
 
 export const List = define_class({
     _options: Object.assign(Object.create(Container.prototype._options), {

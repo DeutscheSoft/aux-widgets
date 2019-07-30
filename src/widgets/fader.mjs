@@ -40,7 +40,7 @@ import { tooltip } from './tooltips.mjs';
 import {
     set_text, element, add_class, toggle_class, remove_class, supports_transform,
     css_space, outer_height, inner_height, outer_width, inner_width
-  } from '../helpers.mjs';
+  } from '../utils/dom.mjs';
 import { ChildWidget } from '../child_widget.mjs';
 import { S } from '../dom_scheduler.mjs';
 

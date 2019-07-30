@@ -20,9 +20,11 @@ import { define_class, ChildElement } from '../widget_helpers.mjs';
 import { Widget } from '../widgets/widget.mjs';
 import { Ranged } from '../implements/ranged.mjs';
 import {
-    set_content, add_class, outer_width, FORMAT, element, remove_class, warn, toggle_class,
+    set_content, add_class, outer_width , element, remove_class, toggle_class,
     empty, inner_height, inner_width, supports_transform
-  } from '../helpers.mjs';
+  } from '../utils/dom.mjs';
+import { FORMAT } from '../utils/sprintf.mjs';
+import { warn } from '../utils/log.mjs';
 import { S } from '../dom_scheduler.mjs';
 
 function get_base(O) {

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-import { element, add_class, toggle_class } from './../helpers.mjs';
+import { element, add_class, toggle_class } from './../utils/dom.mjs';
 import { define_class } from './../widget_helpers.mjs';
 import { ChildWidget } from './../child_widget.mjs';
 import { Widget } from './widget.mjs';

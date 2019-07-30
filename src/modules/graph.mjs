@@ -19,9 +19,8 @@
 import { define_class } from './../widget_helpers.mjs';
 import { Widget } from '../widgets/widget.mjs';
 import { Ranges } from '../implements/ranges.mjs';
-import {
-    make_svg, add_class, remove_class, error
-  } from '../helpers.mjs';
+import { make_svg, add_class, remove_class } from '../utils/dom.mjs';
+import { error } from '../utils/log.mjs';
 
 function range_change_cb() {
     this.invalidate_all();

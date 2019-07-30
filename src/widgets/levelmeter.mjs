@@ -20,9 +20,8 @@ import { define_class, ChildElement } from '../widget_helpers.mjs';
 import { ChildWidget } from '../child_widget.mjs';
 import { MeterBase } from './meterbase.mjs';
 import { State } from './state.mjs';
-import {
-    FORMAT, add_class, toggle_class, element, set_text
-  } from '../helpers.mjs';
+import { add_class, toggle_class, element, set_text } from '../utils/dom.mjs';
+import { FORMAT } from '../utils/sprintf.mjs';
 
 function vert(O) {
     return O.layout === "left" || O.layout === "right";

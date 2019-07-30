@@ -1,5 +1,6 @@
 import { Base } from './implements/base.mjs';
-import { toggle_class, element, warn } from './helpers.mjs';
+import { toggle_class, element } from './utils/dom.mjs';
+import { warn } from './utils/log.mjs';
 
 export function add_event(to, event, fun) {
     var tmp = to[event];

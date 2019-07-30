@@ -22,7 +22,7 @@ import { Label } from './label.mjs';
 import {
     element, add_class, outer_width, width, height, scroll_left, scroll_top, set_styles,
     outer_height, position_top, position_left, set_style, get_duration, empty, remove_class
-  } from '../helpers.mjs';
+  } from '../utils/dom.mjs';
 import { S } from '../dom_scheduler.mjs';
  
  /**

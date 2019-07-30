@@ -32,7 +32,8 @@ import { DragValue } from '../modules/dragvalue.mjs';
 import { ScrollValue } from '../modules/scrollvalue.mjs';
 import { Ranged } from '../implements/ranged.mjs';
 import { Warning } from '../implements/warning.mjs';
-import { element, add_class, warn, outer_width } from '../helpers.mjs';
+import { element, add_class, outer_width } from '../utils/dom.mjs';
+import { warn } from '../utils/log.mjs';
      
 function dblclick() {
     this.userset("value", this.options.reset);

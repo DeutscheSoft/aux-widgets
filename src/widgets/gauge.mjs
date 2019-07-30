@@ -19,7 +19,9 @@
 import { define_class } from './../widget_helpers.mjs';
 import { Widget } from './widget.mjs';
 import { Circular } from '../modules/circular.mjs';
-import { FORMAT, element, add_class, make_svg, object_and, object_sub } from '../helpers.mjs';
+import { element, add_class, make_svg } from '../utils/dom.mjs';
+import { FORMAT } from '../utils/sprintf.mjs';
+import { object_and, object_sub } from '../utils/object.mjs';
 import { S } from '../dom_scheduler.mjs';
 
 function _get_coords_single(deg, inner, pos) {

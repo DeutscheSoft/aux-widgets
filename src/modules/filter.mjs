@@ -18,7 +18,7 @@
  */
 import { define_class } from './../widget_helpers.mjs';
 import { Base } from '../implements/base.mjs';
-import { error } from '../helpers.mjs';
+import { error } from '../utils/log.mjs';
 
 /* These formulae for 'standard' biquad filter coefficients are
  * from

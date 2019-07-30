@@ -21,9 +21,9 @@ import { ChildWidget } from '../child_widget.mjs';
 import { LevelMeter } from './levelmeter.mjs';
 import { Label } from './label.mjs';
 import { Container } from './container.mjs';
-import {
-    FORMAT, add_class, toggle_class, element, set_text, object_sub, remove_class
-  } from '../helpers.mjs';
+import { add_class, toggle_class, element, set_text, remove_class } from '../utils/dom.mjs';
+import { FORMAT } from '../utils/sprintf.mjs';
+import { object_sub } from '../utils/object.mjs';
 
 function add_meters (cnt, options) {
     for (var i = 0; i < cnt; i++)

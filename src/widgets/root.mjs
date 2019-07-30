@@ -18,7 +18,7 @@
  */
 import { define_class } from '../widget_helpers.mjs';
 import { Container } from './container.mjs';
-import { add_class } from '../helpers.mjs';
+import { add_class } from '../utils/dom.mjs';
 
 function visibility_change() {
     if (document.hidden) {

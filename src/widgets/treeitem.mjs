@@ -21,7 +21,7 @@ import { ListItem } from './listitem.mjs';
 import { List } from './list.mjs';
 import { Container } from './container.mjs';
 import { Button } from './button.mjs';
-import { has_class, toggle_class, add_class, get_duration } from '../helpers.mjs';
+import { has_class, toggle_class, add_class, get_duration } from '../utils/dom.mjs';
 import { S } from '../dom_scheduler.mjs';
 
 var toggle_collapsed = function () {
