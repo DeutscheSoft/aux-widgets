@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class } from './../widget_helpers.mjs';
-import { db2scale, scale2db, freq2scale, scale2freq } from './audiomath.mjs';
+import { db2scale, scale2db, freq2scale, scale2freq } from '../utils/audiomath.mjs';
 import { error, warn } from './../utils/log.mjs';
 
 function LinearSnapModule(stdlib, foreign) {
