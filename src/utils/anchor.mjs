@@ -16,7 +16,6 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-import { define_class } from './../widget_helpers.mjs';
 
 /**
  * Returns real x and y values from a relative positioning.

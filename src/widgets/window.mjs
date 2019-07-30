@@ -25,7 +25,7 @@ import { Button } from './button.mjs';
 import { Drag } from '../modules/drag.mjs';
 import { Resize } from '../modules/resize.mjs';
 import { GlobalCursor } from '../implements/globalcursor.mjs';
-import { translate_anchor } from '../implements/anchor.mjs';
+import { translate_anchor } from '../utils/anchor.mjs';
 import {
     add_class, remove_class, outer_width, outer_height, position_left, position_top, width,
     inner_width, inner_height, element, height, toggle_class, set_content
