@@ -17,14 +17,16 @@
  * Boston, MA  02110-1301  USA
  */
 
-function data(e) {
-    var r;
-    if (!data_store) data_store = new window.WeakMap();
+const data_store = new WeakMap();;
 
-    r = data_store[e];
+function data(e) {
+    let r;
+
+    r = data_store.get(e);
 
     if (!r) {
-        data_store[e] = r = {};
+        r = {};
+        data_store.set(e, r);
     }
 
     return r;
@@ -40,6 +42,7 @@ function store(e, key, val) {
      */
     data(e)[key] = val;
 }
+
 function retrieve(e, key) {
     /**
      * Retrieve a piece of data from an object.
