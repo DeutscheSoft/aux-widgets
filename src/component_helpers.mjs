@@ -102,7 +102,6 @@ class ComponentBase extends HTMLElement
   constructor(widget)
   {
     super();
-    this.tk_events_counts = new Map();
     this.tk_events_handlers = new Map();
     this.tk_events_paused = false;
     this.widget = null;
@@ -122,68 +121,22 @@ class ComponentBase extends HTMLElement
     this.tk_events_paused = false;
   }
 
-  addEventListener(type, listener, ...args)
+  addEventListener(type, ...args)
   {
-    if (type.startsWith('tk:'))
+    const handlers = this.tk_events_handlers;
+
+    if (!handlers.has(type))
     {
-      const counts = this.tk_events_counts;
+      const cb = (...args) => {
+        if (this.tk_events_paused) return;
+        this.dispatchEvent(new CustomEvent(type, { detail: { args: args } }));
+      };
 
-      if (counts.has(type))
-      {
-        counts.set(counts.get(type) + 1);
-      }
-      else
-      {
-        const tk_type = type.substr(3);
-
-        counts.set(type, 1);
-
-        const cb = (...args) => {
-          if (this.tk_events_paused) return;
-          this.dispatchEvent(new CustomEvent(type, { detail: { args: args } }));
-        };
-
-        this.tk_events_handlers.set(type, cb);
-        this.widget.add_event(tk_type, cb);
-      }
+      handlers.set(type, cb);
+      this.widget.add_event(type, cb);
     }
 
-    super.addEventListener(type, listener, ...args);
-  }
-
-  removeEventListener(type, listener, ...args)
-  {
-    if (type.startsWith('tk:'))
-    {
-      const counts = this.tk_events_counts;
-
-      if (counts.has(type))
-      {
-        const v = counts.get(type);
-
-        if (v <= 1)
-        {
-          // remove handler
-          const tk_type = type.substr(3);
-          const handlers = this.tk_events_handlers;
-
-          handlers.delete(type);
-          counts.delete(type);
-
-          this.widget.remove_event(tk_type, handlers.get(type));
-        }
-        else
-        {
-          counts.set(v - 1);
-        }
-      }
-      else
-      {
-        warn('calling removeEventListener on %o twice!', this);
-      }
-    }
-
-    super.removeEventListener(type, listener, ...args);
+    super.addEventListener(type, ...args);
   }
 }
 
