@@ -51,7 +51,7 @@ export function print_widget_tree(w, depth) {
     var extra = Array.prototype.slice.call(arguments, 1);
     if (depth) fmt = nchars(depth, " ") + fmt;
     var args = [ fmt ];
-    log.apply(TK, args.concat(extra));
+    log.apply(this, args.concat(extra));
   };
 
   var nchars = function(n, c) {

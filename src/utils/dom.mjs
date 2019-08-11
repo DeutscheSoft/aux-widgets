@@ -21,6 +21,8 @@
  * Helper functions for manipulating the DOM
  */
 
+import { warn } from './log.mjs';
+
 /**
  * Returns true if the node has the given class.
  * @param {HTMLElement|SVGElement} node - The DOM node.

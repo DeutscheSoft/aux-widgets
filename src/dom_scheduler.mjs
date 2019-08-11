@@ -17,6 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 import { warn, log } from './utils/log.mjs';
+import { sprintf } from './utils/sprintf.mjs';
 
 function low_add(Q, o, prio) {
     prio = prio << 1;
