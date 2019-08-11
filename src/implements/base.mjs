@@ -1,4 +1,3 @@
-import { toggle_class, element } from './../utils/dom.mjs';
 import { warn } from './../utils/log.mjs';
 import { remove_event_listener, add_event_listener } from './../utils/events.mjs';
 import { define_class, add_event, remove_event } from './../widget_helpers.mjs';
@@ -318,7 +317,7 @@ export const Base = define_class({
      * @param {boolean} stop - Set to true if the event should stop bubbling up the tree.
      */
     add_event: function (event, func) {
-        var ev, tmp;
+        var ev;
 
         if (typeof event !== "string")
             throw new TypeError("Expected string.");

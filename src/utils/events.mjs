@@ -27,6 +27,7 @@ try {
   var options = Object.defineProperty({}, "passive", {
     get: function() {
       passiveSupported = true;
+      return true;
     }
   });
 

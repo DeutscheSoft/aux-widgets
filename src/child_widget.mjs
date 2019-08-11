@@ -11,7 +11,7 @@ function get_child_options(parent, name, options, config) {
     var inherit_options = !!config.inherit_options;
     var blacklist_options = config.blacklist_options || [];
 
-    if (tmp = config.default_options)
+    if ((tmp = config.default_options))
         Object.assign(ret, (typeof(tmp) === "function") ?  tmp.call(parent) : tmp);
 
     for (key in options) {
@@ -106,7 +106,7 @@ export function ChildWidget(widget, name, config) {
           : function(key, value) { this.parent.userset(name+"."+key, value); return false; };
 
 
-    if (m = config.static_events)
+    if ((m = config.static_events))
         Object.assign(static_events, m);
 
     if (config.create === void(0)) {
@@ -191,7 +191,7 @@ export function ChildWidget(widget, name, config) {
             if (this[name]) this[name].set(key, val);
         };
     };
-    if (m = config.map_options) {
+    if ((m = config.map_options)) {
         for (tmp in m) {
             p._options[tmp] = child.prototype._options[m[tmp]];
             if (!p.options[tmp])

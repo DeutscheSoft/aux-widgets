@@ -80,7 +80,7 @@ export const Icon = define_class({
         }
     },
     set: function (key, val) {
-        if (key == "icon") {
+        if (key === "icon") {
             this._icon_old.push(this.options.icon);
         }
         return Widget.prototype.set.call(this, key, val);

@@ -1,6 +1,4 @@
-import { Base } from './implements/base.mjs';
 import { toggle_class, element } from './utils/dom.mjs';
-import { warn } from './utils/log.mjs';
 
 export function add_event(to, event, fun) {
     var tmp = to[event];
@@ -198,9 +196,9 @@ function mixin(dst, src) {
 export function define_class(o) {
     var constructor;
     var methods;
-    var tmp, i, c, key;
+    var tmp, i, c;
 
-    if (tmp = o.Extends) {
+    if ((tmp = o.Extends)) {
         if (typeof(tmp) === "function") {
             tmp = tmp.prototype;
         }

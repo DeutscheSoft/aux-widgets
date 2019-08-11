@@ -19,7 +19,7 @@ export function FORMAT(fmt) {
     var regexp = /%(\.\d+)?([bcdefgosO%])/g;
     var argname;
 
-    while (res = regexp.exec(fmt)) {
+    while ((res = regexp.exec(fmt))) {
         if (argnum) s += "+";
         s += JSON.stringify(fmt.substr(last, regexp.lastIndex - res[0].length - last));
         s += "+";
@@ -54,7 +54,6 @@ export function FORMAT(fmt) {
             break;
         default:
             throw new Error("unknown format:"+res[0]);
-            break;
         }
         argnum++;
         last = regexp.lastIndex;
@@ -77,7 +76,6 @@ export function FORMAT(fmt) {
  * @see FORMAT
  */
 export function sprintf(fmt) {
-    var arg_len = arguments.length;
     var i, last_fmt;
     var c, arg_num = 1;
     var ret = [];
@@ -91,7 +89,7 @@ export function sprintf(fmt) {
 
         i ++;
 
-        if (has_precision = (fmt.charCodeAt(i) === 46 /* '.' */)) {
+        if ((has_precision = (fmt.charCodeAt(i) === 46 /* '.' */))) {
             i++;
             precision = parseInt(fmt.substr(i));
             while ((c = fmt.charCodeAt(i)) >= 48 && c <= 57) i++;

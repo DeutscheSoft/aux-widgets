@@ -91,7 +91,7 @@ export function get_style(e, style) {
   return window.getComputedStyle(e).getPropertyValue(style);
 };
 
-const class_regex = /[^A-Za-z0-9_\-]/;
+const class_regex = /[^A-Za-z0-9_-]/;
 
 /**
  * Returns true ii a string could be a class name.
@@ -187,7 +187,7 @@ export function get_tag(tag, element) {
  */
 export function element(tag) {
     var n = document.createElement(tag);
-    var i, v, j;
+    var i, v;
     for (i = 1; i < arguments.length; i++) {
         v = arguments[i];
         if (typeof v === "object") {
@@ -331,7 +331,7 @@ export function scroll_left(element) {
  */
 export function scroll_all_top(element) {
     var v = 0;
-    while (element = element.parentNode) v += element.scrollTop || 0;
+    while ((element = element.parentNode)) v += element.scrollTop || 0;
     return v;
 }
 
@@ -343,7 +343,7 @@ export function scroll_all_top(element) {
  */
 export function scroll_all_left(element) {
     var v = 0;
-    while (element = element.parentNode) v += element.scrollLeft || 0;
+    while ((element = element.parentNode)) v += element.scrollLeft || 0;
     return v;
 }
 

@@ -90,7 +90,7 @@ function attributes_from_widget(Widget)
 
   for (var i in Widget.prototype._options)
   {
-    if (skip.indexOf(i) == -1)
+    if (skip.indexOf(i) === -1)
       attributes.push(i);
   }
 
@@ -222,11 +222,6 @@ export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove
         remove_cb(parent, this.widget);
         this.parent = null;
       }
-    }
-
-    static get observedAttributes()
-    {
-      return attributes;
     }
   }
 }
