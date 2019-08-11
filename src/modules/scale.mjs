@@ -20,7 +20,7 @@ import { define_class, ChildElement } from '../widget_helpers.mjs';
 import { Widget } from '../widgets/widget.mjs';
 import { Ranged } from '../implements/ranged.mjs';
 import {
-    set_content, add_class, outer_width , element, remove_class, toggle_class,
+    set_content, add_class, outer_width, outer_height, element, remove_class, toggle_class,
     empty, inner_height, inner_width, supports_transform
   } from '../utils/dom.mjs';
 import { FORMAT } from '../utils/sprintf.mjs';
