@@ -80,7 +80,7 @@ var __native_events = {
     submit     : true,
     contextmenu: true,
 };
-function is_native_event(type) {
+export function is_native_event(type) {
     return __native_events[type];
 }
 

@@ -1,6 +1,7 @@
 import { warn, error } from './utils/log.mjs';
 import { FORMAT } from './utils/sprintf.mjs';
 import { html } from './utils/dom.mjs';
+import { is_native_event } from './implements/base.mjs';
 
 // TODO:
 // * the refcount logic is not correct since it ignores the fact
@@ -104,6 +105,7 @@ class ComponentBase extends HTMLElement
     super();
     this.tk_events_handlers = new Map();
     this.tk_events_paused = false;
+    this.tk_initializing = false;
     this.widget = null;
   }
 
@@ -111,16 +113,25 @@ class ComponentBase extends HTMLElement
   {
   }
 
+  tk_try_initialize()
+  {
+    if (this.widget !== null) return true;
+
+    if (this.tk_initializing) return false;
+    this.tk_initializing = true;
+    this.tk_initialize();
+    this.tk_initializing = false;
+    return true;
+  }
+
   connectedCallback()
   {
-    if (this.widget === null)
-      this.tk_initialize();
+    this.tk_try_initialize();
   }
 
   attributeChangedCallback(name, oldValue, newValue)
   {
-    if (this.widget === null)
-      this.tk_initialize();
+    if (!this.tk_try_initialize()) return;
 
     this.tk_events_paused = true;
     try {
@@ -136,20 +147,20 @@ class ComponentBase extends HTMLElement
 
   addEventListener(type, ...args)
   {
-    if (this.widget === null)
-      this.tk_initialize();
-
-    const handlers = this.tk_events_handlers;
-
-    if (!handlers.has(type))
+    if (!is_native_event(type) && this.tk_try_initialize())
     {
-      const cb = (...args) => {
-        if (this.tk_events_paused) return;
-        this.dispatchEvent(new CustomEvent(type, { detail: { args: args } }));
-      };
+      const handlers = this.tk_events_handlers;
 
-      handlers.set(type, cb);
-      this.widget.add_event(type, cb);
+      if (!handlers.has(type))
+      {
+        const cb = (...args) => {
+          if (this.tk_events_paused) return;
+          this.dispatchEvent(new CustomEvent(type, { detail: { args: args } }));
+        };
+
+        handlers.set(type, cb);
+        this.widget.add_event(type, cb);
+      }
     }
 
     super.addEventListener(type, ...args);
@@ -169,7 +180,6 @@ export function component_from_widget(Widget)
 
     tk_initialize()
     {
-      this.widget = {};
       this.widget = new Widget({
         element: this,
       });
@@ -209,7 +219,6 @@ export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove
 
     tk_initialize()
     {
-      this.widget = {};
       this.widget = new Widget();
       this.setAttribute('hidden', '');
     }
