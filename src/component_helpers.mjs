@@ -107,8 +107,21 @@ class ComponentBase extends HTMLElement
     this.widget = null;
   }
 
+  tk_initialize()
+  {
+  }
+
+  connectedCallback()
+  {
+    if (this.widget === null)
+      this.tk_initialize();
+  }
+
   attributeChangedCallback(name, oldValue, newValue)
   {
+    if (this.widget === null)
+      this.tk_initialize();
+
     this.tk_events_paused = true;
     try {
       const widget = this.widget;
@@ -123,6 +136,9 @@ class ComponentBase extends HTMLElement
 
   addEventListener(type, ...args)
   {
+    if (this.widget === null)
+      this.tk_initialize();
+
     const handlers = this.tk_events_handlers;
 
     if (!handlers.has(type))
@@ -151,9 +167,9 @@ export function component_from_widget(Widget)
       return attributes;
     }
 
-    constructor()
+    tk_initialize()
     {
-      super();
+      this.widget = {};
       this.widget = new Widget({
         element: this,
       });
@@ -161,6 +177,7 @@ export function component_from_widget(Widget)
 
     connectedCallback()
     {
+      super.connectedCallback();
       this.widget.enable_draw();
     }
 
@@ -190,16 +207,23 @@ export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove
       return attributes;
     }
 
+    tk_initialize()
+    {
+      this.widget = {};
+      this.widget = new Widget();
+      this.setAttribute('hidden', '');
+    }
+
     constructor()
     {
       super();
-      this.widget = new Widget();
       this.parent = null;
-      this.setAttribute('hidden', '');
     }
 
     connectedCallback()
     {
+      super.connectedCallback();
+
       const parent = this.parentNode.widget;
 
       if (parent instanceof ParentWidget)
