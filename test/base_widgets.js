@@ -43,26 +43,23 @@ describe('Components', () => {
   });
   it('addEventListener', (done) => {
     const o = document.createElement('TK-WIDGET');
-    const widget = o.widget;
     
     o.addEventListener('tk:set_disabled', (ev) => {
       done();
     });
-    widget.set('disabled', true);
+    o.widget.set('disabled', true);
   });
   it('removeEventListener', (done) => {
     const o = document.createElement('TK-WIDGET');
-    const widget = o.widget;
     const cb = (ev) => { done(new Error('fail.')); };
 
     o.addEventListener('tk:set_disabled', cb);
     o.removeEventListener('tk:set_disabled', cb);
-    widget.set('disabled', true);
+    o.widget.set('disabled', true);
     done();
   });
   it('addEventListener on setAttribute does not trigger', (done) => {
     const o = document.createElement('TK-WIDGET');
-    const widget = o.widget;
     
     o.addEventListener('tk:set_disabled', (ev) => {
       done(new Error('failed.'));
