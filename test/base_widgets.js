@@ -1,6 +1,6 @@
-import { Base } from '../src/implements/base.mjs';
-import { Widget } from '../src/widgets/widget.mjs';
-import { WidgetComponent } from '../src/components/widget.mjs';
+import { Base } from '../src/implements/base.js';
+import { Widget } from '../src/widgets/widget.js';
+import { WidgetComponent } from '../src/components/widget.js';
 
 describe('Events', () => {
   it('add_event()', (done) => {

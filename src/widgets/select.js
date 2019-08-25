@@ -1,0 +1,644 @@
+/*
+ * This file is part of Toolkit.
+ *
+ * Toolkit is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * Toolkit is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU General
+ * Public License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ */
+import { define_class } from './../widget_helpers.js';
+import { Button } from './button.js';
+import { Label } from './label.js';
+import {
+    element, add_class, outer_width, width, height, scroll_left, scroll_top, set_styles,
+    outer_height, position_top, position_left, set_style, get_duration, empty, remove_class
+  } from '../utils/dom.js';
+import { S } from '../dom_scheduler.js';
+ 
+ /**
+ * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
+ * The event is emitted for the options <code>selected</code> and <code>value</code>.
+ *
+ * @event Select#useraction
+ * 
+ * @param {string} name - The name of the option which was changed due to the users action
+ * @param {mixed} value - The new value of the option
+ */
+ 
+function hide_list() {
+    this.__transition = false;
+    this.__timeout = false;
+    if (!this.__open) {
+        this._list.remove();
+    } else {
+        document.addEventListener("touchstart", this._global_touch_start);
+        document.addEventListener("mousedown", this._global_touch_start);
+    }
+}
+function show_list(show) {
+    if (show) {
+        var ew = outer_width(this.element, true);
+        document.body.appendChild(this._list);
+        var cw = width();
+        var ch = height();
+        var sx = scroll_left();
+        var sy = scroll_top();
+        set_styles(this._list, {
+            "opacity": "0",
+            "maxHeight": ch+"px",
+            "maxWidth": cw+"px",
+            "minWidth": ew+"px"
+        });
+        var lw = outer_width(this._list, true);
+        var lh = outer_height(this._list, true);
+        set_styles(this._list, {
+            "top": Math.min(position_top(this.element) + outer_height(this.element, true), ch + sy - lh) + "px",
+            "left": Math.min(position_left(this.element), cw + sx - lw) + "px",
+        });
+    } else {
+        document.removeEventListener("touchstart", this._global_touch_start);
+        document.removeEventListener("mousedown", this._global_touch_start);
+    }
+    set_style(this._list, "opacity", show ? "1" : "0");
+    this.__transition = true;
+    this.__open = show;
+    if (this.__timeout !== false) window.clearTimeout(this.__timeout);
+    var dur = get_duration(this._list);
+    this.__timeout = window.setTimeout(hide_list.bind(this), dur);
+}
+
+function low_remove_entry(entry) {
+  var li = entry.element;
+  var entries = this.entries;
+  var id = entries.indexOf(entry);
+
+  if (id === -1) throw new Error("Entry removed twice.");
+
+  // remove from DOM
+  if (li.parentElement == this._list)
+      this._list.removeChild(li);
+  // remove from list
+  entries.splice(id, 1);
+  // selection
+  var sel = this.options.selected;
+  if (sel !== false) {
+      if (sel > id) {
+          this.options.selected --;
+      } else if (sel === id) {
+          this.options.selected = false;
+          this.set("label", "");
+      }
+  }
+  this.invalid.entries = true;
+  this.select(this.options.selected);
+  /**
+   * Is fired when a new entry is added to the list.
+   * 
+   * @event Select.entryremoved
+   * 
+   * @param {Object} entry - An object containing the members <code>title</code> and <code>value</code>.
+   */
+  this.fire_event("entryremoved", entry);
+}
+
+export const Select = define_class({
+    /**
+     * Select provides a button with a select list to choose from
+     * a list of entries.
+     *
+     * @class Select
+     * 
+     * @extends Button
+     *
+     * @param {Object} [options={ }] - An object containing initial options.
+     * 
+     * @property {Integer} options.selected - The index of the selected entry.
+     * @property options.value - The value of the selected entry.
+     * @property {Boolean} [options.auto_size=true] - If true, the drop-down button is
+     *   auto-sized to be as wide as the longest entry.
+     * @property {Array<Object>} [options.entries=[]] - The list of entries. Each entry is a an
+     *   object with the two properties <code>title</code> and <code>value</code>, a string or a SelectEntry instance.
+     *
+     */
+    _class: "Select",
+    Extends: Button,
+    _options: Object.assign(Object.create(Button.prototype._options), {
+        entries: "array",
+        selected: "int",
+        value: "mixed",
+        auto_size: "boolean",
+        show_list: "boolean",
+        sort: "function",
+        resized: "boolean",
+    }),
+    options: {
+        entries: [], // A list of strings or objects {title: "Title", value: 1} or SelectEntry instance
+        selected: false,
+        value: false,
+        auto_size: true,
+        show_list: false,
+        icon: "arrowdown",
+    },
+    static_events: {
+        click: function(e) { this.set("show_list", !this.options.show_list); }
+    },
+    initialize: function (options)  {
+        this.__open = false;
+
+        this.__timeout = -1;
+        
+        /**
+         * @member {Array} Select#entries - An array containing all entry objects with members <code>title</code> and <code>value</code>.
+         */
+        this.entries = [];
+        this._active = null;
+        Button.prototype.initialize.call(this, options);
+        /**
+         * @member {HTMLDivElement} Select#element - The main DIV container.
+         *   Has class <code>toolkit-select</code>.
+         */
+        add_class(this.element, "toolkit-select");
+        
+        /**
+         * @member {HTMLListElement} Select#_list - A HTML list for displaying the entry titles.
+         *   Has class <code>toolkit-select-list</code>.
+         */
+        this._list = element("ul", "toolkit-select-list");
+        this._global_touch_start = function (e) {
+            if (this.__open && !this.__transition &&
+                !this._list.contains(e.target) &&
+                !this.element.contains(e.target)) {
+
+                this.show_list(false);
+            }
+        }.bind(this);
+        var sel = this.options.selected;
+        var val = this.options.value; 
+        this.set("entries",  this.options.entries);
+        if (sel === false && val !== false) {
+            this.set("value", val);
+        } else {
+            this.set("selected", sel);
+        }
+    },
+    destroy: function () {
+        this.clear();
+        this._list.remove();
+        Button.prototype.destroy.call(this);
+    },
+    
+    /**
+     * Show or hide the select list
+     * 
+     * @method Select#show_list
+     * 
+     * @param {boolean} show - true to show and false to hide the list
+     */
+    show_list: function (s) {
+        this.set("show_list", !!s);
+    },
+    
+    /**
+     * Select an entry by its ID.
+     * 
+     * @method Select#select
+     * 
+     * @param {int} id - The ID of the entry to select.
+     */
+    select: function (id) {
+        this.set("selected", id);
+    },
+    /**
+     * Select an entry by its value.
+     * 
+     * @method Select#select_value
+     * 
+     * @param {mixed} value - The value of the entry to select.
+     */
+    select_value: function (value) {
+        var id = this.index_by_value.call(this, value);
+        this.set("selected", id);
+    },
+    /**
+     * Replaces the list to select from with an entirely new one.
+     * 
+     * @method Select#set_entries
+     * 
+     * @param {Array} entries - An array of entries to set as the new list to select from.
+     */
+    set_entries: function (entries) {
+        // Replace all entries with a new options list
+        this.clear();
+        this.add_entries(entries);
+        this.select(this.index_by_value.call(this, this.options.value));
+    },
+    /**
+     * Adds new entries to the end of the list to select from.
+     * 
+     * @method Select#add_entries
+     * 
+     * @param {Array} entries - An array of entries to add at the end of the list to select from.
+     */
+    add_entries: function (entries) {
+        for (var i = 0; i < entries.length; i++)
+            this.add_entry(entries[i]);
+    },
+    /**
+     * Adds a single entry to the end of the list.
+     * 
+     * @method Select.add_entry
+     * 
+     * @param {mixed} entry - A string to be displayed and used as the value or an object with members <code>title</code> and <code>value</code>.
+     * 
+     * @emits Select.entryadded
+     */
+    add_entry: function (ent) {
+        var O = this.options;
+        var entry;
+        var entries = this.entries;
+
+        if (SelectEntry.prototype.isPrototypeOf(ent)) {
+            entry = ent;
+        } else {
+            entry = new SelectEntry({
+                value: (typeof ent === "string") ? ent : ent.value,
+                title: (typeof ent === "string")
+                       ? ent : (ent.title !== void(0))
+                       ? ent.title : ent.value.toString()
+            });
+        }
+        this.add_child(entry);
+        entries.push(entry);
+        entry.set("container", this._list)
+
+        var id;
+
+        if (O.sort) {
+          entries.sort(O.sort);
+          id = entries.indexOf(entry);
+          if (id !== entries.length - 1)
+            this._list.insertBefore(entry.element, entries[id+1].element);
+        } else {
+          id = entries.length - 1;
+        }
+        
+        this.invalid.entries = true;
+
+        if (this.options.selected === id) {
+            this.invalid.selected = true;
+            this.trigger_draw();
+        } else if (this.options.selected > id) {
+            this.set("selected", this.options.selected+1);
+        } else {
+            this.trigger_draw();
+        }
+        /**
+         * Is fired when a new entry is added to the list.
+         * 
+         * @event Select.entryadded
+         * 
+         * @param {Object} entry - An object containing the members <code>title</code> and <code>value</code>.
+         */
+        this.fire_event("entryadded", entry);
+    },
+    /**
+     * Remove an entry from the list by its value.
+     * 
+     * @method Select#remove_value
+     * 
+     * @param {mixed} value - The value of the entry to be removed from the list.
+     * 
+     * @emits Select#entryremoved
+     */
+    remove_value: function (val) {
+        this.remove_id(this.index_by_value.call(this, val));
+    },
+    /**
+     * Remove an entry from the list by its title.
+     * 
+     * @method Select#remove_title
+     * 
+     * @param {string} title - The title of the entry to be removed from the list.
+     * 
+     * @emits Select#entryremoved
+     */
+    remove_title: function (title) {
+        this.remove_id(this.index_by_title.call(this, title));
+    },
+    /**
+     * Remove an entry from the list.
+     * 
+     * @method Select#remove_entry
+     * 
+     * @param {Object} entry - The entry to be removed from the list.
+     * 
+     * @emits Select#entryremoved
+     */
+    remove_entry: function (entry) {
+        this.remove_child(entry);
+    },
+    remove_entries: function (a) {
+        for (var i = 0; i < a.length; i++)
+            this.remove_entry(a[i]);
+    },
+    remove_child: function(child) {
+      Button.prototype.remove_child.call(this, child);
+      if (SelectEntry.prototype.isPrototypeOf(child)) {
+        low_remove_entry.call(this, child);
+      }
+    },
+    /**
+     * Remove an entry from the list by its ID.
+     * 
+     * @method Select#remove_id
+     * 
+     * @param {int} id - The ID of the entry to be removed from the list.
+     * 
+     * @emits Select#entryremoved
+     */
+    remove_id: function (id) {
+        // remove DOM element
+        var entry = this.entries[id];
+
+        this.remove_child(entry);
+    },
+    /*
+     * Get the index of an entry by its value
+     * 
+     * @method SelectEntry#index_by_value
+     * 
+     * @returns {mixed} The index of the entry or false
+     */
+    index_by_value: function (val) {
+        var entries = this.entries;
+        for (var i = 0; i < entries.length; i++) {
+            if (entries[i].options.value === val)
+                return i;
+        }
+        return false;
+    },
+    /*
+     * Get the index of an entry by its title (or label)
+     * 
+     * @method SelectEntry#index_by_title
+     * 
+     * @returns {mixed} The index of the entry or false
+     */
+    index_by_title: function (title) {
+        var entries = this.entries;
+        for (var i = 0; i < entries.length; i++) {
+            if (entries[i].options.title === title)
+                return i;
+        }
+        return false;
+    },
+    /*
+     * Get the index of an entry by the entry itself
+     * 
+     * @method SelectEntry#index_by_entry
+     * 
+     * @returns {mixed} The index of the entry or false
+     */
+    index_by_entry: function (entry) {
+        var pos = this.entries.indexOf(entry);
+        return pos === -1 ? false : pos;
+    },
+    /*
+     * Get an entry by its value
+     * 
+     * @method SelectEntry#entry_by_value
+     * 
+     * @returns {mixed} The entry or false
+     */
+    entry_by_value: function (val) {
+        var entries = this.entries;
+        for (var i = 0; i < entries.length; i++) {
+            if (entries[i].options.value === val)
+                return entries[i];
+        }
+        return false;
+    },
+    /*
+     * Get an entry by its title (or label)
+     * 
+     * @method SelectEntry#entry_by_title
+     * 
+     * @returns {mixed} The entry or false
+     */
+    entry_by_title: function (title) {
+        var entries = this.entries;
+        for (var i = 0; i < entries.length; i++) {
+            if (entries[i].options.title === title)
+                return entries[i];
+        }
+        return false;
+    },
+    value_by_index: function(index) {
+        var entries = this.entries;
+        if (index >= 0 && index < entries.length && entries[index]) {
+          return entries[index].options.value;
+        }
+    },
+    /**
+     * Remove all entries from the list.
+     * 
+     * @method Select#clear
+     * 
+     * @emits Select#cleared
+     */
+    clear: function () {
+        empty(this._list);
+        this.select(false);
+        var entries = this.entries.slice(0);
+        for (var i = 0; i < entries.length; i++) {
+          this.remove_child(entries[i]);
+        }
+        /**
+         * Is fired when the list is cleared.
+         * 
+         * @event Select.cleared
+         */
+        this.fire_event("cleared");
+    },
+
+    redraw: function() {
+        Button.prototype.redraw.call(this);
+
+        var I = this.invalid;
+        var O = this.options;
+        var E = this.element;
+
+        if (I.selected) {
+            if (this._active) {
+                remove_class(this._active, "toolkit-active");
+            }
+            var entry = this.entries[O.selected];
+
+            if (entry) {
+                this._active = entry.element;
+                add_class(entry.element, "toolkit-active");
+            } else {
+                this._active = null;
+            }
+        }
+
+        if (I.validate("entries", "auto_size")) {
+
+            I.show_list = true;
+
+            var L;
+
+            if (O.auto_size && (L = this._label)) {
+                var width = 0;
+                E.style.width = "auto";
+                var orig_content = document.createDocumentFragment();
+                while (L.firstChild) orig_content.appendChild(L.firstChild);
+                var entries = this.entries;
+                for (var i = 0; i < entries.length; i++) {
+                    L.appendChild(document.createTextNode(entries[i].options.title));
+                    L.appendChild(document.createElement("BR"));
+                }
+                S.add(function() {
+                    width = outer_width(E, true);
+                    S.add(function() {
+                        while (L.firstChild) L.removeChild(L.firstChild);
+                        L.appendChild(orig_content);
+                        outer_width(E, true, width);
+                    }, 1);
+                });
+            }
+        }
+
+        if (I.validate("show_list", "resized")) {
+            show_list.call(this, O.show_list);
+        }
+    },
+    /**
+     * Get the currently selected entry.
+     * 
+     * @method Select#current
+     * 
+     * @returns {Object} The entry object with the members <code>title</code> and <code>value</code>.
+     */
+    current: function() {
+        return this.entries[this.options.selected];
+    },
+    current_value: function() {
+        var w = this.current();
+        if (w) return w.get("value");
+        return void(0);
+    },
+    set: function (key, value) {
+        if (key === "value") {
+            var index = this.index_by_value.call(this, value);
+            if (index === false) return;
+            this.set("selected", index);
+
+            return this.options.value;
+        }
+
+        value = Button.prototype.set.call(this, key, value);
+
+        switch (key) {
+            case "selected":
+                var entry = this.current();
+                if (entry) {
+                    Button.prototype.set.call(this, "value", entry.options.value); 
+                    this.set("label", entry.options.title);
+                } else {
+                    this.set("label", "");
+                }
+                break;
+            case "entries":
+                this.set_entries(value);
+                break;
+        }
+        return value;
+    }
+});
+
+
+function on_select(e) {
+    var w = this.parent;
+    var id = w.index_by_entry(this);
+    var entry = this;
+    e.stopPropagation();
+    e.preventDefault();
+
+    if (w.userset("selected", id) === false) return false;
+    w.userset("value", this.options.value);
+    /**
+     * Is fired when a selection was made by the user. The arguments
+     * are the value of the entry, the id of the selected element and the title of the entry.
+     * 
+     * @event Select#select
+     * 
+     * @param {mixed} value - The value of the selected entry.
+     * @param {number} value - The ID of the selected entry.
+     * @param {string} value - The title of the selected entry.
+     */
+    w.fire_event("select", entry.options.value, id, entry.options.title);
+    w.show_list(false);
+
+    return false;
+}
+
+export const SelectEntry = define_class({
+    /**
+     * SelectEntry provides a Label as an entry of a Select.
+     *
+     * @class SelectEntry
+     * 
+     * @extends Button
+     *
+     * @param {Object} [options={ }] - An object containing initial options.
+     * 
+     * @property {String} options.title - The title of the entry. Kept for backward compatibility,
+     *  use label instead.
+     * @property {mixed} options.value - The value of the selected entry.
+     *
+     */
+    _class: "SelectEntry",
+    Extends: Label,
+    
+    _options: Object.assign(Object.create(Label.prototype._options), {
+        value: "mixed",
+        title: "string",
+    }),
+    options: {
+        title: "",
+        value: null
+    },
+    initialize: function (options) {
+        // FIXME: is this really correct, do we not end up with this.element
+        // being that created by Label ?
+        var E = this.element = element("li", "toolkit-option");
+        Label.prototype.initialize.call(this, options);
+        this.set("title", this.options.title);
+    },
+    static_events: {
+      touchstart: on_select,
+      mousedown: on_select,
+    },
+    set: function (key, value) {
+        switch (key) {
+            case "title":
+                this.set("label", value);
+                break;
+            case "label":
+                this.options.title = value;
+                break;
+        }
+        return Label.prototype.set.call(this, key, value);
+    }
+});

@@ -1,4 +1,4 @@
-import { DOMScheduler } from '../src/index.mjs';
+import { DOMScheduler } from '../src/index.js';
 
 describe('DOMScheduler', () => {
   const S = new DOMScheduler();

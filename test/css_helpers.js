@@ -1,4 +1,4 @@
-import { add_class, remove_class, has_class, toggle_class } from '../src/index.mjs';
+import { add_class, remove_class, has_class, toggle_class } from '../src/index.js';
 
 describe('CSSHelpers', () => {
   const div = document.createElement('DIV');
