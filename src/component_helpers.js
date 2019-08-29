@@ -183,6 +183,16 @@ export function component_from_widget(Widget)
       this.widget = new Widget({
         element: this,
       });
+
+      for (let i = 0; i < attributes.length; i++)
+      {
+        const name = attributes[i];
+        if (this.hasAttribute(name))
+        {
+          const v = this.getAttribute(name);
+          this.attributeChangedCallback(name, null, v);
+        }
+      }
     }
 
     connectedCallback()
