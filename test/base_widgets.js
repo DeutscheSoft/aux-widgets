@@ -44,7 +44,7 @@ describe('Components', () => {
   it('addEventListener', (done) => {
     const o = document.createElement('TK-WIDGET');
     
-    o.addEventListener('tk:set_disabled', (ev) => {
+    o.addEventListener('set_disabled', (ev) => {
       done();
     });
     o.widget.set('disabled', true);
@@ -53,8 +53,8 @@ describe('Components', () => {
     const o = document.createElement('TK-WIDGET');
     const cb = (ev) => { done(new Error('fail.')); };
 
-    o.addEventListener('tk:set_disabled', cb);
-    o.removeEventListener('tk:set_disabled', cb);
+    o.addEventListener('set_disabled', cb);
+    o.removeEventListener('set_disabled', cb);
     o.widget.set('disabled', true);
     done();
   });
