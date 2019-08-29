@@ -14,6 +14,19 @@ describe('Events', () => {
     o.fire_event("foo");
     done();
   });
+  it('subscribe()', () => {
+    const o = new Base();
+    let called = false;
+    const sub = o.subscribe("foo", () => {
+      called = true;
+    });
+    o.fire_event("foo");
+    if (!called) throw new Error("not called");
+    called = false;
+    sub();
+    o.fire_event("foo");
+    if (called) throw new Error("called");
+  });
 });
 
 describe('Options', () => {

@@ -333,6 +333,38 @@ export const Base = define_class({
         ev = this.__events;
         add_event(ev, event, func);
     },
+    addEventListener: function(event, func)
+    {
+        return this.add_event(event, func);
+    },
+    hasEventListener: function(event, func)
+    {
+      const ev = this.__events;
+
+      const handlers = ev[event];
+
+      if (!handlers) return false;
+
+      if (Array.isArray(handlers))
+      {
+        return handlers.indexOf(func);
+      }
+
+      return handlers === func;
+    },
+    subscribe: function(event, func)
+    {
+        if (this.hasEventListener(event, func))
+        {
+          throw new Error('Event handler already registered.');
+        }
+
+        this.addEventListener(event, func);
+
+        return () => {
+          this.removeEventListener(event, func);
+        };
+    },
     /**
      * Removes the given function from the event queue.
      * If it is a native DOM event, it removes the DOM event listener
@@ -351,6 +383,10 @@ export const Base = define_class({
             var ev = this.__event_target;
             if (ev) remove_event_listener(ev, event, this.__native_handler);
         }
+    },
+    removeEventListener: function(event, func)
+    {
+      return this.remove_event(event, func);
     },
     /**
      * Fires an event.
@@ -386,6 +422,10 @@ export const Base = define_class({
             v = dispatch_events(this, ev, args);
             if (v !== void(0)) return v;
         }
+    },
+    emit: function(event, ...args)
+    {
+      return this.fire_event(event, ...args);
     },
     /**
      * Test if the event descriptor has some handler functions in the queue.
