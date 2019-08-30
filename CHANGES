@@ -6,6 +6,13 @@ Refactoring
 
 * All code is now organized into es6 modules
 * Dropped support for IE
+* Most widgets now exist as WebComponents
+* Added additional APIs to Base
+  * addEventListener and removeEventListener
+    as aliases for add_event and remove_event
+  * subscribe() for easier subscription
+    life cycle management
+* Added a new set of unit tests using mocha
 
 Changes since version 1.2
 --------------------------------------
