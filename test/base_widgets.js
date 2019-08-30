@@ -17,15 +17,29 @@ describe('Events', () => {
   it('subscribe()', () => {
     const o = new Base();
     let called = false;
-    const sub = o.subscribe("foo", () => {
+    const cb = () => {
       called = true;
-    });
+    };
+    const sub = o.subscribe("foo", cb);
+
+    // check that subscription works
     o.fire_event("foo");
     if (!called) throw new Error("not called");
+
+    // check that unsubscribe works
     called = false;
     sub();
     o.fire_event("foo");
     if (called) throw new Error("called");
+
+    // check that unsubscribe can be called twice
+    called = false;
+    const sub2 = o.subscribe("foo", cb);
+    sub();
+    o.fire_event("foo");
+    if (!called) throw new Error("not called");
+    sub2();
+
   });
 });
 

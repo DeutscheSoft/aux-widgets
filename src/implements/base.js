@@ -359,9 +359,12 @@ export const Base = define_class({
           throw new Error('Event handler already registered.');
         }
 
+        let active = true;
         this.addEventListener(event, func);
 
         return () => {
+          if (!active) return;
+          active = false;
           this.removeEventListener(event, func);
         };
     },
