@@ -1,7 +1,7 @@
 {
-  "name": "toolkit",
-  "version": "2.0.0",
-  "description": "toolkit Audio Widget Library",
+  "name": "aux",
+  "version": "1.0.0",
+  "description": "AUX Audio Widget Library",
   "main": "src/index.js",
   "directories": {
     "doc": "doc",
@@ -14,7 +14,16 @@
     "type": "git",
     "url": "git@git.deutschesoft.eu:toolkit"
   },
-  "author": "",
+  "author": {
+    "name" : "Markus Schmidt",
+    "email" : "markus@deuso.de"
+  },
+  "contributors": [
+    {
+      "name" : "Arne Goedeke",
+      "email" : "arne@deuso.de"
+    }
+  ],
   "private": true,
   "devDependencies": {
     "http-server": "^0.11.1",
