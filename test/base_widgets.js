@@ -43,7 +43,7 @@ describe('Options', () => {
 
 describe('Components', () => {
   it('setAttribute()', (done) => {
-    const o = document.createElement('TK-WIDGET');
+    const o = document.createElement('aux-widget');
     o.setAttribute("disabled", true);
     const widget = o.widget;
     if (widget.options.disabled !== true)
@@ -53,7 +53,7 @@ describe('Components', () => {
     done();
   });
   it('addEventListener', (done) => {
-    const o = document.createElement('TK-WIDGET');
+    const o = document.createElement('aux-widget');
     
     o.addEventListener('set_disabled', (ev) => {
       done();
@@ -61,7 +61,7 @@ describe('Components', () => {
     o.widget.set('disabled', true);
   });
   it('removeEventListener', (done) => {
-    const o = document.createElement('TK-WIDGET');
+    const o = document.createElement('aux-widget');
     const cb = (ev) => { done(new Error('fail.')); };
 
     o.addEventListener('set_disabled', cb);
@@ -70,9 +70,9 @@ describe('Components', () => {
     done();
   });
   it('addEventListener on setAttribute does not trigger', (done) => {
-    const o = document.createElement('TK-WIDGET');
+    const o = document.createElement('aux-widget');
     
-    o.addEventListener('tk:set_disabled', (ev) => {
+    o.addEventListener('set_disabled', (ev) => {
       done(new Error('failed.'));
     });
     o.setAttribute('disabled', 'true');

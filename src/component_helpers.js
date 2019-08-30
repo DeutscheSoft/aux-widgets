@@ -271,6 +271,5 @@ export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove
 
 export function define_component(name, component)
 {
-  customElements.define('tk-'+name, component);
-  //customElements.define('aux-'+name, component);
+  customElements.define('aux-'+name, component);
 }

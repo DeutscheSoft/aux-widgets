@@ -27,73 +27,73 @@
   </head>
   <body>
     <h2>Button</h2>
-    <tk-button label="Click me" icon=gear layout=horizontal></tk-button>
-    <tk-button label="Click me" icon=gear state=true layout=horizontal></tk-button>
+    <aux-button label="Click me" icon=gear layout=horizontal></aux-button>
+    <aux-button label="Click me" icon=gear state=true layout=horizontal></aux-button>
     
     <h2>Toggle</h2>
-    <tk-toggle label='Toggle me' icon=warning icon_active=success></tk-toggle>
-    <tk-toggle label='Toggle me at leisure' icon=warning icon_active=success delay=1000></tk-toggle>
-    <tk-toggle label='Press or toggle me' label_active="Release or toggle me" icon=warning icon_active=success press=250></tk-toggle>
+    <aux-toggle label='Toggle me' icon=warning icon_active=success></aux-toggle>
+    <aux-toggle label='Toggle me at leisure' icon=warning icon_active=success delay=1000></aux-toggle>
+    <aux-toggle label='Press or toggle me' label_active="Release or toggle me" icon=warning icon_active=success press=250></aux-toggle>
 
     <h2>ConfirmButton</h2>
-    <tk-confirmbutton label="Do something dangerous" icon="warning" label_confirm="Are you sure?" icon_confirm="questionmark"></tk-confirmbutton>
+    <aux-confirmbutton label="Do something dangerous" icon="warning" label_confirm="Are you sure?" icon_confirm="questionmark"></aux-confirmbutton>
 
     <h2>Equalizer</h2>
-    <tk-equalizer style='width: 800px; height: 600px;'
+    <aux-equalizer style='width: 800px; height: 600px;'
         range_x="js:{min:10, max:20000, scale:'frequency'}"
         range_y="js:{min:-24, max:24}"
         range_z="js:{min:0, max:24}"
     >
-      <tk-eqband freq=2000 gain=0 q=2 title='hello' active=true></tk-eqband>
-    </tk-equalizer>
+      <aux-eqband freq=2000 gain=0 q=2 title='hello' active=true></aux-eqband>
+    </aux-equalizer>
 
     <h2>Value</h2>
-    <tk-value></tk-value>
+    <aux-value></aux-value>
 
     <h2>Knob</h2>
-    <tk-knob></tk-knob>
+    <aux-knob></aux-knob>
 
     <h2>State</h2>
-    <tk-state></tk-state>
+    <aux-state></aux-state>
 
     <h2>Slider</h2>
-    <tk-slider></tk-slider>
+    <aux-slider></aux-slider>
 
     <h2>Gauge</h2>
-    <tk-gauge></tk-gauge>
+    <aux-gauge></aux-gauge>
 
     <h2>Fader</h2>
-    <tk-fader min=0 max=100 style='height: 300px'></tk-fader>
+    <aux-fader min=0 max=100 style='height: 300px'></aux-fader>
 
     <h2>Select</h2>
-    <tk-select label='click me'>
-      <tk-selectentry label='hello 1' value='json:{}'></tk-selectentry>
-      <tk-selectentry label='hello 2' value='json:{}'></tk-selectentry>
-    </tk-select>
+    <aux-select label='click me'>
+      <aux-selectentry label='hello 1' value='json:{}'></aux-selectentry>
+      <aux-selectentry label='hello 2' value='json:{}'></aux-selectentry>
+    </aux-select>
 
     <h2>ValueButton</h2>
-    <tk-valuebutton></tk-valuebutton>
+    <aux-valuebutton></aux-valuebutton>
 
     <h2>ValueKnob</h2>
-    <tk-valueknob></tk-valueknob>
+    <aux-valueknob></aux-valueknob>
 
     <h2>MeterBase</h2>
-    <tk-meterbase value='0.5'></tk-meterbase>
+    <aux-meterbase value='0.5'></aux-meterbase>
 
     <h2>LevelMeter</h2>
-    <tk-levelmeter value='0.5'></tk-levelmeter>
+    <aux-levelmeter value='0.5'></aux-levelmeter>
 
     <h2>MultiMeter</h2>
-    <tk-multimeter value='0.5'></tk-multimeter>
+    <aux-multimeter value='0.5'></aux-multimeter>
 
     <h2>Clock</h2>
-    <tk-clock></tk-clock>
+    <aux-clock></aux-clock>
 
     <h2>Dynamics</h2>
-    <tk-dynamics style='width: 300px; height: 300px;'></tk-dynamics>
+    <aux-dynamics style='width: 300px; height: 300px;'></aux-dynamics>
 
     <h2>ColorPicker</h2>
-    <tk-colorpicker></tk-colorpicker>
+    <aux-colorpicker></aux-colorpicker>
 
   </body>
   
