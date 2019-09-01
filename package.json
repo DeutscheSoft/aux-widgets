@@ -15,18 +15,15 @@
     "url": "git@git.deutschesoft.eu:toolkit"
   },
   "author": {
-    "name" : "Markus Schmidt",
-    "email" : "markus@deuso.de"
+    "name": "Markus Schmidt",
+    "email": "markus@deuso.de"
   },
   "contributors": [
     {
-      "name" : "Arne Goedeke",
-      "email" : "arne@deuso.de"
+      "name": "Arne Goedeke",
+      "email": "arne@deuso.de"
     }
   ],
   "private": true,
-  "devDependencies": {
-    "http-server": "^0.11.1",
-    "mocha": "^6.1.4"
-  }
+  "devDependencies": {}
 }
