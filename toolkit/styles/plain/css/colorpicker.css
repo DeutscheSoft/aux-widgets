@@ -27,9 +27,7 @@
 }
 .toolkit-color-picker > .toolkit-canvas > .toolkit-indicator {
     border: 0.5px solid;
-    -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
-    -moz-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
-    -ms-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
 }
 
 

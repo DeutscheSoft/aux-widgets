@@ -63,10 +63,6 @@
 .toolkit-valuebutton > .toolkit-value {
     background: rgba(0,0,0,0.033);
     border: none;
-    -webkit-border-top-right-radius: 5px;
-    -webkit-border-bottom-right-radius: 5px;
-    -moz-border-radius-topright: 5px;
-    -moz-border-radius-bottomright: 5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     
@@ -82,7 +78,5 @@
     background-color: #002f42;
     color: white;
     text-shadow: 0px -1px 0px black;
-    -webkit-border-radius: 4px;
-    -moz-border-radius:    4px;
     border-radius:         4px;
 }

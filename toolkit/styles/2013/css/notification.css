@@ -1,3 +1,22 @@
+/*
+ * This file is part of Toolkit.
+ *
+ * Toolkit is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * Toolkit is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU General
+ * Public License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ */
+ 
 .toolkit-notification {
   background: rgba(238, 238, 238, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.9);
@@ -8,12 +27,8 @@
   font-size: 1rem;
   text-align: left;
   
-  -webkit-box-shadow: 0px 2px 9px 0px rgba(0, 0, 0, 0.25);
-  -moz-box-shadow:    0px 2px 9px 0px rgba(0, 0, 0, 0.25);
   box-shadow:         0px 2px 9px 0px rgba(0, 0, 0, 0.25);
   
-  -webkit-border-radius: 6px;
-  -moz-border-radius:    6px;
   border-radius:         6px;
   
   display: block;
@@ -58,17 +73,7 @@
 
 .toolkit-notification {
   opacity: 0;
-  
-  -webkit-animation: -webkit-fade-in 0.5s;
-  -moz-animation: -moz-fade-in 0.5s;
-  -ms-animation: -ms-fade-in 0.5s;
-  -o-animation: -o-fade-in 0.5s;
   animation: fade-in 0.5s;
-  
-  -webkit-transform: scale(1);
-  -moz-transform: scale(1);
-  -ms-transform: scale(1);
-  -o-transform: scale(1);
   transform: scale(1);
 }
 
@@ -77,36 +82,10 @@
 }
 .toolkit-notification.toolkit-hiding {
   opacity: 0;
-  
-  -webkit-transition: opacity 0.5s, transform 0.5s;
-  -moz-transition: opacity 0.5s, transform 0.5s;
-  -ms-transition: opacity 0.5s, transform 0.5s;
-  -o-transition: opacity 0.5s, transform 0.5s;
   transition: opacity 0.5s, transform 0.5s;
-  
-  -webkit-transform: scale(0);
-  -moz-transform: scale(0);
-  -ms-transform: scale(0);
-  -o-transform: scale(0);
   transform: scale(0);
 }
 
-@-webkit-keyframes -webit-fade-in {
-  0% { opacity: 0; -webit-transform: scale(1); }
-  100% { opacity: 1; -webit-transform: scale(1);}
-}
-@-moz-keyframes -moz-fade-in {
-  0% { opacity: 0; -moz-transform: scale(1); }
-  100% { opacity: 1; -moz-transform: scale(1);}
-}
-@-ms-keyframes -ms-fade-in {
-  0% { opacity: 0; -ms-transform: scale(1); }
-  100% { opacity: 1; -ms-transform: scale(1);}
-}
-@-o-keyframes -o-fade-in {
-  0% { opacity: 0; -o-transform: scale(1); }
-  100% { opacity: 1; -o-transform: scale(1);}
-}
 @keyframes fade-in {
   0% { opacity: 0; transform: scale(1); }
   100% { opacity: 1; transform: scale(1);}

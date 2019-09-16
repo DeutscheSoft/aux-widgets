@@ -19,18 +19,12 @@
 .toolkit-window {
     border: 1px solid #fff;
     background: #eee url(../images/window/background.png) no-repeat;
-    -webkit-box-shadow:  0px 4px 12px 0px rgba(0, 0, 0, 0.33);
-    -moz-box-shadow:  0px 4px 12px 0px rgba(0, 0, 0, 0.33);
     box-shadow:  0px 4px 12px 0px rgba(0, 0, 0, 0.33);
     opacity: 1;
-    -webkit-border-radius: 6px;
-    -moz-border-radius:    6px;
     border-radius:         6px;
 }
 .toolkit-window.toolkit-inactive {
     opacity: 0.5;
-    -webkit-box-shadow:  0px 3px 10px 0px rgba(0, 0, 0, 0.2);
-    -moz-box-shadow:  0px 3px 10px 0px rgba(0, 0, 0, 0.2);
     box-shadow:  0px 3px 10px 0px rgba(0, 0, 0, 0.2);
 }
 

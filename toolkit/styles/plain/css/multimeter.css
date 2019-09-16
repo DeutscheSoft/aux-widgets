@@ -33,12 +33,8 @@
 .toolkit-multi-meter > .toolkit-level-meter {
     border: none;
     background: transparent;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
     box-shadow: none;
     margin: 0;
-    -webkit-border-radius: 0px;
-    -moz-border-radius: 0px;
     border-radius: 0px;
     padding-top: calc(1.2em + 8px);
 }
