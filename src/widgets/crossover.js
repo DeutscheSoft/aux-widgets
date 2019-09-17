@@ -41,8 +41,8 @@ export const CrossoverBand = define_class({
     _class: "CrossoverBand",
     Extends: EqBand,
     _options: Object.assign(Object.create(EqBand.prototype._options), {
-        lower: "string",
-        upper: "string",
+        lower: "string|function",
+        upper: "string|function",
     }),
     options: {
         lower: "lowpass3",
