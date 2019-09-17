@@ -192,6 +192,8 @@ pre, code {
 
 .toolkit-widget.toolkit-clock {
     border-radius: 100%;
+    min-width: 200px;
+    min-height: 200px;
 }
 
 /* COLORPICKER */
