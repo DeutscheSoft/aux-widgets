@@ -241,16 +241,17 @@ function draw_title() {
 }
 
 /**
- * Chart is an SVG image containing one or more Graphs. There are functions
- * to add and remove graphs. Chart extends {@link Widget} and contains a
- * Grid and two Ranges.
+ * Chart is an SVG image containing one or more Graphs. Chart
+ * extends {@link Widget} and contains a {@link Grid} and two
+ * {@link Range}s.
  *
  * @class Chart
  * @extends Widget
  *
  * @param {Object} [options={ }] - An object containing initial options.
  * 
- * @property {String} [options.title=""] - A title for the Chart.
+ * @property {String|Boolean} [options.title=""] - A title for the Chart.
+ *   Set to `false` to remove the title from the DOM.
  * @property {String} [options.title_position="top-right"] - Position of the
  *   title inside of the chart. Possible values are
  *   <code>"top-left"</code>, <code>"top"</code>, <code>"top-right"</code>,
@@ -261,25 +262,38 @@ function draw_title() {
  *   a key is rendered into the chart at the given position. The key
  *   will detail names and colors of the graphs inside of this chart.
  *   Possible values are <code>"top-left"</code>, <code>"top-right"</code>,
- *   <code>"bottom-left"</code> and <code>"bottom-right"</code>.
- * @property {Object} [options.key_size={x:20,y:10}] - Size of the colored rectangles
- *   inside of the key describing individual graphs.
- * @property {Boolean} [options.show_grid=true] - Set to <code>false</code> to
- *   disable the grid.
- * @property {Array<Object>} [options.grid_x=[]] - An array containing objects with the following optional members:
+ *   <code>"bottom-left"</code> and <code>"bottom-right"</code>. Set to `false`
+ *   to remove the key from the DOM.
+ * @property {Object} [options.key_size={x:20,y:10}] - Size of the colored
+ *   rectangles inside of the key describing individual graphs.
+ * @property {Array<Object>} [options.grid_x=[]] - An array containing
+ *   objects with the following optional members to draw the grid:
  *   <code>{pos:x[, color: "colorstring"[,class: "classname"[, label:"labeltext"]]]}</code>
- * @property {Array<Object>} [options.grid_y=[]] - An array containing objects with the following optional members:
+ * @property {Array<Object>} [options.grid_y=[]] - An array containing
+ *   objects with the following optional members to draw the grid:
  *   <code>{pos:y[, color: "colorstring"[,class: "classname"[, label:"labeltext"]]]}</code>
- * @property {Function|Object} [options.range_x={}] - Either a function returning a {@link Range}
- *   or an object containing options for a new {@link Range}
- * @property {Function|Object} [options.range_y={}] - Either a function returning a {@link Range}
- *   or an object containing options for a new {@link Range}
- * @param {Number} [options.importance_label=4] - Multiplicator of square pixels on hit testing labels to gain importance.
- * @param {Number} [options.importance_handle=1] - Multiplicator of square pixels on hit testing handles to gain importance.
- * @param {Number} [options.importance_border=50] - Multiplicator of square pixels on hit testing borders to gain importance.
- * @param {Object|Function} [options.range_z={ scale: "linear", min: 0, max: 1 }] - Options for z {@link Range}.
- * @param {Array} [options.handles=[]] - An array of options for creating {@link ResponseHandle} on init.
- * @param {Bollean} [options.show_handles=true] - Show or hide all handles.
+ * @property {Boolean} [options.show_grid=true] - Set to <code>false</code> to
+ *   hide the grid.
+ * @property {Function|Object} [options.range_x={}] - Either a function
+ *   returning a {@link Range} or an object containing options for a
+ *   new {@link Range}.
+ * @property {Function|Object} [options.range_y={}] - Either a function
+ *   returning a {@link Range} or an object containing options for a
+ *   new {@link Range}.
+ * @property {Object|Function} [options.range_z={ scale: "linear", min: 0, max: 1 }] -
+ *   Either a function returning a {@link Range} or an object
+ *   containing options for a new {@link Range}.
+ * @property {Number} [options.importance_label=4] - Multiplicator of
+ *   square pixels on hit testing labels to gain importance.
+ * @property {Number} [options.importance_handle=1] - Multiplicator of
+ *   square pixels on hit testing handles to gain importance.
+ * @property {Number} [options.importance_border=50] - Multiplicator of
+ *   square pixels on hit testing borders to gain importance.
+ * @property {Array<Object>} [options.handles=[]] - An array of options for
+ *   creating {@link ResponseHandle} on init.
+ * @property {Boolean} [options.show_handles=true] - Show or hide all
+ *   handles.
+ * 
  */
 function geom_set(value, key) {
     this.set_style(key, value+"px");
@@ -386,7 +400,7 @@ export const Chart = define_class({
             this.options.height = this.range_y.options.basis;
         
         /** 
-         * @member {SVGGroup} Chart#_graphs - The group containing all graphs.
+         * @member {SVGGroup} Chart#_graphs - The SVG group containing all graphs.
          *      Has class <code>toolkit-graphs</code>.
          */
         this._graphs = make_svg("g", {"class": "toolkit-graphs"});
@@ -396,7 +410,11 @@ export const Chart = define_class({
         if (this.options.width) this.set("width", this.options.width);
         if (this.options.height) this.set("height", this.options.height);
         
-        this._handles = make_svg("g", {"class": "toolkit-response-handles toolkit-handles"});
+        /** 
+         * @member {SVGGroup} Chart#_handles - The SVG group containing all handles.
+         *      Has class <code>toolkit-handles</code>.
+         */
+        this._handles = make_svg("g", {"class": "toolkit-handles"});
         this.svg.appendChild(this._handles);
         this.svg.onselectstart = function () { return false; };
         this.add_handles(this.options.handles);
@@ -662,25 +680,28 @@ export const Chart = define_class({
         }
     },
     /*
-     * Remove multiple {@link ResponseHandle} from the widget. Options is an array
-     * of {@link ResponseHandle} instances.
+     * Remove multiple or all {@link ResponseHandle}s from the widget.
      * 
      * @method ResponseHandler#remove_handles
      * 
-     * @param {Array<ResponseHandle>} handles - An array of {@link ResponseHandle} instances.
+     * @param {Array<ResponseHandle>} handles - An array of
+     *   {@link ResponseHandle} instances. If the argument reveals to
+     *   `false`, all handles are removed from the widget.
      */
-    remove_handles: function () {
-        // remove all handles from the widget.
-        for (var i = 0; i < this.handles.length; i++) {
-            this.remove_handle(this.handles[i]);
+    remove_handles: function (handles) {
+        var H = handles || this.handles.slice();
+        for (var i = 0; i < H.length; i++) {
+            this.remove_handle(H[i]);
         }
-        this.handles = [];
-        /**
-         * Is fired when all handles are removed.
-         * 
-         * @event ResponseHandler#emptied
-         */
-        this.fire_event("emptied")
+        if (!handles) {
+            this.handles = [];
+            /**
+             * Is fired when all handles are removed.
+             * 
+             * @event ResponseHandler#emptied
+             */
+            this.fire_event("emptied");
+        }
     },
     
     intersect: function (X, handle) {
@@ -736,6 +757,10 @@ export const Chart = define_class({
         return {intersect: a, count: c};
     },
 });
+/**
+ * @member {Grid} Chart#grid - The grid element of the chart.
+ *   Has class <code>toolkit-grid</code>.
+ */
 ChildWidget(Chart, "grid", {
     create: Grid,
     show: true,
@@ -760,8 +785,8 @@ function key_hover_cb(ev) {
     toggle_class(this.nextSibling, "toolkit-hover", b);
 }
 /**
- * @member {SVGRect} Chart#_key_background - The rectangle of the key.
- *      Has class <code>toolkit-background</code>.
+ * @member {SVGRect} Chart#_key_background - The SVG rectangle of the key.
+ *   Has class <code>toolkit-background</code>.
  */
 ChildElement(Chart, "key_background", {
     option: "key",
@@ -779,8 +804,8 @@ ChildElement(Chart, "key_background", {
     },
 });
 /**
- * @member {SVGGroup} Chart#_key - The group containing all descriptions.
- *      Has class <code>toolkit-key</code>.
+ * @member {SVGGroup} Chart#_key - The SVG group containing all descriptions.
+ *   Has class <code>toolkit-key</code>.
  */
 ChildElement(Chart, "key", {
     option: "key",
@@ -798,7 +823,7 @@ ChildElement(Chart, "key", {
 });
 /**
  * @member {SVGText} Chart#_title - The title of the chart.
- *      Has class <code>toolkit-title</code>.
+ *   Has class <code>toolkit-title</code>.
  */
 ChildElement(Chart, "title", {
     option: "title",

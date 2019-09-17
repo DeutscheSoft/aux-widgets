@@ -27,12 +27,19 @@ import { add_class } from '../utils/dom.js';
  * 
  * @extends Container
  * 
+ * @param {Object} [options={ }] - An object containing initial options.
+ * 
+ * @property {String|Boolean} [options.label=false] - The label of the frame. Set to `false` to remove it from the DOM.
+ * 
  * @class Frame
  */
 export const Frame = define_class({
     Extends: Container,
     _class: "Frame",
     _options: Object.create(Container.prototype._options),
+    options: {
+        label: false,
+    },
     initialize: function (options) {
         Container.prototype.initialize.call(this, options);
         /**

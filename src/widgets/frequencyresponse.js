@@ -45,8 +45,8 @@ function calculate_grid(range, step) {
 
 export const FrequencyResponse = define_class({
     /**
-     * FrequencyResponse is a Chart drawing frequencies on the x axis and dB
-     * values on the y axis. This widget automatically draws a Grid depending
+     * FrequencyResponse is a {@link Chart} drawing frequencies on the x axis and dB
+     * values on the y axis. This widget automatically draws a {@link Grid} depending
      * on the ranges.
      *
      * @class FrequencyResponse
@@ -63,7 +63,7 @@ export const FrequencyResponse = define_class({
      * @property {Array<Object>} [options.grid_x=[{pos:    20, label: "20 Hz"}, {pos:    30}, {pos:    40}, {pos:    50}, {pos:    60}, {pos:    70}, {pos:    80}, {pos:    90}, {pos:   100, label: "100 Hz"}, {pos:   200}, {pos:   300}, {pos:   400}, {pos:   500}, {pos:   600}, {pos:   700}, {pos:   800}, {pos:   900}, {pos:  1000, label: "1000 Hz"}, {pos:  2000}, {pos:  3000}, {pos:  4000}, {pos:  5000}, {pos:  6000}, {pos:  7000}, {pos:  8000}, {pos:  9000}, {pos: 10000, label: "10000 Hz"}, {pos: 20000, label: "20000 Hz"}]] - An array containing objects with the following optional members:
      *   <code>{pos:y[, color: "colorstring"[,class: "classname"[, label:"labeltext"]]]}</code>
      * @property {String} [options.scale="linear"] - The type of the decibels scale. See {@link Range} for more details.
-     * @param {Number} [options.depth=0] - The depth of the z axis (<code>basis</code> of options.range_z)
+     * @property {Number} [options.depth=0] - The depth of the z axis (<code>basis</code> of options.range_z)
      */
     _class: "FrequencyResponse",
     Extends: Chart,
@@ -131,6 +131,12 @@ export const FrequencyResponse = define_class({
          *   Has class <code>toolkit-frequency-response</code>.
          */
         add_class(this.element, "toolkit-frequency-response");
+        /** 
+         * @member {SVGGroup} Chart#_handles - The SVG group containing all handles.
+         *      Has class <code>toolkit-response-handles</code>.
+         */
+        add_class(this._handles, "toolkit-response-handles");
+        
         // do not overwrite custom grids, please
         if (this.options.db_grid && !this.options.grid_y.length)
             this.set("db_grid", this.options.db_grid);

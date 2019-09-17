@@ -33,13 +33,6 @@ import { os } from './../utils/browser_detection.js';
  */
 function value_clicked(e) {
     var O = this.options;
-    // TODO: FIXME by finishing the dedicated keyboard widget
-    if (os() === "Android") {
-        e.preventDefault();
-        //e.stopPropagation();
-        return false;
-    }
-    // TODO
     if (O.set === false) return;
     if (this.__editing) return false;
     add_class(this.element, "toolkit-active");
@@ -62,10 +55,6 @@ function value_typing(e) {
     if (O.set === false) return;
     if (!this.__editing) return;
     switch (e.keyCode) {
-        default:
-            if (O.editmode == "immediate")
-                this.userset("value", O.set ? O.set(this._input.value) : this._input.value);
-            break;
         case 27:
             // ESC
             value_done.call(this);
@@ -104,6 +93,13 @@ function value_typing(e) {
      * @param {string} value - The new value of the widget.
      */
     this.fire_event("valuetyping", e, O.value);
+}
+function value_input() {
+    var O = this.options;
+    if (O.set === false) return;
+    if (!this.__editing) return;
+    if (O.editmode == "immediate")
+        this.userset("value", O.set ? O.set(this._input.value) : this._input.value);
 }
 function value_done() {
     if (!this.__editing) return;
@@ -206,9 +202,12 @@ export const Value = define_class({
 
         this._value_typing = value_typing.bind(this);
         this._value_done = value_done.bind(this);
+        this._value_input = value_input.bind(this);
                 
         this._input.addEventListener("keyup", this._value_typing);
+        this._input.addEventListener("input", this._value_input);
         this._input.addEventListener("blur", this._value_done);
+        this.__editing = false;
     },
     
     redraw: function () {
@@ -257,6 +256,7 @@ export const Value = define_class({
     destroy: function () {
         this._input.removeEventListener("keyup", this._value_typing);
         this._input.removeEventListener("blur", this._value_done);
+        this._input.removeEventListener("input", this._value_input);
         this._input.remove();
         Widget.prototype.destroy.call(this);
     },

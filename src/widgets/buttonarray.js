@@ -75,29 +75,30 @@ var zero = { width: 0, height: 0};
 
 export const ButtonArray = define_class({
     /**
-     * ButtonArray is a list of buttons ({@link Button}) layouted
-     * either vertically or horizontally. ButtonArray automatically
-     * adds arrow buttons if the overal width is smaller than the buttons
-     * list.
+     * ButtonArray is a list of ({@link Button})s, arranged
+     * either vertically or horizontally. ButtonArray is able to
+     * adds arrow buttons automatically if the overal size is smaller
+     * than the buttons list.
      *
      * @param {Object} [options={ }] - An object containing initial options.
      * 
-     * @property {Array<Object|String>} [options.buttons=[]] - A list of button options
-     *   or label strings which is converted to button instances on init.
-     *   If get is called, the converted list of button instances is
-     *   returned.
-     * @property {Boolean} [options.auto_arrows=true] - If arrow buttons are
-     *   added automatically
-     * @property {String} [options.direction="horizontal"] - The direction of
-     *   the button list, either "horizontal" or "vertical".
-     * @property {Integer|Button} [options.show=-1] - The {@link Button} to scroll
-     *   to, either the button index starting from zero or the button object
-     *   itself.
+     * @property {Array<Object|String>} [options.buttons=[]] - A list of
+     *   button options objects or label strings which is converted to
+     *   button instances on init. If get is called, a converted list
+     *   of button instances is returned.
+     * @property {Boolean} [options.auto_arrows=true] - Set to `false`
+     *   to disable auto-generated arrow buttons.
+     * @property {String} [options.direction="horizontal"] - The layout
+     *   of the button list, either "horizontal" or "vertical".
+     * @property {Integer|Button} [options.show=-1] - The {@link Button}
+     *   to scroll to and highlight, expects either the button index starting
+     *   from zero or the {@link Button} instance itself.
      * @property {Number} [options.scroll=0] - Offer scrollbars and "real"
      *   scrolling. This reduces performance because movement is done in JS
-     *   instead of (probably accelerated) CSS transitions. 0 for standard
+     *   instead of (pesumably accelerated) CSS transitions. 0 for standard
      *   behavior, n > 0 is handled as milliseconds for transitions.
-     * @property {Object} [options.button_class=Button] - A class to be used for instantiating the buttons.
+     * @property {Object} [options.button_class=Button] - A class to
+     *   be used for instantiating the buttons.
      * 
      * @class ButtonArray
      * 
@@ -300,7 +301,7 @@ export const ButtonArray = define_class({
      * @method ButtonArray#remove_button
      * 
      * @param {integer|Button} button - button index or the {@link Button}
-     *   instance.
+     *   instance to be removed.
      */
     remove_button: function (button) {
         if (typeof button === "object")
@@ -427,14 +428,14 @@ export const ButtonArray = define_class({
      *
      * @method ButtonArray#current
      * 
-     * @returns {Button} The active {@link Button} or null.
+     * @returns {Button|Boolean} The active {@link Button} or `false`, if none is selected.
      */
     current: function() {
         var n = this.options.show;
         if (n >= 0 && n < this.buttons.length) {
             return this.buttons[n];
         }
-        return null;
+        return false;
     },
     
     set: function (key, value) {

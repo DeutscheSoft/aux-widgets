@@ -104,7 +104,7 @@ export const ValueKnob = define_class({
     },
 });
 /**
- * @member {Label} ValueKnob#label - The Label widget.
+ * @member {Label} ValueKnob#label - The {@link Label} widget.
  */
 ChildWidget(ValueKnob, "label", {
     create: Label,
@@ -115,7 +115,7 @@ ChildWidget(ValueKnob, "label", {
     },
 });
 /**
- * @member {Knob} ValueKnob#knob - The Knob widget.
+ * @member {Knob} ValueKnob#knob - The {@link Knob} widget.
  */
 ChildWidget(ValueKnob, "knob", {
     create: Knob,
@@ -124,7 +124,7 @@ ChildWidget(ValueKnob, "knob", {
     toggle_class: true,
 });
 /**
- * @member {Value} ValueKnob#value - The Value widget.
+ * @member {Value} ValueKnob#value - The {@link Value} widget.
  */
 ChildWidget(ValueKnob, "value", {
     create: Value,

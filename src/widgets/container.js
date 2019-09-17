@@ -71,15 +71,16 @@ function disable_draw_children() {
 }
 export const Container = define_class({
     /**
-     * Container represents a <code>&lt;DIV></code> element.
+     * Container represents a <code>&lt;DIV></code> element contining various
+     *   other widgets or DOMNodes.
      *
-     * Container have four different display states: <code>show</code>, <code>hide</code>,
+     * Containers have four different display states: <code>show</code>, <code>hide</code>,
      * <code>showing</code> and <code>hiding</code>. Each of these states has a corresponding
      * CSS class called <code>toolkit-show</code>, <code>toolkit-hide</code>, <code>toolkit-showing</code>
      * and <code>toolkit-hiding</code>, respectively. The display state can be controlled using
      * the methods {@link Container#show}, {@link Container#hide} and {@link Widget#toggle_hidden}.
      *
-     * A container can keep track of the display states of its children.
+     * A container can keep track of the display states of its child widgets.
      * The display state of a child can be changed using {@link Container#hide_child},
      * {@link Container#show_child} and {@link Container#toggle_child}.
      *
@@ -90,7 +91,7 @@ export const Container = define_class({
      * @param {Object} [options={ }] - An object containing initial options.
      * 
      * @property {String|HTMLElement} [options.content] - The content of the container. It can either be
-     *   a string which is interpreted as Text or a DOM node. Note that this options will remove all
+     *   a string which is interpreted as Text or a DOM node. Note that this option will remove all
      *   child nodes from the container element including those added via append_child.
      * @property {Number} [options.hiding_duration] - The duration in ms of the hiding CSS
      *   transition/animation of this container. If this option is not set, the transition duration
@@ -105,10 +106,10 @@ export const Container = define_class({
     _class: "Container",
     Extends: Widget,
     _options: Object.assign(Object.create(Widget.prototype._options), {
-        content: "string",
+        content: "string|DOMNode",
         display_state: "string",
-        hiding_duration: "int",
-        showing_duration: "int",
+        hiding_duration: "number",
+        showing_duration: "number",
         children: "array",
     }),
     options: {
@@ -406,8 +407,8 @@ export const Container = define_class({
         if (I.content) {
             I.content = false;
             empty(E);
-
-            if (O.content) set_content(E, O.content);
+            if (typeof O.content === "string") set_content(E, O.content);
+            else E.appendChild(O.content);
         }
     },
 });

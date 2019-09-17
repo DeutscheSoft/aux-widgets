@@ -21,6 +21,14 @@ import { Container } from './container.js';
 import { element } from '../utils/dom.js';
 
 export const ListItem = define_class({
+    /**
+     * ListItem is a member {@link Container} of {@List}s. The
+     * element is a LI instead of a DIV.
+     * 
+     * @class ListItem
+     * 
+     * @extends Container
+     */
     _class: "ListItem",
     Extends: Container,
     

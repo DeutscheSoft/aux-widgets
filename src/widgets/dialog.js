@@ -179,7 +179,7 @@ export const Dialog = define_class({
         }
     },
     /**
-     * Open the dialog. Optionally set x and y position regarding the `anchor`.
+     * Open the dialog. Optionally set x and y position regarding `anchor`.
      *
      * @method Dialog#open
      * 
@@ -196,7 +196,7 @@ export const Dialog = define_class({
             this.set("y", y);
     },
     /**
-     * Close the dialog. The DOM node is removed from DOM if `auto_remove` is set to `true`.
+     * Close the dialog. The node is removed from DOM if `auto_remove` is set to `true`.
      *
      * @method Dialog#close
      */

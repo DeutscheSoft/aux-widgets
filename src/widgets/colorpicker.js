@@ -116,8 +116,35 @@ function set_atoms (key, value) {
  * ColorPicker provides a collection of widgets to select a color in
  * RGB or HSL color space.
  * 
+ * @class ColorPicker
+ * 
+ * @extends Container
+ * 
  * @implements Colors
  * 
+ * @param {Object} [options={ }] - An object containing initial options.
+ * 
+ * @property {object} [hsl={h:0, s:0.5, l:0}] - An object containing members `h`ue, `s`aturation and `l`ightness as numerical values.
+ * @property {object} [rgb={r:0, r:0, b:0}] - An object containing members `r`ed, `g`reen and `b`lue as numerical values.
+ * @property {string} [hex=000000] - A HEX color value, either with or without leading `#`.
+ * @property {number} [hue=0] - A numerical value 0..1 for the hue.
+ * @property {number} [saturation=0] - A numerical value 0..1 for the saturation.
+ * @property {number} [lightness=0] - A numerical value 0..1 for the lightness.
+ * @property {number} [red=0] - A numerical value 0..255 for the amount of red.
+ * @property {number} [green=0] - A numerical value 0..255 for the amount of green.
+ * @property {number} [blue=0] - A numerical value 0..255 for the amount of blue.
+ * @property {boolean} [show_hue=true] - Set to `false` to hide the {@link ValueKnob} for hue.
+ * @property {boolean} [show_saturation=true] - Set to `false` to hide the {@link ValueKnob} for saturation.
+ * @property {boolean} [show_lightness=true] - Set to `false` to hide the {@link ValueKnob} for lightness.
+ * @property {boolean} [show_red=true] - Set to `false` to hide the {@link ValueKnob} for red.
+ * @property {boolean} [show_green=true] - Set to `false` to hide the {@link ValueKnob} for green.
+ * @property {boolean} [show_blue=true] - Set to `false` to hide the {@link ValueKnob} for blue.
+ * @property {boolean} [show_hex=true] - Set to `false` to hide the {@link Value} for the HEX color.
+ * @property {boolean} [show_apply=true] - Set to `false` to hide the {@link Button} to apply.
+ * @property {boolean} [show_cancel=true] - Set to `false` to hide the {@link Button} to cancel.
+ * @property {boolean} [show_canvas=true] - Set to `false` to hide the color canvas.
+ * @property {boolean} [show_grayscale=true] - Set to `false` to hide the grayscale.
+ * @property {boolean} [show_indicator=true] - Set to `false` to hide the color indicator.
  */
 
 
@@ -154,20 +181,31 @@ export const ColorPicker = define_class({
         options = this.options;
 
         var E = this.element;
-        /** @member {HTMLDivElement} Label#element - The main DIV container.
-         * Has class <code>toolkit-color-picker-hsl</code>.
+        /** @member {HTMLDivElement} ColorPicker#element - The main DIV container.
+         * Has class <code>toolkit-color-picker</code>.
          */
         add_class(E, "toolkit-color-picker");
         
+        /**
+         * @member {Range} ColorPicker#range_x - The {@link Range} for the x axis. 
+         */
         this.range_x = new Range({
             min: 0,
             max: 1,
         });
+        
+        /**
+         * @member {Range} ColorPicker#range_y - The {@link Range} for the y axis.
+         */
         this.range_y = new Range({
             min: 0,
             max: 1,
             reverse: true,
         });
+        
+        /**
+         * @member {Range} ColorPicker#drag_x - The {@link DragValue} for the x axis.
+         */
         this.drag_x = new DragValue(this, {
             range: (function () { return this.range_x; }).bind(this),
             get: function () { return this.parent.options.hue; },
@@ -180,6 +218,9 @@ export const ColorPicker = define_class({
                 this.parent.set("hue", this.options.range().px2val(x));
             }
         });
+        /**
+         * @member {Range} ColorPicker#drag_y - The {@link DragValue} for the y axis.
+         */
         this.drag_y = new DragValue(this, {
             range: (function () { return this.range_y; }).bind(this),
             get: function () { return this.parent.options.lightness; },
@@ -264,6 +305,10 @@ export const ColorPicker = define_class({
     }
 });
 
+/**
+ * @member {HTMLDivElement} ColorPicker#canvas - The color background.
+ *   Has class `toolkit-canvas`,
+ */
 ChildElement(ColorPicker, "canvas", {
     show: true,
     append: function () {
@@ -272,12 +317,20 @@ ChildElement(ColorPicker, "canvas", {
         this.drag_y.set("node", this._canvas);
     },
 });
+/**
+ * @member {HTMLDivElement} ColorPicker#grayscale - The grayscale background.
+ *   Has class `toolkit-grayscale`,
+ */
 ChildElement(ColorPicker, "grayscale", {
     show: true,
     append: function () {
         this._canvas.appendChild(this._grayscale);
     },
 });
+/**
+ * @member {HTMLDivElement} ColorPicker#indicator - The indicator element.
+ *   Has class `toolkit-indicator`,
+ */
 ChildElement(ColorPicker, "indicator", {
     show: true,
     append: function () {
@@ -285,6 +338,10 @@ ChildElement(ColorPicker, "indicator", {
     },
 });
 
+/**
+ * @member {Value} ColorPicker#hex - The {@link Value} for the HEX color.
+ *   Has class `toolkit-hex`,
+ */
 ChildWidget(ColorPicker, "hex", {
     create: Value,
     show: true,
@@ -320,6 +377,10 @@ ChildWidget(ColorPicker, "hex", {
     inherit_options: true,
 });
 
+/**
+ * @member {ValueKnob} ColorPicker#hue - The {@link ValueKnob} for the hue.
+ *   Has class `toolkit-hue`,
+ */
 ChildWidget(ColorPicker, "hue", {
     create: ValueKnob,
     option: "show_hsl",
@@ -341,6 +402,10 @@ ChildWidget(ColorPicker, "hue", {
     inherit_options: true,
     blacklist_options: ["x", "y", "value"],
 });
+/**
+ * @member {ValueKnob} ColorPicker#saturation - The {@link ValueKnob} for the saturation.
+ *   Has class `toolkit-saturation`,
+ */
 ChildWidget(ColorPicker, "saturation", {
     create: ValueKnob,
     show: true,
@@ -361,6 +426,10 @@ ChildWidget(ColorPicker, "saturation", {
     inherit_options: true,
     blacklist_options: ["x", "y", "value"],
 });
+/**
+ * @member {ValueKnob} ColorPicker#lightness - The {@link ValueKnob} for the lightness.
+ *   Has class `toolkit-lightness`,
+ */
 ChildWidget(ColorPicker, "lightness", {
     create: ValueKnob,
     option: "show_hsl",
@@ -382,7 +451,10 @@ ChildWidget(ColorPicker, "lightness", {
     inherit_options: true,
     blacklist_options: ["x", "y", "value"],
 });
-
+/**
+ * @member {ValueKnob} ColorPicker#red - The {@link ValueKnob} for the red color.
+ *   Has class `toolkit-red`,
+ */
 ChildWidget(ColorPicker, "red", {
     create: ValueKnob,
     option: "show_rgb",
@@ -407,6 +479,10 @@ ChildWidget(ColorPicker, "red", {
     inherit_options: true,
     blacklist_options: ["x", "y", "value"],
 });
+/**
+ * @member {ValueKnob} ColorPicker#green - The {@link ValueKnob} for the green color.
+ *   Has class `toolkit-green`,
+ */
 ChildWidget(ColorPicker, "green", {
     create: ValueKnob,
     option: "show_rgb",
@@ -431,6 +507,10 @@ ChildWidget(ColorPicker, "green", {
     inherit_options: true,
     blacklist_options: ["x", "y", "value"],
 });
+/**
+ * @member {ValueKnob} ColorPicker#blue - The {@link ValueKnob} for the blue color.
+ *   Has class `toolkit-blue`,
+ */
 ChildWidget(ColorPicker, "blue", {
     create: ValueKnob,
     option: "show_rgb",
@@ -455,6 +535,10 @@ ChildWidget(ColorPicker, "blue", {
     inherit_options: true,
     blacklist_options: ["x", "y", "value"],
 });
+/**
+ * @member {Button} ColorPicker#apply - The {@link Button} to apply.
+ *   Has class `toolkit-apply`,
+ */
 ChildWidget(ColorPicker, "apply", {
     create: Button,
     show: true,
@@ -466,6 +550,10 @@ ChildWidget(ColorPicker, "apply", {
         "class": "toolkit-apply",
     },
 });
+/**
+ * @member {Button} ColorPicker#cancel - The {@link Button} to cancel.
+ *   Has class `toolkit-cancel`,
+ */
 ChildWidget(ColorPicker, "cancel", {
     create: Button,
     show: true,

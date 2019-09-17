@@ -21,6 +21,22 @@ import { Container } from './container.js';
 import { element } from '../utils/dom.js';
 
 export const List = define_class({
+    /**
+     * List is a sortable {@link Container} for {@ListItems}s.
+     *   the element is a UL instead of a DIV.
+     * 
+     * @param {Object} [options={ }] - An object containing initial options.
+     * 
+     * @property {Function|Boolean} [options.sort=false] - A function
+     *   expecting arguments A and B, returning a number < 0, if A comes first and > 0,
+     *   if B comes first. 0 keeps both elements in place. Please refer to the
+     *   compareFunction at <a href="https://www.w3schools.com/jsref/jsref_sort.asp">W3Schools</a>
+     *   for any further information.
+     * 
+     * @class List
+     * 
+     * @extends Container
+     */
     _options: Object.assign(Object.create(Container.prototype._options), {
       sort: "function",
     }),

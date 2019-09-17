@@ -35,18 +35,32 @@ function apply (color) {
 }
 
 export const ColorPickerDialog = define_class({
+    /**
+     * A {@link Dialog} window containing a {@link ColorPicker}. It can be opened
+     * programatically and closes automatically on the appropriate user
+     * interactions like hitting ESC or clicking `apply`. ColorPickerDialog
+     * inherits all options of ColorPicker.
+     * 
+     * @class ColorPickerDialog
+     * 
+     * @extends Dialog
+     * 
+     */
     
     _class: "ColorPickerDialog",
     Extends: Dialog,
     
     initialize: function (options) {
         Dialog.prototype.initialize.call(this, options);
+        /** @member {HTMLDivElement} ColorPickerDialog#element - The main DIV container.
+         * Has class <code>toolkit-color-picker-dialog</code>.
+         */
         add_class(this.element, "toolkit-color-picker-dialog");
     },
 });
     
 /**
- * @member {ColorPicker} ColorPickerDialog#colorpicker - The ColorPicker widget.
+ * @member {ColorPicker} ColorPickerDialog#colorpicker - The {@link ColorPicker} widget.
  */
 ChildWidget(ColorPickerDialog, "colorpicker", {
     create: ColorPicker,

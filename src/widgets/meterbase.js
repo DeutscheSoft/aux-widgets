@@ -125,15 +125,17 @@ function subtract_intervals(a, b) {
 }
 export const MeterBase = define_class({
     /**
-     * MeterBase is a base class to build different meters such as LevelMeter.
-     * MeterBase uses Gradient and has a Scale widget. MeterBase inherits all
-     * options from Scale. Note that the two options <code>format_labels</code> and
+     * MeterBase is a base class to build different meters such as {@link LevelMeter} from.
+     * MeterBase uses {@link Gradient} and contains a {@link Scale} widget.
+     * MeterBase inherits all options from {@link Scale}.
+     * 
+     * Note that the two options <code>format_labels</code> and
      * <code>scale_base</code> have different names here.
      *
      * Note that level meters with high update frequencies can be very demanding when it comes
      * to rendering performance. These performance requirements can be reduced by increasing the
      * segment size using the <code>segment</code> option. Using a segment, the different level
-     * meter positions are reduced. This widget will take advantage of that and avoid rendering those
+     * meter positions are reduced. This widget will take advantage of that by avoiding rendering those
      * changes to the meter level, which fall into the same segment.
      *
      * @class MeterBase
@@ -149,23 +151,23 @@ export const MeterBase = define_class({
      *   <code>"top"</code> and <code>"bottom"</code> are horizontal layouts in which the meter
      *   is at the top or the bottom, respectively.
      * @property {Integer} [options.segment=1] - Segment size. Pixel positions of the meter level are
-     *   rounded to multiples of this size. This can be used to give the level meter a LED effect.
+     *   rounded to multiples of this size. This can be used to give the level meter a LED effect and to
+     *   reduce processor load.
      * @property {Number} [options.value=0] - Level value.
      * @property {Number} [options.base=false] - The base value of the meter. If set to <code>false</code>,
      *   the base will coincide with the minimum value <code>options.min</code>. The meter level is drawn
      *   starting from the base to the value.
-     * @property {Number} [options.label=false] - Value of the label position. 
-     * @property {Number} [options.title=false] - The title.
-     * @property {Boolean} [options.show_title=false] - If set to <code>true</code> a title is displayed.
-     * @property {Boolean} [options.show_label=false] - If set to <code>true</code> a label is displayed.
-     * @property {Boolean} [options.show_scale=true] - If set to <code>true</code> the scale is displayed.
+     * @property {Number} [options.label=0] - Value to be displayed on the label. 
      * @property {Function} [options.format_label=FORMAT("%.2f")] - Function for formatting the 
      *   label.
-     * @property {Number} [options.scale_base=false] - Base of the meter scale, see {@link Scale}.
-     * @property {Boolean} [options.show_labels=true] - If <code>true</code>, display labels in the
+     * @property {Boolean} [options.show_label=false] - If set to <code>true</code> a label is displayed.
+     * @property {Number} [options.title=false] - The title of the MeterBase. Set to `false` to hide it.
+     * @property {Boolean} [options.show_scale=true] - Set to <code>false</code> to hide the scale.
+     * @property {Number|Boolean} [options.scale_base=false] - Base of the meter scale, see {@link Scale} for more information.
+     * @property {Boolean} [options.show_labels=true] - If <code>true</code>, display labels on the
      *   scale.
      * @property {Function} [options.format_labels=FORMAT("%.2f")] - Function for formatting the 
-     *   scale labels. This is passed to the Scale as option <code>labels</code>.
+     *   scale labels. This is passed to Scale as option <code>labels</code>.
      *
      */
     
@@ -180,11 +182,11 @@ export const MeterBase = define_class({
         base: "number|boolean",
         min: "number",
         max: "number",
-        label: "string|boolean",
+        label: "number",
         title: "string|boolean",
         show_labels: "boolean",
         format_label: "function",
-        scale_base: "number",
+        scale_base: "number|boolean",
         format_labels: "function",
         background: "string|boolean",
         gradient: "object|boolean"
@@ -194,7 +196,7 @@ export const MeterBase = define_class({
         segment:         1,
         value:           0,
         base:            false,
-        label:           false,
+        label:           0,
         title:           false,
         show_labels:     true,
         format_label:    FORMAT("%.2f"),
@@ -281,7 +283,7 @@ export const MeterBase = define_class({
         add_class(E, "toolkit-meter-base");
         this.widgetize(E, false, true, true);
         
-        this._bar    = element("div", "toolkit-bar");
+        this._bar = element("div", "toolkit-bar");
         /**
          * @member {HTMLCanvas} MeterBase#_canvas - The canvas element drawing the mask.
          *   Has class <code>toolkit-mask</code>.
@@ -321,6 +323,7 @@ export const MeterBase = define_class({
             S.add(function() {
                 this._fillstyle = get_style(this._canvas, "background-color");
                 S.add(function() {
+                    this._canvas.getContext("2d").fillStyle = this._fillstyle;
                     this._canvas.style.setProperty("background-color", "transparent", "important");
                     this.trigger_draw();
                 }.bind(this), 3);
@@ -375,6 +378,11 @@ export const MeterBase = define_class({
             /* FIXME: I am not sure why this is even necessary */
             this._canvas.style.width = O._width + "px";
             this._canvas.style.height = O._height + "px";
+            this._canvas.getContext("2d").fillStyle = this._fillstyle;
+        }
+        
+        if (I.value && O.show_label) {
+            this.label.set("label", O.format_label(O.value));
         }
         
         if (I.value || I.basis || I.min || I.max) {
@@ -492,7 +500,7 @@ export const MeterBase = define_class({
     
 });
 /**
- * @member {Scale} MeterBase#scale - The {@link Scale} module of the meter.
+ * @member {Scale} MeterBase#scale - The {@link Scale} of the meter.
  */
 ChildWidget(MeterBase, "scale", {
     create: Scale,
@@ -512,7 +520,7 @@ ChildWidget(MeterBase, "scale", {
     },
 });
 /**
- * @member {Label} MeterBase#title - The DIV element displaying the title.
+ * @member {Label} MeterBase#title - The {@link Label} displaying the title.
  *   Has class <code>toolkit-title</code>.
  */
 ChildWidget(MeterBase, "title", {
@@ -524,7 +532,7 @@ ChildWidget(MeterBase, "title", {
     toggle_class: true,
 });
 /**
- * @member {Label} MeterBase#label - The DIV element of the label.
+ * @member {Label} MeterBase#label - The {@link Label} displaying the label.
  */
 ChildWidget(MeterBase, "label", {
     create: Label,

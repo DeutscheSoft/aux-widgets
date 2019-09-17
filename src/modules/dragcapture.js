@@ -58,7 +58,7 @@ function startcapture(state) {
     /**
      * Capturing started.
      * 
-     * @event Drag#startcapture
+     * @event DragCapture#startcapture
      * 
      * @param {object} state - An internal state object.
      * @param {DOMEvent} start - The event object of the initial event.
@@ -80,7 +80,7 @@ function movecapture(ev) {
     /**
      * A movement was captured.
      * 
-     * @event Drag#movecapture
+     * @event DragCapture#movecapture
      * 
      * @param {DOMEvent} event - The event object of the current move event.
      */
@@ -95,9 +95,9 @@ function stopcapture(ev) {
     if (s === null) return;
     
     /**
-     * Capturing stopped..
+     * Capturing stopped.
      * 
-     * @event Drag#stopcapture
+     * @event DragCapture#stopcapture
      * 
      * @param {object} state - An internal state object.
      * @param {DOMEvent} event - The event object of the current event.
@@ -308,7 +308,7 @@ export const DragCapture = define_class({
      * @param {Object} widget - The parent widget making use of DragValue.
      * @param {Object} [options={ }] - An object containing initial options.
      * 
-     * @param {HTMLElement} [options.node] - The DOM element receiving the drag events. If not set the widgets element is used.
+     * @property {HTMLElement} [options.node] - The DOM element receiving the drag events. If not set the widgets element is used.
      * 
      * @class DragCapture
      */

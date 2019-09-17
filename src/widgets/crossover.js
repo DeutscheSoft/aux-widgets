@@ -28,6 +28,12 @@ export const CrossoverBand = define_class({
     /**
      * CrossoverBand is a {@link EqBand} with an additional filter.
      * 
+     * @param {Object} [options={ }] - An object containing additional options.
+     * 
+     * @property {String} [lower="lowpass3"] - The type of filter for the range below cutoff frequency.
+     * @property {String} [upper="highpass3"] - The type of filter for the range above cutoff frequency.
+     * @property {Function} [label=function (t, x, y, z) { return sprintf("%.2f Hz", x); }] - The function formatting the handles label.
+     * 
      * @class CrossoverBand
      * 
      * @extends EqBand
@@ -42,8 +48,8 @@ export const CrossoverBand = define_class({
         lower: "lowpass3",
         upper: "highpass3",
         label: function (t, x, y, z) { return sprintf("%.2f Hz", x); },
-        mode: "line-vertical",
-        preferences: [ "top-right", "right", "bottom-right", "top-left", "left", "bottom-left"],
+        mode: "line-vertical", // undocumented, just a default differing from ResponseHanlde
+        preferences: [ "top-right", "right", "bottom-right", "top-left", "left", "bottom-left"], // undocumented, just a default differing from ResponseHanlde
     },
     initialize: function (options) {
         /**
@@ -206,4 +212,3 @@ export const Crossover = define_class({
         return r;
     },
 });
-

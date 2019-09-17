@@ -24,11 +24,11 @@ import { element, add_class } from '../utils/dom.js';
  * The State widget is a multi-functional adaption of a traditional LED. It
  * is able to show different colors as well as on/off states. The
  * "brightness" can be set seamlessly. Classes can be used to display
- * different styles. State extends Widget.
+ * different styles. State extends {@link Widget}.
  *
- * The LED effect is implemented as an DIV element, which is overlayed by
- * a DIV mask element with class <code>toolkit-mask</code>. When switching
- * the state the opacity of the mask is toggled between zero and
+ * The LED effect is implemented as a DIV element, which is overlayed by
+ * a DIV element with class <code>toolkit-mask</code>. When switching
+ * the state, the opacity of the mask is toggled between zero and
  * <code>options.opactity</code>.
  *
  * @class State
@@ -37,16 +37,18 @@ import { element, add_class } from '../utils/dom.js';
  *
  * @param {Object} [options={ }] - An object containing initial options.
  * 
- * @property {Number} [options.state=0] - The state.
- * @property {String} [options.color="red"] - A css color string for the state LED.
- *   <code>false</code>.
+ * @property {Number} [options.state=0] - The state. To toggle between `on|off` set to `1|0`.
+ *   Set to fractions of `1` to change "brightness", e.g. `0.5`. Values > 0 trigger setting
+ *   the class `toolkit-state-on`, while a state of `0` results in class `toolkit-state-off`.
+ * @property {String|Boolean} [options.color=false] - A CSS color string for the state LED or
+ *   `false` to set the background via external CSS.
  */
 export const State = define_class({
     _class: "State",
     Extends: Widget,
     _options: Object.assign(Object.create(Widget.prototype._options), {
         state: "number|boolean",
-        color: "string",
+        color: "string|boolean",
     }),
     options: {
         state:           0,     // the initial state (0 ... 1)

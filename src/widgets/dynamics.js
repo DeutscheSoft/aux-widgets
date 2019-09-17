@@ -27,8 +27,8 @@ function range_set(value, key) {
 }
 export const Dynamics = define_class({
     /**
-     * Dynamics are based on Charts and display the characteristics of dynamic
-     * processors. They are square widgets drawing a Grid automatically based on
+     * Dynamics are based on {@link Chart} and display the characteristics of dynamic
+     * processors. They are square widgets drawing a {@link Grid} automatically based on
      * the range.
      *
      * @class Dynamics
@@ -53,7 +53,7 @@ export const Dynamics = define_class({
     _class: "Dynamics",
     Extends: Chart,
     _options: Object.assign(Object.create(Chart.prototype._options), {
-        size: "number",
+        size: "number", // deprecated, undocumented. Is set via CSS.
         min:  "number",
         max:  "number",
         scale: "string",
@@ -72,10 +72,7 @@ export const Dynamics = define_class({
         min:     -96,
         max:     24,
         scale:   "linear",
-        type:    false,          // type of dynamics display. can be
-                                 // "compressor", "limiter",
-                                 // "gate", "expander"
-                                 // or false to draw your own curve
+        type:    false, 
         threshold: 0,
         ratio:     1,
         makeup:    0,
@@ -86,7 +83,7 @@ export const Dynamics = define_class({
     },
     static_events: {
         set_size: function(value) {
-            error("using deprecated 'size' option");
+            warn("using deprecated 'size' option");
             this.set("width", value);
             this.set("height", value);
         },
@@ -216,7 +213,7 @@ export const Dynamics = define_class({
         {
           s = (1 / (Math.max(ratio, 1.001) - 1)) * ratio * ref;
         }
-        var l = 5; // estimated with of line. dirty workaround for
+        var l = 5; // estimated width of line. dirty workaround for
                    // keeping the line end out of sight in case
                    // salient point is outside the visible are
         switch (O.type) {

@@ -29,7 +29,7 @@ function toggle(e) {
     return collapse.call(self, !self.options.expanded);
 }
 function collapse(state) {
-    this.set("expanded", state);
+    this.userset("expanded", state);
     return false;
 }
 function visible_when_expanded(widget) {
@@ -150,7 +150,7 @@ export const Expander = define_class({
      *
      * @param {Object} [options={ }] - An object containing initial options.
      * 
-     * @property {Boolean} [options.expanded=false] - This is the state of this widget.
+     * @property {Boolean} [options.expanded=false] - The state of the widget.
      * @property {Boolean} [options.always_expanded=false] - This essentially overwrites
      *   the <code>expanded</code> option. This can be used to switch this widget to be
      *   always expanded, e.g. when the screen size is big enough.
@@ -159,7 +159,9 @@ export const Expander = define_class({
      *   can be open at one time.
      * @property {Boolean} [options.group_default=false] - If set, this expander is expanded
      *   if all other group members are collapsed.
-     * @param {String} [options.icon=""] - Icon of the {@link Button} which toggles expand state.
+     * @param {String} [options.icon=""] - Icon of the {@link Button} which toggles expanded state.
+     * @param {String} [options.label=""] - Label of the {@link Button} which toggles expanded state.
+     * @param {Boolean} [options.show_button=true] - Set to `false` to hide the {@link Button} toggling expanded state.
      */
     _class: "Expander",
     _options: Object.assign(Object.create(Container.prototype._options), {

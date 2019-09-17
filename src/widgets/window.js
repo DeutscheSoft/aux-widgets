@@ -412,23 +412,24 @@ export const Window = define_class({
      * @property {Number} [options.min_height=64] - Minimum height of the window.
      * @property {Number} [options.max_height=-1] - Maximum height of the window, -1 ~ infinite.
      * @property {String} [options.anchor="top-left"] - Anchor of the window, can be one out of
-     *   "top-left", "top", "top-right", "left", "center", "right", "bottom-left", "bottom", "bottom-right"
+     *   `top-left`, `top`, `top-right`, `left`, `center`, `right`, `bottom-left`, `bottom`, `bottom-right`
      * @property {Boolean} [options.modal=false] - If modal window blocks all other elements
      * @property {String} [options.dock=false] - Docking of the window, can be one out of
-     *   "top-left", "top", "top-right", "left", "center", "right", "bottom-left", "bottom", "bottom-right"
+     *   `top-left`, `top`, `top-right`, `left`, `center`, `right`, `bottom-left`, `bottom`, `bottom-right`
      * @property {Object|Boolean} [options.maximize=false] - Boolean or object with members <code>x</code> and <code>y</code> as boolean to determine the maximized state.
      * @property {Boolean} [options.minimize=false] - Minimize window (does only make sense with a
      *   window manager application to keep track of it)
      * @property {Boolean} [options.shrink=false] - Shrink rolls the window up into the title bar.
-     * @property {String|HTMLElement} [options.content=""] - The content of the window.
+     * @property {String|HTMLElement|TK.Container} [options.content=""] - The content of the window.
+     *   Can be either a string, a HTMLElement or a {@link TK.Container} to be appended to the content area.
      * @property {String} [options.open="center"] - initial position of the window, can be one out of
-     *   "top-left", "top", "top-right", "left", "center", "right", "bottom-left", "bottom", "bottom-right"
+     *   `top-left`, `top`, `top-right`, `left`, `center`, `right`, `bottom-left`, `bottom`, `bottom-right`
      * @property {Integer} [options.z_index=10000] - Z index for piling windows. does make more sense
      *   when used together with a window manager
-     * @property {String|Array<String>} [options.header=["icon","title","maximize","close"]] - Single element or array of
-     *   "title", "icon", "close", "minimize", "shrink", "maximize", "maximizevertical", "maximizehorizontal", "status", "resize", "spacer".
+     * @property {String|Array<String>} [options.header=["title", "maximize", "close"]] - Single element or array of
+     *   `title`, `icon`, `close`, `minimize`, `shrink`, `maximize`, `maximizevertical`, `maximizehorizontal`, `status`, `resize`, `spacer`.
      * @property {String|Array<String>} [options.footer=false] - Single element or array of
-     *   "title", "icon", "close", "minimize", "shrink", "maximize", "maximizevertical", "maximizehorizontal", "status", "resize", "spacer".
+     *   `title`, `icon`, `close`, `minimize`, `shrink`, `maximize`, `maximizevertical`, `maximizehorizontal`, `status`, `resize`, `spacer`.
      * @property {String} [options.title=false] - Window title.
      * @property {String} [options.status=false] Window status.
      * @property {String} [options.icon=false] URL to window icon.
@@ -440,18 +441,19 @@ export const Window = define_class({
      * @property {Boolean} [options.auto_shrink=true] - Set whether shrink toggles the window or not
      * @property {Boolean} [options.draggable=true] - Set whether the window is draggable
      * @property {Boolean} [options.resizable=true] - Set whether the window is resizable
-     * @property {String} [options.resizing="continuous"] - Resizing policy, "continuous" or "stop".
+     * @property {String} [options.resizing="continuous"] - Resizing policy, `continuous` or `stop`.
      *   The first one resizes all children continuously while resizing.
-     * @property {Number} [options.header_action="maximize"] - Action for double clicking the window header, one out of
-     *   "close", "minimize", "shrink", "maximize", "maximizevertical", "maximizehorizontal"
+     * @property {String} [options.header_action="maximize"] - Action for double clicking the window header, one out of
+     *   `close`, `minimize`, `shrink`, `maximize`, `maximizevertical`, `maximizehorizontal`
      * @property {Boolean} [options.active=true] - Active state of the window.
      * @property {Integer} [options.hide_status=0] - If set to !0 status message hides after [n] milliseconds.
      */
      
-    /*
-     * @member {Drag} Window#Drag - The {Drag} module.
-     * @member {Resize} Window#Resize - The {Resize} module.
+    /**
+     * @member {Drag} Window#Drag - The {@link Drag} module.
+     * @member {Resize} Window#Resize - The {@link Resize} module.
      */
+     
     _class: "Window",
     Extends: Container,
     Implements: [GlobalCursor],
@@ -674,7 +676,16 @@ export const Window = define_class({
         }
         if (I.content) {
             I.content = false;
-            if (O.content) set_content(this.content.element, O.content);
+            if (O.content) {
+                if (TK.Container.prototype.isPrototypeOf(O.content)) {
+                    TK.set_content(this.content.element, "");
+                    this.append_child(O.content);
+                } else {
+                    TK.set_content(this.content.element, O.content);
+                }
+            }
+            setD = true;
+            setP = true;
         }
         
         if (setD) set_dimensions.call(this);
@@ -743,10 +754,20 @@ ChildWidget(Window, "status", {
 });
 /**
  * @member {Button} Window#close - The close button.
+ */
+/**
  * @member {Button} Window#minimize - The minimize button.
+ */
+/**
  * @member {Button} Window#maximize - The maximize button.
+ */
+/**
  * @member {Button} Window#maximizevertical - The maximizevertical button.
+ */
+/**
  * @member {Button} Window#maximizehorizontal - The maximizehorizontal button.
+ */
+/**
  * @member {Button} Window#shrink - The shrink button.
  */
 

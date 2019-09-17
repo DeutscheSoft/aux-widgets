@@ -101,11 +101,12 @@ var clicked = function (e) {
   
 export const ConfirmButton = define_class({
   /**
-   * ConfirmButton needs to clicks/taps until the <code>confirmed</code>
-   * event is fired. After the first click/tap dedicated label and icon
-   * can be displayed and the button gets the class <code>toolkit-active</code>.
-   * After the first click a timeout set via <code>timeout</code> the
-   * button resets to its default settings if no second click/tap happens.
+   * ConfirmButton is a {@link TK.Button} firing the `confirmed` event
+   * after it was hit a second time. While waiting for the confirmation, a
+   * dedicated label and icon can be displayed. The button is reset to
+   * default if no second click appears. A click outside of the button
+   * resets it, too. It gets class `toolkit-active` while waiting for
+   * the confirmation.
    *
    * @class ConfirmButton
    * 
@@ -115,7 +116,7 @@ export const ConfirmButton = define_class({
    * 
    * @property {Boolean} [options.confirm=true] - Defines if the button acts as <code>ConfirmButton</code> or normal <code>Button</code>.
    * @property {Number} [options.timeout=2000] - Defines a time in milliseconds after the button resets to defaults if no second click happens.
-   * @property {Number} [options.interrupt=0] - This is the minimum time in milliseconds between two clicks to fire the <code>confirmed</code> event.
+   * @property {Number} [options.interrupt=0] - Defines a duration in milliseconds within further clicks are ignored. Set to avoid double-clicks being recognized as confirmation.
    * @property {String} [options.label_confirm] - The label to be used while in active state.
    * @property {String} [options.icon_confirm] - The icon to be used while in active state.
    */
@@ -125,7 +126,7 @@ export const ConfirmButton = define_class({
   _options: Object.assign(Object.create(Button.prototype._options), {
     confirm: "boolean",
     timeout: "number",
-    interupt: "number",
+    interrupt: "number",
     label_confirm : "string",
     icon_confirm: "string",
   }),

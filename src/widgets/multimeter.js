@@ -65,7 +65,7 @@ function remove_meter (meter) {
     
 export const MultiMeter = define_class({
     /**
-     * MultiMeter is a collection of {@link LevelMeter}s to show levels of full channels
+     * MultiMeter is a collection of {@link LevelMeter}s to show levels of channels
      * containing multiple audio streams. It offers all options of {@link LevelMeter} and
      * {@link MeterBase} which are passed to all instantiated level meters.
      *
@@ -75,8 +75,8 @@ export const MultiMeter = define_class({
      * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
-     * @property {Number} [options.count=2] - The amount of level meters
-     * @property {String} [options.title=""] - The title of the multi meter
+     * @property {Number} [options.count=2] - The amount of level meters.
+     * @property {String} [options.title=""] - The title of the multi meter. Set to `false` to hide the title from the DOM.
      * @property {Array<String>} [options.titles=["L", "R"]] - An Array containing titles for the level meters. Their order is the same as the meters.
      * @property {Array<Number>} [options.values=[]] - An Array containing values for the level meters. Their order is the same as the meters.
      * @property {Array<Number>} [options.labels=[]] - An Array containing label values for the level meters. Their order is the same as the meters.
@@ -174,7 +174,7 @@ export const MultiMeter = define_class({
 });
 
 /**
- * @member {HTMLDivElement} MultiMeter#_title - The DIV element of the {@link Label} module.
+ * @member {HTMLDivElement} MultiMeter#title - The {@link Label} widget displaying the meters title.
  */
 ChildWidget(MultiMeter, "title", {
     create: Label,

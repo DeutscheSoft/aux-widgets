@@ -125,16 +125,17 @@ function hide_bands() {
 }
 export const Equalizer = define_class({
     /**
-     * Equalizer is a ResponseHandler adding some EqBands instead of
-     * simple ResponseHandles.
+     * Equalizer is a {@link ResponseHandler}, utilizing {@link EqBand}s instead of
+     * simple {@link ResponseHandle}s.
      *
      * @property {Object} options
      * 
-     * @param {Number} [options.accuracy=1] - The distance between points on the x axis.
+     * @param {Number} [options.accuracy=1] - The distance between points on
+     *   the x axis. Reduces CPU load in favour of accuracy and smoothness.
      * @param {Array} [options.bands=[]] - A list of bands to add on init.
      * @param {Boolean} [options.show_bands=true] - Show or hide all bands.
      * @param {Number} [options.oversampling=5] - If slope of the curve is too
-     *   steep, oversample n times in order to not miss a notch filter.
+     *   steep, oversample n times in order to not miss e.g. notch filters.
      * @param {Number} [options.threshold=5] - Steepness of slope to oversample,
      *   i.e. y pixels difference per x pixel
      * @class Equalizer
@@ -169,11 +170,12 @@ export const Equalizer = define_class({
     },
     
     initialize: function (options) {
+        ResponseHandler.prototype.initialize.call(this, options);
         /**
          * @member {Array} Equalizer#bands - Array of {@link EqBand} instances.
          */
-        this.bands = [];
-        ResponseHandler.prototype.initialize.call(this, options);
+        this.bands = this.handles;
+        
         /**
          * @member {HTMLDivElement} Equalizer#element - The main DIV container.
          *   Has class <code>toolkit-equalizer</code>.
@@ -184,8 +186,8 @@ export const Equalizer = define_class({
          * @member {SVGGroup} Equalizer#_bands - The SVG group containing all the bands SVG elements.
          *   Has class <code>toolkit-eqbands</code>.
          */
-        this._bands = make_svg("g", {"class": "toolkit-eqbands"});
-        this.svg.appendChild(this._bands);
+        this._bands = this._handles;
+        add_class(this._bands, "toolkit-eqbands");
         
         /**
          * @member {Graph} Equalizer#baseline - The graph drawing the zero line.
@@ -241,7 +243,7 @@ export const Equalizer = define_class({
      * 
      * @method Equalizer#add_band
      * 
-     * @param {Object} [options={ }] - An object containing initial options. - The options for the {@link EqBand}.
+     * @param {Object} [options={ }] - An object containing initial options for the {@link EqBand}.
      * @param {Object} [type=EqBand] - A widget class to be used for the new band.
      * 
      * @emits Equalizer#bandadded
@@ -285,7 +287,7 @@ export const Equalizer = define_class({
         return b;
     },
     /*
-     * Add multiple new {@link EqBand} to the equalizer. Options is an array
+     * Add multiple new {@link EqBand}s to the equalizer. Options is an array
      * of objects containing options for the new instances of {@link EqBand}
      * 
      * @method Equalizer#add_bands

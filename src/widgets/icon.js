@@ -24,7 +24,7 @@ import { Widget } from './widget.js';
 export const Icon = define_class({
     /**
      * Icon represents a <code>&lt;DIV></code> element showing either
-     * icons from the toolkit font or dedicated image files.
+     * icons from the toolkit font or dedicated image files as CSS background.
      *
      * @class Icon
      * 
@@ -33,7 +33,7 @@ export const Icon = define_class({
      * @param {Object} [options={ }] - An object containing initial options.
      * 
      * @property {String} [options.icon] - The icon to show. It can either be
-     *   a string which is interpreted as class name (if <code>[A-Za-z0-9_\-]</code>) or URI.
+     *   a string which is interpreted as class name (if <code>[A-Za-z0-9_\-]</code>) or as URI.
      */
     _class: "Icon",
     Extends: Widget,
@@ -47,7 +47,7 @@ export const Icon = define_class({
         var E;
         Widget.prototype.initialize.call(this, options);
         /** 
-         * @member {HTMLDivElement} Container#element - The main DIV element. Has class <code>toolkit-container</code> 
+         * @member {HTMLDivElement} Icon#element - The main DIV element. Has class <code>toolkit-icon</code> 
          */
         if (!(E = this.element)) this.element = E = element("div");
         add_class(E, "toolkit-icon"); 

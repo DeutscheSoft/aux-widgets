@@ -265,7 +265,7 @@ export const Circular = define_class({
      * Circular is a SVG group element containing two paths for displaying
      * numerical values in a circular manner. Circular is able to draw labels,
      * dots and markers and can show a hand. Circular e.g. is implemented by
-     * {@link Clock} to draw the hours, minutes and seconds.
+     * {@link Clock} to draw hours, minutes and seconds.
      * 
      * @class Circular
      * 
@@ -289,7 +289,7 @@ export const Circular = define_class({
      * @property {Number} [options.start=135] - The starting point in degrees.
      * @property {Number} [options.angle=270] - The maximum degree of the rotation when
      *   <code>options.value === options.max</code>.
-     * @property {Number|boolean} [options.base=false] - If a base value is set in degrees,
+     * @property {Number|Boolean} [options.base=false] - If a base value is set in degrees,
      *   circular starts drawing elements from this position.
      * @property {Boolean} [options.show_base=true] - Draw the base ring.
      * @property {Boolean} [options.show_value=true] - Draw the value ring.
@@ -321,9 +321,10 @@ export const Circular = define_class({
      *   inside or outside of the circle with radius <code>options.size/2 - margin</code>.
      * @property {Function} [options.label.format] - Optional formatting function for the label.
      *   Receives the label value as first argument.
-     * @property {Array<Object>} [options.labels=[]] - An array containing objects which describe where labels
-     *   are to be places. Members are the position <code>pos</code> in the value range and optionally
-     *   <code>color</code>, <code>class</code> and any of the properties of <code>options.label</code>.
+     * @property {Array<Object>} [options.labels=[]] - An array containing objects which describe labels
+     *   to be displayed. Either a value or an object whose members are the position <code>pos</code>
+     *   insie the value range and optionally <code>color</code>, <code>class</code> and any of the
+     *   properties of <code>options.label</code>.
      * 
      * @extends Widget
      * 
@@ -525,8 +526,9 @@ export const Circular = define_class({
      * Adds a label.
      *
      * @method Circular#add_label
-     * @param label - The label.
-     * @returns label
+     * @param {Object|Number} label - The label. Please refer to the `options`
+     *   to learn more about possible values.
+     * @returns {Object} label - The interpreted object to build the label from.
      */
     add_label: function(label) {
         var O = this.options;
@@ -549,8 +551,8 @@ export const Circular = define_class({
      * Removes a label.
      *
      * @method Circular#remove_label
-     * @param label - The label.
-     * @returns label
+     * @param {Object} label - The label object as returned from `add_label`.
+     * @returns {Object} label - The removed label object.
      */
     remove_label: function(label) {
         var O = this.options;

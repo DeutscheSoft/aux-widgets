@@ -109,7 +109,7 @@ export const ValueButton = define_class({
         add_class(this.element, "toolkit-valuebutton");
         
         /**
-         * @member {DragValue} ValueButton#drag - The DragValue module.
+         * @member {DragValue} ValueButton#drag - The {@link DragValue} module.
          */
         this.drag = new DragValue(this, {
             node:      this.element,
@@ -118,7 +118,7 @@ export const ValueButton = define_class({
             blind_angle: this.options.blind_angle,
         });
         /**
-         * @member {ScrollValue} ValueButton#scroll - The ScrollValue module.
+         * @member {ScrollValue} ValueButton#scroll - The {@link ScrollValue} module.
          */
         this.scroll = new ScrollValue(this, {
             node: this.element,
@@ -205,7 +205,7 @@ ChildWidget(ValueButton, "value", {
 });
 
 /**
- * @member {Scale} ValueButton#scale - The scale widget showing the value.
+ * @member {Scale} ValueButton#scale - The {@link Scale} showing the value.
  */
 ChildWidget(ValueButton, "scale", {
     create: Scale,

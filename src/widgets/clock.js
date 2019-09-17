@@ -20,8 +20,11 @@ import { define_class } from '../widget_helpers.js';
 import { Widget } from './widget.js';
 import { Circular } from '../modules/circular.js';
 import { set_text, element, add_class, get_style, make_svg } from '../utils/dom.js';
+import { FORMAT } from '../utils/sprint.js';
 import { S } from '../dom_scheduler.js';
 
+
+var format_viewbox = FORMAT("0 0 %d %d");
 
 function draw_time(force) {
     var tmp, drawn;
@@ -155,7 +158,7 @@ function onhide() {
 export const Clock = define_class({
     /**
      * Clock shows a customized clock with circulars displaying hours, minutes
-     * and seconds. It has three free formatable labels.
+     * and seconds. It additionally offers three freely formatable labels.
      *
      * @class Clock
      * 
@@ -178,29 +181,30 @@ export const Clock = define_class({
      * @property {Function} [options.label=function (_date, year, month, date, day, hour, minute, second, millisecond, frame, months, days) { return ((hour < 10) ? ("0" + hour) : hour) + ":" + ((minute < 10) ? ("0" + minute) : minute) + ":" + ((second < 10) ? ("0" + second) : second);] - Callback to format the main label.
      * @property {Function} [options.label_upper=function (_date, year, month, date, day, hour, minute, second, millisecond, frame, months, days) { return days[day]; }] - Callback to format the upper label.
      * @property {Function} [options.label_lower=function (_date, year, month, date, day, hour, minute, second, millisecond, frame, months, days) { return ((date < 10) ? ("0" + date) : date) + ". " + months[month] + " " + year; }] - Callback to format the lower label.
-     * @property {Number} [options.label_scale=0.33] - test
-     * @property {Date} [options.time=10] - test
+     * @property {Number} [options.label_scale=0.33] - The scale of `label_upper` and `label_lower` compared to the main label.
+     * @property {Number|String|Date} [options.time] - Set a specific time and date. To avoid auto-udates, set `timeout` to 0.
+     *   For more information about the value, please refer to <a href="https://www.w3schools.com/jsref/jsref_obj_date.asp">W3Schools</a>.
      */
     _class: "Clock",
     Extends: Widget,
     _options: Object.assign(Object.create(Widget.prototype._options), {
-        thickness:    "int",
-        margin:       "int",
-        size:         "int",
+        thickness:    "number",
+        margin:       "number",
+        size:         "number",
         show_seconds: "boolean",
         show_minutes: "boolean",
         show_hours:   "boolean",
         timeout:      "int",
         timeadd:      "int",
         offset:       "int",
-        fps:          "int",
+        fps:          "number",
         months:       "array",
         days:         "array",
         label:        "function",
         label_upper:  "function",
         label_lower:  "function",
         label_scale:  "number",
-        time: "object",
+        time: "object|string|number",
     }),
     options: {
         thickness:    10,         // thickness of the rings
@@ -246,7 +250,8 @@ export const Clock = define_class({
         this.circulars = {};
         this._margin = -1;
         Widget.prototype.initialize.call(this, options);
-        this.options.time = new Date();
+        this.set("time", this.options.time);
+        
         /**
          * @member {HTMLDivElement} Clock#element - The main DIV element. Has class <code>toolkit-clock</code> 
          */
@@ -293,7 +298,11 @@ export const Clock = define_class({
             angle: 360,
             min: 0
         };
-
+        
+        /**
+         * @member {Object} Clock#circulars - An object containing the {@link Circular}
+         * widgets. Members are `seconds`, `minutes` and `hours`.
+         */
         this.circulars.seconds = new Circular(Object.assign({}, circ_options,
             {max: 60, "class": "toolkit-seconds"}));
         this.circulars.minutes = new Circular(Object.assign({}, circ_options,
@@ -315,9 +324,7 @@ export const Clock = define_class({
         Widget.prototype.redraw.call(this);
 
         if (I.size) {
-            var tmp = O.size;
-            this.svg.setAttribute("width", (typeof tmp === "number" ? tmp + "px" : tmp));
-            this.svg.setAttribute("height", (typeof tmp === "number" ? tmp + "px" : tmp));
+            this.svg.setAttribute("viewBox", format_viewbox(O.size, O.size));
         }
 
         if (I.validate("show_hours", "show_minutes", "show_seconds", "thickness", "margin") || I.size) {
@@ -366,5 +373,16 @@ export const Clock = define_class({
         if (this.__to)
             window.clearTimeout(this.__to);
         Widget.prototype.destroy.call(this);
+    },
+    
+    set: function (key, value) {
+        switch (key) {
+            case "time":
+                if (Object.prototype.toString.call(value) === '[object Date]')
+                    break;
+                value = new Date(value);
+                break;
+        }
+        return Widget.prototype.set.call(this, key, value);
     },
 });

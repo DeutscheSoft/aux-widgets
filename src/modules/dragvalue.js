@@ -25,17 +25,8 @@ import { S } from '../dom_scheduler.js';
 
 function start_drag(value) {
     if (!value) return;
-
     var O = this.options;
-
     this.start_pos = O.range.call(this).val2px(O.get.call(this));
-    /**
-     * Is fired when a user starts dragging.
-     *
-     * @event DragValue#startdrag
-     *
-     * @param {DOMEvent} event - The native DOM event.
-     */
     this.fire_event("startdrag", this.drag_state.start);
     if (O.events) O.events.call(this).fire_event("startdrag", this.drag_state.start);
 }
@@ -138,13 +129,6 @@ function movecapture(state) {
 }
 
 function stop_drag(state, ev) {
-    /**
-     * Is fired when a user stops dragging.
-     *
-     * @event DragValue#stopdrag
-     *
-     * @param {DOMEvent} event - The native DOM event.
-     */
     this.fire_event("stopdrag", ev);
     var O = this.options;
     if (O.events) O.events.call(this).fire_event("stopdrag", ev);
@@ -197,13 +181,6 @@ export const DragValue = define_class({
      *
      * @mixes GlobalCursor
      */
-    /**
-     * Is fired while a user is dragging.
-     *
-     * @event DragValue#startdrag
-     *
-     * @param {DOMEvent} event - The native DOM event.
-     */
     _class: "DragValue",
     Extends: DragCapture,
     Implements: GlobalCursor,
@@ -213,7 +190,7 @@ export const DragValue = define_class({
         range: "function",
         events: "function",
         classes: "object|boolean",
-        direction: "int",
+        direction: "string",
         active: "boolean",
         cursor: "boolean",
         blind_angle: "number",
@@ -235,6 +212,27 @@ export const DragValue = define_class({
         reverse:   false,
         limit: false,
     },
+    /**
+     * Is fired while a user is dragging.
+     *
+     * @event DragValue#dragging
+     *
+     * @param {DOMEvent} event - The native DOM event.
+     */
+    /**
+     * Is fired when a user starts dragging.
+     *
+     * @event DragValue#startdrag
+     *
+     * @param {DOMEvent} event - The native DOM event.
+     */
+    /**
+     * Is fired when a user stops dragging.
+     *
+     * @event DragValue#stopdrag
+     *
+     * @param {DOMEvent} event - The native DOM event.
+     */
     static_events: {
         set_state: start_drag,
         stopcapture: stop_drag,

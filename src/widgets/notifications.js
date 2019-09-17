@@ -22,8 +22,8 @@ import { Notification } from './notification.js';
 import { add_class } from '../utils/dom.js';
 
 /**
- * Notifications is a {@link Container} for displaying {@link Notification}
- * popups.
+ * Notifications is a {@link Container} displaying {@link Notification}
+ *   popups.
  * 
  * @class Notifications
  * 
@@ -31,7 +31,8 @@ import { add_class } from '../utils/dom.js';
  * 
  * @param {Object} [options={ }] - An object containing initial options.
  * 
- * @property {String} [options.stack="end"] - Where does a new {@link Notification} appear - "end" or "start"
+ * @property {String} [options.stack="end"] - Define the position a new {@link Notification}
+ *   is appended to the container, either `end` or `start`.
  */
 
 export const Notifications = define_class({
@@ -53,9 +54,9 @@ export const Notifications = define_class({
     
     notify: function (options) {
     /**
-     * Resets the peak label.
+     * Create and show a new notification.
      * 
-     * @method Notification#notify
+     * @method Notifications#notify
      * 
      * @param {Object} [options={ }] - An object containing initial options. - Options for the {@link Notification} to add
      * 
