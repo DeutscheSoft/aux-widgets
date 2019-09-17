@@ -51,6 +51,18 @@ export const CrossoverBand = define_class({
         mode: "line-vertical", // undocumented, just a default differing from ResponseHanlde
         preferences: [ "top-right", "right", "bottom-right", "top-left", "left", "bottom-left"], // undocumented, just a default differing from ResponseHanlde
     },
+    static_events: {
+        set_lower: function (val) {
+            this.filter = this.lower;
+            EqBand.prototype.set.call(this, "type", val);
+            this.set("mode", "line-vertical");
+        },
+        set_upper: function (val) {
+            this.filter = this.upper;
+            EqBand.prototype.set.call(this, "type", val);
+            this.set("mode", "line-vertical");
+        },
+    },
     initialize: function (options) {
         /**
          * @member {Filter} CrossoverBand#upper - The filter providing the graphical calculations for the upper graph. 
@@ -72,16 +84,6 @@ export const CrossoverBand = define_class({
     },
     set: function (key, val) {
         switch (key) {
-            case"lower":
-                this.filter = this.lower;
-                var r = EqBand.prototype.set.call(this, "type", val);
-                this.set("mode", "line-vertical");
-                return r;
-            case "upper":
-                this.filter = this.upper;
-                var r = EqBand.prototype.set.call(this, "type", val);
-                this.set("mode", "line-vertical");
-                return r;
             case "freq":
             case "gain":
             case "q":
