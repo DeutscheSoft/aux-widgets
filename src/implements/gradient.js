@@ -24,8 +24,7 @@ import { browser } from '../utils/browser_detection.js';
 export const Gradient = define_class({
     /**
      * Gradient provides a function to set the background of a
-     * DOM element to a CSS gradient according on the users browser and version.
-     * Gradient needs a {@link Range} to be implemented on.
+     * DOM element to a CSS gradient according to a {@link Range}.
      *
      * @mixin Gradient
      * 
@@ -76,14 +75,7 @@ export const Gradient = define_class({
         
         //  {"-96": "rgb(30,87,153)", "-0.001": "rgb(41,137,216)", "0": "rgb(32,124,202)", "24": "rgb(125,185,232)"}
         // becomes:
-//         background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10'><linearGradient id='gradient'><stop offset='10%' stop-color='#F00'/><stop offset='90%' stop-color='#fcc'/> </linearGradient><rect fill='url(#gradient)' x='0' y='0' width='100%' height='100%'/></svg>");
-//         background: -moz-linear-gradient(top, rgb(30,87,153) 0%, rgb(41,137,216) 50%, rgb(32,124,202) 51%, rgb(125,185,232) 100%);
-//         background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgb(30,87,153)), color-stop(50%,rgb(41,137,216)), color-stop(51%,rgb(32,124,202)), color-stop(100%,rgb(125,185,232)));
-//         background: -webkit-linear-gradient(top, rgb(30,87,153) 0%,rgb(41,137,216) 50%,rgb(32,124,202) 51%,rgb(125,185,232) 100%);
-//         background: -o-linear-gradient(top, rgb(30,87,153) 0%,rgb(41,137,216) 50%,rgb(32,124,202) 51%,rgb(125,185,232) 100%);
-//         background: -ms-linear-gradient(top, rgb(30,87,153) 0%,rgb(41,137,216) 50%,rgb(32,124,202) 51%,rgb(125,185,232) 100%);
-//         background: linear-gradient(to bottom, rgb(30,87,153) 0%,rgb(41,137,216) 50%,rgb(32,124,202) 51%,rgb(125,185,232) 100%);
-//         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#7db9e8',GradientType=0 );
+        // background: linear-gradient(to bottom, rgb(30,87,153) 0%,rgb(41,137,216) 50%,rgb(32,124,202) 51%,rgb(125,185,232) 100%);
         
         var bg = "";
         range = range || this;
@@ -92,50 +84,15 @@ export const Gradient = define_class({
         else {
             gradient = gradient || this.options.gradient;
             
-            var ms_first   = "";
-            var ms_last    = "";
-            var m_svg      = "";
             var m_regular  = "";
-            var m_webkit   = "";
-            var s_ms       = "background filter: progid:DXImageTransform."
-                           + "Microsoft.gradient( startColorstr='%s', "
-                           + "endColorstr='%s',GradientType='%d' )";
-            var s_svg      = "url(\"data:image/svg+xml;utf8,<svg "
-                           + "xmlns='http://www.w3.org/2000/svg' width='100%%' "
-                           + "height='100%%'>"
-                           + "<linearGradient id='%s_gradient' %s>%s"
-                           + "</linearGradient><rect fill='url(#%s_gradient)' "
-                           + "x='0' y='0' width='100%%' "
-                           + "height='100%%'/></svg>\")";
-            var s_regular  = "%slinear-gradient(%s, %s)";
-            var s_webkit   = "-webkit-gradient(linear, %s, %s)";
-            var c_svg      = "<stop offset='%s%%' stop-color='%s'/>";
+            var s_regular  = "linear-gradient(%s, %s)";
             var c_regular  = "%s %s%%, ";
-            var c_webkit   = "color-stop(%s%%, %s), ";
             
             var d_w3c = {};
             d_w3c["s"+"left"]       = "to top";
             d_w3c["s"+"right"]      = "to top";
             d_w3c["s"+"top"]        = "to right";
             d_w3c["s"+"bottom"]     = "to right";
-            
-            var d_regular = {};
-            d_regular["s"+"left"]   = "bottom";
-            d_regular["s"+"right"]  = "bottom";
-            d_regular["s"+"top"]    = "left";
-            d_regular["s"+"bottom"] = "left";
-            
-            var d_webkit = {};
-            d_webkit["s"+"left"]    = "left bottom, left top";
-            d_webkit["s"+"right"]   = "left bottom, left top";
-            d_webkit["s"+"top"]     = "left top, right top";
-            d_webkit["s"+"bottom"]  = "left top, right top";
-            
-            var d_ms = {};
-            d_ms["s"+"left"]     = 'x1="0%" y1="0%" x2="0%" y2="100%"';
-            d_ms["s"+"right"]    = 'x1="0%" y1="0%" x2="0%" y2="100%"';
-            d_ms["s"+"top"]      = 'x1="100%" y1="0%" x2="0%" y2="0%"';
-            d_ms["s"+"bottom"]   = 'x1="100%" y1="0%" x2="0%" y2="0%"';
             
             var keys = Object.keys(gradient);
             for (var i = 0; i < keys.length; i++) {
@@ -146,54 +103,10 @@ export const Gradient = define_class({
             
             for (var i = 0; i < keys.length; i++) {
                 var ps = (100*range.val2coef(range.snap(keys[i]))).toFixed(2);
-                if (!ms_first) ms_first = gradient[i];
-                ms_last = gradient[keys[i] + ""];
-                
-                m_svg     += sprintf(c_svg, ps, gradient[keys[i] + ""]);
                 m_regular += sprintf(c_regular, gradient[keys[i] + ""], ps);
-                m_webkit  += sprintf(c_webkit, ps, gradient[keys[i] + ""]);
             }
             m_regular = m_regular.substr(0, m_regular.length -2);
-            m_webkit  = m_regular.substr(0, m_webkit.length -2);
-            
-            if (browser.name === "IE" && browser.version <= 8)
-                    bg = (sprintf(s_ms, ms_last, ms_first, this._vert() ? 0:1));
-                
-            else if (browser.name === "IE" && browser.version === 9)
-                bg = (sprintf(s_svg, this.options.id,
-                      d_ms["s"+this.options.layout],
-                      m_svg, this.options.id));
-            
-            else if (browser.name === "IE" && browser.version >= 10)
-                bg = (sprintf(s_regular, "-ms-",
-                      d_regular["s" + this.options.layout],
-                      m_regular));
-            
-            else if (browser.name=="Firefox")
-                bg = (sprintf(s_regular, "-moz-",
-                      d_regular["s"+this.options.layout],
-                      m_regular));
-            
-            else if (browser.name === "Opera" && browser.version >= 11)
-                bg = (sprintf(s_regular, "-o-",
-                      d_regular["s"+this.options.layout],
-                      m_regular));
-            
-            else if (browser.name === "Chrome" && browser.version < 10
-                  || browser.name === "Safari" && browser.version < 5.1)
-                bg = (sprintf(s_webkit,
-                      d_webkit["s"+this.options.layout],
-                      m_regular));
-            
-            else if (browser.name === "Chrome" || browser.name === "Safari")
-                bg = (sprintf(s_regular, "-webkit-",
-                      d_regular["s"+this.options.layout],
-                      m_regular));
-            
-            else
-                bg = (sprintf(s_regular, "",
-                      d_w3c["s"+this.options.layout],
-                      m_regular));
+            bg = (sprintf(s_regular, d_w3c["s"+this.options.layout], m_regular));
         }
         
         if (element) {
