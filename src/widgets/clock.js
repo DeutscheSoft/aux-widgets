@@ -20,7 +20,7 @@ import { define_class } from '../widget_helpers.js';
 import { Widget } from './widget.js';
 import { Circular } from '../modules/circular.js';
 import { set_text, element, add_class, get_style, make_svg } from '../utils/dom.js';
-import { FORMAT } from '../utils/sprint.js';
+import { FORMAT } from '../utils/sprintf.js';
 import { S } from '../dom_scheduler.js';
 
 
