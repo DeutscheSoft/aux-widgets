@@ -5,6 +5,7 @@ export * from './components/confirmbutton.js';
 export * from './components/dynamics.js';
 export * from './components/equalizer.js';
 export * from './components/fader.js';
+export * from './components/frame.js';
 export * from './components/gauge.js';
 export * from './components/knob.js';
 export * from './components/levelmeter.js';

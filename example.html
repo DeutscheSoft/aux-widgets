@@ -23,12 +23,22 @@
     <script type=module src="src/components/clock.js"></script>
     <script type=module src="src/components/dynamics.js"></script>
     <script type=module src="src/components/colorpicker.js"></script>
+    <script type=module src="src/components/frame.js"></script>
     <link rel="stylesheet" href="toolkit/styles/2013.css" />
   </head>
   <body>
-    <h2>Button</h2>
-    <aux-button label="Click me" icon=gear layout=horizontal></aux-button>
-    <aux-button label="Click me" icon=gear state=true layout=horizontal></aux-button>
+    <h1>AUX Examples</h1>
+    <p>
+        This is a collection of AUX widgets in different configurations
+        for demonstration and guideline purposes. Browsers with developer tools
+        (try <code>F12</code>) are recommended to get an insight in
+        structure and relation.
+    </p>
+    
+    <aux-frame label="Button">
+        <aux-button label="Click me" icon=gear layout=horizontal></aux-button>
+        <aux-button label="Click me" icon=gear state=true layout=horizontal></aux-button>
+    </aux-frame>
     
     <h2>Toggle</h2>
     <aux-toggle label='Toggle me' icon=warning icon_active=success></aux-toggle>
