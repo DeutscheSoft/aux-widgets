@@ -27,7 +27,7 @@ import { element, add_class } from '../utils/dom.js';
  * different styles. State extends {@link Widget}.
  *
  * The LED effect is implemented as a DIV element, which is overlayed by
- * a DIV element with class <code>toolkit-mask</code>. When switching
+ * a DIV element with class <code.aux-mask</code>. When switching
  * the state, the opacity of the mask is toggled between zero and
  * <code>options.opactity</code>.
  *
@@ -39,7 +39,7 @@ import { element, add_class } from '../utils/dom.js';
  * 
  * @property {Number} [options.state=0] - The state. To toggle between `on|off` set to `1|0`.
  *   Set to fractions of `1` to change "brightness", e.g. `0.5`. Values > 0 trigger setting
- *   the class `toolkit-state-on`, while a state of `0` results in class `toolkit-state-off`.
+ *   the class .aux-state-on`, while a state of `0` results in class .aux-state-off`.
  * @property {String|Boolean} [options.color=false] - A CSS color string for the state LED or
  *   `false` to set the background via external CSS.
  */
@@ -60,17 +60,17 @@ export const State = define_class({
         var E;
         /**
          * @member {HTMLDivElement} State#element - The main DIV container.
-         *   Has class <code>toolkit-state</code>.
+         *   Has class <code.aux-state</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "toolkit-state");
+        add_class(E, "aux-state");
         this.widgetize(E, true, true, true);
         
         /**
          * @member {HTMLDivElement} State#_mask - A DIV for masking the background.
-         *   Has class <code>toolkit-mask</code>.
+         *   Has class <code.aux-mask</code>.
          */
-        this._mask   = element("div","toolkit-mask");
+        this._mask   = element("div","aux-mask");
 
         E.appendChild(this._mask);
     },
@@ -99,11 +99,11 @@ export const State = define_class({
             if (!(v <= 1)) v = 1;
 
             if (!O.state) {
-                this.remove_class("toolkit-state-on");
-                this.add_class("toolkit-state-off");
+                this.remove_class("aux-state-on");
+                this.add_class("aux-state-off");
             } else {
-                this.remove_class("toolkit-state-off");
-                this.add_class("toolkit-state-on");
+                this.remove_class("aux-state-off");
+                this.add_class("aux-state-on");
             }
             this._mask.style["opacity"] = "" + (1 - v);
         }

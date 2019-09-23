@@ -1,0 +1,86 @@
+/*
+ * This file is part of Toolkit.
+ *
+ * Toolkit is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * Toolkit is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU General
+ * Public License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ */
+.aux-window {
+    box-shadow:  0px 4px 12px 0px rgba(0, 0, 0, 0.33);
+    opacity: 1;
+}
+.aux-window.aux-inactive {
+    opacity: 0.5;
+    box-shadow:  0px 3px 10px 0px rgba(0, 0, 0, 0.2);
+}
+
+.aux-window.aux-resizing,
+.aux-window.aux-dragging {
+    opacity: 0.7;
+}
+
+.aux-window > .aux-content {
+    margin: 4px;
+}
+
+.aux-window > .aux-header {
+    line-height: 30px;
+    background: #00ccff;
+    color: white;
+}
+.aux-window > .aux-footer {
+    line-height: 30px;
+    border-top: 1px solid white;
+}
+
+.aux-window > .aux-header > .aux-title,
+.aux-window > .aux-footer > .aux-title {
+    text-align: left;
+    font-size: bold;
+}
+.aux-window > .aux-header > .aux-status,
+.aux-window > .aux-footer > .aux-status {
+    text-align: left;
+    margin: 0 5px;
+}
+.aux-window > .aux-header > .aux-icon,
+.aux-window > .aux-footer > .aux-icon {
+    width: 24px;
+    height: 24px;
+    margin: 3px;
+}
+.aux-window > .aux-header > .aux-button,
+.aux-window > .aux-footer > .aux-button {
+    background: transparent;
+    border-color: transparent;
+    position: relative;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    margin: 0 2px;
+}
+
+.aux-window > .aux-header > .aux-button .aux-icon,
+.aux-window > .aux-footer > .aux-button .aux-icon {
+    height: 16px;
+    margin: 0;
+    font-size: 16px;
+    line-height: 16px;
+    text-shadow: none !important;
+}
+
+
+.aux-window.aux-shrinked {
+    height: 32px !important;
+}

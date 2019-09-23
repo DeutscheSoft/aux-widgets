@@ -22,7 +22,7 @@ import { Button } from './button.js';
 import { add_class } from '../utils/dom.js';
 
 var build_sorter = function () {
-    this.sorter = new Button({"class":"toolkit-sorter",container:this.element});
+    this.sorter = new Button({"class":"aux-sorter",container:this.element});
     this.add_child(this.sorter);
 }
 
@@ -37,7 +37,7 @@ export const SortableListItem = define_class({
     },
     initialize: function (options) {
         ListItem.prototype.initialize.call(this, options);
-        add_class(this.element, "toolkit-sortable-list-item");
+        add_class(this.element, "aux-sortable-list-item");
     },
     redraw: function () {
         ListItem.prototype.redraw.call(this);

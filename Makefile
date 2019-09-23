@@ -177,4 +177,4 @@ jsdoc: Makefile $(js_input_files) doc/jsdoc/conf.json toolkit/styles/2013/css/to
 	cp -r toolkit doc/documentation/
 	
 icons: Makefile
-	icongen -p toolkit- toolkit/styles/fonts/Toolkit
+	icongen -p aux- styles/fonts/AUX

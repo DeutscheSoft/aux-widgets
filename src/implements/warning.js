@@ -20,7 +20,7 @@ import { define_class } from './../widget_helpers.js';
 import { add_class, remove_class } from '../utils/dom.js';
 
 /**
- * Adds the class "toolkit-warn" on <code>this.element</code> for a certain
+ * Adds the class "aux-warn" on <code>this.element</code> for a certain
  * period of time. It is used e.g. in {@link ResponseHandle} or {@link Knob} when the value
  * exceeds the range.
  *
@@ -29,7 +29,7 @@ import { add_class, remove_class } from '../utils/dom.js';
 export const Warning = define_class({
     _class: "Warning",
     /** 
-     * Adds the class <code>toolkit-warn</code> to the given element and
+     * Adds the class <code.aux-warn</code> to the given element and
      * sets a timeout after which the class is removed again. If there
      * already is a timeout waiting it gets updated.
      *
@@ -44,9 +44,9 @@ export const Warning = define_class({
         if (!timeout) timeout = 250;
         if (this.__wto) window.clearTimeout(this.__wto);
         this.__wto = null;
-        add_class(element, "toolkit-warn");
+        add_class(element, "aux-warn");
         this.__wto = window.setTimeout(function () {
-            remove_class(element, "toolkit-warn");
+            remove_class(element, "aux-warn");
         }.bind(this), timeout);
         /**
          * Gets fired when {@link Warning#warning} was called.

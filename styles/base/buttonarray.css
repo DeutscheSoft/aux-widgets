@@ -1,0 +1,80 @@
+/*
+ * This file is part of Toolkit.
+ *
+ * Toolkit is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * Toolkit is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU General
+ * Public License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ */
+.aux-buttonarray {
+    height: 36px;
+}
+
+.aux-buttonarray.aux-vertical {
+    text-align: left;
+}
+.aux-buttonarray.aux-horizontal > .aux-previous {
+    width: 40px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+.aux-buttonarray.aux-horizontal > .aux-next {
+    width: 40px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.aux-buttonarray > .aux-clip {
+    transition: left 0.5s ease-in-out, top 0.5s ease-in-out, right 0.5s ease-in-out, bottom 0.5s ease-in-out;
+}
+.aux-buttonarray.aux-over.aux-horizontal > .aux-clip {
+    
+}
+.aux-buttonarray.aux-over.aux-vertical > .aux-clip {
+    
+}
+
+.aux-buttonarray > .aux-clip > .aux-container {
+    transition: left 0.5s ease-in-out, top 0.5s ease-in-out;
+}
+
+.aux-buttonarray.aux-horizontal > .aux-clip > .aux-container {
+    
+}
+.aux-buttonarray.aux-vertical > .aux-clip > .aux-container {
+    
+}
+
+.aux-buttonarray > .aux-clip > .aux-container > .aux-button {
+    margin: 0;
+}
+.aux-buttonarray > .aux-clip > .aux-container > .aux-button.aux-active {
+    
+}
+.aux-buttonarray > .aux-clip > .aux-container > .aux-button > .aux-label {
+    white-space: nowrap;
+    width: 100%;
+    box-sizing: border-box;
+}
+.aux-buttonarray.aux-horizontal > .aux-clip > .aux-container > .aux-button {
+    height: 100%;
+}
+.aux-buttonarray.aux-vertical > .aux-clip > .aux-container > .aux-button {
+    display: flex;
+    width: 100%;
+}
+.aux-buttonarray.aux-vertical > .aux-clip > .aux-container > .aux-button:hover,
+.aux-buttonarray.aux-vertical > .aux-clip > .aux-container > .aux-button:active
+{
+    
+}

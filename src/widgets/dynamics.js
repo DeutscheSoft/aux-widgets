@@ -96,20 +96,20 @@ export const Dynamics = define_class({
         var O = this.options;
         /**
          * @member {HTMLDivElement} Dynamics#element - The main DIV container.
-         *   Has class <code>toolkit-dynamics</code>.
+         *   Has class <code.aux-dynamics</code>.
          */
-        add_class(this.element, "toolkit-dynamics");
+        add_class(this.element, "aux-dynamics");
         this.set("scale", O.scale);
         if (O.size) this.set("size", O.size);
         this.set("min", O.min);
         this.set("max", O.max);
         /**
-         * @member {Graph} Dynamics#steady - The graph drawing the zero line. Has class <code>toolkit-steady</code> 
+         * @member {Graph} Dynamics#steady - The graph drawing the zero line. Has class <code.aux-steady</code> 
          */
         this.steady = this.add_graph({
             dots: [{x:O.min, y:O.min},
                    {x:O.max, y:O.max}],
-            "class": "toolkit-steady",
+            "class": "aux-steady",
             mode: "line"
         });
     },
@@ -128,7 +128,7 @@ export const Dynamics = define_class({
             var step = O.db_grid;
             var cls;
             for (var i = min; i <= max; i += step) {
-                cls = i ? "" : "toolkit-highlight";
+                cls = i ? "" : "aux-highlight";
                 grid_x.push({
                     pos:     i,
                     label:   i === min ? "" : O.grid_labels(i),
@@ -151,8 +151,8 @@ export const Dynamics = define_class({
         
         if (I.type) {
             if (O._last_type)
-                remove_class(this.element, "toolkit-" + O._last_type);
-            add_class(this.element, "toolkit-" + O.type);
+                remove_class(this.element, "aux-" + O._last_type);
+            add_class(this.element, "aux-" + O.type);
         }
 
         if (I.validate("ratio", "threshold", "range", "makeup", "gain", "reference")) {

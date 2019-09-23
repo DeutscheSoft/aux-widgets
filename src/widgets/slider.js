@@ -122,10 +122,10 @@ export const Slider = define_class({
         var E;
         /**
          * @member {HTMLDivElement} Slider#element - The main DIV container.
-         *   Has class <code>toolkit-slider</code>.
+         *   Has class <code.aux-slider</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "toolkit-slider");
+        add_class(E, "aux-slider");
         this.widgetize(E, true, true, true);
         /**
          * @member {DragValue} Knob#drag - Instance of {@link DragValue} used for

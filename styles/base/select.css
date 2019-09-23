@@ -1,0 +1,62 @@
+/*
+ * This file is part of Toolkit.
+ *
+ * Toolkit is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * Toolkit is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU General
+ * Public License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ */
+.aux-button.aux-select {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.aux-button.aux-select > .aux-cell > .aux-label {
+    margin-right: 20px;
+}
+.aux-button.aux-select > .aux-cell > .aux-arrow {
+    width: 12px;
+    height: 6px;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    bottom: 0;
+    border-width: 8px 6px 0 6px;
+    border-style: solid;
+    border-color: white transparent transparent transparent;
+    transform: translateY(-50%);
+}
+
+.aux-select-list {
+    margin: 0;
+    padding: 0;
+    transition: opacity 0.25s;
+    text-align: left;
+}
+
+.aux-select-list > .aux-option {
+    list-style: none;
+    margin: 0;
+    padding: 0 5px;
+    line-height: 2em;
+    cursor: pointer;
+    transition: background 0.25s ease-in-out, color 0.25s ease-in-out;
+    display: block;
+}
+
+.aux-select-list > .aux-option:hover {
+    
+}
+.aux-select-list > .aux-option.aux-active {
+    
+}

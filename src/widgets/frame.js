@@ -44,9 +44,9 @@ export const Frame = define_class({
         Container.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} Frame#element - The main DIV container.
-         *   Has class <code>toolkit-frame</code>.
+         *   Has class <code.aux-frame</code>.
          */
-        add_class(this.element, "toolkit-frame");
+        add_class(this.element, "aux-frame");
     },
 });
 /**
@@ -57,6 +57,6 @@ ChildWidget(Frame, "label", {
     option: "label",
     inherit_options: true,
     default_options: {
-        class: "toolkit-frame-label"
+        class: "aux-frame-label"
     },
 });

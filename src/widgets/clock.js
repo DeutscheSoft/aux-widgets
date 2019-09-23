@@ -253,7 +253,7 @@ export const Clock = define_class({
         this.set("time", this.options.time);
         
         /**
-         * @member {HTMLDivElement} Clock#element - The main DIV element. Has class <code>toolkit-clock</code> 
+         * @member {HTMLDivElement} Clock#element - The main DIV element. Has class <code.aux-clock</code> 
          */
         if (!(E = this.element)) this.element = E = element("div");
         /**
@@ -261,28 +261,28 @@ export const Clock = define_class({
          */
         this.svg = S = make_svg("svg");
         this.widgetize(E, true, true, true);
-        add_class(E, "toolkit-clock");
+        add_class(E, "aux-clock");
         
         /**
-         * @member {SVGText} Clock#_label - The center label showing the time. Has class<code>toolkit-label</code>
+         * @member {SVGText} Clock#_label - The center label showing the time. Has class<code.aux-label</code>
          */
         this._label       = make_svg("text", {
-            "class":       "toolkit-label",
+            "class":       "aux-label",
             "text-anchor": "middle",
             "style":       "dominant-baseline: central;"
         });
         /**
-         * @member {SVGText} Clock#_label_upper - The upper label showing the day. Has class<code>toolkit-label-upper</code>
+         * @member {SVGText} Clock#_label_upper - The upper label showing the day. Has class<code.aux-label-upper</code>
          */
         this._label_upper = make_svg("text", {
-            "class": "toolkit-label-upper",
+            "class": "aux-label-upper",
             "text-anchor": "middle",
             "style":       "dominant-baseline: central;"
         });
-        /** @member {SVGText} Clock#_label_lower - The lower label showing the date. Has class<code>toolkit-label-lower</code>
+        /** @member {SVGText} Clock#_label_lower - The lower label showing the date. Has class<code.aux-label-lower</code>
          */
         this._label_lower = make_svg("text", {
-            "class": "toolkit-label-lower",
+            "class": "aux-label-lower",
             "text-anchor": "middle",
             "style":       "dominant-baseline: central;"
         });
@@ -304,11 +304,11 @@ export const Clock = define_class({
          * widgets. Members are `seconds`, `minutes` and `hours`.
          */
         this.circulars.seconds = new Circular(Object.assign({}, circ_options,
-            {max: 60, "class": "toolkit-seconds"}));
+            {max: 60, "class": "aux-seconds"}));
         this.circulars.minutes = new Circular(Object.assign({}, circ_options,
-            {max: 60, "class": "toolkit-minutes"}));
+            {max: 60, "class": "aux-minutes"}));
         this.circulars.hours   = new Circular(Object.assign({}, circ_options,
-            {max: 12, "class": "toolkit-hours"}));
+            {max: 12, "class": "aux-hours"}));
 
         this.add_child(this.circulars.seconds);
         this.add_child(this.circulars.minutes);

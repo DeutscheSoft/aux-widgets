@@ -50,11 +50,11 @@ function header_action() {
 }
 function mout(e) {
     if(this.options.auto_active && !this.dragging && !this.resizing)
-        remove_class(this.element, "toolkit-active");
+        remove_class(this.element, "aux-active");
 }
 function mover(e) {
     if(this.options.auto_active)
-        add_class(this.element, "toolkit-active");
+        add_class(this.element, "aux-active");
 }
 function max_height() {
     // returns the max height of the window
@@ -121,7 +121,7 @@ function shrink(e) {
 function start_resize(el, ev) {
     this.global_cursor("se-resize");
     this.resizing = true;
-    add_class(this.element, "toolkit-resizing");
+    add_class(this.element, "aux-resizing");
     /**
      * The user starts resizing the window.
      * @event Window.startresize
@@ -132,7 +132,7 @@ function start_resize(el, ev) {
 function stop_resize(el, ev) {
     this.remove_cursor("se-resize");
     this.resizing = false;
-    remove_class(this.element, "toolkit-resizing");
+    remove_class(this.element, "aux-resizing");
     this.trigger_resize_children();
     calculate_dimensions.call(this);
     /**
@@ -184,7 +184,7 @@ function vert_max() {
 }
 function start_drag(ev, el) {
     this.global_cursor("move");
-    add_class(this.element, "toolkit-dragging");
+    add_class(this.element, "aux-dragging");
     // if window is maximized, we have to replace the window according
     // to the position of the mouse
     var x = y = 0;
@@ -375,7 +375,7 @@ function build_from_const(element) {
                 });
             }
         } else {
-            E.appendChild(element("div", "toolkit-spacer"));
+            E.appendChild(element("div", "aux-spacer"));
         }
     }
 }
@@ -536,7 +536,7 @@ export const Window = define_class({
         this.dimensions = {anchor: "top-left", x: 0, x1: 0, x2: 0, y: 0, y1: 0, y2: 0, width: 0, height: 0};
         Container.prototype.initialize.call(this, options);
         var O = this.options;
-        add_class(this.element, "toolkit-window");
+        add_class(this.element, "aux-window");
         this.__status_to = false;
         init_position.call(this, this.options.open);
         this.set("maximize", this.options.maximize);
@@ -618,8 +618,8 @@ export const Window = define_class({
                 O.shrink = false;
                 I.shrink = true;
             }
-            toggle_class(this.element, "toolkit-maximized-horizontal", O.maximize.x);
-            toggle_class(this.element, "toolkit-maximized-vertical", O.maximize.y);
+            toggle_class(this.element, "aux-maximized-horizontal", O.maximize.x);
+            toggle_class(this.element, "aux-maximized-vertical", O.maximize.y);
             setD = true;
         }
         if (I.anchor) {
@@ -659,20 +659,20 @@ export const Window = define_class({
         }
         if (I.active) {
             I.active = false;
-            toggle_class(this.element, "toolkit-active", O.active);
+            toggle_class(this.element, "aux-active", O.active);
         }
         if (I.shrink) {
             I.shrink = false;
             this.options.maximize.y = false;
-            toggle_class(this.element, "toolkit-shrinked", O.shrink);
+            toggle_class(this.element, "aux-shrinked", O.shrink);
         }
         if (I.draggable) {
             I.draggable = false;
-            toggle_class(this.element, "toolkit-draggable", O.draggable);
+            toggle_class(this.element, "aux-draggable", O.draggable);
         }
         if (I.resizable) {
             I.resizable = false;
-            toggle_class(this.element, "toolkit-resizable", O.resizable);
+            toggle_class(this.element, "aux-resizable", O.resizable);
         }
         if (I.content) {
             I.content = false;
@@ -739,7 +739,7 @@ ChildWidget(Window, "icon", {
  */
 ChildWidget(Window, "title", {
     create: Label,
-    default_options: { "class" : "toolkit-title" },
+    default_options: { "class" : "aux-title" },
     map_options: { title : "label" },
     toggle_class: true,
 });
@@ -748,7 +748,7 @@ ChildWidget(Window, "title", {
  */
 ChildWidget(Window, "status", {
     create: Label,
-    default_options: { "class" : "toolkit-status" },
+    default_options: { "class" : "aux-status" },
     map_options: { status : "label" },
     toggle_class: true,
 });
@@ -775,7 +775,7 @@ var bfactory = function (name) {
     ChildWidget(Window, name, {
         create: Button,
         default_options: {
-            "class" : "toolkit-" + name,
+            "class" : "aux-" + name,
             "icon" :  "window" + name,
         },
         static_events: {
@@ -792,7 +792,7 @@ b.map(bfactory);
  */
 ChildWidget(Window, "size", {
     create: Icon,
-    default_options: { "icon" : "windowresize", "class" : "toolkit-size" },
+    default_options: { "icon" : "windowresize", "class" : "aux-size" },
 });
 /**
  * @member {Container} Window#content - A {@link Container} for the window content.
@@ -801,7 +801,7 @@ ChildWidget(Window, "content", {
     create: Container,
     toggle_class: true,
     show: true,
-    default_options: { "class" : "toolkit-content" },
+    default_options: { "class" : "aux-content" },
 });
 /**
  * @member {Container} Window#header - The top header bar.
@@ -810,7 +810,7 @@ ChildWidget(Window, "header", {
     create: Container,
     toggle_class: true,
     show: true,
-    default_options: { "class" : "toolkit-header" },
+    default_options: { "class" : "aux-header" },
     static_events: {
         "dblclick" : header_action,
     },
@@ -823,6 +823,6 @@ ChildWidget(Window, "footer", {
     create: Container,
     toggle_class: true,
     show: false,
-    default_options: { "class" : "toolkit-footer" },
+    default_options: { "class" : "aux-footer" },
     append : function () { build_footer.call(this); this.element.appendChild(this.footer.element); },
 });

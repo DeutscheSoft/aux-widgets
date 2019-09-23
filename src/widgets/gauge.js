@@ -65,9 +65,9 @@ export const Gauge = define_class({
         title: "object",
     }),
     options: Object.assign({}, Circular.prototype.options, {
-        width:  120, // width of the element
-        height: 120, // height of the svg
-        size:   120,
+        width:  100, // width of the element
+        height: 100, // height of the svg
+        size:   100,
         title: {pos: 90, margin: 0, align: "inner", title:""}
     }),
     initialize: function (options) {
@@ -88,16 +88,16 @@ export const Gauge = define_class({
         
         /**
          * @member {HTMLDivElement} Gauge#element - The main DIV container.
-         *   Has class <code>toolkit-gauge</code>.
+         *   Has class <code.aux-gauge</code>.
          */
-        add_class(E, "toolkit-gauge");
+        add_class(E, "aux-gauge");
         this.widgetize(E, true, true, true);
         
         /**
          * @member {SVGText} Gauge#_title - The title of the gauge.
-         *   Has class <code>toolkit-title</code>.
+         *   Has class <code.aux-title</code>.
          */
-        this._title = make_svg("text", {"class": "toolkit-title"});
+        this._title = make_svg("text", {"class": "aux-title"});
         S.appendChild(this._title);
 
         var co = object_and(O, Circular.prototype._options);

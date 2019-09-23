@@ -55,7 +55,7 @@ export const SortableList = define_class({
     },
     initialize: function (options) {
         List.prototype.initialize.call(this, options);
-        add_class(this.element, "toolkit-sortable-list");
+        add_class(this.element, "aux-sortable-list");
     },
     add_item: function (item, pos) {
         var O = this.options;

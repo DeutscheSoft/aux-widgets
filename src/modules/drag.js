@@ -49,12 +49,12 @@ function startdrag(e, drag) {
         this._xpos = O.node.offsetLeft;
         this._ypos = O.node.offsetTop;
     }
-    add_class(O.node, "toolkit-dragging");
+    add_class(O.node, "aux-dragging");
 }
 function stopdrag(e, drag) {
     if (!this.options.active) return;
     if (e.button !== void(0) && e.button > 0) return;
-    remove_class(this.options.node, "toolkit-dragging");
+    remove_class(this.options.node, "aux-dragging");
 }
 function dragging(e, drag) {
     var O = this.options;

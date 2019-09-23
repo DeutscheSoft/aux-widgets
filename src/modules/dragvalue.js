@@ -159,7 +159,7 @@ export const DragValue = define_class({
      *   events <code>startdrag</code>, <code>dragging</code> and <code>stopdrag</code>.
      *   By default it returns <code>this.parent</code>.
      * @property {Element|boolean} [options.classes=false] - While dragging, the class
-     *   <code>toolkit-dragging</code> will be added to this element. If set to <code>false</code>
+     *   <code.aux-dragging</code> will be added to this element. If set to <code>false</code>
      *   the class will be set on <code>options.node</code>.
      * @property {Function} [options.get] - Callback function returning the value to drag.
      *   By default it returns <code>this.parent.options.value</code>.
@@ -251,7 +251,7 @@ export const DragValue = define_class({
         startdrag: function(ev) {
             S.add(function() {
                 var O = this.options;
-                add_class(O.classes || O.node, "toolkit-dragging");
+                add_class(O.classes || O.node, "aux-dragging");
                 if (O.cursor) {
                     if (O.direction === "vertical") {
                         this.global_cursor("row-resize");
@@ -264,7 +264,7 @@ export const DragValue = define_class({
         stopdrag: function() {
             S.add(function() {
                 var O = this.options;
-                remove_class(O.classes || O.node, "toolkit-dragging");
+                remove_class(O.classes || O.node, "aux-dragging");
 
                 if (O.cursor) {
                     if (O.direction === "vertical") {

@@ -39,7 +39,7 @@ export const Button = define_class({
      *   file or an icon class (see styles/fonts/Toolkit.html). If set
      *   to <code>false</code>, the icon is removed from DOM.
      * @property {Boolean} [options.state=false] - State of the button,
-     *   reflected as class <code>toolkit-active</code>.
+     *   reflected as class <code.aux-active</code>.
      * @property {String} [options.layout="horizontal"] - Define the
      *   arrangement of label and icon. <code>vertical</code> means icon
      *   above the label, <code>horizontal</code> places the icon left
@@ -68,10 +68,10 @@ export const Button = define_class({
         Widget.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} Button#element - The main DIV element.
-         *   Has class <code>toolkit-button</code>.
+         *   Has class <code.aux-button</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "toolkit-button");
+        add_class(E, "aux-button");
         this.widgetize(E, true, true, true);
     },
     destroy: function () {
@@ -86,13 +86,13 @@ export const Button = define_class({
         
         if (I.layout) {
             I.layout = false;
-            toggle_class(E, "toolkit-vertical", O.layout === "vertical");
-            toggle_class(E, "toolkit-horizontal", O.layout !== "vertical");
+            toggle_class(E, "aux-vertical", O.layout === "vertical");
+            toggle_class(E, "aux-horizontal", O.layout !== "vertical");
         }
 
         if (I.state) {
             I.state = false;
-            toggle_class(E, "toolkit-active", O.state);
+            toggle_class(E, "aux-active", O.state);
         }
     },
 });

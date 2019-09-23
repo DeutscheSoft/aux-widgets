@@ -109,10 +109,10 @@ export const Knob = define_class({
         var E, S;
         /**
          * @member {HTMLDivElement} Knob#element - The main DIV container.
-         *   Has class <code>toolkit-knob</code>.
+         *   Has class <code.aux-knob</code>.
          */
         if (!(E = this.element)) this.element = E = element("div")
-        add_class(E, "toolkit-knob");
+        add_class(E, "aux-knob");
 
         /**
          * @member {SVGImage} Knob#svg - The main SVG image.

@@ -76,8 +76,8 @@ export const Container = define_class({
      *
      * Containers have four different display states: <code>show</code>, <code>hide</code>,
      * <code>showing</code> and <code>hiding</code>. Each of these states has a corresponding
-     * CSS class called <code>toolkit-show</code>, <code>toolkit-hide</code>, <code>toolkit-showing</code>
-     * and <code>toolkit-hiding</code>, respectively. The display state can be controlled using
+     * CSS class called <code.aux-show</code>, <code.aux-hide</code>, <code.aux-showing</code>
+     * and <code.aux-hiding</code>, respectively. The display state can be controlled using
      * the methods {@link Container#show}, {@link Container#hide} and {@link Widget#toggle_hidden}.
      *
      * A container can keep track of the display states of its child widgets.
@@ -121,16 +121,16 @@ export const Container = define_class({
         Widget.prototype.initialize.call(this, options);
         this.hidden_children = [];
         /** 
-         * @member {HTMLDivElement} Container#element - The main DIV element. Has class <code>toolkit-container</code> 
+         * @member {HTMLDivElement} Container#element - The main DIV element. Has class <code.aux-container</code> 
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "toolkit-container"); 
+        add_class(E, "aux-container"); 
         this.widgetize(E, true, true, true);
 
         this.__after_hiding = after_hiding.bind(this);
         this.__after_showing = after_showing.bind(this);
         this.__hide_id = false;
-        add_class(E, "toolkit-show");
+        add_class(E, "aux-show");
         
         if (this.options.children)
             this.append_children(this.options.children);
@@ -210,7 +210,7 @@ export const Container = define_class({
     /** 
      * Immediately switches the display state of this container to <code>hide</code>.
      * Unlike {@link Container#hide} this method does not perform the hiding transition
-     * and immediately modifies the DOM by setting the <code>toolkit-hide</code> class.
+     * and immediately modifies the DOM by setting the <code.aux-hide</code> class.
      *
      * @method Container#force_hide
      *
@@ -221,8 +221,8 @@ export const Container = define_class({
         this.disable_draw();
         var E = this.element;
         O.display_state = "hide";
-        add_class(E, "toolkit-hide");
-        remove_class(E, "toolkit-hiding", "toolkit-showing", "toolkit-show");
+        add_class(E, "aux-hide");
+        remove_class(E, "aux-hiding", "aux-showing", "aux-show");
     },
     /** 
      * Starts the transition of the <code>display_state</code> to <code>show</code>.
@@ -239,7 +239,7 @@ export const Container = define_class({
     /** 
      * Immediately switches the display state of this container to <code>show</code>.
      * Unlike {@link Container#hide} this method does not perform the hiding transition
-     * and immediately modifies the DOM by setting the <code>toolkit-show</code> class.
+     * and immediately modifies the DOM by setting the <code.aux-show</code> class.
      *
      * @method Container#force_show
      *
@@ -250,8 +250,8 @@ export const Container = define_class({
         this.enable_draw();
         var E = this.element;
         O.display_state = "show";
-        add_class(E, "toolkit-show");
-        remove_class(E, "toolkit-hiding", "toolkit-showing", "toolkit-hide");
+        add_class(E, "aux-show");
+        remove_class(E, "aux-hiding", "aux-showing", "aux-hide");
     },
     show_nodraw: function() {
         var O = this.options;
@@ -364,7 +364,7 @@ export const Container = define_class({
         if (I.display_state) {
             I.display_state = false;
             var time;
-            remove_class(E, "toolkit-hiding", "toolkit-hide", "toolkit-showing", "toolkit-show");
+            remove_class(E, "aux-hiding", "aux-hide", "aux-showing", "aux-show");
 
             if (this.__hide_id) {
                 window.clearTimeout(this.__hide_id);
@@ -373,21 +373,21 @@ export const Container = define_class({
 
             switch (O.display_state) {
             case "hiding":
-                add_class(E, "toolkit-hiding");
+                add_class(E, "aux-hiding");
                 time = O.hiding_duration || get_duration(E);
                 if (time > 0) {
                     this.__hide_id = window.setTimeout(this.__after_hiding, time);
                     break;
                 }
                 this.set("display_state", "hide");
-                remove_class(E, "toolkit-hiding");
+                remove_class(E, "aux-hiding");
                 /* FALL THROUGH */
             case "hide":
-                add_class(E, "toolkit-hide");
+                add_class(E, "aux-hide");
                 disable_draw_self.call(this);
                 break;
             case "showing":
-                add_class(E, "toolkit-showing");
+                add_class(E, "aux-showing");
                 time = O.showing_duration || get_duration(E);
                 if (time > 0) {
                     this.__hide_id = window.setTimeout(this.__after_showing, time);
@@ -395,10 +395,10 @@ export const Container = define_class({
                     break;
                 }
                 this.set("display_state", "show");
-                remove_class(E, "toolkit-showing");
+                remove_class(E, "aux-showing");
                 /* FALL THROUGH */
             case "show":
-                add_class(E, "toolkit-show");
+                add_class(E, "aux-show");
                 enable_draw_children.call(this);
                 break;
             }

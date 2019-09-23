@@ -182,9 +182,9 @@ export const ColorPicker = define_class({
 
         var E = this.element;
         /** @member {HTMLDivElement} ColorPicker#element - The main DIV container.
-         * Has class <code>toolkit-color-picker</code>.
+         * Has class <code.aux-color-picker</code>.
          */
-        add_class(E, "toolkit-color-picker");
+        add_class(E, "aux-color-picker");
         
         /**
          * @member {Range} ColorPicker#range_x - The {@link Range} for the x axis. 
@@ -212,7 +212,7 @@ export const ColorPicker = define_class({
             set: function (v) { this.parent.userset("hue", this.parent.range_x.snap(v)); },
             direction: "horizontal",
             onstartcapture: function (e) {
-                if (e.start.target.classList.contains("toolkit-indicator")) return;
+                if (e.start.target.classList.contains("aux-indicator")) return;
                 var ev = e.stouch ? e.stouch : e.start;
                 var x = ev.clientX - this.parent._canvas.getBoundingClientRect().left;
                 this.parent.set("hue", this.options.range().px2val(x));
@@ -227,7 +227,7 @@ export const ColorPicker = define_class({
             set: function (v) { this.parent.userset("lightness", this.parent.range_y.snap(v)); },
             direction: "vertical",
             onstartcapture: function (e) {
-                if (e.start.target.classList.contains("toolkit-indicator")) return;
+                if (e.start.target.classList.contains("aux-indicator")) return;
                 var ev = e.stouch ? e.stouch : e.start;
                 var y = ev.clientY - this.parent._canvas.getBoundingClientRect().top;
                 this.parent.set("lightness", 1 - this.options.range().px2val(y));
@@ -307,7 +307,7 @@ export const ColorPicker = define_class({
 
 /**
  * @member {HTMLDivElement} ColorPicker#canvas - The color background.
- *   Has class `toolkit-canvas`,
+ *   Has class .aux-canvas`,
  */
 ChildElement(ColorPicker, "canvas", {
     show: true,
@@ -319,7 +319,7 @@ ChildElement(ColorPicker, "canvas", {
 });
 /**
  * @member {HTMLDivElement} ColorPicker#grayscale - The grayscale background.
- *   Has class `toolkit-grayscale`,
+ *   Has class .aux-grayscale`,
  */
 ChildElement(ColorPicker, "grayscale", {
     show: true,
@@ -329,7 +329,7 @@ ChildElement(ColorPicker, "grayscale", {
 });
 /**
  * @member {HTMLDivElement} ColorPicker#indicator - The indicator element.
- *   Has class `toolkit-indicator`,
+ *   Has class .aux-indicator`,
  */
 ChildElement(ColorPicker, "indicator", {
     show: true,
@@ -340,7 +340,7 @@ ChildElement(ColorPicker, "indicator", {
 
 /**
  * @member {Value} ColorPicker#hex - The {@link Value} for the HEX color.
- *   Has class `toolkit-hex`,
+ *   Has class .aux-hex`,
  */
 ChildWidget(ColorPicker, "hex", {
     create: Value,
@@ -354,7 +354,7 @@ ChildWidget(ColorPicker, "hex", {
     },
     default_options: {
         format: FORMAT("%s"),
-        "class": "toolkit-hex",
+        "class": "aux-hex",
         set: function (v) {
             var p=0, tmp;
             if (v[0] == "#")
@@ -379,7 +379,7 @@ ChildWidget(ColorPicker, "hex", {
 
 /**
  * @member {ValueKnob} ColorPicker#hue - The {@link ValueKnob} for the hue.
- *   Has class `toolkit-hue`,
+ *   Has class .aux-hue`,
  */
 ChildWidget(ColorPicker, "hue", {
     create: ValueKnob,
@@ -394,7 +394,7 @@ ChildWidget(ColorPicker, "hue", {
         title: "Hue",
         min: 0,
         max: 1,
-        "class": "toolkit-hue",
+        "class": "aux-hue",
     },
     map_options: {
         "hue" : "value"
@@ -404,7 +404,7 @@ ChildWidget(ColorPicker, "hue", {
 });
 /**
  * @member {ValueKnob} ColorPicker#saturation - The {@link ValueKnob} for the saturation.
- *   Has class `toolkit-saturation`,
+ *   Has class .aux-saturation`,
  */
 ChildWidget(ColorPicker, "saturation", {
     create: ValueKnob,
@@ -418,7 +418,7 @@ ChildWidget(ColorPicker, "saturation", {
         title: "Saturation",
         min: 0,
         max: 1,
-        "class": "toolkit-saturation",
+        "class": "aux-saturation",
     },
     map_options: {
         "saturation" : "value"
@@ -428,7 +428,7 @@ ChildWidget(ColorPicker, "saturation", {
 });
 /**
  * @member {ValueKnob} ColorPicker#lightness - The {@link ValueKnob} for the lightness.
- *   Has class `toolkit-lightness`,
+ *   Has class .aux-lightness`,
  */
 ChildWidget(ColorPicker, "lightness", {
     create: ValueKnob,
@@ -443,7 +443,7 @@ ChildWidget(ColorPicker, "lightness", {
         title: "Lightness",
         min: 0,
         max: 1,
-        "class": "toolkit-lightness",
+        "class": "aux-lightness",
     },
     map_options: {
         "lightness" : "value"
@@ -453,7 +453,7 @@ ChildWidget(ColorPicker, "lightness", {
 });
 /**
  * @member {ValueKnob} ColorPicker#red - The {@link ValueKnob} for the red color.
- *   Has class `toolkit-red`,
+ *   Has class .aux-red`,
  */
 ChildWidget(ColorPicker, "red", {
     create: ValueKnob,
@@ -471,7 +471,7 @@ ChildWidget(ColorPicker, "red", {
         snap: 1,
         value_format: function (v) { return parseInt(v); },
         set: function (v) { return Math.round(v); },
-        "class": "toolkit-red",
+        "class": "aux-red",
     },
     map_options: {
         "red" : "value"
@@ -481,7 +481,7 @@ ChildWidget(ColorPicker, "red", {
 });
 /**
  * @member {ValueKnob} ColorPicker#green - The {@link ValueKnob} for the green color.
- *   Has class `toolkit-green`,
+ *   Has class .aux-green`,
  */
 ChildWidget(ColorPicker, "green", {
     create: ValueKnob,
@@ -499,7 +499,7 @@ ChildWidget(ColorPicker, "green", {
         snap: 1,
         value_format: function (v) { return parseInt(v); },
         set: function (v) { return Math.round(v); },
-        "class": "toolkit-green",
+        "class": "aux-green",
     },
     map_options: {
         "green" : "value"
@@ -509,7 +509,7 @@ ChildWidget(ColorPicker, "green", {
 });
 /**
  * @member {ValueKnob} ColorPicker#blue - The {@link ValueKnob} for the blue color.
- *   Has class `toolkit-blue`,
+ *   Has class .aux-blue`,
  */
 ChildWidget(ColorPicker, "blue", {
     create: ValueKnob,
@@ -527,7 +527,7 @@ ChildWidget(ColorPicker, "blue", {
         snap: 1,
         value_format: function (v) { return parseInt(v); },
         set: function (v) { return Math.round(v); },
-        "class": "toolkit-blue",
+        "class": "aux-blue",
     },
     map_options: {
         "blue" : "value"
@@ -537,7 +537,7 @@ ChildWidget(ColorPicker, "blue", {
 });
 /**
  * @member {Button} ColorPicker#apply - The {@link Button} to apply.
- *   Has class `toolkit-apply`,
+ *   Has class .aux-apply`,
  */
 ChildWidget(ColorPicker, "apply", {
     create: Button,
@@ -547,12 +547,12 @@ ChildWidget(ColorPicker, "apply", {
     },
     default_options: {
         "label" : "Apply",
-        "class": "toolkit-apply",
+        "class": "aux-apply",
     },
 });
 /**
  * @member {Button} ColorPicker#cancel - The {@link Button} to cancel.
- *   Has class `toolkit-cancel`,
+ *   Has class .aux-cancel`,
  */
 ChildWidget(ColorPicker, "cancel", {
     create: Button,
@@ -562,7 +562,7 @@ ChildWidget(ColorPicker, "cancel", {
     },
     default_options: {
         "label" : "Cancel",
-        "class" : "toolkit-cancel",
+        "class" : "aux-cancel",
     },
 });
 

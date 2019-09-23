@@ -277,19 +277,19 @@ export const MeterBase = define_class({
         var O = this.options;
         /**
          * @member {HTMLDivElement} MeterBase#element - The main DIV container.
-         *   Has class <code>toolkit-meter-base</code>.
+         *   Has class <code.aux-meter-base</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "toolkit-meter-base");
+        add_class(E, "aux-meter-base");
         this.widgetize(E, false, true, true);
         
-        this._bar = element("div", "toolkit-bar");
+        this._bar = element("div", "aux-bar");
         /**
          * @member {HTMLCanvas} MeterBase#_canvas - The canvas element drawing the mask.
-         *   Has class <code>toolkit-mask</code>.
+         *   Has class <code.aux-mask</code>.
          */
         this._canvas = document.createElement("canvas");
-        add_class(this._canvas, "toolkit-mask");
+        add_class(this._canvas, "aux-mask");
 
         this._fillstyle = false;
         
@@ -299,7 +299,7 @@ export const MeterBase = define_class({
         
         /**
          * @member {HTMLDivElement} MeterBase#_bar - The DIV element containing the masks
-         *      and drawing the background. Has class <code>toolkit-bar</code>.
+         *      and drawing the background. Has class <code.aux-bar</code>.
          */
         this.delegate(this._bar);
         this._last_meters = [];
@@ -332,7 +332,7 @@ export const MeterBase = define_class({
 
         if (I.reverse) {
             I.reverse = false;
-            toggle_class(E, "toolkit-reverse", O.reverse);
+            toggle_class(E, "aux-reverse", O.reverse);
         }
         if (I.gradient || I.background) {
             I.gradient = I.background = false;
@@ -343,26 +343,26 @@ export const MeterBase = define_class({
         
         if (I.layout) {
             I.layout = false;
-            remove_class(E, "toolkit-vertical",
-                            "toolkit-horizontal", "toolkit-left",
-                            "toolkit-right", "toolkit-top", "toolkit-bottom");
+            remove_class(E, "aux-vertical",
+                            "aux-horizontal", "aux-left",
+                            "aux-right", "aux-top", "aux-bottom");
             var scale = this.scale ? this.scale.element : null;
             var bar = this._bar;
             switch (O.layout) {
                 case "left":
-                    add_class(E, "toolkit-vertical", "toolkit-left");
+                    add_class(E, "aux-vertical", "aux-left");
                     if (scale) insert_after(scale, bar);
                     break;
                 case "right":
-                    add_class(E, "toolkit-vertical", "toolkit-right");
+                    add_class(E, "aux-vertical", "aux-right");
                     if (scale) insert_after(bar, scale);
                     break;
                 case "top":
-                    add_class(E, "toolkit-horizontal", "toolkit-top");
+                    add_class(E, "aux-horizontal", "aux-top");
                     if (scale) insert_after(scale, bar);
                     break;
                 case "bottom":
-                    add_class(E, "toolkit-horizontal", "toolkit-bottom");
+                    add_class(E, "aux-horizontal", "aux-bottom");
                     if (scale) insert_after(bar, scale);
                     break;
                 default:
@@ -521,13 +521,13 @@ ChildWidget(MeterBase, "scale", {
 });
 /**
  * @member {Label} MeterBase#title - The {@link Label} displaying the title.
- *   Has class <code>toolkit-title</code>.
+ *   Has class <code.aux-title</code>.
  */
 ChildWidget(MeterBase, "title", {
     create: Label,
     show: false,
     option: "title",
-    default_options: { "class" : "toolkit-title" },
+    default_options: { "class" : "aux-title" },
     map_options: { "title" : "label" },
     toggle_class: true,
 });
@@ -537,6 +537,6 @@ ChildWidget(MeterBase, "title", {
 ChildWidget(MeterBase, "label", {
     create: Label,
     show: false,
-    default_options: { "class" : "toolkit-value" },
+    default_options: { "class" : "aux-value" },
     toggle_class: true,
 });

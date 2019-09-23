@@ -1,0 +1,21 @@
+.aux-dialog {
+    background: #111111;
+    box-shadow:         0px 2px 9px 0px rgba(0, 0, 0, 0.75);
+    position: absolute;
+    z-index: 100000000000;
+    animation: dialog-fade-in 0.5s;
+    transform: scale(1);
+}
+
+.aux-dialog.aux-show {
+    opacity: 1;
+}
+.aux-dialog.aux-hiding {
+    opacity: 0;
+    transition: opacity 0.5s, transform 0.5s;
+    transform: scale(0);
+}
+@keyframes dialog-fade-in {
+    0% { opacity: 0; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1);}
+}

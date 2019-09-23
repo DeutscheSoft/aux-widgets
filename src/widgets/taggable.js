@@ -64,14 +64,14 @@ export const Taggable = define_class({
             O.backend = new Tags({});
             
         this.tags = new Container({
-            "class" : "toolkit-tags"
+            "class" : "aux-tags"
         });
         this.append_child(this.tags);
         
         this.add = new Button({
             container: this.element,
             label: O.add_label,
-            "class": "toolkit-add",
+            "class": "aux-add",
             "onclick": add.bind(this),
         });
         this.append_child(this.add);

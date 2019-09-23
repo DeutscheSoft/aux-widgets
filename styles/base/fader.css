@@ -1,0 +1,115 @@
+/*
+ * This file is part of Toolkit.
+ *
+ * Toolkit is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * Toolkit is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU General
+ * Public License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ */
+.aux-fader {
+    margin: 4px;
+    padding: 0px;
+    background-repeat: no-repeat;
+}
+
+/* TRACK */
+
+.aux-fader.aux-vertical > .aux-track {
+    width: 36px;
+}
+.aux-fader.aux-horizontal > .aux-track {
+    height: 36px;
+}
+
+/* HANDLE */
+
+.aux-fader > .aux-track > .aux-handle {
+    cursor: pointer;
+    cursor: hand;
+    width: 36px;
+    height: 36px;
+    border: 2px solid white;
+    box-sizing: border-box;
+}
+.aux-fader.aux-vertical > .aux-track > .aux-handle::after,
+.aux-fader.aux-vertical > .aux-track > .aux-handle::before {
+    content: "";
+    display: block;
+    position: absolute;
+    border-style: solid;
+    left: 6px;
+    right: 6px;
+    height: 8px;
+    box-sizing: border-box;
+}
+.aux-fader.aux-vertical > .aux-track > .aux-handle::before,
+.aux-fader.aux-vertical > .aux-track > .aux-handle::after {
+    border-width: 2px 0;
+}
+.aux-fader.aux-vertical > .aux-track > .aux-handle::before {
+    top: 6px;
+}
+.aux-fader.aux-vertical > .aux-track > .aux-handle::after {
+    bottom: 6px;
+}
+.aux-fader.aux-horizontal > .aux-track > .aux-handle::after,
+.aux-fader.aux-horizontal > .aux-track > .aux-handle::before {
+    content: "";
+    display: block;
+    position: absolute;
+    border-style: solid;
+    top: 6px;
+    bottom: 6px;
+    width: 8px;
+    box-sizing: border-box;
+}
+.aux-fader.aux-horizontal > .aux-track > .aux-handle::before,
+.aux-fader.aux-horizontal > .aux-track > .aux-handle::after {
+    border-width: 0 2px;
+}
+.aux-fader.aux-horizontal > .aux-track > .aux-handle::before {
+    left: 6px;
+}
+.aux-fader.aux-horizontal > .aux-track > .aux-handle::after {
+    right: 6px;
+}
+
+/* SCALE */
+
+.aux-fader.aux-horizontal > .aux-scale {
+    margin: 0 20px;
+}
+.aux-fader.aux-vertical > .aux-scale {
+    margin: 20px 0;
+}
+
+/* LABEL */
+
+.aux-fader > .aux-label {
+    width: 40px;
+    line-height: 18px;
+    height: 18px;
+}
+
+/* VALUE */
+
+.aux-fader > .aux-value,
+.aux-fader > .aux-value > .aux-input {
+    width: 40px;
+    line-height: 18px;
+    height: 18px;
+    font-size: 14px;
+}
+.aux-fader > .aux-value > .aux-input {
+    background: transparent;
+}

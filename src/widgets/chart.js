@@ -83,7 +83,7 @@ function draw_key() {
     var lines = [];
     for (var i = 0; i < this.graphs.length; i++) {
         if (this.graphs[i].get("key") !== false) {
-            var t = make_svg("tspan", {"class": "toolkit-label",
+            var t = make_svg("tspan", {"class": "aux-label",
                                      style: "dominant-baseline: central;"
             });
             t.textContent = this.graphs[i].get("key");
@@ -110,7 +110,7 @@ function draw_key() {
     }
     for (var i = 0; i < lines.length; i++) {
         var b = make_svg("rect", {
-            "class": lines[i]["class"] + " toolkit-rect",
+            "class": lines[i]["class"] + ".aux-rect",
             color:   lines[i].color,
             style:   lines[i].style,
             x:       lines[i].x + 0.5 + w + gpad.left,
@@ -386,10 +386,10 @@ export const Chart = define_class({
         
         /**
          * @member {HTMLDivElement} Chart#element - The main DIV container.
-         *   Has class <code>toolkit-chart</code>.
+         *   Has class <code.aux-chart</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "toolkit-chart");
+        add_class(E, "aux-chart");
         this.widgetize(E, true, true, true);
         
         this.svg = S = make_svg("svg");
@@ -401,9 +401,9 @@ export const Chart = define_class({
         
         /** 
          * @member {SVGGroup} Chart#_graphs - The SVG group containing all graphs.
-         *      Has class <code>toolkit-graphs</code>.
+         *      Has class <code.aux-graphs</code>.
          */
-        this._graphs = make_svg("g", {"class": "toolkit-graphs"});
+        this._graphs = make_svg("g", {"class": "aux-graphs"});
         S.appendChild(this._graphs);
         E.appendChild(S);
         
@@ -412,9 +412,9 @@ export const Chart = define_class({
         
         /** 
          * @member {SVGGroup} Chart#_handles - The SVG group containing all handles.
-         *      Has class <code>toolkit-handles</code>.
+         *      Has class <code.aux-handles</code>.
          */
-        this._handles = make_svg("g", {"class": "toolkit-handles"});
+        this._handles = make_svg("g", {"class": "aux-handles"});
         this.svg.appendChild(this._handles);
         this.svg.onselectstart = function () { return false; };
         this.add_handles(this.options.handles);
@@ -759,7 +759,7 @@ export const Chart = define_class({
 });
 /**
  * @member {Grid} Chart#grid - The grid element of the chart.
- *   Has class <code>toolkit-grid</code>.
+ *   Has class <code.aux-grid</code>.
  */
 ChildWidget(Chart, "grid", {
     create: Grid,
@@ -780,13 +780,13 @@ ChildWidget(Chart, "grid", {
 });
 function key_hover_cb(ev) {
     var b = ev.type === "mouseenter";
-    toggle_class(this, "toolkit-hover", b);
+    toggle_class(this, "aux-hover", b);
     /* this.nextSibling is the key */
-    toggle_class(this.nextSibling, "toolkit-hover", b);
+    toggle_class(this.nextSibling, "aux-hover", b);
 }
 /**
  * @member {SVGRect} Chart#_key_background - The SVG rectangle of the key.
- *   Has class <code>toolkit-background</code>.
+ *   Has class <code.aux-background</code>.
  */
 ChildElement(Chart, "key_background", {
     option: "key",
@@ -794,7 +794,7 @@ ChildElement(Chart, "key_background", {
         return !!v;
     },
     create: function() {
-        var k = make_svg("rect", {"class": "toolkit-background"});
+        var k = make_svg("rect", {"class": "aux-background"});
         k.addEventListener("mouseenter", key_hover_cb);
         k.addEventListener("mouseleave", key_hover_cb);
         return k;
@@ -805,7 +805,7 @@ ChildElement(Chart, "key_background", {
 });
 /**
  * @member {SVGGroup} Chart#_key - The SVG group containing all descriptions.
- *   Has class <code>toolkit-key</code>.
+ *   Has class <code.aux-key</code>.
  */
 ChildElement(Chart, "key", {
     option: "key",
@@ -813,8 +813,8 @@ ChildElement(Chart, "key", {
         return !!v;
     },
     create: function() {
-        var key = make_svg("g", {"class": "toolkit-key"});
-        key.appendChild(make_svg("text", {"class": "toolkit-key-text"}));
+        var key = make_svg("g", {"class": "aux-key"});
+        key.appendChild(make_svg("text", {"class": "aux-key-text"}));
         return key;
     },
     append: function() {
@@ -823,7 +823,7 @@ ChildElement(Chart, "key", {
 });
 /**
  * @member {SVGText} Chart#_title - The title of the chart.
- *   Has class <code>toolkit-title</code>.
+ *   Has class <code.aux-title</code>.
  */
 ChildElement(Chart, "title", {
     option: "title",
@@ -832,7 +832,7 @@ ChildElement(Chart, "title", {
     },
     create: function() {
         return make_svg("text", {
-            "class": "toolkit-title",
+            "class": "aux-title",
             style: "dominant-baseline: central;"
         });
     },

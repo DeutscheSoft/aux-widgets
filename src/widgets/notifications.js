@@ -49,7 +49,7 @@ export const Notifications = define_class({
     
     initialize: function (options) {
         Container.prototype.initialize.call(this, options);
-        add_class(this.element, "toolkit-notifications");
+        add_class(this.element, "aux-notifications");
     },
     
     notify: function (options) {

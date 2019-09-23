@@ -1,0 +1,217 @@
+/*
+ * This file is part of Toolkit.
+ *
+ * Toolkit is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * Toolkit is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU General
+ * Public License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ */
+.aux-response-handle {
+    
+}
+.aux-response-handle.aux-disabled {
+    display: none;
+}
+.aux-response-handle:hover {
+    
+}
+.aux-response-handle.aux-inactive {
+    
+}
+.aux-response-handle.aux-active {
+    cursor: move !important;
+}
+.aux-response-handle.aux-warn {
+    
+}
+.aux-response-handle.aux-circular {
+    
+}
+.aux-response-handle.aux-circular:hover {
+    
+}
+.aux-response-handle.aux-circular.aux-active {
+    
+}
+.aux-response-handle.aux-line {
+    
+}
+.aux-response-handle.aux-line-vertical {
+    
+}
+.aux-response-handle.aux-line-horizontal {
+    
+}
+.aux-response-handle.aux-block {
+    
+}
+.aux-response-handle.aux-block-left {
+    
+}
+.aux-response-handle.aux-block-right {
+    
+}
+.aux-response-handle.aux-block-top {
+    
+}
+.aux-response-handle.aux-block-bottom {
+    
+}
+
+.aux-response-handle > .aux-z-handle {
+    opacity: 0.5;
+    cursor: pointer;
+    stroke-width: 4;
+}
+.aux-response-handle > .aux-z-handle:hover {
+    opacity: 0.75;
+}
+.aux-response-handle.aux-active > .aux-z-handle {
+    opacity: 0.75;
+    cursor: move;
+}
+
+.aux-response-handle > .aux-label {
+    cursor: pointer;
+    font-size: 0.8em;
+}
+.aux-response-handle:hover > .aux-label {
+    
+}
+.aux-response-handle.aux-active > .aux-label {
+    cursor:move;
+}
+.aux-response-handle > .aux-label > tspan {
+    
+}
+
+.aux-response-handle.aux-circular > .aux-label {
+    opacity: 0.5;
+}
+.aux-response-handle.aux-circular:hover > .aux-label {
+    opacity: 0.66;
+}
+.aux-response-handle.aux-circular.aux-active > .aux-label {
+    opacity: 0.8;
+}
+.aux-response-handle.aux-line > .aux-label {
+    opacity: 0.5;
+}
+.aux-response-handle.aux-line:hover > .aux-label {
+    opacity: 0.66;
+}
+.aux-response-handle.aux-line.aux-active > .aux-label {
+    opacity: 0.8;
+}
+.aux-response-handle.aux-block > .aux-label {
+    opacity: 0.5;
+}
+.aux-response-handle.aux-block:hover > .aux-label {
+    opacity: 0.66;
+}
+.aux-response-handle.aux-block.aux-active > .aux-label {
+    opacity: 0.8;
+}
+
+
+
+.aux-response-handle > .aux-handle {
+    cursor:pointer;
+}
+.aux-response-handle.aux-active > .aux-handle {
+    cursor:move;
+}
+.aux-response-handle.aux-warn > .aux-handle {
+    stroke-width: 20;
+}
+.aux-response-handle.aux-circular > .aux-handle {
+    opacity: 0.33;
+}
+.aux-response-handle.aux-circular:hover > .aux-handle {
+    opacity: 0.5;
+}
+.aux-response-handle.aux-circular.aux-active > .aux-handle {
+    opacity: 0.66;
+}
+.aux-response-handle.aux-line > .aux-handle {
+    opacity: 0.33;
+}
+.aux-response-handle.aux-line:hover > .aux-handle {
+    opacity: 0.5;
+}
+.aux-response-handle.aux-line.aux-active > .aux-handle {
+    opacity: 0.66;
+}
+.aux-response-handle.aux-block > .aux-handle {
+    opacity: 0.2;
+}
+.aux-response-handle.aux-block:hover > .aux-handle {
+    opacity: 0.33;
+}
+.aux-response-handle.aux-block.aux-active > .aux-handle {
+    opacity: 0.5;
+}
+
+
+
+.aux-response-handle > .aux-line {
+    stroke-width: 1;
+}
+.aux-response-handle:hover > .aux-line {
+    
+}
+.aux-response-handle.aux-active > .aux-line {
+    
+}
+.aux-response-handle.aux-circular > .aux-line {
+/*     stroke-dasharray: 1,1; */
+    opacity: 0.5;
+}
+.aux-response-handle.aux-circular.aux-active > .aux-line {
+    
+}
+
+.aux-response-handle.aux-line > .aux-line-1 {
+    stroke-dasharray: 1,1;
+    opacity: 0.6;
+}
+.aux-response-handle.aux-line:hover > .aux-line-1 {
+    stroke-dasharray: 0;
+}
+.aux-response-handle.aux-line.aux-active > .aux-line-1 {
+    stroke-dasharray: 0;
+}
+.aux-response-handle.aux-line > .aux-line-2 {
+    opacity: 0.5;
+}
+.aux-response-handle.aux-line.aux-active > .aux-line-2 {
+    
+}
+
+.aux-response-handle.aux-block > .aux-line-1 {
+    stroke-dasharray: 1,1;
+    opacity: 0.6;
+}
+.aux-response-handle.aux-block:hover > .aux-line-1 {
+    stroke-dasharray: 0;
+}
+.aux-response-handle.aux-block.aux-active > .aux-line-1 {
+    stroke-dasharray: 0;
+    opacity: 0.9;
+}
+.aux-response-handle.aux-block > .aux-line-2 {
+    opacity: 0.5;
+}
+.aux-response-handle.aux-block.aux-active > .aux-line-2 {
+    
+}

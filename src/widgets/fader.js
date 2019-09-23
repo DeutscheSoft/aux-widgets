@@ -221,22 +221,22 @@ export const Fader = define_class({
         
         /**
          * @member {HTMLDivElement} Fader#element - The main DIV container.
-         *   Has class <code>toolkit-fader</code>.
+         *   Has class <code.aux-fader</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "toolkit-fader");
+        add_class(E, "aux-fader");
         this.widgetize(E, true, true, true);
 
         /**
-         * @member {HTMLDivElement} Fader#_track - The track for the handle. Has class <code>toolkit-track</code>.
+         * @member {HTMLDivElement} Fader#_track - The track for the handle. Has class <code.aux-track</code>.
          */
-        this._track = element("div", "toolkit-track");
+        this._track = element("div", "aux-track");
         this.element.appendChild(this._track);
         
         /**
-         * @member {HTMLDivElement} Fader#_handle - The handle of the fader. Has class <code>toolkit-handle</code>.
+         * @member {HTMLDivElement} Fader#_handle - The handle of the fader. Has class <code.aux-handle</code>.
          */
-        this._handle = element("div", "toolkit-handle");
+        this._handle = element("div", "aux-handle");
         this._handle_size = 0;
         this._track.appendChild(this._handle);
 
@@ -281,10 +281,10 @@ export const Fader = define_class({
         if (I.layout) {
             I.layout = false;
             value = O.layout;
-            remove_class(E, "toolkit-vertical", "toolkit-horizontal", "toolkit-left",
-                            "toolkit-right", "toolkit-top", "toolkit-bottom");
-            add_class(E, vert(O) ? "toolkit-vertical" : "toolkit-horizontal");
-            add_class(E, "toolkit-"+value);
+            remove_class(E, "aux-vertical", "aux-horizontal", "aux-left",
+                            "aux-right", "aux-top", "aux-bottom");
+            add_class(E, vert(O) ? "aux-vertical" : "aux-horizontal");
+            add_class(E, "aux-"+value);
             
             if (supports_transform)
                 this._handle.style.transform = null;

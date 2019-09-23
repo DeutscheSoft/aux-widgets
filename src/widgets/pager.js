@@ -123,11 +123,11 @@ export const Pager = define_class({
         this.pages = [];
         Container.prototype.initialize.call(this, options);
         /**
-         * The main DIV element. Has the class <code>toolkit-pager</code>.
+         * The main DIV element. Has the class <code.aux-pager</code>.
          *
          * @member Pager#element
          */
-        add_class(this.element, "toolkit-pager");
+        add_class(this.element, "aux-pager");
     },
     
     initialized: function () {
@@ -145,26 +145,26 @@ export const Pager = define_class({
 
         if (I.direction) {
             I.direction = false;
-            remove_class(E, "toolkit-forward", "toolkit-backward");
-            add_class(E, "toolkit-" + O.direction);
+            remove_class(E, "aux-forward", "aux-backward");
+            add_class(E, "aux-" + O.direction);
         }
         
         if (I.position) {
             I.position = false;
-            remove_class(E, "toolkit-top", "toolkit-right", "toolkit-bottom",
-                            "toolkit-left", "toolkit-vertical", "toolkit-horizontal");
+            remove_class(E, "aux-top", "aux-right", "aux-bottom",
+                            "aux-left", "aux-vertical", "aux-horizontal");
             switch (O.position) {
                 case "top":
-                    add_class(E, "toolkit-top", "toolkit-vertical");
+                    add_class(E, "aux-top", "aux-vertical");
                     break;
                 case "bottom":
-                    add_class(E, "toolkit-bottom", "toolkit-vertical");
+                    add_class(E, "aux-bottom", "aux-vertical");
                     break;
                 case "left":
-                    add_class(E, "toolkit-left", "toolkit-horizontal");
+                    add_class(E, "aux-left", "aux-horizontal");
                     break;
                 case "right":
-                    add_class(E, "toolkit-right", "toolkit-horizontal");
+                    add_class(E, "aux-right", "aux-horizontal");
                     break;
                 default:
                     warn("Unsupported position", O.position);
@@ -177,9 +177,9 @@ export const Pager = define_class({
             for (var i = 0; i < this.pages.length; i ++) {
                 var page = this.pages[i];
                 if (i === O.show)
-                    page.add_class("toolkit-active");
+                    page.add_class("aux-active");
                 else
-                    page.remove_class("toolkit-active");
+                    page.remove_class("aux-active");
             }
         }
     },
@@ -249,7 +249,7 @@ export const Pager = define_class({
             p = content;
         }
 
-        p.add_class("toolkit-page");
+        p.add_class("aux-page");
         p.set("container", this._clip);
 
         var len = this.pages.length;
@@ -435,7 +435,7 @@ ChildWidget(Pager, "buttonarray", {
 
 /**
  * @member {HTMLDivElement} Pager#_clip - The clipping area containing the pages.
- *   Has class <code>toolkit-clip</code>.
+ *   Has class <code.aux-clip</code>.
  */
 ChildElement(Pager, "clip", {
     show: true,

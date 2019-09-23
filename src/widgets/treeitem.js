@@ -25,7 +25,7 @@ import { has_class, toggle_class, add_class, get_duration } from '../utils/dom.j
 import { S } from '../dom_scheduler.js';
 
 var toggle_collapsed = function () {
-    set_collapsed.call(this, !has_class(this.element, "toolkit-collapsed"));
+    set_collapsed.call(this, !has_class(this.element, "aux-collapsed"));
 }
 var set_collapsed = function (c) {
     this.set("collapsed", c);
@@ -55,16 +55,16 @@ export const TreeItem = define_class({
         this.list = new List({
             "onset_display_state": reset_size
         });
-        this.flex = new Container({"class":"toolkit-flex"});
+        this.flex = new Container({"class":"aux-flex"});
         
         ListItem.prototype.initialize.call(this, options);
-        add_class(this.element, "toolkit-tree-item");
+        add_class(this.element, "aux-tree-item");
         
         ListItem.prototype.append_child.call(this, this.flex);
         ListItem.prototype.add_child.call(this, this.list);
         this.flex.show();
         
-        this.collapse = new Button({"class":"toolkit-collapse"});
+        this.collapse = new Button({"class":"aux-collapse"});
         this.append_child(this.collapse);
         this.collapse.add_event("click", toggle_collapsed.bind(this));
         
@@ -111,11 +111,11 @@ export const TreeItem = define_class({
             if (this.list.children && this.list.children.length) {
                 if (this.list.element.parentElement != E)
                     E.appendChild(this.list.element);
-                this.add_class("toolkit-has-tree");
+                this.add_class("aux-has-tree");
             } else {
                 if (this.list.element.parentElement == E)
                     E.removeChild(this.list.element);
-                this.remove_class("toolkit-has-tree");
+                this.remove_class("aux-has-tree");
             }
         }
         if (I._list || I.collapsable || I.force_collapsable) {
@@ -123,7 +123,7 @@ export const TreeItem = define_class({
                 F.appendChild(this.collapse.element);
             else if (this.collapse.element.parentElement == E)
                 F.removeChild(this.collapse.element);
-            toggle_class(E, "toolkit-force-collapsable", O.force_collapsable);
+            toggle_class(E, "aux-force-collapsable", O.force_collapsable);
         }
         if (I.collapsed) {
             I.collapsed = false;
@@ -156,7 +156,7 @@ export const TreeItem = define_class({
                   }, 1);
                 });
             }
-            toggle_class(E, "toolkit-collapsed", O.collapsed);
+            toggle_class(E, "aux-collapsed", O.collapsed);
         }
         I._list = I.collapsable = I.force_collapsable = false;
     },

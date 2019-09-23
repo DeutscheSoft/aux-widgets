@@ -1,0 +1,61 @@
+/*
+ * This file is part of Toolkit.
+ *
+ * Toolkit is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * Toolkit is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU General
+ * Public License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ */
+
+.aux-multi-meter {
+    margin: 3px;
+    padding: 0;
+}
+
+.aux-multi-meter > .aux-title {
+    height: 1.2em;
+    line-height: 1.2em;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+}
+
+.aux-multi-meter > .aux-level-meter {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    border-radius: 0px;
+    padding-top: calc(1.2em + 8px);
+}
+
+.aux-multi-meter.aux-vertical > .aux-level-meter > .aux-bar,
+.aux-multi-meter.aux-vertical > .aux-level-meter > .aux-state {
+    border-right: 1px solid transparent;
+}
+.aux-multi-meter.aux-horizontal > .aux-level-meter > .aux-bar,
+.aux-multi-meter.aux-horizontal > .aux-level-meter > .aux-state {
+    border-bottom: 1px solid transparent;
+}
+.aux-multi-meter.aux-vertical > .aux-level-meter:nth-last-of-type(1) > .aux-bar,
+.aux-multi-meter.aux-vertical > .aux-level-meter:nth-last-of-type(1) > .aux-state {
+    border-right: 0px solid transparent;
+}
+.aux-multi-meter.aux-horizontal > .aux-level-meter:nth-last-of-type(1) > .aux-bar,
+.aux-multi-meter.aux-horizontal > .aux-level-meter:nth-last-of-type(1) > .aux-state {
+    border-bottom: 0px solid transparent;
+}
+
+.aux-multi-meter.aux-horizontal .aux-level-meter > .aux-title {
+    margin-right: 4px;
+}

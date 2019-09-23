@@ -44,7 +44,7 @@ export const List = define_class({
     Extends: Container,
     
     initialize: function (options) {
-        this.element = element("ul", "toolkit-list");
+        this.element = element("ul", "aux-list");
         Container.prototype.initialize.call(this, options);
     },
     static_events: {

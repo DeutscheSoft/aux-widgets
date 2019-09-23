@@ -73,7 +73,7 @@ function draw_dots() {
     empty(_dots);
     for (var i = 0; i < dots.length; i++) {
         var m = dots[i];
-        var r = make_svg("rect", {"class": "toolkit-dot"});
+        var r = make_svg("rect", {"class": "aux-dot"});
         
         var length = m.length === void(0)
                    ? dot.length : m.length;
@@ -136,7 +136,7 @@ function draw_markers() {
         else
             to = Math.min(O.max, Math.max(O.min, m.to));
         
-        var s = make_svg("path", {"class": "toolkit-marker"});
+        var s = make_svg("path", {"class": "aux-marker"});
         this._markers.appendChild(s);
         
         if (m["class"]) add_class(s, m["class"]);
@@ -173,7 +173,7 @@ function draw_labels() {
 
     for (i = 0; i < labels.length; i++) {
         l = labels[i];
-        p = make_svg("text", {"class": "toolkit-label",
+        p = make_svg("text", {"class": "aux-label",
                                  style: "dominant-baseline: central;"
         });
         
@@ -400,30 +400,30 @@ export const Circular = define_class({
         
         /**
          * @member {SVGImage} Circular#element - The main SVG element.
-         *      Has class <code>toolkit-circular</code> 
+         *      Has class <code.aux-circular</code> 
          */
-        this.element = E = make_svg("g", {"class": "toolkit-circular"});
+        this.element = E = make_svg("g", {"class": "aux-circular"});
         this.widgetize(E, true, true, true);
         
         /**
          * @member {SVGPath} Circular#_base - The base of the ring.
-         *      Has class <code>toolkit-base</code> 
+         *      Has class <code.aux-base</code> 
          */
-        this._base = make_svg("path", {"class": "toolkit-base"});
+        this._base = make_svg("path", {"class": "aux-base"});
         E.appendChild(this._base);
         
         /**
          * @member {SVGPath} Circular#_value - The ring showing the value.
-         *      Has class <code>toolkit-value</code> 
+         *      Has class <code.aux-value</code> 
          */
-        this._value = make_svg("path", {"class": "toolkit-value"});
+        this._value = make_svg("path", {"class": "aux-value"});
         E.appendChild(this._value);
         
         /**
          * @member {SVGRect} Circular#_hand - The hand of the knob.
-         *      Has class <code>toolkit-hand</code> 
+         *      Has class <code.aux-hand</code> 
          */
-        this._hand = make_svg("rect", {"class": "toolkit-hand"});
+        this._hand = make_svg("rect", {"class": "aux-hand"});
         E.appendChild(this._hand);
 
         if (this.options.labels)
@@ -597,37 +597,37 @@ export const Circular = define_class({
 });
 /**
  * @member {SVGGroup} Circular#_markers - A group containing all markers.
- *      Has class <code>toolkit-markers</code> 
+ *      Has class <code.aux-markers</code> 
  */
 ChildElement(Circular, "markers", {
     //option: "markers",
     //display_check: function(v) { return !!v.length; },
     show: true,
     create: function() {
-        return make_svg("g", {"class": "toolkit-markers"});
+        return make_svg("g", {"class": "aux-markers"});
     },
 });
 /** 
  * @member {SVGGroup} Circular#_dots - A group containing all dots.
- *      Has class <code>toolkit-dots</code> 
+ *      Has class <code.aux-dots</code> 
  */
 ChildElement(Circular, "dots", {
     //option: "dots",
     //display_check: function(v) { return !!v.length; },
     show: true,
     create: function() {
-        return make_svg("g", {"class": "toolkit-dots"});
+        return make_svg("g", {"class": "aux-dots"});
     },
 });
 /**
  * @member {SVGGroup} Circular#_labels - A group containing all labels.
- *      Has class <code>toolkit-labels</code> 
+ *      Has class <code.aux-labels</code> 
  */
 ChildElement(Circular, "labels", {
     //option: "labels",
     //display_check: function(v) { return !!v.length; },
     show: true,
     create: function() {
-        return make_svg("g", {"class": "toolkit-labels"});
+        return make_svg("g", {"class": "aux-labels"});
     },
 });

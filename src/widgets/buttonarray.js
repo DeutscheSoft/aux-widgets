@@ -36,7 +36,7 @@ function hide_arrows() {
     if (this._prev.parentNode) this._prev.remove();
     if (this._next.parentNode) this._next.remove();
     var E = this.element;
-    remove_class(E, "toolkit-over");
+    remove_class(E, "aux-over");
     this.trigger_resize();
 }
 function show_arrows() {
@@ -44,7 +44,7 @@ function show_arrows() {
     var E = this.element;
     E.insertBefore(this._prev, this._clip);
     E.appendChild(this._next);
-    add_class(E, "toolkit-over");
+    add_class(E, "aux-over");
     this.trigger_resize();
 }
 function prev_clicked(e) {
@@ -159,19 +159,19 @@ export const ButtonArray = define_class({
         Container.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} ButtonArray#element - The main DIV container.
-         *   Has class <code>toolkit-buttonarray</code>.
+         *   Has class <code.aux-buttonarray</code>.
          */
-        add_class(this.element, "toolkit-buttonarray");
+        add_class(this.element, "aux-buttonarray");
         /**
          * @member {HTMLDivElement} ButtonArray#_clip - A clipping area containing the list of {@link Button}s.
-         *    Has class <code>toolkit-clip</code>.
+         *    Has class <code.aux-clip</code>.
          */
-        this._clip      = element("div", "toolkit-clip");
+        this._clip      = element("div", "aux-clip");
         /**
          * @member {HTMLDivElement} ButtonArray#_container - A container for all the {@link Button}s.
-         *    Has class <code>toolkit-container</code>.
+         *    Has class <code.aux-container</code>.
          */
-        this._container = element("div", "toolkit-container");
+        this._container = element("div", "aux-container");
         this.element.appendChild(this._clip);
         this._clip.appendChild(this._container);
         
@@ -180,11 +180,11 @@ export const ButtonArray = define_class({
         /**
          * @member {Button} ButtonArray#prev - The previous arrow {@link Button} instance.
          */
-        this.prev = new Button({class: "toolkit-previous", dblclick:400});
+        this.prev = new Button({class: "aux-previous", dblclick:400});
         /**
          * @member {Button} ButtonArray#next - The next arrow {@link Button} instance.
          */
-        this.next = new Button({class: "toolkit-next", dblclick:400});
+        this.next = new Button({class: "aux-next", dblclick:400});
         
         this.prev.add_event("click", prev_clicked.bind(this));
         this.prev.add_event("doubleclick", prev_dblclicked.bind(this));
@@ -344,8 +344,8 @@ export const ButtonArray = define_class({
 
         if (I.direction) {
             var E = this.element;
-            remove_class(E, "toolkit-vertical", "toolkit-horizontal");
-            add_class(E, "toolkit-"+O.direction);
+            remove_class(E, "aux-vertical", "aux-horizontal");
+            add_class(E, "aux-"+O.direction);
         }
 
         if (I.validate("direction", "auto_arrows") || I.resized) {
@@ -449,7 +449,7 @@ export const ButtonArray = define_class({
             if (button) button.set("state", false);
         }
         if (key == "scroll") {
-            toggle_class(this.element, "toolkit-scroll", value > 0);
+            toggle_class(this.element, "aux-scroll", value > 0);
             this.trigger_resize();
         }
         return Container.prototype.set.call(this, key, value);

@@ -33,8 +33,8 @@ function draw_lines(a, mode, last) {
             label = make_svg("text");
             label.textContent = obj.label;
             label.style["dominant-baseline"] = "central";
-            add_class(label, "toolkit-grid-label");
-            add_class(label, mode ? "toolkit-horizontal" : "toolkit-vertical");
+            add_class(label, "aux-grid-label");
+            add_class(label, mode ? "aux-horizontal" : "aux-vertical");
             if (obj["class"]) add_class(label, obj["class"]);
 
             this.element.appendChild(label);
@@ -130,8 +130,8 @@ function draw_lines(a, mode, last) {
                 || (!mode && obj.pos === this.range_x.options.max))
                     continue;
                 var line = make_svg("path");
-                add_class(line, "toolkit-grid-line");
-                add_class(line, mode ? "toolkit-horizontal" : "toolkit-vertical");
+                add_class(line, "aux-grid-line");
+                add_class(line, mode ? "aux-horizontal" : "aux-vertical");
                 if (obj["class"]) add_class(line, obj["class"]);
                 if (obj.color) line.setAttribute("style", "stroke:" + obj.color);
                 if (mode) {
@@ -201,10 +201,10 @@ export const Grid = define_class({
     initialize: function (options) {
         Widget.prototype.initialize.call(this, options);
         /**
-         * @member {SVGGroup} Grid#element - The main SVG group containing all grid elements. Has class <code>toolkit-grid</code>.
+         * @member {SVGGroup} Grid#element - The main SVG group containing all grid elements. Has class <code.aux-grid</code>.
          */
         this.element = this.widgetize(
-                       make_svg("g", {"class": "toolkit-grid"}), true, true, true);
+                       make_svg("g", {"class": "aux-grid"}), true, true, true);
         /**
          * @member {Range} Grid#range_x - The range for the x axis. 
          */

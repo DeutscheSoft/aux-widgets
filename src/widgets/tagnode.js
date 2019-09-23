@@ -43,7 +43,7 @@ export const TagNode = define_class({
   initialize: function (options, tag) {
     Container.prototype.initialize.call(this, options);
     this.tag = tag;
-    this.add_class("toolkit-tag");
+    this.add_class("aux-tag");
     
   },
   
@@ -78,7 +78,7 @@ ChildWidget(TagNode, "colorize", {
       click: function (e) { this.parent.fire_event("colorize", e); }
     },
     default_options: {
-        class: "toolkit-colorize"
+        class: "aux-colorize"
     },
 });
 ChildWidget(TagNode, "remove", {
@@ -89,7 +89,7 @@ ChildWidget(TagNode, "remove", {
       confirmed: function (e) { this.parent.fire_event("remove", e, this.parent); }
     },
     default_options: {
-        class: "toolkit-remove",
+        class: "aux-remove",
         label : "",
         confirm: false,
     },

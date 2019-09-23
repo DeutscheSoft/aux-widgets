@@ -29,7 +29,7 @@ import { add_class, remove_class } from '../utils/dom.js';
 export const GlobalCursor = define_class({
     _class: "GlobalCursor",
     /**
-     * Adds a class <code>"toolkit-cursor-" + cursor</code> to the <code>document.body</code> to show a specific cursor.
+     * Adds a class <code>"aux-cursor-" + cursor</code> to the <code>document.body</code> to show a specific cursor.
      * 
      * @method GlobalCursor#global_cursor
      * 
@@ -38,7 +38,7 @@ export const GlobalCursor = define_class({
      * @emits GlobalCursor#globalcursor
      */
     global_cursor: function (cursor) {
-        add_class(document.body, "toolkit-cursor-" + cursor);
+        add_class(document.body, "aux-cursor-" + cursor);
         /**
          * Is fired when a cursor gets set.
          * 
@@ -58,7 +58,7 @@ export const GlobalCursor = define_class({
      * @emits GlobalCursor#cursorremoved
      */
     remove_cursor: function (cursor) {
-        remove_class(document.body, "toolkit-cursor-" + cursor);
+        remove_class(document.body, "aux-cursor-" + cursor);
         /**
          * Is fired when a cursor is removed.
          * 

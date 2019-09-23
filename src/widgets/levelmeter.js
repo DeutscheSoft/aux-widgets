@@ -206,9 +206,9 @@ export const LevelMeter = define_class({
         
         /**
          * @member {HTMLDivElement} LevelMeter#element - The main DIV container.
-         *   Has class <code>toolkit-level-meter</code>.
+         *   Has class <code.aux-level-meter</code>.
          */
-        add_class(this.element, "toolkit-level-meter");
+        add_class(this.element, "aux-level-meter");
 
         var O = this.options;
         
@@ -229,7 +229,7 @@ export const LevelMeter = define_class({
 
         if (I.show_hold) {
             I.show_hold = false;
-            toggle_class(E, "toolkit-has-hold", O.show_hold);
+            toggle_class(E, "aux-has-hold", O.show_hold);
         }
 
         if (I.top || I.bottom) {
@@ -246,7 +246,7 @@ export const LevelMeter = define_class({
 
         if (I.clip) {
             I.clip = false;
-            toggle_class(E, "toolkit-clipping", O.clip);
+            toggle_class(E, "aux-clipping", O.clip);
         }
     },
     destroy: function () {
@@ -488,7 +488,7 @@ export const LevelMeter = define_class({
 /**
  * @member {State} LevelMeter#clip - The {@link State} instance for the clipping LED.
  * @member {HTMLDivElement} LevelMeter#clip.element - The DIV element of the clipping LED.
- *   Has class <code>toolkit-clip</code>.
+ *   Has class <code.aux-clip</code>.
  */
 ChildWidget(LevelMeter, "clip", {
     create: State,
@@ -497,19 +497,19 @@ ChildWidget(LevelMeter, "clip", {
         clip: "state",
     },
     default_options: {
-        "class": "toolkit-clip"
+        "class": "aux-clip"
     },
     toggle_class: true,
 });
 /**
  * @member {HTMLDivElement} LevelMeter#_peak - The DIV element for the peak marker.
- *   Has class <code>toolkit-peak</code>.
+ *   Has class <code.aux-peak</code>.
  */
 ChildElement(LevelMeter, "peak", {
     show: false,
     create: function() {
-        var peak = element("div","toolkit-peak");
-        peak.appendChild(element("div","toolkit-peak-label"));
+        var peak = element("div","aux-peak");
+        peak.appendChild(element("div","aux-peak-label"));
         return peak;
     },
     append: function() {

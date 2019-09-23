@@ -29,7 +29,7 @@ function calculate_grid(range, step) {
 
     for (i = min; i <= max; i += step) {
         if (i == 0) {
-            cls = "toolkit-highlight";
+            cls = "aux-highlight";
         } else {
             cls = "";
         }
@@ -128,14 +128,14 @@ export const FrequencyResponse = define_class({
             this.set("scale", options.scale, true);
         /**
          * @member {HTMLDivElement} FrequencyResponse#element - The main DIV container.
-         *   Has class <code>toolkit-frequency-response</code>.
+         *   Has class <code.aux-frequency-response</code>.
          */
-        add_class(this.element, "toolkit-frequency-response");
+        add_class(this.element, "aux-frequency-response");
         /** 
          * @member {SVGGroup} Chart#_handles - The SVG group containing all handles.
-         *      Has class <code>toolkit-response-handles</code>.
+         *      Has class <code.aux-response-handles</code>.
          */
-        add_class(this._handles, "toolkit-response-handles");
+        add_class(this._handles, "aux-response-handles");
         
         // do not overwrite custom grids, please
         if (this.options.db_grid && !this.options.grid_y.length)

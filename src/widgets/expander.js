@@ -136,7 +136,7 @@ export const Expander = define_class({
      * Expander is a container which can be toggled between two different states,
      * expanded and collapsed. It can be used to implement overlay popups, but it is
      * not limited to that application.
-     * In expanded mode the container has the class <code>toolkit-expanded</code>.
+     * In expanded mode the container has the class <code.aux-expanded</code>.
      * Child widgets are shown or hidden depending on the state of the two pseudo
      * options <code>_expanded</code> and <code>_collapsed</code>. If a child widget
      * of the expander has <code>_expanded</code> set to true it will be shown in
@@ -202,13 +202,13 @@ export const Expander = define_class({
         Container.prototype.redraw.call(this);
 
         if (I.always_expanded) {
-            this[O.always_expanded ? "add_class" : "remove_class"]("toolkit-always-expanded");
+            this[O.always_expanded ? "add_class" : "remove_class"]("aux-always-expanded");
         }
 
         if (I.expanded || I.always_expanded) {
             I.always_expanded = I.expanded = false; 
             var v = O.always_expanded || O.expanded;
-            this[v ? "add_class" : "remove_class"]("toolkit-expanded");
+            this[v ? "add_class" : "remove_class"]("aux-expanded");
             this.trigger_resize();
         }
     },
@@ -216,9 +216,9 @@ export const Expander = define_class({
         Container.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} Expander#element - The main DIV container.
-         *   Has class <code>toolkit-expander</code>.
+         *   Has class <code.aux-expander</code>.
          */
-        add_class(this.element, "toolkit-expander");
+        add_class(this.element, "aux-expander");
 
         this._update_visibility = update_visibility.bind(this);
 
@@ -266,7 +266,7 @@ ChildWidget(Expander, "button", {
     default_options: {
         _expanded: true,
         _collapsed: true,
-        class: "toolkit-toggle-expand"
+        class: "aux-toggle-expand"
     },
     static_events: {
         click: toggle,

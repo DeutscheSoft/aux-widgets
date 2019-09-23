@@ -31,7 +31,7 @@ function scroll_timeout() {
     this._wheel = false;
     this.__sto = false;
     this.set("scrolling", false);
-    remove_class(this.options.classes, "toolkit-scrolling");
+    remove_class(this.options.classes, "aux-scrolling");
 }
 function scrollwheel(e) {
     var O = this.options;
@@ -51,7 +51,7 @@ function scrollwheel(e) {
         window.clearTimeout(this.__sto);
     } else {
         this._raw_value = v = O.get.call(this);
-        add_class(O.classes, "toolkit-scrolling");
+        add_class(O.classes, "aux-scrolling");
         /**
          * Is fired when scrolling starts.
          * 

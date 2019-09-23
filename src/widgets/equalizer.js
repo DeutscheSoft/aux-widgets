@@ -178,27 +178,27 @@ export const Equalizer = define_class({
         
         /**
          * @member {HTMLDivElement} Equalizer#element - The main DIV container.
-         *   Has class <code>toolkit-equalizer</code>.
+         *   Has class <code.aux-equalizer</code>.
          */
-        add_class(this.element, "toolkit-equalizer");
+        add_class(this.element, "aux-equalizer");
         
         /**
          * @member {SVGGroup} Equalizer#_bands - The SVG group containing all the bands SVG elements.
-         *   Has class <code>toolkit-eqbands</code>.
+         *   Has class <code.aux-eqbands</code>.
          */
         this._bands = this._handles;
-        add_class(this._bands, "toolkit-eqbands");
+        add_class(this._bands, "aux-eqbands");
         
         /**
          * @member {Graph} Equalizer#baseline - The graph drawing the zero line.
-         *   Has class <code>toolkit-baseline</code> 
+         *   Has class <code.aux-baseline</code> 
          */
         this.baseline = this.add_graph({
             range_x:   this.range_x,
             range_y:   this.range_y,
             container: this._bands,
             dots: [{x: 20, y: 0}, {x: 20000, y: 0}],
-            "class": "toolkit-baseline"
+            "class": "aux-baseline"
         });
         this.add_bands(this.options.bands);
     },

@@ -49,7 +49,7 @@ export function ChildElement(widget, name, config) {
      * widget definitions. E.g. the tiny marker used to display the back-end
      * value is a simple DIV added using ChildElement. The generic element
      * is a DIV added to Widget.element with the class
-     * <code>toolkit-[name]</code>. Default creating and adding can be
+     * <code.aux-[name]</code>. Default creating and adding can be
      * overwritten with custom callback functions.
      * 
      * @param {Widget} widget - The {@link Widget} to add the ChildElement to.
@@ -77,7 +77,7 @@ export function ChildElement(widget, name, config) {
      *     supposed to create and return a DOM element to be added to the
      *     parent widget.
      * @property {boolean} [config.toggle_class=false] - Defines if the parent widget
-     *     receives the class <code>toolkit-has-[name]</code> as soon as
+     *     receives the class <code.aux-has-[name]</code> as soon as
      *     the child element is shown.
      * @property {array} [config.draw_options] - A list of options of the parent
      *     widget which are supposed to trigger a check if the element has to
@@ -117,7 +117,7 @@ export function ChildElement(widget, name, config) {
     var append = config.append;
     var create = config.create;
 
-    if (create === void(0)) create = function() { return element("div", "toolkit-"+name); }
+    if (create === void(0)) create = function() { return element("div", "aux-"+name); }
     if (append === void(0)) append = function() { this.element.appendChild(this[index]); }
 
     add_static_event(widget, "set_"+show_option, function(value) {
@@ -131,7 +131,7 @@ export function ChildElement(widget, name, config) {
             this[index] = null;
             C.remove();
         }
-        if (config.toggle_class) toggle_class(this.element, "toolkit-has-"+name, value);
+        if (config.toggle_class) toggle_class(this.element, "aux-has-"+name, value);
         this.trigger_resize();
     });
 

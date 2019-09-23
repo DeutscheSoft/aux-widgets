@@ -31,7 +31,7 @@ function autoclose_cb(e) {
     // with the colorpicker.
     // workaround for the moment:
     // don't close on click on any dialog
-    if (curr.classList.contains("toolkit-dialog")) return;
+    if (curr.classList.contains("aux-dialog")) return;
     curr = curr.parentElement;
   }
   this.close();
@@ -142,7 +142,7 @@ export const Dialog = define_class({
     },
     initialize: function (options) {
         Container.prototype.initialize.call(this, options);
-        add_class(this.element, "toolkit-dialog");
+        add_class(this.element, "aux-dialog");
         var O = this.options;
         /* This cannot be a default option because document.body
          * is not defined there */

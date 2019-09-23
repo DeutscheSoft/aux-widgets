@@ -57,7 +57,7 @@ export const Tagger = define_class({
     },
     initialize: function (options) {
         Dialog.prototype.initialize.call(this, options);
-        add_class(this.element, "toolkit-tagger");
+        add_class(this.element, "aux-tagger");
         
         Taggable.prototype.initialize.call(this);
         this.append_child(this.tags);
@@ -77,21 +77,21 @@ export const Tagger = define_class({
             I.add = false;
             if (O.add) {
                 if (!this._input) {
-                    this._input = element("input", "toolkit-input");
+                    this._input = element("input", "aux-input");
                     this._input.addEventListener("keyup", keyup.bind(this), true);
                     this._input.type = "text";
                     this._input.placeholder = "New tag";
                     this.element.appendChild(this._input);
                 }
                 this.add.set("container", this.element);
-                add_class(this.element, "toolkit-has-input");
+                add_class(this.element, "aux-has-input");
             } else if (!O.add) {
                 if (this._input) {
                     this.element.removeChild(this._input);
                     this._input = null;
                 }
                 this.add.set("container", false);
-                remove_class(this.element, "toolkit-has-input");
+                remove_class(this.element, "aux-has-input");
             }
         }
     },

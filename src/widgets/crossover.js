@@ -75,9 +75,9 @@ export const CrossoverBand = define_class({
         EqBand.prototype.initialize.call(this, options);
         /** 
          * @member {HTMLDivElement} CrossoverBand#element - The main SVG group.
-         *   Has class <code>toolkit-crossoverband</code>.
+         *   Has class <code.aux-crossoverband</code>.
          */
-        add_class(this.element, "toolkit-crossoverband");
+        add_class(this.element, "aux-crossoverband");
         
         this.set("lower", this.options.lower);
         this.set("upper", this.options.upper);
@@ -166,9 +166,9 @@ export const Crossover = define_class({
         Equalizer.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} Equalizer#element - The main DIV container.
-         *   Has class <code>toolkit-response-handler</code>.
+         *   Has class <code.aux-response-handler</code>.
          */
-        add_class(this.element, "toolkit-crossover");
+        add_class(this.element, "aux-crossover");
 
         var self = this;
         this.set_freq_cb = function(f) {

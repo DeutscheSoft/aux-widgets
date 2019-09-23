@@ -35,7 +35,7 @@ function value_clicked(e) {
     var O = this.options;
     if (O.set === false) return;
     if (this.__editing) return false;
-    add_class(this.element, "toolkit-active");
+    add_class(this.element, "aux-active");
     this._input.setAttribute("value", O.value);
     this.__editing = true;
     this._input.focus();
@@ -104,7 +104,7 @@ function value_input() {
 function value_done() {
     if (!this.__editing) return;
     this.__editing = false;
-    remove_class(this.element, "toolkit-active");
+    remove_class(this.element, "aux-active");
     this._input.blur();
     /**
      * Is fired when editing of the value ends.
@@ -185,18 +185,18 @@ export const Value = define_class({
         Widget.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} Value#element - The main DIV container.
-         *   Has class <code>toolkit-value</code>.
+         *   Has class <code.aux-value</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "toolkit-value");
+        add_class(E, "aux-value");
         
         this.widgetize(E, true, true, true);
         
         /**
          * @member {HTMLInputElement} Value#_input - The text input.
-         *   Has class <code>toolkit-input</code>.
+         *   Has class <code.aux-input</code>.
          */
-        this._input  = element("input", "toolkit-input");
+        this._input  = element("input", "aux-input");
         this._input.type = "text";
         E.appendChild(this._input);
 

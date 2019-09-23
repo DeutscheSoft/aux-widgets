@@ -48,10 +48,10 @@ export const Label = define_class({
         var E;
         Widget.prototype.initialize.call(this, options);
         /** @member {HTMLDivElement} Label#element - The main DIV container.
-         * Has class <code>toolkit-label</code>.
+         * Has class <code.aux-label</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "toolkit-label");
+        add_class(E, "aux-label");
         this._text = document.createTextNode("");
         E.appendChild(this._text);
         this.widgetize(E, true, true, true);

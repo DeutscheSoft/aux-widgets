@@ -39,13 +39,13 @@ export const ResponseHandler = define_class({
         FrequencyResponse.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} ResponseHandler#element - The main DIV container.
-         *   Has class <code>toolkit-response-handler</code>.
+         *   Has class <code.aux-response-handler</code>.
          */
-        add_class(this.element, "toolkit-response-handler");
+        add_class(this.element, "aux-response-handler");
         /**
          * @member {SVGImage} ResponseHandler#_handles - An SVG group element containing all {@link ResponseHandle} graphics.
-         *   Has class <code>toolkit-response-handles</code>.
+         *   Has class <code.aux-response-handles</code>.
          */
-        add_class(this._handles, "toolkit-response-handles");
+        add_class(this._handles, "aux-response-handles");
     },
 });

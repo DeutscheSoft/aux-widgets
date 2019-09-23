@@ -28,6 +28,6 @@ export const TaggableListItem = define_class({
     initialize: function (options) {
         ListItem.prototype.initialize.call(this, options);
         Taggable.prototype.initialize.call(this);
-        add_class(this.element, "toolkit-taggable-list-item");
+        add_class(this.element, "aux-taggable-list-item");
     }
 });

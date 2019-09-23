@@ -59,10 +59,10 @@ function scrollwheel(e) {
 
     if (this.__sto) window.clearTimeout(this.__sto);
     this.set("dragging", true);
-    add_class(this.element, "toolkit-active");
+    add_class(this.element, "aux-active");
     this.__sto = window.setTimeout(function () {
         this.set("dragging", false);
-        remove_class(this.element, "toolkit-active");
+        remove_class(this.element, "aux-active");
         this.fire_event("zchangeended", this.options.z);
     }.bind(this), 250);
     var s = range_z.get("step") * direction;
@@ -335,7 +335,7 @@ function create_zhandle() {
 
     E = make_svg(
         O.mode === "circular" ? "circle" : "rect", {
-            "class": "toolkit-z-handle",
+            "class": "aux-z-handle",
         }
     );
 
@@ -347,13 +347,13 @@ function create_zhandle() {
 function create_line1() {
     if (this._line1) remove_line1.call(this);
     this._line1 = make_svg("path", {
-        "class": "toolkit-line toolkit-line-1"
+        "class": "aux-line.aux-line-1"
     });
 }
 function create_line2() {
     if (this._line2) remove_line2.call(this);
     this._line2 = make_svg("path", {
-        "class": "toolkit-line toolkit-line-2"
+        "class": "aux-line.aux-line-2"
     });
 }
 function remove_line1() {
@@ -577,7 +577,7 @@ function prevent_default(e) {
 function create_label() {
     var E;
     this._label = E = make_svg("text", {
-        "class": "toolkit-label"
+        "class": "aux-label"
     });
     add_event_listener(E, "mousewheel", this._scrollwheel);
     add_event_listener(E, "DOMMouseScroll",  this._scrollwheel);
@@ -604,7 +604,7 @@ function create_handle() {
     if (this._handle) remove_handle.call(this);
     
     E = make_svg(O.mode === "circular" ? "circle" : "rect",
-                    { class: "toolkit-handle" });
+                    { class: "aux-handle" });
     add_event_listener(E, "mousewheel",     this._scrollwheel);
     add_event_listener(E, "DOMMouseScroll", this._scrollwheel);
     add_event_listener(E, 'selectstart', prevent_default);
@@ -780,15 +780,15 @@ function set_main_class(O) {
     var E = this.element;
     var i;
 
-    for (i = 0; i < MODES.length; i++) remove_class(E, "toolkit-"+MODES[i]);
+    for (i = 0; i < MODES.length; i++) remove_class(E, "aux-"+MODES[i]);
 
-    remove_class(E, "toolkit-line");
-    remove_class(E, "toolkit-block");
+    remove_class(E, "aux-line");
+    remove_class(E, "aux-block");
 
     switch (O.mode) {
     case "line-vertical":
     case "line-horizontal":
-        add_class(E, "toolkit-line");
+        add_class(E, "aux-line");
     case "circular":
         break;
     case "block-left":
@@ -796,25 +796,25 @@ function set_main_class(O) {
     case "block-top":
     case "block-bottom":
     case "block":
-        add_class(E, "toolkit-block");
+        add_class(E, "aux-block");
         break;
     default:
         warn("Unsupported mode:", O.mode);
         return;
     }
 
-    add_class(E, "toolkit-"+O.mode);
+    add_class(E, "aux-"+O.mode);
 }
 
 function startdrag() {
     this.draw_once(function() {
         var e = this.element;
         var p = e.parentNode;
-        add_class(e, "toolkit-active");
+        add_class(e, "aux-active");
         this.set("dragging", true);
 
         /* TODO: move this into the parent */
-        add_class(this.parent.element, "toolkit-dragging");
+        add_class(this.parent.element, "aux-dragging");
 
         this.global_cursor("move");
 
@@ -826,11 +826,11 @@ function startdrag() {
 function enddrag() {
     this.draw_once(function() {
         var e = this.element;
-        remove_class(e, "toolkit-active");
+        remove_class(e, "aux-active");
         this.set("dragging", false);
 
         /* TODO: move this into the parent */
-        remove_class(this.parent.element, "toolkit-dragging");
+        remove_class(this.parent.element, "aux-dragging");
 
         this.remove_cursor("move");
     });
@@ -892,13 +892,13 @@ function enddrag() {
  */
 
 /**
- * @member {SVGText} ResponseHandle#_label - The label. Has class <code>toolkit-label</code>.
+ * @member {SVGText} ResponseHandle#_label - The label. Has class <code.aux-label</code>.
  */
 /**
- * @member {SVGPath} ResponseHandle#_line1 - The first line. Has class <code>toolkit-line toolkit-line-1</code>.
+ * @member {SVGPath} ResponseHandle#_line1 - The first line. Has class <code.aux-line.aux-line-1</code>.
  */
 /**
- * @member {SVGPath} ResponseHandle#_line2 - The first line. Has class <code>toolkit-line toolkit-line-2</code>.
+ * @member {SVGPath} ResponseHandle#_line2 - The first line. Has class <code.aux-line.aux-line-2</code>.
  */
 
 function set_min(value, key) {
@@ -1076,21 +1076,21 @@ export const ResponseHandle = define_class({
         var E = make_svg("g");
         
         /**
-         * @member {SVGGroup} ResponseHandle#element - The main SVG group containing all handle elements. Has class <code>toolkit-response-handle</code>.
+         * @member {SVGGroup} ResponseHandle#element - The main SVG group containing all handle elements. Has class <code.aux-response-handle</code>.
          */
         this.element = E;
 
         this.widgetize(E, true, true);
 
-        add_class(E, "toolkit-response-handle");
+        add_class(E, "aux-response-handle");
         /**
          * @member {SVGCircular} ResponseHandle#_handle - The main handle.
-         *      Has class <code>toolkit-handle</code>.
+         *      Has class <code.aux-handle</code>.
          */
         
         /**
          * @member {SVGCircular} ResponseHandle#_zhandle - The handle for manipulating z axis.
-         *      Has class <code>toolkit-z-handle</code>.
+         *      Has class <code.aux-z-handle</code>.
          */
 
         this._scrollwheel = scrollwheel.bind(this);
@@ -1289,11 +1289,11 @@ export const ResponseHandle = define_class({
 
         if (I.hover) {
             I.hover = false;
-            toggle_class(this.element, "toolkit-hover", O.hover);
+            toggle_class(this.element, "aux-hover", O.hover);
         }
         if (I.dragging) {
             I.dragging = false;
-            toggle_class(this.element, "toolkit-dragging", O.dragging);
+            toggle_class(this.element, "aux-dragging", O.dragging);
         }
 
         if (I.active || I.disabled) {
@@ -1301,7 +1301,7 @@ export const ResponseHandle = define_class({
             // TODO: this is not very nice, we should really use the options
             // for that. 1) set "active" from the mouse handlers 2) set disabled instead
             // of active
-            toggle_class(this.element, "toolkit-disabled", !O.active || O.disabled);
+            toggle_class(this.element, "aux-disabled", !O.active || O.disabled);
         }
 
         var moved = I.validate("x", "y", "z", "mode", "active", "show_handle");

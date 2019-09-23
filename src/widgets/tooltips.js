@@ -34,10 +34,10 @@ function get_event(event) {
  * @class Tooltip
  */
 export function GlobalTooltip() {
-    var overlay = element("div", "toolkit-tooltip");
-    var table   = element("div", "toolkit-table");
-    var row     = element("div", "toolkit-row");
-    var cell    = element("div", "toolkit-cell");
+    var overlay = element("div", "aux-tooltip");
+    var table   = element("div", "aux-table");
+    var row     = element("div", "aux-row");
+    var cell    = element("div", "aux-cell");
 
     var tmp = row.cloneNode();
 
@@ -52,10 +52,10 @@ export function GlobalTooltip() {
     tmp = row.cloneNode();
 
     var entry = cell.cloneNode();
-    entry.className += " toolkit-entry";
+    entry.className += ".aux-entry";
 
     var entry_tl = cell.cloneNode();
-    entry_tl.className += " toolkit-tt-container";
+    entry_tl.className += ".aux-tt-container";
     entry_tl.appendChild(entry);
 
     tmp.appendChild(cell.cloneNode());
@@ -184,17 +184,17 @@ export function GlobalTooltip() {
     
     /**
      * @member {HTMLDivElement} Tooltip#element - The overlay containing the tooltip table.
-     *   Has class <code>toolkit-tooltip</code>.
+     *   Has class <code.aux-tooltip</code>.
      */
     this.element = overlay;
     /** 
      * @member {HTMLDivElement} Tooltip#_table - The table containing the tooltips.
-     *   Has class <code>toolkit-table</code>.
+     *   Has class <code.aux-table</code>.
      */
     this._table = table;
     /**
      * @member {HTMLDivElement} Tooltip#_entry - The element containing the tooltip text.
-     *   Has class <code>toolkit-entry</code>.
+     *   Has class <code.aux-entry</code>.
      */
     this._entry = entry;
 };

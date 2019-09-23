@@ -25,7 +25,7 @@ import { Button } from './button.js';
 function reset_delay_to () {
     window.clearTimeout(this.__delayed_to);
     this.__delayed_to = -1;
-    this.remove_class("toolkit-delayed");
+    this.remove_class("aux-delayed");
 }
 
 function toggle(O) {
@@ -39,10 +39,10 @@ function press_start() {
         this.__delayed_to = window.setTimeout((function (t) {
             return function () { press_start.call(t); }
         })(this), O.delay);
-        this.add_class("toolkit-delayed");
+        this.add_class("aux-delayed");
         return;
     }
-    this.remove_class("toolkit-delayed");
+    this.remove_class("aux-delayed");
     if (O.delay && this.__delayed_to >= 0) {
         toggle.call(this, O);
     }
@@ -162,7 +162,7 @@ export const Toggle = define_class({
      *   interpreted as a milliseconds timeout. When pressing a button longer than this timeout, it will
      *   be toggled until released, otherwise it will be toggled permanently.
      * @property {Integer} [options.delay=0] - Delay all actions for n milliseconds. While actions are
-     *   delayed, the widget has class <code>toolkit-delayed</code>. Use to force users to press the button
+     *   delayed, the widget has class <code.aux-delayed</code>. Use to force users to press the button
      *   for a certain amount of time before it actually gets toggled.
      * @property {String|Boolean} [options.icon_active=false] - An optional icon which is only displayed
      *   when the button toggle state is <code>true</code>. Please note that this option only works if `icon` is also set.
@@ -196,9 +196,9 @@ export const Toggle = define_class({
         Button.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} Toggle#element - The main DIV container.
-         *   Has class <code>toolkit-toggle</code>.
+         *   Has class <code.aux-toggle</code>.
          */
-        add_class(this.element, "toolkit-toggle");
+        add_class(this.element, "aux-toggle");
         this.__press_start_time = 0;
         this.__touch_id = false;
         this.__delayed_to = -1;

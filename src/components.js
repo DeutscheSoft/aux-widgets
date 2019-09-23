@@ -1,4 +1,5 @@
 export * from './components/button.js';
+export * from './components/buttonarray.js';
 export * from './components/clock.js';
 export * from './components/colorpicker.js';
 export * from './components/confirmbutton.js';

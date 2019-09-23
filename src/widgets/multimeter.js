@@ -108,9 +108,9 @@ export const MultiMeter = define_class({
         Container.prototype.initialize.call(this, options, true);
         /**
          * @member {HTMLDivElement} MultiMeter#element - The main DIV container.
-         *   Has class <code>toolkit-multi-meter</code>.
+         *   Has class <code.aux-multi-meter</code>.
          */
-        add_class(this.element, "toolkit-multi-meter");
+        add_class(this.element, "aux-multi-meter");
         this.meters = [];
         var O = this.options;
     },
@@ -126,27 +126,27 @@ export const MultiMeter = define_class({
                 remove_meter.call(this, M[M.length-1]);
             while (M.length < O.count)
                 add_meter.call(this, O);
-            E.setAttribute("class", E.getAttribute("class").replace(/toolkit-count-[0-9]*/g, ""));
+            E.setAttribute("class", E.getAttribute("class").replace(.aux-count-[0-9]*/g, ""));
             E.setAttribute("class", E.getAttribute("class").replace(/ +/g, " "));
-            add_class(E, "toolkit-count-" + O.count);
+            add_class(E, "aux-count-" + O.count);
         }
         
         if (I.layout || I.count) {
             I.count = I.layout = false;
-            remove_class(E, "toolkit-vertical", "toolkit-horizontal", "toolkit-left",
-                            "toolkit-right", "toolkit-top", "toolkit-bottom");
+            remove_class(E, "aux-vertical", "aux-horizontal", "aux-left",
+                            "aux-right", "aux-top", "aux-bottom");
             switch (O.layout) {
                 case "left":
-                    add_class(E, "toolkit-vertical", "toolkit-left");
+                    add_class(E, "aux-vertical", "aux-left");
                     break;
                 case "right":
-                    add_class(E, "toolkit-vertical", "toolkit-right");
+                    add_class(E, "aux-vertical", "aux-right");
                     break;
                 case "top":
-                    add_class(E, "toolkit-horizontal", "toolkit-top");
+                    add_class(E, "aux-horizontal", "aux-top");
                     break;
                 case "bottom":
-                    add_class(E, "toolkit-horizontal", "toolkit-bottom");
+                    add_class(E, "aux-horizontal", "aux-bottom");
                     break;
                 default:
                     throw new Error("unsupported layout");
@@ -180,7 +180,7 @@ ChildWidget(MultiMeter, "title", {
     create: Label,
     show: false,
     option: "title",
-    default_options: { "class" : "toolkit-title" },
+    default_options: { "class" : "aux-title" },
     map_options: { "title" : "label" },
     toggle_class: true,
 });

@@ -86,7 +86,7 @@ export function ChildWidget(widget, name, config) {
      *     added to the parent widget. Each entry is a mapping between
      *     the name of the event and the callback function.
      * @property {boolean} [config.toggle_class=false] - Defines if the parent widget
-     *     receives the class <code>toolkit-has-[name]</code> as soon as
+     *     receives the class <code.aux-has-[name]</code> as soon as
      *     the child element is shown.
      * @property {array<string>} [config.blacklist_options] - Array containing options names
      *     which are skipped on `inherit_options`.
@@ -160,7 +160,7 @@ export function ChildWidget(widget, name, config) {
             C.destroy();
             this[name] = null;
         }
-        if (config.toggle_class) toggle_class(this.element, "toolkit-has-"+name, show);
+        if (config.toggle_class) toggle_class(this.element, "aux-has-"+name, show);
         this.trigger_resize();
     });
     var set_cb = function(val, key) {
@@ -205,4 +205,3 @@ export function ChildWidget(widget, name, config) {
         p.options[key] = fixed || !!config.show;
     }
 }
-

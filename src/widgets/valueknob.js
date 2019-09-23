@@ -85,10 +85,10 @@ export const ValueKnob = define_class({
         var E;
         /**
          * @member {HTMLDivElement} ValueKnob#element - The main DIV container.
-         *   Has class <code>toolkit-valueknob</code>.
+         *   Has class <code.aux-valueknob</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "toolkit-valueknob");
+        add_class(E, "aux-valueknob");
 
         this.widgetize(E, true, true, true);
     },

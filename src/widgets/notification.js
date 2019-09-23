@@ -95,9 +95,9 @@ export const Notification = define_class({
     var O = this.options;
     /**
      * @member {HTMLDivElement} Notification#element - The main DIV container.
-     *   Has class <code>toolkit-notification</code>.
+     *   Has class <code.aux-notification</code>.
      */
-    add_class(this.element, "toolkit-notification");
+    add_class(this.element, "aux-notification");
     this._timeout = void(0);
     this.set("timeout", O.timeout);
   },
@@ -141,7 +141,7 @@ ChildWidget(Notification, "close", {
   },
   default_options: {
     "icon" : "close",
-    "class" : "toolkit-close",
+    "class" : "aux-close",
   },
 });
 

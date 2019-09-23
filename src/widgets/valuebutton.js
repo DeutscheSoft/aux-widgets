@@ -104,9 +104,9 @@ export const ValueButton = define_class({
         
         /**
          * @member {HTMLDivElement} ValueButton#element - The main DIV container.
-         *   Has class <code>toolkit-valuebutton</code>.
+         *   Has class <code.aux-valuebutton</code>.
          */
-        add_class(this.element, "toolkit-valuebutton");
+        add_class(this.element, "aux-valuebutton");
         
         /**
          * @member {DragValue} ValueButton#drag - The {@link DragValue} module.

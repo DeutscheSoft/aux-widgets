@@ -168,15 +168,15 @@ export const Select = define_class({
         Button.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} Select#element - The main DIV container.
-         *   Has class <code>toolkit-select</code>.
+         *   Has class <code.aux-select</code>.
          */
-        add_class(this.element, "toolkit-select");
+        add_class(this.element, "aux-select");
         
         /**
          * @member {HTMLListElement} Select#_list - A HTML list for displaying the entry titles.
-         *   Has class <code>toolkit-select-list</code>.
+         *   Has class <code.aux-select-list</code>.
          */
-        this._list = element("ul", "toolkit-select-list");
+        this._list = element("ul", "aux-select-list");
         this._global_touch_start = function (e) {
             if (this.__open && !this.__transition &&
                 !this._list.contains(e.target) &&
@@ -562,13 +562,13 @@ export const Select = define_class({
         if (I.selected || I.value) {
             I.selected = I.value = false;
             if (this._active) {
-                remove_class(this._active, "toolkit-active");
+                remove_class(this._active, "aux-active");
             }
             var entry = this.entries[O.selected];
 
             if (entry) {
                 this._active = entry.element;
-                add_class(entry.element, "toolkit-active");
+                add_class(entry.element, "aux-active");
             } else {
                 this._active = null;
             }
@@ -722,7 +722,7 @@ export const SelectEntry = define_class({
     initialize: function (options) {
         // FIXME: is this really correct, do we not end up with this.element
         // being that created by Label ?
-        var E = this.element = element("li", "toolkit-option");
+        var E = this.element = element("li", "aux-option");
         Label.prototype.initialize.call(this, options);
         this.set("title", this.options.title);
     },

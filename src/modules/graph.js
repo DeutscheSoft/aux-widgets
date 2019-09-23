@@ -221,10 +221,10 @@ export const Graph = define_class({
     
     initialize: function (options) {
         Widget.prototype.initialize.call(this, options);
-        /** @member {SVGPath} Graph#element - The SVG path. Has class <code>toolkit-graph</code> 
+        /** @member {SVGPath} Graph#element - The SVG path. Has class <code.aux-graph</code> 
          */
         this.element = this.widgetize(make_svg("path"), true, true, true);
-        add_class(this.element, "toolkit-graph");
+        add_class(this.element, "aux-graph");
         /** @member {Range} Graph#range_x - The range for the x axis. 
          */
         /** @member {Range} Graph#range_y - The range for the y axis.
@@ -248,9 +248,9 @@ export const Graph = define_class({
 
         if (I.mode) {
             I.mode = false;
-            remove_class(E, "toolkit-filled");
-            remove_class(E, "toolkit-outline");
-            add_class(E, O.mode === "line" ?  "toolkit-outline" : "toolkit-filled");
+            remove_class(E, "aux-filled");
+            remove_class(E, "aux-outline");
+            add_class(E, O.mode === "line" ?  "aux-outline" : "aux-filled");
         }
 
         if (I.validate("dots", "type", "width", "height")) {

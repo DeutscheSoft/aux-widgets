@@ -1,0 +1,106 @@
+/*
+ * This file is part of Toolkit.
+ *
+ * Toolkit is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * Toolkit is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU General
+ * Public License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ */
+html.aux-cursor-default,
+html.aux-cursor-default * {
+    cursor:default !important;
+}
+html.aux-cursor-crosshair,
+html.aux-cursor-crosshair * {
+    cursor:crosshair !important;
+}
+html.aux-cursor-pointer,
+html.aux-cursor-pointer * {
+    cursor:pointer !important;
+}
+html.aux-cursor-move,
+html.aux-cursor-move * {
+    cursor:move !important;
+}
+html.aux-cursor-text,
+html.aux-cursor-text * {
+    cursor:text !important;
+}
+html.aux-cursor-wait,
+html.aux-cursor-wait * {
+    cursor:wait !important;
+}
+html.aux-cursor-help,
+html.aux-cursor-help * {
+    cursor:help !important;
+}
+html.aux-cursor-n-resize,
+html.aux-cursor-n-resize * {
+    cursor:n-resize !important;
+}
+html.aux-cursor-ne-resize,
+html.aux-cursor-ne-resize * {
+    cursor:ne-resize !important;
+}
+html.aux-cursor-e-resize,
+html.aux-cursor-e-resize * {
+    cursor:e-resize !important;
+}
+html.aux-cursor-se-resize,
+html.aux-cursor-se-resize * {
+    cursor:se-resize !important;
+}
+html.aux-cursor-s-resize,
+html.aux-cursor-s-resize * {
+    cursor:s-resize !important;
+}
+html.aux-cursor-sw-resize,
+html.aux-cursor-sw-resize * {
+    cursor:sw-resize !important;
+}
+html.aux-cursor-w-resize,
+html.aux-cursor-w-resize * {
+    cursor:w-resize !important;
+}
+html.aux-cursor-nw-resize,
+html.aux-cursor-nw-resize * {
+    cursor:nw-resize !important;
+}
+html.aux-cursor-progress,
+html.aux-cursor-progress * {
+    cursor:progress !important;
+}
+html.aux-cursor-not-allowed,
+html.aux-cursor-not-allowed * {
+    cursor:not-allowed !important;
+}
+html.aux-cursor-no-drop,
+html.aux-cursor-no-drop * {
+    cursor:no-drop !important;
+}
+html.aux-cursor-vertical-text,
+html.aux-cursor-vertical-text * {
+    cursor:vertical-text !important;
+}
+html.aux-cursor-all-scroll,
+html.aux-cursor-all-scroll * {
+    cursor:all-scroll !important;
+}
+html.aux-cursor-col-resize,
+html.aux-cursor-col-resize * {
+    cursor:col-resize !important;
+}
+html.aux-cursor-row-resize,
+html.aux-cursor-row-resize * {
+    cursor:row-resize !important;
+}

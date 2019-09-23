@@ -62,9 +62,9 @@ export const Root = define_class({
         Container.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} Root#element - The main DIV container.
-         *   Has class <code>toolkit-root</code>.
+         *   Has class <code.aux-root</code>.
          */
-        add_class(this.element, "toolkit-root");
+        add_class(this.element, "aux-root");
         this._resize_cb = resized.bind(this);
         this._visibility_cb = visibility_change.bind(this);
         this.resize_event = false;

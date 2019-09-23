@@ -158,7 +158,7 @@ function create_dom_nodes(data, create) {
 function create_label(value, position) {
     var O = this.options;
     var elem = document.createElement("SPAN");
-    elem.className = "toolkit-label";
+    elem.className = "aux-label";
 
     if (vert(O)) {
         elem.style.bottom = position.toFixed(1) + "px";
@@ -169,18 +169,18 @@ function create_label(value, position) {
     set_content(elem, O.labels(value));
 
     if (get_base(O) === value)
-        add_class(elem, "toolkit-base");
+        add_class(elem, "aux-base");
     else if (O.max === value)
-        add_class(elem, "toolkit-max");
+        add_class(elem, "aux-max");
     else if (O.min === value)
-        add_class(elem, "toolkit-min");
+        add_class(elem, "aux-min");
 
     return elem;
 }
 function create_dot(value, position) {
     var O = this.options;
     var elem = document.createElement("DIV");
-    elem.className = "toolkit-dot";
+    elem.className = "aux-dot";
     
     if (O.layout === "left" || O.layout === "right") {
         elem.style.bottom = Math.round(position + 0.5) + "px";
@@ -189,11 +189,11 @@ function create_dot(value, position) {
     }
     
     if (get_base(O) === value)
-        add_class(elem, "toolkit-base");
+        add_class(elem, "aux-base");
     else if (O.max === value)
-        add_class(elem, "toolkit-max");
+        add_class(elem, "aux-max");
     else if (O.min === value)
-        add_class(elem, "toolkit-min");
+        add_class(elem, "aux-min");
 
     return elem;
 }
@@ -215,9 +215,9 @@ function handle_end(O, labels, i) {
     var v = labels.values[i];
 
     if (v === O.min) {
-        add_class(node, "toolkit-min");
+        add_class(node, "aux-min");
     } else if (v === O.max) {
-        add_class(node, "toolkit-max");
+        add_class(node, "aux-max");
     } else return;
 }
 function generate_scale(from, to, include_from, show_to) {
@@ -276,7 +276,7 @@ function generate_scale(from, to, include_from, show_to) {
         create_dom_nodes.call(this, labels, create_label.bind(this));
 
         if (labels.values.length && labels.values[0] === get_base(O)) {
-            add_class(labels.nodes[0], "toolkit-base");
+            add_class(labels.nodes[0], "aux-base");
         }
     }
 
@@ -290,7 +290,7 @@ function generate_scale(from, to, include_from, show_to) {
             };
             create_dom_nodes.call(this, markers, create_dot.bind(this));
             for (var i = 0; i < markers.nodes.length; i++)
-                add_class(markers.nodes[i], "toolkit-marker");
+                add_class(markers.nodes[i], "aux-marker");
         }
 
         if (O.show_labels && labels.values.length > 1) {
@@ -325,7 +325,7 @@ function mark_markers(labels, dots) {
         if (a[i] < b[j]) i++;
         else if (a[i] > b[j]) j++;
         else {
-            add_class(nodes[j], "toolkit-marker");
+            add_class(nodes[j], "aux-marker");
             i++;
             j++;
         }
@@ -370,7 +370,7 @@ function mark_markers(labels, dots) {
  *   for the labels to be drawn at. The values must be sorted in ascending order. <code>false</code> disables
  *   fixed labels.
  * @property {Boolean} [options.show_markers=true] - If true, every dot which is located at the same
- *   position as a label has the <code>toolkit-marker</code> class set.
+ *   position as a label has the <code.aux-marker</code> class set.
  * @property {Number|Boolean} [options.pointer=false] - The value to set the pointers position to.
  * @property {Number|Boolean} [options.bar=false] - The value to set the bars height to.
  */
@@ -423,10 +423,10 @@ export const Scale = define_class({
         var E;
         Widget.prototype.initialize.call(this, options);
         /**
-         * @member {HTMLDivElement} Scale#element - The main DIV element. Has class <code>toolkit-scale</code> 
+         * @member {HTMLDivElement} Scale#element - The main DIV element. Has class <code.aux-scale</code> 
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "toolkit-scale");
+        add_class(E, "aux-scale");
         this.element = this.widgetize(E, true, true, true);
     },
 
@@ -439,20 +439,20 @@ export const Scale = define_class({
 
         if (I.layout) {
             I.layout = false;
-            remove_class(E, "toolkit-vertical", "toolkit-horizontal", "toolkit-top",
-                            "toolkit-bottom", "toolkit-right", "toolkit-left");
+            remove_class(E, "aux-vertical", "aux-horizontal", "aux-top",
+                            "aux-bottom", "aux-right", "aux-left");
             switch (O.layout) {
             case "left":
-                add_class(E, "toolkit-vertical", "toolkit-left");
+                add_class(E, "aux-vertical", "aux-left");
                 break;
             case "right":
-                add_class(E, "toolkit-vertical", "toolkit-right");
+                add_class(E, "aux-vertical", "aux-right");
                 break;
             case "top":
-                add_class(E, "toolkit-horizontal", "toolkit-top");
+                add_class(E, "aux-horizontal", "aux-top");
                 break;
             case "bottom":
-                add_class(E, "toolkit-horizontal", "toolkit-bottom");
+                add_class(E, "aux-horizontal", "aux-bottom");
                 break;
             default:
                 warn("Unsupported layout setting:", O.layout);
@@ -461,7 +461,7 @@ export const Scale = define_class({
 
         if (I.reverse) {
           /* NOTE: reverse will be validated below */
-          toggle_class(E, "toolkit-reverse", O.reverse);
+          toggle_class(E, "aux-reverse", O.reverse);
         }
 
         if (I.validate("base", "show_base", "gap_labels", "min", "show_min", "division", "max", "show_markers",
