@@ -147,7 +147,7 @@ export const ButtonArray = define_class({
                  * @param {Button} button - The {@link Button} which was clicked.
                  * @param {int} id - the ID of the clicked {@link Button}.
                  */
-                this.fire_event("changed", button, value);
+                this.emit("changed", button, value);
             }
         },
     },
@@ -186,10 +186,10 @@ export const ButtonArray = define_class({
          */
         this.next = new Button({class: "aux-next", dblclick:400});
         
-        this.prev.add_event("click", prev_clicked.bind(this));
-        this.prev.add_event("doubleclick", prev_dblclicked.bind(this));
-        this.next.add_event("click", next_clicked.bind(this));
-        this.next.add_event("doubleclick", next_dblclicked.bind(this));
+        this.prev.on("click", prev_clicked.bind(this));
+        this.prev.on("doubleclick", prev_dblclicked.bind(this));
+        this.next.on("click", next_clicked.bind(this));
+        this.next.on("doubleclick", next_dblclicked.bind(this));
         
         /**
          * @member {HTMLDivElement} ButtonArray#_prev - The HTMLDivElement of the previous {@link Button}.
@@ -281,7 +281,7 @@ export const ButtonArray = define_class({
         this.add_child(b);
 
         this.trigger_resize();
-        b.add_event("click", button_clicked.bind(this, b));
+        b.on("click", button_clicked.bind(this, b));
         /**
          * A {@link Button} was added to the ButtonArray.
          *
@@ -291,7 +291,7 @@ export const ButtonArray = define_class({
          */
         if (b === this.current())
             b.set("state", true);
-        this.fire_event("added", b);
+        this.emit("added", b);
 
         return b;
     },
@@ -315,7 +315,7 @@ export const ButtonArray = define_class({
          * 
          * @param {Button} button - The {@link Button} instance which was removed.
          */
-        this.fire_event("removed", this.buttons[button]);
+        this.emit("removed", this.buttons[button]);
         if (this.current() && button <= this.options.show) {
             this.options.show --;
             this.invalid.show = true;

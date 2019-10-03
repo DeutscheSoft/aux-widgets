@@ -534,7 +534,7 @@ export const Chart = define_class({
         if (!g.options.range_y) g.set("range_y", this.range_y);
 
         this.graphs.push(g);
-        g.add_event("set", function (key, value, obj) {
+        g.on("set", function (key, value, obj) {
             if (key === "color" || key === "class" || key === "key") {
                 this.invalid.graphs = true;
                 this.trigger_draw();
@@ -549,7 +549,7 @@ export const Chart = define_class({
          * @param {Graph} graph - The {@link Graph} which was added.
          * @param {int} id - The ID of the added {@link Graph}.
          */
-        this.fire_event("graphadded", g, this.graphs.length - 1);
+        this.emit("graphadded", g, this.graphs.length - 1);
 
         this.invalid.graphs = true;
         this.trigger_draw();
@@ -577,7 +577,7 @@ export const Chart = define_class({
              * @param {Graph} graph - The {@link Graph} which was removed.
              * @param {int} id - The ID of the removed {@link Graph}.
              */
-            this.fire_event("graphremoved", g, i);
+            this.emit("graphremoved", g, i);
             g.destroy();
             this.graphs.splice(i, 1);
             Widget.prototype.remove_child.call(this, g);
@@ -599,7 +599,7 @@ export const Chart = define_class({
          * 
          * @event Chart#emptied
          */
-        this.fire_event("emptied");
+        this.emit("emptied");
     },
     
     /*
@@ -636,7 +636,7 @@ export const Chart = define_class({
          * 
          * @event ResponseHandler#handleadded
          */
-        this.fire_event("handleadded", h);
+        this.emit("handleadded", h);
         return h;
     },
     /*
@@ -674,7 +674,7 @@ export const Chart = define_class({
                  * 
                  * @event ResponseHandler#handleremoved
                  */
-                this.fire_event("handleremoved");
+                this.emit("handleremoved");
                 break;
             }
         }
@@ -700,7 +700,7 @@ export const Chart = define_class({
              * 
              * @event ResponseHandler#emptied
              */
-            this.fire_event("emptied");
+            this.emit("emptied");
         }
     },
     

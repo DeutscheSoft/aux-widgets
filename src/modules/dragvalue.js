@@ -27,8 +27,8 @@ function start_drag(value) {
     if (!value) return;
     var O = this.options;
     this.start_pos = O.range.call(this).val2px(O.get.call(this));
-    this.fire_event("startdrag", this.drag_state.start);
-    if (O.events) O.events.call(this).fire_event("startdrag", this.drag_state.start);
+    this.emit("startdrag", this.drag_state.start);
+    if (O.events) O.events.call(this).emit("startdrag", this.drag_state.start);
 }
 
 /* This version integrates movements, instead
@@ -124,14 +124,14 @@ function movecapture(state) {
         movecapture_abs.call(this, O, range, state);
     }
 
-    this.fire_event("dragging", state.current);
-    if (O.events) O.events.call(this).fire_event("dragging", state.current);
+    this.emit("dragging", state.current);
+    if (O.events) O.events.call(this).emit("dragging", state.current);
 }
 
 function stop_drag(state, ev) {
-    this.fire_event("stopdrag", ev);
+    this.emit("stopdrag", ev);
     var O = this.options;
-    if (O.events) O.events.call(this).fire_event("stopdrag", ev);
+    if (O.events) O.events.call(this).emit("stopdrag", ev);
 }
 
 function angle_diff(a, b) {

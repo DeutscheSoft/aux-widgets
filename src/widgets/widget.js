@@ -57,7 +57,7 @@ function redraw(fun) {
      * 
      * @event Widget#redraw
      */
-    this.fire_event("redraw");
+    this.emit("redraw");
     fun.call(this);
 }
 function resize() {
@@ -80,7 +80,7 @@ function dblclick (e) {
     var d = + new Date();
     if (this.__lastclick + dbc > d) {
         e.lastclick = this.__lastclick;
-        this.fire_event("doubleclick", e);
+        this.emit("doubleclick", e);
         this.__lastclick = 0;
     } else {
         this.__lastclick = d;
@@ -287,7 +287,7 @@ export const Widget = define_class({
          * 
          * @event Widget#resize
          */
-        this.fire_event("resize");
+        this.emit("resize");
 
         if (this._options.resized)
             this.set("resized", true);
@@ -298,7 +298,7 @@ export const Widget = define_class({
          * @event Widget#resized
          */
         if (this.has_event_listeners("resized")) {
-            S.after_frame(this.fire_event.bind(this, "resized"));
+            S.after_frame(this.emit.bind(this, "resized"));
         }
     },
 
@@ -323,7 +323,7 @@ export const Widget = define_class({
          * 
          * @event Widget#initialized
          */
-        this.fire_event("initialized");
+        this.emit("initialized");
         this.trigger_draw();
     },
     draw_once: function(fun) {
@@ -396,7 +396,7 @@ export const Widget = define_class({
           warn("destroy called twice on ", this);
           return;
         }
-        this.fire_event("destroy");
+        this.emit("destroy");
 
         this.disable_draw();
         if (this.parent) this.parent.remove_child(this);
@@ -425,7 +425,7 @@ export const Widget = define_class({
          * 
          * @param {HTMLElement} element - The element all native DOM events are delegated to.
          */
-        this.fire_event("delegated", element);
+        this.emit("delegated", element);
         return element;
     },
     add_class: function (cls) {
@@ -450,7 +450,7 @@ export const Widget = define_class({
          * 
          * @param {HTMLElement} element - The element which receives all further class changes.
          */
-        this.fire_event("classified", element);
+        this.emit("classified", element);
         return element;
     },
     set_style: function (name, value) {
@@ -485,7 +485,7 @@ export const Widget = define_class({
          * 
          * @param {HTMLElement} element - The element which receives all further style changes.
          */
-        this.fire_event("stylized", element);
+        this.emit("stylized", element);
         return element;
     },
     widgetize: function (element, delegate, classify, stylize) {
@@ -531,7 +531,7 @@ export const Widget = define_class({
          * 
          * @param {HTMLElement} element - The element which got widgetized.
          */
-        this.fire_event("widgetized", element);
+        this.emit("widgetized", element);
         return element;
     },
     
@@ -584,8 +584,8 @@ export const Widget = define_class({
          * 
          * @event Widget#show
          */
-        this.fire_event("show");
-        this.fire_event("visibility", true);
+        this.emit("show");
+        this.emit("visibility", true);
         var C = this.children;
         if (C) for (var i = 0; i < C.length; i++) C[i].enable_draw();
     },
@@ -615,8 +615,8 @@ export const Widget = define_class({
          * 
          * @event Widget#visibility
          */
-        this.fire_event("hide");
-        this.fire_event("visibility", false);
+        this.emit("hide");
+        this.emit("visibility", false);
         var C = this.children;
         if (C) for (var i = 0; i < C.length; i++) C[i].disable_draw();
     },

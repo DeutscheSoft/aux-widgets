@@ -222,8 +222,8 @@ export const Grid = define_class({
             this.invalid.range_y = true;
             this.trigger_draw();
         }.bind(this);
-        this.range_x.add_event("set", this.invalidate_ranges);
-        this.range_y.add_event("set", this.invalidate_ranges);
+        this.range_x.on("set", this.invalidate_ranges);
+        this.range_y.on("set", this.invalidate_ranges);
     },
     
     redraw: function () {
@@ -237,8 +237,8 @@ export const Grid = define_class({
         Widget.prototype.redraw.call(this);
     },
     destroy: function () {
-        this.range_x.remove_event("set", this.invalidate_ranges);
-        this.range_y.remove_event("set", this.invalidate_ranges);
+        this.range_x.off("set", this.invalidate_ranges);
+        this.range_y.off("set", this.invalidate_ranges);
         Widget.prototype.destroy.call(this);
     },
     // GETTER & SETTER
@@ -255,7 +255,7 @@ export const Grid = define_class({
                  * @param {Array} grid_x - The grid elements for x axis.
                  * @param {Array} grid_y - The grid elements for y axis.
                  */
-                this.fire_event("gridchanged", this.options.grid_x, this.options.grid_y);
+                this.emit("gridchanged", this.options.grid_x, this.options.grid_y);
                 break;
             case "width":
                 this.range_x.set("basis", value);

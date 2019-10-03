@@ -66,7 +66,7 @@ export const TreeItem = define_class({
         
         this.collapse = new Button({"class":"aux-collapse"});
         this.append_child(this.collapse);
-        this.collapse.add_event("click", toggle_collapsed.bind(this));
+        this.collapse.on("click", toggle_collapsed.bind(this));
         
         if (this.options.collapsable && this.options.collapsed) {
           this.list.element.style.height = "0px";

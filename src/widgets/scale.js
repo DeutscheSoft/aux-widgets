@@ -526,7 +526,7 @@ export const Scale = define_class({
                  * @param {string} key - The name of the option which changed the {@link Scale}.
                  * @param {mixed} value - The value of the option.
                  */
-                this.fire_event("scalechanged", key, value)
+                this.emit("scalechanged", key, value)
                 break;
         }
     }

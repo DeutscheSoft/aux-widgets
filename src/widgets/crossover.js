@@ -202,14 +202,14 @@ export const Crossover = define_class({
         type = type || CrossoverBand;
         this.add_graph();
         var r = Equalizer.prototype.add_band.call(this, options, type);
-        r.add_event("set_freq", this.set_freq_cb);
+        r.on("set_freq", this.set_freq_cb);
         limit_bands.call(this);
         return r;
     },
     remove_band: function (band) {
         this.remove_graph(this.graphs[this.graphs.length-1]);
         var r = Equalizer.prototype.remove_band.call(this, options);
-        r.remove_event("set_freq", this.set_freq_cb);
+        r.off("set_freq", this.set_freq_cb);
         limit_bands.call(this);
         return r;
     },

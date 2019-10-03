@@ -102,9 +102,9 @@ function fire_event(title, event) {
     var O = this.options;
     // fire an event on this drag object and one with more
     // information on the draggified element
-    this.fire_event(title, this, event);
+    this.emit(title, this, event);
     var e = O.events.call(this);
-    if (e) e.fire_event(title, event, O.get.call(this), O.node, this, O.range.call(this));
+    if (e) e.emit(title, event, O.get.call(this), O.node, this, O.range.call(this));
 }
 /**
  * ScrollValue enables the scroll wheel for setting a value of an

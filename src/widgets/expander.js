@@ -115,7 +115,7 @@ function update_visibility() {
     }
 
     if (value) {
-        this.fire_event("expand");
+        this.emit("expand");
         /**
          * Is fired when the expander expands.
          * 
@@ -127,7 +127,7 @@ function update_visibility() {
          * 
          * @event Expander#collapse
          */
-        this.fire_event("collapse");
+        this.emit("collapse");
     }
 }
 var expander_groups = { };
@@ -231,13 +231,13 @@ export const Expander = define_class({
     add_child: function(child) {
         Container.prototype.add_child.call(this, child);
         if (!is_visible.call(this, child)) this.hide_child(child);
-        child.add_event("set__expanded", this._update_visibility);
-        child.add_event("set__collapsed", this._update_visibility);
+        child.on("set__expanded", this._update_visibility);
+        child.on("set__collapsed", this._update_visibility);
     },
     remove_child: function(child) {
         Container.prototype.remove_child.call(this, child);
-        child.remove_event("set__expanded", this._update_visibility);
-        child.remove_event("set__collapsed", this._update_visibility);
+        child.off("set__expanded", this._update_visibility);
+        child.off("set__collapsed", this._update_visibility);
     },
     set: function(key, value) {
         var group;

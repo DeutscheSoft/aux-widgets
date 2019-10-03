@@ -272,7 +272,7 @@ export const Equalizer = define_class({
         }
         
         this.bands.push(b);
-        b.add_event("set", invalidate_bands.bind(this));
+        b.on("set", invalidate_bands.bind(this));
         /**
          * Is fired when a new band was added.
          * 
@@ -280,7 +280,7 @@ export const Equalizer = define_class({
          * 
          * @param {EqBand} band - The {@link EqBand} which was added.
          */
-        this.fire_event("bandadded", b);
+        this.emit("bandadded", b);
         if (this.options.show_bands)
             this.add_child(b);
         invalidate_bands.call(this);
@@ -322,7 +322,7 @@ export const Equalizer = define_class({
                  * 
                  * @param {EqBand} band - The {@link EqBand} which was removed.
                  */
-                this.fire_event("bandremoved", h);
+                this.emit("bandremoved", h);
                 invalidate_bands.call(this);
                 break;
             }
@@ -346,7 +346,7 @@ export const Equalizer = define_class({
          * 
          * @event Equalizer#emptied
          */
-        this.fire_event("emptied");
+        this.emit("emptied");
         invalidate_bands.call(this);
     },
     _draw_graph: draw_graph,

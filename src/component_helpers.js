@@ -159,7 +159,7 @@ class ComponentBase extends HTMLElement
         };
 
         handlers.set(type, cb);
-        this.widget.add_event(type, cb);
+        this.widget.on(type, cb);
       }
     }
 

@@ -1,17 +1,17 @@
 import { Base, Widget, WidgetComponent } from '../src/index.js';
 
 describe('Events', () => {
-  it('add_event()', (done) => {
+  it('addEventListener()', (done) => {
     const o = new Base();
-    o.add_event("foo", done);
-    o.fire_event("foo");
+    o.addEventListener("foo", done);
+    o.dispatchEvent("foo");
   });
-  it('remove_event()', (done) => {
+  it('removeEventListener()', (done) => {
     const o = new Base();
     const cb = () => { done(new Error('fail.')); };
-    o.add_event("foo", cb);
-    o.remove_event("foo", cb);
-    o.fire_event("foo");
+    o.addEventListener("foo", cb);
+    o.removeEventListener("foo", cb);
+    o.dispatchEvent("foo");
     done();
   });
   it('subscribe()', () => {
@@ -23,20 +23,20 @@ describe('Events', () => {
     const sub = o.subscribe("foo", cb);
 
     // check that subscription works
-    o.fire_event("foo");
+    o.dispatchEvent("foo");
     if (!called) throw new Error("not called");
 
     // check that unsubscribe works
     called = false;
     sub();
-    o.fire_event("foo");
+    o.dispatchEvent("foo");
     if (called) throw new Error("called");
 
     // check that unsubscribe can be called twice
     called = false;
     const sub2 = o.subscribe("foo", cb);
     sub();
-    o.fire_event("foo");
+    o.dispatchEvent("foo");
     if (!called) throw new Error("not called");
     sub2();
 

@@ -43,7 +43,7 @@ function enable_draw_self() {
      * 
      * @event Container#show
      */
-    this.fire_event("show");
+    this.emit("show");
 }
 function enable_draw_children() {
     var C = this.children;
@@ -62,7 +62,7 @@ function disable_draw_self() {
      * 
      * @event Container#hide
      */
-    this.fire_event("hide");
+    this.emit("hide");
 }
 function disable_draw_children() {
     var C = this.children;

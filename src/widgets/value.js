@@ -48,7 +48,7 @@ function value_clicked(e) {
      * 
      * @param {number} value - The value of the widget.
      */
-    this.fire_event("valueclicked", O.value);
+    this.emit("valueclicked", O.value);
 }
 function value_typing(e) {
     var O = this.options;
@@ -65,7 +65,7 @@ function value_typing(e) {
              * 
              * @param {string} value - The new value of the widget.
              */
-            this.fire_event("valueescape", O.value);
+            this.emit("valueescape", O.value);
             break;
         case 13:
             // ENTER
@@ -78,7 +78,7 @@ function value_typing(e) {
              * 
              * @param {string} value - The new value of the widget.
              */
-            this.fire_event("valueset", O.value);
+            this.emit("valueset", O.value);
             
             e.preventDefault();
             return false;
@@ -92,7 +92,7 @@ function value_typing(e) {
      * @param {DOMEvent} event - The native DOM event.
      * @param {string} value - The new value of the widget.
      */
-    this.fire_event("valuetyping", e, O.value);
+    this.emit("valuetyping", e, O.value);
 }
 function value_input() {
     var O = this.options;
@@ -113,7 +113,7 @@ function value_done() {
      * 
      * @param {string} value - The new value of the widget.
      */
-    this.fire_event("valuedone", this.options.value);
+    this.emit("valuedone", this.options.value);
     this.invalid.value = true;
     this.trigger_draw();
 }

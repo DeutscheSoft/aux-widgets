@@ -90,9 +90,9 @@ var clicked = function (e) {
   var T = this.__temp;
   var O = this.options;
   if (!O.confirm) {
-    this.fire_event("confirmed");
+    this.emit("confirmed");
   } else if (O.state && Date.now() > T.click + O.interrupt) {
-    this.fire_event("confirmed");
+    this.emit("confirmed");
     state_reset.call(this);
   } else if (!O.state) {
     state_set.call(this);
@@ -141,7 +141,7 @@ export const ConfirmButton = define_class({
   initialize: function (options) {
     Button.prototype.initialize.call(this, options);
     add_class(this.element, "aux-confirm-button");
-    this.add_event("click", clicked.bind(this));
+    this.on("click", clicked.bind(this));
     this.__temp = {
       label: "",
       icon: "",

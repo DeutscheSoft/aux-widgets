@@ -113,7 +113,7 @@ function native_handler(ev) {
      * * mouseover and error are cancelled with true
      * * beforeunload is cancelled with null
      */
-    if (this.fire_event(ev.type, ev) === false) return false;
+    if (this.emit(ev.type, ev) === false) return false;
 }
 function has_event_listeners(event) {
     var ev = this.__events;
@@ -136,7 +136,7 @@ export const Base = define_class({
         this.__event_target = null;
         this.__native_handler = native_handler.bind(this);
         this.set_options(options);
-        this.fire_event("initialize");
+        this.emit("initialize");
     },
     get_option_type: function(name) {
       return this._options[name];
@@ -147,7 +147,7 @@ export const Base = define_class({
          * 
          * @event Base#initialized
          */
-        this.fire_event("initialized");
+        this.emit("initialized");
     },
     /**
      * Destroys all event handlers and the options object.
@@ -200,7 +200,7 @@ export const Base = define_class({
             this.options = Object.assign({}, o);
         }
         for (key in this.options) if (key.startsWith("on")) {
-            this.add_event(key.substr(2).toLowerCase(), this.options[key]);
+            this.on(key.substr(2).toLowerCase(), this.options[key]);
             delete this.options[key];
         }
     },
@@ -240,7 +240,7 @@ export const Base = define_class({
          * @param {mixed} value - The value of the option.
          */
         if (this.has_event_listeners("set"))
-            this.fire_event("set", key, value);
+            this.emit("set", key, value);
         /**
          * Is fired when an option is set.
          * 
@@ -250,7 +250,7 @@ export const Base = define_class({
          */
         e = "set_"+key;
         if (this.has_event_listeners(e))
-            this.fire_event(e, value, key);
+            this.emit(e, value, key);
 
         return value;
     },
@@ -270,9 +270,9 @@ export const Base = define_class({
      * @emits Base#useraction
      */
     userset: function(key, value) {
-        if (false === this.fire_event("userset", key, value)) return false;
+        if (false === this.emit("userset", key, value)) return false;
         value = this.set(key, value);
-        this.fire_event("useraction", key, value);
+        this.emit("useraction", key, value);
         return true;
     },
     /**
@@ -300,7 +300,7 @@ export const Base = define_class({
          * @param {HTMLElement|Array} old_element - The element which previously
          *      received all native DOM events.
          */
-        this.fire_event("delegated", element, old_target);
+        this.emit("delegated", element, old_target);
 
         if (old_target) remove_native_events.call(this, old_target);
         if (element) add_native_events.call(this, element);
@@ -312,14 +312,12 @@ export const Base = define_class({
     /**
      * Register an event handler.
      *
-     * @method Base#add_event
+     * @method Base#addEventListener
      * 
      * @param {string} event - The event descriptor.
      * @param {Function} func - The function to call when the event happens.
-     * @param {boolean} prevent - Set to true if the event should prevent the default behavior.
-     * @param {boolean} stop - Set to true if the event should stop bubbling up the tree.
      */
-    add_event: function (event, func) {
+    on: function (event, func) {
         var ev;
 
         if (typeof event !== "string")
@@ -338,7 +336,7 @@ export const Base = define_class({
     },
     addEventListener: function(event, func)
     {
-        return this.add_event(event, func);
+        return this.on(event, func);
     },
     hasEventListener: function(event, func)
     {
@@ -381,7 +379,7 @@ export const Base = define_class({
      * @param {string} event - The event descriptor.
      * @param {Function} fun - The function to remove.
      */
-    remove_event: function (event, fun) {
+    off: function (event, fun) {
         remove_event(this.__events, event, fun);
 
         // remove native DOM event listener from __event_target
@@ -392,17 +390,17 @@ export const Base = define_class({
     },
     removeEventListener: function(event, func)
     {
-      return this.remove_event(event, func);
+      return this.off(event, func);
     },
     /**
      * Fires an event.
      *
-     * @method Base#fire_event
+     * @method Base#dispatchEvent
      * 
      * @param {string} event - The event descriptor.
      * @param {...*} args - Event arguments.
      */
-    fire_event: function (event) {
+    emit: function (event) {
         var ev;
         var args;
         var v;
@@ -429,9 +427,9 @@ export const Base = define_class({
             if (v !== void(0)) return v;
         }
     },
-    emit: function(event, ...args)
+    dispatchEvent: function(event, ...args)
     {
-      return this.fire_event(event, ...args);
+      return this.emit(event, ...args);
     },
     /**
      * Test if the event descriptor has some handler functions in the queue.

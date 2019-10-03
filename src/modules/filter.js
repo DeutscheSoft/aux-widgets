@@ -312,7 +312,7 @@ function reset() {
      * 
      * @event Filter#reset
      */
-    this.fire_event("reset");
+    this.emit("reset");
 }
 
 export const Filter = define_class({

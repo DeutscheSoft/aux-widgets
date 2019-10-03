@@ -140,7 +140,7 @@ export const FrequencyResponse = define_class({
         // do not overwrite custom grids, please
         if (this.options.db_grid && !this.options.grid_y.length)
             this.set("db_grid", this.options.db_grid);
-        this.range_y.add_event("set", function (key, value) {
+        this.range_y.on("set", function (key, value) {
             if (key === "scale")
                 this.options.scale = value;
         }.bind(this));

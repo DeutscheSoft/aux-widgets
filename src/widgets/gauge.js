@@ -159,7 +159,7 @@ export const Gauge = define_class({
                      * 
                      * @event Gauge#titledrawn
                      */
-                    this.fire_event("titledrawn");
+                    this.emit("titledrawn");
                 }.bind(this));
             }
         }

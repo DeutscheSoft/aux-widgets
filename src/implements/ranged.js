@@ -543,7 +543,7 @@ function set_cb(key, value) {
     case "reverse":
     case "basis":
         update_transformation.call(this);
-        this.fire_event("rangedchanged");
+        this.emit("rangedchanged");
         break;
     }
 }

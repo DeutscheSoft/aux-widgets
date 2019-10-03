@@ -23,7 +23,7 @@ import { TagNode } from './tagnode.js';
 import { ColorPickerDialog } from './colorpickerdialog.js';
 
 function remove (e, node) {
-    this.fire_event("remove", node);
+    this.emit("remove", node);
     if (!this.options.async)
         this.remove_node(node);
 }
@@ -37,7 +37,7 @@ function colorize (e) {
             if (!that.options.async)
                 that.userset("color", hex);
             else
-                that.fire_event("userset", "color", hex);
+                that.emit("userset", "color", hex);
             
         },
         container: document.body,
@@ -101,7 +101,7 @@ export const Tag = define_class({
         for (var i = 0; i < this.nodes.length; i++) {
             if (this.nodes[i] == node) {
                 node.set("container", false);
-                this.fire_event("noderemoved", node);
+                this.emit("noderemoved", node);
                 this.nodes.splice(i, 1);
                 node.destroy();
                 return true;
@@ -114,10 +114,10 @@ export const Tag = define_class({
         options.color = O.color;
         options.tag = O.tag;
         var node = new O.node_class(options, this);
-        node.add_event("colorize", colorize.bind(this));
-        node.add_event("remove", remove.bind(this));
+        node.on("colorize", colorize.bind(this));
+        node.on("remove", remove.bind(this));
         this.nodes.push(node);
-        this.fire_event("nodecreated", node);
+        this.emit("nodecreated", node);
         return node;
     },
     set: function (key, value) {

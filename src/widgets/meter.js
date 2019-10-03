@@ -216,7 +216,7 @@ export const Meter = define_class({
              * 
              * @param {string} label - The label of the {@link Meter}.
              */
-            this.fire_event("labelchanged", value);
+            this.emit("labelchanged", value);
         },
         set_title: function(value) {
             /**
@@ -227,7 +227,7 @@ export const Meter = define_class({
              * 
              * @param {string} title - The title of the {@link Meter}.
              */
-            this.fire_event("titlechanged", value);
+            this.emit("titlechanged", value);
         },
         set_segment: function(value) {
             // what is this supposed to do?
@@ -243,7 +243,7 @@ export const Meter = define_class({
              * 
              * @param {number} value - The value of the {@link Meter}.
              */
-            this.fire_event("valuechanged", value);
+            this.emit("valuechanged", value);
         },
         set_base: function(value) {
             if (value === false) {
@@ -258,7 +258,7 @@ export const Meter = define_class({
              * 
              * @param {number} base - The value of the base.
              */
-            this.fire_event("basechanged", value);
+            this.emit("basechanged", value);
         },
         rangedchanged: function() {
             /* redraw the gradient, if we have any */
@@ -515,7 +515,7 @@ ChildWidget(Meter, "scale", {
         set: function(key, value) {
             var p = this.parent;
             if (p)
-              p.fire_event("scalechanged", key, value);
+              p.emit("scalechanged", key, value);
         },
     },
 });

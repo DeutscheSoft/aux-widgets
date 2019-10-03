@@ -80,7 +80,7 @@ function draw_time(force) {
          * 
          * @event Clock#timedrawn
          */
-        this.fire_event("timedrawn", O.time);
+        this.emit("timedrawn", O.time);
 }
 function set_labels() {
     var O = this.options;

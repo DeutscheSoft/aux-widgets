@@ -72,17 +72,17 @@ var apply = function () {
 var fevent = function (e, useraction) {
     var O = this.options;
     if (useraction) {
-        this.fire_event("userset", "rgb", O.rgb);
-        this.fire_event("userset", "hsl", O.hsl);
-        this.fire_event("userset", "hex", O.hex);
-        this.fire_event("userset", "hue", O.hue);
-        this.fire_event("userset", "saturation", O.saturation);
-        this.fire_event("userset", "lightness", O.lightness);
-        this.fire_event("userset", "red", O.red);
-        this.fire_event("userset", "green", O.green);
-        this.fire_event("userset", "blue", O.blue);
+        this.emit("userset", "rgb", O.rgb);
+        this.emit("userset", "hsl", O.hsl);
+        this.emit("userset", "hex", O.hex);
+        this.emit("userset", "hue", O.hue);
+        this.emit("userset", "saturation", O.saturation);
+        this.emit("userset", "lightness", O.lightness);
+        this.emit("userset", "red", O.red);
+        this.emit("userset", "green", O.green);
+        this.emit("userset", "blue", O.blue);
     }
-    this.fire_event(e, {
+    this.emit(e, {
         rgb: O.rgb,
         hsl: O.hsl,
         hex: O.hex,

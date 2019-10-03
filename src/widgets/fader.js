@@ -108,7 +108,7 @@ function dblclick(ev) {
      * 
      * @param {number} value - The value of the {@link Fader}.
      */
-    this.fire_event("doubleclick", this.options.value);
+    this.emit("doubleclick", this.options.value);
 }
 function activate_tooltip() {
     if (!this.tooltip_by_position) {
@@ -118,22 +118,22 @@ function activate_tooltip() {
         this.__stopdrag = stopdrag.bind(this);
         this.__scrolling = scrolling.bind(this);
     }
-    this.add_event("mouseenter", mouseenter);
-    this.add_event("mouseleave", mouseleave);
-    this.drag.add_event("startdrag", this.__startdrag);
-    this.drag.add_event("stopdrag", this.__stopdrag);
-    this.scroll.add_event("scrolling", this.__scrolling);
+    this.on("mouseenter", mouseenter);
+    this.on("mouseleave", mouseleave);
+    this.drag.on("startdrag", this.__startdrag);
+    this.drag.on("stopdrag", this.__stopdrag);
+    this.scroll.on("scrolling", this.__scrolling);
 }
 
 function deactivate_tooltip() {
     if (!this.tooltip_by_position) return;
     tooltip.remove(0, this.tooltip_by_value);
     tooltip.remove(1, this.tooltip_by_position);
-    this.remove_event("mouseenter", mouseenter);
-    this.remove_event("mouseleave", mouseleave);
-    this.drag.remove_event("startdrag", this.__startdrag);
-    this.drag.remove_event("stopdrag", this.__stopdrag);
-    this.scroll.remove_event("scrolling", this.__scrolling);
+    this.off("mouseenter", mouseenter);
+    this.off("mouseleave", mouseleave);
+    this.drag.off("startdrag", this.__startdrag);
+    this.drag.off("stopdrag", this.__stopdrag);
+    this.scroll.off("scrolling", this.__scrolling);
 }
 /**
  * Fader is a slidable control with a {@link Scale} next to it which
@@ -197,12 +197,12 @@ export const Fader = define_class({
     },
     static_events: {
         set_bind_click: function(value) {
-            if (value) this.add_event("click", clicked);
-            else this.remove_event("click", clicked);
+            if (value) this.on("click", clicked);
+            else this.off("click", clicked);
         },
         set_bind_dblclick: function(value) {
-            if (value) this.add_event("dblclick", dblclick);
-            else this.remove_event("dblclick", dblclick);
+            if (value) this.on("dblclick", dblclick);
+            else this.off("dblclick", dblclick);
         },
         set_tooltip: function(value) {
             (value ? activate_tooltip : deactivate_tooltip).call(this);
@@ -389,7 +389,7 @@ ChildWidget(Fader, "scale", {
              * @param {mixed} value - The value to which it was set.
              */
             if (this.parent)
-                this.parent.fire_event("scalechanged", key, value);
+                this.parent.emit("scalechanged", key, value);
         },
     },
 });

@@ -335,7 +335,7 @@ export const Graph = define_class({
             case "range_x":
             case "range_y":
                 this.add_range(value, key);
-                value.add_event("set", range_change_cb.bind(this));
+                value.on("set", range_change_cb.bind(this));
                 break;
             case "width":
                 this.range_x.set("basis", value);
@@ -348,7 +348,7 @@ export const Graph = define_class({
                  * Is fired when the graph changes
                  * @event Graph#graphchanged
                  */
-                this.fire_event("graphchanged");
+                this.emit("graphchanged");
                 break;
         }
     }

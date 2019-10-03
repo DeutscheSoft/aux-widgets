@@ -70,7 +70,7 @@ export const Ranges = define_class({
         }
         if (name) {
             this[name] = r;
-            this.add_event("set_"+name, range_changed);
+            this.on("set_"+name, range_changed);
         }
         /**
          * Gets fired when a new range is added
@@ -79,7 +79,7 @@ export const Ranges = define_class({
          * 
          * @param {Range} range - The {@link Range} that was added.
          */
-        this.fire_event("rangeadded", r);
+        this.emit("rangeadded", r);
         return r;
     }
 });

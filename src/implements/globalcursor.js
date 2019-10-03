@@ -46,7 +46,7 @@ export const GlobalCursor = define_class({
          * 
          * @param {string} cursor - The name of the <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">cursor</a> to show. 
          */
-        this.fire_event("globalcursor", cursor);
+        this.emit("globalcursor", cursor);
     },
     /**
      * Removes the class from <code>document.body</code> node.
@@ -66,6 +66,6 @@ export const GlobalCursor = define_class({
          * 
          * @param {string} cursor - The name of the <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">cursor</a> to remove.
          */
-        this.fire_event("cursorremoved", cursor);
+        this.emit("cursorremoved", cursor);
     }
 });

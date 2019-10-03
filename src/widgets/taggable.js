@@ -23,11 +23,11 @@ import { Container } from './container.js';
 import { Button } from './button.js';
 
 function add (e) {
-    this.fire_event("addtag", e);
+    this.emit("addtag", e);
 }
 
 function remove (e, tagnode) {
-    this.fire_event("removetag", tagnode);
+    this.emit("removetag", tagnode);
     if (!this.options.async)
         this.remove_tag(tagnode.tag, tagnode);
 }
@@ -97,11 +97,11 @@ export const Taggable = define_class({
         var node = tag.create_node(options);
         this.tags.append_child(node);
         
-        node.add_event("remove", remove.bind(this));
+        node.on("remove", remove.bind(this));
         
         var t = {tag:tag, node:node};
         this.taglist.push(t);
-        this.fire_event("tagadded", tag, node);
+        this.emit("tagadded", tag, node);
         return t;
     },
     has_tag: function (tag) {
@@ -140,7 +140,7 @@ export const Taggable = define_class({
         }
         if (purge)
             B.remove_tag(tag);
-        this.fire_event("tagremoved", tag);
+        this.emit("tagremoved", tag);
     },
     empty: function () {
         var T = this.taglist;

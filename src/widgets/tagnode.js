@@ -75,7 +75,7 @@ ChildWidget(TagNode, "colorize", {
     show: false,
     toggle_class: true,
     static_events: {
-      click: function (e) { this.parent.fire_event("colorize", e); }
+      click: function (e) { this.parent.emit("colorize", e); }
     },
     default_options: {
         class: "aux-colorize"
@@ -86,7 +86,7 @@ ChildWidget(TagNode, "remove", {
     show: true,
     toggle_class: true,
     static_events: {
-      confirmed: function (e) { this.parent.fire_event("remove", e, this.parent); }
+      confirmed: function (e) { this.parent.emit("remove", e, this.parent); }
     },
     default_options: {
         class: "aux-remove",

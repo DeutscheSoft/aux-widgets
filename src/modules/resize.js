@@ -39,7 +39,7 @@ function dragstart(e, drag) {
      * 
      * @param {DOMEvent} event - The native DOM event.
      */
-    this.fire_event("resizestart", e);
+    this.emit("resizestart", e);
 }
 function dragend(e, drag) {
     if (!this.options.active) return;
@@ -50,7 +50,7 @@ function dragend(e, drag) {
      * 
      * @param {DOMEvent} event - The native DOM event.
      */
-    this.fire_event("resizestop", e);
+    this.emit("resizestop", e);
 }
 function dragging(e, drag) {
     var O = this.options;
@@ -73,7 +73,7 @@ function dragging(e, drag) {
      * @param {int} width - The new width of the element.
      * @param {int} height - The new height of the element.
      */
-    this.fire_event("resizing", e, w, h);
+    this.emit("resizing", e, w, h);
 }
 function set_handle() {
     var h = this.options.handle;

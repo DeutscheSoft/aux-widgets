@@ -35,7 +35,7 @@ function new_tag_from_input () {
     var t = false;
     if (!this.options.async)
         t = this.add_tag(val);
-    this.fire_event("newtag", val, t);
+    this.emit("newtag", val, t);
     if (this.options.closenew)
         this.close();
 }
@@ -61,7 +61,7 @@ export const Tagger = define_class({
         
         Taggable.prototype.initialize.call(this);
         this.append_child(this.tags);
-        this.add_event("addtag", new_tag_from_input.bind(this));
+        this.on("addtag", new_tag_from_input.bind(this));
         
         this.set("add", this.options.add);
     },
@@ -98,9 +98,9 @@ export const Tagger = define_class({
     add_tag: function (tag, options) {
         var t = Taggable.prototype.add_tag.call(this, tag, options);
         if (!t) return;
-        t.node.label.add_event("click", (function (that, tag) {
+        t.node.label.on("click", (function (that, tag) {
             return function (e) {
-                that.fire_event("tagclicked", tag.tag, tag.node);
+                that.emit("tagclicked", tag.tag, tag.node);
             }
         })(this, t));
         if (this.options.visible)

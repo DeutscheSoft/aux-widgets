@@ -30,7 +30,7 @@ function reset_delay_to () {
 
 function toggle(O) {
     if (this.userset("state", !O.state) === false) return;
-    this.fire_event("toggled", O.state);
+    this.emit("toggled", O.state);
 }
 function press_start() {
     var O = this.options;
@@ -72,21 +72,21 @@ function press_cancel() {
 
 /* MOUSE handling */
 function mouseup(e) {
-    this.remove_event("mouseup", mouseup);
-    this.remove_event("mouseleave", mouseleave);
+    this.off("mouseup", mouseup);
+    this.off("mouseleave", mouseleave);
     press_end.call(this);
 }
 function mouseleave(e) {
-    this.remove_event("mouseup", mouseup);
-    this.remove_event("mouseleave", mouseleave);
+    this.off("mouseup", mouseup);
+    this.off("mouseleave", mouseleave);
     press_cancel.call(this);
 }
 function mousedown(e) {
     /* only left click please */
     if (e.button) return true;
     press_start.call(this);
-    this.add_event("mouseup", mouseup);
-    this.add_event("mouseleave", mouseleave);
+    this.on("mouseup", mouseup);
+    this.on("mouseleave", mouseleave);
 }
 
 /* TOUCH handling */
@@ -108,9 +108,9 @@ function touchend(e) {
     e.preventDefault();
     press_end.call(this);
 
-    this.remove_event("touchend", touchend);
-    this.remove_event("touchcancel", touchleave);
-    this.remove_event("touchleave", touchleave);
+    this.off("touchend", touchend);
+    this.off("touchcancel", touchleave);
+    this.off("touchleave", touchleave);
 }
 function touchleave(e) {
     if (!is_current_touch.call(this, e)) return;
@@ -118,17 +118,17 @@ function touchleave(e) {
     e.preventDefault();
     press_cancel.call(this);
 
-    this.remove_event("touchend", touchend);
-    this.remove_event("touchcancel", touchleave);
-    this.remove_event("touchleave", touchleave);
+    this.off("touchend", touchend);
+    this.off("touchcancel", touchleave);
+    this.off("touchleave", touchleave);
 }
 function touchstart(e) {
     if (this.__touch_id !== false) return;
     this.__touch_id = e.targetTouches[0].identifier;
     press_start.call(this);
-    this.add_event("touchend", touchend);
-    this.add_event("touchcancel", touchleave);
-    this.add_event("touchleave", touchleave);
+    this.on("touchend", touchend);
+    this.on("touchcancel", touchleave);
+    this.on("touchleave", touchleave);
     e.preventDefault();
     e.stopPropagation();
     return false;

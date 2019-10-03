@@ -46,7 +46,7 @@ function header_action() {
      * @event Window.headeraction
      * @param {string} action - The function which was executed, e.g. <code>shrink</code>, <code>maximize</code> or <code>close</code>.
      */
-    that.fire_event("headeraction", that.options.header_action);
+    that.emit("headeraction", that.options.header_action);
 }
 function mout(e) {
     if(this.options.auto_active && !this.dragging && !this.resizing)
@@ -69,7 +69,7 @@ function close(e) {
      * The user clicked the close button.
      * @event Window.closeclicked
      */
-    this.fire_event("closeclicked");
+    this.emit("closeclicked");
     if (this.options.auto_close)
         this.destroy();
 }
@@ -80,7 +80,7 @@ function maximize(e) {
      * @event Window.maximizeclicked
      * @param {Object} maximize - The maximize option.
      */
-    this.fire_event("maximizeclicked", this.options.maximize);
+    this.emit("maximizeclicked", this.options.maximize);
 }
 function maximizevertical(e) {
     if (this.options.auto_maximize) this.toggle_maximize_vertical();
@@ -89,7 +89,7 @@ function maximizevertical(e) {
      * @event Window.maximizeverticalclicked
      * @param {Object} maximize - The maximize option.
      */
-    this.fire_event("maximizeverticalclicked", this.options.maximize.y);
+    this.emit("maximizeverticalclicked", this.options.maximize.y);
 }
 function maximizehorizontal(e) {
     if (this.options.auto_maximize) this.toggle_maximize_horizontal();
@@ -98,7 +98,7 @@ function maximizehorizontal(e) {
      * @event Window.maximizehorizontalclicked
      * @param {Object} maximize - The maximize option.
      */
-    this.fire_event("maximizehorizontalclicked", this.options.maximize.x);
+    this.emit("maximizehorizontalclicked", this.options.maximize.x);
 }
 function minimize(e) {
     if (this.options.auto_minimize) this.toggle_minimize();
@@ -107,7 +107,7 @@ function minimize(e) {
      * @event Window.minimizeclicked
      * @param {Object} minimize - The minimize option.
      */
-    this.fire_event("minimizeclicked", this.options.minimize);
+    this.emit("minimizeclicked", this.options.minimize);
 }
 function shrink(e) {
     if (this.options.auto_shrink) this.toggle_shrink();
@@ -116,7 +116,7 @@ function shrink(e) {
      * @event Window.shrinkclicked
      * @param {Object} shrink - The shrink option.
      */
-    this.fire_event("shrinkclicked", this.options.shrink);
+    this.emit("shrinkclicked", this.options.shrink);
 }
 function start_resize(el, ev) {
     this.global_cursor("se-resize");
@@ -127,7 +127,7 @@ function start_resize(el, ev) {
      * @event Window.startresize
      * @param {DOMEvent} event - The DOM event.
      */
-    this.fire_event("startresize", ev);
+    this.emit("startresize", ev);
 }
 function stop_resize(el, ev) {
     this.remove_cursor("se-resize");
@@ -140,7 +140,7 @@ function stop_resize(el, ev) {
      * @event Window.stopresize
      * @param {DOMEvent} event - The DOM event.
      */
-    this.fire_event("stopresize", ev);
+    this.emit("stopresize", ev);
 }
 function resizing(el, ev) {
     if (this.options.resizing === "continuous") {
@@ -152,7 +152,7 @@ function resizing(el, ev) {
      * @event Window.resizing
      * @param {DOMEvent} event - The DOM event.
      */
-    this.fire_event("resizing", ev);
+    this.emit("resizing", ev);
 }
 function calculate_dimensions() {
     var x = outer_width(this.element, true);
@@ -210,7 +210,7 @@ function start_drag(ev, el) {
      * @event Window.startdrag
      * @param {DOMEvent} event - The DOM event.
      */
-    this.fire_event("startdrag", ev);
+    this.emit("startdrag", ev);
 }
 function stop_drag(ev, el) {
     this.dragging = false;
@@ -221,7 +221,7 @@ function stop_drag(ev, el) {
      * @event Window.stopdrag
      * @param {DOMEvent} event - The DOM event.
      */
-    this.fire_event("stopdrag", ev);
+    this.emit("stopdrag", ev);
 }
 function dragging(ev, el) {
     if (!this.dragging) {
@@ -240,7 +240,7 @@ function dragging(ev, el) {
      * @event Window.dragging
      * @param {DOMEvent} event - The DOM event.
      */
-    this.fire_event("dragging", ev);
+    this.emit("dragging", ev);
 }
 function init_position(pos) {
     var O = this.options;
@@ -285,7 +285,7 @@ function set_position() {
      * @event Window.positionchanged
      * @param {Object} event - The {@link Window#dimensions} dimensions object.
      */
-    this.fire_event("positionchanged", D);
+    this.emit("positionchanged", D);
 }
 function set_dimensions() {
     var O = this.options;
@@ -321,7 +321,7 @@ function set_dimensions() {
      * @event Window.dimensionschanged
      * @param {Object} event - The {@link Window#dimensions} dimensions object.
      */
-    this.fire_event("dimensionschanged", this.dimensions);
+    this.emit("dimensionschanged", this.dimensions);
 }
 function build_header() {
     build_from_const.call(this, "header");
@@ -335,13 +335,13 @@ function build_header() {
             min         : {x: 0 - this.options.width + 20, y: 0},
             max         : {x: width() - 20, y: height() - 20},
         });
-        //this.header.add_event("dblclick", header_action.bind(this));
+        //this.header.on("dblclick", header_action.bind(this));
     }
     /**
      * The header changed.
      * @event Window.headerchanged
      */
-    this.fire_event("headerchanged");
+    this.emit("headerchanged");
 }
 function build_footer() {
     build_from_const.call(this, "footer");
@@ -349,7 +349,7 @@ function build_footer() {
      * The footer changed.
      * @event Window.footerchanged
      */
-    this.fire_event("footerchanged");
+    this.emit("footerchanged");
 }
 function build_from_const(element) {
     var E = this[element].element;

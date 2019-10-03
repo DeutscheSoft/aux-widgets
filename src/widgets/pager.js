@@ -99,7 +99,7 @@ export const Pager = define_class({
                  * 
                  * @event Pager#changed
                  */
-                this.fire_event("changed", page, value);
+                this.emit("changed", page, value);
             }
         },
         set_pages: function(value) {
@@ -269,7 +269,7 @@ export const Pager = define_class({
          * 
          * @param {Container} page - The {@link Container} which was added as a page.
          */
-        this.fire_event("added", p);
+        this.emit("added", p);
 
         this.add_child(p);
 
@@ -322,7 +322,7 @@ export const Pager = define_class({
          * 
          * @param {Container} page - The {@link Container} which was removed.
          */
-        this.fire_event("removed", p);
+        this.emit("removed", p);
     },
 
     current: function() {

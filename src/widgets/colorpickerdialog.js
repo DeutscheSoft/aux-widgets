@@ -24,13 +24,13 @@ import { add_class } from '../utils/dom.js';
 
 function cancel () {
     var self = this.parent;
-    self.fire_event.call(self, "cancel");
+    self.emit.call(self, "cancel");
     self.close();
 }
 
 function apply (color) {
     var self = this.parent;
-    self.fire_event.call(self, "apply", color);
+    self.emit.call(self, "apply", color);
     self.close();
 }
 

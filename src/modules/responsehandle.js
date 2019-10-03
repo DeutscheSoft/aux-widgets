@@ -63,7 +63,7 @@ function scrollwheel(e) {
     this.__sto = window.setTimeout(function () {
         this.set("dragging", false);
         remove_class(this.element, "aux-active");
-        this.fire_event("zchangeended", this.options.z);
+        this.emit("zchangeended", this.options.z);
     }.bind(this), 250);
     var s = range_z.get("step") * direction;
     if (e.ctrlKey && e.shiftKey)
@@ -72,7 +72,7 @@ function scrollwheel(e) {
         s *= range_z.get("shift_up");
     this.userset("z", this.get("z") + s);
     if (!this._zwheel)
-        this.fire_event("zchangestarted", this.options.z);
+        this.emit("zchangestarted", this.options.z);
     this._zwheel = true;
 }
 
@@ -1125,7 +1125,7 @@ export const ResponseHandle = define_class({
                  * 
                  * @param {number} z - The z value.
                  */
-                self.fire_event("zchangestarted", O.z);
+                self.emit("zchangestarted", O.z);
                 startdrag.call(self);
                 return true;
             },
@@ -1156,7 +1156,7 @@ export const ResponseHandle = define_class({
                  * 
                  * @param {number} z - The z value.
                  */
-                self.fire_event("zchangeended", self.options.z);
+                self.emit("zchangeended", self.options.z);
                 enddrag.call(self);
             },
         });
@@ -1204,7 +1204,7 @@ export const ResponseHandle = define_class({
                  * 
                  * @param {Object} positions - An object containing all relevant positions of the pointer.
                  */
-                self.fire_event("handlegrabbed", {
+                self.emit("handlegrabbed", {
                     x:     O.x,
                     y:     O.y,
                     pos_x: state.x,
@@ -1249,7 +1249,7 @@ export const ResponseHandle = define_class({
                  */
                 var self = this.parent;
                 var O = self.options;
-                self.fire_event("handlereleased", {
+                self.emit("handlereleased", {
                     x:     O.x,
                     y:     O.y,
                     pos_x: O.range_x.val2px(O.x),
@@ -1376,7 +1376,7 @@ export const ResponseHandle = define_class({
               }
 
               // FIXME: solve this better
-              value.add_event('set', function() {
+              value.on('set', function() {
                                 this.invalid.x = true;
                                 this.trigger_draw();
                               }.bind(this));

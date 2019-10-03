@@ -97,7 +97,7 @@ export const Dialog = define_class({
         deactivate_autoclose.call(this);
         if (this.options.auto_remove)
             this.element.remove();
-        this.fire_event("close");
+        this.emit("close");
       },
       set_display_state: function(val) {
         var O = this.options;
@@ -188,7 +188,7 @@ export const Dialog = define_class({
      */
     open: function (x, y) {
         
-        this.fire_event("open");
+        this.emit("open");
         this.userset("visible", true);
         if (typeof x !== "undefined")
             this.set("x", x);

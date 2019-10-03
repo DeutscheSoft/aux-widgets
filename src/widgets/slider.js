@@ -44,7 +44,7 @@ function dblclick() {
      * 
      * @param {number} value - The value of the widget.
      */
-    this.fire_event("doubleclick", this.options.value);
+    this.emit("doubleclick", this.options.value);
 }
 
 function set_background(horiz, vert, size) {

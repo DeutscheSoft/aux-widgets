@@ -101,7 +101,7 @@ function draw_dots() {
      * Is fired when dots are (re)drawn.
      * @event Circular#dotsdrawn
      */
-    this.fire_event("dotsdrawn");
+    this.emit("dotsdrawn");
 }
 function draw_markers() {
     // depends on size, markers, marker, min, max
@@ -154,7 +154,7 @@ function draw_markers() {
      * Is fired when markers are (re)drawn.
      * @event Circular#markersdrawn
      */
-    this.fire_event("markersdrawn");
+    this.emit("markersdrawn");
 }
 function draw_labels() {
     // depends on size, labels, label, min, max, start
@@ -222,7 +222,7 @@ function draw_labels() {
              * Is fired when labels are (re)drawn.
              * @event Circular#labelsdrawn
              */
-            this.fire_event("labelsdrawn");
+            this.emit("labelsdrawn");
         }.bind(this), 1);
     }.bind(this));
 }

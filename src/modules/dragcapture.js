@@ -64,7 +64,7 @@ function startcapture(state) {
      * @param {DOMEvent} start - The event object of the initial event.
      */
 
-    var v = this.fire_event("startcapture", state, state.start);
+    var v = this.emit("startcapture", state, state.start);
 
     if (v === true) {
         /* we capture this event */
@@ -85,7 +85,7 @@ function movecapture(ev) {
      * @param {DOMEvent} event - The event object of the current move event.
      */
      
-    if (!d.set_current(ev) || this.fire_event("movecapture", d) === false) {
+    if (!d.set_current(ev) || this.emit("movecapture", d) === false) {
         stopcapture.call(this, ev);
         return false;
     }
@@ -103,7 +103,7 @@ function stopcapture(ev) {
      * @param {DOMEvent} event - The event object of the current event.
      */
      
-    this.fire_event("stopcapture", s, ev);
+    this.emit("stopcapture", s, ev);
     this.set("state", false);
     s.destroy();
     this.drag_state = null;

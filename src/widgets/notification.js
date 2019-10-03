@@ -30,7 +30,7 @@ function close_clicked (e) {
    * 
    * @event Notification#closeclicked
    */
-  this.fire_event("closeclicked");
+  this.emit("closeclicked");
   close.call(this.parent);
 }
 
@@ -42,14 +42,14 @@ function after_hide() {
 }
 
 function close () {
-  this.add_event("hide", after_hide);
+  this.on("hide", after_hide);
   this.hide();
   /**
    * Is fired when the notification was removed from the DOM after the hiding animation.
    * 
    * @event Notification#closed
    */
-  this.fire_event("closed");
+  this.emit("closed");
 }
 
 function timeout() {

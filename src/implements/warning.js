@@ -53,6 +53,6 @@ export const Warning = define_class({
          * 
          * @event Warning#warning 
          */
-        this.fire_event("warning");
+        this.emit("warning");
     }
 });

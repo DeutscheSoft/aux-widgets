@@ -108,7 +108,7 @@ function low_remove_entry(entry) {
    * 
    * @param {Object} entry - An object containing the members <code>title</code> and <code>value</code>.
    */
-  this.fire_event("entryremoved", entry);
+  this.emit("entryremoved", entry);
 }
 
 export const Select = define_class({
@@ -329,7 +329,7 @@ export const Select = define_class({
          * 
          * @param {SelectEntry} entry - A new {@link SelectEntry}.
          */
-        this.fire_event("entryadded", entry);
+        this.emit("entryadded", entry);
     },
     /**
      * Remove a {@link SelectEntry} from the list by its index.
@@ -549,7 +549,7 @@ export const Select = define_class({
          * 
          * @event Select.cleared
          */
-        this.fire_event("cleared");
+        this.emit("cleared");
     },
 
     redraw: function() {
@@ -688,7 +688,7 @@ function on_select(e) {
      * @param {string} value - The title of the selected entry.
      * @param {string} value - The title of the selected entry.
      */
-    w.fire_event("select", entry.options.value, id, entry.options.title);
+    w.emit("select", entry.options.value, id, entry.options.title);
     w.show_list(false);
 
     return false;

@@ -46,7 +46,7 @@ function value_clicked() {
      * 
      * @param {number} value - The value of the widget.
      */
-    self.fire_event("valueedit", this.options.value);
+    self.emit("valueedit", this.options.value);
 }
 function value_done() {
     var self = this.parent;
@@ -60,7 +60,7 @@ function value_done() {
      * 
      * @param {number} value - The value of the widget.
      */
-    self.fire_event("valueset", this.options.value);
+    self.emit("valueset", this.options.value);
 }
 export const ValueKnob = define_class({
     /**

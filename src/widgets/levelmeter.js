@@ -268,7 +268,7 @@ export const LevelMeter = define_class({
          * 
          * @event LevelMeter#resetpeak
          */
-        this.fire_event("resetpeak");
+        this.emit("resetpeak");
     },
     /**
      * Resets the label.
@@ -286,7 +286,7 @@ export const LevelMeter = define_class({
          * 
          * @event LevelMeter#resetlabel
          */
-        this.fire_event("resetlabel");
+        this.emit("resetlabel");
     },
     /**
      * Resets the clipping LED.
@@ -304,7 +304,7 @@ export const LevelMeter = define_class({
          * 
          * @event LevelMeter#resetclip
          */
-        this.fire_event("resetclip");
+        this.emit("resetclip");
     },
     /**
      * Resets the top hold.
@@ -320,7 +320,7 @@ export const LevelMeter = define_class({
          * 
          * @event LevelMeter#resettop
          */
-        this.fire_event("resettop");
+        this.emit("resettop");
     },
     /*
      * Resets the bottom hold.
@@ -336,7 +336,7 @@ export const LevelMeter = define_class({
          * 
          * @event LevelMeter#resetbottom
          */
-        this.fire_event("resetbottom");
+        this.emit("resetbottom");
     },
     /*
      * Resets all hold features.
@@ -541,6 +541,6 @@ ChildElement(LevelMeter, "peak", {
          * 
          * @event LevelMeter#drawpeak
          */
-        this.fire_event("drawpeak");
+        this.emit("drawpeak");
     },
 });

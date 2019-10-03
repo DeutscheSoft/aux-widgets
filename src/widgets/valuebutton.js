@@ -136,7 +136,7 @@ export const ValueButton = define_class({
              * 
              * @param {number} value - The value of the widget.
              */
-            this.fire_event("doubleclick", this.options.value);
+            this.emit("doubleclick", this.options.value);
         }.bind(this));
     },
     destroy: function () {
@@ -168,7 +168,7 @@ function value_clicked() {
      * 
      * @param {number} value - The value of the widget.
      */
-    self.fire_event("valueedit", self.options.value);
+    self.emit("valueedit", self.options.value);
 }
 function value_done() {
     var self = this.parent;
@@ -181,7 +181,7 @@ function value_done() {
      * 
      * @param {number} value - The value of the widget.
      */
-    self.fire_event("valueset", self.options.value);
+    self.emit("valueset", self.options.value);
 }
 /**
  * @member {Value} ValueButton#value - The value widget for editing the value manually.
