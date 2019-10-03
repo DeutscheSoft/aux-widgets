@@ -28,7 +28,7 @@ import { Ranges } from '../implements/ranges.js';
 import { Graph } from '../modules/graph.js';
 import { ResponseHandle } from '../modules/responsehandle.js';
 import { ChildWidget } from '../child_widget.js';
-import { Grid } from '../modules/grid.js';
+import { Grid } from '../widgets/grid.js';
     
 function calculate_overlap(X, Y) {
     /* no overlap, return 0 */

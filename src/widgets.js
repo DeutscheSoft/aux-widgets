@@ -16,6 +16,7 @@ export * from './widgets/fader.js';
 export * from './widgets/frame.js';
 export * from './widgets/frequencyresponse.js';
 export * from './widgets/gauge.js';
+export * from './widgets/grid.js';
 export * from './widgets/icon.js';
 export * from './widgets/knob.js';
 export * from './widgets/label.js';
