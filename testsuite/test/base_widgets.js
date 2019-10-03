@@ -49,4 +49,31 @@ describe('Components', () => {
     o.setAttribute('disabled', 'true');
     done();
   });
+  it('get_option_type()', () => {
+    const o = new Widget();
+
+    if (o.get_option_type('disabled') !== 'boolean')
+      throw new Error('bad type for disabled');
+  });
+  it('get_default()', () => {
+    const o = new Widget();
+
+    if (o.get_default('disabled') !== false)
+      throw new Error('bad default value for disabled');
+
+    {
+      let ok = false;
+      try
+      {
+        o.get_default('this_option_does_not_exist');
+      }
+      catch (e)
+      {
+        ok = true;
+      }
+
+      if (!ok) throw new Error('Expected error for unknown option');
+
+    }
+  });
 });

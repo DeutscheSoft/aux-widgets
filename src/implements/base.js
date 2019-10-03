@@ -138,8 +138,24 @@ export const Base = define_class({
         this.set_options(options);
         this.emit("initialize");
     },
+    /**
+     * Returns the type of an option. If the given option does not exist,
+     * 'undefined' is returned.
+     */
     get_option_type: function(name) {
       return this._options[name];
+    },
+    /**
+     * Returns the default value of a given option. If the option does not
+     * exist, an exception is thrown.
+     */
+    get_default: function(name) {
+      if (this.get_option_type(name) === void(0))
+      {
+        throw new Error('Option does not exist.');
+      }
+
+      return this.constructor.prototype.options[name];
     },
     initialized : function() {
         /**
