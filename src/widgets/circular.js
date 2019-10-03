@@ -24,7 +24,7 @@ import { S } from '../dom_scheduler.js';
 import { Warning } from '../implements/warning.js';
 import { Ranged } from '../implements/ranged.js';
 import { ChildElement } from '../widget_helpers.js';
-import { Widget } from '../widgets/widget.js';
+import { Widget } from './widget.js';
 
 function interpret_label(x) {
     if (typeof x === "object") return x;

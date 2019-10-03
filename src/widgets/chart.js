@@ -25,10 +25,10 @@ import {
 import { warn } from '../utils/log.js';
 import { Widget } from './widget.js';
 import { Ranges } from '../implements/ranges.js';
-import { Graph } from '../widgets/graph.js';
+import { Graph } from './graph.js';
 import { ResponseHandle } from '../modules/responsehandle.js';
 import { ChildWidget } from '../child_widget.js';
-import { Grid } from '../widgets/grid.js';
+import { Grid } from './grid.js';
     
 function calculate_overlap(X, Y) {
     /* no overlap, return 0 */

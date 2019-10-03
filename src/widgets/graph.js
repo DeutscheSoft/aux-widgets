@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class } from './../widget_helpers.js';
-import { Widget } from '../widgets/widget.js';
+import { Widget } from './widget.js';
 import { Ranges } from '../implements/ranges.js';
 import { make_svg, add_class, remove_class } from '../utils/dom.js';
 import { error } from '../utils/log.js';

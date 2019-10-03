@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class, ChildElement } from '../widget_helpers.js';
-import { Widget } from '../widgets/widget.js';
+import { Widget } from './widget.js';
 import { Ranged } from '../implements/ranged.js';
 import {
     set_content, add_class, outer_width, outer_height, element, remove_class, toggle_class,

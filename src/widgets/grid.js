@@ -19,7 +19,7 @@
 import { S } from '../dom_scheduler.js';
 import { define_class } from './../widget_helpers.js';
 import { make_svg, add_class, get_style, empty } from '../utils/dom.js';
-import { Widget } from '../widgets/widget.js';
+import { Widget } from './widget.js';
 import { Ranges } from '../implements/ranges.js';
 
 function draw_lines(a, mode, last) {

@@ -21,7 +21,7 @@ import { ChildWidget } from '../child_widget.js';
 import { Widget } from './widget.js';
 import { Label } from './label.js';
 import { Gradient } from '../implements/gradient.js';
-import { Scale } from '../widgets/scale.js';
+import { Scale } from './scale.js';
 import {
     element, add_class, get_style, toggle_class, remove_class, insert_after,
     inner_width, inner_height
