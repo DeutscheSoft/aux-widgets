@@ -713,32 +713,18 @@ export const SelectEntry = define_class({
     
     _options: Object.assign(Object.create(Label.prototype._options), {
         value: "mixed",
-        title: "string",
     }),
     options: {
-        title: "",
         value: null
     },
     initialize: function (options) {
-        // FIXME: is this really correct, do we not end up with this.element
-        // being that created by Label ?
-        var E = this.element = element("li", "aux-option");
+        if (!options) options = {};
+        if (!options.element) options.element = element("li");
         Label.prototype.initialize.call(this, options);
-        this.set("title", this.options.title);
+        add_class(this.element, "aux-option");
     },
     static_events: {
       touchstart: on_select,
       mousedown: on_select,
-    },
-    set: function (key, value) {
-        switch (key) {
-            case "title":
-                this.set("label", value);
-                break;
-            case "label":
-                this.options.title = value;
-                break;
-        }
-        return Label.prototype.set.call(this, key, value);
     }
 });
