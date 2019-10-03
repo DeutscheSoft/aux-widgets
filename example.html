@@ -4,28 +4,7 @@
     <meta charset="utf-8" />
     <title>AUX Examples</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type=module src="src/components/button.js"></script>
-    <script type=module src="src/components/buttonarray.js"></script>
-    <script type=module src="src/components/toggle.js"></script>
-    <script type=module src="src/components/confirmbutton.js"></script>
-    <script type=module src="src/components/equalizer.js"></script>
-    <script type=module src="src/components/value.js"></script>
-    <script type=module src="src/components/knob.js"></script>
-    <script type=module src="src/components/state.js"></script>
-    <script type=module src="src/components/slider.js"></script>
-    <script type=module src="src/components/gauge.js"></script>
-    <script type=module src="src/components/fader.js"></script>
-    <script type=module src="src/components/select.js"></script>
-    <script type=module src="src/components/valuebutton.js"></script>
-    <script type=module src="src/components/valueknob.js"></script>
-    <script type=module src="src/components/meterbase.js"></script>
-    <script type=module src="src/components/levelmeter.js"></script>
-    <script type=module src="src/components/multimeter.js"></script>
-    <script type=module src="src/components/clock.js"></script>
-    <script type=module src="src/components/dynamics.js"></script>
-    <script type=module src="src/components/colorpicker.js"></script>
-    <script type=module src="src/components/frame.js"></script>
-    
+    <script type=module src="src/index.js"></script>
     
     <link rel="stylesheet" id=stylesheet href="styles/base.css" />
     
@@ -142,6 +121,11 @@
             <aux-select label='click me'>
               <aux-selectentry label='hello 1' value='json:{}'></aux-selectentry>
               <aux-selectentry label='hello 2' value='json:{}'></aux-selectentry>
+            </aux-select>
+        </aux-frame>
+
+        <aux-frame label="Scale">
+            <aux-scale min='-96' max=6 style='height: 300px'>
             </aux-select>
         </aux-frame>
         

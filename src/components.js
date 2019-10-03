@@ -12,6 +12,7 @@ export * from './components/knob.js';
 export * from './components/levelmeter.js';
 export * from './components/meter.js';
 export * from './components/multimeter.js';
+export * from './components/scale.js';
 export * from './components/select.js';
 export * from './components/slider.js';
 export * from './components/state.js';
