@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>AUX Examples</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type=module src="/src/index.js"></script>
+    
+    <link rel="stylesheet" id=stylesheet href="/styles/base.css" />
+    
+    <style>
+        
+        body {
+            background: #ddd;
+            color: #333;
+            font-family: sans-serif;
+            font-size: 14px;
+        }
+        #wrapper {
+            
+        }
+        
+        #wrapper > aux-frame {
+            display: block;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 6px;
+            margin: 12px;
+            padding: 32px 8px 8px 8px;
+            min-width: 128px;
+            min-height: 64px;
+        }
+        #wrapper > aux-frame > .aux-frame-label {
+             top: 4px;
+             font-weight: normal;
+             font-size: 20px;
+        }
+        
+    </style>
+    
+    
+  </head>
+  <body>
+    <aux-root id="wrapper">
+        <aux-frame label="NAME">
+            CONTENT
+        </aux-frame>
+    </aux-root>
+  </body>
+  
+</html>
