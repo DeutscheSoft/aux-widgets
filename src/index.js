@@ -8,6 +8,7 @@ export * from './utils/sprintf.js';
 export * from './utils/svg.js';
 export * from './utils/events.js';
 export * from './utils/browser_detection.js';
+export * from './utils/timers.js';
 
 export { Base } from './implements/base.js';
 
