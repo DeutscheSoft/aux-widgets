@@ -126,7 +126,7 @@ export const MultiMeter = define_class({
                 remove_meter.call(this, M[M.length-1]);
             while (M.length < O.count)
                 add_meter.call(this, O);
-            E.setAttribute("class", E.getAttribute("class").replace(.aux-count-[0-9]*/g, ""));
+            E.setAttribute("class", E.getAttribute("class").replace(/aux-count-[0-9]*/g, ""));
             E.setAttribute("class", E.getAttribute("class").replace(/ +/g, " "));
             add_class(E, "aux-count-" + O.count);
         }
