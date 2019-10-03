@@ -36,18 +36,18 @@ export function add_static_event(w, event, fun) {
     add_event(e, event, fun);
 }
 
-export function ChildElement(widget, name, config) {
+export function define_child_element(widget, name, config) {
     /**
-     * @function ChildElement
+     * @function define_child_element
      *
      * Creates a HTMLElement as a child for a widget. Is used to simplify
      * widget definitions. E.g. the tiny marker used to display the back-end
-     * value is a simple DIV added using ChildElement. The generic element
+     * value is a simple DIV added using child element. The generic element
      * is a DIV added to Widget.element with the class
      * <code.aux-[name]</code>. Default creating and adding can be
      * overwritten with custom callback functions.
      * 
-     * @param {Widget} widget - The {@link Widget} to add the ChildElement to.
+     * @param {Widget} widget - The {@link Widget} to add the child element to.
      * @param {string} name - The identifier of the element. It will be prefixed
      *     by an underscore <code>Widget["_" + config.name]</code>.
      * @param {object} config - The configuration of the child element.
@@ -78,8 +78,6 @@ export function ChildElement(widget, name, config) {
      *     widget which are supposed to trigger a check if the element has to
      *     be added or removed.
      * @property {function} [config.draw] - A function to be called on redraw.
-     * 
-     * @class ChildElement
      * 
      */
     var p = widget.prototype;

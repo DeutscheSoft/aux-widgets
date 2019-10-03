@@ -18,7 +18,7 @@
  */
 import { element, add_class, toggle_class } from './../utils/dom.js';
 import { define_class } from './../widget_helpers.js';
-import { ChildWidget } from './../child_widget.js';
+import { define_child_widget } from './../child_widget.js';
 import { Widget } from './widget.js';
 import { Icon } from './icon.js';
 import { Label } from './label.js';
@@ -100,7 +100,7 @@ export const Button = define_class({
 /**
  * @member {Icon} Button#icon - The {@link Icon} widget.
  */
-ChildWidget(Button, "icon", {
+define_child_widget(Button, "icon", {
     create: Icon,
     option: "icon",
     inherit_options: true,
@@ -110,7 +110,7 @@ ChildWidget(Button, "icon", {
 /**
  * @member {Label} Button#label - The {@link Label} of the button.
  */
-ChildWidget(Button, "label", {
+define_child_widget(Button, "label", {
     create: Label,
     option: "label",
     inherit_options: true,

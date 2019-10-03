@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class, add_static_event } from '../widget_helpers.js';
-import { ChildWidget } from '../child_widget.js';
+import { define_child_widget } from '../child_widget.js';
 import { LevelMeter } from './levelmeter.js';
 import { Label } from './label.js';
 import { Container } from './container.js';
@@ -176,7 +176,7 @@ export const MultiMeter = define_class({
 /**
  * @member {HTMLDivElement} MultiMeter#title - The {@link Label} widget displaying the meters title.
  */
-ChildWidget(MultiMeter, "title", {
+define_child_widget(MultiMeter, "title", {
     create: Label,
     show: false,
     option: "title",
@@ -188,7 +188,7 @@ ChildWidget(MultiMeter, "title", {
 
 
 /*
- * This could be moved into ChildWidgets(),
+ * This could be moved into define_child_widgets(),
  * which could in similar ways be used in the buttonarray,
  * pager, etc.
  *

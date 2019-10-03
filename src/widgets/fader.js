@@ -41,7 +41,7 @@ import {
     set_text, element, add_class, toggle_class, remove_class, supports_transform,
     css_space, outer_height, inner_height, outer_width, inner_width
   } from '../utils/dom.js';
-import { ChildWidget } from '../child_widget.js';
+import { define_child_widget } from '../child_widget.js';
 import { S } from '../dom_scheduler.js';
 
 function vert(O) {
@@ -373,7 +373,7 @@ export const Fader = define_class({
 /**
  * @member {Scale} Fader#scale - A {@link Scale} to display a scale next to the fader.
  */
-ChildWidget(Fader, "scale", {
+define_child_widget(Fader, "scale", {
     create: Scale,
     show: true,
     inherit_options: true,
@@ -396,7 +396,7 @@ ChildWidget(Fader, "scale", {
 /**
  * @member {Label} Fader#label - A {@link label} to display a title.
  */
-ChildWidget(Fader, "label", {
+define_child_widget(Fader, "label", {
     create: Label,
     show: false,
     toggle_class: true,
@@ -408,7 +408,7 @@ ChildWidget(Fader, "label", {
 /**
  * @member {Label} Fader#value - A {@link Value} to display the current value, offering a way to enter a value via keyboard.
  */
-ChildWidget(Fader, "value", {
+define_child_widget(Fader, "value", {
     create: Value,
     show: false,
     static_events: {

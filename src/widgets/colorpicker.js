@@ -16,8 +16,8 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-import { define_class, ChildElement, add_static_event } from '../widget_helpers.js';
-import { ChildWidget } from '../child_widget.js';
+import { define_class, define_child_element, add_static_event } from '../widget_helpers.js';
+import { define_child_widget } from '../child_widget.js';
 import { Container } from './container.js';
 import { Value } from './value.js';
 import { ValueKnob } from './valueknob.js';
@@ -309,7 +309,7 @@ export const ColorPicker = define_class({
  * @member {HTMLDivElement} ColorPicker#canvas - The color background.
  *   Has class .aux-canvas`,
  */
-ChildElement(ColorPicker, "canvas", {
+define_child_element(ColorPicker, "canvas", {
     show: true,
     append: function () {
         this.element.appendChild(this._canvas);
@@ -321,7 +321,7 @@ ChildElement(ColorPicker, "canvas", {
  * @member {HTMLDivElement} ColorPicker#grayscale - The grayscale background.
  *   Has class .aux-grayscale`,
  */
-ChildElement(ColorPicker, "grayscale", {
+define_child_element(ColorPicker, "grayscale", {
     show: true,
     append: function () {
         this._canvas.appendChild(this._grayscale);
@@ -331,7 +331,7 @@ ChildElement(ColorPicker, "grayscale", {
  * @member {HTMLDivElement} ColorPicker#indicator - The indicator element.
  *   Has class .aux-indicator`,
  */
-ChildElement(ColorPicker, "indicator", {
+define_child_element(ColorPicker, "indicator", {
     show: true,
     append: function () {
         this._canvas.appendChild(this._indicator);
@@ -342,7 +342,7 @@ ChildElement(ColorPicker, "indicator", {
  * @member {Value} ColorPicker#hex - The {@link Value} for the HEX color.
  *   Has class .aux-hex`,
  */
-ChildWidget(ColorPicker, "hex", {
+define_child_widget(ColorPicker, "hex", {
     create: Value,
     show: true,
     static_events: {
@@ -381,7 +381,7 @@ ChildWidget(ColorPicker, "hex", {
  * @member {ValueKnob} ColorPicker#hue - The {@link ValueKnob} for the hue.
  *   Has class .aux-hue`,
  */
-ChildWidget(ColorPicker, "hue", {
+define_child_widget(ColorPicker, "hue", {
     create: ValueKnob,
     option: "show_hsl",
     show: true,
@@ -406,7 +406,7 @@ ChildWidget(ColorPicker, "hue", {
  * @member {ValueKnob} ColorPicker#saturation - The {@link ValueKnob} for the saturation.
  *   Has class .aux-saturation`,
  */
-ChildWidget(ColorPicker, "saturation", {
+define_child_widget(ColorPicker, "saturation", {
     create: ValueKnob,
     show: true,
     static_events: {
@@ -430,7 +430,7 @@ ChildWidget(ColorPicker, "saturation", {
  * @member {ValueKnob} ColorPicker#lightness - The {@link ValueKnob} for the lightness.
  *   Has class .aux-lightness`,
  */
-ChildWidget(ColorPicker, "lightness", {
+define_child_widget(ColorPicker, "lightness", {
     create: ValueKnob,
     option: "show_hsl",
     show: true,
@@ -455,7 +455,7 @@ ChildWidget(ColorPicker, "lightness", {
  * @member {ValueKnob} ColorPicker#red - The {@link ValueKnob} for the red color.
  *   Has class .aux-red`,
  */
-ChildWidget(ColorPicker, "red", {
+define_child_widget(ColorPicker, "red", {
     create: ValueKnob,
     option: "show_rgb",
     show: true,
@@ -483,7 +483,7 @@ ChildWidget(ColorPicker, "red", {
  * @member {ValueKnob} ColorPicker#green - The {@link ValueKnob} for the green color.
  *   Has class .aux-green`,
  */
-ChildWidget(ColorPicker, "green", {
+define_child_widget(ColorPicker, "green", {
     create: ValueKnob,
     option: "show_rgb",
     show: true,
@@ -511,7 +511,7 @@ ChildWidget(ColorPicker, "green", {
  * @member {ValueKnob} ColorPicker#blue - The {@link ValueKnob} for the blue color.
  *   Has class .aux-blue`,
  */
-ChildWidget(ColorPicker, "blue", {
+define_child_widget(ColorPicker, "blue", {
     create: ValueKnob,
     option: "show_rgb",
     show: true,
@@ -539,7 +539,7 @@ ChildWidget(ColorPicker, "blue", {
  * @member {Button} ColorPicker#apply - The {@link Button} to apply.
  *   Has class .aux-apply`,
  */
-ChildWidget(ColorPicker, "apply", {
+define_child_widget(ColorPicker, "apply", {
     create: Button,
     show: true,
     static_events: {
@@ -554,7 +554,7 @@ ChildWidget(ColorPicker, "apply", {
  * @member {Button} ColorPicker#cancel - The {@link Button} to cancel.
  *   Has class .aux-cancel`,
  */
-ChildWidget(ColorPicker, "cancel", {
+define_child_widget(ColorPicker, "cancel", {
     create: Button,
     show: true,
     static_events: {

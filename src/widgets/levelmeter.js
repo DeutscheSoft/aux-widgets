@@ -16,8 +16,8 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-import { define_class, ChildElement } from '../widget_helpers.js';
-import { ChildWidget } from '../child_widget.js';
+import { define_class, define_child_element } from '../widget_helpers.js';
+import { define_child_widget } from '../child_widget.js';
 import { Meter } from './meter.js';
 import { State } from './state.js';
 import { add_class, toggle_class, element, set_text } from '../utils/dom.js';
@@ -490,7 +490,7 @@ export const LevelMeter = define_class({
  * @member {HTMLDivElement} LevelMeter#clip.element - The DIV element of the clipping LED.
  *   Has class <code.aux-clip</code>.
  */
-ChildWidget(LevelMeter, "clip", {
+define_child_widget(LevelMeter, "clip", {
     create: State,
     show: false,
     map_options: {
@@ -505,7 +505,7 @@ ChildWidget(LevelMeter, "clip", {
  * @member {HTMLDivElement} LevelMeter#_peak - The DIV element for the peak marker.
  *   Has class <code.aux-peak</code>.
  */
-ChildElement(LevelMeter, "peak", {
+define_child_element(LevelMeter, "peak", {
     show: false,
     create: function() {
         var peak = element("div","aux-peak");

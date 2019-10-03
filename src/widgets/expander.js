@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class } from '../widget_helpers.js';
-import { ChildWidget } from '../child_widget.js';
+import { define_child_widget } from '../child_widget.js';
 import { Container } from './container.js';
 import { Button } from './button.js';
 import { add_class } from '../utils/dom.js';
@@ -256,7 +256,7 @@ export const Expander = define_class({
 /**
  * @member {Button} Expander#button - The button for toggling the state of the expander.
  */
-ChildWidget(Expander, "button", {
+define_child_widget(Expander, "button", {
     create: Button,
     show: true,
     map_options: {

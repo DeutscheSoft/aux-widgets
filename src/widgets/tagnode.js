@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class } from '../widget_helpers.js';
-import { ChildWidget } from '../child_widget.js';
+import { define_child_widget } from '../child_widget.js';
 import { Container } from './container.js';
 import { Label } from './label.js';
 import { Button } from './button.js';
@@ -62,7 +62,7 @@ export const TagNode = define_class({
   }
 });
 
-ChildWidget(TagNode, "label", {
+define_child_widget(TagNode, "label", {
     create: Label,
     show: true,
     map_options: {
@@ -70,7 +70,7 @@ ChildWidget(TagNode, "label", {
     },
     toggle_class: true,
 });
-ChildWidget(TagNode, "colorize", {
+define_child_widget(TagNode, "colorize", {
     create: Button,
     show: false,
     toggle_class: true,
@@ -81,7 +81,7 @@ ChildWidget(TagNode, "colorize", {
         class: "aux-colorize"
     },
 });
-ChildWidget(TagNode, "remove", {
+define_child_widget(TagNode, "remove", {
     create: ConfirmButton,
     show: true,
     toggle_class: true,

@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class } from '../widget_helpers.js';
-import { ChildWidget } from '../child_widget.js';
+import { define_child_widget } from '../child_widget.js';
 import { Button } from './button.js';
 import { Value } from './value.js';
 import { Warning } from '../implements/warning.js';
@@ -186,7 +186,7 @@ function value_done() {
 /**
  * @member {Value} ValueButton#value - The value widget for editing the value manually.
  */
-ChildWidget(ValueButton, "value", {
+define_child_widget(ValueButton, "value", {
     create: Value,
     show: true,
     map_options: {
@@ -207,7 +207,7 @@ ChildWidget(ValueButton, "value", {
 /**
  * @member {Scale} ValueButton#scale - The {@link Scale} showing the value.
  */
-ChildWidget(ValueButton, "scale", {
+define_child_widget(ValueButton, "scale", {
     create: Scale,
     show: true,
     toggle_class: true,

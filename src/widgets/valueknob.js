@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class } from '../widget_helpers.js';
-import { ChildWidget } from '../child_widget.js';
+import { define_child_widget } from '../child_widget.js';
 import { Widget } from './widget.js';
 import { Knob } from './knob.js';
 import { Value } from './value.js';
@@ -106,7 +106,7 @@ export const ValueKnob = define_class({
 /**
  * @member {Label} ValueKnob#label - The {@link Label} widget.
  */
-ChildWidget(ValueKnob, "label", {
+define_child_widget(ValueKnob, "label", {
     create: Label,
     option: "title",
     toggle_class: true,
@@ -117,7 +117,7 @@ ChildWidget(ValueKnob, "label", {
 /**
  * @member {Knob} ValueKnob#knob - The {@link Knob} widget.
  */
-ChildWidget(ValueKnob, "knob", {
+define_child_widget(ValueKnob, "knob", {
     create: Knob,
     show: true,
     inherit_options: true,
@@ -126,7 +126,7 @@ ChildWidget(ValueKnob, "knob", {
 /**
  * @member {Value} ValueKnob#value - The {@link Value} widget.
  */
-ChildWidget(ValueKnob, "value", {
+define_child_widget(ValueKnob, "value", {
     create: Value,
     show: true,
     inherit_options: true,

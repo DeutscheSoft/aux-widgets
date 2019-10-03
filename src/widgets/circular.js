@@ -23,7 +23,7 @@ import { empty, make_svg, add_class, get_style } from '../utils/dom.js';
 import { S } from '../dom_scheduler.js';
 import { Warning } from '../implements/warning.js';
 import { Ranged } from '../implements/ranged.js';
-import { ChildElement } from '../widget_helpers.js';
+import { define_child_element } from '../widget_helpers.js';
 import { Widget } from './widget.js';
 
 function interpret_label(x) {
@@ -599,7 +599,7 @@ export const Circular = define_class({
  * @member {SVGGroup} Circular#_markers - A group containing all markers.
  *      Has class <code.aux-markers</code> 
  */
-ChildElement(Circular, "markers", {
+define_child_element(Circular, "markers", {
     //option: "markers",
     //display_check: function(v) { return !!v.length; },
     show: true,
@@ -611,7 +611,7 @@ ChildElement(Circular, "markers", {
  * @member {SVGGroup} Circular#_dots - A group containing all dots.
  *      Has class <code.aux-dots</code> 
  */
-ChildElement(Circular, "dots", {
+define_child_element(Circular, "dots", {
     //option: "dots",
     //display_check: function(v) { return !!v.length; },
     show: true,
@@ -623,7 +623,7 @@ ChildElement(Circular, "dots", {
  * @member {SVGGroup} Circular#_labels - A group containing all labels.
  *      Has class <code.aux-labels</code> 
  */
-ChildElement(Circular, "labels", {
+define_child_element(Circular, "labels", {
     //option: "labels",
     //display_check: function(v) { return !!v.length; },
     show: true,

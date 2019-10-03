@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-import { define_class, ChildElement } from './../widget_helpers.js';
+import { define_class, define_child_element } from './../widget_helpers.js';
 import { S } from '../dom_scheduler.js';
 import {
     empty, css_space, make_svg, get_style, element, add_class,
@@ -27,7 +27,7 @@ import { Widget } from './widget.js';
 import { Ranges } from '../implements/ranges.js';
 import { Graph } from './graph.js';
 import { ResponseHandle } from '../modules/responsehandle.js';
-import { ChildWidget } from '../child_widget.js';
+import { define_child_widget } from '../child_widget.js';
 import { Grid } from './grid.js';
     
 function calculate_overlap(X, Y) {
@@ -761,7 +761,7 @@ export const Chart = define_class({
  * @member {Grid} Chart#grid - The grid element of the chart.
  *   Has class <code.aux-grid</code>.
  */
-ChildWidget(Chart, "grid", {
+define_child_widget(Chart, "grid", {
     create: Grid,
     show: true,
     append: function() {
@@ -788,7 +788,7 @@ function key_hover_cb(ev) {
  * @member {SVGRect} Chart#_key_background - The SVG rectangle of the key.
  *   Has class <code.aux-background</code>.
  */
-ChildElement(Chart, "key_background", {
+define_child_element(Chart, "key_background", {
     option: "key",
     display_check: function(v) {
         return !!v;
@@ -807,7 +807,7 @@ ChildElement(Chart, "key_background", {
  * @member {SVGGroup} Chart#_key - The SVG group containing all descriptions.
  *   Has class <code.aux-key</code>.
  */
-ChildElement(Chart, "key", {
+define_child_element(Chart, "key", {
     option: "key",
     display_check: function(v) {
         return !!v;
@@ -825,7 +825,7 @@ ChildElement(Chart, "key", {
  * @member {SVGText} Chart#_title - The title of the chart.
  *   Has class <code.aux-title</code>.
  */
-ChildElement(Chart, "title", {
+define_child_element(Chart, "title", {
     option: "title",
     display_check: function(v) {
         return typeof(v) === "string" && v.length;

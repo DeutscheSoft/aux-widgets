@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class } from '../widget_helpers.js';
-import { ChildWidget } from '../child_widget.js';
+import { define_child_widget } from '../child_widget.js';
 import { Container } from './container.js';
 import { Button } from './button.js';
 import { Icon } from './icon.js';
@@ -132,7 +132,7 @@ export const Notification = define_class({
 /**
  * @member {Button} Notification#close - The Button for closing the notification.
  */
-ChildWidget(Notification, "close", {
+define_child_widget(Notification, "close", {
   create: Button,
   show: false,
   toggle_class: true,
@@ -148,7 +148,7 @@ ChildWidget(Notification, "close", {
 /**
  * @member {Icon} Notification#icon - The Icon widget.
  */
-ChildWidget(Notification, "icon", {
+define_child_widget(Notification, "icon", {
   create: Icon,
   show: false,
   toggle_class: true,

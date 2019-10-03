@@ -26,8 +26,8 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { define_class, ChildElement } from '../widget_helpers.js';
-import { ChildWidget } from '../child_widget.js';
+import { define_class, define_child_element } from '../widget_helpers.js';
+import { define_child_widget } from '../child_widget.js';
 import { add_class, remove_class, is_dom_node } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 import { Container } from './container.js';
@@ -419,7 +419,7 @@ export const Pager = define_class({
  *
  * @member Pager#buttonarray
  */
-ChildWidget(Pager, "buttonarray", {
+define_child_widget(Pager, "buttonarray", {
     create: ButtonArray,
     show: true,
     map_options: {
@@ -437,6 +437,6 @@ ChildWidget(Pager, "buttonarray", {
  * @member {HTMLDivElement} Pager#_clip - The clipping area containing the pages.
  *   Has class <code.aux-clip</code>.
  */
-ChildElement(Pager, "clip", {
+define_child_element(Pager, "clip", {
     show: true,
 });

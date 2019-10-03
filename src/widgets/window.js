@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class } from '../widget_helpers.js';
-import { ChildWidget } from '../child_widget.js';
+import { define_child_widget } from '../child_widget.js';
 import { Container } from './container.js';
 import { Icon } from './icon.js';
 import { Label } from './label.js';
@@ -729,7 +729,7 @@ export const Window = define_class({
 /**
  * @member {Icon} Window#icon - A {@link Icon} widget to display the window icon.
  */
-ChildWidget(Window, "icon", {
+define_child_widget(Window, "icon", {
     create: Icon,
     map_options: { icon : "icon" },
     toggle_class: true,
@@ -737,7 +737,7 @@ ChildWidget(Window, "icon", {
 /**
  * @member {Label} Window#title - A {@link Label} to display the window title.
  */
-ChildWidget(Window, "title", {
+define_child_widget(Window, "title", {
     create: Label,
     default_options: { "class" : "aux-title" },
     map_options: { title : "label" },
@@ -746,7 +746,7 @@ ChildWidget(Window, "title", {
 /**
  * @member {Label} Window#status - A {@link Label} to display the window status.
  */
-ChildWidget(Window, "status", {
+define_child_widget(Window, "status", {
     create: Label,
     default_options: { "class" : "aux-status" },
     map_options: { status : "label" },
@@ -772,7 +772,7 @@ ChildWidget(Window, "status", {
  */
 
 var bfactory = function (name) {
-    ChildWidget(Window, name, {
+    define_child_widget(Window, name, {
         create: Button,
         default_options: {
             "class" : "aux-" + name,
@@ -790,14 +790,14 @@ b.map(bfactory);
 /**
  * @member {Icon} Window#size - A {@link Icon} acting as handle for window resize.
  */
-ChildWidget(Window, "size", {
+define_child_widget(Window, "size", {
     create: Icon,
     default_options: { "icon" : "windowresize", "class" : "aux-size" },
 });
 /**
  * @member {Container} Window#content - A {@link Container} for the window content.
  */
-ChildWidget(Window, "content", {
+define_child_widget(Window, "content", {
     create: Container,
     toggle_class: true,
     show: true,
@@ -806,7 +806,7 @@ ChildWidget(Window, "content", {
 /**
  * @member {Container} Window#header - The top header bar.
  */
-ChildWidget(Window, "header", {
+define_child_widget(Window, "header", {
     create: Container,
     toggle_class: true,
     show: true,
@@ -819,7 +819,7 @@ ChildWidget(Window, "header", {
 /**
  * @member {Container} Window#footer - The bottom footer bar.
  */
-ChildWidget(Window, "footer", {
+define_child_widget(Window, "footer", {
     create: Container,
     toggle_class: true,
     show: false,

@@ -37,20 +37,20 @@ function get_child_options(parent, name, options, config) {
     return ret;
 }
 
-export function ChildWidget(widget, name, config) {
+export function define_child_widget(widget, name, config) {
     
     /**
-     * @function ChildWidget
+     * @function define_child_widget
      *
      * Defines a {@link Widget} as a child for another widget. This function
      * is used internally to simplify widget definitions. E.g. the {@link Icon} of a
-     * {@link Button} is defined as a ChildWidget. ChildWidgets
+     * {@link Button} is defined as a child widget. Child widgets
      * are created/added after the initialization of the parent widget.
      * If not configured otherwise, all options of the child widget can
      * be accessed via <code>Widget.options[config.name + "." + option]</code>
      * on the parent widget.
      * 
-     * @param {Widget} widget - The {@link Widget} to add the ChildWidget to.
+     * @param {Widget} widget - The {@link Widget} to add the child widget to.
      * @param {string} name - The identifier of the element, <code>Widget[config.name]</code>.
      * @param {object} config - The configuration of the child element.
      * 
@@ -91,8 +91,6 @@ export function ChildWidget(widget, name, config) {
      * @property {array<string>} [config.blacklist_options] - Array containing options names
      *     which are skipped on `inherit_options`.
      * 
-     * @class ChildWidget
-     * 
      */
      
     var p = widget.prototype;
@@ -110,7 +108,7 @@ export function ChildWidget(widget, name, config) {
         Object.assign(static_events, m);
 
     if (config.create === void(0)) {
-      warn("'create' is undefined. Skipping ChildWidget ", name);
+      warn("'create' is undefined. Skipping child widget ", name);
       return;
     }
 

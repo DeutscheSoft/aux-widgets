@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class } from '../widget_helpers.js';
-import { ChildWidget } from '../child_widget.js';
+import { define_child_widget } from '../child_widget.js';
 import { Widget } from './widget.js';
 import { Label } from './label.js';
 import { Gradient } from '../implements/gradient.js';
@@ -502,7 +502,7 @@ export const Meter = define_class({
 /**
  * @member {Scale} Meter#scale - The {@link Scale} of the meter.
  */
-ChildWidget(Meter, "scale", {
+define_child_widget(Meter, "scale", {
     create: Scale,
     map_options: {
         format_labels: "labels",
@@ -523,7 +523,7 @@ ChildWidget(Meter, "scale", {
  * @member {Label} Meter#title - The {@link Label} displaying the title.
  *   Has class <code.aux-title</code>.
  */
-ChildWidget(Meter, "title", {
+define_child_widget(Meter, "title", {
     create: Label,
     show: false,
     option: "title",
@@ -534,7 +534,7 @@ ChildWidget(Meter, "title", {
 /**
  * @member {Label} Meter#label - The {@link Label} displaying the label.
  */
-ChildWidget(Meter, "label", {
+define_child_widget(Meter, "label", {
     create: Label,
     show: false,
     default_options: { "class" : "aux-value" },

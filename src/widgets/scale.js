@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-import { define_class, ChildElement } from '../widget_helpers.js';
+import { define_class, define_child_element } from '../widget_helpers.js';
 import { Widget } from './widget.js';
 import { Ranged } from '../implements/ranged.js';
 import {
@@ -535,7 +535,7 @@ export const Scale = define_class({
 /**
  * @member {HTMLDivElement} Fader#_pointer - The DIV element of the pointer. It can be used to e.g. visualize the value set in the backend.
  */
-ChildElement(Scale, "pointer", {
+define_child_element(Scale, "pointer", {
     show: false,
     toggle_class: true,
     option: "pointer",
@@ -561,7 +561,7 @@ ChildElement(Scale, "pointer", {
 /**
  * @member {HTMLDivElement} Fader#_bar - The DIV element of the bar. It can be used to e.g. visualize the value set in the backend or to draw a simple levelmeter.
  */
-ChildElement(Scale, "bar", {
+define_child_element(Scale, "bar", {
     show: false,
     toggle_class: true,
     option: "bar",

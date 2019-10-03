@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class } from '../widget_helpers.js';
-import { ChildWidget } from '../child_widget.js';
+import { define_child_widget } from '../child_widget.js';
 import { Dialog } from './dialog.js';
 import { ColorPicker } from './colorpicker.js';
 import { add_class } from '../utils/dom.js';
@@ -62,7 +62,7 @@ export const ColorPickerDialog = define_class({
 /**
  * @member {ColorPicker} ColorPickerDialog#colorpicker - The {@link ColorPicker} widget.
  */
-ChildWidget(ColorPickerDialog, "colorpicker", {
+define_child_widget(ColorPickerDialog, "colorpicker", {
     create: ColorPicker,
     show: true,
     inherit_options: true,
