@@ -6,7 +6,7 @@ export function add_event(to, event, fun) {
     if (!tmp) {
         to[event] = fun;
     } else if (Array.isArray(tmp)) {
-        tmp.push(fun);
+        to[event] = tmp.concat([ fun ]);
     } else {
         to[event] = [ tmp, fun ];
     }
@@ -16,12 +16,7 @@ export function remove_event(from, event, fun) {
     var tmp = from[event];
     if (!tmp) return;
     if (Array.isArray(tmp)) {
-        for (var i = 0; i < tmp.length; i++) {
-            if (tmp[i] === fun) {
-                tmp[i] = tmp[tmp.length-1];
-                tmp.length --;
-            }
-        }
+        from[event] = tmp.filter((f) => f === fun);
         if (tmp.length === 1) from[event] = tmp[0];
         else if (tmp.length === 0) delete from[event];
     } else if (tmp === fun) {
