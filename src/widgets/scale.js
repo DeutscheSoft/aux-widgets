@@ -332,7 +332,7 @@ function mark_markers(labels, dots) {
     }
 }
 /**
- * Scale can be used to draw scales. It is used in {@link MeterBase} and
+ * Scale can be used to draw scales. It is used in {@link Meter} and
  * {@link Fader}. Scale draws labels and markers based on its parameters
  * and the available space. Scales can be drawn both vertically and horizontally.
  * Scale mixes in {@link Ranged} and inherits all its options.

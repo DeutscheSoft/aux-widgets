@@ -18,7 +18,7 @@
  */
 import { define_class, ChildElement } from '../widget_helpers.js';
 import { ChildWidget } from '../child_widget.js';
-import { MeterBase } from './meterbase.js';
+import { Meter } from './meter.js';
 import { State } from './state.js';
 import { add_class, toggle_class, element, set_text } from '../utils/dom.js';
 import { FORMAT } from '../utils/sprintf.js';
@@ -82,14 +82,14 @@ function bottom_timeout() {
 export const LevelMeter = define_class({
     /**
      * LevelMeter is a fully functional meter bar displaying numerical values.
-     * LevelMeter is an enhanced {@link MeterBase}'s containing a clip LED,
+     * LevelMeter is an enhanced {@link Meter}'s containing a clip LED,
      * a peak pin with value label and hold markers.
      * In addition, LevelMeter has an optional falling animation, top and bottom peak
      * values and more.
      *
      * @class LevelMeter
      * 
-     * @extends MeterBase
+     * @extends Meter
      *
      * @param {Object} [options={ }] - An object containing initial options.
      * 
@@ -127,8 +127,8 @@ export const LevelMeter = define_class({
      *   and external falling are combined.
      */
     _class: "LevelMeter",
-    Extends: MeterBase,
-    _options: Object.assign(Object.create(MeterBase.prototype._options), {
+    Extends: Meter,
+    _options: Object.assign(Object.create(Meter.prototype._options), {
         falling: "number",
         falling_fps: "number",
         falling_init: "number",
@@ -197,7 +197,7 @@ export const LevelMeter = define_class({
     initialize: function (options) {
         /* track the age of the value option */
         this.track_option("value");
-        MeterBase.prototype.initialize.call(this, options);
+        Meter.prototype.initialize.call(this, options);
         this._reset_label = this.reset_label.bind(this);
         this._reset_clip = this.reset_clip.bind(this);
         this._reset_peak = this.reset_peak.bind(this);
@@ -242,7 +242,7 @@ export const LevelMeter = define_class({
         if (I.base)
           I.value = true;
 
-        MeterBase.prototype.redraw.call(this);
+        Meter.prototype.redraw.call(this);
 
         if (I.clip) {
             I.clip = false;
@@ -250,7 +250,7 @@ export const LevelMeter = define_class({
         }
     },
     destroy: function () {
-        MeterBase.prototype.destroy.call(this);
+        Meter.prototype.destroy.call(this);
     },
     /**
      * Resets the peak label.
@@ -407,7 +407,7 @@ export const LevelMeter = define_class({
             }
         }
 
-        i = MeterBase.prototype.calculate_meter.call(this, to, value, i);
+        i = Meter.prototype.calculate_meter.call(this, to, value, i);
 
         if (!O.show_hold) return i;
 
@@ -481,7 +481,7 @@ export const LevelMeter = define_class({
         } else if (key === "top" || key === "bottom") {
             value = this.snap(value);
         }
-        return MeterBase.prototype.set.call(this, key, value);
+        return Meter.prototype.set.call(this, key, value);
     }
 });
 

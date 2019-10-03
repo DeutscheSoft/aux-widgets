@@ -25,7 +25,7 @@ export * from './widgets/label.js';
 export * from './widgets/levelmeter.js';
 export * from './widgets/list.js';
 export * from './widgets/listitem.js';
-export * from './widgets/meterbase.js';
+export * from './widgets/meter.js';
 export * from './widgets/multimeter.js';
 export * from './widgets/notification.js';
 export * from './widgets/notifications.js';

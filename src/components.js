@@ -10,7 +10,7 @@ export * from './components/frame.js';
 export * from './components/gauge.js';
 export * from './components/knob.js';
 export * from './components/levelmeter.js';
-export * from './components/meterbase.js';
+export * from './components/meter.js';
 export * from './components/multimeter.js';
 export * from './components/select.js';
 export * from './components/slider.js';

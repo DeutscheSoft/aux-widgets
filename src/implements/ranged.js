@@ -566,7 +566,7 @@ export const Ranged = define_class({
      * The second feature of anged is that it allows transforming values between coordinate systems.
      * This can be used to transform values from and to linear scales in which they are displayed on the
      * screen. It is used inside of Toolkit to translate values (e.g. in Hz or dB) to pixel positions or
-     * percentages, for instance in widgets such as {@link Scale}, {@link MeterBase} or
+     * percentages, for instance in widgets such as {@link Scale}, {@link Meter} or
      * {@link Graph}.
      *
      * Ranged features several types of coordinate systems which are often used in audio applications.

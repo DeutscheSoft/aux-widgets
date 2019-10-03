@@ -25,7 +25,7 @@ export const Range = define_class({
     * Range is used for calculating linear scales from
     * different values. They are useful to build coordinate systems,
     * calculate pixel positions for different scale types and the like.
-    * Range is used e.g. in {@link Scale}, {@link MeterBase} and {@link Graph} to draw
+    * Range is used e.g. in {@link Scale}, {@link Meter} and {@link Graph} to draw
     * elements on a certain position according to a value on an
     * arbitrary scale.
     * 

@@ -123,11 +123,11 @@ function subtract_intervals(a, b) {
 
     return ret;
 }
-export const MeterBase = define_class({
+export const Meter = define_class({
     /**
-     * MeterBase is a base class to build different meters such as {@link LevelMeter} from.
-     * MeterBase uses {@link Gradient} and contains a {@link Scale} widget.
-     * MeterBase inherits all options from {@link Scale}.
+     * Meter is a base class to build different meters such as {@link LevelMeter} from.
+     * Meter uses {@link Gradient} and contains a {@link Scale} widget.
+     * Meter inherits all options from {@link Scale}.
      * 
      * Note that the two options <code>format_labels</code> and
      * <code>scale_base</code> have different names here.
@@ -138,7 +138,7 @@ export const MeterBase = define_class({
      * meter positions are reduced. This widget will take advantage of that by avoiding rendering those
      * changes to the meter level, which fall into the same segment.
      *
-     * @class MeterBase
+     * @class Meter
      * 
      * @extends Widget
      *
@@ -161,7 +161,7 @@ export const MeterBase = define_class({
      * @property {Function} [options.format_label=FORMAT("%.2f")] - Function for formatting the 
      *   label.
      * @property {Boolean} [options.show_label=false] - If set to <code>true</code> a label is displayed.
-     * @property {Number} [options.title=false] - The title of the MeterBase. Set to `false` to hide it.
+     * @property {Number} [options.title=false] - The title of the Meter. Set to `false` to hide it.
      * @property {Boolean} [options.show_scale=true] - Set to <code>false</code> to hide the scale.
      * @property {Number|Boolean} [options.scale_base=false] - Base of the meter scale, see {@link Scale} for more information.
      * @property {Boolean} [options.show_labels=true] - If <code>true</code>, display labels on the
@@ -171,7 +171,7 @@ export const MeterBase = define_class({
      *
      */
     
-    _class: "MeterBase",
+    _class: "Meter",
     Extends: Widget,
     Implements: [Gradient],
     _options: Object.assign(Object.create(Widget.prototype._options),
@@ -212,9 +212,9 @@ export const MeterBase = define_class({
              * Is fired when the label changed.
              * The argument is the actual label value.
              * 
-             * @event MeterBase#labelchanged
+             * @event Meter#labelchanged
              * 
-             * @param {string} label - The label of the {@link MeterBase}.
+             * @param {string} label - The label of the {@link Meter}.
              */
             this.fire_event("labelchanged", value);
         },
@@ -223,9 +223,9 @@ export const MeterBase = define_class({
              * Is fired when the title changed.
              * The argument is the actual title.
              * 
-             * @event MeterBase#titlechanged
+             * @event Meter#titlechanged
              * 
-             * @param {string} title - The title of the {@link MeterBase}.
+             * @param {string} title - The title of the {@link Meter}.
              */
             this.fire_event("titlechanged", value);
         },
@@ -239,9 +239,9 @@ export const MeterBase = define_class({
              * Is fired when the value changed.
              * The argument is the actual value.
              * 
-             * @event MeterBase#valuechanged
+             * @event Meter#valuechanged
              * 
-             * @param {number} value - The value of the {@link MeterBase}.
+             * @param {number} value - The value of the {@link Meter}.
              */
             this.fire_event("valuechanged", value);
         },
@@ -254,7 +254,7 @@ export const MeterBase = define_class({
              * Is fired when the base value changed.
              * The argument is the actual base value.
              * 
-             * @event MeterBase#basechanged
+             * @event Meter#basechanged
              * 
              * @param {number} base - The value of the base.
              */
@@ -276,7 +276,7 @@ export const MeterBase = define_class({
         Widget.prototype.initialize.call(this, options);
         var O = this.options;
         /**
-         * @member {HTMLDivElement} MeterBase#element - The main DIV container.
+         * @member {HTMLDivElement} Meter#element - The main DIV container.
          *   Has class <code.aux-meter-base</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
@@ -285,7 +285,7 @@ export const MeterBase = define_class({
         
         this._bar = element("div", "aux-bar");
         /**
-         * @member {HTMLCanvas} MeterBase#_canvas - The canvas element drawing the mask.
+         * @member {HTMLCanvas} Meter#_canvas - The canvas element drawing the mask.
          *   Has class <code.aux-mask</code>.
          */
         this._canvas = document.createElement("canvas");
@@ -298,7 +298,7 @@ export const MeterBase = define_class({
         this._bar.appendChild(this._canvas);
         
         /**
-         * @member {HTMLDivElement} MeterBase#_bar - The DIV element containing the masks
+         * @member {HTMLDivElement} Meter#_bar - The DIV element containing the masks
          *      and drawing the background. Has class <code.aux-bar</code>.
          */
         this.delegate(this._bar);
@@ -500,9 +500,9 @@ export const MeterBase = define_class({
     
 });
 /**
- * @member {Scale} MeterBase#scale - The {@link Scale} of the meter.
+ * @member {Scale} Meter#scale - The {@link Scale} of the meter.
  */
-ChildWidget(MeterBase, "scale", {
+ChildWidget(Meter, "scale", {
     create: Scale,
     map_options: {
         format_labels: "labels",
@@ -520,10 +520,10 @@ ChildWidget(MeterBase, "scale", {
     },
 });
 /**
- * @member {Label} MeterBase#title - The {@link Label} displaying the title.
+ * @member {Label} Meter#title - The {@link Label} displaying the title.
  *   Has class <code.aux-title</code>.
  */
-ChildWidget(MeterBase, "title", {
+ChildWidget(Meter, "title", {
     create: Label,
     show: false,
     option: "title",
@@ -532,9 +532,9 @@ ChildWidget(MeterBase, "title", {
     toggle_class: true,
 });
 /**
- * @member {Label} MeterBase#label - The {@link Label} displaying the label.
+ * @member {Label} Meter#label - The {@link Label} displaying the label.
  */
-ChildWidget(MeterBase, "label", {
+ChildWidget(Meter, "label", {
     create: Label,
     show: false,
     default_options: { "class" : "aux-value" },

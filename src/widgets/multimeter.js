@@ -67,7 +67,7 @@ export const MultiMeter = define_class({
     /**
      * MultiMeter is a collection of {@link LevelMeter}s to show levels of channels
      * containing multiple audio streams. It offers all options of {@link LevelMeter} and
-     * {@link MeterBase} which are passed to all instantiated level meters.
+     * {@link Meter} which are passed to all instantiated level meters.
      *
      * @class MultiMeter
      * 
@@ -89,7 +89,7 @@ export const MultiMeter = define_class({
     Extends: Container,
     
     /* TODO: The following sucks cause we need to maintain it according to
-    LevelMeters and MeterBases options. */
+    LevelMeters and Meter options. */
     _options: Object.assign(Object.create(Container.prototype._options), {
         count: "int",
         title: "boolean|string",
