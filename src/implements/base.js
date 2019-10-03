@@ -138,6 +138,9 @@ export const Base = define_class({
         this.set_options(options);
         this.fire_event("initialize");
     },
+    get_option_type: function(name) {
+      return this._options[name];
+    },
     initialized : function() {
         /**
          * Is fired when an instance is initialized.
