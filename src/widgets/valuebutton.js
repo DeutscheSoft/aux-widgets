@@ -23,7 +23,7 @@ import { Value } from './value.js';
 import { Warning } from '../implements/warning.js';
 import { Ranged } from '../implements/ranged.js';
 import { DragValue } from '../modules/dragvalue.js';
-import { Scale } from '../modules/scale.js';
+import { Scale } from '../widgets/scale.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
 import { add_class } from '../utils/dom.js';
 import { FORMAT } from '../utils/sprintf.js';

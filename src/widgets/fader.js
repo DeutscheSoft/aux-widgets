@@ -31,7 +31,7 @@ import { Widget } from './widget.js';
 import { Ranged } from '../implements/ranged.js';
 import { Warning } from '../implements/warning.js';
 import { GlobalCursor } from '../implements/globalcursor.js';
-import { Scale } from '../modules/scale.js';
+import { Scale } from '../widgets/scale.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
 import { Value } from './value.js';

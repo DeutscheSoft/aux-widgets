@@ -29,6 +29,7 @@ export * from './widgets/notifications.js';
 export * from './widgets/pager.js';
 export * from './widgets/responsehandler.js';
 export * from './widgets/root.js';
+export * from './widgets/scale.js';
 export * from './widgets/select.js';
 export * from './widgets/slider.js';
 export * from './widgets/sortablelist.js';

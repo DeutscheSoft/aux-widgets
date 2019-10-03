@@ -10,5 +10,4 @@ export * from './modules/module.js';
 export * from './modules/range.js';
 export * from './modules/resize.js';
 export * from './modules/responsehandle.js';
-export * from './modules/scale.js';
 export * from './modules/scrollvalue.js';
