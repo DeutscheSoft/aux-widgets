@@ -1,4 +1,3 @@
-export * from './modules/circular.js';
 export * from './modules/drag.js';
 export * from './modules/dragcapture.js';
 export * from './modules/dragvalue.js';

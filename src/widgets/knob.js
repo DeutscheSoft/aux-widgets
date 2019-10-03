@@ -28,7 +28,7 @@
  */
 import { define_class } from '../widget_helpers.js';
 import { Widget } from './widget.js';
-import { Circular } from '../modules/circular.js';
+import { Circular } from './circular.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
 import { element, add_class, remove_class, make_svg } from '../utils/dom.js';
