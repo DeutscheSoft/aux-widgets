@@ -4,7 +4,6 @@ export * from './modules/dragcapture.js';
 export * from './modules/dragvalue.js';
 export * from './modules/eqband.js';
 export * from './modules/filter.js';
-export * from './modules/graph.js';
 export * from './modules/module.js';
 export * from './modules/range.js';
 export * from './modules/resize.js';
