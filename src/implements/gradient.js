@@ -19,7 +19,6 @@
 import { define_class } from '../widget_helpers.js';
 import { Ranged } from './ranged.js';
 import { sprintf } from '../utils/sprintf.js';
-import { browser } from '../utils/browser_detection.js';
 
 export const Gradient = define_class({
     /**

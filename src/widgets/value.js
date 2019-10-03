@@ -20,7 +20,6 @@ import { define_class } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 import { element, add_class, remove_class } from './../utils/dom.js';
 import { FORMAT } from './../utils/sprintf.js';
-import { os } from './../utils/browser_detection.js';
  
  /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
