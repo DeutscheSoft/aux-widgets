@@ -369,6 +369,15 @@ export const Base = define_class({
           this.removeEventListener(event, func);
         };
     },
+    once: function(event, func)
+    {
+      const sub = this.subscribe(event, (...args) => {
+        sub();
+        func(...args);
+      });
+
+      return sub;
+    },
     /**
      * Removes the given function from the event queue.
      * If it is a native DOM event, it removes the DOM event listener

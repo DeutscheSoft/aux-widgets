@@ -39,8 +39,32 @@ describe('Events', () => {
     o.dispatchEvent("foo");
     if (!called) throw new Error("not called");
     sub2();
-
   });
+  it('once()', () => {
+    const o = new Base();
+    let called = false;
+    const cb = () => {
+      called = true;
+    };
+    const sub = o.once("foo", cb);
+
+    // check that subscription works
+    o.dispatchEvent("foo");
+    if (!called) throw new Error("not called");
+
+    // check that unsubscribe works
+    called = false;
+    o.dispatchEvent("foo");
+    if (called) throw new Error("called");
+
+    // check that unsubscribe can be called twice
+    called = false;
+    const sub2 = o.once("foo", cb);
+    sub2();
+    o.dispatchEvent("foo");
+    if (called) throw new Error("called");
+  });
+
 });
 
 describe('Options', () => {
