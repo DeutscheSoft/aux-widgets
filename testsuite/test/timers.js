@@ -12,7 +12,7 @@ function expect_timeout(t, cb)
   });
 }
 
-describe.only('Timers', () => {
+describe('Timers', () => {
   it('restart() with increasing time', () => {
      return expect_timeout(40, (cb) => {
        const t = new Timer(cb);
