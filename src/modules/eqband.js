@@ -114,7 +114,7 @@ export const EqBand = define_class({
             type: options.type,
         });
         
-        if (options.mode) var _m = options.mode;
+        const _m = options.mode;
         this.set("type", this.options.type);
         if (_m) this.set("mode", options.mode);
 
