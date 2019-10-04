@@ -1,0 +1,15 @@
+{
+  "name": "aux-documentation",
+  "version": "1.0.0",
+  "description": "documentation generator for AUX",
+  "main": "index.html",
+  "directories": {},
+  "scripts": {
+    "build" : "./node_modules/.bin/jsdoc -u tutorials/ --readme docs/Main.md -c jsdoc/conf.json -d out -r ../src"
+  },
+  "author": "Arne Goedeke",
+  "private": true,
+  "dependencies": {
+    "jsdoc": "^3.6.3"
+  }
+}

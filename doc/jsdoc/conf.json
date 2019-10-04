@@ -8,11 +8,11 @@
     },
     "plugins": [
             "plugins/markdown",
-            "./doc/jsdoc/files"
+            "./jsdoc/files"
     ],
     "extra_mainpages" : [
-        { "path" : "./doc/docs/Widgets.md", "name" : "Layout" },
-        "./doc/docs/Rendering.md"
+        { "path" : "./docs/Widgets.md", "name" : "Layout" },
+        "./docs/Rendering.md"
     ],
     "templates": {
         "cleverLinks": false,
@@ -20,12 +20,11 @@
         "default": {
             "staticFiles": {
                 "include" : [
-                    "./doc/jsdoc/screen.css",
-                    "./doc/jsdoc/script.js"
+                    "./jsdoc/screen.css",
+                    "./jsdoc/script.js"
                 ]
             },
             "outputSourceFiles": true,
-            "layoutFile" : "doc/jsdoc/layout.tmpl",
             "useLongnameInNav" : true
         }
     }
