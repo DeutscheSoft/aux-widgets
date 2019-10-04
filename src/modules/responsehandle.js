@@ -595,8 +595,6 @@ function remove_label() {
     this.label = [0,0,0,0];
 }
 
-function STOP() { return false; };
-
 function create_handle() {
     var O = this.options;
     var E;
@@ -769,7 +767,7 @@ function redraw_lines(O, X) {
             }
             break;
         default:
-            warn("Unsupported mode", pref[i]);
+            warn("Unsupported mode", O.mode);
     }
 
     if (this._line1 && !this._line1.parentNode) this.element.appendChild(this._line1);
