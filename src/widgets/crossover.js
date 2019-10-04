@@ -208,7 +208,7 @@ export const Crossover = define_class({
     },
     remove_band: function (band) {
         this.remove_graph(this.graphs[this.graphs.length-1]);
-        var r = Equalizer.prototype.remove_band.call(this, options);
+        var r = Equalizer.prototype.remove_band.call(this, band);
         r.off("set_freq", this.set_freq_cb);
         limit_bands.call(this);
         return r;
