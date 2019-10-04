@@ -240,16 +240,18 @@ function draw_slice(a_from, a_to, r_inner, r_outer, pos, slice) {
     if (a_from > 360) a_from %= 360;
     if (a_to > 360) a_to   %= 360;
     // get drawing direction (sweep = clock-wise)
+    let sweep;
     if (this.options.reverse && a_to <= a_from
     || !this.options.reverse && a_to > a_from)
-        var sweep = 1;
+        sweep = 1;
     else
-        var sweep = 0;
+        sweep = 0;
     // get large flag
+    let large;
     if (Math.abs(a_from - a_to) >= 180)
-        var large = 1;
+        large = 1;
     else
-        var large = 0;
+        large = 0;
     // draw this slice
     var from = _get_coords(a_from, r_inner, r_outer, pos);
     var to = _get_coords(a_to, r_inner, r_outer, pos);
