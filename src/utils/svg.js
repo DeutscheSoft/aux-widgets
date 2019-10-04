@@ -17,7 +17,9 @@
  * Boston, MA  02110-1301  USA
  */
 
-const data_store = new WeakMap();;
+import { get_style, has_class, get_tag } from './dom.js';
+
+const data_store = new WeakMap();
 
 function data(e) {
     let r;
@@ -30,7 +32,7 @@ function data(e) {
     }
 
     return r;
-};
+}
 
 function store(e, key, val) {
     /**
@@ -82,7 +84,7 @@ export function seat_svg(e) {
         e.style.marginTop = retrieve(e, "margin-top") || 0;
     }
     var t = parseFloat(retrieve(e, "margin-top") || 0);
-    var b = e.getBoundingClientRect();
+    b = e.getBoundingClientRect();
     var y = b.top % 1;
     if (y) {
         if (x < 0.5) t -= y;
