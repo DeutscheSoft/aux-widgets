@@ -481,8 +481,9 @@ export const Select = define_class({
      * @returns {SelectEntry|Boolean} The {@link SelectEntry} or `false`.
      */
     entry_by_index: function (index) {
+        var entries = this.entries;
         if (index >= 0 && index < entries.length && entries[index])
-            return entries[i];
+            return entries[index];
         return false;
     },
     /**
