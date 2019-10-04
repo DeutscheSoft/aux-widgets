@@ -1,0 +1,14 @@
+{
+  "name": "aux-jshint",
+  "version": "1.0.0",
+  "description": "jshint scaffolding for AUX",
+  "directories": {},
+  "scripts": {
+    "check" : "./node_modules/.bin/jshint -c .jshintrc ../src/**/*.js"
+  },
+  "author": "Arne Goedeke",
+  "private": true,
+  "dependencies": {
+    "jshint": "^2.10.2"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "undef": true,
+  "unused": true,
+  "globals": {
+  },
+  "browser" : true,
+  "esversion" : 6
+}
