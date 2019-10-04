@@ -1,0 +1,13 @@
+<aux-equalizer style='width: 100%; height: 480px;'
+    range_x="js:{min:10, max:20000, scale:'frequency'}"
+    range_y="js:{min:-24, max:24}"
+    range_z="js:{min:0.1, max:20, reverse:true}"
+>
+  <aux-eqband freq=30 q=1 title='HP' type=highpass3 active=true></aux-eqband>
+  <aux-eqband freq=100 gain=-3 q=1 title='LS' type=low-shelf active=true></aux-eqband>
+  <aux-eqband freq=450 gain=6 q=0.5 title='P#1' active=true></aux-eqband>
+  <aux-eqband freq=1500 gain=-6 q=2 title='P#2' active=true></aux-eqband>
+  <aux-eqband freq=3000 gain=-12 q=10 title='P#3' active=true></aux-eqband>
+  <aux-eqband freq=5000 gain=3 q=1 title='HS' type=high-shelf active=true></aux-eqband>
+  <aux-eqband freq=10000 q=1 title='LP' type=lowpass3 active=true></aux-eqband>
+</aux-equalizer>
