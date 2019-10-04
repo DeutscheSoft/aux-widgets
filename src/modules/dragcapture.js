@@ -20,8 +20,6 @@ import { define_class } from './../widget_helpers.js';
 import { Module } from './module.js';
 import { add_event_listener, remove_event_listener } from '../utils/events.js';
 
-var document = window.document;
-
 /* this has no global symbol */
 function CaptureState(start) {
     this.start = start;
@@ -117,7 +115,6 @@ function MouseCaptureState(start) {
 }
 MouseCaptureState.prototype = Object.assign(Object.create(CaptureState.prototype), {
     set_current: function(ev) {
-        var start = this.start;
         /* If the buttons have changed, we assume that the capture has ended */
         if (!this.is_dragged_by(ev)) return false;
         return CaptureState.prototype.set_current.call(this, ev);
