@@ -29,14 +29,11 @@ var build_dragcapture = function () {
     this.dragcapture = new DragCapture(this, {
         state: true,
         onstartcapture: function (state) {
-            console.log(state, "start");
             return true;
         },
         onmovecapture: function (state) {
-            console.log(state, "move");
         },
         onstopcapture: function () {
-            console.log("stop");
         }
     });
 }
