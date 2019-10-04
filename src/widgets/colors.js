@@ -243,7 +243,9 @@ var rgb2hsl = function () {
     var col = decode_args(arguments, "r", "g", "b");
     var r = col.r, g = col.g, b = col.b;
     
-    r /= 255, g /= 255, b /= 255;
+    r /= 255;
+    g /= 255;
+    b /= 255;
 
     var max = Math.max(r, g, b), min = Math.min(r, g, b);
     var h, s, l = (max + min) / 2;
