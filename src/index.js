@@ -1,3 +1,8 @@
+/**
+ * @module aux
+ *
+ * @description This is aux.
+ */
 export * from './dom_scheduler.js';
 export * from './utils/dom.js';
 export * from './utils/object.js';

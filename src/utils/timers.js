@@ -1,4 +1,8 @@
 /**
+ * @module aux
+ */
+
+/**
  * This class represents a single timer. It is faster than manual setTimeout
  * in situations in which the timer is regularly delayed while it is running.
  */
