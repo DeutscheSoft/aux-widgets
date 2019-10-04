@@ -400,8 +400,7 @@ export const ButtonArray = define_class({
                             this._container.style[subd] = null;
                     } else {
                         this._container.style[subd] = -p + "px";
-                        if (s)
-                            this._clip[subt] = 0;
+                        this._clip[subt] = 0;
                     }
                 }
             }
