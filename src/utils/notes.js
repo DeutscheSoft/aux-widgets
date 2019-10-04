@@ -87,5 +87,5 @@ export function freq2cents(freq, base) {
  */
 export function freq2note(freq, base) {
     base |= 440;
-    return this.midi2note(this.freq2midi(freq, base));
+    return midi2note(freq2midi(freq, base));
 }
