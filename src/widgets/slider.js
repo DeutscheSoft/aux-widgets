@@ -32,7 +32,7 @@ import { DragValue } from '../modules/dragvalue.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
 import { Ranged } from '../implements/ranged.js';
 import { Warning } from '../implements/warning.js';
-import { element, add_class, outer_width } from '../utils/dom.js';
+import { element, add_class, outer_width, outer_height } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
      
 function dblclick() {
