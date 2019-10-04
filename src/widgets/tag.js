@@ -45,7 +45,6 @@ function colorize (e) {
     c.open(e.pageX, e.pageY);
     c.show();
     this.colorpicker = c;
-    w.c = c;
 }
 
 export const Tag = define_class({
