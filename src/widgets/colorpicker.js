@@ -22,11 +22,11 @@ import { Container } from './container.js';
 import { Value } from './value.js';
 import { ValueKnob } from './valueknob.js';
 import { Button } from './button.js';
-import { Colors } from './colors.js';
 import { Range } from '../modules/range.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { add_class } from '../utils/dom.js';
 import { FORMAT } from '../utils/sprintf.js';
+import { rgb2bw, rgb2hex, rgb2hsl, hsl2rgb, hex2rgb } from '../utils/colors.js';
 
 var color_options = [ "rgb", "hsl", "hex", "hue", "saturation", "lightness", "red", "green", "blue" ];
 
@@ -108,7 +108,7 @@ function set_atoms (key, value) {
         }
     }
     if (key !== "hex")
-        O.hex = this.rgb2hex(O.rgb);
+        O.hex = rgb2hex(O.rgb);
 }
 
 
@@ -119,8 +119,6 @@ function set_atoms (key, value) {
  * @class ColorPicker
  * 
  * @extends Container
- * 
- * @implements Colors
  * 
  * @param {Object} [options={ }] - An object containing initial options.
  * 
@@ -152,7 +150,6 @@ export const ColorPicker = define_class({
     
     _class: "ColorPicker",
     Extends: Container,
-    Implements: [Colors],
     
     _options: Object.assign(Object.create(Container.prototype._options), {
         hsl: "object",
@@ -246,7 +243,7 @@ export const ColorPicker = define_class({
         var O = this.options;
         var E = this.element;
         if (I.validate("rgb", "hsl", "hex", "hue", "saturation", "lightness", "red", "green", "blue")) {
-            var bw = this.rgb2bw(O.rgb);
+            var bw = rgb2bw(O.rgb);
             var bg = "rgb("+parseInt(O.red)+","+parseInt(O.green)+","+parseInt(O.blue)+")";
             this.hex._input.style.backgroundColor = bg;
             this.hex._input.style.color = bw;
@@ -265,38 +262,38 @@ export const ColorPicker = define_class({
         if (color_options.indexOf(key) > -1) {
             switch (key) {
                 case "rgb":
-                    O.hsl = this.rgb2hsl(value);
+                    O.hsl = rgb2hsl(value);
                     break;
                 case "hsl":
-                    O.rgb = this.hsl2rgb(value);
+                    O.rgb = hsl2rgb(value);
                     break;
                 case "hex":
-                    O.rgb = this.hex2rgb(value);
-                    O.hsl = this.rgb2hsl(O.rgb);
+                    O.rgb = hex2rgb(value);
+                    O.hsl = rgb2hsl(O.rgb);
                     break;
                 case "hue":
                     O.hsl = {h:Math.min(1,Math.max(0,value)), s:O.saturation, l:O.lightness};
-                    O.rgb = this.hsl2rgb(O.hsl);
+                    O.rgb = hsl2rgb(O.hsl);
                     break;
                 case "saturation":
                     O.hsl = {h:O.hue, s:Math.min(1,Math.max(0,value)), l:O.lightness};
-                    O.rgb = this.hsl2rgb(O.hsl);
+                    O.rgb = hsl2rgb(O.hsl);
                     break;
                 case "lightness":
                     O.hsl = {h:O.hue, s:O.saturation, l:Math.min(1,Math.max(0,value))};
-                    O.rgb = this.hsl2rgb(O.hsl);
+                    O.rgb = hsl2rgb(O.hsl);
                     break;
                 case "red":
                     O.rgb = {r:Math.min(255,Math.max(0,value)), g:O.green, b:O.blue};
-                    O.hsl = this.rgb2hsl(O.rgb);
+                    O.hsl = rgb2hsl(O.rgb);
                     break;
                 case "green":
                     O.rgb = {r:O.red, g:Math.min(255,Math.max(0,value)), b:O.blue};
-                    O.hsl = this.rgb2hsl(O.rgb);
+                    O.hsl = rgb2hsl(O.rgb);
                     break;
                 case "blue":
                     O.rgb = {r:O.red, g:O.green, b:Math.min(255,Math.max(0,value))};
-                    O.hsl = this.rgb2hsl(O.rgb);
+                    O.hsl = rgb2hsl(O.rgb);
                     break;
             }
             set_atoms.call(this, key, value);

@@ -8,6 +8,7 @@ export * from './utils/dom.js';
 export * from './utils/object.js';
 export * from './utils/log.js';
 export * from './utils/sprintf.js';
+export * from './utils/colors.js';
 
 // maybe we should not export these
 export * from './utils/svg.js';

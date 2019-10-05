@@ -22,12 +22,11 @@ import { Container } from './container.js';
 import { Label } from './label.js';
 import { Button } from './button.js';
 import { ConfirmButton } from './confirmbutton.js';
-import { Colors } from './colors.js';
+import { rgb2bw, hex2rgb } from '../utils/colors.js';
 
 export const TagNode = define_class({
   
   Extends: Container,
-  Implements: Colors,
   
   _options: Object.assign(Object.create(Container.prototype._options), {
     label: "string",
@@ -55,7 +54,7 @@ export const TagNode = define_class({
       I.color = false;
       this.element.style.backgroundColor = O.color;
       if (O.color)
-        this.element.style.color = this.rgb2bw(this.hex2rgb(O.color));
+        this.element.style.color = rgb2bw(hex2rgb(O.color));
       else
         this.element.style.color = null;
     }

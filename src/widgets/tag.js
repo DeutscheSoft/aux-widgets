@@ -18,9 +18,9 @@
  */
 import { define_class } from '../widget_helpers.js';
 import { Widget } from './widget.js';
-import { Colors } from './colors.js';
 import { TagNode } from './tagnode.js';
 import { ColorPickerDialog } from './colorpickerdialog.js';
+import { rgb2gray, hex2rgb } from '../utils/colors.js';
 
 function remove (e, node) {
     this.emit("remove", node);
@@ -50,7 +50,6 @@ function colorize (e) {
 export const Tag = define_class({
     _class: "Tag",
     Extends: Widget,
-    Implements: Colors,
     
     _options: Object.assign(Object.create(Widget.prototype._options), {
         color: "string|null",
@@ -83,7 +82,7 @@ export const Tag = define_class({
             for (var i = 0; i < this.nodes.length; i++) {
                 this.nodes[i].element.style.backgroundColor = O.color;
                 if (O.color)
-                    this.nodes[i].element.style.color = this.rgb2gray(this.hex2rgb(O.color)) > 0.5 ? "black" : "white";
+                    this.nodes[i].element.style.color = rgb2gray(hex2rgb(O.color)) > 0.5 ? "black" : "white";
                 else
                     this.nodes[i].element.style.color = null;
             }
