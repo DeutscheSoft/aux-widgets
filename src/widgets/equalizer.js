@@ -237,7 +237,7 @@ export const Equalizer = define_class({
         invalidate_bands.call(this);
         ResponseHandler.prototype.resize.call(this);
     },
-    /*
+    /**
      * Add a new band to the equalizer. Options is an object containing
      * options for the {@link EqBand}
      * 
@@ -286,7 +286,7 @@ export const Equalizer = define_class({
         invalidate_bands.call(this);
         return b;
     },
-    /*
+    /**
      * Add multiple new {@link EqBand}s to the equalizer. Options is an array
      * of objects containing options for the new instances of {@link EqBand}
      * 
@@ -299,7 +299,7 @@ export const Equalizer = define_class({
         for (var i = 0; i < bands.length; i++)
             this.add_band(bands[i], type);
     },
-    /*
+    /**
      * Remove a band from the widget.
      * 
      * @method Equalizer#remove_handle
@@ -328,7 +328,7 @@ export const Equalizer = define_class({
             }
         }
     },
-    /*
+    /**
      * Remove multiple {@link EqBand} from the equalizer. Options is an array
      * of {@link EqBand} instances.
      * 
