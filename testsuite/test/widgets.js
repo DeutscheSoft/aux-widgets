@@ -157,10 +157,8 @@ describe('ButtonArray', () => {
         for (var i = 0; i < ba.buttons.length; i++) {
             res += ba.buttons[i].options.label;
         }
-        if (res != "231") {
-            console.error(res);
-            throw new Error('Wrong order.');
-        }
+        if (res != "231")
+            throw new Error('Wrong order: '+res+' - should be 231');
         done();
     });
 });
@@ -175,10 +173,8 @@ describe ("Clock", () => {
         c.invalid.time = true;
         c.redraw();
         var l = c._label.innerHTML + c._label_upper.innerHTML + c._label_lower.innerHTML;
-        if (l !== "labelupperlower") {
-            console.log(l);
-            throw new Error("Wrong label content");
-        }
+        if (l !== "labelupperlower")
+            throw new Error("Wrong label content: '"+l+"' - should be 'labelupperlower'");
         done();
     });
 });
