@@ -164,3 +164,21 @@ describe('ButtonArray', () => {
         done();
     });
 });
+
+describe ("Clock", () => {
+    it("clock labels", (done) => {
+        const c = new Clock({
+            label: function (date, fps, days, months) { return "label"; },
+            label_upper: function (date, fps, days, months) { return "upper"; },
+            label_lower: function (date, fps, days, months) { return "lower"; }
+        });
+        c.invalid.time = true;
+        c.redraw();
+        var l = c._label.innerHTML + c._label_upper.innerHTML + c._label_lower.innerHTML;
+        if (l !== "labelupperlower") {
+            console.log(l);
+            throw new Error("Wrong label content");
+        }
+        done();
+    });
+});
