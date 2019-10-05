@@ -1,15 +1,15 @@
-# ![toolkit](/logo.png)
+# ![AUX](logo.png)
 
-toolkit is a JavaScript widget library with special focus on building
+AUX is a JavaScript widget library with special focus on building
 low latency user interfaces for audio applications. It contains a wide range
 of widgets such as faders, knobs, levelmeters and equalizers.
 
 ## Design Goals
 
-toolkit is written in pure JavaScript and has no external dependencies.
+AUX is written in pure JavaScript and has no external dependencies.
 It is supposed to run in browsers which support ECMAScript 5 including
-IE9. toolkit was designed to be lightweight and fast while keeping the
-full flexibility which comes with CSS. toolkit widgets offer consistent
+IE9. AUX was designed to be lightweight and fast while keeping the
+full flexibility which comes with CSS. AUX widgets offer consistent
 and intuitive APIs.
 
 ## Documentation
@@ -29,12 +29,12 @@ These articles automatically get added to the generated documentation by our jsd
 
 ## Demos
 
-Several online demos of interfaces using toolkit can be found at [http://demo.deuso.de].
+Several online demos of interfaces using AUX can be found at [http://demo.deuso.de].
 All of those demos are written in [AWML](https://github.com/DeutscheSoft/AWML), which is
-a HTML5 based markup language, which can be used to create toolkit-based interfaces.
+a HTML5 based markup language, which can be used to create AUX-based interfaces.
 
 For most use-cases using AWML is much more convenient than building an interface in
-JavaScript using toolkit directly.
+JavaScript using AUX directly.
 
 ## Reporting Bugs
 
@@ -42,7 +42,7 @@ When you find a bug in this software, please report it to our issue tracker at [
 
 ## License
 
-toolkit is released unter the the terms of the GPLv3. See the file `COPYING`
+AUX is released unter the the terms of the GPLv3. See the file `COPYING`
 file for details.
 
 Copyright (c) 2013-2019 Markus Schmidt <markus@deuso.de>
