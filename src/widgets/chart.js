@@ -602,16 +602,16 @@ export const Chart = define_class({
         this.emit("emptied");
     },
     
-    /*
+    /**
      * Add a new handle to the widget. Options is an object containing
      * options for the {@link ResponseHandle}.
      * 
-     * @method ResponseHandler#add_handle
+     * @method Chart#add_handle
      * 
      * @param {Object} [options={ }] - An object containing initial options. - The options for the {@link ResponseHandle}.
      * @param {Object} [type=ResponseHandle] - A widget class to be used as the new handle.
      * 
-     * @emits ResponseHandler#handleadded
+     * @emits Chart#handleadded
      */
     add_handle: function (options, type) {
         type = type || ResponseHandle;
@@ -634,16 +634,16 @@ export const Chart = define_class({
          * 
          * @param {ResponseHandle} handle - The {@link ResponseHandle} which was added.
          * 
-         * @event ResponseHandler#handleadded
+         * @event Chart#handleadded
          */
         this.emit("handleadded", h);
         return h;
     },
-    /*
+    /**
      * Add multiple new {@link ResponseHandle} to the widget. Options is an array
      * of objects containing options for the new instances of {@link ResponseHandle}.
      * 
-     * @method ResponseHandler#add_handles
+     * @method Chart#add_handles
      * 
      * @param {Array<Object>} options - An array of options objects for the {@link ResponseHandle}.
      * @param {Object} [type=ResponseHandle] - A widget class to be used for the new handles.
@@ -652,14 +652,14 @@ export const Chart = define_class({
         for (var i = 0; i < handles.length; i++)
             this.add_handle(handles[i], type);
     },
-    /*
+    /**
      * Remove a handle from the widget.
      * 
-     * @method ResponseHandler#remove_handle
+     * @method Chart#remove_handle
      * 
      * @param {ResponseHandle} handle - The {@link ResponseHandle} to remove.
      * 
-     * @emits ResponseHandler#handleremoved
+     * @emits Chart#handleremoved
      */
     remove_handle: function (handle) {
         // remove a handle from the widget.
@@ -672,17 +672,17 @@ export const Chart = define_class({
                 /**
                  * Is fired when a handle was removed.
                  * 
-                 * @event ResponseHandler#handleremoved
+                 * @event Chart#handleremoved
                  */
                 this.emit("handleremoved");
                 break;
             }
         }
     },
-    /*
-     * Remove multiple or all {@link ResponseHandle}s from the widget.
+    /**
+     * Remove multiple or all {@link ResponseHandle} from the widget.
      * 
-     * @method ResponseHandler#remove_handles
+     * @method Chart#remove_handles
      * 
      * @param {Array<ResponseHandle>} handles - An array of
      *   {@link ResponseHandle} instances. If the argument reveals to
@@ -698,7 +698,7 @@ export const Chart = define_class({
             /**
              * Is fired when all handles are removed.
              * 
-             * @event ResponseHandler#emptied
+             * @event Chart#emptied
              */
             this.emit("emptied");
         }
