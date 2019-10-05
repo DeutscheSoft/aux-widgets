@@ -322,7 +322,7 @@ export const LevelMeter = define_class({
          */
         this.emit("resettop");
     },
-    /*
+    /**
      * Resets the bottom hold.
      * 
      * @method LevelMeter#reset_bottom
@@ -338,7 +338,7 @@ export const LevelMeter = define_class({
          */
         this.emit("resetbottom");
     },
-    /*
+    /**
      * Resets all hold features.
      * 
      * @method LevelMeter#reset_all
