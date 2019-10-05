@@ -202,8 +202,8 @@ function start_drag(ev, el) {
     if (horiz_max.call(this)) this.options.x = pos.x;
     if (vert_max.call(this))  this.options.y = pos.y;
     
-    this.Drag._xpos += x;
-    this.Drag._ypos += y;
+    this.drag._xpos += x;
+    this.drag._ypos += y;
     
     /**
      * The user starts dragging the window.
@@ -325,8 +325,8 @@ function set_dimensions() {
 }
 function build_header() {
     build_from_const.call(this, "header");
-    if (!this.Drag) {
-        this.Drag = new Drag({
+    if (!this.drag) {
+        this.drag = new Drag({
             node        : this.element,
             handle      : this.header.element,
             onStartdrag : start_drag.bind(this),
@@ -362,8 +362,8 @@ function build_from_const(element) {
         if (L[i] !== "spacer") {
             this.set("show_" + L[i], true);
             E.appendChild(this[L[i]].element);
-            if (L[i] == "size" && !this.Resize && this.size) {
-                this.Resize = new Resize({
+            if (L[i] == "size" && !this.resize && this.size) {
+                this.resize = new Resize({
                     node          : this.element,
                     handle        : this.size.element,
                     min           : {x: O.min_width, y: O.min_height},
@@ -450,8 +450,10 @@ export const Window = define_class({
      */
      
     /**
-     * @member {Drag} Window#Drag - The {@link Drag} module.
-     * @member {Resize} Window#Resize - The {@link Resize} module.
+     * @member {Drag} Window#drag - The {@link Drag} module.
+     */
+    /**
+     * @member {Resize} Window#resize - The {@link Resize} module.
      */
      
     _class: "Window",
@@ -599,8 +601,8 @@ export const Window = define_class({
     },
     
     resize: function () {
-        this.Drag.set("min", {x: 0 - this.options.width + 20, y: 0});
-        this.Drag.set("max", {x: width() - 20, y: height() - 20});
+        this.drag.set("min", {x: 0 - this.options.width + 20, y: 0});
+        this.drag.set("max", {x: width() - 20, y: height() - 20});
         Container.prototype.resize.call(this);
     },
     
@@ -718,7 +720,7 @@ export const Window = define_class({
                 }
                 break;
             case "resizable":
-                this.Resize.set("active", value);
+                this.resize.set("active", value);
                 break;
             
         }
