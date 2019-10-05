@@ -254,17 +254,22 @@ export const ButtonArray = define_class({
      *
      * @method ButtonArray#add_button
      * 
-     * @param {Object|string} options - An object containing options for the
-     *   {@link Button} to add or a string for the label.
+     * @param {Button|Object|String} options - An alread instantiated {@link Button},
+     *   an object containing options for a new {@link Button} to add
+     *   or a string for the label of the newly created {@link Button}.
      * @param {integer} [position] - The position to add the {@link Button}
      *   to. If avoided the {@link Button} is added to the end of the list.
      * 
      * @returns {Button} The {@link Button} instance.
      */
-    add_button: function (options, position) {
-        if (typeof options === "string")
-            options = {label: options}
-        var b    = new this.options.button_class(options);
+    add_button: function (button, position) {
+        if (button instanceof Button) {
+            b = button;
+        } else {
+            if (typeof button === "string")
+                button = {label: button}
+            var b = new this.options.button_class(button);
+        }
         var len  = this.buttons.length;
         var vert = this.options.direction === "vertical";
         if (position === void(0))
