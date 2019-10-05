@@ -30,8 +30,8 @@ export const CrossoverBand = define_class({
      * 
      * @param {Object} [options={ }] - An object containing additional options.
      * 
-     * @property {String} [lower="lowpass3"] - The type of filter for the range below cutoff frequency.
-     * @property {String} [upper="highpass3"] - The type of filter for the range above cutoff frequency.
+     * @property {String|Function} [lower="lowpass3"] - The type of filter for the range below cutoff frequency. See {@link EqBand} for more information.
+     * @property {String|Function} [upper="highpass3"] - The type of filter for the range above cutoff frequency. See {@link EqBand} for more information.
      * @property {Function} [label=function (t, x, y, z) { return sprintf("%.2f Hz", x); }] - The function formatting the handles label.
      * 
      * @class CrossoverBand
