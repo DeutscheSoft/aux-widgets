@@ -1,4 +1,5 @@
 import {
+    Button,
     ResponseHandle,
     EqBand,
     Chart,
@@ -129,4 +130,37 @@ describe('Crossover', () => {
 
     done();
   });
+});
+
+describe('ButtonArray', () => {
+    it("creating buttons via string, options and instance", (done) => {
+        const ba = new ButtonArray();
+        const label = "testing";
+        const b1 = ba.add_button(label);
+        const b2 = ba.add_button({label:label});
+        const b3 = ba.add_button(new Button({label:label}));
+        const o1 = object_minus(ba.buttons[0].options, ['id']);
+        const o2 = object_minus(ba.buttons[1].options, ['id']);
+        const o3 = object_minus(ba.buttons[2].options, ['id']);
+        if (!compare(o1, o2) || !compare(o1, o3)) {
+            console.error(b1.options, b2.options, b3.options);
+            throw new Error('Labels mismatch.');
+        }
+        done();
+    });
+    it ("creating buttons in right order", (done) => {
+        const ba = new ButtonArray();
+        const b1 = ba.add_button("1");
+        const b2 = ba.add_button("2", 0);
+        const b3 = ba.add_button("3", 1);
+        let res = "";
+        for (var i = 0; i < ba.buttons.length; i++) {
+            res += ba.buttons[i].options.label;
+        }
+        if (res != "231") {
+            console.error(res);
+            throw new Error('Wrong order.');
+        }
+        done();
+    });
 });
