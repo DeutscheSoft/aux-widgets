@@ -44,18 +44,7 @@ function draw_time(force) {
         this.__hour = tmp;
     }
     
-    var args = [t,
-                t.getFullYear(),
-                t.getMonth(),
-                t.getDate(),
-                t.getDay(),
-                t.getHours(),
-                t.getMinutes(),
-                t.getSeconds(),
-                t.getMilliseconds(),
-                Math.round(t.getMilliseconds() / (1000 / O.fps)),
-                O.months,
-                O.days];
+    var args = [t, O.fps, O.months, O.days];
     if ((tmp = O.label.apply(this, args)) !== this.__label || force) {
         set_text(this._label, tmp);
         this.__label = tmp;
@@ -178,9 +167,9 @@ export const Clock = define_class({
      * @property {Integer} [options.fps=25] - Framerate for calculating SMTP frames
      * @property {Array<String>} [options.months=["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]] - Array containing all months names.
      * @property {Array<String>} [options.days=["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]] - Array containing all days names.
-     * @property {Function} [options.label=function (_date, year, month, date, day, hour, minute, second, millisecond, frame, months, days) { return ((hour < 10) ? ("0" + hour) : hour) + ":" + ((minute < 10) ? ("0" + minute) : minute) + ":" + ((second < 10) ? ("0" + second) : second);] - Callback to format the main label.
-     * @property {Function} [options.label_upper=function (_date, year, month, date, day, hour, minute, second, millisecond, frame, months, days) { return days[day]; }] - Callback to format the upper label.
-     * @property {Function} [options.label_lower=function (_date, year, month, date, day, hour, minute, second, millisecond, frame, months, days) { return ((date < 10) ? ("0" + date) : date) + ". " + months[month] + " " + year; }] - Callback to format the lower label.
+     * @property {Function} [options.label=function (date, fps, months, days) { var h = date.getHours(); var m = date.getMinutes(); var s = date.getSeconds(); return ((h < 10) ? ("0" + h) : h) + ":" + ((m < 10) ? ("0" + m) : m) + ":" + ((s < 10) ? ("0" + s) : s);] - Callback to format the main label.
+     * @property {Function} [options.label_upper=function (date, fps, months, days) { return days[date.getDay()]; }] - Callback to format the upper label.
+     * @property {Function} [options.label_lower=function (date, fps, months, days) { var d = date.getDate(); var m = date.getMonth(); var y = date.getFullYear()return ((d < 10) ? ("0" + d) : d) + ". " + months[m] + " " + y; }] - Callback to format the lower label.
      * @property {Number} [options.label_scale=0.33] - The scale of `label_upper` and `label_lower` compared to the main label.
      * @property {Number|String|Date} [options.time] - Set a specific time and date. To avoid auto-udates, set `timeout` to 0.
      *   For more information about the value, please refer to <a href="https://www.w3schools.com/jsref/jsref_obj_date.asp">W3Schools</a>.
@@ -223,16 +212,18 @@ export const Clock = define_class({
         fps:          25,         // framerate for calculatind SMTP frames
         months:       ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
         days:         ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-        label: function (_date, year, month, date, day, hour, minute, second, millisecond, frame, months, days) {
-            return ((hour < 10) ? ("0" + hour) : hour) + ":" +
-                   ((minute < 10) ? ("0" + minute) : minute) + ":" +
-                   ((second < 10) ? ("0" + second) : second);
+        label: function (date, fps, months, days) {
+            var h = date.getHours(), m = date.getMinutes(), s = date.getSeconds();
+            return ((h < 10) ? ("0" + h) : h) + ":" +
+                   ((m < 10) ? ("0" + m) : m) + ":" +
+                   ((s < 10) ? ("0" + s) : s);
         },
-        label_upper: function (_date, year, month, date, day, hour, minute, second, millisecond, frame, months, days) {
-            return days[day];
+        label_upper: function (date, fps, months, days) {
+            return days[date.getDay()];
         },
-        label_lower: function (_date, year, month, date, day, hour, minute, second, millisecond, frame, months, days) {
-            return ((date < 10) ? ("0" + date) : date) + ". " + months[month] + " " + year;
+        label_lower: function (date, fps, months, days) {
+            var d = date.getDate(), m = date.getMonth(), y = date.getFullYear();
+            return ((d < 10) ? ("0" + d) : d) + ". " + months[m] + " " + y;
         },
         label_scale: 0.33           // the scale of the upper and lower labels
                                    // compared to the main label
