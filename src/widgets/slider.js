@@ -70,7 +70,7 @@ function set_background(horiz, vert, size) {
  * times the amount of frames.
  * Slider uses {@link DragValue} and {@link ScrollValue}
  * for setting its value.
- * It inherits all options of {@link DragValue}.
+ * It inherits all options of {@link DragValue}, {@link Ranged} and {@link Warning}.
  *
  * @class Slider
  * 
@@ -78,12 +78,13 @@ function set_background(horiz, vert, size) {
  *
  * @param {Object} [options={ }] - An object containing initial options.
  * 
+ * @property {Number} [options.value=0] - The current value.
  * @property {Integer} [options.frames=1] - The amount of frames contained
- * in the background image
+ *     in the background image.
  * @property {String} [options.alignment="horizontal"] - The direction
- * of the frames in the image, next to (`horizontal`) or among each other (`"vertical`)
+ *     of the frames in the image, next to (`horizontal`) or among each other (`"vertical`).
  * @property {String|Booelan} options.image - The image containing all frames for the slider.
- *   Set to `false` to set the background image via external CSS.
+ *     Set to `false` to set the background image via external CSS.
  * 
  */
 export const Slider = define_class({
