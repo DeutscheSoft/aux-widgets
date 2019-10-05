@@ -31,7 +31,7 @@ export const Label = define_class({
      * 
      * @property {Object} options
      * 
-     * @param {String} [options.label=""] - The text of the label.
+     * @param {Mixed} [options.label=""] - The content of the label. Can be formatted via `options.format`.
      * @param {Function|Boolean} [options.format=false] - Optional format function.
      */
     _class: "Label",
