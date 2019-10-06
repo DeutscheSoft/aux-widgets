@@ -1,107 +1,110 @@
 import { Base } from '../src/index.js';
+import { Events } from '../src/events.js';
 
-describe('Events', () => {
-  it('addEventListener()', (done) => {
-    const o = new Base();
-    o.addEventListener("foo", done);
-    o.dispatchEvent("foo");
-  });
-  it('removeEventListener()', (done) => {
-    const o = new Base();
-    const cb = () => { done(new Error('fail.')); };
-    o.addEventListener("foo", cb);
-    o.removeEventListener("foo", cb);
-    o.dispatchEvent("foo");
-    done();
-  });
-  it('subscribe()', () => {
-    const o = new Base();
-    let called = false;
-    const cb = () => {
-      called = true;
-    };
-    const sub = o.subscribe("foo", cb);
-
-    // check that subscription works
-    o.dispatchEvent("foo");
-    if (!called) throw new Error("not called");
-
-    // check that unsubscribe works
-    called = false;
-    sub();
-    o.dispatchEvent("foo");
-    if (called) throw new Error("called");
-
-    // check that unsubscribe can be called twice
-    called = false;
-    const sub2 = o.subscribe("foo", cb);
-    sub();
-    o.dispatchEvent("foo");
-    if (!called) throw new Error("not called");
-    sub2();
-  });
-  it('once()', () => {
-    const o = new Base();
-    let called = false;
-    const cb = () => {
-      called = true;
-    };
-    const sub = o.once("foo", cb);
-
-    // check that subscription works
-    o.dispatchEvent("foo");
-    if (!called) throw new Error("not called");
-
-    // check that unsubscribe works
-    called = false;
-    o.dispatchEvent("foo");
-    if (called) throw new Error("called");
-
-    // check that unsubscribe can be called twice
-    called = false;
-    const sub2 = o.once("foo", cb);
-    sub2();
-    o.dispatchEvent("foo");
-    if (called) throw new Error("called");
-  });
-  it('reentrance', () => {
-    {
-      const o = new Base();
+for (let C of [Base, Events])
+{
+  describe.only('Events', () => {
+    it('addEventListener()', (done) => {
+      const o = new C();
+      o.addEventListener("foo", done);
+      o.dispatchEvent("foo");
+    });
+    it('removeEventListener()', (done) => {
+      const o = new C();
+      const cb = () => { done(new Error('fail.')); };
+      o.addEventListener("foo", cb);
+      o.removeEventListener("foo", cb);
+      o.dispatchEvent("foo");
+      done();
+    });
+    it('subscribe()', () => {
+      const o = new C();
       let called = false;
-
       const cb = () => {
         called = true;
       };
-      const cb2 = () => {
-        o.off('foo', cb2);
-      };
+      const sub = o.subscribe("foo", cb);
 
-      o.on('foo', cb2);
-      o.on('foo', cb);
-      o.on('foo', cb2);
+      // check that subscription works
+      o.dispatchEvent("foo");
+      if (!called) throw new Error("not called");
 
-      o.emit('foo');
+      // check that unsubscribe works
+      called = false;
+      sub();
+      o.dispatchEvent("foo");
+      if (called) throw new Error("called");
 
-      if (!called) throw new Error('not called');
-    }
-    {
-      const o = new Base();
+      // check that unsubscribe can be called twice
+      called = false;
+      const sub2 = o.subscribe("foo", cb);
+      sub();
+      o.dispatchEvent("foo");
+      if (!called) throw new Error("not called");
+      sub2();
+    });
+    it('once()', () => {
+      const o = new C();
       let called = false;
-
       const cb = () => {
         called = true;
       };
-      const cb2 = () => {
+      const sub = o.once("foo", cb);
+
+      // check that subscription works
+      o.dispatchEvent("foo");
+      if (!called) throw new Error("not called");
+
+      // check that unsubscribe works
+      called = false;
+      o.dispatchEvent("foo");
+      if (called) throw new Error("called");
+
+      // check that unsubscribe can be called twice
+      called = false;
+      const sub2 = o.once("foo", cb);
+      sub2();
+      o.dispatchEvent("foo");
+      if (called) throw new Error("called");
+    });
+    it('reentrance', () => {
+      {
+        const o = new C();
+        let called = false;
+
+        const cb = () => {
+          called = true;
+        };
+        const cb2 = () => {
+          o.off('foo', cb2);
+        };
+
+        o.on('foo', cb2);
         o.on('foo', cb);
-      };
+        o.on('foo', () => cb2());
 
-      o.on('foo', cb2);
-      o.on('foo', cb2);
+        o.emit('foo');
 
-      o.emit('foo');
+        if (!called) throw new Error('not called');
+      }
+      {
+        const o = new C();
+        let called = false;
 
-      if (called) throw new Error('called');
-    }
+        const cb = () => {
+          called = true;
+        };
+        const cb2 = () => {
+          o.on('foo', cb);
+        };
+
+        o.on('foo', cb2);
+        o.on('foo', () => cb2);
+
+        o.emit('foo');
+
+        if (called) throw new Error('called');
+      }
+    });
   });
-});
-
+}
