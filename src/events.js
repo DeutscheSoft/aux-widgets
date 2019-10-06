@@ -49,12 +49,59 @@ function remove_event_handler(to, event, fun)
   return to;
 }
 
+function has_event_handler(handlers, name, callback)
+{
+  if (handlers === null) return false;
+
+  const tmp = handlers.get(name);
+
+  if (tmp === null) return false;
+
+  if (typeof callback === 'undefined') return true;
+
+  if (typeof callback !== "function")
+      throw new TypeError("Expected function.");
+
+  if (Array.isArray(tmp))
+  {
+    return tmp.indexOf(callback) !== -1;
+  }
+  else
+  {
+    return tmp === callback;
+  }
+}
+
 function call_event_handler(fun, self, args) {
     try {
         return fun.apply(self, args);
     } catch (e) {
         warn("event handler", fun, "threw", e);
     }
+}
+
+function emit_event(handlers, name, self, args)
+{
+  if (handlers === null) return;
+
+  const tmp = handlers.get(name);
+
+  if (tmp === null) return;
+
+  if (Array.isArray(tmp))
+  {
+    for (let i = 0; i < tmp.length; i++)
+    {
+      const ret = call_event_handler(tmp[i], self, args);
+
+      if (ret !== void(0)) return ret;
+    }
+    return void(0);
+  }
+  else
+  {
+    return call_event_handler(tmp, self, args);
+  }
 }
 
 /**
@@ -138,25 +185,7 @@ export class Events
 
     const handlers = this._event_handlers;
 
-    if (handlers === null) return false;
-
-    const tmp = handlers.get(name);
-
-    if (tmp === null) return false;
-
-    if (typeof callback === 'undefined') return true;
-
-    if (typeof callback !== "function")
-        throw new TypeError("Expected function.");
-
-    if (Array.isArray(tmp))
-    {
-      return tmp.indexOf(callback) !== -1;
-    }
-    else
-    {
-      return tmp === callback;
-    }
+    return has_event_handler(handlers, name, callback);
   }
 
   /**
@@ -179,27 +208,7 @@ export class Events
     if (typeof name !== "string")
         throw new TypeError("Expected string.");
 
-    const handlers = this._event_handlers;
-
-    if (handlers === null) return;
-
-    const tmp = handlers.get(name);
-
-    if (tmp === null) return;
-
-    if (Array.isArray(tmp))
-    {
-      for (let i = 0; i < tmp.length; i++)
-      {
-        const ret = call_event_handler(tmp[i], this, args);
-
-        if (ret !== void(0)) return ret;
-      }
-    }
-    else
-    {
-      return call_event_handler(tmp, this, args);
-    }
+    return emit_event(this._event_handlers, name, this, args);
   }
 
   /**
