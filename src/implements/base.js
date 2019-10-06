@@ -389,7 +389,7 @@ export const Base = define_class({
     {
       const sub = this.subscribe(event, (...args) => {
         sub();
-        func(...args);
+        return func(...args);
       });
 
       return sub;

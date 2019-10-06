@@ -1,3 +1,5 @@
+import { warn } from './utils/log.js';
+
 function add_event_handler(to, event, fun)
 {
     if (to === null)
@@ -26,7 +28,7 @@ function remove_event_handler(to, event, fun)
   let tmp = to.get(event);
 
   if (Array.isArray(tmp)) {
-    tmp = tmp.filter((f) => f === fun);
+    tmp = tmp.filter((f) => f !== fun);
     if (tmp.length === 1) tmp = tmp[0];
     else if (tmp.length === 0) tmp = null;
   } else if (tmp === fun) {
@@ -259,7 +261,7 @@ export class Events
   {
     const sub = this.subscribe(event, (...args) => {
       sub();
-      func(...args);
+      return func(...args);
     });
 
     return sub;

@@ -16,7 +16,7 @@ export function remove_event(from, event, fun) {
     var tmp = from[event];
     if (!tmp) return;
     if (Array.isArray(tmp)) {
-        from[event] = tmp.filter((f) => f === fun);
+        from[event] = tmp.filter((f) => f !== fun);
         if (tmp.length === 1) from[event] = tmp[0];
         else if (tmp.length === 0) delete from[event];
     } else if (tmp === fun) {
