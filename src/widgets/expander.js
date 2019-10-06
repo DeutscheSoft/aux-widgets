@@ -186,7 +186,7 @@ export const Expander = define_class({
             if (value) add_to_group.call(this, value);
         }
     },
-    Extends: TK.Container,
+    Extends: Container,
     /**
      * Toggles the collapsed state of the widget.
      * 
