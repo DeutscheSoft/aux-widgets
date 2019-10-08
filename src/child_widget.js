@@ -46,12 +46,12 @@ export function define_child_widget(widget, name, config) {
      * is used internally to simplify widget definitions. E.g. the {@link Icon} of a
      * {@link Button} is defined as a child widget. Child widgets
      * are created/added after the initialization of the parent widget.
-     * If not configured otherwise, all options of the child widget can
+     * If not configured explicitly, all options of the child widget can
      * be accessed via <code>Widget.options[config.name + "." + option]</code>
      * on the parent widget.
      * 
-     * @param {Widget} widget - The {@link Widget} to add the child widget to.
-     * @param {string} name - The identifier of the element, <code>Widget[config.name]</code>.
+     * @param {Widget} widget - The {@link Widget} to add the ChildWidget to.
+     * @param {string} name - The identifier of the element inside the parent element, <code>Widget[config.name]</code>.
      * @param {object} config - The configuration of the child element.
      * 
      * @property {Widget} config.create - A Widget class derivate to be used as child widget.
