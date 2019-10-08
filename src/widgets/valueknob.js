@@ -65,7 +65,7 @@ function value_done() {
 export const ValueKnob = define_class({
     /**
      * This widget combines a {@link Knob}, a {@link Label}  and a {@link Value} whose
-     * value is synchronized.
+     * value is synchronized. It inherits all options from {@link Knob} and {@link Value}.
      *
      * @class ValueKnob
      * 
@@ -73,8 +73,11 @@ export const ValueKnob = define_class({
      * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
+     * @property {String} [options.title=false] - Title of the knob. Set to `false` to hide the element from the DOM.
      * @property {Function} [options.value_format=FORMAT("%.2f")] - Callback to format the value.
      * @property {Number} [options.value_size=5] - Amount of digits for the value input.
+     * @property {Number} [options.show_value=true] - Set to `false` to hide the {@link Value}.
+     * @property {Number} [options.show_knob=true] - Set to `false` to hide the {@link Knob}.
      */
     _class: "ValueKnob",
     Extends: Widget,
