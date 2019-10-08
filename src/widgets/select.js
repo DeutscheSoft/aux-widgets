@@ -123,7 +123,7 @@ export const Select = define_class({
      * @param {Object} [options={ }] - An object containing initial options.
      * 
      * @property {Integer|Boolean} [options.selected=false] - The index of the selected {@SelectEntry}.
-     *   Set to `false` to unselect any already selected entry.
+     *   Set to `false` to unselect any already selected entries.
      * @property {mixed} [options.value] - The value of the selected entry.
      * @property {Boolean} [options.auto_size=true] - If `true`, the Select is
      *   auto-sized to be as wide as the widest {@SelectEntry}.
