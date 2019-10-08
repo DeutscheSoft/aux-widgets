@@ -27,9 +27,8 @@ import { element, add_class } from '../utils/dom.js';
  * different styles. State extends {@link Widget}.
  *
  * The LED effect is implemented as a DIV element, which is overlayed by
- * a DIV element with class <code.aux-mask</code>. When switching
- * the state, the opacity of the mask is toggled between zero and
- * <code>options.opactity</code>.
+ * a DIV element with class <code>aux-mask</code>. `options.state`
+ * changes the opacity of the mask element.
  *
  * @class State
  * 
