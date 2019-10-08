@@ -139,6 +139,7 @@ function deactivate_tooltip() {
  * Fader is a slidable control with a {@link Scale} next to it which
  * can be both dragged and scrolled. Fader implements {@link Ranged},
  * {@link Warning} and {@link GlobalCursor} and inherits their options.
+ * A {@link Label} and a {@link Value} are available optionally.
  *
  * @class Fader
  * 
@@ -146,7 +147,7 @@ function deactivate_tooltip() {
  *
  * @param {Object} [options={ }] - An object containing initial options.
  * 
- * @property {Number} [options.value] - The fader position. This options is
+ * @property {Number} [options.value] - The faders position. This options is
  *   modified by user interaction.
  * @property {Function} [options.tooltip=false] - An optional formatting function for
  *   the tooltip value. The tooltip will show the value the mouse cursor is
