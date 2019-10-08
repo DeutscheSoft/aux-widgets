@@ -4,13 +4,14 @@
   "description": "backstop tests for AUX",
   "main": "index.html",
   "scripts": {
-    "test": "node ./node_modules/.bin/http-server"
+    "test": "node run.js"
   },
   "author": "Arne Goedeke",
   "private": true,
   "dependencies": {
     "backstopjs": "^4.3.2",
     "connect": "^3.7.0",
+    "http-server": "^0.11.1",
     "readdirp": "^3.1.3",
     "serve-static": "^1.14.1"
   }
