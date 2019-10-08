@@ -4,7 +4,8 @@
   "description": "backstop tests for AUX",
   "main": "index.html",
   "scripts": {
-    "test": "node run.js"
+    "test": "node run.js",
+    "approve": "node run.js approve"
   },
   "author": "Arne Goedeke",
   "private": true,
