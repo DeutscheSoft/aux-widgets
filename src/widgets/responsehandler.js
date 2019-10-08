@@ -23,11 +23,11 @@ import { add_class } from '../utils/dom.js';
     
 export const ResponseHandler = define_class({
     /**
-     * ResponseHandler is a FrequencyResponse adding some ResponseHandles. It is
+     * ResponseHandler is a {@link FrequencyResponse} adding some {@link ResponseHandle}s. It is
      * meant as a universal user interface for equalizers and the like.
      * 
      * This class is deprecated since all relevant functionality went into
-     * the base class Graph. Use FrequencyResponse instead.
+     * the base class {@link Graph}. Use {@link FrequencyResponse} instead.
      *
      * @class ResponseHandler
      * 
