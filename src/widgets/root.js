@@ -34,12 +34,12 @@ function resized() {
     }
 }
 /**
- * TK.Root is used to force a resize on all its child widgets
+ * Root is used to force a resize on all its child widgets
  * as soon as the browser window is resized. It also toggles drawing
  * of its children depending on the state of visibility of the
  * browser tab or browser window.
  * 
- * @extends TK.Container
+ * @extends Container
  * 
  * @class Root
  */

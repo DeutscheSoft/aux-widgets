@@ -420,8 +420,8 @@ export const Window = define_class({
      * @property {Boolean} [options.minimize=false] - Minimize window (does only make sense with a
      *   window manager application to keep track of it)
      * @property {Boolean} [options.shrink=false] - Shrink rolls the window up into the title bar.
-     * @property {String|HTMLElement|TK.Container} [options.content=""] - The content of the window.
-     *   Can be either a string, a HTMLElement or a {@link TK.Container} to be appended to the content area.
+     * @property {String|HTMLElement|Container} [options.content=""] - The content of the window.
+     *   Can be either a string, a HTMLElement or a {@link Container} to be appended to the content area.
      * @property {String} [options.open="center"] - initial position of the window, can be one out of
      *   `top-left`, `top`, `top-right`, `left`, `center`, `right`, `bottom-left`, `bottom`, `bottom-right`
      * @property {Integer} [options.z_index=10000] - Z index for piling windows. does make more sense
@@ -679,11 +679,11 @@ export const Window = define_class({
         if (I.content) {
             I.content = false;
             if (O.content) {
-                if (TK.Container.prototype.isPrototypeOf(O.content)) {
-                    TK.set_content(this.content.element, "");
+                if (Container.prototype.isPrototypeOf(O.content)) {
+                    set_content(this.content.element, "");
                     this.append_child(O.content);
                 } else {
-                    TK.set_content(this.content.element, O.content);
+                    set_content(this.content.element, O.content);
                 }
             }
             setD = true;

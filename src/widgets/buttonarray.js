@@ -114,7 +114,7 @@ export const ButtonArray = define_class({
         show: "int",
         resized: "boolean",
         scroll: "int",
-        button_class: "TK.Button",
+        button_class: "Button",
     }),
     options: {
         buttons: [],

@@ -101,7 +101,7 @@ var clicked = function (e) {
   
 export const ConfirmButton = define_class({
   /**
-   * ConfirmButton is a {@link TK.Button} firing the `confirmed` event
+   * ConfirmButton is a {@link Button} firing the `confirmed` event
    * after it was hit a second time. While waiting for the confirmation, a
    * dedicated label and icon can be displayed. The button is reset to
    * default if no second click appears. A click outside of the button
