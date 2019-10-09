@@ -183,8 +183,6 @@ export const Graph = define_class({
      *   of the base line to fill from between 0 (bottom) and 1 (top).
      * @property {String} [options.color=""] - Set the color of the path.
      *   Better use <code>stroke</code> and <code>fill</code> via CSS.
-     * @property {Number} [options.width=0] - The width of the graph.
-     * @property {Number} [options.height=0] - The height of the graph.
      * @property {String|Boolean} [options.key=false] - Show a description
      *   for this graph in the charts key, <code>false</code> to turn it off.
      * 
@@ -203,8 +201,6 @@ export const Graph = define_class({
         color: "string",
         range_x: "object",
         range_y: "object",
-        width: "number",
-        height: "number",
         key: "string|boolean",
         element: void(0),
     }),
@@ -214,8 +210,6 @@ export const Graph = define_class({
         mode:      "line",
         base:      0,
         color:     "",
-        width:     0,
-        height:    0,
         key:       false
     },
     
@@ -253,7 +247,7 @@ export const Graph = define_class({
             add_class(E, O.mode === "line" ?  "aux-outline" : "aux-filled");
         }
 
-        if (I.validate("dots", "type", "width", "height")) {
+        if (I.validate("dots", "type")) {
             var a = 0.5;
             var dots = O.dots;
             var range_x = this.range_x;
@@ -336,12 +330,6 @@ export const Graph = define_class({
             case "range_y":
                 this.add_range(value, key);
                 value.on("set", range_change_cb.bind(this));
-                break;
-            case "width":
-                this.range_x.set("basis", value);
-                break;
-            case "height":
-                this.range_y.set("basis", value);
                 break;
             case "dots":
                 /**
