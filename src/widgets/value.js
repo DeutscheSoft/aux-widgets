@@ -132,7 +132,7 @@ function submit_cb(e) {
  * @param {Object} [options={ }] - An object containing initial options.
  * 
  * @property {Number} [options.value=0] - The value.
- * @property {Function} [options.format=FORMAT("%.2f")] - A formatting
+ * @property {Function} [options.format=function (v) { return v; }] - A formatting
  *   function used to display the value.
  * @property {Integer} [options.size=5] - Size attribute of the INPUT element.
  * @property {Integer} [options.maxlength] - Maxlength attribute of the INPUT element.
@@ -162,7 +162,7 @@ export const Value = define_class({
     }),
     options: {
         value: 0,
-        format: FORMAT("%.2f"),
+        format: function (v) { return v; },
         size: 5,
         container: false,
         // set a callback function if value is editable or
