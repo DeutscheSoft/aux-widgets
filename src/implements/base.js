@@ -125,7 +125,7 @@ function has_event_listeners(event) {
     return ev && ev.hasOwnProperty(event);
 }
 /**
- * This is the base class for all widgets in toolkit.
+ * This is the base class for all AUX widgets.
  * It provides an API for event handling and other basic implementations.
  *
  * @class Base

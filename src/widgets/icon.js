@@ -24,7 +24,7 @@ import { Widget } from './widget.js';
 export const Icon = define_class({
     /**
      * Icon represents a <code>&lt;DIV></code> element showing either
-     * icons from the toolkit font or dedicated image files as CSS background.
+     * icons from the AUX font or dedicated image files as CSS background.
      *
      * @class Icon
      * 
