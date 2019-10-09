@@ -19,7 +19,7 @@
 import { define_class } from './../widget_helpers.js';
 import { make_svg, add_class } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
-import { ResponseHandler } from './responsehandler.js';
+import { FrequencyResponse } from './responsehandler.js';
 import { EqBand } from '../modules/eqband.js';
  
 function fast_draw_plinear(X, Y) {
@@ -125,7 +125,7 @@ function hide_bands() {
 }
 export const Equalizer = define_class({
     /**
-     * Equalizer is a {@link ResponseHandler}, utilizing {@link EqBand}s instead of
+     * Equalizer is a {@link FrequencyResponse}, utilizing {@link EqBand}s instead of
      * simple {@link ResponseHandle}s.
      *
      * @property {Object} options
@@ -140,11 +140,11 @@ export const Equalizer = define_class({
      *   i.e. y pixels difference per x pixel
      * @class Equalizer
      * 
-     * @extends ResponseHandler
+     * @extends FrequencyResponse
      */
     _class: "Equalizer",
-    Extends: ResponseHandler,
-    _options: Object.assign(Object.create(ResponseHandler.prototype._options), {
+    Extends: FrequencyResponse,
+    _options: Object.assign(Object.create(FrequencyResponse.prototype._options), {
         accuracy: "number",
         oversampling: "number",
         threshold: "number",
@@ -170,7 +170,7 @@ export const Equalizer = define_class({
     },
     
     initialize: function (options) {
-        ResponseHandler.prototype.initialize.call(this, options);
+        FrequencyResponse.prototype.initialize.call(this, options);
         /**
          * @member {Array} Equalizer#bands - Array of {@link EqBand} instances.
          */
@@ -206,12 +206,12 @@ export const Equalizer = define_class({
     destroy: function () {
         this.empty(); // Arne: ??? <- Markus: removes all graphs, defined in Chart
         this._bands.remove();
-        ResponseHandler.prototype.destroy.call(this);
+        FrequencyResponse.prototype.destroy.call(this);
     },
     redraw: function () {
         var I = this.invalid;
         var O = this.options;
-        ResponseHandler.prototype.redraw.call(this);
+        FrequencyResponse.prototype.redraw.call(this);
         if (I.validate("bands", "accuracy")) {
             if (this.baseline) {
                 var f = [];
@@ -235,7 +235,7 @@ export const Equalizer = define_class({
     },
     resize: function () {
         invalidate_bands.call(this);
-        ResponseHandler.prototype.resize.call(this);
+        FrequencyResponse.prototype.resize.call(this);
     },
     /**
      * Add a new band to the equalizer. Options is an object containing

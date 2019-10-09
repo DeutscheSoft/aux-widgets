@@ -50,7 +50,6 @@ js_input_files = \
     toolkit/widgets/dynamics.js\
     toolkit/widgets/gauge.js\
     toolkit/widgets/frequencyresponse.js\
-    toolkit/widgets/responsehandler.js\
     toolkit/widgets/equalizer.js\
     toolkit/widgets/fader.js\
     toolkit/widgets/knob.js\
@@ -100,7 +99,6 @@ css_input_files = \
     toolkit/styles/2013/css/levelmeter.css \
     toolkit/styles/2013/css/frequencyresponse.css \
     toolkit/styles/2013/css/dynamics.css \
-    toolkit/styles/2013/css/responsehandler.css \
     toolkit/styles/2013/css/clock.css \
     toolkit/styles/2013/css/window.css \
     toolkit/styles/2013/css/knob.css \

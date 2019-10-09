@@ -835,8 +835,8 @@ function enddrag() {
 }
 
 /**
- * Class which represents a draggable SVG element, which can be used to represent and change
- * a value inside of a {@link ResponseHandler} and is drawn inside of a chart.
+ * ResponseHandle is a draggable SVG element, which can be used to represent and change
+ * a value inside a {@link FrequencyResponse} and is drawn inside of a {@link Chart}.
  *
  * @class ResponseHandle
  * 
