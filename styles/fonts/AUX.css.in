@@ -13,12 +13,6 @@
   vertical-align: middle;
 }
 
-.[prefix]button.[prefix]icon::before{
-  display: table-cell;
-  vertical-align: middle;
-  text-align: center;
-}
-
 .[prefix]icon.[prefix]12  { font-size: 12px; }
 .[prefix]icon.[prefix]16  { font-size: 16px; }
 .[prefix]icon.[prefix]20  { font-size: 20px; }
