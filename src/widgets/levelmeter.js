@@ -118,11 +118,10 @@ export const LevelMeter = define_class({
      *   if set to <code>-1</code> it remains forever.
      * @property {Function} [options.format_peak=FORMAT("%.2f")] - Formatting function for the peak label.
      * @property {Number} [options.falling=0] - If set to a positive number, activates the automatic falling
-     *   animation. The meter level will fall by this amount per frame.
-     * @property {Number} [options.falling_fps=24] - This is the number of frames of the falling animation.
-     *   It is not an actual frame rate, but instead is used to determine the actual speed of the falling
-     *   animation together with the option <code>falling</code>.
-     * @property {Number} [options.falling_init=2] - Initial falling delay in number of frames. This option
+     *   animation. The meter level will fall by this amount over the time set via `options.falling_duration`.
+     * @property {Number} [options.falling_duration=1000] - This is the time in milliseconds for the falling
+     *   animation. The level falls by `options.falling` in this period of time.
+     * @property {Number} [options.falling_init=50] - Initial falling delay in milliseconds. This option
      *   can be used to delay the start of the falling animation in order to avoid flickering if internal
      *   and external falling are combined.
      */
@@ -130,7 +129,7 @@ export const LevelMeter = define_class({
     Extends: Meter,
     _options: Object.assign(Object.create(Meter.prototype._options), {
         falling: "number",
-        falling_fps: "number",
+        falling_duration: "int",
         falling_init: "number",
         peak: "number",
         top: "number",
@@ -148,8 +147,8 @@ export const LevelMeter = define_class({
     options: {
         clip:         false,
         falling:      0,
-        falling_fps:  24,
-        falling_init: 2,
+        falling_duration: 1000,
+        falling_init: 50,
         peak:         false,
         top:          false,
         bottom:       false,
@@ -361,21 +360,20 @@ export const LevelMeter = define_class({
         var O = this.options;
         var falling = +O.falling;
         if (O.falling <= 0) return O.value;
-        var value = +O.value, base = +O.base;
+        var value = +O.value, base = +O.base, dur = +O.falling_duration;
 
         var age = +this.value_time.value;
 
         if (!(age > 0)) age = Date.now();
         else age = +(Date.now() - age);
-
-        var frame_length = 1000.0 / +O.falling_fps;
-
-        if (age > O.falling_init * frame_length) {
+        var diff = age * (falling / dur);
+        
+        if (age > O.falling_init) {
             if (value > base) {
-                value -= falling * (age / frame_length);
+                value -= diff;
                 if (value < base) value = base;
             } else {
-                value += falling * (age / frame_length);
+                value += diff;
                 if (value > base) value = base;
             }
         }
