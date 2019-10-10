@@ -141,7 +141,6 @@ css_input_files = \
     toolkit/styles/plain/css/levelmeter.css \
     toolkit/styles/plain/css/frequencyresponse.css \
     toolkit/styles/plain/css/dynamics.css \
-    toolkit/styles/plain/css/responsehandler.css \
     toolkit/styles/plain/css/clock.css \
     toolkit/styles/plain/css/window.css \
     toolkit/styles/plain/css/knob.css \
