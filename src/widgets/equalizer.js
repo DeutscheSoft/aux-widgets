@@ -19,7 +19,7 @@
 import { define_class } from './../widget_helpers.js';
 import { make_svg, add_class } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
-import { FrequencyResponse } from './responsehandler.js';
+import { FrequencyResponse } from './frequencyresponse.js';
 import { EqBand } from '../modules/eqband.js';
  
 function fast_draw_plinear(X, Y) {
