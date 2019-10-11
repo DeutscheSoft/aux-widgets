@@ -64,7 +64,7 @@ export const Dialog = define_class({
  * @param {Object} [options={ }] - An object containing initial options.
  * 
  * @property {Boolean} [options.visible=true] - Hide or show the dialog.
- * @property {String} [options.anchor="top-left"] - Origin of `x` and `y` coordinates.
+ * @property {String} [options.anchor="top-left"] - Origin of `x` and `y` coordinates. See {@link Anchor} for more information.
  * @property {Number} [options.x=0] - X-position of the dialog.
  * @property {Number} [options.y=0] - Y-position of the dialog.
  * @property {boolean} [options.auto_close=false] - Set dialog to `visible=false` if clicked outside in the document.
@@ -164,18 +164,17 @@ export const Dialog = define_class({
         var I = this.invalid;
         var O = this.options;
         var E = this.element;
-        if (I.x || I.y || I.anchor) {
-            var bodybox = document.body.getBoundingClientRect();
-            var sw = bodybox.width;
-            var sh = bodybox.height;
-            var box = this.element.getBoundingClientRect();
-            I.x = I.y = I.anchor = false;
-            var box = E.getBoundingClientRect();
-            var pos = translate_anchor(O.anchor, O.x, O.y, -box.width, -box.height);
-            pos.x = Math.min(sw - box.width, Math.max(0, pos.x));
-            pos.y = Math.min(sh - box.height, Math.max(0, pos.y));
-            E.style.left = pos.x + "px"
-            E.style.top  = pos.y + "px"
+        if (I.x) {
+            I.x = false;
+            E.style.left = O.x + "px"
+        }
+        if (I.y) {
+            I.y = false;
+            E.style.top  = O.y + "px"
+        }
+        if (I.anchor) {
+            var pos = translate_anchor(O.anchor, 0, 0, -100, -100);
+            this.element.style.transform = "translate("+pos.x+"%, "+pos.y+"%)";
         }
     },
     /**
