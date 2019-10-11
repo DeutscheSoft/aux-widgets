@@ -26,29 +26,6 @@ function range_change_cb() {
     this.invalidate_all();
     this.trigger_draw();
 };
-function transform_dots(dots) {
-    if (dots === void(0)) return "";
-    if (typeof dots === "string") return dots;
-    if (typeof dots === "object") {
-        if (Array.isArray(dots)) {
-            if (!dots.length || !dots[0]) return null;
-            var ret = { };
-            var start, stop;
-
-            for (var name in dots[0]) if (dots[0].hasOwnProperty(name)) {
-                var a = [];
-                ret[name] = a;
-                for (var i = 0; i < dots.length; i++) {
-                    a[i] = dots[i][name];
-                }
-            }
-            return ret;
-        } else return dots;
-    } else {
-        error("Unsupported option 'dots':", dots);
-        return "";
-    }
-}
 // this is not really a rounding operation but simply adds 0.5. we do this to make sure
 // that integer pixel positions result in actual pixels, instead of being spread across
 // two pixels with half opacity
@@ -56,20 +33,17 @@ function svg_round(x) {
     x = +x;
     return x + 0.5;
 }
-function svg_round_array(x) {
-    var i;
-    for (i = 0; i < x.length; i++) {
-        x[i]  = +x[i] + 0.5;
-    }
-    return x;
+function get_px(value, range) {
+    return svg_round(range.val2px(value));
 }
+
 function _start(d, s) {
     var w = this.range_x.options.basis;
     var h = this.range_y.options.basis;
-    var t = this.options.type;
+    var t = d[0].type || this.options.type;
     var m = this.options.mode;
-    var x = this.range_x.val2px(d.x[0]);
-    var y = this.range_y.val2px(d.y[0]);
+    var x = this.range_x.val2px(d[0].x);
+    var y = this.range_y.val2px(d[0].y);
     switch (m) {
         case "bottom":
             // fill the lower part of the graph
@@ -112,11 +86,12 @@ function _start(d, s) {
 }
 function _end(d, s) {
     var a = 0.5;
+    var dot = d[d.length-1];
     var h = this.range_y.options.basis;
-    var t = this.options.type;
+    var t = dot.type || this.options.type;
     var m = this.options.mode;
-    var x = this.range_x.val2px(d.x[d.x.length-1]);
-    var y = this.range_y.val2px(d.y[d.y.length-1]);
+    var x = this.range_x.val2px(dot.x);
+    var y = this.range_y.val2px(dot.y);
     switch (m) {
         case "bottom":
             // fill the graph below
@@ -161,7 +136,10 @@ export const Graph = define_class({
      *   for a new {@link Range}.
      * @property {Array<Object>|String} options.dots=[] - The dots of the path.
      *   Can be a ready-to-use SVG-path-string or an array of objects like
-     *   <code>{x: x, y: y [, x1, y1, x2, y2]}</code> (depending on the type).
+     *   <code>{x: x, y: y [, x1: x1, y1: y1, x2: x2, y2: y2, type: type]}</code> (depending on the type,
+     *   see `options.type` for more information). `type` is optional and defines a different type
+     *   as explained under `options.type` for a specific dot. If omitted, the
+     *   general `options.type` is used.
      * @property {String} [options.type="L"] - Type of the graph (needed values in dots object):
      *   <ul>
      *     <li><code>L</code>: normal (needs x,y)</li>
@@ -227,7 +205,6 @@ export const Graph = define_class({
         if (this.options.range_y) this.set("range_y", this.options.range_y);
         this.set("color", this.options.color);
         this.set("mode",  this.options.mode);
-        if (this.options.dots) this.options.dots = transform_dots(this.options.dots);
     },
     
     redraw: function () {
@@ -248,68 +225,67 @@ export const Graph = define_class({
         }
 
         if (I.validate("dots", "type")) {
-            var a = 0.5;
             var dots = O.dots;
-            var range_x = this.range_x;
-            var range_y = this.range_y;
-            var w = range_x.options.basis;
-            var h = range_y.options.basis;
+            var type = O.type;
+            var RX = this.range_x;
+            var RY = this.range_y;
+            var w = RX.options.basis;
+            var h = RY.options.basis;
         
             if (typeof dots === "string") {
                 E.setAttribute("d", dots);
             } else if (!dots) {
                 E.setAttribute("d", "");
             } else {
-                var x = svg_round_array(dots.x.map(range_x.val2px));
-                var y = svg_round_array(dots.y.map(range_y.val2px));
-                var x1, x2, y1, y2;
                 // if we are drawing a line, _start will do the first point
-                var i = O.type === "line" ? 1 : 0;
+                var i = O.mode === "line" ? 1 : 0;
                 var s = [];
-                var f;
+                var f, t, _t, dot;
 
                 _start.call(this, dots, s);
-
-                switch (O.type.substr(0,1)) {
-                case "L":
-                case "T":
-                    for (; i < x.length; i++)
-                        s.push(" " + O.type + " " + x[i] + " " + y[i]);
-                    break;
-                case "Q":
-                case "S":
-                    x1 = svg_round_array(dots.x1.map(range_x.val2px));
-                    y1 = svg_round_array(dots.y1.map(range_y.val2px));
-                    for (; i < x.length; i++)
-                        s.push(" " + O.type + " "
-                                 + x1[i] + "," + y1[i] + " "
-                                 + x[i] + "," + y[i]);
-                    break;
-                case "C":
-                    x1 = svg_round_array(dots.x1.map(range_x.val2px));
-                    x2 = svg_round_array(dots.x2.map(range_x.val2px));
-                    y1 = svg_round_array(dots.y1.map(range_y.val2px));
-                    y2 = svg_round_array(dots.y2.map(range_y.val2px));
-                    for (; i < x.length; i++)
-                        s.push(" " + O.type + " "
-                            + x1[i] + "," + y1[i] + " "
-                            + x2[i] + "," + y2[i] + " "
-                            + x[i] + "," + y[i]);
-                    break;
-                case "H":
-                    f = O.type.length > 1 ? parseFloat(O.type.substr(1)) : 3;
-                    if (i === 0) {
-                        i++;
-                        s.push(" S" + x[0] + "," + y[0] + " " + x[0] + "," + y[0]);
-                    }
-                    for (; i < x.length-1; i++)
+                
+                _t = dots[i].type || type;
+                f = _t.length > 1 ? parseFloat(_t.substr(1)) : 3;
+                if (_t.substr(0) === "H" && i === 0) {
+                    i++;
+                    s.push(" S" + get_px(dots[i].x, RX) + "," + get_px(dots[i].y, RY) + " " + get_px(dots[i].x, RX) + "," + get_px(dots[i].y, RY));
+                }
+                        
+                for (; i < dots.length; i++) {
+                    dot = dots[i];
+                    t = dot.type || type;
+                    t = t.substr(0,1);
+                    switch (t) {
+                    case "L":
+                    case "T":
+                        s.push(" " + t + " " + get_px(dot.x, RX) + " " + get_px(dot.y, RY));
+                        break;
+                    case "Q":
+                    case "S":
+                        s.push(" " + t + " "
+                            + get_px(dot.x1) + "," + get_px(dot.y1, RY) + " "
+                            + get_px(dot.x) + "," + get_px(dot.y, RY));
+                        break;
+                    case "C":
+                        s.push(" " + t + " "
+                            + get_px(dot.x1, RX) + "," + get_px(dot.y1, RY) + " "
+                            + get_px(dot.x2, RX) + "," + get_px(dot.y2, RY) + " "
+                            + get_px(dot.x, RX) + "," + get_px(dot.y, RY));
+                        break;
+                    case "H":
                         s.push(" S" + (x[i] - Math.round(x[i] - x[i-1])/f) + ","
-                               + y[i] + " " + x[i] + "," + y[i]);
-                    if (i < x.length)
-                        s.push(" S" + x[i] + "," + y[i] + " " + x[i] + "," + y[i]);
-                    break;
-                default:
-                    error("Unsupported graph type", O.type);
+                            + y[i] + " " + x[i] + "," + y[i]);
+                        break;
+                    default:
+                        error("Unsupported graph type", O.type);
+                    }
+                }
+                
+                if (i < dots.length) {
+                    _t = dots[i] || type; 
+                    if (_t.substr(0) === "H") {
+                        s.push(" S" + get_px(dot.x, RX) + "," + get_px(dot.y, RY) + " " + get_px(dot.x, RX) + "," + get_px(dot.y, RY));
+                    }
                 }
                 
                 _end.call(this, dots, s);
@@ -321,9 +297,6 @@ export const Graph = define_class({
     
     // GETTER & SETTER
     set: function (key, value) {
-        if (key === "dots") {
-            value = transform_dots(value);
-        }
         Widget.prototype.set.call(this, key, value);
         switch (key) {
             case "range_x":
