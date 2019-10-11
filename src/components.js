@@ -4,6 +4,7 @@ export * from './components/chart.js';
 export * from './components/clock.js';
 export * from './components/colorpicker.js';
 export * from './components/confirmbutton.js';
+export * from './components/dialog.js';
 export * from './components/dynamics.js';
 export * from './components/equalizer.js';
 export * from './components/fader.js';

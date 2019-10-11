@@ -1,0 +1,12 @@
+<aux-button label="Open Dialog" onclick="js:function c(e) { document.getElementById('dialog').widget.open(e.clientX, e.clientY); }"></aux-button>
+<aux-dialog id="dialog" visible=false toplevel=true auto_close=true auto_remove=false>
+    This is a Dialog widget. Click anywhere outside to close.
+</aux-dialog>
+<style>
+    #dialog {
+        width: 200px;
+        height: 100px;
+        padding: 16px;
+        position: fixed;
+    }
+</style>
