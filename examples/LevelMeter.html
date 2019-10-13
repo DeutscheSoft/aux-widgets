@@ -1,1 +1,129 @@
+<style>
+  aux-levelmeter.aux-vertical {
+    height: 300px;
+  }
+  aux-levelmeter.aux-horizontal {
+    width: 300px;
+  }
+  aux-levelmeter > .aux-bar {
+    background-color: red;
+  }
+
+  aux-levelmeter .aux-mask {
+    opacity: 0.8;
+  }
+
+  .segment aux-meter.aux-vertical {
+    height: 305px;
+  }
+  .segment aux-meter.aux-horizontal {
+    width: 305px;
+  }
+
+  div.segment .aux-bar {
+    background-color:#269;
+    background-image: linear-gradient(white 2px, transparent 2px),
+    linear-gradient(90deg, white 2px, transparent 2px),
+    linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 1px);
+    background-position:-2px -2px, -2px -2px, -1px -1px, -1px -1px;
+    background-position-y: bottom, bottom, bottom, bottom;
+  }
+
+  div.segment .aux-horizontal .aux-bar {
+    background-size: 100px 100px, 100px 100px, 10px 16px, 10px 16px;
+  }
+
+  div.segment .aux-vertical .aux-bar {
+    background-size: 100px 100px, 100px 100px, 16px 10px, 16px 10px;
+  }
+</style>
 <aux-levelmeter value='0.75' gradient="js:{'0':'#00FFAA','0.7':'#FFFF00','1':'#FF8800'}"></aux-levelmeter>
+
+<aux-levelmeter min=-96 max=6 scale=decibel value='-10'></aux-levelmeter>
+<aux-levelmeter min=-96 max=6 base=-96 scale=decibel value='-10'></aux-levelmeter>
+
+<aux-levelmeter min=-96 max=6 base=-96 scale=decibel show_hold=true auto_hold=-1 hold=0 hold_size=5 value='-10'></aux-levelmeter>
+<aux-levelmeter min=-96 max=6 base=-96 scale=decibel show_hold=true auto_hold=-1 hold=0 hold_size=10 value='-10'></aux-levelmeter>
+<aux-levelmeter min=-96 max=6 base=-96 scale=decibel show_hold=true auto_hold=-1
+hold=0 hold_size=20 value='-10'></aux-levelmeter>
+
+<aux-levelmeter reverse min=-96 max=6 scale=decibel value='-10'></aux-levelmeter>
+<aux-levelmeter reverse min=-96 max=6 base=-96 scale=decibel value='-10'></aux-levelmeter>
+
+<aux-levelmeter reverse min=-96 max=6 base=-96 scale=decibel show_hold=true auto_hold=-1 hold=0 hold_size=5 value='-10'></aux-levelmeter>
+<aux-levelmeter reverse min=-96 max=6 base=-96 scale=decibel show_hold=true auto_hold=-1 hold=0 hold_size=10 value='-10'></aux-levelmeter>
+<aux-levelmeter reverse min=-96 max=6 base=-96 scale=decibel show_hold=true
+auto_hold=-1 hold=0 hold_size=20 value='-10'></aux-levelmeter>
+
+<br>
+<aux-levelmeter layout=top min=-96 max=6 scale=decibel value='-10'></aux-levelmeter>
+<br>
+<aux-levelmeter layout=top min=-96 max=6 base=-96 scale=decibel value='-10'></aux-levelmeter>
+<br>
+<aux-levelmeter layout=top min=-96 max=6 base=-96 scale=decibel show_hold=true auto_hold=-1 hold=0 hold_size=5 value='-10'></aux-levelmeter>
+<br>
+<aux-levelmeter layout=top min=-96 max=6 base=-96 scale=decibel show_hold=true auto_hold=-1 hold=0 hold_size=10 value='-10'></aux-levelmeter>
+<br>
+<aux-levelmeter layout=top min=-96 max=6 base=-96 scale=decibel show_hold=true
+auto_hold=-1 hold=0 hold_size=20 value='-10'></aux-levelmeter>
+<br>
+<aux-levelmeter reverse layout=top min=-96 max=6 scale=decibel value='-10'></aux-levelmeter>
+<br>
+<aux-levelmeter reverse layout=top min=-96 max=6 base=-96 scale=decibel value='-10'></aux-levelmeter>
+<br>
+<aux-levelmeter reverse layout=top min=-96 max=6 base=-96 scale=decibel show_hold=true auto_hold=-1 hold=0 hold_size=5 value='-10'></aux-levelmeter>
+<br>
+<aux-levelmeter reverse layout=top min=-96 max=6 base=-96 scale=decibel show_hold=true auto_hold=-1 hold=0 hold_size=10 value='-10'></aux-levelmeter>
+<br>
+<aux-levelmeter reverse layout=top min=-96 max=6 base=-96 scale=decibel
+show_hold=true auto_hold=-1 hold=0 hold_size=20 value='-10'></aux-levelmeter>
+
+<br>
+
+<div class=segment>
+  <aux-levelmeter segment=10 min=-96 max=6 scale=decibel value='-10'></aux-levelmeter>
+  <aux-levelmeter segment=10 min=-96 max=6 base=-96 scale=decibel value='-10'></aux-levelmeter>
+
+  <aux-levelmeter segment=10 min=-96 max=6 base=-96 scale=decibel show_hold=true
+  auto_hold=-1 hold=0 hold_size=0.5 value='-10'></aux-levelmeter>
+  <aux-levelmeter segment=10 min=-96 max=6 base=-96 scale=decibel show_hold=true auto_hold=-1 hold=0 hold_size=1 value='-10'></aux-levelmeter>
+  <aux-levelmeter segment=10 min=-96 max=6 base=-96 scale=decibel show_hold=true
+  auto_hold=-1 hold=0 hold_size=0.1 value='-10' segment=10></aux-levelmeter>
+
+  <aux-levelmeter reverse segment=10 min=-96 max=6 scale=decibel value='-10'></aux-levelmeter>
+  <aux-levelmeter reverse segment=10 min=-96 max=6 base=-96 scale=decibel value='-10'></aux-levelmeter>
+
+  <aux-levelmeter reverse segment=10 min=-96 max=6 base=-96 scale=decibel
+  show_hold=true auto_hold=-1 hold=0 hold_size=0.5 value='-10'></aux-levelmeter>
+  <aux-levelmeter reverse segment=10 min=-96 max=6 base=-96 scale=decibel show_hold=true auto_hold=-1 hold=0 hold_size=1 value='-10'></aux-levelmeter>
+  <aux-levelmeter reverse segment=10 min=-96 max=6 base=-96 scale=decibel
+  show_hold=true auto_hold=-1 hold=0 hold_size=2 value='-10' segment=10></aux-levelmeter>
+
+  <br>
+  <aux-levelmeter layout=top segment=10 min=-96 max=6 scale=decibel value='-10'></aux-levelmeter>
+  <br>
+  <aux-levelmeter layout=top segment=10 min=-96 max=6 base=-96 scale=decibel value='-10'></aux-levelmeter>
+  <br>
+  <aux-levelmeter layout=top segment=10 min=-96 max=6 base=-96 scale=decibel
+  show_hold=true auto_hold=-1 hold=0 hold_size=0.5 value='-10'></aux-levelmeter>
+  <br>
+  <aux-levelmeter layout=top segment=10 min=-96 max=6 base=-96 scale=decibel
+  show_hold=true auto_hold=-1 hold=0 hold_size=1 value='-10'></aux-levelmeter>
+  <br>
+  <aux-levelmeter layout=top segment=10 min=-96 max=6 base=-96 scale=decibel
+  show_hold=true auto_hold=-1 hold=0 hold_size=2 value='-10' segment=10></aux-levelmeter>
+  <br>
+  <aux-levelmeter reverse layout=top segment=10 min=-96 max=6 scale=decibel value='-10'></aux-levelmeter>
+  <br>
+  <aux-levelmeter reverse layout=top segment=10 min=-96 max=6 base=-96 scale=decibel value='-10'></aux-levelmeter>
+  <br>
+  <aux-levelmeter reverse layout=top segment=10 min=-96 max=6 base=-96
+  scale=decibel show_hold=true auto_hold=-1 hold=0 hold_size=0.5 value='-10'></aux-levelmeter>
+  <br>
+  <aux-levelmeter reverse layout=top segment=10 min=-96 max=6 base=-96
+  scale=decibel show_hold=true auto_hold=-1 hold=0 hold_size=1 value='-10'></aux-levelmeter>
+  <br>
+  <aux-levelmeter reverse layout=top segment=10 min=-96 max=6 base=-96
+  scale=decibel show_hold=true auto_hold=-1 hold=0 hold_size=2 value='-10' segment=10></aux-levelmeter>
+</div>

@@ -1,1 +1,72 @@
+<style>
+  aux-meter.aux-vertical {
+    height: 300px;
+  }
+  aux-meter.aux-horizontal {
+    width: 300px;
+  }
+  aux-meter > .aux-bar {
+    background-color: red;
+  }
+
+  aux-meter .aux-mask {
+    opacity: 0.8;
+  }
+
+  .segment aux-meter.aux-vertical {
+    height: 305px;
+  }
+  .segment aux-meter.aux-horizontal {
+    width: 305px;
+  }
+
+  div.segment .aux-bar {
+    background-color:#269;
+    background-image: linear-gradient(white 2px, transparent 2px),
+    linear-gradient(90deg, white 2px, transparent 2px),
+    linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 1px);
+    background-position:-2px -2px, -2px -2px, -1px -1px, -1px -1px;
+    background-position-y: bottom, bottom, bottom, bottom;
+  }
+
+  div.segment .aux-horizontal .aux-bar {
+    background-size: 100px 100px, 100px 100px, 10px 16px, 10px 16px;
+  }
+
+  div.segment .aux-vertical .aux-bar {
+    background-size: 100px 100px, 100px 100px, 16px 10px, 16px 10px;
+  }
+</style>
 <aux-meter value='0.75' gradient="js:{'0':'#00FFAA','0.7':'#FFFF00','1':'#FF8800'}"></aux-meter>
+<aux-meter min=-96 max=6 scale=decibel value='-10'></aux-meter>
+<aux-meter min=-96 max=6 scale=decibel value='-10' base=-96></aux-meter>
+<aux-meter min=-96 max=6 scale=decibel value='-10' reverse></aux-meter>
+<aux-meter min=-96 max=6 scale=decibel value='-10' base=-96 reverse></aux-meter>
+
+<br>
+<aux-meter layout=top min=-96 max=6 scale=decibel value='-10'></aux-meter>
+<br>
+<aux-meter layout=top min=-96 max=6 scale=decibel value='-10' base=-96></aux-meter>
+<br>
+<aux-meter layout=top min=-96 max=6 scale=decibel value='-10' reverse></aux-meter>
+<br>
+<aux-meter layout=top min=-96 max=6 scale=decibel value='-10' base=-96 reverse></aux-meter>
+
+<br>
+
+<div class=segment>
+  <aux-meter segment=10 min=-96 max=6 scale=decibel value='-10'></aux-meter>
+  <aux-meter segment=10 min=-96 max=6 scale=decibel value='-10' base=-96></aux-meter>
+  <aux-meter segment=10 min=-96 max=6 scale=decibel value='-10' reverse></aux-meter>
+  <aux-meter segment=10 min=-96 max=6 scale=decibel value='-10' base=-96 reverse></aux-meter>
+
+  <br>
+  <aux-meter layout=top segment=10 min=-96 max=6 scale=decibel value='-10'></aux-meter>
+  <br>
+  <aux-meter layout=top segment=10 min=-96 max=6 scale=decibel value='-10' base=-96></aux-meter>
+  <br>
+  <aux-meter layout=top segment=10 min=-96 max=6 scale=decibel value='-10' reverse></aux-meter>
+  <br>
+  <aux-meter layout=top segment=10 min=-96 max=6 scale=decibel value='-10' base=-96 reverse></aux-meter>
+</div>
