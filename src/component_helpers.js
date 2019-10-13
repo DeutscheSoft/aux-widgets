@@ -3,13 +3,6 @@ import { FORMAT } from './utils/sprintf.js';
 import { html } from './utils/dom.js';
 import { is_native_event } from './implements/base.js';
 
-// TODO:
-// * the refcount logic is not correct since it ignores the fact
-//   that addEventListener and friends can
-//    - be called more than once without effect
-//    - can be called with different values of capture
-//   this is a proof of concept at the moment
-
 function low_parse_attribute(type, x) {
   switch (type) {
   case "js":
