@@ -24,7 +24,7 @@ function low_parse_attribute(type, x) {
   case "bool":
   case "boolean":
     x = x.trim();
-    if (x === "true") {
+    if (x === "true" || x === '') {
       return true;
     } else if (x === "false") {
       return false;
