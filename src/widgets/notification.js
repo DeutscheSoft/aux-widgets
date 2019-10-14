@@ -95,7 +95,7 @@ export const Notification = define_class({
     var O = this.options;
     /**
      * @member {HTMLDivElement} Notification#element - The main DIV container.
-     *   Has class <code.aux-notification</code>.
+     *   Has class <code>.aux-notification</code>.
      */
     add_class(this.element, "aux-notification");
     this._timeout = void(0);

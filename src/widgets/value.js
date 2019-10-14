@@ -184,7 +184,7 @@ export const Value = define_class({
         Widget.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} Value#element - The main DIV container.
-         *   Has class <code.aux-value</code>.
+         *   Has class <code>.aux-value</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
         add_class(E, "aux-value");
@@ -193,7 +193,7 @@ export const Value = define_class({
         
         /**
          * @member {HTMLInputElement} Value#_input - The text input.
-         *   Has class <code.aux-input</code>.
+         *   Has class <code>.aux-input</code>.
          */
         this._input  = element("input", "aux-input");
         this._input.type = "text";

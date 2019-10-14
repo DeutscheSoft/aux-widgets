@@ -205,7 +205,7 @@ export const LevelMeter = define_class({
         
         /**
          * @member {HTMLDivElement} LevelMeter#element - The main DIV container.
-         *   Has class <code.aux-level-meter</code>.
+         *   Has class <code>.aux-level-meter</code>.
          */
         add_class(this.element, "aux-level-meter");
 
@@ -486,7 +486,7 @@ export const LevelMeter = define_class({
 /**
  * @member {State} LevelMeter#clip - The {@link State} instance for the clipping LED.
  * @member {HTMLDivElement} LevelMeter#clip.element - The DIV element of the clipping LED.
- *   Has class <code.aux-clip</code>.
+ *   Has class <code>.aux-clip</code>.
  */
 define_child_widget(LevelMeter, "clip", {
     create: State,
@@ -501,7 +501,7 @@ define_child_widget(LevelMeter, "clip", {
 });
 /**
  * @member {HTMLDivElement} LevelMeter#_peak - The DIV element for the peak marker.
- *   Has class <code.aux-peak</code>.
+ *   Has class <code>.aux-peak</code>.
  */
 define_child_element(LevelMeter, "peak", {
     show: false,

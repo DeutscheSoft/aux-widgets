@@ -392,7 +392,7 @@ export const Chart = define_class({
         
         /**
          * @member {HTMLDivElement} Chart#element - The main DIV container.
-         *   Has class <code.aux-chart</code>.
+         *   Has class <code>.aux-chart</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
         add_class(E, "aux-chart");
@@ -407,7 +407,7 @@ export const Chart = define_class({
         
         /** 
          * @member {SVGGroup} Chart#_graphs - The SVG group containing all graphs.
-         *      Has class <code.aux-graphs</code>.
+         *      Has class <code>.aux-graphs</code>.
          */
         this._graphs = make_svg("g", {"class": "aux-graphs"});
         S.appendChild(this._graphs);
@@ -418,7 +418,7 @@ export const Chart = define_class({
         
         /** 
          * @member {SVGGroup} Chart#_handles - The SVG group containing all handles.
-         *      Has class <code.aux-handles</code>.
+         *      Has class <code>.aux-handles</code>.
          */
         this._handles = make_svg("g", {"class": "aux-handles"});
         this.svg.appendChild(this._handles);
@@ -765,7 +765,7 @@ export const Chart = define_class({
 });
 /**
  * @member {Grid} Chart#grid - The grid element of the chart.
- *   Has class <code.aux-grid</code>.
+ *   Has class <code>.aux-grid</code>.
  */
 define_child_widget(Chart, "grid", {
     create: Grid,
@@ -792,7 +792,7 @@ function key_hover_cb(ev) {
 }
 /**
  * @member {SVGRect} Chart#_key_background - The SVG rectangle of the key.
- *   Has class <code.aux-background</code>.
+ *   Has class <code>.aux-background</code>.
  */
 define_child_element(Chart, "key_background", {
     option: "key",
@@ -811,7 +811,7 @@ define_child_element(Chart, "key_background", {
 });
 /**
  * @member {SVGGroup} Chart#_key - The SVG group containing all descriptions.
- *   Has class <code.aux-key</code>.
+ *   Has class <code>.aux-key</code>.
  */
 define_child_element(Chart, "key", {
     option: "key",
@@ -829,7 +829,7 @@ define_child_element(Chart, "key", {
 });
 /**
  * @member {SVGText} Chart#_title - The title of the chart.
- *   Has class <code.aux-title</code>.
+ *   Has class <code>.aux-title</code>.
  */
 define_child_element(Chart, "title", {
     option: "title",

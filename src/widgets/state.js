@@ -27,7 +27,7 @@ import { element, add_class } from '../utils/dom.js';
  * different styles. State extends {@link Widget}.
  *
  * The LED effect is implemented as a DIV element, which is overlayed by
- * a DIV element with class <code>aux-mask</code>. `options.state`
+ * a DIV element with class <code>.aux-mask</code>. `options.state`
  * changes the opacity of the mask element.
  *
  * @class State
@@ -59,7 +59,7 @@ export const State = define_class({
         var E;
         /**
          * @member {HTMLDivElement} State#element - The main DIV container.
-         *   Has class <code.aux-state</code>.
+         *   Has class <code>.aux-state</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
         add_class(E, "aux-state");
@@ -67,7 +67,7 @@ export const State = define_class({
         
         /**
          * @member {HTMLDivElement} State#_mask - A DIV for masking the background.
-         *   Has class <code.aux-mask</code>.
+         *   Has class <code>.aux-mask</code>.
          */
         this._mask   = element("div","aux-mask");
 

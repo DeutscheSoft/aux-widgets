@@ -244,7 +244,7 @@ export const Clock = define_class({
         this.set("time", this.options.time);
         
         /**
-         * @member {HTMLDivElement} Clock#element - The main DIV element. Has class <code.aux-clock</code> 
+         * @member {HTMLDivElement} Clock#element - The main DIV element. Has class <code>.aux-clock</code> 
          */
         if (!(E = this.element)) this.element = E = element("div");
         /**
@@ -255,7 +255,7 @@ export const Clock = define_class({
         add_class(E, "aux-clock");
         
         /**
-         * @member {SVGText} Clock#_label - The center label showing the time. Has class<code.aux-label</code>
+         * @member {SVGText} Clock#_label - The center label showing the time. Has class<code>.aux-label</code>
          */
         this._label       = make_svg("text", {
             "class":       "aux-label",
@@ -263,14 +263,14 @@ export const Clock = define_class({
             "style":       "dominant-baseline: central;"
         });
         /**
-         * @member {SVGText} Clock#_label_upper - The upper label showing the day. Has class<code.aux-label-upper</code>
+         * @member {SVGText} Clock#_label_upper - The upper label showing the day. Has class<code>.aux-label-upper</code>
          */
         this._label_upper = make_svg("text", {
             "class": "aux-label-upper",
             "text-anchor": "middle",
             "style":       "dominant-baseline: central;"
         });
-        /** @member {SVGText} Clock#_label_lower - The lower label showing the date. Has class<code.aux-label-lower</code>
+        /** @member {SVGText} Clock#_label_lower - The lower label showing the date. Has class<code>.aux-label-lower</code>
          */
         this._label_lower = make_svg("text", {
             "class": "aux-label-lower",

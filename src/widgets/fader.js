@@ -222,20 +222,20 @@ export const Fader = define_class({
         
         /**
          * @member {HTMLDivElement} Fader#element - The main DIV container.
-         *   Has class <code.aux-fader</code>.
+         *   Has class <code>.aux-fader</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
         add_class(E, "aux-fader");
         this.widgetize(E, true, true, true);
 
         /**
-         * @member {HTMLDivElement} Fader#_track - The track for the handle. Has class <code.aux-track</code>.
+         * @member {HTMLDivElement} Fader#_track - The track for the handle. Has class <code>.aux-track</code>.
          */
         this._track = element("div", "aux-track");
         this.element.appendChild(this._track);
         
         /**
-         * @member {HTMLDivElement} Fader#_handle - The handle of the fader. Has class <code.aux-handle</code>.
+         * @member {HTMLDivElement} Fader#_handle - The handle of the fader. Has class <code>.aux-handle</code>.
          */
         this._handle = element("div", "aux-handle");
         this._handle_size = 0;

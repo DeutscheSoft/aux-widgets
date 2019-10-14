@@ -76,8 +76,8 @@ export const Container = define_class({
      *
      * Containers have four different display states: <code>show</code>, <code>hide</code>,
      * <code>showing</code> and <code>hiding</code>. Each of these states has a corresponding
-     * CSS class called <code.aux-show</code>, <code.aux-hide</code>, <code.aux-showing</code>
-     * and <code.aux-hiding</code>, respectively. The display state can be controlled using
+     * CSS class called <code>.aux-show</code>, <code>.aux-hide</code>, <code>.aux-showing</code>
+     * and <code>.aux-hiding</code>, respectively. The display state can be controlled using
      * the methods {@link Container#show}, {@link Container#hide} and {@link Widget#toggle_hidden}.
      *
      * A container can keep track of the display states of its child widgets.
@@ -121,7 +121,7 @@ export const Container = define_class({
         Widget.prototype.initialize.call(this, options);
         this.hidden_children = [];
         /** 
-         * @member {HTMLDivElement} Container#element - The main DIV element. Has class <code.aux-container</code> 
+         * @member {HTMLDivElement} Container#element - The main DIV element. Has class <code>.aux-container</code> 
          */
         if (!(E = this.element)) this.element = E = element("div");
         add_class(E, "aux-container"); 
@@ -210,7 +210,7 @@ export const Container = define_class({
     /** 
      * Immediately switches the display state of this container to <code>hide</code>.
      * Unlike {@link Container#hide} this method does not perform the hiding transition
-     * and immediately modifies the DOM by setting the <code.aux-hide</code> class.
+     * and immediately modifies the DOM by setting the <code>.aux-hide</code> class.
      *
      * @method Container#force_hide
      *
@@ -239,7 +239,7 @@ export const Container = define_class({
     /** 
      * Immediately switches the display state of this container to <code>show</code>.
      * Unlike {@link Container#hide} this method does not perform the hiding transition
-     * and immediately modifies the DOM by setting the <code.aux-show</code> class.
+     * and immediately modifies the DOM by setting the <code>.aux-show</code> class.
      *
      * @method Container#force_show
      *

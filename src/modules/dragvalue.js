@@ -159,7 +159,7 @@ export const DragValue = define_class({
      *   events <code>startdrag</code>, <code>dragging</code> and <code>stopdrag</code>.
      *   By default it returns <code>this.parent</code>.
      * @property {Element|boolean} [options.classes=false] - While dragging, the class
-     *   <code.aux-dragging</code> will be added to this element. If set to <code>false</code>
+     *   <code>.aux-dragging</code> will be added to this element. If set to <code>false</code>
      *   the class will be set on <code>options.node</code>.
      * @property {Function} [options.get] - Callback function returning the value to drag.
      *   By default it returns <code>this.parent.options.value</code>.

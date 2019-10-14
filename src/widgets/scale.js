@@ -370,7 +370,7 @@ function mark_markers(labels, dots) {
  *   for the labels to be drawn at. The values must be sorted in ascending order. <code>false</code> disables
  *   fixed labels.
  * @property {Boolean} [options.show_markers=true] - If true, every dot which is located at the same
- *   position as a label has the <code.aux-marker</code> class set.
+ *   position as a label has the <code>.aux-marker</code> class set.
  * @property {Number|Boolean} [options.pointer=false] - The value to set the pointers position to. Set to `false` to hide the pointer.
  * @property {Number|Boolean} [options.bar=false] - The value to set the bars height to. Set to `false` to hide the bar.
  */
@@ -423,7 +423,7 @@ export const Scale = define_class({
         var E;
         Widget.prototype.initialize.call(this, options);
         /**
-         * @member {HTMLDivElement} Scale#element - The main DIV element. Has class <code.aux-scale</code> 
+         * @member {HTMLDivElement} Scale#element - The main DIV element. Has class <code>.aux-scale</code> 
          */
         if (!(E = this.element)) this.element = E = element("div");
         add_class(E, "aux-scale");

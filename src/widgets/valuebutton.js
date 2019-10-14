@@ -104,7 +104,7 @@ export const ValueButton = define_class({
         
         /**
          * @member {HTMLDivElement} ValueButton#element - The main DIV container.
-         *   Has class <code.aux-valuebutton</code>.
+         *   Has class <code>.aux-valuebutton</code>.
          */
         add_class(this.element, "aux-valuebutton");
         

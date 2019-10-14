@@ -47,7 +47,7 @@ export const Icon = define_class({
         var E;
         Widget.prototype.initialize.call(this, options);
         /** 
-         * @member {HTMLDivElement} Icon#element - The main DIV element. Has class <code.aux-icon</code> 
+         * @member {HTMLDivElement} Icon#element - The main DIV element. Has class <code>.aux-icon</code> 
          */
         if (!(E = this.element)) this.element = E = element("div");
         add_class(E, "aux-icon"); 

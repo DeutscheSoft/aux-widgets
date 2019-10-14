@@ -168,13 +168,13 @@ export const Select = define_class({
         Button.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} Select#element - The main DIV container.
-         *   Has class <code.aux-select</code>.
+         *   Has class <code>.aux-select</code>.
          */
         add_class(this.element, "aux-select");
         
         /**
          * @member {HTMLListElement} Select#_list - A HTML list for displaying the entry titles.
-         *   Has class <code.aux-select-list</code>.
+         *   Has class <code>.aux-select-list</code>.
          */
         this._list = element("ul", "aux-select-list");
         this._global_touch_start = function (e) {

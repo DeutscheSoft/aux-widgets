@@ -193,7 +193,7 @@ export const Graph = define_class({
     
     initialize: function (options) {
         Widget.prototype.initialize.call(this, options);
-        /** @member {SVGPath} Graph#element - The SVG path. Has class <code.aux-graph</code> 
+        /** @member {SVGPath} Graph#element - The SVG path. Has class <code>.aux-graph</code> 
          */
         this.element = this.widgetize(make_svg("path"), true, true, true);
         add_class(this.element, "aux-graph");

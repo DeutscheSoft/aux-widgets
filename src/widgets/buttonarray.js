@@ -160,17 +160,17 @@ export const ButtonArray = define_class({
         Container.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} ButtonArray#element - The main DIV container.
-         *   Has class <code.aux-buttonarray</code>.
+         *   Has class <code>.aux-buttonarray</code>.
          */
         add_class(this.element, "aux-buttonarray");
         /**
          * @member {HTMLDivElement} ButtonArray#_clip - A clipping area containing the list of {@link Button}s.
-         *    Has class <code.aux-clip</code>.
+         *    Has class <code>.aux-clip</code>.
          */
         this._clip      = element("div", "aux-clip");
         /**
          * @member {HTMLDivElement} ButtonArray#_container - A container for all the {@link Button}s.
-         *    Has class <code.aux-container</code>.
+         *    Has class <code>.aux-container</code>.
          */
         this._container = element("div", "aux-container");
         this.element.appendChild(this._clip);

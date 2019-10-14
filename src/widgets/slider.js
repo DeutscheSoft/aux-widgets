@@ -123,7 +123,7 @@ export const Slider = define_class({
         var E;
         /**
          * @member {HTMLDivElement} Slider#element - The main DIV container.
-         *   Has class <code.aux-slider</code>.
+         *   Has class <code>.aux-slider</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
         add_class(E, "aux-slider");

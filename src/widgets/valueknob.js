@@ -88,7 +88,7 @@ export const ValueKnob = define_class({
         var E;
         /**
          * @member {HTMLDivElement} ValueKnob#element - The main DIV container.
-         *   Has class <code.aux-valueknob</code>.
+         *   Has class <code>.aux-valueknob</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
         add_class(E, "aux-valueknob");

@@ -207,7 +207,7 @@ export const Grid = define_class({
     initialize: function (options) {
         Widget.prototype.initialize.call(this, options);
         /**
-         * @member {SVGGroup} Grid#element - The main SVG group containing all grid elements. Has class <code.aux-grid</code>.
+         * @member {SVGGroup} Grid#element - The main SVG group containing all grid elements. Has class <code>.aux-grid</code>.
          */
         this.element = this.widgetize(
                        make_svg("g", {"class": "aux-grid"}), true, true, true);

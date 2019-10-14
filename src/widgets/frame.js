@@ -44,7 +44,7 @@ export const Frame = define_class({
         Container.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} Frame#element - The main DIV container.
-         *   Has class <code.aux-frame</code>.
+         *   Has class <code>.aux-frame</code>.
          */
         add_class(this.element, "aux-frame");
     },

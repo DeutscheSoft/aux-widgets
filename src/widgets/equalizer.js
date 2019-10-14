@@ -178,20 +178,20 @@ export const Equalizer = define_class({
         
         /**
          * @member {HTMLDivElement} Equalizer#element - The main DIV container.
-         *   Has class <code.aux-equalizer</code>.
+         *   Has class <code>.aux-equalizer</code>.
          */
         add_class(this.element, "aux-equalizer");
         
         /**
          * @member {SVGGroup} Equalizer#_bands - The SVG group containing all the bands SVG elements.
-         *   Has class <code.aux-eqbands</code>.
+         *   Has class <code>.aux-eqbands</code>.
          */
         this._bands = this._handles;
         add_class(this._bands, "aux-eqbands");
         
         /**
          * @member {Graph} Equalizer#baseline - The graph drawing the zero line.
-         *   Has class <code.aux-baseline</code> 
+         *   Has class <code>.aux-baseline</code> 
          */
         this.baseline = this.add_graph({
             range_x:   this.range_x,

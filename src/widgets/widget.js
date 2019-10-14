@@ -103,9 +103,9 @@ export const Widget = define_class({
      * @property {HTMLElement} [options.container] - A container the main element shall be added to.
      * @property {String} [options.id=""] - A string to be set as id attribute on the main element.
      * @property {Object} [options.styles=""] - An object containing CSS declarations to be added directly to the main element.
-     * @property {Boolean} [options.disabled=false] - Toggles the class <code.aux-disabled</code>.
+     * @property {Boolean} [options.disabled=false] - Toggles the class <code>.aux-disabled</code>.
      * @property {HTMLElement} [options.element] - An element to be used as the main element.
-     * @property {Boolean} [options.active] - Toggles the class <code.aux-inactive</code>.
+     * @property {Boolean} [options.active] - Toggles the class <code>.aux-inactive</code>.
      * @property {Boolean} [options.needs_resize=true] - Set to true if the resize function shall be called before the next redraw.
      * @property {Boolean} [options.dblclick=400] - Set a time in milliseconds for triggering double click event. If 0, no double click events are fired.
      */

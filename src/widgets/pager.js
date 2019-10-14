@@ -126,7 +126,7 @@ export const Pager = define_class({
         this.pages = [];
         Container.prototype.initialize.call(this, options);
         /**
-         * The main DIV element. Has the class <code.aux-pager</code>.
+         * The main DIV element. Has the class <code>.aux-pager</code>.
          *
          * @member Pager#element
          */
@@ -438,7 +438,7 @@ define_child_widget(Pager, "buttonarray", {
 
 /**
  * @member {HTMLDivElement} Pager#_clip - The clipping area containing the pages.
- *   Has class <code.aux-clip</code>.
+ *   Has class <code>.aux-clip</code>.
  */
 define_child_element(Pager, "clip", {
     show: true,

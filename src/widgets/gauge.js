@@ -88,14 +88,14 @@ export const Gauge = define_class({
         
         /**
          * @member {HTMLDivElement} Gauge#element - The main DIV container.
-         *   Has class <code.aux-gauge</code>.
+         *   Has class <code>.aux-gauge</code>.
          */
         add_class(E, "aux-gauge");
         this.widgetize(E, true, true, true);
         
         /**
          * @member {SVGText} Gauge#_title - The title of the gauge.
-         *   Has class <code.aux-title</code>.
+         *   Has class <code>.aux-title</code>.
          */
         this._title = make_svg("text", {"class": "aux-title"});
         S.appendChild(this._title);

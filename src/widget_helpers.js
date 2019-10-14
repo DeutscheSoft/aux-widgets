@@ -44,7 +44,7 @@ export function define_child_element(widget, name, config) {
      * widget definitions. E.g. the tiny marker used to display the back-end
      * value is a simple DIV added using child element. The generic element
      * is a DIV added to Widget.element with the class
-     * <code.aux-[name]</code>. Default creating and adding can be
+     * <code>.aux-[name]</code>. Default creating and adding can be
      * overwritten with custom callback functions.
      * 
      * @param {Widget} widget - The {@link Widget} to add the child element to.
@@ -72,7 +72,7 @@ export function define_child_element(widget, name, config) {
      *     supposed to create and return a DOM element to be added to the
      *     parent widget.
      * @property {boolean} [config.toggle_class=false] - Defines if the parent widget
-     *     receives the class <code.aux-has-[name]</code> as soon as
+     *     receives the class <code>.aux-has-[name]</code> as soon as
      *     the child element is shown.
      * @property {array} [config.draw_options] - A list of options of the parent
      *     widget which are supposed to trigger a check if the element has to

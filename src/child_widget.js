@@ -86,7 +86,7 @@ export function define_child_widget(widget, name, config) {
      *     added to the parent widget. Each entry is a mapping between
      *     the name of the event and the callback function.
      * @property {boolean} [config.toggle_class=false] - Defines if the parent widget
-     *     receives the class <code.aux-has-[name]</code> as soon as
+     *     receives the class <code>.aux-has-[name]</code> as soon as
      *     the child element is shown.
      * @property {array<string>} [config.blacklist_options] - Array containing options names
      *     which are skipped on `inherit_options`.

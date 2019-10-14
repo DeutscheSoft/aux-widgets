@@ -39,7 +39,7 @@ export const Button = define_class({
      *   file or an icon class (see styles/fonts/Toolkit.html). If set
      *   to <code>false</code>, the icon is removed from DOM.
      * @property {Boolean} [options.state=false] - State of the button,
-     *   reflected as class <code.aux-active</code>.
+     *   reflected as class <code>.aux-active</code>.
      * @property {String} [options.layout="horizontal"] - Define the
      *   arrangement of label and icon. <code>vertical</code> means icon
      *   above the label, <code>horizontal</code> places the icon left
@@ -68,7 +68,7 @@ export const Button = define_class({
         Widget.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} Button#element - The main DIV element.
-         *   Has class <code.aux-button</code>.
+         *   Has class <code>.aux-button</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
         add_class(E, "aux-button");

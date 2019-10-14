@@ -162,7 +162,7 @@ export const Toggle = define_class({
      *   interpreted as a milliseconds timeout. When pressing a button longer than this timeout, it will
      *   be toggled until released, otherwise it will be toggled permanently.
      * @property {Integer} [options.delay=0] - Delay all actions for n milliseconds. While actions are
-     *   delayed, the widget has class <code.aux-delayed</code>. Use to force users to press the button
+     *   delayed, the widget has class <code>.aux-delayed</code>. Use to force users to press the button
      *   for a certain amount of time before it actually gets toggled.
      * @property {String|Boolean} [options.icon_active=false] - An optional icon which is only displayed
      *   when the button toggle state is <code>true</code>. Please note that this option only works if `icon` is also set.
@@ -196,7 +196,7 @@ export const Toggle = define_class({
         Button.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} Toggle#element - The main DIV container.
-         *   Has class <code.aux-toggle</code>.
+         *   Has class <code>.aux-toggle</code>.
          */
         add_class(this.element, "aux-toggle");
         this.__press_start_time = 0;

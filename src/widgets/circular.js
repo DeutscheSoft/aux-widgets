@@ -402,28 +402,28 @@ export const Circular = define_class({
         
         /**
          * @member {SVGImage} Circular#element - The main SVG element.
-         *      Has class <code.aux-circular</code> 
+         *      Has class <code>.aux-circular</code> 
          */
         this.element = E = make_svg("g", {"class": "aux-circular"});
         this.widgetize(E, true, true, true);
         
         /**
          * @member {SVGPath} Circular#_base - The base of the ring.
-         *      Has class <code.aux-base</code> 
+         *      Has class <code>.aux-base</code> 
          */
         this._base = make_svg("path", {"class": "aux-base"});
         E.appendChild(this._base);
         
         /**
          * @member {SVGPath} Circular#_value - The ring showing the value.
-         *      Has class <code.aux-value</code> 
+         *      Has class <code>.aux-value</code> 
          */
         this._value = make_svg("path", {"class": "aux-value"});
         E.appendChild(this._value);
         
         /**
          * @member {SVGRect} Circular#_hand - The hand of the knob.
-         *      Has class <code.aux-hand</code> 
+         *      Has class <code>.aux-hand</code> 
          */
         this._hand = make_svg("rect", {"class": "aux-hand"});
         E.appendChild(this._hand);
@@ -599,7 +599,7 @@ export const Circular = define_class({
 });
 /**
  * @member {SVGGroup} Circular#_markers - A group containing all markers.
- *      Has class <code.aux-markers</code> 
+ *      Has class <code>.aux-markers</code> 
  */
 define_child_element(Circular, "markers", {
     //option: "markers",
@@ -611,7 +611,7 @@ define_child_element(Circular, "markers", {
 });
 /** 
  * @member {SVGGroup} Circular#_dots - A group containing all dots.
- *      Has class <code.aux-dots</code> 
+ *      Has class <code>.aux-dots</code> 
  */
 define_child_element(Circular, "dots", {
     //option: "dots",
@@ -623,7 +623,7 @@ define_child_element(Circular, "dots", {
 });
 /**
  * @member {SVGGroup} Circular#_labels - A group containing all labels.
- *      Has class <code.aux-labels</code> 
+ *      Has class <code>.aux-labels</code> 
  */
 define_child_element(Circular, "labels", {
     //option: "labels",

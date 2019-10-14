@@ -49,7 +49,7 @@ export const Label = define_class({
         if (!options.element) options.element = element("div");
         Widget.prototype.initialize.call(this, options);
         /** @member {HTMLDivElement} Label#element - The main DIV container.
-         * Has class <code.aux-label</code>.
+         * Has class <code>.aux-label</code>.
          */
         const E = this.element;
         add_class(E, "aux-label");

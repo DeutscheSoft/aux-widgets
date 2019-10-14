@@ -888,13 +888,13 @@ function enddrag() {
  */
 
 /**
- * @member {SVGText} ResponseHandle#_label - The label. Has class <code.aux-label</code>.
+ * @member {SVGText} ResponseHandle#_label - The label. Has class <code>.aux-label</code>.
  */
 /**
- * @member {SVGPath} ResponseHandle#_line1 - The first line. Has class <code.aux-line.aux-line-1</code>.
+ * @member {SVGPath} ResponseHandle#_line1 - The first line. Has class <code>.aux-line .aux-line-1</code>.
  */
 /**
- * @member {SVGPath} ResponseHandle#_line2 - The second line. Has class <code>aux-line aux-line-2</code>.
+ * @member {SVGPath} ResponseHandle#_line2 - The second line. Has class <code>.aux-line .aux-line-2</code>.
  */
 
 function set_min(value, key) {
@@ -1072,7 +1072,7 @@ export const ResponseHandle = define_class({
         var E = make_svg("g");
         
         /**
-         * @member {SVGGroup} ResponseHandle#element - The main SVG group containing all handle elements. Has class <code.aux-response-handle</code>.
+         * @member {SVGGroup} ResponseHandle#element - The main SVG group containing all handle elements. Has class <code>.aux-response-handle</code>.
          */
         this.element = E;
 
@@ -1081,12 +1081,12 @@ export const ResponseHandle = define_class({
         add_class(E, "aux-response-handle");
         /**
          * @member {SVGCircular} ResponseHandle#_handle - The main handle.
-         *      Has class <code.aux-handle</code>.
+         *      Has class <code>.aux-handle</code>.
          */
         
         /**
          * @member {SVGCircular} ResponseHandle#_zhandle - The handle for manipulating z axis.
-         *      Has class <code.aux-z-handle</code>.
+         *      Has class <code>.aux-z-handle</code>.
          */
 
         this._scrollwheel = scrollwheel.bind(this);

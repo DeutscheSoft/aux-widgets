@@ -131,12 +131,12 @@ export const FrequencyResponse = define_class({
             this.set("scale", options.scale, true);
         /**
          * @member {HTMLDivElement} FrequencyResponse#element - The main DIV container.
-         *   Has class <code.aux-frequency-response</code>.
+         *   Has class <code>.aux-frequency-response</code>.
          */
         add_class(this.element, "aux-frequency-response");
         /** 
          * @member {SVGGroup} Chart#_handles - The SVG group containing all handles.
-         *      Has class <code.aux-response-handles</code>.
+         *      Has class <code>.aux-response-handles</code>.
          */
         add_class(this._handles, "aux-response-handles");
         

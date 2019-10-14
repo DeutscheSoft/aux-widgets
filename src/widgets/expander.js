@@ -136,7 +136,7 @@ export const Expander = define_class({
      * Expander is a container which can be toggled between two different states,
      * expanded and collapsed. It can be used to implement overlay popups, but it is
      * not limited to that application.
-     * In expanded mode the container has the class <code.aux-expanded</code>.
+     * In expanded mode the container has the class <code>.aux-expanded</code>.
      * Child widgets are shown or hidden depending on the state of the two pseudo
      * options <code>_expanded</code> and <code>_collapsed</code>. If a child widget
      * of the expander has <code>_expanded</code> set to true it will be shown in
@@ -216,7 +216,7 @@ export const Expander = define_class({
         Container.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} Expander#element - The main DIV container.
-         *   Has class <code.aux-expander</code>.
+         *   Has class <code>.aux-expander</code>.
          */
         add_class(this.element, "aux-expander");
 

@@ -184,17 +184,17 @@ export function GlobalTooltip() {
     
     /**
      * @member {HTMLDivElement} Tooltip#element - The overlay containing the tooltip table.
-     *   Has class <code.aux-tooltip</code>.
+     *   Has class <code>.aux-tooltip</code>.
      */
     this.element = overlay;
     /** 
      * @member {HTMLDivElement} Tooltip#_table - The table containing the tooltips.
-     *   Has class <code.aux-table</code>.
+     *   Has class <code>.aux-table</code>.
      */
     this._table = table;
     /**
      * @member {HTMLDivElement} Tooltip#_entry - The element containing the tooltip text.
-     *   Has class <code.aux-entry</code>.
+     *   Has class <code>.aux-entry</code>.
      */
     this._entry = entry;
 };

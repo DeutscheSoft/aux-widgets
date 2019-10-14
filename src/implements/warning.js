@@ -29,7 +29,7 @@ import { add_class, remove_class } from '../utils/dom.js';
 export const Warning = define_class({
     _class: "Warning",
     /** 
-     * Adds the class <code.aux-warn</code> to the given element and
+     * Adds the class <code>.aux-warn</code> to the given element and
      * sets a timeout after which the class is removed again. If there
      * already is a timeout waiting it gets updated.
      *

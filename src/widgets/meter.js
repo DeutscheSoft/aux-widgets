@@ -277,7 +277,7 @@ export const Meter = define_class({
         var O = this.options;
         /**
          * @member {HTMLDivElement} Meter#element - The main DIV container.
-         *   Has class <code.aux-meter-base</code>.
+         *   Has class <code>.aux-meter-base</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
         add_class(E, "aux-meter-base");
@@ -286,7 +286,7 @@ export const Meter = define_class({
         this._bar = element("div", "aux-bar");
         /**
          * @member {HTMLCanvas} Meter#_canvas - The canvas element drawing the mask.
-         *   Has class <code.aux-mask</code>.
+         *   Has class <code>.aux-mask</code>.
          */
         this._canvas = document.createElement("canvas");
         add_class(this._canvas, "aux-mask");
@@ -299,7 +299,7 @@ export const Meter = define_class({
         
         /**
          * @member {HTMLDivElement} Meter#_bar - The DIV element containing the masks
-         *      and drawing the background. Has class <code.aux-bar</code>.
+         *      and drawing the background. Has class <code>.aux-bar</code>.
          */
         this.delegate(this._bar);
         this._last_meters = [];
@@ -521,7 +521,7 @@ define_child_widget(Meter, "scale", {
 });
 /**
  * @member {Label} Meter#title - The {@link Label} displaying the title.
- *   Has class <code.aux-title</code>.
+ *   Has class <code>.aux-title</code>.
  */
 define_child_widget(Meter, "title", {
     create: Label,

@@ -75,7 +75,7 @@ export const CrossoverBand = define_class({
         EqBand.prototype.initialize.call(this, options);
         /** 
          * @member {HTMLDivElement} CrossoverBand#element - The main SVG group.
-         *   Has class <code.aux-crossoverband</code>.
+         *   Has class <code>.aux-crossoverband</code>.
          */
         add_class(this.element, "aux-crossoverband");
         
@@ -166,7 +166,7 @@ export const Crossover = define_class({
         Equalizer.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} Equalizer#element - The main DIV container.
-         *   Has class <code.aux-response-handler</code>.
+         *   Has class <code>.aux-response-handler</code>.
          */
         add_class(this.element, "aux-crossover");
 

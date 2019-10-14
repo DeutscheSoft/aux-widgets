@@ -96,7 +96,7 @@ export const Dynamics = define_class({
         var O = this.options;
         /**
          * @member {HTMLDivElement} Dynamics#element - The main DIV container.
-         *   Has class <code.aux-dynamics</code>.
+         *   Has class <code>.aux-dynamics</code>.
          */
         add_class(this.element, "aux-dynamics");
         this.set("scale", O.scale);
@@ -104,7 +104,7 @@ export const Dynamics = define_class({
         this.set("min", O.min);
         this.set("max", O.max);
         /**
-         * @member {Graph} Dynamics#steady - The graph drawing the zero line. Has class <code.aux-steady</code> 
+         * @member {Graph} Dynamics#steady - The graph drawing the zero line. Has class <code>.aux-steady</code> 
          */
         this.steady = this.add_graph({
             dots: [{x:O.min, y:O.min},
