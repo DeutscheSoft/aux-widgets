@@ -272,9 +272,10 @@ export const Buttons = define_class({
      * 
      * @param {integer|Button} button - button index or the {@link Button}
      *   instance to be removed.
+     * @param {Boolean} destroy - destroy the {@link Button} after removal.
      */
-    remove_button: function (button) {
-        var O =this.options;
+    remove_button: function (button, destroy) {
+        var O = this.options;
         var B = this.buttons;
         if (button instanceof Button)
             button = B.indexOf(button);
@@ -302,7 +303,8 @@ export const Buttons = define_class({
          * @param {Button} button - The {@link Button} instance which was removed.
          */
         this.emit("removed", b);
-        b.destroy();
+        if (destroy)
+            b.destroy();
     },
     
     destroy: function () {
