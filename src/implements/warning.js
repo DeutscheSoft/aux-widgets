@@ -19,6 +19,22 @@
 import { define_class } from './../widget_helpers.js';
 import { add_class, remove_class } from '../utils/dom.js';
 
+function reset (element) {
+    var i = this.elements.indexOf(element);
+    if (i < 0) return;
+    remove_class(this.elements[i], "aux-warn");
+    this.elements.splice(i, 1);
+    this.timeouts.splice(i, 1);
+    /**
+     * Gets fired when the warning class was removed.
+     * 
+     * @event Warning#warning_released
+     * 
+     * @param {HTMLElement|SVGElement} element - The element which lost the warning class.
+     */
+    this.emit("warning_released", element);
+}
+
 /**
  * Adds the class "aux-warn" on <code>this.element</code> for a certain
  * period of time. It is used e.g. in {@link ResponseHandle} or {@link Knob} when the value
@@ -28,6 +44,8 @@ import { add_class, remove_class } from '../utils/dom.js';
  */
 export const Warning = define_class({
     _class: "Warning",
+    elements: [],
+    timeouts: [],
     /** 
      * Adds the class <code>.aux-warn</code> to the given element and
      * sets a timeout after which the class is removed again. If there
@@ -37,22 +55,28 @@ export const Warning = define_class({
      * 
      * @emits Warning#warning
      * 
-     * @param {HTMLElement|SVGElement} element - The DOM node the class should be added to.
-     * @param {Number} [timeout=250] - The timeout in ms until the class should be removed again.
+     * @param {HTMLElement|SVGElement} element - The DOM node the class should be set on.
+     * @param {Number} [timeout=250] - The timeout in milliseconds until the class should be removed again.
      */
     warning: function (element, timeout) {
         if (!timeout) timeout = 250;
-        if (this.__wto) window.clearTimeout(this.__wto);
-        this.__wto = null;
+        var i;
+        if ((i = this.elements.indexOf(element)) >= 0) {
+            window.clearTimeout(this.timeouts[i]);
+        } else {
+            i = this.elements.length;
+        }
+        this.elements[i] = element;
+        this.timeouts[i] = window.setTimeout(reset.bind(this, element), timeout);
         add_class(element, "aux-warn");
-        this.__wto = window.setTimeout(function () {
-            remove_class(element, "aux-warn");
-        }.bind(this), timeout);
         /**
          * Gets fired when {@link Warning#warning} was called.
          * 
          * @event Warning#warning 
+         * 
+         * @param {HTMLElement|SVGElement} element - The element which received the warning class.
          */
-        this.emit("warning");
-    }
+        this.emit("warning", element);
+    },
+    
 });
