@@ -170,6 +170,20 @@ pre, code {
     width: 100%;
 }
 
+/* BUTTONS */
+
+.aux-buttons {
+    box-sizing: border-box;
+    display: inline-flex;
+}
+.aux-buttons.aux-vertical {
+    flex-direction: column;
+}
+.aux-buttons > .aux-button.aux-warn {
+    background-color: #F80;
+    border-color: #F80;
+}
+
 /* CONTAINER */
 
 .aux-container.aux-hide {
