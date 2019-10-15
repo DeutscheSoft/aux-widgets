@@ -18,7 +18,7 @@
  */
 
 import { define_class } from './../widget_helpers.js';
-import { element, add_class, remove_class, inner_height, inner_width, toggle_class } from './../utils/dom.js';
+import { element, add_class, remove_class } from './../utils/dom.js';
 import { Container } from './container.js';
 import { Button } from './button.js';
 import { Warning } from '../implements/warning.js';
