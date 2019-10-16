@@ -113,7 +113,6 @@ function set_handle() {
  * @class Drag
  */
 export const Drag = define_class({
-    _class: "Drag",
     Extends: Base,
     _options: {
         node    : "object",

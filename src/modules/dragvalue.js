@@ -181,7 +181,6 @@ export const DragValue = define_class({
      *
      * @mixes GlobalCursor
      */
-    _class: "DragValue",
     Extends: DragCapture,
     Implements: GlobalCursor,
     _options: {

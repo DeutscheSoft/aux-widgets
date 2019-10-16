@@ -34,7 +34,6 @@ export const Label = define_class({
      * @param {Mixed} [options.label=""] - The content of the label. Can be formatted via `options.format`.
      * @param {Function|Boolean} [options.format=false] - Optional format function.
      */
-    _class: "Label",
     Extends: Widget,
     _options: Object.assign(Object.create(Widget.prototype._options), {
         label: "string",

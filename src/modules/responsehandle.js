@@ -924,7 +924,6 @@ function set_range(range, key) {
  * @param {mixed} value - The new value of the option.
  */
 export const ResponseHandle = define_class({
-    _class: "ResponseHandle",
     Extends: Widget,
     Implements: [GlobalCursor, Warning],
     _options: Object.assign(Object.create(Widget.prototype._options), {

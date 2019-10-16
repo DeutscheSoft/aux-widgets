@@ -171,7 +171,6 @@ export const Meter = define_class({
      *
      */
     
-    _class: "Meter",
     Extends: Widget,
     Implements: [Gradient],
     _options: Object.assign(Object.create(Widget.prototype._options),

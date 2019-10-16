@@ -38,7 +38,6 @@ export const CrossoverBand = define_class({
      * 
      * @extends EqBand
      */
-    _class: "CrossoverBand",
     Extends: EqBand,
     _options: Object.assign(Object.create(EqBand.prototype._options), {
         lower: "string|function",
@@ -151,7 +150,6 @@ export const Crossover = define_class({
      *   Value is a factor of x. Example: if distance=0.2 a band cannot be moved beyond 800Hz if the upper next
      *   band is at 1kHz.
      */
-    _class: "Crossover",
     Extends: Equalizer,
     _options: Object.assign(Object.create(Equalizer.prototype._options), {
         leap: "boolean",

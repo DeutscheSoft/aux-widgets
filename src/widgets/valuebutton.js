@@ -63,7 +63,6 @@ export const ValueButton = define_class({
      * @property {Number} [options.snap=0.01] - Snap value while dragging.
      * @property {Number} [options.basis=300] - Distance to drag between <code>min</code> and <code>max</code> in pixels.
      */
-    _class: "ValueButton",
     Extends: Button,
     Implements: [Warning, Ranged],
     _options: Object.assign(Object.create(Button.prototype._options), Ranged.prototype._options, {

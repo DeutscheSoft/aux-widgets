@@ -131,7 +131,6 @@ function fire_event(title, event) {
  * @property {Boolean} [options.limit=false] - Limit the returned value to min and max of the range.
  */
 export const ScrollValue = define_class({
-    _class: "ScrollValue",
     Extends: Module,
     _options: {
         get: "function",

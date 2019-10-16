@@ -27,7 +27,6 @@ import { add_class, remove_class } from '../utils/dom.js';
  * @mixin GlobalCursor
  */
 export const GlobalCursor = define_class({
-    _class: "GlobalCursor",
     /**
      * Adds a class <code>"aux-cursor-" + cursor</code> to the <code>document.body</code> to show a specific cursor.
      * 

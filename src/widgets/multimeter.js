@@ -85,7 +85,6 @@ export const MultiMeter = define_class({
      * @property {Array<Number>} [options.tops=[]] - An Array containing values for top for the level meters. Their order is the same as the meters.
      * @property {Array<Number>} [options.bottoms=[]] - An Array containing values for bottom for the level meters. Their order is the same as the meters.
      */
-    _class: "MultiMeter",
     Extends: Container,
     
     /* TODO: The following sucks cause we need to maintain it according to

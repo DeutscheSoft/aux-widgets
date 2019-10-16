@@ -311,7 +311,6 @@ export const DragCapture = define_class({
      */
      
     Extends: Module,
-    _class: "DragCapture",
     _options: {
         node: "object",
         state: "boolean", /* internal, undocumented */

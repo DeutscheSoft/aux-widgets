@@ -34,7 +34,6 @@ function range_changed(value, name) {
  * @mixin Ranges
  */
 export const Ranges = define_class({
-    _class: "Ranges",
     /**
      * Add a new {@link Range}. If <code>name</code> is set and <code>this.options[name]</code>
      * exists, is an object and <code>from</code> is an object, too, both are merged

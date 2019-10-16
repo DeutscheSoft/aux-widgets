@@ -108,7 +108,6 @@ export const Buttons = define_class({
      * @mixes Warning
      * 
      */
-    _class: "Buttons",
     Extends: Container,
     Implements: Warning,
     _options: Object.assign(Object.create(Container.prototype._options), {

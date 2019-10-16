@@ -617,7 +617,6 @@ export const Ranged = define_class({
      * @mixin Ranged
      */
 
-    _class: "Ranged",
     options: {
         scale:          "linear",
         reverse:        false,

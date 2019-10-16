@@ -49,7 +49,6 @@ export const Button = define_class({
      * 
      * @class Button
      */
-    _class: "Button",
     Extends: Widget,
     _options: Object.assign(Object.create(Widget.prototype._options), {
         label: "string|boolean",

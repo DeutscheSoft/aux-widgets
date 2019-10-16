@@ -306,7 +306,6 @@ function geom_set(value, key) {
     error("using deprecated '"+key+"' options");
 }
 export const Chart = define_class({
-    _class: "Chart",
     Extends: Widget,
     Implements: Ranges,
     _options: Object.assign(Object.create(Widget.prototype._options), {

@@ -146,7 +146,6 @@ function submit_cb(e) {
  * 
  */
 export const Value = define_class({
-    _class: "Value",
     Extends: Widget,
     _options: Object.assign(Object.create(Widget.prototype._options), {
         value: "number|string",

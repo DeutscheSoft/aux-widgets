@@ -37,7 +37,6 @@ import { add_class } from '../utils/dom.js';
 
 export const Notifications = define_class({
     
-    _class: "Notifications",
     Extends: Container,
     
     _options: Object.assign(Container.prototype._options, {

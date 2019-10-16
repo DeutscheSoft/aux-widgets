@@ -42,7 +42,6 @@ function new_tag_from_input () {
 
 export const Tagger = define_class({
     
-    _class: "Tagger",
     Extends: Dialog,
     Implements: Taggable,
     

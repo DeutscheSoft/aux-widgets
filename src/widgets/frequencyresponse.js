@@ -68,7 +68,6 @@ export const FrequencyResponse = define_class({
      * @property {String} [options.scale="linear"] - The type of the decibels scale. See {@link Range} for more details.
      * @property {Number} [options.depth=0] - The depth of the z axis (<code>basis</code> of options.range_z)
      */
-    _class: "FrequencyResponse",
     Extends: Chart,
     _options: Object.assign(Object.create(Chart.prototype._options), {
         db_grid: "number",

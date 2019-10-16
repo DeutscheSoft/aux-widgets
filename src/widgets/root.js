@@ -45,7 +45,6 @@ function resized() {
  */
 export const Root = define_class({
     Extends: Container,
-    _class: "Root",
     _options: Object.create(Container.prototype._options),
     static_events: {
         initialized: function () {

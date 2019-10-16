@@ -43,7 +43,6 @@ import { element, add_class } from '../utils/dom.js';
  *   `false` to set the background via external CSS.
  */
 export const State = define_class({
-    _class: "State",
     Extends: Widget,
     _options: Object.assign(Object.create(Widget.prototype._options), {
         state: "number|boolean",

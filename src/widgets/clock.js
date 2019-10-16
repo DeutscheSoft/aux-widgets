@@ -174,7 +174,6 @@ export const Clock = define_class({
      * @property {Number|String|Date} [options.time] - Set a specific time and date. To avoid auto-udates, set `timeout` to 0.
      *   For more information about the value, please refer to <a href="https://www.w3schools.com/jsref/jsref_obj_date.asp">W3Schools</a>.
      */
-    _class: "Clock",
     Extends: Widget,
     _options: Object.assign(Object.create(Widget.prototype._options), {
         thickness:    "number",

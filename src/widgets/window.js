@@ -456,7 +456,6 @@ export const Window = define_class({
      * @member {Resize} Window#resize - The {@link Resize} module.
      */
      
-    _class: "Window",
     Extends: Container,
     Implements: [GlobalCursor],
     _options: Object.assign(Object.create(Container.prototype._options), {

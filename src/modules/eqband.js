@@ -77,7 +77,6 @@ export const EqBand = define_class({
      *
      * @extends ResponseHandle
      */
-    _class: "EqBand",
     Extends: ResponseHandle,
     _options: Object.assign(Object.create(ResponseHandle.prototype._options), {
         type: "string|function",

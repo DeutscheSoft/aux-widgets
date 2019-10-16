@@ -22,7 +22,6 @@ import { Taggable } from './taggable.js';
 import { add_class } from '../utils/dom.js';
 
 export const TaggableListItem = define_class({
-    _class: "TaggableListItem",
     Extends: ListItem,
     Implements: Taggable,
     initialize: function (options) {

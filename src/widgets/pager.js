@@ -71,7 +71,6 @@ export const Pager = define_class({
      *  ]
      * });
      */
-    _class: "Pager",
     Extends: Container,
     _options: Object.assign(Object.create(Container.prototype._options), {
         position:  "string",

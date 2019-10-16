@@ -37,7 +37,6 @@ export const Gradient = define_class({
      *   Values are valid css color strings like <code>#ff8000</code> or <code>rgb(0,56,103)</code>.
      *   If set to false the css style color is used.
      */
-    _class: "Gradient",
     Implements: Ranged,
     _options: Object.assign(Ranged.prototype._options, {
         gradient: "mixed",

@@ -38,7 +38,6 @@ var reset_size = function (state) {
 
 export const TreeItem = define_class({
     
-    _class: "TreeItem",
     Extends: ListItem,
     
     _options: Object.assign(Object.create(ListItem.prototype._options), {

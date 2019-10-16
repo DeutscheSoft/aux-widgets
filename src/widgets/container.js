@@ -103,7 +103,6 @@ export const Container = define_class({
      *   Do not modify, manually.
      * @property {Array<TK.Widget>} [options.children=[]] - Add child widgets on init. Will not be maintained on runtime! Just for convenience purposes on init.
      */
-    _class: "Container",
     Extends: Widget,
     _options: Object.assign(Object.create(Widget.prototype._options), {
         content: "string|DOMNode",

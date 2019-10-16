@@ -168,7 +168,6 @@ export const Graph = define_class({
      * 
      * @mixes Ranges
      */
-    _class: "Graph",
     Extends: Widget,
     Implements: Ranges,
     _options: Object.assign(Object.create(Widget.prototype._options), {

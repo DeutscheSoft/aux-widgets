@@ -77,7 +77,6 @@ function module_range() {
 
  */
 export const Knob = define_class({
-    _class: "Knob",
     Extends: Widget,
     _options: Object.assign(Object.create(Widget.prototype._options), Circular.prototype._options,
                             DragValue.prototype._options, {

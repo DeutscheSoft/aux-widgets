@@ -75,7 +75,6 @@ export const Range = define_class({
     *   again.
      */
     Extends : Base,
-    _class: "Range",
     Implements: [Ranged],
     _options: {
         scale: "string|function",

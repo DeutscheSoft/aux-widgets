@@ -375,8 +375,6 @@ function mark_markers(labels, dots) {
  * @property {Number|Boolean} [options.bar=false] - The value to set the bars height to. Set to `false` to hide the bar.
  */
 export const Scale = define_class({
-    _class: "Scale",
-    
     Extends: Widget,
     Implements: [Ranged],
     _options: Object.assign(Object.create(Widget.prototype._options), Ranged.prototype._options, {

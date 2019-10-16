@@ -50,7 +50,6 @@ export const Dynamics = define_class({
      * @param {Function} [options.grid_labels=function (val) { return val + (!val ? "dB":""); }] - Callback to format the labels of the {@link Grid}.
      * @param {Number} [options.db_grid=12] - Draw a grid line every [n] decibels.
      */
-    _class: "Dynamics",
     Extends: Chart,
     _options: Object.assign(Object.create(Chart.prototype._options), {
         size: "number", // deprecated, undocumented. Is set via CSS.

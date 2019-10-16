@@ -172,7 +172,6 @@ function mixin(dst, src) {
     var fun, key;
     for (key in src) if (!dst[key]) {
         if (key === "constructor" ||
-            key === "_class" ||
             key === "Extends" ||
             key === "Implements" ||
             key === "options") continue;

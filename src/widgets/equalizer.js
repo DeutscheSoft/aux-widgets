@@ -142,7 +142,6 @@ export const Equalizer = define_class({
      * 
      * @extends FrequencyResponse
      */
-    _class: "Equalizer",
     Extends: FrequencyResponse,
     _options: Object.assign(Object.create(FrequencyResponse.prototype._options), {
         accuracy: "number",

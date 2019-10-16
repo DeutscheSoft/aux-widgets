@@ -79,7 +79,6 @@ export const ValueKnob = define_class({
      * @property {Number} [options.show_value=true] - Set to `false` to hide the {@link Value}.
      * @property {Number} [options.show_knob=true] - Set to `false` to hide the {@link Knob}.
      */
-    _class: "ValueKnob",
     Extends: Widget,
     _options: Object.create(Widget.prototype._options),
     options: { },

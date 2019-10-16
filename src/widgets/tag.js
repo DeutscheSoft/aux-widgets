@@ -48,7 +48,6 @@ function colorize (e) {
 }
 
 export const Tag = define_class({
-    _class: "Tag",
     Extends: Widget,
     
     _options: Object.assign(Object.create(Widget.prototype._options), {

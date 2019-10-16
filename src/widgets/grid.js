@@ -185,7 +185,6 @@ export const Grid = define_class({
      * 
      * @mixes Ranges
      */
-    _class: "Grid",
     Extends: Widget,
     Implements: Ranges,
     _options: Object.assign(Object.create(Widget.prototype._options), {

@@ -120,7 +120,6 @@ export const ConfirmButton = define_class({
    * @property {String} [options.label_confirm] - The label to be used while in active state.
    * @property {String} [options.icon_confirm] - The icon to be used while in active state.
    */
-  _class: "ConfirmButton",
   Extends: Button,
   
   _options: Object.assign(Object.create(Button.prototype._options), {

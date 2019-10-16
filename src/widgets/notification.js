@@ -76,7 +76,6 @@ function timeout() {
  
 export const Notification = define_class({
     
-  _class: "Notification",
   Extends: Container,
   
   _options: Object.assign(Container.prototype._options, {

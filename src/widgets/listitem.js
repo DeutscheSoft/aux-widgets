@@ -29,7 +29,6 @@ export const ListItem = define_class({
      * 
      * @extends Container
      */
-    _class: "ListItem",
     Extends: Container,
     
     initialize: function (options) {

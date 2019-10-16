@@ -108,7 +108,6 @@ function set_handle() {
  */
 export const Resize = define_class({
     // Resize enables resizing of elements on the screen.
-    _class: "Resize",
     Extends: Base,
     _options: {
         handle : "object",

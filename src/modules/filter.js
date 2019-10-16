@@ -344,7 +344,6 @@ export const Filter = define_class({
       * 
       * @returns {number} gain - The gain at the given frequency.
       */ 
-    _class: "Filter",
     Extends: Base,
     _options: {
         type: "string|function",

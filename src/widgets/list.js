@@ -40,7 +40,6 @@ export const List = define_class({
     _options: Object.assign(Object.create(Container.prototype._options), {
       sort: "function",
     }),
-    _class: "List",
     Extends: Container,
     
     initialize: function (options) {

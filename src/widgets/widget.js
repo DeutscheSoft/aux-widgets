@@ -151,7 +151,6 @@ export const Widget = define_class({
      * @event Widget#show
      */
     Extends : Base,
-    _class: "Widget",
     _options: {
         // A CSS class to add to the main element
         class: "string",

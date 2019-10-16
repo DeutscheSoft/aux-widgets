@@ -27,7 +27,6 @@ var build_sorter = function () {
 }
 
 export const SortableListItem = define_class({
-    _class: "SortableListItem",
     Extends: ListItem,
     _options: Object.assign(Object.create(ListItem.prototype._options), {
         sortable: "boolean",

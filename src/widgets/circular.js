@@ -334,7 +334,6 @@ export const Circular = define_class({
      * 
      * @mixes Ranged
      */
-    _class: "Circular",
     Extends: Widget,
     Implements: [Warning, Ranged],
     _options: Object.assign(Object.create(Widget.prototype._options), Ranged.prototype._options, {

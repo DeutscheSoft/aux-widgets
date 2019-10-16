@@ -132,7 +132,6 @@ export const Select = define_class({
      *   as label for constructing a {@SelectEntry} or an instance of {@SelectEntry}.
      *
      */
-    _class: "Select",
     Extends: Button,
     _options: Object.assign(Object.create(Button.prototype._options), {
         entries: "array",
@@ -709,7 +708,6 @@ export const SelectEntry = define_class({
      * @property {mixed} [options.value] - The value of the selected entry.
      *
      */
-    _class: "SelectEntry",
     Extends: Label,
     
     _options: Object.assign(Object.create(Label.prototype._options), {

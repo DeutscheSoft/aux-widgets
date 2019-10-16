@@ -163,7 +163,6 @@ export const Expander = define_class({
      * @param {String} [options.label=""] - Label of the {@link Button} which toggles expanded state.
      * @param {Boolean} [options.show_button=true] - Set to `false` to hide the {@link Button} toggling expanded state.
      */
-    _class: "Expander",
     _options: Object.assign(Object.create(Container.prototype._options), {
         expanded: "boolean",
         always_expanded: "boolean",

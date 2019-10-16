@@ -43,7 +43,6 @@ function reset (element) {
  * @mixin Warning
  */
 export const Warning = define_class({
-    _class: "Warning",
     elements: [],
     timeouts: [],
     /** 

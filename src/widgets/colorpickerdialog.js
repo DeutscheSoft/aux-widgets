@@ -47,7 +47,6 @@ export const ColorPickerDialog = define_class({
      * 
      */
     
-    _class: "ColorPickerDialog",
     Extends: Dialog,
     
     initialize: function (options) {

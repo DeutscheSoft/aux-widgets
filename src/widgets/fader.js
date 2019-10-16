@@ -163,7 +163,6 @@ function deactivate_tooltip() {
  * @property {String|Boolean} [options.label=false] - Add a label to the fader. Set to `false` to remove the label from the DOM.
  */
 export const Fader = define_class({
-    _class: "Fader",
     Extends: Widget,
     Implements: [Ranged, Warning, GlobalCursor],
     _options: Object.assign(Object.create(Widget.prototype._options),

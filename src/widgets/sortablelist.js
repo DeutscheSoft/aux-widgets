@@ -40,7 +40,6 @@ var build_dragcapture = function () {
 
 export const SortableList = define_class({
     
-    _class: "SortableList",
     Extends: List,
     
     _options: Object.assign(Object.create(Container.prototype._options), {

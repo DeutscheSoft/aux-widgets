@@ -23,7 +23,6 @@ import { add_class } from '../utils/dom.js';
 
 export const TaggableTreeItem = define_class({
     
-    _class: "TaggableTreeItem",
     Extends: TreeItem,
     Implements: Taggable,
     

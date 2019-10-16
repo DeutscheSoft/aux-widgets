@@ -105,7 +105,6 @@ export const ButtonArray = define_class({
      * 
      * @extends Container
      */
-    _class: "ButtonArray",
     Extends: Container,
     _options: Object.assign(Object.create(Container.prototype._options), {
         buttons: "array",

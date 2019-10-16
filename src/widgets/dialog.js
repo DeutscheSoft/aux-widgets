@@ -72,7 +72,6 @@ export const Dialog = define_class({
  * @property {boolean} [options.toplevel=false] - Add the dialog DOM node to the topmost position in DOM on `visible=true`. Topmost means either a parenting `AWML-ROOT` or the `BODY` node.
  * 
  */
-    _class: "Dialog",
     Extends: Container,
     _options: Object.assign(Object.create(Container.prototype._options), {
         visible: "boolean",

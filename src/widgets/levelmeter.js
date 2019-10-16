@@ -125,7 +125,6 @@ export const LevelMeter = define_class({
      *   can be used to delay the start of the falling animation in order to avoid flickering if internal
      *   and external falling are combined.
      */
-    _class: "LevelMeter",
     Extends: Meter,
     _options: Object.assign(Object.create(Meter.prototype._options), {
         falling: "number",

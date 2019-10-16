@@ -35,7 +35,6 @@ import { add_class } from '../utils/dom.js';
  */
 export const Frame = define_class({
     Extends: Container,
-    _class: "Frame",
     _options: Object.create(Container.prototype._options),
     options: {
         label: false,

@@ -169,7 +169,6 @@ export const Toggle = define_class({
      * @property {String|Boolean} [options.label_active=false] - An optional label which is only displayed
      *   when the button toggle state is <code>true</code>. Please note that this option only works if `label` is also set.
      */
-    _class: "Toggle",
     Extends: Button,
     _options: Object.assign(Object.create(Button.prototype._options), {
         label_active: "string",

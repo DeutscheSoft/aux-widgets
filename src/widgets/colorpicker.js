@@ -148,7 +148,6 @@ function set_atoms (key, value) {
 
 export const ColorPicker = define_class({
     
-    _class: "ColorPicker",
     Extends: Container,
     
     _options: Object.assign(Object.create(Container.prototype._options), {

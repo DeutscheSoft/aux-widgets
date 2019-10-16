@@ -35,7 +35,6 @@ export const Icon = define_class({
      * @property {String} [options.icon] - The icon to show. It can either be
      *   a string which is interpreted as class name (if <code>[A-Za-z0-9_\-]</code>) or as URI.
      */
-    _class: "Icon",
     Extends: Widget,
     _options: Object.assign(Object.create(Widget.prototype._options), {
         icon: "string",
