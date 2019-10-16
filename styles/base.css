@@ -44,6 +44,11 @@
     border-color: white;
 }
 
+.aux-buttons > .aux-button.aux-warn {
+    background-color: #F80;
+    border-color: #F80;
+}
+
 .aux-buttonarray > .aux-clip {
     background: white;
 }
