@@ -27,6 +27,8 @@ export const Gradient = define_class({
      *
      * @mixin Gradient
      * 
+     * @mixes Ranged
+     * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
      * @property {Object|Boolean} options.gradient - Gradient definition for the background.

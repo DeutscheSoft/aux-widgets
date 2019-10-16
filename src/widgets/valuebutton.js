@@ -48,6 +48,9 @@ export const ValueButton = define_class({
      * 
      * @extends Button
      * 
+     * @mixes Warning
+     * @mixes Ranged
+     * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
      * @property {Number} [options.value=0] - The value of the widget.

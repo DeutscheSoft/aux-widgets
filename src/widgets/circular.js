@@ -331,7 +331,6 @@ export const Circular = define_class({
      * @extends Widget
      * 
      * @mixes Warning
-     * 
      * @mixes Ranged
      */
     Extends: Widget,

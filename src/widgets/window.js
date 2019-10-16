@@ -399,7 +399,8 @@ export const Window = define_class({
      * @class Window
      * 
      * @extends Container
-     * @implments GlobalCursor
+     * 
+     * @mixes GlobalCursor
      * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 

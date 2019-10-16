@@ -144,6 +144,10 @@ function deactivate_tooltip() {
  * @class Fader
  * 
  * @extends Widget
+ * 
+ * @mixes Ranged
+ * @mixes Warning
+ * @mixes GlobalCursor
  *
  * @param {Object} [options={ }] - An object containing initial options.
  * 

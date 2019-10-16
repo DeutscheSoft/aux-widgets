@@ -922,6 +922,9 @@ function set_range(range, key) {
  * 
  * @param {string} name - The name of the option which was changed due to the users action.
  * @param {mixed} value - The new value of the option.
+ * 
+ * @mixes GlobalCursor
+ * @mixes Warning
  */
 export const ResponseHandle = define_class({
     Extends: Widget,

@@ -141,6 +141,8 @@ export const Meter = define_class({
      * @class Meter
      * 
      * @extends Widget
+     * 
+     * @mixes Gradient
      *
      * @param {Object} [options={ }] - An object containing initial options.
      * 

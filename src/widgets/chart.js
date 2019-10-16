@@ -247,6 +247,7 @@ function draw_title() {
  *
  * @class Chart
  * @extends Widget
+ * @mixes Ranges
  *
  * @param {Object} [options={ }] - An object containing initial options.
  * 

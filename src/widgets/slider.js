@@ -75,6 +75,9 @@ function set_background(horiz, vert, size) {
  * @class Slider
  * 
  * @extends Widget
+ * 
+ * @mixes Ranged
+ * @mixes Warning
  *
  * @param {Object} [options={ }] - An object containing initial options.
  * 
