@@ -45,7 +45,6 @@ export * from './widgets/tagger.js';
 export * from './widgets/tagnode.js';
 export * from './widgets/tags.js';
 export * from './widgets/toggle.js';
-export * from './widgets/tooltips.js';
 export * from './widgets/treeitem.js';
 export * from './widgets/value.js';
 export * from './widgets/valuebutton.js';

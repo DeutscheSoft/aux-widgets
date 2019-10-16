@@ -36,7 +36,6 @@ import { DragValue } from '../modules/dragvalue.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
 import { Value } from './value.js';
 import { Label } from './label.js';
-import { tooltip } from './tooltips.js';
 import {
     set_text, element, add_class, toggle_class, remove_class, supports_transform,
     css_space, outer_height, inner_height, outer_width, inner_width
@@ -60,21 +59,6 @@ function get_value(ev) {
     }
     return this.px2val(real);
 }
-function tooltip_by_position(ev, tt) {
-    if (this._handle.contains(ev.target)) {
-        tooltip_by_value.call(this, ev, tt);
-        return;
-    }
-    var val = this.snap(get_value.call(this, ev));
-    set_text(tt, this.options.tooltip(val));
-}
-function tooltip_by_value(ev, tt) {
-    set_text(tt, this.options.tooltip(this.options.value));
-}
-function mouseenter (ev) {
-    if (!this.options.tooltip) return;
-    tooltip.add(1, this.tooltip_by_position);
-}
 function clicked(ev) {
     var value;
     if (this._handle.contains(ev.target)) return;
@@ -82,22 +66,6 @@ function clicked(ev) {
     if (this.label.element.contains(ev.target)) return;
     if (this.scale.element.contains(ev.target)) return;
     value = this.userset("value", get_value.call(this, ev));
-    if (this.options.tooltip && tooltip._entry)
-        set_text(tooltip._entry, this.options.tooltip(this.options.value));
-}
-function mouseleave (ev) {
-    tooltip.remove(1, this.tooltip_by_position);
-}
-function startdrag(ev) {
-    if (!this.options.tooltip) return;
-    tooltip.add(0, this.tooltip_by_value);
-}
-function stopdrag(ev) {
-    tooltip.remove(0, this.tooltip_by_value);
-}
-function scrolling(ev) {
-    if (!this.options.tooltip) return;
-    set_text(tooltip._entry, this.options.tooltip(this.options.value));
 }
 function dblclick(ev) {
     this.userset("value", this.options.reset);
@@ -110,31 +78,7 @@ function dblclick(ev) {
      */
     this.emit("doubleclick", this.options.value);
 }
-function activate_tooltip() {
-    if (!this.tooltip_by_position) {
-        this.tooltip_by_position = tooltip_by_position.bind(this);
-        this.tooltip_by_value = tooltip_by_value.bind(this);
-        this.__startdrag = startdrag.bind(this);
-        this.__stopdrag = stopdrag.bind(this);
-        this.__scrolling = scrolling.bind(this);
-    }
-    this.on("mouseenter", mouseenter);
-    this.on("mouseleave", mouseleave);
-    this.drag.on("startdrag", this.__startdrag);
-    this.drag.on("stopdrag", this.__stopdrag);
-    this.scroll.on("scrolling", this.__scrolling);
-}
 
-function deactivate_tooltip() {
-    if (!this.tooltip_by_position) return;
-    tooltip.remove(0, this.tooltip_by_value);
-    tooltip.remove(1, this.tooltip_by_position);
-    this.off("mouseenter", mouseenter);
-    this.off("mouseleave", mouseleave);
-    this.drag.off("startdrag", this.__startdrag);
-    this.drag.off("stopdrag", this.__stopdrag);
-    this.scroll.off("scrolling", this.__scrolling);
-}
 /**
  * Fader is a slidable control with a {@link Scale} next to it which
  * can be both dragged and scrolled. Fader implements {@link Ranged},
@@ -153,9 +97,6 @@ function deactivate_tooltip() {
  * 
  * @property {Number} [options.value] - The faders position. This options is
  *   modified by user interaction.
- * @property {Function} [options.tooltip=false] - An optional formatting function for
- *   the tooltip value. The tooltip will show the value the mouse cursor is
- *   currently hovering over. If this option is not set, no tooltip will be shown.
  * @property {Boolean} [options.bind_click=false] - If true, a <code>click</code>
  *   on the fader will move the handle to the pointed position.
  * @property {Boolean} [options.bind_dblclick=true] - If true, a <code>dblclick</code>
@@ -178,7 +119,6 @@ export const Fader = define_class({
         gap_labels: "number",
         show_labels: "boolean",
         labels: "function",
-        tooltip: "function",
         layout: "string",
         direction: "int",
         reset: "number",
@@ -193,7 +133,6 @@ export const Fader = define_class({
         gap_labels: 40,
         show_labels: true,
         labels: function (val) { return val.toFixed(2); },
-        tooltip: false,
         layout: "left",
         bind_click: false,
         bind_dblclick: true,
@@ -207,9 +146,6 @@ export const Fader = define_class({
         set_bind_dblclick: function(value) {
             if (value) this.on("dblclick", dblclick);
             else this.off("dblclick", dblclick);
-        },
-        set_tooltip: function(value) {
-            (value ? activate_tooltip : deactivate_tooltip).call(this);
         },
         set_layout: function(value) {
             this.options.direction = vert(this.options) ? "vertical" : "horizontal";
@@ -271,7 +207,6 @@ export const Fader = define_class({
         
         this.set("bind_click", O.bind_click);
         this.set("bind_dblclick", O.bind_dblclick);
-        this.set("tooltip", O.tooltip);
     },
 
     redraw: function () {
@@ -342,8 +277,6 @@ export const Fader = define_class({
     destroy: function () {
         this._handle.remove();
         Widget.prototype.destroy.call(this);
-        tooltip.remove(0, this.tooltip_by_value);
-        tooltip.remove(1, this.tooltip_by_position);
     },
 
     /**

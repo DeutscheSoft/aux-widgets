@@ -14,7 +14,6 @@ js_input_files = \
     toolkit/implements/warning.js\
     toolkit/implements/gradient.js\
     toolkit/implements/notes.js\
-    toolkit/widgets/tooltips.js\
     toolkit/widgets/icon.js\
     toolkit/widgets/label.js\
     toolkit/widgets/colors.js\
@@ -81,7 +80,6 @@ css_input_files = \
     toolkit/styles/toolkit.css \
     toolkit/styles/2013.css \
     toolkit/styles/2013/css/globalcursor.css \
-    toolkit/styles/2013/css/tooltip.css \
     toolkit/styles/2013/css/scale.css \
     toolkit/styles/2013/css/graph.css \
     toolkit/styles/2013/css/grid.css \
@@ -124,7 +122,6 @@ css_input_files = \
     toolkit/styles/plain/cyan.css \
     toolkit/styles/plain/raspberry.css \
     toolkit/styles/plain/css/globalcursor.css \
-    toolkit/styles/plain/css/tooltip.css \
     toolkit/styles/plain/css/scale.css \
     toolkit/styles/plain/css/graph.css \
     toolkit/styles/plain/css/grid.css \

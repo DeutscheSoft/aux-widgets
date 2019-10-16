@@ -1077,35 +1077,6 @@ pre, code {
     height: 100%;
 }
 
-/* TOOLTIP */
-
-.aux-tooltip {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    pointer-events: none;
-    z-index: 9999;
-}
-.aux-tooltip > .aux-table {
-    display: table;
-    width: 100vw;
-    height: 100vh;
-    table-layout: auto;
-}
-.aux-tooltip > .aux-table > .aux-row {
-    display: table-row;
-}
-.aux-tooltip > .aux-table > .aux-row > .aux-cell {
-    display: table-cell;
-    height: auto;
-}
-.aux-tooltip > .aux-table > .aux-row > .aux-cell > .aux-entry {
-    white-space: nowrap;
-    display: table-cell;
-}
-
 /* VALUE */
 
 .aux-value > .aux-input {
