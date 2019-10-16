@@ -178,9 +178,9 @@ export const ColorPicker = define_class({
 
         var E = this.element;
         /** @member {HTMLDivElement} ColorPicker#element - The main DIV container.
-         * Has class <code>.aux-color-picker</code>.
+         * Has class <code>.aux-colorpicker</code>.
          */
-        add_class(E, "aux-color-picker");
+        add_class(E, "aux-colorpicker");
         
         /**
          * @member {Range} ColorPicker#range_x - The {@link Range} for the x axis. 

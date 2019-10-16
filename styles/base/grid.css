@@ -16,24 +16,24 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-.aux-grid-line {
+.aux-gridline {
     stroke-dasharray: 1,1;
 }
-.aux-grid-line.aux-vertical {
+.aux-gridline.aux-vertical {
     
 }
-.aux-grid-line.aux-horizontal {
+.aux-gridline.aux-horizontal {
     
 }
 
-.aux-grid-label {
+.aux-gridlabel {
     /* ONLY USE PADDING FOR POSITIONING! */
     padding: 1px 2px;
     font-size: 0.7em;
 }
-.aux-grid-label.aux-vertical {
+.aux-gridlabel.aux-vertical {
     
 }
-.aux-grid-label.aux-horizontal {
+.aux-gridlabel.aux-horizontal {
     
 }

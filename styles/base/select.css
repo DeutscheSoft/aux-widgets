@@ -37,14 +37,14 @@
     transform: translateY(-50%);
 }
 
-.aux-select-list {
+.aux-selectlist {
     margin: 0;
     padding: 0;
     transition: opacity 0.25s;
     text-align: left;
 }
 
-.aux-select-list > .aux-option {
+.aux-selectlist > .aux-selectentry {
     list-style: none;
     margin: 0;
     padding: 0 5px;
@@ -54,9 +54,9 @@
     display: block;
 }
 
-.aux-select-list > .aux-option:hover {
+.aux-selectlist > .aux-selectentry:hover {
     
 }
-.aux-select-list > .aux-option.aux-active {
+.aux-selectlist > .aux-selectentry.aux-active {
     
 }

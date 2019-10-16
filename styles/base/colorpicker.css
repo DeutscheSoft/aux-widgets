@@ -17,34 +17,34 @@
  * Boston, MA  02110-1301  USA
  */
  
- .aux-color-picker {
+ .aux-colorpicker {
     
 }
 
-.aux-color-picker > .aux-canvas {
+.aux-colorpicker > .aux-canvas {
 }
-.aux-color-picker > .aux-canvas > .aux-grayscale {
+.aux-colorpicker > .aux-canvas > .aux-grayscale {
 }
-.aux-color-picker > .aux-canvas > .aux-indicator {
+.aux-colorpicker > .aux-canvas > .aux-indicator {
     border: 0.5px solid;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
 }
 
 
-.aux-color-picker > .aux-hex {
+.aux-colorpicker > .aux-hex {
     border: 0px solid black;
 }
 
-.aux-color-picker > .aux-hue {
+.aux-colorpicker > .aux-hue {
 }
-.aux-color-picker  >.aux-saturation {
+.aux-colorpicker  >.aux-saturation {
 }
-.aux-color-picker > .aux-lightness {
+.aux-colorpicker > .aux-lightness {
 }
 
-.aux-color-picker > .aux-red {
+.aux-colorpicker > .aux-red {
 }
-.aux-color-picker > .aux-green {
+.aux-colorpicker > .aux-green {
 }
-.aux-color-picker > .aux-blue {
+.aux-colorpicker > .aux-blue {
 }

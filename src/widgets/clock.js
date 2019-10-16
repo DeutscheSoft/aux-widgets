@@ -262,17 +262,17 @@ export const Clock = define_class({
             "style":       "dominant-baseline: central;"
         });
         /**
-         * @member {SVGText} Clock#_label_upper - The upper label showing the day. Has class<code>.aux-label-upper</code>
+         * @member {SVGText} Clock#_label_upper - The upper label showing the day. Has class<code>.aux-upperlabel</code>
          */
         this._label_upper = make_svg("text", {
-            "class": "aux-label-upper",
+            "class": "aux-upperlabel",
             "text-anchor": "middle",
             "style":       "dominant-baseline: central;"
         });
-        /** @member {SVGText} Clock#_label_lower - The lower label showing the date. Has class<code>.aux-label-lower</code>
+        /** @member {SVGText} Clock#_label_lower - The lower label showing the date. Has class<code>.aux-lowerlabel</code>
          */
         this._label_lower = make_svg("text", {
-            "class": "aux-label-lower",
+            "class": "aux-lowerlabel",
             "text-anchor": "middle",
             "style":       "dominant-baseline: central;"
         });

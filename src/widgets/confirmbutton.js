@@ -139,7 +139,7 @@ export const ConfirmButton = define_class({
   
   initialize: function (options) {
     Button.prototype.initialize.call(this, options);
-    add_class(this.element, "aux-confirm-button");
+    add_class(this.element, "aux-confirmbutton");
     this.on("click", clicked.bind(this));
     this.__temp = {
       label: "",

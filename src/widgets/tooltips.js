@@ -55,7 +55,7 @@ export function GlobalTooltip() {
     entry.className += ".aux-entry";
 
     var entry_tl = cell.cloneNode();
-    entry_tl.className += ".aux-tt-container";
+    entry_tl.className += ".aux-ttcontainer";
     entry_tl.appendChild(entry);
 
     tmp.appendChild(cell.cloneNode());

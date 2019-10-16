@@ -57,7 +57,7 @@ export const TreeItem = define_class({
         this.flex = new Container({"class":"aux-flex"});
         
         ListItem.prototype.initialize.call(this, options);
-        add_class(this.element, "aux-tree-item");
+        add_class(this.element, "aux-treeitem");
         
         ListItem.prototype.append_child.call(this, this.flex);
         ListItem.prototype.add_child.call(this, this.list);

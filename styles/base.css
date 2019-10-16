@@ -62,10 +62,10 @@
 .aux-chart > svg > .aux-grid {
     opacity: 0.5;
 }
-.aux-chart > svg > .aux-grid > .aux-grid-line.aux-highlight {
+.aux-chart > svg > .aux-grid > .aux-gridline.aux-highlight {
     stroke: #00ccff;
 }
-.aux-chart > svg > .aux-grid > .aux-grid-label.aux-highlight {
+.aux-chart > svg > .aux-grid > .aux-gridlabel.aux-highlight {
     fill: rgb(255,255,255);
 }
 .aux-chart > svg > .aux-background {
@@ -141,14 +141,14 @@
 .aux-frame {
     border-color: white;
 }
-.aux-frame > .aux-frame-label {
+.aux-frame > .aux-framelabel {
     background: #e3e3e3;
 }
 
 .aux-frame {
     border-color: white;
 }
-.aux-frame > .aux-frame-label {
+.aux-frame > .aux-framelabel {
     background: #e3e3e3;
 }
 
@@ -176,10 +176,10 @@
     fill: none;
 }
 
-.aux-grid-line {
+.aux-gridline {
     stroke: #666;
 }
-.aux-grid-label {
+.aux-gridlabel {
     fill: #999;
 }
 
@@ -203,44 +203,44 @@
     color: white;
 }
 
-.aux-level-meter.aux-clipping > .aux-label {
+.aux-levelmeter.aux-clipping > .aux-label {
     color: #00ccff;
     text-shadow: 0 0 3px white, 0 0 3px white;
 }
-.aux-level-meter > .aux-clip {
+.aux-levelmeter > .aux-clip {
     background-color: #00ccff;
 }
-.aux-level-meter.aux-vertical.aux-left > .aux-bar > .aux-peak::before {
+.aux-levelmeter.aux-vertical.aux-left > .aux-bar > .aux-peak::before {
     border-left-color: #e3e3e3;
 }
-.aux-level-meter.aux-vertical.aux-right > .aux-bar > .aux-peak::before {
+.aux-levelmeter.aux-vertical.aux-right > .aux-bar > .aux-peak::before {
     border-right-color: #e3e3e3;
 }
-.aux-level-meter.aux-horizontal.aux-top > .aux-bar > .aux-peak::before {
+.aux-levelmeter.aux-horizontal.aux-top > .aux-bar > .aux-peak::before {
     border-top-color: #e3e3e3;
 }
-.aux-level-meter.aux-horizontal.aux-bottom > .aux-bar > .aux-peak::before {
+.aux-levelmeter.aux-horizontal.aux-bottom > .aux-bar > .aux-peak::before {
     border-bottom-color: #e3e3e3;
 }
-.aux-level-meter.aux-vertical > .aux-bar > .aux-peak .aux-peak-label {
+.aux-levelmeter.aux-vertical > .aux-bar > .aux-peak .aux-peaklabel {
     text-shadow: 0 1px 2px white, 0 1px 2px white;
 }
-.aux-level-meter.aux-horizontal > .aux-bar > .aux-peak .aux-peak-label {
+.aux-levelmeter.aux-horizontal > .aux-bar > .aux-peak .aux-peaklabel {
     text-shadow: -1px 0 2px white, -1px 0 2px white;
 }
 
-.aux-meter-base > .aux-bar > .aux-mask {
+.aux-meterbase > .aux-bar > .aux-mask {
     background: white;
 }
-.aux-meter-base > .aux-bar > .aux-mark > .aux-dot.aux-marker,
-.aux-meter-base > .aux-bar > .aux-mark > .aux-dot.aux-min,
-.aux-meter-base > .aux-bar > .aux-mark > .aux-dot.aux-max,
-.aux-meter-base > .aux-bar > .aux-mark > .aux-dot.aux-base {
+.aux-meterbase > .aux-bar > .aux-mark > .aux-dot.aux-marker,
+.aux-meterbase > .aux-bar > .aux-mark > .aux-dot.aux-min,
+.aux-meterbase > .aux-bar > .aux-mark > .aux-dot.aux-max,
+.aux-meterbase > .aux-bar > .aux-mark > .aux-dot.aux-base {
     background: white;
 }
 
-.aux-multi-meter > .aux-level-meter > .aux-bar,
-.aux-multi-meter > .aux-level-meter > .aux-state {
+.aux-multimeter > .aux-levelmeter > .aux-bar,
+.aux-multimeter > .aux-levelmeter > .aux-state {
     border-color: white !important;
 }
 
@@ -251,52 +251,52 @@
     color: #00ccff;
 }
 
-.aux-response-handle {
+.aux-responsehandle {
     fill: #aaa;
 }
-.aux-response-handle > .aux-handle {
+.aux-responsehandle > .aux-handle {
     fill: #00ccff;
 }
-.aux-response-handle.aux-warn > .aux-handle {
+.aux-responsehandle.aux-warn > .aux-handle {
     stroke: rgba(0,204,255,0.33);
 }
-.aux-response-handle > .aux-z-handle {
+.aux-responsehandle > .aux-zhandle {
     fill: #00ccff;
     stroke: rgba(0,204,255, 0.5);
 }
-.aux-response-handle > .aux-z-handle:hover {
+.aux-responsehandle > .aux-zhandle:hover {
     stroke: #00ccff;
 }
-.aux-response-handle.aux-active > .aux-z-handle {
+.aux-responsehandle.aux-active > .aux-zhandle {
     stroke: #00ccff;
 }
-.aux-response-handle.aux-circular > .aux-line {
+.aux-responsehandle.aux-circular > .aux-line {
     stroke: #00ccff;
 }
-.aux-response-handle.aux-line > .aux-line-1 {
+.aux-responsehandle.aux-line > .aux-line1 {
     stroke: #00ccff;
 }
-.aux-response-handle.aux-line > .aux-line-2 {
+.aux-responsehandle.aux-line > .aux-line2 {
     stroke: #00ccff;
 }
-.aux-response-handle.aux-block > .aux-line-1 {
+.aux-responsehandle.aux-block > .aux-line1 {
     stroke: #00ccff;
 }
-.aux-response-handle.aux-block > .aux-line-2 {
+.aux-responsehandle.aux-block > .aux-line2 {
     stroke: #00ccff;
 }
 
 .aux-button.aux-select > .aux-cell > .aux-arrow {
     border-top-color: #666;
 }
-.aux-select-list {
+.aux-selectlist {
     background: white;
 }
-.aux-select-list > .aux-option:hover {
+.aux-selectlist > .aux-option:hover {
     background: #00ccff;
     color: white;
 }
-.aux-select-list > .aux-option.aux-active {
+.aux-selectlist > .aux-option.aux-active {
     background: #666;
     color: white;
 }

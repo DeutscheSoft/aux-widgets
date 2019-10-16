@@ -16,202 +16,196 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-.aux-response-handle {
+.aux-responsehandle {
     
 }
-.aux-response-handle.aux-disabled {
+.aux-responsehandle.aux-disabled {
     display: none;
 }
-.aux-response-handle:hover {
+.aux-responsehandle:hover {
     
 }
-.aux-response-handle.aux-inactive {
+.aux-responsehandle.aux-inactive {
     
 }
-.aux-response-handle.aux-active {
+.aux-responsehandle.aux-active {
     cursor: move !important;
 }
-.aux-response-handle.aux-warn {
+.aux-responsehandle.aux-warn {
     
 }
-.aux-response-handle.aux-circular {
+.aux-responsehandle.aux-circular {
     
 }
-.aux-response-handle.aux-circular:hover {
+.aux-responsehandle.aux-circular:hover {
     
 }
-.aux-response-handle.aux-circular.aux-active {
+.aux-responsehandle.aux-circular.aux-active {
     
 }
-.aux-response-handle.aux-line {
+.aux-responsehandle.aux-line {
     
 }
-.aux-response-handle.aux-line-vertical {
+.aux-responsehandle.aux-block {
     
 }
-.aux-response-handle.aux-line-horizontal {
+.aux-responsehandle.aux-blockleft {
     
 }
-.aux-response-handle.aux-block {
+.aux-responsehandle.aux-blockright {
     
 }
-.aux-response-handle.aux-block-left {
+.aux-responsehandle.aux-blocktop {
     
 }
-.aux-response-handle.aux-block-right {
-    
-}
-.aux-response-handle.aux-block-top {
-    
-}
-.aux-response-handle.aux-block-bottom {
+.aux-responsehandle.aux-blockbottom {
     
 }
 
-.aux-response-handle > .aux-z-handle {
+.aux-responsehandle > .aux-zhandle {
     opacity: 0.5;
     cursor: pointer;
     stroke-width: 4;
 }
-.aux-response-handle > .aux-z-handle:hover {
+.aux-responsehandle > .aux-zhandle:hover {
     opacity: 0.75;
 }
-.aux-response-handle.aux-active > .aux-z-handle {
+.aux-responsehandle.aux-active > .aux-zhandle {
     opacity: 0.75;
     cursor: move;
 }
 
-.aux-response-handle > .aux-label {
+.aux-responsehandle > .aux-label {
     cursor: pointer;
     font-size: 0.8em;
 }
-.aux-response-handle:hover > .aux-label {
+.aux-responsehandle:hover > .aux-label {
     
 }
-.aux-response-handle.aux-active > .aux-label {
+.aux-responsehandle.aux-active > .aux-label {
     cursor:move;
 }
-.aux-response-handle > .aux-label > tspan {
+.aux-responsehandle > .aux-label > tspan {
     
 }
 
-.aux-response-handle.aux-circular > .aux-label {
+.aux-responsehandle.aux-circular > .aux-label {
     opacity: 0.5;
 }
-.aux-response-handle.aux-circular:hover > .aux-label {
+.aux-responsehandle.aux-circular:hover > .aux-label {
     opacity: 0.66;
 }
-.aux-response-handle.aux-circular.aux-active > .aux-label {
+.aux-responsehandle.aux-circular.aux-active > .aux-label {
     opacity: 0.8;
 }
-.aux-response-handle.aux-line > .aux-label {
+.aux-responsehandle.aux-line > .aux-label {
     opacity: 0.5;
 }
-.aux-response-handle.aux-line:hover > .aux-label {
+.aux-responsehandle.aux-line:hover > .aux-label {
     opacity: 0.66;
 }
-.aux-response-handle.aux-line.aux-active > .aux-label {
+.aux-responsehandle.aux-line.aux-active > .aux-label {
     opacity: 0.8;
 }
-.aux-response-handle.aux-block > .aux-label {
+.aux-responsehandle.aux-block > .aux-label {
     opacity: 0.5;
 }
-.aux-response-handle.aux-block:hover > .aux-label {
+.aux-responsehandle.aux-block:hover > .aux-label {
     opacity: 0.66;
 }
-.aux-response-handle.aux-block.aux-active > .aux-label {
+.aux-responsehandle.aux-block.aux-active > .aux-label {
     opacity: 0.8;
 }
 
 
 
-.aux-response-handle > .aux-handle {
+.aux-responsehandle > .aux-handle {
     cursor:pointer;
 }
-.aux-response-handle.aux-active > .aux-handle {
+.aux-responsehandle.aux-active > .aux-handle {
     cursor:move;
 }
-.aux-response-handle.aux-warn > .aux-handle {
+.aux-responsehandle.aux-warn > .aux-handle {
     stroke-width: 20;
 }
-.aux-response-handle.aux-circular > .aux-handle {
+.aux-responsehandle.aux-circular > .aux-handle {
     opacity: 0.33;
 }
-.aux-response-handle.aux-circular:hover > .aux-handle {
+.aux-responsehandle.aux-circular:hover > .aux-handle {
     opacity: 0.5;
 }
-.aux-response-handle.aux-circular.aux-active > .aux-handle {
+.aux-responsehandle.aux-circular.aux-active > .aux-handle {
     opacity: 0.66;
 }
-.aux-response-handle.aux-line > .aux-handle {
+.aux-responsehandle.aux-line > .aux-handle {
     opacity: 0.33;
 }
-.aux-response-handle.aux-line:hover > .aux-handle {
+.aux-responsehandle.aux-line:hover > .aux-handle {
     opacity: 0.5;
 }
-.aux-response-handle.aux-line.aux-active > .aux-handle {
+.aux-responsehandle.aux-line.aux-active > .aux-handle {
     opacity: 0.66;
 }
-.aux-response-handle.aux-block > .aux-handle {
+.aux-responsehandle.aux-block > .aux-handle {
     opacity: 0.2;
 }
-.aux-response-handle.aux-block:hover > .aux-handle {
+.aux-responsehandle.aux-block:hover > .aux-handle {
     opacity: 0.33;
 }
-.aux-response-handle.aux-block.aux-active > .aux-handle {
+.aux-responsehandle.aux-block.aux-active > .aux-handle {
     opacity: 0.5;
 }
 
 
 
-.aux-response-handle > .aux-line {
+.aux-responsehandle > .aux-line {
     stroke-width: 1;
 }
-.aux-response-handle:hover > .aux-line {
+.aux-responsehandle:hover > .aux-line {
     
 }
-.aux-response-handle.aux-active > .aux-line {
+.aux-responsehandle.aux-active > .aux-line {
     
 }
-.aux-response-handle.aux-circular > .aux-line {
+.aux-responsehandle.aux-circular > .aux-line {
 /*     stroke-dasharray: 1,1; */
     opacity: 0.5;
 }
-.aux-response-handle.aux-circular.aux-active > .aux-line {
+.aux-responsehandle.aux-circular.aux-active > .aux-line {
     
 }
 
-.aux-response-handle.aux-line > .aux-line-1 {
+.aux-responsehandle.aux-line > .aux-line1 {
     stroke-dasharray: 1,1;
     opacity: 0.6;
 }
-.aux-response-handle.aux-line:hover > .aux-line-1 {
+.aux-responsehandle.aux-line:hover > .aux-line1 {
     stroke-dasharray: 0;
 }
-.aux-response-handle.aux-line.aux-active > .aux-line-1 {
+.aux-responsehandle.aux-line.aux-active > .aux-line1 {
     stroke-dasharray: 0;
 }
-.aux-response-handle.aux-line > .aux-line-2 {
+.aux-responsehandle.aux-line > .aux-line2 {
     opacity: 0.5;
 }
-.aux-response-handle.aux-line.aux-active > .aux-line-2 {
+.aux-responsehandle.aux-line.aux-active > .aux-line2 {
     
 }
 
-.aux-response-handle.aux-block > .aux-line-1 {
+.aux-responsehandle.aux-block > .aux-line1 {
     stroke-dasharray: 1,1;
     opacity: 0.6;
 }
-.aux-response-handle.aux-block:hover > .aux-line-1 {
+.aux-responsehandle.aux-block:hover > .aux-line1 {
     stroke-dasharray: 0;
 }
-.aux-response-handle.aux-block.aux-active > .aux-line-1 {
+.aux-responsehandle.aux-block.aux-active > .aux-line1 {
     stroke-dasharray: 0;
     opacity: 0.9;
 }
-.aux-response-handle.aux-block > .aux-line-2 {
+.aux-responsehandle.aux-block > .aux-line2 {
     opacity: 0.5;
 }
-.aux-response-handle.aux-block.aux-active > .aux-line-2 {
+.aux-responsehandle.aux-block.aux-active > .aux-line2 {
     
 }

@@ -204,9 +204,9 @@ export const LevelMeter = define_class({
         
         /**
          * @member {HTMLDivElement} LevelMeter#element - The main DIV container.
-         *   Has class <code>.aux-level-meter</code>.
+         *   Has class <code>.aux-levelmeter</code>.
          */
-        add_class(this.element, "aux-level-meter");
+        add_class(this.element, "aux-levelmeter");
 
         var O = this.options;
         
@@ -506,7 +506,7 @@ define_child_element(LevelMeter, "peak", {
     show: false,
     create: function() {
         var peak = element("div","aux-peak");
-        peak.appendChild(element("div","aux-peak-label"));
+        peak.appendChild(element("div","aux-peaklabel"));
         return peak;
     },
     append: function() {

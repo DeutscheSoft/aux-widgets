@@ -107,9 +107,9 @@ export const MultiMeter = define_class({
         Container.prototype.initialize.call(this, options, true);
         /**
          * @member {HTMLDivElement} MultiMeter#element - The main DIV container.
-         *   Has class <code>.aux-multi-meter</code>.
+         *   Has class <code>.aux-multimeter</code>.
          */
-        add_class(this.element, "aux-multi-meter");
+        add_class(this.element, "aux-multimeter");
         this.meters = [];
         var O = this.options;
     },

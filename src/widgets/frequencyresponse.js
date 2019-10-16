@@ -130,14 +130,14 @@ export const FrequencyResponse = define_class({
             this.set("scale", options.scale, true);
         /**
          * @member {HTMLDivElement} FrequencyResponse#element - The main DIV container.
-         *   Has class <code>.aux-frequency-response</code>.
+         *   Has class <code>.aux-frequencyresponse</code>.
          */
-        add_class(this.element, "aux-frequency-response");
+        add_class(this.element, "aux-frequencyresponse");
         /** 
          * @member {SVGGroup} Chart#_handles - The SVG group containing all handles.
-         *      Has class <code>.aux-response-handles</code>.
+         *      Has class <code>.aux-responsehandles</code>.
          */
-        add_class(this._handles, "aux-response-handles");
+        add_class(this._handles, "aux-responsehandles");
         
         // do not overwrite custom grids, please
         if (this.options.db_grid && !this.options.grid_y.length)

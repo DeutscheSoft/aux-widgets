@@ -33,7 +33,7 @@ function draw_lines(a, mode, last) {
             label = make_svg("text");
             label.textContent = obj.label;
             label.style["dominant-baseline"] = "central";
-            add_class(label, "aux-grid-label");
+            add_class(label, "aux-gridlabel");
             add_class(label, mode ? "aux-horizontal" : "aux-vertical");
             if (obj["class"]) add_class(label, obj["class"]);
 
@@ -130,7 +130,7 @@ function draw_lines(a, mode, last) {
                 || (!mode && obj.pos === this.range_x.options.max))
                     continue;
                 var line = make_svg("path");
-                add_class(line, "aux-grid-line");
+                add_class(line, "aux-gridline");
                 add_class(line, mode ? "aux-horizontal" : "aux-vertical");
                 if (obj["class"]) add_class(line, obj["class"]);
                 if (obj.color) line.setAttribute("style", "stroke:" + obj.color);

@@ -335,7 +335,7 @@ function create_zhandle() {
 
     E = make_svg(
         O.mode === "circular" ? "circle" : "rect", {
-            "class": "aux-z-handle",
+            "class": "aux-zhandle",
         }
     );
 
@@ -347,13 +347,13 @@ function create_zhandle() {
 function create_line1() {
     if (this._line1) remove_line1.call(this);
     this._line1 = make_svg("path", {
-        "class": "aux-line.aux-line-1"
+        "class": "aux-line.aux-line1"
     });
 }
 function create_line2() {
     if (this._line2) remove_line2.call(this);
     this._line2 = make_svg("path", {
-        "class": "aux-line.aux-line-2"
+        "class": "aux-line.aux-line2"
     });
 }
 function remove_line1() {
@@ -891,10 +891,10 @@ function enddrag() {
  * @member {SVGText} ResponseHandle#_label - The label. Has class <code>.aux-label</code>.
  */
 /**
- * @member {SVGPath} ResponseHandle#_line1 - The first line. Has class <code>.aux-line .aux-line-1</code>.
+ * @member {SVGPath} ResponseHandle#_line1 - The first line. Has class <code>.aux-line .aux-line1</code>.
  */
 /**
- * @member {SVGPath} ResponseHandle#_line2 - The second line. Has class <code>.aux-line .aux-line-2</code>.
+ * @member {SVGPath} ResponseHandle#_line2 - The second line. Has class <code>.aux-line .aux-line2</code>.
  */
 
 function set_min(value, key) {
@@ -1074,13 +1074,13 @@ export const ResponseHandle = define_class({
         var E = make_svg("g");
         
         /**
-         * @member {SVGGroup} ResponseHandle#element - The main SVG group containing all handle elements. Has class <code>.aux-response-handle</code>.
+         * @member {SVGGroup} ResponseHandle#element - The main SVG group containing all handle elements. Has class <code>.aux-responsehandle</code>.
          */
         this.element = E;
 
         this.widgetize(E, true, true);
 
-        add_class(E, "aux-response-handle");
+        add_class(E, "aux-responsehandle");
         /**
          * @member {SVGCircular} ResponseHandle#_handle - The main handle.
          *      Has class <code>.aux-handle</code>.
@@ -1088,7 +1088,7 @@ export const ResponseHandle = define_class({
         
         /**
          * @member {SVGCircular} ResponseHandle#_zhandle - The handle for manipulating z axis.
-         *      Has class <code>.aux-z-handle</code>.
+         *      Has class <code>.aux-zhandle</code>.
          */
 
         this._scrollwheel = scrollwheel.bind(this);

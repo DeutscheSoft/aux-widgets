@@ -16,13 +16,13 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-.aux-frequency-response {
+.aux-frequencyresponse {
     
 }
 
-.aux-frequency-response > svg > .aux-grid > .aux-grid-line.aux-highlight {
+.aux-frequencyresponse > svg > .aux-grid > .aux-gridline.aux-highlight {
     
 }
-.aux-frequency-response > svg > .aux-grid > .aux-grid-label.aux-highlight {
+.aux-frequencyresponse > svg > .aux-grid > .aux-gridlabel.aux-highlight {
     font-weight: bold;
 }

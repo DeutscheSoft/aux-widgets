@@ -265,7 +265,7 @@ define_child_widget(Expander, "button", {
     default_options: {
         _expanded: true,
         _collapsed: true,
-        class: "aux-toggle-expand"
+        class: "aux-toggleexpand"
     },
     static_events: {
         click: toggle,

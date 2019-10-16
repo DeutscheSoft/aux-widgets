@@ -32,7 +32,7 @@ export const ListItem = define_class({
     Extends: Container,
     
     initialize: function (options) {
-        this.element = element("li", "aux-list-item");
+        this.element = element("li", "aux-listitem");
         Container.prototype.initialize.call(this, options);
     },
 });

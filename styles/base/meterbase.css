@@ -34,14 +34,14 @@
 
 /* BASE */
 
-.aux-meter-base {
+.aux-meterbase {
     padding: 4px;
     margin: 4px;
 }
 
 /* LABEL */
 
-.aux-meter-base > .aux-label {
+.aux-meterbase > .aux-label {
     line-height: 1.2em;
     height: 1.2em;
     overflow: visible;
@@ -50,7 +50,7 @@
 
 /* TITLE */
 
-.aux-meter-base > .aux-title {
+.aux-meterbase > .aux-title {
     line-height: 1.2em;
     height: 1.2em;
     overflow: visible;
@@ -59,30 +59,30 @@
 
 /* SCALE */
 
-.aux-meter-base > .aux-scale {
+.aux-meterbase > .aux-scale {
     
 }
 
 /* BAR */
 
-.aux-meter-base > .aux-bar {
+.aux-meterbase > .aux-bar {
     
 }
-.aux-meter-base.aux-horizontal > .aux-bar {
+.aux-meterbase.aux-horizontal > .aux-bar {
     height: 16px;
 }
-.aux-meter-base.aux-vertical > .aux-bar {
+.aux-meterbase.aux-vertical > .aux-bar {
     width: 16px;
 }
-.aux-meter-base.aux-horizontal > .aux-bar {
+.aux-meterbase.aux-horizontal > .aux-bar {
     height: 16px;
 }
-.aux-meter-base.aux-vertical > .aux-bar {
+.aux-meterbase.aux-vertical > .aux-bar {
     width: 16px;
 }
 
 /* MASK */
 
-.aux-meter-base > .aux-bar > .aux-mask {
+.aux-meterbase > .aux-bar > .aux-mask {
     
 }

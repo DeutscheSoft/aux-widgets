@@ -278,10 +278,10 @@ export const Meter = define_class({
         var O = this.options;
         /**
          * @member {HTMLDivElement} Meter#element - The main DIV container.
-         *   Has class <code>.aux-meter-base</code>.
+         *   Has class <code>.aux-meterbase</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "aux-meter-base");
+        add_class(E, "aux-meterbase");
         this.widgetize(E, false, true, true);
         
         this._bar = element("div", "aux-bar");

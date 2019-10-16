@@ -820,7 +820,7 @@ define_child_element(Chart, "key", {
     },
     create: function() {
         var key = make_svg("g", {"class": "aux-key"});
-        key.appendChild(make_svg("text", {"class": "aux-key-text"}));
+        key.appendChild(make_svg("text", {"class": "aux-keytext"}));
         return key;
     },
     append: function() {

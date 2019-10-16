@@ -164,7 +164,7 @@ export const Crossover = define_class({
         Equalizer.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} Equalizer#element - The main DIV container.
-         *   Has class <code>.aux-response-handler</code>.
+         *   Has class <code>.aux-responsehandler</code>.
          */
         add_class(this.element, "aux-crossover");
 

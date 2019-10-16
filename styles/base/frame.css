@@ -20,7 +20,7 @@
     padding: 8px;
     margin-top: 8px;
 }
-.aux-frame > .aux-frame-label {
+.aux-frame > .aux-framelabel {
     font-weight: bold;
     position: absolute;
     top: -8px;

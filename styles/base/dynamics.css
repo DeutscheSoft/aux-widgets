@@ -26,10 +26,10 @@
     transform: translate(-50%, -50%);
 }
 
-.aux-dynamics > svg > .aux-grid > .aux-grid-line.aux-highlight {
+.aux-dynamics > svg > .aux-grid > .aux-gridline.aux-highlight {
     
 }
-.aux-dynamics > svg > .aux-grid > .aux-grid-label.aux-highlight {
+.aux-dynamics > svg > .aux-grid > .aux-gridlabel.aux-highlight {
     font-weight: bold;
 }
 

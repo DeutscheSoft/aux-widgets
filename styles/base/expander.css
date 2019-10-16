@@ -21,12 +21,12 @@
 .aux-expander.aux-popup {
     background: rgba(216, 216, 216, 0.9);
 }
-.aux-expander.aux-popup.aux-expanded > .aux-toggle-expand {
+.aux-expander.aux-popup.aux-expanded > .aux-toggleexpand {
     width: 42px;
     height: 42px;
 }
-.aux-expander.aux-popup.aux-expanded > .aux-toggle-expand::after,
-.aux-expander.aux-popup.aux-expanded > .aux-toggle-expand::before {
+.aux-expander.aux-popup.aux-expanded > .aux-toggleexpand::after,
+.aux-expander.aux-popup.aux-expanded > .aux-toggleexpand::before {
     content: "";
     display: block;
     position: absolute;
@@ -37,7 +37,7 @@
     transform: rotate(45deg);
     background: #003050;
 }
-.aux-expander.aux-popup.aux-expanded > .aux-toggle-expand::before {
+.aux-expander.aux-popup.aux-expanded > .aux-toggleexpand::before {
     transform: rotate(135deg);
 }
 
@@ -47,12 +47,12 @@
     background: rgba(216, 216, 216, 0.9);
 }
 
-.aux-expander.aux-popup-inplace.aux-expanded > .aux-toggle-expand {
+.aux-expander.aux-popup-inplace.aux-expanded > .aux-toggleexpand {
     width: 42px;
     height: 42px;
 }
-.aux-expander.aux-popup-inplace.aux-expanded > .aux-toggle-expand::after,
-.aux-expander.aux-popup-inplace.aux-expanded > .aux-toggle-expand::before {
+.aux-expander.aux-popup-inplace.aux-expanded > .aux-toggleexpand::after,
+.aux-expander.aux-popup-inplace.aux-expanded > .aux-toggleexpand::before {
     content: "";
     display: block;
     position: absolute;
@@ -63,6 +63,6 @@
     transform: rotate(45deg);
     background: #003050;
 }
-.aux-expander.aux-popup.aux-expanded > .aux-toggle-expand::before {
+.aux-expander.aux-popup.aux-expanded > .aux-toggleexpand::before {
     transform: rotate(135deg);
 }

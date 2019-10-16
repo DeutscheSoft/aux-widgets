@@ -56,6 +56,6 @@ define_child_widget(Frame, "label", {
     option: "label",
     inherit_options: true,
     default_options: {
-        class: "aux-frame-label"
+        class: "aux-framelabel"
     },
 });
