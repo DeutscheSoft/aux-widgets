@@ -87,6 +87,7 @@ pre, code {
     vertical-align: middle;
     position: relative;
     user-select: none;
+    box-sizing: border-box;
 }
 .aux-input {
     user-select: all;
@@ -173,15 +174,10 @@ pre, code {
 /* BUTTONS */
 
 .aux-buttons {
-    box-sizing: border-box;
     display: inline-flex;
 }
 .aux-buttons.aux-vertical {
     flex-direction: column;
-}
-.aux-buttons > .aux-button.aux-warn {
-    background-color: #F80;
-    border-color: #F80;
 }
 
 /* CONTAINER */
@@ -687,6 +683,39 @@ pre, code {
     will-change: transform;
     transform: translate3d(0, 0, 0);
 }
+
+/* NAVIGATION */
+
+.aux-navigation {
+    overflow: hidden;
+    display: flex;
+}
+.aux-navigation.aux-vertical {
+    flex-direction: column;
+}
+.aux-navigation > .aux-button {
+    flex: 0 0 auto;
+}
+.aux-navigation > .aux-prev {
+    order: 1;
+}
+.aux-navigation > .aux-next {
+    order: 3;
+}
+.aux-navigation > .aux-buttons {
+    flex: 1 1 auto;
+    order: 2;
+    overflow: hidden;
+}
+.aux-navigation.aux-horizontal > .aux-buttons {
+    overflow-x: auto;
+    height: calc(100% + 40px);
+}
+.aux-navigation.aux-vertical > .aux-buttons {
+    overflow-y: auto;
+    width: calc(100% + 40px);
+}
+
 
 /* LEVELMETER */
 /* out of order because multimeter would override properties */
