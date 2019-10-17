@@ -158,6 +158,16 @@ class ComponentBase extends HTMLElement
 
     super.addEventListener(type, ...args);
   }
+
+  static get aux()
+  {
+    return true;
+  }
+
+  auxWidget()
+  {
+    return this.widget;
+  }
 }
 
 export function component_from_widget(Widget)
