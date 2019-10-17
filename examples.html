@@ -36,9 +36,8 @@
       import { html } from './src/utils/dom.js';
 
       window.addEventListener('load', function() {
-        var cnt = 0;
         const root = document.querySelector('aux-root');
-        examples.forEach(async (file) => {
+        const tasks = examples.map(async (file) => {
           const tmp = file.split('.');
           tmp.pop();
           const name = tmp.join('.');
@@ -48,19 +47,19 @@
 
           const res = await window.fetch('examples/' + file);
           frame.appendChild(html(await res.text()));
-          if (++cnt >= examples.length) {
+        });
+        Promise.all(tasks).then(() => {
+          setTimeout(function () {
             var h = window.location.hash;
             if (h) {
-              setTimeout(function () {
-                var s = +h.substr(1);
-                window.scrollTo(0, s);
-              }, 50);
+              var s = +h.substr(1);
+              window.scrollTo(0, s);
             }
             document.addEventListener("scroll", function () {
               var s = parseInt(document.children[0].scrollTop);
               window.location.hash = "#" + s;
             });
-          }
+          }, 100);
         });
       });
 
