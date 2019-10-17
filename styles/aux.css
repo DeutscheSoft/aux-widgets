@@ -853,15 +853,15 @@ pre, code {
     will-change: transform;
     transform: translate3d(0,0,0);
 }
-.aux-pager > .aux-buttonarray {
+.aux-pager > .aux-navigation {
     flex: 0 0 auto;
 }
-.aux-pager.aux-left > .aux-buttonarray,
-.aux-pager.aux-top > .aux-buttonarray {
+.aux-pager.aux-left > .aux-navigation,
+.aux-pager.aux-top > .aux-navigation {
     order: 1;
 }
-.aux-pager.aux-right > .aux-buttonarray,
-.aux-pager.aux-bottom > .aux-buttonarray {
+.aux-pager.aux-right > .aux-navigation,
+.aux-pager.aux-bottom > .aux-navigation {
     order: 2;
 }
 

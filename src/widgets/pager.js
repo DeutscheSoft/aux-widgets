@@ -31,19 +31,19 @@ import { define_child_widget } from '../child_widget.js';
 import { add_class, remove_class, is_dom_node } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 import { Container } from './container.js';
-import { ButtonArray } from './buttonarray.js';
+import { Navigation } from './navigation.js';
  
 export const Pager = define_class({
     /**
      * Pager, also known as Notebook in other UI toolkits, provides
      * multiple containers for displaying contents which are switchable
-     * via a {@link ButtonArray}.
+     * via a {@link Navigation}.
      * 
      * @class Pager
      * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
-     * @property {String} [options.position="top"] - The position of the ButtonArray. Can either be `top`, `right`, `left` or `bottom`.
+     * @property {String} [options.position="top"] - The position of the {@link Navigation}. Can either be `top`, `right`, `left` or `bottom`.
      * @property {Array<Object>} [options.pages=[]] -
      *   An array of objects with the following members:
      * @property {String|Object} [options.pages.label=""] - A string
@@ -117,7 +117,7 @@ export const Pager = define_class({
             } else {
                 badir = "vertical";
             }
-            this.buttonarray.set("direction", badir);
+            this.navigation.set("direction", badir);
         },
     },
     
@@ -216,7 +216,7 @@ export const Pager = define_class({
     
     /**
      * Adds a {@link Container} to the pager and a corresponding {@link Button}
-     *   to the pagers {@link ButtonArray}.
+     *   to the pagers {@link Navigation}.
      *
      * @method Pager#add_page
      *
@@ -238,7 +238,7 @@ export const Pager = define_class({
         var p;
         if (typeof button === "string")
             button = {label: button};
-        this.buttonarray.add_button(button, position);
+        this.navigation.add_button(button, position);
 
         if (typeof content === "string" || is_dom_node(content)) {
             if (!options) options = {}; 
@@ -278,7 +278,7 @@ export const Pager = define_class({
         // TODO: not always necessary
         if (this.current() === p) {
             this.options.show = position;
-            this.buttonarray.set("show", position);
+            this.navigation.set("select", position);
             p.set("active", true);
             p.set("display_state", "show");
         } else {
@@ -306,7 +306,7 @@ export const Pager = define_class({
             page = this.pages.indexOf(page);
         if (page < 0 || page >= this.pages.length)
             return;
-        this.buttonarray.remove_button(page);
+        this.navigation.remove_button(page);
         if (page < this.options.show)
             this.set("show", this.options.show-1);
         else if (page === this.options.show)
@@ -406,7 +406,7 @@ export const Pager = define_class({
                 page.set("active", false);
             }
 
-            this.buttonarray.set("show", value);
+            this.navigation.set("select", value);
         }
         return Container.prototype.set.call(this, key, value);
     },
@@ -417,15 +417,15 @@ export const Pager = define_class({
 });
 
 /**
- * The {@link ButtonArray} instance acting as the menu.
+ * The {@link Navigation} instance acting as the menu.
  *
- * @member Pager#buttonarray
+ * @member Pager#navigation
  */
-define_child_widget(Pager, "buttonarray", {
-    create: ButtonArray,
+define_child_widget(Pager, "navigation", {
+    create: Navigation,
     show: true,
     map_options: {
-        show: "show",
+        show: "select",
     },
     static_events: {
         userset: function(key, value) {
