@@ -865,72 +865,91 @@ pre, code {
     order: 2;
 }
 
+/* PAGES */
 
-
-.aux-pager.aux-forward.aux-vertical  > .aux-clip > .aux-page.aux-hiding {
-    animation: aux-page-vertical-out-forward 0.5s ease-in-out;
-    transform: translateX(-100%);
+.aux-pages {
+    box-sizing: border-box;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
 }
-.aux-pager.aux-forward.aux-vertical  > .aux-clip > .aux-page.aux-showing {
+.aux-pages > .aux-page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    overflow: auto;
+    will-change: transform;
+    transform: translate3d(0,0,0);
+}
+
+.aux-pages.aux-forward.aux-vertical > .aux-page.aux-hiding {
+    animation: aux-page-vertical-out-forward 0.5s ease-in-out;
+    transform: translateY(-100%);
+}
+.aux-pages.aux-forward.aux-vertical > .aux-page.aux-showing {
     animation: aux-page-vertical-in-forward 0.5s ease-in-out;
 }
 
-.aux-pager.aux-backward.aux-vertical  > .aux-clip > .aux-page.aux-hiding {
+.aux-pages.aux-backward.aux-vertical > .aux-page.aux-hiding {
     animation: aux-page-vertical-out-backward 0.5s ease-in-out;
-    transform: translateX(100%);
+    transform: translateY(100%);
 }
-.aux-pager.aux-backward.aux-vertical  > .aux-clip > .aux-page.aux-showing {
+.aux-pages.aux-backward.aux-vertical > .aux-page.aux-showing {
     animation: aux-page-vertical-in-backward 0.5s ease-in-out;
 }
 
-.aux-pager.aux-forward.aux-horizontal > .aux-clip > .aux-page.aux-hiding {
+.aux-pages.aux-forward.aux-horizontal > .aux-page.aux-hiding {
     animation: aux-page-horizontal-out-forward 0.5s ease-in-out;
-    transform: translateY(-100%);
+    transform: translateX(-100%);
 }
-.aux-pager.aux-forward.aux-horizontal  > .aux-clip > .aux-page.aux-showing {
+.aux-pages.aux-forward.aux-horizontal > .aux-page.aux-showing {
     animation: aux-page-horizontal-in-forward 0.5s ease-in-out;
 }
 
-.aux-pager.aux-backward.aux-horizontal  > .aux-clip > .aux-page.aux-hiding {
+.aux-pages.aux-backward.aux-horizontal > .aux-page.aux-hiding {
     animation: aux-page-horizontal-out-backward 0.5s ease-in-out;
-    transform: translateY(100%);
+    transform: translateX(100%);
 }
-.aux-pager.aux-backward.aux-horizontal  > .aux-clip > .aux-page.aux-showing {
+.aux-pages.aux-backward.aux-horizontal > .aux-page.aux-showing {
     animation: aux-page-horizontal-in-backward 0.5s ease-in-out;
 }
 
-@keyframes aux-page-horizontal-in-forward {
-    0%   { transform: translateY(100%); }
-    100% { transform: translateY(0); }
-}
-@keyframes aux-page-horizontal-out-forward {
-    0%   { transform: translateY(0); }
-    100% { transform: translateY(-100%); }
-}
-@keyframes aux-page-horizontal-in-backward {
-    0%   { transform: translateY(-100%); }
-    100% { transform: translateY(0); }
-}
-@keyframes aux-page-horizontal-out-backward {
-    0%   { transform: translateY(0); }
-    100% { transform: translateY(100%); }
-}
 
-@keyframes aux-page-vertical-in-forward {
+@keyframes aux-page-horizontal-in-forward {
     0%   { transform: translateX(100%); }
     100% { transform: translateX(0); }
 }
-@keyframes aux-page-vertical-out-forward {
+@keyframes aux-page-horizontal-out-forward {
     0%   { transform: translateX(0); }
     100% { transform: translateX(-100%); }
 }
-@keyframes aux-page-vertical-in-backward {
+@keyframes aux-page-horizontal-in-backward {
     0%   { transform: translateX(-100%); }
     100% { transform: translateX(0); }
 }
-@keyframes aux-page-vertical-out-backward {
+@keyframes aux-page-horizontal-out-backward {
     0%   { transform: translateX(0); }
     100% { transform: translateX(100%); }
+}
+
+@keyframes aux-page-vertical-in-forward {
+    0%   { transform: translateY(100%); }
+    100% { transform: translateY(0); }
+}
+@keyframes aux-page-vertical-out-forward {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(-100%); }
+}
+@keyframes aux-page-vertical-in-backward {
+    0%   { transform: translateY(-100%); }
+    100% { transform: translateY(0); }
+}
+@keyframes aux-page-vertical-out-backward {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(100%); }
 }
 
 
