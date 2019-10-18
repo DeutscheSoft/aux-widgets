@@ -251,7 +251,7 @@ export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove
       if (parent instanceof ParentWidget)
       {
         this.parent = parent;
-        append_cb(parent, this.widget);
+        append_cb(parent, this.widget, this);
       }
       else
       {
@@ -265,7 +265,7 @@ export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove
 
       if (parent)
       {
-        remove_cb(parent, this.widget);
+        remove_cb(parent, this.widget, this);
         this.parent = null;
       }
     }
