@@ -405,7 +405,7 @@ function redraw_handle(O, X) {
     var tmp;
 
     if (O.mode === "circular") {
-        tmp = Math.max(O.min_size, z * O.max_size)/2;
+        tmp = (O.min_size + z * (O.max_size - O.min_size)) / 2;
         X[0] = x-tmp;
         X[1] = y-tmp;
         X[2] = x+tmp;
