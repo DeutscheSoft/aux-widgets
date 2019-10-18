@@ -17,7 +17,9 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class } from './../widget_helpers.js';
+import { define_child_widget } from '../child_widget.js';
 import { Chart } from './chart.js';
+import { ResponseHandle } from '../modules/responsehandle.js';
 import { add_class, remove_class, css_space, inner_width, inner_height } from '../utils/dom.js';
 import { error, warn } from '../utils/log.js';
 
@@ -25,6 +27,18 @@ function range_set(value, key) {
     this.range_x.set(key, value);
     this.range_y.set(key, value);
 }
+
+function drag_handle (key, value) {
+    if (key == "z") {
+        this.set("ratio", value);
+        return true;
+    }
+    if (key == "y") {
+        this.set("threshold", value);
+    }
+    return false;
+}
+
 export const Dynamics = define_class({
     /**
      * Dynamics are based on {@link Chart} and display the characteristics of dynamic
@@ -49,10 +63,11 @@ export const Dynamics = define_class({
      * @param {Number} [options.reference=0] - Input reference of the dynamics.
      * @param {Function} [options.grid_labels=function (val) { return val + (!val ? "dB":""); }] - Callback to format the labels of the {@link Grid}.
      * @param {Number} [options.db_grid=12] - Draw a grid line every [n] decibels.
+     * @param {Boolean} [show_handle=true] - Draw a handle to manipulate threshold and ratio.
+     * @param {Boolean|Function} [label=false] - Function to format the handle label.
      */
     Extends: Chart,
     _options: Object.assign(Object.create(Chart.prototype._options), {
-        size: "number", // deprecated, undocumented. Is set via CSS.
         min:  "number",
         max:  "number",
         scale: "string",
@@ -65,6 +80,8 @@ export const Dynamics = define_class({
         reference: "number",
         grid_labels: "function",
         db_grid: "number",
+        show_handle: "boolean",
+        handle_label: "boolean|function",
     }),
     options: {
         db_grid: 12,
@@ -78,17 +95,24 @@ export const Dynamics = define_class({
         range:     0,
         gain:      0,
         reference: 0,
-        grid_labels: function (val) { return val + (!val ? "dB":""); }
+        grid_labels: function (val) { return val + (!val ? "dB":""); },
+        show_handle: true,
+        handle_label: false,
     },
     static_events: {
-        set_size: function(value) {
-            warn("using deprecated 'size' option");
-            this.set("width", value);
-            this.set("height", value);
-        },
         set_min: range_set,
         set_max: range_set,
         set_scale: range_set,
+        set_threshold: function (v) {
+            this.handle.set("x", v);
+            this.handle.set("y", v);
+        },
+        set_ratio: function (v) {
+            this.handle.set("z", v);
+        },
+        set_handle_label: function (v) {
+            this.handle.set("label", v);
+        },
     },
     initialize: function (options) {
         Chart.prototype.initialize.call(this, options, true);
@@ -111,6 +135,19 @@ export const Dynamics = define_class({
             "class": "aux-steady",
             mode: "line"
         });
+        /**
+         * @member {ResponseHandle} Dynamics#handle - The handle to set threshold. Has class <code>.aux-handle</code> 
+         */
+        this.handle = this.add_handle({
+            range_x: this.range_x,
+            range_y: this.range_y,
+            range_z: this.range_z,
+        });
+        this.handle.addEventListener("userset", drag_handle.bind(this));
+        
+        this.set("handle_label", this.options.handle_label);
+        this.set("ratio", this.options.ratio);
+        this.set("threshold", this.options.threshold);
     },
     
     redraw: function () {
@@ -154,7 +191,7 @@ export const Dynamics = define_class({
             add_class(this.element, "aux-" + O.type);
         }
 
-        if (I.validate("ratio", "threshold", "range", "makeup", "gain", "reference")) {
+        if (I.validate("ratio", "threshold", "range", "makeup", "gain", "reference", "type")) {
             this.draw_graph();
         }
     },
@@ -280,6 +317,8 @@ export const Dynamics = define_class({
     set: function (key, val) {
         if (key == "type")
             this.options._last_type = this.options.type;
+        if (key == "ratio")
+            val = this.range_z.snap(val);
         return Chart.prototype.set.call(this, key, val);
     },
 });
