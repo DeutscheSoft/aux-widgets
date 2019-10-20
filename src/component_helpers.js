@@ -234,6 +234,16 @@ export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove
     {
       this.widget = new Widget();
       this.setAttribute('hidden', '');
+
+      for (let i = 0; i < attributes.length; i++)
+      {
+        const name = attributes[i];
+        if (this.hasAttribute(name))
+        {
+          const v = this.getAttribute(name);
+          this.attributeChangedCallback(name, null, v);
+        }
+      }
     }
 
     constructor()
