@@ -66,6 +66,7 @@ start_http(http_port);
 
 readdirp(path.join(__dirname, 'tests'), { fileFilter: '*.html' })
   .on('data', (entry) => {
+    if (entry.path.search(/Clock/) !== -1) return;
     config.scenarios.push(make_scenario(entry.path));
    })
   .on('end', () => {
