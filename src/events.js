@@ -96,7 +96,7 @@ function emit_event(handlers, name, self, args)
 
       if (ret !== void(0)) return ret;
     }
-    return void(0);
+    return;
   }
   else
   {
@@ -213,7 +213,7 @@ export class Events
 
   /**
    * This method is similar to emit() except that it returns false
-   * if an event handler ѕtopped event processing.
+   * if an event handler stopped event processing.
    *
    * @params {string} name - The event name.
    * @param {...*} args - Event arguments.
