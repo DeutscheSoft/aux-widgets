@@ -57,4 +57,50 @@ export function add_passive_event_listener(e, type, cb) {
 export function remove_passive_event_listener(e, type, cb) {
   remove_event_listener(e, type, cb, passive_options);
 }
+const __native_events = {
+    // mouse
+    mouseenter : true,
+    mouseleave : true,
+    mousedown  : true,
+    mouseup    : true,
+    mousemove  : true,
+    mouseover  : true,
 
+    click      : true,
+    dblclick   : true,
+
+    startdrag  : true,
+    stopdrag   : true,
+    drag       : true,
+    dragenter  : true,
+    dragleave  : true,
+    dragover   : true,
+    drop       : true,
+    dragend    : true,
+
+    // touch
+    touchstart : true,
+    touchend   : true,
+    touchmove  : true,
+    touchenter : true,
+    touchleave : true,
+    touchcancel: true,
+
+    keydown    : true,
+    keypress   : true,
+    keyup      : true,
+    scroll     : true,
+    focus      : true,
+    blur       : true,
+
+    // mousewheel
+    mousewheel : true,
+    DOMMouseScroll : true,
+    wheel : true,
+
+    submit     : true,
+    contextmenu: true,
+};
+export function is_dom_event(type) {
+    return __native_events[type];
+}

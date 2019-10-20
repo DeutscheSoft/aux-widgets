@@ -183,11 +183,12 @@ export const Widget = define_class({
             }
         },
         set_dblclick: function (val) {
-            if (!this.__delegated) return;
+            const event_target = this.getEventTarget();
+            if (!event_target) return;
             if (!!val)
-                this.__delegated.addEventListener("click", this.__dblclick_cb);
+                event_target.addEventListener("click", this.__dblclick_cb);
             else
-                this.__delegated.removeEventListener("click", this.__dblclick_cb);
+                event_target.removeEventListener("click", this.__dblclick_cb);
         },
         initialized: function () {
             var v = this.options.dblclick;
@@ -205,7 +206,6 @@ export const Widget = define_class({
         this.__classified = null;
         this.__stylized = null;
         this.__delegated = null;
-        this.__widgetized = null;
         this.invalid = new Invalid(this.options);
         if (!this.value_time) this.value_time = null;
         this.needs_redraw = false;
@@ -218,6 +218,18 @@ export const Widget = define_class({
         this.draw_queue = null;
         this.__lastclick = 0;
         this.__dblclick_cb = dblclick.bind(this);
+    },
+
+    getStyleTarget: function() {
+      return this.__stylized || this.element;
+    },
+
+    getClassTarget: function() {
+      return this.__classified || this.element;
+    },
+
+    getEventTarget: function() {
+      return this.__delegated || this.element;
     },
 
     is_destructed: function() {
@@ -348,7 +360,7 @@ export const Widget = define_class({
             }
         }
 
-        E = this.__stylized;
+        E = this.getStyleTarget();
 
         if (E) {
             if (I.active) {
@@ -428,13 +440,13 @@ export const Widget = define_class({
         return element;
     },
     add_class: function (cls) {
-        add_class(this.__classified, cls);
+        add_class(this.getClassTarget(), cls);
     },
     remove_class: function (cls) {
-        remove_class(this.__classified, cls);
+        remove_class(this.getClassTarget(), cls);
     },
     has_class: function (cls) {
-        return has_class(this.__classified, cls);
+        return has_class(this.getClassTarget(), cls);
     },
     classify: function (element) {
         // Takes a DOM element and adds its CSS functionality to the
@@ -453,7 +465,7 @@ export const Widget = define_class({
         return element;
     },
     set_style: function (name, value) {
-        set_style(this.__stylized, name, value);
+        set_style(this.getStyleTarget(), name, value);
     },
     /**
      * Sets a CSS style property in this widgets DOM element.
@@ -461,7 +473,7 @@ export const Widget = define_class({
      * @method Widget#set_style
      */
     set_styles: function (styles) {
-        set_styles(this.__stylized, styles);
+        set_styles(this.getStyleTarget(), styles);
     },
     /**
      * Returns the computed style of this widgets DOM element.
@@ -469,7 +481,7 @@ export const Widget = define_class({
      * @method Widget#get_style
      */
     get_style: function (name) {
-        return get_style(this.__stylized, name);
+        return get_style(this.getStyleTarget(), name);
     },
     stylize: function (element) {
         // Marks a DOM element as receiver for the "styles" options
@@ -522,7 +534,6 @@ export const Widget = define_class({
             this.classify(element);
         if (stylize)
             this.stylize(element);
-        this.__widgetized = element;
         /**
          * Is fired when a widget is widgetized.
          * 
