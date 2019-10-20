@@ -411,17 +411,29 @@ export const LevelMeter = define_class({
         // shorten things
         var hold       = +O.top;
         var segment   = O.segment|0;
-        var hold_size = (O.hold_size|0) * segment;
+        var hold_size = O.hold_size * segment;
         var base      = +O.base;
         var pos;
+
+        if (!(hold_size > 0)) return i;
+
+        var pos_base = +this.val2px(base);
 
         if (hold > base) {
             /* TODO: lets snap in set() */
             pos = this.val2px(hold)|0;
             if (segment !== 1) pos = segment*(Math.round(pos/segment)|0);
 
-            to[i++] = pos;
-            to[i++] = pos+hold_size;
+            if (pos > pos_base)
+            {
+              to[i++] = pos-hold_size;
+              to[i++] = pos;
+            }
+            else
+            {
+              to[i++] = pos;
+              to[i++] = pos+hold_size;
+            }
         }
 
         hold = +O.bottom;
@@ -430,8 +442,16 @@ export const LevelMeter = define_class({
             pos = this.val2px(hold)|0;
             if (segment !== 1) pos = segment*(Math.round(pos/segment)|0);
 
-            to[i++] = pos;
-            to[i++] = pos+hold_size;
+            if (pos > pos_base)
+            {
+              to[i++] = pos-hold_size;
+              to[i++] = pos;
+            }
+            else
+            {
+              to[i++] = pos;
+              to[i++] = pos+hold_size;
+            }
         }
 
         return i;
