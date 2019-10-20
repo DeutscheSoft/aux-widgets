@@ -633,7 +633,7 @@ export const Chart = define_class({
         else
         {
           type = type || ResponseHandle;
-          object = Object.assign({
+          options = Object.assign(options, {
             intersect: this.intersect.bind(this),
             range_x: () => this.range_x,
             range_y: () => this.range_y,
