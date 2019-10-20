@@ -1,0 +1,38 @@
+aux-levelmeter.aux-vertical {
+  height: 300px;
+}
+aux-levelmeter.aux-horizontal {
+  width: 300px;
+}
+aux-levelmeter > .aux-bar {
+  background-color: red;
+}
+
+aux-levelmeter .aux-mask {
+  opacity: 0.8;
+}
+
+.segment aux-meter.aux-vertical {
+  height: 305px;
+}
+.segment aux-meter.aux-horizontal {
+  width: 305px;
+}
+
+div.segment .aux-bar {
+  background-color:#269;
+  background-image: linear-gradient(white 2px, transparent 2px),
+  linear-gradient(90deg, white 2px, transparent 2px),
+  linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 1px);
+  background-position:-2px -2px, -2px -2px, -1px -1px, -1px -1px;
+  background-position-y: bottom, bottom, bottom, bottom;
+}
+
+div.segment .aux-horizontal .aux-bar {
+  background-size: 100px 100px, 100px 100px, 10px 16px, 10px 16px;
+}
+
+div.segment .aux-vertical .aux-bar {
+  background-size: 100px 100px, 100px 100px, 16px 10px, 16px 10px;
+}

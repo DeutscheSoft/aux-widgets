@@ -4,6 +4,7 @@
   "description": "backstop tests for AUX",
   "main": "index.html",
   "scripts": {
+    "serve": "node serve.js",
     "test": "node run.js",
     "approve": "node run.js approve"
   },
