@@ -620,21 +620,32 @@ export const Chart = define_class({
      * @emits Chart#handleadded
      */
     add_handle: function (options, type) {
-        type = type || ResponseHandle;
-        options.container = this._handles;
-        if (options.range_x === void(0))
-            options.range_x = function () { return this.range_x; }.bind(this);
-        if (options.range_y === void(0))
-            options.range_y = function () { return this.range_y; }.bind(this);
-        if (options.range_z === void(0))
-            options.range_z = function () { return this.range_z; }.bind(this);
+        let handle;
+
+        if (options instanceof ResponseHandle)
+        {
+          handle = options;
+          handle.set('intersect', this.intersect.bind(this));
+          handle.set('range_x', () => this.range_x);
+          handle.set('range_y', () => this.range_y);
+          handle.set('range_z', () => this.range_z);
+        }
+        else
+        {
+          type = type || ResponseHandle;
+          object = Object.assign({
+            intersect: this.intersect.bind(this),
+            range_x: () => this.range_x,
+            range_y: () => this.range_y,
+            range_z: () => this.range_z,
+          });
+          handle = new type(options);
+        }
         
-        options.intersect = this.intersect.bind(this);
-        
-        var h = new type(options);
-        this.handles.push(h);
+        this.handles.push(handle);
+        this._handles.appendChild(handle.element);
         if (this.options.show_handles)
-            this.add_child(h);
+            this.add_child(handle);
         /**
          * Is fired when a new handle was added.
          * 
@@ -642,8 +653,8 @@ export const Chart = define_class({
          * 
          * @event Chart#handleadded
          */
-        this.emit("handleadded", h);
-        return h;
+        this.emit("handleadded", handle);
+        return handle;
     },
     /**
      * Add multiple new {@link ResponseHandle} to the widget. Options is an array

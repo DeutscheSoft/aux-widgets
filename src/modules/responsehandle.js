@@ -1328,6 +1328,10 @@ export const ResponseHandle = define_class({
         var O = this.options;
 
         switch (key) {
+        case "label":
+            if (value !== false && typeof value !== 'function')
+              throw new TypeError('Bad type.');
+            break;
         case "z_handle":
             if (value !== false && !ZHANDLE_POSITION_circular[value]) {
                 warn("Unsupported z_handle option:", value);

@@ -30,5 +30,5 @@ export const ResponseHandleComponent = subcomponent_from_widget(ResponseHandle, 
 export const GraphComponent = subcomponent_from_widget(Graph, Chart, add_graph, remove_graph);
 
 define_component('chart', ChartComponent);
-define_component('responsehandle', ResponseHandleComponent)
-define_component('graph', GraphComponent)
+define_component('chart-handle', ResponseHandleComponent)
+define_component('chart-graph', GraphComponent)
