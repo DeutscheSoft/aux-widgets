@@ -82,13 +82,12 @@ function make_interval(a) {
     } while (again);
 
     for (i = 0; i < a.length-2; i+= 2) {
+        // the first interval overlaps with the next, we merge them
         if (a[i+1] > a[i+2]) {
             if (a[i+3] > a[i+1]) {
                 a[i+1] = a[i+3];
             }
-            for (j = i+3; j < a.length; j++) a[j-1] = a[j];
-            a.length = j-2;
-            i -=2;
+            a.splice(i+2, 2);
             continue;
         }
     }
@@ -411,8 +410,6 @@ export const Meter = define_class({
         // the meter bar
         var base = O.base;
         var segment = O.segment|0;
-        var reverse = !!O.reverse;
-        var size = O.basis|0;
 
         /* At this point the whole meter bar is filled. We now want
          * to clear the area between base and value.
