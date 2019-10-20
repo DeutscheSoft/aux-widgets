@@ -26,7 +26,7 @@ import { error, warn } from '../utils/log.js';
 import { Widget } from './widget.js';
 import { Ranges } from '../implements/ranges.js';
 import { Graph } from './graph.js';
-import { ResponseHandle } from '../modules/responsehandle.js';
+import { ResponseHandle } from './responsehandle.js';
 import { define_child_widget } from '../child_widget.js';
 import { Grid } from './grid.js';
     

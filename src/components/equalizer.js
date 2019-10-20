@@ -2,7 +2,7 @@ import {
     component_from_widget, define_component, subcomponent_from_widget
   } from './../component_helpers.js';
 import { Equalizer } from './../widgets/equalizer.js';
-import { EqBand } from './../modules/eqband.js';
+import { EqBand } from './../widgets/eqband.js';
 
 function add_band(eq, band)
 {

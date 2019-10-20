@@ -18,7 +18,7 @@
  */
 
 import { define_class } from './../widget_helpers.js';
-import { Widget } from './../widgets/widget.js';
+import { Widget } from './widget.js';
 import { GlobalCursor } from '../implements/globalcursor.js';
 import { Warning } from '../implements/warning.js';
 import { S } from '../dom_scheduler.js';
@@ -26,7 +26,7 @@ import { FORMAT } from '../utils/sprintf.js';
 import { warn } from '../utils/log.js';
 import { add_event_listener, remove_event_listener } from '../utils/events.js';
 import { make_svg, set_text, remove_class, add_class, toggle_class } from '../utils/dom.js';
-import { Range } from './range.js';
+import { Range } from '../modules/range.js';
 
 import { DragCapture } from '../modules/dragcapture.js';
  

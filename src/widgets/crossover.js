@@ -21,7 +21,7 @@ import { add_class } from '../utils/dom.js';
 import { error } from '../utils/log.js';
 import { sprintf } from '../utils/sprintf.js';
 import { Equalizer } from './equalizer.js';
-import { EqBand } from '../modules/eqband.js';
+import { EqBand } from './eqband.js';
 import { Filter } from '../modules/filter.js';
 
 export const CrossoverBand = define_class({

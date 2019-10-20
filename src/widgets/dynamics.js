@@ -19,7 +19,7 @@
 import { define_class } from './../widget_helpers.js';
 import { define_child_widget } from '../child_widget.js';
 import { Chart } from './chart.js';
-import { ResponseHandle } from '../modules/responsehandle.js';
+import { ResponseHandle } from './responsehandle.js';
 import { add_class, remove_class, css_space, inner_width, inner_height } from '../utils/dom.js';
 import { error, warn } from '../utils/log.js';
 

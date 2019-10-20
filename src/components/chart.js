@@ -2,7 +2,7 @@ import {
     component_from_widget, define_component, subcomponent_from_widget
   } from './../component_helpers.js';
 import { Chart } from './../widgets/chart.js';
-import { ResponseHandle } from './../modules/responsehandle.js';
+import { ResponseHandle } from './../widgets/responsehandle.js';
 import { Graph } from './../widgets/graph.js';
 
 function add_handle(chart, handle)

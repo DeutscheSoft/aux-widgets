@@ -17,8 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from './../widget_helpers.js';
-import { Filter } from './filter.js';
+import { define_class } from '../widget_helpers.js';
+import { Filter } from '../modules/filter.js';
 import { ResponseHandle } from './responsehandle.js';
 import { add_class } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
