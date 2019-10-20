@@ -39,11 +39,25 @@
       import { html } from './src/utils/dom.js';
 
       window.addEventListener('load', function() {
+        const hash = window.location.hash.substr(1);
+        let filter = null;
+
+        if (hash !== '' && parseInt(hash).toString() !== hash)
+        {
+          filter = hash.toLowerCase().split(',');
+        }
+
         const root = document.querySelector('aux-root');
         const tasks = examples.map(async (file) => {
           const tmp = file.split('.');
           tmp.pop();
           const name = tmp.join('.');
+
+          if (filter && filter.indexOf(name.toLowerCase()) === -1)
+          {
+            return;
+          }
+
           const frame = document.createElement('aux-frame');
           frame.setAttribute('label', name);
           root.appendChild(frame);
@@ -53,15 +67,14 @@
         });
         Promise.all(tasks).then(() => {
           setTimeout(function () {
-            var h = window.location.hash;
-            if (h) {
-              var s = +h.substr(1);
-              window.scrollTo(0, s);
+            if (filter === null)
+            {
+              window.scrollTo(0, parseInt(hash));
+              document.addEventListener("scroll", function () {
+                let s = parseInt(document.children[0].scrollTop);
+                window.location.hash = "#" + s;
+              });
             }
-            document.addEventListener("scroll", function () {
-              var s = parseInt(document.children[0].scrollTop);
-              window.location.hash = "#" + s;
-            });
 
             document.querySelectorAll('.aux-widget').forEach((node) => {
               if (!node.tagName.startsWith('AUX')) return;
