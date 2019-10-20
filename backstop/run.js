@@ -48,7 +48,7 @@ function make_scenario(path)
     "referenceUrl": "",
     "readyEvent": "",
     "readySelector": "",
-    "delay": 100,
+    "delay": 200,
     "hideSelectors": [],
     "removeSelectors": [],
     "hoverSelector": "",
