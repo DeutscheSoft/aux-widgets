@@ -306,6 +306,8 @@ export const Pages = define_class({
      * first page exists, <code>false</code> otherwise.
      *
      * @method Pages#first
+     * 
+     * @returns {Boolean} True if successful, false otherwise.
      */
     first: function() {
         if (this.pages.length) {
@@ -319,6 +321,8 @@ export const Pages = define_class({
      * last page exists, <code>false</code> otherwise.
      *
      * @method Pages#last
+     * 
+     * @returns {Boolean} True if successful, false otherwise.
      */
     last: function() {
         if (this.pages.length) {
@@ -333,6 +337,8 @@ export const Pages = define_class({
      * next page exists, <code>false</code> otherwise.
      *
      * @method Pages#next
+     * 
+     * @returns {Boolean} True if successful, false otherwise.
      */
     next: function() {
         var c = this.options.show;
@@ -343,6 +349,8 @@ export const Pages = define_class({
      * previous page exists, <code>false</code> otherwise.
      *
      * @method Pages#prev
+     * 
+     * @returns {Boolean} True if successful, false otherwise.
      */
     prev: function() {
         var c = this.options.show;
