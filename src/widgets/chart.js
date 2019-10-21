@@ -494,25 +494,67 @@ export const Chart = define_class({
         }
     },
     destroy: function () {
-        for (var i = 0; i < this._graphs.length; i++) {
-            this._graphs[i].destroy();
+        for (var i = 0; i < this.graphs.length; i++) {
+            this.graphs[i].destroy();
         }
         this._graphs.remove();
         this._handles.remove();
         Widget.prototype.destroy.call(this);
     },
     add_child: function(child) {
-        if (child instanceof Graph) {
-            this.add_graph(child);
-            return;
-        }
-
         Widget.prototype.add_child.call(this, child);
+
+        if (child instanceof Graph)
+        {
+          const g = child;
+          g.set("range_x", this.range_x);
+          g.set("range_y", this.range_y);
+
+          this.graphs.push(g);
+          g.on("set", function (key, value, obj) {
+              if (key === "color" || key === "class" || key === "key") {
+                  this.invalid.graphs = true;
+                  this.trigger_draw();
+              }
+          }.bind(this));
+          /**
+           * Is fired when a graph was added. Arguments are the graph
+           * and its position in the array.
+           * 
+           * @event Chart#graphadded
+           * 
+           * @param {Graph} graph - The {@link Graph} which was added.
+           * @param {int} id - The ID of the added {@link Graph}.
+           */
+          this.emit("graphadded", g, this.graphs.length - 1);
+
+          this.invalid.graphs = true;
+          this.trigger_draw();
+        }
     },
     remove_child: function(child) {
-        if (child instanceof Graph) {
-            this.remove_graph(child);
-            return;
+        if (child instanceof Graph)
+        {
+          const G = this.graphs;
+          const i = G.indexOf(child);
+
+          if (i !== -1)
+          {
+            /**
+             * Is fired when a graph was removed. Arguments are the graph
+             * and its position in the array.
+             * 
+             * @event Chart#graphremoved
+             * 
+             * @param {Graph} graph - The {@link Graph} which was removed.
+             * @param {int} id - The ID of the removed {@link Graph}.
+             */
+            this.emit("graphremoved", child, i);
+            this.graphs.splice(i, 1);
+            child.element.remove();
+            this.invalid.graphs = true;
+            this.trigger_draw();
+          }
         }
 
         Widget.prototype.remove_child.call(this, child);
@@ -533,37 +575,15 @@ export const Chart = define_class({
     add_graph: function (options) {
         var g;
 
-        if (Graph.prototype.isPrototypeOf(options)) {
+        if (options instanceof Graph) {
             g = options;
         } else {
             g = new Graph(options);
         }
 
         this._graphs.appendChild(g.element);
-        if (!g.options.range_x) g.set("range_x", this.range_x);
-        if (!g.options.range_y) g.set("range_y", this.range_y);
+        this.add_child(g);
 
-        this.graphs.push(g);
-        g.on("set", function (key, value, obj) {
-            if (key === "color" || key === "class" || key === "key") {
-                this.invalid.graphs = true;
-                this.trigger_draw();
-            }
-        }.bind(this));
-        /**
-         * Is fired when a graph was added. Arguments are the graph
-         * and its position in the array.
-         * 
-         * @event Chart#graphadded
-         * 
-         * @param {Graph} graph - The {@link Graph} which was added.
-         * @param {int} id - The ID of the added {@link Graph}.
-         */
-        this.emit("graphadded", g, this.graphs.length - 1);
-
-        this.invalid.graphs = true;
-        this.trigger_draw();
-        Widget.prototype.add_child.call(this, g);
         return g;
     },
     /**
@@ -576,24 +596,7 @@ export const Chart = define_class({
      * @emits Chart#graphremoved
      */
     remove_graph: function (g) {
-        var i;
-        if ((i = this.graphs.indexOf(g)) !== -1) {
-            /**
-             * Is fired when a graph was removed. Arguments are the graph
-             * and its position in the array.
-             * 
-             * @event Chart#graphremoved
-             * 
-             * @param {Graph} graph - The {@link Graph} which was removed.
-             * @param {int} id - The ID of the removed {@link Graph}.
-             */
-            this.emit("graphremoved", g, i);
-            g.destroy();
-            this.graphs.splice(i, 1);
-            Widget.prototype.remove_child.call(this, g);
-            this.invalid.graphs = true;
-            this.trigger_draw();
-        }
+        this.remove_child(g);
     },
     /**
      * Remove all graphs from the chart.
