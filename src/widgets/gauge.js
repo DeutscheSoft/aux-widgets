@@ -106,7 +106,6 @@ export const Gauge = define_class({
          */
         this.circular = new Circular(co);
         this.add_child(this.circular);
-        E.appendChild(S);
     },
     resize: function() {
         Widget.prototype.resize.call(this);
@@ -116,6 +115,7 @@ export const Gauge = define_class({
     draw: function(O, element)
     {
       add_class(element, "aux-gauge");
+      element.appendChild(this.svg);
 
       Widget.prototype.draw.call(this, O, element);
     },

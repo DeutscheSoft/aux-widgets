@@ -83,13 +83,12 @@ export const ValueKnob = define_class({
     _options: Object.create(Widget.prototype._options),
     options: { },
     initialize: function (options) {
+        if (!options.element) options.element = element("div");
         Widget.prototype.initialize.call(this, options);
-        var E;
         /**
          * @member {HTMLDivElement} ValueKnob#element - The main DIV container.
          *   Has class <code>.aux-valueknob</code>.
          */
-        if (!(E = this.element)) this.element = E = element("div");
     },
     draw: function(O, element)
     {

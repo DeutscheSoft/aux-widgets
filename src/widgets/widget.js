@@ -157,6 +157,7 @@ export const Widget = define_class({
      *
      * @event Widget#show
      */
+    /** @property {HTMLElement} Widget#element - The main element. */
     Extends : Base,
     _options: {
         // A CSS class to add to the main element
@@ -204,27 +205,27 @@ export const Widget = define_class({
               this.set("dblclick", v);
         },
     },
+    constructor: function (options) {
+      if (!options) options = {};
+      Base.call(this, options);
+    },
     initialize: function (options) {
-        // Main actions every widget needs to take
-        if (!options) options = {};
-        /** @property {HTMLElement} Widget#element - The main element. */
-        if (options.element)
-            this.element = options.element;
-        Base.prototype.initialize.call(this, options);
-        this.__delegated = null;
-        this.invalid = new Invalid(this.options);
-        if (!this.value_time) this.value_time = null;
-        this.needs_redraw = false;
-        this.needs_draw = true;
-        this._redraw = redraw.bind(this, this.redraw);
-        this.__resize = resize.bind(this);
-        this._schedule_resize = this.schedule_resize.bind(this);
-        this._drawn = false;
-        this.parent = null;
-        this.children = null;
-        this.draw_queue = null;
-        this.__lastclick = 0;
-        this.__dblclick_cb = dblclick.bind(this);
+      Base.prototype.initialize.call(this, options);
+      // Main actions every widget needs to take
+      this.element = options.element || null;
+      this.invalid = new Invalid(this.options);
+      if (!this.value_time) this.value_time = null;
+      this.needs_redraw = false;
+      this.needs_draw = true;
+      this._drawn = false;
+      this._redraw = redraw.bind(this, this.redraw);
+      this.__resize = resize.bind(this);
+      this._schedule_resize = this.schedule_resize.bind(this);
+      this.parent = null;
+      this.children = null;
+      this.draw_queue = null;
+      this.__lastclick = 0;
+      this.__dblclick_cb = dblclick.bind(this);
     },
 
     getStyleTarget: function() {
@@ -236,7 +237,7 @@ export const Widget = define_class({
     },
 
     getEventTarget: function() {
-      return this.__delegated || this.element;
+      return this.element;
     },
 
     is_destructed: function() {

@@ -149,7 +149,6 @@ export const ValueButton = define_class({
     destroy: function () {
         this.drag.destroy();
         this.scroll.destroy();
-        this.scale.destroy();
         Button.prototype.destroy.call(this);
     },
     // GETTERS & SETTERS

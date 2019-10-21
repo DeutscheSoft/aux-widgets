@@ -368,7 +368,7 @@ export const Chart = define_class({
         },
     },
     initialize: function (options) {
-        var E, S;
+        var S;
         /**
          * @member {Array} Chart#graphs - An array containing all SVG paths acting as graphs.
          */
@@ -377,6 +377,7 @@ export const Chart = define_class({
          * @member {Array} Chart#handles - An array containing all {@link ResponseHandle} instances.
          */
         this.handles = [];
+        if (!options.element) options.element = element('div');
         Widget.prototype.initialize.call(this, options);
         
         /**
@@ -394,7 +395,6 @@ export const Chart = define_class({
          * @member {HTMLDivElement} Chart#element - The main DIV container.
          *   Has class <code>.aux-chart</code>.
          */
-        if (!(E = this.element)) this.element = E = element("div");
         
         this.svg = S = make_svg("svg");
 
@@ -409,7 +409,6 @@ export const Chart = define_class({
          */
         this._graphs = make_svg("g", {"class": "aux-graphs"});
         S.appendChild(this._graphs);
-        E.appendChild(S);
         
         if (this.options.width) this.set("width", this.options.width);
         if (this.options.height) this.set("height", this.options.height);
@@ -419,13 +418,14 @@ export const Chart = define_class({
          *      Has class <code>.aux-handles</code>.
          */
         this._handles = make_svg("g", {"class": "aux-handles"});
-        this.svg.appendChild(this._handles);
-        this.svg.onselectstart = function () { return false; };
+        S.appendChild(this._handles);
+        S.onselectstart = function () { return false; };
         this.add_handles(this.options.handles);
     },
     draw: function(O, element)
     {
       add_class(element, "aux-chart");
+      element.appendChild(this.svg);
 
       Widget.prototype.draw.call(this, O, element);
     },

@@ -179,13 +179,12 @@ export const Value = define_class({
         click: value_clicked,
     },
     initialize: function (options) {
-        var E;
+        if (!options.element) options.element = element("div");
         Widget.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} Value#element - The main DIV container.
          *   Has class <code>.aux-value</code>.
          */
-        if (!(E = this.element)) this.element = E = element("div");
         
         /**
          * @member {HTMLInputElement} Value#_input - The text input.
@@ -193,7 +192,6 @@ export const Value = define_class({
          */
         this._input  = element("input", "aux-input");
         this._input.type = "text";
-        E.appendChild(this._input);
 
         this._value_typing = value_typing.bind(this);
         this._value_done = value_done.bind(this);
@@ -208,6 +206,7 @@ export const Value = define_class({
     draw: function(O, element)
     {
       add_class(element, "aux-value");
+      element.appendChild(this._input);
 
       Widget.prototype.draw.call(this, O, element);
     },

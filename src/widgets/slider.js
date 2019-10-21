@@ -119,15 +119,16 @@ export const Slider = define_class({
         dblclick: dblclick,
     },
     initialize: function (options) {
+        if (!options.element) options.element = element("div");
         Widget.prototype.initialize.call(this, options);
         options = this.options;
 
-        var E;
+        const E = this.element;
+
         /**
          * @member {HTMLDivElement} Slider#element - The main DIV container.
          *   Has class <code>.aux-slider</code>.
          */
-        if (!(E = this.element)) this.element = E = element("div");
         /**
          * @member {DragValue} Knob#drag - Instance of {@link DragValue} used for
          *   interaction.

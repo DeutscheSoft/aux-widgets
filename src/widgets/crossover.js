@@ -76,10 +76,15 @@ export const CrossoverBand = define_class({
          * @member {HTMLDivElement} CrossoverBand#element - The main SVG group.
          *   Has class <code>.aux-crossoverband</code>.
          */
-        add_class(this.element, "aux-crossoverband");
         
         this.set("lower", this.options.lower);
         this.set("upper", this.options.upper);
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-crossoverband");
+
+      EqBand.prototype.draw.call(this, O, element);
     },
     set: function (key, val) {
         switch (key) {

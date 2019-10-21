@@ -44,19 +44,17 @@ export const Label = define_class({
         format: false,
     },
     initialize: function (options) {
-        if (!options) options = {};
         if (!options.element) options.element = element("div");
         Widget.prototype.initialize.call(this, options);
         /** @member {HTMLDivElement} Label#element - The main DIV container.
          * Has class <code>.aux-label</code>.
          */
-        const E = this.element;
         this._text = document.createTextNode("");
-        E.appendChild(this._text);
     },
     draw: function(O, element)
     {
       add_class(element, "aux-label");
+      element.appendChild(this._text);
 
       Widget.prototype.draw.call(this, O, element);
     },

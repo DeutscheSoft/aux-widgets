@@ -43,12 +43,11 @@ export const Icon = define_class({
         icon: false,
     },
     initialize: function (options) {
-        var E;
+        if (!options.element) options.element = element('div');
         Widget.prototype.initialize.call(this, options);
         /** 
          * @member {HTMLDivElement} Icon#element - The main DIV element. Has class <code>.aux-icon</code> 
          */
-        if (!(E = this.element)) this.element = E = element("div");
         this._icon_old = [];
     },
     draw: function(O, element)

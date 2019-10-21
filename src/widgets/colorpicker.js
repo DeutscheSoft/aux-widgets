@@ -176,7 +176,6 @@ export const ColorPicker = define_class({
         Container.prototype.initialize.call(this, options);
         options = this.options;
 
-        var E = this.element;
         /** @member {HTMLDivElement} ColorPicker#element - The main DIV container.
          * Has class <code>.aux-colorpicker</code>.
          */

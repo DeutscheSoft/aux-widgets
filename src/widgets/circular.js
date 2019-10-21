@@ -395,35 +395,30 @@ export const Circular = define_class({
     },
     
     initialize: function (options) {
+        if (!options.element) options.element = make_svg("g");
         Widget.prototype.initialize.call(this, options);
-        var E;
         
         /**
          * @member {SVGImage} Circular#element - The main SVG element.
          *      Has class <code>.aux-circular</code> 
          */
-        this.element = E = make_svg("g", {"class": "aux-circular"});
-        
         /**
          * @member {SVGPath} Circular#_base - The base of the ring.
          *      Has class <code>.aux-base</code> 
          */
         this._base = make_svg("path", {"class": "aux-base"});
-        E.appendChild(this._base);
         
         /**
          * @member {SVGPath} Circular#_value - The ring showing the value.
          *      Has class <code>.aux-value</code> 
          */
         this._value = make_svg("path", {"class": "aux-value"});
-        E.appendChild(this._value);
         
         /**
          * @member {SVGRect} Circular#_hand - The hand of the knob.
          *      Has class <code>.aux-hand</code> 
          */
         this._hand = make_svg("rect", {"class": "aux-hand"});
-        E.appendChild(this._hand);
 
         if (this.options.labels)
             this.set("labels", this.options.labels);
@@ -433,6 +428,16 @@ export const Circular = define_class({
         this.invalid.labels = true;
         this.trigger_draw();
         Widget.prototype.resize.call(this);
+    },
+
+    draw: function(O, element)
+    {
+      add_class(element, "aux-circular");
+      element.appendChild(this._base);
+      element.appendChild(this._value);
+      element.appendChild(this._hand);
+
+      Widget.prototype.draw.call(this, O, element);
     },
     
     redraw: function () {

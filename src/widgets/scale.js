@@ -418,12 +418,11 @@ export const Scale = define_class({
     },
     
     initialize: function (options) {
-        var E;
+        if (!options.element) options.element = element('div');
         Widget.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} Scale#element - The main DIV element. Has class <code>.aux-scale</code> 
          */
-        if (!(E = this.element)) this.element = E = element("div");
     },
     draw: function(O, element)
     {

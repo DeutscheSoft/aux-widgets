@@ -239,13 +239,13 @@ export const Clock = define_class({
          */
         this.circulars = {};
         this._margin = -1;
+        if (!options.element) options.element = element('div');
         Widget.prototype.initialize.call(this, options);
         this.set("time", this.options.time);
         
         /**
          * @member {HTMLDivElement} Clock#element - The main DIV element. Has class <code>.aux-clock</code> 
          */
-        if (!(E = this.element)) this.element = E = element("div");
         /**
          * @member {SVGImage} Clock#svg - The main SVG image.
          */
@@ -277,7 +277,6 @@ export const Clock = define_class({
         S.appendChild(this._label);
         S.appendChild(this._label_upper);
         S.appendChild(this._label_lower);
-        E.appendChild(S);
 
         var circ_options = {
             container: S,
@@ -309,6 +308,7 @@ export const Clock = define_class({
     draw: function(O, element)
     {
       add_class(element, "aux-clock");
+      element.appendChild(this.svg);
 
       Widget.prototype.draw.call(this, O, element);
     },

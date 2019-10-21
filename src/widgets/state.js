@@ -53,22 +53,19 @@ export const State = define_class({
         color:           false, // the base color
     },
     initialize: function (options) {
+        if (!options.element) options.element = element("div");
         Widget.prototype.initialize.call(this, options);
 
-        var E;
         /**
          * @member {HTMLDivElement} State#element - The main DIV container.
          *   Has class <code>.aux-state</code>.
          */
-        if (!(E = this.element)) this.element = E = element("div");
         
         /**
          * @member {HTMLDivElement} State#_mask - A DIV for masking the background.
          *   Has class <code>.aux-mask</code>.
          */
         this._mask   = element("div","aux-mask");
-
-        E.appendChild(this._mask);
     },
     destroy: function () {
         this._mask.remove();
@@ -78,6 +75,7 @@ export const State = define_class({
     draw: function(O, element)
     {
       add_class(element, "aux-state");
+      element.appendChild(this._mask);
 
       Widget.prototype.draw.call(this, O, element);
     },

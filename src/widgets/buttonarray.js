@@ -171,7 +171,6 @@ export const ButtonArray = define_class({
          *    Has class <code>.aux-container</code>.
          */
         this._container = element("div", "aux-container");
-        this.element.appendChild(this._clip);
         this._clip.appendChild(this._container);
         
         var vert = this.get("direction") === "vertical";
@@ -208,6 +207,7 @@ export const ButtonArray = define_class({
     draw: function(O, element)
     {
       add_class(element, "aux-buttonarray");
+      element.appendChild(this._clip);
 
       Container.prototype.draw.call(this, O, element);
     },

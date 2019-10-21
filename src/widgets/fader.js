@@ -155,6 +155,7 @@ export const Fader = define_class({
     },
     initialize: function (options) {
         this.__tt = false;
+        if (!options.element) options.element = element('div');
         Widget.prototype.initialize.call(this, options);
 
         var E, O = this.options;
@@ -163,13 +164,11 @@ export const Fader = define_class({
          * @member {HTMLDivElement} Fader#element - The main DIV container.
          *   Has class <code>.aux-fader</code>.
          */
-        if (!(E = this.element)) this.element = E = element("div");
 
         /**
          * @member {HTMLDivElement} Fader#_track - The track for the handle. Has class <code>.aux-track</code>.
          */
         this._track = element("div", "aux-track");
-        this.element.appendChild(this._track);
         
         /**
          * @member {HTMLDivElement} Fader#_handle - The handle of the fader. Has class <code>.aux-handle</code>.
@@ -209,6 +208,7 @@ export const Fader = define_class({
     draw: function(O, element)
     {
       add_class(element, "aux-fader");
+      element.appendChild(this._track);
 
       Widget.prototype.draw.call(this, O, element);
     },

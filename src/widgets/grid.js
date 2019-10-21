@@ -204,11 +204,11 @@ export const Grid = define_class({
         height:  0
     },
     initialize: function (options) {
+        if (!options.element) options.element = make_svg("g");
         Widget.prototype.initialize.call(this, options);
         /**
          * @member {SVGGroup} Grid#element - The main SVG group containing all grid elements. Has class <code>.aux-grid</code>.
          */
-        this.element = make_svg("g");
         /**
          * @member {Range} Grid#range_x - The range for the x axis. 
          */

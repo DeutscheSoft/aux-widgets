@@ -1055,6 +1055,7 @@ export const ResponseHandle = define_class({
         this.handle = [0,0,0,0];
         this._zwheel = false;
         this.__sto = 0;
+        if (!options.element) options.element = make_svg('g');
         Widget.prototype.initialize.call(this, options);
         var O = this.options;
         
@@ -1076,12 +1077,9 @@ export const ResponseHandle = define_class({
             this.trigger_draw();
         }.bind(this);
 
-        var E = make_svg("g");
-        
         /**
          * @member {SVGGroup} ResponseHandle#element - The main SVG group containing all handle elements. Has class <code>.aux-responsehandle</code>.
          */
-        this.element = E;
         /**
          * @member {SVGCircular} ResponseHandle#_handle - The main handle.
          *      Has class <code>.aux-handle</code>.

@@ -32,7 +32,7 @@ export const ListItem = define_class({
     Extends: Container,
     
     initialize: function (options) {
-        this.element = element("li");
+        if (!options.element) options.element = element("li");
         Container.prototype.initialize.call(this, options);
     },
     draw: function(O, element)

@@ -45,7 +45,12 @@ export const Frame = define_class({
          * @member {HTMLDivElement} Frame#element - The main DIV container.
          *   Has class <code>.aux-frame</code>.
          */
-        add_class(this.element, "aux-frame");
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-frame");
+
+      Container.prototype.draw.call(this, O, element);
     },
 });
 /**

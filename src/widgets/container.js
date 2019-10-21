@@ -117,17 +117,16 @@ export const Container = define_class({
     },
     initialize: function (options) {
         var E;
+        if (!options.element) options.element = element('div');
         Widget.prototype.initialize.call(this, options);
         this.hidden_children = [];
         /** 
          * @member {HTMLDivElement} Container#element - The main DIV element. Has class <code>.aux-container</code> 
          */
-        if (!(E = this.element)) this.element = E = element("div");
 
         this.__after_hiding = after_hiding.bind(this);
         this.__after_showing = after_showing.bind(this);
         this.__hide_id = false;
-        add_class(E, "aux-show");
         
         if (this.options.children)
             this.append_children(this.options.children);
@@ -354,6 +353,7 @@ export const Container = define_class({
     draw: function(O, element)
     {
       add_class(element, "aux-container");
+      add_class(element, "aux-show");
 
       Widget.prototype.draw.call(this, O, element);
     },

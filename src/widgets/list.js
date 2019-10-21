@@ -43,7 +43,7 @@ export const List = define_class({
     Extends: Container,
     
     initialize: function (options) {
-        this.element = element("ul");
+        if (!options.element) options.element = element("ul");
         Container.prototype.initialize.call(this, options);
     },
     static_events: {

@@ -49,6 +49,10 @@ export const Button = define_class({
      * 
      * @class Button
      */
+    /**
+     * @member {HTMLDivElement} Button#element - The main DIV element.
+     *   Has class <code>.aux-button</code>.
+     */
     Extends: Widget,
     _options: Object.assign(Object.create(Widget.prototype._options), {
         label: "string|boolean",
@@ -63,13 +67,8 @@ export const Button = define_class({
         layout:           "horizontal"
     },
     initialize: function (options) {
-        var E;
+        if (!options.element) options.element = element('div');
         Widget.prototype.initialize.call(this, options);
-        /**
-         * @member {HTMLDivElement} Button#element - The main DIV element.
-         *   Has class <code>.aux-button</code>.
-         */
-        if (!(E = this.element)) this.element = E = element("div");
     },
     destroy: function () {
         Widget.prototype.destroy.call(this);

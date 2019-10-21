@@ -722,7 +722,6 @@ export const SelectEntry = define_class({
         value: null
     },
     initialize: function (options) {
-        if (!options) options = {};
         if (!options.element) options.element = element("li");
         Label.prototype.initialize.call(this, options);
         add_class(this.element, "aux-selectentry");

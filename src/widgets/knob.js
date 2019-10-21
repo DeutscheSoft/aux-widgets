@@ -103,14 +103,14 @@ export const Knob = define_class({
         dblclick: dblclick,
     },
     initialize: function (options) {
+        if (!options.element) options.element = element('div');
         Widget.prototype.initialize.call(this, options);
         options = this.options;
-        var E, S;
+        var S;
         /**
          * @member {HTMLDivElement} Knob#element - The main DIV container.
          *   Has class <code>.aux-knob</code>.
          */
-        if (!(E = this.element)) this.element = E = element("div")
 
         /**
          * @member {SVGImage} Knob#svg - The main SVG image.
@@ -148,7 +148,6 @@ export const Knob = define_class({
             limit: true,
         });
 
-        E.appendChild(S);
         this.set("base", options.base);
         if (options.reset === void(0))
             options.reset = options.value;
@@ -162,6 +161,7 @@ export const Knob = define_class({
     draw: function(O, element)
     {
       add_class(element, "aux-knob");
+      element.appendChild(this.svg);
 
       Widget.prototype.draw.call(this, O, element);
     },

@@ -179,7 +179,6 @@ export const Graph = define_class({
         range_x: "object",
         range_y: "object",
         key: "string|boolean",
-        element: void(0),
     }),
     options: {
         dots:      null,
@@ -191,10 +190,10 @@ export const Graph = define_class({
     },
     
     initialize: function (options) {
+        if (!options.element) options.element = make_svg('path');
         Widget.prototype.initialize.call(this, options);
         /** @member {SVGPath} Graph#element - The SVG path. Has class <code>.aux-graph</code> 
          */
-        this.element = make_svg("path");
         /** @member {Range} Graph#range_x - The range for the x axis. 
          */
         /** @member {Range} Graph#range_y - The range for the y axis.

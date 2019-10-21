@@ -1,5 +1,5 @@
 import { define_class, add_static_event } from './widget_helpers.js';
-import { toggle_class } from './utils/dom.js';
+import { add_class, remove_class } from './utils/dom.js';
 import { warn } from './utils/log.js';
 import { Widget } from './widgets/widget.js';
 
@@ -147,19 +147,37 @@ export function define_child_widget(widget, name, config) {
         var show = fixed || !!val;
         if (show && !C) {
             var O = get_child_options(this, name, this.options, config);
-            if (append === true)
-                O.container = this.element;
             var w = new child(O);
             this.add_child(w);
             this[name] = w;
-            if (typeof(append) === "function")
-                append.call(this);
         } else if (!show && C) {
-            C.destroy();
             this[name] = null;
+            if (config.toggle_class)
+              remove_class(this.element, "aux-has-"+name);
+            C.destroy();
         }
-        if (config.toggle_class) toggle_class(this.element, "aux-has-"+name, show);
         this.trigger_resize();
+    });
+    add_static_event(widget, "redraw", function() {
+      const show = fixed || this.options[key];
+      let C = this[name];
+
+      if (show && C && !C.element.parentNode)
+      {
+        const E = this.element;
+
+        if (config.toggle_class)
+          add_class(E, "aux-has-"+name);
+
+        if (append === true)
+        {
+          E.appendChild(C.element);
+        }
+        else if (typeof(append) === "function")
+        {
+          append.call(this);
+        }
+      }
     });
     var set_cb = function(val, key) {
         if (this[name]) this[name].set(key.substr(name.length+1), val);
