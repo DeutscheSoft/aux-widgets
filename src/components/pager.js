@@ -2,17 +2,20 @@ import {
     component_from_widget, define_component, subcomponent_from_widget
   } from './../component_helpers.js';
 import { Pager } from './../widgets/pager.js';
+import { Container } from './../widgets/container.js';
 
-function add_page(pager, page)
+function add_page(pager, page, element)
 {
-  pager.add_page(page);
+  pager.add_page(element.getAttribute("label"), page);
 }
 
-function remove_page(pager, page)
+function remove_page(pager, page, element)
 {
   pager.remove_page(page);
 }
 
 export const PagerComponent = component_from_widget(Pager);
+export const PageComponent = subcomponent_from_widget(Container, Pager, add_page, remove_page);
 
 define_component('pager', PagerComponent);
+define_component('page', PageComponent);
