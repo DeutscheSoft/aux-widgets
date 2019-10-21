@@ -91,7 +91,7 @@ export const Container = define_class({
      * @param {Object} [options={ }] - An object containing initial options.
      * 
      * @property {String|HTMLElement} [options.content] - The content of the container. It can either be
-     *   a string which is interpreted as Text or a DOM node. Note that this option will remove all
+     *   a string which is interpreted as HTML or a DOM node. Note that this option will remove all
      *   child nodes from the container element including those added via append_child.
      * @property {Number} [options.hiding_duration] - The duration in ms of the hiding CSS
      *   transition/animation of this container. If this option is not set, the transition duration
@@ -406,7 +406,7 @@ export const Container = define_class({
         if (I.content) {
             I.content = false;
             empty(E);
-            if (typeof O.content === "string") set_content(E, O.content);
+            if (typeof O.content === "string") E.innerHTML = O.content;
             else E.appendChild(O.content);
         }
     },
