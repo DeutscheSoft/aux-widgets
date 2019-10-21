@@ -164,8 +164,6 @@ export const Fader = define_class({
          *   Has class <code>.aux-fader</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "aux-fader");
-        this.widgetize(E, true, true, true);
 
         /**
          * @member {HTMLDivElement} Fader#_track - The track for the handle. Has class <code>.aux-track</code>.
@@ -207,6 +205,12 @@ export const Fader = define_class({
         
         this.set("bind_click", O.bind_click);
         this.set("bind_dblclick", O.bind_dblclick);
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-fader");
+
+      Widget.prototype.draw.call(this, O, element);
     },
 
     redraw: function () {

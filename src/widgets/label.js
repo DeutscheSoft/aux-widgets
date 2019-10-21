@@ -51,10 +51,14 @@ export const Label = define_class({
          * Has class <code>.aux-label</code>.
          */
         const E = this.element;
-        add_class(E, "aux-label");
         this._text = document.createTextNode("");
         E.appendChild(this._text);
-        this.widgetize(E, true, true, true);
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-label");
+
+      Widget.prototype.draw.call(this, O, element);
     },
     
     redraw: function () {

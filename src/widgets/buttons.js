@@ -182,11 +182,16 @@ export const Buttons = define_class({
          * @member {HTMLDivElement} Buttons#element - The main DIV container.
          *   Has class <code>.aux-buttons</code>.
          */
-        add_class(this.element, "aux-buttons");
         
         this.set("direction", this.options.direction);
         this.set("multi_select", this.options.multi_select);
         this.add_buttons(this.options.buttons);
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-buttons");
+
+      Container.prototype.draw.call(this, O, element);
     },
     
     /**

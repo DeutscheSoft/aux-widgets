@@ -56,7 +56,7 @@ function remove_meter (meter) {
     }
     if (m < 0 || m > M.length - 1) return;
     this.remove_child(M[m]);
-    M[m].set("container", null);
+    M[m].element.remove();
     // TODO: no destroy function in levelmeter at this point?
     //this.meters[m].destroy();
     M = M.splice(m, 1);
@@ -109,11 +109,15 @@ export const MultiMeter = define_class({
          * @member {HTMLDivElement} MultiMeter#element - The main DIV container.
          *   Has class <code>.aux-multimeter</code>.
          */
-        add_class(this.element, "aux-multimeter");
         this.meters = [];
         var O = this.options;
     },
-    
+    draw: function(O, element)
+    {
+      add_class(element, "aux-multimeter");
+
+      Container.prototype.draw.call(this, O, element);
+    },
     redraw: function () {
         var O = this.options;
         var I = this.invalid;

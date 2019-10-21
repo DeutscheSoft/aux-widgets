@@ -206,8 +206,6 @@ export const LevelMeter = define_class({
          * @member {HTMLDivElement} LevelMeter#element - The main DIV container.
          *   Has class <code>.aux-levelmeter</code>.
          */
-        add_class(this.element, "aux-levelmeter");
-
         var O = this.options;
         
         if (O.peak === false)
@@ -218,6 +216,13 @@ export const LevelMeter = define_class({
             O.bottom = O.value;
         if (O.falling < 0)
             O.falling = -O.falling;
+    },
+
+    draw: function(O, element)
+    {
+      add_class(element, "aux-levelmeter");
+
+      Meter.prototype.draw.call(this, O, element);
     },
     
     redraw: function () {

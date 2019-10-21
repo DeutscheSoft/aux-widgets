@@ -538,7 +538,6 @@ export const Window = define_class({
         this.dimensions = {anchor: "top-left", x: 0, x1: 0, x2: 0, y: 0, y1: 0, y2: 0, width: 0, height: 0};
         Container.prototype.initialize.call(this, options);
         var O = this.options;
-        add_class(this.element, "aux-window");
         this.__status_to = false;
         init_position.call(this, this.options.open);
         this.set("maximize", this.options.maximize);
@@ -551,7 +550,7 @@ export const Window = define_class({
      * @param {Widget} child - The child widget to add to the windows content area.
      */
     append_child : function(child) {
-        child.set("container", this.content.element);
+        this.content.appendChild(child.element);
         this.add_child(child);
     },
     
@@ -604,6 +603,13 @@ export const Window = define_class({
         this.drag.set("min", {x: 0 - this.options.width + 20, y: 0});
         this.drag.set("max", {x: width() - 20, y: height() - 20});
         Container.prototype.resize.call(this);
+    },
+
+    draw: function(O, element)
+    {
+      add_class(element, "aux-window");
+
+      Container.prototype.draw.call(this, O, element);
     },
     
     redraw: function () {

@@ -169,7 +169,6 @@ export const Select = define_class({
          * @member {HTMLDivElement} Select#element - The main DIV container.
          *   Has class <code>.aux-select</code>.
          */
-        add_class(this.element, "aux-select");
         
         /**
          * @member {HTMLListElement} Select#_list - A HTML list for displaying the entry titles.
@@ -298,7 +297,7 @@ export const Select = define_class({
         }
         this.add_child(entry);
         entries.push(entry);
-        entry.set("container", this._list)
+        this._list.appendChild(entry.element);
 
         var id;
 
@@ -550,6 +549,12 @@ export const Select = define_class({
          * @event Select.cleared
          */
         this.emit("cleared");
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-select");
+
+      Button.prototype.draw.call(this, O, element);
     },
 
     redraw: function() {

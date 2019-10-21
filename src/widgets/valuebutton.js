@@ -108,7 +108,6 @@ export const ValueButton = define_class({
          * @member {HTMLDivElement} ValueButton#element - The main DIV container.
          *   Has class <code>.aux-valuebutton</code>.
          */
-        add_class(this.element, "aux-valuebutton");
         
         /**
          * @member {DragValue} ValueButton#drag - The {@link DragValue} module.
@@ -140,6 +139,12 @@ export const ValueButton = define_class({
              */
             this.emit("doubleclick", this.options.value);
         }.bind(this));
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-valuebutton");
+
+      Button.prototype.draw.call(this, O, element);
     },
     destroy: function () {
         this.drag.destroy();

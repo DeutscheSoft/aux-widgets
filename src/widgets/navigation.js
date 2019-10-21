@@ -154,8 +154,6 @@ export const Navigation = define_class({
          * @member {HTMLDivElement} Navigation#element - The main DIV container.
          *   Has class <code>.aux-navigation</code>.
          */
-        add_class(this.element, "aux-navigation");
-        
         /**
          * @member {Button} ButtonArray#prev - The previous arrow {@link Button} instance.
          */
@@ -185,6 +183,12 @@ export const Navigation = define_class({
     resize: function () {
         measure.call(this);
         Container.prototype.resize.call(this);
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-navigation");
+
+      Container.prototype.draw.call(this, O, element);
     },
     redraw: function () {
         var O = this.options;

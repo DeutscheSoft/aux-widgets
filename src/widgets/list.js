@@ -43,7 +43,7 @@ export const List = define_class({
     Extends: Container,
     
     initialize: function (options) {
-        this.element = element("ul", "aux-list");
+        this.element = element("ul");
         Container.prototype.initialize.call(this, options);
     },
     static_events: {
@@ -56,6 +56,12 @@ export const List = define_class({
           }
         }
       },
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-list");
+
+      Container.prototype.draw.call(this, O, element);
     },
     append_child: function(w) {
       Container.prototype.append_child.call(this, w);

@@ -139,7 +139,6 @@ export const ConfirmButton = define_class({
   
   initialize: function (options) {
     Button.prototype.initialize.call(this, options);
-    add_class(this.element, "aux-confirmbutton");
     this.on("click", clicked.bind(this));
     this.__temp = {
       label: "",
@@ -148,6 +147,13 @@ export const ConfirmButton = define_class({
       reset: null,
       click: 0,
     }
+  },
+
+  draw: function(O, element)
+  {
+    add_class(element, "aux-confirmbutton");
+
+    Button.prototype.draw.call(this, O, element);
   },
   
   set: function (key, value) {

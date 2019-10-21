@@ -130,7 +130,7 @@ export const Dialog = define_class({
           if (O.toplevel && O.container.tagName !== "AWML-ROOT" && O.container.tagName !== "BODY") {
             var p = this.element;
             while ((p = p.parentElement) && p.tagName !== "AWML-ROOT" && p.tagName !== "BODY") {};
-            this.set("container", p);
+            this.element.appendChild(p.element);
           }
           this.show();
         } else {
@@ -141,7 +141,6 @@ export const Dialog = define_class({
     },
     initialize: function (options) {
         Container.prototype.initialize.call(this, options);
-        add_class(this.element, "aux-dialog");
         var O = this.options;
         /* This cannot be a default option because document.body
          * is not defined there */
@@ -157,6 +156,12 @@ export const Dialog = define_class({
     resize: function() {
         if (this.options.visible)
           this.reposition();
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-dialog");
+
+      Container.prototype.draw.call(this, O, element);
     },
     redraw: function () {
         Container.prototype.redraw.call(this);

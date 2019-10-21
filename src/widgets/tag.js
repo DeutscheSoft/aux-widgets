@@ -97,7 +97,7 @@ export const Tag = define_class({
         var O = this.options;
         for (var i = 0; i < this.nodes.length; i++) {
             if (this.nodes[i] == node) {
-                node.set("container", false);
+                node.element.remove();
                 this.emit("noderemoved", node);
                 this.nodes.splice(i, 1);
                 node.destroy();

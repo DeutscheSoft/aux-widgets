@@ -90,9 +90,12 @@ export const ValueKnob = define_class({
          *   Has class <code>.aux-valueknob</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "aux-valueknob");
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-valueknob");
 
-        this.widgetize(E, true, true, true);
+      Widget.prototype.draw.call(this, O, element);
     },
     get_range: function() {
         return this.knob.get_range();

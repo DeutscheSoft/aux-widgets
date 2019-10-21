@@ -49,9 +49,13 @@ export const Icon = define_class({
          * @member {HTMLDivElement} Icon#element - The main DIV element. Has class <code>.aux-icon</code> 
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "aux-icon"); 
-        this.widgetize(E, true, true, true);
         this._icon_old = [];
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-icon");
+
+      Widget.prototype.draw.call(this, O, element);
     },
     redraw: function() {
         var O = this.options;

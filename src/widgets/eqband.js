@@ -134,9 +134,13 @@ export const EqBand = define_class({
          * @member {HTMLDivElement} EqBand#element - The main SVG group.
          *   Has class <code>.aux-eqband</code>.
          */
-        add_class(this.element, "aux-eqband");
-        
         this.filter.reset();
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-eqband");
+
+      ResponseHandle.prototype.draw.call(this, O, element);
     },
 
     /**

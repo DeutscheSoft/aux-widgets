@@ -194,8 +194,7 @@ export const Graph = define_class({
         Widget.prototype.initialize.call(this, options);
         /** @member {SVGPath} Graph#element - The SVG path. Has class <code>.aux-graph</code> 
          */
-        this.element = this.widgetize(make_svg("path"), true, true, true);
-        add_class(this.element, "aux-graph");
+        this.element = make_svg("path");
         /** @member {Range} Graph#range_x - The range for the x axis. 
          */
         /** @member {Range} Graph#range_y - The range for the y axis.
@@ -204,6 +203,12 @@ export const Graph = define_class({
         if (this.options.range_y) this.set("range_y", this.options.range_y);
         this.set("color", this.options.color);
         this.set("mode",  this.options.mode);
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-graph");
+
+      Widget.prototype.draw.call(this, O, element);
     },
     
     redraw: function () {

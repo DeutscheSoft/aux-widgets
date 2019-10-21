@@ -164,6 +164,11 @@ export const Base = define_class({
          * @event Base#initialized
          */
         this.emit("initialized");
+
+        const element = this.getEventTarget();
+
+        if (element !== this.__event_target)
+          add_native_events.call(this, element);
     },
     /**
      * Destroys all event handlers and the options object.
@@ -291,6 +296,9 @@ export const Base = define_class({
         this.emit("useraction", key, value);
         return true;
     },
+    getEventTarget: function() {
+      return this.__event_target;
+    },
     /**
      * Delegates all occuring DOM events of a specific DOM node to the widget.
      * This way the widget fires e.g. a click event if someone clicks on the
@@ -306,6 +314,11 @@ export const Base = define_class({
      */
     delegate_events: function (element) {
         var old_target = this.__event_target;
+
+        if (old_target !== this.getEventTarget())
+        {
+          throw new Error("Cannot both overload getEventTarget() and call delegate_events()");
+        }
         /**
          * Is fired when an element is delegated.
          * 
@@ -345,7 +358,7 @@ export const Base = define_class({
         if (arguments.length !== 2)
             throw new Error("Bad number of arguments.");
 
-        if (is_native_event(event) && (ev = this.__event_target) && !this.has_event_listeners(event))
+        if (is_native_event(event) && (ev = this.getEventTarget()) && !this.has_event_listeners(event))
             add_event_listener(ev, event, this.__native_handler);
         ev = this.__events;
         add_event(ev, event, func);
@@ -407,9 +420,9 @@ export const Base = define_class({
     off: function (event, fun) {
         remove_event(this.__events, event, fun);
 
-        // remove native DOM event listener from __event_target
+        // remove native DOM event listener from getEventTarget()
         if (is_native_event(event) && !this.has_event_listeners(event)) {
-            var ev = this.__event_target;
+            var ev = this.getEventTarget();
             if (ev) remove_event_listener(ev, event, this.__native_handler);
         }
     },

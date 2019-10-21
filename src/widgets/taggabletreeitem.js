@@ -31,4 +31,10 @@ export const TaggableTreeItem = define_class({
         Taggable.prototype.initialize.call(this);
         add_class(this.element, "aux-taggabletreeitem");
     },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-taggabletreeitem");
+
+      TreeItem.prototype.draw.call(this, O, element);
+    },
 });

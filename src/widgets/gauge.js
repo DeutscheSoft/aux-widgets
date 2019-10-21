@@ -89,8 +89,6 @@ export const Gauge = define_class({
          * @member {HTMLDivElement} Gauge#element - The main DIV container.
          *   Has class <code>.aux-gauge</code>.
          */
-        add_class(E, "aux-gauge");
-        this.widgetize(E, true, true, true);
         
         /**
          * @member {SVGText} Gauge#_title - The title of the gauge.
@@ -108,13 +106,18 @@ export const Gauge = define_class({
          */
         this.circular = new Circular(co);
         this.add_child(this.circular);
-        this.widgetize(this.element);
         E.appendChild(S);
     },
     resize: function() {
         Widget.prototype.resize.call(this);
         this.invalid.title = true;
         this.trigger_draw();
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-gauge");
+
+      Widget.prototype.draw.call(this, O, element);
     },
     redraw: function() {
         var I = this.invalid, O = this.options;

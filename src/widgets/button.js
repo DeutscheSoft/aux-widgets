@@ -70,13 +70,16 @@ export const Button = define_class({
          *   Has class <code>.aux-button</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "aux-button");
-        this.widgetize(E, true, true, true);
     },
     destroy: function () {
         Widget.prototype.destroy.call(this);
     },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-button");
 
+      Widget.prototype.draw.call(this, O, element);
+    },
     redraw: function() {
         Widget.prototype.redraw.call(this);
         var I = this.invalid;

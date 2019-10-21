@@ -123,8 +123,6 @@ export const Container = define_class({
          * @member {HTMLDivElement} Container#element - The main DIV element. Has class <code>.aux-container</code> 
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "aux-container"); 
-        this.widgetize(E, true, true, true);
 
         this.__after_hiding = after_hiding.bind(this);
         this.__after_showing = after_showing.bind(this);
@@ -154,7 +152,7 @@ export const Container = define_class({
      * @param {Widget} child - The child widget to append.
      */
     append_child : function(child) {
-        child.set("container", this.element);
+        this.element.appendChild(child.element);
         this.add_child(child);
     },
     set_parent : function(parent) {
@@ -351,6 +349,13 @@ export const Container = define_class({
     hidden: function() {
         var state = this.options.display_state;
         return Widget.prototype.hidden.call(this) || state === "hiding" || state === "hide";
+    },
+
+    draw: function(O, element)
+    {
+      add_class(element, "aux-container");
+
+      Widget.prototype.draw.call(this, O, element);
     },
 
     redraw: function() {

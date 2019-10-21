@@ -161,7 +161,6 @@ export const ButtonArray = define_class({
          * @member {HTMLDivElement} ButtonArray#element - The main DIV container.
          *   Has class <code>.aux-buttonarray</code>.
          */
-        add_class(this.element, "aux-buttonarray");
         /**
          * @member {HTMLDivElement} ButtonArray#_clip - A clipping area containing the list of {@link Button}s.
          *    Has class <code>.aux-clip</code>.
@@ -205,6 +204,12 @@ export const ButtonArray = define_class({
         this.add_children([this.prev, this.next]);
         this.add_buttons(this.options.buttons);
         this._sizes = null;
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-buttonarray");
+
+      Container.prototype.draw.call(this, O, element);
     },
     
     resize: function () {

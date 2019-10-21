@@ -250,8 +250,6 @@ export const Clock = define_class({
          * @member {SVGImage} Clock#svg - The main SVG image.
          */
         this.svg = S = make_svg("svg");
-        this.widgetize(E, true, true, true);
-        add_class(E, "aux-clock");
         
         /**
          * @member {SVGText} Clock#_label - The center label showing the time. Has class<code>.aux-label</code>
@@ -306,6 +304,13 @@ export const Clock = define_class({
         
         // start the clock
         this.__timeout = timeout.bind(this);
+    },
+
+    draw: function(O, element)
+    {
+      add_class(element, "aux-clock");
+
+      Widget.prototype.draw.call(this, O, element);
     },
 
     redraw: function () {

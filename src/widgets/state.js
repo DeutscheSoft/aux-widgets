@@ -61,8 +61,6 @@ export const State = define_class({
          *   Has class <code>.aux-state</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "aux-state");
-        this.widgetize(E, true, true, true);
         
         /**
          * @member {HTMLDivElement} State#_mask - A DIV for masking the background.
@@ -75,6 +73,13 @@ export const State = define_class({
     destroy: function () {
         this._mask.remove();
         Widget.prototype.destroy.call(this);
+    },
+
+    draw: function(O, element)
+    {
+      add_class(element, "aux-state");
+
+      Widget.prototype.draw.call(this, O, element);
     },
 
     redraw: function() {

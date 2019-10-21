@@ -179,7 +179,6 @@ export const Equalizer = define_class({
          * @member {HTMLDivElement} Equalizer#element - The main DIV container.
          *   Has class <code>.aux-equalizer</code>.
          */
-        add_class(this.element, "aux-equalizer");
         
         /**
          * @member {SVGGroup} Equalizer#_bands - The SVG group containing all the bands SVG elements.
@@ -206,6 +205,12 @@ export const Equalizer = define_class({
         this.empty(); // Arne: ??? <- Markus: removes all graphs, defined in Chart
         this._bands.remove();
         FrequencyResponse.prototype.destroy.call(this);
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-equalizer");
+
+      FrequencyResponse.prototype.draw.call(this, O, element);
     },
     redraw: function () {
         var I = this.invalid;

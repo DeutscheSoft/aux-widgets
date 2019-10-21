@@ -27,6 +27,11 @@ export const TaggableListItem = define_class({
     initialize: function (options) {
         ListItem.prototype.initialize.call(this, options);
         Taggable.prototype.initialize.call(this);
-        add_class(this.element, "aux-taggablelistitem");
-    }
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-taggablelistitem");
+
+      ListItem.prototype.draw.call(this, O, element);
+    },
 });

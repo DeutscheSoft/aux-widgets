@@ -280,9 +280,6 @@ export const Meter = define_class({
          *   Has class <code>.aux-meterbase</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "aux-meterbase");
-        this.widgetize(E, false, true, true);
-        
         this._bar = element("div", "aux-bar");
         /**
          * @member {HTMLCanvas} Meter#_canvas - The canvas element drawing the mask.
@@ -301,17 +298,25 @@ export const Meter = define_class({
          * @member {HTMLDivElement} Meter#_bar - The DIV element containing the masks
          *      and drawing the background. Has class <code>.aux-bar</code>.
          */
-        this.delegate(this._bar);
         this._last_meters = [];
         this._current_meters = [];
 
         this.set("label", O.value);
         this.set("base", O.base);
     },
+    getEventTarget: function() {
+      return this._bar;
+    },
 
     destroy: function () {
         this._bar.remove();
         Widget.prototype.destroy.call(this);
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-meterbase");
+
+      Widget.prototype.draw.call(this, O, element);
     },
     redraw: function () {
         var I = this.invalid;

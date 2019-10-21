@@ -186,9 +186,6 @@ export const Value = define_class({
          *   Has class <code>.aux-value</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "aux-value");
-        
-        this.widgetize(E, true, true, true);
         
         /**
          * @member {HTMLInputElement} Value#_input - The text input.
@@ -206,6 +203,13 @@ export const Value = define_class({
         this._input.addEventListener("input", this._value_input);
         this._input.addEventListener("blur", this._value_done);
         this.__editing = false;
+    },
+
+    draw: function(O, element)
+    {
+      add_class(element, "aux-value");
+
+      Widget.prototype.draw.call(this, O, element);
     },
     
     redraw: function () {

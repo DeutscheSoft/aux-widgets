@@ -1045,6 +1045,11 @@ export const ResponseHandle = define_class({
         set_range_x: set_range,
     },
 
+    getStyleTarget: function() {
+      // TODO: is this really intended
+      return null;
+    },
+
     initialize: function (options) {
         this.label = [0,0,0,0];
         this.handle = [0,0,0,0];
@@ -1077,10 +1082,6 @@ export const ResponseHandle = define_class({
          * @member {SVGGroup} ResponseHandle#element - The main SVG group containing all handle elements. Has class <code>.aux-responsehandle</code>.
          */
         this.element = E;
-
-        this.widgetize(E, true, true);
-
-        add_class(E, "aux-responsehandle");
         /**
          * @member {SVGCircular} ResponseHandle#_handle - The main handle.
          *      Has class <code>.aux-handle</code>.
@@ -1268,6 +1269,13 @@ export const ResponseHandle = define_class({
         this.set("z_handle", O.z_handle);
         this.set("label", O.label);
 
+    },
+
+    draw: function(O, element)
+    {
+      add_class(element, "aux-responsehandle");
+
+      Widget.prototype.draw.call(this, O, element);
     },
 
     redraw: function () {

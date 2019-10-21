@@ -45,6 +45,13 @@ export const TagNode = define_class({
     this.add_class("aux-tag");
     
   },
+
+  draw: function(O, element)
+  {
+    add_class(element, "aux-tag");
+
+    Container.prototype.draw.call(this, O, element);
+  },
   
   redraw: function () {
     Container.prototype.redraw.call(this);

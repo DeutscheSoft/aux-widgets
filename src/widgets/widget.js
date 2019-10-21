@@ -51,6 +51,13 @@ Invalid.prototype = {
 };
 function redraw(fun) {
     if (!this._drawn) return;
+
+    if (this.needs_draw)
+    {
+      this.needs_draw = false;
+      this.draw(this.options, this.element);
+    }
+
     this.needs_redraw = false;
     /**
      * Is fired when a redraw is executed.
@@ -160,7 +167,6 @@ export const Widget = define_class({
         // a id to set on the element. If omitted a random
         // string is generated.
         id: "string",
-        // If an element was stylized, styles can be applied
         styles: "object",
         disabled: "boolean",
         element: "object",
@@ -176,11 +182,13 @@ export const Widget = define_class({
     },
     static_events: {
         set_container: function(value) {
-            if (value && this.element) {
-                value.appendChild(this.element);
-            } else if (!value && this.element.parentElement) {
-                this.element.parentElement.removeChild(this.element);
-            }
+            throw new Error('container is not a dynamic option.');
+        },
+        set_styles: function(value) {
+            throw new Error('styles is not a dynamic option.');
+        },
+        set_class: function(value) {
+            throw new Error('class is not a dynamic option.');
         },
         set_dblclick: function (val) {
             const event_target = this.getEventTarget();
@@ -203,12 +211,11 @@ export const Widget = define_class({
         if (options.element)
             this.element = options.element;
         Base.prototype.initialize.call(this, options);
-        this.__classified = null;
-        this.__stylized = null;
         this.__delegated = null;
         this.invalid = new Invalid(this.options);
         if (!this.value_time) this.value_time = null;
         this.needs_redraw = false;
+        this.needs_draw = true;
         this._redraw = redraw.bind(this, this.redraw);
         this.__resize = resize.bind(this);
         this._schedule_resize = this.schedule_resize.bind(this);
@@ -221,11 +228,11 @@ export const Widget = define_class({
     },
 
     getStyleTarget: function() {
-      return this.__stylized || this.element;
+      return this.element;
     },
 
     getClassTarget: function() {
-      return this.__classified || this.element;
+      return this.element;
     },
 
     getEventTarget: function() {
@@ -334,7 +341,7 @@ export const Widget = define_class({
          * 
          * @event Widget#initialized
          */
-        this.emit("initialized");
+        Base.prototype.initialized.call(this);
         this.trigger_draw();
     },
     draw_once: function(fun) {
@@ -348,17 +355,34 @@ export const Widget = define_class({
         }
         this.trigger_draw();
     },
+    draw: function (O, element) {
+      let E;
+
+      if (O.container)
+        O.container.appendChild(element);
+
+      add_class(element, "aux-widget");
+
+      if (O.id)
+        element.setAttribute("id", O.id);
+
+      if (O.class && (E = this.getClassTarget()))
+      {
+        const tmp = O.class.split(" ");
+        for (let i = 0; i < tmp.length; i++)
+          add_class(E, tmp[i]);
+      }
+
+      if (O.styles && (E = this.getStyleTarget()))
+      {
+        set_styles(E, O.styles);
+      }
+
+    },
     redraw: function () {
         var I = this.invalid;
         var O = this.options;
         var E = this.element;
-
-        if (E) {
-            if (I.id) {
-                I.id = false;
-                if (O.id) E.setAttribute("id", O.id);
-            }
-        }
 
         E = this.getStyleTarget();
 
@@ -371,11 +395,6 @@ export const Widget = define_class({
             if (I.disabled) {
                 I.disabled = false;
                 toggle_class(E, "aux-disabled", O.disabled);
-            }
-
-            if (I.styles) {
-                I.styles = false;
-                if (O.styles) set_styles(E, O.styles);
             }
         }
 
@@ -426,19 +445,6 @@ export const Widget = define_class({
             this.element = null;
         }
     },
-    delegate: function (element) {
-        this.delegate_events(element);
-        this.__delegated = element;
-        /**
-         * Is fired when a widget gets delegated.
-         * 
-         * @event Widget#initialized
-         * 
-         * @param {HTMLElement} element - The element all native DOM events are delegated to.
-         */
-        this.emit("delegated", element);
-        return element;
-    },
     add_class: function (cls) {
         add_class(this.getClassTarget(), cls);
     },
@@ -447,22 +453,6 @@ export const Widget = define_class({
     },
     has_class: function (cls) {
         return has_class(this.getClassTarget(), cls);
-    },
-    classify: function (element) {
-        // Takes a DOM element and adds its CSS functionality to the
-        // widget instance
-        this.__classified = element;
-        if (this.options.class && element)
-            add_class(element, this.options.class);
-        /**
-         * Is fired when a widget is classified.
-         * 
-         * @event Widget#classified
-         * 
-         * @param {HTMLElement} element - The element which receives all further class changes.
-         */
-        this.emit("classified", element);
-        return element;
     },
     set_style: function (name, value) {
         set_style(this.getStyleTarget(), name, value);
@@ -483,68 +473,6 @@ export const Widget = define_class({
     get_style: function (name) {
         return get_style(this.getStyleTarget(), name);
     },
-    stylize: function (element) {
-        // Marks a DOM element as receiver for the "styles" options
-        this.__stylized = element;
-        if (this.options.styles) {
-            set_styles(element, this.options.styles);
-        }
-        /**
-         * Is fired when a widget is stylized.
-         * 
-         * @event Widget#stylized
-         * 
-         * @param {HTMLElement} element - The element which receives all further style changes.
-         */
-        this.emit("stylized", element);
-        return element;
-    },
-    widgetize: function (element, delegate, classify, stylize) {
-        /**
-         * Set the DOM elements of this widgets. This method is usually only used internally.
-         * Basically it means to add the id from options and set a basic CSS class.
-         * If delegate is true, basic events will be delegated from the element to the widget instance
-         * if classify is true, CSS functions will be bound to the widget instance.
-         *
-         * @method Widget#widgetize
-         * @emits Widget#widgetize
-         */
-        var O = this.options;
-        
-        // classify?
-        add_class(element, "aux-widget");
-        if (typeof O.id !== "string") {
-            O.id = element.getAttribute("id");
-            if (!O.id) {
-                O.id = unique_id()
-                element.setAttribute("id", O.id);
-            }
-        } else element.setAttribute("id", O.id);
-
-        if (O.class) {
-            var c = O.class.split(" ");
-            for (var i = 0; i < c.length; i++)
-                add_class(element, c[i]);
-        }
-        if (O.container)
-            O.container.appendChild(element);
-        if (delegate)
-            this.delegate(element);
-        if (classify)
-            this.classify(element);
-        if (stylize)
-            this.stylize(element);
-        /**
-         * Is fired when a widget is widgetized.
-         * 
-         * @event Widget#widgetize
-         * 
-         * @param {HTMLElement} element - The element which got widgetized.
-         */
-        this.emit("widgetized", element);
-        return element;
-    },
-    
     // GETTER & SETTER
     /**
      * Sets an option.
@@ -557,10 +485,6 @@ export const Widget = define_class({
     set: function (key, value) {
         /* These options are special and need to be handled immediately, in order
          * to preserve correct ordering */
-        if (key === "class" && this.__classified) {
-            if (this.options.class) remove_class(this.__classified, this.options.class);
-            if (value) add_class(this.__classified, value);
-        }
         if (this._options[key]) {
             this.invalid[key] = true;
             if (this.value_time && this.value_time[key])

@@ -180,7 +180,6 @@ export const ColorPicker = define_class({
         /** @member {HTMLDivElement} ColorPicker#element - The main DIV container.
          * Has class <code>.aux-colorpicker</code>.
          */
-        add_class(E, "aux-colorpicker");
         
         /**
          * @member {Range} ColorPicker#range_x - The {@link Range} for the x axis. 
@@ -235,6 +234,12 @@ export const ColorPicker = define_class({
         var rect = this._canvas.getBoundingClientRect();
         this.range_x.set("basis", rect.width);
         this.range_y.set("basis", rect.height);
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-colorpicker");
+
+      Container.prototype.draw.call(this, O, element);
     },
     redraw: function () {
         Container.prototype.redraw.call(this);

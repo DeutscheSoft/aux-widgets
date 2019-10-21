@@ -403,7 +403,6 @@ export const Circular = define_class({
          *      Has class <code>.aux-circular</code> 
          */
         this.element = E = make_svg("g", {"class": "aux-circular"});
-        this.widgetize(E, true, true, true);
         
         /**
          * @member {SVGPath} Circular#_base - The base of the ring.

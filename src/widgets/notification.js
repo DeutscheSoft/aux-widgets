@@ -96,9 +96,14 @@ export const Notification = define_class({
      * @member {HTMLDivElement} Notification#element - The main DIV container.
      *   Has class <code>.aux-notification</code>.
      */
-    add_class(this.element, "aux-notification");
     this._timeout = void(0);
     this.set("timeout", O.timeout);
+  },
+  draw: function(O, element)
+  {
+    add_class(element, "aux-notification");
+
+    Container.prototype.draw.call(this, O, element);
   },
   redraw: function () {
     var I = this.invalid;

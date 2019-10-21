@@ -32,7 +32,13 @@ export const ListItem = define_class({
     Extends: Container,
     
     initialize: function (options) {
-        this.element = element("li", "aux-listitem");
+        this.element = element("li");
         Container.prototype.initialize.call(this, options);
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-listitem");
+
+      Widget.prototype.draw.call(this, O, element);
     },
 });

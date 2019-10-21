@@ -217,7 +217,6 @@ export const Expander = define_class({
          * @member {HTMLDivElement} Expander#element - The main DIV container.
          *   Has class <code>.aux-expander</code>.
          */
-        add_class(this.element, "aux-expander");
 
         this._update_visibility = update_visibility.bind(this);
 
@@ -226,6 +225,12 @@ export const Expander = define_class({
         this.set("expanded", this.options.expanded);
         this.set("always_expanded", this.options.always_expanded);
         
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-expander");
+
+      Container.prototype.draw.call(this, O, element);
     },
     add_child: function(child) {
         Container.prototype.add_child.call(this, child);

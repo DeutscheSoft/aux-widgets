@@ -132,7 +132,6 @@ export const FrequencyResponse = define_class({
          * @member {HTMLDivElement} FrequencyResponse#element - The main DIV container.
          *   Has class <code>.aux-frequencyresponse</code>.
          */
-        add_class(this.element, "aux-frequencyresponse");
         /** 
          * @member {SVGGroup} Chart#_handles - The SVG group containing all handles.
          *      Has class <code>.aux-responsehandles</code>.
@@ -147,6 +146,12 @@ export const FrequencyResponse = define_class({
                 this.options.scale = value;
         }.bind(this));
         if (this.options.depth) this.set("depth", this.options.depth);
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-frequencyresponse");
+
+      Chart.prototype.draw.call(this, O, element);
     },
 
     redraw: function() {

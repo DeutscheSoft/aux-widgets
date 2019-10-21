@@ -56,7 +56,6 @@ export const Tagger = define_class({
     },
     initialize: function (options) {
         Dialog.prototype.initialize.call(this, options);
-        add_class(this.element, "aux-tagger");
         
         Taggable.prototype.initialize.call(this);
         this.append_child(this.tags);
@@ -67,6 +66,12 @@ export const Tagger = define_class({
     destroy: function (options) {
         Taggable.prototype.destroy.call(this);
         Dialog.prototype.destroy.call(this);
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-tagger");
+
+      Dialog.prototype.draw.call(this, O, element);
     },
     redraw: function () {
         Dialog.prototype.redraw.call(this);
@@ -82,14 +87,14 @@ export const Tagger = define_class({
                     this._input.placeholder = "New tag";
                     this.element.appendChild(this._input);
                 }
-                this.add.set("container", this.element);
+                this.element.appendChild(this.add.element);
                 add_class(this.element, "aux-has-input");
             } else if (!O.add) {
                 if (this._input) {
                     this.element.removeChild(this._input);
                     this._input = null;
                 }
-                this.add.set("container", false);
+                this.add.element.remove();
                 remove_class(this.element, "aux-has-input");
             }
         }

@@ -57,7 +57,6 @@ export const TreeItem = define_class({
         this.flex = new Container({"class":"aux-flex"});
         
         ListItem.prototype.initialize.call(this, options);
-        add_class(this.element, "aux-treeitem");
         
         ListItem.prototype.append_child.call(this, this.flex);
         ListItem.prototype.add_child.call(this, this.list);
@@ -98,6 +97,12 @@ export const TreeItem = define_class({
         }
         this.invalid._list = true;
         this.trigger_resize();
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-treeitem");
+
+      ListItem.prototype.draw.call(this, O, element);
     },
     redraw: function () {
         ListItem.prototype.redraw.call(this);

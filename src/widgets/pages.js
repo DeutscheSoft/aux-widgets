@@ -114,13 +114,18 @@ export const Pages = define_class({
          *
          * @member Pages#element
          */
-        add_class(this.element, "aux-pages");
     },
     
     initialized: function () {
         Container.prototype.initialized.call(this);
         this.add_pages(this.options.pages);
         this.set("show", this.options.show);
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-pages");
+
+      Container.prototype.draw.call(this, O, element);
     },
     
     redraw: function () {
@@ -211,7 +216,7 @@ export const Pages = define_class({
         }
         
         p.add_class("aux-page");
-        p.set("container", this.element);
+        this.element.appendChild(p.element);
 
         var len = this.pages.length;
 

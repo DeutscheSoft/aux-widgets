@@ -102,7 +102,6 @@ export const Pager = define_class({
          *
          * @member Pager#element
          */
-        add_class(this.element, "aux-pager");
     },
     
     initialized: function () {
@@ -110,6 +109,12 @@ export const Pager = define_class({
         this.add_pages(this.options.pages);
         this.set("position", this.options.position);
         this.set("show", this.options.show);
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-pager");
+
+      Container.prototype.draw.call(this, O, element);
     },
     
     redraw: function () {

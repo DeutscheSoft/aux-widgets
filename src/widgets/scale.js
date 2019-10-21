@@ -424,8 +424,12 @@ export const Scale = define_class({
          * @member {HTMLDivElement} Scale#element - The main DIV element. Has class <code>.aux-scale</code> 
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "aux-scale");
-        this.element = this.widgetize(E, true, true, true);
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-scale");
+
+      Widget.prototype.draw.call(this, O, element);
     },
 
     redraw: function () {

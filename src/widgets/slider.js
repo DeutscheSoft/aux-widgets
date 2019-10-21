@@ -128,8 +128,6 @@ export const Slider = define_class({
          *   Has class <code>.aux-slider</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "aux-slider");
-        this.widgetize(E, true, true, true);
         /**
          * @member {DragValue} Knob#drag - Instance of {@link DragValue} used for
          *   interaction.
@@ -158,6 +156,13 @@ export const Slider = define_class({
         this.drag.destroy();
         this.scroll.destroy();
         Widget.prototype.destroy.call(this);
+    },
+
+    draw: function(O, element)
+    {
+      add_class(element, "aux-slider");
+
+      Widget.prototype.draw.call(this, O, element);
     },
 
     redraw: function() {

@@ -54,7 +54,12 @@ export const ColorPickerDialog = define_class({
         /** @member {HTMLDivElement} ColorPickerDialog#element - The main DIV container.
          * Has class <code>.aux-colorpickerdialog</code>.
          */
-        add_class(this.element, "aux-colorpickerdialog");
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-colorpickerdialog");
+
+      Dialog.prototype.draw.call(this, O, element);
     },
 });
     

@@ -111,7 +111,6 @@ export const Knob = define_class({
          *   Has class <code>.aux-knob</code>.
          */
         if (!(E = this.element)) this.element = E = element("div")
-        add_class(E, "aux-knob");
 
         /**
          * @member {SVGImage} Knob#svg - The main SVG image.
@@ -127,8 +126,6 @@ export const Knob = define_class({
          */
         this.circular = new Circular(co);
 
-        this.widgetize(E, true, true, true);
-        
         /**
          * @member {DragValue} Knob#drag - Instance of {@link DragValue} used for the
          *   interaction.
@@ -160,6 +157,13 @@ export const Knob = define_class({
 
     get_range: function() {
         return this.circular;
+    },
+
+    draw: function(O, element)
+    {
+      add_class(element, "aux-knob");
+
+      Widget.prototype.draw.call(this, O, element);
     },
     
     destroy: function () {

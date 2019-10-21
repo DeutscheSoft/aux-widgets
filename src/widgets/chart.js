@@ -395,8 +395,6 @@ export const Chart = define_class({
          *   Has class <code>.aux-chart</code>.
          */
         if (!(E = this.element)) this.element = E = element("div");
-        add_class(E, "aux-chart");
-        this.widgetize(E, true, true, true);
         
         this.svg = S = make_svg("svg");
 
@@ -424,6 +422,12 @@ export const Chart = define_class({
         this.svg.appendChild(this._handles);
         this.svg.onselectstart = function () { return false; };
         this.add_handles(this.options.handles);
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-chart");
+
+      Widget.prototype.draw.call(this, O, element);
     },
     resize: function () {
         var E = this.element;
@@ -535,7 +539,7 @@ export const Chart = define_class({
             g = new Graph(options);
         }
 
-        g.set("container", this._graphs);
+        this._graphs.appendChild(g.element);
         if (!g.options.range_x) g.set("range_x", this.range_x);
         if (!g.options.range_y) g.set("range_y", this.range_y);
 

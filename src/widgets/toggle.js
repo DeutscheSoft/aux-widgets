@@ -197,10 +197,15 @@ export const Toggle = define_class({
          * @member {HTMLDivElement} Toggle#element - The main DIV container.
          *   Has class <code>.aux-toggle</code>.
          */
-        add_class(this.element, "aux-toggle");
         this.__press_start_time = 0;
         this.__touch_id = false;
         this.__delayed_to = -1;
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-toggle");
+
+      Button.prototype.draw.call(this, O, element);
     },
     
     redraw: function () {

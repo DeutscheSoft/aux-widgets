@@ -208,8 +208,7 @@ export const Grid = define_class({
         /**
          * @member {SVGGroup} Grid#element - The main SVG group containing all grid elements. Has class <code>.aux-grid</code>.
          */
-        this.element = this.widgetize(
-                       make_svg("g", {"class": "aux-grid"}), true, true, true);
+        this.element = make_svg("g");
         /**
          * @member {Range} Grid#range_x - The range for the x axis. 
          */
@@ -229,6 +228,12 @@ export const Grid = define_class({
         }.bind(this);
         this.range_x.on("set", this.invalidate_ranges);
         this.range_y.on("set", this.invalidate_ranges);
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-grid");
+
+      Widget.prototype.draw.call(this, O, element);
     },
     
     redraw: function () {

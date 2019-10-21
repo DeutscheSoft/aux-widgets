@@ -36,7 +36,12 @@ export const SortableListItem = define_class({
     },
     initialize: function (options) {
         ListItem.prototype.initialize.call(this, options);
-        add_class(this.element, "aux-sortablelistitem");
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-sortablelistitem");
+
+      ListItem.prototype.draw.call(this, O, element);
     },
     redraw: function () {
         ListItem.prototype.redraw.call(this);

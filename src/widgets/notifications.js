@@ -48,7 +48,12 @@ export const Notifications = define_class({
     
     initialize: function (options) {
         Container.prototype.initialize.call(this, options);
-        add_class(this.element, "aux-notifications");
+    },
+    draw: function(O, element)
+    {
+      add_class(element, "aux-notifications");
+
+      Container.prototype.draw.call(this, O, element);
     },
     
     notify: function (options) {

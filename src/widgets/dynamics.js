@@ -121,7 +121,6 @@ export const Dynamics = define_class({
          * @member {HTMLDivElement} Dynamics#element - The main DIV container.
          *   Has class <code>.aux-dynamics</code>.
          */
-        add_class(this.element, "aux-dynamics");
         this.set("scale", O.scale);
         if (O.size) this.set("size", O.size);
         this.set("min", O.min);
@@ -148,6 +147,13 @@ export const Dynamics = define_class({
         this.set("handle_label", this.options.handle_label);
         this.set("ratio", this.options.ratio);
         this.set("threshold", this.options.threshold);
+    },
+
+    draw: function(O, element)
+    {
+      add_class(element, "aux-dynamics");
+
+      Chart.prototype.draw.call(this, O, element);
     },
     
     redraw: function () {
