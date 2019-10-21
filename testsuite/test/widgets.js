@@ -82,11 +82,12 @@ const widgets = [
 ];
 
 describe('Widgets', () => {
-  widgets.map((w) => {
-    it('create '+ w.prototype._class, (done) => {
-       new w();
-       done();
+  it('creating Widgets', (done) => {
+    widgets.map((w) => {
+       const widget = new w();
+       widget.destroy();
     });
+    done();
   });
 });
 
