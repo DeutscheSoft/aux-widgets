@@ -258,15 +258,17 @@ export const Navigation = define_class({
         }
         I.resized = false;
     },
-    /* TODO: The following three members could be formalized by API in define_child_widget */
-    add_button: function (button, position) {
-        return this.buttons.add_button(button, position);
+    add_button: function (...arg) {
+        return this.buttons.add_button(...arg);
     },
-    add_buttons: function (buttons) {
-        return this.buttons.add_buttons(buttons);
+    add_buttons: function (...arg) {
+        return this.buttons.add_buttons(...arg);
     },
-    remove_button: function (button, destroy) {
-        return this.buttons.remove_button(button, destroy);
+    remove_button: function (...arg) {
+        return this.buttons.remove_button(...arg);
+    },
+    empty: function (...arg) {
+        return this.buttons.empty(...arg);
     },
 });
 /**
