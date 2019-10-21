@@ -502,7 +502,8 @@ export const Chart = define_class({
         Widget.prototype.destroy.call(this);
     },
     add_child: function(child) {
-        Widget.prototype.add_child.call(this, child);
+        if (!(child instanceof ResponseHandle) || this.options.show_handles)
+          Widget.prototype.add_child.call(this, child);
 
         if (child instanceof Graph)
         {
@@ -511,6 +512,7 @@ export const Chart = define_class({
           g.set("range_y", this.range_y);
 
           this.graphs.push(g);
+          this._graphs.appendChild(g.element);
           g.on("set", function (key, value, obj) {
               if (key === "color" || key === "class" || key === "key") {
                   this.invalid.graphs = true;
@@ -530,6 +532,23 @@ export const Chart = define_class({
 
           this.invalid.graphs = true;
           this.trigger_draw();
+        }
+        else if (child instanceof ResponseHandle)
+        {
+          child.set('intersect', this.intersect.bind(this));
+          child.set('range_x', () => this.range_x);
+          child.set('range_y', () => this.range_y);
+          child.set('range_z', () => this.range_z);
+          this.handles.push(child);
+          this._handles.appendChild(child.element);
+          /**
+           * Is fired when a new handle was added.
+           * 
+           * @param {ResponseHandle} handle - The {@link ResponseHandle} which was added.
+           * 
+           * @event Chart#handleadded
+           */
+          this.emit("handleadded", child);
         }
     },
     remove_child: function(child) {
@@ -554,6 +573,25 @@ export const Chart = define_class({
             child.element.remove();
             this.invalid.graphs = true;
             this.trigger_draw();
+          }
+        }
+        else if (child instanceof ResponseHandle)
+        {
+          const H = this.handles;
+          const i = H.indexOf(child);
+
+          if (i !== -1)
+          {
+            this.handles.splice(i, 1);
+            /**
+             * Is fired when a handle was removed.
+             * 
+             * @event Chart#handleremoved
+             */
+            this.emit("handleremoved");
+
+            if (this.options.show_handles)
+              return;
           }
         }
 
@@ -581,7 +619,6 @@ export const Chart = define_class({
             g = new Graph(options);
         }
 
-        this._graphs.appendChild(g.element);
         this.add_child(g);
 
         return g;
@@ -632,35 +669,15 @@ export const Chart = define_class({
         if (options instanceof ResponseHandle)
         {
           handle = options;
-          handle.set('intersect', this.intersect.bind(this));
-          handle.set('range_x', () => this.range_x);
-          handle.set('range_y', () => this.range_y);
-          handle.set('range_z', () => this.range_z);
         }
         else
         {
           type = type || ResponseHandle;
-          options = Object.assign(options, {
-            intersect: this.intersect.bind(this),
-            range_x: () => this.range_x,
-            range_y: () => this.range_y,
-            range_z: () => this.range_z,
-          });
           handle = new type(options);
         }
+
+        this.add_child(handle);
         
-        this.handles.push(handle);
-        this._handles.appendChild(handle.element);
-        if (this.options.show_handles)
-            this.add_child(handle);
-        /**
-         * Is fired when a new handle was added.
-         * 
-         * @param {ResponseHandle} handle - The {@link ResponseHandle} which was added.
-         * 
-         * @event Chart#handleadded
-         */
-        this.emit("handleadded", handle);
         return handle;
     },
     /**
@@ -686,22 +703,7 @@ export const Chart = define_class({
      * @emits Chart#handleremoved
      */
     remove_handle: function (handle) {
-        // remove a handle from the widget.
-        for (var i = 0; i < this.handles.length; i++) {
-            if (this.handles[i] === handle) {
-                if (this.options.show_handles)
-                    this.remove_child(handle);
-                this.handles[i].destroy();
-                this.handles.splice(i, 1);
-                /**
-                 * Is fired when a handle was removed.
-                 * 
-                 * @event Chart#handleremoved
-                 */
-                this.emit("handleremoved");
-                break;
-            }
-        }
+        this.remove_child(handle);
     },
     /**
      * Remove multiple or all {@link ResponseHandle} from the widget.

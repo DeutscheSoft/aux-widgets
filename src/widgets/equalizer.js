@@ -111,18 +111,6 @@ function invalidate_bands() {
     this.invalid.bands = true;
     this.trigger_draw();
 }
-function show_bands() {
-    var b = this.bands;
-    for (var i = 0; i < b.length; i ++) {
-        this.add_child(b[i]);
-    }
-}
-function hide_bands() {
-    var b = this.bands;
-    for (var i = 0; i < b.length; i ++) {
-        this.remove_child(b[i]);
-    }
-}
 export const Equalizer = define_class({
     /**
      * Equalizer is a {@link FrequencyResponse}, utilizing {@link EqBand}s instead of
@@ -164,7 +152,7 @@ export const Equalizer = define_class({
             this.add_bands(value);
         },
         set_show_bands: function(value) {
-            (value ? show_bands : hide_bands).call(this);
+          this.set('show_handles', value);
         },
     },
     
@@ -202,7 +190,7 @@ export const Equalizer = define_class({
     },
     
     destroy: function () {
-        this.empty(); // Arne: ??? <- Markus: removes all graphs, defined in Chart
+        this.empty();
         this._bands.remove();
         FrequencyResponse.prototype.destroy.call(this);
     },
@@ -227,15 +215,6 @@ export const Equalizer = define_class({
                 draw_graph.call(this, this.baseline, f);
             }
         }
-
-        if (I.show_bands) {
-            I.show_bands = false;
-            if (O.show_bands) {
-                this._bands.style.removeProperty("display");
-            } else {
-                this._bands.style.display = "none";
-            }
-        }
     },
     resize: function () {
         invalidate_bands.call(this);
@@ -252,31 +231,13 @@ export const Equalizer = define_class({
      * 
      * @emits Equalizer#bandadded
      */
-    add_band: function (options, type) {
-        var b;
-        type = type || EqBand;
-        if (type.prototype.isPrototypeOf(options)) {
-          b = options;
-          b.set('range_x', this.range_x);
-          b.set('range_y', this.range_y);
-          b.set('range_z', this.range_z);
-          b.set('intersect', this.intersect.bind(this));
-          this._bands.appendChild(b.element);
-        } else {
-          if (options.range_x === void(0))
-              options.range_x = this.range_x;
-          if (options.range_y === void(0))
-              options.range_y = this.range_y;
-          if (options.range_z === void(0))
-              options.range_z = this.range_z;
-          options.intersect = this.intersect.bind(this);
+    add_child: function(child)
+    {
+      FrequencyResponse.prototype.add_child.call(this, child);
 
-          b = new type(options);
-          this._bands.appendChild(b.element);
-        }
-        
-        this.bands.push(b);
-        b.on("set", invalidate_bands.bind(this));
+      if (child instanceof EqBand)
+      {
+        child.on("set", invalidate_bands.bind(this));
         /**
          * Is fired when a new band was added.
          * 
@@ -284,10 +245,39 @@ export const Equalizer = define_class({
          * 
          * @param {EqBand} band - The {@link EqBand} which was added.
          */
-        this.emit("bandadded", b);
-        if (this.options.show_bands)
-            this.add_child(b);
+        this.emit("bandadded", child);
         invalidate_bands.call(this);
+      }
+    },
+    remove_child: function(child) {
+      if (child instanceof EqBand)
+      {
+        /**
+         * Is fired when a band was removed.
+         * 
+         * @event Equalizer#bandremoved
+         * 
+         * @param {EqBand} band - The {@link EqBand} which was removed.
+         */
+        this.emit("bandremoved", h);
+        invalidate_bands.call(this);
+      }
+
+      FrequencyResponse.prototype.remove_child.call(this, child);
+    },
+    add_band: function (options, type) {
+        let b;
+
+        if (options instanceof EqBand)
+        {
+          b = options;
+        } else {
+          type = type || EqBand;
+          b = new type(options);
+        }
+
+        this.add_child(b);
+        
         return b;
     },
     /**
@@ -313,24 +303,7 @@ export const Equalizer = define_class({
      * @emits Equalizer#bandremoved
      */
     remove_band: function (h) {
-        for (var i = 0; i < this.bands.length; i++) {
-            if (this.bands[i] === h) {
-                if (this.options.show_bands)
-                    this.remove_child(h);
-                
-                this.bands.splice(i, 1);
-                /**
-                 * Is fired when a band was removed.
-                 * 
-                 * @event Equalizer#bandremoved
-                 * 
-                 * @param {EqBand} band - The {@link EqBand} which was removed.
-                 */
-                this.emit("bandremoved", h);
-                invalidate_bands.call(this);
-                break;
-            }
-        }
+        this.remove_child(h);
     },
     /**
      * Remove multiple {@link EqBand} from the equalizer. Options is an array
@@ -340,18 +313,18 @@ export const Equalizer = define_class({
      * 
      * @param {Array<EqBand>} bands - An array of {@link EqBand} instances.
      */
-    remove_bands: function () {
-        while (this.bands.length) {
-            this.remove_band(this.bands[0]);
-        }
-        this.bands = [];
+    remove_bands: function (bands) {
+        if (!bands) bands = this.bands.slice(0);
+
+        for (let i = 0; i < bands.length; i++)
+          this.remove_band(bands[i]);
         /**
          * Is fired when all bands are removed.
          * 
          * @event Equalizer#emptied
          */
-        this.emit("emptied");
-        invalidate_bands.call(this);
+        if (!bands)
+          this.emit("emptied");
     },
     _draw_graph: draw_graph,
 });
