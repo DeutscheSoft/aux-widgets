@@ -830,19 +830,19 @@ pre, code {
 .aux-pager.aux-vertical {
     flex-direction: column;
 }
-.aux-pager > .aux-clip {
+.aux-pager > .aux-pages {
     flex: 1 1 100%;
     position: relative;
 }
-.aux-pager.aux-left > .aux-clip,
-.aux-pager.aux-top > .aux-clip {
+.aux-pager.aux-left > .aux-pages,
+.aux-pager.aux-top > .aux-pages {
     order: 2;
 }
-.aux-pager.aux-right > .aux-clip,
-.aux-pager.aux-bottom > .aux-clip {
+.aux-pager.aux-right > .aux-pages,
+.aux-pager.aux-bottom > .aux-pages {
     order: 1;
 }
-.aux-pager > .aux-clip > .aux-page {
+.aux-pager > .aux-pages > .aux-page {
     position: absolute;
     top: 0;
     left: 0;
