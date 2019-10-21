@@ -310,9 +310,8 @@ export const Buttons = define_class({
      * @method Buttons#empty
      */
     empty: function () {
-        for (var i = 0; i < this.buttons.length; i++) {
-            this.remove_button(this.buttons[i]);
-        }
+        while (this.buttons.length)
+            this.remove_button(0, true);
     },
     
     destroy: function () {
