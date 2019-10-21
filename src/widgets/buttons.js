@@ -304,6 +304,17 @@ export const Buttons = define_class({
             b.destroy();
     },
     
+    /**
+     * Removes all buttons.
+     * 
+     * @method Buttons#empty
+     */
+    empty: function () {
+        for (var i = 0; i < this.buttons.length; i++) {
+            this.remove_button(this.buttons[i]);
+        }
+    },
+    
     destroy: function () {
         for (var i = 0; i < this.buttons.length; i++)
             this.buttons[i].destroy();
