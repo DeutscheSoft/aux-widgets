@@ -131,6 +131,11 @@ function has_event_listeners(event) {
  * @class Base
  */
 export const Base = define_class({
+    constructor: function(...args)
+    {
+      this.initialize(...args);
+      this.initialized();
+    },
     initialize : function(options) {
         this.__events = {};
         this.__event_target = null;

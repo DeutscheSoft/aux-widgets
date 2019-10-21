@@ -186,14 +186,13 @@ function mixin(dst, src) {
 };
 
 export function define_class(o) {
-    var constructor;
     var methods;
     var tmp, i, c;
 
-    if ((tmp = o.Extends)) {
-        if (typeof(tmp) === "function") {
-            tmp = tmp.prototype;
-        }
+    const Extends = o.Extends;
+
+    if (Extends) {
+        const tmp = Extends.prototype;
         if (typeof(o.options) === "object" &&
             typeof(tmp.options) === "object") {
             o.options = Object.assign(Object.create(tmp.options), o.options);
@@ -232,15 +231,11 @@ export function define_class(o) {
         }
     }
 
-    var init = methods.initialize;
-    var post_init = methods.initialized;
-
-    if (post_init) {
-        constructor = function() {
-            init.apply(this, arguments);
-            post_init.call(this);
-        };
-    } else constructor = init || (function() {});
+    const constructor = o.hasOwnProperty('constructor')
+        ? methods.constructor
+        : Extends
+          ? function (...args) { Extends.call(this, ...args); }
+          : function () { };
 
     constructor.prototype = methods;
     methods.constructor = constructor;
