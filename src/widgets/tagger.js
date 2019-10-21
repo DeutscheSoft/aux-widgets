@@ -64,7 +64,6 @@ export const Tagger = define_class({
         this.set("add", this.options.add);
     },
     destroy: function (options) {
-        Taggable.prototype.destroy.call(this);
         Dialog.prototype.destroy.call(this);
     },
     draw: function(O, element)
