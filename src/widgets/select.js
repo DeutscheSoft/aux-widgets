@@ -152,7 +152,7 @@ export const Select = define_class({
     },
     static_events: {
         click: function(e) { this.set("show_list", !this.options.show_list); },
-        "set_show_list": function (v) {this.set("icon", (v ? "arrowup" : "arrowdown"));},
+        set_show_list: function (v) {this.set("icon", (v ? "arrowup" : "arrowdown"));},
     },
     initialize: function (options)  {
         this.__open = false;
