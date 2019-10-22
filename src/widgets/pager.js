@@ -87,6 +87,7 @@ export const Pager = define_class({
                 badir = "vertical";
             }
             this.navigation.set("direction", badir);
+            this.pages.set("animation", badir);
         },
         set_pages: function(value) {
             this.navigation.empty();
