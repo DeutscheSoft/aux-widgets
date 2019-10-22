@@ -129,7 +129,7 @@ export const Dialog = define_class({
           deactivate_autoclose.call(this);
           if (O.toplevel && O.container.tagName !== "AWML-ROOT" && O.container.tagName !== "BODY") {
             var p = this.element;
-            while ((p = p.parentElement) && p.tagName !== "AWML-ROOT" && p.tagName !== "BODY") {};
+            while ((p = p.parentElement) && p.tagName !== "AWML-ROOT" && p.tagName !== "BODY");
             this.element.appendChild(p.element);
           }
           this.show();
@@ -149,9 +149,9 @@ export const Dialog = define_class({
         this._autoclose_cb = autoclose_cb.bind(this);
         this.set('visible', O.visible);
         if (O.visible)
-          this.force_show()
+          this.force_show();
         else
-          this.force_hide()
+          this.force_hide();
     },
     resize: function() {
         if (this.options.visible)
@@ -170,11 +170,11 @@ export const Dialog = define_class({
         var E = this.element;
         if (I.x) {
             I.x = false;
-            E.style.left = O.x + "px"
+            E.style.left = O.x + "px";
         }
         if (I.y) {
             I.y = false;
-            E.style.top  = O.y + "px"
+            E.style.top  = O.y + "px";
         }
         if (I.anchor) {
             var pos = translate_anchor(O.anchor, 0, 0, -100, -100);

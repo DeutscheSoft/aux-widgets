@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-import { add_class, remove_class } from './../utils/dom.js';
+import { add_class } from './../utils/dom.js';
 import { define_class } from './../widget_helpers.js';
 import { Button } from './button.js';
 
@@ -37,7 +37,7 @@ function press_start() {
     this.__press_start_time = Date.now();
     if (O.delay && this.__delayed_to < 0) {
         this.__delayed_to = window.setTimeout((function (t) {
-            return function () { press_start.call(t); }
+            return function () { press_start.call(t); };
         })(this), O.delay);
         this.add_class("aux-delayed");
         return;
@@ -137,10 +137,6 @@ function contextmenu(e) {
     e.preventDefault();
     e.stopPropagation();
     return false;
-}
-var class_regex = /[^A-Za-z0-9_\-]/;
-function is_class_name (str) {
-    return !class_regex.test(str);
 }
 
 export const Toggle = define_class({

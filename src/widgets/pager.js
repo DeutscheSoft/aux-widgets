@@ -26,7 +26,7 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { define_class, define_child_element } from '../widget_helpers.js';
+import { define_class } from '../widget_helpers.js';
 import { define_child_widget } from '../child_widget.js';
 import { add_class, remove_class } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
@@ -195,11 +195,10 @@ export const Pager = define_class({
      * @emits Pager#added
      */
     add_page: function (button, content, options, position) {
-        var p;
         if (typeof button === "string")
             button = {label: button};
         this.navigation.add_button(button, position);
-        var p = this.pages.add_page(content, position, options);
+        const p = this.pages.add_page(content, position, options);
         this.emit("added", p);
         return p;
     },

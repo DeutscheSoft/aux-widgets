@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class } from './../widget_helpers.js';
-import { make_svg, add_class } from '../utils/dom.js';
+import { add_class } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 import { FrequencyResponse } from './frequencyresponse.js';
 import { EqBand } from './eqband.js';
@@ -69,7 +69,6 @@ function draw_graph (graph, bands) {
     var i, j, k;
     var x, y;
     var pursue;
-    var diff;
                 
     var X = new Array(end / step);
     for (i = 0; i < X.length; i++) {
@@ -77,14 +76,13 @@ function draw_graph (graph, bands) {
         c += step;
     }
     var Y = new Array(end / step);
-    var y;
     
     for (i = 0; i < X.length; i++) {
         x = x_px_to_val(X[i]);
         y = 0.0;
         for (j = 0; j < bands.length; j++) y += bands[j](x);
         Y[i] = y_val_to_px(y);
-        var diff = Math.abs(Y[i] - Y[i-1]) >= thres;
+        let diff = Math.abs(Y[i] - Y[i-1]) >= thres;
         if (i && over > 1 && (diff || pursue)) {
             if (diff) pursue = true;
             else if (!diff && pursue) pursue = false;

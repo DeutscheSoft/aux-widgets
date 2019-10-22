@@ -54,7 +54,7 @@ export const Root = define_class({
         },
         destroy: function() {
             window.removeEventListener("resize", this._resize_cb);
-            document.removeEventListener("visibilitychange", this._visibility_cb)
+            document.removeEventListener("visibilitychange", this._visibility_cb);
             this._resize_cb = this._visibility_cb = null;
         },
         redraw: function() {

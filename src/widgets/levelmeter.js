@@ -417,7 +417,6 @@ export const LevelMeter = define_class({
         var hold       = +O.top;
         var segment   = O.segment|0;
         var hold_size = O.hold_size * segment;
-        var base      = +O.base;
         var pos;
 
         if (!(hold_size > 0)) return i;
@@ -552,7 +551,7 @@ define_child_element(LevelMeter, "peak", {
                 this._peak.style.top = pos + "px";
             } else {
                 pos = this.val2px(this.snap(O.peak));
-                pos = Math.min(O.basis, pos)
+                pos = Math.min(O.basis, pos);
                 this._peak.style.left = pos + "px";
             }
         } else {

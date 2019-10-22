@@ -37,7 +37,7 @@ function auto_arrows () {
     if (!O.auto_arrows) return;
     var B = this.buttons.buttons;
     var vert = O.direction === "vertical";
-    var cons = vert ? inner_height(this.buttons.element) : inner_width(this.buttons.element)
+    var cons = vert ? inner_height(this.buttons.element) : inner_width(this.buttons.element);
     var list;
     if (B.length) {
         var lastb = B[B.length-1].element;
@@ -54,7 +54,6 @@ function auto_arrows () {
 
 function measure () {
     var B = this.buttons.buttons;
-    var O = this.options;
     var mm = {
         clip: {
             height: inner_height(this.buttons.element),
@@ -66,8 +65,8 @@ function measure () {
         },
         buttons: [],
     };
-    B.forEach(b => {
-        var e = b.element;
+    B.forEach(button => {
+        var e = button.element;
         var b = e.getBoundingClientRect();
         mm.buttons.push({
             width: b.width,
@@ -226,33 +225,33 @@ export const Navigation = define_class({
             var show = O.select;
             var M = this.measurement;
             if (show >= 0 && show < B.length) {
-                var dir  = O.direction === "vertical";
-                var subd = dir ? 'top' : 'left';
-                var subt = dir ? 'scrollTop' : 'scrollLeft';
-                var subs = dir ? 'height' : 'width';
-                var butt  = M.buttons[show];
-                var clip = M.clip[subs];
-                var list = M.list[subs];
-                var btnsize = 0;
-                var btnpos = 0;
+                const dir  = O.direction === "vertical";
+                const subd = dir ? 'top' : 'left';
+                const subt = dir ? 'scrollTop' : 'scrollLeft';
+                const subs = dir ? 'height' : 'width';
+                const butt  = M.buttons[show];
+                const clip = M.clip[subs];
+                const list = M.list[subs];
+                let btnsize = 0;
+                let btnpos = 0;
                 if (M.buttons.length) {
                     btnsize  = butt[subs];
                     btnpos   = butt[subd];
                 }
-                var pos = (Math.max(0, Math.min(list - clip, btnpos - (clip / 2 - btnsize / 2))));
-                var s = BE[subt];
+                const pos = (Math.max(0, Math.min(list - clip, btnpos - (clip / 2 - btnsize / 2))));
+                const s = BE[subt];
                 this._scroll = {to: ~~pos, from: s, dir: pos > s ? 1 : -1, diff: ~~pos - s, time: Date.now()};
                 this.invalid._scroll = true;
             }
         }
         if (this.invalid._scroll) {
-            var subt = O.direction === "vertical" ? 'scrollTop' : 'scrollLeft';
-            var s = ~~BE[subt];
-            var _s = this._scroll;
-            var now = Date.now();
-            if ((s >= _s.to && _s.dir > 0)
-             || (s <= _s.to && _s.dir < 0)
-             || now > (_s.time + O.scroll)) {
+            const subt = O.direction === "vertical" ? 'scrollTop' : 'scrollLeft';
+            const s = ~~BE[subt];
+            const _s = this._scroll;
+            const now = Date.now();
+            if ((s >= _s.to && _s.dir > 0) ||
+                (s <= _s.to && _s.dir < 0) ||
+                now > (_s.time + O.scroll)) {
                 this.invalid._scroll = false;
                 BE[subt] = _s.to;
             } else {

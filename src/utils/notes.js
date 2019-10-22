@@ -31,7 +31,7 @@ const notes = [ "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" 
  */
 export function midi2note(num) {
     return notes[num % 12] + parseInt(num / 12);
-};
+}
 /**
  * Returns a frequency of a MIDI note number.
  * 
@@ -42,7 +42,7 @@ export function midi2note(num) {
 export function midi2freq(num, base) {
     base |= 440;
     return Math.pow(2, (num - 69) / 12) * base;
-};
+}
 /**
  * Returns a MIDI note number for a frequency.
  * 
@@ -55,7 +55,7 @@ export function freq2midi(freq, base) {
     base |= 440;
     var f2 = Math.log2(freq / base);
     return Math.max(0, Math.round(12 * f2 + 69));
-};
+}
 /**
  * Returns the percents a frequency misses a real note by.
  * 
@@ -70,7 +70,7 @@ export function freq2cents(freq, base) {
     f2 *= 1200;
     f2 %= 100;
     return (f2 < -50) ? 100 + f2 : (f2 > 50) ? -(100 - f2) : f2;
-};
+}
 /**
  * Returns a note name for a frequency.
  * 

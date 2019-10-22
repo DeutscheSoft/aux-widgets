@@ -23,6 +23,7 @@ import { Label } from './label.js';
 import { Button } from './button.js';
 import { ConfirmButton } from './confirmbutton.js';
 import { rgb2bw, hex2rgb } from '../utils/colors.js';
+import { add_class } from '../utils/dom.js';
 
 export const TagNode = define_class({
   

@@ -183,7 +183,7 @@ function HighPass4(O) {
     return O;
 }
 
-var Filters = {
+const Filters = {
     Null: Null,
     LowShelf:  LowShelf,
     HighShelf: HighShelf,
@@ -213,7 +213,7 @@ var standard_biquads = {
     highpass4:    BiquadFilter(HighPass4),
 };
 
-var NullModule = { freq2gain: function(f) { return 0.0; } };
+var NullModule = { freq2gain: function() { return 0.0; } };
 
 function BilinearModule(w, O) {
     var log = Math.log;
@@ -230,7 +230,7 @@ function BilinearModule(w, O) {
 
     function freq2gain(f) {
         f = +f;
-        var S = +sin(PI * f)
+        var S = +sin(PI * f);
         S *= S;
         return LN10_10 * log( (Rb - S * Yb) /
                               (Ra - S * Ya) );
@@ -256,7 +256,7 @@ function BiquadModule(w, O) {
 
     function freq2gain(f) {
         f = +f;
-        var S = +sin(PI * f)
+        var S = +sin(PI * f);
         S *= S;
         return LN10_10 * log( (Rb - S * (Xb * (1 - S) + Yb)) /
                               (Ra - S * (Xa * (1 - S) + Ya)) );

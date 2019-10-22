@@ -62,9 +62,9 @@ function movecapture_int(O, range, state) {
     }
 
     dist *= multi;
-    var v = this.start_pos + dist;
+    let start_pos = this.start_pos + dist;
 
-    var nval = range.px2val(v);
+    var nval = range.px2val(start_pos);
     if (O.limit)
         O.set.call(this, Math.min(RO.max, Math.max(RO.min, nval)));
     else
@@ -72,12 +72,12 @@ function movecapture_int(O, range, state) {
 
     if (!(nval > RO.min) || !(nval < RO.max)) return;
 
-    this.start_pos = v;
+    this.start_pos = start_pos;
 }
 
 function movecapture_abs(O, range, state) {
     var dist;
-    var RO = range.options
+    var RO = range.options;
     switch(O.direction) {
     case "vertical":
         dist = -state.vdistance()[1];
@@ -115,7 +115,7 @@ function movecapture(state) {
 
     if (O.active === false) return false;
 
-    var state = this.drag_state;
+    state = this.drag_state;
     var range = O.range.call(this);
 
     if (O.direction === "polar") {
@@ -134,11 +134,6 @@ function stop_drag(state, ev) {
     if (O.events) O.events.call(this).emit("stopdrag", ev);
 }
 
-function angle_diff(a, b) {
-    // returns an unsigned difference between two angles
-    var d = (Math.abs(a - b) + 360) % 360;
-    return d > 180 ? 360 - d : d;
-}
 export const DragValue = define_class({
     /**
      * DragValue enables dragging an element and setting a
@@ -247,7 +242,7 @@ export const DragValue = define_class({
             this.set("_cutoff", Math.cos(v));
         },
         movecapture: movecapture,
-        startdrag: function(ev) {
+        startdrag: function() {
             S.add(function() {
                 var O = this.options;
                 add_class(O.classes || O.node, "aux-dragging");

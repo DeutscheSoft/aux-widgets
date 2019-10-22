@@ -25,7 +25,7 @@ import { add_class } from '../utils/dom.js';
 
 /* TODO */
 
-var build_dragcapture = function () {
+function build_dragcapture() {
     this.dragcapture = new DragCapture(this, {
         state: true,
         onstartcapture: function (state) {
@@ -60,7 +60,7 @@ export const SortableList = define_class({
     },
     add_item: function (item, pos) {
         var O = this.options;
-        var item = List.prototype.add_item.call(this, item, pos);
+        item = List.prototype.add_item.call(this, item, pos);
         item.set("sortable", O.sortable);
     },
     set: function (key, value) {

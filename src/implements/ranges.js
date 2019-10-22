@@ -61,10 +61,8 @@ export const Ranges = define_class({
         } else if (Range.prototype.isPrototypeOf(from)) {
             r = from;
         } else {
-            if (name
-            && this.options[name]
-            && typeof this.options[name] === "object")
-                from = Object.assign({}, this.options[name], from)
+            if (name && this.options[name] && typeof this.options[name] === "object")
+                from = Object.assign({}, this.options[name], from);
             r = new Range(from);
         }
         if (name) {

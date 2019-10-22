@@ -21,7 +21,7 @@ import { ListItem } from './listitem.js';
 import { Button } from './button.js';
 import { add_class } from '../utils/dom.js';
 
-var build_sorter = function () {
+function build_sorter() {
     this.sorter = new Button({"class":"aux-sorter",container:this.element});
     this.add_child(this.sorter);
 }

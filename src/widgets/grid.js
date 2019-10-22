@@ -124,10 +124,10 @@ function draw_lines(a, mode, last) {
                 if (label) m = label.m;
                 else m = 0;
 
-                if ((mode && obj.pos === this.range_y.options.min)
-                || ( mode && obj.pos === this.range_y.options.max)
-                || (!mode && obj.pos === this.range_x.options.min)
-                || (!mode && obj.pos === this.range_x.options.max))
+                if ((mode && obj.pos === this.range_y.options.min) ||
+                    ( mode && obj.pos === this.range_y.options.max) ||
+                    (!mode && obj.pos === this.range_x.options.min) ||
+                    (!mode && obj.pos === this.range_x.options.max))
                     continue;
                 var line = make_svg("path");
                 add_class(line, "aux-gridline");
@@ -136,14 +136,14 @@ function draw_lines(a, mode, last) {
                 if (obj.color) line.setAttribute("style", "stroke:" + obj.color);
                 if (mode) {
                     // line from left to right
-                    line.setAttribute("d", "M0 " + Math.round(this.range_y.val2px(obj.pos))
-                        + ".5 L"  + (this.range_x.options.basis - m) + " "
-                        + Math.round(this.range_y.val2px(obj.pos)) + ".5");
+                    line.setAttribute("d", "M0 " + Math.round(this.range_y.val2px(obj.pos)) +
+                                      ".5 L"  + (this.range_x.options.basis - m) + " " +
+                                      Math.round(this.range_y.val2px(obj.pos)) + ".5");
                 } else {
                     // line from top to bottom
-                    line.setAttribute("d", "M" + Math.round(this.range_x.val2px(obj.pos))
-                        + ".5 0 L"  + Math.round(this.range_x.val2px(obj.pos))
-                        + ".5 " + (this.range_y.options.basis - m));
+                    line.setAttribute("d", "M" + Math.round(this.range_x.val2px(obj.pos)) +
+                                      ".5 0 L"  + Math.round(this.range_x.val2px(obj.pos)) +
+                                      ".5 " + (this.range_y.options.basis - m));
                 }
                 this.element.appendChild(line);
             }

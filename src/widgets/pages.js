@@ -26,12 +26,10 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { define_class, define_child_element } from '../widget_helpers.js';
-import { define_child_widget } from '../child_widget.js';
+import { define_class } from '../widget_helpers.js';
 import { add_class, remove_class, is_dom_node } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 import { Container } from './container.js';
-import { Navigation } from './navigation.js';
  
 export const Pages = define_class({
     /**

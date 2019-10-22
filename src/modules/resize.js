@@ -17,12 +17,11 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class } from './../widget_helpers.js';
-import { add_class, remove_class } from '../utils/dom.js';
 import { Range } from './range.js';
 import { DragValue } from './dragvalue.js';
 import { Base } from '../implements/base.js';
 
-function dragstart(e, drag) {
+function dragstart(e) {
     var O = this.options;
     if (!O.active) return;
     var E = O.node;
@@ -41,7 +40,7 @@ function dragstart(e, drag) {
      */
     this.emit("resizestart", e);
 }
-function dragend(e, drag) {
+function dragend(e) {
     if (!this.options.active) return;
     /**
      * Is fired when resizing stops.
@@ -52,7 +51,7 @@ function dragend(e, drag) {
      */
     this.emit("resizestop", e);
 }
-function dragging(e, drag) {
+function dragging(e) {
     var O = this.options;
     if (!O.active) return;
     var w = this._xsize + e.pageX - this._xstart;

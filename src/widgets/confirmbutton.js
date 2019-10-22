@@ -16,11 +16,11 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-import { add_class } from "./../utils/dom.js"
-import { define_class } from "./../widget_helpers.js"
-import { Button } from "./button.js"
+import { add_class } from "./../utils/dom.js";
+import { define_class } from "./../widget_helpers.js";
+import { Button } from "./button.js";
 
-var reset = function (e) {
+function reset(e) {
   if (!this.options.state) return;
   if (e) {
     var t = e.target;
@@ -32,7 +32,7 @@ var reset = function (e) {
   state_reset.call(this);
 }
 
-var state_set = function () {
+function state_set() {
   var T = this.__temp;
   var O = this.options;
   if (O.label_confirm) {
@@ -56,7 +56,7 @@ var state_set = function () {
   this.set("state", true);
 }
 
-var state_reset = function () {
+function state_reset() {
   var T = this.__temp;
   if (T.label)
     this.set("label", T.label);
@@ -86,7 +86,7 @@ var state_reset = function () {
  * @event ConfirmButton#confirmed
  */
          
-var clicked = function (e) {
+function clicked(e) {
   var T = this.__temp;
   var O = this.options;
   if (!O.confirm) {
@@ -146,7 +146,7 @@ export const ConfirmButton = define_class({
       timeout: -1,
       reset: null,
       click: 0,
-    }
+    };
   },
 
   draw: function(O, element)

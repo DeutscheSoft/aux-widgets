@@ -265,7 +265,7 @@ var dummy = function() {};
 function get_parents(e) {
     var ret = [];
     if (Array.isArray(e)) e.map(function(e) { e = e.parentNode; if (e) ret.push(e); });
-    else if (e = e.parentNode) ret.push(e);
+    else if ((e = e.parentNode)) ret.push(e);
     return ret;
 }
 

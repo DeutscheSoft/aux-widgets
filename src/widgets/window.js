@@ -187,12 +187,12 @@ function start_drag(ev, el) {
     add_class(this.element, "aux-dragging");
     // if window is maximized, we have to replace the window according
     // to the position of the mouse
-    var x = y = 0;
+    let y = 0, x = 0;
     if (vert_max.call(this)) {
-        var y = (!this.options.fixed ? window.scrollY : 0);
+        y = (!this.options.fixed ? window.scrollY : 0);
     }
     if (horiz_max.call(this)) {
-        var x = ev.clientX - (ev.clientX / width())
+        x = ev.clientX - (ev.clientX / width())
                             * this.options.width;
         x += (!this.options.fixed ? window.scrollX : 0);
     }
@@ -355,7 +355,6 @@ function build_from_const(element) {
     var E = this[element].element;
     var L = this.options[element];
     var O = this.options;
-    var targ;
     while (E.firstChild) E.firstChild.remove();
     if (!L) return;
     for (var i = 0; i < L.length; i++) {
@@ -722,7 +721,7 @@ export const Window = define_class({
                         O.container = E.parentElement;
                     E.remove();
                 } else if (O.container) {
-                    this.set("container", O.container)
+                    this.set("container", O.container);
                 }
                 break;
             case "resizable":
@@ -779,7 +778,7 @@ define_child_widget(Window, "status", {
  * @member {Button} Window#shrink - The shrink button.
  */
 
-var bfactory = function (name) {
+function bfactory(name) {
     define_child_widget(Window, name, {
         create: Button,
         default_options: {

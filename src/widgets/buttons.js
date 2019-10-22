@@ -18,7 +18,7 @@
  */
 
 import { define_class } from './../widget_helpers.js';
-import { element, add_class, remove_class } from './../utils/dom.js';
+import { add_class, remove_class } from './../utils/dom.js';
 import { Container } from './container.js';
 import { Button } from './button.js';
 import { Warning } from '../implements/warning.js';
@@ -224,12 +224,13 @@ export const Buttons = define_class({
      */
     add_button: function (button, position) {
         var O = this.options;
+        let b;
         if (button instanceof Button) {
             b = button;
         } else {
             if (typeof button === "string")
                 button = {label: button};
-            var b = new O.button_class(button);
+            b = new O.button_class(button);
         }
         var len  = this.buttons.length;
         if (position === void(0))

@@ -106,7 +106,7 @@ export const State = define_class({
                 this.remove_class("aux-state-off");
                 this.add_class("aux-state-on");
             }
-            this._mask.style["opacity"] = "" + (1 - v);
+            this._mask.style.opacity = "" + (1 - v);
         }
     }
 });

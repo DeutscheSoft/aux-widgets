@@ -18,7 +18,7 @@
  */
 import { define_class } from '../widget_helpers.js';
 import { Container } from './container.js';
-import { element } from '../utils/dom.js';
+import { element, add_class } from '../utils/dom.js';
 
 export const List = define_class({
     /**

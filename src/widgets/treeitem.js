@@ -24,14 +24,14 @@ import { Button } from './button.js';
 import { has_class, toggle_class, add_class, get_duration } from '../utils/dom.js';
 import { S } from '../dom_scheduler.js';
 
-var toggle_collapsed = function () {
+function toggle_collapsed() {
     set_collapsed.call(this, !has_class(this.element, "aux-collapsed"));
 }
-var set_collapsed = function (c) {
+function set_collapsed(c) {
     this.set("collapsed", c);
 }
 
-var reset_size = function (state) {
+function reset_size(state) {
     if (state !== "show") return;
     //this.element.style.height = null;
 }
@@ -133,8 +133,8 @@ export const TreeItem = define_class({
             var s = this.list.element.style;
             if (O.collapsed) {
                 var h = this.list.element.offsetHeight;
-                s["height"] = h + "px";
-                window.requestAnimationFrame(function () {s["height"] = "0px";});
+                s.height = h + "px";
+                window.requestAnimationFrame(function () { s.height = "0px";});
             } else {
                 var list = this.list.element;
                 /* This is a train */
@@ -142,19 +142,19 @@ export const TreeItem = define_class({
                   var h0 = list.offsetHeight;
                   var duration = get_duration(list);
                   S.add(function() {
-                    s["height"] = "auto";
+                    s.height = "auto";
                     S.add(function() {
                       var h = list.offsetHeight;
                       S.add(function() {
-                        s["height"] = h0 + "px";
+                        s.height = h0 + "px";
                         S.add_next(function () {
-                          s["height"] = h + "px";
+                          s.height = h + "px";
 
                           setTimeout(function () {
                             s.height = null;
                           }, duration);
                         });
-                      }, 1)
+                      }, 1);
                     });
                   }, 1);
                 });

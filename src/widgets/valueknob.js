@@ -23,7 +23,6 @@ import { Knob } from './knob.js';
 import { Value } from './value.js';
 import { Label } from './label.js';
 import { add_class, element } from '../utils/dom.js';
-import { FORMAT } from '../utils/sprintf.js';
 
  /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.

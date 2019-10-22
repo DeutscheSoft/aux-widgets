@@ -10,5 +10,5 @@ export const ResponseHandleComponent = subcomponent_from_widget(ResponseHandle, 
 export const GraphComponent = subcomponent_from_widget(Graph, Chart);
 
 define_component('chart', ChartComponent);
-define_component('chart-handle', ResponseHandleComponent)
-define_component('chart-graph', GraphComponent)
+define_component('chart-handle', ResponseHandleComponent);
+define_component('chart-graph', GraphComponent);

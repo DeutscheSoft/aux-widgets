@@ -128,7 +128,7 @@ function Z_HANDLE_SIZE(pos) {
     case "right":
         return Z_HANDLE_SIZE_horiz;
     }
-};
+}
 
 function get_zhandle_size(O, X) {
     var vec = Z_HANDLE_SIZE(O.z_handle);
@@ -231,7 +231,7 @@ const LABEL_ALIGN = {
         "bottom-right":"end",
         "center" : "middle",
     }
-}
+};
 
 function get_label_align(O, pos) {
     return LABEL_ALIGN[mode_to_handle(O.mode)][pos];
@@ -288,7 +288,7 @@ const LABEL_POSITION = {
         "top-left":          [ -1, -1, 0, 0, 1, 1 ],
         center:              [ 0, 0, 0, -1/2, 0, 0 ],
     }
-}
+};
 
 function get_label_position(O, X, pos, label_size) {
     /* X: array containing [X0, Y0, X1, Y1] of the handle
@@ -661,7 +661,6 @@ function redraw_label(O, X) {
         S.add(function() {
             var label_size = [ w, bbox.height ];
 
-            var i;
             var pref = O.preferences;
             var area = 0;
             var label_position;
@@ -673,7 +672,7 @@ function redraw_label(O, X) {
              * Calculate possible positions of the labels and calculate their intersections. Choose
              * that position which has the smallest intersection area with all other handles and labels
              */
-            for (i = 0; i < pref.length; i++) {
+            for (let i = 0; i < pref.length; i++) {
 
                 /* get alignment */
                 var align = get_label_align(O, pref[i]);
@@ -705,7 +704,7 @@ function redraw_label(O, X) {
             this._label.setAttribute("y", Math.round(text_position[1]) + "px");
             this._label.setAttribute("text-anchor", text_anchor);
             var c = this._label.childNodes;
-            for (var i = 0; i < c.length; i++)
+            for (let i = 0; i < c.length; i++)
                 c[i].setAttribute("x", tmp);
 
             redraw_lines.call(this, O, X);
@@ -730,7 +729,6 @@ function redraw_lines(O, X) {
 
     var x = range_x.val2px(O.x);
     var y = range_y.val2px(O.y);
-    var z = range_z.val2px(O.z);
     switch (O.mode) {
         case "circular":
         case "block":
@@ -965,7 +963,7 @@ export const ResponseHandle = define_class({
         range_x:          {},
         range_y:          {},
         range_z:          {},
-        intersect:        function () { return { intersect: 0, count: 0 } },
+        intersect:        function () { return { intersect: 0, count: 0 }; },
         // NOTE: this is currently not a public API
         // callback function for checking intersections: function (x1, y1, x2, y2, id) {}
         // returns a value describing the amount of intersection with other handle elements.
@@ -1042,7 +1040,6 @@ export const ResponseHandle = define_class({
                 this.z_drag.cancel_drag();
             }
         },
-        set_range_x: set_range,
     },
 
     getStyleTarget: function() {

@@ -292,7 +292,7 @@ export const Select = define_class({
                 value: (typeof ent === "string") ? ent : ent.value,
                 title: (typeof ent === "string")
                        ? ent : (ent.title !== void(0))
-                       ? ent.title : ent.value.toString()
+                       ? ent.title : ent.value.toString(),
             });
         }
         this.add_child(entry);

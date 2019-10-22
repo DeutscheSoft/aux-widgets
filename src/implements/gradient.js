@@ -89,20 +89,20 @@ export const Gradient = define_class({
             var c_regular  = "%s %s%%, ";
             
             var d_w3c = {};
-            d_w3c["s"+"left"]       = "to top";
-            d_w3c["s"+"right"]      = "to top";
-            d_w3c["s"+"top"]        = "to right";
-            d_w3c["s"+"bottom"]     = "to right";
+            d_w3c.sleft       = "to top";
+            d_w3c.sright      = "to top";
+            d_w3c.stop        = "to right";
+            d_w3c.sbottom     = "to right";
             
             var keys = Object.keys(gradient);
-            for (var i = 0; i < keys.length; i++) {
+            for (let i = 0; i < keys.length; i++) {
                 keys[i] = parseFloat(keys[i]);
             }
             keys = keys.sort(this.options.reverse ?
-                function (a,b) { return b-a } : function (a,b) { return a-b });
+                function (a,b) { return b-a; } : function (a,b) { return a-b; });
             
-            for (var i = 0; i < keys.length; i++) {
-                var ps = (100*range.val2coef(range.snap(keys[i]))).toFixed(2);
+            for (let i = 0; i < keys.length; i++) {
+                const ps = (100*range.val2coef(range.snap(keys[i]))).toFixed(2);
                 m_regular += sprintf(c_regular, gradient[keys[i] + ""], ps);
             }
             m_regular = m_regular.substr(0, m_regular.length -2);

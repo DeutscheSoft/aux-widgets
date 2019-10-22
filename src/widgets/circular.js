@@ -43,7 +43,7 @@ function _get_coords(deg, inner, outer, pos) {
         y1: Math.sin(deg) * outer + pos,
         x2: Math.cos(deg) * inner + pos,
         y2: Math.sin(deg) * inner + pos
-    }
+    };
 }
 function _get_coords_single(deg, inner, pos) {
     deg = +deg;
@@ -53,7 +53,7 @@ function _get_coords_single(deg, inner, pos) {
     return {
         x: Math.cos(deg) * inner + pos,
         y: Math.sin(deg) * inner + pos
-    }
+    };
 }
 var format_path = FORMAT("M %f,%f " +
                             "A %f,%f 0 %d,%d %f,%f " +
@@ -75,12 +75,9 @@ function draw_dots() {
         var m = dots[i];
         var r = make_svg("rect", {"class": "aux-dot"});
         
-        var length = m.length === void(0)
-                   ? dot.length : m.length;
-        var width  = m.width === void(0)
-                   ? dot.width : m.width;
-        var margin = m.margin === void(0)
-                   ? dot.margin : m.margin;
+        var length = m.length === void(0) ? dot.length : m.length;
+        var width  = m.width === void(0) ? dot.width : m.width;
+        var margin = m.margin === void(0) ? dot.margin : m.margin;
         var pos    = Math.min(O.max, Math.max(O.min, m.pos));
         // TODO: consider adding them all at once
         _dots.appendChild(r);
@@ -93,9 +90,9 @@ function draw_dots() {
         r.setAttribute("width",  length);
         r.setAttribute("height", width);
         
-        r.setAttribute("transform", "rotate("
-            + (this.val2coef(this.snap(pos)) * angle) + " "
-            + (O.size / 2) + " " + (this.options.size / 2) + ")");
+        r.setAttribute("transform", "rotate(" +
+                       (this.val2coef(this.snap(pos)) * angle) + " " +
+                       (O.size / 2) + " " + (this.options.size / 2) + ")");
     }
     /**
      * Is fired when dots are (re)drawn.
@@ -105,7 +102,6 @@ function draw_dots() {
 }
 function draw_markers() {
     // depends on size, markers, marker, min, max
-    var I = this.invalid;
     var O = this.options;
     var markers = O.markers;
     var marker = O.marker;
@@ -117,10 +113,8 @@ function draw_markers() {
     
     for (var i = 0; i < markers.length; i++) {
         var m       = markers[i];
-        var thick   = m.thickness === void(0)
-                    ? marker.thickness : m.thickness;
-        var margin  = m.margin === void(0)
-                    ? marker.margin : m.margin;
+        var thick   = m.thickness === void(0) ? marker.thickness : m.thickness;
+        var margin  = m.margin === void(0) ? marker.margin : m.margin;
         var inner   = outer - thick;
         var outer_p = outer - margin - stroke / 2;
         var inner_p = inner - margin - stroke / 2;
@@ -241,8 +235,8 @@ function draw_slice(a_from, a_to, r_inner, r_outer, pos, slice) {
     if (a_to > 360) a_to   %= 360;
     // get drawing direction (sweep = clock-wise)
     let sweep;
-    if (this.options.reverse && a_to <= a_from
-    || !this.options.reverse && a_to > a_from)
+    if (this.options.reverse && a_to <= a_from ||
+        !this.options.reverse && a_to > a_from)
         sweep = 1;
     else
         sweep = 0;

@@ -38,7 +38,7 @@ export const Tags = define_class({
     },
     tag_to_string: function (tag) {
         if (typeof tag == "string") {
-            return tag
+            return tag;
         } else if (Tag.prototype.isPrototypeOf(tag)) {
             if (!tag.is_destructed()) {
               return tag.options.tag;

@@ -17,11 +17,9 @@
  * Boston, MA  02110-1301  USA
  */
 import { define_class } from './../widget_helpers.js';
-import { define_child_widget } from '../child_widget.js';
 import { Chart } from './chart.js';
-import { ResponseHandle } from './responsehandle.js';
 import { add_class, remove_class, css_space, inner_width, inner_height } from '../utils/dom.js';
-import { error, warn } from '../utils/log.js';
+import { warn } from '../utils/log.js';
 
 function range_set(value, key) {
     this.range_x.set(key, value);

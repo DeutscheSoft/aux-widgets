@@ -25,9 +25,6 @@ function keyup (e) {
     if (e.keyCode != 13) return;
     new_tag_from_input.call(this);
 }
-function addclicked (e) {
-    new_tag_from_input.call(this);
-}
 function new_tag_from_input () {
     var val = this._input.value;
     if (!val) return;
@@ -62,7 +59,7 @@ export const Tagger = define_class({
         
         this.set("add", this.options.add);
     },
-    destroy: function (options) {
+    destroy: function () {
         Dialog.prototype.destroy.call(this);
     },
     draw: function(O, element)
@@ -103,7 +100,7 @@ export const Tagger = define_class({
         t.node.label.on("click", (function (that, tag) {
             return function (e) {
                 that.emit("tagclicked", tag.tag, tag.node);
-            }
+            };
         })(this, t));
         if (this.options.visible)
           this.reposition();

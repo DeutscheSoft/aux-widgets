@@ -25,7 +25,7 @@ import { error } from '../utils/log.js';
 function range_change_cb() {
     this.invalidate_all();
     this.trigger_draw();
-};
+}
 // this is not really a rounding operation but simply adds 0.5. we do this to make sure
 // that integer pixel positions result in actual pixels, instead of being spread across
 // two pixels with half opacity
@@ -38,7 +38,6 @@ function get_px(value, range) {
 }
 
 function _start(d, s) {
-    var w = this.range_x.options.basis;
     var h = this.range_y.options.basis;
     var t = d[0].type || this.options.type;
     var m = this.options.mode;
@@ -85,13 +84,11 @@ function _start(d, s) {
     }
 }
 function _end(d, s) {
-    var a = 0.5;
     var dot = d[d.length-1];
     var h = this.range_y.options.basis;
     var t = dot.type || this.options.type;
     var m = this.options.mode;
     var x = this.range_x.val2px(dot.x);
-    var y = this.range_y.val2px(dot.y);
     switch (m) {
         case "bottom":
             // fill the graph below
@@ -265,15 +262,15 @@ export const Graph = define_class({
                         break;
                     case "Q":
                     case "S":
-                        s.push(" " + t + " "
-                            + get_px(dot.x1) + "," + get_px(dot.y1, RY) + " "
-                            + get_px(dot.x) + "," + get_px(dot.y, RY));
+                        s.push(" " + t + " " +
+                               get_px(dot.x1) + "," + get_px(dot.y1, RY) + " " +
+                               get_px(dot.x) + "," + get_px(dot.y, RY));
                         break;
                     case "C":
-                        s.push(" " + t + " "
-                            + get_px(dot.x1, RX) + "," + get_px(dot.y1, RY) + " "
-                            + get_px(dot.x2, RX) + "," + get_px(dot.y2, RY) + " "
-                            + get_px(dot.x, RX) + "," + get_px(dot.y, RY));
+                        s.push(" " + t + " " +
+                               get_px(dot.x1, RX) + "," + get_px(dot.y1, RY) + " " +
+                               get_px(dot.x2, RX) + "," + get_px(dot.y2, RY) + " " +
+                               get_px(dot.x, RX) + "," + get_px(dot.y, RY));
                         break;
                     case "H":
                         s.push(" S" + (x[i] - Math.round(x[i] - x[i-1])/f) + ","

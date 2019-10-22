@@ -19,7 +19,6 @@
 import { define_class } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 import { element, add_class, remove_class } from './../utils/dom.js';
-import { FORMAT } from './../utils/sprintf.js';
  
  /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -39,7 +38,7 @@ function value_clicked(e) {
     this.__editing = true;
     this._input.focus();
     if (O.auto_select)
-        this._input.setSelectionRange(0, this._input.value.length)
+        this._input.setSelectionRange(0, this._input.value.length);
     /**
      * Is fired when the value was clicked.
      * 
@@ -81,7 +80,6 @@ function value_typing(e) {
             
             e.preventDefault();
             return false;
-            break;
     }
     /**
      * Is fired when the user hits a key while editing the value.

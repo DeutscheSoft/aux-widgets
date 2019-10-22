@@ -126,7 +126,7 @@ export const Taggable = define_class({
         if (!node) {
             var c = this.tags.children;
             if (c) {
-                for (var i = 0; i < c.length; i++) {
+                for (let i = 0; i < c.length; i++) {
                     var tagnode = c[i];
                     if (tagnode.tag === tag) {
                         tag.remove_node(tagnode);

@@ -78,7 +78,7 @@ export const Tag = define_class({
         var O = this.options;
         if (I.color) {
             I.color = false;
-            for (var i = 0; i < this.nodes.length; i++) {
+            for (let i = 0; i < this.nodes.length; i++) {
                 this.nodes[i].element.style.backgroundColor = O.color;
                 if (O.color)
                     this.nodes[i].element.style.color = rgb2gray(hex2rgb(O.color)) > 0.5 ? "black" : "white";
@@ -88,7 +88,7 @@ export const Tag = define_class({
         }
         if (I.tag) {
             I.tag = false;
-            for (var i = 0; i < this.nodes.length; i++)
+            for (let i = 0; i < this.nodes.length; i++)
                 this.nodes[i].children[0].textContent = O.tag;
         }
         Widget.prototype.redraw.call(this);
@@ -120,11 +120,11 @@ export const Tag = define_class({
     set: function (key, value) {
         switch (key) {
             case "color":
-                for (var i = 0; i < this.nodes.length; i++)
+                for (let i = 0; i < this.nodes.length; i++)
                     this.nodes[i].set("color", this.options.color);
                 break;
             case "tag":
-                for (var i = 0; i < this.nodes.length; i++)
+                for (let i = 0; i < this.nodes.length; i++)
                     this.nodes[i].set("tag", this.options.tag);
                 break;
         }

@@ -61,7 +61,7 @@ export function FORMAT(fmt) {
 
     if (argnum) s += "+";
     s += JSON.stringify(fmt.substr(last));
-
+    /* jshint: evil false */
     return new Function(args, s);
 }
 

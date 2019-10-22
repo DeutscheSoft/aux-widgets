@@ -30,7 +30,7 @@ import { rgb2bw, rgb2hex, rgb2hsl, hsl2rgb, hex2rgb } from '../utils/colors.js';
 
 var color_options = [ "rgb", "hsl", "hex", "hue", "saturation", "lightness", "red", "green", "blue" ];
 
-var checkinput = function (e) {
+function checkinput(e) {
     var I = this.hex._input;
     if (e.keyCode && e.keyCode == 13) {
         apply.call(this);
@@ -51,7 +51,7 @@ var checkinput = function (e) {
         this.set("hex", I.value);
     }
 }
-var cancel = function () {
+function cancel() {
     /**
      * Is fired whenever the cancel button gets clicked or ESC is hit on input.
      * 
@@ -59,7 +59,7 @@ var cancel = function () {
      */
     fevent.call(this, "cancel");
 }
-var apply = function () {
+function apply() {
     /**
      * Is fired whenever the apply button gets clicked or return is hit on input.
      * 
@@ -69,7 +69,7 @@ var apply = function () {
     fevent.call(this, "apply", true);
 }
 
-var fevent = function (e, useraction) {
+function fevent (e, useraction) {
     var O = this.options;
     if (useraction) {
         this.emit("userset", "rgb", O.rgb);
@@ -103,7 +103,7 @@ function set_atoms (key, value) {
     for ( var i = 0; i < atoms.length; i++) {
         var atom = atoms[i];
         if (key !== atom) {
-            O[atom] = O[color_atoms[atom]][atom.substr(0,1)]
+            O[atom] = O[color_atoms[atom]][atom.substr(0,1)];
             this[atom].set("value", O[atom]);
         }
     }

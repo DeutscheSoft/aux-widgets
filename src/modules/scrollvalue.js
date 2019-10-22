@@ -18,7 +18,6 @@
  */
 import { define_class } from '../widget_helpers.js';
 import { add_class, remove_class } from '../utils/dom.js';
-import { warn } from '../utils/log.js';
 import { Module } from './module.js';
 
 function scroll_timeout() {
@@ -172,4 +171,4 @@ export const ScrollValue = define_class({
         if ((key === "classes") && !value) value = this.options.node;
         return Module.prototype.set.call(this, key, value);
     }
-})
+});

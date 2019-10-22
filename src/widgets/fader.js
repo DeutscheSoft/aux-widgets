@@ -37,18 +37,17 @@ import { ScrollValue } from '../modules/scrollvalue.js';
 import { Value } from './value.js';
 import { Label } from './label.js';
 import {
-    set_text, element, add_class, toggle_class, remove_class, supports_transform,
+    element, add_class, remove_class, supports_transform,
     css_space, outer_height, inner_height, outer_width, inner_width
   } from '../utils/dom.js';
 import { define_child_widget } from '../child_widget.js';
-import { S } from '../dom_scheduler.js';
 
 function vert(O) {
     return O.layout === "left" || O.layout === "right";
 }
 function get_value(ev) {
     var is_vertical = vert(this.options);
-    var pos, real, hsize, pad;
+    var real, hsize, pad;
     hsize = this._handle_size / 2;
     pad = this._padding;
     
@@ -244,7 +243,7 @@ export const Fader = define_class({
             I.value = false;
             // TODO: value is snapped already in set(). This is not enough for values which are set during
             // initialization.
-            tmp = this.val2px(this.snap(O.value)) + "px"
+            tmp = this.val2px(this.snap(O.value)) + "px";
 
             if (vert(O)) {
                 if (supports_transform)

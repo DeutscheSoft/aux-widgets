@@ -95,8 +95,8 @@ function set_labels() {
         var pos     = O.size / 2;
         
         S.add(function() {
-            E.setAttribute("transform", "translate(" + pos + "," + pos + ") "
-                + "scale(" + scale + ")");
+            E.setAttribute("transform", "translate(" + pos + "," + pos + ") " +
+                           "scale(" + scale + ")");
 
             /* FORCE_RELAYOUT */
             
@@ -104,10 +104,10 @@ function set_labels() {
                 bb = E.getBoundingClientRect();
                 
                 S.add(function() {
-                    this._label_upper.setAttribute("transform", "translate(" + pos + "," + (pos - bb.height / 2 - mtop) + ") "
-                        + "scale(" + (scale * O.label_scale) + ")");
-                    this._label_lower.setAttribute("transform", "translate(" + pos + "," + (pos + bb.height / 2 + mtop) + ") "
-                        + "scale(" + (scale * O.label_scale) + ")");
+                    this._label_upper.setAttribute("transform", "translate(" + pos + "," + (pos - bb.height / 2 - mtop) + ") " +
+                                                   "scale(" + (scale * O.label_scale) + ")");
+                    this._label_lower.setAttribute("transform", "translate(" + pos + "," + (pos + bb.height / 2 + mtop) + ") " +
+                                                   "scale(" + (scale * O.label_scale) + ")");
                     draw_time.call(this, true);
                 }.bind(this), 1);
             }.bind(this));
@@ -132,7 +132,7 @@ function timeout() {
             
         var targ = (O.timeout|0);
         if (O.timeadd) {
-            targ += (O.timeadd|0) - ((ts % 1000)|0)
+            targ += (O.timeadd|0) - ((ts % 1000)|0);
         }
         this.__to = window.setTimeout(this.__timeout, targ);
     } else this.__to = false;

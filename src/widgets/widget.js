@@ -17,14 +17,14 @@
  * Boston, MA  02110-1301  USA
  */
 import { S } from '../dom_scheduler.js';
-import { toggle_class, set_styles, add_class, remove_class, has_class, set_style, get_style, unique_id } from './../utils/dom.js';
-import { warn } from './../utils/log.js';
+import { toggle_class, set_styles, add_class, remove_class, has_class, set_style, get_style } from './../utils/dom.js';
+import { warn, error } from './../utils/log.js';
 import { define_class } from './../widget_helpers.js';
 import { Base } from './../implements/base.js';
 
 function Invalid(options) {
     for (var key in options) this[key] = true;
-};
+}
 Invalid.prototype = {
     validate : function() {
         var i = 0, key;

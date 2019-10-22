@@ -21,14 +21,9 @@ import { define_child_widget } from '../child_widget.js';
 import { LevelMeter } from './levelmeter.js';
 import { Label } from './label.js';
 import { Container } from './container.js';
-import { add_class, toggle_class, element, set_text, remove_class } from '../utils/dom.js';
-import { FORMAT } from '../utils/sprintf.js';
+import { add_class, remove_class } from '../utils/dom.js';
 import { object_sub } from '../utils/object.js';
 
-function add_meters (cnt, options) {
-    for (var i = 0; i < cnt; i++)
-        this.add_meter(options);
-}
 function add_meter (options) {
     var l = this.meters.length;
     var O = options;
@@ -40,7 +35,6 @@ function add_meter (options) {
 }
 function remove_meter (meter) {
     /* meter can be int or meter instance */
-    var I = this.invalid;
     var M = this.meters;
     
     var m = -1;
@@ -157,14 +151,14 @@ export const MultiMeter = define_class({
             switch (O.layout) {
                 case "top":
                 case "left":
-                    for (var i = 0; i < M.length - 1; i++)
+                    for (let i = 0; i < M.length - 1; i++)
                         M[i].set("show_scale", false);
                     if (M.length)
                         M[this.meters.length - 1].set("show_scale", O.show_scale);
                     break;
                 case "bottom":
                 case "right":
-                    for (var i = 0; i < M.length; i++)
+                    for (let i = 0; i < M.length; i++)
                         M[i].set("show_scale", false);
                     if (M.length)
                         M[0].set("show_scale", O.show_scale);

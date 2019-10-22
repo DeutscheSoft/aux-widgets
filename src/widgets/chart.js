@@ -54,7 +54,7 @@ function hide_handles() {
     }
 }
 
-var STOP = function(e) {
+function STOP(e) {
     e.preventDefault();
     e.stopPropagation();
     return false;
@@ -81,7 +81,7 @@ function draw_key() {
     var w   = 0;
     var top = 0;
     var lines = [];
-    for (var i = 0; i < this.graphs.length; i++) {
+    for (let i = 0; i < this.graphs.length; i++) {
         if (this.graphs[i].get("key") !== false) {
             var t = make_svg("tspan", {"class": "aux-label",
                                      style: "dominant-baseline: central;"
@@ -102,13 +102,13 @@ function draw_key() {
                 "class": this.graphs[i].element.getAttribute("class"),
                 color:   (this.graphs[i].element.getAttribute("color") || ""),
                 style:   this.graphs[i].element.getAttribute("style")
-            })
+            });
             w = Math.max(w, t.getComputedTextLength());
             disp = "block";
             c++;
         }
     }
-    for (var i = 0; i < lines.length; i++) {
+    for (let i = 0; i < lines.length; i++) {
         var b = make_svg("rect", {
             "class": lines[i]["class"] + ".aux-rect",
             color:   lines[i].color,
@@ -134,7 +134,7 @@ function draw_key() {
                 y1: gmarg.top,
                 x2: gmarg.left + parseInt(bb.width) + gpad.left + gpad.right,
                 y2: gmarg.top + parseInt(bb.height) + gpad.top + gpad.bottom
-            }
+            };
             break;
         case "top-right":
             __key = {
@@ -142,7 +142,7 @@ function draw_key() {
                 y1: gmarg.top,
                 x2: width - gmarg.right,
                 y2: gmarg.top + parseInt(bb.height) + gpad.top + gpad.bottom
-            }
+            };
             break;
         case "bottom-left":
             __key = {
@@ -150,7 +150,7 @@ function draw_key() {
                 y1: height - gmarg.bottom - parseInt(bb.height) - gpad.top - gpad.bottom,
                 x2: gmarg.left + parseInt(bb.width) + gpad.left + gpad.right,
                 y2: height - gmarg.bottom
-            }
+            };
             break;
         case "bottom-right":
             __key = {
@@ -158,7 +158,7 @@ function draw_key() {
                 y1: height -gmarg.bottom - parseInt(bb.height) - gpad.top - gpad.bottom,
                 x2: width - gmarg.right,
                 y2: height - gmarg.bottom
-            }
+            };
             break;
         default:
             warn("Unsupported key", O.key);
@@ -513,7 +513,7 @@ export const Chart = define_class({
 
           this.graphs.push(g);
           this._graphs.appendChild(g.element);
-          g.on("set", function (key, value, obj) {
+          g.on("set", function (key) {
               if (key === "color" || key === "class" || key === "key") {
                   this.invalid.graphs = true;
                   this.trigger_draw();
@@ -739,10 +739,10 @@ export const Chart = define_class({
         var c = 0;
         var a = 0, _a;
         var O = this.options;
-        var importance_handle = O.importance_handle
-        var importance_label = O.importance_label
+        var importance_handle = O.importance_handle;
+        var importance_label = O.importance_label;
 
-        for (var i = 0; i < this.handles.length; i++) {
+        for (let i = 0; i < this.handles.length; i++) {
             var h = this.handles[i];
             if (h === handle || !h.get("active") || !h.get("show_handle")) continue;
             _a = calculate_overlap(X, h.handle);
@@ -760,7 +760,7 @@ export const Chart = define_class({
             }
         }
         if (this.bands && this.bands.length) {
-            for (var i = 0; i < this.bands.length; i++) {
+            for (let i = 0; i < this.bands.length; i++) {
                 var b = this.bands[i];
                 if (b === handle || !b.get("active") || !b.get("show_handle")) continue;
                 _a = calculate_overlap(X, b.handle);

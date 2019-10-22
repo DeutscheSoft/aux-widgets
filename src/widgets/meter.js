@@ -63,7 +63,7 @@ function draw_full(ctx, w, h, a, is_vertical) {
     clear_interval(ctx, w, h, a, is_vertical);
 }
 function make_interval(a) {
-    var i, tmp, again, j;
+    var i, tmp, again;
 
     do {
         again = false;
@@ -446,7 +446,7 @@ export const Meter = define_class({
         var a = this._current_meters;
         var tmp = this._last_meters;
 
-        var i = this.calculate_meter(a, O.value, 0);
+        i = this.calculate_meter(a, O.value, 0);
         if (i < a.length) a.length = i;
         make_interval(a);
 

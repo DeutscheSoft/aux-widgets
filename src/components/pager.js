@@ -4,12 +4,12 @@ import {
 import { Pager } from './../widgets/pager.js';
 import { Container } from './../widgets/container.js';
 
-function add_page(pager, page, element)
+function add_page(pager, page)
 {
   pager.add_page(element.getAttribute("label"), page);
 }
 
-function remove_page(pager, page, element)
+function remove_page(pager, page)
 {
   pager.remove_page(page);
 }

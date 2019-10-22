@@ -166,7 +166,7 @@ function ArraySnapModule(stdlib, foreign, heap) {
         snap : snap
     };
 }
-function NullSnapModule(stdlib, foreign, heap) {
+function NullSnapModule(stdlib, foreign) {
     var min = +foreign.min;
     var max = +foreign.max;
 
@@ -284,11 +284,9 @@ function TRAFO_PIECEWISE(stdlib, foreign, heap) {
         val2coef:val2coef,
         coef2val:coef2val,
     };
-};
+}
 function TRAFO_FUNCTION(stdlib, foreign) {
     var reverse = foreign.reverse|0;
-    var min = +foreign.min;
-    var max = +foreign.max;
     var scale = foreign.scale;
     var basis = +foreign.basis;
     function val2based(value, size) {
@@ -531,7 +529,7 @@ function update_transformation() {
 
     Object.assign(this, module);
 }
-function set_cb(key, value) {
+function set_cb(key) {
     switch (key) {
     case "min":
     case "max":

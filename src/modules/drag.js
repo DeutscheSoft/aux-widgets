@@ -26,7 +26,7 @@ function extract_matrix (t) {
     var a = t.indexOf("matrix(");
     if (a < 0) return; 
     t = t.substr(a+7);
-    return (t.split(")"))[0].split(",").map(function(v){return parseInt(v.trim())});
+    return (t.split(")"))[0].split(",").map(function(v){return parseInt(v.trim());});
 }
 
 function xy_from_transform (t) {
@@ -34,7 +34,7 @@ function xy_from_transform (t) {
     return (!mx || !mx.length) ? [0, 0] : [mx[4], mx[5]];
 }
 
-function startdrag(e, drag) {
+function startdrag(e) {
     this._dragged = 0;
     var O = this.options;
     if (!O.active) return;
@@ -51,17 +51,17 @@ function startdrag(e, drag) {
     }
     add_class(O.node, "aux-dragging");
 }
-function stopdrag(e, drag) {
+function stopdrag(e) {
     if (!this.options.active) return;
     if (e.button !== void(0) && e.button > 0) return;
     remove_class(this.options.node, "aux-dragging");
 }
-function dragging(e, drag) {
+function dragging(e) {
     var O = this.options;
     if (!O.active) return;
     if (e.button !== void(0) && e.button > 0) return;
-    this._dragged += (Math.abs(e.pageX - this._xlast)
-                    + Math.abs(e.pageY - this._ylast)) / 2;
+    this._dragged += (Math.abs(e.pageX - this._xlast) +
+                      Math.abs(e.pageY - this._ylast)) / 2;
     if (this._dragged < O.initial) return;
     this._xlast = e.pageX;
     this._ylast = e.pageY;
@@ -92,7 +92,7 @@ function set_handle() {
         node: h,
         range: function () { return range; },
         get: function() { return 0; },
-        set: function(v) { return; },
+        set: function() { return; },
     });
 }
 /**

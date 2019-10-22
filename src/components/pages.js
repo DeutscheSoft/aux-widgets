@@ -3,12 +3,12 @@ import {
   } from './../component_helpers.js';
 import { Pages } from './../widgets/pages.js';
 
-function add_page(pages, page, element)
+function add_page(pages, page)
 {
   pages.add_page(page);
 }
 
-function remove_page(pages, page, element)
+function remove_page(pages, page)
 {
   pages.remove_page(page);
 }

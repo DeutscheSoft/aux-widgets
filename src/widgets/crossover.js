@@ -131,7 +131,7 @@ function set_freq (band) {
 
 function _set_freq (i, band) {
     var freq = band.options.freq;
-    var dist = freq * this.get("distance")
+    var dist = freq * this.get("distance");
     if (i)
         this.bands[i-1].set("x_max", freq - dist);
     if (i < this.bands.length-1)

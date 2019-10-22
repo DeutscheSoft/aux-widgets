@@ -22,14 +22,13 @@ import { Circular } from './circular.js';
 import { element, add_class, make_svg } from '../utils/dom.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { object_and, object_sub } from '../utils/object.js';
-import { S } from '../dom_scheduler.js';
 
 function _get_coords_single(deg, inner, pos) {
     deg = deg * Math.PI / 180;
     return {
         x: Math.cos(deg) * inner + pos,
         y: Math.sin(deg) * inner + pos
-    }
+    };
 }
 var format_translate = FORMAT("translate(%f, %f)");
 var format_viewbox = FORMAT("0 0 %d %d");
@@ -144,10 +143,10 @@ export const Gauge = define_class({
                     var outer_p = outer - margin;
                     var coords  = _get_coords_single(angle, outer_p, outer);
 
-                    var mx = ((coords.x - outer) / outer_p)
-                           * (bb.width + bb.height / 2.5) / (align ? -2 : 2);
-                    var my = ((coords.y - outer) / outer_p)
-                           * bb.height / (align ? -2 : 2);
+                    var mx = ((coords.x - outer) / outer_p) *
+                             (bb.width + bb.height / 2.5) / (align ? -2 : 2);
+                    var my = ((coords.y - outer) / outer_p) *
+                             bb.height / (align ? -2 : 2);
                     
                     mx += O.x;
                     my += O.y;

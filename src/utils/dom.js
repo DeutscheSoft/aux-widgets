@@ -76,7 +76,7 @@ export function toggle_class(e, cls, cond) {
             remove_class(e, cls);
         }
     } else e.classList.toggle(cls);
-};
+}
 
 /**
  * Returns the computed style of a node.
@@ -89,7 +89,7 @@ export function toggle_class(e, cls, cond) {
  */
 export function get_style(e, style) {
   return window.getComputedStyle(e).getPropertyValue(style);
-};
+}
 
 const class_regex = /[^A-Za-z0-9_-]/;
 
@@ -137,10 +137,10 @@ export function get_max_time(string) {
 * @returns {number}
 */
 export function get_duration(element) {
-    return Math.max(get_max_time(get_style(element, "animation-duration"))
-                  + get_max_time(get_style(element, "animation-delay")),
-                    get_max_time(get_style(element, "transition-duration"))
-                  + get_max_time(get_style(element, "transition-delay")));
+    return Math.max(get_max_time(get_style(element, "animation-duration")) +
+                    get_max_time(get_style(element, "animation-delay")),
+                    get_max_time(get_style(element, "transition-duration")) +
+                    get_max_time(get_style(element, "transition-delay")));
 }
 
 /**
@@ -594,7 +594,7 @@ export function unique_id() {
     var id;
     do { id = "tk-" + _id_cnt++; } while (document.getElementById(id));
     return id;
-};
+}
 
 /**
  * Creates and returns an SVG child element.
@@ -625,7 +625,7 @@ export const supports_transform = 'transform' in document.createElement("div").s
  * @function is_touch
  */
 export function is_touch() {
-    return 'ontouchstart' in window // works on most browsers
-      || 'onmsgesturechange' in window; // works on ie10
+    return 'ontouchstart' in window || // works on most browsers
+           'onmsgesturechange' in window; // works on ie10
 }
 

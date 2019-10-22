@@ -19,7 +19,7 @@
 import { define_class } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 import { S } from '../dom_scheduler.js';
-import { element, add_class, remove_class, get_duration, empty, set_content } from '../utils/dom.js';
+import { element, add_class, remove_class, get_duration, empty } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 
 function after_hiding() {
@@ -256,7 +256,7 @@ export const Container = define_class({
 
         var C = this.children;
         var H = this.hidden_children;
-        if (C) for (var i = 0; i < C.length; i++) if (!H[i]) C[i].show_nodraw();
+        if (C) for (let i = 0; i < C.length; i++) if (!H[i]) C[i].show_nodraw();
     },
     hide_nodraw: function() {
         var O = this.options;
@@ -265,7 +265,7 @@ export const Container = define_class({
 
         var C = this.children;
         var H = this.hidden_children;
-        if (C) for (i = 0; i < C.length; i++) if (!H[i]) C[i].hide_nodraw();
+        if (C) for (let i = 0; i < C.length; i++) if (!H[i]) C[i].hide_nodraw();
     },
 
     /**

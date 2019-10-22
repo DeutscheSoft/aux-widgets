@@ -16,7 +16,6 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-import { define_class } from '../widget_helpers.js';
 
 /**
  * Colors provides a couple of functions for easy-to-use color calculations
@@ -177,7 +176,7 @@ const color_names = {
     "slategray" : "708090",
     "darkslategray" : "2f4f4f",
     "black" : "000000"
-}
+};
 
 /* helpers */
 
@@ -204,12 +203,12 @@ function decode_args() {
      */
     var out = {};
     if (arguments[0][0] instanceof Array) {
-        for (var i = 0; i < arguments.length - 1; i++)
+        for (let i = 0; i < arguments.length - 1; i++)
             out[arguments[i+1]] = arguments[0][0][i];
     } else if (typeof(arguments[0][0]) === "object") {
         out = arguments[0][0];
     } else {
-        for (var i = 0; i < arguments.length - 1; i++)
+        for (let i = 0; i < arguments.length - 1; i++)
             out[arguments[i+1]] = arguments[0][i];
     }
     return out;
@@ -226,17 +225,17 @@ function decode_color(args) {
      */
     if (typeof args[0] === "string" && args[0][0] === "#") {
         // HEX string
-        var res = hex2rgb(args[0]);
-        res["type"] = "hex";
-        res["hex"] = args[0];
+        let res = hex2rgb(args[0]);
+        res.type = "hex";
+        res.hex = args[0];
         return res;
     }
     if (typeof args[0] === "string" && color_names[args[0]]) {
         // color string
-        var res = hex2rgb("#" + color_names[args[0]]);
-        res["type"] = "string";
-        res["string"] = args[0];
-        res["hex"] = color_names[args[0]];
+        let res = hex2rgb("#" + color_names[args[0]]);
+        res.type = "string";
+        res.string = args[0];
+        res.hex = color_names[args[0]];
         return res;
     }
     var S = decode_args(arguments, "a", "b", "c");
@@ -286,7 +285,9 @@ export function rgb2hsl() {
     var col = decode_args(arguments, "r", "g", "b");
     var r = col.r, g = col.g, b = col.b;
     
-    r /= 255, g /= 255, b /= 255;
+    r /= 255;
+    g /= 255;
+    b /= 255;
 
     var max = Math.max(r, g, b), min = Math.min(r, g, b);
     var h, s, l = (max + min) / 2;
@@ -505,7 +506,7 @@ export function hex2rgb(hex) {
  * @returns {object} Object with members h, s and l as numbers (0..1)
  */
 export function hex2hsl(hex) {
-    return rgb2hsl(hex2rgb(hex))
+    return rgb2hsl(hex2rgb(hex));
 }
 
 /**
@@ -519,7 +520,7 @@ export function hex2hsl(hex) {
  * @returns {string} Hex color string.
  */
 export function hex2bw(hex) {
-    return rgb2bw(hex2rgb(hex))
+    return rgb2bw(hex2rgb(hex));
 }
 
 /**
@@ -533,7 +534,7 @@ export function hex2bw(hex) {
  * @returns {string} Hex color string.
  */
 export function hex2wb(hex) {
-    return rgb2wb(hex2rgb(hex))
+    return rgb2wb(hex2rgb(hex));
 }
 
 /**
@@ -547,7 +548,7 @@ export function hex2wb(hex) {
  * @returns {string} Hex color string.
  */
 export function hex2gray(hex) {
-    return rgb2gray(hex2rgb(hex))
+    return rgb2gray(hex2rgb(hex));
 }
 
 

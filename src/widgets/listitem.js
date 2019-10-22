@@ -18,7 +18,7 @@
  */
 import { define_class } from '../widget_helpers.js';
 import { Container } from './container.js';
-import { element } from '../utils/dom.js';
+import { element, add_class } from '../utils/dom.js';
 
 export const ListItem = define_class({
     /**
@@ -39,6 +39,6 @@ export const ListItem = define_class({
     {
       add_class(element, "aux-listitem");
 
-      Widget.prototype.draw.call(this, O, element);
+      Container.prototype.draw.call(this, O, element);
     },
 });

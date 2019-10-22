@@ -26,7 +26,6 @@
  *
  */
 
-const exp = Math.exp;
 const log = Math.log;
 const pow = Math.pow;
 const MAX = Math.max;
