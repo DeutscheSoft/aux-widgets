@@ -206,19 +206,35 @@ export const Crossover = define_class({
         }
         Equalizer.prototype.redraw.call(this);
     },
+    add_child: function (child) {
+        Equalizer.prototype.add_child.call(this, child);
+        if (child instanceof CrossoverBand) {
+            this.add_graph();
+            child.on("set_freq", this.set_freq_cb);
+            limit_bands.call(this);
+        }
+    },
+    remove_child: function (child) {
+        Equalizer.prototype.remove_child.call(this, child);
+        if (child instanceof CrossoverBand) {
+            this.remove_graph(this.graphs[this.graphs.length-1]);
+            child.off("set_freq", this.set_freq_cb);
+            limit_bands.call(this);
+        }
+    },
     add_band: function (options, type) {
-        type = type || CrossoverBand;
-        this.add_graph();
-        var r = Equalizer.prototype.add_band.call(this, options, type);
-        r.on("set_freq", this.set_freq_cb);
-        limit_bands.call(this);
-        return r;
+        let band;
+
+        if (options instanceof CrossoverBand) {
+          band = options;
+        } else {
+          type = type || CrossoverBand;
+          band = new type(options);
+        }
+        this.add_child(band);
+        return band;
     },
     remove_band: function (band) {
-        this.remove_graph(this.graphs[this.graphs.length-1]);
-        var r = Equalizer.prototype.remove_band.call(this, band);
-        r.off("set_freq", this.set_freq_cb);
-        limit_bands.call(this);
-        return r;
+        this.remove_child(child);
     },
 });
