@@ -347,13 +347,13 @@ function create_zhandle() {
 function create_line1() {
     if (this._line1) remove_line1.call(this);
     this._line1 = make_svg("path", {
-        "class": "aux-line.aux-line1"
+        "class": "aux-line aux-line1"
     });
 }
 function create_line2() {
     if (this._line2) remove_line2.call(this);
     this._line2 = make_svg("path", {
-        "class": "aux-line.aux-line2"
+        "class": "aux-line aux-line2"
     });
 }
 function remove_line1() {
