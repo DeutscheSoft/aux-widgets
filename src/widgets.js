@@ -1,5 +1,4 @@
 export * from './widgets/button.js';
-export * from './widgets/buttonarray.js';
 export * from './widgets/buttons.js';
 export * from './widgets/circular.js';
 export * from './widgets/chart.js';

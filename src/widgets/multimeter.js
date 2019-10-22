@@ -186,7 +186,7 @@ define_child_widget(MultiMeter, "title", {
 
 /*
  * This could be moved into define_child_widgets(),
- * which could in similar ways be used in the buttonarray,
+ * which could in similar ways be used in the navigation,
  * pager, etc.
  *
  */

@@ -49,18 +49,6 @@
     border-color: #F80;
 }
 
-.aux-buttonarray > .aux-clip {
-    background: white;
-}
-.aux-buttonarray > .aux-previous,
-.aux-buttonarray > .aux-next {
-    color: #666;
-}
-.aux-buttonarray > .aux-previous:hover,
-.aux-buttonarray > .aux-next:hover {
-    color: #00ccff;
-}  
-
 .aux-chart > svg {
     background-color: #222;
 }

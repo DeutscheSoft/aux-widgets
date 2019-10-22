@@ -131,46 +131,6 @@ pre, code {
     flex-direction: column;
 }
 
-/* BUTTONARRAY */
-
-.aux-buttonarray {
-    box-sizing: border-box;
-    display: inline-flex;
-}
-.aux-buttonarray.aux-vertical {
-    height: 100%;
-    flex-direction: column;
-}
-.aux-buttonarray.aux-horizontal {
-    width: 100%;
-}
-.aux-buttonarray > .aux-previous,
-.aux-buttonarray > .aux-next {
-    flex: 0 0 auto;
-    margin: 0;
-}
-.aux-buttonarray > .aux-clip {
-    flex: 1 1 100%;
-    overflow: hidden;
-    box-sizing: border-box;
-}
-.aux-buttonarray.aux-horizontal.aux-scroll > .aux-clip {
-    overflow-x: scroll !important;
-}
-.aux-buttonarray.aux-vertical.aux-scroll > .aux-clip {
-    overflow-y: scroll !important;
-}
-.aux-buttonarray > .aux-clip > .aux-container {
-    position: relative;
-}
-.aux-buttonarray.aux-horizontal > .aux-clip > .aux-container {
-    height: 100%;
-    white-space: nowrap;
-}
-.aux-buttonarray.aux-vertical > .aux-clip > .aux-container {
-    width: 100%;
-}
-
 /* BUTTONS */
 
 .aux-buttons {

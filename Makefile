@@ -38,7 +38,6 @@ js_input_files = \
     toolkit/widgets/value.js\
     toolkit/widgets/valuebutton.js\
     toolkit/widgets/confirmbutton.js\
-    toolkit/widgets/buttonarray.js\
     toolkit/widgets/clock.js\
     toolkit/widgets/state.js\
     toolkit/widgets/pager.js\
@@ -86,7 +85,6 @@ css_input_files = \
     toolkit/styles/2013/css/responsehandle.css \
     toolkit/styles/2013/css/circular.css \
     toolkit/styles/2013/css/buttonarray.css \
-    toolkit/styles/2013/css/meterbase.css \
     toolkit/styles/2013/css/chart.css \
     toolkit/styles/2013/css/gauge.css \
     toolkit/styles/2013/css/label.css \
@@ -129,7 +127,6 @@ css_input_files = \
     toolkit/styles/plain/css/circular.css \
     toolkit/styles/plain/css/buttonarray.css \
     toolkit/styles/plain/css/meterbase.css \
-    toolkit/styles/plain/css/chart.css \
     toolkit/styles/plain/css/gauge.css \
     toolkit/styles/plain/css/button.css \
     toolkit/styles/plain/css/valuebutton.css \

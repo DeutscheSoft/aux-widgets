@@ -154,11 +154,11 @@ export const Navigation = define_class({
          *   Has class <code>.aux-navigation</code>.
          */
         /**
-         * @member {Button} ButtonArray#prev - The previous arrow {@link Button} instance.
+         * @member {Button} Navigation#prev - The previous arrow {@link Button} instance.
          */
         this.prev = new Button({class: "aux-previous", dblclick:400});
         /**
-         * @member {Button} ButtonArray#next - The next arrow {@link Button} instance.
+         * @member {Button} Navigation#next - The next arrow {@link Button} instance.
          */
         this.next = new Button({class: "aux-next", dblclick:400});
         
