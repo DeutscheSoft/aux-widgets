@@ -1,27 +1,26 @@
 <aux-pager
     pages="js:[{label:'foobar',content:'foobar'},{label:'barfoo',content:'barfoo'}]"
+    show=0>
+</aux-pager>
+<aux-pager
+    pages="js:[{label:'foobar',content:'foobar'},{label:'barfoo',content:'barfoo'}]"
     show=0
-    >
-<!--
-    <aux-page label="Page #1">
-        <h1>Page #1</h1>
-        <p>
-            This is a page with some content demonstrating
-            the Pager widget.
-        </p>
-    </aux-page>
-    <aux-page label="Page #2">
-        <h1>Page #2</h1>
-        <p>
-            This is a page with some content demonstrating
-            the Pager widget.
-        </p>
-    </aux-page>
--->
+    position=bottom>
+</aux-pager>
+<aux-pager
+    pages="js:[{label:'foobar',content:'foobar'},{label:'barfoo',content:'barfoo'}]"
+    show=0
+    position=left>
+</aux-pager>
+<aux-pager
+    pages="js:[{label:'foobar',content:'foobar'},{label:'barfoo',content:'barfoo'}]"
+    show=0
+    position=right>
 </aux-pager>
 <style>
     aux-pager {
-        width: 100%;
+        width: 48% !important;
         height: 240px !important;
+        display: inline-flex !important;
     }
 </style>
