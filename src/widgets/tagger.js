@@ -58,7 +58,6 @@ export const Tagger = define_class({
         Dialog.prototype.initialize.call(this, options);
         
         Taggable.prototype.initialize.call(this);
-        this.append_child(this.tags);
         this.on("addtag", new_tag_from_input.bind(this));
         
         this.set("add", this.options.add);
