@@ -633,6 +633,10 @@ export const Widget = define_class({
     add_child: function(child) {
         var C = this.children;
         if (!C) this.children = C = [];
+
+        if (C.indexOf(child) !== -1)
+          throw new Error('Adding child twice.');
+
         child.set_parent(this);
         C.push(child);
         if (!this.hidden()) {
@@ -658,6 +662,8 @@ export const Widget = define_class({
         var i = C.indexOf(child);
         if (i !== -1) {
             C.splice(i, 1);
+        } else {
+          error("%o is not a child of %o", child, this);
         }
         if (!C.length) this.children = null;
     },
