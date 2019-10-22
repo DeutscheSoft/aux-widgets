@@ -259,7 +259,7 @@ export const Equalizer = define_class({
          * 
          * @param {EqBand} band - The {@link EqBand} which was removed.
          */
-        this.emit("bandremoved", h);
+        this.emit("bandremoved", child);
         invalidate_bands.call(this);
       }
 
