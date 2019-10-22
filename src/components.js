@@ -3,6 +3,7 @@ export * from './components/buttons.js';
 export * from './components/chart.js';
 export * from './components/clock.js';
 export * from './components/colorpicker.js';
+export * from './components/colorpickerdialog.js';
 export * from './components/confirmbutton.js';
 export * from './components/dialog.js';
 export * from './components/dynamics.js';
