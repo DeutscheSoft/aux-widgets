@@ -175,6 +175,7 @@ export const Navigation = define_class({
         // FIXME: this throws an exception if destroy() is called within
         // the first 500ms
         setTimeout((function () {
+            if (this.is_destructed()) return;
             this.set("auto_arrows", this.options.auto_arrows);
             this.set("direction", this.options.direction);
         }).bind(this), 500);
