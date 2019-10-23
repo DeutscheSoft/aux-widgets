@@ -54,10 +54,11 @@ function parse_attribute(type, value)
       catch (err) { }
     }
 
-    const types = type.split('|');
 
-    if (types.length > 1)
+    if (type.includes('|'))
     {
+      const types = type.split('|');
+
       for (let i = 0; i < types.length; i++)
       {
         try
@@ -66,7 +67,7 @@ function parse_attribute(type, value)
         }
         catch (e)
         {
-          warn(e);
+          //warn(e);
         }
       }
 
