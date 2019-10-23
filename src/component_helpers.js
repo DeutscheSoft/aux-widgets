@@ -160,17 +160,56 @@ function create_component (base) {
   
       super.addEventListener(type, ...args);
     }
-  
-    static get aux()
+
+    /**
+     * Returns true. This can be used to detect AUX components.
+     */
+    get isAuxWidget()
     {
       return true;
     }
-  
+
+    /**
+     * Returns the widget object of this component.
+     */
     auxWidget()
     {
       return this.widget;
     }
-  }
+
+    /**
+     * Trigger a resize. This leads the widget to recalculates it's size. Some
+     * components, such as those which have scales, need this to redraw themselves
+     * correctly.
+     */
+    auxResize()
+    {
+      this.widget.trigger_resize();
+    }
+  };
+}
+
+function find_parent_node(node)
+{
+  do
+  {
+    if (node.isAuxWidget)
+    {
+      return node;
+    }
+    node = node.parentNode;
+  } while (node);
+
+  return null;
+}
+
+function find_parent_widget(node)
+{
+  const parentNode = find_parent_node(node);
+
+  if (parentNode) return parentNode.auxWidget();
+
+  return null;
 }
 
 export function component_from_widget(Widget, base)
@@ -205,11 +244,21 @@ export function component_from_widget(Widget, base)
     connectedCallback()
     {
       super.connectedCallback();
-      this.widget.enable_draw();
+      const widget = this.widget;
+      const parent = find_parent_widget(this.parentNode);
+      if (parent)
+      {
+        parent.add_child(widget);
+      }
+      else
+      {
+        widget.set_parent(null);
+      }
     }
 
     disconnectedCallback()
     {
+      this.widget.set_parent(void(0));
       this.widget.disable_draw();
     }
   }

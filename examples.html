@@ -48,7 +48,7 @@
           filter = hash.toLowerCase().split(',');
         }
 
-        const root = document.querySelector('aux-root');
+        const root = document.querySelector('#wrapper');
         const tasks = examples.map(async (file) => {
           const tmp = file.split('.');
           tmp.pop();
@@ -134,7 +134,7 @@
         (try <code>F12</code>) are recommended.
     </p>
     
-    <aux-root id="wrapper"></aux-root>
+    <div id="wrapper"></div>
     
   </body>
   

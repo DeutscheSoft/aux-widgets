@@ -20,24 +20,11 @@ import { define_class } from '../widget_helpers.js';
 import { Container } from './container.js';
 import { add_class } from '../utils/dom.js';
 
-function visibility_change() {
-    if (document.hidden) {
-        this.disable_draw();
-    } else {
-        this.enable_draw();
-    }
-}
-function resized() {
-    if (!this.resize_event) {
-        this.resize_event = true;
-        this.trigger_resize();
-    }
-}
 /**
- * Root is used to force a resize on all its child widgets
- * as soon as the browser window is resized. It also toggles drawing
- * of its children depending on the state of visibility of the
- * browser tab or browser window.
+ * Root is a Container which can be used as the top level when building
+ * UIs programmatically. It will automatically activate listening for resize
+ * and visibilitychange events globally and forward them to it's child widgets.
+ * There is no need for using `aux-root` when using WebComponents.
  * 
  * @extends Container
  * 
@@ -46,31 +33,13 @@ function resized() {
 export const Root = define_class({
     Extends: Container,
     _options: Object.create(Container.prototype._options),
-    static_events: {
-        initialized: function () {
-            window.addEventListener("resize", this._resize_cb);
-            document.addEventListener("visibilitychange", this._visibility_cb, false);
-            this.enable_draw();
-        },
-        destroy: function() {
-            window.removeEventListener("resize", this._resize_cb);
-            document.removeEventListener("visibilitychange", this._visibility_cb);
-            this._resize_cb = this._visibility_cb = null;
-        },
-        redraw: function() {
-            if (this.resize_event)
-                this.resize_event = false;
-        },
-    },
     initialize: function (options) {
         Container.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} Root#element - The main DIV container.
          *   Has class <code>.aux-root</code>.
          */
-        this._resize_cb = resized.bind(this);
-        this._visibility_cb = visibility_change.bind(this);
-        this.resize_event = false;
+        this.set_parent(null);
     },
     draw: function(O, element)
     {

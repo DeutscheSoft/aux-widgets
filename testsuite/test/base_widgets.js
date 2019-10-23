@@ -1,5 +1,7 @@
 import { Widget, WidgetComponent } from '../src/index.js';
 
+import { assert, assert_error } from './helpers.js';
+
 describe('Options', () => {
   it('set()', (done) => {
     const o = new Widget();
@@ -25,7 +27,6 @@ describe('Components', () => {
   });
   it('addEventListener', (done) => {
     const o = document.createElement('aux-widget');
-    
     o.addEventListener('set_disabled', (ev) => {
       done();
     });
@@ -42,7 +43,6 @@ describe('Components', () => {
   });
   it('addEventListener on setAttribute does not trigger', (done) => {
     const o = document.createElement('aux-widget');
-    
     o.addEventListener('set_disabled', (ev) => {
       done(new Error('failed.'));
     });
@@ -74,6 +74,66 @@ describe('Components', () => {
 
       if (!ok) throw new Error('Expected error for unknown option');
 
+    }
+  });
+  it('child handling', () => {
+    {
+      const w1 = new Widget();
+      const w2 = new Widget();
+      const c1 = new Widget();
+      const c2 = new Widget();
+      w1.add_child(c1);
+      w2.add_child(c2);
+
+      assert(w1.has_child(c1), 'add_child failed.');
+
+      w2.add_child(c1);
+
+      assert(!w1.has_child(c1), 'add_child failed.');
+      assert(w2.has_child(c1), 'add_child failed.');
+
+      c1.set_parent();
+
+      assert(!w2.has_child(c1), 'set_parent failed.');
+
+
+      assert_error(() => w2.remove_child(c1));
+
+      w1.destroy();
+      w2.destroy();
+      c1.destroy();
+      c2.destroy();
+    }
+
+    {
+      const w = new Widget();
+      const c = new Widget();
+
+      w.add_child(c);
+
+      assert(w.hidden() === c.hidden());
+      w.show();
+      assert(!w.hidden() && w.hidden() === c.hidden());
+      w.hide();
+      assert(w.hidden() && w.hidden() === c.hidden());
+
+      w.destroy();
+      c.destroy();
+    }
+
+    {
+      const w = new Widget({ element: document.createElement('div') });
+      const c = new Widget({ element: document.createElement('div') });
+
+      w.add_child(c);
+
+      w.set_parent(null);
+
+      assert(w.hidden() === c.hidden());
+      assert(w.hidden() === document.hidden);
+
+      w.destroy();
+      c.destroy();
     }
   });
 });

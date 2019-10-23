@@ -27,3 +27,24 @@ export function object_minus(o, list)
 
   return ret;
 }
+
+export function assert(v, msg)
+{
+  if (!v)
+  {
+    throw new Error(msg || 'assertion failed.');
+  }
+}
+
+export function assert_error(cb, msg)
+{
+  let ok = true;
+  try
+  {
+    w2.remove_child(c1);
+    ok = false;
+  }
+  catch (err) { }
+
+  assert(ok, msg || "expected error.");
+}

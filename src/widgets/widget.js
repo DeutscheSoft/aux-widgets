@@ -71,6 +71,19 @@ function resize() {
     if (this.is_destructed()) return;
     this.resize();
 }
+function onvisibilitychange() {
+  if (document.hidden)
+  {
+    this.disable_draw();
+  }
+  else
+  {
+    this.enable_draw();
+  }
+}
+function onresize() {
+  this.trigger_resize();
+}
 function dblclick (e) {
     /**
      * Is fired after a double click appeared. Set `dblclick` to 0 to
@@ -221,11 +234,13 @@ export const Widget = define_class({
       this._redraw = redraw.bind(this, this.redraw);
       this.__resize = resize.bind(this);
       this._schedule_resize = this.schedule_resize.bind(this);
-      this.parent = null;
+      this.parent = void(0);
       this.children = null;
       this.draw_queue = null;
       this.__lastclick = 0;
       this.__dblclick_cb = dblclick.bind(this);
+      this._onresize = onresize.bind(this);
+      this._onvisibilitychange = onvisibilitychange.bind(this);
     },
 
     getStyleTarget: function() {
@@ -430,7 +445,7 @@ export const Widget = define_class({
         this.emit("destroy");
 
         this.disable_draw();
-        if (this.parent) this.parent.remove_child(this);
+        this.set_parent(void(0));
 
         Base.prototype.destroy.call(this);
 
@@ -439,7 +454,6 @@ export const Widget = define_class({
         this._schedule_resize = null;
         this.children = null;
         this.options = null;
-        this.parent = null;
 
         if (this.element) {
             this.element.remove();
@@ -616,10 +630,37 @@ export const Widget = define_class({
         else this.hide();
     },
     set_parent: function(parent) {
-        if (this.parent) {
-            this.parent.remove_child(this);
-        }
+        const old_parent = this.parent;
+
+        if (old_parent === parent) return;
+
         this.parent = parent;
+
+        if (parent === null)
+        {
+          if (old_parent !== parent)
+          {
+            window.addEventListener("resize", this._onresize);
+            document.addEventListener("visibilitychange", this._onvisibilitychange, false);
+            this._onvisibilitychange();
+          }
+        }
+        else if (parent !== null && old_parent === null)
+        {
+          window.removeEventListener("resize", this._onresize);
+          document.removeEventListener("visibilitychange", this._onvisibilitychange);
+        }
+
+
+        if (old_parent) {
+            old_parent.remove_child(this);
+        }
+    },
+    has_child: function(child)
+    {
+      const C = this.children;
+
+      return C !== null && C.indexOf(child) !== -1;
     },
     /**
      * Registers a widget as a child widget. This method is used to build up the widget tree. It does not modify the DOM tree.
@@ -655,8 +696,12 @@ export const Widget = define_class({
      * @param {Widget} child - The child to remove.
      */
     remove_child : function(child) {
+        if (child.parent === this)
+        {
+          child.set_parent(void(0));
+          return;
+        }
         child.disable_draw();
-        child.parent = null;
         var C = this.children;
         if (C === null) return;
         var i = C.indexOf(child);
