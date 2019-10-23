@@ -6,6 +6,7 @@ import { Container } from './../widgets/container.js';
 
 function add_page(pager, page)
 {
+  const element = page.element;
   pager.add_page(element.getAttribute("label"), page);
 }
 
