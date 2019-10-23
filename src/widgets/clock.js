@@ -196,7 +196,7 @@ export const Clock = define_class({
     }),
     options: {
         thickness:    10,         // thickness of the rings
-        margin:       0,          // margin between the circulars
+        margin:       1,          // margin between the circulars
         size:         200,        // diameter of the whole clock
         show_seconds: true,       // show the seconds ring
         show_minutes: true,       // show the minutes ring
