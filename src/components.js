@@ -19,6 +19,7 @@ export * from './components/multimeter.js';
 export * from './components/navigation.js';
 export * from './components/pager.js';
 export * from './components/pages.js';
+export * from './components/root.js';
 export * from './components/scale.js';
 export * from './components/select.js';
 export * from './components/slider.js';
