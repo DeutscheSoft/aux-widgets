@@ -18,7 +18,7 @@ describe('Components', () => {
   it('setAttribute()', (done) => {
     const o = document.createElement('aux-widget');
     o.setAttribute("disabled", true);
-    const widget = o.widget;
+    const widget = o.auxWidget;
     if (widget.options.disabled !== true)
       throw new Error('fail: ' + widget.options.disabled);
     if (!widget.invalid.disabled)
@@ -30,7 +30,7 @@ describe('Components', () => {
     o.addEventListener('set_disabled', (ev) => {
       done();
     });
-    o.widget.set('disabled', true);
+    o.auxWidget.set('disabled', true);
   });
   it('removeEventListener', (done) => {
     const o = document.createElement('aux-widget');
@@ -38,7 +38,7 @@ describe('Components', () => {
 
     o.addEventListener('set_disabled', cb);
     o.removeEventListener('set_disabled', cb);
-    o.widget.set('disabled', true);
+    o.auxWidget.set('disabled', true);
     done();
   });
   it('addEventListener on setAttribute does not trigger', (done) => {

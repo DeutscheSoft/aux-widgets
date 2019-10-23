@@ -83,7 +83,7 @@
                 console.log(node.tagName);
                 node.constructor.observedAttributes.forEach((name) => {
                   if (!node.hasAttribute(name)) return;
-                  const widget = node.auxWidget();
+                  const widget = node.auxWidget;
                   console.log('%s %o %o', name, node.getAttribute(name),
                               widget.get(name));
                 });

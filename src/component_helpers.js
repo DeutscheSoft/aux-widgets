@@ -77,10 +77,29 @@ function parse_attribute(type, value)
   return low_parse_attribute(type, value);
 }
 
+function extract_options(node, WidgetType, attributes)
+{
+  const ret = {};
+  const _options = WidgetType.prototype._options;
+
+  for (let i = 0; i < attributes.length; i++)
+  {
+    const name = attributes[i];
+
+    if (!node.hasAttribute(name)) continue;
+
+    const type = _options[attributes[i]];
+
+    ret[name] = parse_attribute(type, node.getAttribute(name));
+  }
+
+  return ret;
+}
+
 function attributes_from_widget(Widget)
 {
   const attributes = [];
-  const skip = ["class", "id", "container", "element"];
+  const skip = ["class", "id", "container", "element", "styles"];
 
   for (var i in Widget.prototype._options)
   {
@@ -98,63 +117,43 @@ function create_component (base) {
     constructor(widget)
     {
       super();
-      this.aux_events_handlers = new Map();
-      this.aux_events_paused = false;
-      this.aux_initializing = false;
-      this.widget = null;
+      this._auxEventHandlers = new Map();
+      this._auxEventsPaused = false;
     }
-  
-    aux_initialize()
-    {
-    }
-  
-    aux_try_initialize()
-    {
-      if (this.widget !== null) return true;
-  
-      if (this.aux_initializing) return false;
-      this.aux_initializing = true;
-      this.aux_initialize();
-      this.aux_initializing = false;
-      return true;
-    }
-  
+
     connectedCallback()
     {
-      this.aux_try_initialize();
     }
   
     attributeChangedCallback(name, oldValue, newValue)
     {
-      if (!this.aux_try_initialize()) return;
-  
-      this.aux_events_paused = true;
+      this._auxEventsPaused = true;
       try {
-        const widget = this.widget;
+        const widget = this.auxWidget;
         const type = widget._options[name];
         const value = parse_attribute(type, newValue);
         widget.set(name, value);
       } catch (e) {
         warn('Setting attribute generated an error:', e);
       }
-      this.aux_events_paused = false;
+      this._auxEventsPause = false;
     }
   
     addEventListener(type, ...args)
     {
-      if (!is_native_event(type) && this.aux_try_initialize())
+      if (!is_native_event(type))
       {
-        const handlers = this.aux_events_handlers;
+        const handlers = this._auxEventHandlers;
   
         if (!handlers.has(type))
         {
           const cb = (...args) => {
-            if (this.aux_events_paused) return;
+            if (this._auxEventsPaused) return;
             this.dispatchEvent(new CustomEvent(type, { detail: { args: args } }));
           };
   
           handlers.set(type, cb);
-          this.widget.on(type, cb);
+          this.auxWidget.on(type, cb);
         }
       }
   
@@ -170,12 +169,9 @@ function create_component (base) {
     }
 
     /**
-     * Returns the widget object of this component.
+     * @property auxWidget
+     * The AUX widget object of this component.
      */
-    auxWidget()
-    {
-      return this.widget;
-    }
 
     /**
      * Trigger a resize. This leads the widget to recalculates it's size. Some
@@ -184,7 +180,7 @@ function create_component (base) {
      */
     auxResize()
     {
-      this.widget.trigger_resize();
+      this.auxWidget.trigger_resize();
     }
   };
 }
@@ -207,7 +203,7 @@ function find_parent_widget(node)
 {
   const parentNode = find_parent_node(node);
 
-  if (parentNode) return parentNode.auxWidget();
+  if (parentNode) return parentNode.auxWidget;
 
   return null;
 }
@@ -224,27 +220,21 @@ export function component_from_widget(Widget, base)
       return attributes;
     }
 
-    aux_initialize()
+    constructor()
     {
-      this.widget = new Widget({
-        element: this,
-      });
+      super();
 
-      for (let i = 0; i < attributes.length; i++)
-      {
-        const name = attributes[i];
-        if (this.hasAttribute(name))
-        {
-          const v = this.getAttribute(name);
-          this.attributeChangedCallback(name, null, v);
-        }
-      }
+      const options = extract_options(this, Widget, attributes);
+
+      options.element = this;
+
+      this.auxWidget = new Widget(options);
     }
 
     connectedCallback()
     {
       super.connectedCallback();
-      const widget = this.widget;
+      const widget = this.auxWidget;
       const parent = find_parent_widget(this.parentNode);
       if (parent)
       {
@@ -258,8 +248,8 @@ export function component_from_widget(Widget, base)
 
     disconnectedCallback()
     {
-      this.widget.set_parent(void(0));
-      this.widget.disable_draw();
+      this.auxWidget.set_parent(void(0));
+      this.auxWidget.disable_draw();
     }
   }
 }
@@ -284,38 +274,26 @@ export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove
       return attributes;
     }
 
-    aux_initialize()
-    {
-      this.widget = new Widget();
-      this.setAttribute('hidden', '');
-
-      for (let i = 0; i < attributes.length; i++)
-      {
-        const name = attributes[i];
-        if (this.hasAttribute(name))
-        {
-          const v = this.getAttribute(name);
-          this.attributeChangedCallback(name, null, v);
-        }
-      }
-    }
-
     constructor()
     {
       super();
-      this.parent = null;
+      const options = extract_options(this, Widget, attributes);
+
+      this.auxWidget = new Widget(options);
+      this.auxParent = null;
     }
 
     connectedCallback()
     {
       super.connectedCallback();
+      this.style.display = 'none';
 
-      const parent = this.parentNode.widget;
+      const parent = find_parent_widget(this.parentNode);
 
       if (parent instanceof ParentWidget)
       {
-        this.parent = parent;
-        append_cb(parent, this.widget, this);
+        this.auxParent = parent;
+        append_cb(parent, this.auxWidget, this);
       }
       else
       {
@@ -325,12 +303,12 @@ export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove
 
     disconnectedCallback()
     {
-      const parent = this.parent;
+      const parent = this.auxParent;
 
       if (parent)
       {
-        remove_cb(parent, this.widget, this);
-        this.parent = null;
+        remove_cb(parent, this.auxWidget, this);
+        this.auxParent = null;
       }
     }
   }
