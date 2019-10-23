@@ -96,37 +96,37 @@ class ComponentBase extends HTMLElement
   constructor(widget)
   {
     super();
-    this.tk_events_handlers = new Map();
-    this.tk_events_paused = false;
-    this.tk_initializing = false;
+    this.aux_events_handlers = new Map();
+    this.aux_events_paused = false;
+    this.aux_initializing = false;
     this.widget = null;
   }
 
-  tk_initialize()
+  aux_initialize()
   {
   }
 
-  tk_try_initialize()
+  aux_try_initialize()
   {
     if (this.widget !== null) return true;
 
-    if (this.tk_initializing) return false;
-    this.tk_initializing = true;
-    this.tk_initialize();
-    this.tk_initializing = false;
+    if (this.aux_initializing) return false;
+    this.aux_initializing = true;
+    this.aux_initialize();
+    this.aux_initializing = false;
     return true;
   }
 
   connectedCallback()
   {
-    this.tk_try_initialize();
+    this.aux_try_initialize();
   }
 
   attributeChangedCallback(name, oldValue, newValue)
   {
-    if (!this.tk_try_initialize()) return;
+    if (!this.aux_try_initialize()) return;
 
-    this.tk_events_paused = true;
+    this.aux_events_paused = true;
     try {
       const widget = this.widget;
       const type = widget._options[name];
@@ -135,19 +135,19 @@ class ComponentBase extends HTMLElement
     } catch (e) {
       warn('Setting attribute generated an error:', e);
     }
-    this.tk_events_paused = false;
+    this.aux_events_paused = false;
   }
 
   addEventListener(type, ...args)
   {
-    if (!is_native_event(type) && this.tk_try_initialize())
+    if (!is_native_event(type) && this.aux_try_initialize())
     {
-      const handlers = this.tk_events_handlers;
+      const handlers = this.aux_events_handlers;
 
       if (!handlers.has(type))
       {
         const cb = (...args) => {
-          if (this.tk_events_paused) return;
+          if (this.aux_events_paused) return;
           this.dispatchEvent(new CustomEvent(type, { detail: { args: args } }));
         };
 
@@ -181,7 +181,7 @@ export function component_from_widget(Widget)
       return attributes;
     }
 
-    tk_initialize()
+    aux_initialize()
     {
       this.widget = new Widget({
         element: this,
@@ -230,7 +230,7 @@ export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove
       return attributes;
     }
 
-    tk_initialize()
+    aux_initialize()
     {
       this.widget = new Widget();
       this.setAttribute('hidden', '');
