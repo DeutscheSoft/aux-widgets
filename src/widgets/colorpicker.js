@@ -31,7 +31,7 @@ import { rgb2bw, rgb2hex, rgb2hsl, hsl2rgb, hex2rgb } from '../utils/colors.js';
 var color_options = [ "rgb", "hsl", "hex", "hue", "saturation", "lightness", "red", "green", "blue" ];
 
 function checkinput(e) {
-    var I = this.hex._input;
+    var I = this.hex.element;
     if (e.keyCode && e.keyCode == 13) {
         apply.call(this);
         return;
@@ -248,8 +248,8 @@ export const ColorPicker = define_class({
         if (I.validate("rgb", "hsl", "hex", "hue", "saturation", "lightness", "red", "green", "blue")) {
             var bw = rgb2bw(O.rgb);
             var bg = "rgb("+parseInt(O.red)+","+parseInt(O.green)+","+parseInt(O.blue)+")";
-            this.hex._input.style.backgroundColor = bg;
-            this.hex._input.style.color = bw;
+            this.hex.element.style.backgroundColor = bg;
+            this.hex.element.style.color = bw;
             this.hex.set("value", O.hex);
             
             this._indicator.style.left = (O.hue * 100) + "%";
@@ -395,6 +395,7 @@ define_child_widget(ColorPicker, "hue", {
         min: 0,
         max: 1,
         "class": "aux-hue",
+        value_format: function (v) { return v.toFixed(2); },
     },
     map_options: {
         "hue" : "value"
@@ -419,6 +420,7 @@ define_child_widget(ColorPicker, "saturation", {
         min: 0,
         max: 1,
         "class": "aux-saturation",
+        value_format: function (v) { return v.toFixed(2); },
     },
     map_options: {
         "saturation" : "value"
@@ -444,6 +446,7 @@ define_child_widget(ColorPicker, "lightness", {
         min: 0,
         max: 1,
         "class": "aux-lightness",
+        value_format: function (v) { return v.toFixed(2); },
     },
     map_options: {
         "lightness" : "value"
