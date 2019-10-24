@@ -26,9 +26,9 @@ function keyup (e) {
     new_tag_from_input.call(this);
 }
 function new_tag_from_input () {
-    var val = this._input.value;
+    var val = this.element.value;
     if (!val) return;
-    this._input.value = "";
+    this.element.value = "";
     var t = false;
     if (!this.options.async)
         t = this.add_tag(val);
@@ -75,19 +75,19 @@ export const Tagger = define_class({
         if (I.add) {
             I.add = false;
             if (O.add) {
-                if (!this._input) {
-                    this._input = element("input", "aux-input");
-                    this._input.addEventListener("keyup", keyup.bind(this), true);
-                    this._input.type = "text";
-                    this._input.placeholder = "New tag";
-                    this.element.appendChild(this._input);
+                if (!this.element) {
+                    this.element = element("input", "aux-input");
+                    this.element.addEventListener("keyup", keyup.bind(this), true);
+                    this.element.type = "text";
+                    this.element.placeholder = "New tag";
+                    this.element.appendChild(this.element);
                 }
                 this.element.appendChild(this.add.element);
                 add_class(this.element, "aux-has-input");
             } else if (!O.add) {
-                if (this._input) {
-                    this.element.removeChild(this._input);
-                    this._input = null;
+                if (this.element) {
+                    this.element.removeChild(this.element);
+                    this.element = null;
                 }
                 this.add.element.remove();
                 remove_class(this.element, "aux-has-input");

@@ -34,11 +34,11 @@ function value_clicked(e) {
     if (O.set === false) return;
     if (this.__editing) return false;
     add_class(this.element, "aux-active");
-    this._input.setAttribute("value", O.value);
+    this.element.setAttribute("value", O.value);
     this.__editing = true;
-    this._input.focus();
+    this.element.focus();
     if (O.auto_select)
-        this._input.setSelectionRange(0, this._input.value.length);
+        this.element.setSelectionRange(0, this.element.value.length);
     /**
      * Is fired when the value was clicked.
      * 
@@ -67,7 +67,7 @@ function value_typing(e) {
             break;
         case 13:
             // ENTER
-            this.userset("value", O.set ? O.set(this._input.value) : this._input.value);
+            this.userset("value", O.set ? O.set(this.element.value) : this.element.value);
             value_done.call(this);
             /**
              * Is fired after the value has been set and editing has ended.
@@ -96,13 +96,13 @@ function value_input() {
     if (O.set === false) return;
     if (!this.__editing) return;
     if (O.editmode == "immediate")
-        this.userset("value", O.set ? O.set(this._input.value) : this._input.value);
+        this.userset("value", O.set ? O.set(this.element.value) : this.element.value);
 }
 function value_done() {
     if (!this.__editing) return;
     this.__editing = false;
     remove_class(this.element, "aux-active");
-    this._input.blur();
+    this.element.blur();
     /**
      * Is fired when editing of the value ends.
      * 
@@ -120,8 +120,8 @@ function submit_cb(e) {
     return false;
 }
 /**
- * Value is a formatted text field displaying numbers and providing
- * a input field for editing the value.
+ * Value is a formatted and editable text field displaying values as
+ *   strings or numbers.
  *
  * @class Value
  * 
@@ -132,14 +132,14 @@ function submit_cb(e) {
  * @property {Number} [options.value=0] - The value.
  * @property {Function} [options.format=function (v) { return v; }] - A formatting
  *   function used to display the value.
- * @property {Integer} [options.size=5] - Size attribute of the INPUT element.
- * @property {Integer} [options.maxlength] - Maxlength attribute of the INPUT element.
+ * @property {Integer} [options.size=5] - Size attribute of the element.
+ * @property {Integer} [options.maxlength] - Maxlength attribute of the element.
  * @property {Function} [options.set=function (val) { return parseFloat(val || 0); }] -
  *   A function which is called to parse user input.
- * @property {boolean} [options.auto_select=false] - Select the entire text in the entry field if clicked (new in v1.3).
- * @property {boolean} [options.readonly=false] - Sets the readonly attribute (new in v1.3).
- * @property {string} [options.placeholder=""] - Sets the placeholder attribute (new in v1.3).
- * @property {string} [options.type="text"] - Sets the type attribute. Type can be either `text` or `password` (new in v1.3).
+ * @property {boolean} [options.auto_select=false] - Select the entire text if clicked .
+ * @property {boolean} [options.readonly=false] - Sets the readonly attribute.
+ * @property {string} [options.placeholder=""] - Sets the placeholder attribute.
+ * @property {string} [options.type="text"] - Sets the type attribute. Type can be either `text` or `password`.
  * @property {string} [options.editmode="onenter"] - Sets the event to trigger the userset event. Can be one out of `onenter` or `immediate`.
  * 
  */
@@ -166,7 +166,7 @@ export const Value = define_class({
         // false to disable editing. A function has to return
         // the value treated by the parent widget.
         set: function (val) { return parseFloat(val || 0); },
-        auto_select: false,
+        auto_select: true,
         readonly: false,
         placeholder: "",
         type: "text",
@@ -177,58 +177,49 @@ export const Value = define_class({
         click: value_clicked,
     },
     initialize: function (options) {
-        if (!options.element) options.element = element("div");
+        if (!options.element) options.element = element("input");
         Widget.prototype.initialize.call(this, options);
         /**
-         * @member {HTMLDivElement} Value#element - The main DIV container.
-         *   Has class <code>.aux-value</code>.
+         * @member {HTMLInputElement} Value#element - The text input.
+         *   Has class <code>aux-value</code>.
          */
         
-        /**
-         * @member {HTMLInputElement} Value#_input - The text input.
-         *   Has class <code>.aux-input</code>.
-         */
-        this._input  = element("input", "aux-input");
-        this._input.type = "text";
-
         this._value_typing = value_typing.bind(this);
         this._value_done = value_done.bind(this);
         this._value_input = value_input.bind(this);
                 
-        this._input.addEventListener("keyup", this._value_typing);
-        this._input.addEventListener("input", this._value_input);
-        this._input.addEventListener("blur", this._value_done);
+        this.element.addEventListener("keyup", this._value_typing);
+        this.element.addEventListener("input", this._value_input);
+        this.element.addEventListener("blur", this._value_done);
         this.__editing = false;
     },
 
     draw: function(O, element)
     {
-      add_class(element, "aux-value");
-      element.appendChild(this._input);
-
-      Widget.prototype.draw.call(this, O, element);
+        add_class(element, "aux-value");
+        Widget.prototype.draw.call(this, O, element);
     },
     
     redraw: function () {
         var I = this.invalid;
         var O = this.options;
-        var E = this._input;
+        var E = this.element;
 
         Widget.prototype.redraw.call(this);
 
         if (I.size) {
-            I.size = 0;
+            I.size = false;
             E.setAttribute("size", O.size);
         }
 
         if (I.maxlength) {
-            I.maxlength = 0;
+            I.maxlength = false;
             if (O.maxlength) E.setAttribute("maxlength", O.maxlength);
             else E.removeAttribute("maxlength");
         }
         
         if (I.placeholder) {
-            I.placeholder = 0;
+            I.placeholder = false;
             if (O.placeholder) E.setAttribute("placeholder", O.placeholder);
             else E.removeAttribute("placeholder");
         }
@@ -239,7 +230,7 @@ export const Value = define_class({
         }
         
         if (I.readonly) {
-            I.readonly = 0;
+            I.readonly = false;
             if (O.readonly)
                 E.setAttribute("readonly", "readonly");
             else
@@ -247,16 +238,14 @@ export const Value = define_class({
         }
         
         if (I.type) {
-            I.type = 0;
+            I.type = false;
             E.setAttribute("type", O.type);
         }
     },
-    
     destroy: function () {
-        this._input.removeEventListener("keyup", this._value_typing);
-        this._input.removeEventListener("blur", this._value_done);
-        this._input.removeEventListener("input", this._value_input);
-        this._input.remove();
+        this.element.removeEventListener("keyup", this._value_typing);
+        this.element.removeEventListener("blur", this._value_done);
+        this.element.removeEventListener("input", this._value_input);
         Widget.prototype.destroy.call(this);
     },
 });
