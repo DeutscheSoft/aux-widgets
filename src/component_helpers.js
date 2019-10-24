@@ -91,90 +91,94 @@ function attributes_from_widget(Widget)
   return attributes;
 }
 
-class ComponentBase extends HTMLElement
-{
-  constructor(widget)
+function create_component (base) {
+  if (!base) base = HTMLElement;
+  return class extends base
   {
-    super();
-    this.aux_events_handlers = new Map();
-    this.aux_events_paused = false;
-    this.aux_initializing = false;
-    this.widget = null;
-  }
-
-  aux_initialize()
-  {
-  }
-
-  aux_try_initialize()
-  {
-    if (this.widget !== null) return true;
-
-    if (this.aux_initializing) return false;
-    this.aux_initializing = true;
-    this.aux_initialize();
-    this.aux_initializing = false;
-    return true;
-  }
-
-  connectedCallback()
-  {
-    this.aux_try_initialize();
-  }
-
-  attributeChangedCallback(name, oldValue, newValue)
-  {
-    if (!this.aux_try_initialize()) return;
-
-    this.aux_events_paused = true;
-    try {
-      const widget = this.widget;
-      const type = widget._options[name];
-      const value = parse_attribute(type, newValue);
-      widget.set(name, value);
-    } catch (e) {
-      warn('Setting attribute generated an error:', e);
-    }
-    this.aux_events_paused = false;
-  }
-
-  addEventListener(type, ...args)
-  {
-    if (!is_native_event(type) && this.aux_try_initialize())
+    constructor(widget)
     {
-      const handlers = this.aux_events_handlers;
-
-      if (!handlers.has(type))
-      {
-        const cb = (...args) => {
-          if (this.aux_events_paused) return;
-          this.dispatchEvent(new CustomEvent(type, { detail: { args: args } }));
-        };
-
-        handlers.set(type, cb);
-        this.widget.on(type, cb);
-      }
+      super();
+      this.aux_events_handlers = new Map();
+      this.aux_events_paused = false;
+      this.aux_initializing = false;
+      this.widget = null;
     }
-
-    super.addEventListener(type, ...args);
-  }
-
-  static get aux()
-  {
-    return true;
-  }
-
-  auxWidget()
-  {
-    return this.widget;
+  
+    aux_initialize()
+    {
+    }
+  
+    aux_try_initialize()
+    {
+      if (this.widget !== null) return true;
+  
+      if (this.aux_initializing) return false;
+      this.aux_initializing = true;
+      this.aux_initialize();
+      this.aux_initializing = false;
+      return true;
+    }
+  
+    connectedCallback()
+    {
+      this.aux_try_initialize();
+    }
+  
+    attributeChangedCallback(name, oldValue, newValue)
+    {
+      if (!this.aux_try_initialize()) return;
+  
+      this.aux_events_paused = true;
+      try {
+        const widget = this.widget;
+        const type = widget._options[name];
+        const value = parse_attribute(type, newValue);
+        widget.set(name, value);
+      } catch (e) {
+        warn('Setting attribute generated an error:', e);
+      }
+      this.aux_events_paused = false;
+    }
+  
+    addEventListener(type, ...args)
+    {
+      if (!is_native_event(type) && this.aux_try_initialize())
+      {
+        const handlers = this.aux_events_handlers;
+  
+        if (!handlers.has(type))
+        {
+          const cb = (...args) => {
+            if (this.aux_events_paused) return;
+            this.dispatchEvent(new CustomEvent(type, { detail: { args: args } }));
+          };
+  
+          handlers.set(type, cb);
+          this.widget.on(type, cb);
+        }
+      }
+  
+      super.addEventListener(type, ...args);
+    }
+  
+    static get aux()
+    {
+      return true;
+    }
+  
+    auxWidget()
+    {
+      return this.widget;
+    }
   }
 }
 
-export function component_from_widget(Widget)
+export function component_from_widget(Widget, base)
 {
+  let compbase = create_component(base);
   const attributes = attributes_from_widget(Widget);
 
-  return class extends ComponentBase
+  return class extends compbase
   {
     static get observedAttributes()
     {
@@ -211,8 +215,9 @@ export function component_from_widget(Widget)
   }
 }
 
-export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove_cb)
+export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove_cb, base)
 {
+  let compbase = create_component(base);
   const attributes = attributes_from_widget(Widget);
 
   if (!append_cb) append_cb = (parent, child) => {
@@ -223,7 +228,7 @@ export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove
     parent.remove_child(child);
   };
 
-  return class extends ComponentBase
+  return class extends compbase
   {
     static get observedAttributes()
     {
@@ -282,7 +287,7 @@ export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove
   }
 }
 
-export function define_component(name, component)
+export function define_component(name, component, options)
 {
-  customElements.define('aux-'+name, component);
+  customElements.define('aux-'+name, component, options);
 }
