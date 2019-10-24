@@ -200,7 +200,7 @@ export const DragValue = define_class({
         events:    function () { return this.parent; },
         direction: "polar",
         active:    true,
-        cursor:    false,
+        cursor:    true,
         blind_angle: 20,
         rotation:  45,
         reverse:   false,
