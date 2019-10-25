@@ -96,6 +96,9 @@ function dblclick(ev) {
  * 
  * @property {Number} [options.value] - The faders position. This options is
  *   modified by user interaction.
+ * @property {String} [options.layout] - The faders layout. One out of
+ *   `top`, `left`, `right` or `bottom`, defining the fader handles position
+ *   in comparison to the scale.
  * @property {Boolean} [options.bind_click=false] - If true, a <code>click</code>
  *   on the fader will move the handle to the pointed position.
  * @property {Boolean} [options.bind_dblclick=true] - If true, a <code>dblclick</code>
