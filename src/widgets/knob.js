@@ -136,7 +136,6 @@ export const Knob = define_class({
             direction: options.direction,
             rotation: options.rotation,
             blind_angle: options.blind_angle,
-            limit: true,
         });
         /**
          * @member {ScrollValue} Knob#scroll - Instance of {@link ScrollValue} used for the
@@ -145,7 +144,6 @@ export const Knob = define_class({
         this.scroll = new ScrollValue(this, {
             node:    S,
             range:   module_range,
-            limit: true,
         });
 
         this.set("base", options.base);
@@ -205,6 +203,7 @@ export const Knob = define_class({
     },
 
     set: function(key, value) {
+        var O = this.options;
         if (key === "base") {
             if (value === false) value = this.options.min;
         }

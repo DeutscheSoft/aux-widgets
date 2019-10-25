@@ -568,19 +568,20 @@ export const Circular = define_class({
     
     // GETTERS & SETTERS
     set: function (key, value) {
+        var O = this.options;
         switch (key) {
         case "dot":
         case "marker":
         case "label":
-            value = Object.assign(this.options[key], value);
+            value = Object.assign(O[key], value);
             break;
         case "base":
-            if (value === false) value = this.options.min;
+            if (value === false) value = O.min;
             break;
         case "value":
-            if (value > this.options.max || value < this.options.min)
+            if (value > O.max || value < O.min)
                 this.warning(this.element);
-            value = this.snap(value);
+            value = this.snap(Math.max(O.min, Math.min(O.max, value)));
             break;
         case "labels":
             if (value)
