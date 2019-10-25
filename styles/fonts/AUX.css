@@ -5,26 +5,6 @@
   src: url("AUX.ttf") format("truetype");
 }
 
-.aux-icon {
-  font-family: "AUX", sans-serif;
-  font-size: 24px;
-  text-align: center;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.aux-icon.aux-12  { font-size: 12px; }
-.aux-icon.aux-16  { font-size: 16px; }
-.aux-icon.aux-20  { font-size: 20px; }
-.aux-icon.aux-24  { font-size: 24px; }
-.aux-icon.aux-32  { font-size: 32px; }
-.aux-icon.aux-40  { font-size: 40px; }
-.aux-icon.aux-48  { font-size: 48px; }
-.aux-icon.aux-56  { font-size: 56px; }
-.aux-icon.aux-64  { font-size: 64px; }
-.aux-icon.aux-128 { font-size: 128px; }
-.aux-icon.aux-256 { font-size: 256px; }
-
 .aux-icon.warning::before                              { font-family: 'AUX'; content: '􀀀'; }
 .aux-icon.information::before                          { font-family: 'AUX'; content: '􀀁'; }
 .aux-icon.info::before                                 { font-family: 'AUX'; content: '􀀁'; }
