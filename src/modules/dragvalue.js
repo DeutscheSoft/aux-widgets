@@ -131,7 +131,21 @@ function movecapture(state) {
 function stop_drag(state, ev) {
     this.emit("stopdrag", ev);
     var O = this.options;
-    if (O.events) O.events.call(this).emit("stopdrag", ev);
+    if (O.events)
+        O.events.call(this).emit("stopdrag", ev);
+}
+
+function set_cursor () {
+    switch (this.options.direction) {
+        case "vertical": this.global_cursor("row-resize"); break;
+        case "horizontal": this.global_cursor("col-resize"); break;
+        case "polar": this.global_cursor("move"); break;
+    }
+}
+function remove_cursor () {
+    this.remove_cursor("row-resize");
+    this.remove_cursor("col-resize");
+    this.remove_cursor("move");
 }
 
 export const DragValue = define_class({
@@ -247,11 +261,7 @@ export const DragValue = define_class({
                 var O = this.options;
                 add_class(O.classes || O.node, "aux-dragging");
                 if (O.cursor) {
-                    if (O.direction === "vertical") {
-                        this.global_cursor("row-resize");
-                    } else {
-                        this.global_cursor("col-resize");
-                    }
+                    set_cursor.call(this);
                 }
             }.bind(this), 1);
         },
@@ -259,13 +269,8 @@ export const DragValue = define_class({
             S.add(function() {
                 var O = this.options;
                 remove_class(O.classes || O.node, "aux-dragging");
-
                 if (O.cursor) {
-                    if (O.direction === "vertical") {
-                        this.remove_cursor("row-resize");
-                    } else {
-                        this.remove_cursor("col-resize");
-                    }
+                    remove_cursor.call(this);
                 }
             }.bind(this), 1);
         },
