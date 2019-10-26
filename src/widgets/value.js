@@ -132,8 +132,8 @@ function submit_cb(e) {
  * @property {Number} [options.value=0] - The value.
  * @property {Function} [options.format=function (v) { return v; }] - A formatting
  *   function used to display the value.
- * @property {Integer} [options.size=5] - Size attribute of the element.
- * @property {Integer} [options.maxlength] - Maxlength attribute of the element.
+ * @property {Null|Integer} [options.size=1] - Size attribute of the element. `null` to unset.
+ * @property {Null|Integer} [options.maxlength=null] - Maxlength attribute of the element. `null` to unset.
  * @property {Function} [options.set=function (val) { return parseFloat(val || 0); }] -
  *   A function which is called to parse user input.
  * @property {boolean} [options.auto_select=false] - Select the entire text if clicked .
@@ -160,7 +160,8 @@ export const Value = define_class({
     options: {
         value: 0,
         format: function (v) { return v; },
-        size: 5,
+        size: 1,
+        maxlength: null,
         container: false,
         // set a callback function if value is editable or
         // false to disable editing. A function has to return
