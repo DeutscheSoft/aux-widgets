@@ -174,7 +174,7 @@ export const Select = define_class({
          * @member {HTMLListElement} Select#_list - A HTML list for displaying the entry titles.
          *   Has class <code>.aux-selectlist</code>.
          */
-        this._list = element("ul", "aux-selectlist");
+        this._list = element("div", "aux-selectlist");
         this._global_touch_start = function (e) {
             if (this.__open && !this.__transition &&
                 !this._list.contains(e.target) &&
@@ -722,12 +722,11 @@ export const SelectEntry = define_class({
         value: null
     },
     initialize: function (options) {
-        if (!options.element) options.element = element("li");
+        if (!options.element) options.element = element("div");
         Label.prototype.initialize.call(this, options);
         add_class(this.element, "aux-selectentry");
     },
     static_events: {
-      touchstart: on_select,
-      mousedown: on_select,
+      click: on_select
     }
 });
