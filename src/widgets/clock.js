@@ -220,7 +220,7 @@ export const Clock = define_class({
         label_upper: function (date, fps, months, days) {
             return days[date.getDay()];
         },
-        label_lower: function (date, fps, months, days) {
+        label_lower: function (date, fps, months/*, days*/) {
             var d = date.getDate(), m = date.getMonth(), y = date.getFullYear();
             return ((d < 10) ? ("0" + d) : d) + ". " + months[m] + " " + y;
         },

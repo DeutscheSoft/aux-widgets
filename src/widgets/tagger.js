@@ -98,7 +98,7 @@ export const Tagger = define_class({
         var t = Taggable.prototype.add_tag.call(this, tag, options);
         if (!t) return;
         t.node.label.on("click", (function (that, tag) {
-            return function (e) {
+            return function () {
                 that.emit("tagclicked", tag.tag, tag.node);
             };
         })(this, t));

@@ -28,7 +28,7 @@ import { GlobalCursor } from '../implements/globalcursor.js';
 import { translate_anchor } from '../utils/anchor.js';
 import {
     add_class, remove_class, outer_width, outer_height, position_left, position_top, width,
-    inner_width, inner_height, element, height, toggle_class, set_content
+    inner_width, inner_height, height, toggle_class, set_content
   } from '../utils/dom.js';
  
 function header_action() {
