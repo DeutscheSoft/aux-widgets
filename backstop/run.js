@@ -3,20 +3,24 @@ const start_http = require('./http_server.js').start;
 const path = require('path');
 const fs = require('fs');
 
-function find_chrome()
+function find_chromes()
 {
     const locations = [
         "/usr/bin/chromium",
         "/usr/bin/chromium-browser",
-        "/usr/bin/chrome-browser"
+        "/usr/bin/chrome-browser",
+        "/usr/bin/google-chrome",
+        "/usr/bin/google-chrome-beta",
+        "/usr/bin/google-chrome-stable",
+        "/usr/bin/google-chrome-unstable"
     ];
 
-    const chrome = locations.filter((path) => fs.existsSync(path))[0];
+    const chromes = locations.filter((path) => fs.existsSync(path));
 
-    if (!chrome)
+    if (!chromes.length)
         throw new Error('Could not find chrom(e|ium) executable to use.');
 
-    return chrome;
+    return chromes;
 }
 
 const config = {
@@ -47,7 +51,7 @@ const config = {
   "engine": "puppeteer",
   "engineOptions": {
     "args": ["--no-sandbox"],
-    executablePath: find_chrome(),
+    executablePath: null,
   },
   "asyncCaptureLimit": 5,
   "asyncCompareLimit": 50,
@@ -115,15 +119,38 @@ test_files.map((fname) => {
   config.scenarios.push(make_scenario(fname));
 });
 
-backstop(process.argv[2] || 'test', {
-    config: config
-  }).then(
-    function() {
-      console.log('All good.');
-      process.exit(0);
-    },
-    function(e) {
-      console.error(e);
-      process.exit(1);
+function run_backstop(executable, command)
+{
+  config.engineOptions.executablePath = executable;
+
+  return backstop(command, {
+      config: config
+    });
+}
+
+async function run(command)
+{
+  const chromes = find_chromes();
+
+  if (command === 'test')
+  {
+    for (let i = 0; i < chromes.length; i++)
+    {
+      await run_backstop(chromes[i], command);
     }
+  }
+  else if (command === 'approve')
+  {
+    await run_backstop(chromes[0], command);
+  }
+  else
+  {
+    throw new Error("Unknown command " + command);
+  }
+}
+
+run(process.argv[2] || 'test')
+  .then(
+    function() { process.exit(0); },
+    function(e) { console.error(e); process.exit(1); }
   );
