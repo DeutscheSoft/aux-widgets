@@ -103,11 +103,15 @@ function readdir_recursive(p)
   return ret;
 }
 
-const test_files = readdir_recursive(path.join(__dirname, "tests"))
+const test_dir = path.join(__dirname, "tests");
+
+const test_files = readdir_recursive(test_dir)
   .filter((fname) => fname.endsWith(".html"))
   .filter((fname) => !fname.includes("Clock")); // ignore clock for now
 
 test_files.map((fname) => {
+  return fname.substr(test_dir.length);
+}).forEach((fname) => {
   config.scenarios.push(make_scenario(fname));
 });
 
