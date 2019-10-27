@@ -71,6 +71,7 @@ var __native_events = {
     scroll     : true,
     focus      : true,
     blur       : true,
+    input      : true,
 
     // mousewheel
     mousewheel : true,
