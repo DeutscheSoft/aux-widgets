@@ -128,6 +128,8 @@ function create_component (base) {
   
     attributeChangedCallback(name, oldValue, newValue)
     {
+      if (oldValue === newValue) return;
+
       this._auxEventsPaused = true;
       try {
         const widget = this.auxWidget;
