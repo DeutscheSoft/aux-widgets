@@ -3,6 +3,22 @@ const start_http = require('./http_server.js').start;
 const path = require('path');
 const fs = require('fs');
 
+function find_chrome()
+{
+    const locations = [
+        "/usr/bin/chromium",
+        "/usr/bin/chromium-browser",
+        "/usr/bin/chrome-browser"
+    ];
+
+    const chrome = locations.filter((path) => fs.existsSync(path))[0];
+
+    if (!chrome)
+        throw new Error('Could not find chrom(e|ium) executable to use.');
+
+    return chrome;
+}
+
 const config = {
   "id": "backstop_default",
   "viewports": [
@@ -31,7 +47,7 @@ const config = {
   "engine": "puppeteer",
   "engineOptions": {
     "args": ["--no-sandbox"],
-    executablePath: '/usr/bin/chromium',
+    executablePath: find_chrome(),
   },
   "asyncCaptureLimit": 5,
   "asyncCompareLimit": 50,
