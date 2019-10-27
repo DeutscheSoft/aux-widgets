@@ -778,7 +778,7 @@ define_child_widget(Window, "status", {
  * @member {Button} Window#shrink - The shrink button.
  */
 
-function bfactory(name) {
+function bfactory(name, handler) {
     define_child_widget(Window, name, {
         create: Button,
         default_options: {
@@ -786,14 +786,18 @@ function bfactory(name) {
             "icon" :  "window" + name,
         },
         static_events: {
-            "click" : function (e) { (eval(name)).call(this.parent, e); },
+            "click" : function (e) { handler.call(this.parent, e); },
             "mousedown" : function (e) { e.stopPropagation(); },
         },
     });
 }
-var b = ["close", "minimize", "maximize", "maximizevertical", "maximizehorizontal", "shrink"];
+bfactory("close", close);
+bfactory("minimize", minimize);
+bfactory("maximize", maximize);
+bfactory("maximizevertical", maximizevertical);
+bfactory("maximizehorizontal", maximizehorizontal);
+bfactory("shrink", shrink);
 
-b.map(bfactory);
 /**
  * @member {Icon} Window#size - A {@link Icon} acting as handle for window resize.
  */
