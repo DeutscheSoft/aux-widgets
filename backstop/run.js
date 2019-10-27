@@ -30,7 +30,8 @@ const config = {
   "report": ["browser"],
   "engine": "puppeteer",
   "engineOptions": {
-    "args": ["--no-sandbox"]
+    "args": ["--no-sandbox"],
+    executablePath: '/usr/bin/chromium',
   },
   "asyncCaptureLimit": 5,
   "asyncCompareLimit": 50,
