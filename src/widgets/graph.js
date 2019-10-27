@@ -17,6 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
+/* jshint -W014 */
 /* jshint -W086 */
 
 import { define_class } from './../widget_helpers.js';

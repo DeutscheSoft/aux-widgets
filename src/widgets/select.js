@@ -16,6 +16,9 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
+
+/* jshint -W014 */
+
 import { define_class } from './../widget_helpers.js';
 import { Button } from './button.js';
 import { Label } from './label.js';
