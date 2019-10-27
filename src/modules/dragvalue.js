@@ -18,6 +18,7 @@
  */
 
 /* jshint -W018 */
+/* jshint -W086 */
 
 import { define_class } from '../widget_helpers.js';
 import { DragCapture } from './dragcapture.js';

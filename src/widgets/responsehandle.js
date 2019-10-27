@@ -17,6 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
+/* jshint -W086 */
+
 import { define_class } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 import { GlobalCursor } from '../implements/globalcursor.js';
