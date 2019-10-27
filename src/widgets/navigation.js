@@ -81,17 +81,17 @@ function measure () {
     this.measurement = mm;
 }
 
-function prev_clicked(e) {
+function prev_clicked() {
     this.userset("select", Math.max(0, this.options.select - 1));
 }
-function prev_dblclicked(e) {
+function prev_dblclicked() {
     this.userset("select", 0);
 }
 
-function next_clicked(e) {
+function next_clicked() {
     this.userset("select", Math.min(this.buttons.buttons.length-1, this.options.select + 1));
 }
-function next_dblclicked(e) {
+function next_dblclicked() {
     this.userset("select", this.buttons.buttons.length-1);
 }
 

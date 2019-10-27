@@ -66,7 +66,7 @@ function clicked(ev) {
     if (this.scale.element.contains(ev.target)) return;
     value = this.userset("value", get_value.call(this, ev));
 }
-function dblclick(ev) {
+function dblclick() {
     this.userset("value", this.options.reset);
     /**
      * Is fired when the handle receives a double click.
@@ -149,7 +149,7 @@ export const Fader = define_class({
             if (value) this.on("dblclick", dblclick);
             else this.off("dblclick", dblclick);
         },
-        set_layout: function(value) {
+        set_layout: function() {
             this.options.direction = vert(this.options) ? "vertical" : "horizontal";
             this.drag.set("direction", this.options.direction);
             this.scroll.set("direction", this.options.direction);

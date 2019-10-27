@@ -71,12 +71,12 @@ function press_cancel() {
 }
 
 /* MOUSE handling */
-function mouseup(e) {
+function mouseup() {
     this.off("mouseup", mouseup);
     this.off("mouseleave", mouseleave);
     press_end.call(this);
 }
-function mouseleave(e) {
+function mouseleave() {
     this.off("mouseup", mouseup);
     this.off("mouseleave", mouseleave);
     press_cancel.call(this);

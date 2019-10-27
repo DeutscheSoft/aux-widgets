@@ -89,7 +89,7 @@ function set_labels() {
         var mleft   = parseInt(get_style(E, "margin-left")) || 0;
         var mright  = parseInt(get_style(E, "margin-right")) || 0;
         var mtop    = parseInt(get_style(E, "margin-top")) || 0;
-        var mbottom = parseInt(get_style(E, "margin-bottom")) || 0;
+        //var mbottom = parseInt(get_style(E, "margin-bottom")) || 0;
         var space   = O.size - mleft - mright - this._margin * 2;
         var scale   = space / bb.width;
         var pos     = O.size / 2;
@@ -211,7 +211,7 @@ export const Clock = define_class({
         fps:          25,         // framerate for calculatind SMTP frames
         months:       ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
         days:         ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-        label: function (date, fps, months, days) {
+        label: function (date/*, fps, months, days*/) {
             var h = date.getHours(), m = date.getMinutes(), s = date.getSeconds();
             return ((h < 10) ? ("0" + h) : h) + ":" +
                    ((m < 10) ? ("0" + m) : m) + ":" +

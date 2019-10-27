@@ -179,7 +179,7 @@ function draw_title() {
     S.add(function() {
         var mtop    = parseInt(get_style(_title, "margin-top") || 0);
         var mleft   = parseInt(get_style(_title, "margin-left") || 0);
-        var mbottom = parseInt(get_style(_title, "margin-bottom") || 0);
+        //var mbottom = parseInt(get_style(_title, "margin-bottom") || 0);
         var mright  = parseInt(get_style(_title, "margin-right") || 0);
         var bb      = _title.getBoundingClientRect();
         var x,y,anchor, range_x = this.range_x, range_y = this.range_y;

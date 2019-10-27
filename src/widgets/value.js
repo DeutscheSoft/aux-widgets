@@ -29,7 +29,7 @@ import { element, add_class, remove_class } from './../utils/dom.js';
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-function value_clicked(e) {
+function value_clicked() {
     var O = this.options;
     if (O.set === false) return;
     if (this.__editing) return false;

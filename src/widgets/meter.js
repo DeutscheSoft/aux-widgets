@@ -229,7 +229,7 @@ export const Meter = define_class({
              */
             this.emit("titlechanged", value);
         },
-        set_segment: function(value) {
+        set_segment: function() {
             // what is this supposed to do?
             // -> probably invalidate the value to force a redraw
             this.set("value", this.options.value);

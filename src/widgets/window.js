@@ -48,11 +48,11 @@ function header_action() {
      */
     that.emit("headeraction", that.options.header_action);
 }
-function mout(e) {
+function mout() {
     if(this.options.auto_active && !this.dragging && !this.resizing)
         remove_class(this.element, "aux-active");
 }
-function mover(e) {
+function mover() {
     if(this.options.auto_active)
         add_class(this.element, "aux-active");
 }
@@ -64,7 +64,7 @@ function max_width() {
     // returns the max width of the window
     return (this.options.max_width < 0 ? Number.MAX_SAFE_INTEGER : this.options.max_width);
 }
-function close(e) {
+function close() {
     /**
      * The user clicked the close button.
      * @event Window.closeclicked
@@ -73,7 +73,7 @@ function close(e) {
     if (this.options.auto_close)
         this.destroy();
 }
-function maximize(e) {
+function maximize() {
     if (this.options.auto_maximize) this.toggle_maximize();
     /**
      * The user clicked the maximize button.
@@ -82,7 +82,7 @@ function maximize(e) {
      */
     this.emit("maximizeclicked", this.options.maximize);
 }
-function maximizevertical(e) {
+function maximizevertical() {
     if (this.options.auto_maximize) this.toggle_maximize_vertical();
     /**
      * The user clicked the maximize-vertical button.
@@ -91,7 +91,7 @@ function maximizevertical(e) {
      */
     this.emit("maximizeverticalclicked", this.options.maximize.y);
 }
-function maximizehorizontal(e) {
+function maximizehorizontal() {
     if (this.options.auto_maximize) this.toggle_maximize_horizontal();
     /**
      * The user clicked the maximize-horizontal button.
@@ -100,7 +100,7 @@ function maximizehorizontal(e) {
      */
     this.emit("maximizehorizontalclicked", this.options.maximize.x);
 }
-function minimize(e) {
+function minimize() {
     if (this.options.auto_minimize) this.toggle_minimize();
     /**
      * The user clicked the minimize button.
@@ -109,7 +109,7 @@ function minimize(e) {
      */
     this.emit("minimizeclicked", this.options.minimize);
 }
-function shrink(e) {
+function shrink() {
     if (this.options.auto_shrink) this.toggle_shrink();
     /**
      * The user clicked the shrink button.
@@ -182,7 +182,7 @@ function vert_max() {
     // returns if maximized vertically
     return this.options.maximize.y;
 }
-function start_drag(ev, el) {
+function start_drag(ev) {
     this.global_cursor("move");
     add_class(this.element, "aux-dragging");
     // if window is maximized, we have to replace the window according
@@ -212,7 +212,7 @@ function start_drag(ev, el) {
      */
     this.emit("startdrag", ev);
 }
-function stop_drag(ev, el) {
+function stop_drag(ev) {
     this.dragging = false;
     calculate_position.call(this);
     this.remove_cursor("move");
@@ -223,7 +223,7 @@ function stop_drag(ev, el) {
      */
     this.emit("stopdrag", ev);
 }
-function dragging(ev, el) {
+function dragging(ev) {
     if (!this.dragging) {
         this.dragging = true;
         // un-maximize

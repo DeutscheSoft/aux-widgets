@@ -24,7 +24,7 @@ import { Icon } from './icon.js';
 import { add_class } from '../utils/dom.js';
 import { S } from '../dom_scheduler.js';
 
-function close_clicked (e) {
+function close_clicked () {
   /**
    * Is fired when the user clicks on the close button.
    * 

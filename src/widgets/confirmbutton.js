@@ -86,7 +86,7 @@ function state_reset() {
  * @event ConfirmButton#confirmed
  */
          
-function clicked(e) {
+function clicked() {
   var T = this.__temp;
   var O = this.options;
   if (!O.confirm) {

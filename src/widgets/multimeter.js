@@ -210,7 +210,7 @@ function map_child_option(value, key) {
     }
 }
 
-add_static_event(MultiMeter, "set_titles", function(value, key) {
+add_static_event(MultiMeter, "set_titles", function(value) {
     map_child_option.call(this, value, "title");
 });
 

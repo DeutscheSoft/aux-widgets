@@ -725,7 +725,6 @@ function redraw_lines(O, X) {
     var pos = this.label;
     var range_x = O.range_x;
     var range_y = O.range_y;
-    var range_z = O.range_z;
 
     var x = range_x.val2px(O.x);
     var y = range_y.val2px(O.y);
@@ -999,7 +998,7 @@ export const ResponseHandle = define_class({
         show_handle:      true
     },
     static_events: {
-        set_show_axis: function(value) {
+        set_show_axis: function() {
             var O = this.options;
             if (O.mode === "circular") create_line1.call(this);
             create_line2.call(this);
@@ -1007,7 +1006,7 @@ export const ResponseHandle = define_class({
         set_label: function(value) {
             if (value !== false && !this._label) create_label.call(this);
         },
-        set_show_handle: function(value) {
+        set_show_handle: function() {
             this.set("mode", this.options.mode);
             this.set("show_axis", this.options.show_axis);
             this.set("label", this.options.label);

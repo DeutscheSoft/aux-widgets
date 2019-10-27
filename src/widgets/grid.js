@@ -221,7 +221,7 @@ export const Grid = define_class({
             this.set("width", this.options.width);
         if (this.options.height)
             this.set("height", this.options.width);
-        this.invalidate_ranges = function (key, value) {
+        this.invalidate_ranges = function () {
             this.invalid.range_x = true;
             this.invalid.range_y = true;
             this.trigger_draw();

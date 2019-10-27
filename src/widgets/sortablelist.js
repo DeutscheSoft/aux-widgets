@@ -28,10 +28,10 @@ import { add_class } from '../utils/dom.js';
 function build_dragcapture() {
     this.dragcapture = new DragCapture(this, {
         state: true,
-        onstartcapture: function (state) {
+        onstartcapture: function () {
             return true;
         },
-        onmovecapture: function (state) {
+        onmovecapture: function () {
         },
         onstopcapture: function () {
         }

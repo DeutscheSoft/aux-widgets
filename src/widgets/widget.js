@@ -195,13 +195,13 @@ export const Widget = define_class({
         dblclick: 0,
     },
     static_events: {
-        set_container: function(value) {
+        set_container: function() {
             throw new Error('container is not a dynamic option.');
         },
-        set_styles: function(value) {
+        set_styles: function() {
             throw new Error('styles is not a dynamic option.');
         },
-        set_class: function(value) {
+        set_class: function() {
             throw new Error('class is not a dynamic option.');
         },
         set_dblclick: function (val) {

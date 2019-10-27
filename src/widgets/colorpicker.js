@@ -97,7 +97,7 @@ function fevent (e, useraction) {
 
 var color_atoms = { "hue":"hsl", "saturation":"hsl", "lightness":"hsl", "red":"rgb", "green":"rgb", "blue":"rgb" };
 
-function set_atoms (key, value) {
+function set_atoms (key) {
     var O = this.options;
     var atoms = Object.keys(color_atoms);
     for ( var i = 0; i < atoms.length; i++) {

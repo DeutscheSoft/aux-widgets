@@ -114,7 +114,7 @@ export const FrequencyResponse = define_class({
         depth: 0,   // the depth of the z axis (basis of range_z)
     },
     static_events: {
-        set_scale: function(value, key) {
+        set_scale: function(value) {
             this.range_y.set("scale", value);
         },
         set_db_grid: function(value) {

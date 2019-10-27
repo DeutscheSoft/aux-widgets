@@ -46,7 +46,7 @@ export const CrossoverBand = define_class({
     options: {
         lower: "lowpass3",
         upper: "highpass3",
-        label: function (t, x, y, z) { return sprintf("%.2f Hz", x); },
+        label: function (t, x/*, y, z*/) { return sprintf("%.2f Hz", x); },
         mode: "line-vertical", // undocumented, just a default differing from ResponseHandle
         preferences: [ "top-right", "right", "bottom-right", "top-left", "left", "bottom-left"], // undocumented, just a default differing from ResponseHandle
     },
@@ -173,7 +173,7 @@ export const Crossover = define_class({
          */
 
         var self = this;
-        this.set_freq_cb = function(f) {
+        this.set_freq_cb = function() {
           set_freq.call(self, this);
         };
     },
