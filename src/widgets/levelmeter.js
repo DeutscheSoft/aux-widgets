@@ -16,6 +16,9 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
+
+/* jshint -W018 */
+
 import { define_class, define_child_element } from '../widget_helpers.js';
 import { define_child_widget } from '../child_widget.js';
 import { Meter } from './meter.js';

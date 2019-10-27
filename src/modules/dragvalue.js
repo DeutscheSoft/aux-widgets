@@ -16,6 +16,9 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
+
+/* jshint -W018 */
+
 import { define_class } from '../widget_helpers.js';
 import { DragCapture } from './dragcapture.js';
 import { GlobalCursor } from '../implements/globalcursor.js';

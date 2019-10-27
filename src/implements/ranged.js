@@ -16,6 +16,9 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
+
+/* jshint -W018 */
+
 import { define_class } from './../widget_helpers.js';
 import { db2scale, scale2db, freq2scale, scale2freq } from '../utils/audiomath.js';
 import { error, warn } from './../utils/log.js';

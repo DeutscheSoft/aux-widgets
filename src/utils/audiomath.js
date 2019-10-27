@@ -17,6 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
+/* jshint -W018 */
 
 /**
  * AudioMath provides a couple of functions for turning
