@@ -4,7 +4,7 @@
   "description": "jshint scaffolding for AUX",
   "directories": {},
   "scripts": {
-    "check" : "./node_modules/.bin/jshint -c .jshintrc ../src/**/*.js"
+    "check" : "./node_modules/.bin/jshint --verbose -c .jshintrc ../src/**/*.js"
   },
   "author": "Arne Goedeke",
   "private": true,
