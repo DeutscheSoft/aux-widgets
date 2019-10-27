@@ -144,7 +144,7 @@ function create_component (base) {
   
     addEventListener(type, ...args)
     {
-      if (!is_native_event(type))
+      if (!is_native_event(type) && this.auxWidget)
       {
         const handlers = this._auxEventHandlers;
   
