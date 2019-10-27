@@ -1,7 +1,7 @@
 const backstop = require('backstopjs');
 const start_http = require('./http_server.js').start;
-const readdirp = require('readdirp');
 const path = require('path');
+const fs = require('fs');
 
 const config = {
   "id": "backstop_default",
@@ -65,23 +65,45 @@ function make_scenario(path)
 
 start_http(http_port);
 
-readdirp(path.join(__dirname, 'tests'), { fileFilter: '*.html' })
-  .on('data', (entry) => {
-    if (entry.path.search(/Clock/) !== -1) return;
-    config.scenarios.push(make_scenario(entry.path));
-   })
-  .on('end', () => {
-    backstop(process.argv[2] || 'test', {
-        config: config
-      }).then(
-        function() {
-          console.log('All good.');
-          process.exit(0);
-        },
-        function(e) {
-          console.error(e);
-          process.exit(1);
-        }
-      );
-   });
+function readdir_recursive(p)
+{
+  const entries = fs.readdirSync(p);
+  let ret = [];
 
+  for (let i = 0; i < entries.length; i++)
+  {
+    const fname = path.join(p, entries[i]);
+    ret.push(fname);
+
+    try
+    {
+      ret = ret.concat(readdir_recursive(fname));
+    }
+    catch (err)
+    {
+    }
+  }
+
+  return ret;
+}
+
+const test_files = readdir_recursive(path.join(__dirname, "tests"))
+  .filter((fname) => fname.endsWith(".html"))
+  .filter((fname) => !fname.includes("Clock")); // ignore clock for now
+
+test_files.map((fname) => {
+  config.scenarios.push(make_scenario(fname));
+});
+
+backstop(process.argv[2] || 'test', {
+    config: config
+  }).then(
+    function() {
+      console.log('All good.');
+      process.exit(0);
+    },
+    function(e) {
+      console.error(e);
+      process.exit(1);
+    }
+  );
