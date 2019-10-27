@@ -145,7 +145,7 @@ export const Graph = define_class({
      *   <ul>
      *     <li><code>L</code>: normal (needs x,y)</li>
      *     <li><code>T</code>: smooth quadratic Bézier (needs x, y)</li>
-     *     <li><code>H[n]</code>: smooth horizontal, [n] = smoothing factor between 1 (square) and 5 (nearly no smooth)</li>
+     *     <li><code>H[n]</code>: smooth horizontal, [n] = smoothing factor between 1 (square) and 5 (nearly no smoothing)</li>
      *     <li><code>Q</code>: quadratic Bézier (needs: x1, y1, x, y)</li>
      *     <li><code>C</code>: CurveTo (needs: x1, y1, x2, y2, x, y)</li>
      *     <li><code>S</code>: SmoothCurve (needs: x1, y1, x, y)</li>
@@ -277,8 +277,8 @@ export const Graph = define_class({
                                get_px(dot.x, RX) + "," + get_px(dot.y, RY));
                         break;
                     case "H":
-                        s.push(" S" + (x[i] - Math.round(x[i] - x[i-1])/f) + ","
-                            + y[i] + " " + x[i] + "," + y[i]);
+                        s.push(" S" + (dot.x - Math.round(dot.x - dots[i-1].x)/f) + ","
+                            + dot.y + " " + dot.x + "," + dot.y);
                         break;
                     default:
                         error("Unsupported graph type", O.type);
