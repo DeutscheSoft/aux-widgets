@@ -235,6 +235,6 @@ export const Crossover = define_class({
         return band;
     },
     remove_band: function (band) {
-        this.remove_child(child);
+        this.remove_child(band);
     },
 });
