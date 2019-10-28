@@ -1,0 +1,378 @@
+/*
+ * This file is part of Toolkit.
+ *
+ * Toolkit is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * Toolkit is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU General
+ * Public License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ */
+
+/* 
+ * This theme file sets some general defaults suitable for most
+ * situations. It mainly covers sizes, margins and paddings, skipping
+ * all design-related aspects like fonts, colors, radii and the like.
+ * 
+ * Use this as a starting point to build your custom theme on top.
+ */
+ 
+@import "essentials.css"; /* technical dependency */
+
+:root {
+    
+    --aux-main-margin: 2px;
+    
+    --aux-clickable-size: 40px;
+    
+    --aux-fader-handlewidth: var(--aux-clickable-size);
+    --aux-fader-handleheight: calc(1.5 * var(--aux-clickable-size));
+    
+    --aux-scale-minwidth: 40px;
+    --aux-scale-minheight: 20px;
+    --aux-scale-dotsize: 3px;
+    --aux-scale-markersize: 5px;
+    --aux-scale-labelmargin: 8px;
+    --aux-scale-barsize: 2px;
+    --aux-scale-pointersize: 5px;
+    
+    --aux-value-height: 32px;
+    
+}
+
+/* BUTTON */
+
+.aux-button {
+    height: var(--aux-clickable-size);
+    padding: 4px 8px;
+    overflow: hidden;
+}
+
+/* BUTTONS */
+
+.aux-buttons > .aux-button {
+    flex: 0 0 auto;
+}
+
+/* CLOCK */
+
+.aux-clock .aux-label {
+    margin: 8px;
+}
+
+/* COLORPICKER */
+
+.aux-colorpicker > .aux-value {
+    height: var(--aux-clickable-size);
+}
+
+/* FADER */
+
+.aux-fader > .aux-track {
+    position: relative;
+}
+.aux-fader.aux-vertical > .aux-track {
+    width: var(--aux-fader-handlewidth);
+}
+.aux-fader.aux-vertical .aux-handle {
+    width: var(--aux-fader-handlewidth);
+    height: var(--aux-fader-handleheight);
+}
+.aux-fader.aux-vertical > .aux-scale {
+    margin: calc(var(--aux-fader-handleheight) / 2) var(--aux-main-margin);
+}
+
+.aux-fader.aux-horizontal > .aux-track {
+    height: var(--aux-fader-handlewidth);
+}
+.aux-fader.aux-horizontal .aux-handle {
+    width: var(--aux-fader-handleheight);
+    height: var(--aux-fader-handlewidth);
+}
+.aux-fader.aux-horizontal > .aux-scale {
+    margin: var(--aux-main-margin) calc(var(--aux-fader-handleheight) / 2);
+}
+
+/* FRAME */
+
+.aux-frame {
+    padding: 16px 8px 8px 8px;
+}
+.aux-frame > .aux-framelabel {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.aux-frame > .aux-framelabel {
+    top: -11px;
+    left: 8px;
+    margin: 0;
+    padding: 2px 4px;
+}
+
+/* GRAPH */
+
+.aux-graph {
+    stroke-width: 1.2px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.aux-graph.aux-filled {
+    stroke-width: 1.2px;
+}
+
+.aux-graph.aux-outline {
+    stroke-width: 2px;
+}
+.aux-graph.aux-steady {
+    stroke-width: 0.5px;
+}
+
+/* GRID */
+
+.aux-gridlabel {
+    padding: 3px;
+}
+
+/* ICON */
+
+.aux-icon {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* KNOB */
+
+.aux-knob::before,
+.aux-knob::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+}
+.aux-knob::after {
+    background: transparent;
+    pointer-events: none;
+}
+
+/* NAVIGATION */
+
+.aux-navigation.aux-horizontal {
+    height: var(--aux-clickable-size);
+}
+.aux-navigation > .aux-buttons {
+    margin: 0;
+}
+.aux-navigation.aux-horizontal > .aux-buttons {
+    margin: 0 var(--aux-main-margin);
+}
+.aux-navigation.aux-vertical > .aux-buttons {
+    margin: var(--aux-main-margin) 0;
+}
+.aux-navigation > .aux-buttons > .aux-button{
+    margin: 0;
+}
+.aux-navigation.aux-horizontal > .aux-buttons > .aux-button {
+    margin: 0 var(--aux-main-margin);
+}
+.aux-navigation.aux-vertical > .aux-buttons > .aux-button {
+    margin: var(--aux-main-margin) 0;
+}
+
+.aux-navigation > .aux-button {
+    margin: 0;
+}
+.aux-navigation.aux-horizontal > .aux-previous {
+    margin-right: var(--aux-main-margin);
+}
+.aux-navigation.aux-horizontal > .aux-next {
+    margin-left: var(--aux-main-margin);
+}
+.aux-navigation.aux-vertical > .aux-previous {
+    margin-bottom: var(--aux-main-margin);
+}
+.aux-navigation.aux-vertical > .aux-next {
+    margin-top: var(--aux-main-margin);
+}
+
+/* RESPONSEHANDLE */
+
+.aux-responsehandle:hover {
+    cursor: pointer;
+}
+.aux-responsehandle .aux-line {
+    stroke-width: 1px;
+}
+.aux-responsehandle .aux-line1 {
+    stroke-width: 1;
+}
+.aux-responsehandle.aux-warn > .aux-handle {
+    stroke-width: 20;
+}
+
+/* ROOT */
+
+.aux-root {
+    margin: 0;
+}
+
+/* SCALE */
+
+.aux-scale.aux-horizontal {
+    min-height: var(--aux-scale-minheight);
+}
+.aux-scale.aux-vertical {
+    min-width: var(--aux-scale-minwidth);
+}
+.aux-scale.aux-horizontal > .aux-dot {
+    width: 1px;
+    height: var(--aux-scale-dotsize);
+}
+.aux-scale.aux-vertical > .aux-dot {
+    width: var(--aux-scale-dotsize);
+    height: 1px;
+}
+.aux-scale.aux-horizontal > .aux-dot.aux-marker {
+    height: var(--aux-scale-markersize);
+}
+.aux-scale.aux-vertical > .aux-dot.aux-marker {
+    width: var(--aux-scale-markersize);
+}
+.aux-scale.aux-top > .aux-dot {
+    top: 0;
+}
+.aux-scale.aux-left > .aux-dot {
+    left: 0;
+}
+.aux-scale.aux-right > .aux-dot {
+    right: 0;
+}
+.aux-scale.aux-bottom > .aux-dot {
+    bottom: 0;
+}
+.aux-scale.aux-top > .aux-label {
+    top: var(--aux-scale-labelmargin);
+}
+.aux-scale.aux-left > .aux-label {
+    left: var(--aux-scale-labelmargin);
+}
+.aux-scale.aux-right > .aux-label {
+    right: var(--aux-scale-labelmargin);
+}
+.aux-scale.aux-bottom > .aux-label {
+    bottom: var(--aux-scale-labelmargin);
+}
+/*
+ * enable to keep labels inside the scales container
+ * 
+.aux-scale.aux-horizontal > .aux-max,
+.aux-scale.aux-horizontal.aux-reverse > .aux-min {
+    transform: translateX(-100%);
+}
+
+.aux-scale.aux-horizontal > .aux-min,
+.aux-scale.aux-horizontal.aux-reverse > .aux-max {
+    transform: translateX(0);
+}
+.aux-scale.aux-vertical > .aux-max,
+.aux-scale.aux-vertical.aux-reverse > .aux-min {
+    transform: translateY(100%);
+}
+
+.aux-scale.aux-vertical > .aux-min,
+.aux-scale.aux-vertical.aux-reverse > .aux-max {
+    transform: translateY(0);
+}
+*/
+.aux-scale.aux-vertical > .aux-bar {
+    width: var(--aux-scale-barsize);
+}
+.aux-scale.aux-horizontal > .aux-bar {
+    height: var(--aux-scale-barsize);
+}
+.aux-scale > .aux-pointer {
+    width: calc(var(--aux-scale-pointersize) * 2);
+    height: calc(var(--aux-scale-pointersize) * 2);
+    border-width: var(--aux-scale-pointersize);
+}
+.aux-scale.aux-vertical > .aux-pointer {
+    margin-bottom: calc(var(--aux-scale-pointersize) * -1);
+}
+.aux-scale.aux-left > .aux-pointer {
+    left: calc(var(--aux-scale-pointersize) * -1);
+}
+.aux-scale.aux-right > .aux-pointer {
+    right: calc(var(--aux-scale-pointersize) * -1);
+}
+.aux-scale.aux-horizontal > .aux-pointer {
+    margin-left: calc(var(--aux-scale-pointersize) * -1);
+}
+.aux-scale.aux-top > .aux-pointer {
+    top: calc(var(--aux-scale-pointersize) * -1);
+}
+.aux-scale.aux-bottom > .aux-pointer {
+    bottom: calc(var(--aux-scale-pointersize) * -1);
+}
+
+/* SELECT */
+
+.aux-selectlist {
+    padding: 0;
+    text-align: left;
+}
+
+.aux-selectlist > .aux-selectentry {
+    margin: 0;
+    padding: 0 8px;
+    line-height: 2em;
+    cursor: pointer;
+    display: block;
+}
+
+/* VALUE */
+
+.aux-value {
+    height: var(--aux-value-height);
+    -webkit-appearance: none;
+}
+
+/* VALUEBUTTON */
+
+.aux-valuebutton {
+    padding: 0 0 0 8px;
+}
+.aux-valuebutton > .aux-value {
+    height: var(--aux-clickable-size);
+    margin: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.aux-valuebutton > .aux-scale {
+    font-size: var(--aux-main-tinyfont);
+}
+
+/* VALUEKNOB */
+
+.aux-valueknob > .aux-widget {
+    margin: 0;
+}
+.aux-valueknob > .aux-value {
+    margin-top: -8px;
+}
+
+/* WIDGET */
+
+.aux-widget {
+    margin: var(--aux-main-margin);
+}
