@@ -48,7 +48,7 @@
           filter = hash.toLowerCase().split(',');
         }
 
-        const root = document.querySelector('#wrapper');
+        const root = document.querySelector('aux-root');
         const tasks = examples.map(async (file) => {
           const tmp = file.split('.');
           tmp.pop();
@@ -111,11 +111,11 @@
             float: right;
             margin: 0 0 8px 16px;
         }
-        #wrapper {
+        .aux-root {
             clear: both;
             padding: 16px;
         }
-        #wrapper > aux-frame {
+        .aux-root > .aux-frame {
             display: block;
             margin-bottom: 20px;
         }
@@ -134,7 +134,7 @@
         (try <code>F12</code>) are recommended.
     </p>
     
-    <div id="wrapper"></div>
+    <aux-root></aux-root>
     
   </body>
   
