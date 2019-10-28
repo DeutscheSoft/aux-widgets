@@ -192,7 +192,6 @@ export const Fader = define_class({
             node:    this._handle,
             classes: this.element,
             direction: O.direction,
-            limit: true,
         });
         this.drag.on('startdrag', () => this.startInteracting());
         this.drag.on('stopdrag', () => this.stopInteracting());
@@ -203,7 +202,6 @@ export const Fader = define_class({
         this.scroll = new ScrollValue(this, {
             node:    this.element,
             classes: this.element,
-            limit: true,
         });
         this.scroll.on('scrollstarted', () => this.startInteracting());
         this.scroll.on('scrollended', () => this.stopInteracting());
@@ -300,22 +298,14 @@ export const Fader = define_class({
     
     // GETTER & SETTER
     set: function (key, value) {
+        var O = this.options;
         if (key === "value") {
-            if (value > this.options.max || value < this.options.min)
+            if (value > O.max || value < O.min)
                 this.warning(this.element);
-            value = this.snap(value);
+            value = this.snap(Math.min(O.max, Math.max(O.min, value)));
         }
-
         return Widget.prototype.set.call(this, key, value);
     },
-    userset: function (key, value) {
-        if (key == "value") {
-            if (value > this.options.max || value < this.options.min)
-                this.warning(this.element);
-            value = this.snap(value);
-        }
-        return Widget.prototype.userset.call(this, key, value);
-    }
 });
 /**
  * @member {Scale} Fader#scale - A {@link Scale} to display a scale next to the fader.

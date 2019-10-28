@@ -131,13 +131,13 @@
     background: linear-gradient(to bottom, #5d6666 0%,#363a3a 20%,#1e2121 22%,#353a3a 48%,var(--aux-active-base) 49%,var(--aux-active-base) 51%,#353a3a 52%,#464c4c 78%,#212424 80%,#191c1c 100%);
 }
 .aux-fader.aux-vertical.aux-warn .aux-handle {
-    background: linear-gradient(to bottom, #5d6666 0%,#363a3a 20%,#1e2121 22%,#353a3a 48%,var(--aux-warn-base) 49%,var(--aux-active-base) 51%,#353a3a 52%,#464c4c 78%,#212424 80%,#191c1c 100%);
+    background: linear-gradient(to bottom, #5d6666 0%,#363a3a 20%,#1e2121 22%,#353a3a 48%,var(--aux-warn-base) 49%,var(--aux-warn-base) 51%,#353a3a 52%,#464c4c 78%,#212424 80%,#191c1c 100%);
 }
 .aux-fader.aux-horizontal .aux-handle {
     background: linear-gradient(to right, #5d6666 0%,#363a3a 20%,#1e2121 22%,#353a3a 48%,var(--aux-active-base) 49%,var(--aux-active-base) 51%,#353a3a 52%,#464c4c 78%,#212424 80%,#191c1c 100%);
 }
 .aux-fader.aux-horizontal.aux-warn .aux-handle {
-    background: linear-gradient(to right, #5d6666 0%,#363a3a 20%,#1e2121 22%,#353a3a 48%,var(--aux-warn-base) 49%,var(--aux-active-base) 51%,#353a3a 52%,#464c4c 78%,#212424 80%,#191c1c 100%);
+    background: linear-gradient(to right, #5d6666 0%,#363a3a 20%,#1e2121 22%,#353a3a 48%,var(--aux-warn-base) 49%,var(--aux-warn-base) 51%,#353a3a 52%,#464c4c 78%,#212424 80%,#191c1c 100%);
 }
 .aux-fader > .aux-track::before {
     content: "";
