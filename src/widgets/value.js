@@ -176,6 +176,12 @@ export const Value = define_class({
     static_events: {
         submit: submit_cb,
         click: value_clicked,
+        focus: function() {
+          this.startInteracting();
+        },
+        blur: function() {
+          this.stopInteracting();
+        },
     },
     initialize: function (options) {
         if (!options.element) options.element = element("input");

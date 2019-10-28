@@ -1042,6 +1042,18 @@ export const ResponseHandle = define_class({
                 this.z_drag.cancel_drag();
             }
         },
+        zchangestarted: function() {
+          this.startInteracting();
+        },
+        zchangeended: function() {
+          this.stopInteracting();
+        },
+        handlegrabbed: function() {
+          this.startInteracting();
+        },
+        handlereleased: function() {
+          this.stopInteracting();
+        },
     },
 
     getStyleTarget: function() {

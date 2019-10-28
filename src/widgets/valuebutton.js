@@ -118,12 +118,16 @@ export const ValueButton = define_class({
             rotation: this.options.rotation,
             blind_angle: this.options.blind_angle,
         });
+        this.drag.on('startdrag', () => this.startInteracting());
+        this.drag.on('stopdrag', () => this.stopInteracting());
         /**
          * @member {ScrollValue} ValueButton#scroll - The {@link ScrollValue} module.
          */
         this.scroll = new ScrollValue(this, {
             node: this.element,
         });
+        this.scroll.on('scrollstarted', () => this.startInteracting());
+        this.scroll.on('scrollended', () => this.stopInteracting());
         
         if (this.options.reset === void(0))
             this.options.reset = this.options.value;

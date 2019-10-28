@@ -187,12 +187,14 @@ export const Widget = define_class({
         active: "boolean",
         needs_resize: "boolean",
         dblclick: "number",
+        interacting: "boolean",
     },
     options: {
         // these options are of less use and only here to show what we need
         disabled:  false,  // Widgets can be disabled by setting this to true
         needs_resize: true,
         dblclick: 0,
+        interacting: false,
     },
     static_events: {
         set_container: function() {
@@ -241,6 +243,7 @@ export const Widget = define_class({
       this.__dblclick_cb = dblclick.bind(this);
       this._onresize = onresize.bind(this);
       this._onvisibilitychange = onvisibilitychange.bind(this);
+      this._interaction_count = 0;
     },
 
     getStyleTarget: function() {
@@ -257,6 +260,19 @@ export const Widget = define_class({
 
     is_destructed: function() {
         return this.options === null;
+    },
+
+    startInteracting: function() {
+      if (!this._interaction_count++)
+      {
+        this.set('interacting', true);
+      }
+    },
+    stopInteracting: function() {
+      if (!--this._interaction_count)
+      {
+        this.set('interacting', false);
+      }
     },
 
     invalidate_all: function() {

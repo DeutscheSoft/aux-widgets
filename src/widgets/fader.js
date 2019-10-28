@@ -194,6 +194,8 @@ export const Fader = define_class({
             direction: O.direction,
             limit: true,
         });
+        this.drag.on('startdrag', () => this.startInteracting());
+        this.drag.on('stopdrag', () => this.stopInteracting());
         /**
          * @member {ScrollValue} Fader#scroll - Instance of {@link ScrollValue} used for the
          *   handle interaction.
@@ -203,6 +205,8 @@ export const Fader = define_class({
             classes: this.element,
             limit: true,
         });
+        this.scroll.on('scrollstarted', () => this.startInteracting());
+        this.scroll.on('scrollended', () => this.stopInteracting());
         
         this.set("bind_click", O.bind_click);
         this.set("bind_dblclick", O.bind_dblclick);
