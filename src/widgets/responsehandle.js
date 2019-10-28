@@ -66,6 +66,7 @@ function scrollwheel(e) {
         this.set("dragging", false);
         remove_class(this.element, "aux-active");
         this.emit("zchangeended", this.options.z);
+        this._zwheel = false;
     }.bind(this), 250);
     var s = range_z.get("step") * direction;
     if (e.ctrlKey && e.shiftKey)
