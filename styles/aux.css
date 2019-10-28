@@ -220,6 +220,8 @@
 }
 .aux-responsehandle > .aux-handle {
     opacity: 0.25;
+    stroke: var(--aux-contrast-text);
+    stroke-opacity: 0.5;
 }
 .aux-responsehandle > .aux-line1 {
     stroke: var(--aux-contrast-text);

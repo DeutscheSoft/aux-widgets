@@ -1367,7 +1367,6 @@ export const ResponseHandle = define_class({
             if (O.y_max !== false && value > O.y_max) value = O.y_max;
             break;
         case "z":
-            value = O.range_z.snap(value);
             if (O.z_min !== false && value < O.z_min) {
                 value = O.z_min;
                 this.warning(this.element);
@@ -1375,6 +1374,10 @@ export const ResponseHandle = define_class({
                 value = O.z_max;
                 this.warning(this.element);
             }
+            if (value < O.range_z.options.min || value > O.range_z.options.max) {
+                this.warning(this.element);
+            }
+            value = O.range_z.snap(value);
             break;
 
         case 'range_x':
