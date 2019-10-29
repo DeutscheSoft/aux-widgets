@@ -721,17 +721,17 @@ body.aux-cursor-row-resize * {
 }
 .aux-levelmeter.aux-left {
     grid-template-areas:
-        "label ."
+        "label label"
         "clip ."
         "bar scale"
-        "value .";
+        "value value";
 }
 .aux-levelmeter.aux-right {
     grid-template-areas:
-        ". label"
+        "label label"
         ". clip"
         "scale bar"
-        ". value";
+        "value value";
 }
 .aux-levelmeter > .aux-clip {
     grid-area: clip;
