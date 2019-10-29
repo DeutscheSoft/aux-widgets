@@ -277,7 +277,7 @@ export const Meter = define_class({
         var O = this.options;
         /**
          * @member {HTMLDivElement} Meter#element - The main DIV container.
-         *   Has class <code>.aux-meterbase</code>.
+         *   Has class <code>.aux-meter</code>.
          */
         this._bar = element("div", "aux-bar");
         /**
@@ -311,7 +311,7 @@ export const Meter = define_class({
     },
     draw: function(O, element)
     {
-      add_class(element, "aux-meterbase");
+      add_class(element, "aux-meter");
       element.appendChild(this._bar);
 
       Widget.prototype.draw.call(this, O, element);

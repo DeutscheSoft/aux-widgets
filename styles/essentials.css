@@ -570,124 +570,124 @@ body.aux-cursor-row-resize * {
     text-overflow: ellipsis;
 }
 
-/* METERBASE */
+/* METER */
 
-.aux-meterbase {
+.aux-meter {
     display: inline-grid;
     overflow: hidden;
 }
-.aux-meterbase.aux-vertical {
+.aux-meter.aux-vertical {
     min-height: 128px;
     grid-template-columns: auto auto;
     grid-template-rows: auto 1fr auto;
 }
-.aux-meterbase.aux-horizontal {
+.aux-meter.aux-horizontal {
     min-width: 128px;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto auto;
 }
-.aux-meterbase.aux-top {
+.aux-meter.aux-top {
     grid-template-areas:
         "bar bar"
         "scale scale"
         "title label";
 }
-.aux-meterbase.aux-bottom {
+.aux-meter.aux-bottom {
     grid-template-areas:
         "title label"
         "scale scale"
         "bar bar";
 }
-.aux-meterbase.aux-left {
+.aux-meter.aux-left {
     grid-template-areas:
         "label ."
         "bar scale"
         "title .";
 }
-.aux-meterbase.aux-right {
+.aux-meter.aux-right {
     grid-template-areas:
         ". label"
         "scale bar"
         ". title";
 }
-.aux-meterbase > .aux-label {
+.aux-meter > .aux-label {
     grid-area: label;
     white-space: nowrap;
 }
-.aux-meterbase.aux-horizontal > .aux-label {
+.aux-meter.aux-horizontal > .aux-label {
     justify-self: end;
     align-self: center;
 }
-.aux-meterbase.aux-vertical > .aux-label {
+.aux-meter.aux-vertical > .aux-label {
     justify-self: center;
     align-self: center;
 }
-.aux-meterbase > .aux-title {
+.aux-meter > .aux-title {
     grid-area: title;
     white-space: nowrap;
 }
-.aux-meterbase.aux-horizontal > .aux-title {
+.aux-meter.aux-horizontal > .aux-title {
     justify-self: start;
     align-self: center;
 }
-.aux-meterbase.aux-vertical > .aux-title {
+.aux-meter.aux-vertical > .aux-title {
     justify-self: center;
     align-self: center;
 }
-.aux-meterbase > .aux-scale {
+.aux-meter > .aux-scale {
     grid-area: scale;
 }
-.aux-meterbase.aux-vertical > .aux-scale {
+.aux-meter.aux-vertical > .aux-scale {
     height: 100%;
 }
-.aux-meterbase.aux-horizontal > .aux-scale {
+.aux-meter.aux-horizontal > .aux-scale {
     width: 100%;
 }
-.aux-meterbase.aux-top > .aux-scale {
+.aux-meter.aux-top > .aux-scale {
     justify-self: center;
     align-self: start;
 }
-.aux-meterbase.aux-bottom > .aux-scale {
+.aux-meter.aux-bottom > .aux-scale {
     justify-self: center;
     align-self: end;
 }
-.aux-meterbase.aux-left > .aux-scale {
+.aux-meter.aux-left > .aux-scale {
     justify-self: start;
     align-self: center;
 }
-.aux-meterbase.aux-right > .aux-scale {
+.aux-meter.aux-right > .aux-scale {
     justify-self: end;
     align-self: center;
 }
-.aux-meterbase > .aux-bar {
+.aux-meter > .aux-bar {
     grid-area: bar;
     position: relative;
     overflow: hidden;
     contain: style layout;
 }
-.aux-meterbase.aux-vertical > .aux-bar {
+.aux-meter.aux-vertical > .aux-bar {
     height: 100%;
 }
-.aux-meterbase.aux-horizontal > .aux-bar {
+.aux-meter.aux-horizontal > .aux-bar {
     width: 100%;
 }
-.aux-meterbase.aux-top > .aux-bar {
+.aux-meter.aux-top > .aux-bar {
     justify-self: center;
     align-self: end;
 }
-.aux-meterbase.aux-bottom > .aux-bar {
+.aux-meter.aux-bottom > .aux-bar {
     justify-self: center;
     align-self: start;
 }
-.aux-meterbase.aux-left > .aux-bar {
+.aux-meter.aux-left > .aux-bar {
     justify-self: end;
     align-self: center;
 }
-.aux-meterbase.aux-right > .aux-bar {
+.aux-meter.aux-right > .aux-bar {
     justify-self: start;
     align-self: center;
 }
-.aux-meterbase > .aux-bar > .aux-mask {
+.aux-meter > .aux-bar > .aux-mask {
     position: absolute;
     left: 0;
     top: 0;
