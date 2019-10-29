@@ -229,12 +229,12 @@ export const Graph = define_class({
         }
 
         if (I.validate("dots", "type")) {
-            var dots = O.dots;
-            var type = O.type;
-            var RX = this.range_x;
-            var RY = this.range_y;
-            var w = RX.options.basis;
-            var h = RY.options.basis;
+            const dots = O.dots;
+            const type = O.type;
+            const RX = this.range_x;
+            const RY = this.range_y;
+            const w = RX.options.basis;
+            const h = RY.options.basis;
         
             if (typeof dots === "string") {
                 E.setAttribute("d", dots);
@@ -242,53 +242,73 @@ export const Graph = define_class({
                 E.setAttribute("d", "");
             } else {
                 // if we are drawing a line, _start will do the first point
-                var i = O.mode === "line" ? 1 : 0;
-                var s = [];
-                var f, t, _t, dot;
+                let i = O.mode === "line" ? 1 : 0;
+                const s = [];
 
                 _start.call(this, dots, s);
                 
-                _t = dots[i].type || type;
-                f = _t.length > 1 ? parseFloat(_t.substr(1)) : 3;
-                if (_t.substr(0) === "H" && i === 0) {
+                if (i === 0 && (dots[i].type || type).startsWith('H'))
+                {
                     i++;
-                    s.push(" S" + get_px(dots[i].x, RX) + "," + get_px(dots[i].y, RY) + " " + get_px(dots[i].x, RX) + "," + get_px(dots[i].y, RY));
+                    const dot = dots[i];
+                    const X  = get_px(dot.x, RX);
+                    const X1 = get_px(dot.x1, RX);
+                    const Y  = get_px(dot.y, RY);
+                    const Y1 = get_px(dot.y1, RY);
+
+                    s.push(" S" + X + "," + Y + " " + X + "," + Y);
                 }
                         
                 for (; i < dots.length; i++) {
-                    dot = dots[i];
-                    t = dot.type || type;
-                    t = t.substr(0,1);
+                    const dot = dots[i];
+                    const _type = dot.type || type;
+                    const t = _type.substr(0,1);
+
                     switch (t) {
                     case "L":
                     case "T":
-                        s.push(" " + t + " " + get_px(dot.x, RX) + " " + get_px(dot.y, RY));
+                      {
+                        const X  = get_px(dot.x, RX);
+                        const Y  = get_px(dot.y, RY);
+
+                        s.push(" " + t + " " + X + " " + Y);
                         break;
+                      }
                     case "Q":
                     case "S":
-                        s.push(" " + t + " " +
-                               get_px(dot.x1, RX) + "," + get_px(dot.y1, RY) + " " +
-                               get_px(dot.x, RX) + "," + get_px(dot.y, RY));
+                      {
+                        const X  = get_px(dot.x, RX);
+                        const X1 = get_px(dot.x1, RX);
+                        const Y  = get_px(dot.y, RY);
+                        const Y1 = get_px(dot.y1, RY);
+
+                        s.push(" " + t + " " + X1 + "," + Y1 + " " + X + "," + Y);
                         break;
+                      }
                     case "C":
-                        s.push(" " + t + " " +
-                               get_px(dot.x1, RX) + "," + get_px(dot.y1, RY) + " " +
-                               get_px(dot.x2, RX) + "," + get_px(dot.y2, RY) + " " +
-                               get_px(dot.x, RX) + "," + get_px(dot.y, RY));
+                      {
+                        const X  = get_px(dot.x, RX);
+                        const X1 = get_px(dot.x1, RX);
+                        const X2 = get_px(dot.x2, RX);
+                        const Y  = get_px(dot.y, RY);
+                        const Y1 = get_px(dot.y1, RY);
+                        const Y2 = get_px(dot.y2, RY);
+
+                        s.push(" " + t + " " + X1 + "," + Y1 + " " + X2 + "," + Y2 + " " + X + "," + Y);
                         break;
+                      }
                     case "H":
-                        s.push(" S" + (dot.x - Math.round(dot.x - dots[i-1].x)/f) + ","
-                            + dot.y + " " + dot.x + "," + dot.y);
+                      {
+                        const f = _type.length > 1 ? parseFloat(type.substr(1)) : 3;
+                        const X = get_px(dot.x, RX);
+                        const Y = get_px(dot.y, RY);
+                        const X1 = get_px(dot.x - Math.round(dot.x - dots[i-1].x)/f, RX);
+
+                        s.push(" S " + X1 + "," + Y + " " + X + "," + Y);
                         break;
+                      }
                     default:
-                        error("Unsupported graph type", O.type);
-                    }
-                }
-                
-                if (i < dots.length) {
-                    _t = dots[i] || type; 
-                    if (_t.substr(0) === "H") {
-                        s.push(" S" + get_px(dot.x, RX) + "," + get_px(dot.y, RY) + " " + get_px(dot.x, RX) + "," + get_px(dot.y, RY));
+                        error("Unsupported graph type", _type);
                     }
                 }
                 
