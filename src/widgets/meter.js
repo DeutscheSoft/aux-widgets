@@ -182,11 +182,10 @@ export const Meter = define_class({
         base: "number|boolean",
         min: "number",
         max: "number",
-        label: "number",
-        title: "string|boolean",
-        show_labels: "boolean",
-        format_label: "function",
+        label: "string|boolean",
+        format_value: "function",
         scale_base: "number|boolean",
+        show_labels: "boolean",
         format_labels: "function",
         background: "string|boolean",
         gradient: "object|boolean"
@@ -196,12 +195,11 @@ export const Meter = define_class({
         segment:         1,
         value:           0,
         base:            false,
-        label:           0,
-        title:           false,
-        show_labels:     true,
-        format_label:    FORMAT("%.2f"),
+        label:           false,
+        format_value:    FORMAT("%.2f"),
         levels:          [1, 5, 10],     // array of steps where to draw labels
         scale_base:       false,
+        show_labels:     true,
         format_labels:   FORMAT("%.2f"),
         background:      false,
         gradient:        false
@@ -217,17 +215,6 @@ export const Meter = define_class({
              * @param {string} label - The label of the {@link Meter}.
              */
             this.emit("labelchanged", value);
-        },
-        set_title: function(value) {
-            /**
-             * Is fired when the title changed.
-             * The argument is the actual title.
-             * 
-             * @event Meter#titlechanged
-             * 
-             * @param {string} title - The title of the {@link Meter}.
-             */
-            this.emit("titlechanged", value);
         },
         set_segment: function() {
             // what is this supposed to do?
@@ -298,7 +285,7 @@ export const Meter = define_class({
         this._last_meters = [];
         this._current_meters = [];
 
-        this.set("label", O.value);
+        this.set("label", O.label);
         this.set("base", O.base);
     },
     getEventTarget: function() {
@@ -384,8 +371,8 @@ export const Meter = define_class({
             this._canvas.getContext("2d").fillStyle = this._fillstyle;
         }
         
-        if (I.value && O.show_label) {
-            this.label.set("label", O.format_label(O.value));
+        if (I.value && O.show_value) {
+            this.value.set("label", O.format_value(O.value));
         }
         
         if (I.value || I.basis || I.min || I.max) {
@@ -521,23 +508,24 @@ define_child_widget(Meter, "scale", {
     },
 });
 /**
- * @member {Label} Meter#title - The {@link Label} displaying the title.
- *   Has class <code>.aux-title</code>.
- */
-define_child_widget(Meter, "title", {
-    create: Label,
-    show: false,
-    option: "title",
-    default_options: { "class" : "aux-title" },
-    map_options: { "title" : "label" },
-    toggle_class: true,
-});
-/**
- * @member {Label} Meter#label - The {@link Label} displaying the label.
+ * @member {Label} Meter#label - The {@link Label} displaying the title.
+ *   Has class <code>.aux-label</code>.
  */
 define_child_widget(Meter, "label", {
     create: Label,
     show: false,
-    default_options: { "class" : "aux-value" },
+    option: "label",
+    map_options: { "label" : "label" },
     toggle_class: true,
+});
+/**
+ * @member {Label} Meter#value - The {@link Label} displaying the value.
+ */
+define_child_widget(Meter, "value", {
+    create: Label,
+    show: false,
+    toggle_class: true,
+    default_options: {
+        "class": "aux-value"
+    },
 });

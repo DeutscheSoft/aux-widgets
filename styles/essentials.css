@@ -590,11 +590,11 @@ body.aux-cursor-row-resize * {
     grid-template-areas:
         "bar bar"
         "scale scale"
-        "title label";
+        "label value";
 }
 .aux-meter.aux-bottom {
     grid-template-areas:
-        "title label"
+        "label value"
         "scale scale"
         "bar bar";
 }
@@ -602,35 +602,35 @@ body.aux-cursor-row-resize * {
     grid-template-areas:
         "label ."
         "bar scale"
-        "title .";
+        "value .";
 }
 .aux-meter.aux-right {
     grid-template-areas:
         ". label"
         "scale bar"
-        ". title";
+        ". value";
 }
 .aux-meter > .aux-label {
     grid-area: label;
     white-space: nowrap;
 }
 .aux-meter.aux-horizontal > .aux-label {
-    justify-self: end;
+    justify-self: start;
     align-self: center;
 }
 .aux-meter.aux-vertical > .aux-label {
     justify-self: center;
     align-self: center;
 }
-.aux-meter > .aux-title {
-    grid-area: title;
+.aux-meter > .aux-value {
+    grid-area: value;
     white-space: nowrap;
 }
-.aux-meter.aux-horizontal > .aux-title {
-    justify-self: start;
+.aux-meter.aux-horizontal > .aux-value {
+    justify-self: end;
     align-self: center;
 }
-.aux-meter.aux-vertical > .aux-title {
+.aux-meter.aux-vertical > .aux-value {
     justify-self: center;
     align-self: center;
 }
@@ -711,11 +711,11 @@ body.aux-cursor-row-resize * {
     grid-template-areas:
         "bar bar clip"
         "scale scale ."
-        "title label label";
+        "label value value";
 }
 .aux-levelmeter.aux-bottom {
     grid-template-areas:
-        "title label label"
+        "label value value"
         "scale scale ."
         "bar bar clip";
 }
@@ -724,14 +724,14 @@ body.aux-cursor-row-resize * {
         "label ."
         "clip ."
         "bar scale"
-        "title .";
+        "value .";
 }
 .aux-levelmeter.aux-right {
     grid-template-areas:
         ". label"
         ". clip"
         "scale bar"
-        ". title";
+        ". value";
 }
 .aux-levelmeter > .aux-clip {
     grid-area: clip;
