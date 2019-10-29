@@ -167,6 +167,11 @@
 
 /* KNOB */
 
+.aux-knob {
+    cursor: pointer;
+    width: 100px;
+    height: 100px;
+}
 .aux-knob::before,
 .aux-knob::after {
     content: "";
@@ -542,7 +547,11 @@ input.aux-value {
     margin: 0;
 }
 .aux-valueknob > .aux-value {
-    margin-top: -8px;
+    margin-top: -12px;
+    z-index: -1;
+}
+.aux-valueknob > .aux-label {
+    margin-bottom: -4px;
 }
 
 /* WIDGET */
