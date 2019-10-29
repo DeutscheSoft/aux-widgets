@@ -172,7 +172,7 @@
     background: var(--aux-contrast-base);
     color: var(--aux-contrast-text);
     border: 1px solid var(--aux-contrast-base);
-    border-radius: var(--aux-border-radius);
+    border-bottom-right-radius: var(--aux-border-radius);
 }
 
 /* GRAPH */

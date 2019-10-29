@@ -39,6 +39,9 @@
     --aux-fader-handlewidth: var(--aux-clickable-size);
     --aux-fader-handleheight: calc(1.5 * var(--aux-clickable-size));
     
+    --aux-frame-padding: 8px;
+    --aux-frame-labelheight: 28px;
+    
     --aux-levelmeter-statesize: 4px;
     
     --aux-meter-size: 16px;
@@ -120,16 +123,12 @@
 /* FRAME */
 
 .aux-frame {
-    padding: 16px 8px 8px 8px;
+    padding: var(--aux-frame-labelheight) var(--aux-frame-padding) var(--aux-frame-padding) var(--aux-frame-padding);
 }
 .aux-frame > .aux-framelabel {
     position: absolute;
     top: 0;
     left: 0;
-}
-.aux-frame > .aux-framelabel {
-    top: -11px;
-    left: 8px;
     margin: 0;
     padding: 2px 4px;
 }
