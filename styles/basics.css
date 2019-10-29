@@ -36,6 +36,10 @@
     --aux-fader-handlewidth: var(--aux-clickable-size);
     --aux-fader-handleheight: calc(1.5 * var(--aux-clickable-size));
     
+    --aux-meter-size: 12px;
+    
+    --aux-multimeter-reduce: 1px;
+    
     --aux-scale-minwidth: 40px;
     --aux-scale-minheight: 20px;
     --aux-scale-dotsize: 3px;
@@ -164,6 +168,90 @@
 .aux-knob::after {
     background: transparent;
     pointer-events: none;
+}
+
+/* METER */
+
+.aux-meter.aux-vertical > .aux-bar {
+    width: var(--aux-meter-size);
+}
+.aux-meter.aux-horizontal > .aux-bar {
+    height: var(--aux-meter-size);
+}
+.aux-meter.aux-top .aux-scale {
+    margin: 2px 0 0 0;
+}
+.aux-meter.aux-left .aux-scale {
+    margin: 0 0 0 2px;
+}
+.aux-meter.aux-right .aux-scale {
+    margin: 0 2px 0 0;
+}
+.aux-meter.aux-bottom .aux-scale {
+    margin: 0 0 2px 0;
+}
+
+/* MULTIMETER */
+
+.aux-multimeter .aux-meter.aux-vertical {
+    margin: 0 1px;
+}
+.aux-multimeter .aux-meter.aux-horizontal {
+    margin: 1px 0;
+}
+.aux-multimeter.aux-vertical.aux-count-2 .aux-bar {
+    width: calc(var(--aux-meter-size) - var(--aux-multimeter-reduce) * 2);
+}
+.aux-multimeter.aux-vertical.aux-count-3 .aux-bar {
+    width: calc(var(--aux-meter-size) - var(--aux-multimeter-reduce) * 3);
+}
+.aux-multimeter.aux-vertical.aux-count-4 .aux-bar {
+    width: calc(var(--aux-meter-size) - var(--aux-multimeter-reduce) * 4);
+}
+.aux-multimeter.aux-vertical.aux-count-5 .aux-bar {
+    width: calc(var(--aux-meter-size) - var(--aux-multimeter-reduce) * 5);
+}
+.aux-multimeter.aux-vertical.aux-count-6 .aux-bar {
+    width: calc(var(--aux-meter-size) - var(--aux-multimeter-reduce) * 6);
+}
+.aux-multimeter.aux-vertical.aux-count-7 .aux-bar {
+    width: calc(var(--aux-meter-size) - var(--aux-multimeter-reduce) * 7);
+}
+.aux-multimeter.aux-vertical.aux-count-8 .aux-bar {
+    width: calc(var(--aux-meter-size) - var(--aux-multimeter-reduce) * 8);
+}
+.aux-multimeter.aux-vertical.aux-count-9 .aux-bar {
+    width: calc(var(--aux-meter-size) - var(--aux-multimeter-reduce) * 9);
+}
+.aux-multimeter.aux-vertical.aux-count-10 .aux-bar {
+    width: calc(var(--aux-meter-size) - var(--aux-multimeter-reduce) * 10);
+}
+.aux-multimeter.aux-horizontal.aux-count-2 .aux-bar {
+    height: calc(var(--aux-meter-size) - var(--aux-multimeter-reduce) * 2);
+}
+.aux-multimeter.aux-horizontal.aux-count-3 .aux-bar {
+    height: calc(var(--aux-meter-size) - var(--aux-multimeter-reduce) * 3);
+}
+.aux-multimeter.aux-horizontal.aux-count-4 .aux-bar {
+    height: calc(var(--aux-meter-size) - var(--aux-multimeter-reduce) * 4);
+}
+.aux-multimeter.aux-horizontal.aux-count-5 .aux-bar {
+    height: calc(var(--aux-meter-size) - var(--aux-multimeter-reduce) * 5);
+}
+.aux-multimeter.aux-horizontal.aux-count-6 .aux-bar {
+    height: calc(var(--aux-meter-size) - var(--aux-multimeter-reduce) * 6);
+}
+.aux-multimeter.aux-horizontal.aux-count-7 .aux-bar {
+    height: calc(var(--aux-meter-size) - var(--aux-multimeter-reduce) * 7);
+}
+.aux-multimeter.aux-horizontal.aux-count-8 .aux-bar {
+    height: calc(var(--aux-meter-size) - var(--aux-multimeter-reduce) * 8);
+}
+.aux-multimeter.aux-horizontal.aux-count-9 .aux-bar {
+    height: calc(var(--aux-meter-size) - var(--aux-multimeter-reduce) * 9);
+}
+.aux-multimeter.aux-horizontal.aux-count-10 .aux-bar {
+    height: calc(var(--aux-meter-size) - var(--aux-multimeter-reduce) * 10);
 }
 
 /* NAVIGATION */

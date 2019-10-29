@@ -212,6 +212,13 @@
                 5px 15px 3px rgba(0, 0, 0, 0.12);
 }
 
+/* METER */
+
+.aux-meter .aux-mask {
+    background: var(--aux-widget-base);
+    opacity: 0.86;
+}
+
 /* RESPONSEHANDLE */
 
 .aux-responsehandle {
