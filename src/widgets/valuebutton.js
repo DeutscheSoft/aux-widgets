@@ -89,6 +89,7 @@ export const ValueButton = define_class({
         snap:           0.01,
         basis: 300,
         labels: FORMAT("%d"),
+        layout: "top",
     },
     static_events: {
         set_drag_direction: function(value) {
