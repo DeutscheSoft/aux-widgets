@@ -212,6 +212,12 @@
                 5px 15px 3px rgba(0, 0, 0, 0.12);
 }
 
+/* LEVELMETER */
+
+.aux-levelmeter > .aux-clip {
+    background: var(--aux-active-base);
+}
+
 /* METER */
 
 .aux-meter .aux-bar {
