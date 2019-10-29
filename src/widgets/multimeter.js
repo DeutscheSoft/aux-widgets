@@ -70,8 +70,8 @@ export const MultiMeter = define_class({
      * @param {Object} [options={ }] - An object containing initial options.
      * 
      * @property {Number} [options.count=2] - The amount of level meters.
-     * @property {String} [options.title=""] - The title of the multi meter. Set to `false` to hide the title from the DOM.
-     * @property {Array<String>} [options.titles=["L", "R"]] - An Array containing titles for the level meters. Their order is the same as the meters.
+     * @property {String} [options.label=""] - The label of the multi meter. Set to `false` to hide the label from the DOM.
+     * @property {Array<String>} [options.labels=["L", "R"]] - An Array containing labels for the level meters. Their order is the same as the meters.
      * @property {Array<Number>} [options.values=[]] - An Array containing values for the level meters. Their order is the same as the meters.
      * @property {Array<Number>} [options.labels=[]] - An Array containing label values for the level meters. Their order is the same as the meters.
      * @property {Array<Boolean>} [options.clips=[]] - An Array containing clippings for the level meters. Their order is the same as the meters.
@@ -85,15 +85,15 @@ export const MultiMeter = define_class({
     LevelMeters and Meter options. */
     _options: Object.assign(Object.create(Container.prototype._options), {
         count: "int",
-        title: "boolean|string",
-        titles: "array",
+        label: "boolean|string",
+        labels: "array",
         layout: "string",
         show_scale: "boolean",
     }),
     options: {
         count: 2,
-        title: false,
-        titles: ["L", "R"],
+        label: false,
+        labels: ["L", "R"],
         layout: "left",
         show_scale: true,
     },
@@ -171,14 +171,14 @@ export const MultiMeter = define_class({
 });
 
 /**
- * @member {HTMLDivElement} MultiMeter#title - The {@link Label} widget displaying the meters title.
+ * @member {HTMLDivElement} MultiMeter#label - The {@link Label} widget displaying the meters title.
  */
-define_child_widget(MultiMeter, "title", {
+define_child_widget(MultiMeter, "label", {
     create: Label,
     show: false,
-    option: "title",
-    default_options: { "class" : "aux-title" },
-    map_options: { "title" : "label" },
+    option: "label",
+    default_options: { "class" : "aux-label" },
+    map_options: { "label" : "label" },
     toggle_class: true,
 });
 
@@ -192,7 +192,7 @@ define_child_widget(MultiMeter, "title", {
  */
  
 var mapped_options = {
-    titles: "title",
+    labels: "label",
     layout: "layout",
 };
 
@@ -210,8 +210,8 @@ function map_child_option(value, key) {
     }
 }
 
-add_static_event(MultiMeter, "set_titles", function(value) {
-    map_child_option.call(this, value, "title");
+add_static_event(MultiMeter, "set_labelss", function(value) {
+    map_child_option.call(this, value, "label");
 });
 
 for (var key in object_sub(LevelMeter.prototype._options, Container.prototype._options)) {
