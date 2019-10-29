@@ -267,8 +267,8 @@ export const Graph = define_class({
                     case "Q":
                     case "S":
                         s.push(" " + t + " " +
-                               get_px(dot.x1) + "," + get_px(dot.y1, RY) + " " +
-                               get_px(dot.x) + "," + get_px(dot.y, RY));
+                               get_px(dot.x1, RX) + "," + get_px(dot.y1, RY) + " " +
+                               get_px(dot.x, RX) + "," + get_px(dot.y, RY));
                         break;
                     case "C":
                         s.push(" " + t + " " +
