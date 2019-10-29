@@ -33,10 +33,15 @@
     
     --aux-clickable-size: 40px;
     
+    --aux-button-paddingvertical: 4px;
+    --aux-button-paddinghorizontal: 8px;
+    
     --aux-fader-handlewidth: var(--aux-clickable-size);
     --aux-fader-handleheight: calc(1.5 * var(--aux-clickable-size));
     
-    --aux-meter-size: 12px;
+    --aux-levelmeter-statesize: 4px;
+    
+    --aux-meter-size: 16px;
     
     --aux-multimeter-reduce: 1px;
     
@@ -45,7 +50,7 @@
     --aux-scale-dotsize: 3px;
     --aux-scale-markersize: 5px;
     --aux-scale-labelmargin: 8px;
-    --aux-scale-barsize: 2px;
+    --aux-scale-barsize: 5px;
     --aux-scale-pointersize: 5px;
     
     --aux-state-width: 12px;
@@ -53,13 +58,16 @@
     
     --aux-value-height: 32px;
     
+    --aux-valuebutton-gap: 4px;
+    --aux-valuebutton-paddingvertical: 2px;
+    
 }
 
 /* BUTTON */
 
 .aux-button {
     height: var(--aux-clickable-size);
-    padding: 4px 8px;
+    padding: var(--aux-button-paddingvertical) var(--aux-button-paddinghorizontal);
     overflow: hidden;
 }
 
@@ -173,23 +181,26 @@
     pointer-events: none;
 }
 
+/* LEVELMETER */
+
+.aux-levelmeter.aux-vertical > .aux-clip {
+    width: var(--aux-meter-size);
+    height: var(--aux-levelmeter-statesize);
+    margin: 0 0 var(--aux-main-margin) 0;
+}
+.aux-levelmeter.aux-horizontal > .aux-clip {
+    width: var(--aux-levelmeter-statesize);
+    height: var(--aux-meter-size);
+    margin: 0 0 0 var(--aux-main-margin);
+}
+
 /* METER */
 
-.aux-meter.aux-vertical > .aux-clip,
 .aux-meter.aux-vertical > .aux-bar {
     width: var(--aux-meter-size);
 }
-.aux-meter.aux-horizontal > .aux-clip,
 .aux-meter.aux-horizontal > .aux-bar {
     height: var(--aux-meter-size);
-}
-.aux-meter.aux-vertical > .aux-clip {
-    height: calc(var(--aux-meter-size) / 2);
-    margin: 0 0 var(--aux-main-margin) 0;
-}
-.aux-meter.aux-horizontal > .aux-clip {
-    width: calc(var(--aux-meter-size) / 2);
-    margin: 0 0 0 var(--aux-main-margin);
 }
 .aux-meter.aux-top > .aux-scale {
     margin: 2px 0 0 0;
@@ -230,10 +241,10 @@
 
 /* MULTIMETER */
 
-.aux-multimeter > .aux-meter.aux-vertical {
+.aux-multimeter.aux-vertical > .aux-meter {
     margin: 0 1px;
 }
-.aux-multimeter > .aux-meter.aux-horizontal {
+.aux-multimeter.aux-horizontal > .aux-meter {
     margin: 1px 0;
 }
 .aux-multimeter.aux-vertical.aux-count-2 .aux-clip,
@@ -503,11 +514,21 @@ input.aux-value {
 /* VALUEBUTTON */
 
 .aux-valuebutton {
-    padding: 0 0 0 8px;
+    padding: var(--aux-valuebutton-paddingvertical) 0 var(--aux-valuebutton-paddingvertical) var(--aux-button-paddinghorizontal);
+    grid-gap: 0 var(--aux-valuebutton-gap);
+}
+.aux-valuebutton > .aux-widget {
+    margin: 0;
+}
+.aux-valuebutton > .aux-icon {
+    justify-self: start;
+}
+.aux-valuebutton > .aux-label {
+    justify-self: start;
 }
 .aux-valuebutton > .aux-value {
     height: var(--aux-clickable-size);
-    margin: 0;
+    margin: 0 0 0 var(--aux-valuebutton-gap);
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
 }

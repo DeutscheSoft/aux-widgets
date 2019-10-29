@@ -21,7 +21,8 @@
  * This is the default AUX theme. Use it to get your development started,
  * concentrating on the design later. If you like the overall appearance
  * and just feel like changing colors, take a look at the variables
- * section. Edit or overwrite these variables to change the color scheme.
+ * section below. Edit or overwrite these variables to change the color
+ * scheme.
  */
  
 @import "basics.css"; /* Some general defaults. This file already
@@ -34,6 +35,7 @@
     
     --aux-main-tinyfont: 8px;
     --aux-main-smallfont: 11px;
+    --aux-main-bigfont: 16px;
     
     --aux-main-base: #E6E6E6;
     --aux-main-text: #212424;
@@ -45,7 +47,7 @@
     --aux-active-text: #FFFFFF;
     
     --aux-warn-base: #FF9900;
-    --aux-warn-text: #000000;
+    --aux-warn-text: #FFFFFF;
     
     --aux-contrast-base: var(--aux-main-text);
     --aux-contrast-text: #FFFFFF;
@@ -57,8 +59,8 @@
 }
 
 ::selection {
-  color: var(--aux-warn-color);
-  background: var(--aux-warn-base);
+  color: var(--aux-active-color);
+  background: var(--aux-active-base);
 }
 
 /* BUTTON */
@@ -273,7 +275,7 @@
     color: var(--aux-active-base);
 }
 .aux-scale > .aux-bar {
-    background: var(--aux-active-base);
+    background: var(--aux-widget-base);
 }
 .aux-scale.aux-top > .aux-pointer {
     border-bottom-color: var(--aux-active-base);
@@ -310,8 +312,22 @@ input.aux-value {
     background: var(--aux-widget-base);
     color: var(--aux-widget-text);
     border-radius: var(--aux-border-radius);
+    font-size: var(--aux-main-bigfont);
 }
 input.aux-value.aux-active {
     background: var(--aux-contrast-base);
     color: var(--aux-contrast-text);
+}
+
+/* VALUEBUTTON */
+
+.aux-valuebutton .aux-bar {
+    background: var(--aux-active-base);
+}
+.aux-valuebutton.aux-warn {
+    background: var(--aux-widget-base);
+    color: var(--aux-widget-color);
+}
+.aux-valuebutton.aux-warn .aux-bar {
+    background: var(--aux-warn-base) !important;
 }
