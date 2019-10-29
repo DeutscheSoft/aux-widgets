@@ -180,7 +180,6 @@ export const Equalizer = define_class({
         this.baseline = this.add_graph({
             range_x:   this.range_x,
             range_y:   this.range_y,
-            container: this._bands,
             dots: [{x: 20, y: 0}, {x: 20000, y: 0}],
             "class": "aux-baseline"
         });
