@@ -43,6 +43,7 @@
     
     --aux-meter-size: 16px;
     
+    --aux-multimeter-labelheight: 20px;
     --aux-multimeter-reduce: 1px;
     
     --aux-scale-minwidth: 40px;
@@ -246,6 +247,17 @@
 
 /* MULTIMETER */
 
+.aux-multimeter {
+    padding-top: var(--aux-multimeter-labelheight);
+}
+.aux-multimeter > .aux-label {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    text-align: left;
+    margin: 0 0 var(--aux-main-margin) 0;
+}
 .aux-multimeter.aux-vertical > .aux-meter {
     margin: 0 1px;
 }
