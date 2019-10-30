@@ -277,7 +277,7 @@
     color: var(--aux-active-base);
 }
 .aux-scale > .aux-bar {
-    background: var(--aux-widget-base);
+    background: var(--aux-active-base);
 }
 .aux-scale.aux-top > .aux-pointer {
     border-bottom-color: var(--aux-active-base);
@@ -329,6 +329,10 @@ input.aux-value.aux-active {
 
 /* VALUEBUTTON */
 
+.aux-valuebutton .aux-value {
+    background: var(--aux-active-base);
+    color: var(--aux-active-text);
+}
 .aux-valuebutton .aux-bar {
     background: var(--aux-active-base);
 }

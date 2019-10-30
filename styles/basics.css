@@ -30,6 +30,7 @@
 :root {
     
     --aux-main-margin: 2px;
+    --aux-main-fontsize: 14px;
     
     --aux-clickable-size: 40px;
     
@@ -79,7 +80,9 @@
     --aux-value-height: 32px;
     
     --aux-valuebutton-gap: 4px;
-    --aux-valuebutton-paddingvertical: 2px;
+    --aux-valuebutton-paddingvertical: 0px;
+    --aux-valuebutton-scaleheight: 16px;
+    --aux-valuebutton-scalemargin: 6px;
     
 }
 
@@ -565,18 +568,23 @@ input.aux-value {
 }
 .aux-valuebutton > .aux-icon {
     justify-self: start;
+    line-height: var(--aux-main-fontsize);
 }
 .aux-valuebutton > .aux-label {
     justify-self: start;
 }
 .aux-valuebutton > .aux-value {
-    height: var(--aux-clickable-size);
+    height: 100%;
     margin: 0 0 0 var(--aux-valuebutton-gap);
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
 }
 .aux-valuebutton > .aux-scale {
     font-size: var(--aux-main-tinyfont);
+    min-height: var(--aux-valuebutton-scaleheight);
+}
+.aux-valuebutton > .aux-scale .aux-label {
+    top: var(--aux-valuebutton-scalemargin);
 }
 
 /* VALUEKNOB */
