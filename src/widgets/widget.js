@@ -107,6 +107,34 @@ function dblclick (e) {
     }
 }
 
+let last_preset;
+let preset_origins = {};
+
+function set_preset (preset) {
+    console.log(preset, this)
+    let O = this.options;
+    let _O = this.options;
+    let key, val;
+    if (last_preset) {
+        this.remove_class("aux-preset-" + last_preset);
+    }
+    this.add_class("aux-preset-" + preset);
+    last_preset = preset;
+    
+    let preset_options = O.presets[preset] || {};
+    for (key in _O) {
+        if (key === "preset" || key === "presets")
+            continue;
+        if (!preset_origins[key])
+            preset_origins[key] = O[key];
+        if (preset_options.hasOwnProperty(key))
+            val = preset_options[key];
+        else
+            val = preset_origins[key];
+        this.set(key, val);
+    }
+}
+
 export const Widget = define_class({
     /**
      * Widget is the base class for all widgets drawing DOM elements. It
@@ -128,6 +156,12 @@ export const Widget = define_class({
      * @property {Boolean} [options.active] - Toggles the class <code>.aux-inactive</code>.
      * @property {Boolean} [options.needs_resize=true] - Set to true if the resize function shall be called before the next redraw.
      * @property {Boolean} [options.dblclick=400] - Set a time in milliseconds for triggering double click event. If 0, no double click events are fired.
+     * @property {String} [options.preset] - Set a preset. This string
+     *   gets set as class attribute `aux-preset-[preset]`. If `options.presets` has a member
+     *   of this name, all options of its option object are set on the Widget. Non-existent
+     *   options are reset to the default on initialization.
+     * @property {Object} [options.presets={}] - An object with available preset
+     *   specific options. Refer to `options.preset` for more information.
      */
     /**
      * The <code>set</code> event is emitted when an option was set using the {@link Widget#set}
@@ -188,6 +222,8 @@ export const Widget = define_class({
         needs_resize: "boolean",
         dblclick: "number",
         interacting: "boolean",
+        presets: "object",
+        preset: "string",
     },
     options: {
         // these options are of less use and only here to show what we need
@@ -195,6 +231,7 @@ export const Widget = define_class({
         needs_resize: true,
         dblclick: 0,
         interacting: false,
+        presets: {},
     },
     static_events: {
         set_container: function() {
@@ -219,6 +256,7 @@ export const Widget = define_class({
             if (v > 0)
               this.set("dblclick", v);
         },
+        set_preset: function (v) { set_preset.call(this, v); },
     },
     constructor: function (options) {
       if (!options) options = {};
