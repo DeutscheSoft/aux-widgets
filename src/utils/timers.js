@@ -18,7 +18,7 @@ export class Timer
     this.id = void(0);
     this.time = 0;
     this._cb = () => {
-      const delta = performance.now() - this.time;
+      const delta = this.time - performance.now();
 
       this.id = void(0);
 
