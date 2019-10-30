@@ -64,14 +64,6 @@ describe('Components', () => {
     o.auxWidget.set('disabled', true);
     done();
   });
-  it('addEventListener on setAttribute does not trigger', (done) => {
-    const o = document.createElement('aux-widget');
-    o.addEventListener('set_disabled', (ev) => {
-      done(new Error('failed.'));
-    });
-    o.setAttribute('disabled', 'true');
-    done();
-  });
   it('get_option_type()', () => {
     const o = new Widget();
 

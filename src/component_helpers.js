@@ -129,8 +129,7 @@ function create_component (base) {
     constructor(widget)
     {
       super();
-      this._auxEventHandlers = new Map();
-      this._auxEventsPaused = false;
+      this._auxEventHandlers = null;
     }
 
     connectedCallback()
@@ -141,7 +140,6 @@ function create_component (base) {
     {
       if (oldValue === newValue) return;
 
-      this._auxEventsPaused = true;
       try {
         const widget = this.auxWidget;
         const type = widget._options[name];
@@ -157,19 +155,22 @@ function create_component (base) {
       } catch (e) {
         warn('Setting attribute generated an error:', e);
       }
-      this._auxEventsPause = false;
     }
   
     addEventListener(type, ...args)
     {
       if (!is_native_event(type) && this.auxWidget)
       {
-        const handlers = this._auxEventHandlers;
+        let handlers = this._auxEventHandlers;
+
+        if (handlers === null)
+        {
+          this._auxEventHandlers = handlers = new Map();
+        }
   
         if (!handlers.has(type))
         {
           const cb = (...args) => {
-            if (this._auxEventsPaused) return;
             this.dispatchEvent(new CustomEvent(type, { detail: { args: args } }));
           };
   
