@@ -67,6 +67,11 @@ export class Timer
     this.id = setTimeout(this._cb, delta);
   }
 
+  get active()
+  {
+    return this.id !== void(0);
+  }
+
   /**
    * Stop the timer.
    */

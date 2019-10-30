@@ -5,3 +5,4 @@ export * from './helpers.js';
 export * from './scheduler.js';
 export * from './widgets.js';
 export * from './timers.js';
+export * from './bindings.js';

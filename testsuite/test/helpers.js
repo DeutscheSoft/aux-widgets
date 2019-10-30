@@ -32,6 +32,7 @@ export function assert(v, msg)
 {
   if (!v)
   {
+    debugger;
     throw new Error(msg || 'assertion failed.');
   }
 }
@@ -47,4 +48,9 @@ export function assert_error(cb, msg)
   catch (err) { }
 
   assert(ok, msg || "expected error.");
+}
+
+export function sleep(n)
+{
+  return new Promise((resolve) => setTimeout(resolve, n));
 }
