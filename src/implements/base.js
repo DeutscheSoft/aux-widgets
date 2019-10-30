@@ -281,6 +281,10 @@ export const Base = define_class({
 
         return value;
     },
+    reset: function(key)
+    {
+      return this.set(key, this.get_default(key));
+    },
     /**
      * Sets an option by user interaction. Emits the <code>userset</code>
      * event. The <code>userset</code> event can be cancelled (if an event handler

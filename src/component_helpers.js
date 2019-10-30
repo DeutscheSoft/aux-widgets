@@ -145,8 +145,15 @@ function create_component (base) {
       try {
         const widget = this.auxWidget;
         const type = widget._options[name];
-        const value = parse_attribute(type, newValue);
-        widget.set(name, value);
+        if (newValue !== null)
+        {
+          const value = parse_attribute(type, newValue);
+          widget.set(name, value);
+        }
+        else
+        {
+          widget.reset(name);
+        }
       } catch (e) {
         warn('Setting attribute generated an error:', e);
       }
