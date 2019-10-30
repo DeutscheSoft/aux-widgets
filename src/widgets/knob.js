@@ -74,7 +74,11 @@ function module_range() {
  * @property {Object} [options.marker={thickness: 6, margin: 13}]
  * @property {Object} [options.label={margin: 10, align: "outer", format: function(val){return val;}}]
  * @property {Number} [options.basis=300] - Distance to drag between <code>min</code> and <code>max</code>.
-
+ * @property {Number} [options.reset] - Reset to this value on double click.
+ * @property {Number} [options.size=100] - SVG viewport size (width and height equally).
+ *   Since SVG scales according to its containers size, this is an internal value
+ *   all other lengths (`margin`, `thickness` aso.) depend on. Setting it to 100
+ *   makes all lengths percentual values.
  */
 export const Knob = define_class({
     Extends: Widget,
