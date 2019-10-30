@@ -467,8 +467,8 @@ export const Circular = define_class({
         var outer_p = outer - stroke / 2 - O.margin;
         var inner_p = inner - stroke / 2 - O.margin;
         
-        if (I.show_value || I.value_ring) {
-            I.show_value = false;
+        if (I.show_value || I.value_ring || I.size) {
+            I.show_value = I.value_ring = false;
             if (O.show_value) {
                 draw_slice.call(this, this.val2coef(this.snap(O.base)) * O.angle, this.val2coef(this.snap(O.value_ring)) * O.angle, inner_p, outer_p, outer,
                                 this._value);
@@ -477,7 +477,7 @@ export const Circular = define_class({
             }
         }
 
-        if (I.show_base) {
+        if (I.show_base || I.size) {
             I.show_base = false;
             if (O.show_base) {
                 draw_slice.call(this, 0, O.angle, inner_p, outer_p, outer, this._base);
@@ -486,7 +486,7 @@ export const Circular = define_class({
                 this._base.removeAttribute("d");
             }
         }
-        if (I.show_hand) {
+        if (I.show_hand || I.size) {
             I.show_hand = false;
             if (O.show_hand) {
                 this._hand.style.display = "block";

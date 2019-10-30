@@ -51,6 +51,9 @@
     --aux-graph-outline: 2px;
     --aux-graph-steady: 0.5px;
     
+    --aux-knob-size: 96px;
+    --aux-knob-backgroundmargin: 23px;
+    
     --aux-levelmeter-statesize: 4px;
     
     --aux-meter-size: 16px;
@@ -185,19 +188,23 @@
 
 .aux-knob {
     cursor: pointer;
-    width: 100px;
-    height: 100px;
+    width: var(--aux-knob-size);
+    height: var(--aux-knob-size);
 }
 .aux-knob::before,
 .aux-knob::after {
     content: "";
     position: absolute;
+    width: calc(100% - var(--aux-knob-backgroundmargin) * 2);
+    height: calc(100% - var(--aux-knob-backgroundmargin) * 2);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 50%;
 }
 .aux-knob::after {
+    width: calc(100% - var(--aux-knob-backgroundmargin) * 2 - 1px);
+    height: calc(100% - var(--aux-knob-backgroundmargin) * 2 - 1px);
     background: transparent;
     pointer-events: none;
 }

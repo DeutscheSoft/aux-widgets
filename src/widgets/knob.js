@@ -75,20 +75,14 @@ function module_range() {
  * @property {Object} [options.label={margin: 10, align: "outer", format: function(val){return val;}}]
  * @property {Number} [options.basis=300] - Distance to drag between <code>min</code> and <code>max</code>.
  * @property {Number} [options.reset] - Reset to this value on double click.
- * @property {Number} [options.size=100] - SVG viewport size (width and height equally).
- *   Since SVG scales according to its containers size, this is an internal value
- *   all other lengths (`margin`, `thickness` aso.) depend on. Setting it to 100
- *   makes all lengths percentual values.
  */
 export const Knob = define_class({
     Extends: Widget,
     _options: Object.assign(Object.create(Widget.prototype._options), Circular.prototype._options,
                             DragValue.prototype._options, {
-        size: "number",
         reset: "number",
     }),
     options: Object.assign({}, Circular.prototype.options, {
-        size: 100,
         hand: {width: 1, length: 12, margin: 24},
         margin: 13,
         thickness: 6,
@@ -173,6 +167,12 @@ export const Knob = define_class({
         this.scroll.destroy();
         this.circular.destroy();
         Widget.prototype.destroy.call(this);
+    },
+    
+    resize: function () {
+        var rect = this.element.getBoundingClientRect();
+        var size = Math.min(rect.width, rect.height);
+        this.set("size", size);
     },
 
     redraw: function() {
