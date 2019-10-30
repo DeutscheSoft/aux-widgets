@@ -229,12 +229,33 @@ function find_parent_widget(node)
   return null;
 }
 
+function define_options_as_properties(component, options)
+{
+  options.forEach((name) => {
+    if (name in component.prototype) return;
+    Object.defineProperty(component.prototype, name, {
+      get: function()
+      {
+        return this.auxWidget.get(name);
+      },
+      set: function(value)
+      {
+        const widget = this.auxWidget;
+        if (value === void(0))
+          return widget.reset(name);
+        else
+          return widget.set(name, value);
+      },
+    });
+  });
+}
+
 export function component_from_widget(Widget, base)
 {
   let compbase = create_component(base);
   const attributes = attributes_from_widget(Widget);
 
-  return class extends compbase
+  const component = class extends compbase
   {
     static get observedAttributes()
     {
@@ -272,7 +293,11 @@ export function component_from_widget(Widget, base)
       this.auxWidget.set_parent(void(0));
       this.auxWidget.disable_draw();
     }
-  }
+  };
+
+  define_options_as_properties(component, attributes);
+
+  return component;
 }
 
 export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove_cb, base)
@@ -288,7 +313,7 @@ export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove
     parent.remove_child(child);
   };
 
-  return class extends compbase
+  const component = class extends compbase
   {
     static get observedAttributes()
     {
@@ -332,7 +357,11 @@ export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove
         this.auxParent = null;
       }
     }
-  }
+  };
+
+  define_options_as_properties(component, attributes);
+
+  return component;
 }
 
 export function define_component(name, component, options)

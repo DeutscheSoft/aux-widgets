@@ -33,6 +33,21 @@ describe('Components', () => {
     o.removeAttribute('disabled');
     assert(!widget.get('disabled'));
   });
+  it('properties', () => {
+    const o = document.createElement('aux-widget');
+    assert(o.disabled === false);
+    o.disabled = true;
+    assert(o.disabled);
+  });
+  it('removeAttribute()', () => {
+    const o = document.createElement('aux-widget');
+    const widget = o.auxWidget;
+
+    o.setAttribute("disabled", true);
+    assert(widget.get('disabled'));
+    o.removeAttribute('disabled');
+    assert(!widget.get('disabled'));
+  });
   it('addEventListener', (done) => {
     const o = document.createElement('aux-widget');
     o.addEventListener('set_disabled', (ev) => {
