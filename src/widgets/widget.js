@@ -111,7 +111,6 @@ let last_preset;
 let preset_origins = {};
 
 function set_preset (preset) {
-    console.log(preset, this)
     let O = this.options;
     let _O = this.options;
     let key, val;
