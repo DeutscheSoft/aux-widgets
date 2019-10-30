@@ -230,6 +230,14 @@
     opacity: 0.86;
 }
 
+/* NOTIFICATIONS */
+
+.aux-notification {
+    background: var(--aux-contrast-base);
+    color: var(--aux-contrast-text);
+    border-radius: var(--aux-border-radius);
+}
+
 /* RESPONSEHANDLE */
 
 .aux-responsehandle {

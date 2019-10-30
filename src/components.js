@@ -17,6 +17,7 @@ export * from './components/levelmeter.js';
 export * from './components/meter.js';
 export * from './components/multimeter.js';
 export * from './components/navigation.js';
+export * from './components/notifications.js';
 export * from './components/pager.js';
 export * from './components/pages.js';
 export * from './components/root.js';

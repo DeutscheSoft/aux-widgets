@@ -49,6 +49,10 @@
     --aux-multimeter-labelheight: 20px;
     --aux-multimeter-reduce: 1px;
     
+    --aux-notification-maxwidth: 400px;
+    --aux-notification-padding: 16px;
+    --aux-notification-margin: 4px;
+    
     --aux-scale-minwidth: 40px;
     --aux-scale-minheight: 20px;
     --aux-scale-dotsize: 3px;
@@ -374,6 +378,20 @@
 }
 .aux-navigation.aux-vertical > .aux-next {
     margin-top: var(--aux-main-margin);
+}
+
+/* NOTIFICATIONS */
+
+.aux-notifications {
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    max-width: var(--aux-notification-maxwidth);
+    transform: translate3d(0, 0, 0);
+}
+.aux-notification {
+    padding: var(--aux-notification-padding);
+    margin: var(--aux-notification-margin);
 }
 
 /* RESPONSEHANDLE */

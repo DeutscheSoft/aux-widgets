@@ -28,7 +28,6 @@ export * from './widgets/listitem.js';
 export * from './widgets/meter.js';
 export * from './widgets/multimeter.js';
 export * from './widgets/navigation.js';
-export * from './widgets/notification.js';
 export * from './widgets/notifications.js';
 export * from './widgets/pager.js';
 export * from './widgets/pages.js';

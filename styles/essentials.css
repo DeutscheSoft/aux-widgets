@@ -837,6 +837,13 @@ body.aux-cursor-row-resize * {
     overflow-y: auto;
 }
 
+/* NOTIFICATIONS */
+
+.aux-notifications {
+    position: fixed;
+    z-index: 100000000000;
+}
+
 /* PAGER */
 
 .aux-pager {
