@@ -109,6 +109,7 @@ function dblclick (e) {
 
 let last_preset;
 let preset_origins = {};
+let presetting = false;
 
 function set_preset (preset) {
     let O = this.options;
@@ -121,6 +122,7 @@ function set_preset (preset) {
     last_preset = preset;
     
     let preset_options = O.presets[preset] || {};
+    presetting = true;
     for (key in _O) {
         if (key === "preset" || key === "presets")
             continue;
@@ -132,6 +134,7 @@ function set_preset (preset) {
             val = preset_origins[key];
         this.set(key, val);
     }
+    presetting = false;
 }
 
 export const Widget = define_class({
@@ -158,7 +161,7 @@ export const Widget = define_class({
      * @property {String} [options.preset] - Set a preset. This string
      *   gets set as class attribute `aux-preset-[preset]`. If `options.presets` has a member
      *   of this name, all options of its option object are set on the Widget. Non-existent
-     *   options are reset to the default on initialization.
+     *   options are reset to the default. Defaults are updated on initialization and runtime.
      * @property {Object} [options.presets={}] - An object with available preset
      *   specific options. Refer to `options.preset` for more information.
      */
@@ -256,6 +259,10 @@ export const Widget = define_class({
               this.set("dblclick", v);
         },
         set_preset: function (v) { set_preset.call(this, v); },
+        set: function (key, val) {
+            if (!presetting && preset_origins.hasOwnProperty(key))
+                preset_origins[key] = val;
+        },
     },
     constructor: function (options) {
       if (!options) options = {};
