@@ -1,11 +1,12 @@
 import { warn, error } from './utils/log.js';
-import { FORMAT } from './utils/sprintf.js';
+import { sprintf, FORMAT } from './utils/sprintf.js';
 import { html } from './utils/dom.js';
 import { is_native_event } from './implements/base.js';
 
 function low_parse_attribute(type, x) {
   switch (type) {
   case "js":
+  case "javascript":
     return new Function([], "return ("+x+");").call(this);
   case "json":
     return JSON.parse(x);
@@ -14,9 +15,19 @@ function low_parse_attribute(type, x) {
   case "string":
     return x;
   case "number":
-    return parseFloat(x);
+    {
+      const f = parseFloat(x);
+      if (f === f) return f;
+
+      throw new Error(sprintf('Invalid number: "%s"', x));
+    }
   case "int":
-    return parseInt(x);
+    {
+      const i = parseInt(x);
+      if (i === i) return i;
+
+      throw new Error(sprintf('Invalid int: "%s"', x));
+    }
   case "sprintf":
     return FORMAT(x);
   case "regexp":
@@ -29,14 +40,14 @@ function low_parse_attribute(type, x) {
     } else if (x === "false") {
       return false;
     }
-    throw new Error("Malformed 'bool': ", x);
+    throw new Error(sprintf('Malformed boolean "%s"', x));
   case "array":
     try {
       return low_parse_attribute('json', x);
     } catch (err) {}
     return low_parse_attribute('js', x);
   default:
-    throw new Error("unsupported type " + type);
+    throw new Error(sprintf('Unsupported attribute type "%s"', type));
   }
 }
 
