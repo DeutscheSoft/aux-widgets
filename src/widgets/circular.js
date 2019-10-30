@@ -73,6 +73,9 @@ function draw_dots() {
     empty(_dots);
     for (var i = 0; i < dots.length; i++) {
         var m = dots[i];
+        if (typeof m == "number")
+            m = {pos:m};
+            
         var r = make_svg("rect", {"class": "aux-dot"});
         
         var length = m.length === void(0) ? dot.length : m.length;
@@ -427,8 +430,8 @@ export const Circular = define_class({
     draw: function(O, element)
     {
       add_class(element, "aux-circular");
-      element.appendChild(this._base);
-      element.appendChild(this._value);
+      element.insertBefore(this._value, this._markers);
+      element.insertBefore(this._base, this._value);
       element.appendChild(this._hand);
 
       Widget.prototype.draw.call(this, O, element);
@@ -444,7 +447,8 @@ export const Circular = define_class({
 
         if (I.validate("x", "y") || I.start || I.size) {
             E.setAttribute("transform", format_translate_rotate(O.x, O.y, O.start, outer, outer));
-            this._labels.setAttribute("transform", format_rotate(-O.start, outer, outer));
+            if (this._labels)
+                this._labels.setAttribute("transform", format_rotate(-O.start, outer, outer));
         }
 
         if (O.show_labels && (I.validate("show_labels", "labels", "label") ||
