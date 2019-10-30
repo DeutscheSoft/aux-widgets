@@ -198,6 +198,9 @@
 
 /* KNOB */
 
+.aux-knob {
+    font-size: var(--aux-main-tinyfont);
+}
 .aux-knob::before {
     background: linear-gradient(to bottom, rgba(56,61,61,1) 0%,rgba(18,20,20,1) 100%);
 }

@@ -64,6 +64,7 @@ function module_range() {
  *
  * @param {Object} [options={ }] - An object containing initial options.
  * 
+ * @property {Number} [options.reset] - Reset to this value on double click.
  * @property {Object} [options.hand={width: 1, length: 12, margin: 24}]
  * @property {Number} [options.margin=13]
  * @property {Number} [options.thickness=6]
@@ -74,7 +75,10 @@ function module_range() {
  * @property {Object} [options.marker={thickness: 6, margin: 13}]
  * @property {Object} [options.label={margin: 10, align: "outer", format: function(val){return val;}}]
  * @property {Number} [options.basis=300] - Distance to drag between <code>min</code> and <code>max</code>.
- * @property {Number} [options.reset] - Reset to this value on double click.
+ * @property {String} [options.preset="medium"] - The preset to use. Presets
+ *   are a functionality of {@link Widget}.
+ * @property {Object} [options.presets={tiny:{margin:0,hand:{width: 1, length: 6, margin: 11}}] - A set of available presets. Presets
+ *   are a functionality of {@link Widget}.
  */
 export const Knob = define_class({
     Extends: Widget,
@@ -83,19 +87,27 @@ export const Knob = define_class({
         reset: "number",
     }),
     options: Object.assign({}, Circular.prototype.options, {
-        hand: {width: 1, length: 12, margin: 24},
+        hand: {width: 1, length: 10, margin: 25},
         margin: 13,
         thickness: 6,
         step: 1,
         shift_up: 4,
         shift_down: 0.25,
-        dot: {length: 6, margin: 13, width: 2},
+        dot: {length: 6, margin: 13, width: 1},
         marker: {thickness: 6, margin: 13},
         label: {margin: 12, align: "outer", format: function(val){return val;}},
         direction: "polar",
-        rotation:       45,
-        blind_angle:    20,
+        rotation: 45,
+        blind_angle: 20,
         basis: 300,
+        preset: "medium",
+        presets: {
+            tiny: {margin:0, thickness:4, hand:{width: 1, length: 6, margin: 8}, dot:{length:4, margin:0, width:1}, show_labels:false},
+            small: {margin:0, thickness:5, hand:{width: 1, length: 8, margin: 10}, dot: {length:5, margin:0,width:1}, show_labels:false},
+            medium: {},
+            large: {hand:{width:1.5, length:12, margin:26}},
+            huge: {hand:{width:2, length:12, margin:28}},
+        }
     }),
     static_events: {
         dblclick: dblclick,
