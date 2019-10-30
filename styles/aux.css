@@ -214,12 +214,6 @@
                 5px 15px 3px rgba(0, 0, 0, 0.12);
 }
 
-/* LEVELMETER */
-
-.aux-levelmeter > .aux-clip {
-    background: var(--aux-active-base);
-}
-
 /* METER */
 
 .aux-meter .aux-bar {
@@ -311,6 +305,12 @@
                 color var(--aux-transition-duration);
 }
 .aux-selectlist > .aux-selectentry.aux-active {
+    background: var(--aux-active-base);
+}
+
+/* STATE */
+
+.aux-state {
     background: var(--aux-active-base);
 }
 
