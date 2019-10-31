@@ -348,6 +348,7 @@ input.aux-value.aux-active {
     background: var(--aux-widget-base);
     color: var(--aux-widget-color);
 }
-.aux-valuebutton.aux-warn .aux-bar {
+.aux-valuebutton.aux-warn .aux-bar,
+.aux-valuebutton.aux-warn .aux-value {
     background: var(--aux-warn-base) !important;
 }
