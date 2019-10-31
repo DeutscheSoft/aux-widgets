@@ -78,8 +78,8 @@ function module_range() {
  * @property {String} [options.preset="medium"] - The preset to use. Presets
  *   are a functionality of {@link Widget}.
  * @property {Object} [options.presets={
-            tiny: {margin:0, thickness:4, hand:{width: 1, length: 6, margin: 8}, dot:{length:4, margin:0, width:1}, show_labels:false},
-            small: {margin:0, thickness:5, hand:{width: 1, length: 8, margin: 10}, dot: {length:5, margin:0,width:1}, show_labels:false},
+            tiny: {margin:0, thickness:4, hand:{width: 1, length: 6, margin: 8}, dot:{length:4, margin:0, width:1}, marker: {thickness: 2, margin: 0}, show_labels:false},
+            small: {margin:0, thickness:5, hand:{width: 1, length: 8, margin: 10}, dot: {length:5, margin:0,width:1}, marker: {thickness: 2, margin: 0}, show_labels:false},
             medium: {},
             large: {hand:{width:1.5, length:12, margin:26}},
             huge: {hand:{width:2, length:12, margin:28}},
