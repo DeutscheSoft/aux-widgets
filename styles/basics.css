@@ -643,11 +643,9 @@ input.aux-value {
     margin: 0;
 }
 .aux-valueknob > .aux-value {
-    margin-top: -12px;
     z-index: -1;
 }
 .aux-valueknob > .aux-label {
-    margin-bottom: -4px;
 }
 
 /* WIDGET */
