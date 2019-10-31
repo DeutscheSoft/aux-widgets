@@ -61,7 +61,12 @@ and adding them to the `imports` list of the `@NgModule` declaration.
 
 In addition is is necessary to add all typescript files for the AUX Angular
 directives into the `"include"` entry in `tsconfig.app.json` to allow the
-typescript compiler to find them.
+typescript compiler to find them:
+
+    "include": [
+      "src/**/*.ts",
+      "node_modules/@deuso/aux/angular/*.ts"
+    ],
 
 ## Observing value changes
 
