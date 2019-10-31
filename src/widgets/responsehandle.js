@@ -50,6 +50,7 @@ function normalize(v) {
 function scrollwheel(e) {
     var direction;
     e.preventDefault();
+    e.stopPropagation();
     var d = e.wheelDelta !== void(0) && e.wheelDelta ? e.wheelDelta : e.detail;
     if (d > 0) {
         direction = 1;
