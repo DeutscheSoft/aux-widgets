@@ -36,10 +36,11 @@ import {
     TaggableTreeItem,
     Tagger,
     Frame,
-    Root
+    Root,
+    Widget
   } from '../src/index.js';
 
-import { compare, object_minus } from './helpers.js';
+import { assert, compare, object_minus } from './helpers.js';
 
 const widgets = [
    ResponseHandle,
@@ -82,12 +83,21 @@ const widgets = [
 ];
 
 describe('Widgets', () => {
-  it('creating Widgets', (done) => {
+  it('creating Widgets', () => {
     widgets.map((w) => {
-       const widget = new w();
-       widget.destroy();
+      const widget = new w();
+      widget.destroy();
     });
-    done();
+  });
+  it('basic options', () => {
+    widgets.map((w) => {
+      const widget = new w();
+      if (widget instanceof Widget)
+      {
+        assert(!widget.get('interacting'));
+      }
+      widget.destroy();
+    });
   });
 });
 
