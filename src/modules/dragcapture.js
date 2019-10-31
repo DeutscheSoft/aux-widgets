@@ -52,15 +52,6 @@ CaptureState.prototype = {
 function startcapture(state) {
     /* do nothing, let other handlers be called */
     if (this.drag_state) return;
-    
-    /**
-     * Capturing started.
-     * 
-     * @event DragCapture#startcapture
-     * 
-     * @param {object} state - An internal state object.
-     * @param {DOMEvent} start - The event object of the initial event.
-     */
 
     var v = this.emit("startcapture", state, state.start);
 
@@ -74,15 +65,7 @@ function startcapture(state) {
 }
 function movecapture(ev) {
     var d = this.drag_state;
-    
-    /**
-     * A movement was captured.
-     * 
-     * @event DragCapture#movecapture
-     * 
-     * @param {DOMEvent} event - The event object of the current move event.
-     */
-     
+
     if (!d.set_current(ev) || this.emit("movecapture", d) === false) {
         stopcapture.call(this, ev);
         return false;
@@ -91,16 +74,7 @@ function movecapture(ev) {
 function stopcapture(ev) {
     var s = this.drag_state;
     if (s === null) return;
-    
-    /**
-     * Capturing stopped.
-     * 
-     * @event DragCapture#stopcapture
-     * 
-     * @param {object} state - An internal state object.
-     * @param {DOMEvent} event - The event object of the current event.
-     */
-     
+
     this.emit("stopcapture", s, ev);
     this.set("state", false);
     s.destroy();
@@ -293,12 +267,25 @@ var static_events = {
 };
 
 export const DragCapture = define_class({
-    
     /**
-     * DragCapture is a low-level class for tracking drag events on
-     *   both, touch and mouse events. It can be used for implementing drag'n'drop
-     *   functionality as well as dragging the value of e.g. {@link Fader} or
+     * DragCapture is a low-level class for tracking drag interaction using both
+     *   touch and mouse events. It can be used for implementing drag'n'drop
+     *   functionality as well as value dragging e.g. {@link Fader} or
      *   {@link Knob}. {@link DragValue} derives from DragCapture.
+     *
+     *   Each drag interaction started by the user begins with the
+     *   `startcapture` event. If an event handler returns `true`, the dragging
+     *   is started. Otherwise mouse or touch events which belong to the same
+     *   drag interaction are ignored.
+     * 
+     *   While the drag interaction is running, the `movecapture` is fired for
+     *   each underlying move event. Once the drag interaction completes, the
+     *   `stopcapture` event is fired.
+     *
+     *   While the drag interaction is running, the `state()` method returns a
+     *   CaptureState object. This object has methods for calculating current
+     *   position, distance from the start position etc.
+     *  
      * 
      * @extends Module
      *
@@ -309,7 +296,31 @@ export const DragCapture = define_class({
      * 
      * @class DragCapture
      */
-     
+    /**
+     * Capturing started.
+     * 
+     * @event DragCapture#startcapture
+     * 
+     * @param {object} state - An internal state object.
+     * @param {DOMEvent} start - The event object of the initial event.
+     */
+
+    /**
+     * A movement was captured.
+     * 
+     * @event DragCapture#movecapture
+     * 
+     * @param {DOMEvent} event - The event object of the current move event.
+     */
+
+    /**
+     * Capturing stopped.
+     * 
+     * @event DragCapture#stopcapture
+     * 
+     * @param {object} state - An internal state object.
+     * @param {DOMEvent} event - The event object of the current event.
+     */
     Extends: Module,
     _options: {
         node: "object",
