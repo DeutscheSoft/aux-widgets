@@ -1,10 +1,10 @@
 import { Widget, WidgetComponent } from '../src/index.js';
-import { observe_option, observe_useraction, Debounce } from '../src/utils/binding.js';
+import { intercept_option, observe_option, observe_useraction, DebounceBinding } from '../src/utils/binding.js';
 
 import { assert, assert_error, sleep } from './helpers.js';
 
-describe('observe_option', () => {
-  it('basics', (done) => {
+describe('Bindings', () => {
+  it('observe_option', () => {
     const o = new Widget();
 
     let called = false;
@@ -25,13 +25,9 @@ describe('observe_option', () => {
 
     // unsubscribe again, this should be ok
     unsubscribe();
-
-    done();
   });
-});
 
-describe('observe_useraction', () => {
-  it('basics', (done) => {
+  it('observe_useraction', () => {
     const o = new Widget();
 
     let called = false;
@@ -53,14 +49,38 @@ describe('observe_useraction', () => {
 
     // unsubscribe again, this should be ok
     unsubscribe();
+  });
 
-    done();
+  it('intercept_option', () => {
+    const o = new Widget();
+
+    let called = false;
+
+    const unsubscribe = intercept_option(o, 'disabled', (value) => {
+      called = true;
+    });
+
+    o.set('disabled', true);
+    assert(!called);
+    o.set('disabled', false);
+    assert(!called);
+    o.userset('disabled', true);
+    assert(called); called = false;
+    assert(!o.get('disabled'));
+    unsubscribe();
+
+    o.userset('disabled', true);
+    assert(!called);
+    assert(o.get('disabled'));
+
+    // unsubscribe again, this should be ok
+    unsubscribe();
   });
 });
-describe('Debounce', () => {
+describe('DebounceBinding', () => {
   it('delay', async () => {
     const o = new Widget();
-    const d = new Debounce(o, 'disabled', 50);
+    const d = new DebounceBinding(o, 'disabled', 50);
 
     d.set(true);
     assert(o.get('disabled'));
@@ -79,7 +99,7 @@ describe('Debounce', () => {
 
   it('delay repeated', async () => {
     const o = new Widget();
-    const d = new Debounce(o, 'disabled', 50);
+    const d = new DebounceBinding(o, 'disabled', 50);
 
     d.set(true);
     assert(o.get('disabled'));
@@ -111,7 +131,7 @@ describe('Debounce', () => {
 
   it('interacting', async () => {
     const o = new Widget();
-    const d = new Debounce(o, 'disabled', 50);
+    const d = new DebounceBinding(o, 'disabled', 50);
 
     o.startInteracting();
     assert(d.isLocked());
