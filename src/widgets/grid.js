@@ -255,18 +255,6 @@ export const Grid = define_class({
     set: function (key, value) {
         this.options[key] = value;
         switch (key) {
-            case "grid_x":
-            case "grid_y":
-                /**
-                 * Is fired when the grid has changed.
-                 * 
-                 * @event Grid#gridchanged
-                 * 
-                 * @param {Array} grid_x - The grid elements for x axis.
-                 * @param {Array} grid_y - The grid elements for y axis.
-                 */
-                this.emit("gridchanged", this.options.grid_x, this.options.grid_y);
-                break;
             case "width":
                 this.range_x.set("basis", value);
                 break;
