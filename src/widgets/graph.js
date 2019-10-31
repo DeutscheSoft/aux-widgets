@@ -328,13 +328,6 @@ export const Graph = define_class({
                 this.add_range(value, key);
                 value.on("set", range_change_cb.bind(this));
                 break;
-            case "dots":
-                /**
-                 * Is fired when the graph changes
-                 * @event Graph#graphchanged
-                 */
-                this.emit("graphchanged");
-                break;
         }
     }
 });
