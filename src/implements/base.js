@@ -395,9 +395,11 @@ export const Base = define_class({
 
       if (!handlers) return false;
 
+      if (typeof func === 'undefined') return true;
+
       if (Array.isArray(handlers))
       {
-        return handlers.indexOf(func);
+        return handlers.includes(func)
       }
 
       return handlers === func;
