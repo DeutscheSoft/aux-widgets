@@ -205,47 +205,16 @@ export const Meter = define_class({
         gradient:        false
     },
     static_events: {
-        set_label: function(value) {
-            /**
-             * Is fired when the label changed.
-             * The argument is the actual label value.
-             * 
-             * @event Meter#labelchanged
-             * 
-             * @param {string} label - The label of the {@link Meter}.
-             */
-            this.emit("labelchanged", value);
-        },
         set_segment: function() {
             // what is this supposed to do?
             // -> probably invalidate the value to force a redraw
             this.set("value", this.options.value);
-        },
-        set_value: function(value) {
-            /**
-             * Is fired when the value changed.
-             * The argument is the actual value.
-             * 
-             * @event Meter#valuechanged
-             * 
-             * @param {number} value - The value of the {@link Meter}.
-             */
-            this.emit("valuechanged", value);
         },
         set_base: function(value) {
             if (value === false) {
               var O = this.options;
               O.base = value = O.min;
             }
-            /**
-             * Is fired when the base value changed.
-             * The argument is the actual base value.
-             * 
-             * @event Meter#basechanged
-             * 
-             * @param {number} base - The value of the base.
-             */
-            this.emit("basechanged", value);
         },
         rangedchanged: function() {
             /* redraw the gradient, if we have any */
