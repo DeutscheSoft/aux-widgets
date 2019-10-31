@@ -119,9 +119,7 @@ function set_preset (preset) {
     
     let preset_options = O.presets[preset] || {};
     this._presetting = true;
-    for (key in _O) {
-        if (key === "preset" || key === "presets")
-            continue;
+    for (key in preset_options) {
         if (!this._preset_origins.hasOwnProperty(key))
             this._preset_origins[key] = O[key];
         if (preset_options.hasOwnProperty(key))
@@ -257,8 +255,10 @@ export const Widget = define_class({
         },
         set_preset: function (v) { set_preset.call(this, v); },
         set: function (key, val) {
-            if (!this._presetting && this._preset_origins.hasOwnProperty(key))
+            if (!this._presetting && this._preset_origins.hasOwnProperty(key)) {
                 this._preset_origins[key] = val;
+                console.log(key, val);
+            }
         },
     },
     constructor: function (options) {
