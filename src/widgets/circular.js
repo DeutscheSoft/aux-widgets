@@ -366,6 +366,11 @@ export const Circular = define_class({
             S.after_frame(this._get_stroke.bind(this));
             this.set("value", this.options.value);
         },
+        rangedchanged: function () {
+            let I = this.invalid;
+            I.size = I.markers = I.dots = I.labels = true;
+            this.trigger_draw();
+        },
     },
     options: {
         value:      0,
