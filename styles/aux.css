@@ -110,6 +110,15 @@
 .aux-circular .aux-hand {
     fill: var(--aux-widget-base);
 }
+.aux-circular .aux-labels .aux-label {
+    fill: var(--aux-main-text);
+}
+.aux-circular .aux-dots .aux-dot {
+    fill: var(--aux-main-text);
+}
+.aux-circular .aux-markers .aux-marker {
+    fill: var(--aux-main-text);
+}
 .aux-circular.aux-warn .aux-base {
     fill: var(--aux-warn-base);
 }
