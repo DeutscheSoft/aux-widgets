@@ -358,6 +358,8 @@ export const Chart = define_class({
         set_width: geom_set,
         set_height: geom_set,
         
+        mousewheel: STOP,
+        DOMMouseScroll: STOP,
         set_depth: function(value) {
             this.range_z.set("basis", value);
         },
