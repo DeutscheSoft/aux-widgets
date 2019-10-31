@@ -107,34 +107,30 @@ function dblclick (e) {
     }
 }
 
-let last_preset;
-let preset_origins = {};
-let presetting = false;
-
 function set_preset (preset) {
     let O = this.options;
     let _O = this.options;
     let key, val;
-    if (last_preset) {
-        this.remove_class("aux-preset-" + last_preset);
+    if (this._last_preset) {
+        this.remove_class("aux-preset-" + this._last_preset);
     }
     this.add_class("aux-preset-" + preset);
-    last_preset = preset;
+    this._last_preset = preset;
     
     let preset_options = O.presets[preset] || {};
-    presetting = true;
+    this._presetting = true;
     for (key in _O) {
         if (key === "preset" || key === "presets")
             continue;
-        if (!preset_origins[key])
-            preset_origins[key] = O[key];
+        if (!this._preset_origins.hasOwnProperty(key))
+            this._preset_origins[key] = O[key];
         if (preset_options.hasOwnProperty(key))
             val = preset_options[key];
         else
-            val = preset_origins[key];
+            val = this._preset_origins[key];
         this.set(key, val);
     }
-    presetting = false;
+    this._presetting = false;
 }
 
 export const Widget = define_class({
@@ -261,8 +257,8 @@ export const Widget = define_class({
         },
         set_preset: function (v) { set_preset.call(this, v); },
         set: function (key, val) {
-            if (!presetting && preset_origins.hasOwnProperty(key))
-                preset_origins[key] = val;
+            if (!this._presetting && this._preset_origins.hasOwnProperty(key))
+                this._preset_origins[key] = val;
         },
     },
     constructor: function (options) {
@@ -289,6 +285,9 @@ export const Widget = define_class({
       this._onresize = onresize.bind(this);
       this._onvisibilitychange = onvisibilitychange.bind(this);
       this._interaction_count = 0;
+      this._preset_origins = {};
+      this._last_preset;
+      this._presetting = false;
     },
 
     getStyleTarget: function() {
