@@ -189,14 +189,14 @@ export function define_class(o) {
     var methods;
     var tmp, i, c;
 
+    if (!o.options) o.options = {};
+
     const Extends = o.Extends;
+
 
     if (Extends) {
         const tmp = Extends.prototype;
-        if (typeof(o.options) === "object" &&
-            typeof(tmp.options) === "object") {
-            o.options = Object.assign(Object.create(tmp.options), o.options);
-        }
+        o.options = Object.assign(Object.create(tmp.options), o.options);
         if (o.static_events) o.static_events = merge_static_events(tmp.static_events, o.static_events);
         methods = Object.assign(Object.create(tmp), o);
     } else {
@@ -213,10 +213,11 @@ export function define_class(o) {
             } else c = tmp[i];
 
             if (typeof(c.options) === "object") {
-                if (!methods.hasOwnProperty("options")) {
-                    methods.options = Object.create(methods.options || null);
+                for (let key in c.options)
+                {
+                  if (!(key in methods.options))
+                    methods.options[key] = c.options[key];
                 }
-                methods.options = Object.assign({}, c.options, methods.options);
             }
             if (c.static_events) {
               if (methods.static_events) {
