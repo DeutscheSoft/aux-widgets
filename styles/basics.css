@@ -63,9 +63,11 @@
     --aux-levelmeter-statesize: 4px;
     
     --aux-meter-size: 16px;
+    --aux-meter-internalmargin: 2px;
     
     --aux-multimeter-labelheight: 20px;
     --aux-multimeter-reduce: 1px;
+    --aux-multimeter-internalmargin: 1px;
     
     --aux-notification-maxwidth: 400px;
     --aux-notification-padding: 16px;
@@ -274,16 +276,16 @@
     height: var(--aux-meter-size);
 }
 .aux-meter.aux-top > .aux-scale {
-    margin: 2px 0 0 0;
+    margin: var(--aux-meter-internalmargin) 0 0 0;
 }
 .aux-meter.aux-left > .aux-scale {
-    margin: 0 0 0 2px;
+    margin: 0 0 0 var(--aux-meter-internalmargin);
 }
 .aux-meter.aux-right > .aux-scale {
-    margin: 0 2px 0 0;
+    margin: 0 var(--aux-meter-internalmargin) 0 0;
 }
 .aux-meter.aux-bottom > .aux-scale {
-    margin: 0 0 2px 0;
+    margin: 0 0 var(--aux-meter-internalmargin) 0;
 }
 .aux-meter.aux-top > .aux-label {
     margin: 0 0 var(--aux-main-margin) 0;
@@ -324,10 +326,10 @@
     margin: 0 0 var(--aux-main-margin) 0;
 }
 .aux-multimeter.aux-vertical > .aux-meter {
-    margin: 0 1px;
+    margin: 0 var(--aux-multimeter-internalmargin);
 }
 .aux-multimeter.aux-horizontal > .aux-meter {
-    margin: 1px 0;
+    margin: var(--aux-multimeter-internalmargin) 0;
 }
 .aux-multimeter.aux-vertical.aux-count-2 .aux-clip,
 .aux-multimeter.aux-vertical.aux-count-2 .aux-bar {
