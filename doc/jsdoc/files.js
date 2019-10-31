@@ -7,6 +7,7 @@ var path = require('path');
 
 exports.handlers = {
     parseComplete: function(e) {
+
         var extra_files = env.conf.extra_mainpages;
         extra_files.forEach(function (f) {
             var location = typeof f === "object" ? f.path : f;
@@ -14,6 +15,8 @@ exports.handlers = {
             var content = fs.readFileSync(location, env.opts.encoding);
             var parse = markdown.getParser();
             name = name.substr(0, 1).toUpperCase() + name.substr(1);
+            console.log('running plugin', name);
+            console.log(e);
             e.doclets.push({
                 kind : "mainpage",
                 readme : parse(content),

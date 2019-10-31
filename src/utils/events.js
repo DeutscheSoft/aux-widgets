@@ -5,6 +5,13 @@
  * for most cases.
  */
 
+/**
+ * This module contains helper functions for using DOM events.
+ *
+ * @module utils/binding
+ */
+
+
 /* generic code, supports node arrays */
 export function add_event_listener(e, type, cb, options) {
     if (Array.isArray(e)) {

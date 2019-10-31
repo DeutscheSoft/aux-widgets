@@ -20,11 +20,10 @@
 /* jshint -W018 */
 
 /**
- * AudioMath provides a couple of functions for turning
- * linear values into logarithmic ones and vice versa. If you need
- * an easy convertion between dB or Hz and a linear scale mixin
- * this class.
+ * AudioMath provides transformations commonly used when handling
+ * audio related units.
  *
+ * @module utils/audiomath
  */
 
 const log = Math.log;

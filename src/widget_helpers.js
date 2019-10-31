@@ -40,7 +40,7 @@ export function define_child_element(widget, name, config) {
     /**
      * @function define_child_element
      *
-     * Creates a HTMLElement as a child for a widget. Is used to simplify
+     * @description Creates a HTMLElement as a child for a widget. Is used to simplify
      * widget definitions. E.g. the tiny marker used to display the back-end
      * value is a simple DIV added using child element. The generic element
      * is a DIV added to Widget.element with the class
@@ -52,32 +52,32 @@ export function define_child_element(widget, name, config) {
      *     by an underscore <code>Widget["_" + config.name]</code>.
      * @param {object} config - The configuration of the child element.
      * 
-     * @property {boolean} [config.show=false] - Show/hide the child element on initialization.
-     * @property {string} [config.option="show_"+config.name] - A custom option of the parent widget
+     * @param {boolean} [config.show=false] - Show/hide the child element on initialization.
+     * @param {string} [config.option="show_"+config.name] - A custom option of the parent widget
      *     to determine the visibility of the child element. If this is
      *     <code>null</code>, <code>Widget.options["show_"+  config.name]</code>
      *     is used to toggle its visibility. The child element is visible, if
      *     this options is <code>!== false</code>.
-     * @property {function} [config.display_check] - A function overriding the 
+     * @param {function} [config.display_check] - A function overriding the 
      *     generic <code>show_option</code> behavior. If set, this function
      *     is called with the value of <code>show_option</code> as argument
      *     as soon as it gets set and is supposed to return a boolean
      *     defining the visibility of the element.
-     * @property {function} [config.append] - A function overriding the generic
+     * @param {function} [config.append] - A function overriding the generic
      *     append mechanism. If not <code>null</code>, this function is
      *     supposed to take care of adding the child element to the parent
      *     widgets DOM.
-     * @property {function} [config.create] - A function overriding the generic
+     * @param {function} [config.create] - A function overriding the generic
      *     creation mechanism. If not <code>null</code>, this function is
      *     supposed to create and return a DOM element to be added to the
      *     parent widget.
-     * @property {boolean} [config.toggle_class=false] - Defines if the parent widget
+     * @param {boolean} [config.toggle_class=false] - Defines if the parent widget
      *     receives the class <code>.aux-has-[name]</code> as soon as
      *     the child element is shown.
-     * @property {array} [config.draw_options] - A list of options of the parent
+     * @param {array} [config.draw_options] - A list of options of the parent
      *     widget which are supposed to trigger a check if the element has to
      *     be added or removed.
-     * @property {function} [config.draw] - A function to be called on redraw.
+     * @param {function} [config.draw] - A function to be called on redraw.
      * 
      */
     var p = widget.prototype;

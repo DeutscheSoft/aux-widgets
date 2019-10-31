@@ -18,9 +18,13 @@
  */
 
 /**
+ * @module utils/anchor
+ */
+
+/**
  * Returns real x and y values from a relative positioning.
  * 
- * @method Anchor#translate_anchor
+ * @function translate_anchor
  * 
  * @param {string} [anchor="top-left"] - Position of the anchor. Can be one out of
  *   `top-left`, `top`, `top-right`, `left`, `center`, `right`, `bottom-left`, 

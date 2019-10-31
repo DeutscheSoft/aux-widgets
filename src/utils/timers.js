@@ -1,5 +1,5 @@
 /**
- * @module aux
+ * @module utils/timer
  */
 
 /**

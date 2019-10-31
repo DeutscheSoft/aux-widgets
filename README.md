@@ -7,8 +7,8 @@ of widgets such as faders, knobs, levelmeters and equalizers.
 ## Design Goals
 
 AUX is written in pure JavaScript and has no external dependencies.
-It is supposed to run in browsers which support ECMAScript 5 including
-IE9. AUX was designed to be lightweight and fast while keeping the
+It is supposed to run in browsers which support ECMAScript 6.
+AUX was designed to be lightweight and fast while keeping the
 full flexibility which comes with CSS. AUX widgets offer consistent
 and intuitive APIs.
 
@@ -47,4 +47,4 @@ file for details.
 
 Copyright (c) 2013-2019 Markus Schmidt <markus@deuso.de>
 
-Copyright (c) 2014-2019 Arne G&ouml;deke <arne@deuso.de>
+Copright (c) 2014-2019 Arne G&ouml;deke <arne@deuso.de>

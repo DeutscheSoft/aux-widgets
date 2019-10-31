@@ -19,6 +19,8 @@
 
 /**
  * Helper functions for manipulating the DOM
+ *
+ * @module utils/dom
  */
 
 import { warn } from './log.js';

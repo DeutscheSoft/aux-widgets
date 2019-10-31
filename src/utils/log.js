@@ -4,6 +4,10 @@
 // break an application
 
 /**
+ * @module utils/log
+ */
+
+/**
  * Generates an error to the JavaScript console. This is virtually identical to console.error, however
  * it can safely be used in browsers which do not support it.
  *

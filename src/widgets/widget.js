@@ -146,6 +146,8 @@ export const Widget = define_class({
      * @class Widget
      * 
      * @extends Base
+     *
+     * @property {HTMLElement} Widget#element - The main element.
      * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
@@ -206,7 +208,6 @@ export const Widget = define_class({
      *
      * @event Widget#show
      */
-    /** @property {HTMLElement} Widget#element - The main element. */
     Extends : Base,
     _options: {
         // A CSS class to add to the main element

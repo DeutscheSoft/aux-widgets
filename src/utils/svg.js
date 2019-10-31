@@ -17,6 +17,12 @@
  * Boston, MA  02110-1301  USA
  */
 
+/**
+ * This module contains function useful for manipulating SVGs.
+ *
+ * @module utils/svg
+ */
+
 import { get_style, has_class, get_tag } from './dom.js';
 
 const data_store = new WeakMap();

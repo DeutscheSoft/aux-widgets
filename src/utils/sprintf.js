@@ -1,4 +1,10 @@
 /**
+ * Module containing sprintf like formatting functions.
+ *
+ * @module utils/sprintf
+ */
+
+/**
  * Generates formatting functions from sprintf-style format strings.
  * This is generally faster when the same format string is used many times.
  *

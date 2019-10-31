@@ -147,6 +147,8 @@ export const Base = define_class({
     /**
      * Returns the type of an option. If the given option does not exist,
      * 'undefined' is returned.
+     *
+     * @method Base#get_option_type
      */
     get_option_type: function(name) {
       return this._options[name];
@@ -154,6 +156,8 @@ export const Base = define_class({
     /**
      * Returns the default value of a given option. If the option does not
      * exist, an exception is thrown.
+     *
+     * @method Base#get_default
      */
     get_default: function(name) {
       if (this.get_option_type(name) === void(0))
@@ -281,6 +285,12 @@ export const Base = define_class({
 
         return value;
     },
+    /**
+     * Resets an option to its default value.
+     *
+     * @method Base#userset
+     * @param {string} key - The option name.
+     */
     reset: function(key)
     {
       return this.set(key, this.get_default(key));

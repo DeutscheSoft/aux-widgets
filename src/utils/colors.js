@@ -18,20 +18,27 @@
  */
 
 /**
- * Colors provides a couple of functions for easy-to-use color calculations
+ * @module utils/colors
+ *
+ * @description Colors provides functions for easy-to-use color calculations
  * and conversions. Functions requiring RGB or HSL color definitions as
  * argument (all `rgb2x` and `hsl2x`) can be called with different types of arguments
  * to make using them more convenient. Examples:
- * <ul><li>`rgb2hsl(240, 128, 128)`</li>
- * <li>rgb2hsl({'r':240,'g':128,'b':128})</li>
- * <li>rgb2hsl([240, 128, 128])</li></ul>
- * The universal functions `color2x` take even more diverse arguments.
+ * <ul>
+ * <li><code>rgb2hsl(240, 128, 128)</code></li>
+ * <li><code>rgb2hsl({'r':240,'g':128,'b':128}</code></li>
+ * <li><code>rgb2hsl([240, 128, 128])</code></li>
+ * </ul>
+ *
+ * The universal functions `color2x` take even more flexible arguments.
  * The following examples all define the same color:
- * <ul><li>("lightcoral")</li>
- * <li>("#F08080")</li>
- * <li>([0,0.31,0.28])</li>
- * <li>(240,128,128)</li>
- * <li>({"r":240,"g":128,"b":128})</li></ul>
+ * <ul>
+ * <li><code>"lightcoral"</code></li>
+ * <li><code>"#F08080"</code></li>
+ * <li><code>[0,0.31,0.28]</code></li>
+ * <li><code>240,128,128</code></li>
+ * <li><code>{"r":240,"g":128,"b":128}</code></li>
+ * </ul>
  * 
  */
  
@@ -187,19 +194,20 @@ function pad(n, width, z) {
 }
 
 function decode_args() {
-    /* decode random arguments. Expects an arguments array
+    /*
+     * Decode random arguments. Expects an arguments array
      * from another function call as first argument and a
      * series of member names the arguments should be decoded
      * to. E.g. decode_args(arguments, "r", "g", "b")
      * Arguments array can consist of:
-         * A single array: member names are mapped to the array
-         * ([[50,100,150]],"r","g","b") => {"r":50,"g":100,"b":150}
-         * 
-         * An object already containing the members: object is returned
-         * ([{"r":50,"g":100,"b":150}, ...) => {"r":50,"g":100,"b":150}
-         * 
-         * Multiple values: values are mapped to member names
-         * ([50,100,150],"r","g","b") => {"r":50,"g":100,"b":150}
+     * A single array: member names are mapped to the array
+     * ([[50,100,150]],"r","g","b") => {"r":50,"g":100,"b":150}
+     * 
+     * An object already containing the members: object is returned
+     * ([{"r":50,"g":100,"b":150}, ...) => {"r":50,"g":100,"b":150}
+     * 
+     * Multiple values: values are mapped to member names
+     * ([50,100,150],"r","g","b") => {"r":50,"g":100,"b":150}
      */
     var out = {};
     if (arguments[0][0] instanceof Array) {
@@ -217,11 +225,11 @@ function decode_args() {
 function decode_color(args) {
     /* detects type of input and disassembles it to a useful object.
      * Only argument is an arguments array from another function.
-         * (["lightcoral"]) => {"type":"string","hex":"#F08080","string":"lightcoral","r":240,"g":128,"b":128}
-         * (["#F08080"]) => {"type":"hex","hex":"#F08080","r":240,"g":128,"b":128}
-         * ([[0,0.31,0.28]] => {"type":"hsl","h":0,"s":0.31,"l":0.28}
-         * ([240,128,128] => {"type":"rgb","r":240,"g":128,"b":128}
-         * ([{"r":240,"g":128,"b":128}] => {"type":"rgb","r":240,"g":128,"b":128}
+     * (["lightcoral"]) => {"type":"string","hex":"#F08080","string":"lightcoral","r":240,"g":128,"b":128}
+     * (["#F08080"]) => {"type":"hex","hex":"#F08080","r":240,"g":128,"b":128}
+     * ([[0,0.31,0.28]] => {"type":"hsl","h":0,"s":0.31,"l":0.28}
+     * ([240,128,128] => {"type":"rgb","r":240,"g":128,"b":128}
+     * ([{"r":240,"g":128,"b":128}] => {"type":"rgb","r":240,"g":128,"b":128}
      */
     if (typeof args[0] === "string" && args[0][0] === "#") {
         // HEX string
@@ -254,7 +262,7 @@ function decode_color(args) {
  * Returns a hex color string
  * from a RGB color.
  * 
- * @method Colors#rgb2hex
+ * @function rgb2hex
  * 
  * @param {number|array|object|string} 1st_value - red (0..255) or object with members `r, g, b` or array of RGB or color name or hex string.
  * @param {number} [2nd_value] - green (0..255) or saturation (0..1)
@@ -273,7 +281,7 @@ export function rgb2hex() {
  * Returns an object containing hue ('h'), saturation ('s') and lightness ('l')
  * from a RGB color.
  * 
- * @method Colors#rgb2hsl
+ * @function rgb2hsl
  * 
  * @param {number|array|object|string} 1st_value - red (0..255) or object with members `r, g, b` or array of RGB or color name or hex string.
  * @param {number} [2nd_value] - green (0..255) or saturation (0..1)
@@ -315,7 +323,7 @@ export function rgb2hsl() {
  * Returns a hex color string either black or white at highest contrast compared to the argument
  * from a RGB color.
  * 
- * @method Colors#rgb2bw
+ * @function rgb2bw
  * 
  * @param {number|array|object|string} 1st_value - red (0..255) or object with members `r, g, b` or array of RGB or color name or hex string.
  * @param {number} [2nd_value] - green (0..255) or saturation (0..1)
@@ -331,7 +339,7 @@ export function rgb2bw() {
  * Returns a hex color string either black or white at lowest contrast compared to the argument
  * from a RGB color.
  * 
- * @method Colors#rgb2wb
+ * @function rgb2wb
  * 
  * @param {number|array|object|string} 1st_value - red (0..255) or object with members `r, g, b` or array of RGB or color name or hex string.
  * @param {number} [2nd_value] - green (0..255) or saturation (0..1)
@@ -347,7 +355,7 @@ export function rgb2wb() {
  * Returns a hex color string of the grayscaled argument
  * from a RGB color.
  * 
- * @method Colors#rgb2gray
+ * @function rgb2gray
  * 
  * @param {number|array|object|string} 1st_value - red (0..255) or object with members `r, g, b` or array of RGB or color name or hex string.
  * @param {number} [2nd_value] - green (0..255) or saturation (0..1)
@@ -377,7 +385,7 @@ export function hue2rgb(p, q, t) {
  * Returns an object containing red ('r'), green ('g') and blue ('b')
  * from a HSL color.
  * 
- * @method Colors#hsl2rgb
+ * @function hsl2rgb
  * 
  * @param {number|array|object} 1st_value - hue (0..1) or object with members `h, s, l` or array of HSL.
  * @param {number} [2nd_value] - saturation (0..1)
@@ -409,7 +417,7 @@ export function hsl2rgb() {
  * Returns a hex color string
  * from a HSL color.
  * 
- * @method Colors#hsl2hex
+ * @function hsl2hex
  * 
  * @param {number|array|object} 1st_value - hue (0..1) or object with members `h, s, l` or array of HSL.
  * @param {number} [2nd_value] - saturation (0..1)
@@ -425,7 +433,7 @@ export function hsl2hex() {
  * Returns a hex color string either black or white at highest contrast compared to the argument
  * from a HSL color.
  * 
- * @method Colors#hsl2bw
+ * @function hsl2bw
  * 
  * @param {number|array|object} 1st_value - hue (0..1) or object with members `h, s, l` or array of HSL.
  * @param {number} [2nd_value] - saturation (0..1)
@@ -441,7 +449,7 @@ export function hsl2bw() {
  * Returns a hex color string either black or white at lowest contrast compared to the argument
  * from a HSL color.
  * 
- * @method Colors#hsl2wb
+ * @function hsl2wb
  * 
  * @param {number|array|object} 1st_value - hue (0..1) or object with members `h, s, l` or array of HSL.
  * @param {number} [2nd_value] - saturation (0..1)
@@ -457,7 +465,7 @@ export function hsl2wb() {
  * Returns a hex color string of the grayscaled argument
  * from a HSL color.
  * 
- * @method Colors#hsl2gray
+ * @function hsl2gray
  * 
  * @param {number|array|object} 1st_value - hue (0..1) or object with members `h, s, l` or array of HSL.
  * @param {number} [2nd_value] - saturation (0..1)
@@ -476,7 +484,7 @@ export function hsl2gray() {
  * Returns an object containing red ('r'), green ('g') and blue ('b')
  * from a hex color string.
  * 
- * @method Colors#hex2rgb
+ * @function hex2rgb
  * 
  * @param {string} hex - Hex color string.
  * 
@@ -499,7 +507,7 @@ export function hex2rgb(hex) {
  * Returns an object containing hue ('h'), saturation ('s') and lightness ('l')
  * from a hex color string.
  * 
- * @method Colors#hex2hsl
+ * @function hex2hsl
  * 
  * @param {string} hex - Hex color string.
  * 
@@ -513,7 +521,7 @@ export function hex2hsl(hex) {
  * Returns a hex color string either black or white at highest contrast compared to the argument
  * from a hex color string.
  * 
- * @method Colors#hex2bw
+ * @function hex2bw
  * 
  * @param {string} hex - Hex color string.
  * 
@@ -527,7 +535,7 @@ export function hex2bw(hex) {
  * Returns a hex color string either black or white at lowest contrast compared to the argument
  * from a hex color string.
  * 
- * @method Colors#hex2wb
+ * @function hex2wb
  * 
  * @param {string} hex - Hex color string.
  * 
@@ -541,7 +549,7 @@ export function hex2wb(hex) {
  * Returns a hex color string of the grayscaled argument
  * from a hex color string.
  * 
- * @method Colors#hex2gray
+ * @function hex2gray
  * 
  * @param {string} hex - Hex color string.
  * 
@@ -558,7 +566,7 @@ export function hex2gray(hex) {
  * Returns a hex color string
  * from a color name.
  * 
- * @method Colors#name2hex
+ * @function name2hex
  * 
  * @param {string} color - Color name.
  * 
@@ -572,7 +580,7 @@ export function name2hex(name) {
  * Returns an object containing red ('r'), green ('g') and blue ('b')
  * from a color name.
  * 
- * @method Colors#name2rgb
+ * @function name2rgb
  * 
  * @param {string} color - Color name.
  * 
@@ -586,7 +594,7 @@ export function name2rgb(name) {
  * Returns an object containing hue ('h'), saturation ('s') and lightness ('l')
  * from a color name.
  * 
- * @method Colors#name2hsl
+ * @function name2hsl
  * 
  * @param {string} color - Color name.
  * 
@@ -600,7 +608,7 @@ export function name2hsl(name) {
  * Returns a hex color string either black or white at highest contrast compared to the argument
  * from a color name.
  * 
- * @method Colors#name2bw
+ * @function name2bw
  * 
  * @param {string} color - Color name.
  * 
@@ -614,7 +622,7 @@ export function name2bw(name) {
  * Returns a hex color string either black or white at lowest contrast compared to the argument
  * from a color name.
  * 
- * @method Colors#name2wb
+ * @function name2wb
  * 
  * @param {string} color - Color name.
  * 
@@ -628,7 +636,7 @@ export function name2wb(name) {
  * Returns a hex color string of the grayscaled argument
  * from a color name.
  * 
- * @method Colors#name2gray
+ * @function name2gray
  * 
  * @param {string} color - Color name.
  * 
@@ -645,7 +653,7 @@ export function name2gray(name) {
  * Returns an object containing red ('r'), green ('g') and blue ('b')
  * from any type of valid color.
  * 
- * @method Colors#color2rgb
+ * @function color2rgb
  * 
  * @param {number|array|object|string} 1st_value - red (0..255) or hue (0..1) or object with members `r, g, b` or `h, s, l` or array of RGB or HSL or color name or hex string.
  * @param {number} [2nd_value] - green (0..255) or saturation (0..1)
@@ -667,7 +675,7 @@ export function color2rgb() {
  * Returns an object containing hue ('h'), saturation ('s') and lightness ('l')
  * from any type of valid color.
  * 
- * @method Colors#color2hsl
+ * @function color2hsl
  * 
  * @param {number|array|object|string} 1st_value - red (0..255) or hue (0..1) or object with members `r, g, b` or `h, s, l` or array of RGB or HSL or color name or hex string.
  * @param {number} [2nd_value] - green (0..255) or saturation (0..1)
@@ -689,7 +697,7 @@ export function color2hsl() {
  * Returns a hex color string
  * from any type of valid color.
  * 
- * @method Colors#color2hex
+ * @function color2hex
  * 
  * @param {number|array|object|string} 1st_value - red (0..255) or hue (0..1) or object with members `r, g, b` or `h, s, l` or array of RGB or HSL or color name or hex string.
  * @param {number} [2nd_value] - green (0..255) or saturation (0..1)
@@ -711,7 +719,7 @@ export function color2hex() {
  * Returns a hex color string either black or white at highest contrast compared to the argument
  * from any type of valid color.
  * 
- * @method Colors#color2bw
+ * @function color2bw
  * 
  * @param {number|array|object|string} 1st_value - red (0..255) or hue (0..1) or object with members `r, g, b` or `h, s, l` or array of RGB or HSL or color name or hex string.
  * @param {number} [2nd_value] - green (0..255) or saturation (0..1)
@@ -733,7 +741,7 @@ export function color2bw() {
  * Returns a hex color string either black or white at lowest contrast compared to the argument
  * from any type of valid color.
  * 
- * @method Colors#color2wb
+ * @function color2wb
  * 
  * @param {number|array|object|string} 1st_value - red (0..255) or hue (0..1) or object with members `r, g, b` or `h, s, l` or array of RGB or HSL or color name or hex string.
  * @param {number} [2nd_value] - green (0..255) or saturation (0..1)
@@ -755,7 +763,7 @@ export function color2wb() {
  * Returns a hex color string of the grayscaled argument
  * from any type of valid color.
  * 
- * @method Colors#color2gray
+ * @function color2gray
  * 
  * @param {number|array|object|string} 1st_value - red (0..255) or hue (0..1) or object with members `r, g, b` or `h, s, l` or array of RGB or HSL or color name or hex string.
  * @param {number} [2nd_value] - green (0..255) or saturation (0..1)

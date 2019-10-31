@@ -1,4 +1,10 @@
 /**
+ * Collection of functions operating on objects.
+ *
+ * @module utils/object
+ */
+
+/**
  * Merge two or more objects. The second and all following objects
  * will be merged into the first one.
  * @param {...object} object - The objects to merge
@@ -17,13 +23,13 @@ export function merge(dst) {
     return dst;
 }
 
-  /**
-   * Filter an object via white list.
-   * @param {object} origin - The object to filter
-   * @param {object} filter - The object containing the white list
-   * @returns {object} The filtered result
-   * @function object_and
-   */
+/**
+ * Filter an object via white list.
+ * @param {object} origin - The object to filter
+ * @param {object} filter - The object containing the white list
+ * @returns {object} The filtered result
+ * @function object_and
+ */
 export function object_and(orig, filter) {
     var ret = {};
     for (var key in orig) {

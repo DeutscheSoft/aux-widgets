@@ -1,5 +1,12 @@
 /* jshint -W078 */
 
+/**
+ * This module contains function for creating Widget option bindings.
+ *
+ * @module utils/binding
+ */
+
+
 import { warn } from './log.js';
 import { Timer } from './timers.js';
 
