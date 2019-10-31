@@ -59,6 +59,10 @@ added to an Angular application by importing them
 
 and adding them to the `imports` list of the `@NgModule` declaration.
 
+In addition is is necessary to add all typescript files for the AUX Angular
+directives into the `"include"` entry in `tsconfig.app.json` to allow the
+typescript compiler to find them.
+
 ## Observing value changes
 
 This group of directives can be used to observe changes of AUX Widget options.
