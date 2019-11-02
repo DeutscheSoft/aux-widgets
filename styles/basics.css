@@ -41,6 +41,7 @@
     
     --aux-fader-handlewidth: var(--aux-clickable-size);
     --aux-fader-handleheight: calc(1.5 * var(--aux-clickable-size));
+    --aux-fader-internalmargin: 2px;
     
     --aux-frame-padding: 8px;
     --aux-frame-labelheight: 28px;
@@ -125,6 +126,15 @@
 
 /* FADER */
 
+.aux-fader {
+    grid-gap: var(--aux-fader-internalmargin);
+}
+.aux-fader > .aux-label {
+    margin: 0;
+}
+.aux-fader > .aux-value {
+    margin: 0;
+}
 .aux-fader.aux-vertical > .aux-track {
     width: var(--aux-fader-handlewidth);
 }
@@ -133,9 +143,8 @@
     height: var(--aux-fader-handleheight);
 }
 .aux-fader.aux-vertical > .aux-scale {
-    margin: calc(var(--aux-fader-handleheight) / 2) var(--aux-main-margin);
+    margin: calc(var(--aux-fader-handleheight) / 2) 0;
 }
-
 .aux-fader.aux-horizontal > .aux-track {
     height: var(--aux-fader-handlewidth);
 }
@@ -144,7 +153,7 @@
     height: var(--aux-fader-handlewidth);
 }
 .aux-fader.aux-horizontal > .aux-scale {
-    margin: var(--aux-main-margin) calc(var(--aux-fader-handleheight) / 2);
+    margin: 0 calc(var(--aux-fader-handleheight) / 2);
 }
 
 /* FRAME */
