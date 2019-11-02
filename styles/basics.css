@@ -41,7 +41,7 @@
     
     --aux-fader-handlewidth: var(--aux-clickable-size);
     --aux-fader-handleheight: calc(1.5 * var(--aux-clickable-size));
-    --aux-fader-internalmargin: 2px;
+    --aux-fader-gridgap: 2px;
     
     --aux-frame-padding: 8px;
     --aux-frame-labelheight: 28px;
@@ -64,11 +64,11 @@
     --aux-levelmeter-statesize: 4px;
     
     --aux-meter-size: 16px;
-    --aux-meter-internalmargin: 2px;
+    --aux-meter-gridgap: 2px;
     
     --aux-multimeter-labelheight: 20px;
     --aux-multimeter-reduce: 1px;
-    --aux-multimeter-internalmargin: 1px;
+    --aux-multimeter-gridgap: 1px;
     
     --aux-notification-maxwidth: 400px;
     --aux-notification-padding: 16px;
@@ -127,7 +127,7 @@
 /* FADER */
 
 .aux-fader {
-    grid-gap: var(--aux-fader-internalmargin);
+    grid-gap: var(--aux-fader-gridgap);
 }
 .aux-fader > .aux-label {
     margin: 0;
@@ -280,57 +280,25 @@
 .aux-levelmeter.aux-vertical > .aux-clip {
     width: var(--aux-meter-size);
     height: var(--aux-levelmeter-statesize);
-    margin: 0 0 var(--aux-main-margin) 0;
 }
 .aux-levelmeter.aux-horizontal > .aux-clip {
     width: var(--aux-levelmeter-statesize);
     height: var(--aux-meter-size);
-    margin: 0 0 0 var(--aux-main-margin);
 }
 
 /* METER */
 
+.aux-meter {
+    grid-gap: var(--aux-meter-gridgap)
+}
 .aux-meter.aux-vertical > .aux-bar {
     width: var(--aux-meter-size);
 }
 .aux-meter.aux-horizontal > .aux-bar {
     height: var(--aux-meter-size);
 }
-.aux-meter.aux-top > .aux-scale {
-    margin: var(--aux-meter-internalmargin) 0 0 0;
-}
-.aux-meter.aux-left > .aux-scale {
-    margin: 0 0 0 var(--aux-meter-internalmargin);
-}
-.aux-meter.aux-right > .aux-scale {
-    margin: 0 var(--aux-meter-internalmargin) 0 0;
-}
-.aux-meter.aux-bottom > .aux-scale {
-    margin: 0 0 var(--aux-meter-internalmargin) 0;
-}
-.aux-meter.aux-top > .aux-label {
-    margin: 0 0 var(--aux-main-margin) 0;
-}
-.aux-meter.aux-left > .aux-label {
-    margin: 0 0 var(--aux-main-margin) 0;
-}
-.aux-meter.aux-right > .aux-label {
-    margin: 0 0 var(--aux-main-margin) 0;
-}
-.aux-meter.aux-bottom > .aux-label {
-    margin: var(--aux-main-margin) 0 0 0;
-}
-.aux-meter.aux-top > .aux-value {
-    margin: var(--aux-main-margin) 0 0 0;
-}
-.aux-meter.aux-left > .aux-value {
-    margin: var(--aux-main-margin) 0 0 0;
-}
-.aux-meter.aux-right > .aux-value {
-    margin: var(--aux-main-margin) 0 0 0;
-}
-.aux-meter.aux-bottom > .aux-value {
-    margin: 0 0 var(--aux-main-margin) 0;
+.aux-meter > .aux-widget {
+    margin: 0;
 }
 
 /* MULTIMETER */
@@ -347,10 +315,10 @@
     margin: 0 0 var(--aux-main-margin) 0;
 }
 .aux-multimeter.aux-vertical > .aux-meter {
-    margin: 0 var(--aux-multimeter-internalmargin);
+    margin: 0 var(--aux-multimeter-gridgap);
 }
 .aux-multimeter.aux-horizontal > .aux-meter {
-    margin: var(--aux-multimeter-internalmargin) 0;
+    margin: var(--aux-multimeter-gridgap) 0;
 }
 .aux-multimeter.aux-vertical.aux-count-2 .aux-clip,
 .aux-multimeter.aux-vertical.aux-count-2 .aux-bar {

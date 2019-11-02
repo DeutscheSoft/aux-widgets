@@ -594,15 +594,15 @@ body.aux-cursor-row-resize * {
 }
 .aux-meter.aux-left {
     grid-template-areas:
-        "label ."
+        "label label"
         "bar scale"
-        "value .";
+        "value value";
 }
 .aux-meter.aux-right {
     grid-template-areas:
-        ". label"
+        "label label"
         "scale bar"
-        ". value";
+        "value value";
 }
 .aux-meter > .aux-label {
     grid-area: label;
