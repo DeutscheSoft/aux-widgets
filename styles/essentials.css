@@ -380,14 +380,14 @@
                          "scale label";
 }
 .aux-fader.aux-left {
-    grid-template-areas: "label ."
+    grid-template-areas: "label label"
                          "track scale"
-                         "value .";
+                         "value value";
 }
 .aux-fader.aux-right {
-    grid-template-areas: ". label"
+    grid-template-areas: "label label"
                          "scale track"
-                         ". value";
+                         "value value";
 }
 .aux-fader.aux-bottom {
     grid-template-areas: "scale label"
@@ -412,12 +412,6 @@
 }
 .aux-fader > .aux-value {
     grid-area: value;
-}
-.aux-fader.aux-horizontal > .aux-value > .aux-input {
-    text-align: left;
-}
-.aux-fader.aux-vertical > .aux-value > .aux-input {
-    text-align: center;
 }
 
 .aux-fader .aux-handle {

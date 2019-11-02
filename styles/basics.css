@@ -155,6 +155,18 @@
 .aux-fader.aux-horizontal > .aux-scale {
     margin: 0 calc(var(--aux-fader-handleheight) / 2);
 }
+.aux-fader.aux-left > .aux-value {
+    justify-self: start;
+}
+.aux-fader.aux-right > .aux-value {
+    justify-self: end;
+}
+.aux-fader.aux-top > .aux-value {
+    align-self: center;
+}
+.aux-fader.aux-bottom > .aux-value {
+    align-self: center;
+}
 
 /* FRAME */
 
