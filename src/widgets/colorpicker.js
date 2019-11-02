@@ -205,6 +205,7 @@ export const ColorPicker = define_class({
             get: function () { return this.parent.options.hue; },
             set: function (v) { this.parent.userset("hue", this.parent.range_x.snap(v)); },
             direction: "horizontal",
+            cursor: false,
             onstartcapture: function (e) {
                 if (e.start.target.classList.contains("aux-indicator")) return;
                 var ev = e.stouch ? e.stouch : e.start;
@@ -220,6 +221,7 @@ export const ColorPicker = define_class({
             get: function () { return this.parent.options.lightness; },
             set: function (v) { this.parent.userset("lightness", this.parent.range_y.snap(v)); },
             direction: "vertical",
+            cursor: false,
             onstartcapture: function (e) {
                 if (e.start.target.classList.contains("aux-indicator")) return;
                 var ev = e.stouch ? e.stouch : e.start;
