@@ -177,6 +177,8 @@ export function define_child_widget(widget, name, config) {
         {
           append.call(this);
         }
+
+        this.trigger_resize();
       }
     });
     var set_cb = function(val, key) {
