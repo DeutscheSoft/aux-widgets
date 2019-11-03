@@ -454,6 +454,7 @@ export const Widget = define_class({
         set_styles(E, O.styles);
       }
 
+      this.schedule_resize();
     },
     redraw: function () {
         var I = this.invalid;
@@ -701,6 +702,7 @@ export const Widget = define_class({
           if (old_parent !== parent)
           {
             window.addEventListener("resize", this._onresize);
+            document.addEventListener("DOMContentLoaded", this._onresize);
             document.addEventListener("visibilitychange", this._onvisibilitychange, false);
             this._onvisibilitychange();
           }
@@ -708,6 +710,7 @@ export const Widget = define_class({
         else if (parent !== null && old_parent === null)
         {
           window.removeEventListener("resize", this._onresize);
+          document.removeEventListener("DOMContentLoaded", this._onresize);
           document.removeEventListener("visibilitychange", this._onvisibilitychange);
         }
 
