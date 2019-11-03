@@ -300,6 +300,9 @@
 .aux-meter > .aux-widget {
     margin: 0;
 }
+.aux-meter > .aux-label {
+    min-height: 1em;
+}
 
 /* MULTIMETER */
 
