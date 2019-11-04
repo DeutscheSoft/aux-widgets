@@ -96,7 +96,6 @@ export const LevelMeter = define_class({
      * @property {Integer|Boolean} [options.peak_value=false] - If set to <code>false</code> the automatic peak
      *   label is disabled, if set to <code>n</code> the peak label is reset after <code>n</code> ms and
      *   if set to <code>-1</code> it remains forever.
-     * @property {Function} [options.format_peak=FORMAT("%.2f")] - Formatting function for the peak label.
      * @property {Number} [options.falling=0] - If set to a positive number, activates the automatic falling
      *   animation. The meter level will fall by this amount over the time set via `options.falling_duration`.
      * @property {Number} [options.falling_duration=1000] - This is the time in milliseconds for the falling
@@ -118,7 +117,6 @@ export const LevelMeter = define_class({
         auto_clip: "int|boolean",
         auto_hold: "int|boolean",
         peak_value: "int|boolean",
-        format_peak: "function",
         clip_options: "object",
     }),
     options: {
@@ -134,7 +132,6 @@ export const LevelMeter = define_class({
         auto_clip:    false,
         auto_hold:    false,
         peak_value:   false,
-        format_peak: FORMAT("%.2f"),
         clip_options: {},
     },
     static_events: {
