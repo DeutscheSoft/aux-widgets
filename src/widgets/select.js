@@ -109,7 +109,7 @@ function low_remove_entry(entry) {
    * 
    * @event Select.entryremoved
    * 
-   * @param {Object} entry - An object containing the members <code>title</code> and <code>value</code>.
+   * @param {Object} entry - An object containing the members <code>label</code> and <code>value</code>.
    */
   this.emit("entryremoved", entry);
 }
@@ -131,7 +131,7 @@ export const Select = define_class({
      * @property {Boolean} [options.auto_size=true] - If `true`, the Select is
      *   auto-sized to be as wide as the widest {@SelectEntry}.
      * @property {Array<Object>} [options.entries=[]] - The list of {@SelectEntry}. Each member is an
-     *   object with the two properties <code>title</code> and <code>value</code>, a string used
+     *   object with the two properties <code>label</code> and <code>value</code>, a string used
      *   as label for constructing a {@SelectEntry} or an instance of {@SelectEntry}.
      *
      */
@@ -146,7 +146,7 @@ export const Select = define_class({
         resized: "boolean",
     }),
     options: {
-        entries: [], // A list of strings or objects {title: "Title", value: 1} or SelectEntry instance
+        entries: [], // A list of strings or objects {label: "Title", value: 1} or SelectEntry instance
         selected: false,
         value: false,
         auto_size: true,
@@ -163,7 +163,7 @@ export const Select = define_class({
         this.__timeout = -1;
         
         /**
-         * @member {Array} Select#entries - An array containing all entry objects with members <code>title</code> and <code>value</code>.
+         * @member {Array} Select#entries - An array containing all entry objects with members <code>label</code> and <code>value</code>.
          */
         this.entries = [];
         this._active = null;
@@ -174,7 +174,7 @@ export const Select = define_class({
          */
         
         /**
-         * @member {HTMLListElement} Select#_list - A HTML list for displaying the entry titles.
+         * @member {HTMLListElement} Select#_list - A HTML list for displaying the entry labels.
          *   Has class <code>.aux-selectlist</code>.
          */
         this._list = element("div", "aux-selectlist");
@@ -235,14 +235,14 @@ export const Select = define_class({
         this.set("selected", id);
     },
     /**
-     * Select a {@link SelectEntry} by its title.
+     * Select a {@link SelectEntry} by its label.
      * 
-     * @method Select#select_title
+     * @method Select#select_label
      * 
-     * @param {mixed} title - The title of the {@link SelectEntry} to select.
+     * @param {mixed} label - The label of the {@link SelectEntry} to select.
      */
-    select_title: function (title) {
-        var id = this.index_by_title.call(this, title);
+    select_label: function (label) {
+        var id = this.index_by_label.call(this, label);
         this.set("selected", id);
     },
     /**
@@ -278,7 +278,7 @@ export const Select = define_class({
      * @method Select#add_entry
      * 
      * @param {mixed} entry - A string to be displayed and used as the value,
-     *   an object with members <code>title</code> and <code>value</code>
+     *   an object with members <code>label</code> and <code>value</code>
      *   or an instance of {@link SelectEntry}.
      * 
      * @emits Select.entryadded
@@ -293,9 +293,9 @@ export const Select = define_class({
         } else {
             entry = new SelectEntry({
                 value: (typeof ent === "string") ? ent : ent.value,
-                title: (typeof ent === "string")
-                       ? ent : (ent.title !== void(0))
-                       ? ent.title : ent.value.toString(),
+                label: (typeof ent === "string")
+                       ? ent : (ent.label !== void(0))
+                       ? ent.label : ent.value.toString(),
             });
         }
         this.add_child(entry);
@@ -358,16 +358,16 @@ export const Select = define_class({
         this.remove_id(this.index_by_value.call(this, val));
     },
     /**
-     * Remove an entry from the list by its title.
+     * Remove an entry from the list by its label.
      * 
-     * @method Select#remove_title
+     * @method Select#remove_label
      * 
-     * @param {string} title - The title of the entry to be removed from the list.
+     * @param {string} label - The label of the entry to be removed from the list.
      * 
      * @emits Select#entryremoved
      */
-    remove_title: function (title) {
-        this.remove_id(this.index_by_title.call(this, title));
+    remove_label: function (label) {
+        this.remove_id(this.index_by_label.call(this, label));
     },
     /**
      * Remove an entry from the list.
@@ -409,18 +409,18 @@ export const Select = define_class({
         return false;
     },
     /**
-     * Get the index of a {@link SelectEntry} by its title/label.
+     * Get the index of a {@link SelectEntry} by its label/label.
      * 
-     * @method Select#index_by_title
+     * @method Select#index_by_label
      * 
-     * @param {String} title - The title/label of the {@link SelectEntry}.
+     * @param {String} label - The label/label of the {@link SelectEntry}.
      * 
      * @returns {Integer|Boolean} The index of the entry or `false`.
      */
-    index_by_title: function (title) {
+    index_by_label: function (label) {
         var entries = this.entries;
         for (var i = 0; i < entries.length; i++) {
-            if (entries[i].options.title === title)
+            if (entries[i].options.label === label)
                 return i;
         }
         return false;
@@ -456,18 +456,18 @@ export const Select = define_class({
         return false;
     },
     /**
-     * Get a {@link SelectEntry} by its title/label.
+     * Get a {@link SelectEntry} by its label/label.
      * 
-     * @method Select#entry_by_title
+     * @method Select#entry_by_label
      * 
-     * @param {String} title - The title of the {@link SelectEntry}.
+     * @param {String} label - The label of the {@link SelectEntry}.
      * 
      * @returns {SelectEntry|Boolean} The {@link SelectEntry} or `false`.
      */
-    entry_by_title: function (title) {
+    entry_by_label: function (label) {
         var entries = this.entries;
         for (var i = 0; i < entries.length; i++) {
-            if (entries[i].options.title === title)
+            if (entries[i].options.label === label)
                 return entries[i];
         }
         return false;
@@ -516,18 +516,18 @@ export const Select = define_class({
         return entry.options.value;
     },
     /**
-     * Get the value of a {@link SelectEntry} by its title/label.
+     * Get the value of a {@link SelectEntry} by its label/label.
      * 
-     * @method Select#value_by_title
+     * @method Select#value_by_label
      * 
-     * @param {String} title - The title of the {@link SelectEntry}.
+     * @param {String} label - The label of the {@link SelectEntry}.
      * 
      * @returns {Mixed|Boolean} The value of the {@link SelectEntry} or `false`.
      */
-    value_by_title: function (title) {
+    value_by_label: function (label) {
         var entries = this.entries;
         for (var i = 0; i < entries.length; i++) {
-            if (entries[i].options.title === title)
+            if (entries[i].options.label === label)
                 return entries[i].options.value;
         }
         return false;
@@ -595,7 +595,7 @@ export const Select = define_class({
                 while (L.firstChild) orig_content.appendChild(L.firstChild);
                 var entries = this.entries;
                 for (var i = 0; i < entries.length; i++) {
-                    L.appendChild(document.createTextNode(entries[i].options.title));
+                    L.appendChild(document.createTextNode(entries[i].options.label));
                     L.appendChild(document.createElement("BR"));
                 }
                 S.add(function() {
@@ -687,16 +687,15 @@ function on_select(e) {
     w.userset("value", this.options.value);
     /**
      * Is fired when a selection was made by the user. The arguments
-     * are the value of the currently selected {@link SelectEntry}, its index, its title and the {@link SelectEntry} instance.
+     * are the value of the currently selected {@link SelectEntry}, its index, its label and the {@link SelectEntry} instance.
      * 
      * @event Select#select
      * 
      * @param {mixed} value - The value of the selected entry.
      * @param {number} value - The ID of the selected entry.
-     * @param {string} value - The title of the selected entry.
-     * @param {string} value - The title of the selected entry.
+     * @param {string} value - The label of the selected entry.
      */
-    w.emit("select", entry.options.value, id, entry.options.title);
+    w.emit("select", entry.options.value, id, entry.options.label);
     w.show_list(false);
 
     return false;
@@ -712,7 +711,7 @@ export const SelectEntry = define_class({
      *
      * @param {Object} [options={ }] - An object containing initial options.
      * 
-     * @property {String} [options.title=""] - The title of the entry. Kept for backward compatibility, deprecated, use label instead.
+     * @property {String} [options.label=""] - The label of the entry. Kept for backward compatibility, deprecated, use label instead.
      * @property {mixed} [options.value] - The value of the selected entry.
      *
      */
