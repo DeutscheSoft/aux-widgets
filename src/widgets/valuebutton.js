@@ -196,8 +196,6 @@ define_child_widget(ValueButton, "value", {
     show: true,
     map_options: {
         value: "value",
-        value_format: "format",
-        value_size: "size",
     },
     default_options: {
         format: function (val) { return val.toFixed(2); },
