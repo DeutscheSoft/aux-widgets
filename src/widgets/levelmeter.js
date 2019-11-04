@@ -29,64 +29,42 @@ import { FORMAT } from '../utils/sprintf.js';
 function vert(O) {
     return O.layout === "left" || O.layout === "right";
 }
+
+function clear_timeout (to) {
+    if (to >= 0)
+        window.clearTimeout(to);
+}
+
 function clip_timeout() {
     var O = this.options;
     if (!O.auto_clip || O.auto_clip < 0) return false;
-    if (this.__cto) return;
-    if (O.clip)
-        this.__cto = window.setTimeout(this._reset_clip, O.auto_clip);
+    clear_timeout(this.__cto);
+    this.__cto = window.setTimeout(this._reset_clip, O.auto_clip);
 }
-function peak_timeout() {
-    var O = this.options;
-    if (!O.auto_peak || O.auto_peak < 0) return false;
-    if (this.__pto) window.clearTimeout(this.__pto);
-    var value = +this.effective_value();
-    if (O.peak > O.base && value > O.base ||
-        O.peak < O.base && value < O.base)
-        this.__pto = window.setTimeout(this._reset_peak, O.auto_peak);
-}
-function label_timeout() {
-    var O = this.options;
-    var peak_label = (0 | O.peak_label);
-    var base = +O.base;
-    var label = +O.label;
-    var value = +this.effective_value();
-
-    if (peak_label <= 0) return false;
-
-    if (this.__lto) window.clearTimeout(this.__lto);
-
-    if (label > base && value > base ||
-        label < base && value < base)
-
-        this.__lto = window.setTimeout(this._reset_label, peak_label);
+function value_timeout() {
+    var peak_value = (0 | this.options.peak_value);
+    if (peak_value <= 0)
+        return false;
+    clear_timeout(this.__lto);
+    this.__lto = window.setTimeout(this._reset_value, peak_value);
 }
 function top_timeout() {
     var O = this.options;
     if (!O.auto_hold || O.auto_hold < 0) return false;
-    if (this.__tto) window.clearTimeout(this.__tto);
-    if (O.top > O.base)
-        this.__tto = window.setTimeout(
-            this._reset_top,
-            O.auto_hold);
-    else
-        this.__tto = null;
+    clear_timeout(this.__tto);
+    this.__tto = window.setTimeout(this._reset_top, O.auto_hold);
 }
 function bottom_timeout() {
     var O = this.options;
     if (!O.auto_hold || O.auto_hold < 0) return false;
-    if (this.__bto) window.clearTimeout(this.__bto);
-    if (O.bottom < O.base)
-        this.__bto = window.setTimeout(this._reset_bottom, O.auto_hold);
-    else
-        this.__bto = null;
+    clear_timeout(this.__bto);
+    this.__bto = window.setTimeout(this._reset_bottom, O.auto_hold);
 }
     
 export const LevelMeter = define_class({
     /**
      * LevelMeter is a fully functional meter bar displaying numerical values.
-     * LevelMeter is an enhanced {@link Meter}'s containing a clip LED,
-     * a peak pin with value label and hold markers.
+     * LevelMeter is an enhanced {@link Meter}'s containing a clip LED and hold markers.
      * In addition, LevelMeter has an optional falling animation, top and bottom peak
      * values and more.
      *
@@ -115,8 +93,7 @@ export const LevelMeter = define_class({
      *   equal the meter level.
      * @property {Number} [options.bottom=false] - The bottom hold value. This only exists if a
      *   <code>base</code> value is set and the value falls below the base.
-     * @property {Boolean} [options.show_peak=false] - If set to <code>true</code>, show the peak label.
-     * @property {Integer|Boolean} [options.peak_label=false] - If set to <code>false</code> the automatic peak
+     * @property {Integer|Boolean} [options.peak_value=false] - If set to <code>false</code> the automatic peak
      *   label is disabled, if set to <code>n</code> the peak label is reset after <code>n</code> ms and
      *   if set to <code>-1</code> it remains forever.
      * @property {Function} [options.format_peak=FORMAT("%.2f")] - Formatting function for the peak label.
@@ -133,16 +110,14 @@ export const LevelMeter = define_class({
         falling: "number",
         falling_duration: "int",
         falling_init: "number",
-        peak: "number",
         top: "number",
         bottom: "number",
         hold_size: "int",
         show_hold: "boolean",
         clipping: "number",
         auto_clip: "int|boolean",
-        auto_peak: "int|boolean",
-        peak_label: "int",
         auto_hold: "int|boolean",
+        peak_value: "int|boolean",
         format_peak: "function",
         clip_options: "object",
     }),
@@ -151,46 +126,35 @@ export const LevelMeter = define_class({
         falling:      0,
         falling_duration: 1000,
         falling_init: 50,
-        peak:         false,
         top:          false,
         bottom:       false,
         hold_size:    1,
         show_hold:    false,
         clipping:     0,
         auto_clip:    false,
-        auto_peak:    false,
-        peak_label:   false,
         auto_hold:    false,
+        peak_value:   false,
         format_peak: FORMAT("%.2f"),
-        clip_options: {}
+        clip_options: {},
     },
     static_events: {
-        set_label: label_timeout,
-        set_bottom: bottom_timeout,
-        set_top: top_timeout,
-        set_peak: peak_timeout,
-        set_clip: function(value) {
-            if (value) {
-                clip_timeout.call(this);
-            }
-        },
-        set_show_peak: peak_timeout,
         set_auto_clip: function(value) {
-            if (this.__cto && 0|value <=0)
+            if (this.__cto >= 0 && 0|value <=0)
                 window.clearTimeout(this.__cto);
         },
-        set_auto_peak: function(value) {
-            if (this.__pto && 0|value <=0)
-                window.clearTimeout(this.__pto);
-        },
-        set_peak_label: function(value) {
-            if (this.__lto && 0|value <=0)
+        set_peak_value: function(value) {
+            if (this.__lto >= 0 && 0|value <=0)
                 window.clearTimeout(this.__lto);
+            if (value === false)
+                this.set("sync_value", this.options._sync_value);
+            else
+                this.set("sync_value", false);
         },
+        set_sync_value: function (v) { this.set("_sync_value", v); },
         set_auto_hold: function(value) {
-            if (this.__tto && 0|value <=0)
+            if (this.__tto >= 0 && 0|value <=0)
                 window.clearTimeout(this.__tto);
-            if (this.__bto && 0|value <=0)
+            if (this.__bto >= 0 && 0|value <=0)
                 window.clearTimeout(this.__bto);
         },
     },
@@ -199,9 +163,8 @@ export const LevelMeter = define_class({
         /* track the age of the value option */
         this.track_option("value");
         Meter.prototype.initialize.call(this, options);
-        this._reset_label = this.reset_label.bind(this);
+        this._reset_value = this.reset_value.bind(this);
         this._reset_clip = this.reset_clip.bind(this);
-        this._reset_peak = this.reset_peak.bind(this);
         this._reset_top = this.reset_top.bind(this);
         this._reset_bottom = this.reset_bottom.bind(this);
         
@@ -211,8 +174,6 @@ export const LevelMeter = define_class({
          */
         var O = this.options;
         
-        if (O.peak === false)
-            O.peak = O.value;
         if (O.top === false)
             O.top = O.value;
         if (O.bottom === false)
@@ -259,40 +220,21 @@ export const LevelMeter = define_class({
         Meter.prototype.destroy.call(this);
     },
     /**
-     * Resets the peak label.
+     * Resets the value.
      * 
-     * @method LevelMeter#reset_peak
+     * @method LevelMeter#reset_value
      * 
-     * @emits LevelMeter#resetpeak
+     * @emits LevelMeter#resetvalue
      */
-    reset_peak: function () {
-        if (this.__pto) clearTimeout(this.__pto);
-        this.__pto = false;
-        this.set("peak", this.effective_value());
+    reset_value: function () {
+        clear_timeout(this.__lto);
+        this.set("value_label", this.effective_value());
         /**
-         * Is fired when the peak was reset.
+         * Is fired when the value label was reset.
          * 
-         * @event LevelMeter#resetpeak
+         * @event LevelMeter#resetvalue
          */
-        this.emit("resetpeak");
-    },
-    /**
-     * Resets the label.
-     * 
-     * @method LevelMeter#reset_label
-     * 
-     * @emits LevelMeter#resetlabel
-     */
-    reset_label: function () {
-        if (this.__lto) clearTimeout(this.__lto);
-        this.__lto = false;
-        this.set("label", this.effective_value());
-        /**
-         * Is fired when the label was reset.
-         * 
-         * @event LevelMeter#resetlabel
-         */
-        this.emit("resetlabel");
+        this.emit("resetvalue");
     },
     /**
      * Resets the clipping LED.
@@ -302,8 +244,7 @@ export const LevelMeter = define_class({
      * @emits LevelMeter#resetclip
      */
     reset_clip: function () {
-        if (this.__cto) clearTimeout(this.__cto);
-        this.__cto = false;
+        clear_timeout(this.__cto);
         this.set("clip", false);
         /**
          * Is fired when the clipping LED was reset.
@@ -349,15 +290,13 @@ export const LevelMeter = define_class({
      * 
      * @method LevelMeter#reset_all
      * 
-     * @emits LevelMeter#resetpeak
-     * @emits LevelMeter#resetlabel
+     * @emits LevelMeter#resetvalue
      * @emits LevelMeter#resetclip
      * @emits LevelMeter#resettop
      * @emits LevelMeter#resetbottom
      */
     reset_all: function () {
-        this.reset_label();
-        this.reset_peak();
+        this.reset_value();
         this.reset_clip();
         this.reset_top();
         this.reset_bottom();
@@ -485,22 +424,35 @@ export const LevelMeter = define_class({
                     return;
                 }
             }
-            if (O.auto_clip !== false && value > O.clipping && !this.has_base()) {
+            if (O.auto_clip !== false && value >= O.clipping && !this.has_base()) {
+                clear_timeout(this.__cto);
                 this.set("clip", true);
             }
-            if (O.show_label && O.peak_label !== false &&
-                (value > O.label && value > base || value < O.label && value < base)) {
-                this.set("label", value);
+            if (O.auto_clip !== false && value < O.clipping && !this.has_base()) {
+                clip_timeout.call(this);
             }
-            if (O.auto_peak !== false &&
-                (value > O.peak && value > base || value < O.peak && value < base)) {
-                this.set("peak", value);
+            if (O.show_value && O.peak_value !== false &&
+                ((value > O.value_label && value > base) || (value < O.value_label && value < base))) {
+                clear_timeout(this.__lto);
+                this.set("value_label", value);
+            }
+            if (O.show_value && O.peak_value !== false &&
+                ((value < O.value_label && value > base) || (value > O.value_label && value < base))) {
+                value_timeout.call(this);
             }
             if (O.auto_hold !== false && O.show_hold && value > O.top) {
+                clear_timeout(this.__tto);
                 this.set("top", value);
             }
+            if (O.auto_hold !== false && O.show_hold && value < O.top) {
+                top_timeout.call(this);
+            }
             if (O.auto_hold !== false && O.show_hold && value < O.bottom && this.has_base()) {
+                clear_timeout(this.__bto);
                 this.set("bottom", value);
+            }
+            if (O.auto_hold !== false && O.show_hold && value > O.bottom && this.has_base()) {
+                bottom_timeout.call(this);
             }
         } else if (key === "top" || key === "bottom") {
             value = this.snap(value);
@@ -524,47 +476,4 @@ define_child_widget(LevelMeter, "clip", {
         "class": "aux-clip"
     },
     toggle_class: true,
-});
-/**
- * @member {HTMLDivElement} LevelMeter#_peak - The DIV element for the peak marker.
- *   Has class <code>.aux-peak</code>.
- */
-define_child_element(LevelMeter, "peak", {
-    show: false,
-    create: function() {
-        var peak = element("div","aux-peak");
-        peak.appendChild(element("div","aux-peaklabel"));
-        return peak;
-    },
-    append: function() {
-        this._bar.appendChild(this._peak);
-    },
-    toggle_class: true,
-    draw_options: [ "peak" ],
-    draw: function (O) {
-        if (!this._peak) return;
-        var n = this._peak.firstChild;
-        set_text(n, O.format_peak(O.peak));
-        if (O.peak > O.min && O.peak < O.max && O.show_peak) {
-            this._peak.style.display = "block";
-            var pos = 0;
-            if (vert(O)) {
-                pos = O.basis - this.val2px(this.snap(O.peak));
-                pos = Math.min(O.basis, pos);
-                this._peak.style.top = pos + "px";
-            } else {
-                pos = this.val2px(this.snap(O.peak));
-                pos = Math.min(O.basis, pos);
-                this._peak.style.left = pos + "px";
-            }
-        } else {
-            this._peak.style.display = "none";
-        }
-        /**
-         * Is fired when the peak was drawn.
-         * 
-         * @event LevelMeter#drawpeak
-         */
-        this.emit("drawpeak");
-    },
 });
