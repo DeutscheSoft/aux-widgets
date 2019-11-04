@@ -202,7 +202,7 @@ define_child_widget(ValueButton, "value", {
     default_options: {
         format: function (val) { return val.toFixed(2); },
         size: 5,
-    }
+    },
     userset_delegate: true,
     static_events: {
         dblclick: function(e) {
