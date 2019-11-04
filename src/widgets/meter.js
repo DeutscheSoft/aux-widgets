@@ -169,7 +169,9 @@ export const Meter = define_class({
      *   scale.
      * @property {Function} [options.format_labels=FORMAT("%.2f")] - Function for formatting the 
      *   scale labels. This is passed to Scale as option <code>labels</code>.
-     *
+     * @property {Number} [options.value_label=0] - The value to be drawn in the value label.
+     * @property {Boolean} [options.sync_value=true] - Synchronize the value on the bar with
+     *   the value label using `options.value_format` function.
      */
     
     Extends: Widget,
@@ -179,10 +181,12 @@ export const Meter = define_class({
         layout: "string",
         segment: "number",
         value: "number",
+        value_label: "number",
         base: "number|boolean",
         min: "number",
         max: "number",
         label: "string|boolean",
+        sync_value: "boolean",
         format_value: "function",
         scale_base: "number|boolean",
         show_labels: "boolean",
@@ -194,8 +198,10 @@ export const Meter = define_class({
         layout:          "left",
         segment:         1,
         value:           0,
+        value_label:    0,
         base:            false,
         label:           false,
+        sync_value:      true,
         format_value:    FORMAT("%.2f"),
         levels:          [1, 5, 10],     // array of steps where to draw labels
         scale_base:       false,
@@ -224,6 +230,14 @@ export const Meter = define_class({
             if (gradient) {
               this.set("gradient", gradient);
             }
+        },
+        set_value: function (val) {
+            if (this.options.sync_value)
+                this.set("value_label", val);
+        },
+        set_value_label: function (val) {
+            if (this.value)
+                this.value.set("label", this.options.format_value(val));
         },
     },
     
@@ -338,10 +352,6 @@ export const Meter = define_class({
             this._canvas.style.width = O._width + "px";
             this._canvas.style.height = O._height + "px";
             this._canvas.getContext("2d").fillStyle = this._fillstyle;
-        }
-        
-        if (I.value && O.show_value) {
-            this.value.set("label", O.format_value(O.value));
         }
         
         if (I.value || I.basis || I.min || I.max) {
