@@ -791,7 +791,7 @@ body.aux-cursor-row-resize * {
 .aux-multimeter.aux-horizontal {
     flex-direction: column;
 }
-.aux-multimeter > .aux-title {
+.aux-multimeter > .aux-label {
     height: 1.2em;
     line-height: 1.2em;
     flex: 1 0 100%;
@@ -807,15 +807,15 @@ body.aux-cursor-row-resize * {
 }
 .aux-multimeter.aux-top .aux-levelmeter {
     grid-template-areas:
-        "title bar clip label"
+        "label bar clip value"
         ". scale . .";
 }
 .aux-multimeter.aux-bottom .aux-levelmeter {
     grid-template-areas:
         ". scale . ."
-        "title bar clip label";
+        "label bar clip value";
 }
-.aux-multimeter.aux-horizontal .aux-levelmeter > .aux-title {
+.aux-multimeter.aux-horizontal .aux-levelmeter > .aux-label {
     justify-self: end  !important;
 }
 
