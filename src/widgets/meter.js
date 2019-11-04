@@ -162,7 +162,7 @@ export const Meter = define_class({
      * @property {Function} [options.format_label=FORMAT("%.2f")] - Function for formatting the 
      *   label.
      * @property {Boolean} [options.show_label=false] - If set to <code>true</code> a label is displayed.
-     * @property {Number} [options.title=false] - The title of the Meter. Set to `false` to hide it.
+     * @property {Number} [options.label=false] - The title of the Meter. Set to `false` to hide it.
      * @property {Boolean} [options.show_scale=true] - Set to <code>false</code> to hide the scale.
      * @property {Number|Boolean} [options.scale_base=false] - Base of the meter scale, see {@link Scale} for more information.
      * @property {Boolean} [options.show_labels=true] - If <code>true</code>, display labels on the
