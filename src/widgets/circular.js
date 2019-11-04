@@ -68,7 +68,7 @@ function draw_dots() {
     var _dots = this._dots;
     var O = this.options;
     var dots = O.dots;
-    var dot = O.dot;
+    var dot = O.dots_defaults;
     var angle = O.angle;
     empty(_dots);
     for (var i = 0; i < dots.length; i++) {
@@ -107,7 +107,7 @@ function draw_markers() {
     // depends on size, markers, marker, min, max
     var O = this.options;
     var markers = O.markers;
-    var marker = O.marker;
+    var marker = O.markers_defaults;
     empty(this._markers);
     
     var stroke  = this._get_stroke();
@@ -158,6 +158,7 @@ function draw_labels() {
     var _labels = this._labels;
     var O = this.options;
     var labels = O.labels;
+    var label = O.labels_defaults;
     empty(this._labels);
 
     if (!labels.length) return;
@@ -181,7 +182,7 @@ function draw_labels() {
         if (l.label !== void(0))
             p.textContent = l.label;
         else
-            p.textContent = O.label.format(l.pos);
+            p.textContent = label.format(l.pos);
 
         p.setAttribute("text-anchor", "middle");
                  
@@ -196,8 +197,8 @@ function draw_labels() {
             l = labels[i];
             p = a[i];
 
-            var margin  = l.margin !== void(0) ? l.margin : O.label.margin;
-            var align   = (l.align !== void(0) ? l.align : O.label.align) === "inner";
+            var margin  = l.margin !== void(0) ? l.margin : label.margin;
+            var align   = (l.align !== void(0) ? l.align : label.align) === "inner";
             var pos     = Math.min(O.max, Math.max(O.min, l.pos));
             var bb      = p.getBBox();
             var angle   = (this.val2coef(this.snap(pos)) * O.angle + O.start) % 360;
@@ -295,35 +296,35 @@ export const Circular = define_class({
      * @property {Number} [options.x=0] - Horizontal displacement of the circle.
      * @property {Number} [options.y=0] - Vertical displacement of the circle.
      * @property {Boolean} [options.show_dots=true] - Show/hide all dots.
-     * @property {Object} [options.dot] - This option acts as default values for the individual dots
+     * @property {Object} [options.dots_defaults] - This option acts as default values for the individual dots
      *   specified in <code>options.dots</code>.
-     * @property {Number} [options.dot.width=2] - Width of the dots.
-     * @property {Number} [options.dot.length=2] - Length of the dots.
-     * @property {Number} [options.dot.margin=5] - Margin of the dots.
+     * @property {Number} [options.dots_defaults.width=2] - Width of the dots.
+     * @property {Number} [options.dots_defaults.length=2] - Length of the dots.
+     * @property {Number} [options.dots_defaults.margin=5] - Margin of the dots.
      * @property {Array<Object>} [options.dots=[]] - An array of objects describing where dots should be placed
      *   along the circle. Members are position <code>pos</code> in the value range and optionally
      *   <code>color</code> and <code>class</code> and any of the properties of <code>options.dot</code>.
      * @property {Boolean} [options.show_markers=true] - Show/hide all markers.
-     * @property {Object} [options.marker] - This option acts as default values of the individual markers
+     * @property {Object} [options.markers_defaults] - This option acts as default values of the individual markers
      *   specified in <code>options.markers</code>.
-     * @property {Number} [options.marker.thickness=3] - Thickness of the marker.
-     * @property {Number} [options.marker.margin=3] - Margin of the marker.
+     * @property {Number} [options.markers_defaults.thickness=3] - Thickness of the marker.
+     * @property {Number} [options.markers_defaults.margin=3] - Margin of the marker.
      * @property {Array<Object>} [options.markers=[]] - An array containing objects which describe where markers
      *   are to be places. Members are the position as <code>from</code> and <code>to</code> and optionally
      *   <code>color</code>, <code>class</code> and any of the properties of <code>options.marker</code>.
      * @property {Boolean} [options.show_labels=true] - Show/hide all labels.
-     * @property {Object} [options.label] - This option acts as default values for the individual labels
+     * @property {Object} [options.labels_defaults] - This option acts as default values for the individual labels
      *   specified in <code>options.labels</code>.
-     * @property {Integer} [options.label.margin=8] - Distance of the label from the circle of diameter
+     * @property {Integer} [options.labels_defaults.margin=8] - Distance of the label from the circle of diameter
      *   <code>options.size</code>.
-     * @property {String} [options.label.align="outer"] - This option controls if labels are positioned
+     * @property {String} [options.labels_defaults.align="outer"] - This option controls if labels are positioned
      *   inside or outside of the circle with radius <code>options.size/2 - margin</code>.
-     * @property {Function} [options.label.format] - Optional formatting function for the label.
+     * @property {Function} [options.labels_defaults.format] - Optional formatting function for the label.
      *   Receives the label value as first argument.
      * @property {Array<Object>} [options.labels=[]] - An array containing objects which describe labels
      *   to be displayed. Either a value or an object whose members are the position <code>pos</code>
      *   insie the value range and optionally <code>color</code>, <code>class</code> and any of the
-     *   properties of <code>options.label</code>.
+     *   properties of <code>options.labels_defaults</code>.
      * 
      * @extends Widget
      * 
@@ -348,11 +349,11 @@ export const Circular = define_class({
         show_hand: "boolean",
         x: "number",
         y: "number",
-        dot: "object",
+        dots_defaults: "object",
         dots: "array",
-        marker: "object",
+        markers_defaults: "object",
         markers: "array",
-        label: "object",
+        labels_defaults: "object",
         labels: "array"
     }),
     static_events: {
@@ -388,11 +389,11 @@ export const Circular = define_class({
         show_hand:  true,
         x:          0,
         y:          0,
-        dot:        {width: 2, length: 2, margin: 5},
+        dots_defaults: {width: 2, length: 2, margin: 5},
         dots:       [],
-        marker:     {thickness: 3, margin: 0},
+        markers_defaults: {thickness: 3, margin: 0},
         markers:    [],
-        label:      {margin: 8, align: "inner", format: function(val){return val;}},
+        labels_defaults: {margin: 8, align: "inner", format: function(val){return val;}},
         labels:     []
     },
     

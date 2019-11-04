@@ -71,15 +71,15 @@ function module_range() {
  * @property {Number} [options.step=1] 
  * @property {Number} [options.shift_up=4]
  * @property {Number} [options.shift_down=0.25]
- * @property {Object} [options.dot={length: 6, margin: 13, width: 2}]
- * @property {Object} [options.marker={thickness: 6, margin: 13}]
- * @property {Object} [options.label={margin: 10, align: "outer", format: function(val){return val;}}]
+ * @property {Object} [options.dots_defaults={length: 6, margin: 13, width: 2}]
+ * @property {Object} [options.markers_defaults={thickness: 6, margin: 13}]
+ * @property {Object} [options.labels_defaults={margin: 10, align: "outer", format: function(val){return val;}}]
  * @property {Number} [options.basis=300] - Distance to drag between <code>min</code> and <code>max</code>.
  * @property {String} [options.preset="medium"] - The preset to use. Presets
  *   are a functionality of {@link Widget}.
  * @property {Object} [options.presets={
-            tiny: {margin:0, thickness:4, hand:{width: 1, length: 6, margin: 8}, dot:{length:4, margin:0, width:1}, marker: {thickness: 2, margin: 0}, show_labels:false},
-            small: {margin:0, thickness:5, hand:{width: 1, length: 8, margin: 10}, dot: {length:5, margin:0,width:1}, marker: {thickness: 2, margin: 0}, show_labels:false},
+            tiny: {margin:0, thickness:4, hand:{width: 1, length: 6, margin: 8}, dots_defaults:{length:4, margin:0, width:1}, markers_defaults: {thickness: 2, margin: 0}, show_labels:false},
+            small: {margin:0, thickness:5, hand:{width: 1, length: 8, margin: 10}, dots_defaults: {length:5, margin:0,width:1}, markers_defaults: {thickness: 2, margin: 0}, show_labels:false},
             medium: {},
             large: {hand:{width:1.5, length:12, margin:26}},
             huge: {hand:{width:2, length:12, margin:28}},
@@ -99,17 +99,17 @@ export const Knob = define_class({
         step: 1,
         shift_up: 4,
         shift_down: 0.25,
-        dot: {length: 6, margin: 13, width: 1},
-        marker: {thickness: 2, margin: 11},
-        label: {margin: 12, align: "outer", format: function(val){return val;}},
+        dots_defaults: {length: 6, margin: 13, width: 1},
+        markers_defaults: {thickness: 2, margin: 11},
+        labels_defaults: {margin: 12, align: "outer", format: function(val){return val;}},
         direction: "polar",
         rotation: 45,
         blind_angle: 20,
         basis: 300,
         preset: "medium",
         presets: {
-            tiny: {margin:0, thickness:4, hand:{width: 1, length: 6, margin: 8}, dot:{length:4, margin:0, width:1}, marker: {thickness: 2, margin: 0}, show_labels:false},
-            small: {margin:0, thickness:5, hand:{width: 1, length: 8, margin: 10}, dot: {length:5, margin:0,width:1}, marker: {thickness: 2, margin: 0}, show_labels:false},
+            tiny: {margin:0, thickness:4, hand:{width: 1, length: 6, margin: 8}, dots_defaults:{length:4, margin:0, width:1}, markers_defaults: {thickness: 2, margin: 0}, show_labels:false},
+            small: {margin:0, thickness:5, hand:{width: 1, length: 8, margin: 10}, dots_defaults: {length:5, margin:0,width:1}, markers_defaults: {thickness: 2, margin: 0}, show_labels:false},
             medium: {},
             large: {hand:{width:1.5, length:12, margin:26}},
             huge: {hand:{width:2, length:12, margin:28}},

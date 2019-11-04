@@ -72,9 +72,7 @@ export const ValueKnob = define_class({
      * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
-     * @property {String} [options.title=false] - Title of the knob. Set to `false` to hide the element from the DOM.
-     * @property {Function} [options.value_format=FORMAT("%.2f")] - Callback to format the value.
-     * @property {Number} [options.value_size=5] - Amount of digits for the value input.
+     * @property {String} [options.label=false] - Label of the knob. Set to `false` to hide the element from the DOM.
      * @property {Number} [options.show_value=true] - Set to `false` to hide the {@link Value}.
      * @property {Number} [options.show_knob=true] - Set to `false` to hide the {@link Knob}.
      */
@@ -111,10 +109,10 @@ export const ValueKnob = define_class({
  */
 define_child_widget(ValueKnob, "label", {
     create: Label,
-    option: "title",
+    option: "label",
     toggle_class: true,
     map_options: {
-        title: "label",
+        label: "label",
     },
 });
 /**
@@ -125,6 +123,7 @@ define_child_widget(ValueKnob, "knob", {
     show: true,
     inherit_options: true,
     toggle_class: true,
+    blacklist_options: [ "label" ],
 });
 /**
  * @member {Value} ValueKnob#value - The {@link Value} widget.
@@ -134,9 +133,7 @@ define_child_widget(ValueKnob, "value", {
     show: true,
     inherit_options: true,
     map_options: {
-        value_format: "format",
-        value_set: "set",
-        value_size: "size",
+        value: "value",
     },
     static_events: {
         valueclicked: value_clicked,
