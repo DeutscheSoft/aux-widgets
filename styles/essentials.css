@@ -113,6 +113,33 @@
     pointer-events: none;
 }
 
+/* CHARTHANDLE */
+
+.aux-charthandle {
+    display: block;
+}
+.aux-charthandle.aux-inactive {
+    display: none;
+}
+.aux-charthandle.aux-circular > .aux-line {
+    display: none;
+}
+.aux-charthandle.aux-circular.aux-active > .aux-line {
+    display: block;
+}
+.aux-charthandle.aux-line > .aux-line2 {
+    display: none;
+}
+.aux-charthandle.aux-line.aux-active > .aux-line2 {
+    display: block;
+}
+.aux-charthandle.aux-block > .aux-line2 {
+    display: none;
+}
+.aux-charthandle.aux-block.aux-active > .aux-line2 {
+    display: block;
+}
+
 /* CLOCK */
 
 .aux-widget.aux-clock {
@@ -970,34 +997,6 @@ body.aux-cursor-row-resize * {
 @keyframes aux-page-vertical-out-backward {
     0%   { transform: translateY(0); }
     100% { transform: translateY(100%); }
-}
-
-
-/* RESPONSEHANDLE */
-
-.aux-responsehandle {
-    display: block;
-}
-.aux-responsehandle.aux-inactive {
-    display: none;
-}
-.aux-responsehandle.aux-circular > .aux-line {
-    display: none;
-}
-.aux-responsehandle.aux-circular.aux-active > .aux-line {
-    display: block;
-}
-.aux-responsehandle.aux-line > .aux-line2 {
-    display: none;
-}
-.aux-responsehandle.aux-line.aux-active > .aux-line2 {
-    display: block;
-}
-.aux-responsehandle.aux-block > .aux-line2 {
-    display: none;
-}
-.aux-responsehandle.aux-block.aux-active > .aux-line2 {
-    display: block;
 }
 
 /* SCALE */

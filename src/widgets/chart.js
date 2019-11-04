@@ -26,7 +26,7 @@ import { error, warn } from '../utils/log.js';
 import { Widget } from './widget.js';
 import { Ranges } from '../implements/ranges.js';
 import { Graph } from './graph.js';
-import { ResponseHandle } from './responsehandle.js';
+import { ChartHandle } from './charthandle.js';
 import { define_child_widget } from '../child_widget.js';
 import { Grid } from './grid.js';
     
@@ -297,7 +297,7 @@ function draw_title() {
  * @property {Number} [options.importance_border=50] - Multiplicator of
  *   square pixels on hit testing borders to gain importance.
  * @property {Array<Object>} [options.handles=[]] - An array of options for
- *   creating {@link ResponseHandle} on init.
+ *   creating {@link ChartHandle} on init.
  * @property {Boolean} [options.show_handles=true] - Show or hide all
  *   handles.
  * 
@@ -374,7 +374,7 @@ export const Chart = define_class({
          */
         this.graphs = [];
         /**
-         * @member {Array} Chart#handles - An array containing all {@link ResponseHandle} instances.
+         * @member {Array} Chart#handles - An array containing all {@link ChartHandle} instances.
          */
         this.handles = [];
         if (!options.element) options.element = element('div');
@@ -502,7 +502,7 @@ export const Chart = define_class({
         Widget.prototype.destroy.call(this);
     },
     add_child: function(child) {
-        if (!(child instanceof ResponseHandle) || this.options.show_handles)
+        if (!(child instanceof ChartHandle) || this.options.show_handles)
           Widget.prototype.add_child.call(this, child);
 
         if (child instanceof Graph)
@@ -533,7 +533,7 @@ export const Chart = define_class({
           this.invalid.graphs = true;
           this.trigger_draw();
         }
-        else if (child instanceof ResponseHandle)
+        else if (child instanceof ChartHandle)
         {
           child.set('intersect', this.intersect.bind(this));
           child.set('range_x', () => this.range_x);
@@ -544,7 +544,7 @@ export const Chart = define_class({
           /**
            * Is fired when a new handle was added.
            * 
-           * @param {ResponseHandle} handle - The {@link ResponseHandle} which was added.
+           * @param {ChartHandle} handle - The {@link ChartHandle} which was added.
            * 
            * @event Chart#handleadded
            */
@@ -575,7 +575,7 @@ export const Chart = define_class({
             this.trigger_draw();
           }
         }
-        else if (child instanceof ResponseHandle)
+        else if (child instanceof ChartHandle)
         {
           const H = this.handles;
           const i = H.indexOf(child);
@@ -654,25 +654,25 @@ export const Chart = define_class({
     
     /**
      * Add a new handle to the widget. Options is an object containing
-     * options for the {@link ResponseHandle}.
+     * options for the {@link ChartHandle}.
      * 
      * @method Chart#add_handle
      * 
-     * @param {Object} [options={ }] - An object containing initial options. - The options for the {@link ResponseHandle}.
-     * @param {Object} [type=ResponseHandle] - A widget class to be used as the new handle.
+     * @param {Object} [options={ }] - An object containing initial options. - The options for the {@link ChartHandle}.
+     * @param {Object} [type=ChartHandle] - A widget class to be used as the new handle.
      * 
      * @emits Chart#handleadded
      */
     add_handle: function (options, type) {
         let handle;
 
-        if (options instanceof ResponseHandle)
+        if (options instanceof ChartHandle)
         {
           handle = options;
         }
         else
         {
-          type = type || ResponseHandle;
+          type = type || ChartHandle;
           handle = new type(options);
         }
 
@@ -681,13 +681,13 @@ export const Chart = define_class({
         return handle;
     },
     /**
-     * Add multiple new {@link ResponseHandle} to the widget. Options is an array
-     * of objects containing options for the new instances of {@link ResponseHandle}.
+     * Add multiple new {@link ChartHandle} to the widget. Options is an array
+     * of objects containing options for the new instances of {@link ChartHandle}.
      * 
      * @method Chart#add_handles
      * 
-     * @param {Array<Object>} options - An array of options objects for the {@link ResponseHandle}.
-     * @param {Object} [type=ResponseHandle] - A widget class to be used for the new handles.
+     * @param {Array<Object>} options - An array of options objects for the {@link ChartHandle}.
+     * @param {Object} [type=ChartHandle] - A widget class to be used for the new handles.
      */
     add_handles: function (handles, type) {
         for (var i = 0; i < handles.length; i++)
@@ -698,7 +698,7 @@ export const Chart = define_class({
      * 
      * @method Chart#remove_handle
      * 
-     * @param {ResponseHandle} handle - The {@link ResponseHandle} to remove.
+     * @param {ChartHandle} handle - The {@link ChartHandle} to remove.
      * 
      * @emits Chart#handleremoved
      */
@@ -706,12 +706,12 @@ export const Chart = define_class({
         this.remove_child(handle);
     },
     /**
-     * Remove multiple or all {@link ResponseHandle} from the widget.
+     * Remove multiple or all {@link ChartHandle} from the widget.
      * 
      * @method Chart#remove_handles
      * 
-     * @param {Array<ResponseHandle>} handles - An array of
-     *   {@link ResponseHandle} instances. If the argument reveals to
+     * @param {Array<ChartHandle>} handles - An array of
+     *   {@link ChartHandle} instances. If the argument reveals to
      *   `false`, all handles are removed from the widget.
      */
     remove_handles: function (handles) {

@@ -836,10 +836,10 @@ function enddrag() {
 }
 
 /**
- * ResponseHandle is a draggable SVG element, which can be used to represent and change
+ * ChartHandle is a draggable SVG element, which can be used to represent and change
  * a value inside a {@link FrequencyResponse} and is drawn inside of a {@link Chart}.
  *
- * @class ResponseHandle
+ * @class ChartHandle
  * 
  * @extends Widget
  *
@@ -889,13 +889,13 @@ function enddrag() {
  */
 
 /**
- * @member {SVGText} ResponseHandle#_label - The label. Has class <code>.aux-label</code>.
+ * @member {SVGText} ChartHandle#_label - The label. Has class <code>.aux-label</code>.
  */
 /**
- * @member {SVGPath} ResponseHandle#_line1 - The first line. Has class <code>.aux-line .aux-line1</code>.
+ * @member {SVGPath} ChartHandle#_line1 - The first line. Has class <code>.aux-line .aux-line1</code>.
  */
 /**
- * @member {SVGPath} ResponseHandle#_line2 - The second line. Has class <code>.aux-line .aux-line2</code>.
+ * @member {SVGPath} ChartHandle#_line2 - The second line. Has class <code>.aux-line .aux-line2</code>.
  */
 
 function set_min(value, key) {
@@ -919,7 +919,7 @@ function set_range(range, key) {
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
  * The event is emitted for the options <code>x</code>, <code>y</code> and <code>z</code>.
  *
- * @event ResponseHandle#useraction
+ * @event ChartHandle#useraction
  * 
  * @param {string} name - The name of the option which was changed due to the users action.
  * @param {mixed} value - The new value of the option.
@@ -927,7 +927,7 @@ function set_range(range, key) {
  * @mixes GlobalCursor
  * @mixes Warning
  */
-export const ResponseHandle = define_class({
+export const ChartHandle = define_class({
     Extends: Widget,
     Implements: [GlobalCursor, Warning],
     _options: Object.assign(Object.create(Widget.prototype._options), {
@@ -1072,13 +1072,13 @@ export const ResponseHandle = define_class({
         var O = this.options;
         
         /**
-         * @member {Range} ResponseHandle#range_x - The {@link Range} for the x axis.
+         * @member {Range} ChartHandle#range_x - The {@link Range} for the x axis.
          */
         /**
-         * @member {Range} ResponseHandle#range_y - The {@link Range} for the y axis.
+         * @member {Range} ChartHandle#range_y - The {@link Range} for the y axis.
          */
         /**
-         * @member {Range} ResponseHandle#range_z - The {@link Range} for the z axis.
+         * @member {Range} ChartHandle#range_z - The {@link Range} for the z axis.
          */
         this.set('range_x', O.range_x);
         this.set('range_y', O.range_y);
@@ -1090,15 +1090,15 @@ export const ResponseHandle = define_class({
         }.bind(this);
 
         /**
-         * @member {SVGGroup} ResponseHandle#element - The main SVG group containing all handle elements. Has class <code>.aux-responsehandle</code>.
+         * @member {SVGGroup} ChartHandle#element - The main SVG group containing all handle elements. Has class <code>.aux-charthandle</code>.
          */
         /**
-         * @member {SVGCircular} ResponseHandle#_handle - The main handle.
+         * @member {SVGCircular} ChartHandle#_handle - The main handle.
          *      Has class <code>.aux-handle</code>.
          */
         
         /**
-         * @member {SVGCircular} ResponseHandle#_zhandle - The handle for manipulating z axis.
+         * @member {SVGCircular} ChartHandle#_zhandle - The handle for manipulating z axis.
          *      Has class <code>.aux-zhandle</code>.
          */
 
@@ -1130,7 +1130,7 @@ export const ResponseHandle = define_class({
                  * Is fired when the user grabs the z-handle. The argument is the
                  * actual z value.
                  * 
-                 * @event ResponseHandle#zchangestarted
+                 * @event ChartHandle#zchangestarted
                  * 
                  * @param {number} z - The z value.
                  */
@@ -1161,7 +1161,7 @@ export const ResponseHandle = define_class({
                  * Is fired when the user releases the z-handle. The argument is the
                  * actual z value.
                  * 
-                 * @event ResponseHandle#zchangeended
+                 * @event ChartHandle#zchangeended
                  * 
                  * @param {number} z - The z value.
                  */
@@ -1209,7 +1209,7 @@ export const ResponseHandle = define_class({
                  * <li>pos_y: the position in pixels on the y axis</li>
                  * </ul>
                  * 
-                 * @event ResponseHandle#handlegrabbed
+                 * @event ChartHandle#handlegrabbed
                  * 
                  * @param {Object} positions - An object containing all relevant positions of the pointer.
                  */
@@ -1252,7 +1252,7 @@ export const ResponseHandle = define_class({
                  * <li>pos_y: the position in pixels on the y axis</li>
                  * </ul>
                  * 
-                 * @event ResponseHandle#handlereleased
+                 * @event ChartHandle#handlereleased
                  * 
                  * @param {Object} positions - An object containing all relevant positions of the pointer.
                  */
@@ -1283,7 +1283,7 @@ export const ResponseHandle = define_class({
 
     draw: function(O, element)
     {
-      add_class(element, "aux-responsehandle");
+      add_class(element, "aux-charthandle");
 
       Widget.prototype.draw.call(this, O, element);
     },

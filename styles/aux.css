@@ -129,6 +129,26 @@
     fill: var(--aux-warn-base);
 }
 
+/* CHARTHANDLE */
+
+.aux-charthandle {
+    font-size: var(--aux-main-smallfont);
+    fill: var(--aux-contrast-text);
+}
+.aux-charthandle > .aux-handle {
+    opacity: 0.25;
+    stroke: var(--aux-contrast-text);
+    stroke-opacity: 0.5;
+}
+.aux-charthandle > .aux-line1 {
+    stroke: var(--aux-contrast-text);
+    opacity: 0.5;
+}
+.aux-charthandle > .aux-line2 {
+    stroke: var(--aux-contrast-text);
+    opacity: 0.5;
+}
+
 /* FADER */
 
 .aux-fader .aux-handle {
@@ -238,26 +258,6 @@
     background: var(--aux-contrast-base);
     color: var(--aux-contrast-text);
     border-radius: var(--aux-border-radius);
-}
-
-/* RESPONSEHANDLE */
-
-.aux-responsehandle {
-    font-size: var(--aux-main-smallfont);
-    fill: var(--aux-contrast-text);
-}
-.aux-responsehandle > .aux-handle {
-    opacity: 0.25;
-    stroke: var(--aux-contrast-text);
-    stroke-opacity: 0.5;
-}
-.aux-responsehandle > .aux-line1 {
-    stroke: var(--aux-contrast-text);
-    opacity: 0.5;
-}
-.aux-responsehandle > .aux-line2 {
-    stroke: var(--aux-contrast-text);
-    opacity: 0.5;
 }
 
 /* ROOT */

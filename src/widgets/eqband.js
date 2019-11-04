@@ -19,7 +19,7 @@
 
 import { define_class } from '../widget_helpers.js';
 import { Filter } from '../modules/filter.js';
-import { ResponseHandle } from './responsehandle.js';
+import { ChartHandle } from './charthandle.js';
 import { add_class } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 
@@ -55,7 +55,7 @@ const type_to_pref = {
 
 export const EqBand = define_class({
     /**
-     * An EqBand extends a {@link ResponseHandle} and holds a
+     * An EqBand extends a {@link ChartHandle} and holds a
      * dependent {@link Filter}. It is used as a fully functional representation
      * of a single equalizer band in {@link Equalizer} EqBand needs a {@link Chart} 
      * or any other derivate to be drawn in.
@@ -69,16 +69,16 @@ export const EqBand = define_class({
      *   <code>low-shelf</code>, <code>high-shelf</code>, <code>lowpass[n]</code> or
      *   <code>highpass[n]</code>.
      * @property {Number} options.freq - Frequency setting. This is an alias for the option <code>x</code>
-     *   defined by {@link ResponseHandle}.
+     *   defined by {@link ChartHandle}.
      * @property {Number} options.gain - Gain setting. This is an alias for the option <code>y</code>
-     *   defined by {@link ResponseHandle}.
+     *   defined by {@link ChartHandle}.
      * @property {Number} options.q - Quality setting. This is an alias for the option <code>z</code>
-     *   defined by {@link ResponseHandle}.
+     *   defined by {@link ChartHandle}.
      *
-     * @extends ResponseHandle
+     * @extends ChartHandle
      */
-    Extends: ResponseHandle,
-    _options: Object.assign(Object.create(ResponseHandle.prototype._options), {
+    Extends: ChartHandle,
+    _options: Object.assign(Object.create(ChartHandle.prototype._options), {
         type: "string|function",
         gain: "number",
         freq: "number",
@@ -105,7 +105,7 @@ export const EqBand = define_class({
         /**
          * @member {Filter} EqBand#filter - The filter providing the graphical calculations. 
          */
-        ResponseHandle.prototype.initialize.call(this, options);
+        ChartHandle.prototype.initialize.call(this, options);
 
         options = this.options;
 
@@ -140,7 +140,7 @@ export const EqBand = define_class({
     {
       add_class(element, "aux-eqband");
 
-      ResponseHandle.prototype.draw.call(this, O, element);
+      ChartHandle.prototype.draw.call(this, O, element);
     },
 
     /**
@@ -188,6 +188,6 @@ export const EqBand = define_class({
                 //value = this.options.range_z.snap(value);
                 //break;
         }
-        return ResponseHandle.prototype.set.call(this, key, value);
+        return ChartHandle.prototype.set.call(this, key, value);
     }
 });

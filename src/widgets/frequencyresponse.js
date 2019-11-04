@@ -134,9 +134,9 @@ export const FrequencyResponse = define_class({
          */
         /** 
          * @member {SVGGroup} Chart#_handles - The SVG group containing all handles.
-         *      Has class <code>.aux-responsehandles</code>.
+         *      Has class <code>.aux-charthandles</code>.
          */
-        add_class(this._handles, "aux-responsehandles");
+        add_class(this._handles, "aux-charthandles");
         
         // do not overwrite custom grids, please
         if (this.options.db_grid && !this.options.grid_y.length)

@@ -138,7 +138,7 @@ export const Dynamics = define_class({
             mode: "line"
         });
         /**
-         * @member {ResponseHandle} Dynamics#handle - The handle to set threshold. Has class <code>.aux-handle</code> 
+         * @member {ChartHandle} Dynamics#handle - The handle to set threshold. Has class <code>.aux-handle</code> 
          */
         this.handle = this.add_handle({
             range_x: this.range_x,

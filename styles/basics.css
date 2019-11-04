@@ -87,7 +87,7 @@
     --aux-state-width: 12px;
     --aux-state-height: 6px;
     
-    --aux-responsehandle-strokewarn: 20;
+    --aux-charthandle-strokewarn: 20;
     
     --aux-value-height: 32px;
     
@@ -110,6 +110,21 @@
 
 .aux-buttons > .aux-button {
     flex: 0 0 auto;
+}
+
+/* CHARTHANDLE */
+
+.aux-charthandle:hover {
+    cursor: pointer;
+}
+.aux-charthandle .aux-line {
+    stroke-width: 1px;
+}
+.aux-charthandle .aux-line1 {
+    stroke-width: 1;
+}
+.aux-charthandle.aux-warn > .aux-handle {
+    stroke-width: var(--aux-charthandle-strokewarn);
 }
 
 /* CLOCK */
@@ -448,21 +463,6 @@
 .aux-notification {
     padding: var(--aux-notification-padding);
     margin: var(--aux-notification-margin);
-}
-
-/* RESPONSEHANDLE */
-
-.aux-responsehandle:hover {
-    cursor: pointer;
-}
-.aux-responsehandle .aux-line {
-    stroke-width: 1px;
-}
-.aux-responsehandle .aux-line1 {
-    stroke-width: 1;
-}
-.aux-responsehandle.aux-warn > .aux-handle {
-    stroke-width: var(--aux-responsehandle-strokewarn);
 }
 
 /* ROOT */

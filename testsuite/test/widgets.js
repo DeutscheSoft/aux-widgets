@@ -1,7 +1,7 @@
 import {
     Button,
     Buttons,
-    ResponseHandle,
+    ChartHandle,
     EqBand,
     Chart,
     Equalizer,
@@ -43,7 +43,7 @@ import {
 import { assert, compare, object_minus } from './helpers.js';
 
 const widgets = [
-   ResponseHandle,
+   ChartHandle,
    EqBand,
    Chart,
    Equalizer,

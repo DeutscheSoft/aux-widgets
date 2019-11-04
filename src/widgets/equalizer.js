@@ -112,7 +112,7 @@ function invalidate_bands() {
 export const Equalizer = define_class({
     /**
      * Equalizer is a {@link FrequencyResponse}, utilizing {@link EqBand}s instead of
-     * simple {@link ResponseHandle}s.
+     * simple {@link ChartHandle}s.
      *
      * @property {Object} options
      * 

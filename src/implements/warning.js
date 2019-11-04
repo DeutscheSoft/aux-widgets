@@ -37,7 +37,7 @@ function reset (element) {
 
 /**
  * Adds the class "aux-warn" on <code>this.element</code> for a certain
- * period of time. It is used e.g. in {@link ResponseHandle} or {@link Knob} when the value
+ * period of time. It is used e.g. in {@link ChartHandle} or {@link Knob} when the value
  * exceeds the range.
  *
  * @mixin Warning

@@ -31,7 +31,7 @@ export * from './widgets/navigation.js';
 export * from './widgets/notifications.js';
 export * from './widgets/pager.js';
 export * from './widgets/pages.js';
-export * from './widgets/responsehandle.js';
+export * from './widgets/charthandle.js';
 export * from './widgets/root.js';
 export * from './widgets/scale.js';
 export * from './widgets/select.js';
