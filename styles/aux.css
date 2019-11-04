@@ -35,7 +35,7 @@
     
     --aux-main-tinyfont: 8px;
     --aux-main-smallfont: 11px;
-    --aux-main-bigfont: 16px;
+    --aux-main-bigfont: 18px;
     
     --aux-main-base: #E0E0E0;
     --aux-main-text: #212424;
@@ -97,6 +97,11 @@
 
 .aux-chart {
     background: var(--aux-contrast-base);
+}
+.aux-chart .aux-title {
+    fill: var(--aux-contrast-text);
+    opacity: 0.5;
+    font-size: var(--aux-main-bigfont);
 }
 
 /* CIRCULAR */

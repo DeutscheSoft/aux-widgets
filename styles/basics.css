@@ -34,6 +34,8 @@
     
     --aux-clickable-size: 40px;
     
+    --aux-chart-titlemargin: 8px;
+    
     --aux-clock-labelmargin: 8px;
     
     --aux-button-paddingvertical: 4px;
@@ -51,6 +53,8 @@
     --aux-graph-filled: 1.2px;
     --aux-graph-outline: 2px;
     --aux-graph-steady: 0.5px;
+    
+    --aux-grid-labelpadding: 0 3px;
     
     --aux-knob-tiny: 40px;
     --aux-knob-small: 56px;
@@ -110,6 +114,12 @@
 
 .aux-buttons > .aux-button {
     flex: 0 0 auto;
+}
+
+/* CHART */
+
+.aux-chart .aux-title {
+    margin: var(--aux-chart-titlemargin);
 }
 
 /* CHARTHANDLE */
@@ -218,7 +228,7 @@
 /* GRID */
 
 .aux-gridlabel {
-    padding: 3px;
+    padding: var(--aux-grid-labelpadding);
 }
 
 /* ICON */

@@ -222,12 +222,12 @@ function draw_title() {
             case "bottom":
                 anchor = "middle";
                 x = range_x.options.basis / 2;
-                y = range_y.options.basis - mtop - bb.height / 2;
+                y = range_y.options.basis - mbottom - bb.height / 2;
                 break;
             case "bottom-right":
                 anchor = "end";
                 x = range_x.options.basis - mright;
-                y = range_y.options.basis - mtop - bb.height / 2;
+                y = range_y.options.basis - mbottom - bb.height / 2;
                 break;
             default:
                 warn("Unsupported title_position", this.options.title_position);
@@ -253,7 +253,7 @@ function draw_title() {
  * 
  * @property {String|Boolean} [options.title=""] - A title for the Chart.
  *   Set to `false` to remove the title from the DOM.
- * @property {String} [options.title_position="top-right"] - Position of the
+ * @property {String} [options.title_position="top-left"] - Position of the
  *   title inside of the chart. Possible values are
  *   <code>"top-left"</code>, <code>"top"</code>, <code>"top-right"</code>,
  *   <code>"left"</code>, <code>"center"</code>, <code>"right"</code>,
@@ -342,7 +342,7 @@ export const Chart = define_class({
                      // position, use false for no key
         key_size: {x:20, y:10}, // size of the key rects
         title:   "", // a title for the chart
-        title_position: "top-right", // the position of the title
+        title_position: "top-left", // the position of the title
         resized: false,
         
         importance_label:  4,   // multiplicator of square pixels on hit testing
