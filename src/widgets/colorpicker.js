@@ -393,7 +393,7 @@ define_child_widget(ColorPicker, "hue", {
         },
     },
     default_options: {
-        title: "Hue",
+        label: "Hue",
         min: 0,
         max: 1,
         "class": "aux-hue",
@@ -418,7 +418,7 @@ define_child_widget(ColorPicker, "saturation", {
         },
     },
     default_options: {
-        title: "Saturation",
+        label: "Saturation",
         min: 0,
         max: 1,
         "class": "aux-saturation",
@@ -444,7 +444,7 @@ define_child_widget(ColorPicker, "lightness", {
         },
     },
     default_options: {
-        title: "Lightness",
+        label: "Lightness",
         min: 0,
         max: 1,
         "class": "aux-lightness",
@@ -470,7 +470,7 @@ define_child_widget(ColorPicker, "red", {
         },
     },
     default_options: {
-        title: "Red",
+        label: "Red",
         min: 0,
         max: 255,
         snap: 1,
@@ -498,7 +498,7 @@ define_child_widget(ColorPicker, "green", {
         },
     },
     default_options: {
-        title: "Green",
+        label: "Green",
         min: 0,
         max: 255,
         snap: 1,
@@ -526,7 +526,7 @@ define_child_widget(ColorPicker, "blue", {
         },
     },
     default_options: {
-        title: "Blue",
+        label: "Blue",
         min: 0,
         max: 255,
         snap: 1,
