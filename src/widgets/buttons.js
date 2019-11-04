@@ -46,7 +46,7 @@ function button_clicked(button) {
             sel.push(b);
         }
     } else {
-        if (O.de_select && sel === b)
+        if (O.deselect && sel === b)
             sel = -1;
         else
             sel = b;
@@ -98,7 +98,7 @@ export const Buttons = define_class({
      *   a defined maximum amount of selectable buttons. If an array is given
      *   for `options.select` while this option is `0`, the first entry
      *   will be used.
-     * @property {Boolean} [options.de_select=false] - Define if single-selection
+     * @property {Boolean} [options.deselect=false] - Define if single-selection
      *   (`options.multi_select=false`) can be de-selected.
      * 
      * @class Buttons
@@ -116,7 +116,7 @@ export const Buttons = define_class({
         select: "int",
         button_class: "Button",
         multi_select: "int",
-        de_select: "boolean",
+        deselect: "boolean",
     }),
     options: {
         buttons: [],
@@ -124,7 +124,7 @@ export const Buttons = define_class({
         select: -1,
         button_class: Button,
         multi_select: 0,
-        de_select: false,
+        deselect: false,
     },
     static_events: {
         set_buttons: function(value) {
