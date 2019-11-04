@@ -83,7 +83,6 @@ export const LevelMeter = define_class({
      * @property {Boolean} [options.clip=false] - If clipping is enabled, this option is set to
      *   <code>true</code> when clipping happens. When automatic clipping is disabled, it can be set to
      *   <code>true</code> to set the clipping state.
-     * @property {Object} [options.clip_options={}] - Additional options for the {@link State} clip LED.
      * @property {Boolean} [options.show_hold=false] - If set to <code>true</code>, show the hold value LED.
      * @property {Integer} [options.hold_size=1] - Size of the hold value LED in the number of segments.
      * @property {Number|boolean} [options.auto_hold=false] - If set to <code>false</code> the automatic
@@ -117,7 +116,6 @@ export const LevelMeter = define_class({
         auto_clip: "int|boolean",
         auto_hold: "int|boolean",
         peak_value: "int|boolean",
-        clip_options: "object",
     }),
     options: {
         clip:         false,
@@ -132,7 +130,6 @@ export const LevelMeter = define_class({
         auto_clip:    false,
         auto_hold:    false,
         peak_value:   false,
-        clip_options: {},
     },
     static_events: {
         set_auto_clip: function(value) {
