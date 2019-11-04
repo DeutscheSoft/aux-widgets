@@ -54,8 +54,6 @@ export const ValueButton = define_class({
      * @param {Object} [options={ }] - An object containing initial options.
      * 
      * @property {Number} [options.value=0] - The value of the widget.
-     * @property {Number} [options.value_format=function (val) { return val.toFixed(2); }] - Callback to format the value label.
-     * @property {Number} [options.value_size=5] - Amount of digits of the value input.
      * @property {String} [options.direction="polar"] - Direction for changing the value.
      *   Can be "polar", "vertical" or "horizontal". See {@link DragValue} for more details.
      * @property {Number} [options.blind_angle=20] - If `options.direction` is "polar",
@@ -70,9 +68,7 @@ export const ValueButton = define_class({
     Implements: [Warning, Ranged],
     _options: Object.assign(Object.create(Button.prototype._options), Ranged.prototype._options, {
         value: "number",
-        value_format: "function",
-        value_size: "number",
-        drag_direction: "string",
+        direction: "string",
         rotation: "number",
         blind_angle: "number",
         snap: "number",
@@ -81,9 +77,7 @@ export const ValueButton = define_class({
     options:  {
         layout: "bottom",
         value: 0,
-        value_format:   function (val) { return val.toFixed(2); },
-        value_size:     5,
-        drag_direction: "polar",
+        direction: "polar",
         rotation:       45,
         blind_angle:    20,
         snap:           0.01,
@@ -92,7 +86,7 @@ export const ValueButton = define_class({
         layout: "top",
     },
     static_events: {
-        set_drag_direction: function(value) {
+        set_direction: function(value) {
             this.drag.set("direction", value);
         },
         set_drag_rotation: function(value) {
@@ -115,7 +109,7 @@ export const ValueButton = define_class({
          */
         this.drag = new DragValue(this, {
             node:      this.element,
-            direction: this.options.drag_direction,
+            direction: this.options.direction,
             rotation: this.options.rotation,
             blind_angle: this.options.blind_angle,
         });
@@ -205,6 +199,10 @@ define_child_widget(ValueButton, "value", {
         value_format: "format",
         value_size: "size",
     },
+    default_options: {
+        format: function (val) { return val.toFixed(2); },
+        size: 5,
+    }
     userset_delegate: true,
     static_events: {
         dblclick: function(e) {
