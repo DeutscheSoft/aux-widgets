@@ -43,7 +43,7 @@
     --aux-widget-base: #FFFFFF;
     --aux-widget-text: var(--aux-main-text);
     
-    --aux-active-base: #A6226A;
+    --aux-active-base: #1199AA;
     --aux-active-text: #FFFFFF;
     
     --aux-warn-base: #FF9900;
@@ -228,7 +228,7 @@
     background: var(--aux-active-base);
 }
 .aux-meter .aux-mask {
-    background: var(--aux-widget-base);
+    background: var(--aux-main-base);
     opacity: 0.86;
 }
 
@@ -319,7 +319,7 @@
 /* STATE */
 
 .aux-state {
-    background: var(--aux-active-base);
+    background: var(--aux-warn-base);
 }
 
 /* VALUE */
