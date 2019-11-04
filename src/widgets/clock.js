@@ -89,7 +89,7 @@ function set_labels() {
         var mleft   = parseInt(get_style(E, "margin-left")) || 0;
         var mright  = parseInt(get_style(E, "margin-right")) || 0;
         var mtop    = parseInt(get_style(E, "margin-top")) || 0;
-        //var mbottom = parseInt(get_style(E, "margin-bottom")) || 0;
+        var mbottom = parseInt(get_style(E, "margin-bottom")) || 0;
         var space   = O.size - mleft - mright - this._margin * 2;
         var scale   = space / bb.width;
         var pos     = O.size / 2;
@@ -106,7 +106,7 @@ function set_labels() {
                 S.add(function() {
                     this._label_upper.setAttribute("transform", "translate(" + pos + "," + (pos - bb.height / 2 - mtop) + ") " +
                                                    "scale(" + (scale * O.label_scale) + ")");
-                    this._label_lower.setAttribute("transform", "translate(" + pos + "," + (pos + bb.height / 2 + mtop) + ") " +
+                    this._label_lower.setAttribute("transform", "translate(" + pos + "," + (pos + bb.height / 2 + mbottom) + ") " +
                                                    "scale(" + (scale * O.label_scale) + ")");
                     draw_time.call(this, true);
                 }.bind(this), 1);
