@@ -1235,8 +1235,11 @@ export const ChartHandle = define_class({
                 var v = state.vdistance();
                 var range_x = O.range_x;
                 var range_y = O.range_y;
-                var x = range_x.px2val(state.x + v[0]);
-                var y = range_y.px2val(state.y + v[1]);
+                var ox = range_x.options;
+                var oy = range_y.options;
+                
+                var x = Math.min(ox.max, Math.max(ox.min, range_x.px2val(state.x + v[0])));
+                var y = Math.min(oy.max, Math.max(oy.min, range_y.px2val(state.y + v[1])));
 
                 self.userset("x", x);
                 self.userset("y", y);
