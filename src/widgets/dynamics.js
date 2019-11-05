@@ -94,7 +94,7 @@ export const Dynamics = define_class({
         threshold: 0,
         ratio:     1,
         makeup:    0,
-        range:     0,
+        range:     -200,
         gain:      0,
         reference: 0,
         knee: 0,
