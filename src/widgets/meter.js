@@ -171,7 +171,7 @@ export const Meter = define_class({
      *   scale labels. This is passed to Scale as option <code>labels</code>.
      * @property {Number} [options.value_label=0] - The value to be drawn in the value label.
      * @property {Boolean} [options.sync_value=true] - Synchronize the value on the bar with
-     *   the value label using `options.value_format` function.
+     *   the value label using `options.format_value` function.
      */
     
     Extends: Widget,
