@@ -300,6 +300,7 @@ function draw_title() {
  *   creating {@link ChartHandle} on init.
  * @property {Boolean} [options.show_handles=true] - Show or hide all
  *   handles.
+ * @property {Boolean} [options.square=false] - Keep the Graph as a square.
  * 
  */
 function geom_set(value, key) {
@@ -329,6 +330,7 @@ export const Chart = define_class({
         handles: "array", 
         show_handles: "boolean",
         depth: "number",
+        square: "boolean",
     }),
     options: {
         grid_x: [],
@@ -353,6 +355,7 @@ export const Chart = define_class({
                                 // borders to gain importance
         handles:           [],  // list of bands to create on init
         show_handles: true,
+        square: false,
     },
     static_events: {
         set_width: geom_set,
@@ -440,6 +443,15 @@ export const Chart = define_class({
         var w = inner_width(E) - tmp.left - tmp.right;
         var h = inner_height(E) - tmp.top - tmp.bottom;
 
+var tmp = css_space(S, "border", "padding");
+        var w = inner_width(E) - tmp.left - tmp.right;
+        var h = inner_height(E) - tmp.top - tmp.bottom;
+        
+        if (O.square) {
+            var s = Math.min(h, w);
+            w = h = s;
+        }
+        
         if (w > 0 && O._width !== w) {
             this.set("_width", w);
             this.range_x.set("basis", w);

@@ -101,6 +101,7 @@ export const Dynamics = define_class({
         grid_labels: function (val) { return val + (!val ? "dB":""); },
         show_handle: true,
         handle_label: false,
+        square: true,
     },
     static_events: {
         set_min: range_set,
@@ -205,28 +206,6 @@ export const Dynamics = define_class({
         }
     },
 
-    resize: function() {
-        var O = this.options;
-        var E = this.element;
-        var S = this.svg;
-
-        /* bypass the Chart resize logic here */
-        Chart.prototype.resize.call(this);
-
-        var tmp = css_space(S, "border", "padding");
-        var w = inner_width(E) - tmp.left - tmp.right;
-        var h = inner_height(E) - tmp.top - tmp.bottom;
-
-        var s = Math.min(h, w);
-
-        if (s > 0 && s !== O._width) {
-            this.set("_width", s);
-            this.set("_height", s);
-            this.range_x.set("basis", s);
-            this.range_y.set("basis", s);
-        }
-    },
-    
     draw_graph: function () {
         var O = this.options;
         if (O.type === false) return;
