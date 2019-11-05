@@ -362,3 +362,76 @@ export const Dynamics = define_class({
         return Chart.prototype.set.call(this, key, val);
     },
 });
+
+/**
+ * Compressor is a pre-configured {@link Dynamics} widget.
+ * @extends Dynamics
+ * @class Compressor
+ */
+export const Compressor = define_class({
+    Extends: Dynamics,
+    options: { type: "compressor" },
+    draw: function(O, element)
+    {
+        /**
+         * @member {HTMLDivElement} Compressor#element - The main DIV container.
+         *   Has class <code>.aux-compressor</code>.
+         */
+        add_class(element, "aux-compressor");
+        Dynamics.prototype.draw.call(this, O, element);
+    },
+});
+/**
+ * Expander is a pre-configured {@link Dynamics} widget.
+ * @extends Dynamics
+ * @class Expander
+ */
+export const Expander = define_class({
+    Extends: Dynamics,
+    options: { type: "expander" },
+    draw: function(O, element)
+    {
+        /**
+         * @member {HTMLDivElement} Expander#element - The main DIV container.
+         *   Has class <code>.aux-expander</code>.
+         */
+        add_class(element, "aux-expander");
+        Dynamics.prototype.draw.call(this, O, element);
+    },
+});
+/**
+ * Gate is a pre-configured {@link Dynamics} widget.
+ * @extends Dynamics
+ * @class Gate
+ */
+export const Gate = define_class({
+    Extends: Dynamics,
+    options: { type: "gate", range_z: {min:1,max:1} },
+    draw: function(O, element)
+    {
+        /**
+         * @member {HTMLDivElement} Gate#element - The main DIV container.
+         *   Has class <code>.aux-gate</code>.
+         */
+        add_class(element, "aux-gate");
+        Dynamics.prototype.draw.call(this, O, element);
+    },
+});
+/**
+ * Limiter is a pre-configured {@link Dynamics} widget.
+ * @extends Dynamics
+ * @class Limiter
+ */
+export const Limiter = define_class({
+    Extends: Dynamics,
+    options: { type: "limiter", range_z: {min:1,max:1} },
+    draw: function(O, element)
+    {
+        /**
+         * @member {HTMLDivElement} Limiter#element - The main DIV container.
+         *   Has class <code>.aux-limiter</code>.
+         */
+        add_class(element, "aux-limiter");
+        Dynamics.prototype.draw.call(this, O, element);
+    },
+});
