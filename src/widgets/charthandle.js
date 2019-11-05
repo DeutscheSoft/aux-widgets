@@ -404,7 +404,7 @@ function redraw_handle(O, X) {
 
     var x = range_x.val2px(O.x);
     var y = range_y.val2px(O.y);
-    var z = range_z.val2coef(O.z);
+    var z = range_z.val2coef(O.z)|0;
 
     var tmp;
 
