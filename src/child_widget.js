@@ -119,19 +119,24 @@ export function define_child_widget(widget, name, config) {
 
 
     /* trigger child widget creation after initialization */
-    add_static_event(widget, "initialized", function() {
+    add_static_event(widget, "initialize", function() {
+        /* we do not want to trash the class cache */
+        this[name] = null;
+    });
+    add_static_event(widget, "initialize_children", function() {
         /* we do not want to trash the class cache */
         if (!this[name])
         {
-          this[name] = null;
           this.set(key, this.options[key]);
         }
     });
 
     /* clean up on destroy */
     add_static_event(widget, "destroy", function() {
-        if (this[name]) {
-            this[name].destroy();
+        const child = this[name];
+
+        if (child) {
+            child.destroy();
             this[name] = null;
         }
     });
