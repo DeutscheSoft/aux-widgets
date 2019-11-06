@@ -208,9 +208,11 @@ export const Pages = define_class({
             if (!options) options = {}; 
             options.content = content;
             p = new Container(options);
-        } else {
+        } else if (content instanceof Container) {
             // assume here content is an instance of Container
             p = content;
+        } else {
+          throw new TypeError('Unexpected argument type.');
         }
         
         p.add_class("aux-page");
