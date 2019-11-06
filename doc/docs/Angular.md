@@ -152,3 +152,20 @@ itself.
 
     <aux-fader min=-96 max=6 [auxBind]="{ value: value_observable }">
     </aux-fader>
+
+# Caveats
+
+## Order of options
+
+In principle the order of options should not matter. However, there are
+*currently* some exceptions to this rule. For instance, the `value` option is
+usually clipped to the range `min .. max` when being set. For these situations
+it is important to make sure that options such as `min` and `max` are set before
+setting the value. When using standard WebComponents with attributes, the set of
+initial options is set at once on creation of the Widget. However, when using
+WebComponents in Angular, the attributes are not applied on creation but
+afterwards seperately. They are currently added in order in which they appear in
+the template. It is therefore advisable to apply `min`, `max` and similar
+options at the beginning. Example:
+
+    <aux-fader min=-96 max=6 value=3></aux-fader>
