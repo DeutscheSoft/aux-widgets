@@ -29,6 +29,8 @@ function draw_lines(a, mode, last) {
 
     for (i = 0; i < a.length; i++) {
         obj = a[i];
+        if (typeof obj === "number")
+            obj = {pos:obj};
         if (obj.label) {
             label = make_svg("text");
             label.textContent = obj.label;
@@ -162,12 +164,14 @@ export const Grid = define_class({
      * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
-     * @property {Array<Object>} [options.grid_x=[]] - Array for vertical grid line definitions with the members:
+     * @property {Array<Object|Number>} [options.grid_x=[]] - Array for vertical grid lines
+     *   containing either numbers or objects with the members:
      * @property {Number} [options.grid_x.pos] - The value where to draw grid line and correspon ding label.
      * @property {String} [options.grid_x.color] - A valid CSS color string to colorize the elements.
      * @property {String} [options.grid_x.class] - A class name for the elements.
      * @property {String} [options.grid_x.label] - A label string.
-     * @property {Array<Object>} [options.grid_y=[]] - Array for horizontal grid lines with the members:
+     * @property {Array<Object|Number>} [options.grid_y=[]] - Array for horizontal grid lines
+     *   containing either positions or objects with the members:
      * @property {Number} [options.grid_y.pos] - The value where to draw grid line and corresponding label.
      * @property {String} [options.grid_y.color] - A valid CSS color string to colorize the elements.
      * @property {String} [options.grid_y.class] - A class name for the elements.
