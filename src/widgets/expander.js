@@ -131,7 +131,7 @@ function update_visibility() {
     }
 }
 var expander_groups = { };
-export const Expander = define_class({
+const Expander = define_class({
     /**
      * Expander is a container which can be toggled between two different states,
      * expanded and collapsed. It can be used to implement overlay popups, but it is
@@ -276,3 +276,5 @@ define_child_widget(Expander, "button", {
         click: toggle,
     },
 });
+
+export const Expand = Expander;
