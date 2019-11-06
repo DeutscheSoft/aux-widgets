@@ -135,6 +135,7 @@ export const Base = define_class({
     constructor: function(...args)
     {
       this.initialize(...args);
+      this.initialize_children();
       this.initialized();
     },
     initialize : function(options) {
@@ -143,6 +144,9 @@ export const Base = define_class({
         this.__native_handler = native_handler.bind(this);
         this.set_options(options);
         this.emit("initialize");
+    },
+    initialize_children: function() {
+      this.emit('initialize_children');
     },
     /**
      * Returns the type of an option. If the given option does not exist,
