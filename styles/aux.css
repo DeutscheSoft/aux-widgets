@@ -265,6 +265,13 @@
     border-radius: var(--aux-border-radius);
 }
 
+/* PANORAMA */
+
+.aux-panorama .aux-center {
+    stroke: var(--aux-warn-base);
+    opacity: 1;
+}
+
 /* ROOT */
 
 .aux-root {

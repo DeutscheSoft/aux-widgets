@@ -31,6 +31,7 @@ export * from './widgets/navigation.js';
 export * from './widgets/notifications.js';
 export * from './widgets/pager.js';
 export * from './widgets/pages.js';
+export * from './widgets/panorama.js';
 export * from './widgets/phasemeter.js';
 export * from './widgets/charthandle.js';
 export * from './widgets/root.js';

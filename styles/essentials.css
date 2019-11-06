@@ -999,6 +999,17 @@ body.aux-cursor-row-resize * {
     100% { transform: translateY(100%); }
 }
 
+/* PANORAMA */
+
+.aux-panorama .aux-gridline.aux-horizontal,
+.aux-panorama .aux-gridlabel.aux-horizontal {
+    display: none;
+}
+.aux-panorama.aux-surround .aux-gridline.aux-horizontal,
+.aux-panorama.aux-surround .aux-gridlabel.aux-horizontal {
+    display: inline;
+}
+
 /* SCALE */
 
 .aux-scale {
