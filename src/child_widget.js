@@ -19,7 +19,7 @@ function get_child_options(parent, name, options, config) {
             ret[key.substr(pref.length)] = options[key];
         }
 
-        if (inherit_options && blacklist_options.indexOf(tmp) < 0) {
+        if (inherit_options && blacklist_options.indexOf(key) < 0) {
             if (key in config.create.prototype._options && !(key in Widget.prototype._options)) {
                 ret[key] = options[key];
             }
