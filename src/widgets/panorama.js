@@ -102,12 +102,17 @@ export const Panorama = define_class({
          */
         this.set_parent(null);
     },
-    draw: function(O, element)
-    {
-        add_class(element, "aux-panorama");
+    initialized: function () {
+        Chart.prototype.initialized.call(this);
+        var O = this.options;
         this.set("range", O.range);
         this.set("digits", O.digits);
         this.set("mode", O.mode);
+    },
+    draw: function(O, element)
+    {
+        add_class(element, "aux-panorama");
+        
         Chart.prototype.draw.call(this, O, element);
     },
 });
