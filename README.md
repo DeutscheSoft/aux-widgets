@@ -1,44 +1,64 @@
 # ![AUX](logo.png)
 
-AUX is a JavaScript widget library with special focus on building
-low latency user interfaces for audio applications. It contains a wide range
+AUX is a JavaScript widget library with special focus on building low
+latency user interfaces for audio applications. It contains a wide range
 of widgets such as faders, knobs, levelmeters and equalizers.
+
+## Repository structure
+
+The JavaScript code in this repository uses ES6 modules. When
+integrating AUX into an application it should be sufficient to import
+the required widgets or components from the main file `src/index.js`.
+
+AUX widgets are implemented as JavaScript widgets. Some of those widgets
+have corresponding WebComponents. All widgets can be found under
+`src/widgets/` and the corresponding components are located at
+`src/components/`. The document `doc/docs/Components.md` describes how
+the components work.
+
+Default themes can be found in the `styles` directory. The document
+`doc/docs/Themeing.md` describes how to create themes based no the
+default theme(s) contained in this repository.
 
 ## Design Goals
 
-AUX is written in pure JavaScript and has no external dependencies.
-It is supposed to run in browsers which support ECMAScript 6.
-AUX was designed to be lightweight and fast while keeping the
-full flexibility which comes with CSS. AUX widgets offer consistent
-and intuitive APIs.
+AUX is written in pure JavaScript and has no external dependencies. It
+is supposed to run in browsers which support ECMAScript 6.  AUX was
+designed to be lightweight and fast while keeping the full flexibility
+which comes with CSS. AUX widgets offer consistent and intuitive APIs.
 
 ## Documentation
 
 The complete API documentation can be found at [http://docs.deuso.de/].
-The documentation contains interactive examples for many Widgets.
 
-Alternatively, the documentation can be directly built from the source code.
-The documentation in the source files uses the common jsdoc syntax and [JSDoc 3](https://usejsdoc.org).
-can be used to generate the documentation. If you have jsdoc installed, simply run
+Alternatively, the documentation can be directly built from the source
+code.  The documentation in the source files uses the common jsdoc
+syntax and [JSDoc 3](https://usejsdoc.org).  can be used to generate the
+documentation. If you have jsdoc installed, simply run
 
-    make jsdoc
+    npm run build
 
-Apart from the documentation inside the source tree, there are several longer
-introductory articles and usage examples in the directories `doc/docs/` and `doc/tutorials/`.
-These articles automatically get added to the generated documentation by our jsdoc configuration.
+inside the `doc` directory.
+
+Apart from the documentation inside the source tree, there are several
+longer introductory articles and usage examples in the directories
+`doc/docs/`.
+
+## Examples
+
+Several component examples can be found in seperate HTML files in the
+`examples/` directory. When serving the repository from a HTTP server
+all examples can be viewed when opening the file `examples.html`.
 
 ## Demos
 
-Several online demos of interfaces using AUX can be found at [http://demo.deuso.de].
-All of those demos are written in [AWML](https://github.com/DeutscheSoft/AWML), which is
-a HTML5 based markup language, which can be used to create AUX-based interfaces.
-
-For most use-cases using AWML is much more convenient than building an interface in
-JavaScript using AUX directly.
+Several online demos of interfaces using AUX can be found at
+[http://demo.deuso.de].
 
 ## Reporting Bugs
 
-When you find a bug in this software, please report it to our issue tracker at [https://github.com/DeutscheSoft/toolkit].
+If you find a bug in this software, please report it to our issue
+tracker at [https://gitlab.deuso.de/WebUI/AUX].
 
 ## License
 
