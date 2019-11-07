@@ -1010,6 +1010,44 @@ body.aux-cursor-row-resize * {
     display: inline;
 }
 
+/* AUX-PROGRESSBAR */
+
+.aux-progressbar.aux-top {
+    grid-template-areas: "label bar value" 
+                             ". scale .";
+}
+.aux-progressbar.aux-bottom {
+    grid-template-areas: ". scale ."
+                         "label bar value";
+}
+.aux-progressbar.aux-left {
+    grid-template-areas: "label ."
+                         "bar scale"
+                         "value .";
+}
+.aux-progressbar.aux-right {
+    grid-template-areas: ". label"
+                         "scale bar"
+                         ". value";
+}
+.aux-progressbar.aux-horizontal > .aux-bar {
+    min-width: 100px;
+}
+.aux-progressbar.aux-vertical > .aux-bar {
+    min-height: 100px;
+}
+.aux-progressbar.aux-horizontal > .aux-label {
+    justify-self: end;
+}
+.aux-progressbar.aux-horizontal > .aux-value {
+    justify-self: start;
+}
+.aux-progressbar.aux-vertical > .aux-label,
+.aux-progressbar.aux-vertical > .aux-bar,
+.aux-progressbar.aux-vertical > .aux-value {
+    justify-self: center;
+}
+
 /* SCALE */
 
 .aux-scale {

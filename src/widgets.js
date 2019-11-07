@@ -33,6 +33,7 @@ export * from './widgets/pager.js';
 export * from './widgets/pages.js';
 export * from './widgets/panorama.js';
 export * from './widgets/phasemeter.js';
+export * from './widgets/progressbar.js';
 export * from './widgets/charthandle.js';
 export * from './widgets/root.js';
 export * from './widgets/scale.js';

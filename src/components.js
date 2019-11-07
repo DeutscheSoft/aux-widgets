@@ -22,6 +22,7 @@ export * from './components/pager.js';
 export * from './components/pages.js';
 export * from './components/panorama.js';
 export * from './components/phasemeter.js';
+export * from './components/progressbar.js';
 export * from './components/root.js';
 export * from './components/scale.js';
 export * from './components/select.js';
