@@ -389,7 +389,7 @@ export const Circular = define_class({
         show_hand:  true,
         x:          0,
         y:          0,
-        dots_defaults: {width: 2, length: 2, margin: 5},
+        dots_defaults: {width: 1, length: 3, margin: 0.5},
         dots:       [],
         markers_defaults: {thickness: 3, margin: 0},
         markers:    [],
