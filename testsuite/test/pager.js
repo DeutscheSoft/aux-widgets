@@ -5,7 +5,7 @@ import {
 
 import { assert, compare, object_minus } from './helpers.js';
 
-describe.only('Pager', () => {
+describe('Pager', () => {
   it('creating with pages', () => {
     const p = new Pager({
       pages: [
