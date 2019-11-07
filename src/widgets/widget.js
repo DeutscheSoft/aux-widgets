@@ -690,7 +690,7 @@ export const Widget = define_class({
         if (this.hidden()) this.show();
         else this.hide();
     },
-    set_parent: function(parent) {
+    set_parent: function(parent, no_remove_child) {
         const old_parent = this.parent;
 
         if (old_parent === parent) return;
@@ -715,7 +715,7 @@ export const Widget = define_class({
         }
 
 
-        if (old_parent) {
+        if (old_parent && !no_remove_child) {
             old_parent.remove_child(this);
         }
     },
@@ -760,10 +760,7 @@ export const Widget = define_class({
      */
     remove_child : function(child) {
         if (child.parent === this)
-        {
-          child.set_parent(void(0));
-          return;
-        }
+          child.set_parent(void(0), true);
         child.disable_draw();
         var C = this.children;
         if (C === null) return;
