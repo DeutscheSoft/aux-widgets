@@ -43,10 +43,10 @@
     --aux-widget-base: #FFFFFF;
     --aux-widget-text: var(--aux-main-text);
     
-    --aux-active-base: #1199AA;
+    --aux-active-base: #1f93b7;
     --aux-active-text: #FFFFFF;
     
-    --aux-warn-base: #FF9900;
+    --aux-warn-base: #ee6b11;
     --aux-warn-text: #FFFFFF;
     
     --aux-contrast-base: var(--aux-main-text);
@@ -300,16 +300,16 @@
     background: var(--aux-active-base);
 }
 .aux-scale.aux-top > .aux-pointer {
-    border-bottom-color: var(--aux-active-base);
+    border-bottom-color: var(--aux-warn-base);
 }
 .aux-scale.aux-left > .aux-pointer {
-    border-right-color: var(--aux-active-base);
+    border-right-color: var(--aux-warn-base);
 }
 .aux-scale.aux-right > .aux-pointer {
-    border-left-color: var(--aux-active-base);
+    border-left-color: var(--aux-warn-base);
 }
 .aux-scale.aux-bottom > .aux-pointer {
-    border-top-color: var(--aux-active-base);
+    border-top-color: var(--aux-warn-base);
 }
 
 /* SELECT */
