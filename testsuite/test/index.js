@@ -7,3 +7,4 @@ export * from './widgets.js';
 export * from './timers.js';
 export * from './bindings.js';
 export * from './pager.js';
+export * from './select.js';

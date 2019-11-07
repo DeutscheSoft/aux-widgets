@@ -54,3 +54,13 @@ export function sleep(n)
 {
   return new Promise((resolve) => setTimeout(resolve, n));
 }
+
+export function wait_for_event(widget, name)
+{
+  return new Promise((resolve, reject) => {
+    const unsubscribe = widget.subscribe(name, () => {
+      resolve();
+      unsubscribe();
+    });
+  });
+}
