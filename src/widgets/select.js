@@ -85,11 +85,15 @@ function low_remove_entry(entry) {
   var entries = this.entries;
   var id = entries.indexOf(entry);
 
-  if (id === -1) throw new Error("Entry removed twice.");
+  if (id === -1)
+  {
+    console.error('element %o not found in %o', entry.get('value'), entries.map((e) => e.get('value')));
+    throw new Error("Entry removed twice.");
+  }
 
   // remove from DOM
   if (li.parentElement == this._list)
-      this._list.removeChild(li);
+      li.remove();
   // remove from list
   entries.splice(id, 1);
   // selection
@@ -280,49 +284,79 @@ export const Select = define_class({
      * @param {mixed} entry - A string to be displayed and used as the value,
      *   an object with members <code>label</code> and <code>value</code>
      *   or an instance of {@link SelectEntry}.
+     * @param {integer} [position] - The position in the list to add the new
+     *   entry at. If omitted, the entry is added at the end.
      * 
      * @emits Select.entryadded
      */
-    add_entry: function (ent) {
-        var O = this.options;
+    add_entry: function (ent, position) {
         var entry;
-        var entries = this.entries;
 
-        if (SelectEntry.prototype.isPrototypeOf(ent)) {
+        if (typeof(ent) === 'object' && ent instanceof SelectEntry)
+        {
             entry = ent;
-        } else {
+        }
+        else if (typeof ent === 'string')
+        {
             entry = new SelectEntry({
-                value: (typeof ent === "string") ? ent : ent.value,
-                label: (typeof ent === "string")
-                       ? ent : (ent.label !== void(0))
-                       ? ent.label : ent.value.toString(),
+                value: ent,
+                label: ent,
             });
         }
-        this.add_child(entry);
-        entries.push(entry);
-        this._list.appendChild(entry.element);
-
-        var id;
-
-        if (O.sort) {
-          entries.sort(O.sort);
-          id = entries.indexOf(entry);
-          if (id !== entries.length - 1)
-            this._list.insertBefore(entry.element, entries[id+1].element);
-        } else {
-          id = entries.length - 1;
+        else if (typeof ent === 'object' && 'value' in ent && 'label' in ent)
+        {
+            entry = new SelectEntry({
+                value: ent.value,
+                label: ent.label,
+            });
         }
+        else
+        {
+          throw new TypeError('Unsupported type of entry.');
+        }
+
+        if (position !== void(0))
+        {
+          if (typeof(position) !== 'number')
+            throw new TypeError('Expected integer.');
+
+          if (position < 0 || position > this.entries.length)
+            throw new TypeError('Index out of bounds.');
+
+          this.entries.splice(position, 0, entry);
+        }
+
+        this.add_child(entry);
+    },
+    add_child: function(child)
+    {
+        Button.prototype.add_child.call(this, child);
+
+        if (!(child instanceof SelectEntry)) return;
+
+        const O = this.options;
+        const entries = this.entries;
+        const entry = child;
+
+        if (!entries.includes(entry))
+          entries.push(entry);
+
+        if (O.sort)
+          entries.sort(O.sort);
+
+        const index = entries.indexOf(entry);
         
+        // invalidate entries.
         this.invalid.entries = true;
 
-        if (this.options.selected === id) {
-            this.invalid.selected = true;
-            this.trigger_draw();
-        } else if (this.options.selected > id) {
-            this.set("selected", this.options.selected+1);
-        } else {
-            this.trigger_draw();
+        const selected = this.options.selected;
+
+        // adjust selected
+        if (selected !== false && selected >= index)
+        {
+            this.set("selected", selected+1);
         }
+        this.trigger_draw();
         /**
          * Is fired when a new {@link SelectEntry} is added to the list.
          * 
@@ -566,6 +600,19 @@ export const Select = define_class({
         var I = this.invalid;
         var O = this.options;
         var E = this.element;
+
+        if (I.entries)
+        {
+          I.entries = false;
+
+          const _list = this._list;
+          const entries = this.entries;
+
+          for (let i = 0; i < entries.length; i++)
+          {
+            _list.appendChild(entries[i].element);
+          }
+        }
 
         if (I.selected || I.value) {
             I.selected = I.value = false;

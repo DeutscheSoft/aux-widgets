@@ -3,9 +3,57 @@ import {
   } from './../component_helpers.js';
 import { Select, SelectEntry } from './../widgets/select.js';
 
-function add_entry(select, entry)
+function find_previous_entry(node)
 {
-  select.add_entry(entry);
+  node = node.previousSibling;
+
+  while (node)
+  {
+    const widget = node.auxWidget;
+
+    if (widget && widget instanceof SelectEntry)
+    {
+      return widget;
+    }
+
+    node = node.previousSibling;
+  }
+}
+
+function find_next_entry(node)
+{
+  node = node.nextSibling;
+
+  while (node)
+  {
+    const widget = node.auxWidget;
+
+    if (widget && widget instanceof SelectEntry)
+    {
+      return widget;
+    }
+
+    node = node.nextSibling;
+  }
+}
+
+function add_entry(select, entry, entry_component)
+{
+  const prev = find_previous_entry(entry_component);
+  const next = find_next_entry(entry_component);
+
+  let position;
+
+  if (prev)
+  {
+    position = select.index_by_entry(prev) + 1;
+  }
+  else if (next)
+  {
+    position = select.index_by_entry(next);
+  }
+
+  select.add_entry(entry, position === false ? undefined : position);
 }
 
 function remove_entry(select, entry)
