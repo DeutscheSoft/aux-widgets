@@ -2,7 +2,7 @@ import { SelectComponent, SelectEntryComponent, Select } from '../src/index.js';
 
 import { assert, wait_for_event } from './helpers.js';
 
-describe.only('Select', () => {
+describe('Select', () => {
 
   function check_select(widget)
   {
