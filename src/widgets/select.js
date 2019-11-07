@@ -137,6 +137,9 @@ export const Select = define_class({
      * @property {Array<Object>} [options.entries=[]] - The list of {@SelectEntry}. Each member is an
      *   object with the two properties <code>label</code> and <code>value</code>, a string used
      *   as label for constructing a {@SelectEntry} or an instance of {@SelectEntry}.
+     * @property {String|Boolean} [options.placeholder=false] - Placeholder test
+     *   for the button label. Set to <code>false</code> to have an empty
+     *   placeholder. This placeholder is shown when no entry is selected.
      *
      */
     Extends: Button,
@@ -148,6 +151,7 @@ export const Select = define_class({
         show_list: "boolean",
         sort: "function",
         resized: "boolean",
+        placeholder: "string|boolean",
     }),
     options: {
         entries: [], // A list of strings or objects {label: "Title", value: 1} or SelectEntry instance
@@ -156,6 +160,7 @@ export const Select = define_class({
         auto_size: true,
         show_list: false,
         icon: "arrowdown",
+        placeholder: false,
     },
     static_events: {
         click: function() { this.set("show_list", !this.options.show_list); },
@@ -711,7 +716,7 @@ export const Select = define_class({
                     this.set("label", entry.options.label);
                 } else {
                     Button.prototype.set.call(this, "value", void 0); 
-                    this.set("label", false);
+                    this.set("label", this.get('placeholder'));
                 }
                 break;
             case "entries":
