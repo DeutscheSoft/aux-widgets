@@ -105,6 +105,10 @@ function draw_lines(a, mode, last) {
         }
 
         S.add(function() {
+            var elements = this.element.querySelectorAll(".aux-gridline.aux-" + (mode ? "horizontal" : "vertical"));
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].parentElement.removeChild(elements[i]);
+            }
             for (i = 0; i < a.length; i++) {
                 label = labels[i];
                 if (label) {
