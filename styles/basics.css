@@ -361,6 +361,9 @@
 .aux-multimeter.aux-horizontal > .aux-label {
     text-align: center;
 }
+.aux-multimeter.aux-right > .aux-label {
+    text-align: right;
+}
 .aux-multimeter.aux-vertical > .aux-meter {
     margin: 0 var(--aux-multimeter-gridgap);
 }
