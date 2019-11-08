@@ -76,21 +76,21 @@
 }
 .aux-button:hover {
     color: var(--aux-main-text);
-    border: 1px solid var(--aux-active-base);
+    border-color: var(--aux-active-base);
     cursor: pointer;
 }
 .aux-button.aux-active {
     background: var(--aux-active-base);
     color: var(--aux-active-text);
-    border: 1px solid var(--aux-active-base);
+    border-color: var(--aux-active-base);
 }
 .aux-button.aux-active:hover {
-    border: 1px solid var(--aux-active-text);
+    border-color: var(--aux-active-text);
 }
 .aux-button.aux-warn {
     background: var(--aux-warn-base);
     color: var(--aux-warn-text);
-    border: 1px solid var(--aux-warn-base);
+    border-color: var(--aux-warn-base);
 }
 
 /* CHART */
@@ -349,6 +349,9 @@ input.aux-value.aux-active {
 
 /* VALUEBUTTON */
 
+.aux-valuebutton {
+    border-width: 0px;
+}
 .aux-valuebutton .aux-value {
     background: var(--aux-active-base);
     color: var(--aux-active-text);
