@@ -257,7 +257,6 @@ export const Widget = define_class({
         set: function (key, val) {
             if (!this._presetting && this._preset_origins.hasOwnProperty(key)) {
                 this._preset_origins[key] = val;
-                console.log(key, val);
             }
         },
     },
