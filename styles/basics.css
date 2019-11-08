@@ -75,7 +75,7 @@
     --aux-meter-size: 16px;
     --aux-meter-gridgap: 2px;
     
-    --aux-multimeter-labelwidth: 32px;
+    --aux-multimeter-labelwidth: 40px;
     --aux-multimeter-valuewidth: 40px;
     --aux-multimeter-labelheight: 20px;
     --aux-multimeter-reduce: 1px;
@@ -341,6 +341,10 @@
 .aux-multimeter {
     padding-top: var(--aux-multimeter-labelheight);
 }
+.aux-multimeter.aux-bottom {
+    padding-top: 0;
+    padding-bottom: var(--aux-multimeter-labelheight);
+}
 .aux-multimeter > .aux-label {
     position: absolute;
     left: 0;
@@ -349,8 +353,13 @@
     text-align: left;
     margin: 0 0 var(--aux-main-margin) 0;
 }
+.aux-multimeter.aux-bottom > .aux-label {
+    bottom: 0;
+    top: auto;
+    margin: var(--aux-main-margin) 0 0 0;
+}
 .aux-multimeter.aux-horizontal > .aux-label {
-    margin-left: calc(var(--aux-meter-gridgap) + var(--aux-multimeter-labelwidth));
+    text-align: center;
 }
 .aux-multimeter.aux-vertical > .aux-meter {
     margin: 0 var(--aux-multimeter-gridgap);
