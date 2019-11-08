@@ -62,6 +62,35 @@ export const MultiMeter = define_class({
      * MultiMeter is a collection of {@link LevelMeter}s to show levels of channels
      * containing multiple audio streams. It offers all options of {@link LevelMeter} and
      * {@link Meter} which are passed to all instantiated level meters.
+     * 
+     * Available presets:
+     * 
+     * <ul>
+     *   <li>mono</li>
+     *   <li>stereo</li>
+     *   <li>3.1</li>
+     *   <li>5.1</li>
+     *   <li>dolby_digital_1_0</li>
+     *   <li>dolby_digital_2_0</li>
+     *   <li>dolby_digital_3_0</li>
+     *   <li>dolby_digital_2_1</li>
+     *   <li>dolby_digital_2_1.1</li>
+     *   <li>dolby_digital_3_1</li>
+     *   <li>dolby_digital_3_1.1</li>
+     *   <li>dolby_digital_2_2</li>
+     *   <li>dolby_digital_2_2.1</li>
+     *   <li>dolby_digital_3_2</li>
+     *   <li>dolby_digital_3_2.1</li>
+     *   <li>dolby_digital_ex</li>
+     *   <li>dolby_stereo</li>
+     *   <li>dolby_digital</li>
+     *   <li>dolby_pro_logic</li>
+     *   <li>dolby_pro_logic_2</li>
+     *   <li>dolby_pro_logic_2x</li>
+     *   <li>dolby_e_mono</li>
+     *   <li>dolby_e_stereo</li>
+     *   <li>dolby_e_5.1_stereo</li>
+     * </ul>
      *
      * @class MultiMeter
      * 
@@ -73,9 +102,8 @@ export const MultiMeter = define_class({
      * @property {String} [options.label=""] - The label of the multi meter. Set to `false` to hide the label from the DOM.
      * @property {Array<String>} [options.labels=["L", "R"]] - An Array containing labels for the level meters. Their order is the same as the meters.
      * @property {Array<Number>} [options.values=[]] - An Array containing values for the level meters. Their order is the same as the meters.
-     * @property {Array<Number>} [options.labels=[]] - An Array containing label values for the level meters. Their order is the same as the meters.
+     * @property {Array<Number>} [options.value_labels=[]] - An Array containing label values for the level meters. Their order is the same as the meters.
      * @property {Array<Boolean>} [options.clips=[]] - An Array containing clippings for the level meters. Their order is the same as the meters.
-     * @property {Array<Number>} [options.peaks=[]] - An Array containing peak values for the level meters. Their order is the same as the meters.
      * @property {Array<Number>} [options.tops=[]] - An Array containing values for top for the level meters. Their order is the same as the meters.
      * @property {Array<Number>} [options.bottoms=[]] - An Array containing values for bottom for the level meters. Their order is the same as the meters.
      */
@@ -96,6 +124,32 @@ export const MultiMeter = define_class({
         labels: ["L", "R"],
         layout: "left",
         show_scale: true,
+        presets: {
+            "mono"   : {count:1, labels:["C"]},
+            "stereo" : {count:2, labels:["L","R"]},
+            "3.1"    : {count:4, labels:["L", "C", "R", "LF"]},
+            "5.1"    : {count:6, labels:["L", "C", "R", "L'", "R'", "LF"]},
+            "dolby_digital_1_0"   : {count:1, labels:["C"]},
+            "dolby_digital_2_0"   : {count:2, labels:["L", "R"]},
+            "dolby_digital_3_0"   : {count:3, labels:["L", "R", "C"]},
+            "dolby_digital_2_1"   : {count:3, labels:["L", "R", "C'"]},
+            "dolby_digital_2_1.1" : {count:4, labels:["L", "R", "C'", "LF"]},
+            "dolby_digital_3_1"   : {count:4, labels:["L", "R", "C", "C'"]},
+            "dolby_digital_3_1.1" : {count:5, labels:["L", "R", "C", "C'", "LF"]},
+            "dolby_digital_2_2"   : {count:4, labels:["L", "R", "L'", "R'"]},
+            "dolby_digital_2_2.1" : {count:5, labels:["L", "R", "L'", "R'", "LF"]},
+            "dolby_digital_3_2"   : {count:5, labels:["L", "R", "C", "L'", "R'"]},
+            "dolby_digital_3_2.1" : {count:6, labels:["L", "R", "C", "L'", "R'", "LF"]},
+            "dolby_digital_ex"    : {count:7, labels:["L", "R", "C", "L'", "R'", "C'", "LF"]},
+            "dolby_stereo"        : {count:4, labels:["L", "R", "C", "C'"]},
+            "dolby_digital"       : {count:4, labels:["L", "R", "C", "C'"]},
+            "dolby_pro_logic"     : {count:4, labels:["L", "R", "C", "C'"]},
+            "dolby_pro_logic_2"   : {count:6, labels:["L", "R", "C", "L'", "R'", "LF"]},
+            "dolby_pro_logic_2x"  : {count:8, labels:["L", "R", "C", "L'", "L''", "R''", "R'", "LF"]},
+            "dolby_e_mono"        : {count:8, labels:["1", "2", "3", "4", "5", "6", "7", "8"]},
+            "dolby_e_stereo"      : {count:8, labels:["1L", "1R", "2L", "2R", "3L", "3R", "4L", "4R"]},
+            "dolby_e_5.1_stereo"  : {count:8, labels:["1L", "1R", "1C", "1L'", "1R'", "1LF", "2L", "2R"]},
+        }
     },
     initialize: function (options) {
         Container.prototype.initialize.call(this, options, true);
@@ -209,10 +263,6 @@ function map_child_option(value, key) {
         for (i = 0; i < M.length; i++) M[i].set(key, value);
     }
 }
-
-add_static_event(MultiMeter, "set_labelss", function(value) {
-    map_child_option.call(this, value, "label");
-});
 
 for (var key in object_sub(LevelMeter.prototype._options, Container.prototype._options)) {
     if (MultiMeter.prototype._options[key]) continue;

@@ -30,7 +30,12 @@
 :root {
     
     --aux-main-margin: 2px;
+    
     --aux-main-fontsize: 14px;
+    
+    --aux-main-tinyfont: 8px;
+    --aux-main-smallfont: 11px;
+    --aux-main-bigfont: 18px;
     
     --aux-clickable-size: 40px;
     
@@ -70,6 +75,8 @@
     --aux-meter-size: 16px;
     --aux-meter-gridgap: 2px;
     
+    --aux-multimeter-labelwidth: 32px;
+    --aux-multimeter-valuewidth: 40px;
     --aux-multimeter-labelheight: 20px;
     --aux-multimeter-reduce: 1px;
     --aux-multimeter-gridgap: 1px;
@@ -342,11 +349,32 @@
     text-align: left;
     margin: 0 0 var(--aux-main-margin) 0;
 }
+.aux-multimeter.aux-horizontal > .aux-label {
+    margin-left: calc(var(--aux-meter-gridgap) + var(--aux-multimeter-labelwidth));
+}
 .aux-multimeter.aux-vertical > .aux-meter {
     margin: 0 var(--aux-multimeter-gridgap);
 }
 .aux-multimeter.aux-horizontal > .aux-meter {
     margin: var(--aux-multimeter-gridgap) 0;
+}
+.aux-multimeter .aux-meter > .aux-label {
+    font-size: var(--aux-main-smallfont);
+}
+.aux-multimeter.aux-count-5 .aux-meter > .aux-label,
+.aux-multimeter.aux-count-6 .aux-meter > .aux-label,
+.aux-multimeter.aux-count-7 .aux-meter > .aux-label,
+.aux-multimeter.aux-count-8 .aux-meter > .aux-label,
+.aux-multimeter.aux-count-9 .aux-meter > .aux-label,
+.aux-multimeter.aux-count-10 .aux-meter > .aux-label {
+    font-size: var(--aux-main-tinyfont);
+}
+.aux-multimeter.aux-horizontal .aux-meter > .aux-label {
+    width: var(--aux-multimeter-labelwidth);
+    text-align: right;
+}
+.aux-multimeter.aux-horizontal .aux-meter > .aux-value {
+    width: var(--aux-multimeter-valuewidth);
 }
 .aux-multimeter.aux-vertical.aux-count-2 .aux-clip,
 .aux-multimeter.aux-vertical.aux-count-2 .aux-bar {
