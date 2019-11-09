@@ -5,11 +5,12 @@
   "main": "index.html",
   "directories": {},
   "scripts": {
-    "build": "./node_modules/.bin/jsdoc --readme docs/Main.md -c jsdoc/conf.json -d out -r ../src"
+    "build": "./node_modules/.bin/jsdoc -c jsdoc/conf.json -d out -r ../src; cp ../logo.png out/"
   },
   "author": "Arne Goedeke",
   "private": true,
   "dependencies": {
+    "docdash": "^1.1.1",
     "jsdoc": "^3.6.3"
   }
 }

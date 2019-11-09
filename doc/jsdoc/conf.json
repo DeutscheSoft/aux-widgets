@@ -6,16 +6,13 @@
         "includePattern": ".+\\.js(doc|x)?$",
         "excludePattern": "(^|\\/|\\\\)_"
     },
+    "opts": {
+        "template": "node_modules/docdash",
+        "tutorials": "docs/",
+        "readme": "../README.md"
+    },
     "plugins": [
-            "plugins/markdown",
-            "./jsdoc/files"
-    ],
-    "extra_mainpages" : [
-        "./docs/Angular.md",
-        "./docs/Components.md",
-        { "path" : "./docs/Widgets.md", "name" : "Layout" },
-        "./docs/Rendering.md",
-        "./docs/Themeing.md"
+        "plugins/markdown"
     ],
     "templates": {
         "cleverLinks": false,
@@ -30,5 +27,16 @@
             "outputSourceFiles": true,
             "useLongnameInNav" : true
         }
+    },
+    "docdash": {
+      "mainpagetitle": "Introduction",
+      "collapse": true,
+      "sectionOrder": [
+         "Tutorials",
+	 "Classes",
+	 "Modules",
+	 "Mixins",
+	 "Interfaces"
+      ]
     }
 }
