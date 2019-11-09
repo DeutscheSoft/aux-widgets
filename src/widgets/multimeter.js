@@ -21,7 +21,7 @@ import { define_child_widget } from '../child_widget.js';
 import { LevelMeter } from './levelmeter.js';
 import { Label } from './label.js';
 import { Container } from './container.js';
-import { add_class, remove_class } from '../utils/dom.js';
+import { add_class, remove_class, toggle_class } from '../utils/dom.js';
 import { object_sub } from '../utils/object.js';
 
 function add_meter (options) {
@@ -156,6 +156,14 @@ export const MultiMeter = define_class({
             "dolby_e_stereo"      : {count:8, labels:["1L", "1R", "2L", "2R", "3L", "3R", "4L", "4R"]},
             "dolby_e_5.1_stereo"  : {count:8, labels:["1L", "1R", "1C", "1L'", "1R'", "1LF", "2L", "2R"]},
         }
+    },
+    static_events: {
+        "set_labels" : function (v) {
+            toggle_class(this.element, "aux-has-labels", v !== false);
+        },
+        "set_show_value" : function (v) {
+            toggle_class(this.element, "aux-has-values", v !== false);
+        },
     },
     initialize: function (options) {
         Container.prototype.initialize.call(this, options, true);

@@ -358,8 +358,8 @@
     top: auto;
     margin: var(--aux-main-margin) 0 0 0;
 }
-.aux-multimeter.aux-horizontal > .aux-label {
-    text-align: center;
+.aux-multimeter.aux-horizontal.aux-has-labels > .aux-label {
+    margin-left: calc(var(--aux-multimeter-labelwidth) + var(--aux-multimeter-gridgap));
 }
 .aux-multimeter.aux-right > .aux-label {
     text-align: right;
