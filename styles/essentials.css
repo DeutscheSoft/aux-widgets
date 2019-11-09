@@ -1240,23 +1240,56 @@ body.aux-cursor-row-resize * {
 
 /* VALUEKNOB */
 
-.aux-valueknob {
+.aux-valueknob.aux-vertical {
     display: inline-flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     
 }
+.aux-valueknob.aux-horizontal {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    
+}
+.aux-valueknob.aux-left {
+    display: inline-grid;
+    grid-template-areas: "knob label"
+                         "knob value";
+}
+.aux-valueknob.aux-right {
+    display: inline-grid;
+    grid-template-areas: "label knob"
+                         "value knob";
+}
 .aux-valueknob > .aux-label {
     flex: 0 0 auto;
+    grid-area: label;
+}
+.aux-valueknob.aux-left > .aux-label,
+.aux-valueknob.aux-right > .aux-label {
+    align-self: end;
 }
 .aux-valueknob > .aux-knob {
     width: 100px;
     height: 100px;
     flex: 0 0 auto;
+    grid-area: knob;
+}
+.aux-valueknob.aux-horizontal > .aux-knob,
+.aux-valueknob.aux-left > .aux-knob,
+.aux-valueknob.aux-right > .aux-knob {
+    align-self: center;
 }
 .aux-valueknob > .aux-value {
     flex: 0 0 auto;
+    grid-area: value;
+}
+.aux-valueknob.aux-left > .aux-value,
+.aux-valueknob.aux-right > .aux-value {
+    align-self: start;
 }
 
 /* WINDOW */

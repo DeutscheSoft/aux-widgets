@@ -107,6 +107,8 @@
     --aux-valuebutton-scaleheight: 16px;
     --aux-valuebutton-scalemargin: 6px;
     
+    --aux-valueknob-gridgap: 4px;
+    
 }
 
 /* BUTTON */
@@ -683,13 +685,20 @@ input.aux-value {
 
 /* VALUEKNOB */
 
+.aux-valueknob {
+    grid-gap: var(--aux-valueknob-gridgap);
+}
 .aux-valueknob > .aux-widget {
     margin: 0;
 }
 .aux-valueknob > .aux-value {
     z-index: -1;
 }
-.aux-valueknob > .aux-label {
+.aux-valueknob.aux-vertical > .aux-knob {
+    margin: var(--aux-valueknob-gridgap) 0;
+}
+.aux-valueknob.aux-horizontal > .aux-knob {
+    margin: 0 var(--aux-valueknob-gridgap);
 }
 
 /* WIDGET */

@@ -22,7 +22,7 @@ import { Widget } from './widget.js';
 import { Knob } from './knob.js';
 import { Value } from './value.js';
 import { Label } from './label.js';
-import { add_class, element } from '../utils/dom.js';
+import { add_class, remove_class,  element } from '../utils/dom.js';
 
  /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -75,10 +75,15 @@ export const ValueKnob = define_class({
      * @property {String} [options.label=false] - Label of the knob. Set to `false` to hide the element from the DOM.
      * @property {Number} [options.show_value=true] - Set to `false` to hide the {@link Value}.
      * @property {Number} [options.show_knob=true] - Set to `false` to hide the {@link Knob}.
+     * @property {String} [options.layout="default"] - Layout of the knob. Select from `horizontal`, `vertical` (default), `left` and `right`.
      */
     Extends: Widget,
-    _options: Object.create(Widget.prototype._options),
-    options: { },
+    _options: Object.assign(Object.create(Widget.prototype._options), {
+        layout: "string",
+    }),
+    options: { 
+        layout: "vertical",
+    },
     initialize: function (options) {
         if (!options.element) options.element = element("div");
         Widget.prototype.initialize.call(this, options);
@@ -92,6 +97,19 @@ export const ValueKnob = define_class({
       add_class(element, "aux-valueknob");
 
       Widget.prototype.draw.call(this, O, element);
+    },
+    redraw: function () {
+        Widget.prototype.redraw.call(this);
+        var I = this.invalid;
+        var O = this.options;
+        var E = this.element;
+        if (I.layout) {
+            I.layout = false;
+            var value = O.layout;
+            remove_class(E, "aux-vertical", "aux-horizontal", "aux-left",
+                            "aux-right");
+            add_class(E, "aux-"+value);
+        }
     },
     get_range: function() {
         return this.knob.get_range();
