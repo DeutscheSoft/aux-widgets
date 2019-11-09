@@ -95,7 +95,7 @@
 
 /* CHART */
 
-.aux-chart {
+.aux-chart > svg {
     background: var(--aux-contrast-base);
 }
 .aux-chart .aux-title {
