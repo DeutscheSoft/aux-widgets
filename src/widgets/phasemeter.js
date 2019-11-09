@@ -26,6 +26,7 @@ export const PhaseMeter = define_class({
      * correlation.
      * 
      * @extends LevelMeter
+     * @class PhaseMeter
      * 
      */
     Extends: LevelMeter,

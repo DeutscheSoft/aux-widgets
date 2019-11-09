@@ -127,7 +127,7 @@ function has_event_listeners(event) {
 }
 /**
  * This is the base class for all AUX widgets.
- * It provides an API for event handling and other basic implementations.
+ * It provides an API for event handling and options.
  *
  * @class Base
  */
@@ -290,9 +290,9 @@ export const Base = define_class({
         return value;
     },
     /**
-     * Resets an option to its default value.
+     * Resets an option to it's default value.
      *
-     * @method Base#userset
+     * @method Base#reset
      * @param {string} key - The option name.
      */
     reset: function(key)
