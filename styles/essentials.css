@@ -1258,11 +1258,15 @@ body.aux-cursor-row-resize * {
     display: inline-grid;
     grid-template-areas: "knob label"
                          "knob value";
+    grid-template-rows: auto auto;
+    grid-template-columns: auto 1fr;
 }
 .aux-valueknob.aux-right {
     display: inline-grid;
     grid-template-areas: "label knob"
                          "value knob";
+    grid-template-rows: auto auto;
+    grid-template-columns: 1fr auto;
 }
 .aux-valueknob > .aux-label {
     flex: 0 0 auto;
@@ -1271,6 +1275,14 @@ body.aux-cursor-row-resize * {
 .aux-valueknob.aux-left > .aux-label,
 .aux-valueknob.aux-right > .aux-label {
     align-self: end;
+}
+.aux-valueknob.aux-left > .aux-label,
+.aux-valueknob.aux-left > .aux-value {
+    justify-self: start;
+}
+.aux-valueknob.aux-right > .aux-label,
+.aux-valueknob.aux-right > .aux-value {
+    justify-self: end;
 }
 .aux-valueknob > .aux-knob {
     width: 100px;

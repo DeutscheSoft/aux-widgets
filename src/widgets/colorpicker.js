@@ -398,6 +398,7 @@ define_child_widget(ColorPicker, "hue", {
         max: 1,
         "class": "aux-hue",
         "value.format": function (v) { return v.toFixed(2); },
+        layout: "left",
     },
     map_options: {
         "hue" : "value"
@@ -423,6 +424,7 @@ define_child_widget(ColorPicker, "saturation", {
         max: 1,
         "class": "aux-saturation",
         "value.format": function (v) { return v.toFixed(2); },
+        layout: "left",
     },
     map_options: {
         "saturation" : "value"
@@ -449,6 +451,7 @@ define_child_widget(ColorPicker, "lightness", {
         max: 1,
         "class": "aux-lightness",
         "value.format": function (v) { return v.toFixed(2); },
+        layout: "left",
     },
     map_options: {
         "lightness" : "value"
@@ -477,6 +480,7 @@ define_child_widget(ColorPicker, "red", {
         "value.format": function (v) { return parseInt(v); },
         set: function (v) { return Math.round(v); },
         "class": "aux-red",
+        layout: "right",
     },
     map_options: {
         "red" : "value"
@@ -505,6 +509,7 @@ define_child_widget(ColorPicker, "green", {
         "value.format": function (v) { return parseInt(v); },
         set: function (v) { return Math.round(v); },
         "class": "aux-green",
+        layout: "right",
     },
     map_options: {
         "green" : "value"
@@ -533,6 +538,7 @@ define_child_widget(ColorPicker, "blue", {
         "value.format": function (v) { return parseInt(v); },
         set: function (v) { return Math.round(v); },
         "class": "aux-blue",
+        layout: "right",
     },
     map_options: {
         "blue" : "value"
