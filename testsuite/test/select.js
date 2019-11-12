@@ -36,7 +36,7 @@ describe('Select', () => {
 
   function make_entry_component(value, label)
   {
-    const entry_component = document.createElement('aux-selectentry');
+    const entry_component = document.createElement('aux-select-entry');
     entry_component.value = value;
     entry_component.label = label;
     return entry_component;

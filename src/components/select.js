@@ -65,4 +65,4 @@ export const SelectComponent = component_from_widget(Select);
 export const SelectEntryComponent = subcomponent_from_widget(SelectEntry, Select, add_entry, remove_entry);
 
 define_component('select', SelectComponent);
-define_component('selectentry', SelectEntryComponent);
+define_component('select-entry', SelectEntryComponent);
