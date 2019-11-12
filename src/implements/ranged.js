@@ -551,10 +551,15 @@ function set_cb(key) {
 /**
  * @callback Ranged~scale_cb
  *
- * @param {number} value - The value to be transformed.
- * @param {Object} [options={ }] - An object containing initial options. - The options of the corresponding {@link Ranged} object.
- * @param {boolean} [inverse=false] - Determines if the value is to be transformed from or
- *   to the coordinate system.
+ * This is the interface for functions implementing custom coordinate
+ * transformations. The transformation is required to map the interval
+ * `[min, max]` onto `[0,1]`.
+ *
+ * @param {number} value - The coordinate value to be transformed.
+ * @param {Object} [options={ }] - The options of the
+ *      corresponding {@link Ranged} object.
+ * @param {boolean} [inverse=false] - If true, the function should return the
+ *      inverse transform.
  *
  * @returns {number} The transformed value.
  */

@@ -153,6 +153,21 @@ itself.
     <aux-fader min=-96 max=6 [auxBind]="{ value: value_observable }">
     </aux-fader>
 
+## Notifying widgets of resize events
+
+Some widgets need to be redrawn when their size changes. This applies for
+instance to those widgets which contain scales. Other examples are charts with
+grids and similar. Widgets automatically react to the size of the browser window
+changing, however they do not detect if the widget has changed it's size for
+some other reason. Some modern browsers support an API called `ResizeObserver`,
+however, it is not broadly enough supported, yet, to be relied upon. In order to
+notify a widget that a resize happened, the `trigger_resize()` method needs to
+be called. This can be done using the directive `auxResize`. It's argument is an
+observable.
+
+In future versions when `ResizeObserver` is supported more broadly, this directive
+will become a no-op.
+
 # Caveats
 
 ## Order of options
