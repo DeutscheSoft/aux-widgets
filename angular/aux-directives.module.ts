@@ -4,6 +4,7 @@ import { AuxBindDirective } from './aux-bind.directive';
 import { AuxInterceptDirective } from './aux-intercept.directive';
 import { AuxObserveAllDirective } from './aux-observe-all.directive';
 import { AuxObserveDirective } from './aux-observe.directive';
+import { AuxResizeDirective } from './aux-resize.directive';
 import { AuxSubscribeDirective } from './aux-subscribe.directive';
 
 
@@ -14,6 +15,7 @@ import { AuxSubscribeDirective } from './aux-subscribe.directive';
     AuxInterceptDirective,
     AuxObserveAllDirective,
     AuxObserveDirective,
+    AuxResizeDirective,
     AuxSubscribeDirective
   ],
   exports: [
@@ -22,6 +24,7 @@ import { AuxSubscribeDirective } from './aux-subscribe.directive';
     AuxInterceptDirective,
     AuxObserveAllDirective,
     AuxObserveDirective,
+    AuxResizeDirective,
     AuxSubscribeDirective
   ],
   imports: [ ]
