@@ -8,4 +8,4 @@ export const CrossoverComponent = component_from_widget(Crossover);
 export const CrossoverBandComponent = subcomponent_from_widget(CrossoverBand, Crossover);
 
 define_component('crossover', CrossoverComponent);
-define_component('crossoverband', CrossoverBandComponent);
+define_component('crossover-band', CrossoverBandComponent);
