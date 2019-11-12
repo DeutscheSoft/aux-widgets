@@ -61,7 +61,21 @@ function remove_entry(select, entry)
   select.remove_entry(entry);
 }
 
+/**
+ * WebComponent for the Select widget. Available in the DOM as `aux-select`.
+ *
+ * @class SelectComponent
+ * @implements Component
+ */
 export const SelectComponent = component_from_widget(Select);
+
+/**
+ * WebComponent for the SelectEntry widget. Available in the DOM as
+ * `aux-select-entry`.
+ *
+ * @class SelectEntryComponent
+ * @implements Component
+ */
 export const SelectEntryComponent = subcomponent_from_widget(SelectEntry, Select, add_entry, remove_entry);
 
 define_component('select', SelectComponent);
