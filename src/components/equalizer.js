@@ -8,4 +8,4 @@ export const EqualizerComponent = component_from_widget(Equalizer);
 export const EqBandComponent = subcomponent_from_widget(EqBand, Equalizer);
 
 define_component('equalizer', EqualizerComponent);
-define_component('eqband', EqBandComponent);
+define_component('equalizer-band', EqBandComponent);
