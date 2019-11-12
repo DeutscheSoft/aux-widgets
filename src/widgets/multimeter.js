@@ -157,14 +157,6 @@ export const MultiMeter = define_class({
             "dolby_e_5.1_stereo"  : {count:8, labels:["1L", "1R", "1C", "1L'", "1R'", "1LF", "2L", "2R"]},
         }
     },
-    static_events: {
-        "set_labels" : function (v) {
-            toggle_class(this.element, "aux-has-labels", v !== false);
-        },
-        "set_show_value" : function (v) {
-            toggle_class(this.element, "aux-has-values", v !== false);
-        },
-    },
     initialize: function (options) {
         Container.prototype.initialize.call(this, options, true);
         /**
@@ -232,6 +224,18 @@ export const MultiMeter = define_class({
                         M[0].set("show_scale", O.show_scale);
                     break;
             }
+        }
+
+        if (I.show_value)
+        {
+          I.show_value = false;
+          toggle_class(E, "aux-has-values", O.show_value !== false);
+        }
+
+        if (I.labels)
+        {
+          I.labels = false;
+          toggle_class(E, "aux-has-labels", O.labels !== false);
         }
         
         Container.prototype.redraw.call(this);
