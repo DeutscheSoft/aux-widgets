@@ -5,7 +5,7 @@
   "main": "index.html",
   "directories": {},
   "scripts": {
-    "build": "./node_modules/.bin/jsdoc -c jsdoc/conf.json -d out -r ../src; cp ../logo.png out/"
+    "build": "./node_modules/.bin/jsdoc -c jsdoc/conf.json -d out -r ../src; cp ../logo.png out/; tail +2 out/styles/jsdoc.css > _foo; mv _foo out/styles/jsdoc.css"
   },
   "author": "Arne Goedeke",
   "private": true,
