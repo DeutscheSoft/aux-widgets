@@ -20,12 +20,25 @@ Default themes can be found in the `styles` directory. The document
 `doc/docs/Themeing.md` describes how to create themes based no the
 default theme(s) contained in this repository.
 
+## Installation
+
+AUX can be installed using `npm`. In order to gain access to all components,
+simply import them all using
+
+    import 'aux';
+
+and include the default theme into your web application.
+
 ## Design Goals
 
 AUX is written in pure JavaScript and has no external dependencies. It
-is supposed to run in browsers which support ECMAScript 6.  AUX was
-designed to be lightweight and fast while keeping the full flexibility
-which comes with CSS. AUX widgets offer consistent and intuitive APIs.
+is supposed to run in browsers which support ECMAScript 6. When transpiled to
+ECMAScript 5 it should work in modern versions of Chrome, Edge, Firefox and
+Safari.
+
+AUX was designed to be lightweight and fast while keeping the full
+flexibility which comes with CSS. AUX widgets offer consistent and intuitive
+APIs.
 
 ## Documentation
 
