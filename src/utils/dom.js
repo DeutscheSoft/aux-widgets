@@ -557,10 +557,6 @@ export function set_styles(elem, styles) {
         if (typeof v !== "number" && !v) {
             delete s[key];
         } else {
-            if (typeof v === "number") {
-                warn("set_styles: use of implicit px conversion is _deprecated_ and will be removed in the future.");
-                v = v.toFixed(3) + "px";
-            }
             s[key] = v;
         }
     }
@@ -630,4 +626,3 @@ export function is_touch() {
     return 'ontouchstart' in window || // works on most browsers
            'onmsgesturechange' in window; // works on ie10
 }
-
