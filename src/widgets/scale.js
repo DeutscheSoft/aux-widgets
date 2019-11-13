@@ -193,9 +193,9 @@ function create_dot(value, position) {
     
     if (get_base(O) === value)
         add_class(elem, "aux-base");
-    else if (O.max === value)
+    if (O.max === value)
         add_class(elem, "aux-max");
-    else if (O.min === value)
+    if (O.min === value)
         add_class(elem, "aux-min");
 
     return elem;
