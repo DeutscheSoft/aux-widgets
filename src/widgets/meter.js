@@ -239,6 +239,12 @@ export const Meter = define_class({
             if (this.value)
                 this.value.set("label", this.options.format_value(val));
         },
+        set_layout: function () {
+            var O = this.options;
+            this.set("value", O.value);
+            this.set("min", O.min);
+            this.trigger_resize();
+        },
     },
     
     initialize: function (options) {
