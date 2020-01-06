@@ -955,7 +955,6 @@ export const ChartHandle = define_class({
         y_max: "number",
         z_min: "number",
         z_max: "number",
-        active: "boolean",
         show_axis: "boolean",
         title: "string",
         hover: "boolean",
@@ -995,7 +994,6 @@ export const ChartHandle = define_class({
         y_max:            false,
         z_min:            false,
         z_max:            false,
-        active:           true,
         show_axis:        false,
         hover:            false,
         dragging:         false,
@@ -1036,12 +1034,6 @@ export const ChartHandle = define_class({
         },
         mouseleave: function() {
             this.set("hover", false);
-        },
-        set_active: function(v) {
-            if (!v) {
-                this.pos_drag.cancel_drag();
-                this.z_drag.cancel_drag();
-            }
         },
         zchangestarted: function() {
           this.startInteracting();
@@ -1111,11 +1103,8 @@ export const ChartHandle = define_class({
             onstartcapture: function(state) {
                 var self = this.parent;
                 var O = self.options;
-                if (!O.active) return;
                 state.z = O.range_z.val2px(O.z);
 
-                /* the main handle is active,
-                 * this is a z gesture */
                 var pstate = self.pos_drag.state();
                 if (pstate) {
                     var d;
@@ -1174,7 +1163,6 @@ export const ChartHandle = define_class({
             onstartcapture: function(state) {
                 var self = this.parent;
                 var O = self.options;
-                if (!O.active) return;
 
                 var button = state.current.button;
                 var E = self.element;
@@ -1275,7 +1263,6 @@ export const ChartHandle = define_class({
         this.set("mode", O.mode);
         this.set("show_handle", O.show_handle);
         this.set("show_axis", O.show_axis);
-        this.set("active", O.active);
         this.set("x", O.x);
         this.set("y", O.y);
         this.set("z", O.z);
@@ -1315,15 +1302,7 @@ export const ChartHandle = define_class({
             toggle_class(this.element, "aux-dragging", O.dragging);
         }
 
-        if (I.active || I.disabled) {
-            I.disabled = false;
-            // TODO: this is not very nice, we should really use the options
-            // for that. 1) set "active" from the mouse handlers 2) set disabled instead
-            // of active
-            toggle_class(this.element, "aux-disabled", !O.active || O.disabled);
-        }
-
-        var moved = I.validate("x", "y", "z", "mode", "active", "show_handle");
+        var moved = I.validate("x", "y", "z", "mode", "show_handle");
 
         if (moved) redraw_handle.call(this, O, X);
 
