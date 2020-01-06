@@ -39,6 +39,10 @@
     opacity: 0.3;
 }
 
+.aux-hidden {
+    display: none;
+}
+
 .aux-widget {
     contain: style layout;
     display: inline-block;
