@@ -35,10 +35,6 @@
     pointer-events: none;
 }
 
-.aux-inactive {
-    opacity: 0.3;
-}
-
 .aux-hidden {
     display: none;
 }
