@@ -31,7 +31,7 @@
 /* ######## GENERIC CSS ######## */
 
 .aux-disabled {
-    opacity: 0.3;
+    filter: grayscale(100%) contrast(50%);
     pointer-events: none;
 }
 
