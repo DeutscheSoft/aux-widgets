@@ -31,7 +31,6 @@
 /* ######## GENERIC CSS ######## */
 
 .aux-disabled {
-    filter: grayscale(100%) contrast(50%);
     pointer-events: none;
 }
 
