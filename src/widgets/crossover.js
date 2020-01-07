@@ -190,19 +190,24 @@ export const Crossover = define_class({
     redraw: function () {
         var I = this.invalid;
         var O = this.options;
-        var lastb = this.bands.length - 1;
-        var lastg = this.graphs.length - 1;
         if (I.validate("bands", "accuracy")) {
             I.bands = false;
             I.accuracy = false;
             sort_bands.call(this);
-            for (var i = 0; i < this.bands.length; i++) {
-                var f = [this.bands[i].lower.get_freq2gain()];
-                if (i)
-                    f.push(this.bands[i-1].upper.get_freq2gain());
-                this._draw_graph(this.graphs[i], f);
+
+            if (this.bands.length && this.graphs.length)
+            {
+              var lastb = this.bands.length - 1;
+              var lastg = this.graphs.length - 1;
+
+              for (var i = 0; i < this.bands.length; i++) {
+                  var f = [this.bands[i].lower.get_freq2gain()];
+                  if (i)
+                      f.push(this.bands[i-1].upper.get_freq2gain());
+                  this._draw_graph(this.graphs[i], f);
+              }
+              this._draw_graph(this.graphs[lastg], [this.bands[lastb].upper.get_freq2gain()]);
             }
-            this._draw_graph(this.graphs[lastg], [this.bands[lastb].upper.get_freq2gain()]);
         }
         Equalizer.prototype.redraw.call(this);
     },
