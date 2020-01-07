@@ -105,7 +105,7 @@ export const ConfirmButton = define_class({
    * after it was hit a second time. While waiting for the confirmation, a
    * dedicated label and icon can be displayed. The button is reset to
    * default if no second click appears. A click outside of the button
-   * resets it, too. It gets class .aux-active` while waiting for
+   * resets it, too. It receives class .aux-active` while waiting for
    * the confirmation.
    *
    * @class ConfirmButton
