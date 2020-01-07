@@ -1049,11 +1049,6 @@ export const ChartHandle = define_class({
         },
     },
 
-    getStyleTarget: function() {
-      // TODO: is this really intended
-      return null;
-    },
-
     initialize: function (options) {
         this.label = [0,0,0,0];
         this.handle = [0,0,0,0];
