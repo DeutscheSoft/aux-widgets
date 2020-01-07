@@ -152,6 +152,8 @@ export const Widget = define_class({
      * @property {Boolean} [options.disabled=false] - Toggles the class <code>.aux-disabled</code>. By default it disables all pointer events on the widget via CSS to make it unusable to the user.
      * @property {HTMLElement} [options.element] - An element to be used as the main element.
      * @property {Boolean} [options.active] - Toggles the class <code>.aux-inactive</code>.
+     * @property {Boolean} [options.visible] - Toggles the class <code>.aux-hide</code> and <code>.aux-show</code>. This option also enables and disabled rendering by
+     *  calling Widget#hide and Widget#show.
      * @property {Boolean} [options.needs_resize=true] - Set to true if the resize function shall be called before the next redraw.
      * @property {Boolean} [options.dblclick=400] - Set a time in milliseconds for triggering double click event. If 0, no double click events are fired.
      * @property {String} [options.preset] - Set a preset. This string
