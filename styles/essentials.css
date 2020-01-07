@@ -34,8 +34,8 @@
     pointer-events: none;
 }
 
-.aux-hidden {
-    display: none;
+.aux-hide {
+    display: none !important;
 }
 
 .aux-widget {
@@ -91,12 +91,6 @@
 }
 .aux-buttons.aux-vertical {
     flex-direction: column;
-}
-
-/* CONTAINER */
-
-.aux-container.aux-hide {
-    display: none !important;
 }
 
 /* CHART */
