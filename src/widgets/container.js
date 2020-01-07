@@ -115,7 +115,7 @@ export const Container = define_class({
         children: "array",
     }),
     options: {
-        display_state : "show",
+        display_state: "show",
         children: [],
     },
     initialize: function (options) {
@@ -203,8 +203,7 @@ export const Container = define_class({
         if (O.display_state === "hide") return;
         disable_draw_children.call(this);
         enable_draw_self.call(this);
-        if (O.display_state === "hiding") return;
-        this.set("display_state", "hiding");
+        this.update("display_state", "hiding");
     },
     /** 
      * Immediately switches the display state of this container to <code>hide</code>.
@@ -216,12 +215,13 @@ export const Container = define_class({
      */
     force_hide: function () {
         var O = this.options;
-        if (O.display_state === "hide") return;
+        if (O.display_state === "hide" && !this.is_drawn()) return;
         this.disable_draw();
         var E = this.element;
         O.display_state = "hide";
         add_class(E, "aux-hide");
         remove_class(E, "aux-hiding", "aux-showing", "aux-show");
+        this.update('visible', false);
     },
     /** 
      * Starts the transition of the <code>display_state</code> to <code>show</code>.
@@ -232,8 +232,8 @@ export const Container = define_class({
     show: function() {
         var O = this.options;
         enable_draw_self.call(this);
-        if (O.display_state === "show" || O.display_state === "showing") return;
-        this.set("display_state", "showing");
+        this.update("display_state", "showing");
+        this.update('visible', true);
     },
     /** 
      * Immediately switches the display state of this container to <code>show</code>.
@@ -245,10 +245,11 @@ export const Container = define_class({
      */
     force_show: function() {
         var O = this.options;
-        if (O.display_state === "show") return;
+        if (O.display_state === "show" && this.is_drawn()) return;
         this.enable_draw();
         var E = this.element;
         O.display_state = "show";
+        this.update('visible', true);
         add_class(E, "aux-show");
         remove_class(E, "aux-hiding", "aux-showing", "aux-hide");
     },
@@ -256,6 +257,7 @@ export const Container = define_class({
         var O = this.options;
         if (O.display_state === "show") return;
         this.set("display_state", "show");
+        this.update('visible', true);
 
         var C = this.children;
         var H = this.hidden_children;
@@ -265,6 +267,7 @@ export const Container = define_class({
         var O = this.options;
         if (O.display_state === "hide") return;
         this.set("display_state", "hide");
+        this.update('visible', false);
 
         var C = this.children;
         var H = this.hidden_children;
@@ -366,8 +369,6 @@ export const Container = define_class({
         var I = this.invalid;
         var E = this.element;
 
-        Widget.prototype.redraw.call(this);
-
         if (I.display_state) {
             I.display_state = false;
             var time;
@@ -392,6 +393,7 @@ export const Container = define_class({
             case "hide":
                 add_class(E, "aux-hide");
                 disable_draw_self.call(this);
+                this.update('visible', false);
                 break;
             case "showing":
                 add_class(E, "aux-showing");
@@ -409,7 +411,13 @@ export const Container = define_class({
                 enable_draw_children.call(this);
                 break;
             }
+
+            // also mark visible as 'done' to prevent the Widget redraw method
+            // from replacing our css classes
+            I.visible = false;
         }
+
+        Widget.prototype.redraw.call(this);
 
         if (I.content) {
             I.content = false;

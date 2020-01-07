@@ -121,16 +121,16 @@ describe('Components', () => {
     }
 
     {
-      const w = new Widget();
-      const c = new Widget();
+      const w = new Widget({ element: document.createElement('div') });
+      const c = new Widget({ element: document.createElement('div') });
 
+      assert(w.is_drawn() === c.is_drawn());
       w.add_child(c);
-
-      assert(w.hidden() === c.hidden());
-      w.show();
-      assert(!w.hidden() && w.hidden() === c.hidden());
-      w.hide();
-      assert(w.hidden() && w.hidden() === c.hidden());
+      assert(w.is_drawn() === c.is_drawn());
+      w.force_show();
+      assert(w.is_drawn() && w.is_drawn() === c.is_drawn());
+      w.force_hide();
+      assert(!w.is_drawn() && w.is_drawn() === c.is_drawn());
 
       w.destroy();
       c.destroy();
@@ -144,8 +144,8 @@ describe('Components', () => {
 
       w.set_parent(null);
 
-      assert(w.hidden() === c.hidden());
-      assert(w.hidden() === document.hidden);
+      assert(w.is_drawn() === c.is_drawn());
+      assert(w.is_drawn() !== document.hidden);
 
       w.destroy();
       c.destroy();

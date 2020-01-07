@@ -1,6 +1,7 @@
 import {
     Button,
     Buttons,
+    Container,
     ChartHandle,
     EqBand,
     Chart,
@@ -43,6 +44,7 @@ import {
 import { assert, compare, object_minus } from './helpers.js';
 
 const widgets = [
+   Container,
    ChartHandle,
    EqBand,
    Chart,
@@ -96,6 +98,19 @@ describe('Widgets', () => {
       {
         assert(!widget.get('interacting'));
       }
+      widget.destroy();
+    });
+  });
+  it('visible', () => {
+    widgets.map((w, i) => {
+      const widget = new w();
+      widget.force_show();
+      assert(widget.get('visible'));
+      widget.force_hide();
+      assert(widget.hidden());
+      assert(!widget.get('visible'));
+      widget.set('visible', true);
+      assert(!widget.hidden());
       widget.destroy();
     });
   });

@@ -216,6 +216,7 @@ export const Widget = define_class({
         disabled: "boolean",
         element: "object",
         active: "boolean",
+        visible: "boolean",
         needs_resize: "boolean",
         dblclick: "number",
         interacting: "boolean",
@@ -225,6 +226,7 @@ export const Widget = define_class({
     options: {
         // these options are of less use and only here to show what we need
         disabled:  false,  // Widgets can be disabled by setting this to true
+        visible: true,
         needs_resize: true,
         dblclick: 0,
         interacting: false,
@@ -259,6 +261,12 @@ export const Widget = define_class({
                 this._preset_origins[key] = val;
             }
         },
+        set_visible: function(val)
+        {
+          if (val !== this.hidden()) return;
+          if (val) this.show();
+          else this.hide();
+        }
     },
     constructor: function (options) {
       if (!options) options = {};
@@ -371,6 +379,7 @@ export const Widget = define_class({
     },
 
     schedule_resize: function() {
+        if (this.__resize === null) return;
         S.add(this.__resize, 0);
     },
 
@@ -459,6 +468,24 @@ export const Widget = define_class({
         var I = this.invalid;
         var O = this.options;
         var E = this.element;
+
+        if (I.visible)
+        {
+          I.visible = false;
+
+          if (O.visible)
+          {
+            remove_class(E, "aux-hide");
+            add_class(E, "aux-show");
+          }
+          else
+          {
+            remove_class(E, "aux-show");
+            add_class(E, "aux-hide");
+            this.disable_draw();
+            return;
+          }
+        }
 
         E = this.getStyleTarget();
 
@@ -594,7 +621,6 @@ export const Widget = define_class({
          * @event Widget#show
          */
         this.emit("show");
-        this.emit("visibility", true);
         var C = this.children;
         if (C) for (var i = 0; i < C.length; i++) C[i].enable_draw();
     },
@@ -625,7 +651,6 @@ export const Widget = define_class({
          * @event Widget#visibility
          */
         this.emit("hide");
-        this.emit("visibility", false);
         var C = this.children;
         if (C) for (var i = 0; i < C.length; i++) C[i].disable_draw();
     },
@@ -636,6 +661,7 @@ export const Widget = define_class({
      * @method Widget#show
      */
     show: function () {
+        this.update('visible', true);
         this.enable_draw();
     },
     /**
@@ -645,6 +671,7 @@ export const Widget = define_class({
      * @method Widget#force_show
      */
     force_show: function() {
+        this.update('visible', true);
         this.enable_draw();
     },
     /**
@@ -655,7 +682,7 @@ export const Widget = define_class({
      * @method Widget#hide
      */
     hide: function () {
-        this.disable_draw();
+        this.update('visible', false);
     },
     /**
      * This is an alias for hide, which may be overloaded.
@@ -664,6 +691,8 @@ export const Widget = define_class({
      * @method Widget#force_hide
      */
     force_hide: function () {
+        this.update('visible', false);
+        this._redraw();
         this.disable_draw();
     },
     show_nodraw: function() { },
@@ -674,7 +703,7 @@ export const Widget = define_class({
      * @method Widget#hidden
      */
     hidden: function() {
-        return !this._drawn;
+        return !this.options.visible;
     },
     is_drawn: function() {
         return this._drawn;
@@ -742,7 +771,7 @@ export const Widget = define_class({
 
         child.set_parent(this);
         C.push(child);
-        if (!this.hidden()) {
+        if (this.is_drawn()) {
             child.enable_draw();
         } else {
             child.disable_draw();

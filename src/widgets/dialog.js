@@ -63,7 +63,6 @@ export const Dialog = define_class({
  *
  * @param {Object} [options={ }] - An object containing initial options.
  * 
- * @property {Boolean} [options.visible=true] - Hide or show the dialog.
  * @property {String} [options.anchor="top-left"] - Origin of `x` and `y` coordinates. See {@link Anchor} for more information.
  * @property {Number} [options.x=0] - X-position of the dialog.
  * @property {Number} [options.y=0] - Y-position of the dialog.
@@ -74,7 +73,6 @@ export const Dialog = define_class({
  */
     Extends: Container,
     _options: Object.assign(Object.create(Container.prototype._options), {
-        visible: "boolean",
         anchor: "string",
         x: "number",
         y: "number",
@@ -83,7 +81,6 @@ export const Dialog = define_class({
         toplevel: "boolean",
     }),
     options: {
-        visible: true,
         anchor: "top-left",
         x: 0,
         y: 0,
@@ -132,10 +129,8 @@ export const Dialog = define_class({
             while ((p = p.parentElement) && p.tagName !== "AWML-ROOT" && p.tagName !== "BODY");
             this.element.appendChild(p.element);
           }
-          this.show();
         } else {
           O.container = this.element.parentElement;
-          this.hide();
         }
       },
     },
@@ -148,10 +143,6 @@ export const Dialog = define_class({
         this._autoclose_active = false;
         this._autoclose_cb = autoclose_cb.bind(this);
         this.set('visible', O.visible);
-        if (O.visible)
-          this.force_show();
-        else
-          this.force_hide();
     },
     resize: function() {
         if (this.options.visible)
