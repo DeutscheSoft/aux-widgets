@@ -20,7 +20,7 @@
 import { define_class } from '../widget_helpers.js';
 import { Filter } from '../modules/filter.js';
 import { ChartHandle } from './charthandle.js';
-import { add_class } from '../utils/dom.js';
+import { add_class, toggle_class } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 
 const type_to_mode = {
@@ -74,6 +74,7 @@ export const EqBand = define_class({
      *   defined by {@link ChartHandle}.
      * @property {Number} options.q - Quality setting. This is an alias for the option <code>z</code>
      *   defined by {@link ChartHandle}.
+     * @property {Boolean} [options.active=true] - Set to `false` to not take this filter into account when drawing the response graph.
      *
      * @extends ChartHandle
      */
@@ -86,9 +87,11 @@ export const EqBand = define_class({
         y: "number",
         z: "number",
         q: "number",
+        active: "boolean",
     }),
     options: {
-        type:    "parametric"
+        type:    "parametric",
+        active: true,
     },
     static_events: {
         set_freq: function(v) { this.set("x", v); },
@@ -141,6 +144,15 @@ export const EqBand = define_class({
       add_class(element, "aux-eqband");
 
       ChartHandle.prototype.draw.call(this, O, element);
+    },
+    redraw: function () {
+        var I = this.invalid;
+        var O = this.options;
+        if (I.active) {
+            I.active = false;
+            toggle_class(this.element, "aux-inactive", !O.active);
+        }
+        ChartHandle.prototype.redraw.call(this);
     },
 
     /**
