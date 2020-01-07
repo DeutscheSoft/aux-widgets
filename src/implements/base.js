@@ -290,6 +290,21 @@ export const Base = define_class({
         return value;
     },
     /**
+     * Conditionally sets an option unless it already has the requested value.
+     *
+     * @method Base#update
+     * 
+     * @param {string} key - The name of the option.
+     * @param {mixed} value - The value of the option.
+     * 
+     * @emits Base#set
+     * @emits Base#set_[option]
+     */
+    update: function (key, value) {
+        if (this.options[key] === value) return;
+        this.set(key, value);
+    },
+    /**
      * Resets an option to it's default value.
      *
      * @method Base#reset
