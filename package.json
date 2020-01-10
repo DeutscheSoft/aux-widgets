@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "AUX Audio Widget Library",
   "main": "src/index.js",
+  "module" : "src/index.js",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -12,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@git.deutschesoft.eu:toolkit"
+    "url": "git@gitlab.deuso.eu:WebUI/AUX.git"
   },
   "author": {
     "name": "Markus Schmidt",
