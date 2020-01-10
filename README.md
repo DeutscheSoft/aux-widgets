@@ -78,6 +78,6 @@ tracker at [https://gitlab.deuso.de/WebUI/AUX].
 AUX is released unter the the terms of the GPLv3. See the file `COPYING`
 file for details.
 
-Copyright (c) 2013-2019 Markus Schmidt <markus@deuso.de>
+Copyright (c) 2013-2020 Markus Schmidt <markus@deuso.de>
 
-Copright (c) 2014-2019 Arne G&ouml;deke <arne@deuso.de>
+Copright (c) 2014-2020 Arne G&ouml;deke <arne@deuso.de>
