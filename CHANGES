@@ -1,4 +1,4 @@
-Changes since version 1.3
+AUX 1.0: Changes since Toolkit 1.3
 --------------------------------------
 
 Toolkit has been re-branded as 'AUX'. The first version is 1.0. In the Toolkit
@@ -120,7 +120,7 @@ Styles
 * Added one new default theme using CSS properties
 
 
-Changes since version 1.2
+Toolkit 1.3: Changes since Toolkit 1.2
 --------------------------------------
 
 Style Changes
@@ -161,7 +161,7 @@ Changes
 * TK.Pager: drop option `overlap` due to new flex layout was already missing since 1.3 but not removed.
 * TK.Button: options.layout defaults to "horizontal".
 
-Changes since version 1.1
+Toolkit 1.2: Changes since Toolkit 1.1
 --------------------------------------
 
 New Features
@@ -260,7 +260,7 @@ Style Changes
   * MultiMeter
   * ValueButton
   
-Version 1.1: Changes since version 1.0
+Toolkit 1.1: Changes since Toolkit 1.0
 -----------------------------------------
 
 New Features
@@ -303,7 +303,7 @@ o the add_event() method no longer accepts flags to automatically
 
 o The 'pointerdown' and 'pointerup' synthetic events have been removed.
 
-Version 1.0.0: Changes since version 0.66
+Toolkit 1.0.0: Changes since Toolkit 0.66
 -----------------------------------------
 
 Browser support
