@@ -1,3 +1,5 @@
+import { S } from '../src/index.js';
+
 export function compare(a, b)
 {
   if (a === b) return true;
@@ -62,5 +64,32 @@ export function wait_for_event(widget, name)
       resolve();
       unsubscribe();
     });
+  });
+}
+
+let _canvas;
+
+function canvas()
+{
+  if (!_canvas)
+  {
+    _canvas = document.createElement("div");
+    _canvas.style.visibility = 'hidden';
+    document.body.appendChild(_canvas);
+  }
+
+  return _canvas;
+}
+
+export function wait_for_drawn(widget)
+{
+  if (!widget.element.parentNode)
+  {
+    canvas().appendChild(widget.element);
+    widget.enable_draw();
+  }
+
+  return new Promise((resolve, reject) => {
+    S.after_frame(resolve);
   });
 }

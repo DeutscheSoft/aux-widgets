@@ -41,7 +41,7 @@ import {
     Widget
   } from '../src/index.js';
 
-import { assert, compare, object_minus } from './helpers.js';
+import { wait_for_drawn, assert, compare, object_minus } from './helpers.js';
 
 const widgets = [
    Container,
@@ -73,15 +73,42 @@ const widgets = [
    Expander,
    Pager,
    List,
-   ListItem,
-   TaggableListItem,
    SortableList,
-   SortableListItem,
-   TreeItem,
-   TaggableTreeItem,
    Tagger,
    Frame,
    Root,
+];
+
+const standalone_widgets = [
+   Chart,
+   Container,
+   Equalizer,
+   Value,
+   Knob,
+   State,
+   Slider,
+   Scale,
+   Gauge,
+   Fader,
+   Select,
+   ValueButton,
+   ValueKnob,
+   Meter,
+   LevelMeter,
+   MultiMeter,
+   Notifications,
+   Clock,
+   Dynamics,
+   ColorPicker,
+   Buttons,
+   Crossover,
+   Expander,
+   Pager,
+   List,
+   SortableList,
+   Tagger,
+   Frame,
+   Root
 ];
 
 describe('Widgets', () => {
@@ -101,18 +128,50 @@ describe('Widgets', () => {
       widget.destroy();
     });
   });
-  it('visible', () => {
-    widgets.map((w, i) => {
+
+  function assert_hidden(widget)
+  {
+    assert(widget.hidden());
+    assert(!widget.get('visible'));
+    assert(!widget.element.classList.contains('aux-show'));
+    assert(widget.element.classList.contains('aux-hide'));
+  }
+
+  function assert_visible(widget)
+  {
+    assert(!widget.hidden());
+    assert(widget.get('visible'));
+    assert(widget.element.classList.contains('aux-show'));
+    assert(!widget.element.classList.contains('aux-hide'));
+  }
+
+  it.only('visible', async () => {
+    Promise.all(standalone_widgets.map(async (w, i) => {
       const widget = new w();
-      widget.force_show();
-      assert(widget.get('visible'));
-      widget.force_hide();
-      assert(widget.hidden());
-      assert(!widget.get('visible'));
+
+      // show()
+      widget.show();
+      assert(widget.is_drawn());
+      await wait_for_drawn(widget);
+      assert_visible(widget);
+
+      // hide()
+      widget.hide();
+      await wait_for_drawn(widget);
+      assert_hidden(widget);
+
+      // set visible = true
       widget.set('visible', true);
-      assert(!widget.hidden());
+      await wait_for_drawn(widget);
+      assert_visible(widget);
+
+      // set visible = false
+      widget.set('visible', false);
+      await wait_for_drawn(widget);
+      assert_hidden(widget);
+
       widget.destroy();
-    });
+    }));
   });
 });
 

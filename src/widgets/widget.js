@@ -265,7 +265,6 @@ export const Widget = define_class({
         },
         set_visible: function(val)
         {
-          if (val !== this.hidden()) return;
           if (val) this.show();
           else this.hide();
         }
