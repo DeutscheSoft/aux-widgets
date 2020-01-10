@@ -145,7 +145,7 @@ describe('Widgets', () => {
     assert(!widget.element.classList.contains('aux-hide'));
   }
 
-  it.only('visible', async () => {
+  it('visible', async () => {
     Promise.all(standalone_widgets.map(async (w, i) => {
       const widget = new w();
 
