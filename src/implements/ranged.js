@@ -1,12 +1,12 @@
 /*
- * This file is part of Toolkit.
+ * This file is part of AUX.
  *
- * Toolkit is free software; you can redistribute it and/or
+ * AUX is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
  *
- * Toolkit is distributed in the hope that it will be useful,
+ * AUX is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
@@ -571,7 +571,7 @@ export const Ranged = define_class({
      * <code>step</code>, <code>min</code>, <code>max</code> and <code>base</code>.
      * The second feature of anged is that it allows transforming values between coordinate systems.
      * This can be used to transform values from and to linear scales in which they are displayed on the
-     * screen. It is used inside of Toolkit to translate values (e.g. in Hz or dB) to pixel positions or
+     * screen. It is used inside of AUX to translate values (e.g. in Hz or dB) to pixel positions or
      * percentages, for instance in widgets such as {@link Scale}, {@link Meter} or
      * {@link Graph}.
      *

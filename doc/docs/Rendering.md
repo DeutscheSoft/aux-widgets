@@ -1,7 +1,7 @@
-# Rendering in toolkit
+# Rendering in AUX
 
-This document describes how the toolkit library renders widgets. The different
-techniques used are important to understand when using toolkit widgets within
+This document describes how the AUX library renders widgets. The different
+techniques used are important to understand when using AUX widgets within
 other applications. This is especially true when widgets are dynamically resized
 or their style sheets are changed dynamically.
 This document also details some optimizations to increase DOM performance, which
@@ -44,7 +44,7 @@ are not performed immediately.
   not be easily done by completely disabling the application, since the application
   logic might need to continue running.
 
-toolkit furthermore employs a technique which we will explain below. We
+AUX furthermore employs a technique which we will explain below. We
 call this technique **DOM scheduling**.
 
 The run time performance of code operating on the DOM tree can be substantially
@@ -53,9 +53,9 @@ triggers. Style recalculations might be triggered by asking for the value of
 a computed style of an element. Likewise reflow operations might be necessary
 when asking for pixel positions or dimensions of an element, e.g. by reading 
 `element.offsetWidth`. Ideally, these kinds of operations are avoided entirely,
-however in some situations that might not be possible. Inside of toolkit there
+however in some situations that might not be possible. Inside of AUX there
 are several widgets which need to measure dimensions when rendering, for instance
-the `toolkit.Fader` element, which needs to measure the size of the fader handle,
+the `AUX.Fader` element, which needs to measure the size of the fader handle,
 in order to position the scale and background correctly.
 
 On the other hand, the operations which might trigger reflows and style
@@ -121,7 +121,7 @@ and therefore this problem can not be solved by reordering DOM manipulations man
 can be practically implemented inside of complex applications. A requirement
 for it to work is that the individual modifications are independent of each
 other. As explained in the beginning of this document, this is the case for
-toolkit widgets. The central component of DOM scheduling is the scheduler. It
+AUX widgets. The central component of DOM scheduling is the scheduler. It
 is a simple global object which executes a series of functions in a certain order.
 The order of execution is determined by a priority. Without going into the details of
 the implementation we can illustrate this by our example:
@@ -149,7 +149,7 @@ the implementation we can illustrate this by our example:
         S.run();
     }
 
-A similar thing happens inside of toolkit. Different `redraw()` methods
+A similar thing happens inside of AUX. Different `redraw()` methods
 in widgets are added for the next scheduler run if their options have
 been modified. The DOMScheduler eventually runs during the next animation
 frame. The individual `redraw()` methods will schedule certain parts of the
