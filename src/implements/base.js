@@ -453,7 +453,7 @@ export const Base = define_class({
      * If it is a native DOM event, it removes the DOM event listener
      * as well.
      *
-     * @method Base#remove_event
+     * @method Base#off
      * 
      * @param {string} event - The event descriptor.
      * @param {Function} fun - The function to remove.
