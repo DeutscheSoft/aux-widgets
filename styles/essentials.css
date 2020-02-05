@@ -243,18 +243,18 @@
     100% { opacity: 1; transform: scale(1);}
 }
 
-/* EXPANDER */
+/* EXPAND */
 
-.aux-expander {
+.aux-expand {
     
 }
 
-.aux-expander.aux-always-expanded > .aux-toggleexpand {
+.aux-expand.aux-always-expanded > .aux-toggleexpand {
     display: none;
 }
 
 /* popup */
-.aux-expander.aux-popup.aux-expanded {
+.aux-expand.aux-popup.aux-expanded {
     position: fixed;
     top: 0;
     left: 0;
@@ -263,7 +263,7 @@
     z-index: 1000000;
     margin: 0;
 }
-.aux-expander.aux-popup > .aux-toggleexpand {
+.aux-expand.aux-popup > .aux-toggleexpand {
     box-sizing: border-box;
     position: absolute;
     z-index: 1;
@@ -276,7 +276,7 @@
     margin: 0;
     opacity: 0;
 }
-.aux-expander.aux-popup.aux-expanded > .aux-toggleexpand {
+.aux-expand.aux-popup.aux-expanded > .aux-toggleexpand {
     opacity: 1;
     top: 10px;
     right: 10px;
@@ -285,7 +285,7 @@
 }
 
 /* drawer right */
-.aux-expander.aux-drawer-right {
+.aux-expand.aux-drawer-right {
     position: absolute;
     top: 0;
     right: 0;
@@ -293,11 +293,11 @@
     transition: transform 500ms;
 }
 
-.aux-expander.aux-drawer-right.aux-expanded {
+.aux-expand.aux-drawer-right.aux-expanded {
     transform: translate3d(0%, 0, 0);
 }
 
-.aux-expander.aux-drawer-right > .aux-toggleexpand {
+.aux-expand.aux-drawer-right > .aux-toggleexpand {
     position: absolute;
     top: 0;
     left: 0;
@@ -305,7 +305,7 @@
 }
 
 /* drawer left */
-.aux-expander.aux-drawer-left {
+.aux-expand.aux-drawer-left {
     position: absolute;
     top: 0;
     left: 0;
@@ -313,11 +313,11 @@
     transition: transform 500ms;
 }
 
-.aux-expander.aux-drawer-left.aux-expanded {
+.aux-expand.aux-drawer-left.aux-expanded {
     transform: translate3d(0%, 0, 0);
 }
 
-.aux-expander.aux-drawer-left > .aux-toggleexpand {
+.aux-expand.aux-drawer-left > .aux-toggleexpand {
     position: absolute;
     top: 0;
     right: 0;
@@ -325,7 +325,7 @@
 }
 
 /* drawer top */
-.aux-expander.aux-drawer-top {
+.aux-expand.aux-drawer-top {
     position: absolute;
     top: 0;
     left: 0;
@@ -333,11 +333,11 @@
     transition: transform 500ms;
 }
 
-.aux-expander.aux-drawer-top.aux-expanded {
+.aux-expand.aux-drawer-top.aux-expanded {
     transform: translate3d(0, 0, 0);
 }
 
-.aux-expander.aux-drawer-top > .aux-toggleexpand {
+.aux-expand.aux-drawer-top > .aux-toggleexpand {
     position: absolute;
     bottom: 0;
     right: 0;
@@ -345,7 +345,7 @@
 }
 
 /* drawer bottom */
-.aux-expander.aux-drawer-bottom {
+.aux-expand.aux-drawer-bottom {
     position: absolute;
     top: 0;
     left: 0;
@@ -353,11 +353,11 @@
     transition: transform 500ms;
 }
 
-.aux-expander.aux-drawer-bottom.aux-expanded {
+.aux-expand.aux-drawer-bottom.aux-expanded {
     transform: translate3d(0, 0, 0);
 }
 
-.aux-expander.aux-drawer-bottom > .aux-toggleexpand {
+.aux-expand.aux-drawer-bottom > .aux-toggleexpand {
     position: absolute;
     top: 0;
     right: 0;
@@ -365,15 +365,15 @@
 }
 
 /* hide */
-.aux-expander.aux-remove {
+.aux-expand.aux-remove {
     display: none;
 }
 
-.aux-expander.aux-remove.aux-expanded {
+.aux-expand.aux-remove.aux-expanded {
     display: block;
 }
 
-.aux-expander.aux-remove > .aux-toggleexpand {
+.aux-expand.aux-remove > .aux-toggleexpand {
     display: none;
 }
 

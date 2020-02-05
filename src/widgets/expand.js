@@ -51,16 +51,16 @@ function is_visible(widget) {
 }
 function changed_expanded(value) {
     var group = this.options.group;
-    var other_expander;
+    var other_expand;
     var grp;
 
     if (group) {
-        grp = expander_groups[group];
+        grp = expand_groups[group];
         if (value) {
-            other_expander = grp.active;
+            other_expand = grp.active;
             grp.active = this;
-            if (other_expander && other_expander !== this)
-                other_expander.set("expanded", false); 
+            if (other_expand && other_expand !== this)
+                other_expand.set("expanded", false); 
         } else if (grp.active === this) {
             grp.active = false;
             if (grp.default) grp.default.set("expanded", true);
@@ -71,8 +71,8 @@ function changed_expanded(value) {
 function add_to_group(group) {
     var grp;
     var O = this.options;
-    if (!(grp = expander_groups[group]))
-        expander_groups[group] = grp = { active: false, default: false };
+    if (!(grp = expand_groups[group]))
+        expand_groups[group] = grp = { active: false, default: false };
 
     if (O.group_default) {
         grp.default = this;
@@ -87,7 +87,7 @@ function add_to_group(group) {
 }
 
 function remove_from_group(group) {
-    var grp = expander_groups[group];
+    var grp = expand_groups[group];
 
     if (grp.default === this) grp.default = false;
     if (grp.active === this) {
@@ -97,7 +97,7 @@ function remove_from_group(group) {
 }
 function remove_group_default(group) {
     if (!group) return;
-    var grp = expander_groups[group];
+    var grp = expand_groups[group];
     grp.default = false;
 }
 function update_visibility() {
@@ -117,34 +117,34 @@ function update_visibility() {
     if (value) {
         this.emit("expand");
         /**
-         * Is fired when the expander expands.
+         * Is fired when the expand expands.
          * 
-         * @event Expander#expand
+         * @event Expand#expand
          */
     } else {
         /**
-         * Is fired when the expander collapses.
+         * Is fired when the expand collapses.
          * 
-         * @event Expander#collapse
+         * @event Expand#collapse
          */
         this.emit("collapse");
     }
 }
-var expander_groups = { };
-const Expander = define_class({
+var expand_groups = { };
+export const Expand = define_class({
     /**
-     * Expander is a container which can be toggled between two different states,
+     * Expand is a container which can be toggled between two different states,
      * expanded and collapsed. It can be used to implement overlay popups, but it is
      * not limited to that application.
      * In expanded mode the container has the class <code>.aux-expanded</code>.
      * Child widgets are shown or hidden depending on the state of the two pseudo
      * options <code>_expanded</code> and <code>_collapsed</code>. If a child widget
-     * of the expander has <code>_expanded</code> set to true it will be shown in
+     * of the expand has <code>_expanded</code> set to true it will be shown in
      * expanded state. If a child widget has <code>_collapsed</code> set to false, it
      * will be shown in collapsed state. This feature can be used to make interfaces
      * more reactive.
      * 
-     * @class Expander
+     * @class Expand
      * 
      * @extends Container
      *
@@ -154,10 +154,10 @@ const Expander = define_class({
      * @property {Boolean} [options.always_expanded=false] - This essentially overwrites
      *   the <code>expanded</code> option. This can be used to switch this widget to be
      *   always expanded, e.g. when the screen size is big enough.
-     * @property {String} [options.group=""] - If set, this expander is grouped together with
-     *   all other expanders of the same group name. At most one expander of the same group
+     * @property {String} [options.group=""] - If set, this expand is grouped together with
+     *   all other expands of the same group name. At most one expand of the same group
      *   can be open at one time.
-     * @property {Boolean} [options.group_default=false] - If set, this expander is expanded
+     * @property {Boolean} [options.group_default=false] - If set, this expand is expanded
      *   if all other group members are collapsed.
      * @param {String} [options.icon=""] - Icon of the {@link Button} which toggles expanded state.
      * @param {String} [options.label=""] - Label of the {@link Button} which toggles expanded state.
@@ -189,7 +189,7 @@ const Expander = define_class({
     /**
      * Toggles the collapsed state of the widget.
      * 
-     * @method Expander#toggle
+     * @method Expand#toggle
      */
     toggle: function() {
         toggle.call(this);
@@ -214,8 +214,8 @@ const Expander = define_class({
     initialize: function (options) {
         Container.prototype.initialize.call(this, options);
         /**
-         * @member {HTMLDivElement} Expander#element - The main DIV container.
-         *   Has class <code>.aux-expander</code>.
+         * @member {HTMLDivElement} Expand#element - The main DIV container.
+         *   Has class <code>.aux-expand</code>.
          */
 
         this._update_visibility = update_visibility.bind(this);
@@ -228,7 +228,7 @@ const Expander = define_class({
     },
     draw: function(O, element)
     {
-      add_class(element, "aux-expander");
+      add_class(element, "aux-expand");
 
       Container.prototype.draw.call(this, O, element);
     },
@@ -258,9 +258,9 @@ const Expander = define_class({
     },
 });
 /**
- * @member {Button} Expander#button - The button for toggling the state of the expander.
+ * @member {Button} Expand#button - The button for toggling the state of the expand.
  */
-define_child_widget(Expander, "button", {
+define_child_widget(Expand, "button", {
     create: Button,
     show: true,
     map_options: {
@@ -276,5 +276,3 @@ define_child_widget(Expander, "button", {
         click: toggle,
     },
 });
-
-export const Expand = Expander;

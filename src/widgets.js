@@ -12,7 +12,7 @@ export * from './widgets/dialog.js';
 export * from './widgets/dynamics.js';
 export * from './widgets/eqband.js';
 export * from './widgets/equalizer.js';
-export * from './widgets/expander.js';
+export * from './widgets/expand.js';
 export * from './widgets/fader.js';
 export * from './widgets/frame.js';
 export * from './widgets/frequencyresponse.js';
