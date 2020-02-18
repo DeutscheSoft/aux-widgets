@@ -59,7 +59,7 @@ longer introductory articles and usage examples in the directories
 
 ## Examples
 
-Several component examples can be found in seperate HTML files in the
+Several component examples can be found in separate HTML files in the
 `examples/` directory. When serving the repository from a HTTP server
 all examples can be viewed when opening the file `examples.html`.
 
