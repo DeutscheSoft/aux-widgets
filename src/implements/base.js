@@ -202,7 +202,7 @@ export const Base = define_class({
     /**
      * Merges a new options object into the existing one,
      * including deep copies of objects. If an option key begins with
-     * the string "on" it is considered as event handler. In this case
+     * the string "on" it is considered an event handler. In this case
      * the value should be the handler function for the event with
      * the corresponding name without the first "on" characters.
      *
