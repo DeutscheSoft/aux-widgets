@@ -40,7 +40,7 @@ events, AUX Widget events have a list of arguments. They are available in the
 CustomEvent object as `ev.detail.args`.
 
 For instance, for option changes triggered by user interaction, AUX widgets define
-one standard event called `useraction`. It has two event, the option name and
+one standard event called `useraction`. It has two events, the option name and
 the new value. The following event handler would call the method
 `onValueChanged` with a two element array.
 
@@ -158,11 +158,11 @@ itself.
 Some widgets need to be redrawn when their size changes. This applies for
 instance to those widgets which contain scales. Other examples are charts with
 grids and similar. Widgets automatically react to the size of the browser window
-changing, however they do not detect if the widget has changed it's size for
+changing, however they do not detect if the widget has changed its size for
 some other reason. Some modern browsers support an API called `ResizeObserver`,
 however, it is not broadly enough supported, yet, to be relied upon. In order to
 notify a widget that a resize happened, the `trigger_resize()` method needs to
-be called. This can be done using the directive `auxResize`. It's argument is an
+be called. This can be done using the directive `auxResize`. Its argument is an
 observable.
 
 In future versions when `ResizeObserver` is supported more broadly, this directive
@@ -179,7 +179,7 @@ it is important to make sure that options such as `min` and `max` are set before
 setting the value. When using standard WebComponents with attributes, the set of
 initial options is set at once on creation of the Widget. However, when using
 WebComponents in Angular, the attributes are not applied on creation but
-afterwards seperately. They are currently added in order in which they appear in
+afterwards separately. They are currently added in the order in which they appear in
 the template. It is therefore advisable to apply `min`, `max` and similar
 options at the beginning. Example:
 

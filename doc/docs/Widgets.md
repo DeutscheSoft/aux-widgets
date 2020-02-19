@@ -9,7 +9,7 @@ should always be a widget which is a subclass of Root. The Root widget takes
 care of tracking resize events and (possibly) document visibility changes.
 
 By default all Widgets are represented by DOM Elements with `display: inline-block`.
-When layouting an interface they can therefore be absolutely positioned inside 
+When laying out an interface they can therefore be absolutely positioned inside 
 a container.
 Alternatively, they can also simply be floating, which makes it easier to build grid-like layouts
 which reorganize themselves depending on window size.
@@ -42,8 +42,8 @@ For example:
 This way the widget itself (and all its children) will be able to correctly determine their new size
 and redraw themselves if necessary.
 
-In the more general case when widgets are resized dynamically in the absense of window resize events,
-it is necessary to call the `resize()` method on that part of the widget tree, which is affected by
+In the more general case when widgets are resized dynamically in the absence of window resize events,
+it is necessary to call the `resize()` method on the part of the widget tree that is affected by
 the size change.
 
 For example:

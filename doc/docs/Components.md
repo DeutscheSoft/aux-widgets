@@ -13,7 +13,7 @@ to the default value.
 
 Widget options can also be set on components as attributes. In that case
 the component will interpret the attribute value based on the type of
-the option. To control how the attribute is interpreted, it the
+the option. To control how the attribute is interpreted, the
 attribute may be prefixed by the format type.
 
 Example:

@@ -118,7 +118,7 @@ Unfortunately most real world situations are considerably more complex than this
 and therefore this problem can not be solved by reordering DOM manipulations manually.
 
 **DOM scheduling** is a technique which addresses this problem in a way which
-can be practically implemented inside of complex applications. A requirement
+can be practically implemented inside complex applications. A requirement
 for it to work is that the individual modifications are independent of each
 other. As explained in the beginning of this document, this is the case for
 AUX widgets. The central component of DOM scheduling is the scheduler. It
