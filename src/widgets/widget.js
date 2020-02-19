@@ -561,7 +561,7 @@ export const Widget = define_class({
         set_style(this.getStyleTarget(), name, value);
     },
     /**
-     * Sets a CSS style property in this widgets DOM element.
+     * Sets a CSS style property in this widget's DOM element.
      *
      * @method Widget#set_style
      */
@@ -569,7 +569,7 @@ export const Widget = define_class({
         set_styles(this.getStyleTarget(), styles);
     },
     /**
-     * Returns the computed style of this widgets DOM element.
+     * Returns the computed style of this widget's DOM element.
      *
      * @method Widget#get_style
      */
