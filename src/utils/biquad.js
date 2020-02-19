@@ -1,5 +1,5 @@
 /**
- * This module contains function for deadling with biquad filters and
+ * This module contains functions for deadling with biquad filters and
  * also implementation of common filters.
  * The formulae for 'standard' biquad filter coefficients are taken
  * from

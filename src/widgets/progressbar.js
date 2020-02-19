@@ -22,7 +22,7 @@ import { add_class } from '../utils/dom.js';
 
 /**
  * ProgressBar is a pre-configured {@link LevelMeter} to display
- * process in percent.
+ * progress in percent.
  * 
  * @extends Meter
  * 

@@ -22,7 +22,7 @@
  *
  * @description Colors provides functions for easy-to-use color calculations
  * and conversions. Functions requiring RGB or HSL color definitions as
- * argument (all `rgb2x` and `hsl2x`) can be called with different types of arguments
+ * arguments (all `rgb2x` and `hsl2x`) can be called with different types of arguments
  * to make using them more convenient. Examples:
  * <ul>
  * <li><code>rgb2hsl(240, 128, 128)</code></li>

@@ -18,7 +18,7 @@
  */
 
 /**
- * This module contains function useful for manipulating SVGs.
+ * This module contains functions useful for manipulating SVGs.
  *
  * @module utils/svg
  */

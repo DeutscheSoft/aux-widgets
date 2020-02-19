@@ -64,7 +64,7 @@ function bottom_timeout() {
 export const LevelMeter = define_class({
     /**
      * LevelMeter is a fully functional meter bar displaying numerical values.
-     * LevelMeter is an enhanced {@link Meter}'s containing a clip LED and hold markers.
+     * LevelMeter is an enhanced {@link Meter} containing a clip LED and hold markers.
      * In addition, LevelMeter has an optional falling animation, top and bottom peak
      * values and more.
      *

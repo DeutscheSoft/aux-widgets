@@ -124,7 +124,7 @@ function subtract_intervals(a, b) {
 }
 export const Meter = define_class({
     /**
-     * Meter is a base class to build different meters such as {@link LevelMeter} from.
+     * Meter is a base class to build different meters from, such as {@link LevelMeter}.
      * Meter uses {@link Gradient} and contains a {@link Scale} widget.
      * Meter inherits all options from {@link Scale}.
      * 

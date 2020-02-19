@@ -55,7 +55,7 @@ export const Gradient = define_class({
          * If element is given, the function automatically sets the
          * background. If gradient is omitted, the gradient is taken from
          * options. Fallback is used if no gradient can be created.
-         * If fallback is omitted, <code>options.background</code> is used. if no range
+         * If fallback is omitted, <code>options.background</code> is used. If no range
          * is set Gradient assumes that the implementing instance has
          * {@link Range} functionality.
          *

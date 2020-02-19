@@ -52,7 +52,7 @@ function reset() {
  * @callback Filter~filter_factory
  *
  * Returns a EqFilter object for a given set of parameters. This method will be
- * called by the Equalizer to update the filter objects when it's parameters
+ * called by the Equalizer to update the filter objects when its parameters
  * have changed.
  *
  * @param {Object} options - The filter parameters.

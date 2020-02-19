@@ -98,7 +98,7 @@ export const MultiMeter = define_class({
      * 
      * @param {Object} [options={ }] - An object containing initial options.
      * 
-     * @property {Number} [options.count=2] - The amount of level meters.
+     * @property {Number} [options.count=2] - The number of level meters.
      * @property {String} [options.label=""] - The label of the multi meter. Set to `false` to hide the label from the DOM.
      * @property {Array<String>} [options.labels=["L", "R"]] - An Array containing labels for the level meters. Their order is the same as the meters.
      * @property {Array<Number>} [options.values=[]] - An Array containing values for the level meters. Their order is the same as the meters.

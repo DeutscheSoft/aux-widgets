@@ -147,7 +147,7 @@ function onhide() {
 export const Clock = define_class({
     /**
      * Clock shows a customized clock with circulars displaying hours, minutes
-     * and seconds. It additionally offers three freely formatable labels.
+     * and seconds. It additionally offers three freely formattable labels.
      *
      * @class Clock
      * 

@@ -45,7 +45,7 @@ export const Pages = define_class({
      *   a DOMNode or a string of HTML which gets wrapped in a new {@link Container}.
      * @property {Integer} [options.show=-1] - The page to show. Set to -1 to hide all pages.
      * @property {String} [options.animation="horizontal"] - The direction of the
-     *   flip animation, einter `horizontal` or `vertical`.
+     *   flip animation, either `horizontal` or `vertical`.
      * 
      * @extends Container
      * 

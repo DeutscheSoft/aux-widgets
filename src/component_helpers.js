@@ -362,9 +362,9 @@ export function define_component(name, component, options)
  *
  * Each Component maps both attributes and properties onto options of the same
  * name. The mapping of attributes is only one-directional, i.e. attributes are
- * turned into options but not the othr way around.
+ * turned into options but not the other way around.
  *
- * Properties are only define on the corresponding component if the base Element
+ * Properties are only defined on the corresponding component if the base Element
  * class does not already define them, e.g. the property `placeholder` is
  * already defined on the HTMLInputElement and is therefore not present on the
  * ValueComponent.
@@ -374,7 +374,7 @@ export function define_component(name, component, options)
  * @property isAuxWidget {boolean} - Returns true. This can be used to detect AUX components.
  */
 /**
- * Trigger a resize. This leads the widget to recalculates it's size. Some
+ * Trigger a resize. This leads the widget to recalculates its size. Some
  * components, such as those which have scales, need this to redraw themselves
  * correctly.
  *

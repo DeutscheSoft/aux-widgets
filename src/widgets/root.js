@@ -23,7 +23,7 @@ import { add_class } from '../utils/dom.js';
 /**
  * Root is a Container which can be used as the top level when building
  * UIs programmatically. It will automatically activate listening for resize
- * and visibilitychange events globally and forward them to it's child widgets.
+ * and visibilitychange events globally and forward them to its child widgets.
  * There is no need for using `aux-root` when using WebComponents.
  * 
  * @extends Container

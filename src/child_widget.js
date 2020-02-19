@@ -65,7 +65,7 @@ export function define_child_widget(widget, name, config) {
      * @param {function} [config.append] - A function overriding the generic
      *     append mechanism. If not <code>null</code>, this function is
      *     supposed to take care of adding the child widget to the parent
-     *     widgets DOM. Otherwise the element of the child widget is added
+     *     widget's DOM. Otherwise the element of the child widget is added
      *     to the element of the parent widget.
      * @param {boolean} [config.inherit_options=false] - Defines if both widgets share the
      *     same set of options. If <code>true</code>, Setting an option on the

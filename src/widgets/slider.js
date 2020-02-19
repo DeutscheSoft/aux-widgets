@@ -67,7 +67,7 @@ function set_background(horiz, vert, size) {
  * width of the image should be frames * width. If alignment is `vertical`
  * the background image is as wide as the widget and the height of the
  * image keeps the ratio intact. The height should be height of widget
- * times the amount of frames.
+ * times the number of frames.
  * Slider uses {@link DragValue} and {@link ScrollValue}
  * for setting its value.
  * It inherits all options of {@link DragValue}, {@link Ranged} and {@link Warning}.

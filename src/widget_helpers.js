@@ -66,7 +66,7 @@ export function define_child_element(widget, name, config) {
      * @param {function} [config.append] - A function overriding the generic
      *     append mechanism. If not <code>null</code>, this function is
      *     supposed to take care of adding the child element to the parent
-     *     widgets DOM.
+     *     widget's DOM.
      * @param {function} [config.create] - A function overriding the generic
      *     creation mechanism. If not <code>null</code>, this function is
      *     supposed to create and return a DOM element to be added to the

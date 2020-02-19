@@ -181,7 +181,7 @@ export const Widget = define_class({
      * The <code>resize</code> event is emitted whenever a widget is being resized. This event can
      * be used to e.g. measure its new size. Note that some widgets do internal adjustments after
      * the <code>resize</code> event. If that is relevant, the {@link Widget#resized} event can
-     * be used, instead.
+     * be used instead.
      *
      * @event Widget#resize
      */
