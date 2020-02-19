@@ -305,7 +305,7 @@ export const Base = define_class({
         this.set(key, value);
     },
     /**
-     * Resets an option to it's default value.
+     * Resets an option to its default value.
      *
      * @method Base#reset
      * @param {string} key - The option name.
