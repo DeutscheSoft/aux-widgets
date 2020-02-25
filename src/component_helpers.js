@@ -111,7 +111,7 @@ function extract_options(node, WidgetType, attributes)
 function attributes_from_widget(Widget)
 {
   const attributes = [];
-  const skip = ["class", "id", "container", "element", "styles"];
+  const skip = ["class", "id", "container", "element", "styles", "title"];
 
   for (var i in Widget.prototype._options)
   {
