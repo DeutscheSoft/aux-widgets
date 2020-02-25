@@ -128,7 +128,22 @@ describe('Widgets', () => {
       widget.destroy();
     });
   });
-
+  
+  it('additional options', async () => {
+    Promise.all(standalone_widgets.map(async (w, i) => {
+      const widget = new w({id:"foobar"});
+      widget.show();
+      await wait_for_drawn(widget);
+      assert(widget.element.getAttribute("id") === "foobar");
+      
+      widget.set("title", "foobar");
+      await wait_for_drawn(widget);
+      assert(widget.element.getAttribute("title") === "foobar");
+      
+      widget.destroy();
+    }));
+  });
+  
   function assert_hidden(widget)
   {
     assert(widget.hidden());
