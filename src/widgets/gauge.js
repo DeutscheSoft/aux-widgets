@@ -47,12 +47,12 @@ var format_viewbox = FORMAT("0 0 %d %d");
  *   represented by a segment of a circle.
  * @property {Number} [options.y=0] - Displacement of the {@link Circular}
  *   in vertical direction.
- * @property {Object} [options.title] - Optional gauge title.
- * @property {Number} [options.title.pos] - Position inside of the circle in
+ * @property {Object} [options.label] - Optional gauge label.
+ * @property {Number} [options.label.pos] - Position inside of the circle in
  *   degrees.
- * @property {String} [options.title.title] - Title string.
- * @property {Number} [options.title.margin] - Margin of the title string.
- * @property {String} [options.title.align] - Alignment of the title, either
+ * @property {String} [options.label.label] - label string.
+ * @property {Number} [options.label.margin] - Margin of the label string.
+ * @property {String} [options.label.align] - Alignment of the label, either
  *   <code>inner</code> or <code>outer</code>.
  */
 export const Gauge = define_class({
@@ -60,13 +60,13 @@ export const Gauge = define_class({
     _options: Object.assign(Object.create(Circular.prototype._options), {
         width:  "number",
         height: "number",
-        title: "object",
+        label: "object",
     }),
     options: Object.assign({}, Circular.prototype.options, {
         width:  100, // width of the element
         height: 100, // height of the svg
         size:   100,
-        title: {pos: 90, margin: 0, align: "inner", title:""}
+        label: {pos: 90, margin: 0, align: "inner", label:""}
     }),
     initialize: function (options) {
         Widget.prototype.initialize.call(this, options);
@@ -74,8 +74,8 @@ export const Gauge = define_class({
         var O = this.options;
         var E, S;
 
-        if (typeof O.title === "string")
-            this.set('title', O.title);
+        if (typeof O.label === "string")
+            this.set('label', O.label);
 
         if (!(E = this.element)) this.element = E = element("div");
         
@@ -90,11 +90,11 @@ export const Gauge = define_class({
          */
         
         /**
-         * @member {SVGText} Gauge#_title - The title of the gauge.
-         *   Has class <code>.aux-title</code>.
+         * @member {SVGText} Gauge#_label - The label of the gauge.
+         *   Has class <code>.aux-label</code>.
          */
-        this._title = make_svg("text", {"class": "aux-title"});
-        S.appendChild(this._title);
+        this._label = make_svg("text", {"class": "aux-label"});
+        S.appendChild(this._label);
 
         var co = object_and(O, Circular.prototype._options);
         co = object_sub(co, Widget.prototype._options);
@@ -108,7 +108,7 @@ export const Gauge = define_class({
     },
     resize: function() {
         Widget.prototype.resize.call(this);
-        this.invalid.title = true;
+        this.invalid.label = true;
         this.trigger_draw();
     },
     draw: function(O, element)
@@ -128,17 +128,17 @@ export const Gauge = define_class({
             S.setAttribute("viewBox", format_viewbox(O.width, O.height));
         }
 
-        if (I.validate("title", "size", "x", "y")) {
-            var _title = this._title;
-            _title.textContent = O.title.title;
+        if (I.validate("label", "size", "x", "y")) {
+            var _label = this._label;
+            _label.textContent = O.label.label;
 
-            if (O.title.title) {
+            if (O.label.label) {
                 S.add(function() {
-                    var t = O.title;
+                    var t = O.label;
                     var outer   = O.size / 2;
                     var margin  = t.margin;
                     var align   = t.align === "inner";
-                    var bb      = _title.getBoundingClientRect();
+                    var bb      = _label.getBoundingClientRect();
                     var angle   = t.pos % 360;
                     var outer_p = outer - margin;
                     var coords  = _get_coords_single(angle, outer_p, outer);
@@ -152,15 +152,15 @@ export const Gauge = define_class({
                     my += O.y;
                            
                     S.add(function() {
-                        _title.setAttribute("transform", format_translate(coords.x + mx, coords.y + my));
-                        _title.setAttribute("text-anchor", "middle");
+                        _label.setAttribute("transform", format_translate(coords.x + mx, coords.y + my));
+                        _label.setAttribute("text-anchor", "middle");
                     }.bind(this), 1);
                     /**
-                     * Is fired when the title changed.
+                     * Is fired when the label changed.
                      * 
-                     * @event Gauge#titledrawn
+                     * @event Gauge#labeldrawn
                      */
-                    this.emit("titledrawn");
+                    this.emit("labeldrawn");
                 }.bind(this));
             }
         }
@@ -168,9 +168,9 @@ export const Gauge = define_class({
     
     // GETTERS & SETTERS
     set: function (key, value) {
-        if (key === "title") {
-            if (typeof value === "string") value = {title: value};
-            value = Object.assign(this.options.title, value);
+        if (key === "label") {
+            if (typeof value === "string") value = {label: value};
+            value = Object.assign(this.options.label, value);
         }
         // Circular does the snapping
         if (!Widget.prototype._options[key] && Circular.prototype._options[key])
