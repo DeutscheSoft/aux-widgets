@@ -169,21 +169,21 @@ function draw_key() {
     _key_bg.setAttribute("width", __key.x2 - __key.x1);
     _key_bg.setAttribute("height", __key.y2 - __key.y1);
 }
-function draw_title() {
-    var _title  = this._title;
-    if (!_title) return;
+function draw_label() {
+    var _label  = this._label;
+    if (!_label) return;
 
-    _title.textContent = this.options.title;
+    _label.textContent = this.options.label;
 
     /* FORCE_RELAYOUT */
     S.add(function() {
-        var mtop    = parseInt(get_style(_title, "margin-top") || 0);
-        var mleft   = parseInt(get_style(_title, "margin-left") || 0);
-        //var mbottom = parseInt(get_style(_title, "margin-bottom") || 0);
-        var mright  = parseInt(get_style(_title, "margin-right") || 0);
-        var bb      = _title.getBoundingClientRect();
+        var mtop    = parseInt(get_style(_label, "margin-top") || 0);
+        var mleft   = parseInt(get_style(_label, "margin-left") || 0);
+        //var mbottom = parseInt(get_style(_label, "margin-bottom") || 0);
+        var mright  = parseInt(get_style(_label, "margin-right") || 0);
+        var bb      = _label.getBoundingClientRect();
         var x,y,anchor, range_x = this.range_x, range_y = this.range_y;
-        switch (this.options.title_position) {
+        switch (this.options.label_position) {
             case "top-left":
                 anchor = "start";
                 x = mleft;
@@ -230,12 +230,12 @@ function draw_title() {
                 y = range_y.options.basis - mbottom - bb.height / 2;
                 break;
             default:
-                warn("Unsupported title_position", this.options.title_position);
+                warn("Unsupported label_position", this.options.label_position);
         }
         S.add(function() {
-            _title.setAttribute("text-anchor", anchor);
-            _title.setAttribute("x", x);
-            _title.setAttribute("y", y);
+            _label.setAttribute("text-anchor", anchor);
+            _label.setAttribute("x", x);
+            _label.setAttribute("y", y);
         }, 1);
     }.bind(this));
 }
@@ -251,10 +251,10 @@ function draw_title() {
  *
  * @param {Object} [options={ }] - An object containing initial options.
  * 
- * @property {String|Boolean} [options.title=""] - A title for the Chart.
- *   Set to `false` to remove the title from the DOM.
- * @property {String} [options.title_position="top-left"] - Position of the
- *   title inside of the chart. Possible values are
+ * @property {String|Boolean} [options.label=""] - A label for the Chart.
+ *   Set to `false` to remove the label from the DOM.
+ * @property {String} [options.label_position="top-left"] - Position of the
+ *   label inside of the chart. Possible values are
  *   <code>"top-left"</code>, <code>"top"</code>, <code>"top-right"</code>,
  *   <code>"left"</code>, <code>"center"</code>, <code>"right"</code>,
  *   <code>"bottom-left"</code>, <code>"bottom"</code> and
@@ -320,8 +320,8 @@ export const Chart = define_class({
         range_z: "object",
         key: "string",
         key_size: "object",
-        title: "string",
-        title_position: "string",
+        label: "string",
+        label_position: "string",
         resized: "boolean",
         
         importance_label:  "number",
@@ -343,8 +343,8 @@ export const Chart = define_class({
         key: false,  // key draws a description for the graphs at the given
                      // position, use false for no key
         key_size: {x:20, y:10}, // size of the key rects
-        title:   "", // a title for the chart
-        title_position: "top-left", // the position of the title
+        label:   "", // a label for the chart
+        label_position: "top-left", // the position of the label
         resized: false,
         
         importance_label:  4,   // multiplicator of square pixels on hit testing
@@ -473,9 +473,9 @@ var tmp = css_space(S, "border", "padding");
         Widget.prototype.redraw.call(this);
 
         if (I.validate("ranges", "_width", "_height", "range_x", "range_y")) {
-            /* we need to redraw both key and title, because
+            /* we need to redraw both key and label, because
              * they do depend on the size */
-            I.title = true;
+            I.label = true;
             I.key = true;
             var w = O._width;
             var h = O._height;
@@ -490,8 +490,8 @@ var tmp = css_space(S, "border", "padding");
                 this.graphs[i].redraw();
             }
         }
-        if (I.validate("title", "title_position")) {
-            draw_title.call(this);
+        if (I.validate("label", "label_position")) {
+            draw_label.call(this);
         }
         if (I.validate("key", "key_size", "graphs")) {
             draw_key.call(this);
@@ -860,22 +860,22 @@ define_child_element(Chart, "key", {
     },
 });
 /**
- * @member {SVGText} Chart#_title - The title of the chart.
- *   Has class <code>.aux-title</code>.
+ * @member {SVGText} Chart#_label - The label of the chart.
+ *   Has class <code>.aux-label</code>.
  */
-define_child_element(Chart, "title", {
-    option: "title",
+define_child_element(Chart, "label", {
+    option: "label",
     display_check: function(v) {
         return typeof(v) === "string" && v.length;
     },
     create: function() {
         return make_svg("text", {
-            "class": "aux-title",
+            "class": "aux-label",
             style: "dominant-baseline: central;"
         });
     },
     append: function() {
         var svg = this.svg;
-        svg.insertBefore(this._title, svg.firstChild);
+        svg.insertBefore(this._label, svg.firstChild);
     },
 });
