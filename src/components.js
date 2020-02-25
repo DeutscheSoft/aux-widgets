@@ -15,6 +15,7 @@ export * from './components/fader.js';
 export * from './components/frame.js';
 export * from './components/gauge.js';
 export * from './components/knob.js';
+export * from './components/label.js';
 export * from './components/levelmeter.js';
 export * from './components/meter.js';
 export * from './components/multimeter.js';
