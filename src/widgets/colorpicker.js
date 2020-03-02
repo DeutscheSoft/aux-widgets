@@ -250,8 +250,8 @@ export const ColorPicker = define_class({
         if (I.validate("rgb", "hsl", "hex", "hue", "saturation", "lightness", "red", "green", "blue")) {
             var bw = rgb2bw(O.rgb);
             var bg = "rgb("+parseInt(O.red)+","+parseInt(O.green)+","+parseInt(O.blue)+")";
-            this.hex.element.style.backgroundColor = bg;
-            this.hex.element.style.color = bw;
+            this.hex._input.style.backgroundColor = bg;
+            this.hex._input.style.color = bw;
             this.hex.set("value", O.hex);
             
             this._indicator.style.left = (O.hue * 100) + "%";

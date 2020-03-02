@@ -4,12 +4,11 @@ import {
 import { Value } from './../widgets/value.js';
 
 /**
- * WebComponent for the Value widget. Available in the DOM as `aux-value`. It is
- * a subclass of `HTMLInputElement`.
+ * WebComponent for the Value widget. Available in the DOM as `aux-value`.
  *
  * @class ValueComponent
  * @implements Component
  */
-export const ValueComponent = component_from_widget(Value, HTMLInputElement);
+export const ValueComponent = component_from_widget(Value);
 
-define_component('value', ValueComponent, { extends: 'input' });
+define_component('value', ValueComponent);

@@ -119,7 +119,6 @@ export const Container = define_class({
         children: [],
     },
     initialize: function (options) {
-        var E;
         if (!options.element) options.element = element('div');
         Widget.prototype.initialize.call(this, options);
         this.hidden_children = [];

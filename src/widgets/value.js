@@ -34,11 +34,11 @@ function value_clicked() {
     if (O.set === false) return;
     if (this.__editing) return false;
     add_class(this.element, "aux-active");
-    this.element.setAttribute("value", O.value);
+    this._input.setAttribute("value", O.value);
     this.__editing = true;
-    this.element.focus();
+    this._input.focus();
     if (O.auto_select)
-        this.element.setSelectionRange(0, this.element.value.length);
+        this._input.setSelectionRange(0, this._input.value.length);
     /**
      * Is fired when the value was clicked.
      * 
@@ -67,7 +67,7 @@ function value_typing(e) {
             break;
         case 13:
             // ENTER
-            this.userset("value", O.set ? O.set(this.element.value) : this.element.value);
+            this.userset("value", O.set ? O.set(this._input.value) : this._input.value);
             value_done.call(this);
             /**
              * Is fired after the value has been set and editing has ended.
@@ -96,13 +96,13 @@ function value_input() {
     if (O.set === false) return;
     if (!this.__editing) return;
     if (O.editmode == "immediate")
-        this.userset("value", O.set ? O.set(this.element.value) : this.element.value);
+        this.userset("value", O.set ? O.set(this._input.value) : this._input.value);
 }
 function value_done() {
     if (!this.__editing) return;
     this.__editing = false;
     remove_class(this.element, "aux-active");
-    this.element.blur();
+    this._input.blur();
     /**
      * Is fired when editing of the value ends.
      * 
@@ -112,7 +112,11 @@ function value_done() {
      */
     this.emit("valuedone", this.options.value);
     this.invalid.value = true;
+    this.stopInteracting();
     this.trigger_draw();
+}
+function value_focus () {
+    this.startInteracting();
 }
 
 function submit_cb(e) {
@@ -132,8 +136,8 @@ function submit_cb(e) {
  * @property {Number} [options.value=0] - The value.
  * @property {Function} [options.format=function (v) { return v; }] - A formatting
  *   function used to display the value.
- * @property {Null|Integer} [options.size=1] - Size attribute of the element. `null` to unset.
- * @property {Null|Integer} [options.maxlength=null] - Maxlength attribute of the element. `null` to unset.
+ * @property {Null|Integer} [options.size=1] - Size attribute of the input element. `null` to unset.
+ * @property {Null|Integer} [options.maxlength=null] - Maxlength attribute of the input element. `null` to unset.
  * @property {Function} [options.set=function (val) { return parseFloat(val || 0); }] -
  *   A function which is called to parse user input.
  * @property {boolean} [options.auto_select=false] - Select the entire text if clicked .
@@ -173,44 +177,49 @@ export const Value = define_class({
         type: "text",
         editmode: "onenter",
     },
-    static_events: {
-        submit: submit_cb,
-        click: value_clicked,
-        focus: function() {
-          this.startInteracting();
-        },
-        blur: function() {
-          this.stopInteracting();
-        },
-    },
     initialize: function (options) {
-        if (!options.element) options.element = element("input");
-        Widget.prototype.initialize.call(this, options);
+        if (!options.element) options.element = element('div');
         /**
-         * @member {HTMLInputElement} Value#element - The text input.
+         * @member {HTMLDivElement} Value#element - The main DIV container.
          *   Has class <code>aux-value</code>.
          */
+        Widget.prototype.initialize.call(this, options);
+        
+        /**
+         * @member {HTMLInputElement} Value#_input - The input element.
+         *   Has class <code>aux-input</code>.
+         */
+        this._input = element("input");
+        this.element.appendChild(this._input);
         
         this._value_typing = value_typing.bind(this);
         this._value_done = value_done.bind(this);
         this._value_input = value_input.bind(this);
+        this._value_clicked = value_clicked.bind(this);
+        this._value_focus = value_focus.bind(this);
                 
-        this.element.addEventListener("keyup", this._value_typing);
-        this.element.addEventListener("input", this._value_input);
-        this.element.addEventListener("blur", this._value_done);
         this.__editing = false;
     },
 
-    draw: function(O, element)
+    draw: function(O, elmnt)
     {
-        add_class(element, "aux-value");
-        Widget.prototype.draw.call(this, O, element);
+        add_class(elmnt, "aux-value");
+        add_class(this._input, "aux-input");
+        
+        this._input.addEventListener("keyup", this._value_typing);
+        this._input.addEventListener("input", this._value_input);
+        this._input.addEventListener("blur", this._value_done);
+        this._input.addEventListener("focus", this._value_focus);
+        this._input.addEventListener("click", this._value_clicked);
+        this._input.addEventListener("submit", submit_cb);
+        
+        Widget.prototype.draw.call(this, O, elmnt);
     },
     
     redraw: function () {
         var I = this.invalid;
         var O = this.options;
-        var E = this.element;
+        var E = this._input;
 
         Widget.prototype.redraw.call(this);
 
@@ -250,9 +259,12 @@ export const Value = define_class({
         }
     },
     destroy: function () {
-        this.element.removeEventListener("keyup", this._value_typing);
-        this.element.removeEventListener("blur", this._value_done);
-        this.element.removeEventListener("input", this._value_input);
+        this._input.removeEventListener("keyup", this._value_typing);
+        this._input.removeEventListener("blur", this._value_done);
+        this._input.removeEventListener("input", this._value_input);
+        this._input.removeEventListener("focus", this._value_focus);
+        this._input.removeEventListener("click", this._value_clicked);
+        this._input.removeEventListener("submit", submit_cb);
         Widget.prototype.destroy.call(this);
     },
 });

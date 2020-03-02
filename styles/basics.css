@@ -337,6 +337,9 @@
 .aux-meter > .aux-label {
     min-height: 1em;
 }
+.aux-meter > .aux-value {
+    height: auto;
+}
 
 /* MULTIMETER */
 
@@ -648,8 +651,10 @@
 
 /* VALUE */
 
-input.aux-value {
+.aux-value {
     height: var(--aux-value-height);
+}
+.aux-value > .aux-input {
     -webkit-appearance: none;
 }
 
@@ -672,6 +677,8 @@ input.aux-value {
 .aux-valuebutton > .aux-value {
     height: 100%;
     margin: 0 0 0 var(--aux-valuebutton-gap);
+}
+.aux-valuebutton > .aux-value > .aux-input {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
 }

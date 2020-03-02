@@ -192,9 +192,6 @@
     grid-area: hex;
     text-align: center;
 }
-.aux-colorpicker > .aux-hex > .aux-input {
-    height: 100%;
-}
 
 .aux-colorpicker > .aux-hue {
     grid-area: hue;
@@ -1198,11 +1195,15 @@ body.aux-cursor-row-resize * {
 
 /* VALUE */
 
-.aux-value {
+.aux-value > .aux-input {
     user-select: auto !important;
     text-align: center;
     border: none;
     outline: none;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 /* VALUEBUTTON */

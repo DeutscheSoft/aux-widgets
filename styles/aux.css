@@ -340,13 +340,13 @@
 
 /* VALUE */
 
-input.aux-value {
+.aux-value > .aux-input {
     background: var(--aux-widget-base);
     color: var(--aux-widget-text);
     border-radius: var(--aux-border-radius);
     font-size: var(--aux-main-bigfont);
 }
-input.aux-value.aux-active {
+.aux-value.aux-active > .aux-input {
     background: var(--aux-contrast-base);
     color: var(--aux-contrast-text);
 }
@@ -356,11 +356,15 @@ input.aux-value.aux-active {
 .aux-valuebutton {
     border-width: 0px;
 }
-.aux-valuebutton .aux-value {
+.aux-valuebutton > .aux-value > .aux-input {
     background: var(--aux-active-base);
     color: var(--aux-active-text);
 }
-.aux-valuebutton .aux-bar {
+.aux-valuebutton > .aux-value.aux-active > .aux-input {
+    background: var(--aux-contrast-base);
+    color: var(--aux-contrast-text);
+}
+.aux-valuebutton > .aux-bar {
     background: var(--aux-active-base);
 }
 .aux-valuebutton.aux-warn {
