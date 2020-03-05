@@ -100,7 +100,9 @@ function extract_options(node, WidgetType, attributes)
 
     if (!node.hasAttribute(name)) continue;
 
-    const type = _options[attributes[i]];
+    const option_name = name.startsWith('aux') ? name.substr(3) : name;
+
+    const type = _options[option_name];
 
     ret[name] = parse_attribute(type, node.getAttribute(name));
   }
@@ -111,12 +113,18 @@ function extract_options(node, WidgetType, attributes)
 function attributes_from_widget(Widget)
 {
   const attributes = [];
-  const skip = ["class", "id", "container", "element", "styles", "title"];
+  const skip = ["class", "id", "container", "element", "styles" ];
+  const rename = [ "title" ];
 
   for (var i in Widget.prototype._options)
   {
-    if (skip.indexOf(i) === -1)
-      attributes.push(i);
+    if (skip.indexOf(i) !== -1)
+      continue;
+
+    if (rename.indexOf(i) !== -1)
+      i = 'aux' + i;
+
+    attributes.push(i);
   }
 
   return attributes;
@@ -139,6 +147,9 @@ function create_component (base) {
     attributeChangedCallback(name, oldValue, newValue)
     {
       if (oldValue === newValue) return;
+
+      if (name.startsWith('aux'))
+        name = name.substr(3);
 
       try {
         const widget = this.auxWidget;
@@ -217,11 +228,16 @@ function find_parent_widget(node)
   return null;
 }
 
+let a_div;
+
 function define_options_as_properties(component, options)
 {
+  if (!a_div)
+    a_div = document.createElement('div');
+
   options.forEach((name) => {
-    if (name in component.prototype) return;
-    Object.defineProperty(component.prototype, name, {
+    let property_name = (name in a_div) ? ('aux' + name) : name;
+    Object.defineProperty(component.prototype, property_name, {
       get: function()
       {
         return this.auxWidget.get(name);
@@ -364,10 +380,12 @@ export function define_component(name, component, options)
  * name. The mapping of attributes is only one-directional, i.e. attributes are
  * turned into options but not the other way around.
  *
- * Properties are only defined on the corresponding component if the base Element
- * class does not already define them, e.g. the property `placeholder` is
- * already defined on the HTMLInputElement and is therefore not present on the
- * ValueComponent.
+ * Properties are only defined on the corresponding component under the same name,
+ * if the base Element class does not already define them, e.g. the property
+ * `title` is already defined on the HTMLElement. Properties such as 'title'
+ * for which the property would override an existing property are defined as
+ * aliases with the prefix 'aux', e.g. 'auxtitle' is defined and maps onto the
+ * 'title' option in the widget.
  *
  * @interface Component
  * @property auxWidget {Widget} - The AUX widget object of this component.

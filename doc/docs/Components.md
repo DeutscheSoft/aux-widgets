@@ -5,8 +5,10 @@ The component implementation maps options of AUX widgets onto both
 attributes and properties. This means that components have getters and
 setters for each widget option. Exceptions to this are those options
 which would collide with properties of the component base class.
-Examples for this are the `value` or `placeholder` options of the
-`ValueComponent` which extends `HTMLInputElement`.
+Examples for this are the `title` option which collides with the standard
+HTML `title` attribute. Options which would collide with existing attributes or
+properties are available with the `aux` prefix, e.g. the `title` option can be
+accesses on the component as `auxtitle` attribute and property.
 
 When setting a property to `undefined`, the widget option will be reset
 to the default value.
