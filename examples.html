@@ -71,6 +71,10 @@
 
           const res = await window.fetch('examples/' + file);
           frame.appendChild(html(await res.text()));
+          const scripts = frame.querySelectorAll('script');
+          scripts.forEach((script) => {
+            eval(script.innerText);
+          });
         });
         Promise.all(tasks).then(() => {
           setTimeout(function () {

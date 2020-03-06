@@ -956,7 +956,6 @@ export const ChartHandle = define_class({
         z_min: "number",
         z_max: "number",
         show_axis: "boolean",
-        title: "string",
         hover: "boolean",
         dragging: "boolean",
         show_handle: "boolean"

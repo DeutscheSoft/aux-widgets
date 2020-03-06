@@ -18,3 +18,51 @@
   <aux-equalizer-band freq=10000 q=1 auxtitle='LP' type=lowpass3 active=true>
   </aux-equalizer-band>
 </aux-equalizer>
+
+<aux-equalizer style='width: 100%; height: 480px;' class='extra_curve'
+    range_x="js:{min:10, max:20000, scale:'frequency'}"
+    range_y="js:{min:-24, max:24}"
+    range_z="js:{min:0.1, max:20, reverse:true}"
+>
+  <aux-equalizer-band freq=450 gain=6 q=0.5 auxtitle='P#1' active=true>
+  </aux-equalizer-band>
+  <aux-equalizer-band freq=1500 gain=-6 q=2 auxtitle='P#2' active=true>
+  </aux-equalizer-band>
+  <aux-equalizer-band freq=10000 q=1 auxtitle='LP' type=lowpass3 active=true>
+  </aux-equalizer-band>
+</aux-equalizer>
+<style>
+.aux-graph.highlite
+{
+  stroke: red;
+}
+</style>
+<script type='text/javascript'>
+  const eq = document.querySelector('aux-equalizer.extra_curve').auxWidget;
+  const EqualizerGraph = eq.baseline.constructor;
+
+  eq.bands.forEach((band) => {
+    let graph;
+    band.subscribe('set_interacting', (interacting) => {
+      if (!!graph == interacting) return;
+      if (interacting)
+      {
+        graph = new EqualizerGraph({ class: "highlite" });
+        graph.add_band(band);
+        eq.add_graph(graph);
+      }
+      else
+      {
+        eq.remove_graph(graph);
+        graph.remove_band(band);
+        graph = null;
+      }
+    });
+  });
+</script>
+<aux-equalizer style='width: 100%; height: 480px;' class='extra_curve'
+    range_x="js:{min:10, max:20000, scale:'frequency'}"
+    range_y="js:{min:-24, max:24}"
+    range_z="js:{min:0.1, max:20, reverse:true}"
+>
+</aux-equalizer>
