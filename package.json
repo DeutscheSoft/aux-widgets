@@ -1,6 +1,6 @@
 {
   "name": "@deuso/aux",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "AUX Audio Widget Library",
   "main": "src/index.js",
   "module": "src/index.js",
