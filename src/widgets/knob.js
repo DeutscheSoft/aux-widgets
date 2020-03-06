@@ -153,6 +153,8 @@ export const Knob = define_class({
             rotation: options.rotation,
             blind_angle: options.blind_angle,
         });
+        this.drag.on('startdrag', () => this.startInteracting());
+        this.drag.on('stopdrag', () => this.stopInteracting());
         /**
          * @member {ScrollValue} Knob#scroll - Instance of {@link ScrollValue} used for the
          *   interaction.
@@ -161,6 +163,8 @@ export const Knob = define_class({
             node:    S,
             range:   module_range,
         });
+        this.scroll.on('scrollstarted', () => this.startInteracting());
+        this.scroll.on('scrollended', () => this.stopInteracting());
 
         this.set("base", options.base);
         if (options.reset === void(0))
