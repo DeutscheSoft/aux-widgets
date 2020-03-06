@@ -116,6 +116,7 @@ export function define_child_element(widget, name, config) {
     add_static_event(widget, "set_"+show_option, function(value) {
         var C = this[index];
         var show = display_check ? display_check(value) : (value !== false);
+        if (show === !!C) return;
         if (show && !C) {
             C = create.call(this);
             this[index] = C;
@@ -124,7 +125,7 @@ export function define_child_element(widget, name, config) {
             this[index] = null;
             C.remove();
         }
-        if (config.toggle_class) toggle_class(this.element, "aux-has-"+name, value);
+        if (config.toggle_class) toggle_class(this.element, "aux-has-"+name, show);
         this.trigger_resize();
     });
 
@@ -136,7 +137,10 @@ export function define_child_element(widget, name, config) {
 
         for (var i = 0; i < m.length; i++) {
             add_static_event(widget, "set_"+m[i], function() {
-                if (this.options[show_option])
+                var value = this.options[show_option];
+                var show = display_check ? display_check(value) : (value !== false);
+
+                if (show)
                     this.draw_once(config.draw);
             });
         }
