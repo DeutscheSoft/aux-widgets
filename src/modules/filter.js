@@ -85,7 +85,7 @@ export const Filter = define_class({
      * @property {Number} [options.q=1] - The initial Q of the filter.
      * @property {Number} [options.sample_rate=44100] - The sample rate.
      *
-     * @mixin Filter
+     * @class Filter
      * 
      * @extends Base
      */
