@@ -7,140 +7,186 @@
     <script type=module src="src/index.js"></script>
     <script type=module>
       const examples = [
-        "Button.html",
-        "Buttons.html",
-        "Chart.html",
-        "Clock.html",
-        "ColorPicker.html",
-        "ColorPickerDialog.html",
-        "Compressor.html",
-        "ConfirmButton.html",
-        "Crossover.html",
-        "Dialog.html",
-        "Dynamics.html",
-        "Equalizer.html",
-        "Expander.html",
-        "Fader.html",
-        "Gate.html",
-        "Gauge.html",
-        "Knob.html",
-        "LevelMeter.html",
-        "Limiter.html",
-        "Meter.html",
-        "MultiMeter.html",
-        "Pager.html",
-        "Pages.html",
-        "Panorama.html",
-        "PhaseMeter.html",
-        "ProgressBar.html",
-        "Scale.html",
-        "Select.html",
-        "Slider.html",
-        "State.html",
-        "Toggle.html",
-        "Value.html",
-        "ValueButton.html",
-        "ValueKnob.html"
+        "Button",
+        "Buttons",
+        "Chart",
+        "Clock",
+        "ColorPicker",
+        "ColorPickerDialog",
+        "Compressor",
+        "ConfirmButton",
+        "Crossover",
+        "Dialog",
+        "Dynamics",
+        "Equalizer",
+        "Expander",
+        "Fader",
+        "Gate",
+        "Gauge",
+        "Knob",
+        "LevelMeter",
+        "Limiter",
+        "Meter",
+        "MultiMeter",
+        "Pager",
+        "Pages",
+        "Panorama",
+        "PhaseMeter",
+        "ProgressBar",
+        "Scale",
+        "Select",
+        "Slider",
+        "State",
+        "Toggle",
+        "Value",
+        "ValueButton",
+        "ValueKnob"
       ];
 
       import { html } from './src/utils/dom.js';
-
-      window.addEventListener('load', function() {
-        const hash = window.location.hash.substr(1);
-        let filter = null;
-
-        if (hash !== '' && parseInt(hash).toString() !== hash)
-        {
-          filter = hash.toLowerCase().split(',');
-        }
-
-        const root = document.querySelector('aux-root');
-        const tasks = examples.map(async (file) => {
-          const tmp = file.split('.');
-          tmp.pop();
-          const name = tmp.join('.');
-
-          if (filter && filter.indexOf(name.toLowerCase()) === -1)
-          {
-            return;
-          }
-
-          const frame = document.createElement('aux-frame');
-          frame.setAttribute('label', name);
-          root.appendChild(frame);
-
-          const res = await window.fetch('examples/' + file);
-          frame.appendChild(html(await res.text()));
+      
+      function isint(v) {
+        return typeof v !== "undefined" && parseInt(v).toString() === v.toString();
+      }
+      
+      function build_list_entry (item, name, active) {
+        var li = document.createElement("li");
+        if (active)
+          li.setAttribute("class", "active");
+        li.innerHTML = name ? name : item;
+        li.addEventListener("click", function (e) {
+          window.location.hash = item;
+          window.location.reload();
         });
+        return li;
+      }
+      
+      function build_examples_list (list, current) {
+        var active;
+        var ul = document.createElement("ul");
+        ul.setAttribute("id", "navigation");
+        ul.appendChild(build_list_entry("", "Home", !current.length));
+        ul.appendChild(build_list_entry("*", "All"));
+        for (var i = 0; i < list.length; i++) {
+          var li = build_list_entry(list[i], "", current.indexOf(list[i]) >= 0);
+          if (!active)
+            active = current.indexOf(list[i]) >= 0 ? li : active;
+          ul.appendChild(li);
+        }
+        return [ul, active];
+      }
+      
+      window.addEventListener('load', function() {
+        const root = document.querySelector('aux-root');
+        const atoms = window.location.hash.substr(1).split(",");
+        let widgets = [];
+        let scroll = 0;
+        let all = false;
+        for (var i = 0; i < atoms.length; i++) {
+          var a = atoms[i];
+          if (a === "*") {
+            widgets = examples;
+            all = true;
+          }
+          else if (!all && examples.indexOf(a) >= 0)
+            widgets.push(a);
+          else if (isint(a))
+            scroll = parseInt(a);
+        }
+        if (widgets.length) {
+          root.innerHTML = "";
+        }
+        const tasks = widgets.map(async (widget) => {
+          var file = widget + ".html";
+        
+          const header = document.createElement("h3");
+          header.innerHTML = widget;
+          root.appendChild(header);
+          
+          const cont = document.createElement('aux-container');
+          root.appendChild(cont);
+  
+          const res = await window.fetch('examples/' + file);
+          cont.appendChild(html(await res.text()));
+          const scripts = cont.querySelectorAll('script');
+          scripts.forEach((script) => {
+            eval(script.innerText);
+          });
+        });
+        
         Promise.all(tasks).then(() => {
           setTimeout(function () {
-            if (filter === null)
-            {
-              window.scrollTo(0, parseInt(hash));
-              document.addEventListener("scroll", function () {
-                let s = parseInt(document.children[0].scrollTop);
-                window.location.hash = "#" + s;
-              });
-            }
+            root.scrollTo(0, scroll);
+            root.addEventListener("scroll", function () {
+              let s = parseInt(root.scrollTop);
+              var h = "#" + s + ",";
+              if (all)
+                h += "*";
+              else
+                h += widgets.join(",");
+              window.location.hash = h;
+            });
 
             document.querySelectorAll('.aux-widget').forEach((node) => {
               if (!node.tagName.startsWith('AUX')) return;
               node.addEventListener('dblclick', (ev) => {
                 console.log(node.tagName);
-                node.constructor.observedAttributes.forEach((name) => {
-                  if (!node.hasAttribute(name)) return;
-                  const widget = node.auxWidget;
-                  console.log('%s %o %o', name, node.getAttribute(name),
-                              widget.get(name));
+                node.constructor.observedAttributes.forEach((widget) => {
+                  if (!node.hasAttribute(widget)) return;
+                  const W = node.auxWidget;
+                  console.log('%s %o %o', W, node.getAttribute(W),
+                              W.get(W));
                 });
                 ev.stopPropagation();
               });
             });
           }, 100);
         });
+        var ul = build_examples_list(examples, widgets);
+        document.body.appendChild(ul[0]);
+        if (ul[1])
+          ul[1].scrollIntoView({block:"nearest"});
+        
       });
 
     </script>
     
     <link rel="stylesheet" id=stylesheet href="styles/aux.css" />
+    <link rel="stylesheet" id=stylesheet href="examples/styles.css" />
     
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: sans-serif;
-            font-size: 14px;
-        }
-        #logo {
-            width: 96px;
-            height: 96px;
-            float: right;
-            margin: 0 0 8px 16px;
-        }
-        .aux-root {
-            clear: both;
-            padding: 16px;
-        }
-        .aux-root > .aux-frame {
-            display: block;
-            margin-bottom: 20px;
-        }
+        
+        
     </style>
     
     
   </head>
   <body>
     
-    <img src="logo.png" id=logo>
-    <h1>AUX Examples</h1>
-    <p>
-        This is a collection of AUX widgets in different configurations
-        for demonstration and guideline purposes. to get an insight into
-        structure and relation, browsers with developer tools
-        (try <code>F12</code>) are recommended.
-    </p>
+    <aux-root>
     
-    <aux-root></aux-root>
+      <h1>AUX Examples</h1>
+      <img src="logo.png" id=logo>
+      <p>
+          This is a collection of AUX widgets in different configurations
+          for development, demonstration and guideline purposes. to get
+          an insight into structure and relation, browsers with developer
+          tools (try <code>F12</code>) are recommended.
+      </p>
+      <p>
+          Select a single widget from the menu to the right or click "All"
+          to see all examples on one page (might slow down your computer).
+      </p>
+      <p>
+          The full documentation can be found online at
+          <a href="http://docs.deuso.de/AUX">docs.deuso.de/AUX</a>.
+      </p>
+      <p>
+          AUX AudioWidgets is a product of
+          <a href="https://deuso.de">DeusO GmbH</a>.
+      </p>
+    
+    </aux-root>
     
     <aux-notifications>
         <aux-notification icon=gear show_close=true timeout=10>
