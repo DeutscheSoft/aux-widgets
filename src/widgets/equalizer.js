@@ -126,6 +126,10 @@ export const EqualizerGraph = define_class({
    *   steep, oversample n times in order to not miss e.g. notch filters.
    * @param {Number} [options.threshold=5] - Steepness of slope to oversample,
    *   i.e. y pixels difference per x pixel
+   * @param {Function} [options.rendering_filter=(b) => b.get('active')] - A
+   *   callback function which can be used to customize which equalizer bands
+   *   are included when rendering the frequency response curve. This defaults
+   *   to those bands which have their `active` option set to `true`.
    * @class EqualizerGraph
    * 
    * @extends Graph
@@ -136,6 +140,7 @@ export const EqualizerGraph = define_class({
     oversampling: "number",
     threshold: "number",
     bands:  "array",
+    rendering_filter: "function",
   }),
   options: {
       accuracy: 1, // the distance between points of curves on the x axis
@@ -143,6 +148,7 @@ export const EqualizerGraph = define_class({
                        // n times in order to not miss a notch filter
       threshold: 10, // steepness of slope, i.e. amount of y pixels difference
       bands: [],   // list of bands to create on init
+      rendering_filter: function (band) { return band.get('active'); },
   },
   initialize: function (options) {
     Graph.prototype.initialize.call(this, options);
@@ -150,8 +156,9 @@ export const EqualizerGraph = define_class({
   },
   redraw: function() {
     var I = this.invalid;
-    if (I.validate("bands", "accuracy")) {
-          var bands = this.options.bands.filter(b => b.get("active"))
+    if (I.validate("bands", "accuracy", "rendering_filter", "oversampling", "threshold"))
+    {
+          var bands = this.options.bands.filter(this.options.rendering_filter);
           var f = bands.map((b) => b.filter.get_freq2gain());
           draw_graph.call(this, f);
     }
