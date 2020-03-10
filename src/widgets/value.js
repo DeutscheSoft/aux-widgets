@@ -164,7 +164,7 @@ export const Value = define_class({
     options: {
         value: 0,
         format: function (v) { return v; },
-        size: 1,
+        size: 3,
         maxlength: null,
         container: false,
         // set a callback function if value is editable or
