@@ -140,9 +140,9 @@
       function build_navigation (list) {
         var ul = document.createElement("ul");
         ul.setAttribute("id", "navigation");
-        const home = build_list_entry("", "Home", current => !current);
+        const home = build_list_entry("", "Home", current => current === void(0));
         ul.appendChild(home);
-        ul.appendChild(build_list_entry("*", "All"));
+        ul.appendChild(build_list_entry("*", "All", current => current === null));
         for (var i = 0; i < list.length; i++) {
           const li = build_list_entry(list[i], "", cmp(list[i]))
           ul.appendChild(li);
@@ -166,9 +166,13 @@
 
         last_info = [ all, scroll, widgets ];
 
-        if (widgets.length) {
-          root.innerHTML = "";
-        }
+        const introduction = root.querySelector('#introduction');
+
+        while (introduction.nextSibling)
+          introduction.nextSibling.remove();
+
+        introduction.style.display = widgets.length ? 'none' : null;
+
         const tasks = widgets.map(load_example);
 
         Promise.all(tasks).then((cbs) => {
@@ -220,26 +224,28 @@
   </head>
   <body>
     <aux-root>
-      <h1>AUX Examples</h1>
-      <img src="logo.png" id=logo>
-      <p>
-          This is a collection of AUX widgets in different configurations
-          for development, demonstration and guideline purposes. to get
-          an insight into structure and relation, browsers with developer
-          tools (try <code>F12</code>) are recommended.
-      </p>
-      <p>
-          Select a single widget from the menu to the right or click "All"
-          to see all examples on one page (might slow down your computer).
-      </p>
-      <p>
-          The full documentation can be found online at
-          <a href="http://docs.deuso.de/AUX">docs.deuso.de/AUX</a>.
-      </p>
-      <p>
-          AUX AudioWidgets is a product of
-          <a href="https://deuso.de">DeusO GmbH</a>.
-      </p>
+      <div id=introduction>
+        <h1>AUX Examples</h1>
+        <img src="logo.png" id=logo>
+        <p>
+            This is a collection of AUX widgets in different configurations
+            for development, demonstration and guideline purposes. to get
+            an insight into structure and relation, browsers with developer
+            tools (try <code>F12</code>) are recommended.
+        </p>
+        <p>
+            Select a single widget from the menu to the right or click "All"
+            to see all examples on one page (might slow down your computer).
+        </p>
+        <p>
+            The full documentation can be found online at
+            <a href="http://docs.deuso.de/AUX">docs.deuso.de/AUX</a>.
+        </p>
+        <p>
+            AUX AudioWidgets is a product of
+            <a href="https://deuso.de">DeusO GmbH</a>.
+        </p>
+      </div>
     </aux-root>
   </body>
 </html>
