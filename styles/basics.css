@@ -698,8 +698,11 @@
 .aux-valueknob > .aux-widget {
     margin: 0;
 }
+.aux-valueknob > .aux-knob {
+    z-index: 1;
+}
 .aux-valueknob > .aux-value {
-    z-index: -1;
+    z-index: 0;
 }
 .aux-valueknob.aux-vertical > .aux-knob {
     margin: var(--aux-valueknob-gridgap) 0;
