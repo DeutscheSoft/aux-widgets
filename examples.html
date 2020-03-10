@@ -44,40 +44,34 @@
       ];
 
       import { html } from './src/utils/dom.js';
-      
+
       function isint(v) {
         return typeof v !== "undefined" && parseInt(v).toString() === v.toString();
       }
-      
-      function build_list_entry (item, name, active) {
-        var li = document.createElement("li");
-        if (active)
-          li.setAttribute("class", "active");
-        li.innerHTML = name ? name : item;
-        li.addEventListener("click", function (e) {
-          window.location.hash = item;
-          window.location.reload();
-        });
-        return li;
+
+      async function load_example(widget) {
+        var file = widget + ".html";
+
+        const header = document.createElement("h3");
+        header.innerHTML = widget;
+
+        const cont = document.createElement('aux-container');
+
+        const res = await window.fetch('examples/' + file);
+        cont.appendChild(html(await res.text()));
+        const scripts = cont.querySelectorAll('script');
+
+        return (root) => {
+          root.appendChild(header);
+          root.appendChild(cont);
+          scripts.forEach((script) => {
+            eval(script.innerText);
+          });
+        };
       }
-      
-      function build_examples_list (list, current) {
-        var active;
-        var ul = document.createElement("ul");
-        ul.setAttribute("id", "navigation");
-        ul.appendChild(build_list_entry("", "Home", !current.length));
-        ul.appendChild(build_list_entry("*", "All"));
-        for (var i = 0; i < list.length; i++) {
-          var li = build_list_entry(list[i], "", current.indexOf(list[i]) >= 0);
-          if (!active)
-            active = current.indexOf(list[i]) >= 0 ? li : active;
-          ul.appendChild(li);
-        }
-        return [ul, active];
-      }
-      
-      window.addEventListener('load', function() {
-        const root = document.querySelector('aux-root');
+
+      function decode_hash()
+      {
         const atoms = window.location.hash.substr(1).split(",");
         let widgets = [];
         let scroll = 0;
@@ -93,38 +87,96 @@
           else if (isint(a))
             scroll = parseInt(a);
         }
+
+        return [ all, scroll, widgets ];
+      }
+
+      function update_hash_silent(hash)
+      {
+        window.location.hash = hash;
+      }
+
+      function update_scroll()
+      {
+        const [ all, scroll, widgets ] = decode_hash();
+
+        const root = document.querySelector('aux-root');
+        let s = parseInt(root.scrollTop);
+        var h = "#" + s + ",";
+        if (all)
+          h += "*";
+        else
+          h += widgets.join(",");
+
+        update_hash_silent(h);
+      }
+
+      function build_list_entry (item, name, is_active) {
+        var li = document.createElement("li");
+        li.innerHTML = name ? name : item;
+        li.addEventListener("click", function (e) {
+          window.location.hash = item;
+        });
+        if (is_active)
+        {
+          const toggle_active = (current) => {
+            const v = is_active(current);
+            li.classList.toggle('active', v);
+            if (v)
+              li.scrollIntoView({ block: "nearest" });
+          };
+          current_subscribers.push(toggle_active);
+        }
+        return li;
+      }
+
+      const current_subscribers = [];
+
+      function cmp(name)
+      {
+        return function(v) { return name === v; };
+      }
+
+      function build_navigation (list) {
+        var ul = document.createElement("ul");
+        ul.setAttribute("id", "navigation");
+        const home = build_list_entry("", "Home", current => !current);
+        ul.appendChild(home);
+        ul.appendChild(build_list_entry("*", "All"));
+        for (var i = 0; i < list.length; i++) {
+          const li = build_list_entry(list[i], "", cmp(list[i]))
+          ul.appendChild(li);
+        }
+        return ul;
+      }
+
+      let last_info = null;
+
+      function load_examples()
+      {
+        const root = document.querySelector('aux-root');
+        const [ all, scroll, widgets ] = decode_hash();
+
+        if (last_info)
+        {
+          if (last_info[0] == all &&
+              JSON.stringify(last_info[2]) == JSON.stringify(widgets))
+            return;
+        }
+
+        last_info = [ all, scroll, widgets ];
+
         if (widgets.length) {
           root.innerHTML = "";
         }
-        const tasks = widgets.map(async (widget) => {
-          var file = widget + ".html";
-        
-          const header = document.createElement("h3");
-          header.innerHTML = widget;
-          root.appendChild(header);
-          
-          const cont = document.createElement('aux-container');
-          root.appendChild(cont);
-  
-          const res = await window.fetch('examples/' + file);
-          cont.appendChild(html(await res.text()));
-          const scripts = cont.querySelectorAll('script');
-          scripts.forEach((script) => {
-            eval(script.innerText);
-          });
-        });
-        
-        Promise.all(tasks).then(() => {
+        const tasks = widgets.map(load_example);
+
+        Promise.all(tasks).then((cbs) => {
+          cbs.forEach((cb) => cb(root));
           setTimeout(function () {
             root.scrollTo(0, scroll);
             root.addEventListener("scroll", function () {
-              let s = parseInt(root.scrollTop);
-              var h = "#" + s + ",";
-              if (all)
-                h += "*";
-              else
-                h += widgets.join(",");
-              window.location.hash = h;
+              update_scroll(root.scrollTop);
             });
 
             document.querySelectorAll('.aux-widget').forEach((node) => {
@@ -142,29 +194,32 @@
             });
           }, 100);
         });
-        var ul = build_examples_list(examples, widgets);
-        document.body.appendChild(ul[0]);
-        if (ul[1])
-          ul[1].scrollIntoView({block:"nearest"});
-        
+
+        const current = widgets.length === examples.length ? null : widgets[0];
+        current_subscribers.forEach((cb) => cb(current));
+      }
+
+      window.addEventListener('hashchange', function() {
+        load_examples();
+      });
+
+      window.addEventListener('load', function() {
+        const ul = build_navigation(examples);
+        document.body.appendChild(ul);
+
+        load_examples();
       });
 
     </script>
-    
+
     <link rel="stylesheet" id=stylesheet href="styles/aux.css" />
     <link rel="stylesheet" id=stylesheet href="examples/styles.css" />
-    
+
     <style>
-        
-        
     </style>
-    
-    
   </head>
   <body>
-    
     <aux-root>
-    
       <h1>AUX Examples</h1>
       <img src="logo.png" id=logo>
       <p>
@@ -185,15 +240,6 @@
           AUX AudioWidgets is a product of
           <a href="https://deuso.de">DeusO GmbH</a>.
       </p>
-    
     </aux-root>
-    
-    <aux-notifications>
-        <aux-notification icon=gear show_close=true timeout=10>
-            I'm a notification.
-        </aux-notification>
-    </aux-notifications>
-
   </body>
-  
 </html>
