@@ -137,8 +137,8 @@
 
 .aux-widget.aux-clock {
     border-radius: 100%;
-    min-width: 200px;
-    min-height: 200px;
+    width: 200px;
+    height: 200px;
 }
 
 /* COLORPICKER */
