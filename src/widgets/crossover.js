@@ -20,7 +20,7 @@ import { define_class } from '../widget_helpers.js';
 import { add_class } from '../utils/dom.js';
 import { error } from '../utils/log.js';
 import { sprintf } from '../utils/sprintf.js';
-import { Equalizer } from './equalizer.js';
+import { EqualizerGraph, Equalizer } from './equalizer.js';
 import { EqBand } from './eqband.js';
 import { Filter } from '../modules/filter.js';
 
@@ -52,17 +52,16 @@ export const CrossoverBand = define_class({
     },
     static_events: {
         set_lower: function (val) {
-            this.filter = this.lower;
-            EqBand.prototype.set.call(this, "type", val);
+            this.lower.set('type', val);
             this.set("mode", "line-vertical");
         },
         set_upper: function (val) {
-            this.filter = this.upper;
-            EqBand.prototype.set.call(this, "type", val);
+            this.upper.set('type', val);
             this.set("mode", "line-vertical");
         },
     },
     initialize: function (options) {
+        EqBand.prototype.initialize.call(this, options);
         /**
          * @member {Filter} CrossoverBand#upper - The filter providing the graphical calculations for the upper graph. 
          */
@@ -70,8 +69,10 @@ export const CrossoverBand = define_class({
         /**
          * @member {Filter} CrossoverBand#lower - The filter providing the graphical calculations for the lower graph. 
          */
-        this.lower = new Filter();
-        EqBand.prototype.initialize.call(this, options);
+        this.lower = this.filter;
+        this.filter.on('set_freq', (v) => { this.upper.set('freq', v); });
+        this.filter.on('set_gain', (v) => { this.upper.set('gain', v); });
+        this.filter.on('set_q', (v) => { this.upper.set('q', v); });
         /** 
          * @member {HTMLDivElement} CrossoverBand#element - The main SVG group.
          *   Has class <code>.aux-crossoverband</code>.
@@ -86,25 +87,40 @@ export const CrossoverBand = define_class({
 
       EqBand.prototype.draw.call(this, O, element);
     },
-    set: function (key, val) {
-        switch (key) {
-            case "freq":
-            case "gain":
-            case "q":
-                if (this.lower)
-                    this.filter = this.lower;
-                val = EqBand.prototype.set.call(this, key, val);
-                this.filter = this.upper;
-                return EqBand.prototype.set.call(this, key, val);
-        }
-        return EqBand.prototype.set.call(this, key, val);
-    },
 });
- 
-function invalidate_bands() {
-    this.invalid.bands = true;
-    this.trigger_draw();
-}
+
+export const CrossoverGraph = define_class({
+  Extends: EqualizerGraph,
+  _options: Object.assign(Object.create(EqualizerGraph.prototype._options), {
+    index: 'number',
+  }),
+  option: {
+    index: -1,
+  },
+  getFilterFunctions: function() {
+    const bands = this.options.bands;
+    const index = this.options.index;
+
+    // sort bands by frequency
+    bands.sort(function (a, b) {
+      return a.options.freq - b.options.freq;
+    });
+
+    const filters = [ ];
+
+    if (index < bands.length)
+    {
+      filters.push(bands[index].lower.get_freq2gain());
+    }
+
+    if (index > 0)
+    {
+      filters.push(bands[index - 1].upper.get_freq2gain());
+    }
+
+    return filters;
+  },
+});
 
 function sort_bands() {
     this.bands.sort(function (a, b) {
@@ -112,11 +128,48 @@ function sort_bands() {
     });
 }
 
+function unlimit_bands()
+{
+  this.bands.forEach((band) => {
+    band.set('x_min', false);
+    band.set('x_max', false);
+  });
+}
+
+/*
+ * Limit the movement of bands based on the frequency in a given band.
+ */
+function limit_band (bands, i, distance)
+{
+  const band = bands[i];
+  const prev = i ? bands[i - 1] : null;
+  const next = i+1 < bands.length ? bands[i+1] : null;
+
+  if (prev)
+  {
+    const x_distance = distance * band.get('freq');
+    const x_max = band.get('freq') - x_distance;
+    prev.set('x_max', x_max);
+    band.set('x_min', prev.get('freq') + x_distance);
+  }
+  else
+  {
+    band.set('x_min', false);
+  }
+
+  if (!next)
+  {
+    band.set('x_max', false);
+  }
+}
+
 function limit_bands () {
     if (this.options.leap) return;
     sort_bands.call(this);
+
+    const distance = Math.abs(this.get('distance'));
     for (var i = 0; i < this.bands.length; i++)
-        _set_freq.call(this, i, this.bands[i]);
+      limit_band(this.bands, i, distance);
 }
 
 function set_freq (band) {
@@ -126,16 +179,8 @@ function set_freq (band) {
         error("Band no member of crossover");
         return;
     }
-    _set_freq.call(this, i, band);
-}
-
-function _set_freq (i, band) {
-    var freq = band.options.freq;
-    var dist = freq * this.get("distance");
-    if (i)
-        this.bands[i-1].set("x_max", freq - dist);
-    if (i < this.bands.length-1)
-        this.bands[i+1].set("x_min", freq + dist);
+    const distance = Math.abs(this.get('distance'));
+    limit_band(this.bands, i, distance);
 }
 
 export const Crossover = define_class({
@@ -151,9 +196,10 @@ export const Crossover = define_class({
      * @param {Object} [options={ }] - An object containing initial options.
      * 
      * @property {Boolean} [options.leap=true] - Define if bands are allowed to leap over each other.
-     * @property {Number} [options.distance=0] - Set a minimal distance between bands if leaping is not allowed.
-     *   Value is a factor of x. Example: if distance=0.2 a band cannot be moved beyond 800Hz if the upper next
-     *   band is at 1kHz.
+     * @property {Number} [options.distance=0] - Set a minimal distance between bands. This has no effect
+     *   is `leap=true`. The value is interpreted as a factor of the frequency
+     *   of the next band, e.g. if distance is `0.2` and a band is at `1kHz`, then a second lower
+     *   band cannot be moved beyond `800Hz`.
      */
     Extends: Equalizer,
     _options: Object.assign(Object.create(Equalizer.prototype._options), {
@@ -164,6 +210,13 @@ export const Crossover = define_class({
         range_y: {min:-60, max: 12, scale: "linear"},
         leap: true,
         distance: 0,
+    },
+    static_events:
+    {
+      set_leap: function (v) {
+        (v ? unlimit_bands : limit_bands).call(this);
+      },
+      set_distance: limit_bands,
     },
     initialize: function (options) {
         Equalizer.prototype.initialize.call(this, options);
@@ -176,10 +229,9 @@ export const Crossover = define_class({
         this.set_freq_cb = function() {
           set_freq.call(self, this);
         };
-    },
-    resize: function () {
-        invalidate_bands.call(this);
-        Equalizer.prototype.resize.call(this);
+        this.remove_child(this.baseline);
+        const graph = this.add_graph(new CrossoverGraph({ index: 0 }));
+        this.crossover_graphs = [ graph ];
     },
     draw: function(O, element)
     {
@@ -187,45 +239,40 @@ export const Crossover = define_class({
 
       Equalizer.prototype.draw.call(this, O, element);
     },
-    redraw: function () {
-        var I = this.invalid;
-        var O = this.options;
-        if (I.validate("bands", "accuracy")) {
-            I.bands = false;
-            I.accuracy = false;
-            sort_bands.call(this);
-
-            if (this.bands.length && this.graphs.length)
-            {
-              var lastb = this.bands.length - 1;
-              var lastg = this.graphs.length - 1;
-
-              for (var i = 0; i < this.bands.length; i++) {
-                  var f = [this.bands[i].lower.get_freq2gain()];
-                  if (i)
-                      f.push(this.bands[i-1].upper.get_freq2gain());
-                  this._draw_graph(this.graphs[i], f);
-              }
-              this._draw_graph(this.graphs[lastg], [this.bands[lastb].upper.get_freq2gain()]);
-            }
-        }
-        Equalizer.prototype.redraw.call(this);
-    },
     add_child: function (child) {
-        Equalizer.prototype.add_child.call(this, child);
-        if (child instanceof CrossoverBand) {
-            this.add_graph();
-            child.on("set_freq", this.set_freq_cb);
-            limit_bands.call(this);
-        }
+      Equalizer.prototype.add_child.call(this, child);
+      if (child instanceof CrossoverBand)
+      {
+        // add this band to all crossover graphs
+        this.crossover_graphs.forEach((g) => g.add_band(child));
+        child.on("set_freq", this.set_freq_cb);
+        limit_bands.call(this);
+        // add an additional crossover graph
+        const graph = this.add_graph(new CrossoverGraph({ index: this.crossover_graphs.length }));
+        this.crossover_graphs.push(graph);
+      }
+      else if (child instanceof CrossoverGraph)
+      {
+        // add all bands to this crossover
+        this.children.filter((child) => child instanceof CrossoverBand)
+            .forEach((band) => child.add_band(band));
+      }
     },
     remove_child: function (child) {
-        Equalizer.prototype.remove_child.call(this, child);
-        if (child instanceof CrossoverBand) {
-            this.remove_graph(this.graphs[this.graphs.length-1]);
-            child.off("set_freq", this.set_freq_cb);
-            limit_bands.call(this);
-        }
+      Equalizer.prototype.remove_child.call(this, child);
+      if (child instanceof CrossoverBand)
+      {
+        const graph = this.crossover_graphs.pop();
+        this.remove_graph(graph);
+        child.off("set_freq", this.set_freq_cb);
+        limit_bands.call(this);
+        this.crossover_graphs.forEach((g) => g.remove_band(child));
+      }
+      else if (child instanceof CrossoverGraph)
+      {
+        this.children.filter((child) => child instanceof CrossoverBand)
+            .forEach((band) => child.remove_band(band));
+      }
     },
     add_band: function (options, type) {
         let band;
@@ -238,8 +285,5 @@ export const Crossover = define_class({
         }
         this.add_child(band);
         return band;
-    },
-    remove_band: function (band) {
-        this.remove_child(band);
     },
 });
