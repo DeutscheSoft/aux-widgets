@@ -100,12 +100,13 @@ function draw_graph (bands) {
         }
 
         if (!isFinite(Y[i])) {
-            warn("Singular filter in Equalizer.");
-            this.set("dots", void(0));
+          warn("Singular filter in Equalizer.");
+          return void(0);
             return;
         }
     }
-    this.set("dots", fast_draw_plinear(X, Y));
+
+    return fast_draw_plinear(X, Y);
 }
 function invalidate_bands() {
     this.invalid.bands = true;
@@ -158,11 +159,23 @@ export const EqualizerGraph = define_class({
     var I = this.invalid;
     if (I.validate("bands", "accuracy", "rendering_filter", "oversampling", "threshold"))
     {
-          var bands = this.options.bands.filter(this.options.rendering_filter);
-          var f = bands.map((b) => b.filter.get_freq2gain());
-          draw_graph.call(this, f);
+        this.set("dots", this.drawPath());
     }
     Graph.prototype.redraw.call(this);
+  },
+  /**
+   * Returns the functions representing the frequency response of all
+   * active filters.
+   */
+  getFilterFunctions: function() {
+    var bands = this.options.bands.filter(this.options.rendering_filter);
+    return bands.map((b) => b.filter.get_freq2gain());
+  },
+  /**
+   * Draws an SVG path for the current frequency response curve.
+   */
+  drawPath: function() {
+    return draw_graph.call(this, this.getFilterFunctions());
   },
   resize: function() {
     invalidate_bands.call(this);
