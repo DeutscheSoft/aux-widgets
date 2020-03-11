@@ -23,7 +23,8 @@
 import { define_class } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 import { Ranges } from '../implements/ranges.js';
-import { make_svg, add_class, remove_class } from '../utils/dom.js';
+import { add_class, remove_class } from '../utils/dom.js';
+import { make_svg } from '../utils/svg.js';
 import { error } from '../utils/log.js';
 
 function range_change_cb() {
