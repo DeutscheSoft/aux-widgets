@@ -595,18 +595,10 @@ export function unique_id() {
 }
 
 /**
- * Creates and returns an SVG child element.
- * @param {string} tag - The element to create as string, e.g. "line" or "g"
- * @param {object} arguments - The attributes to set onto the element
- * @returns {SVGElement}
+ * Check if an object is a DOMNode
+ * @returns {boolean}
+ * @function is_dom_node
  */
-export function make_svg(tag, args) {
-    var el = document.createElementNS('http://www.w3.org/2000/svg', "svg:" + tag);
-    for (var k in args)
-        el.setAttribute(k, args[k]);
-    return el;
-}
-
 export function is_dom_node(o) {
     /* this is broken for SVG */
     return typeof o === "object" && o instanceof Node;

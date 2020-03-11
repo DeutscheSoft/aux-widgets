@@ -27,7 +27,8 @@ import { S } from '../dom_scheduler.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { warn } from '../utils/log.js';
 import { add_event_listener, remove_event_listener } from '../utils/events.js';
-import { make_svg, set_text, remove_class, add_class, toggle_class } from '../utils/dom.js';
+import { set_text, remove_class, add_class, toggle_class } from '../utils/dom.js';
+import { make_svg } from '../utils/svg.js';
 import { Range } from '../modules/range.js';
 
 import { DragCapture } from '../modules/dragcapture.js';

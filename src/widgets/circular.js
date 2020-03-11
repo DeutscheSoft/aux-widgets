@@ -19,7 +19,8 @@
 import { define_class } from '../widget_helpers.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { error } from '../utils/log.js';
-import { empty, make_svg, add_class, get_style } from '../utils/dom.js';
+import { empty, add_class, get_style } from '../utils/dom.js';
+import { make_svg } from '../utils/svg.js';
 import { S } from '../dom_scheduler.js';
 import { Warning } from '../implements/warning.js';
 import { Ranged } from '../implements/ranged.js';

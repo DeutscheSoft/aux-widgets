@@ -113,3 +113,16 @@ export function seat_all_svg(parent) {
             seat_svg(a[i]);
     }
 }
+
+/**
+ * Creates and returns an SVG child element.
+ * @param {string} tag - The element to create as string, e.g. "line" or "g"
+ * @param {object} arguments - The attributes to set onto the element
+ * @returns {SVGElement}
+ */
+export function make_svg(tag, args) {
+    var el = document.createElementNS('http://www.w3.org/2000/svg', "svg:" + tag);
+    for (var k in args)
+        el.setAttribute(k, args[k]);
+    return el;
+}

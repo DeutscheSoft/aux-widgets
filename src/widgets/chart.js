@@ -19,9 +19,10 @@
 import { define_class, define_child_element } from './../widget_helpers.js';
 import { S } from '../dom_scheduler.js';
 import {
-    empty, css_space, make_svg, get_style, element, add_class,
+    empty, css_space, get_style, element, add_class,
     inner_width, toggle_class, inner_height
   } from '../utils/dom.js';
+import { make_svg } from '../utils/svg.js';
 import { error, warn } from '../utils/log.js';
 import { Widget } from './widget.js';
 import { Ranges } from '../implements/ranges.js';

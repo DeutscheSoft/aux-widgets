@@ -31,7 +31,8 @@ import { Widget } from './widget.js';
 import { Circular } from './circular.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
-import { element, add_class, make_svg } from '../utils/dom.js';
+import { element, add_class } from '../utils/dom.js';
+import { make_svg } from '../utils/svg.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { object_and, object_sub } from '../utils/object.js';
      
