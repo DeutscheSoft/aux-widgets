@@ -153,8 +153,7 @@ export const Pager = define_class({
      * @method Pager#add_pages
      * 
      * @param {Array<Object>} options - An Array of objects with members
-     *   `label` and `content`. `label` is a string with the {@link Button}s label or
-     *   an object containing options for the {@link Button} instance.
+     *   `content` and all options available in {@link Button}.
      *   `content` is either a {@link Container} (or derivate) widget,
      *   a DOMNode or a string of HTML which
      *   gets wrapped in a new {@link Container} with options from
@@ -165,14 +164,19 @@ export const Pager = define_class({
      * p.add_pages([
      *   {
      *     label: "Page 1",
+     *     icon: "gear",
      *     content: "<h1>Page1</h1>",
      *   }
      * ]);
      * 
      */
     add_pages: function (pages) {
-        for (var i = 0; i < pages.length; i++)
-            this.add_page(pages[i].label, pages[i].content);
+        for (var i = 0; i < pages.length; i++) {
+            var con = pages[i].content;
+            var but = pages[i];
+            delete but.content;
+            this.add_page(but, con);
+        }
     },
     
     /**
