@@ -65,7 +65,7 @@ export const Dynamics = define_class({
      * @param {Function} [options.grid_labels=function (val) { return val + (!val ? "dB":""); }] - Callback to format the labels of the {@link Grid}.
      * @param {Number} [options.db_grid=12] - Draw a grid line every [n] decibels.
      * @param {Boolean} [show_handle=true] - Draw a handle to manipulate threshold and ratio.
-     * @param {Boolean|Function} [label=false] - Function to format the handle label.
+     * @param {Boolean|Function} [format_label=false] - Function to format the handle label.
      */
     Extends: Chart,
     _options: Object.assign(Object.create(Chart.prototype._options), {
@@ -115,7 +115,7 @@ export const Dynamics = define_class({
             this.handle.set("z", v);
         },
         set_handle_label: function (v) {
-            this.handle.set("label", v);
+            this.handle.set("format_label", v);
         },
     },
     initialize: function (options) {

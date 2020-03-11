@@ -628,12 +628,12 @@ function remove_handle() {
 }
 
 function redraw_label(O, X) {
-    if (!O.show_handle || O.label === false) {
+    if (!O.show_handle || O.format_label === false) {
         if (this._label) remove_label.call(this);
         return false;
     }
 
-    var a = O.label.call(this, O.title, O.x, O.y, O.z).split("\n");
+    var a = O.format_label.call(this, O.label, O.x, O.y, O.z).split("\n");
     var c = this._label.childNodes;
 
     while (c.length < a.length) {
@@ -846,6 +846,7 @@ function enddrag() {
  *
  * @param {Object} [options={ }] - An object containing initial options.
  * 
+ * @property {String} options.label - The name of the handle.
  * @property {Function|Object} options.range_x - Callback returning a {@link Range}
  *   for the x-axis or an object with options for a {@link Range}. This is usually
  *   the <code>x_range</code> of the parent chart.
@@ -863,8 +864,8 @@ function enddrag() {
  * @property {Number} [options.z] - Value of the z-coordinate.
  * @property {Number} [options.min_size=24] - Minimum size of the handle in px.
  * @property {Number} [options.max_size=100] - Maximum size of the handle in px.
- * @property {Function|Boolean} options.label - Label formatting function. Arguments are
- *   <code>title</code>, <code>x</code>, <code>y</code>, <code>z</code>. If set to <code>false</code>, no label is displayed.
+ * @property {Function|Boolean} options.format_label - Label formatting function. Arguments are
+ *   <code>label</code>, <code>x</code>, <code>y</code>, <code>z</code>. If set to <code>false</code>, no label is displayed.
  * @property {Array<String>}  [options.preferences=["left", "top", "right", "bottom"]] - Possible label
  *   positions by order of preference. Depending on the selected <code>mode</code> this can
  *   be a subset of <code>top</code>, <code>top-right</code>, <code>right</code>,
@@ -938,7 +939,7 @@ export const ChartHandle = define_class({
         intersect: "function",
         mode: "string",
         preferences: "array",
-        label: "function|boolean",
+        format_label: "function|boolean",
         x: "number",
         y: "number",
         z: "number",
@@ -957,7 +958,7 @@ export const ChartHandle = define_class({
         z_min: "number",
         z_max: "number",
         show_axis: "boolean",
-        title: "string",
+        label: "string",
         hover: "boolean",
         dragging: "boolean",
         show_handle: "boolean"
@@ -975,7 +976,7 @@ export const ChartHandle = define_class({
         // that have a low impact on intersection
         mode:             "circular",
         preferences:      ["left", "top", "right", "bottom"],
-        label:            FORMAT("%s\n%d Hz\n%.2f dB\nQ: %.2f"),
+        format_label:     FORMAT("%s\n%d Hz\n%.2f dB\nQ: %.2f"),
         x:                0,
         y:                0,
         z:                0,
@@ -1006,13 +1007,13 @@ export const ChartHandle = define_class({
             if (O.mode === "circular") create_line1.call(this);
             create_line2.call(this);
         },
-        set_label: function(value) {
+        set_format_label: function(value) {
             if (value !== false && !this._label) create_label.call(this);
         },
         set_show_handle: function() {
             this.set("mode", this.options.mode);
             this.set("show_axis", this.options.show_axis);
-            this.set("label", this.options.label);
+            this.set("format_label", this.options.format_label);
         },
         set_mode: function(value) {
             var O = this.options;
@@ -1263,8 +1264,7 @@ export const ChartHandle = define_class({
         this.set("y", O.y);
         this.set("z", O.z);
         this.set("z_handle", O.z_handle);
-        this.set("label", O.label);
-
+        this.set("format_label", O.format_label);
     },
 
     draw: function(O, element)
@@ -1311,7 +1311,7 @@ export const ChartHandle = define_class({
         var delay_lines;
         
         // LABEL
-        if (I.validate("label", "title", "preference") || moved) {
+        if (I.validate("format_label", "label", "preference") || moved) {
             delay_lines = redraw_label.call(this, O, X);
         }
 
@@ -1324,7 +1324,7 @@ export const ChartHandle = define_class({
         var O = this.options;
 
         switch (key) {
-        case "label":
+        case "format_label":
             if (value !== false && typeof value !== 'function')
               throw new TypeError('Bad type.');
             break;

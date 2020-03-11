@@ -116,11 +116,11 @@ export const Panorama = define_class({
         Chart.prototype.draw.call(this, O, element);
     },
 });
-function handle_label (title, x, y, z) {
+function handle_label (label, x, y, z) {
     var O = this.options;
     var s = "";
     if (O._mode == "balance")
-        s += title + "\n";
+        s += label + "\n";
     var lr = x ? x < 0 ? "L" : "R" : "";
     s += lr + " " + Math.abs(x).toFixed(+O._digits);
     if (O._mode == "surround") {
@@ -129,9 +129,9 @@ function handle_label (title, x, y, z) {
     }
     return s;
 }
-function handle_label2 (title, x, y, z) {
+function handle_label2 (label, x, y, z) {
     var O = this.options;
-    var s = title + "\n";
+    var s = label + "\n";
     var lr = y ? y < 0 ? "L" : "R" : "";
     s = lr + " " + Math.abs(y).toFixed(+O._digits);
     return s;
@@ -151,9 +151,9 @@ define_child_widget(Panorama, "handle1", {
         y: "y",
     },
     default_options: {
-        label: handle_label,
+        format_label: handle_label,
         preferences:["top","bottom","left","right"],
-        title: "In 1",
+        label: "In 1",
     },
 });
 /**
@@ -169,9 +169,9 @@ define_child_widget(Panorama, "handle2", {
         y: "x",
     },
     default_options: {
-        label: handle_label,
+        format_label: handle_label,
         mode: "line-vertical",
         preferences:["top","bottom","left","right"],
-        title: "In 2",
+        label: "In 2",
     },
 });

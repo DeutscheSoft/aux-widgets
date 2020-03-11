@@ -32,7 +32,7 @@ export const CrossoverBand = define_class({
      * 
      * @property {String|Function} [lower="lowpass3"] - The type of filter for the range below cutoff frequency. See {@link EqBand} for more information.
      * @property {String|Function} [upper="highpass3"] - The type of filter for the range above cutoff frequency. See {@link EqBand} for more information.
-     * @property {Function} [label=function (t, x, y, z) { return sprintf("%.2f Hz", x); }] - The function formatting the handles label.
+     * @property {Function} [format_label=function (t, x, y, z) { return sprintf("%.2f Hz", x); }] - The function formatting the handles label.
      * 
      * @class CrossoverBand
      * 
@@ -46,7 +46,7 @@ export const CrossoverBand = define_class({
     options: {
         lower: "lowpass3",
         upper: "highpass3",
-        label: function (t, x/*, y, z*/) { return sprintf("%.2f Hz", x); },
+        format_label: function (t, x/*, y, z*/) { return sprintf("%.2f Hz", x); },
         mode: "line-vertical", // undocumented, just a default differing from ChartHandle
         preferences: [ "top-right", "right", "bottom-right", "top-left", "left", "bottom-left"], // undocumented, just a default differing from ChartHandle
     },
