@@ -149,6 +149,7 @@ export const Knob = define_class({
          */
         this.drag = new DragValue(this, {
             node:    S,
+            classes: this.element,
             range:   module_range,
             direction: options.direction,
             rotation: options.rotation,
@@ -162,6 +163,7 @@ export const Knob = define_class({
          */
         this.scroll = new ScrollValue(this, {
             node:    S,
+            classes: this.element,
             range:   module_range,
         });
         this.scroll.on('scrollstarted', () => this.startInteracting());

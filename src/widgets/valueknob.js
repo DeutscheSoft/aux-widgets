@@ -95,6 +95,9 @@ export const ValueKnob = define_class({
     draw: function(O, element)
     {
       add_class(element, "aux-valueknob");
+      
+      this.knob.drag.set("classes", this.element);
+      this.knob.scroll.set("classes", this.element);
 
       Widget.prototype.draw.call(this, O, element);
     },
