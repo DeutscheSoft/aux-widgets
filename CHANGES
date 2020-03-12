@@ -48,6 +48,8 @@ API Changes
 * ResponseHandle has been renamed to ChartHandle
 * Widget: removed the 'active' option and the corresponding 'aux-inactive' CSS
   class
+* ChartHandle: 'label' has been renamed to 'format_label'
+* ChartHandle: 'title' has been renamed to 'label'
 
 DOM Changes
 ===========
