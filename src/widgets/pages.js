@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
- 
+
  /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
  * The event is emitted for the option <code>show</code>.
@@ -30,7 +30,7 @@ import { define_class } from '../widget_helpers.js';
 import { add_class, remove_class, is_dom_node } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 import { Container } from './container.js';
- 
+
 export const Pages = define_class({
     /**
      * Pages contains different pages ({@link Container}s) which can
@@ -73,25 +73,22 @@ export const Pages = define_class({
     static_events: {
         set_show: function(value) {
             var page = this.current();
+            if (!page) return;
+            page.set("active", true);
+            this.show_child(page);
 
-            if (page) {
-                page.set("active", true);
-                this.show_child(page);
-                /**
-                 * The page to show has changed.
-                 * 
-                 * @param {Container} page - The {@link Container} instance of the newly selected page.
-                 * @param {number} id - The ID of the page.
-                 * 
-                 * @event Pages#changed
-                 */
-                this.emit("changed", page, value);
-            }
+            /**
+             * The page to show has changed.
+             * 
+             * @param {Container} page - The {@link Container} instance of the newly selected page.
+             * @param {number} id - The ID of the page.
+             * 
+             * @event Pages#changed
+             */
+            this.emit("changed", page, value);
         },
         set_pages: function(value) {
-            for (var i = 0; i < this.pages.length; i++)
-                this.pages[i].destroy();
-            this.pages = [];
+            this.empty();
             this.add_pages(value);
         },
         set_position: function(value) {
@@ -216,18 +213,44 @@ export const Pages = define_class({
         }
         
         p.add_class("aux-page");
-        this.element.appendChild(p.element);
 
-        var len = this.pages.length;
-
-        if (position >= 0 && position < len - 1) {
-            this.pages.splice(position, 0, p);
+        if (position >= 0 && position < this.element.childNodes.length - 1)
+        {
             this.element.insertBefore(p.element, this.element.childNodes[position]);
-        } else {
-            position = len;
-            this.pages.push(p);
+        }
+        else
+        {
             this.element.appendChild(p.element);
         }
+
+        this.add_child(p);
+
+        return p;
+    },
+    add_child: function(child)
+    {
+      Container.prototype.add_child.call(this, child);
+
+      if (child instanceof Container)
+      {
+        const nodes = Array.from(this.element.childNodes);
+        let position = nodes.indexOf(child.element);
+
+        if (position === -1)
+        {
+          warn("child added to pages at unknown position.");
+        }
+
+        if (position >= 0 && position < this.pages.length - 1)
+        {
+          this.pages.splice(position, 0, child);
+        }
+        else
+        {
+          position = this.pages.length;
+          this.pages.push(child);
+        }
+
         /**
          * A page was added to the Pages.
          *
@@ -235,25 +258,25 @@ export const Pages = define_class({
          * 
          * @param {Container} page - The {@link Container} which was added as a page.
          */
-        this.emit("added", p);
+        this.emit("added", child);
 
-        this.add_child(p);
-
-        // TODO: not always necessary
-        if (this.current() === p) {
-            this.options.show = position;
-            p.set("active", true);
-            p.set("display_state", "show");
-        } else {
+        if (this.current() === child)
+        {
+            child.force_show();
+            child.set('display_state', 'show');
+            this.options.show = -1;
+            this.set('show', position);
+        }
+        else
+        {
             /* do not use animation */
-            p.force_hide();
-            this.hide_child(p);
+            child.force_hide();
+            this.hide_child(child);
         }
         this.invalid.layout = true;
         this.trigger_draw();
-        return p;
+      }
     },
-
     /**
      * Removes a page from the Pages.
      * 
@@ -265,18 +288,35 @@ export const Pages = define_class({
      * 
      * @emits Pages#removed
      */
-    remove_page: function (page, destroy) {
-        if (typeof page === "object")
-            page = this.pages.indexOf(page);
-        if (page < 0 || page >= this.pages.length)
-            return;
-        if (page < this.options.show)
+    remove_page: function (page, destroy)
+    {
+        if (typeof(page) === 'number')
+        {
+          page = this.pages[page];
+        }
+
+        if (this.pages.indexOf(page) === -1)
+          throw new Error('Unknown page.');
+
+        page.element.remove();
+        this.remove_child(page);
+
+        if (destroy)
+            page.destroy();
+    },
+    remove_child: function (child)
+    {
+      Container.prototype.remove_child.call(this, child);
+
+      if (this.pages.indexOf(child) !== -1)
+      {
+        const index = this.pages.indexOf(child);
+
+        if (index < this.options.show)
             this.set("show", this.options.show-1);
-        else if (page === this.options.show)
+        else if (index === this.options.show)
             this.set("show", this.options.show);
-        var p = this.pages[page];
-        this.pages.splice(page, 1);
-        this.remove_child(p);
+        this.pages.splice(index, 1);
         this.invalid.layout = true;
         this.trigger_draw();
         /**
@@ -286,9 +326,8 @@ export const Pages = define_class({
          * 
          * @param {Container} page - The {@link Container} which was removed.
          */
-        this.emit("removed", p);
-        if (destroy)
-            p.destroy();
+        this.emit("removed", child);
+      }
     },
     
     /**
@@ -373,7 +412,6 @@ export const Pages = define_class({
     set: function (key, value) {
         var page;
         if (key === "show") {
-            value = Math.min(this.pages.length, Math.max(-1, value));
             if (value === this.options.show) return value;
             if (value > this.options.show) {
                 this.set("direction", "forward");

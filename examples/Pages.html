@@ -1,5 +1,21 @@
-<aux-pages
-    pages="js:['foobar','barfoo']"
-    show=0
-    style="width:100%; height:240px">
+<h2>Pages using options</h2>
+<aux-pages pages="js:['Page Content 1','Page Content 2']" show=0>
 </aux-pages>
+<br>
+<h2>Pages using container children</h2>
+<aux-pages show=0>
+  <aux-container>
+    Page Content 1
+  </aux-container>
+  <aux-container>
+    Page Content 2
+  </aux-container>
+</aux-pages>
+<style>
+aux-pages
+{
+  width: 100%;
+  height: 240px !important;
+  border: 1px solid black;
+}
+</style>
