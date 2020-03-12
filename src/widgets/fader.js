@@ -331,7 +331,7 @@ define_child_widget(Fader, "scale", {
     },
 });
 /**
- * @member {Label} Fader#label - A {@link label} to display a title.
+ * @member {Label} Fader#label - A {@link Label} to display a title.
  */
 define_child_widget(Fader, "label", {
     create: Label,
@@ -343,7 +343,7 @@ define_child_widget(Fader, "label", {
     },
 });
 /**
- * @member {Label} Fader#value - A {@link Value} to display the current value, offering a way to enter a value via keyboard.
+ * @member {Value} Fader#value - A {@link Value} to display the current value, offering a way to enter a value via keyboard.
  */
 define_child_widget(Fader, "value", {
     create: Value,
