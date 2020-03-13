@@ -3,6 +3,26 @@ import { sprintf, FORMAT } from './utils/sprintf.js';
 import { html } from './utils/dom.js';
 import { is_native_event } from './implements/base.js';
 
+function attributes_from_widget(Widget)
+{
+  const attributes = [];
+  const skip = ["class", "id", "container", "element", "styles" ];
+  const rename = [ "title" ];
+
+  for (var i in Widget.prototype._options)
+  {
+    if (skip.indexOf(i) !== -1)
+      continue;
+
+    if (rename.indexOf(i) !== -1)
+      i = 'aux' + i;
+
+    attributes.push(i);
+  }
+
+  return attributes;
+}
+
 function low_parse_attribute(type, x) {
   switch (type) {
   case "js":
@@ -43,9 +63,9 @@ function low_parse_attribute(type, x) {
     throw new Error(sprintf('Malformed boolean "%s"', x));
   case "array":
     try {
-      return low_parse_attribute('json', x);
+      return low_parse_attribute.call(this, 'json', x);
     } catch (err) {}
-    return low_parse_attribute('js', x);
+    return low_parse_attribute.call(this, 'js', x);
   default:
     throw new Error(sprintf('Unsupported attribute type "%s"', type));
   }
@@ -60,7 +80,7 @@ function parse_attribute(type, value)
     {
       try
       {
-        return low_parse_attribute(value.substr(0, pos), value.substr(pos+1));
+        return low_parse_attribute.call(this, value.substr(0, pos), value.substr(pos+1));
       }
       catch (err) { }
     }
@@ -74,7 +94,7 @@ function parse_attribute(type, value)
       {
         try
         {
-          return low_parse_attribute(types[i], value);
+          return low_parse_attribute.call(this, types[i], value);
         }
         catch (e)
         {
@@ -86,57 +106,55 @@ function parse_attribute(type, value)
     }
   }
 
-  return low_parse_attribute(type, value);
-}
-
-function extract_options(node, WidgetType, attributes)
-{
-  const ret = {};
-  const _options = WidgetType.prototype._options;
-
-  for (let i = 0; i < attributes.length; i++)
-  {
-    const name = attributes[i];
-
-    if (!node.hasAttribute(name)) continue;
-
-    const option_name = name.startsWith('aux') ? name.substr(3) : name;
-
-    const type = _options[option_name];
-
-    ret[name] = parse_attribute(type, node.getAttribute(name));
-  }
-
-  return ret;
-}
-
-function attributes_from_widget(Widget)
-{
-  const attributes = [];
-  const skip = ["class", "id", "container", "element", "styles" ];
-  const rename = [ "title" ];
-
-  for (var i in Widget.prototype._options)
-  {
-    if (skip.indexOf(i) !== -1)
-      continue;
-
-    if (rename.indexOf(i) !== -1)
-      i = 'aux' + i;
-
-    attributes.push(i);
-  }
-
-  return attributes;
+  return low_parse_attribute.call(this, type, value);
 }
 
 function create_component (base) {
   if (!base) base = HTMLElement;
   return class extends base
   {
+    auxAttributes()
+    {
+      const attribute_names = this.constructor.observedAttributes;
+      const result = new Map();
+
+      for (let i = 0; i < attribute_names.length; i++)
+      {
+        const name = attribute_names[i];
+        if (!this.hasAttribute(name)) continue;
+        result.set(name, this.getAttribute(name));
+      }
+
+      return result.size ? result : null;
+    }
+
+    auxOptions(WidgetType)
+    {
+      const ret = {};
+      const _options = WidgetType.prototype._options;
+      const attribute_names = this.constructor.observedAttributes;
+
+      for (let i = 0; i < attribute_names.length; i++)
+      {
+        const name = attribute_names[i];
+
+        if (!this.hasAttribute(name)) continue;
+
+        const option_name = name.startsWith('aux') ? name.substr(3) : name;
+
+        const type = _options[option_name];
+        const attribute_value = this.getAttribute(name);
+
+        ret[name] = parse_attribute.call(this, type, attribute_value);
+      }
+
+      return ret;
+    }
+
     constructor(widget)
     {
       super();
+      this._auxInitialAttributes = this.auxAttributes();
       this._auxEventHandlers = null;
     }
 
@@ -148,6 +166,35 @@ function create_component (base) {
     {
       if (oldValue === newValue) return;
 
+      /* NOTE: We extract all attributes initially and pass them to
+       * the widget constructor options. Due to how the WebComponent life-cycle
+       * events are specified, we will also receive an attributeChangedCallback
+       * for each of these initial attributes. In order to avoid setting/parsing
+       * the same attribute twice, we check here if we are in this situation and
+       * need to ignore this initial call to attributeChangedCallback.
+       */
+      {
+        const attributes = this._auxInitialAttributes;
+
+        if (attributes !== null && attributes.has(name))
+        {
+          const value = attributes.get(name);
+
+          // next time we ignore this check
+          attributes.delete(name);
+
+          if (!attributes.size)
+            this._auxInitialAttributes = null;
+
+          // FIXME: we want to disable this check for all
+          // types of attributes
+          if (oldValue === null && value === newValue && value.startsWith('js'))
+          {
+            return;
+          }
+        }
+      }
+
       if (name.startsWith('aux'))
         name = name.substr(3);
 
@@ -156,7 +203,7 @@ function create_component (base) {
         const type = widget._options[name];
         if (newValue !== null)
         {
-          const value = parse_attribute(type, newValue);
+          const value = parse_attribute.call(this, type, newValue);
           widget.set(name, value);
         }
         else
@@ -270,7 +317,7 @@ export function component_from_widget(Widget, base)
     {
       super();
 
-      const options = extract_options(this, Widget, attributes);
+      const options = this.auxOptions(Widget, attributes);
 
       options.element = this;
 
@@ -327,7 +374,7 @@ export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove
     constructor()
     {
       super();
-      const options = extract_options(this, Widget, attributes);
+      const options = this.auxOptions(Widget);
 
       this.auxWidget = new Widget(options);
       this.auxParent = null;
