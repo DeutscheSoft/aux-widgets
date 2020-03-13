@@ -108,10 +108,11 @@ export const ValueButton = define_class({
          * @member {DragValue} ValueButton#drag - The {@link DragValue} module.
          */
         this.drag = new DragValue(this, {
-            node:      this.element,
-            direction: this.options.direction,
-            rotation: this.options.rotation,
+            node:        this.element,
+            direction:   this.options.direction,
+            rotation:    this.options.rotation,
             blind_angle: this.options.blind_angle,
+            limit:       true,
         });
         this.drag.on('startdrag', () => this.startInteracting());
         this.drag.on('stopdrag', () => this.stopInteracting());
@@ -119,7 +120,8 @@ export const ValueButton = define_class({
          * @member {ScrollValue} ValueButton#scroll - The {@link ScrollValue} module.
          */
         this.scroll = new ScrollValue(this, {
-            node: this.element,
+            node:  this.element,
+            limit: true,
         });
         this.scroll.on('scrollstarted', () => this.startInteracting());
         this.scroll.on('scrollended', () => this.stopInteracting());

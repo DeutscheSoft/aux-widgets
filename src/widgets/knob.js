@@ -148,12 +148,13 @@ export const Knob = define_class({
          *   interaction.
          */
         this.drag = new DragValue(this, {
-            node:    S,
-            classes: this.element,
-            range:   module_range,
-            direction: options.direction,
-            rotation: options.rotation,
+            node:        S,
+            classes:     this.element,
+            range:       module_range,
+            direction:   options.direction,
+            rotation:    options.rotation,
             blind_angle: options.blind_angle,
+            limit:       true,
         });
         this.drag.on('startdrag', () => this.startInteracting());
         this.drag.on('stopdrag', () => this.stopInteracting());
@@ -165,6 +166,7 @@ export const Knob = define_class({
             node:    S,
             classes: this.element,
             range:   module_range,
+            limit:   true,
         });
         this.scroll.on('scrollstarted', () => this.startInteracting());
         this.scroll.on('scrollended', () => this.stopInteracting());

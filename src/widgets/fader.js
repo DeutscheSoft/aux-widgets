@@ -189,10 +189,10 @@ export const Fader = define_class({
          *   interaction.
          */
         this.drag = new DragValue(this, {
-            node:    this._handle,
-            classes: this.element,
+            node:      this._handle,
+            classes:   this.element,
             direction: O.direction,
-            limit:   true,
+            limit:     true,
         });
         this.drag.on('startdrag', () => this.startInteracting());
         this.drag.on('stopdrag', () => this.stopInteracting());
