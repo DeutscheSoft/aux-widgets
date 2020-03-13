@@ -192,6 +192,7 @@ export const Fader = define_class({
             node:    this._handle,
             classes: this.element,
             direction: O.direction,
+            limit:   true,
         });
         this.drag.on('startdrag', () => this.startInteracting());
         this.drag.on('stopdrag', () => this.stopInteracting());
@@ -202,6 +203,7 @@ export const Fader = define_class({
         this.scroll = new ScrollValue(this, {
             node:    this.element,
             classes: this.element,
+            limit:   true,
         });
         this.scroll.on('scrollstarted', () => this.startInteracting());
         this.scroll.on('scrollended', () => this.stopInteracting());
