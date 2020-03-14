@@ -203,6 +203,7 @@ export const Pages = define_class({
         var p;
         if (typeof content === "string" || is_dom_node(content)) {
             if (!options) options = {}; 
+            if (content.parentNode) content.remove();
             options.content = content;
             p = new Container(options);
         } else if (content instanceof Container) {
@@ -212,15 +213,15 @@ export const Pages = define_class({
           throw new TypeError('Unexpected argument type.');
         }
         
-        p.add_class("aux-page");
+        const element = this.element;
 
-        if (position >= 0 && position < this.element.childNodes.length - 1)
+        if (position >= 0 && position < element.childNodes.length - 1)
         {
-            this.element.insertBefore(p.element, this.element.childNodes[position]);
+            element.insertBefore(p.element, element.childNodes[position]);
         }
         else
         {
-            this.element.appendChild(p.element);
+            element.appendChild(p.element);
         }
 
         this.add_child(p);
@@ -233,8 +234,11 @@ export const Pages = define_class({
 
       if (child instanceof Container)
       {
+        child.add_class("aux-page");
+
         const nodes = Array.from(this.element.childNodes);
         let position = nodes.indexOf(child.element);
+
 
         if (position === -1)
         {
@@ -258,7 +262,7 @@ export const Pages = define_class({
          * 
          * @param {Container} page - The {@link Container} which was added as a page.
          */
-        this.emit("added", child);
+        this.emit("added", child, position);
 
         if (this.current() === child)
         {
@@ -325,8 +329,9 @@ export const Pages = define_class({
          * @event Pages#removed
          * 
          * @param {Container} page - The {@link Container} which was removed.
+         * @param {number} index - The index at which the container was.
          */
-        this.emit("removed", child);
+        this.emit("removed", child, index);
       }
     },
     

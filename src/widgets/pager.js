@@ -33,6 +33,26 @@ import { warn } from '../utils/log.js';
 import { Pages } from './pages.js';
 import { Container } from './container.js';
 import { Navigation } from './navigation.js';
+
+function page_added(page, index)
+{
+  const pager = this.parent;
+  if (pager.ignore_pages_events) return;
+
+  if (pager.navigation)
+  {
+    pager.navigation.add_button({ label: page.get('title') }, index);
+    pager.set('show', pager.get('show'));
+  }
+}
+
+function page_removed(page, index)
+{
+  const pager = this.parent;
+  if (pager.ignore_pages_events) return;
+  if (pager.navigation)
+    pager.navigation.remove_button(index);
+}
  
 export const Pager = define_class({
     /**
@@ -103,6 +123,24 @@ export const Pager = define_class({
          *
          * @member Pager#element
          */
+        this.ignore_pages_events = false;
+    },
+
+    call_and_ignore: function(cb)
+    {
+      this.ignore_pages_events = true;
+
+      try
+      {
+        const result = cb();
+        this.ignore_pages_events = false;
+        return result;
+      }
+      catch (err)
+      {
+        this.ignore_pages_events = false;
+        throw err;
+      }
     },
     
     initialized: function () {
@@ -116,6 +154,53 @@ export const Pager = define_class({
       add_class(element, "aux-pager");
 
       Container.prototype.draw.call(this, O, element);
+    },
+
+    remove_child: function(child)
+    {
+      if (child instanceof Pages)
+      {
+        if (this.pages === child)
+        {
+          this.pages.off('added', page_added);
+          this.pages.off('removed', page_removed);
+          this.pages.element.remove();
+          this.pages = null;
+        }
+      }
+
+      Container.prototype.remove_child.call(this, child);
+    },
+
+    add_child: function(child)
+    {
+      Container.prototype.add_child.call(this, child);
+
+      if (child instanceof Pages)
+      {
+        if (this.pages && this.pages !== child)
+        {
+          // this.pages is being replaced by a new instance (set by the user)
+          this.remove_child(this.pages);
+        }
+
+        this.pages = child;
+        child.on('added', page_added);
+        child.on('removed', page_removed);
+        this.set('show', this.get('show'));
+        this.set('position', this.get('position'));
+      }
+      else if (child instanceof Navigation)
+      {
+        const pages = this.pages;
+        if (pages)
+        {
+          pages.forEach((page) => {
+            child.add_button({ label: page.get('title') });
+          });
+        }
+        this.set('show', this.get('show'));
+      }
     },
     
     redraw: function () {
@@ -203,7 +288,7 @@ export const Pager = define_class({
         if (typeof button === "string")
             button = {label: button};
         this.navigation.add_button(button, position);
-        const p = this.pages.add_page(content, position, options);
+        const p = this.call_and_ignore(() => this.pages.add_page(content, position, options));
         this.emit("added", p);
         return p;
     },
@@ -222,7 +307,7 @@ export const Pager = define_class({
         const i = this.pages.pages.indexOf(page);
         if (i >= 0)
             this.navigation.remove_button(i);
-        return this.pages.remove_page(page);
+        return this.call_and_ignore(() => this.pages.remove_page(page));
     },
     /**
      * Returns the currently displayed page or null.
