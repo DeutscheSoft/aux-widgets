@@ -113,3 +113,8 @@
 .aux-icon.load::before                                 { font-family: 'AUX'; content: '􀁩'; }
 .aux-icon.folder::before                               { font-family: 'AUX'; content: '􀁩'; }
 .aux-icon.open::before                                 { font-family: 'AUX'; content: '􀁩'; }
+.aux-icon.rectangular::before                          { font-family: 'AUX'; content: '􀁰'; }
+.aux-icon.rect::before                                 { font-family: 'AUX'; content: '􀁰'; }
+.aux-icon.whitenoise::before                           { font-family: 'AUX'; content: '􀁱'; }
+.aux-icon.pinknoise::before                            { font-family: 'AUX'; content: '􀁲'; }
+.aux-icon.sweep::before                                { font-family: 'AUX'; content: '􀁳'; }
