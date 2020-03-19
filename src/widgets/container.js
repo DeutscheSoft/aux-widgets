@@ -199,8 +199,8 @@ export const Container = define_class({
      */
     hide: function () {
         var O = this.options;
-        if (O.display_state === "hide") return;
         disable_draw_children.call(this);
+        if (O.display_state === "hide") return;
         enable_draw_self.call(this);
         this.update("display_state", "hiding");
     },
