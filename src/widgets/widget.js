@@ -809,6 +809,28 @@ export const Widget = define_class({
         if (!C.length) this.children = null;
     },
     /**
+     * Calls {@link Widget#append_child} for an array of widgets.
+     * 
+     * @method Widget#append_children
+     *
+     * @param {Array.<Widget>} children - The child widgets to append.
+     */
+    append_children : function (a) {
+        a.map(this.append_child, this);
+    },
+    /**
+     * Appends <code>child.element</code> to the widget element and
+     * registers <code>child</code> as a child widget.
+     * 
+     * @method Widget#append_child
+     *
+     * @param {Widget} child - The child widget to append.
+     */
+    append_child : function(child) {
+        this.element.appendChild(child.element);
+        this.add_child(child);
+    },
+    /**
      * Removes an array of children.
      *
      * @method Widget#remove_children

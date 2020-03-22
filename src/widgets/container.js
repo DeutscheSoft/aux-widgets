@@ -134,28 +134,6 @@ export const Container = define_class({
             this.append_children(this.options.children);
     },
     
-    /**
-     * Calls {@link Container#append_child} for an array of widgets.
-     * 
-     * @method Container#append_children
-     *
-     * @param {Array.<Widget>} children - The child widgets to append.
-     */
-    append_children : function (a) {
-        a.map(this.append_child, this);
-    },
-    /**
-     * Appends <code>child.element</code> to the container element and
-     * registers <code>child</code> as a child widget.
-     * 
-     * @method Container#append_child
-     *
-     * @param {Widget} child - The child widget to append.
-     */
-    append_child : function(child) {
-        this.element.appendChild(child.element);
-        this.add_child(child);
-    },
     set_parent : function(parent) {
         if (parent && !(parent instanceof Container)) {
             warn("Container %o should not be child of non-container %o", this, parent);
