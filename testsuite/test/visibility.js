@@ -8,6 +8,10 @@ import {
 } from '../src/widget_helpers.js';
 
 import {
+  check_visibility
+} from '../src/utils/debug.js';
+
+import {
   define_component, component_from_widget
 } from '../src/component_helpers.js';
 
@@ -38,28 +42,13 @@ function make_debug_widget(Base)
       this.check_visibility();
     },
     check_visibility: function() {
-      let widget = this;
-
-      let drawn = this.is_drawn();
-      
-      if (drawn) while (widget)
+      try
       {
-        let element = widget.element;
-
-        if (element.classList.contains('aux-hide'))
-        {
-          errors.push(new Error('found aux-hide on element while drawn.'));
-        }
-        widget = widget.parent;
+        check_visibility(this);
       }
-      else
+      catch (err)
       {
-        let element = widget.element;
-
-        if (element.classList.contains('aux-show'))
-        {
-          errors.push(new Error('found aux-show on element while !drawn.'));
-        }
+        errors.push(err);
       }
     },
     redraw: function() {
@@ -80,7 +69,7 @@ const DebugContainerComponent = component_from_widget(DebugContainer);
 define_component('debug-widget', DebugWidgetComponent);
 define_component('debug-container', DebugContainerComponent);
 
-describe.only('Visibility', () => {
+describe('Visibility', () => {
   it('Widget(Widget)', async () => {
     const w = new DebugWidget();    
     w.append_child(new DebugWidget());
@@ -134,7 +123,7 @@ describe.only('Visibility', () => {
     outer.hide_child(inner);
     await check();
   });
-  it('ContainerComponent(WidgetComponent)', async () => {
+  it('ContainerComponent(ContainerComponent(WidgetComponent))', async () => {
     const outerComponent = document.createElement('aux-debug-container');
     const innerComponent = document.createElement('aux-debug-container');
     const widgetComponent = document.createElement('aux-debug-widget');
