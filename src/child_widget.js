@@ -37,6 +37,29 @@ function get_child_options(parent, name, options, config) {
     return ret;
 }
 
+export function inherit_child_options(dst, child_name, src, blacklist)
+{
+  if (!blacklist) blacklist = [];
+
+  const set_cb = function (value, key)
+  {
+    const C = this[child_name];
+
+    if (C) C.set(key, value);
+  };
+
+  for (let tmp in src.prototype._options)
+  {
+    if (tmp in dst.prototype._options) continue;
+    if (blacklist.indexOf(tmp) > -1) continue;
+    add_static_event(dst, "set_"+tmp, set_cb);
+    if (!dst.prototype._options[tmp])
+        dst.prototype._options[tmp] = src.prototype._options[tmp];
+    if (!dst.prototype.options[tmp])
+        dst.prototype.options[tmp] = src.prototype.options[tmp];
+  }
+}
+
 export function define_child_widget(widget, name, config) {
     
     /**
