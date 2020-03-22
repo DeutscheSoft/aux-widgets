@@ -1,0 +1,169 @@
+import {
+  Container,
+  Widget,
+} from '../src/index.js';
+
+import {
+  define_class
+} from '../src/widget_helpers.js';
+
+import {
+  define_component, component_from_widget
+} from '../src/component_helpers.js';
+
+import { wait_for_drawn, canvas } from './helpers.js';
+
+const errors = [];
+
+function check_errors()
+{
+  if (errors.length)
+  {
+    const tmp = errors.slice(0);
+    errors.length = 0;
+    throw tmp[0];
+  }
+}
+
+function make_debug_widget(Base)
+{
+  const DebugWidget = define_class({
+    Extends: Base,
+    initialize: function(options) {
+      options.element = document.createElement('DIV');
+      Base.prototype.initialize.call(this, options);
+    },
+    resize: function() {
+      Base.prototype.resize.call(this);
+      this.check_visibility();
+    },
+    check_visibility: function() {
+      let widget = this;
+
+      let drawn = this.is_drawn();
+      
+      if (drawn) while (widget)
+      {
+        let element = widget.element;
+
+        if (element.classList.contains('aux-hide'))
+        {
+          errors.push(new Error('found aux-hide on element while drawn.'));
+        }
+        widget = widget.parent;
+      }
+      else
+      {
+        let element = widget.element;
+
+        if (element.classList.contains('aux-show'))
+        {
+          errors.push(new Error('found aux-show on element while !drawn.'));
+        }
+      }
+    },
+    redraw: function() {
+      Base.prototype.redraw.call(this);
+      this.check_visibility();
+    },
+  });
+
+  return DebugWidget;
+}
+
+const DebugWidget = make_debug_widget(Widget);
+const DebugContainer = make_debug_widget(Container);
+
+const DebugWidgetComponent = component_from_widget(DebugWidget);
+const DebugContainerComponent = component_from_widget(DebugContainer);
+
+define_component('debug-widget', DebugWidgetComponent);
+define_component('debug-container', DebugContainerComponent);
+
+describe.only('Visibility', () => {
+  it('Widget(Widget)', async () => {
+    const w = new DebugWidget();    
+    w.append_child(new DebugWidget());
+    w.show();
+    await wait_for_drawn(w);
+    check_errors();
+  });
+  it('Container(Widget)', async () => {
+    const container = new DebugContainer();    
+    const widget = new DebugWidget();
+    container.append_child(widget);
+    container.show();
+
+    const check = async () => {
+      container.trigger_draw();
+      widget.trigger_draw();
+      await wait_for_drawn(container);
+      check_errors();
+    };
+
+    await check();
+    container.hide_child(widget);
+    await check();
+    container.show_child(widget);
+    await check();
+    container.hide();
+    await check();
+  });
+  it('Container(Container(Widget))', async () => {
+    const outer = new DebugContainer();    
+    const inner = new DebugContainer();    
+    const widget = new DebugWidget();
+
+    const check = async () => {
+      outer.trigger_draw();
+      inner.trigger_draw();
+      widget.trigger_draw();
+      await wait_for_drawn(outer);
+      check_errors();
+    };
+
+    outer.append_child(inner);
+    inner.append_child(widget);
+    outer.show();
+
+    await check();
+    inner.hide_child(widget);
+    await check();
+    inner.show_child(widget);
+    await check();
+    outer.hide_child(inner);
+    await check();
+  });
+  it('ContainerComponent(WidgetComponent)', async () => {
+    const outerComponent = document.createElement('aux-debug-container');
+    const innerComponent = document.createElement('aux-debug-container');
+    const widgetComponent = document.createElement('aux-debug-widget');
+
+    outerComponent.appendChild(innerComponent);
+    innerComponent.appendChild(widgetComponent);
+
+    const outer = outerComponent.auxWidget;
+    const inner = innerComponent.auxWidget;
+    const widget = widgetComponent.auxWidget;
+
+    const check = async () => {
+      outer.trigger_draw();
+      inner.trigger_draw();
+      widget.trigger_draw();
+      await wait_for_drawn(outer);
+      check_errors();
+    };
+
+    canvas().appendChild(outerComponent);
+
+    await check();
+    inner.hide_child(widget);
+    await check();
+    inner.show_child(widget);
+    await check();
+    outer.hide_child(inner);
+    await check();
+
+    outerComponent.remove();
+  });
+});

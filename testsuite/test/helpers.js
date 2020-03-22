@@ -69,7 +69,7 @@ export function wait_for_event(widget, name)
 
 let _canvas;
 
-function canvas()
+export function canvas()
 {
   if (!_canvas)
   {
