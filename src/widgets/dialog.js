@@ -95,10 +95,10 @@ export const Dialog = define_class({
             this.element.remove();
         this.emit("close");
       },
-      set_display_state: function(val) {
+      set_visible: function(val) {
         var O = this.options;
 
-        if (val === "show") {
+        if (val === true) {
           if (O.auto_close)
             activate_autoclose.call(this);
           this.trigger_resize();

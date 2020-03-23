@@ -267,8 +267,11 @@ export const Widget = define_class({
         },
         set_visible: function(val)
         {
-          if (val) this.show();
-          else this.hide();
+          if (val === true)
+          {
+            if (!this.is_drawn())
+              this.enable_draw();
+          }
         }
     },
     constructor: function (options) {
@@ -482,12 +485,14 @@ export const Widget = define_class({
         {
           I.visible = false;
 
-          if (O.visible)
+          const visible = O.visible;
+
+          if (visible === true)
           {
             remove_class(E, "aux-hide");
             add_class(E, "aux-show");
           }
-          else
+          else if (visible === false)
           {
             remove_class(E, "aux-show");
             add_class(E, "aux-hide");
@@ -616,6 +621,17 @@ export const Widget = define_class({
         if (!this.value_time) this.value_time = {};
         this.value_time[key] = Date.now();
     },
+    enable_draw_self: function() {
+    },
+    /**
+     * Enables rendering for all children of this widget.
+     *
+     * @method Widget#enable_draw_children
+     */
+    enable_draw_children: function() {
+      var C = this.children;
+      if (C) for (var i = 0; i < C.length; i++) C[i].enable_draw();
+    },
     /**
      * Schedules this widget for drawing.
      *
@@ -624,19 +640,22 @@ export const Widget = define_class({
      * @emits Widget#show
      */
     enable_draw: function () {
-        if (this._drawn) return;
-        this._drawn = true;
-        if (this.needs_redraw) {
-            S.add(this._redraw, 1);
-        }
-        /**
-         * Is fired when a widget gets enabled for drawing.
-         * 
-         * @event Widget#show
-         */
-        this.emit("show");
+      if (this._drawn) return;
+      this._drawn = true;
+      if (this.needs_redraw) {
+          S.add(this._redraw, 1);
+      }
+      /**
+       * Is fired when a widget gets enabled for drawing.
+       * 
+       * @event Widget#show
+       */
+      this.emit("show");
+      this.enable_draw_children();
+    },
+    disable_draw_children: function() {
         var C = this.children;
-        if (C) for (var i = 0; i < C.length; i++) C[i].enable_draw();
+        if (C) for (var i = 0; i < C.length; i++) C[i].disable_draw();
     },
     /**
      * Stop drawing this widget.
@@ -665,18 +684,17 @@ export const Widget = define_class({
          * @event Widget#visibility
          */
         this.emit("hide");
-        var C = this.children;
-        if (C) for (var i = 0; i < C.length; i++) C[i].disable_draw();
+        this.disable_draw_children();
     },
     /**
-     * Make the widget visible. This does not modify the DOM, instead it will only schedule
-     * the widget for rendering.
+     * Make the widget visible. This will apply the class <code>aux-show</code>
+     * during the next rendering step.
      *
      * @method Widget#show
      */
     show: function () {
-        this.update('visible', true);
-        this.enable_draw();
+        if (this.hidden()) this.set('visible', true);
+        if (!this.is_drawn()) this.enable_draw();
     },
     /**
      * This is an alias for hide, which may be overloaded.
@@ -687,37 +705,56 @@ export const Widget = define_class({
     force_show: function() {
         this.update('visible', true);
         this.enable_draw();
+        this._redraw();
+        this.disable_draw();
     },
     /**
-     * Make the widget hidden. This does not modify the DOM, instead it will stop rendering
-     * this widget. Options changed after calling hide will only be rendered (i.e. applied
-     * to the DOM) when the widget is made visible again using {@link Widget#show}.
+     * Hide the widget. This will result in the class <code>aux-hide</code>
+     * being applied to this widget in the next rendering step.
      *
      * @method Widget#hide
      */
     hide: function () {
-        this.update('visible', false);
+      if (!this.hidden())
+        this.set('visible', false);
     },
     /**
-     * This is an alias for hide, which may be overloaded.
-     * See {@link Container} for an example.
+     * Hide the widget immediately.
      *
      * @method Widget#force_hide
      */
     force_hide: function () {
+        var O = this.options;
         this.update('visible', false);
+        this.enable_draw();
         this._redraw();
         this.disable_draw();
     },
-    show_nodraw: function() { },
-    hide_nodraw: function() { },
+    show_nodraw_children: function() {
+      var C = this.children;
+      if (C) for (let i = 0; i < C.length; i++) C[i].show_nodraw();
+    },
+    show_nodraw: function() {
+      if (this.options.visible === true) return;
+      this.update('visible', true);
+      this.show_nodraw_children();
+    },
+    hide_nodraw_children: function() {
+      var C = this.children;
+      if (C) for (let i = 0; i < C.length; i++) C[i].hide_nodraw();
+    },
+    hide_nodraw: function() {
+      if (this.options.visible === false) return;
+      this.update('visible', false);
+      this.hide_nodraw_children();
+    },
     /**
      * Returns the current hidden status.
      *
      * @method Widget#hidden
      */
     hidden: function() {
-        return !this.options.visible;
+        return this.options.visible === false;
     },
     is_drawn: function() {
         return this._drawn;

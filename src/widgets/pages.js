@@ -267,7 +267,6 @@ export const Pages = define_class({
         if (this.current() === child)
         {
             child.force_show();
-            child.set('display_state', 'show');
             this.options.show = -1;
             this.set('show', position);
         }

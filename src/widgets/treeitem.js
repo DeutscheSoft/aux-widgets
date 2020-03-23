@@ -31,11 +31,6 @@ function set_collapsed(c) {
     this.set("collapsed", c);
 }
 
-function reset_size(state) {
-    if (state !== "show") return;
-    //this.element.style.height = null;
-}
-
 export const TreeItem = define_class({
     
     Extends: ListItem,
@@ -52,7 +47,6 @@ export const TreeItem = define_class({
     },
     initialize: function (options) {
         this.list = new List({
-            "onset_display_state": reset_size
         });
         this.flex = new Container({"class":"aux-flex"});
         

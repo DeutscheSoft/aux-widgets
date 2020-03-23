@@ -27,50 +27,15 @@ import { warn } from '../utils/log.js';
 
 function after_hiding() {
     this.__hide_id = false;
-    if (this.options.display_state === "hiding")
-        this.set("display_state", "hide");
+    if (this.options.visible !== "hiding") return;
+    remove_class(this.element, 'aux-hiding');
+    this.set("visible", false);
 }
 function after_showing() {
     this.__hide_id = false;
-    if (this.options.display_state === "showing")
-        this.set("display_state", "show");
-}
-function enable_draw_self() {
-    if (this._drawn) return;
-    this._drawn = true;
-    if (this.needs_redraw) {
-        S.add(this._redraw, 1);
-    }
-    /**
-     * Is fired when the container is shown.
-     * 
-     * @event Container#show
-     */
-    this.emit("show");
-}
-function enable_draw_children() {
-    var C = this.children;
-    var H = this.hidden_children;
-    if (C) for (var i = 0; i < C.length; i++) if (!H[i]) C[i].enable_draw();
-}
-function disable_draw_self() {
-    if (!this._drawn) return;
-    this._drawn = false;
-    if (this.needs_redraw) {
-        S.remove(this._redraw, 1);
-        S.remove_next(this._redraw, 1);
-    }
-    /**
-     * Is fired when the container is hidden.
-     * 
-     * @event Container#hide
-     */
-    this.emit("hide");
-}
-function disable_draw_children() {
-    var C = this.children;
-    var H = this.hidden_children;
-    if (C) for (var i = 0; i < C.length; i++) if (!H[i]) C[i].disable_draw();
+    if (this.options.visible === "showing")
+    remove_class(this.element, 'aux-showing');
+    this.set("visible", true);
 }
 export const Container = define_class({
     /**
@@ -102,21 +67,28 @@ export const Container = define_class({
      *   expensive. Setting this option explicitly can therefore be an optimization.
      * @property {Number} [options.showing_duration] - The duration in ms of the showing CSS
      *   transition/animation of this container.
-     * @property {String} [options.display_state="show"] - The current display state of this container.
-     *   Do not modify, manually.
      * @property {Array<TK.Widget>} [options.children=[]] - Add child widgets on init. Will not be maintained on runtime! Just for convenience purposes on init.
      */
     Extends: Widget,
     _options: Object.assign(Object.create(Widget.prototype._options), {
         content: "string|DOMNode",
-        display_state: "string",
+        visible: "string|boolean",
         hiding_duration: "number",
         showing_duration: "number",
         children: "array",
     }),
     options: {
-        display_state: "show",
         children: [],
+    },
+    static_events: {
+        set_visible: function(val)
+        {
+          if (val === 'showing')
+          {
+            if (!this.is_drawn())
+              this.enable_draw();
+          }
+        },
     },
     initialize: function (options) {
         if (!options.element) options.element = element('div');
@@ -159,98 +131,46 @@ export const Container = define_class({
             H.splice(i, 1);
         }
     },
-    enable_draw: function () {
-        if (this._drawn) return;
-        enable_draw_self.call(this);
-        enable_draw_children.call(this);
+    enable_draw_children: function () {
+        var C = this.children;
+        var H = this.hidden_children;
+        if (C) for (var i = 0; i < C.length; i++) if (!H[i]) C[i].enable_draw();
     },
-    disable_draw: function () {
-        if (!this._drawn) return;
-        disable_draw_self.call(this);
-        disable_draw_children.call(this);
+    disable_draw_children: function () {
+        var C = this.children;
+        var H = this.hidden_children;
+        if (C) for (var i = 0; i < C.length; i++) if (!H[i]) C[i].disable_draw();
     },
     /** 
-     * Starts the transition of the <code>display_state</code> to <code>hide</code>.
+     * Starts the transition of the <code>visible</code> to <code>false</code>.
      *
      * @method Container#hide
      *
      */
     hide: function () {
-        var O = this.options;
-        disable_draw_children.call(this);
-        if (O.display_state === "hide") return;
-        enable_draw_self.call(this);
-        this.update("display_state", "hiding");
+        if (!this.hidden())
+          this.update("visible", 'hiding');
     },
     /** 
-     * Immediately switches the display state of this container to <code>hide</code>.
-     * Unlike {@link Container#hide} this method does not perform the hiding transition
-     * and immediately modifies the DOM by setting the <code>.aux-hide</code> class.
-     *
-     * @method Container#force_hide
-     *
-     */
-    force_hide: function () {
-        var O = this.options;
-        if (O.display_state === "hide" && !this.is_drawn()) return;
-        this.disable_draw();
-        var E = this.element;
-        O.display_state = "hide";
-        add_class(E, "aux-hide");
-        remove_class(E, "aux-hiding", "aux-showing", "aux-show");
-        this.update('visible', false);
-    },
-    /** 
-     * Starts the transition of the <code>display_state</code> to <code>show</code>.
+     * Starts the transition of the <code>visible</code> to <code>true</code>.
      *
      * @method Container#show
      *
      */
     show: function() {
-        var O = this.options;
-        enable_draw_self.call(this);
-        this.update("display_state", "showing");
-        this.update('visible', true);
+        if (!this.is_drawn()) this.enable_draw();
+        if (this.hidden()) this.update('visible', 'showing');
     },
-    /** 
-     * Immediately switches the display state of this container to <code>show</code>.
-     * Unlike {@link Container#hide} this method does not perform the hiding transition
-     * and immediately modifies the DOM by setting the <code>.aux-show</code> class.
-     *
-     * @method Container#force_show
-     *
-     */
-    force_show: function() {
-        var O = this.options;
-        if (O.display_state === "show" && this.is_drawn()) return;
-        this.enable_draw();
-        var E = this.element;
-        O.display_state = "show";
-        this.update('visible', true);
-        add_class(E, "aux-show");
-        remove_class(E, "aux-hiding", "aux-showing", "aux-hide");
-    },
-    show_nodraw: function() {
-        var O = this.options;
-        if (O.display_state === "show") return;
-        this.set("display_state", "show");
-        this.update('visible', true);
-
+    show_nodraw_children: function() {
         var C = this.children;
         var H = this.hidden_children;
         if (C) for (let i = 0; i < C.length; i++) if (!H[i]) C[i].show_nodraw();
     },
-    hide_nodraw: function() {
-        var O = this.options;
-        if (O.display_state === "hide") return;
-        this.set("display_state", "hide");
-        this.update('visible', false);
-
+    hide_nodraw_children: function() {
         var C = this.children;
         var H = this.hidden_children;
         if (C) for (let i = 0; i < C.length; i++) if (!H[i]) C[i].hide_nodraw();
     },
-
     /**
      * Switches the hidden state of a child to <code>hidden</code>.
      * The argument is either the child index or the child itself.
@@ -329,8 +249,8 @@ export const Container = define_class({
     },
 
     hidden: function() {
-        var state = this.options.display_state;
-        return Widget.prototype.hidden.call(this) || state === "hiding" || state === "hide";
+        var state = this.options.visible;
+        return Widget.prototype.hidden.call(this) || state === "hiding";
     },
 
     draw: function(O, element)
@@ -346,52 +266,43 @@ export const Container = define_class({
         var I = this.invalid;
         var E = this.element;
 
-        if (I.display_state) {
-            I.display_state = false;
+        if (I.visible) {
             var time;
-            remove_class(E, "aux-hiding", "aux-hide", "aux-showing", "aux-show");
+            remove_class(E, 'aux-hiding', 'aux-showing', 'aux-hide', 'aux-show');
 
-            if (this.__hide_id) {
+            if (this.__hide_id !== false) {
                 window.clearTimeout(this.__hide_id);
                 this.__hide_id = false;
             }
 
-            switch (O.display_state) {
-            case "hiding":
-                add_class(E, "aux-hiding");
+            switch (O.visible) {
+            case 'hiding':
+                add_class(E, 'aux-hiding');
                 time = O.hiding_duration || get_duration(E);
-                if (time > 0) {
-                    this.__hide_id = window.setTimeout(this.__after_hiding, time);
-                    break;
+                if (time > 0)
+                {
+                  this.__hide_id = window.setTimeout(this.__after_hiding, time);
                 }
-                this.set("display_state", "hide");
-                remove_class(E, "aux-hiding");
-                /* FALL THROUGH */
-            case "hide":
-                add_class(E, "aux-hide");
-                disable_draw_self.call(this);
-                this.update('visible', false);
+                else
+                {
+                  remove_class(E, 'aux-hiding');
+                  this.set('visible', false);
+                }
                 break;
-            case "showing":
-                add_class(E, "aux-showing");
+            case 'showing':
+                add_class(E, 'aux-showing');
                 time = O.showing_duration || get_duration(E);
-                if (time > 0) {
-                    this.__hide_id = window.setTimeout(this.__after_showing, time);
-                    enable_draw_children.call(this);
-                    break;
+                if (time > 0)
+                {
+                  this.__hide_id = window.setTimeout(this.__after_showing, time);
                 }
-                this.set("display_state", "show");
-                remove_class(E, "aux-showing");
-                /* FALL THROUGH */
-            case "show":
-                add_class(E, "aux-show");
-                enable_draw_children.call(this);
+                else
+                {
+                  remove_class(E, 'aux-showing');
+                  this.set('visible', true);
+                }
                 break;
             }
-
-            // also mark visible as 'done' to prevent the Widget redraw method
-            // from replacing our css classes
-            I.visible = false;
         }
 
         Widget.prototype.redraw.call(this);
