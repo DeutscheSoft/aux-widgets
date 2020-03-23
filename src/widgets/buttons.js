@@ -113,7 +113,7 @@ export const Buttons = define_class({
     _options: Object.assign(Object.create(Container.prototype._options), {
         buttons: "array",
         direction: "string",
-        select: "int",
+        select: "int|array",
         button_class: "Button",
         multi_select: "int",
         deselect: "boolean",
@@ -248,10 +248,8 @@ export const Buttons = define_class({
                 if (b >= position)
                     a[i] = b+1;
             });
-        } else {
-            if (O.select >= position)
-                O.select += 1;
         }
+
         this.add_child(b);
 
         this.trigger_resize();
@@ -265,6 +263,19 @@ export const Buttons = define_class({
          * @param {Button} button - The {@link Button} which was added to Buttons.
          */
         this.emit("added", b);
+
+        if (!O.multi_select)
+        {
+          let select = O.select;
+
+          if (O.select >= position)
+          {
+            if (select+1 < this.buttons.length)
+              select ++;
+
+            this.set('select', select);
+          }
+        }
 
         return b;
     },
