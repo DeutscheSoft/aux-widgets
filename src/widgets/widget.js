@@ -706,7 +706,6 @@ export const Widget = define_class({
         this.update('visible', true);
         this.enable_draw();
         this._redraw();
-        this.disable_draw();
     },
     /**
      * Hide the widget. This will result in the class <code>aux-hide</code>
