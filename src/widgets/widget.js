@@ -278,7 +278,13 @@ export const Widget = define_class({
     initialize: function (options) {
       Base.prototype.initialize.call(this, options);
       // Main actions every widget needs to take
-      this.element = options.element || null;
+      var E = options.element || null;
+      if (E !== null && !E.isAuxWidget)
+      {
+        E.auxWidget = this;
+        E.isAuxWidget = true;
+      }
+      this.element = E;
       this.invalid = new Invalid(this.options);
       if (!this.value_time) this.value_time = null;
       this.needs_redraw = false;
