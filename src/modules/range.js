@@ -101,3 +101,23 @@ export const Range = define_class({
         round:      false 
     },
 });
+
+
+export function effective_value (value, base, falling, duration, init, age) {
+    // +O.value, +O.base, +O.falling, +O.falling_duration, +O.falling_init, +this.value_time.value
+    if (falling <= 0) return value;
+    if (!(age > 0)) age = Date.now();
+    else age = +(Date.now() - age);
+    var diff = age * (falling / duration);
+    
+    if (age > init) {
+        if (value > base) {
+            value -= diff;
+            if (value < base) value = base;
+        } else {
+            value += diff;
+            if (value > base) value = base;
+        }
+    }
+    return value;
+}
