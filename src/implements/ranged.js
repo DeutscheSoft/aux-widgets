@@ -648,7 +648,7 @@ export const Ranged = define_class({
         step: "number",
         shift_up: "number",
         shift_down: "number",
-        snap: "mixed",
+        snap: "number|array",
         round: "boolean",
         log_factor: "number",
         trafo_reverse: "boolean",
