@@ -223,7 +223,7 @@ export const LevelMeter = define_class({
      */
     reset_value: function () {
         clear_timeout(this.__lto);
-        this.set("value_label", this.effective_value(+O.value, +O.base, +O.falling, +O.falling_duration, +O.falling_init, +this.value_time.value));
+        this.set("value_label", effective_value(+O.value, +O.base, +O.falling, +O.falling_duration, +O.falling_init, +this.value_time.value));
         /**
          * Is fired when the value label was reset.
          * 
@@ -256,7 +256,7 @@ export const LevelMeter = define_class({
      * @emits LevelMeter#resettop
      */
     reset_top: function () {
-        this.set("top", this.effective_value(+O.value, +O.base, +O.falling, +O.falling_duration, +O.falling_init, +this.value_time.value));
+        this.set("top", effective_value(+O.value, +O.base, +O.falling, +O.falling_duration, +O.falling_init, +this.value_time.value));
         /**
          * Is fired when the top hold was reset.
          * 
@@ -272,7 +272,7 @@ export const LevelMeter = define_class({
      * @emits LevelMeter#resetbottom
      */
     reset_bottom: function () {
-        this.set("bottom", this.effective_value(+O.value, +O.base, +O.falling, +O.falling_duration, +O.falling_init, +this.value_time.value));
+        this.set("bottom", effective_value(+O.value, +O.base, +O.falling, +O.falling_duration, +O.falling_init, +this.value_time.value));
         /**
          * Is fired when the bottom hold was reset.
          * 
@@ -312,7 +312,7 @@ export const LevelMeter = define_class({
 
         // this is a bit unelegant...
         if (falling) {
-            value = this.effective_value(+O.value, +O.base, +O.falling, +O.falling_duration, +O.falling_init, +this.value_time.value);
+            value = effective_value(+O.value, +O.base, +O.falling, +O.falling_duration, +O.falling_init, +this.value_time.value);
             // continue animation
             if (value !== base) {
                 this.invalid.value = true;
@@ -383,7 +383,7 @@ export const LevelMeter = define_class({
             value = this.snap(value);
 
             if (O.falling) {
-                var v = this.effective_value(+O.value, +O.base, +O.falling, +O.falling_duration, +O.falling_init, +this.value_time.value);
+                var v = effective_value(+O.value, +O.base, +O.falling, +O.falling_duration, +O.falling_init, +this.value_time.value);
                 if (v >= base && value >= base && value < v ||
                     v <= base && value <= base && value > v) {
                     /* NOTE: we are doing a falling animation, but maybe its not running */
