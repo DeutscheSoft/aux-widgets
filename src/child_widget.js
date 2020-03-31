@@ -113,13 +113,15 @@ export function define_child_widget(widget, name, config) {
      *     the child element is shown.
      * @param {array<string>} [config.blacklist_options] - Array containing options names
      *     which are skipped on `inherit_options`.
-     * 
+     * @param {boolean} [config.map_interacting=true] - If true, the interacting
+     *     property will be true if it is true in the child.
      */
      
     var p = widget.prototype;
     var key = config.option || "show_"+name;
     var tmp, m;
     var static_events = { };
+    var map_interacting = config.map_interacting !== false;
     
     if (!config.userset_ignore)
       static_events.userset = (config.inherit_options || config.userset_delegate)
@@ -133,6 +135,17 @@ export function define_child_widget(widget, name, config) {
     if (config.create === void(0)) {
       warn("'create' is undefined. Skipping child widget ", name);
       return;
+    }
+
+    if (map_interacting) {
+      static_events.set_interacting = function (value) {
+        var self = this.parent;
+
+        if (value)
+          self.startInteracting();
+        else
+          self.stopInteracting();
+      };
     }
 
     var child = define_class({
@@ -163,7 +176,7 @@ export function define_child_widget(widget, name, config) {
             this[name] = null;
         }
     });
-    
+
     var fixed = config.fixed;
     var append = config.append;
 
@@ -179,6 +192,10 @@ export function define_child_widget(widget, name, config) {
             this.add_child(w);
             this[name] = w;
         } else if (!show && C) {
+            if (map_interacting && C.get('interacting'))
+            {
+              this.stopInteracting();
+            }
             this[name] = null;
             if (config.toggle_class)
               remove_class(this.element, "aux-has-"+name);
