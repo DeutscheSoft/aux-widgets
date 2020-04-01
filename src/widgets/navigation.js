@@ -35,7 +35,7 @@ import { Container } from './container.js';
 function auto_arrows () {
     var O = this.options;
     if (!O.auto_arrows) return;
-    var B = this.buttons.buttons;
+    var B = this.buttons.get_buttons();
     var vert = O.direction === "vertical";
     var cons = vert ? inner_height(this.buttons.element) : inner_width(this.buttons.element);
     var list;
@@ -53,7 +53,7 @@ function auto_arrows () {
 }
 
 function measure () {
-    var B = this.buttons.buttons;
+    var B = this.buttons.get_buttons();
     var mm = {
         clip: {
             height: inner_height(this.buttons.element),
@@ -89,10 +89,10 @@ function prev_dblclicked() {
 }
 
 function next_clicked() {
-    this.userset("select", Math.min(this.buttons.buttons.length-1, this.options.select + 1));
+    this.userset("select", Math.min(this.buttons.get_buttons().length-1, this.options.select + 1));
 }
 function next_dblclicked() {
-    this.userset("select", this.buttons.buttons.length-1);
+    this.userset("select", this.buttons.get_buttons().length-1);
 }
 
 function easeInOut (t, b, c, d) {
@@ -194,7 +194,7 @@ export const Navigation = define_class({
         var O = this.options;
         var I = this.invalid;
         var E = this.element;
-        var B = this.buttons.buttons;
+        var B = this.buttons.get_buttons();
         var BE = this.buttons.element;
         
         if (I.direction) {

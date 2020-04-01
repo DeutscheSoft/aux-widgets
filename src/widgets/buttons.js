@@ -22,6 +22,7 @@ import { add_class, remove_class } from './../utils/dom.js';
 import { Container } from './container.js';
 import { Button } from './button.js';
 import { Warning } from '../implements/warning.js';
+import { ChildWidgets } from '../utils/child_widgets.js';
 
  /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -31,41 +32,113 @@ import { Warning } from '../implements/warning.js';
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
- 
-function button_clicked(button) {
-    var O = this.options;
-    var B = this.buttons;
-    var b = B.indexOf(button);
-    var sel = O.select;
-    
-    if (O.multi_select) {
-        var s = sel.indexOf(b);
-        if (s >= 0) {
-            sel.splice(s, 1);
-        } else {
-            sel.push(b);
-        }
-    } else {
-        if (O.deselect && sel === b)
-            sel = -1;
-        else
-            sel = b;
+
+function update_select(select, position, add)
+{
+  if (Array.isArray(select)) {
+      if (add === select.includes(position)) return select;
+
+      if (!add) {
+          select = select.filter((_position) => position !== _position);
+      } else {
+          select = select.concat([ position ]);
+      }
+  } else {
+      if (add === (select === position)) return select;
+
+      select = add ? position : -1;
+  }
+
+  return select;
+}
+
+function enforce_multi_select(select, multi_select)
+{
+  const is_array = Array.isArray(select);
+
+  if (!is_array && !multi_select) return select;
+
+  if (multi_select)
+  {
+    if (is_array)
+    {
+      if (multi_select === 1) return select;
+      if (select.length <= multi_select) return select;
+
+      return select.slice(0, multi_select);
     }
-    this.userset("select", sel);
+    else
+    {
+      return select === -1 ? [] : [ select ];
+    }
+  }
+  else
+  {
+    return select.length ? select[0] : -1;
+  }
 }
 
-function deselect_all () {
-    this.buttons.forEach(b => {
-        b.set("state", false);
-    });
+function on_button_click()
+{
+  this.userset('state', !this.get('state'));
 }
 
-function equalize_select () {
-    var select = this.options.select;
-    select.forEach((b, i, a) => {
-        a[i] = b instanceof Button ? this.buttons.indexOf(b) : b;
-    });
-    select.sort((a, b) => a - b);
+function on_button_userset(key, value)
+{
+  if (key !== 'state') return;
+
+  // make sure this is a boolean
+  value = !!value;
+
+  const parent = this.parent;
+
+  const O = parent.options;
+  const position = parent.buttons.indexOf(this);
+  let select = enforce_multi_select(update_select(O.select, position, value), O.multi_select);
+
+  if (select === O.select) return;
+
+  return parent.userset("select", select);
+}
+
+function on_button_set_state(value)
+{
+  // make sure this is a boolean
+  value = !!value;
+
+  const parent = this.parent;
+
+  const O = parent.options;
+  const position = parent.buttons.indexOf(this);
+  let select = enforce_multi_select(update_select(O.select, position, value), O.multi_select);
+
+  if (select === O.select) return;
+
+  return parent.set("select", select);
+}
+
+function on_button_added(child)
+{
+  const parent = this.widget;
+
+  child.on('click', on_button_click);
+  child.on('userset', on_button_userset);
+  child.on('set_state', on_button_set_state);
+
+  parent.emit('added', child);
+  parent.trigger_resize();
+}
+
+function on_button_removed(child)
+{
+  const parent = this.widget;
+
+  child.off('click', on_button_click);
+  child.off('userset', on_button_userset);
+  child.off('set_state', on_button_set_state);
+
+  parent.emit('removed', child);
+  parent.trigger_resize();
 }
 
 export const Buttons = define_class({
@@ -108,6 +181,20 @@ export const Buttons = define_class({
      * @mixes Warning
      * 
      */
+    /**
+     * A {@link Button} was added to Buttons.
+     *
+     * @event Buttons#added
+     * 
+     * @param {Button} button - The {@link Button} which was added to Buttons.
+     */
+    /**
+     * A {@link Button} was removed from the Buttons.
+     *
+     * @event Buttons#removed
+     * 
+     * @param {Button} button - The {@link Button} instance which was removed.
+     */
     Extends: Container,
     Implements: Warning,
     _options: Object.assign(Object.create(Container.prototype._options), {
@@ -127,65 +214,53 @@ export const Buttons = define_class({
         deselect: false,
     },
     static_events: {
-        set_buttons: function(value) {
-            for (var i = 0; i < this.buttons.length; i++)
-                this.buttons[i].destroy();
-            this.buttons = [];
-            this.add_buttons(value);
+        userset: function (key, value) {
+          if (key !== 'select' || this.options.deselect) return;
+
+          if (value === -1 || Array.isArray(value) && value.length === 0)
+            return false;
         },
         set_select: function(value) {
-            var O = this.options;
-            var B = this.buttons;
-            deselect_all.call(this);
-            if (O.multi_select) {
-                if (!Array.isArray(O.select))
-                    O.select = [ O.select ];
-                if (O.multi_select > 1) {
-                    var w = O.select.splice(O.multi_select);
-                    w.forEach(b => {
-                        this.warning(this.buttons[b].element);
-                    });
-                }
-                equalize_select.call(this);
-                O.select.forEach(b => {
-                    B[b].set("state", true);
-                });
-            } else {
-                value = Math.min(B.length-1, value);
-                if (value >= 0)
-                    B[value].set("state", true);
+            const list = this.buttons.getList();
+            const selected = Array.isArray(value) ? value : (value === -1 ? [ ] : [ value ]);
+            for (let i = 0; i < list.length; i++)
+            {
+              // we use update, it avoids changing the state if it is already
+              // correct.
+              list[i].update('state', selected.includes(i));
             }
         },
-        set_multi_select: function (value) {
-            var O = this.options;
-            if (!value && Array.isArray(O.select)) {
-                if (O.select.length)
-                    O.select = O.select[0];
-                else
-                    O.select = -1;
-            }
-            if (value && !Array.isArray(O.select)) {
-                if (O.select === -1)
-                    O.select = [];
-                else
-                    O.select = [ O.select ];
-            }
+        set_multi_select: function (multi_select) {
+            const O = this.options;
+
+            let select = enforce_multi_select(O.select, multi_select);
+
+            this.update('select', select);
         },
     },
     initialize: function (options) {
-        /**
-         * @member {Array} Buttons#buttons - An array holding all {@link Button}s.
-         */
-        this.buttons = [];
         Container.prototype.initialize.call(this, options);
         /**
          * @member {HTMLDivElement} Buttons#element - The main DIV container.
          *   Has class <code>.aux-buttons</code>.
          */
-        
+        /**
+         * @member {ChildWidgets} Buttons#buttons - An instance of {@link ChildWidgets} holding all
+         *   {@link Button}s.
+         */
+        this.buttons = new ChildWidgets(this, {
+          filter: Button,
+        });
+        this.buttons.on('child_added', on_button_added);
+        this.buttons.on('child_removed', on_button_removed);
+
         this.set("direction", this.options.direction);
         this.set("multi_select", this.options.multi_select);
-        this.add_buttons(this.options.buttons);
+
+        // the set() method would otherwise try to remove initial buttons
+        const buttons = options.buttons;
+        this.options.buttons = [];
+        this.set("buttons", buttons);
     },
     draw: function(O, element)
     {
@@ -193,22 +268,40 @@ export const Buttons = define_class({
 
       Container.prototype.draw.call(this, O, element);
     },
-    
     /**
      * Adds an array of buttons to the end of the list.
      *
      * @method Buttons#add_buttons
      * 
-     * @param {Array.<string|object>} options - An Array containing
+     * @param {Array.<string|object>} list - An Array containing
      *   Button instances, objects
      *   with options for the buttons (see {@link Button} for more
      *   information) or strings for the buttons labels.
      */
-    add_buttons: function (options) {
-        for (var i = 0; i < options.length; i++)
-            this.add_button(options[i]);
+    add_buttons: function (list) {
+      return list.map((options) => this.add_button(options));
     },
-    
+
+    create_button: function (options) {
+      if (options instanceof Button) {
+        return options;
+      } else {
+        if (typeof options === "string")
+        {
+          options = {label: options};
+        }
+        else if (options === void(0))
+        {
+          options = {};
+        }
+        else if (typeof options !== 'object')
+        {
+          throw new TypeError('Expected object of options.');
+        }
+
+        return  new this.options.button_class(options);
+      }
+    },
     /**
      * Adds a {@link Button} to Buttons.
      *
@@ -222,62 +315,20 @@ export const Buttons = define_class({
      * 
      * @returns {Button} The {@link Button} instance.
      */
-    add_button: function (button, position) {
-        var O = this.options;
-        let b;
-        if (button instanceof Button) {
-            b = button;
+    add_button: function (options, position) {
+        const button = this.create_button(options);
+        const buttons = this.get_buttons();
+        const E = this.element;
+
+        if (position === void(0) || position === buttons.length) {
+          E.appendChild(button.element);
         } else {
-            if (typeof button === "string")
-                button = {label: button};
-            b = new O.button_class(button);
-        }
-        var len  = this.buttons.length;
-        if (position === void(0))
-            position = len;
-        if (position === len) {
-            this.buttons.push(b);
-            this.element.appendChild(b.element);
-        } else {
-            this.buttons.splice(position, 0, b);
-            this.element.insertBefore(b.element,
-                this.element.childNodes[position]);
-        }
-        if (O.multi_select) {
-            O.select.forEach((b, a, i) => {
-                if (b >= position)
-                    a[i] = b+1;
-            });
+          E.insertBefore(button.element, buttons[position].element);
         }
 
-        this.add_child(b);
+        this.add_child(button);
 
-        this.trigger_resize();
-        b.on("click", button_clicked.bind(this, b));
-        
-        /**
-         * A {@link Button} was added to Buttons.
-         *
-         * @event Buttons#added
-         * 
-         * @param {Button} button - The {@link Button} which was added to Buttons.
-         */
-        this.emit("added", b);
-
-        if (!O.multi_select)
-        {
-          let select = O.select;
-
-          if (O.select >= position)
-          {
-            if (select+1 < this.buttons.length)
-              select ++;
-
-            this.set('select', select);
-          }
-        }
-
-        return b;
+        return button;
     },
     /**
      * Removes a {@link Button} from Buttons.
@@ -289,56 +340,52 @@ export const Buttons = define_class({
      * @param {Boolean} destroy - destroy the {@link Button} after removal.
      */
     remove_button: function (button, destroy) {
-        var O = this.options;
-        var B = this.buttons;
-        if (button instanceof Button)
-            button = B.indexOf(button);
-        if (button < 0 || button >= B.length)
-            return;
-        
-        if (O.multi_select) {
-            if (O.select.indexOf(button)) {
-                O.select.splice(button, 1);
-            }
-        } else {
-            if (O.select === button)
-                O.select = -1;
-            if (button < O.select)
-                O.select--;
-        }
-        
-        var b = B[button];
-        this.buttons.splice(button, 1);
-        /**
-         * A {@link Button} was removed from the Buttons.
-         *
-         * @event Buttons#removed
-         * 
-         * @param {Button} button - The {@link Button} instance which was removed.
-         */
-        this.emit("removed", b);
-        if (destroy)
-            b.destroy();
-    },
+        const buttons = this.buttons;
+        let position = -1;
 
+        if (button instanceof Button)
+        {
+          position = buttons.indexOf(button);
+        }
+        else if (typeof(button) === 'number')
+        {
+          position = button;
+          button = buttons.at(position);
+        }
+
+        if (!button || position === -1)
+          throw new Error('Unknown button.');
+
+        this.element.removeChild(button.element);
+
+        if (buttons.at(position) === button)
+        {
+          // NOTE: if we remove a child which is a web component,
+          // it will itself call remove_child
+          this.remove_child(button);
+        }
+
+        if (destroy)
+            button.destroy();
+    },
+    /**
+     * @returns {Button[]} The list of {@link Button}s.
+     */
     get_buttons: function()
     {
-      return this.buttons;
+      return this.buttons.getList();
     },
-    
     /**
      * Removes all buttons.
      * 
      * @method Buttons#empty
      */
     empty: function () {
-        while (this.buttons.length)
-            this.remove_button(0, true);
+        this.buttons.forEach((button) => this.remove_button(button, true));
     },
-    
     destroy: function () {
-        for (var i = 0; i < this.buttons.length; i++)
-            this.buttons[i].destroy();
+        this.buttons.destroy();
+        this.set('buttons', []);
         Container.prototype.destroy.call(this);
     },
 
@@ -354,7 +401,6 @@ export const Buttons = define_class({
             add_class(E, "aux-"+O.direction);
         }
     },
-    
     /**
      * Checks if an index or {@link Button} is selected.
      *
@@ -365,13 +411,26 @@ export const Buttons = define_class({
      * @returns {Boolean}
      */
     is_selected: function (probe) {
-        if (probe instanceof Button) {
-            probe = this.buttons.indexOf(probe);
-        }
+        const button = typeof(probe) === 'number' ? this.buttons.at(probe) : probe;
+
+        if (!button)
+          throw new Error('Unknown button.');
+
+        return button.get('state');
     },
-    
-    get: function (key) {
-        if (key === "buttons") return this.buttons;
-        return Container.prototype.get.call(this, key);
-    }
+    set: function (key, value)
+    {
+      if (key === 'buttons')
+      {
+        // remove all buttons which were added using this option
+        this.options.buttons.forEach((b) => this.remove_button(b, true));
+        value = this.add_buttons(value || []);
+      }
+      else if (key === 'select')
+      {
+        value = enforce_multi_select(value, this.options.multi_select);
+      }
+
+      return Container.prototype.set.call(this, key, value);
+    },
 });

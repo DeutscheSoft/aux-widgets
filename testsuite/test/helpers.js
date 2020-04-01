@@ -30,6 +30,21 @@ export function object_minus(o, list)
   return ret;
 }
 
+export function compare_options(w1, w2)
+{
+  const o1 = {},
+        o2 = {};
+  for (var key in w1._options)
+  {
+    if (key === 'id' || key === 'element')
+      continue;
+    o1[key] = w1.get(key);
+    o2[key] = w2.get(key);
+  }
+
+  return compare(o1, o2);
+}
+
 export function assert(v, msg)
 {
   if (!v)

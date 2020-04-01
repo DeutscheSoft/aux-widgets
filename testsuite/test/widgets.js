@@ -230,67 +230,6 @@ describe('Crossover', () => {
   });
 });
 
-describe('Buttons', () => {
-    it("creating buttons via string, options and instance", (done) => {
-        const ba = new Buttons();
-        const label = "testing";
-        const b1 = ba.add_button(label);
-        const b2 = ba.add_button({label:label});
-        const b3 = ba.add_button(new Button({label:label}));
-        const o1 = object_minus(ba.get_buttons()[0].options, ['id']);
-        const o2 = object_minus(ba.get_buttons()[1].options, ['id']);
-        const o3 = object_minus(ba.get_buttons()[2].options, ['id']);
-        if (!compare(o1, o2) || !compare(o1, o3)) {
-            console.error(b1.options, b2.options, b3.options);
-            throw new Error('Labels mismatch.');
-        }
-        done();
-    });
-    it("creating buttons in right order", (done) => {
-        const ba = new Buttons();
-        const b1 = ba.add_button("1");
-        const b2 = ba.add_button("2", 0);
-        const b3 = ba.add_button("3", 1);
-        let res = "";
-        for (var i = 0; i < ba.get_buttons().length; i++) {
-            res += ba.get_buttons()[i].options.label;
-        }
-        if (res != "231")
-            throw new Error('Wrong order: '+res+' - should be 231');
-        done();
-    });
-    it("multi-selection unlimited", (done) => {
-        const comp_array = function (a1, a2) {
-            return a1.length === a2.length && a1.sort().every(function(v, i) { return v === a2.sort()[i]});
-        }
-        const ba = new Buttons({multi_select:1, buttons:['1','2','3']});
-        var sel = [];
-        var test = [];
-        for (var i = 0; i < ba.get_buttons().length; i++) {
-            sel.push(i);
-            test.push(i);
-            ba.set("select", sel);
-            if (!comp_array(ba.get("select"), test))
-                throw new Error('Selection went wrong: '+JSON.stringify(ba.get('select'))+' should be ' + JSON.stringify(test));
-        }
-        done();
-    });
-    it("multi-selection limit", (done) => {
-        const comp_array = function (a1, a2) {
-            return a1.length === a2.length && a1.sort().every(function(v, i) { return v === a2.sort()[i]});
-        }
-        const ba = new Buttons({multi_select:2, buttons:['1','2','3']});
-        var sel = [];
-        for (var i = 0; i < ba.get_buttons().length; i++) {
-            sel.push(i);
-            ba.set("select", sel);
-            if (ba.get("select").length > 2)
-                throw new Error('Selection went wrong. Limit was 2 but got '+sel.length+' items selected.');
-        }
-        done();
-    });
-});
-
 describe ("Clock", () => {
     it("clock labels", (done) => {
         const c = new Clock({

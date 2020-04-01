@@ -195,7 +195,7 @@ for (let C of [Base, Events])
         if (!called) throw new Error('not called');
       }
     });
-    it.only('event termination', function() {
+    it('event termination', function() {
         const o = new C();
         o.emit('this_event_does_not_exist');
     });

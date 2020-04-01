@@ -923,6 +923,11 @@ export const Widget = define_class({
         }
         return a;
     },
+
+    get_children: function() {
+        var C = this.children;
+        return C !== null ? C : [];
+    },
 });
 /**
  * Generic DOM events. Please refer to
