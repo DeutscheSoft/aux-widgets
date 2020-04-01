@@ -113,23 +113,22 @@ export const Container = define_class({
         Widget.prototype.set_parent.call(this, parent);
     },
     add_child : function(child) {
-        Widget.prototype.add_child.call(this, child);
         var H = this.hidden_children;
         if (!H) this.hidden_children = H = [];
         H.push(false);
+        Widget.prototype.add_child.call(this, child);
     },
     remove_child : function(child) {
-        if (!child) return;
-        child.disable_draw();
-        child.parent = null;
         var C = this.children;
-        if (C === null) return;
-        var H = this.hidden_children;
-        var i = C.indexOf(child);
-        if (i !== -1) {
-            C.splice(i, 1);
-            H.splice(i, 1);
+        var i;
+
+        // if this child is not found, Widget.remove_child will generate an
+        // error for us
+        if (C !== null && (i = C.indexOf(child)) !== -1) {
+          this.hidden_children.splice(i, 1);
         }
+
+        Widget.prototype.remove_child.call(this, child);
     },
     enable_draw_children: function () {
         var C = this.children;

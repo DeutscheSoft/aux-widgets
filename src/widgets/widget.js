@@ -827,6 +827,7 @@ export const Widget = define_class({
             child.disable_draw();
         }
         child.trigger_resize();
+        this.emit('child_added', child);
     },
     /**
      * Removes a child widget. Note that this method only modifies
@@ -841,14 +842,14 @@ export const Widget = define_class({
           child.set_parent(void(0), true);
         child.disable_draw();
         var C = this.children;
-        if (C === null) return;
-        var i = C.indexOf(child);
-        if (i !== -1) {
-            C.splice(i, 1);
+        var i;
+        if (C !== null && (i = C.indexOf(child)) !== -1) {
+          C.splice(i, 1);
+          this.emit('child_removed', child);
+          if (!C.length) this.children = null;
         } else {
-          error("%o is not a child of %o", child, this);
+            error("%o is not a child of %o", child, this);
         }
-        if (!C.length) this.children = null;
     },
     /**
      * Calls {@link Widget#append_child} for an array of widgets.
