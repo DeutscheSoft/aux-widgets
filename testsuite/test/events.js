@@ -24,8 +24,8 @@ for (let C of [Base, Events])
     });
     it('off()', () => {
       {
-          const o = new C();
-          let called = false;
+        const o = new C();
+        let called = false;
 
         const cb = () => { called = true; };
         o.on("foo", cb);
@@ -194,6 +194,10 @@ for (let C of [Base, Events])
         o.emit('foo');
         if (!called) throw new Error('not called');
       }
+    });
+    it.only('event termination', function() {
+        const o = new C();
+        o.emit('this_event_does_not_exist');
     });
   });
 }

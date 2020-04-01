@@ -55,7 +55,7 @@ function has_event_handler(handlers, name, callback)
 
   const tmp = handlers.get(name);
 
-  if (tmp === null) return false;
+  if (tmp === void(0)) return false;
 
   if (typeof callback === 'undefined') return true;
 
@@ -86,7 +86,7 @@ function emit_event(handlers, name, self, args)
 
   const tmp = handlers.get(name);
 
-  if (tmp === null) return;
+  if (tmp === void(0)) return;
 
   if (Array.isArray(tmp))
   {
