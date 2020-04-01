@@ -320,6 +320,11 @@ export const Buttons = define_class({
         if (destroy)
             b.destroy();
     },
+
+    get_buttons: function()
+    {
+      return this.buttons;
+    },
     
     /**
      * Removes all buttons.
