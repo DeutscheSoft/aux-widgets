@@ -106,11 +106,11 @@ export const Container = define_class({
             this.append_children(this.options.children);
     },
     
-    set_parent : function(parent) {
+    set_parent : function(parent, no_remove_child) {
         if (parent && !(parent instanceof Container)) {
             warn("Container %o should not be child of non-container %o", this, parent);
         }
-        Widget.prototype.set_parent.call(this, parent);
+        Widget.prototype.set_parent.call(this, parent, no_remove_child);
     },
     add_child : function(child) {
         var H = this.hidden_children;
