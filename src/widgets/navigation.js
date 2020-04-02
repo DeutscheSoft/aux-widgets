@@ -261,6 +261,8 @@ export const Navigation = define_class({
             }
         }
         I.resized = false;
+
+        Container.prototype.redraw.call(this);
     },
     add_button: function (...arg) {
         return this.buttons.add_button(...arg);
