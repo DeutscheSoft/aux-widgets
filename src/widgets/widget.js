@@ -553,12 +553,17 @@ export const Widget = define_class({
         this.disable_draw();
         this.set_parent(void(0));
 
+        if (this.children)
+        {
+          this.remove_children(this.children);
+          this.children = null;
+        }
+
         Base.prototype.destroy.call(this);
 
         this._redraw = null;
         this.__resize = null;
         this._schedule_resize = null;
-        this.children = null;
         this.options = null;
 
         if (this.element) {
@@ -838,6 +843,7 @@ export const Widget = define_class({
      * @param {Widget} child - The child to remove.
      */
     remove_child : function(child) {
+        if (this.is_destructed()) return;
         if (child.parent === this)
           child.set_parent(void(0), true);
         child.disable_draw();
