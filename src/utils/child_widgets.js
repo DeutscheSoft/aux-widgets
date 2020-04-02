@@ -39,13 +39,14 @@ export class ChildWidgets extends Events
         if (!this.filter(child)) return;
         this.list.push(child);
         this.sortByDOM();
-        this.emit('child_added', child);
+        this.emit('child_added', child, this.list.indexOf(child));
         this.emit('changed');
       }),
       widget.subscribe('child_removed', (child) => {
         if (!this.filter(child)) return;
+        const position = this.list.indexOf(child);
         this.list = this.list.filter((_child) => _child !== child);
-        this.emit('child_removed', child);
+        this.emit('child_removed', child, position);
         this.emit('changed');
       }),
     ];

@@ -33,6 +33,25 @@ import { ChildWidgets } from '../utils/child_widgets.js';
  * @param {mixed} value - The new value of the option
  */
 
+function calculate_select(buttons)
+{
+  const list = buttons.get_buttons();
+  const old_select = buttons.get('select');
+
+  const should_be_selected = list.filter((b) => b.get('state')).map((b) => list.indexOf(b));
+  const are_selected = Array.isArray(old_select) ? old_select : (old_select === -1 ? [] : [ old_select ]);
+
+  if (are_selected.length !== should_be_selected.length) return should_be_selected;
+
+  for (let i = 0; i < are_selected.length; i++)
+  {
+    if (should_be_selected.indexOf(are_selected[i]) === -1)
+      return should_be_selected;
+  }
+
+  return old_select;
+}
+
 function update_select(select, position, add)
 {
   if (Array.isArray(select)) {
@@ -117,28 +136,85 @@ function on_button_set_state(value)
   return parent.set("select", select);
 }
 
-function on_button_added(child)
+function on_button_added(button, position)
 {
-  const parent = this.widget;
+  const buttons = this.widget;
 
-  child.on('click', on_button_click);
-  child.on('userset', on_button_userset);
-  child.on('set_state', on_button_set_state);
+  button.on('click', on_button_click);
+  button.on('userset', on_button_userset);
+  button.on('set_state', on_button_set_state);
 
-  parent.emit('added', child);
-  parent.trigger_resize();
+  let select = buttons.get('select');
+  let length = buttons.get_buttons().length;
+
+  const correct_index = (index) => {
+    if (index >= position && position < length - 1)
+    {
+      return index + 1;
+    }
+
+    return index;
+  };
+
+  if (Array.isArray(select))
+  {
+    select = select.map(correct_index);
+    if (button.get('state') && select.indexOf(position) === -1)
+      select = [ position ].concat(select);
+  }
+  else
+  {
+    select = correct_index(select);
+    if (button.get('state'))
+      select = position;
+  }
+
+  buttons.set('select', select);
+  buttons.emit('added', button);
+
+  buttons.trigger_resize();
 }
 
-function on_button_removed(child)
+function on_button_removed(button, position)
 {
-  const parent = this.widget;
+  const buttons = this.widget;
 
-  child.off('click', on_button_click);
-  child.off('userset', on_button_userset);
-  child.off('set_state', on_button_set_state);
+  button.off('click', on_button_click);
+  button.off('userset', on_button_userset);
+  button.off('set_state', on_button_set_state);
 
-  parent.emit('removed', child);
-  parent.trigger_resize();
+  let select = buttons.get('select');
+  let length = buttons.get_buttons().length;
+
+  const correct_index = (index) => {
+    if (index > position && position < length + 1)
+    {
+      return index - 1;
+    }
+
+    return index;
+  };
+
+  if (Array.isArray(select))
+  {
+    select = select.filter((index) => index !== position).map(correct_index);
+  }
+  else
+  {
+    if (select === position)
+    {
+      select = -1;
+    }
+    else
+    {
+      select = correct_index(select);
+    }
+  }
+
+  buttons.set('select', select);
+  buttons.emit('removed', button);
+
+  buttons.trigger_resize();
 }
 
 export const Buttons = define_class({
