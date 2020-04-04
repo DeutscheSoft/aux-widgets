@@ -433,5 +433,8 @@ export const Pages = define_class({
     get: function (key) {
         if (key === "pages") return this.pages;
         return Container.prototype.get.call(this, key);
-    }
+    },
+    get_pages: function() {
+        return this.pages;
+    },
 });

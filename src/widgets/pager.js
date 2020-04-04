@@ -304,7 +304,7 @@ export const Pager = define_class({
      * @emits Pager#removed
      */
     remove_page: function (page) {
-        const i = this.pages.pages.indexOf(page);
+        const i = this.pages.get_pages().indexOf(page);
         if (i >= 0)
             this.navigation.remove_button(i);
         return this.call_and_ignore(() => this.pages.remove_page(page));
@@ -325,7 +325,7 @@ export const Pager = define_class({
      * @method Pager#first
      */
     first: function() {
-        if (this.pages.pages.length) {
+        if (this.pages.get_pages().length) {
             this.set("show", 0);
             return true;
         }
@@ -338,8 +338,8 @@ export const Pager = define_class({
      * @method Pager#last
      */
     last: function() {
-        if (this.pages.pages.length) {
-            this.set("show", this.pages.pages.length-1);
+        if (this.pages.get_pages().length) {
+            this.set("show", this.pages.get_pages().length-1);
             return true;
         }
         return false;
