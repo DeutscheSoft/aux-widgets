@@ -30,30 +30,11 @@ import { define_class } from '../widget_helpers.js';
 import { define_child_widget } from '../child_widget.js';
 import { add_class, remove_class } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
+import { init_subscriptions, add_subscription, unsubscribe_subscriptions } from '../utils/subscriptions.js';
 import { Pages } from './pages.js';
 import { Container } from './container.js';
 import { Navigation } from './navigation.js';
 
-function page_added(page, index)
-{
-  const pager = this.parent;
-  if (pager.ignore_pages_events) return;
-
-  if (pager.navigation)
-  {
-    pager.navigation.add_button({ label: page.get('title') }, index);
-    pager.set('show', pager.get('show'));
-  }
-}
-
-function page_removed(page, index)
-{
-  const pager = this.parent;
-  if (pager.ignore_pages_events) return;
-  if (pager.navigation)
-    pager.navigation.remove_button(index);
-}
- 
 export const Pager = define_class({
     /**
      * Pager, also known as Notebook in other UI toolkits, provides
@@ -106,14 +87,93 @@ export const Pager = define_class({
             } else {
                 badir = "vertical";
             }
-            this.navigation.set("direction", badir);
-            this.pages.set("animation", badir);
+            if (this.navigation)
+              this.navigation.set("direction", badir);
+            if (this.pages)
+              this.pages.set("animation", badir);
         },
-        set_pages: function(value) {
-            this.navigation.empty();
-            this.pages.empty();
-            this.add_pages(value);
-        },
+    },
+
+    initializePages: function()
+    {
+      this.pages_subscriptions = unsubscribe_subscriptions(this.pages_subscriptions);
+
+      const pages = this.pages;
+      const navigation = this.navigation;
+
+      if (!pages || !navigation) return;
+
+      // create one button for each page and keep the title synchronized
+      // with the page title
+      let subs = pages.pages.forEachAsync((page, position) => {
+        let subs = init_subscriptions();
+
+        const button = navigation.add_button({ label: page.get('title') }, position);
+
+        this.page_to_button.set(page, button);
+
+        subs = add_subscription(subs, page.subscribe('set_title', (title) => {
+          button.set('label', title);
+        }));
+
+        subs = add_subscription(subs, () => {
+          navigation.remove_button(button);
+          this.page_to_button.delete(page);
+        });
+
+        this.emit('added', page);
+
+        subs = add_subscription(subs, () => {
+          this.emit('removed', page);
+        });
+
+        return subs;
+      });
+
+      // delegate the userset action from pages to pager
+      subs = add_subscription(subs, pages.subscribe('userset', (key, value) => {
+        if (key !== 'show') return;
+        return this.userset('show', value);
+      }));
+
+      // delegate the set_show action from pages to pager
+      subs = add_subscription(subs, pages.subscribe('set_show', (value) => {
+        return this.update('show', value);
+      }));
+
+      // delegate the userset action from navigation to pager
+      subs = add_subscription(subs, navigation.subscribe('userset', (key, value) => {
+        if (key !== 'select') return;
+        this.update('show', value);
+      }));
+
+      // delegate the set_select action from navigation to pager
+      subs = add_subscription(subs, navigation.subscribe('set_select', (value) => {
+        this.update('show', value);
+      }));
+
+      // delegate the set_show action from pager to both pages and navigation
+      subs = add_subscription(subs, this.subscribe('set_show', (value) => {
+        pages.update('show', value);
+        navigation.update('select', value);
+      }));
+
+      // delegate the added and removed events from pages
+      subs = add_subscription(subs, this.subscribe('set_show', (value) => {
+        pages.update('show', value);
+        navigation.update('select', value);
+      }));
+
+      this.pages.set('show', this.get('show'));
+      this.navigation.set('select', this.get('show'));
+      this.set("position", this.get('position'));
+
+      this.pages_subscriptions = subs;
+    },
+
+    getButtonForPage: function(page)
+    {
+      return this.page_to_button.get(page);
     },
     
     initialize: function (options) {
@@ -123,26 +183,10 @@ export const Pager = define_class({
          *
          * @member Pager#element
          */
-        this.ignore_pages_events = false;
+        this.pages_subscriptions = init_subscriptions();
+        this.page_to_button = new Map();
     },
 
-    call_and_ignore: function(cb)
-    {
-      this.ignore_pages_events = true;
-
-      try
-      {
-        const result = cb();
-        this.ignore_pages_events = false;
-        return result;
-      }
-      catch (err)
-      {
-        this.ignore_pages_events = false;
-        throw err;
-      }
-    },
-    
     initialized: function () {
         Container.prototype.initialized.call(this);
         this.add_pages(this.options.pages);
@@ -162,10 +206,9 @@ export const Pager = define_class({
       {
         if (this.pages === child)
         {
-          this.pages.off('added', page_added);
-          this.pages.off('removed', page_removed);
           this.pages.element.remove();
           this.pages = null;
+          this.initializePages();
         }
       }
 
@@ -185,21 +228,7 @@ export const Pager = define_class({
         }
 
         this.pages = child;
-        child.on('added', page_added);
-        child.on('removed', page_removed);
-        this.set('show', this.get('show'));
-        this.set('position', this.get('position'));
-      }
-      else if (child instanceof Navigation)
-      {
-        const pages = this.pages;
-        if (pages)
-        {
-          pages.forEach((page) => {
-            child.add_button({ label: page.get('title') });
-          });
-        }
-        this.set('show', this.get('show'));
+        this.initializePages();
       }
     },
     
@@ -248,7 +277,7 @@ export const Pager = define_class({
      * var p = new Pager();
      * p.add_pages([
      *   {
-     *     label: "Page 1",
+     *     title: "Page 1",
      *     icon: "gear",
      *     content: "<h1>Page1</h1>",
      *   }
@@ -256,11 +285,13 @@ export const Pager = define_class({
      * 
      */
     add_pages: function (pages) {
-        for (var i = 0; i < pages.length; i++) {
-            var con = pages[i].content;
-            var but = pages[i];
-            delete but.content;
-            this.add_page(but, con);
+        for (var i = 0; i < pages.length; i++)
+        {
+          const options = Object.assign({}, pages[i]);
+          const content = options.content;
+          delete options.content;
+
+          this.add_page(options, content);
         }
     },
     
@@ -270,7 +301,7 @@ export const Pager = define_class({
      *
      * @method Pager#add_page
      *
-     * @param {string|Object} button - A string with the {@link Button}s label or
+     * @param {string|Object} buttonOptions - A string with the {@link Button}s label or
      *   an object containing options for the {@link Button} instance.
      * @param {Container|DOMNode|string} content - The content of the page.
      *   Either a {@link Container} (or derivate) widget,
@@ -284,12 +315,32 @@ export const Pager = define_class({
      * 
      * @emits Pager#added
      */
-    add_page: function (button, content, options, position) {
-        if (typeof button === "string")
-            button = {label: button};
-        this.navigation.add_button(button, position);
-        const p = this.call_and_ignore(() => this.pages.add_page(content, position, options));
-        this.emit("added", p);
+    add_page: function (buttonOptions, content, options, position) {
+        const p = this.pages.add_page(content, position, options);
+
+        const button = this.getButtonForPage(p);
+
+        if (typeof buttonOptions === 'string')
+        {
+          p.set('title', buttonOptions);
+        }
+        else if (typeof buttonOptions === 'object')
+        {
+          const label = buttonOptions.label;
+
+          if (label)
+            p.set('title', buttonOptions);
+
+          for (var key in buttonOptions)
+          {
+            button.set(key, buttonOptions[key]);
+          }
+        }
+        else
+        {
+          throw new TypeError('Unsupported API.');
+        }
+
         return p;
     },
 
@@ -304,10 +355,7 @@ export const Pager = define_class({
      * @emits Pager#removed
      */
     remove_page: function (page) {
-        const i = this.pages.get_pages().indexOf(page);
-        if (i >= 0)
-            this.navigation.remove_button(i);
-        return this.call_and_ignore(() => this.pages.remove_page(page));
+        this.pages.remove_page(page);
     },
     /**
      * Returns the currently displayed page or null.
