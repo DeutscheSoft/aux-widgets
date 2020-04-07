@@ -394,7 +394,7 @@ export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove
       }
       else
       {
-        error('Missing parent widget.');
+        error('Missing parent widget.',this);
       }
     }
 
