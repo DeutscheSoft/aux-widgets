@@ -1,4 +1,5 @@
 import { Events } from '../events.js'; 
+import { init_subscriptions, add_subscription, unsubscribe_subscriptions } from './subscriptions.js';
 
 function make_filter(filter)
 {
@@ -104,5 +105,30 @@ export class ChildWidgets extends Events
   {
     this.subscriptions.forEach((cb) => cb());
     this.widget = null;
+  }
+
+  forEachAsync(callback)
+  {
+    let subs = init_subscriptions();
+    const child_subscriptions = new Map();
+
+    this.getList().forEach((child, position) => {
+      child_subscriptions.set(child, callback(child, position) || null);
+    });
+
+    subs = add_subscription(subs, this.subscribe('child_added', (child, position) => {
+      child_subscriptions.set(child, callback(child, position) || null);
+    }));
+
+    subs = add_subscription(subs, this.subscribe('child_removed', (child, position) => {
+      unsubscribe_subscriptions(child_subscriptions.get(child));
+      child_subscriptions.delete(child);
+    }));
+
+    return () => {
+      subs = unsubscribe_subscriptions(subs);
+      child_subscriptions.forEach((subs) => unsubscribe_subscriptions(subs));
+      child_subscriptions.clear();
+    };
   }
 }
