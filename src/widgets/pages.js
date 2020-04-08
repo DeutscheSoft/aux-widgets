@@ -296,7 +296,8 @@ export const Pages = define_class({
       }
       else if (is_dom_node(content))
       {
-        content.remove();
+        if (content.remove)
+          content.remove();
         if (!options) options = {}; 
         options.content = content;
         return new Container(options);
