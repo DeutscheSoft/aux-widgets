@@ -131,7 +131,7 @@ function on_page_removed(page, position)
    * @param {Container} page - The {@link Container} which was removed.
    * @param {number} index - The index at which the container was.
    */
-  pages.emit("removed", child, position);
+  pages.emit("removed", page, position);
 }
 
 export const Pages = define_class({
@@ -209,7 +209,7 @@ export const Pages = define_class({
           filter: Container,
         });
         this.pages.on('child_added', on_page_added);
-        this.pages.on('child_removed', on_page_added);
+        this.pages.on('child_removed', on_page_removed);
     },
     
     initialized: function () {
