@@ -211,6 +211,15 @@ export const Pager = define_class({
           this.initializePages();
         }
       }
+      else if (child instanceof Navigation)
+      {
+        if (this.navigation === child)
+        {
+          this.navigation.element.remove();
+          this.navigation = null;
+          this.initializePages();
+        }
+      }
 
       Container.prototype.remove_child.call(this, child);
     },
