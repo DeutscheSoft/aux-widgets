@@ -61,7 +61,7 @@ function on_page_added(page, position)
    * 
    * @param {Container} page - The {@link Container} which was added as a page.
    */
-  this.emit("added", page, position);
+  pages.emit("added", page, position);
 
   if (page.get('active'))
   {
