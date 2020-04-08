@@ -44,7 +44,7 @@ export const Notifications = define_class({
     
     Extends: Container,
     
-    _options: Object.assign(Container.prototype._options, {
+    _options: Object.assign(Object.create(Container.prototype._options), {
       stack: "string",
     }),
     options: {
@@ -151,7 +151,7 @@ export const Notification = define_class({
     
   Extends: Container,
   
-  _options: Object.assign(Container.prototype._options, {
+  _options: Object.assign(Object.create(Container.prototype._options), {
     timeout: "number",
     icon: "string",
     show_close: "boolean",
