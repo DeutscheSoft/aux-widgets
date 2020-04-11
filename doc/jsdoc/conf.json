@@ -7,7 +7,7 @@
         "excludePattern": "(^|\\/|\\\\)_"
     },
     "opts": {
-        "template": "node_modules/docdash",
+        "template": "template",
         "tutorials": "docs/",
         "readme": "../README.md"
     },
