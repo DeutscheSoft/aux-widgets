@@ -2,7 +2,7 @@ all: build
 
 out/examples: ../logo.png ../src/**/*.js ../styles/**/* ../styles/* ../examples.html Makefile
 	rm -fr $@
-	mkdir $@
+	mkdir -p $@
 	cp -r ../logo.png ../src ../styles ../examples.html ../examples/ $@
 
 
