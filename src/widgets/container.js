@@ -57,6 +57,7 @@ export const Container = define_class({
      * @extends Widget
      *
      * @param {Object} [options={ }] - An object containing initial options.
+     * @param {Array<TK.Widget>} [options.children=[]] - Add child widgets on init. Will not be maintained on runtime! Just for convenience purposes on init.
      * 
      * @property {String|HTMLElement} [options.content] - The content of the container. It can either be
      *   a string which is interpreted as HTML or a DOM node. Note that this option will remove all
@@ -67,7 +68,6 @@ export const Container = define_class({
      *   expensive. Setting this option explicitly can therefore be an optimization.
      * @property {Number} [options.showing_duration] - The duration in ms of the showing CSS
      *   transition/animation of this container.
-     * @property {Array<TK.Widget>} [options.children=[]] - Add child widgets on init. Will not be maintained on runtime! Just for convenience purposes on init.
      */
     Extends: Widget,
     _options: Object.assign(Object.create(Widget.prototype._options), {
