@@ -47,25 +47,23 @@ export const Dynamics = define_class({
      * 
      * @extends Chart
      * 
-     * @property {Object} options
-     * 
-     * @param {Number} [options.min=-96] - Minimum decibels to display.
-     * @param {Number} [options.max=24] - Maximum decibels to display.
-     * @param {String} [options.scale="linear"] - Scale of the display, see {@link Range} for details.
-     * @param {String} [options.type=false] - Type of the dynamics: <code>compressor</code>, <code>expander</code>, <code>gate</code>, <code>limiter</code> or <code>false</code> to draw your own graph.
-     * @param {Number} [options.threshold=0] - Threshold of the dynamics.
-     * @param {Number} [options.ratio=1] - Ratio of the dynamics.
-     * @param {Number} [options.makeup=0] - Makeup of the dynamics. This raises the whole graph after all other parameters are applied.
-     * @param {Number} [options.range=0] - Range of the dynamics. Only used in type <code>expander</code>. The maximum gain reduction.
-     * @param {Number} [options.gain=0] - Input gain of the dynamics.
-     * @param {Number} [options.reference=0] - Input reference of the dynamics.
-     * @param {Number} [options.knee=0] - Soft knee width of the compressor in dB.
+     * @property {Number} [options.min=-96] - Minimum decibels to display.
+     * @property {Number} [options.max=24] - Maximum decibels to display.
+     * @property {String} [options.scale="linear"] - Scale of the display, see {@link Range} for details.
+     * @property {String} [options.type=false] - Type of the dynamics: <code>compressor</code>, <code>expander</code>, <code>gate</code>, <code>limiter</code> or <code>false</code> to draw your own graph.
+     * @property {Number} [options.threshold=0] - Threshold of the dynamics.
+     * @property {Number} [options.ratio=1] - Ratio of the dynamics.
+     * @property {Number} [options.makeup=0] - Makeup of the dynamics. This raises the whole graph after all other property are applied.
+     * @property {Number} [options.range=0] - Range of the dynamics. Only used in type <code>expander</code>. The maximum gain reduction.
+     * @property {Number} [options.gain=0] - Input gain of the dynamics.
+     * @property {Number} [options.reference=0] - Input reference of the dynamics.
+     * @property {Number} [options.knee=0] - Soft knee width of the compressor in dB.
      *   Replaces the hard knee of the compressor at the salient point by a
      *   quadratic curve.
-     * @param {Function} [options.grid_labels=function (val) { return val + (!val ? "dB":""); }] - Callback to format the labels of the {@link Grid}.
-     * @param {Number} [options.db_grid=12] - Draw a grid line every [n] decibels.
-     * @param {Boolean} [show_handle=true] - Draw a handle to manipulate threshold and ratio.
-     * @param {Boolean|Function} [format_label=false] - Function to format the handle label.
+     * @property {Function} [options.grid_labels=function (val) { return val + (!val ? "dB":""); }] - Callback to format the labels of the {@link Grid}.
+     * @property {Number} [options.db_grid=12] - Draw a grid line every [n] decibels.
+     * @property {Boolean} [options.show_handle=true] - Draw a handle to manipulate threshold and ratio.
+     * @property {Boolean|Function} [options.format_label=false] - Function to format the handle label.
      */
     Extends: Chart,
     _options: Object.assign(Object.create(Chart.prototype._options), {
