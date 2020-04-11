@@ -608,7 +608,7 @@ export const Ranged = define_class({
      *  grid points.
      *  Then, inside of the interval <code>options.min</code> ... <code>options.max</code> the grid
      *  points are <code> options.base + n * options.snap </code> where <code>n</code> is any
-     *  integer. Any values outside of that interval are snapped to the biggest or smallest grid
+     *  integer. Any values outside of that interval are rounded to the biggest or smallest grid
      *  point, respectively.
      *  In order to define grids with non-uniform spacing, set <code>options.snap</code> to an Array
      *  of grid points.
@@ -617,7 +617,7 @@ export const Ranged = define_class({
      *  as the step size.
      * @property {Number} [options.shift_up=4] - Multiplier for increased stepping speed, e.g. used by
      *  {@link ScrollValue} when simultaneously pressing 'shift'.
-     * @property {Number} [options.shift_down=0.25] - Multiplier for descresed stepping speed, e.g. used by
+     * @property {Number} [options.shift_down=0.25] - Multiplier for decreased stepping speed, e.g. used by
      *  {@link ScrollValue} when simultaneously pressing 'shift' and 'ctrl'.
      *
      * @mixin Ranged
