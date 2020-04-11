@@ -118,16 +118,14 @@ export const EqualizerGraph = define_class({
    * EqualizerGraph is a special {@link Graph}, which contains a list of {@link EqBand}s and draws the
    * resulting frequency response curve.
    *
-   * @property {Object} options
-   * 
-   * @param {Number} [options.accuracy=1] - The distance between points on
+   * @property {Number} [options.accuracy=1] - The distance between points on
    *   the x axis. Reduces CPU load in favour of accuracy and smoothness.
-   * @param {Array} [options.bands=[]] - The list of {@link EqBand}s.
-   * @param {Number} [options.oversampling=5] - If slope of the curve is too
+   * @property {Array} [options.bands=[]] - The list of {@link EqBand}s.
+   * @property {Number} [options.oversampling=5] - If slope of the curve is too
    *   steep, oversample n times in order to not miss e.g. notch filters.
-   * @param {Number} [options.threshold=5] - Steepness of slope to oversample,
+   * @property {Number} [options.threshold=5] - Steepness of slope to oversample,
    *   i.e. y pixels difference per x pixel
-   * @param {Function} [options.rendering_filter=(b) => b.get('active')] - A
+   * @property {Function} [options.rendering_filter=(b) => b.get('active')] - A
    *   callback function which can be used to customize which equalizer bands
    *   are included when rendering the frequency response curve. This defaults
    *   to those bands which have their `active` option set to `true`.
@@ -199,9 +197,8 @@ export const Equalizer = define_class({
      * EqualizerGraph}s can be added. The Equalizer inherits all options of
      * {@link EqualizerGraph}.
      *
-     * @property {Object} options
-     * 
-     * @param {Boolean} [options.show_bands=true] - Show or hide all bands.
+     * @property {Boolean} [options.show_bands=true] - Show or hide all bands.
+     *
      * @class Equalizer
      * 
      * @extends FrequencyResponse
