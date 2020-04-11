@@ -16,24 +16,31 @@ function publish(data, opts, tutorials) {
   };
 
   const parents = (cl) => {
-    const ret = [];
+    let ret = [];
 
-    if (!cl.augments) return ret;
-
-    let parent = classes.get(cl.augments[0]);
-
-    while (parent)
+    if (cl.augments)
     {
-      ret.push(parent);
-      if (!parent.augments) break;
-      parent = classes.get(parent.augments[0]);
+      cl.augments.map((name) => classes.get(name)).forEach((parent) => {
+        if (!parent) return;
+        ret.push(parent);
+        ret = ret.concat(parents(parent));
+      });
+    }
+
+    if (cl.mixes)
+    {
+      cl.mixes.map((name) => classes.get(name)).forEach((parent) => {
+        if (!parent) return;
+        ret.push(parent);
+        ret = ret.concat(parents(parent));
+      });
     }
 
     return ret;
   };
 
   data().each(function(doclet) {
-    if (doclet.kind !== 'class') return;
+    if (doclet.kind !== 'class' && doclet.kind !== 'mixin') return;
     classes.set(doclet.name, doclet);
   });
 
