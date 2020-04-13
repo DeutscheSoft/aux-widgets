@@ -1,0 +1,23 @@
+<aux-meter id='transparent_mask_meter' min=0 max=100 value=50></aux-meter>
+<style>
+#transparent_mask_meter > .aux-bar > .aux-mask {
+  background-color: rgb(0, 0, 0);
+  opacity: 0.5;
+}
+</style>
+<script>
+  const run = async () => {
+    const delay = (n) => new Promise((resolve) => setTimeout(resolve, n));
+    const meter = document.querySelector('#transparent_mask_meter');
+
+    await delay(50);
+    meter.value = 60;
+    await delay(50);
+    meter.value = 40;
+    await delay(50);
+    meter.value = 20;
+    await delay(50);
+  };
+
+  document.addEventListener('DOMContentLoaded', run);
+</script>
