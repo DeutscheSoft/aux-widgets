@@ -137,6 +137,13 @@ export const Meter = define_class({
      * meter positions are reduced. This widget will take advantage of that by avoiding rendering those
      * changes to the meter level, which fall into the same segment.
      *
+     * The meter is drawn as a mask above a background. The mask represents the
+     * inactive part of the meter. This mask is drawn into a canvas. The
+     * fillstyle of this mask is initialized from the `background-color` style
+     * of the canvas element with class `aux-mask`. Note that using a `background-color`
+     * value with opacity will lead to rendering artifacts in the meter. Instead, set
+     * the `opacity` of the mask to the desired value.
+     *
      * @class Meter
      * 
      * @extends Widget
