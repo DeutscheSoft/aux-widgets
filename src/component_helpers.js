@@ -2,8 +2,9 @@ import { warn, error } from './utils/log.js';
 import { sprintf, FORMAT } from './utils/sprintf.js';
 import { html } from './utils/dom.js';
 import { is_native_event } from './implements/base.js';
+import { subscribeOptionsAttributes } from './options.js';
 
-function attributes_from_widget(Widget)
+function attribute_for_widget(Widget)
 {
   const attributes = [];
   const skip = ["class", "id", "container", "element", "styles" ];
@@ -19,6 +20,9 @@ function attributes_from_widget(Widget)
 
     attributes.push(i);
   }
+
+  // this is for supporting AUX-OPTIONS
+  attributes.push('options');
 
   return attributes;
 }
@@ -113,7 +117,7 @@ function create_component (base) {
   if (!base) base = HTMLElement;
   return class extends base
   {
-    auxAttributes()
+    _auxCalculateAttributes(parentAttributes)
     {
       const attribute_names = this.constructor.observedAttributes;
       const result = new Map();
@@ -122,78 +126,31 @@ function create_component (base) {
       {
         const name = attribute_names[i];
         if (!this.hasAttribute(name)) continue;
-        result.set(name, this.getAttribute(name));
-      }
-
-      return result.size ? result : null;
-    }
-
-    auxOptions(WidgetType)
-    {
-      const ret = {};
-      const _options = WidgetType.prototype._options;
-      const attribute_names = this.constructor.observedAttributes;
-
-      for (let i = 0; i < attribute_names.length; i++)
-      {
-        const name = attribute_names[i];
-
-        if (!this.hasAttribute(name)) continue;
-
-        const option_name = name.startsWith('aux') ? name.substr(3) : name;
-
-        const type = _options[option_name];
-        const attribute_value = this.getAttribute(name);
-
-        ret[name] = parse_attribute.call(this, type, attribute_value);
-      }
-
-      return ret;
-    }
-
-    constructor(widget)
-    {
-      super();
-      this._auxInitialAttributes = this.auxAttributes();
-      this._auxEventHandlers = null;
-    }
-
-    connectedCallback()
-    {
-    }
-  
-    attributeChangedCallback(name, oldValue, newValue)
-    {
-      if (oldValue === newValue) return;
-
-      /* NOTE: We extract all attributes initially and pass them to
-       * the widget constructor options. Due to how the WebComponent life-cycle
-       * events are specified, we will also receive an attributeChangedCallback
-       * for each of these initial attributes. In order to avoid setting/parsing
-       * the same attribute twice, we check here if we are in this situation and
-       * need to ignore this initial call to attributeChangedCallback.
-       */
-      {
-        const attributes = this._auxInitialAttributes;
-
-        if (attributes !== null && attributes.has(name))
+        
+        if (name === 'options')
         {
-          const value = attributes.get(name);
-
-          // next time we ignore this check
-          attributes.delete(name);
-
-          if (!attributes.size)
-            this._auxInitialAttributes = null;
-
-          // FIXME: we want to disable this check for all
-          // types of attributes
-          if (oldValue === null && value === newValue && value.startsWith('js'))
-          {
-            return;
-          }
+          continue;
+        }
+        else
+        {
+          result.set(name, this.getAttribute(name));
         }
       }
+
+      if (parentAttributes)
+      {
+        parentAttributes.forEach((value, key) => {
+          if (result.has(key)) return;
+          result.set(key, value);
+        });
+      }
+
+      return result;
+    }
+
+    _auxAttributeChanged(name, oldValue, newValue)
+    {
+      this._auxAttributes.set(name, newValue);
 
       if (name.startsWith('aux'))
         name = name.substr(3);
@@ -212,6 +169,143 @@ function create_component (base) {
         }
       } catch (e) {
         warn('Setting attribute generated an error:', e);
+      }
+    }
+
+    _auxUpdateAttributes(parentAttributes)
+    {
+      const new_attributes = this._auxCalculateAttributes(parentAttributes);
+      const current_attributes = this.auxAttributes();
+
+      // delete and update
+      current_attributes.forEach((oldValue, name) => {
+        if (!new_attributes.has(name))
+        {
+          this._auxAttributeChanged(name, oldValue, null);
+        }
+        else
+        {
+          const newValue = new_attributes.get(name);
+
+          if (newValue !== oldValue)
+          {
+            this._auxAttributeChanged(name, oldValue, newValue);
+          }
+        }
+      });
+
+      // new attributes
+      new_attributes.forEach((newValue, name) => {
+
+        if (!current_attributes.has(name))
+        {
+          this._auxAttributeChanged(name, null, newValue);
+        }
+      });
+    }
+
+    auxAttributes()
+    {
+      return this._auxAttributes;
+    }
+
+    auxOptions(WidgetType)
+    {
+      const ret = {};
+      const _options = WidgetType.prototype._options;
+      const attribute_names = this.constructor.observedAttributes;
+      const attributes = this.auxAttributes();
+
+      for (let i = 0; i < attribute_names.length; i++)
+      {
+        const name = attribute_names[i];
+
+        if (!attributes.has(name)) continue;
+
+        const option_name = name.startsWith('aux') ? name.substr(3) : name;
+
+        const type = _options[option_name];
+        const attribute_value = attributes.get(name);
+
+        ret[name] = parse_attribute.call(this, type, attribute_value);
+      }
+
+      return ret;
+    }
+
+    constructor(widget)
+    {
+      super();
+      this._auxEventHandlers = null;
+      this._auxAttributesSubscription = null;
+      this._auxAttributes = this._auxCalculateAttributes(null);
+    }
+
+    connectedCallback()
+    {
+      const options = this.getAttribute('options');
+
+      if (options)
+      {
+        // this will initially happen in the attributeChangedCallback after the
+        // constructor and before the connectedCallback
+        if (this._auxAttributesSubscription) return;
+
+        this._auxAttributesSubscription = subscribeOptionsAttributes(this.parentNode, options, (attr) => {
+          this._auxUpdateAttributes(attr);
+        });
+      }
+    }
+
+    disconnectedCallback()
+    {
+      const subscriptions = this._auxAttributesSubscription;
+      if (subscriptions)
+      {
+        this._auxAttributesSubscription = null;
+        subscriptions();
+        this._auxUpdateAttributes(null);
+      }
+    }
+  
+    attributeChangedCallback(name, oldValue, newValue)
+    {
+      const attr = this.auxAttributes();
+
+      // all attribute changed callbacks will fire once befor the initial
+      // connectedCallback(). This check prevents those because we collect all
+      // attributes initially in the constructor.
+      if (oldValue === null && newValue === attr.get(name)) return;
+
+      if (name === 'options')
+      {
+        if (!this.isConnected) return;
+        if (oldValue === newValue) return;
+
+        const subscriptions = this._auxAttributesSubscription;
+
+        if (subscriptions)
+        {
+          this._auxAttributesSubscription = null;
+          subscriptions();
+        }
+
+        const options = newValue;
+
+        if (options)
+        {
+          this._auxAttributesSubscription = subscribeOptionsAttributes(this.parentNode, options, (attr) => {
+            this._auxUpdateAttributes(attr);
+          });
+        }
+        else
+        {
+          this._auxUpdateAttributes(null);
+        }
+      }
+      else
+      {
+        this._auxAttributeChanged(name, oldValue, newValue);
       }
     }
   
@@ -304,7 +398,7 @@ function define_options_as_properties(component, options)
 export function component_from_widget(Widget, base)
 {
   let compbase = create_component(base);
-  const attributes = attributes_from_widget(Widget);
+  const attributes = attribute_for_widget(Widget);
 
   const component = class extends compbase
   {
@@ -341,6 +435,7 @@ export function component_from_widget(Widget, base)
 
     disconnectedCallback()
     {
+      super.disconnectedCallback();
       this.auxWidget.set_parent(void(0));
       this.auxWidget.disable_draw();
     }
@@ -354,7 +449,7 @@ export function component_from_widget(Widget, base)
 export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove_cb, base)
 {
   let compbase = create_component(base);
-  const attributes = attributes_from_widget(Widget);
+  const attributes = attribute_for_widget(Widget);
 
   if (!append_cb) append_cb = (parent, child) => {
     parent.add_child(child);
@@ -400,6 +495,8 @@ export function subcomponent_from_widget(Widget, ParentWidget, append_cb, remove
 
     disconnectedCallback()
     {
+      super.disconnectedCallback();
+
       const parent = this.auxParent;
 
       if (parent)

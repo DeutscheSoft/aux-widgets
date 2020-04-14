@@ -1,3 +1,4 @@
+// widgets
 export * from './components/button.js';
 export * from './components/buttons.js';
 export * from './components/chart.js';
@@ -37,3 +38,6 @@ export * from './components/value.js';
 export * from './components/valuebutton.js';
 export * from './components/valueknob.js';
 export * from './components/widget.js';
+
+// other
+export * from './components/options.js';
