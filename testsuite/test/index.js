@@ -10,3 +10,4 @@ export * from './pager.js';
 export * from './select.js';
 export * from './visibility.js';
 export * from './buttons.js';
+export * from './options.js';
