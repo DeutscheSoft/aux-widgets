@@ -333,6 +333,7 @@ export const Pages = define_class({
         const page = this.create_page(content, options);
         const pages = this.get_pages();
         const element = this.element;
+        const length = pages.length;
 
         if (!(position >= 0 && position < length))
         {
