@@ -439,6 +439,11 @@ export const Widget = define_class({
          */
         Base.prototype.initialized.call(this);
         this.trigger_draw();
+
+        if (this.options.preset !== this.get_default('preset'))
+        {
+          this.set('preset', this.options.preset);
+        }
     },
     draw_once: function(fun) {
         var q = this.draw_queue;
