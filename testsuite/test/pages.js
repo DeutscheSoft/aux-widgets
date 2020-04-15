@@ -5,7 +5,7 @@ import {
     PagesComponent
   } from '../src/index.js';
 
-import { wait_for_drawn, assert, compare, compare_options } from './helpers.js';
+import { wait_for_connected, assert, compare, compare_options } from './helpers.js';
 
 describe('Pages', () => {
     let n = 0;
@@ -60,11 +60,22 @@ describe('Pages', () => {
           const pages = new Pages({ show: 0 });
           const b1 = await add_page(pages, "1");
           assert(b1.get('active'));
+          assert(b1.get('visible') === true);
           await remove_page(pages, b1);
           assert(pages.get('show') === -1);
           assert(b1.get('active'));
           await add_page(pages, b1);
           assert(pages.get('show') === 0);
+          assert(b1.get('visible') === true);
+
+          // remove it again, hide() it and add it back
+          await remove_page(pages, b1);
+          b1.force_hide();
+          assert(pages.get('show') === -1);
+          assert(b1.get('active'));
+          await add_page(pages, b1);
+          assert(pages.get('show') === 0);
+          assert(b1.get('visible') === true);
         }
       });
       it('show ' + n, async () => {
@@ -86,6 +97,7 @@ describe('Pages', () => {
 
           const page = await add_page(ba, '', void(0), { active: true });
           assert(page.get('active'));
+          assert(page.get('visible') === true);
           pages.forEach((p) => { assert(p.get('active') === (p === page)); });
       });
       n++;
@@ -152,7 +164,7 @@ describe('Pages', () => {
     };
 
     const remove_page2 = (pages, page) => {
-      if (page instanceof Container && page.element.tagName === 'AUX-BUTTON')
+      if (page instanceof Container && page.element.tagName === 'AUX-CONTAINER')
       {
         page.element.remove();
       }
@@ -180,7 +192,7 @@ describe('Pages', () => {
       const add_page = async (pages, ...args) => {
         const n = pages.get_pages().length;
         const page = low_add_page(pages, ... args);
-        await wait_for_drawn(pages);
+        await wait_for_connected(pages);
         assert(pages.get_pages().length === n+1);
         check_show(pages);
         return page;
@@ -189,7 +201,7 @@ describe('Pages', () => {
         const remove_page = async (pages, ...args) => {
           const n = pages.get_pages().length;
           low_remove_page(pages, ...args);
-          await wait_for_drawn(pages);
+          await wait_for_connected(pages);
           assert(pages.get_pages().length === n-1);
           check_show(pages);
         };
