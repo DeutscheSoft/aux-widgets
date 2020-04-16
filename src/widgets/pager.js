@@ -430,6 +430,10 @@ export const Pager = define_class({
         var c = this.options.show;
         return this.set("show", c-1) !== c;
     },
+
+    get_pages: function() {
+        return this.pages.get_pages();
+    },
 });
 
 /**
