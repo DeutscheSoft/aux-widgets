@@ -563,6 +563,7 @@ body.aux-cursor-row-resize * {
     background-position: center center;
     background-size: contain;
     background-repeat: no-repeat;
+    display: inline-flex;
 }
 
 /* KNOB */
