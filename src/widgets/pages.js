@@ -288,7 +288,7 @@ export const Pages = define_class({
 
     create_page: function(content, options)
     {
-      if (typeof content === "string")
+      if (typeof content === "string" || content === void(0))
       {
         if (!options) options = {}; 
         options.content = content;
