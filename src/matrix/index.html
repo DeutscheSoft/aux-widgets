@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Matrix Test</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script type=module src="components/entry.js"></script>
+        
+        <link rel=stylesheet href="../../styles/aux.css"></style>
+        <script>
+            
+        </script>
+        
+        <style>
+            
+            body {
+                font-family: sans-serif;
+            }
+            
+            
+            :root {
+                --aux-patchbay-entry-size: var(--aux-clickable-size);
+            }
+            .aux-entry {
+                height: var(--aux-patchbay-entry-size);
+                display: flex;
+                align-items: center;
+                margin: 0;
+                
+                background: yellow;
+            }
+            .aux-entry > .aux-indent {
+                width: calc(var(--aux-patchbay-entry-size) * var(--aux-entry-depth));
+                height: var(--aux-patchbay-entry-size);
+                order: 0;
+                margin: 0;
+                
+                background: red;
+            }
+            .aux-entry > .aux-label {
+                order: 1;
+            }
+            
+        </style>
+    </head>
+    <body>
+        <aux-root>
+            
+            <aux-entry label="Port #1" depth=0></aux-entry>
+            <aux-entry label="Port #2" depth=0></aux-entry>
+            <aux-entry label="Group #1" depth=0></aux-entry>
+            <aux-entry label="Port #1.1" depth=1></aux-entry>
+            <aux-entry label="Port #1.2" depth=1></aux-entry>
+            <aux-entry label="Port #1.3" depth=1></aux-entry>
+            <aux-entry label="Port #1.4" depth=1></aux-entry>
+            <aux-entry label="Group #1.1" depth=1></aux-entry>
+            <aux-entry label="Port #1.1.1" depth=2></aux-entry>
+            <aux-entry label="Port #1.1.2" depth=2></aux-entry>
+            <aux-entry label="Port #1.1.3" depth=2></aux-entry>
+            <aux-entry label="Port #1.1.4" depth=2></aux-entry>
+            <aux-entry label="Group #1.1.1" depth=2></aux-entry>
+            <aux-entry label="Port #1.1.1.1" depth=3></aux-entry>
+            <aux-entry label="Port #1.1.1.2" depth=3></aux-entry>
+            <aux-entry label="Port #1.1.1.3" depth=3></aux-entry>
+            <aux-entry label="Port #1.1.1.4" depth=3></aux-entry>
+            <aux-entry label="Group #1.2" depth=1></aux-entry>
+            <aux-entry label="Port #1.2.1" depth=2></aux-entry>
+            <aux-entry label="Port #1.2.2" depth=2></aux-entry>
+            <aux-entry label="Port #1.2.3" depth=2></aux-entry>
+            <aux-entry label="Port #1.2.4" depth=2></aux-entry>
+            
+        </aux-root>
+    </body>
+</body>
