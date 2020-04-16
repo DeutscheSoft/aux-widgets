@@ -294,8 +294,16 @@ export const Pager = define_class({
      * 
      */
     add_pages: function (pages) {
+        if (!Array.isArray(pages))
+          throw new TypeError('Expected array of objects.');
+
         for (var i = 0; i < pages.length; i++)
         {
+          if (typeof(pages[i]) !== 'object')
+          {
+            throw new TypeError('Expected array of objects.');
+          }
+
           const options = Object.assign({}, pages[i]);
           const content = options.content;
           delete options.content;

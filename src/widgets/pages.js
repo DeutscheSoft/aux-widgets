@@ -335,6 +335,9 @@ export const Pages = define_class({
         const element = this.element;
         const length = pages.length;
 
+        if (position !== void(0) && typeof(position) !== 'number')
+          throw new TypeError('position: Argument must be a number.');
+
         if (!(position >= 0 && position < length))
         {
           element.appendChild(page.element);
