@@ -1,0 +1,15 @@
+@font-face {
+  font-family: "Shapes";
+  font-style: normal;
+  font-weight: normal;
+  src: url("Shapes.ttf") format("truetype");
+}
+
+.aux-icon.trunk::before           { font-family: 'Shapes'; content: ''; }
+.aux-icon.stem::before            { font-family: 'Shapes'; content: ''; }
+.aux-icon.pipe::before            { font-family: 'Shapes'; content: ''; }
+.aux-icon.branch::before          { font-family: 'Shapes'; content: ''; }
+.aux-icon.end::before             { font-family: 'Shapes'; content: ''; }
+.aux-icon.none::before            { font-family: 'Shapes'; content: ''; }
+.aux-icon.null::before            { font-family: 'Shapes'; content: ''; }
+.aux-icon.clear::before           { font-family: 'Shapes'; content: ''; }
