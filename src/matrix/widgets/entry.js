@@ -1,19 +1,33 @@
 import { define_class } from '../../widget_helpers.js';
 import { define_child_widget } from '../../child_widget.js';
+import { set_text, add_class, remove_class } from '../../utils/dom.js';
 import { Container } from '../../widgets/container.js';
+import { Toggle } from '../../widgets/toggle.js';
 import { Label } from '../../widgets/label.js';
+import { Icon } from '../../widgets/icon.js';
+
+const indent_to_glyph = {
+    "trunk" : "",
+    "branch" : "",
+    "end" : "",
+    "none" : "",
+}
 
 export const Entry = define_class({
     Extends: Container,
     _options: Object.assign(Object.create(Container.prototype._options), {
         label: "string|boolean",
-        depth: "number|boolean",
+        depth: "array|boolean",
         last: "boolean",
+        collapsable: "boolean",
+        icon: "string|boolean",
     }),
     options: {
         label: false,
         depth: false,
         last: false,
+        collapsable: false,
+        icon: false,
     },
     initialize: function (options) {
         if (!options.element) options.element = element('div');
@@ -26,6 +40,8 @@ export const Entry = define_class({
         element.classList.add("aux-entry");
     },
     redraw: function () {
+        Container.prototype.redraw.call(this);
+        
         var O = this.options;
         var E = this.element;
         var I = this.invalid;
@@ -36,8 +52,17 @@ export const Entry = define_class({
             C = C.replace(/aux-depth-[0-9]*/mg, "");
             C = C.replace(/\s\s+/g, ' ');
             E.setAttribute("class", C);
-            E.classList.add("aux-depth-" + O.depth);
-            E.style.setProperty('--aux-entry-depth', O.depth)
+            
+            if (O.depth) {
+                var d = O.depth.length;
+                E.classList.add("aux-depth-" + d);
+                E.style.setProperty('--aux-entry-depth', d);
+                var s = "";
+                for (var i = 0; i < d; ++i) {
+                    s += indent_to_glyph[O.depth[i]];
+                }
+                set_text(this.indent.element, s);
+            }
         }
         
         if (I.last) {
@@ -45,8 +70,13 @@ export const Entry = define_class({
             E.classList[O.last ? "add" : "remove"]("aux-last");
         }
         
-        Container.prototype.redraw.call(this);
-        
+        if (I.collapsable) {
+            I.collapsable = false;
+            if (O.collapsable)
+                add_class(E, "aux-collapsable");
+            else
+                remove_class(E, "aux-collapsable");
+        }
     },
     setDatum: function(datum) {
         if (this.datumSubscription)
@@ -95,11 +125,29 @@ define_child_widget(Entry, "label", {
     toggle_class: true,
 });
 
+define_child_widget(Entry, "icon", {
+    create: Icon,
+    option: "icon",
+    inherit_options: true,
+    toggle_class: true,
+});
+
 define_child_widget(Entry, "indent", {
     create: Container,
     option: "depth",
     toggle_class: true,
     default_options: {
         class: "aux-indent",
+    },
+});
+
+define_child_widget(Entry, "collapse", {
+    create: Toggle,
+    show: true,
+    toggle_class: true,
+    default_options: {
+        class: "aux-collapse",
+        icon: "arrowdown",
+        icon_active: "arrowup",
     },
 });

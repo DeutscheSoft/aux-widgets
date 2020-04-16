@@ -20,25 +20,62 @@
             
             :root {
                 --aux-patchbay-entry-size: var(--aux-clickable-size);
+                --aux-patchbay-entry-size: 32px;
             }
             .aux-entry {
                 height: var(--aux-patchbay-entry-size);
                 display: flex;
                 align-items: center;
                 margin: 0;
-                
-                background: yellow;
             }
             .aux-entry > .aux-indent {
+                flex: 0 0 0;
                 width: calc(var(--aux-patchbay-entry-size) * var(--aux-entry-depth));
                 height: var(--aux-patchbay-entry-size);
                 order: 0;
                 margin: 0;
+                font-family: Shapes;
+                font-size: var(--aux-patchbay-entry-size);
+                line-height: var(--aux-patchbay-entry-size);
+            }
+            .aux-entry > .aux-collapse {
+                flex: 0 0 var(--aux-patchbay-entry-size);
+                order: 1;
+                width: var(--aux-patchbay-entry-size);
+                height: var(--aux-patchbay-entry-size);
+                padding: 0;
+                margin: 0;
+                border-radius: 0;
+                border: none;
+                display: none;
                 
-                background: red;
+                background: plum;
+                color: black;
+            }
+            .aux-entry.aux-collapsable > .aux-collapse {
+                display: flex;
+            }
+            .aux-entry > .aux-icon {
+                flex: 0 0 var(--aux-patchbay-entry-size);
+                height: var(--aux-patchbay-entry-size);
+                order: 2;
+                margin: 0;
+                font-size: 20px;
+                background: palegreen;
+            }
+            .aux-entry.aux-collapsable > .aux-icon {
+                background: plum;
             }
             .aux-entry > .aux-label {
-                order: 1;
+                flex: 1 1 auto;
+                order: 3;
+                line-height: var(--aux-patchbay-entry-size);
+                margin: 0;
+                padding: 0 4px;
+                background: palegreen;
+            }
+            .aux-entry.aux-collapsable > .aux-label {
+                background: plum;
             }
             
         </style>
@@ -46,28 +83,20 @@
     <body>
         <aux-root>
             
-            <aux-entry label="Port #1" depth=0></aux-entry>
-            <aux-entry label="Port #2" depth=0></aux-entry>
-            <aux-entry label="Group #1" depth=0></aux-entry>
-            <aux-entry label="Port #1.1" depth=1></aux-entry>
-            <aux-entry label="Port #1.2" depth=1></aux-entry>
-            <aux-entry label="Port #1.3" depth=1></aux-entry>
-            <aux-entry label="Port #1.4" depth=1></aux-entry>
-            <aux-entry label="Group #1.1" depth=1></aux-entry>
-            <aux-entry label="Port #1.1.1" depth=2></aux-entry>
-            <aux-entry label="Port #1.1.2" depth=2></aux-entry>
-            <aux-entry label="Port #1.1.3" depth=2></aux-entry>
-            <aux-entry label="Port #1.1.4" depth=2></aux-entry>
-            <aux-entry label="Group #1.1.1" depth=2></aux-entry>
-            <aux-entry label="Port #1.1.1.1" depth=3></aux-entry>
-            <aux-entry label="Port #1.1.1.2" depth=3></aux-entry>
-            <aux-entry label="Port #1.1.1.3" depth=3></aux-entry>
-            <aux-entry label="Port #1.1.1.4" depth=3></aux-entry>
-            <aux-entry label="Group #1.2" depth=1></aux-entry>
-            <aux-entry label="Port #1.2.1" depth=2></aux-entry>
-            <aux-entry label="Port #1.2.2" depth=2></aux-entry>
-            <aux-entry label="Port #1.2.3" depth=2></aux-entry>
-            <aux-entry label="Port #1.2.4" depth=2></aux-entry>
+            <aux-entry label="Port #1" icon="connected" depth="js:[]"></aux-entry>
+            <aux-entry label="Port #2" icon="disconnected" depth="js:[]"></aux-entry>
+            <aux-entry label="Group #1" icon="disconnected" depth="js:[]" collapsable=true></aux-entry>
+            <aux-entry label="Port #1.1" icon="disconnected" depth="js:['branch']"></aux-entry>
+            <aux-entry label="Port #1.2" icon="disconnected" depth="js:['branch']"></aux-entry>
+            <aux-entry label="Group #1.1" icon="connected" depth="js:['branch']" collapsable=true></aux-entry>
+            <aux-entry label="Port #1.1.1" icon="connected" depth="js:['trunk','branch']"></aux-entry>
+            <aux-entry label="Port #1.1.2" icon="connected" depth="js:['trunk','branch']"></aux-entry>
+            <aux-entry label="Group #1.1.1" icon="disconnected" depth="js:['trunk','end']" collapsable=true></aux-entry>
+            <aux-entry label="Port #1.1.1.1" icon="disconnected" depth="js:['trunk','none','branch']"></aux-entry>
+            <aux-entry label="Port #1.1.1.2" icon="disconnected" depth="js:['trunk','none','end']"></aux-entry>
+            <aux-entry label="Group #1.2" icon="connected" depth="js:['end']" collapsable=true></aux-entry>
+            <aux-entry label="Port #1.2.1" icon="disconnected" depth="js:['none','branch']"></aux-entry>
+            <aux-entry label="Port #1.2.2" icon="connected" depth="js:['none','end']"></aux-entry>
             
         </aux-root>
     </body>
