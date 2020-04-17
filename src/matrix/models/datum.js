@@ -7,9 +7,12 @@ export class Datum extends Events
         super();
         this.properties = {};
 
-        for (let name in o)
+        if (o)
         {
-            this.set(name, o[name]);
+          for (let name in o)
+          {
+              this.set(name, o[name]);
+          }
         }
     }
 

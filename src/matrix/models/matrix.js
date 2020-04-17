@@ -1,7 +1,6 @@
 import { Datum } from './datum.js';
-import { PortData } from './portdata.js';
-import { GroupData } from './groupdata.js';
-import { ConnectionData } from './connectiondata.js';
+import { PortData } from './port.js';
+import { GroupData } from './group.js';
 import { ListDataView } from './listdataview.js';
 import { TreeNodeData } from './treenode.js';
 
@@ -10,21 +9,49 @@ export class MatrixData extends Datum
   constructor()
   {
     super();
-    this.root = new GroupData();
+    this.root = this.createGroup();
     this.nodes = new Map();
+    this.last_id = 0;
   }
 
   registerNode(node)
   {
-    if (!(child instanceof TreeNodeData))
+    if (!(node instanceof TreeNodeData))
       throw new TypeError('Expected TreeDataNode');
+
+    const id = node.id;
+
+    const nodes = this.nodes;
+
+    if (nodes.has(id))
+      throw new Error('Node with same id already defined.');
+
+    nodes.set(id, node);
+  }
+
+  unregisterNode(node)
+  {
+    if (!(node instanceof TreeNodeData))
+      throw new TypeError('Expected TreeDataNode');
+
+    const id = node.id;
+    const nodes = this.nodes;
+
+    if (nodes.get(id) !== node)
+      throw new Error('Removing unknown node.');
+
+    nodes.delete(id);
   }
 
   createPort(port)
   {
     if (!(port instanceof PortData))
     {
-      port = new Port(this, port);
+      if (!port.id)
+      {
+        port.id = this.last_id++;
+      }
+      port = new PortData(this, port);
     }
 
     return port;
@@ -34,7 +61,7 @@ export class MatrixData extends Datum
   {
     if (!(group instanceof GroupData))
     {
-      group = new Group(this, group);
+      group = new GroupData(this, group);
     }
 
     return group;

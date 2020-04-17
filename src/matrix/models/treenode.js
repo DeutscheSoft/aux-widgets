@@ -15,7 +15,7 @@ export class TreeNodeData extends MatrixDatum
 
     setParent(parent)
     {
-      if (this.parent)
+      if (parent !== null && this.parent !== null)
       {
         throw new Error('Node already has a parent.');
       }

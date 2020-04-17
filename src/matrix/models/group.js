@@ -1,5 +1,5 @@
 import { TreeNodeData } from './treenode.js';
-import { PortData } from './portdata.js';
+import { PortData } from './port.js';
 
 function on_child_treechanged()
 {
@@ -19,7 +19,7 @@ export class GroupData extends TreeNodeData
       if (!(child instanceof TreeNodeData))
         throw new TypeError('Expected TreeDataNode');
 
-      this.matrix.registerNode(group);
+      this.matrix.registerNode(child);
 
       const children = this.children;
 
@@ -32,7 +32,7 @@ export class GroupData extends TreeNodeData
       child.on('treeChanged', on_child_treechanged);
     }
 
-    removeChild(child)
+    deleteChild(child)
     {
       if (!(child instanceof TreeNodeData))
         throw new TypeError('Expected TreeDataNode');
@@ -42,10 +42,10 @@ export class GroupData extends TreeNodeData
       if (!children.has(child))
         throw new Error('Unknown child.');
 
-      this.matrix.unregisterNode(group);
+      this.matrix.unregisterNode(child);
 
       child.setParent(null);
-      children.remove(child);
+      children.delete(child);
 
       child.off('treeChanged', on_child_treechanged);
 
@@ -71,7 +71,7 @@ export class GroupData extends TreeNodeData
     addGroup(group)
     {
       if (!(group instanceof GroupData))
-        group = this.matrix.createPort(group);
+        group = this.matrix.createGroup(group);
 
       this.addChild(group);
       return group;
