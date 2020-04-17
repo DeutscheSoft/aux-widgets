@@ -20,6 +20,18 @@ export class TreeNodeData extends MatrixDatum
         throw new Error('Node already has a parent.');
       }
 
+      if (parent !== null && !parent.isGroup)
+        throw new TypeError('Parent node must be a group.');
+
       this.parent = parent;
+    }
+
+    getPath()
+    {
+      const parent = this.parent;
+
+      if (!parent) return [];
+
+      return parent.getPath().concat([ parent ]);
     }
 }

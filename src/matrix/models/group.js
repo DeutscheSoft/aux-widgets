@@ -1,6 +1,8 @@
 import { TreeNodeData } from './treenode.js';
 import { PortData } from './port.js';
 
+import { init_subscriptions, add_subscription, unsubscribe_subscriptions } from '../../utils/subscriptions.js';
+
 function on_child_treechanged()
 {
   this.parent.emit('treeChanged');
@@ -8,10 +10,12 @@ function on_child_treechanged()
 
 export class GroupData extends TreeNodeData
 {
+    get isGroup() { return true; }
+
     constructor(matrix, o)
     {
-        super(matrix, o);
-        this.children = new Set();
+      super(matrix, o);
+      this.children = new Set();
     }
 
     addChild(child)
@@ -82,6 +86,19 @@ export class GroupData extends TreeNodeData
       this.deleteChild(group);
     }
 
+    /**
+     * Iterates all children of this group and all their children recursively.
+     * Will descend into group nodes if the callback returns either undefined or
+     * a trueish value.
+     *
+     * @param cb {Function} - A callback function to be called for each node in
+     *  this subtree. The arguments are the node and the path description. The
+     *  path description is an Array of objects with 3 properties `parent`,
+     *  `index` and `length`. Parent is the parent node, `index` the index of
+     *  the node in the list of children and `length` is the number of siblings.
+     * @param sorter {Function} - An optional sort function. Will be used as an
+     *  argument to Array.prototype.sort for each list of child nodes.
+     */
     forEachNode(cb, sorter, path)
     {
       const children = Array.from(this.children);
@@ -116,5 +133,30 @@ export class GroupData extends TreeNodeData
           child.forEachNode(cb, sorter, current_path);
         }
       }
+    }
+
+    forEachAsync(callback)
+    {
+      let subs = init_subscriptions();
+      const child_subscriptions = new Map();
+
+      this.children.forEach((node) => {
+        child_subscriptions.set(node, callback(node) || null);
+      });
+
+      subs = add_subscription(subs, this.subscribe('childAdded', (child) => {
+        child_subscriptions.set(child, callback(child) || null);
+      }));
+
+      subs = add_subscription(subs, this.subscribe('childRemoved', (child) => {
+        unsubscribe_subscriptions(child_subscriptions.get(child));
+        child_subscriptions.delete(child);
+      }));
+
+      return () => {
+        subs = unsubscribe_subscriptions(subs);
+        child_subscriptions.forEach((subs) => unsubscribe_subscriptions(subs));
+        child_subscriptions.clear();
+      };
     }
 }
