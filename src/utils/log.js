@@ -15,9 +15,8 @@
  * @function error
  */
 export function error() {
-    if (!window.console) return;
     try {
-        window.console.error.apply(window.console, arguments);
+        console.error.apply(console, arguments);
     } catch(e) {}
 }
 
@@ -29,9 +28,8 @@ export function error() {
  * @function warn
  */
 export function warn() {
-    if (!window.console) return;
     try {
-        window.console.warn.apply(window.console, arguments);
+        console.warn.apply(console, arguments);
     } catch(e) {}
 }
 /**
@@ -42,9 +40,9 @@ export function warn() {
  * @function log
  */
 export function log() {
-    if (!window.console) return;
+    if (!console) return;
     try {
-        window.console.log.apply(window.console, arguments);
+        console.log.apply(console, arguments);
     } catch(e) {}
 }
 
