@@ -127,9 +127,10 @@ describe('Components', () => {
       assert(w.is_drawn() === c.is_drawn());
       w.add_child(c);
       assert(w.is_drawn() === c.is_drawn());
-      w.force_show();
+      w.show();
       assert(w.is_drawn() && w.is_drawn() === c.is_drawn());
       w.force_hide();
+      w.disable_draw();
       assert(!w.is_drawn() && w.is_drawn() === c.is_drawn());
 
       w.destroy();

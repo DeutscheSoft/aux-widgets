@@ -707,15 +707,16 @@ export const Widget = define_class({
         if (!this.is_drawn()) this.enable_draw();
     },
     /**
-     * This is an alias for hide, which may be overloaded.
-     * See {@link Container} for an example.
+     * Show the widget immediately by applying the class <code>aux-show</code>.
+     * Does not call enable_draw().
      *
      * @method Widget#force_show
      */
     force_show: function() {
-        this.update('visible', true);
-        this.enable_draw();
-        this._redraw();
+        const E = this.element;
+        this.set('visible', true);
+        add_class(E, "aux-show");
+        remove_class(E, "aux-hide");
     },
     /**
      * Hide the widget. This will result in the class <code>aux-hide</code>
@@ -728,16 +729,16 @@ export const Widget = define_class({
         this.set('visible', false);
     },
     /**
-     * Hide the widget immediately.
+     * Hide the widget immediately by applying the class <code>aux-hide</code>.
+     * Does not call disable_draw().
      *
      * @method Widget#force_hide
      */
     force_hide: function () {
-        var O = this.options;
-        this.update('visible', false);
-        this.enable_draw();
-        this._redraw();
-        this.disable_draw();
+        const E = this.element;
+        this.set('visible', false);
+        remove_class(E, "aux-show");
+        add_class(E, "aux-hide");
     },
     show_nodraw_children: function() {
       var C = this.children;
