@@ -3,50 +3,95 @@ import { PortData } from './portdata.js';
 import { GroupData } from './groupdata.js';
 import { ConnectionData } from './connectiondata.js';
 import { ListDataView } from './listdataview.js';
+import { TreeNodeData } from './treenode.js';
 
 export class MatrixData extends Datum
 {
-    // APIs for managing groups
+  constructor()
+  {
+    super();
+    this.root = new GroupData();
+    this.nodes = new Map();
+  }
 
-    addGroup(group)
+  registerNode(node)
+  {
+    if (!(child instanceof TreeNodeData))
+      throw new TypeError('Expected TreeDataNode');
+  }
+
+  createPort(port)
+  {
+    if (!(port instanceof PortData))
     {
-        if (!(group instanceof Group))
-        {
-            group = new Group(this, group);
-        }
+      port = new Port(this, port);
     }
 
-    deleteGroup(group)
+    return port;
+  }
+
+  createGroup(group)
+  {
+    if (!(group instanceof GroupData))
     {
+      group = new Group(this, group);
     }
 
-    getGroupById(id)
-    {
-    }
+    return group;
+  }
 
-    // APIs for managing ports
+  // APIs for managing groups
+  addGroup(group)
+  {
+    return this.root.addGroup(group);
+  }
 
-    // adds a port to this matrix (not into a group)
-    addPort(port)
-    {
-    }
+  deleteGroup(group)
+  {
+    return this.root.deleteGroup(group);
+  }
 
-    deletePort(port)
-    {
-    }
+  getGroupById(id)
+  {
+    const group = this.nodes.get(id);
 
-    // APIs for managing connections
+    if (group && group instanceof GroupData)
+      return group;
+  }
 
-    addConnection(connection)
-    {
-    }
+  // APIs for managing ports
 
-    deleteConnection(connection)
-    {
-    }
+  // adds a port to this matrix (not into a group)
+  addPort(port)
+  {
+    this.root.addPort(port);
+  }
 
-    createListDataView(filterFunction, amount)
-    {
-        return new ListDataView(this, filterFunction, amount);
-    }
+  deletePort(port)
+  {
+    this.root.deletePort(port);
+  }
+
+  getPortById(id)
+  {
+    const port = this.nodes.get(id);
+
+    if (port && port instanceof PortData)
+      return port;
+  }
+
+  // APIs for managing connections
+
+  addConnection(connection)
+  {
+  }
+
+  deleteConnection(connection)
+  {
+  }
+
+  createListDataView(filterFunction, amount)
+  {
+    return new ListDataView(this.root, filterFunction, amount);
+  }
 }

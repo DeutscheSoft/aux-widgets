@@ -1,13 +1,7 @@
-import { MatrixDatum } from './matrixdatum.js';
+import { TreeNodeData } from './treenode.js';
 
-export class PortData extends MatrixDatum
+export class PortData extends TreeNodeData
 {
-    set id(value) { return this.set('id', value); }
-    get id() { return this.get('id'); }
-
     set type(value) { return this.set('type', value); }
     get type() { return this.get('type'); }
-
-    set label(value) { return this.set('label', value); }
-    get label() { return this.get('label'); }
 }

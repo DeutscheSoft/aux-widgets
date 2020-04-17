@@ -2,10 +2,10 @@ import { Events } from '../../events.js';
 
 export class ListDataView extends Events
 {
-    constructor(matrix, filterFunction, amount)
+    constructor(group, filterFunction, amount)
     {
         super();
-        this.matrix = matrix;
+        this.group = group;
         this.filterFunction = filterFunction;
         this.startIndex = 0;
         this.amount = amount;
