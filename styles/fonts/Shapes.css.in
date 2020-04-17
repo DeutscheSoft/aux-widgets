@@ -1,6 +1,54 @@
 @font-face {
   font-family: "[name]";
   font-style: normal;
-  font-weight: normal;
-  src: url("[name].ttf") format("truetype");
+  font-weight: 100;
+  src: url("[name]100.ttf") format("truetype");
+}
+@font-face {
+  font-family: "[name]";
+  font-style: normal;
+  font-weight: 200;
+  src: url("[name]200.ttf") format("truetype");
+}
+@font-face {
+  font-family: "[name]";
+  font-style: normal;
+  font-weight: 300;
+  src: url("[name]300.ttf") format("truetype");
+}
+@font-face {
+  font-family: "[name]";
+  font-style: normal;
+  font-weight: 400;
+  src: url("[name]400.ttf") format("truetype");
+}
+@font-face {
+  font-family: "[name]";
+  font-style: normal;
+  font-weight: 500;
+  src: url("[name]500.ttf") format("truetype");
+}
+@font-face {
+  font-family: "[name]";
+  font-style: normal;
+  font-weight: 600;
+  src: url("[name]600.ttf") format("truetype");
+}
+@font-face {
+  font-family: "[name]";
+  font-style: normal;
+  font-weight: 700;
+  src: url("[name]700.ttf") format("truetype");
+}
+@font-face {
+  font-family: "[name]";
+  font-style: normal;
+  font-weight: 800;
+  src: url("[name]800.ttf") format("truetype");
+}
+@font-face {
+  font-family: "[name]";
+  font-style: normal;
+  font-weight: 900;
+  src: url("[name]900.ttf") format("truetype");
 }

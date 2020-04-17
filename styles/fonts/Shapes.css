@@ -1,8 +1,56 @@
 @font-face {
   font-family: "Shapes";
   font-style: normal;
-  font-weight: normal;
-  src: url("Shapes.ttf") format("truetype");
+  font-weight: 100;
+  src: url("Shapes100.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Shapes";
+  font-style: normal;
+  font-weight: 200;
+  src: url("Shapes200.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Shapes";
+  font-style: normal;
+  font-weight: 300;
+  src: url("Shapes300.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Shapes";
+  font-style: normal;
+  font-weight: 400;
+  src: url("Shapes400.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Shapes";
+  font-style: normal;
+  font-weight: 500;
+  src: url("Shapes500.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Shapes";
+  font-style: normal;
+  font-weight: 600;
+  src: url("Shapes600.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Shapes";
+  font-style: normal;
+  font-weight: 700;
+  src: url("Shapes700.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Shapes";
+  font-style: normal;
+  font-weight: 800;
+  src: url("Shapes800.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Shapes";
+  font-style: normal;
+  font-weight: 900;
+  src: url("Shapes900.ttf") format("truetype");
 }
 
 .aux-icon.trunk::before           { font-family: 'Shapes'; content: ''; }
