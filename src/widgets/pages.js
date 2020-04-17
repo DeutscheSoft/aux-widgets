@@ -38,8 +38,18 @@ function on_page_set_active(value)
 
   if (value)
   {
+    const index = pages.get_pages().indexOf(this);
     pages.show_child(this);
-    pages.update('show', pages.get_pages().indexOf(this));
+    pages.update('show', index);
+    /**
+     * The page to show has changed.
+     * 
+     * @param {Container} page - The {@link Container} instance of the newly selected page.
+     * @param {number} id - The ID of the page.
+     * 
+     * @event Pages#changed
+     */
+    pages.emit("changed", this, index);
   }
   else
   {
@@ -54,6 +64,41 @@ function on_page_added(page, position)
   page.add_class('aux-page');
   page.on('set_active', on_page_set_active);
 
+  const current = pages.current();
+
+  if (page.get('active'))
+  {
+    pages.set('show', position);
+  }
+  else
+  {
+    let show = pages.get('show');
+
+    // if the current active page has been moved, we have to update the
+    // show property
+    if (show >= position && show >= 0 && show < this.getList().length - 1)
+    {
+      ++show;
+    }
+
+    // update all pages active option, possibly also that of the new page
+    pages.set('show', show);
+  }
+
+  // the new page is active
+  if (page.get('active'))
+  {
+    // we don't want any animation
+    page.force_show();
+
+    if (current && current !== page)
+      current.force_hide();
+  }
+  else
+  {
+    page.force_hide();
+  }
+
   /**
    * A page was added to the Pages.
    *
@@ -62,34 +107,6 @@ function on_page_added(page, position)
    * @param {Container} page - The {@link Container} which was added as a page.
    */
   pages.emit("added", page, position);
-
-  if (page.get('active'))
-  {
-    page.set('visible', true);
-    pages.set('show', position);
-    page.show();
-  }
-  else
-  {
-    let show = pages.get('show');
-
-    if (show >= position && show >= 0 && show < this.getList().length - 1)
-    {
-      show++;
-    }
-    
-    if (show === position)
-    {
-      page.set('visible', true);
-    }
-    else
-    {
-      page.set('visible', false);
-      pages.hide_child(page);
-    }
-
-    pages.set('show', show);
-  }
 }
 
 function on_page_removed(page, position)
@@ -185,19 +202,6 @@ export const Pages = define_class({
           {
             const page = list[i];
             page.update('active', i === value);
-            if (i === value)
-            {
-              this.show_child(page);
-              /**
-               * The page to show has changed.
-               * 
-               * @param {Container} page - The {@link Container} instance of the newly selected page.
-               * @param {number} id - The ID of the page.
-               * 
-               * @event Pages#changed
-               */
-              this.emit("changed", page, value);
-            }
           }
         },
     },

@@ -5,7 +5,7 @@ import {
     PagesComponent
   } from '../src/index.js';
 
-import { wait_for_connected, assert, compare, compare_options } from './helpers.js';
+import { wait_for_connected, wait_for_drawn, assert, compare, compare_options } from './helpers.js';
 
 describe('Pages', () => {
     let n = 0;
@@ -18,9 +18,15 @@ describe('Pages', () => {
 
       shown.forEach((b) => {
         assert(show === list.indexOf(b));
+        assert(!b.hidden());
+        assert(b.element.classList.contains('aux-show') ||
+               b.element.classList.contains('aux-showing'));
       });
       notshown.forEach((b) => {
         assert(show !== list.indexOf(b));
+        assert(b.element.classList.contains('aux-hide') ||
+               b.element.classList.contains('aux-hiding'));
+        assert(b.hidden());
       });
     };
     const test = (add_page, remove_page, show_page) => {
@@ -33,9 +39,9 @@ describe('Pages', () => {
            const b3 = await add_page(pages, new Container({ content: '' }));
            assert(compare_options(b1, b2));
            assert(compare_options(b1, b3));
-           show_page(pages, b1);
-           show_page(pages, b2);
-           show_page(pages, b3);
+           await show_page(pages, b1);
+           await show_page(pages, b2);
+           await show_page(pages, b3);
            await remove_page(pages, b1);
            await remove_page(pages, b2);
            await remove_page(pages, b3);
@@ -87,7 +93,7 @@ describe('Pages', () => {
 
           for (let i = 0; i < pages.length; i++)
           {
-            show_page(ba, pages[i]);
+            await show_page(ba, pages[i]);
             for (let j = 0; j < pages.length; j++)
             {
               if (i !== j)
@@ -206,8 +212,9 @@ describe('Pages', () => {
           check_show(pages);
         };
         [ show_page1, show_page2, show_page3 ].forEach((low_show_page) => {
-          const show_page = (pages, page) => {
+          const show_page = async (pages, page) => {
             low_show_page(pages, page);
+            await wait_for_drawn(pages);
             assert(page.get('active'));
             check_show(pages);
           };
