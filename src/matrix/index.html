@@ -9,6 +9,17 @@
         <link rel=stylesheet href="../../styles/aux.css"></style>
         <script>
             
+            if (window.location.hash.indexOf("shapeweight") >= 0) {
+                var style = document.createElement("style");
+                document.head.appendChild(style);
+                var c = 100;
+                window.setInterval(function () {
+                    style.innerHTML = ".aux-indent { font-weight: " + c + "; }";
+                    c += 100;
+                    if (c > 900) c = 100;
+                },1000);
+            }
+            
         </script>
         
         <style>
