@@ -155,8 +155,12 @@ export const Pages = define_class({
      * @example
      * var pages = new Pages({
      *  pages: [
-     *   document.createElement("span"),
-     *   "<h1>Foobar</h1><p>Lorem ipsum dolor sit amet</p>"
+     *   {
+     *    content: document.createElement("span"),
+     *   },
+     *   {
+     *    content: "<h1>Foobar</h1><p>Lorem ipsum dolor sit amet</p>",
+     *   }
      *  ]
      * });
      */
