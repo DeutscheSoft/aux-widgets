@@ -150,6 +150,12 @@ export const Container = define_class({
         if (!this.hidden())
           this.update("visible", 'hiding');
     },
+    force_hide: function () {
+        const E = this.element;
+        this.set('visible', false);
+        add_class(E, "aux-hide");
+        remove_class(E, "aux-show", "aux-hiding", "aux-showing");
+    },
     /** 
      * Starts the transition of the <code>visible</code> to <code>true</code>.
      *
@@ -159,6 +165,12 @@ export const Container = define_class({
     show: function() {
         if (!this.is_drawn()) this.enable_draw();
         if (this.hidden()) this.update('visible', 'showing');
+    },
+    force_show: function() {
+        const E = this.element;
+        this.set('visible', true);
+        add_class(E, "aux-show");
+        remove_class(E, "aux-hide", "aux-hiding", "aux-showing");
     },
     show_nodraw_children: function() {
         var C = this.children;
@@ -182,13 +194,26 @@ export const Container = define_class({
         var C = this.children;
         var H = this.hidden_children;
 
-        if (typeof i !== "number") {
+        if (typeof i !== "number")
+        {
             i = C.indexOf(i);
-            if (i === -1) throw new Error("Cannot find child.");
         }
 
+        const child = C[i];
+
+        if (!child)
+          throw new Error("Cannot find child.");
+
         H[i] = true;
-        C[i].hide();
+
+        if (this.is_drawn())
+        {
+          child.hide();
+        }
+        else
+        {
+          child.force_hide();
+        }
     },
 
     /**
@@ -205,13 +230,17 @@ export const Container = define_class({
 
         if (typeof i !== "number") {
             i = C.indexOf(i);
-            if (i === -1) throw new Error("Cannot find child.");
         }
+
+        const child = C[i];
+
+        if (!child)
+          throw new Error("Cannot find child.");
 
         if (H[i]) {
             H[i] = false;
             if (this.is_drawn()) C[i].show();
-            else C[i].show_nodraw();
+            else C[i].force_show();
         }
     },
 

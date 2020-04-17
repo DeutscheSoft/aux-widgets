@@ -185,6 +185,12 @@ describe('Widgets', () => {
       await wait_for_drawn(widget);
       assert_hidden(widget);
 
+      widget.force_show();
+      assert_visible(widget);
+
+      widget.force_hide();
+      assert_hidden(widget);
+
       widget.destroy();
     }));
   });

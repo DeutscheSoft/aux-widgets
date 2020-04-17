@@ -11,3 +11,5 @@ export * from './select.js';
 export * from './visibility.js';
 export * from './buttons.js';
 export * from './options.js';
+export * from './pages.js';
+export * from './pager.js';

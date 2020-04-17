@@ -108,3 +108,20 @@ export function wait_for_drawn(widget)
     S.after_frame(resolve);
   });
 }
+
+export function defer()
+{
+  return new Promise((resolve) => setTimeout(resolve), 0);
+}
+
+export function wait_for_connected(widget)
+{
+  if (!widget.element.parentNode)
+  {
+    canvas().appendChild(widget.element);
+    widget.enable_draw();
+  }
+
+  return defer();
+}
+

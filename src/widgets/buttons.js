@@ -394,15 +394,20 @@ export const Buttons = define_class({
     add_button: function (options, position) {
         const button = this.create_button(options);
         const buttons = this.get_buttons();
-        const E = this.element;
+        const element = this.element;
 
-        if (position === void(0) || position === buttons.length) {
-          E.appendChild(button.element);
+        if (!(position >= 0 && position < buttons.length)) {
+          element.appendChild(button.element);
         } else {
-          E.insertBefore(button.element, buttons[position].element);
+          element.insertBefore(button.element, buttons[position].element);
         }
 
-        this.add_child(button);
+        if (button.parent !== this)
+        {
+          // if this button is a web component, the above appendChild would have
+          // already triggered a call to add_child
+          this.add_child(button);
+        }
 
         return button;
     },
