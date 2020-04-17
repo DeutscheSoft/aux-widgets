@@ -1,0 +1,6 @@
+# Icongen
+
+Dependencies: Python with XML support (minidom)
+              FontForge
+
+To generate icons run `make icons` in the root of this repository.
