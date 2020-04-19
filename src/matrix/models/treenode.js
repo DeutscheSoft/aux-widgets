@@ -26,6 +26,16 @@ export class TreeNodeData extends MatrixDatum
       this.parent = parent;
     }
 
+    isChildOf(parent)
+    {
+      for (let node = this.parent; node; node = node.parent)
+      {
+        if (node === parent) return true;
+      }
+
+      return false;
+    }
+
     getPath()
     {
       const parent = this.parent;

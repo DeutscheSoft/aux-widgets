@@ -1,24 +1,5 @@
 import { MatrixData } from '../models/matrix.js';
-
-function assert(x, msg)
-{
-  if (!x) throw new Error(msg || 'Assertion failed.');
-}
-
-function test(name, cb)
-{
-  console.log('Testing: %s ', name);
-
-  try
-  {
-    cb();
-    console.log('OK');
-  }
-  catch (e)
-  {
-    console.error('FAIL', e);
-  }
-}
+import { assert, test } from './helpers.js';
 
 test('Adding and removing ports', () => {
   const matrix = new MatrixData();

@@ -23,6 +23,9 @@ export class GroupData extends TreeNodeData
       if (!(child instanceof TreeNodeData))
         throw new TypeError('Expected TreeDataNode');
 
+      if (this.isChildOf(child))
+        throw new Error('Creating graphs is not allowed.');
+
       this.matrix.registerNode(child);
 
       const children = this.children;
@@ -84,6 +87,11 @@ export class GroupData extends TreeNodeData
     deleteGroup(group)
     {
       this.deleteChild(group);
+    }
+
+    forEach(cb)
+    {
+      this.children.forEach(cb);
     }
 
     /**

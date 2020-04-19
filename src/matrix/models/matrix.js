@@ -117,8 +117,8 @@ export class MatrixData extends Datum
   {
   }
 
-  createListDataView(filterFunction, amount)
+  createListDataView(amount, filterFunction, sortFunction)
   {
-    return new ListDataView(this.root, filterFunction, amount);
+    return new ListDataView(this.root, amount, filterFunction, sortFunction);
   }
 }
