@@ -218,11 +218,6 @@ export const Meter = define_class({
         gradient:        false
     },
     static_events: {
-        set_segment: function() {
-            // what is this supposed to do?
-            // -> probably invalidate the value to force a redraw
-            this.set("value", this.options.value);
-        },
         set_base: function(value) {
             if (value === false) {
               var O = this.options;
@@ -367,8 +362,8 @@ export const Meter = define_class({
             this._canvas.getContext("2d").fillStyle = this._fillstyle;
         }
         
-        if (I.value || I.basis || I.min || I.max) {
-            I.basis = I.value = I.min = I.max = false;
+        if (I.value || I.basis || I.min || I.max || I.segment) {
+            I.basis = I.value = I.min = I.max = I.segment = false;
             this.draw_meter();
         }
     },
