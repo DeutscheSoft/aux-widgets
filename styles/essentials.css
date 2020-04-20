@@ -29,6 +29,10 @@
 @import "fonts/AUX.css";
 @import "fonts/Shapes.css";
 
+body {
+    --aux-scrollbar-size: 0;
+}
+
 /* ######## GENERIC CSS ######## */
 
 .aux-disabled {

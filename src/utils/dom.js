@@ -618,3 +618,26 @@ export function is_touch() {
     return 'ontouchstart' in window || // works on most browsers
            'onmsgesturechange' in window; // works on ie10
 }
+
+
+/**
+ * Evaluate size of scroll bars. The size is set as CSS variable
+ * `--aux-scrollbar-size` on the `body` element.
+ * @returns {integer} Size in pixel.
+ * @function scrollbar_size
+ */
+var _scrollbar_size;
+
+export function scrollbar_size () {
+    if (!_scrollbar_size) {
+        var div = element("div");
+        div.style.overflow = "scroll";
+        div.style.position = "fixed";
+        div.style.visibility = "hidden";
+        document.body.appendChild(div);
+        _scrollbar_size = div.offsetWidth - div.clientWidth;
+        document.body.removeChild(div);
+        document.body.style.setProperty("--aux-scrollbar-size", _scrollbar_size + "px");
+    }
+    return _scrollbar_size;
+}
