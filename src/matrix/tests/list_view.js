@@ -1,7 +1,7 @@
 import { MatrixData } from '../models/matrix.js';
-import { assert, test } from './helpers.js';
+import { assert, test, assert_error } from './helpers.js';
 
-test('Adding and removing ports', () => {
+test('ListDataView', () => {
   const matrix = new MatrixData();
 
   const group = matrix.addGroup({ label: 'group1' });
@@ -23,8 +23,14 @@ test('Adding and removing ports', () => {
     return 1;
   };
 
-  const filter = (node) => true;
-  const listview = matrix.createListDataView(4, filter, sorter);
+  const listview = matrix.createListDataView(4, null, sorter);
+
+  assert(listview.getSubtreeSize(group) === 4);
+  assert(listview.getDepth(group) === 0);
+
+  ports.forEach((port) => {
+    assert(listview.getDepth(port) === 1);
+  });
 
   {
     const tmp = [];
@@ -40,6 +46,38 @@ test('Adding and removing ports', () => {
     {
       assert(tmp[i] === ports[i]);
     }
+  }
+
+
+  {
+    const port5 = group.addPort({ label: 'port5' });
+
+    assert(listview.getSubtreeSize(group) === 5);
+
+    group.deletePort(port5);
+
+    assert(listview.getSubtreeSize(group) === 4);
+  }
+
+  {
+    const group2 = group.addGroup({ label: 'group2' });
+    assert(listview.getSubtreeSize(group) === 5);
+    const port = group2.addPort({ label: 'port5' });
+    assert(listview.getSubtreeSize(group) === 6);
+    assert(listview.getDepth(port) == 2);
+    group.deleteGroup(group2);
+    assert(listview.getSubtreeSize(group) === 4);
+  }
+
+  {
+    const group2 = group.addGroup({ label: 'group2' });
+    const group3 = group2.addGroup({ label: 'group3' });
+    group.deleteGroup(group2);
+
+    assert_error(() => listview.getGroupInfo(group3));
+    assert_error(() => listview.getGroupInfo(group2));
+
+    assert(listview.getSubtreeSize(group) === 4);
   }
 
   listview.destroy();

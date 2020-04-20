@@ -1,6 +1,22 @@
+let ok;
+
 export function assert(x, msg)
 {
   if (!x) throw new Error(msg || 'Assertion failed.');
+  ok++;
+}
+
+export function assert_error(cb)
+{
+  try
+  {
+    cb();
+    assert(false, 'Expected an error.');
+  }
+  catch (err)
+  {
+    // we expect this
+  }
 }
 
 export function test(name, cb)
@@ -9,6 +25,7 @@ export function test(name, cb)
 
   try
   {
+    ok = 0;
     cb();
   }
   catch (e)
@@ -16,9 +33,8 @@ export function test(name, cb)
     err = e;
   }
 
-  console.log(' - %s .. %s', name, err ? 'FAIL' : 'OK');
+  console.log(' - %s .. %s (%d checks)', name, err ? 'FAIL' : 'OK', ok);
 
   if (err)
     console.error(err);
 }
-

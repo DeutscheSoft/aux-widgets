@@ -47,6 +47,7 @@ export class MatrixData extends Datum
   {
     if (!(port instanceof PortData))
     {
+      if (!port) port = {};
       if (!port.id)
       {
         port.id = this.last_id++;
@@ -61,6 +62,11 @@ export class MatrixData extends Datum
   {
     if (!(group instanceof GroupData))
     {
+      if (!group) group = {};
+      if (!group.id)
+      {
+        group.id = this.last_id++;
+      }
       group = new GroupData(this, group);
     }
 
