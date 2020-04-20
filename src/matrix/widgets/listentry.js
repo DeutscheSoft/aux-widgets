@@ -13,7 +13,7 @@ const indent_to_glyph = {
     "none" : "",
 }
 
-export const Entry = define_class({
+export const ListEntry = define_class({
     Extends: Container,
     _options: Object.assign(Object.create(Container.prototype._options), {
         label: "string|boolean",
@@ -37,7 +37,7 @@ export const Entry = define_class({
     },
     draw: function (options, element) {
         Container.prototype.draw.call(this, options, element);
-        element.classList.add("aux-entry");
+        element.classList.add("aux-listentry");
     },
     redraw: function () {
         Container.prototype.redraw.call(this);
@@ -118,21 +118,21 @@ export const Entry = define_class({
     }
 });
 
-define_child_widget(Entry, "label", {
+define_child_widget(ListEntry, "label", {
     create: Label,
     option: "label",
     inherit_options: true,
     toggle_class: true,
 });
 
-define_child_widget(Entry, "icon", {
+define_child_widget(ListEntry, "icon", {
     create: Icon,
     option: "icon",
     inherit_options: true,
     toggle_class: true,
 });
 
-define_child_widget(Entry, "indent", {
+define_child_widget(ListEntry, "indent", {
     create: Container,
     option: "depth",
     toggle_class: true,
@@ -141,7 +141,7 @@ define_child_widget(Entry, "indent", {
     },
 });
 
-define_child_widget(Entry, "collapse", {
+define_child_widget(ListEntry, "collapse", {
     create: Toggle,
     show: true,
     toggle_class: true,
