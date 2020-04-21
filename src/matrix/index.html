@@ -46,9 +46,26 @@
             
             .aux-list {
                 display: block;
-                height: 300px;
+                height: 290px;
                 background: #eee;
                 border: 8px solid black;
+                .overflow: hidden;
+                top: 400px;
+            }
+            
+            .aux-list > .aux-scrollbar {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: calc(-1 * var(--aux-scrollbar-size));
+                bottom: 0;
+                overflow-y: scroll;
+            }
+            .aux-list > .aux-scrollbar > .aux-scroller {
+                display: block;
+                width: 100%;
+                overflow: hidden;
+                box-sizing: border-box;
             }
             
             .aux-listentry {
@@ -56,6 +73,10 @@
                 display: flex;
                 align-items: center;
                 margin: 0;
+                pointer-events: none;
+            }
+            .aux-listentry:nth-child(odd) {
+                background: #ddd;
             }
             .aux-listentry > .aux-indent {
                 flex: 0 0 0;
@@ -128,7 +149,6 @@
                     {label: "Port #1.2.1", icon: "disconnected", depth: "js:[\"none\",\"branch\"]"},
                     {label: "Port #1.2.2", icon: "connected", depth: "js:[\"none\",\"end\"]"}
                 ]'
-                entry_class="window.ListEntry"
             ></aux-list>
             <!--aux-listentry label="Port #1" icon="connected" depth="js:[]"></aux-listentry>
             <aux-listentry label="Port #2" icon="disconnected" depth="js:[]"></aux-listentry>

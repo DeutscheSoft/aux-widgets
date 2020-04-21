@@ -30,7 +30,6 @@ export const ListEntry = define_class({
         icon: false,
     },
     initialize: function (options) {
-        if (!options.element) options.element = element('div');
         Container.prototype.initialize.call(this, options);
         this.datum = null;
         this.datumSubscription = null;
