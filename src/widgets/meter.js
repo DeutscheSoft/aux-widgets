@@ -205,13 +205,13 @@ export const Meter = define_class({
         layout:          "left",
         segment:         1,
         value:           0,
-        value_label:    0,
+        value_label:     0,
         base:            false,
         label:           false,
         sync_value:      true,
         format_value:    FORMAT("%.2f"),
         levels:          [1, 5, 10],     // array of steps where to draw labels
-        scale_base:       false,
+        scale_base:      false,
         show_labels:     true,
         format_labels:   FORMAT("%.2f"),
         background:      false,
@@ -246,6 +246,10 @@ export const Meter = define_class({
             this.set("value", O.value);
             this.set("min", O.min);
             this.trigger_resize();
+        },
+        initialized: function() {
+            this.set('value', this.get('value'));
+            this.set('base', this.get('base'));
         },
     },
     
