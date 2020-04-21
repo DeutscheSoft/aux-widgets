@@ -148,11 +148,10 @@ export function define_child_widget(widget, name, config) {
       };
     }
 
-    var child = define_class({
+    const ChildWidget = define_class({
         Extends: config.create,
         static_events: static_events,
     });
-
 
     /* trigger child widget creation after initialization */
     add_static_event(widget, "initialize", function() {
@@ -188,7 +187,7 @@ export function define_child_widget(widget, name, config) {
         var show = fixed || !!val;
         if (show && !C) {
             var O = get_child_options(this, name, this.options, config);
-            var w = new child(O);
+            var w = new ChildWidget(O);
             this.add_child(w);
             this[name] = w;
         } else if (!show && C) {
@@ -230,9 +229,9 @@ export function define_child_widget(widget, name, config) {
         if (this[name]) this[name].set(key.substr(name.length+1), val);
     };
 
-    for (tmp in child.prototype._options) {
+    for (tmp in ChildWidget.prototype._options) {
         add_static_event(widget, "set_"+name+"."+tmp, set_cb);
-        p._options[name+"."+tmp] = child.prototype._options[tmp];
+        p._options[name+"."+tmp] = ChildWidget.prototype._options[tmp];
     }
 
     /* direct option inherit */
@@ -241,12 +240,12 @@ export function define_child_widget(widget, name, config) {
         set_cb = function(val, key) {
             if (this[name]) this[name].set(key, val);
         };
-        for (tmp in child.prototype._options) {
+        for (tmp in ChildWidget.prototype._options) {
             if (tmp in Widget.prototype._options) continue;
             if (blacklist_options.indexOf(tmp) > -1) continue;
             add_static_event(widget, "set_"+tmp, set_cb);
             if (!p._options[tmp])
-                p._options[tmp] = child.prototype._options[tmp];
+                p._options[tmp] = ChildWidget.prototype._options[tmp];
         }
     }
     set_cb = function(key) {
@@ -256,9 +255,9 @@ export function define_child_widget(widget, name, config) {
     };
     if ((m = config.map_options)) {
         for (tmp in m) {
-            p._options[tmp] = child.prototype._options[m[tmp]];
+            p._options[tmp] = ChildWidget.prototype._options[m[tmp]];
             if (!p.options[tmp])
-                p.options[tmp] = child.prototype.options[m[tmp]];
+                p.options[tmp] = ChildWidget.prototype.options[m[tmp]];
             add_static_event(widget, "set_"+tmp, set_cb(m[tmp]));
         }
     }
