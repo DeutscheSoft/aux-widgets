@@ -579,8 +579,15 @@ define_child_widget(ColorPicker, "cancel", {
 
 // This has to happen after all children are initialized
 add_static_event(ColorPicker, "initialized", function() {
-    var O = this.options;
-    if (O.rgb) this.set("rgb", O.rgb);
-    if (O.hex) this.set("hex", O.hex);
-    if (O.hsl) this.set("hsl", O.hsl);
+    const options = {};
+    color_options.forEach((name) => {
+      if (this.options[name] !== this.get_default(name))
+      {
+        options[name] = this.options[name];
+      }
+    });
+    for (let key in options)
+    {
+      this.set(key, options[key]);
+    }
   });
