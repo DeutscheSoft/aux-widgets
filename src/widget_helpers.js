@@ -95,7 +95,7 @@ export function define_child_element(widget, name, config) {
     });
 
     /* trigger child element creation after initialization */
-    add_static_event(widget, "initialized", function() {
+    add_static_event(widget, "initialize_children", function() {
         this.set(show_option, this.options[show_option]);
     });
 

@@ -229,7 +229,7 @@ export const ColorPicker = define_class({
                 this.parent.set("lightness", 1 - this.options.range().px2val(y));
             }
         });
-        
+
     },
     resize: function () {
         var rect = this._canvas.getBoundingClientRect();
