@@ -346,7 +346,7 @@ export const Pager = define_class({
           const label = buttonOptions.label;
 
           if (label)
-            p.set('title', buttonOptions);
+            p.set('title', label);
 
           for (var key in buttonOptions)
           {
