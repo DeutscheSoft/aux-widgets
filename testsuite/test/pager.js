@@ -46,7 +46,6 @@ describe('Pager', () => {
           const b1 = await add_page(pager, '1', '', { title: "1" });
           assert(pager.get_pages()[0] === b1);
           const b2 = await add_page(pager, '2', '', { title: "2" }, 0);
-          console.log(pager.get_pages());
           assert(pager.get_pages()[0] === b2);
           const b3 = await add_page(pager, '3', '', { title: "3" }, 1);
           assert(pager.get_pages()[1] === b3);

@@ -194,6 +194,24 @@ describe('Widgets', () => {
       widget.destroy();
     }));
   });
+
+  it('child_widget', async () => {
+    {
+      // We check that the value.format option is properly set on the
+      // value child of the Fader
+      function foo(v) { return v; }
+      function bar(v) { return v; }
+
+      const fader = new Fader({
+        show_value: true,
+        "value.format": foo,
+      });
+      assert(fader.value.get('format') === foo);
+
+      fader.set('value.format', bar);
+      assert(fader.value.get('format') === bar);
+    }
+  });
 });
 
 describe('Equalizer', () => {
