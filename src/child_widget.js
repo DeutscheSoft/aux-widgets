@@ -253,12 +253,20 @@ export function define_child_widget(widget, name, config) {
             if (this[name]) this[name].set(key, val);
         };
     };
-    if ((m = config.map_options)) {
-        for (tmp in m) {
-            p._options[tmp] = ChildWidget.prototype._options[m[tmp]];
-            if (!p.options[tmp])
-                p.options[tmp] = ChildWidget.prototype.options[m[tmp]];
-            add_static_event(widget, "set_"+tmp, set_cb(m[tmp]));
+
+    const map_options = config.map_options;
+
+    if (map_options) {
+        for (let parent_key in map_options)
+        {
+            const child_key = map_options[parent_key];
+
+            if (!(parent_key in p._options))
+            {
+              p._options[parent_key] = ChildWidget.prototype._options[child_key];
+              p.options[parent_key] = ChildWidget.prototype.options[child_key];
+            }
+            add_static_event(widget, "set_"+parent_key, set_cb(child_key));
         }
     }
     if (!config.options) {
