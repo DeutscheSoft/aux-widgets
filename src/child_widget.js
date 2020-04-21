@@ -5,33 +5,50 @@ import { Widget } from './widgets/widget.js';
 
 function get_child_options(parent, name, options, config) {
     var ret = {};
-    var key, pref = name+".";
-    var tmp;
+    var pref = name+".";
 
     var inherit_options = !!config.inherit_options;
     var blacklist_options = config.blacklist_options || [];
 
-    if ((tmp = config.default_options))
-        Object.assign(ret, (typeof(tmp) === "function") ?  tmp.call(parent) : tmp);
+    let default_options = config.default_options;
 
-    for (key in options) {
-        if (key.startsWith(pref)) {
+    if (default_options)
+    {
+      if (typeof default_options === 'function')
+        default_options = default_options.call(parent);
+
+      ret = Object.assign(ret, default_options);
+    }
+
+    for (let key in options)
+    {
+        if (key.startsWith(pref))
+        {
             ret[key.substr(pref.length)] = options[key];
         }
-
-        if (inherit_options && blacklist_options.indexOf(key) < 0) {
+        else if (inherit_options && blacklist_options.indexOf(key) < 0)
+        {
             if (key in config.create.prototype._options && !(key in Widget.prototype._options)) {
                 ret[key] = options[key];
             }
         }
     }
 
-    var map_options = config.map_options;
+    const map_options = config.map_options;
 
-    if (map_options) for (key in map_options) {
-        if (options[key]) {
+    if (map_options)
+    {
+      for (let key in map_options) {
+          if (key in options)
+          {
+            if (key in ret && options[key] === parent.get_default(key))
+            {
+              continue;
+            }
+
             ret[map_options[key]] = options[key];
-        }
+          }
+      }
     }
 
     return ret;
