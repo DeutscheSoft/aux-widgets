@@ -110,34 +110,25 @@ export const EqBand = define_class({
          */
         ChartHandle.prototype.initialize.call(this, options);
 
-        options = this.options;
-
         this.filter = new Filter({
-            type: options.type,
+            type: this.get('type'),
         });
         
-        const _m = options.mode;
-        this.set("type", this.options.type);
-        if (_m) this.set("mode", options.mode);
-
-        if (options.x !== void(0))
-            this.set("x", options.x);
-        else if (options.freq !== void(0))
-            this.set("freq", options.freq);
-        if (options.y !== void(0))
-            this.set("y", options.y);
-        else if (options.gain !== void(0))
-            this.set("gain", options.gain);
-        if (options.z !== void(0))
-            this.set("z", options.z);
-        else if (options.q !== void(0))
-            this.set("q", options.q);
+        const mode = this.get('mode');
+        this.set("type", this.get('type'));
+        if (mode) this.set("mode", this.get('mode'));
         
         /** 
          * @member {HTMLDivElement} EqBand#element - The main SVG group.
          *   Has class <code>.aux-eqband</code>.
          */
-        this.filter.reset();
+         [ 'freq', 'gain', 'q' ].forEach((name) => {
+           if (name in options)
+           {
+             this.set(name, options[name]);
+           }
+         });
+         this.filter.reset();
     },
     draw: function(O, element)
     {
