@@ -8,6 +8,14 @@
         <script type=module src="components/listentry.js"></script>
         
         <link rel=stylesheet href="../../styles/aux.css"></style>
+        
+        <script type=module>
+            
+            import { ListEntry } from "./widgets/listentry.js";
+            window.ListEntry = ListEntry;
+            
+        </script>
+        
         <script>
             
             if (window.location.hash.indexOf("shapeweight") >= 0) {
@@ -34,6 +42,15 @@
                 --aux-patchbay-listentry-size: var(--aux-clickable-size);
                 --aux-patchbay-listentry-size: 32px;
             }
+            
+            
+            .aux-list {
+                display: block;
+                height: 300px;
+                background: #eee;
+                border: 8px solid black;
+            }
+            
             .aux-listentry {
                 height: var(--aux-patchbay-listentry-size);
                 display: flex;
@@ -95,7 +112,25 @@
     <body>
         <aux-root>
             
-            <aux-listentry label="Port #1" icon="connected" depth="js:[]"></aux-listentry>
+            <aux-list
+                entries='js:[
+                    {label: "Port #2", icon: "disconnected", depth: "js:[]"},
+                    {label: "Group #1", icon: "disconnected", depth: "js:[]", collapsable: true},
+                    {label: "Port #1.1", icon: "disconnected", depth: "js:[\"branch\"]"},
+                    {label: "Port #1.2", icon: "disconnected", depth: "js:[\"branch\"]"},
+                    {label: "Group #1.1", icon: "connected", depth: "js:[\"branch\"]", collapsable: true},
+                    {label: "Port #1.1.1", icon: "connected", depth: "js:[\"trunk\",\"branch\"]"},
+                    {label: "Port #1.1.2", icon: "connected", depth: "js:[\"trunk\",\"branch\"]"},
+                    {label: "Group #1.1.1", icon: "disconnected", depth: "js:[\"trunk\",\"end\"]", collapsable: true},
+                    {label: "Port #1.1.1.1", icon: "disconnected", depth: "js:[\"trunk\",\"none\",\"branch\"]"},
+                    {label: "Port #1.1.1.2", icon: "disconnected", depth: "js:[\"trunk\",\"none\",\"end\"]"},
+                    {label: "Group #1.2", icon: "connected", depth: "js:[\"end\"]", collapsable: true},
+                    {label: "Port #1.2.1", icon: "disconnected", depth: "js:[\"none\",\"branch\"]"},
+                    {label: "Port #1.2.2", icon: "connected", depth: "js:[\"none\",\"end\"]"}
+                ]'
+                entry_class="window.ListEntry"
+            ></aux-list>
+            <!--aux-listentry label="Port #1" icon="connected" depth="js:[]"></aux-listentry>
             <aux-listentry label="Port #2" icon="disconnected" depth="js:[]"></aux-listentry>
             <aux-listentry label="Group #1" icon="disconnected" depth="js:[]" collapsable=true></aux-listentry>
             <aux-listentry label="Port #1.1" icon="disconnected" depth="js:['branch']"></aux-listentry>
@@ -108,7 +143,7 @@
             <aux-listentry label="Port #1.1.1.2" icon="disconnected" depth="js:['trunk','none','end']"></aux-listentry>
             <aux-listentry label="Group #1.2" icon="connected" depth="js:['end']" collapsable=true></aux-listentry>
             <aux-listentry label="Port #1.2.1" icon="disconnected" depth="js:['none','branch']"></aux-listentry>
-            <aux-listentry label="Port #1.2.2" icon="connected" depth="js:['none','end']"></aux-listentry>
+            <aux-listentry label="Port #1.2.2" icon="connected" depth="js:['none','end']"></aux-listentry-->
             
         </aux-root>
     </body>
