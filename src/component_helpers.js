@@ -227,7 +227,7 @@ function create_component (base) {
         const type = _options[option_name];
         const attribute_value = attributes.get(name);
 
-        ret[name] = parse_attribute.call(this, type, attribute_value);
+        ret[option_name] = parse_attribute.call(this, type, attribute_value);
       }
 
       return ret;
