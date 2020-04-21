@@ -629,7 +629,7 @@ export function is_touch() {
 var _scrollbar_size;
 
 export function scrollbar_size () {
-    if (!_scrollbar_size) {
+    if (typeof _scrollbar_size === "undefined") {
         var div = element("div");
         div.style.overflow = "scroll";
         div.style.position = "fixed";
