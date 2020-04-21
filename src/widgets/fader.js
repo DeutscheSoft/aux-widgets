@@ -350,9 +350,7 @@ define_child_widget(Fader, "label", {
 define_child_widget(Fader, "value", {
     create: Value,
     show: false,
-    static_events: {
-        "valueset" : function (v) { this.parent.set("value", v); }
-    },
+    userset_delegate: true,
     map_options: {
         value: "value",
         format: "format",
