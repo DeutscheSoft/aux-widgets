@@ -201,7 +201,7 @@ export function define_child_widget(widget, name, config) {
     /* child widget creation */
     add_static_event(widget, "set_"+key, function(val) {
         var C = this[name];
-        var show = fixed || !!val;
+        var show = fixed || (val !== false);
         if (show && !C) {
             var O = get_child_options(this, name, this.options, config);
             var w = new ChildWidget(O);
@@ -288,7 +288,9 @@ export function define_child_widget(widget, name, config) {
     }
     if (!config.options) {
         if (!p._options[key])
-            p._options[key] = "boolean";
-        p.options[key] = fixed || !!config.show;
+        {
+          p._options[key] = "boolean";
+          p.options[key] = fixed || !!config.show;
+        }
     }
 }
