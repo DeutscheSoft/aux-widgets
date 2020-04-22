@@ -144,7 +144,7 @@ define_child_widget(ValueKnob, "knob", {
     show: true,
     inherit_options: true,
     toggle_class: true,
-    blacklist_options: [ "label" ],
+    blacklist_options: [ "label", 'show_value' ],
 });
 /**
  * @member {Value} ValueKnob#value - The {@link Value} widget.
