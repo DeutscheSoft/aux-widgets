@@ -25,6 +25,8 @@ test('ListDataView', () => {
 
   const listview = matrix.createListDataView(4, null, sorter);
 
+  listview.check();
+
   assert(listview.getSubtreeSize(group) === 4);
   assert(listview.getDepth(group) === 0);
 
@@ -50,34 +52,87 @@ test('ListDataView', () => {
 
 
   {
+    const size = listview.getSubtreeSize(group);
+
     const port5 = group.addPort({ label: 'port5' });
 
-    assert(listview.getSubtreeSize(group) === 5);
+    listview.check();
+    assert(listview.getSubtreeSize(group) === size + 1);
 
     group.deletePort(port5);
+    listview.check();
 
-    assert(listview.getSubtreeSize(group) === 4);
+    assert(listview.getSubtreeSize(group) === size);
   }
 
   {
+    listview.check();
     const group2 = group.addGroup({ label: 'group2' });
+    listview.check();
     assert(listview.getSubtreeSize(group) === 5);
     const port = group2.addPort({ label: 'port5' });
+    listview.check();
     assert(listview.getSubtreeSize(group) === 6);
     assert(listview.getDepth(port) == 2);
     group.deleteGroup(group2);
+    listview.check();
     assert(listview.getSubtreeSize(group) === 4);
   }
 
   {
+    listview.check();
     const group2 = group.addGroup({ label: 'group2' });
+    listview.check();
     const group3 = group2.addGroup({ label: 'group3' });
+    listview.check();
     group.deleteGroup(group2);
+    listview.check();
 
     assert_error(() => listview.getGroupInfo(group3));
     assert_error(() => listview.getGroupInfo(group2));
 
     assert(listview.getSubtreeSize(group) === 4);
+  }
+
+  {
+    const tmp = [];
+
+    const check = () => {
+      let n = 0;
+      listview.forEach((node) => {
+        const startIndex = listview.startIndex;
+        const endIndex = startIndex + listview.amount;
+        if (n >= startIndex && n < endIndex)
+        {
+          const child = tmp[n - startIndex];
+          //console.log('%d %o %o %o', n, node.label, child.label, node === child);
+          assert(child === node);
+        }
+        n++;
+      });
+    };
+
+    const sub = listview.subscribeElements((i, element) => {
+      tmp[i - listview.startIndex] = element;
+    });
+
+    check();
+
+    listview.setStartIndex(1);
+    check();
+
+    listview.setStartIndex(2);
+    check();
+
+    listview.setStartIndex(1);
+    check();
+    const group2 = group.addGroup({ label: 'group2' });
+    check();
+    const group3 = group2.addGroup({ label: 'group3' });
+    check();
+    group.deleteGroup(group2);
+
+    sub();
   }
 
   listview.destroy();
