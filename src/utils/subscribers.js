@@ -53,7 +53,7 @@ export function remove_subscriber(subscribers, cb)
   }
   else if (Array.isArray(subscribers))
   {
-    const tmp = subscribers.filter((_cb) !== cb);
+    const tmp = subscribers.filter((_cb) => _cb !== cb);
 
     if (tmp.length === subscribers.length)
       subscriber_not_found();
