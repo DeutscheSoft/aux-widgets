@@ -1,13 +1,41 @@
 import { Events } from '../../events.js';
 import { init_subscribers, add_subscriber, remove_subscriber, call_subscribers } from '../../utils/subscribers.js';
 import { init_subscriptions, add_subscription, unsubscribe_subscriptions } from '../../utils/subscriptions.js';
+import { SubscriberMap } from '../../utils/subscriber_map.js';
 
 import { GroupData } from './group.js';
 
-function allowAll(cb)
+function allowAll(node, callback)
 {
-  return (node) => {
-    return cb(node);
+  callback(true);
+  return init_subscriptions();
+}
+
+function call_continuation_if(node, subscribe_predicate, continuation)
+{
+  let active = false;
+  let inner_subscription = init_subscriptions();
+
+  let subscription = subscribe_predicate(node, (value) => {
+    // nothing todo
+    if (active === value) return;
+
+    active = value;
+
+
+    if (value)
+    {
+      inner_subscription = continuation(node);
+    }
+    else
+    {
+      inner_subscription = unsubscribe_subscriptions(inner_subscription);
+    }
+  });
+
+  return () => {
+    subscription = unsubscribe_subscriptions(subscription);
+    inner_subscription = unsubscribe_subscriptions(inner_subscription);
   };
 }
 
@@ -66,6 +94,21 @@ class SuperGroup
     {
       parent.updateSize(diff);
     }
+  }
+
+  forEach(cb)
+  {
+    this.children.forEach((node) => {
+      if (node instanceof SuperGroup)
+      {
+        cb(node.group, this);
+        node.forEach(cb);
+      }
+      else
+      {
+        cb(node, this);
+      }
+    });
   }
 }
 
@@ -146,7 +189,7 @@ export class ListDataView extends Events
       sub = add_subscription(sub, this._subscribe(node));
     }
 
-    this._notifyRegion(list_index, list_index + 1);
+    this._notifyRegion(list_index, this.size);
 
     return sub;
   }
@@ -197,7 +240,7 @@ export class ListDataView extends Events
       }
     }
 
-    this._notifyRegion(list_index, list_index + size);
+    this._notifyRegion(list_index, this.size);
   }
 
   _subscribe(super_group)
@@ -206,35 +249,31 @@ export class ListDataView extends Events
     const group = super_group.group;
 
     const sub = group.forEachAsync((node) => {
-      let sub = init_subscriptions();
+      return this._filter(node, (node) => {
+        let sub = init_subscriptions();
 
-      // TODO: needs to be dynamic
-      if (!this.filterFunction(node))
-      {
-        return init_subscriptions();
-      }
+        node = super_group.createChildNode(node);
 
-      node = super_group.createChildNode(node);
+        list.push(node);
+        // TODO: needs to be dynamic
+        list.sort(this.sortFunction);
 
-      list.push(node);
-      // TODO: needs to be dynamic
-      list.sort(this.sortFunction);
+        sub = add_subscription(sub, this._childAdded(super_group, node, list.indexOf(node)));
 
-      sub = add_subscription(sub, this._childAdded(super_group, node, list.indexOf(node)));
+        sub = add_subscription(sub, () => {
+          if (node === null) return;
 
-      sub = add_subscription(sub, () => {
-        if (node === null) return;
+          const index = list.indexOf(node);
 
-        const index = list.indexOf(node);
+          list.splice(index, 1);
 
-        list.splice(index, 1);
+          this._childRemoved(super_group, node, index);
 
-        this._childRemoved(super_group, node, index);
+          node = null;
+        });
 
-        node = null;
+        return sub;
       });
-
-      return sub;
     });
 
     return sub;
@@ -261,6 +300,20 @@ export class ListDataView extends Events
     }
   }
 
+  _filterCollapsed(node, continuation)
+  {
+    return call_continuation_if(node, (node, callback) => {
+      return this.subscribeCollapsed(node.parent, (is_collapsed) => callback(!is_collapsed));
+    }, continuation);
+  }
+
+  _filter(node, continuation)
+  {
+    return this._filterCollapsed(node, (node) => {
+      return call_continuation_if(node, this.filterFunction, continuation);
+    });
+  }
+
   // PUBLIC APIs
   constructor(group, amount, filterFunction, sortFunction)
   {
@@ -270,20 +323,23 @@ export class ListDataView extends Events
       this.amount = amount;
       this.filterFunction = filterFunction || allowAll;
       this.sortFunction = sortFunction;
-      this.subscriptions = init_subscriptions();
-
-      // subscribers
       this.subscribers = init_subscribers();
+
 
       // global flat list
       this.list = [];
 
+      // set of collapsed groups
+      this.collapsed = new WeakSet();
+
+      // list of subscribers for an element being collapsed
+      this.collapsedSubscribers = new SubscriberMap();
+
       // index in the flat list where each group
       this.groups = new Map([[ group, this.root ]]);
 
-      let subs = this._subscribe(this.root);
-
-      this.subscriptions = add_subscription(subs, this.subscriptions);
+      // subscribers
+      this.subscriptions = this._subscribe(this.root);
   }
 
   get size()
@@ -344,8 +400,35 @@ export class ListDataView extends Events
     }
   }
 
-  collapseGroup(group, collapsed)
+  collapseGroup(group, is_collapsed)
   {
+    if (typeof is_collapsed !== 'boolean')
+      throw new TypeError('Expected boolean.');
+
+    if (!(group instanceof GroupData))
+      throw new TypeError('Expected GroupData.');
+
+    const collapsed = this.collapsed;
+
+    if (is_collapsed)
+    {
+      collapsed.add(group);
+    }
+    else
+    {
+      collapsed.delete(group);
+    }
+
+
+    this.collapsedSubscribers.call(group, is_collapsed);
+  }
+
+  isCollapsed(group)
+  {
+    if (!(group instanceof GroupData))
+      throw new TypeError('Expected GroupData.');
+
+    return this.collapsed.has(group);
   }
 
   destroy()
@@ -442,5 +525,17 @@ export class ListDataView extends Events
   subscribeStartIndexChanged(cb)
   {
     return this.subscribe('startIndexChanged', cb);
+  }
+
+  subscribeCollapsed(group, cb)
+  {
+    cb(this.collapsed.has(group));
+
+    return this.collapsedSubscribers.subscribe(group, cb);
+  }
+
+  at(index)
+  {
+    return this.list[index];
   }
 }
