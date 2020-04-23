@@ -65,9 +65,10 @@ export class ListDataView extends Events
       return this.getSuperGroup(group).childDistance(index);
     }
 
-    _updateSize(group, diff)
+    _updateSize(parent, diff)
     {
-      return this.getSuperGroup(group).updateSize(diff);
+      parent.updateSize(diff);
+      this.emit('sizeChanged', this.root.size);
     }
 
     _updateIndex(startIndex)
@@ -91,7 +92,7 @@ export class ListDataView extends Events
       let sub = init_subscriptions();
 
       // increase size by one
-      parent.updateSize(1);
+      this._updateSize(parent, 1);
 
       const offset = parent.childDistance(index);
       const list = this.list;
@@ -129,7 +130,7 @@ export class ListDataView extends Events
         : 1;
 
       // decrease size
-      parent.updateSize(-size);
+      this._updateSize(parent, -size);
 
       const offset = parent.childDistance(index);
       const list = this.list;
@@ -226,7 +227,11 @@ export class ListDataView extends Events
         let subs = this._subscribe(this.root);
 
         this.subscriptions = add_subscription(subs, this.subscriptions);
+    }
 
+    get size()
+    {
+      return this.root.size;
     }
 
     getSuperGroup(group)
@@ -346,5 +351,15 @@ export class ListDataView extends Events
         this.subscribers = remove_subscriber(this.subscribers, cb);
         cb = null;
       };
+    }
+
+    /**
+     * Emits the size of the list.
+     */
+    subscribeSize(cb)
+    {
+      call_subscribers(cb, this.root.size);
+
+      return this.subscribe('sizeChanged', cb);
     }
 }
