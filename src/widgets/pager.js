@@ -144,7 +144,7 @@ export const Pager = define_class({
       // delegate the userset action from navigation to pager
       subs = add_subscription(subs, navigation.subscribe('userset', (key, value) => {
         if (key !== 'select') return;
-        this.update('show', value);
+        return this.userset('show', value);
       }));
 
       // delegate the set_select action from navigation to pager
