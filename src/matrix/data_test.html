@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Matrix Data Test</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style>
+          .entry
+          {
+            height: 30px;
+            border: 1px solid black;
+            box-sizing: border-box;
+            font-size: 15px;
+            background-color: #eff;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 45vw;
+          }
+          .entry.group
+          {
+            background-color: #fef;
+          }
+          
+          #list,#scroller
+          {
+            display: inline-block;
+            width: 45vw;
+            background: #eee;
+            height: 300px;
+            position: relative;
+          }
+
+          #list
+          {
+            overflow: hidden;
+          }
+          
+          #scroller
+          {
+            overflow-y: scroll;
+            overflow-x: hidden;
+          }
+        </style>
+        <script type=module>
+            import { MatrixData } from './models/matrix.js';
+            import { ListDataView } from './models/listdataview.js';
+            import { sprintf } from '../utils/sprintf.js';
+
+            const matrix = new MatrixData();
+
+            const sorter = (a, b) => {
+              const labela = a.label;
+              const labelb = b.label;
+
+              if (labela > labelb) return -1;
+              if (labela === labelb) return 0;
+              return 1;
+            };
+
+            const AMOUNT = 10;
+
+            const listview = matrix.createListDataView(AMOUNT + 1, null, sorter);
+
+            const outputs = matrix.addGroup({ label: 'Outputs' });
+
+            for (let i = 0; i < 10; i++)
+            {
+              const group = outputs.addGroup({ label: 'Group ' + i });
+
+              for (let j = 0; j < 10; j++)
+              {
+                const port = group.addPort({ label: 'Port ' + (i * 10 + j) });
+              }
+            }
+
+            const ITEM_HEIGHT = 30;
+
+      	    document.addEventListener('DOMContentLoaded', () => {
+              const scrollarea = document.querySelector('#scrollarea');
+              const scroller = document.querySelector('#scroller');
+              const list = document.querySelector('#list');
+
+              let entries = [];
+
+              let microScroll = 0;
+
+              const setTransform = (entry, index) => {
+                entry.style.transform = sprintf('translateY(%dpx)', index * ITEM_HEIGHT + microScroll);
+              };
+
+              const onScroll = (offset) => {
+                const startIndex = Math.floor(offset / ITEM_HEIGHT);
+                microScroll = - (offset % ITEM_HEIGHT);
+
+                const diff = startIndex - listview.startIndex;
+
+                if (diff)
+                {
+                  // we scroll less than all entries, we reorder them
+                  if (diff < AMOUNT)
+                  {
+                    if (diff > 0)
+                    {
+                      // we remove diff entries at the front and move them to
+                      // the back
+                      const tmp = entries.slice(0, diff);
+                      entries.splice(0, diff);
+                      entries = entries.concat(tmp);
+                    }
+                    else
+                    {
+                      // we remove diff entries at the end and move them
+                      // to the front
+                      const tmp = entries.slice(entries.length + diff);
+                      entries = tmp.concat(entries.slice(0, entries.length + diff));
+                    }
+                    listview.scrollStartIndex(diff);
+                  }
+                  else
+                  {
+                    listview.setStartIndex(startIndex);
+                  }
+                }
+
+                entries.forEach(setTransform);
+              };
+
+              // create all entries
+              for (let i = 0; i < AMOUNT + 1; i++)
+              {
+                const entry = document.createElement('div');
+                entry.className = 'entry';
+                // move it by i times it's own height
+                entry.style.transform = 'translateY(' + (i * 100) + '%)';
+                entries.push(entry);
+                list.appendChild(entry);
+              }
+
+              // connect entries with our list entries
+              listview.subscribeElements((index, element) => {
+                const n = index - listview.startIndex;
+                const entry = entries[n];
+
+                /*
+                console.log('startIndex: %d, index: %d, n: %d',
+                            listview.startIndex, index, n);
+                            */
+
+                if (element)
+                {
+                  entry.textContent = element.label;
+                  entry.style.removeProperty('display');
+                  entry.classList.toggle('group', element.isGroup);
+                }
+                else
+                {
+                  entry.style.display = 'none';
+                }
+              });
+              
+              // give the fake scroll area the right size
+              listview.subscribeSize((size) => {
+                scrollarea.style.height = size * ITEM_HEIGHT + 'px';
+              });
+
+              scroller.addEventListener('scroll', (ev) => {
+                onScroll(scroller.scrollTop);
+              }, { passive: true });
+            });
+        </script>
+    </head>
+    <body>
+      <div id=list>
+      </div>
+      <div id=scroller>
+        <div id=scrollarea></div>
+      </div>
+    </body>
+</body>
