@@ -85,6 +85,8 @@
     --aux-notification-padding: 16px;
     --aux-notification-margin: 4px;
     
+    --aux-listentry-size: 32px;
+    
     --aux-scale-minwidth: 40px;
     --aux-scale-minheight: 20px;
     --aux-scale-dotsize: 3px;
@@ -321,6 +323,43 @@
 .aux-levelmeter.aux-horizontal > .aux-clip {
     width: var(--aux-levelmeter-statesize);
     height: var(--aux-meter-size);
+}
+
+/* LISTENTRY */
+
+.aux-list .aux-listentry {
+    height: var(--aux-listentry-size);
+    align-items: center;
+}
+.aux-list .aux-listentry {
+    /* prevent from being overwritten by aux-widget */
+    margin: 0;
+}
+.aux-listentry > .aux-indent {
+    width: calc(var(--aux-listentry-size) * var(--aux-listentry-depth));
+    height: var(--aux-listentry-size);
+    font-size: var(--aux-listentry-size);
+    line-height: var(--aux-listentry-size);
+    order: 0;
+}
+.aux-listentry > .aux-collapse {
+    flex: 0 0 var(--aux-listentry-size);
+    width: var(--aux-listentry-size);
+    height: var(--aux-listentry-size);
+    order: 1;
+}
+.aux-listentry > .aux-icon {
+    flex: 0 0 var(--aux-listentry-size);
+    height: var(--aux-listentry-size);
+    order: 2;
+    margin: 0;
+}
+.aux-listentry > .aux-label {
+    flex: 1 1 auto;
+    order: 3;
+    line-height: var(--aux-listentry-size);
+    margin: 0;
+    padding: 0 4px;
 }
 
 /* METER */

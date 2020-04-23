@@ -780,6 +780,43 @@ body.aux-cursor-row-resize * {
     float: left;
 }
 
+/* LIST */
+
+.aux-list {
+    overflow: hidden;
+}
+
+.aux-list > .aux-scrollbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: calc(-1 * var(--aux-scrollbar-size));
+    bottom: 0;
+    overflow-y: scroll;
+}
+.aux-list > .aux-scrollbar > .aux-scroller {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+            
+/* LISTENTRY */
+
+.aux-listentry {
+    display: flex;
+}
+.aux-listentry > .aux-indent {
+    flex: 0 0 0;
+    font-family: Shapes;
+}
+.aux-listentry > .aux-collapse {
+    display: none;
+}
+.aux-listentry.aux-collapsable > .aux-collapse {
+    display: flex;
+}
+
 /* MULTIMETER */
 
 .aux-multimeter {
