@@ -23,6 +23,18 @@ class SuperGroup
     this.children = [];
   }
 
+  createChildNode(child)
+  {
+    if (child instanceof GroupData)
+    {
+      return new SuperGroup(child, this);
+    }
+    else
+    {
+      return child;
+    }
+  }
+
   childDistance(index)
   {
     let offset = 1;
@@ -57,6 +69,19 @@ class SuperGroup
   }
 }
 
+function get_child(node)
+{
+  if (node instanceof SuperGroup)
+  {
+    return node.group;
+  }
+  else
+  {
+    return node;
+  }
+}
+
+
 export class ListDataView extends Events
 {
     // PRIVATE APIs
@@ -87,9 +112,10 @@ export class ListDataView extends Events
       }
     }
 
-    _childAdded(parent, child, index)
+    _childAdded(parent, node, index)
     {
       let sub = init_subscriptions();
+      const child = get_child(node);
 
       // increase size by one
       this._updateSize(parent, 1);
@@ -101,19 +127,23 @@ export class ListDataView extends Events
 
       list.splice(list_index, 0, child);
 
-      let super_group;
-
-      if (child instanceof GroupData)
+      if (node instanceof SuperGroup)
       {
-        super_group = new SuperGroup(child, parent, list_index);
-        this.groups.set(child, super_group);
+        node.index = list_index;
+        this.groups.set(child, node);
       }
 
       this._updateIndex(list_index + 1);
 
-      if (child instanceof GroupData)
+      if (list_index < this.startIndex)
       {
-        sub = add_subscription(sub, this._subscribe(super_group)); 
+        this.startIndex++;
+        this.emit('startIndexChanged', this.startIndex);
+      }
+
+      if (node instanceof SuperGroup)
+      {
+        sub = add_subscription(sub, this._subscribe(node));
       }
 
       this._notifyRegion(list_index, list_index + 1);
@@ -121,12 +151,13 @@ export class ListDataView extends Events
       return sub;
     }
 
-    _childRemoved(parent, child, index)
+    _childRemoved(parent, node, index)
     {
+      const child = get_child(node);
       // NOTE: the subtree is always empty now, since
       // it is automatically removed before
-      const size = (child instanceof GroupData)
-        ? (1 + this.getSubtreeSize(child))
+      const size = (node instanceof SuperGroup)
+        ? (1 + node.size)
         : 1;
 
       // decrease size
@@ -138,10 +169,34 @@ export class ListDataView extends Events
       const list_index = parent.index + offset;
 
       if (list[list_index] !== child)
+      {
+        /*
+        console.log('list: %o', list.map((n) => n.label));
+        console.log('index %d : %o vs. %o',
+                    list_index, list[list_index].label,
+                    child.label);
+        */
         throw new Error('Removing wrong child.');
+      }
 
       list.splice(list_index, size);
-      this._updateIndex(list_index + size);
+      this._updateIndex(list_index);
+
+      {
+        const startIndex = this.startIndex;
+
+        if (list_index < startIndex)
+        {
+          this.startIndex -= size;
+          this.emit('startIndexChanged', this.startIndex);
+        }
+        else if (this.size < startIndex + this.amount && startIndex > 0)
+        {
+          this.startIndex = Math.max(0, startIndex - size);
+          this.emit('startIndexChanged', this.startIndex);
+        }
+      }
+
       this._notifyRegion(list_index, list_index + size);
     }
 
@@ -158,6 +213,8 @@ export class ListDataView extends Events
         {
           return init_subscriptions();
         }
+
+        node = super_group.createChildNode(node);
 
         list.push(node);
         // TODO: needs to be dynamic
@@ -186,7 +243,7 @@ export class ListDataView extends Events
     _notifyRegion(start, end)
     {
       const startIndex = this.startIndex;
-      const endIndex = startIndex + this.amount; 
+      const endIndex = startIndex + this.amount;
 
       if (end <= startIndex) return;
       if (start >= endIndex) return;
@@ -306,8 +363,24 @@ export class ListDataView extends Events
           if (this.list[index] !== child)
           {
             console.error('Found group at position %d. Found %o vs. %o.\n',
-                        index, child.label, this.list[index]);
+                        index, child.label, this.list[index].label);
             throw new Error('Group is not at right position.');
+          }
+        }
+        else if (child instanceof SuperGroup)
+        {
+          throw new TypeError('Discovered unexpected node SuperGroup.');
+        }
+        else
+        {
+          const super_group = this.getSuperGroup(child.parent);
+          const index = super_group.children.indexOf(child);
+          const distance = super_group.childDistance(index);
+
+          if (this.list[super_group.index + distance] !== child)
+          {
+            console.error('Found group at position %d. Found %o vs. %o.\n',
+                        index, child.label, this.list[index].label);
           }
         }
       });
@@ -315,17 +388,15 @@ export class ListDataView extends Events
 
     forEach(cb)
     {
-      const rec = (group) => {
-        const list = this.getSuperGroup(group).children;
-
-        list.forEach((child) => {
-          cb(child);
-          if (child instanceof GroupData)
-            rec(child);
+      const rec = (super_group) => {
+        super_group.children.forEach((node) => {
+          cb(get_child(node));
+          if (node instanceof SuperGroup)
+            rec(node);
         });
       };
 
-      rec(this.root.group);
+      rec(this.root);
     }
 
     subscribeElements(cb)
@@ -361,5 +432,15 @@ export class ListDataView extends Events
       call_subscribers(cb, this.root.size);
 
       return this.subscribe('sizeChanged', cb);
+    }
+
+    /**
+     * Triggers when the startIndex changed but the view remained the same. This
+     * may happen when data is being removed which is entirely _before_ the
+     * current view.
+     */
+    subscribeStartIndexChanged(cb)
+    {
+      return this.subscribe('startIndexChanged', cb);
     }
 }

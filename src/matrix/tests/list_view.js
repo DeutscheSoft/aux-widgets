@@ -1,7 +1,7 @@
 import { MatrixData } from '../models/matrix.js';
 import { assert, test, assert_error } from './helpers.js';
 
-test('ListDataView', () => {
+test('ListDataView basics', () => {
   const matrix = new MatrixData();
 
   const group = matrix.addGroup({ label: 'group1' });
@@ -146,5 +146,67 @@ test('ListDataView', () => {
     sub();
   }
 
+  listview.destroy();
+});
+
+test('ListDataView.startIndex behavior', () => {
+  const matrix = new MatrixData();
+
+  const group1 = matrix.addGroup({ label: 'group1' });
+
+  const ports1 = [
+    group1.addPort({ label: 'port1' }),
+    group1.addPort({ label: 'port2' }),
+    group1.addPort({ label: 'port3' }),
+    group1.addPort({ label: 'port4' }),
+  ];
+
+  const group2 = matrix.addGroup({ label: 'group2' });
+
+  const ports2 = [
+    group2.addPort({ label: 'port1' }),
+    group2.addPort({ label: 'port2' }),
+    group2.addPort({ label: 'port3' }),
+    group2.addPort({ label: 'port4' }),
+  ];
+
+  const sorter = (a, b) => {
+    const labela = a.label;
+    const labelb = b.label;
+
+    if (labela > labelb) return 1;
+    if (labela === labelb) return 0;
+    return -1;
+  };
+
+  const listview = matrix.createListDataView(4, null, sorter);
+
+  listview.check();
+
+  //console.log(listview.list.map((n) => n.label));
+
+  // step over first group + 1
+  listview.setStartIndex(6);
+
+  const tmp = [];
+  const sub = listview.subscribeElements((i, element) => {
+    tmp[i - listview.startIndex] = element;
+  });
+
+  ports2.forEach((port, i) => {
+    assert(tmp[i] === port);
+  });
+
+  {
+    let removing = false;
+    const tmp_sub = listview.subscribeElements(() => { assert(!removing); });
+    removing = true;
+    matrix.deleteGroup(group1);
+    removing = false;
+  }
+
+  assert(listview.startIndex === 1);
+
+  sub();
   listview.destroy();
 });
