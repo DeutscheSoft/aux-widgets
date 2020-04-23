@@ -10,6 +10,11 @@ export function init_subscribers()
   return null;
 }
 
+export function subscribers_is_empty(subscribers)
+{
+  return subscribers === null;
+}
+
 export function add_subscriber(subscribers, cb)
 {
   if (typeof cb !== 'function')
