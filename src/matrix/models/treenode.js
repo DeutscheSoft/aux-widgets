@@ -2,6 +2,8 @@ import { MatrixDatum } from './matrixdatum.js';
 
 export class TreeNodeData extends MatrixDatum
 {
+    get isGroup() { return false; }
+
     constructor(matrix, o)
     {
         super(matrix, o);
