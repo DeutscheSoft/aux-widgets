@@ -16,6 +16,7 @@
             top: 0;
             left: 0;
             width: 45vw;
+            user-select: none;
           }
           .entry.group
           {
@@ -89,6 +90,16 @@
                 entry.style.transform = sprintf('translateY(%dpx)', index * ITEM_HEIGHT + microScroll);
               };
 
+              const onClick = (ev) => {
+                const index = entries.indexOf(ev.target);
+
+                const element = listview.at(listview.startIndex + index);
+
+                if (!element.isGroup) return;
+
+                listview.collapseGroup(element, !listview.isCollapsed(element));
+              };
+
               const onScroll = (offset) => {
                 const startIndex = Math.floor(offset / ITEM_HEIGHT);
                 microScroll = - (offset % ITEM_HEIGHT);
@@ -133,8 +144,12 @@
                 entry.className = 'entry';
                 // move it by i times it's own height
                 entry.style.transform = 'translateY(' + (i * 100) + '%)';
-                entries.push(entry);
+                entry.addEventListener('click', onClick);
+
                 list.appendChild(entry);
+
+
+                entries.push(entry);
               }
 
               // connect entries with our list entries
