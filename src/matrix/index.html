@@ -2,12 +2,12 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Matrix Test</title>
+        <title>A.UX Matrix Test</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <script type=module src="components/list.js"></script>
-        <script type=module src="components/listentry.js"></script>
         
-        <link rel=stylesheet href="../../styles/aux.css"></style>
+        <script type=module src="../index.js"></script>
+        
+        <link rel=stylesheet href="../../styles/A.UX.css"></style>
         
         <style>
             
@@ -19,7 +19,6 @@
                 display: block;
                 height: 290px;
                 background: #eee;
-                top: 400px;
             }
             
             .aux-listentry:nth-child(odd) {
@@ -56,7 +55,7 @@
     <body>
         <aux-root>
             
-            <aux-list data_factory="js:data_factory"></aux-list>
+            <aux-list data_factory="js:window.data_factory"></aux-list>
             
         </aux-root>
     </body>

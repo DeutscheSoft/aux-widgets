@@ -6,13 +6,77 @@ import { Container } from './../../widgets/container.js';
 import { ListEntry } from './listentry.js';
 import { ListDataView } from './../models/listdataview.js';
 
+
 const scroll = function (e) {
     var O = this.options;
     var size = O.size;
-    var S = this._scrollbar.scrollTop;
-    var micro = S % size;
-    var first = ~~(S / size);
-    this._scroller.style.paddingTop = (first * size) + "px";
+    var scroll = this._scrollbar.scrollTop;
+    var micro = scroll % size;
+    var start = ~~(scroll / size);
+    var diff = start - this.data.startIndex;
+    
+    if (diff) {
+        if (diff < this.amount) {
+            // we scroll less than all entries, we reorder them
+            rearrange_entries.call(this, diff);
+            this.data.scrollStartIndex(diff);
+        } else {
+            this.data.setStartIndex(start);
+        }
+    }
+    for (var i = 0, max = this.entries.length; i < max; ++i) {
+        this.entries[i].style.transform = sprintf('translateY(%.2fpx)', i * size + micro);
+    }
+}
+
+function rearrange_entries (diff) {
+    if (diff > 0) {
+        //console.log('Moving %d entries to the back.', diff);
+        const tmp = this.entries.slice(0, diff);
+        this.entries.splice(0, diff);
+        this.entries = this.entries.concat(tmp);
+    } else {
+        //console.log('Moving %d entries to the front.', -diff);
+        const tmp = this.entries.slice(this.entries.length + diff);
+        this.entries = tmp.concat(this.entries.slice(0, this.entries.length + diff));
+    }
+}
+
+function elements_cb (index, element) {
+    const entry = this.entries[index - this.data.startIndex];
+    if (element) {
+        for (var i in element) {
+            if (!element.hasOwnPorperty(i)) continue;
+            if (i.substr(0, 1) !== "_")
+                entry.set(i, element[i]);
+        }
+        entry.set("collapsable", element.isGroup);
+        entry.show();
+    } else {
+        entry.hide();
+    }
+}
+
+function start_index_cb (start, last) {
+    var st = this._scrollbar.scrollTop;
+    var diff = start - last;
+    this._scrollbar.scrollTop = st + diff * O.size;
+    rearrange_entries.call(this, diff);
+}
+
+function size_cb (size) {
+    this.set("_resize_scroller", size);
+}
+              
+function data_factory (amount) {
+    var O = this.options;
+    this.data = O.data_factory(amount);
+    
+    this.data.subscribeStartIndexChanged(start_index_cb.bind(this));
+    this.data.subscribeSize(size_cb.bind(this));
+    this.data.subscribeElements(elements_cb.bind(this));
+    
+    this.set("_generate_entries", true);
 }
 
 export const List = define_class({
@@ -38,16 +102,9 @@ export const List = define_class({
     data: null,
     static_events: {
         set_size: function (v) { this.trigger_resize(); },
-        set_sort: function (v) { this.view.sortFunction = v; },
+        set_data_factory: function (v) { console.log("set_data_factory",v) },
     },
     initialize: function (options) {
-        if (!options.data)
-            error("No data model found.");
-        this.view = options.data;
-        this.view.subscribeSize((function (size) {
-            this.set("_resize_scroller", true);
-        }).bind(this));
-        
         if (!options.element) options.element = element('div');
         Container.prototype.initialize.call(this, options);
         
@@ -57,6 +114,7 @@ export const List = define_class({
         Container.prototype.draw.call(this, options, element);
         element.classList.add("aux-list");
         this._scrollbar.addEventListener("scroll", scroll.bind(this), { passive: true });
+        this.set("data_factory", options.data_factory);
         this.trigger_resize();
     },
     redraw: function () {
@@ -70,13 +128,13 @@ export const List = define_class({
             while (this.entries.length > this.amount)
                 this.remove_child(this.entries[0]);
             
-            while (this.entries.length < amount)
+            while (this.entries.length < this.amount)
                 this._scroller.appendChild((this.add_child(new this.options.entry_class())).element);
         }
         
         if (I._resize_scroller) {
-            I._resize_scroller = O._resize_scroller = false;
-            this._scroller.style.height = (this.view.getSize() * O.size) + "px";
+            I._resize_scroller = false;
+            this._scroller.style.height = (O._resize_scroller * O.size) + "px";
         }
         
         if (I.scroll) {
@@ -88,13 +146,14 @@ export const List = define_class({
     },
     resize: function () {
         var E = this.element;
+        var O = this.options;
         
         this.width = inner_width(E);
         this.height = inner_height(E);
         this.amount = ~~(this.height / O.size) + 2;
-        this.data = O.data_factory(amount);
         
-        this.set("_generate_entries", true);
+        if (O.data_factory)
+            this.data = O.data_factory(this.amount);
         
         Container.prototype.resize.call(this);
     },
