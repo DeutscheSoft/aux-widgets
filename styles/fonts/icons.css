@@ -2,7 +2,7 @@
   font-family: "AUX";
   font-style: normal;
   font-weight: normal;
-  src: url("AUX.ttf") format("truetype");
+  src: url("icons.ttf") format("truetype");
 }
 
 .aux-icon.warning::before                              { font-family: 'AUX'; content: '􀀀'; }
