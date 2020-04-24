@@ -24,23 +24,18 @@ export const List = define_class({
         size : "number",
         scroll: "number",
         entry_class: "ListEntry",
-        sort: "function",
-        data: "ListDataView",
+        data_factory: "function",
     }),
     options: {
         size: 32,
         scroll: 0,
         entry_class: ListEntry,
-        sort: (a, b) => {
-            const la = a.label;
-            const lb = b.label;
-            if (la === lb) return 0;
-            return la > lb ? 1 : -1;
-        },
     },
     entries: [],
     width: 0,
     height: 0,
+    amount: 0,
+    data: null,
     static_events: {
         set_size: function (v) { this.trigger_resize(); },
         set_sort: function (v) { this.view.sortFunction = v; },
@@ -72,10 +67,7 @@ export const List = define_class({
         if (I._generate_entries) {
             I._generate_entries = O._generate_entries = false;
             
-            var amount = ~~(this.height / O.size) + 2;
-            this.view.amount = amount;
-            
-            while (this.entries.length > amount)
+            while (this.entries.length > this.amount)
                 this.remove_child(this.entries[0]);
             
             while (this.entries.length < amount)
@@ -92,7 +84,6 @@ export const List = define_class({
             
         }
         
-        
         Container.prototype.redraw.call(this);
     },
     resize: function () {
@@ -100,6 +91,8 @@ export const List = define_class({
         
         this.width = inner_width(E);
         this.height = inner_height(E);
+        this.amount = ~~(this.height / O.size) + 2;
+        this.data = O.data_factory(amount);
         
         this.set("_generate_entries", true);
         

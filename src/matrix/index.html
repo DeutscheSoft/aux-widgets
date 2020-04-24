@@ -32,13 +32,22 @@
             
             import { MatrixData } from './models/matrix.js';
             
-            window.matrix = new MatrixData();
+            const sort = (a, b) => {
+                const la = a.label;
+                const lb = b.label;
+                if (la === lb) return 0;
+                return la > lb ? 1 : -1;
+            };
+            const matrix = new MatrixData();
             const outputs = matrix.addGroup({ label: 'Outputs' });
             for (let i = 0; i < 10; i++) {
                 const group = outputs.addGroup({ label: 'Group ' + i });
                 for (let j = 0; j < 10; j++) {
                     const port = group.addPort({ label: 'Port ' + (i * 10 + j) });
                 }
+            }
+            window.data_factory = function (amount) {
+                return matrix.createListDataView(amount, null, sort);
             }
             
         </script>
@@ -47,7 +56,7 @@
     <body>
         <aux-root>
             
-            <aux-list data="js:matrix.createListDataView()"></aux-list>
+            <aux-list data_factory="js:data_factory"></aux-list>
             
         </aux-root>
     </body>
