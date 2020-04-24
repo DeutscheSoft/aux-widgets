@@ -1,7 +1,7 @@
 {
   "name": "aux-testsuite",
   "version": "1.0.0",
-  "description": "mocha test suite for AUX",
+  "description": "mocha test suite for A.UX",
   "main": "index.html",
   "directories": {
     "test": "test"

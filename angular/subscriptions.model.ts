@@ -41,10 +41,10 @@ export abstract class AuxSubscriptions implements OnDestroy
     {
       if (element.tagName.startsWith('AUX-'))
       {
-        throw new Error("The AUX WebComponent has not been upgraded, yet. "+
+        throw new Error("The A.UX WebComponent has not been upgraded, yet. "+
                         "Are you missing and import?");
       }
-      throw new Error("The element is not an AUX WebComponent.");
+      throw new Error("The element is not an A.UX WebComponent.");
     }
 
     const last = this.last || {};

@@ -1,23 +1,23 @@
-# Using AUX with Angular
+# Using A.UX with Angular
 
-AUX can be integrated into an Angular project simply by installing it as a
-dependency. AUX Widgets are exposed as WebComponents using the v1 WebComponents API, which
-is supported in modern browser. To import all AUX Components into an Angular
+A.UX can be integrated into an Angular project simply by installing it as a
+dependency. A.UX Widgets are exposed as WebComponents using the v1 WebComponents API, which
+is supported in modern browser. To import all A.UX Components into an Angular
 project add a global import to the top level module.
 
     import '@deutschesoft/a.ux';
 
-Importing the standard AUX CSS theme can be done by adding
+Importing the standard A.UX CSS theme can be done by adding
 `node_modules/@deuso/aux/styles/main.css` to the `styles` list in the
 `angular.json` configuration file.
 
 In order to use WebComponents inside of Angular templates, the corresponding Angular
-module needs to have the `CUSTOM_ELEMENTS_SCHEMA`. Once that is set up, AUX
+module needs to have the `CUSTOM_ELEMENTS_SCHEMA`. Once that is set up, A.UX
 Components should work within Angular templates.
 
 ## Setting options
 
-All options of AUX Widgets are available via usual tag attributes and can be set
+All options of A.UX Widgets are available via usual tag attributes and can be set
 from within the template.
 
     <aux-fader min=-96 max=6></aux-fader>
@@ -35,11 +35,11 @@ Widget options automatically.
 
 ## Subscribing to events
 
-All AUX Widget events are available via standard DOM custom events. Unlike DOM
-events, AUX Widget events have a list of arguments. They are available in the
+All A.UX Widget events are available via standard DOM custom events. Unlike DOM
+events, A.UX Widget events have a list of arguments. They are available in the
 CustomEvent object as `ev.detail.args`.
 
-For instance, for option changes triggered by user interaction, AUX widgets define
+For instance, for option changes triggered by user interaction, A.UX widgets define
 one standard event called `useraction`. It has two events, the option name and
 the new value. The following event handler would call the method
 `onValueChanged` with a two element array.
@@ -47,10 +47,10 @@ the new value. The following event handler would call the method
     <aux-fader min=-96 max=6 (useraction)="onValueChanged($event.detail.args)">
     </aux-fader>
 
-# AUX Angular Directives
+# A.UX Angular Directives
 
-The AUX repository contains implementations of several Angular directives which
-aim to make bindings between AUX Widget options and Angular components simpler
+The A.UX repository contains implementations of several Angular directives which
+aim to make bindings between A.UX Widget options and Angular components simpler
 and more performant than relying on custom DOM events. The implementation of
 those Angular Directives can be found in the `angular` subdirectory. They can be
 added to an Angular application by importing them
@@ -59,7 +59,7 @@ added to an Angular application by importing them
 
 and adding them to the `imports` list of the `@NgModule` declaration.
 
-In addition is is necessary to add all typescript files for the AUX Angular
+In addition is is necessary to add all typescript files for the A.UX Angular
 directives into the `"include"` entry in `tsconfig.app.json` to allow the
 typescript compiler to find them:
 
@@ -70,7 +70,7 @@ typescript compiler to find them:
 
 ## Observing value changes
 
-This group of directives can be used to observe changes of AUX Widget options.
+This group of directives can be used to observe changes of A.UX Widget options.
 These directives can be used to subscribe to changes to any number of options.
 They expect an Object as argument with options names as keys. The values can
 either be a function or an object implementing a `next()` method, such as
@@ -115,13 +115,13 @@ externally check if a parameter is valid before feeding it back into the widget.
     <aux-fader min=-96 max=6 [auxIntercept]="{ value: clip_value }">
     </aux-fader>
 
-## Observing AUX Widget events
+## Observing A.UX Widget events
 
 ### The `auxSubscribe` directive
 
-The `auxSubscribe` directive can be used to subscribe to a number of AUX Widget
+The `auxSubscribe` directive can be used to subscribe to a number of A.UX Widget
 events. As with the value observe directives it expects an object which contain
-either functions or observers. Functions are called with the AUX event
+either functions or observers. Functions are called with the A.UX event
 arguments. Observers receive the array of arguments as the value.
 
 Using `auxSubscribe` can be more convenient when working with `Subject`s than
@@ -130,13 +130,13 @@ because it avoids the translation to and from DOM events.
 
 ## Binding options using `auxBind`
 
-Binding backend values to AUX widget options can be done simply by setting the
+Binding backend values to A.UX widget options can be done simply by setting the
 property. However, when doing this while a user is interacting with the widget
 leads to very poor user experience. For instance, a fader value would jump while
 being dragged if the back end connection has network delay.
 
 The `auxBind` can be used to prevent such issues when binding options to backend
-data. It internally uses the `DebounceBinding` class which is part of AUX. It
+data. It internally uses the `DebounceBinding` class which is part of A.UX. It
 delays received values
 
 * while the `interacting` option is `true` on a widget or
