@@ -7,10 +7,10 @@ of widgets such as faders, knobs, levelmeters and equalizers.
 ## Repository structure
 
 The JavaScript code in this repository uses ES6 modules. When
-integrating AUX into an application it should be sufficient to import
+integrating A.UX into an application it should be sufficient to import
 the required widgets or components from the main file `src/index.js`.
 
-AUX widgets are implemented as JavaScript widgets. Some of those widgets
+A.UX widgets are implemented as JavaScript widgets. Some of those widgets
 have corresponding WebComponents. All widgets can be found under
 `src/widgets/` and the corresponding components are located at
 `src/components/`. The document `doc/docs/Components.md` describes how
@@ -25,7 +25,7 @@ default theme(s) contained in this repository.
 AUX can be installed using `npm`. In order to gain access to all components,
 simply import them all using
 
-    import 'aux';
+    import '@deutschesoft/a.ux';
 
 and include the default theme into your web application.
 

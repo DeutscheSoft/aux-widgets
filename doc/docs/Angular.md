@@ -5,10 +5,10 @@ dependency. AUX Widgets are exposed as WebComponents using the v1 WebComponents 
 is supported in modern browser. To import all AUX Components into an Angular
 project add a global import to the top level module.
 
-    import '@deuso/aux';
+    import '@deutschesoft/a.ux';
 
 Importing the standard AUX CSS theme can be done by adding
-`node_modules/@deuso/aux/styles/aux.css` to the `styles` list in the
+`node_modules/@deuso/aux/styles/main.css` to the `styles` list in the
 `angular.json` configuration file.
 
 In order to use WebComponents inside of Angular templates, the corresponding Angular
