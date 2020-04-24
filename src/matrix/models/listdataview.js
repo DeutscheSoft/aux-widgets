@@ -189,7 +189,7 @@ export class ListDataView extends Events
       sub = add_subscription(sub, this._subscribe(node));
     }
 
-    this._notifyRegion(list_index, this.size);
+    this._notifyRegion(list_index);
 
     return sub;
   }
@@ -231,16 +231,17 @@ export class ListDataView extends Events
       if (list_index < startIndex)
       {
         this.startIndex -= size;
-        this.emit('startIndexChanged', this.startIndex);
+        this.emit('startIndexChanged', this.startIndex, startIndex);
       }
       else if (this.size < startIndex + this.amount && startIndex > 0)
       {
         this.startIndex = Math.max(0, startIndex - size);
-        this.emit('startIndexChanged', this.startIndex);
+        this.emit('startIndexChanged', this.startIndex, startIndex);
+        this._notifyRegion(this.startIndex, this.startIndex + size);
       }
     }
 
-    this._notifyRegion(list_index, this.size);
+    this._notifyRegion(list_index);
   }
 
   _subscribe(super_group)
@@ -283,6 +284,8 @@ export class ListDataView extends Events
   {
     const startIndex = this.startIndex;
     const endIndex = startIndex + this.amount;
+
+    if (end === void(0)) end = endIndex;
 
     if (end <= startIndex) return;
     if (start >= endIndex) return;
