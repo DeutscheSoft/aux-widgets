@@ -2,7 +2,7 @@ import { Directive, ElementRef, Input } from '@angular/core';
 import { Observable, SubscriptionLike } from 'rxjs';
 import {
     AuxSubscriptions, aux_subscribe
-  } from './aux-subscriptions.model';
+  } from './subscriptions.model';
 
 @Directive({
   selector: '[auxSubscribe]'

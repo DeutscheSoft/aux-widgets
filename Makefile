@@ -1,5 +1,5 @@
 icons: Makefile
-	./tools/icongen -p aux- styles/fonts/AUX
+	./tools/icongen -p aux- styles/fonts/A.UX
 	./tools/icongen -p aux- styles/fonts/Shapes
 	./tools/icongen -c -h styles/fonts/Shapes100
 	./tools/icongen -c -h styles/fonts/Shapes200

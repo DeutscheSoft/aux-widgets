@@ -1,12 +1,12 @@
 /*
- * This file is part of AUX.
+ * This file is part of A.UX.
  *
- * AUX is free software; you can redistribute it and/or
+ * A.UX is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
  *
- * AUX is distributed in the hope that it will be useful,
+ * A.UX is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
@@ -144,7 +144,7 @@ define_child_widget(ValueKnob, "knob", {
     show: true,
     inherit_options: true,
     toggle_class: true,
-    blacklist_options: [ "label" ],
+    blacklist_options: [ "label", 'show_value' ],
 });
 /**
  * @member {Value} ValueKnob#value - The {@link Value} widget.

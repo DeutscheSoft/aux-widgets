@@ -1,12 +1,12 @@
 /*
- * This file is part of AUX.
+ * This file is part of A.UX.
  *
- * AUX is free software; you can redistribute it and/or
+ * A.UX is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
  *
- * AUX is distributed in the hope that it will be useful,
+ * A.UX is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
@@ -22,7 +22,7 @@
 import { define_class } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 import { S } from '../dom_scheduler.js';
-import { element, add_class, remove_class, get_duration, empty } from '../utils/dom.js';
+import { element, add_class, remove_class, get_duration, empty, is_dom_node } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 
 function after_hiding() {
@@ -337,9 +337,20 @@ export const Container = define_class({
 
         if (I.content) {
             I.content = false;
+            const content = O.content;
             empty(E);
-            if (typeof O.content === "string") E.innerHTML = O.content;
-            else E.appendChild(O.content);
+            if (typeof content === "string")
+            {
+              E.innerHTML = content;
+            }
+            else if (is_dom_node(content))
+            {
+              E.appendChild(content);
+            }
+            else if (content !== void(0))
+            {
+              warn('Unsupported content option: %o', content);
+            }
         }
     },
 });

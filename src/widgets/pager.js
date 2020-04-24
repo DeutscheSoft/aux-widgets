@@ -1,12 +1,12 @@
 /*
- * This file is part of AUX.
+ * This file is part of A.UX.
  *
- * AUX is free software; you can redistribute it and/or
+ * A.UX is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
  *
- * AUX is distributed in the hope that it will be useful,
+ * A.UX is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
@@ -103,17 +103,17 @@ export const Pager = define_class({
 
       if (!pages || !navigation) return;
 
-      // create one button for each page and keep the title synchronized
-      // with the page title
+      // create one button for each page and keep the label synchronized
+      // with the page label
       let subs = pages.pages.forEachAsync((page, position) => {
         let subs = init_subscriptions();
 
-        const button = navigation.add_button({ label: page.get('title') }, position);
+        const button = navigation.add_button({ label: page.get('label') }, position);
 
         this.page_to_button.set(page, button);
 
-        subs = add_subscription(subs, page.subscribe('set_title', (title) => {
-          button.set('label', title);
+        subs = add_subscription(subs, page.subscribe('set_label', (label) => {
+          button.set('label', label);
         }));
 
         subs = add_subscription(subs, () => {
@@ -144,7 +144,7 @@ export const Pager = define_class({
       // delegate the userset action from navigation to pager
       subs = add_subscription(subs, navigation.subscribe('userset', (key, value) => {
         if (key !== 'select') return;
-        this.update('show', value);
+        return this.userset('show', value);
       }));
 
       // delegate the set_select action from navigation to pager
@@ -286,7 +286,7 @@ export const Pager = define_class({
      * var p = new Pager();
      * p.add_pages([
      *   {
-     *     title: "Page 1",
+     *     label: "Page 1",
      *     icon: "gear",
      *     content: "<h1>Page1</h1>",
      *   }
@@ -339,14 +339,14 @@ export const Pager = define_class({
 
         if (typeof buttonOptions === 'string')
         {
-          p.set('title', buttonOptions);
+          p.set('label', buttonOptions);
         }
         else if (typeof buttonOptions === 'object')
         {
           const label = buttonOptions.label;
 
           if (label)
-            p.set('title', buttonOptions);
+            p.set('label', label);
 
           for (var key in buttonOptions)
           {

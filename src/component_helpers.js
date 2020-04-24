@@ -227,7 +227,7 @@ function create_component (base) {
         const type = _options[option_name];
         const attribute_value = attributes.get(name);
 
-        ret[name] = parse_attribute.call(this, type, attribute_value);
+        ret[option_name] = parse_attribute.call(this, type, attribute_value);
       }
 
       return ret;
@@ -518,7 +518,7 @@ export function define_component(name, component, options)
 }
 
 /**
- * Interface implemented by all WebComponents based on AUX Widgets.
+ * Interface implemented by all WebComponents based on A.UX Widgets.
  *
  * Each Component maps both attributes and properties onto options of the same
  * name. The mapping of attributes is only one-directional, i.e. attributes are
@@ -532,8 +532,8 @@ export function define_component(name, component, options)
  * 'title' option in the widget.
  *
  * @interface Component
- * @property auxWidget {Widget} - The AUX widget object of this component.
- * @property isAuxWidget {boolean} - Returns true. This can be used to detect AUX components.
+ * @property auxWidget {Widget} - The A.UX widget object of this component.
+ * @property isAuxWidget {boolean} - Returns true. This can be used to detect A.UX components.
  */
 /**
  * Trigger a resize. This leads the widget to recalculates its size. Some

@@ -1,12 +1,12 @@
 /*
- * This file is part of AUX.
+ * This file is part of A.UX.
  *
- * AUX is free software; you can redistribute it and/or
+ * A.UX is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
  *
- * AUX is distributed in the hope that it will be useful,
+ * A.UX is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
@@ -205,24 +205,19 @@ export const Meter = define_class({
         layout:          "left",
         segment:         1,
         value:           0,
-        value_label:    0,
+        value_label:     0,
         base:            false,
         label:           false,
         sync_value:      true,
         format_value:    FORMAT("%.2f"),
         levels:          [1, 5, 10],     // array of steps where to draw labels
-        scale_base:       false,
+        scale_base:      false,
         show_labels:     true,
         format_labels:   FORMAT("%.2f"),
         background:      false,
         gradient:        false
     },
     static_events: {
-        set_segment: function() {
-            // what is this supposed to do?
-            // -> probably invalidate the value to force a redraw
-            this.set("value", this.options.value);
-        },
         set_base: function(value) {
             if (value === false) {
               var O = this.options;
@@ -251,6 +246,10 @@ export const Meter = define_class({
             this.set("value", O.value);
             this.set("min", O.min);
             this.trigger_resize();
+        },
+        initialized: function() {
+            this.set('value', this.get('value'));
+            this.set('base', this.get('base'));
         },
     },
     
@@ -367,8 +366,8 @@ export const Meter = define_class({
             this._canvas.getContext("2d").fillStyle = this._fillstyle;
         }
         
-        if (I.value || I.basis || I.min || I.max) {
-            I.basis = I.value = I.min = I.max = false;
+        if (I.value || I.basis || I.min || I.max || I.segment) {
+            I.basis = I.value = I.min = I.max = I.segment = false;
             this.draw_meter();
         }
     },

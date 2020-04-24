@@ -2,25 +2,26 @@ import { Directive, ElementRef, Input } from '@angular/core';
 import { Observable, SubscriptionLike } from 'rxjs';
 import {
     AuxSubscriptions, make_subscription
-  } from './aux-subscriptions.model';
-import { observe_option } from '@deuso/aux';
+  } from './subscriptions.model';
+import { intercept_option } from '@deuso/aux';
 
 @Directive({
-  selector: '[auxObserveAll]'
+  selector: '[auxIntercept]'
 })
-export class AuxObserveAllDirective extends AuxSubscriptions {
+export class AuxInterceptDirective extends AuxSubscriptions
+{
   protected install_binding(widget: any, name: string, b: any)
     : SubscriptionLike
   {
     if (typeof(b) === 'object' && b.next)
     {
-      return make_subscription(observe_option(widget, name, (v) => {
+      return make_subscription(intercept_option(widget, name, (v) => {
         b.next(v);
       }));
     }
     else if (typeof(b) === 'function')
     {
-      return make_subscription(observe_option(widget, name, b));
+      return make_subscription(intercept_option(widget, name, b));
     }
     else
     {
@@ -28,8 +29,8 @@ export class AuxObserveAllDirective extends AuxSubscriptions {
     }
   }
 
-  @Input('auxObserveAll')
-  set auxObserveAll(bindings: {[name: string]: any}|null)
+  @Input('auxIntercept')
+  set auxIntercept(bindings: {[name: string]: any}|null)
   {
     this.update(bindings);
   }

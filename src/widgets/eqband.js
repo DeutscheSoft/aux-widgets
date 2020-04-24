@@ -1,12 +1,12 @@
 /*
- * This file is part of AUX.
+ * This file is part of A.UX.
  *
- * AUX is free software; you can redistribute it and/or
+ * A.UX is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
  *
- * AUX is distributed in the hope that it will be useful,
+ * A.UX is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
@@ -110,34 +110,25 @@ export const EqBand = define_class({
          */
         ChartHandle.prototype.initialize.call(this, options);
 
-        options = this.options;
-
         this.filter = new Filter({
-            type: options.type,
+            type: this.get('type'),
         });
         
-        const _m = options.mode;
-        this.set("type", this.options.type);
-        if (_m) this.set("mode", options.mode);
-
-        if (options.x !== void(0))
-            this.set("x", options.x);
-        else if (options.freq !== void(0))
-            this.set("freq", options.freq);
-        if (options.y !== void(0))
-            this.set("y", options.y);
-        else if (options.gain !== void(0))
-            this.set("gain", options.gain);
-        if (options.z !== void(0))
-            this.set("z", options.z);
-        else if (options.q !== void(0))
-            this.set("q", options.q);
+        const mode = this.get('mode');
+        this.set("type", this.get('type'));
+        if (mode) this.set("mode", this.get('mode'));
         
         /** 
          * @member {HTMLDivElement} EqBand#element - The main SVG group.
          *   Has class <code>.aux-eqband</code>.
          */
-        this.filter.reset();
+         [ 'freq', 'gain', 'q' ].forEach((name) => {
+           if (name in options)
+           {
+             this.set(name, options[name]);
+           }
+         });
+         this.filter.reset();
     },
     draw: function(O, element)
     {

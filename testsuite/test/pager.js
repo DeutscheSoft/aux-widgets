@@ -46,7 +46,6 @@ describe('Pager', () => {
           const b1 = await add_page(pager, '1', '', { title: "1" });
           assert(pager.get_pages()[0] === b1);
           const b2 = await add_page(pager, '2', '', { title: "2" }, 0);
-          console.log(pager.get_pages());
           assert(pager.get_pages()[0] === b2);
           const b3 = await add_page(pager, '3', '', { title: "3" }, 1);
           assert(pager.get_pages()[1] === b3);
@@ -225,5 +224,23 @@ describe('Pager', () => {
       });
     });
 
+    it.only("Preventing changing pages", async () => {
+      const pager = new Pager();
+      const label = "testing";
+      const b1 = pager.add_page('', '');
+      const b2 = pager.add_page('', '');
+      pager.set('show', 1);
+
+      // prevent all changes
+      const sub = pager.subscribe('userset', (key, value) => {
+        return false;
+      });
+
+      pager.navigation.buttons.get_buttons()[0].userset('state', true);
+      assert(!b1.get('active'));
+      sub();
+      pager.navigation.buttons.get_buttons()[0].userset('state', true);
+      assert(b1.get('active'));
+    });
 });
 

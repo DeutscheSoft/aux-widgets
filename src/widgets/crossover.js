@@ -1,12 +1,12 @@
 /*
- * This file is part of AUX.
+ * This file is part of A.UX.
  *
- * AUX is free software; you can redistribute it and/or
+ * A.UX is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
  *
- * AUX is distributed in the hope that it will be useful,
+ * A.UX is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
@@ -73,6 +73,9 @@ export const CrossoverBand = define_class({
         this.filter.on('set_freq', (v) => { this.upper.set('freq', v); });
         this.filter.on('set_gain', (v) => { this.upper.set('gain', v); });
         this.filter.on('set_q', (v) => { this.upper.set('q', v); });
+        this.upper.set('freq', this.lower.get('freq'));
+        this.upper.set('gain', this.lower.get('gain'));
+        this.upper.set('q', this.lower.get('q'));
         /** 
          * @member {HTMLDivElement} CrossoverBand#element - The main SVG group.
          *   Has class <code>.aux-crossoverband</code>.
@@ -217,6 +220,10 @@ export const Crossover = define_class({
         (v ? unlimit_bands : limit_bands).call(this);
       },
       set_distance: limit_bands,
+      initialized: function() {
+        this.set('leap', this.options.leap);
+        this.set('distance', this.options.distance);
+      },
     },
     initialize: function (options) {
         Equalizer.prototype.initialize.call(this, options);

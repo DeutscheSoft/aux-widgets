@@ -5,33 +5,50 @@ import { Widget } from './widgets/widget.js';
 
 function get_child_options(parent, name, options, config) {
     var ret = {};
-    var key, pref = name+".";
-    var tmp;
+    var pref = name+".";
 
     var inherit_options = !!config.inherit_options;
     var blacklist_options = config.blacklist_options || [];
 
-    if ((tmp = config.default_options))
-        Object.assign(ret, (typeof(tmp) === "function") ?  tmp.call(parent) : tmp);
+    let default_options = config.default_options;
 
-    for (key in options) {
-        if (key.startsWith(pref)) {
+    if (default_options)
+    {
+      if (typeof default_options === 'function')
+        default_options = default_options.call(parent);
+
+      ret = Object.assign(ret, default_options);
+    }
+
+    for (let key in options)
+    {
+        if (key.startsWith(pref))
+        {
             ret[key.substr(pref.length)] = options[key];
         }
-
-        if (inherit_options && blacklist_options.indexOf(key) < 0) {
+        else if (inherit_options && blacklist_options.indexOf(key) < 0)
+        {
             if (key in config.create.prototype._options && !(key in Widget.prototype._options)) {
                 ret[key] = options[key];
             }
         }
     }
 
-    var map_options = config.map_options;
+    const map_options = config.map_options;
 
-    if (map_options) for (key in map_options) {
-        if (options[key]) {
+    if (map_options)
+    {
+      for (let key in map_options) {
+          if (key in options)
+          {
+            if (key in ret && options[key] === parent.get_default(key))
+            {
+              continue;
+            }
+
             ret[map_options[key]] = options[key];
-        }
+          }
+      }
     }
 
     return ret;
@@ -148,11 +165,10 @@ export function define_child_widget(widget, name, config) {
       };
     }
 
-    var child = define_class({
+    const ChildWidget = define_class({
         Extends: config.create,
         static_events: static_events,
     });
-
 
     /* trigger child widget creation after initialization */
     add_static_event(widget, "initialize", function() {
@@ -185,10 +201,10 @@ export function define_child_widget(widget, name, config) {
     /* child widget creation */
     add_static_event(widget, "set_"+key, function(val) {
         var C = this[name];
-        var show = fixed || !!val;
+        var show = fixed || (val !== false);
         if (show && !C) {
             var O = get_child_options(this, name, this.options, config);
-            var w = new child(O);
+            var w = new ChildWidget(O);
             this.add_child(w);
             this[name] = w;
         } else if (!show && C) {
@@ -230,9 +246,9 @@ export function define_child_widget(widget, name, config) {
         if (this[name]) this[name].set(key.substr(name.length+1), val);
     };
 
-    for (tmp in child.prototype._options) {
+    for (tmp in ChildWidget.prototype._options) {
         add_static_event(widget, "set_"+name+"."+tmp, set_cb);
-        p._options[name+"."+tmp] = child.prototype._options[tmp];
+        p._options[name+"."+tmp] = ChildWidget.prototype._options[tmp];
     }
 
     /* direct option inherit */
@@ -241,12 +257,12 @@ export function define_child_widget(widget, name, config) {
         set_cb = function(val, key) {
             if (this[name]) this[name].set(key, val);
         };
-        for (tmp in child.prototype._options) {
+        for (tmp in ChildWidget.prototype._options) {
             if (tmp in Widget.prototype._options) continue;
             if (blacklist_options.indexOf(tmp) > -1) continue;
             add_static_event(widget, "set_"+tmp, set_cb);
             if (!p._options[tmp])
-                p._options[tmp] = child.prototype._options[tmp];
+                p._options[tmp] = ChildWidget.prototype._options[tmp];
         }
     }
     set_cb = function(key) {
@@ -254,17 +270,27 @@ export function define_child_widget(widget, name, config) {
             if (this[name]) this[name].set(key, val);
         };
     };
-    if ((m = config.map_options)) {
-        for (tmp in m) {
-            p._options[tmp] = child.prototype._options[m[tmp]];
-            if (!p.options[tmp])
-                p.options[tmp] = child.prototype.options[m[tmp]];
-            add_static_event(widget, "set_"+tmp, set_cb(m[tmp]));
+
+    const map_options = config.map_options;
+
+    if (map_options) {
+        for (let parent_key in map_options)
+        {
+            const child_key = map_options[parent_key];
+
+            if (!(parent_key in p._options))
+            {
+              p._options[parent_key] = ChildWidget.prototype._options[child_key];
+              p.options[parent_key] = ChildWidget.prototype.options[child_key];
+            }
+            add_static_event(widget, "set_"+parent_key, set_cb(child_key));
         }
     }
     if (!config.options) {
         if (!p._options[key])
-            p._options[key] = "boolean";
-        p.options[key] = fixed || !!config.show;
+        {
+          p._options[key] = "boolean";
+          p.options[key] = fixed || !!config.show;
+        }
     }
 }

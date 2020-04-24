@@ -1,7 +1,7 @@
 {
   "name": "aux-backstop",
   "version": "1.0.0",
-  "description": "backstop tests for AUX",
+  "description": "backstop tests for A.UX",
   "main": "index.html",
   "scripts": {
     "serve": "node serve.js",

@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
-import { AuxAssignDirective } from './aux-assign.directive';
-import { AuxBindDirective } from './aux-bind.directive';
-import { AuxInterceptDirective } from './aux-intercept.directive';
-import { AuxObserveAllDirective } from './aux-observe-all.directive';
-import { AuxObserveDirective } from './aux-observe.directive';
-import { AuxResizeDirective } from './aux-resize.directive';
-import { AuxSubscribeDirective } from './aux-subscribe.directive';
+import { AuxAssignDirective } from './assign.directive';
+import { AuxBindDirective } from './bind.directive';
+import { AuxInterceptDirective } from './intercept.directive';
+import { AuxObserveAllDirective } from './observe-all.directive';
+import { AuxObserveDirective } from './observe.directive';
+import { AuxResizeDirective } from './resize.directive';
+import { AuxSubscribeDirective } from './subscribe.directive';
 
 
 @NgModule({

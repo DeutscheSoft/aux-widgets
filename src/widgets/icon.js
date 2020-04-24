@@ -1,12 +1,12 @@
 /*
- * This file is part of AUX.
+ * This file is part of A.UX.
  *
- * AUX is free software; you can redistribute it and/or
+ * A.UX is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
  *
- * AUX is distributed in the hope that it will be useful,
+ * A.UX is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
@@ -24,7 +24,7 @@ import { Widget } from './widget.js';
 export const Icon = define_class({
     /**
      * Icon represents a <code>&lt;DIV></code> element showing either
-     * icons from the AUX font or dedicated image files as CSS background.
+     * icons from the A.UX font or dedicated image files as CSS background.
      *
      * @class Icon
      * 

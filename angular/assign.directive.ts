@@ -1,6 +1,6 @@
 import { Directive, ElementRef, Inject, Input } from '@angular/core';
 import { Observable, SubscriptionLike, isObservable } from 'rxjs';
-import { AuxSubscriptions } from './aux-subscriptions.model';
+import { AuxSubscriptions } from './subscriptions.model';
 
 @Directive({
   selector: '[auxAssign]'

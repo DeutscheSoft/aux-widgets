@@ -1,12 +1,12 @@
 /*
- * This file is part of AUX.
+ * This file is part of A.UX.
  *
- * AUX is free software; you can redistribute it and/or
+ * A.UX is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
  *
- * AUX is distributed in the hope that it will be useful,
+ * A.UX is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
@@ -229,7 +229,7 @@ export const ColorPicker = define_class({
                 this.parent.set("lightness", 1 - this.options.range().px2val(y));
             }
         });
-        
+
     },
     resize: function () {
         var rect = this._canvas.getBoundingClientRect();
@@ -579,8 +579,15 @@ define_child_widget(ColorPicker, "cancel", {
 
 // This has to happen after all children are initialized
 add_static_event(ColorPicker, "initialized", function() {
-    var O = this.options;
-    if (O.rgb) this.set("rgb", O.rgb);
-    if (O.hex) this.set("hex", O.hex);
-    if (O.hsl) this.set("hsl", O.hsl);
+    const options = {};
+    color_options.forEach((name) => {
+      if (this.options[name] !== this.get_default(name))
+      {
+        options[name] = this.options[name];
+      }
+    });
+    for (let key in options)
+    {
+      this.set(key, options[key]);
+    }
   });

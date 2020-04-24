@@ -1,16 +1,16 @@
-# ![AUX](logo.png)
+# ![A.UX](logo.png)
 
-AUX is a JavaScript widget library with special focus on building low
+A.UX is a JavaScript widget library with special focus on building low
 latency user interfaces for audio applications. It contains a wide range
 of widgets such as faders, knobs, levelmeters and equalizers.
 
 ## Repository structure
 
 The JavaScript code in this repository uses ES6 modules. When
-integrating AUX into an application it should be sufficient to import
+integrating A.UX into an application it should be sufficient to import
 the required widgets or components from the main file `src/index.js`.
 
-AUX widgets are implemented as JavaScript widgets. Some of those widgets
+A.UX widgets are implemented as JavaScript widgets. Some of those widgets
 have corresponding WebComponents. All widgets can be found under
 `src/widgets/` and the corresponding components are located at
 `src/components/`. The document `doc/docs/Components.md` describes how
@@ -22,22 +22,22 @@ default theme(s) contained in this repository.
 
 ## Installation
 
-AUX can be installed using `npm`. In order to gain access to all components,
+A.UX can be installed using `npm`. In order to gain access to all components,
 simply import them all using
 
-    import 'aux';
+    import '@deutschesoft/a.ux';
 
 and include the default theme into your web application.
 
 ## Design Goals
 
-AUX is written in pure JavaScript and has no external dependencies. It
+A.UX is written in pure JavaScript and has no external dependencies. It
 is supposed to run in browsers which support ECMAScript 6. When transpiled to
 ECMAScript 5 it should work in modern versions of Chrome, Edge, Firefox and
 Safari.
 
-AUX was designed to be lightweight and fast while keeping the full
-flexibility which comes with CSS. AUX widgets offer consistent and intuitive
+A.UX was designed to be lightweight and fast while keeping the full
+flexibility which comes with CSS. A.UX widgets offer consistent and intuitive
 APIs.
 
 ## Documentation
@@ -65,7 +65,7 @@ all examples can be viewed when opening the file `examples.html`.
 
 ## Demos
 
-Several online demos of interfaces using AUX can be found at
+Several online demos of interfaces using A.UX can be found at
 [http://demo.deuso.de].
 
 ## Reporting Bugs
@@ -75,7 +75,7 @@ tracker at [https://gitlab.deuso.de/WebUI/AUX].
 
 ## License
 
-AUX is released unter the the terms of the GPLv3. See the file `COPYING`
+A.UX is released unter the the terms of the GPLv3. See the file `COPYING`
 file for details.
 
 Copyright (c) 2013-2020 Markus Schmidt <markus@deuso.de>
