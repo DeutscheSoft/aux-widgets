@@ -60,16 +60,18 @@
             };
 
             const AMOUNT = 10;
+            const GROUPS = 10;
+            const PORTS = 10;
 
             const listview = matrix.createListDataView(AMOUNT + 1, null, sorter);
 
             const outputs = matrix.addGroup({ label: 'Outputs' });
 
-            for (let i = 0; i < 10; i++)
+            for (let i = 0; i < GROUPS; i++)
             {
               const group = outputs.addGroup({ label: 'Group ' + i });
 
-              for (let j = 0; j < 10; j++)
+              for (let j = 0; j < PORTS; j++)
               {
                 const port = group.addPort({ label: 'Port ' + (i * 10 + j) });
               }
@@ -85,6 +87,39 @@
               let entries = [];
 
               let microScroll = 0;
+
+              const scrollEntries = (diff) => {
+                if (diff > 0)
+                {
+                  //console.log('Moving %d entries to the back.', diff);
+                  // we remove diff entries at the front and move them to
+                  // the back
+                  const tmp = entries.slice(0, diff);
+                  entries.splice(0, diff);
+                  entries = entries.concat(tmp);
+                }
+                else
+                {
+                  //console.log('Moving %d entries to the front.', -diff);
+                  // we remove diff entries at the end and move them
+                  // to the front
+                  const tmp = entries.slice(entries.length + diff);
+                  entries = tmp.concat(entries.slice(0, entries.length + diff));
+                }
+              };
+
+              listview.subscribeStartIndexChanged((startIndex, oldStartIndex) => {
+                //console.log('startIndexChanged', startIndex);
+
+                // the startIndex was changed (when elements were removed or
+                // collapsed).
+
+                // We have to update the scroll position.
+                scroller.scrollTop = startIndex * ITEM_HEIGHT + microScroll;
+
+                // We also have to 'scroll' some entries
+                scrollEntries(startIndex - oldStartIndex);
+              });
 
               const setTransform = (entry, index) => {
                 entry.style.transform = sprintf('translateY(%dpx)', index * ITEM_HEIGHT + microScroll);
@@ -111,21 +146,7 @@
                   // we scroll less than all entries, we reorder them
                   if (diff < AMOUNT)
                   {
-                    if (diff > 0)
-                    {
-                      // we remove diff entries at the front and move them to
-                      // the back
-                      const tmp = entries.slice(0, diff);
-                      entries.splice(0, diff);
-                      entries = entries.concat(tmp);
-                    }
-                    else
-                    {
-                      // we remove diff entries at the end and move them
-                      // to the front
-                      const tmp = entries.slice(entries.length + diff);
-                      entries = tmp.concat(entries.slice(0, entries.length + diff));
-                    }
+                    scrollEntries(diff);
                     listview.scrollStartIndex(diff);
                   }
                   else
@@ -155,6 +176,7 @@
               // connect entries with our list entries
               listview.subscribeElements((index, element) => {
                 const n = index - listview.startIndex;
+                //console.log('element %d: %s', n, element && element.label);
                 const entry = entries[n];
 
                 /*
