@@ -225,23 +225,23 @@ export class ListDataView extends Events
     list.splice(list_index, size);
     this._updateIndex(list_index);
 
+    const startIndex = this.startIndex;
+
+    if (list_index < startIndex)
     {
-      const startIndex = this.startIndex;
-
-      if (list_index < startIndex)
-      {
-        this.startIndex -= size;
-        this.emit('startIndexChanged', this.startIndex, startIndex);
-      }
-      else if (this.size < startIndex + this.amount && startIndex > 0)
-      {
-        this.startIndex = Math.max(0, startIndex - size);
-        this.emit('startIndexChanged', this.startIndex, startIndex);
-        this._notifyRegion(this.startIndex, this.startIndex + size);
-      }
+      this.startIndex -= size;
+      this.emit('startIndexChanged', this.startIndex, startIndex);
     }
-
-    this._notifyRegion(list_index);
+    else if (this.size < startIndex + this.amount && startIndex > 0)
+    {
+      this.startIndex = Math.max(0, startIndex - size);
+      this.emit('startIndexChanged', this.startIndex, startIndex);
+      this._notifyRegion(this.startIndex, this.startIndex + size);
+    }
+    else
+    {
+      this._notifyRegion(list_index);
+    }
   }
 
   _subscribe(super_group)
