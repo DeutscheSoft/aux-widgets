@@ -1,7 +1,7 @@
 import {
     component_from_widget, define_component
-  } from '../../component_helpers.js';
-import { ListEntry } from '../widgets/listentry.js';
+  } from './../../component_helpers.js';
+import { ListEntry } from './../widgets/listentry.js';
 
 /**
  * WebComponent for the ListEntry widget. Available in the DOM as

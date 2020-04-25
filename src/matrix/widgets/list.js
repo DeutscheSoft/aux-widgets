@@ -4,7 +4,6 @@ import { error } from './../../utils/log.js';
 
 import { Container } from './../../widgets/container.js';
 import { ListEntry } from './listentry.js';
-import { ListDataView } from './../models/listdataview.js';
 
 
 const scroll = function (e) {
@@ -94,6 +93,7 @@ export const List = define_class({
         size: 32,
         scroll: 0,
         entry_class: ListEntry,
+        data_factory: function () {},
     },
     entries: [],
     width: 0,

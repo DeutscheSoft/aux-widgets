@@ -45,7 +45,7 @@
                     const port = group.addPort({ label: 'Port ' + (i * 10 + j) });
                 }
             }
-            window.data_factory = function (amount) {
+            window.my_data_factory = function (amount) {
                 return matrix.createListDataView(amount, null, sort);
             }
             
@@ -55,7 +55,7 @@
     <body>
         <aux-root>
             
-            <aux-list data_factory="js:window.data_factory"></aux-list>
+            <aux-list data_factory="js:my_data_factory"></aux-list>
             
         </aux-root>
     </body>
