@@ -109,13 +109,16 @@
               };
 
               listview.subscribeStartIndexChanged((startIndex, oldStartIndex) => {
-                //console.log('startIndexChanged', startIndex);
+                console.log('startIndexChanged', startIndex, oldStartIndex);
+                console.log('size', listview.size, listview.amount);
 
                 // the startIndex was changed (when elements were removed or
                 // collapsed).
 
                 // We have to update the scroll position.
-                scroller.scrollTop = startIndex * ITEM_HEIGHT + microScroll;
+                console.log('setting scrollTop to', startIndex * ITEM_HEIGHT);
+                scroller.scrollTop = (1 + startIndex) * ITEM_HEIGHT;
+                microScroll = 0;
 
                 // We also have to 'scroll' some entries
                 scrollEntries(startIndex - oldStartIndex);
@@ -136,6 +139,7 @@
               };
 
               const onScroll = (offset) => {
+                console.log('onScroll', offset);
                 const startIndex = Math.floor(offset / ITEM_HEIGHT);
                 microScroll = - (offset % ITEM_HEIGHT);
 
