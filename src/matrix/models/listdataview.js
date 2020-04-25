@@ -387,6 +387,27 @@ export class ListDataView extends Events
     this._notifyRegion(index, index + this.amount);
   }
 
+  setAmount(amount)
+  {
+    const oldAmount = this.amount;
+    this.amount = amount;
+
+    this.emit('amountChanged', amount);
+
+    if (amount <= oldAmount) return;
+
+    const startIndex = this.startIndex;
+    const size = this.size;
+
+    this._notifyRegion(startIndex + oldAmount, startIndex + amount);
+
+    if (size < startIndex + this.amount && startIndex > 0)
+    {
+      this.startIndex = Math.max(0, size - this.amount);
+      this.emit('startIndexChanged', this.startIndex, startIndex);
+    }
+  }
+
   scrollStartIndex(offset)
   {
     this.startIndex += offset;
@@ -518,6 +539,13 @@ export class ListDataView extends Events
     call_subscribers(cb, this.root.size);
 
     return this.subscribe('sizeChanged', cb);
+  }
+
+  subscribeAmount(cb)
+  {
+    call_subscribers(cb, this.amount);
+
+    return this.subscribe('amountChanged', cb);
   }
 
   /**

@@ -210,3 +210,44 @@ test('ListDataView.startIndex behavior', () => {
   sub();
   listview.destroy();
 });
+
+test('ListDataView.setAmount', () => {
+  const matrix = new MatrixData();
+
+  const sorter = (a, b) => {
+    const labela = a.label;
+    const labelb = b.label;
+
+    if (labela > labelb) return 1;
+    if (labela === labelb) return 0;
+    return -1;
+  };
+
+  const listview = matrix.createListDataView(4, null, sorter);
+
+  const group1 = matrix.addGroup({ label: 'group1' });
+
+  const ports1 = [
+    group1.addPort({ label: 'port1' }),
+    group1.addPort({ label: 'port2' }),
+    group1.addPort({ label: 'port3' }),
+    group1.addPort({ label: 'port4' }),
+  ];
+
+  const group2 = matrix.addGroup({ label: 'group2' });
+
+  const ports2 = [
+    group2.addPort({ label: 'port1' }),
+    group2.addPort({ label: 'port2' }),
+    group2.addPort({ label: 'port3' }),
+    group2.addPort({ label: 'port4' }),
+  ];
+
+  const tmp = [];
+  const sub = listview.subscribeElements((i, element) => {
+    tmp[i - listview.startIndex] = element;
+  });
+
+  listview.setAmount(8);
+  assert(tmp.length === 8);
+});
