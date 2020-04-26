@@ -5,6 +5,17 @@ import { SubscriberMap } from '../../utils/subscriber_map.js';
 
 import { GroupData } from './group.js';
 
+function interval_union(a, b)
+{
+  if (a === null) return b;
+  if (b === null) return a;
+
+  const start = (a[0] === void(0) || b[0] === void(0)) ? void(0) : Math.min(a[0], b[0]);
+  const end = (a[1] === void(0) || b[1] === void(0)) ? void(0) : Math.max(a[1], b[1]);
+
+  return [ start, end ];
+}
+
 function allowAll(node, callback)
 {
   callback(true);
@@ -41,6 +52,11 @@ function call_continuation_if(node, subscribe_predicate, continuation)
 
 class SuperGroup
 {
+  getInterval()
+  {
+    return [ this.index, this.index + this.size + 1 ];
+  }
+
   constructor(group, parent, index)
   {
     this.group = group;
@@ -49,6 +65,7 @@ class SuperGroup
     this.size = 0;
     this.index = index !== void(0) ? index : -1;
     this.children = [];
+    this.treePosition = parent ? parent.treePosition.concat([ false ]) : [ ];
   }
 
   createChildNode(child)
@@ -107,6 +124,35 @@ class SuperGroup
       else
       {
         cb(node, this);
+      }
+    });
+  }
+
+  isLastChild(child)
+  {
+    const children = this.children;
+
+    return children[children.length - 1] === child;
+  }
+
+  getTreePositionFor(child)
+  {
+    return this.treePosition.concat([ this.isLastChild(child) ]);
+  }
+
+  updateTreePosition()
+  {
+    const parent = this.parent;
+
+    if (parent)
+    {
+      this.treePosition = parent.getTreePositionFor(this);
+    }
+
+    this.children.forEach((child) => {
+      if (child instanceof SuperGroup)
+      {
+        child.updateTreePosition();
       }
     });
   }
@@ -178,18 +224,36 @@ export class ListDataView extends Events
 
     this._updateIndex(list_index + 1);
 
+    let notify_interval = null;
+
     if (list_index < this.startIndex)
     {
       this.startIndex++;
       this.emit('startIndexChanged', this.startIndex);
     }
+    else
+    {
+      notify_interval = [ list_index, void(0) ];
+    }
+
 
     if (node instanceof SuperGroup)
     {
       sub = add_subscription(sub, this._subscribe(node));
     }
 
-    this._notifyRegion(list_index);
+    if (parent.children.length === index + 1)
+    {
+      parent.updateTreePosition();
+      notify_interval = interval_union(notify_interval, parent.getInterval());
+    }
+    else if (node instanceof SuperGroup)
+    {
+      node.updateTreePosition();
+    }
+
+    if (notify_interval)
+      this._notifyRegion(notify_interval[0], notify_interval[1]);
 
     return sub;
   }
@@ -225,6 +289,8 @@ export class ListDataView extends Events
     list.splice(list_index, size);
     this._updateIndex(list_index);
 
+    let notify_interval = null;
+
     const startIndex = this.startIndex;
 
     if (list_index < startIndex)
@@ -236,12 +302,23 @@ export class ListDataView extends Events
     {
       this.startIndex = Math.max(0, startIndex - size);
       this.emit('startIndexChanged', this.startIndex, startIndex);
-      this._notifyRegion(this.startIndex, this.startIndex + size);
+      notify_interval = [ this.startIndex, this.startIndex + size ];
     }
     else
     {
-      this._notifyRegion(list_index);
+      notify_interval = [ this.startIndex, void(0) ];
     }
+
+    // if we remove the last child,
+    // we have to update the tree positions
+    if (index === parent.children.length)
+    {
+      parent.updateTreePosition();
+      notify_interval = interval_union(notify_interval, parent.getInterval());
+    }
+
+    if (notify_interval)
+      this._notifyRegion(notify_interval[0], notify_interval[1]);
   }
 
   _subscribe(super_group)
@@ -280,6 +357,35 @@ export class ListDataView extends Events
     return sub;
   }
 
+  _forEachWithTreePosition(from, to, callback)
+  {
+    const list = this.list;
+
+    let super_group = null;
+
+    for (let i = from; i < to; i++)
+    {
+      const element = list[i];
+      let treePosition;
+
+      if (element instanceof GroupData)
+      {
+        super_group = this.groups.get(element);
+        treePosition = super_group.treePosition;
+      }
+      else if (element !== void(0))
+      {
+        if (!super_group)
+        {
+          super_group = this.groups.get(element.parent);
+        }
+        treePosition = super_group.getTreePositionFor(element);
+      }
+
+      callback(i, element, treePosition);
+    }
+  }
+
   _notifyRegion(start, end)
   {
     const startIndex = this.startIndex;
@@ -292,15 +398,11 @@ export class ListDataView extends Events
 
     const from = Math.max(start, startIndex);
     const to = Math.min(end, endIndex);
-    const list = this.list;
     const subscribers = this.subscribers;
 
-    for (let i = from; i < to; i++)
-    {
-      const element = list[i];
-
-      call_subscribers(subscribers, i, element);
-    }
+    this._forEachWithTreePosition(from, to, (i, element, treePosition) => {
+      call_subscribers(subscribers, i, element, treePosition);
+    });
   }
 
   _filterCollapsed(node, continuation)
@@ -517,12 +619,9 @@ export class ListDataView extends Events
     const to = from + this.amount;
     const list = this.list;
 
-    for (let i = from; i < to; i++)
-    {
-      const element = list[i];
-
-      call_subscribers(cb, i, element);
-    }
+    this._forEachWithTreePosition(from, to, (i, element, treePosition) => {
+      call_subscribers(cb, i, element, treePosition);
+    });
 
     return () => {
       if (cb === null) return;

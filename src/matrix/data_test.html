@@ -4,6 +4,7 @@
         <meta charset="utf-8" />
         <title>Matrix Data Test</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link href="../../styles/fonts/Shapes.css" rel="stylesheet" type="text/css" />
         <style>
           .entry
           {
@@ -17,10 +18,21 @@
             left: 0;
             width: 45vw;
             user-select: none;
+            padding: 0;
           }
           .entry.group
           {
             background-color: #fef;
+          }
+          .entry > .indent
+          {
+            font-family: Shapes;
+            font-size: 28px;
+          }
+          .entry > .label
+          {
+            font-size: 20px;
+            vertical-align: 40%;
           }
           
           #list,#scroller
@@ -47,6 +59,61 @@
             import { MatrixData } from './models/matrix.js';
             import { ListDataView } from './models/listdataview.js';
             import { sprintf } from '../utils/sprintf.js';
+
+            function treePositionToShapes(treePosition)
+            {
+              let text = '';
+              const TRUNK = "";
+              const BRANCH = "";
+              const NONE = "";
+              const END = "";
+
+              // we ignore the top level
+              if (treePosition.length === 1) return text;
+
+              for (let i = 1; i < treePosition.length - 1; i++)
+              {
+                const isLastChild = treePosition[i];
+
+                if (isLastChild)
+                {
+                  text += NONE;
+                }
+                else
+                {
+                  text += TRUNK;
+                }
+              }
+
+              if (treePosition[treePosition.length - 1])
+              {
+                text += END;
+              }
+              else
+              {
+                text += BRANCH;
+              }
+
+              return text;
+            }
+
+            function createEntry()
+            {
+                const entry = document.createElement('div');
+                entry.className = 'entry';
+
+                const indent = document.createElement('span');
+                indent.className = 'indent';
+
+                entry.appendChild(indent);
+
+                const label = document.createElement('span');
+                label.className = 'label';
+
+                entry.appendChild(label);
+
+                return entry;
+            }
 
             const matrix = new MatrixData();
 
@@ -129,7 +196,7 @@
               };
 
               const onClick = (ev) => {
-                const index = entries.indexOf(ev.target);
+                const index = entries.indexOf(ev.currentTarget);
 
                 const element = listview.at(listview.startIndex + index);
 
@@ -165,8 +232,7 @@
               // create all entries
               for (let i = 0; i < AMOUNT + 1; i++)
               {
-                const entry = document.createElement('div');
-                entry.className = 'entry';
+                const entry = createEntry();
                 // move it by i times it's own height
                 entry.style.transform = 'translateY(' + (i * 100) + '%)';
                 entry.addEventListener('click', onClick);
@@ -178,7 +244,7 @@
               }
 
               // connect entries with our list entries
-              listview.subscribeElements((index, element) => {
+              listview.subscribeElements((index, element, treePosition) => {
                 const n = index - listview.startIndex;
                 //console.log('element %d: %s', n, element && element.label);
                 const entry = entries[n];
@@ -190,7 +256,8 @@
 
                 if (element)
                 {
-                  entry.textContent = element.label;
+                  entry.children[0].textContent = treePositionToShapes(treePosition);
+                  entry.children[1].textContent = element.label;
                   entry.style.removeProperty('display');
                   entry.classList.toggle('group', element.isGroup);
                 }
