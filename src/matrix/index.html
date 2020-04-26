@@ -4,6 +4,32 @@
         <meta charset="utf-8" />
         <title>A.UX Matrix Test</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script type=module>
+            
+            import { MatrixData } from './models/matrix.js';
+            
+            const sort = (a, b) => {
+                const la = a.label;
+                const lb = b.label;
+                if (la === lb) return 0;
+                return la > lb ? 1 : -1;
+            };
+            const matrix = new MatrixData();
+            const outputs = matrix.addGroup({ label: 'Outputs' });
+            for (let i = 0; i < 10; i++) {
+                const group = outputs.addGroup({ label: 'Group ' + i });
+                for (let j = 0; j < 10; j++) {
+                    const port = group.addPort({ label: 'Port ' + (i * 10 + j) });
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+              const aux_list = document.querySelector('aux-list');
+
+              aux_list.listview = matrix.createListDataView(10, null, sort);
+            });
+        </script>
+        
         
         <script type=module src="../index.js"></script>
         
@@ -26,37 +52,10 @@
             }
             
         </style>
-        
-        <script type=module>
-            
-            import { MatrixData } from './models/matrix.js';
-            
-            const sort = (a, b) => {
-                const la = a.label;
-                const lb = b.label;
-                if (la === lb) return 0;
-                return la > lb ? 1 : -1;
-            };
-            const matrix = new MatrixData();
-            const outputs = matrix.addGroup({ label: 'Outputs' });
-            for (let i = 0; i < 10; i++) {
-                const group = outputs.addGroup({ label: 'Group ' + i });
-                for (let j = 0; j < 10; j++) {
-                    const port = group.addPort({ label: 'Port ' + (i * 10 + j) });
-                }
-            }
-            window.my_data_factory = function (amount) {
-                return matrix.createListDataView(amount, null, sort);
-            }
-            
-        </script>
-        
     </head>
     <body>
         <aux-root>
-            
-            <aux-list data_factory="js:my_data_factory"></aux-list>
-            
+            <aux-list></aux-list>
         </aux-root>
     </body>
 </body>
