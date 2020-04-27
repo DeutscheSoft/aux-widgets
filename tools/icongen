@@ -21,7 +21,7 @@ def parse_glyphs (font):
     name = glyph.getAttribute("glyph-name")
     atoms = name.split("/")
     g = {}
-    g["name"] = atoms[0]
+    g["name"] = name #atoms[0]
     g["char"] = glyph.getAttribute("unicode")
     g["icons"] = []
     g["fills"] = []
@@ -29,6 +29,7 @@ def parse_glyphs (font):
       continue
     for a in atoms:
       icon = a.replace(" ", "").lower()
+      icon = icon.replace(".", "_")
       g["icons"].append(icon)
       g["fills"].append(" " * (size - len(icon)))
     glyphs.append(g)
