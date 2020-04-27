@@ -85,3 +85,49 @@ export function unsubscribe_subscriptions(subscriptions)
 
   return null;
 }
+
+export class Subscription
+{
+  constructor(subscription)
+  {
+    if (subscription !== void(0))
+    {
+      if (subscription instanceof Subscription)
+      {
+        subscription = subscription.sub;
+      }
+    }
+    else
+    {
+      subscription = init_subscriptions();
+    }
+
+    this.sub = subscription;
+  }
+
+  unsubscribe()
+  {
+    this.sub = unsubscribe_subscriptions(this.sub);
+  }
+}
+
+export class Subscriptions extends Subscription
+{
+  add(subscription)
+  {
+    if (subscription instanceof Subscription)
+    {
+      subscription = subscription.sub;
+    }
+
+    else
+    {
+      this.sub = add_subscription(this.sub, subscription);
+    }
+  }
+
+  unsubscribe()
+  {
+    this.sub = unsubscribe_subscriptions(this.sub);
+  }
+}
