@@ -2,7 +2,7 @@ import { define_class } from '../../widget_helpers.js';
 import { define_child_widget } from '../../child_widget.js';
 import { set_text, add_class, remove_class } from '../../utils/dom.js';
 import { Container } from '../../widgets/container.js';
-import { Toggle } from '../../widgets/toggle.js';
+import { Button } from '../../widgets/button.js';
 import { Label } from '../../widgets/label.js';
 import { Icon } from '../../widgets/icon.js';
 
@@ -13,30 +13,67 @@ const indent_to_glyph = {
     "none" : "",
 }
 
+function set_datum (datum) {
+    const O = this.options;
+    if (this.datum_subscription) {
+        this.datum_subscription();
+        this.datum_subscription = null;
+    }
+    if (!datum) {
+        this.hide();
+    } else {
+        const props = datum.properties;
+        for (let i in props) {
+            if (props.hasOwnProperty(i) && i !== "id" && i.substr(0, 1) !== "_")
+                this.set(i, props[i]);
+        }
+        this.datum_subscription = datum.subscribe('propertyChanged',
+                                                 (name, value) => datum_property_changed.call(this, name, value));
+        if (!O.datum) {
+            this.show();
+        }
+    }
+}
+
+function datum_property_changed (name, value) {
+    console.log(name, value)
+    if (name !== "id" && name.substr(0, 1) !== "_")
+        this.set(name, value);
+}
+
 export const ListEntry = define_class({
     Extends: Container,
     _options: Object.assign(Object.create(Container.prototype._options), {
+        datum: "object",
         label: "string|boolean",
         depth: "array|boolean",
-        last: "boolean",
         collapsable: "boolean",
+        collapsed: "boolean",
+        icon_collapsed: "string",
+        icon_uncollaped: "string",
         icon: "string|boolean",
     }),
     options: {
         label: false,
         depth: false,
-        last: false,
         collapsable: false,
+        collapsed: false,
+        icon_collapsed: "arrowdown",
+        icon_uncollapsed: "arrowup",
         icon: false,
+    },
+    static_events: {
+        set_datum: function (datum) { set_datum.call(this, datum); },
     },
     initialize: function (options) {
         Container.prototype.initialize.call(this, options);
-        this.datum = null;
-        this.datumSubscription = null;
+        this.datum_subscription = null;
     },
     draw: function (options, element) {
         Container.prototype.draw.call(this, options, element);
         element.classList.add("aux-listentry");
+        if (options.datum)
+            this.set("datum", options.datum);
     },
     redraw: function () {
         Container.prototype.redraw.call(this);
@@ -64,11 +101,6 @@ export const ListEntry = define_class({
             }
         }
         
-        if (I.last) {
-            I.last = false;
-            E.classList[O.last ? "add" : "remove"]("aux-last");
-        }
-        
         if (I.collapsable) {
             I.collapsable = false;
             if (O.collapsable)
@@ -76,45 +108,12 @@ export const ListEntry = define_class({
             else
                 remove_class(E, "aux-collapsable");
         }
+        
+        if (I.collapsed) {
+            I.collapsed = false;
+            this.collapse.set("icon", O[O.collapsed ? "icon_collapsed" : "icon_uncollapsed"]);
+        }
     },
-    setDatum: function(datum) {
-        if (this.datumSubscription)
-        {
-            this.datumSubscription();
-            this.datumSubscription = null;
-        }
-
-        if (!datum)
-        {
-            this.hide();
-        }
-        else
-        {
-            // connect properties of the data entry with
-            // our options
-            this.set('label', datum.label);
-
-
-            this.datumSubscription = datum.subscribe('propertyChanged',
-                                                     (name, value) => this.datumPropertyChanged(name, value));
-            if (!this.datum)
-            {
-                this.show();
-            }
-        }
-
-        this.datum = datum;
-    },
-    datumPropertyChanged: function(name, value)
-    {
-        switch (name)
-        {
-        case 'depth':
-        case 'label':
-            this.set(name, value);
-            break;
-        }
-    }
 });
 
 define_child_widget(ListEntry, "label", {
@@ -141,12 +140,15 @@ define_child_widget(ListEntry, "indent", {
 });
 
 define_child_widget(ListEntry, "collapse", {
-    create: Toggle,
+    create: Button,
     show: true,
     toggle_class: true,
     default_options: {
         class: "aux-collapse",
-        icon: "arrowdown",
-        icon_active: "arrowup",
+    },
+    static_events: {
+        click: function () {
+            this.parent.emit("collapse");
+        },
     },
 });

@@ -9,24 +9,25 @@
             import { MatrixData } from './models/matrix.js';
             
             const sort = (a, b) => {
-                const la = a.label;
-                const lb = b.label;
+                const la = a.id;
+                const lb = b.id;
                 if (la === lb) return 0;
                 return la > lb ? 1 : -1;
             };
-            const matrix = new MatrixData();
-            const outputs = matrix.addGroup({ label: 'Outputs' });
-            for (let i = 0; i < 10; i++) {
-                const group = outputs.addGroup({ label: 'Group ' + i });
-                for (let j = 0; j < 10; j++) {
-                    const port = group.addPort({ label: 'Port ' + (i * 10 + j) });
+            window.matrix = new MatrixData();
+            const ports = ["L","C","R","L'","R'","LF"];
+            const outputs = matrix.addGroup({ label: 'Outputs', icon: 'speaker' });
+            for (let i = 0; i < 8; i++) {
+                const group = outputs.addGroup({ label: 'Output #' + (i+1), icon: 'mc5_1' });
+                for (let j = 0; j < 6; j++) {
+                    const port = group.addPort({ label: 'Channel ' + ports[j], icon: 'disconnected' });
                 }
             }
 
             document.addEventListener('DOMContentLoaded', () => {
               const aux_list = document.querySelector('aux-list');
 
-              aux_list.listview = matrix.createListDataView(10, null, sort);
+              aux_list.listview = matrix.createListDataView(0, null, sort);
             });
         </script>
         
@@ -37,18 +38,22 @@
         
         <style>
             
-            body {
+            body, html {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
                 font-family: sans-serif;
             }
             
+            .aux-root {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+            }
             .aux-list {
                 display: block;
                 height: 290px;
-                background: #eee;
-            }
-            
-            .aux-listentry:nth-child(odd) {
-                background: rgba(0, 0, 0, 0.05);
             }
             
         </style>

@@ -799,12 +799,17 @@ body.aux-cursor-row-resize * {
     width: 100%;
     overflow: hidden;
     box-sizing: border-box;
+    position: relative;
 }
-            
+
 /* LISTENTRY */
 
 .aux-listentry {
     display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
 }
 .aux-listentry > .aux-indent {
     flex: 0 0 0;
