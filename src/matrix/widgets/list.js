@@ -37,7 +37,6 @@ function draw () {
     
     if (diff) {
         if (diff < this.amount) {
-            // we scroll less than all entries, we reorder them
             rearrange_entries.call(this, diff);
             listview.scrollStartIndex(diff);
         } else {
@@ -52,12 +51,10 @@ function draw () {
 
 function rearrange_entries (diff) {
     if (diff > 0) {
-        //console.log('Moving %d entries to the back.', diff);
         const tmp = this.entries.slice(0, diff);
         this.entries.splice(0, diff);
         this.entries = this.entries.concat(tmp);
     } else {
-        //console.log('Moving %d entries to the front.', -diff);
         const tmp = this.entries.slice(this.entries.length + diff);
         this.entries = tmp.concat(this.entries.slice(0, this.entries.length + diff));
     }
@@ -138,8 +135,7 @@ export const List = define_class({
     amount: 0,
     
     _options: Object.assign(Object.create(Container.prototype._options), {
-        _generate_entries: "bool",
-        _scroller_size: "bool",
+        _scroller_size: "number",
         size : "number",
         scroll: "number",
         entry_class: "ListEntry",
@@ -147,6 +143,7 @@ export const List = define_class({
         resized: "boolean",
     }),
     options: {
+        _scroller_size: 0,
         size: 32,
         scroll: 0,
         entry_class: ListEntry,
