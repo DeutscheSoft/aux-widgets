@@ -133,6 +133,10 @@ function subscribe_all () {
 export const List = define_class({
     Extends: Container,
     
+    width: 0,
+    height: 0,
+    amount: 0,
+    
     _options: Object.assign(Object.create(Container.prototype._options), {
         _generate_entries: "bool",
         _scroller_size: "bool",
@@ -148,10 +152,6 @@ export const List = define_class({
         entry_class: ListEntry,
         data_factory: function () {},
     },
-    width: 0,
-    height: 0,
-    amount: 0,
-    data: null,
     static_events: {
         set_size: function (v) { this.trigger_resize(); },
         set_listview: function (listview) {
@@ -232,7 +232,7 @@ export const List = define_class({
         if (i !== -1) {
             let E = this.entries.splice(i, 1);
             this.emit("entryremoved", E[0]);
-            this._scroller.removeChild(E.element);
+            this._scroller.removeChild(E[0].element);
         }
         Container.prototype.remove_child.call(this, child);
     },

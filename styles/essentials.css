@@ -825,7 +825,7 @@ body.aux-cursor-row-resize * {
 /* MATRIX */
 
 .aux-matrix {
-    
+    overflow: hidden;
 }
 .aux-matrix > * {
     position: absolute;
@@ -838,6 +838,12 @@ body.aux-cursor-row-resize * {
 }
 .aux-matrix > .aux-list.aux-listb {
     
+}
+.aux-matrix > .aux-scrollbar {
+    position: absolute;
+    overflow: scroll;
+    bottom: calc(-1 * var(--aux-scrollbar-size));
+    right: calc(-1 * var(--aux-scrollbar-size));
 }
 
 /* MULTIMETER */

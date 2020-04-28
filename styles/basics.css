@@ -406,6 +406,10 @@
     order: 3;
     transform: scaleX(-1);
 }
+.aux-matrix > .aux-scrollbar {
+    left: var(--aux-matrix-list-size);
+    top: var(--aux-matrix-list-size);
+}
 
 /* METER */
 

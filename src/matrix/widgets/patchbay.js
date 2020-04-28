@@ -9,9 +9,10 @@ export const Patchbay = define_class({
     _options: Object.assign(Object.create(Container.prototype._options), {
         sources: "object",
         sinks: "object",
+        size: "number",
     }),
     options: {
-        
+        size: 32,
     },
     initialize: function (options) {
         Container.prototype.initialize.call(this, options);
@@ -27,6 +28,7 @@ define_child_widget(Patchbay, "list_a", {
     show: true,
     map_options: {
         sources: "listview",
+        size: "size",
     },
     default_options: {
         class: "aux-lista",
@@ -38,8 +40,18 @@ define_child_widget(Patchbay, "list_b", {
     show: true,
     map_options: {
         sinks: "listview",
+        size: "size",
     },
     default_options: {
         class: "aux-listb",
     },
+});
+
+define_child_element(Patchbay, "scrollbar", {
+    show: true,
+});
+
+define_child_element(Patchbay, "scroller", {
+    show: true,
+    append: function () { this._scrollbar.appendChild(this._scroller); },
 });
