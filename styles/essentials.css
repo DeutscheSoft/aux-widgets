@@ -845,6 +845,9 @@ body.aux-cursor-row-resize * {
     bottom: calc(-1 * var(--aux-scrollbar-size));
     right: calc(-1 * var(--aux-scrollbar-size));
 }
+.aux-matrix > .aux-scrollbar > .aux-scroller {
+    overflow: hidden;
+}
 
 /* MULTIMETER */
 
