@@ -73,6 +73,8 @@
     
     --aux-levelmeter-statesize: 4px;
     
+    --aux-matrix-list-size: 196px;
+    
     --aux-meter-size: 16px;
     --aux-meter-gridgap: 2px;
     
@@ -364,6 +366,45 @@
     line-height: var(--aux-listentry-size);
     margin: 0;
     padding: 0 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* MATRIX */
+
+.aux-matrix {
+    min-width: 480px;
+    min-height: 480px;
+}
+.aux-matrix > .aux-list {
+    width: var(--aux-matrix-list-size);
+}
+.aux-matrix > .aux-list.aux-lista {
+    top: var(--aux-matrix-list-size);
+    left: 0;
+    bottom: 0;
+    height: auto;
+}
+.aux-matrix > .aux-list.aux-listb {
+    top: 0;
+    left: 0;
+    transform-origin: top right;
+    transform: rotate(-90deg);
+}
+.aux-matrix > .aux-list.aux-listb .aux-listentry > .aux-label {
+    order: 0;
+    text-align: right;
+}
+.aux-matrix > .aux-list.aux-listb .aux-listentry > .aux-icon {
+    order: 1;
+    transform: rotate(90deg);
+}
+.aux-matrix > .aux-list.aux-listb .aux-listentry > .aux-collapse {
+    order: 2;
+}
+.aux-matrix > .aux-list.aux-listb .aux-listentry > .aux-indent {
+    order: 3;
+    transform: scaleX(-1);
 }
 
 /* METER */

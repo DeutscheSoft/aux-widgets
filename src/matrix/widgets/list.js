@@ -159,7 +159,6 @@ export const List = define_class({
         },
     },
     initialize: function (options) {
-        if (!options.element) options.element = element('div');
         Container.prototype.initialize.call(this, options);
 
         this.subscriptions = null;
@@ -192,6 +191,9 @@ export const List = define_class({
                 I.listview = false;
                 subscribe_all.call(this);
             }
+            if (O.listview) {
+                O.listview.setAmount(this.amount);
+            }
             draw.call(this);
         }
         
@@ -211,14 +213,10 @@ export const List = define_class({
         const E = this.element;
         const O = this.options;
         
-        this.width = inner_width(E);
-        this.height = inner_height(E);
+        this.width = E.offsetWidth;
+        this.height = E.offsetHeight;
         this.amount = 1 + Math.floor(this.height / O.size);
 
-        if (O.listview) {
-            O.listview.setAmount(this.amount);
-        }
-            
         Container.prototype.resize.call(this);
     },
     add_child: function (child) {

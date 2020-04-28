@@ -25,9 +25,10 @@
             }
 
             document.addEventListener('DOMContentLoaded', () => {
-              const aux_list = document.querySelector('aux-list');
+              const aux_matrix = document.querySelector('aux-matrix');
 
-              aux_list.listview = matrix.createListDataView(0, null, sort);
+              aux_matrix.sources = matrix.createListDataView(0, null, sort);
+              aux_matrix.sinks = matrix.createListDataView(0, null, sort);
             });
         </script>
         
@@ -51,16 +52,17 @@
                 height: 100%;
                 margin: 0;
             }
-            .aux-list {
+            .aux-matrix {
                 display: block;
-                height: 290px;
+                width: 100%;
+                height: 480px;
             }
             
         </style>
     </head>
     <body>
         <aux-root>
-            <aux-list></aux-list>
+            <aux-matrix></aux-matrix>
         </aux-root>
     </body>
 </body>

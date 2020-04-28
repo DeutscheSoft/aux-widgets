@@ -822,6 +822,24 @@ body.aux-cursor-row-resize * {
     display: flex;
 }
 
+/* MATRIX */
+
+.aux-matrix {
+    
+}
+.aux-matrix > * {
+    position: absolute;
+}
+.aux-matrix > .aux-list {
+    margin: 0;
+}
+.aux-matrix > .aux-list.aux-lista {
+    
+}
+.aux-matrix > .aux-list.aux-listb {
+    
+}
+
 /* MULTIMETER */
 
 .aux-multimeter {

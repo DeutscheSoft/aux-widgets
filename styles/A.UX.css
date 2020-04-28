@@ -286,6 +286,21 @@
     font-weight: bold;
 }
 
+/* MATRIX */
+
+.aux-matrix {
+    
+}
+.aux-matrix > .aux-list {
+    
+}
+.aux-matrix > .aux-list.aux-lista {
+    
+}
+.aux-matrix > .aux-list.aux-listb {
+    
+}
+
 /* METER */
 
 .aux-meter .aux-bar {
