@@ -31,7 +31,7 @@ function draw () {
     const scroll = O.scroll;
     
     const micro = scroll % size;
-    const start = ~~(scroll / size);
+    const start = Math.floor(scroll / size);
     const diff = start - listview.startIndex;
     
     if (diff) {
@@ -109,9 +109,8 @@ function elements_cb (index, element, tree_position) {
 
 function start_index_cb (start, last) {
     const O = this.options;
-    const st = this._scrollbar.scrollTop;
     const diff = start - last;
-    this._scrollbar.scrollTop = st + diff * O.size;
+    this._scrollbar.scrollTop = (1 + start) * O.size;
     rearrange_entries.call(this, diff);
 }
 
@@ -213,8 +212,8 @@ export const List = define_class({
         
         this.width = inner_width(E);
         this.height = inner_height(E);
-        this.amount = 1 + Math.ceil(this.height / O.size);
-        
+        this.amount = 1 + Math.floor(this.height / O.size);
+
         if (O.listview) {
             O.listview.setAmount(this.amount);
         }
