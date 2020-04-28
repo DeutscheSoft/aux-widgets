@@ -302,7 +302,7 @@ export class ListDataView extends Events
     {
       this.startIndex = Math.max(0, startIndex - size);
       this.emit('startIndexChanged', this.startIndex, startIndex);
-      notify_interval = [ this.startIndex, this.startIndex + size ];
+      notify_interval = [ this.startIndex, void(0) ];
     }
     else
     {
