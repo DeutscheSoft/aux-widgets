@@ -21,6 +21,7 @@ function scroll (e) {
     const O = this.options;
     O.scroll = this._scrollbar.scrollTop;
     draw.call(this);
+    this.emit("useraction", "scroll", O.scroll);
 }
 
 function draw () {
