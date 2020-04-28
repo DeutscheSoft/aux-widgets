@@ -13,6 +13,9 @@ export class TreeNodeData extends MatrixDatum
   set label(value) { return this.set('label', value); }
   get label() { return this.get('label'); }
 
+  set icon(value) { return this.set('icon', value); }
+  get icon() { return this.get('icon'); }
+  
   get id() { return this.get('id'); }
 
   setParent(parent)
