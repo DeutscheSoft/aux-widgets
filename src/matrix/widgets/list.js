@@ -215,7 +215,7 @@ export const List = define_class({
         
         this.width = E.offsetWidth;
         this.height = E.offsetHeight;
-        this.amount = 1 + Math.floor(this.height / O.size);
+        this.amount = 1 + Math.ceil(this.height / O.size);
 
         Container.prototype.resize.call(this);
     },
