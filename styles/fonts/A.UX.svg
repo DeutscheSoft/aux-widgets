@@ -482,7 +482,7 @@
          unicode="􀂈"
          d="M 32,992 V 800 H 96 V 224 H 32 V 32 H 224 V 96 H 416 V 32 H 608 V 96 H 800 V 32 h 192 v 192 h -64 v 576 h 64 V 992 H 800 V 928 H 608 v 64 H 416 V 928 H 224 v 64 z M 224,864 h 192 v -64 h 192 v 64 h 192 v -64 h 64 V 224 H 800 V 160 H 608 v 64 H 416 V 160 H 224 v 64 h -64 v 576 h 64 z M 416,608 V 416 h 192 v 192 z" />
       <glyph
-         glyph-name="Dolby ProLogic 2X"
+         glyph-name="MC 7.1/Dolby ProLogic 2X"
          id="glyph89"
          unicode="􀂉"
          d="M 32,992 V 800 H 96 V 224 H 32 V 32 h 192 v 64 h 64 V 32 h 192 v 64 h 64 V 32 h 192 v 64 h 64 V 32 h 192 v 192 h -64 v 576 h 64 V 992 H 800 V 928 H 608 v 64 H 416 V 928 H 224 v 64 z M 224,864 h 192 v -64 h 192 v 64 h 192 v -64 h 64 V 224 h -64 v -64 h -64 v 64 H 544 v -64 h -64 v 64 H 288 v -64 h -64 v 64 h -64 v 576 h 64 z M 416,608 V 416 h 192 v 192 z" />
@@ -1661,7 +1661,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.24964488"
-     inkscape:cx="-1740.4702"
+     inkscape:cx="-4692.6637"
      inkscape:cy="490.15373"
      inkscape:document-units="px"
      inkscape:current-layer="svg2"
@@ -2177,7 +2177,7 @@
        sodipodi:role="line"
        id="tspan1811"
        x="-10496"
-       y="-4150.123"></tspan></text>
+       y="-4150.123" /></text>
   <text
      xml:space="preserve"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:144px;line-height:100%;font-family:monoMMM_5;-inkscape-font-specification:monoMMM_5;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
