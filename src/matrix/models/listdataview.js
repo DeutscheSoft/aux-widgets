@@ -2,8 +2,10 @@ import { Events } from '../../events.js';
 import { init_subscribers, add_subscriber, remove_subscriber, call_subscribers } from '../../utils/subscribers.js';
 import { init_subscriptions, add_subscription, unsubscribe_subscriptions } from '../../utils/subscriptions.js';
 import { SubscriberMap } from '../../utils/subscriber_map.js';
+import { typecheck_function } from '../../utils/typecheck.js';
 
 import { GroupData } from './group.js';
+import { call_continuation_if } from './helpers.js';
 
 function interval_union(a, b)
 {
@@ -20,34 +22,6 @@ function allowAll(node, callback)
 {
   callback(true);
   return init_subscriptions();
-}
-
-function call_continuation_if(node, subscribe_predicate, continuation)
-{
-  let active = false;
-  let inner_subscription = init_subscriptions();
-
-  let subscription = subscribe_predicate(node, (value) => {
-    // nothing todo
-    if (active === value) return;
-
-    active = value;
-
-
-    if (value)
-    {
-      inner_subscription = continuation(node);
-    }
-    else
-    {
-      inner_subscription = unsubscribe_subscriptions(inner_subscription);
-    }
-  });
-
-  return () => {
-    subscription = unsubscribe_subscriptions(subscription);
-    inner_subscription = unsubscribe_subscriptions(inner_subscription);
-  };
 }
 
 class SuperGroup
@@ -255,6 +229,8 @@ export class ListDataView extends Events
     if (notify_interval)
       this._notifyRegion(notify_interval[0], notify_interval[1]);
 
+    this.emit('childAdded', child);
+
     return sub;
   }
 
@@ -316,6 +292,8 @@ export class ListDataView extends Events
       parent.updateTreePosition();
       notify_interval = interval_union(notify_interval, parent.getInterval());
     }
+
+    this.emit('childRemoved', child);
 
     if (notify_interval)
       this._notifyRegion(notify_interval[0], notify_interval[1]);
@@ -403,6 +381,7 @@ export class ListDataView extends Events
     this._forEachWithTreePosition(from, to, (i, element, treePosition) => {
       call_subscribers(subscribers, i, element, treePosition);
     });
+    this.emit('elementsChanged');
   }
 
   _filterCollapsed(node, continuation)
@@ -420,6 +399,17 @@ export class ListDataView extends Events
   }
 
   // PUBLIC APIs
+
+  get matrix()
+  {
+    return this.root.group.matrix;
+  }
+
+  get group()
+  {
+    return this.root.group;
+  }
+
   constructor(group, amount, filterFunction, sortFunction)
   {
       super();
@@ -559,6 +549,7 @@ export class ListDataView extends Events
 
   destroy()
   {
+    super.destroy();
     this.subscriptions = unsubscribe_subscriptions(this.subscriptions);
   }
 
@@ -608,25 +599,36 @@ export class ListDataView extends Events
     rec(this.root);
   }
 
-  subscribeElements(cb)
+  subscribeElements(cb, done_cb)
   {
-    if (typeof(cb) !== 'function')
-      throw new TypeError('Expected function.');
+    typecheck_function(cb);
+
+    if (done_cb) typecheck_function(done_cb);
 
     this.subscribers = add_subscriber(this.subscribers, cb);
 
     const from = this.startIndex;
     const to = from + this.amount;
     const list = this.list;
+    let subscriptions = init_subscriptions();
+
+    subscriptions = add_subscription(subscriptions, () => {
+      this.subscribers = remove_subscriber(this.subscribers, cb);
+    });
 
     this._forEachWithTreePosition(from, to, (i, element, treePosition) => {
       call_subscribers(cb, i, element, treePosition);
     });
 
+    if (done_cb)
+    {
+      call_subscribers(done_cb);
+
+      subscriptions = add_subscription(subscriptions, this.subscribe('elementsChanged', done_cb));
+    }
+
     return () => {
-      if (cb === null) return;
-      this.subscribers = remove_subscriber(this.subscribers, cb);
-      cb = null;
+      subscriptions = unsubscribe_subscriptions(subscriptions);
     };
   }
 
@@ -667,5 +669,10 @@ export class ListDataView extends Events
   at(index)
   {
     return this.list[index];
+  }
+
+  forEachElement(cb)
+  {
+    this.list.forEach(cb);
   }
 }

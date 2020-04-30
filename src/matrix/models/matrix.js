@@ -231,6 +231,18 @@ export class MatrixData extends Datum
     return this.getConnectionsOf(node).filter((connection) => connection.to === node);
   }
 
+  forEachConnection(cb)
+  {
+    this.connections.forEach((map, port) => {
+      map.forEach((connection) => {
+        if (connection.from === port)
+          cb(connection);
+      });
+    });
+  }
+
+  // other public apis
+
   createListDataView(amount, filterFunction, sortFunction)
   {
     return new ListDataView(this.root, amount, filterFunction, sortFunction);

@@ -1,4 +1,4 @@
-TESTS = tree_data.js list_view.js
+TESTS = tree_data.js list_view.js connection_view.js
 
 test:
 	@for test in $(TESTS); do \

@@ -15,6 +15,7 @@ export function assert_error(cb)
   }
   catch (err)
   {
+    ok++;
     // we expect this
   }
 }
