@@ -312,7 +312,7 @@ export class ListDataView extends Events
 
         list.push(node);
         // TODO: needs to be dynamic
-        list.sort(this.sortFunction);
+        list.sort(this._sorter);
 
         sub = add_subscription(sub, this._childAdded(super_group, node, list.indexOf(node)));
 
@@ -420,6 +420,9 @@ export class ListDataView extends Events
       this.sortFunction = sortFunction;
       this.subscribers = init_subscribers();
 
+      this._sorter = (node1, node2) => {
+        return this.sortFunction(get_child(node1), get_child(node2));
+      };
 
       // global flat list
       this.list = [];
