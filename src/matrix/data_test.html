@@ -35,7 +35,7 @@
             vertical-align: 40%;
           }
           
-          #list,#scroller
+          .list,.scroller
           {
             display: inline-block;
             width: 45vw;
@@ -44,17 +44,17 @@
             position: relative;
           }
 
-          #scroller
+          .scroller
           {
             width: 50px;
           }
 
-          #list
+          .list
           {
             overflow: hidden;
           }
           
-          #scroller
+          .scroller
           {
             overflow-y: scroll;
             overflow-x: hidden;
@@ -126,7 +126,7 @@
               const labela = a.label;
               const labelb = b.label;
 
-              if (labela > labelb) return -1;
+              if (labela < labelb) return -1;
               if (labela === labelb) return 0;
               return 1;
             };
@@ -134,8 +134,6 @@
             const AMOUNT = 10;
             const GROUPS = 10;
             const PORTS = 4;
-
-            const listview = matrix.createListDataView(AMOUNT + 1, null, sorter);
 
             const outputs = matrix.addGroup({ label: 'Outputs' });
 
@@ -145,16 +143,36 @@
 
               for (let j = 0; j < PORTS; j++)
               {
-                const port = group.addPort({ label: 'Port ' + (i * 10 + j) });
+                const port = group.addPort({ label: 'Sink ' + (i * 10 + j) });
+              }
+            }
+
+            const inputs = matrix.addGroup({ label: 'Inputs' });
+
+            for (let i = 0; i < GROUPS; i++)
+            {
+              const group = inputs.addGroup({ label: 'Group ' + i });
+
+              for (let j = 0; j < PORTS; j++)
+              {
+                const port = group.addPort({ label: 'Source ' + (i * 10 + j) });
               }
             }
 
             const ITEM_HEIGHT = 30;
 
-      	    document.addEventListener('DOMContentLoaded', () => {
-              const scrollarea = document.querySelector('#scrollarea');
-              const scroller = document.querySelector('#scroller');
-              const list = document.querySelector('#list');
+            function createList(into, listview)
+            {
+              const scrollarea = document.createElement('div');
+              scrollarea.className = 'scrollarea';
+              const scroller = document.createElement('div');
+              scroller.className = 'scroller';
+              const list = document.createElement('div');
+              list.className = 'list';
+
+              into.appendChild(list);
+              scroller.appendChild(scrollarea);
+              into.appendChild(scroller);
 
               let entries = [];
 
@@ -280,14 +298,31 @@
               scroller.addEventListener('scroll', (ev) => {
                 onScroll(scroller.scrollTop);
               }, { passive: true });
+            }
+
+      	    document.addEventListener('DOMContentLoaded', () => {
+              {
+                const filter_sources = (node, cb) => {
+                  cb(node !== outputs);
+                  return null;
+                };
+                const listview = matrix.createListDataView(AMOUNT + 1, filter_sources, sorter);
+                createList(document.querySelector('#list1'), listview);
+              }
+
+              {
+                const filter_sinks = (node, cb) => {
+                  cb(node !== inputs);
+                  return null;
+                };
+                const listview = matrix.createListDataView(AMOUNT + 1, filter_sinks, sorter);
+                createList(document.querySelector('#list2'), listview);
+              }
             });
         </script>
     </head>
     <body>
-      <div id=list>
-      </div>
-      <div id=scroller>
-        <div id=scrollarea></div>
-      </div>
+      <div id=list1></div>
+      <div id=list2></div>
     </body>
 </body>
