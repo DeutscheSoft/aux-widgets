@@ -2,11 +2,12 @@ import { define_class, define_child_element } from './../../widget_helpers.js';
 import { inner_width, inner_height, scrollbar_size, add_class, remove_class } from './../../utils/dom.js';
 import { error } from './../../utils/log.js';
 import { sprintf } from '../../index.js';
-
 import { init_subscriptions, add_subscription, unsubscribe_subscriptions } from '../../utils/subscriptions.js';
 
 import { Container } from './../../widgets/container.js';
 import { ListEntry } from './listentry.js';
+
+const SCROLLBAR_SIZE = scrollbar_size();
 
 function collapse (state) {
     const list = this.parent;
@@ -19,8 +20,16 @@ function collapse (state) {
 
 function scroll (e) {
     const O = this.options;
+    
+    const internal = this._internal_scroll;
+    this._internal_scroll = false;
+    
     O.scroll = this._scrollbar.scrollTop;
+    
     draw.call(this);
+    
+    if (internal) return false;
+    
     this.emit("useraction", "scroll", O.scroll);
 }
 
@@ -36,7 +45,7 @@ function draw () {
     const diff = start - listview.startIndex;
     
     if (diff) {
-        if (diff < this.amount) {
+        if (diff < O._amount) {
             rearrange_entries.call(this, diff);
             listview.scrollStartIndex(diff);
         } else {
@@ -45,7 +54,8 @@ function draw () {
     }
     for (let i = 0, max = this.entries.length; i < max; ++i) {
         const element = this.entries[i].element;
-        element.style.transform = sprintf('translateY(%.2fpx)', i * size + scroll - micro);
+        const pos = scroll + i * size - micro;
+        element.style.transform = sprintf('translateY(%.2fpx)', pos);
     }
 }
 
@@ -107,9 +117,10 @@ function elements_cb (index, element, tree_position) {
 
 function start_index_cb (start, last) {
     const O = this.options;
-    const diff = start - last;
+    this._internal_scroll = true;
     this._scrollbar.scrollTop = (1 + start) * O.size;
-    rearrange_entries.call(this, diff);
+    //rearrange_entries.call(this, start - last);
+    draw.call(this);
 }
 
 function size_cb (size) {
@@ -130,12 +141,10 @@ function subscribe_all () {
 export const List = define_class({
     Extends: Container,
     
-    width: 0,
-    height: 0,
-    amount: 0,
-    
     _options: Object.assign(Object.create(Container.prototype._options), {
+        _amount: "number",
         _scroller_size: "number",
+        
         size : "number",
         scroll: "number",
         entry_class: "ListEntry",
@@ -143,7 +152,9 @@ export const List = define_class({
         resized: "boolean",
     }),
     options: {
+        _amount: 0,
         _scroller_size: 0,
+        
         size: 32,
         scroll: 0,
         entry_class: ListEntry,
@@ -152,22 +163,23 @@ export const List = define_class({
     static_events: {
         set_size: function (v) { this.trigger_resize(); },
         set_listview: function (listview) {
-          this.subscriptions = unsubscribe_subscriptions(this.subscriptions);
+            if (this.subscriptions)
+                this.subscriptions = unsubscribe_subscriptions(this.subscriptions);
+            subscribe_all.call(this);
         },
     },
     initialize: function (options) {
         Container.prototype.initialize.call(this, options);
-
         this.subscriptions = null;
         this.entries = [];
-        
-        scrollbar_size();
+        this._internal_scroll = false;
     },
     draw: function (options, element) {
         Container.prototype.draw.call(this, options, element);
         element.classList.add("aux-list");
         this._scrollbar.addEventListener("scroll", scroll.bind(this), { passive: true });
-        this.set("listview", options.listview);
+        if (options.listview)
+            this.set("listview", options.listview);
         this.trigger_resize();
     },
     redraw: function () {
@@ -175,21 +187,16 @@ export const List = define_class({
         const I = this.invalid;
         const E = this.element;
         
-        if (I.resized) {
-            I.resized = false; 
-            while (this.entries.length > this.amount)
+        if (I._amount) {
+            I._amount = false; 
+            while (this.entries.length > O._amount)
                 this.remove_child(this.entries[this.entries.length - 1]);
             
-            while (this.entries.length < this.amount)
+            while (this.entries.length < O._amount)
                 this._scroller.appendChild((this.add_child(new this.options.entry_class())).element);
 
-            if (I.listview)
-            {
-                I.listview = false;
-                subscribe_all.call(this);
-            }
             if (O.listview) {
-                O.listview.setAmount(this.amount);
+                O.listview.setAmount(O._amount);
             }
             draw.call(this);
         }
@@ -201,6 +208,7 @@ export const List = define_class({
         
         if (I.scroll) {
             I.scroll = false;
+            this._internal_scroll = true;
             this._scrollbar.scrollTop = O.scroll;
         }
         
@@ -210,9 +218,7 @@ export const List = define_class({
         const E = this.element;
         const O = this.options;
         
-        this.width = E.offsetWidth;
-        this.height = E.offsetHeight;
-        this.amount = 1 + Math.ceil(this.height / O.size);
+        this.set("_amount", 1 + Math.ceil(E.offsetHeight / O.size));
 
         Container.prototype.resize.call(this);
     },

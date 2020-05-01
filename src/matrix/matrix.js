@@ -11,6 +11,7 @@ export * from './models/port.js';
 export * from './models/treenode.js';
 
 export * from './widgets/canvas.js';
+export * from './widgets/indicator.js';
 export * from './widgets/list.js';
 export * from './widgets/listentry.js';
 export * from './widgets/matrix.js';

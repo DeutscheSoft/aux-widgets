@@ -833,20 +833,23 @@ body.aux-cursor-row-resize * {
 .aux-matrix > .aux-list {
     margin: 0;
 }
-.aux-matrix > .aux-list.aux-lista {
-    
-}
-.aux-matrix > .aux-list.aux-listb {
-    
-}
-.aux-matrix > .aux-scrollbar {
+.aux-matrix > .aux-indicators {
     position: absolute;
     overflow: scroll;
     bottom: calc(-1 * var(--aux-scrollbar-size));
     right: calc(-1 * var(--aux-scrollbar-size));
+    margin: 0;
 }
-.aux-matrix > .aux-scrollbar > .aux-scroller {
+.aux-matrix > .aux-indicators > .aux-scroller {
     overflow: hidden;
+}
+.aux-matrix .aux-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 /* MULTIMETER */
