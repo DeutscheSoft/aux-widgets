@@ -75,6 +75,11 @@ class SuperGroup
     return offset;
   }
 
+  indexOf(child)
+  {
+    return this.children.indexOf(child);
+  }
+
   updateSize(diff)
   {
     this.size += diff;
@@ -483,6 +488,22 @@ export class ListDataView extends Events
   {
     this.startIndex = index;
     this._notifyRegion(index, index + this.amount);
+  }
+
+  indexOf(child)
+  {
+    if (child instanceof GroupData)
+    {
+      const super_group = this.getSuperGroup(child);
+
+      return super_group.index;
+    }
+    else
+    {
+      const super_group = this.getSuperGroup(child.parent);
+
+      return super_group.index + super_group.childDistance(super_group.indexOf(child));
+    }
   }
 
   setAmount(amount)

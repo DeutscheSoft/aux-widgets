@@ -59,6 +59,14 @@ test('ListDataView basics', () => {
     }
   }
 
+  {
+    let index = 0;
+    listview.forEach((node) => {
+      assert(index === listview.indexOf(node));
+      index++;
+    });
+  }
+
 
   {
     const size = listview.getSubtreeSize(group);
