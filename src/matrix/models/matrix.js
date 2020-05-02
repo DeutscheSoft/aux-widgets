@@ -171,14 +171,17 @@ export class MatrixData extends Datum
   _registerConnection(connection)
   {
     this._lowRegisterConnection(connection.from, connection.to, connection);
-    this._lowRegisterConnection(connection.to, connection.from, connection);
+
+    if (connection.to !== connection.from)
+      this._lowRegisterConnection(connection.to, connection.from, connection);
     this.emit('connectionAdded', connection);
   }
 
   _unregisterConnection(connection)
   {
     this._lowUnregisterConnection(connection.from, connection.to, connection);
-    this._lowUnregisterConnection(connection.to, connection.from, connection);
+    if (connection.to !== connection.from)
+      this._lowUnregisterConnection(connection.to, connection.from, connection);
     this.emit('connectionRemoved', connection);
   }
 
