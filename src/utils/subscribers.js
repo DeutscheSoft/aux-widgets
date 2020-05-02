@@ -104,3 +104,40 @@ export function call_subscribers(subscribers, ...args)
   }
   else expected_subscribers();
 }
+
+export class Subscribers
+{
+  constructor()
+  {
+    this.subscribers = init_subscribers();
+  }
+
+  add(cb)
+  {
+    this.subscribers = add_subscriber(this.subscribers, cb);
+  }
+
+  remove(cb)
+  {
+    this.subscribers = remove_subscriber(this.subscribers, cb);
+  }
+
+  call(...args)
+  {
+    call_subscribers(this.subscribers, ...args);
+  }
+
+  subscribe(cb)
+  {
+    this.add(cb);
+
+    return () => {
+      this.remove(cb);
+    };
+  }
+
+  destroy()
+  {
+    this.subscribers = init_subscribers();
+  }
+}
