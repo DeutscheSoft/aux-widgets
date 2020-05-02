@@ -204,6 +204,7 @@ export class ListDataView extends Events
     {
       this.startIndex++;
       this.emit('startIndexChanged', this.startIndex);
+      this.emit('scrollView', 1);
     }
     else
     {
@@ -273,11 +274,13 @@ export class ListDataView extends Events
     {
       this.startIndex -= size;
       this.emit('startIndexChanged', this.startIndex, startIndex);
+      this.emit('scrollView', this.startIndex - startIndex);
     }
     else if (this.size < startIndex + this.amount && startIndex > 0)
     {
       this.startIndex = Math.max(0, startIndex - size);
       this.emit('startIndexChanged', this.startIndex, startIndex);
+      this.emit('scrollView', this.startIndex - startIndex);
       notify_interval = [ this.startIndex, void(0) ];
     }
     else
@@ -500,22 +503,30 @@ export class ListDataView extends Events
     {
       this.startIndex = Math.max(0, size - this.amount);
       this.emit('startIndexChanged', this.startIndex, startIndex);
+      this.emit('scrollView', this.startIndex - startIndex);
     }
   }
 
   scrollStartIndex(offset)
   {
+    if (offset === 0) return;
+
     this.startIndex += offset;
+
+    this.emit('startIndexChanged', this.startIndex, this.startIndex - offset);
+    this.emit('scrollView', offset);
 
     if (offset > 0)
     {
       const end = this.startIndex + this.amount;
-      this._notifyRegion(end - offset, end);
+      const start = Math.max(this.startIndex, end - offset);
+      this._notifyRegion(start, end);
     }
     else if (offset < 0)
     {
       const start = this.startIndex;
-      this._notifyRegion(start, start - offset);
+      const end = start + Math.min(this.amount, -offset);
+      this._notifyRegion(start, end);
     }
   }
 
@@ -662,6 +673,11 @@ export class ListDataView extends Events
     return this.subscribe('startIndexChanged', cb);
   }
 
+  subscribeScrollView(cb)
+  {
+    return this.subscribe('scrollView', cb);
+  }
+
   subscribeCollapsed(group, cb)
   {
     cb(this.collapsed.has(group));
@@ -672,6 +688,11 @@ export class ListDataView extends Events
   at(index)
   {
     return this.list[index];
+  }
+
+  get(offset)
+  {
+    return this.list[this.startIndex + offset];
   }
 
   forEachElement(cb)
