@@ -50,25 +50,13 @@ function resize_array(array, length, create)
   }
 }
 
-function rearrange_array(array, diff)
+function subtract_mod(a, b, n)
 {
-  // would copyWithin be faster?
-  if (diff > 0)
-  {
-    // we remove diff entries at the front and move them to
-    // the back
-    const tmp = array.slice(0, diff);
-    array.splice(0, diff);
-    array.splice(array.length, 0, ...tmp);
-  }
-  else
-  {
-    // we remove diff entries at the end and move them
-    // to the front
-    const tmp = array.slice(array.length + diff);
-    array.splice(array.length + diff, -diff);
-    array.splice(0, 0, ...tmp);
-  }
+  let result = (a - b) % n;
+
+  if (result < 0) result += n;
+
+  return result;
 }
 
 export class ConnectionDataView extends Events
@@ -80,16 +68,29 @@ export class ConnectionDataView extends Events
 
   _notifyPair(row_element, column_element, connection)
   {
-    const i = this.rows.indexOf(row_element);
+    const rows = this.rows;
+    const columns = this.columns;
+    const matrix = this.matrix;
+    const subscribers = this.subscribers;
 
-    if (i === -1) return;
+    const startIndex1 = this.startIndex1;
+    const startIndex2 = this.startIndex2;
 
-    const j = this.columns.indexOf(column_element);
+    const n = rows.indexOf(row_element);
 
-    if (j === -1) return;
+    if (n === -1) return;
 
-    this.matrix[i][j] = connection;
-    call_subscribers(this.subscribers, i, j, connection);
+    const m = columns.indexOf(column_element);
+
+    if (m === -1) return;
+
+    matrix[n][m] = connection;
+
+    let index1 = startIndex1 + subtract_mod(n, startIndex1, rows.length);
+    let index2 = startIndex2 + subtract_mod(m, startIndex2, columns.length);
+
+    call_subscribers(this.subscribers, index1, index2,
+                     connection, row_element, column_element);
   }
 
   _lowRegisterConnection(row_element, column_element, connection)
@@ -255,6 +256,16 @@ export class ConnectionDataView extends Events
     return subscribe(listview.group);
   }
 
+  get startIndex1()
+  {
+    return this.listview1.startIndex;
+  }
+
+  get startIndex2()
+  {
+    return this.listview2.startIndex;
+  }
+
   constructor(listview1, listview2)
   {
     typecheck_instance(listview1, ListDataView);
@@ -303,98 +314,66 @@ export class ConnectionDataView extends Events
       });
     }));
 
-    // the start index was changed while scrolling, we want to rearrange rows
-    this._addSubscription(listview1.subscribeStartIndexChanged((startIndex, oldStartIndex) => {
-      rearrange_array(this.matrix, startIndex - oldStartIndex);
-    }));
-
-    // the start index was changed while scrolling, we want to rearrange columns
-    this._addSubscription(listview2.subscribeStartIndexChanged((startIndex, oldStartIndex) => {
-      this.matrix.forEach((row) => {
-        rearrange_array(row, startIndex - oldStartIndex);
-      });
-    }));
-
     this._addSubscription(listview1.subscribeElements(
-      (index, element) => {
-        const n = index - this.listview1.startIndex;
-        this.rows[n] = element;
-        this.rows_changed[n] = true;
-      },
-      () => {
+      (index, row_element) => {
         const rows = this.rows;
-        const rows_changed = this.rows_changed;
-        const matrix = this.matrix;
         const columns = this.columns;
+        const matrix = this.matrix;
+        const subscribers = this.subscribers;
 
-        for (let i = 0; i < rows.length; i++)
+        const startIndex2 = this.startIndex2;
+        const i = index % rows.length;
+
+        rows[i] = row_element;
+
+        for (let n = 0; n < columns.length; n++)
         {
-          if (rows_changed[i])
-          {
-            const row_element = rows[i];
+          const j = (startIndex2 + n) % columns.length;
+          const column_element = columns[j];
 
-            rows_changed[i] = false;
+          let connection = this.getConnectionFor(row_element, column_element);
 
-            for (let j = 0; j < columns.length; j++)
-            {
-              let current_connection = matrix[i][j];
+          // actually update and tell our subscribers
+          matrix[i][j] = connection;
 
-              let connection = this.getConnectionFor(row_element, columns[j]);
-
-              if (current_connection === connection) continue;
-
-              // actually update and tell our subscribers
-              matrix[i][j] = connection;
-
-              call_subscribers(subscribers, i, j, connection);
-            }
-          }
+          call_subscribers(subscribers, index, startIndex2 + n,
+                           connection, row_element, column_element);
         }
       }
     ));
 
     this._addSubscription(listview2.subscribeElements(
-      (index, element) => {
-        const n = index - this.listview2.startIndex;
-        this.columns[n] = element;
-        this.columns_changed[n] = true;
-      },
-      () => {
-        const columns = this.columns;
-        const columns_changed = this.columns_changed;
-        const matrix = this.matrix;
+      (index, column_element) => {
         const rows = this.rows;
+        const columns = this.columns;
+        const matrix = this.matrix;
         const subscribers = this.subscribers;
 
-        for (let i = 0; i < columns.length; i++)
+        const startIndex1 = this.startIndex1;
+        const j = index % columns.length;
+
+        columns[j] = column_element;
+
+        for (let n = 0; n < rows.length; n++)
         {
-          if (columns_changed[i])
-          {
-            const column_element = columns[i];
+          const i = (startIndex1 + n) % columns.length;
+          const row_element = rows[i];
 
-            columns_changed[i] = false;
+          let connection = this.getConnectionFor(row_element, column_element);
 
-            for (let j = 0; j < rows.length; j++)
-            {
-              const current_connection = matrix[j][i];
+          // actually update and tell our subscribers
+          matrix[i][j] = connection;
 
-              const connection = this.getConnectionFor(rows[j], column_element);
-
-              if (current_connection === connection) continue;
-
-              // actually update and tell our subscribers
-              matrix[j][i] = connection;
-
-              call_subscribers(subscribers, j, i, connection);
-            }
-          }
+          call_subscribers(subscribers, startIndex1 + n, index,
+                           connection, row_element, column_element);
         }
-      }
+      },
     ));
 
     this._addSubscription(this._subscribeAllElements(listview1, this.elements1, this.elements2));
     this._addSubscription(this._subscribeAllElements(listview2, this.elements2, this.elements1));
 
+    // collect all connections
     {
       const matrix = this.listview1.matrix;
 
@@ -410,6 +389,14 @@ export class ConnectionDataView extends Events
         this._unregisterConnection(connection);
       }));
     }
+
+    listview1.subscribeScrollView((offset) => {
+      this.emit('scrollView', offset, 0);
+    });
+
+    listview2.subscribeScrollView((offset) => {
+      this.emit('scrollView', 0, offset);
+    });
   }
 
   getConnectionFor(row_element, column_element)
@@ -451,15 +438,38 @@ export class ConnectionDataView extends Events
   {
     this.subscribers = add_subscriber(this.subscribers, cb);
 
-    this.matrix.forEach((rows, i) => {
-      rows.forEach((connection, j) => {
-        call_subscribers(cb, i, j, connection);
-      });
-    });
+    const matrix = this.matrix;
+    const rows = this.rows;
+    const columns = this.columns;
+    const subscribers = this.subscribers;
+
+    const startIndex1 = this.startIndex1;
+    const startIndex2 = this.startIndex2;
+
+    for (let n = 0; n < rows.length; n++)
+    {
+      const i = (startIndex1 + n) % rows.length;
+      const row_element = rows[i];
+
+      for (let m = 0; m < columns.length; m++)
+      {
+        const j = (startIndex2 + m) % columns.length;
+        const column_element = columns[j];
+
+
+        call_subscribers(cb, startIndex1 + n, startIndex2 + m, matrix[i][j],
+                         row_element, column_element);
+      }
+    }
 
     return () => {
       this.subscribers = remove_subscriber(this.subscribers, cb);
     };
+  }
+
+  subscribeScrollView(cb)
+  {
+    return this.subscribe('scrollView', cb);
   }
 
   destroy()
