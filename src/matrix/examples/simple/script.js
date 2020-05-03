@@ -1,6 +1,6 @@
 import { MatrixData } from '../../models/matrix.js';
 import { ListDataView } from '../../models/listdataview.js';
-import { ConnectionDataView } from '../../models/connectiondataview.js';
+import { ConnectionDataView, resize_array_mod } from '../../models/connectiondataview.js';
 import { sprintf } from '../../../utils/sprintf.js';
 import { Subscribers } from '../../../utils/subscribers.js';
 import { Timer } from '../../../utils/timers.js';
@@ -115,7 +115,6 @@ function createList(into, listview)
 
   let entries = [];
   let startIndex = 0;
-  let amount = listview.amount;
 
   const setEntryPosition = (entry, index) => {
     entry.style.transform = sprintf('translateY(%dpx)', index * ITEM_HEIGHT);
@@ -148,9 +147,9 @@ function createList(into, listview)
     // We have to scroll our entries by the given offset
 
     // if we scrolled more than all entries, we update all positions
-    if (Math.abs(diff) >= amount)
+    if (Math.abs(diff) >= listview.amount)
     {
-      diff = -amount;
+      diff = -listview.amount;
     }
 
     if (diff > 0)
@@ -158,7 +157,7 @@ function createList(into, listview)
       // we have to update diff entries at the end
       for (let i = 0; i < diff; i++)
       {
-        const index = startIndex - diff + amount + i;
+        const index = startIndex - diff + listview.amount + i;
         updateEntryPosition(index);
       }
     }
@@ -174,16 +173,6 @@ function createList(into, listview)
     }
   });
 
-  const onClick = (ev) => {
-    const index = getEntryPosition(ev.currentTarget);
-
-    const element = listview.at(index);
-
-    if (!element.isGroup) return;
-
-    listview.collapseGroup(element, !listview.isCollapsed(element));
-  };
-
   const onScroll = (offset) => {
     const startIndex = Math.floor(offset / ITEM_HEIGHT);
     //console.log('onScroll', offset, startIndex, listview.startIndex);
@@ -196,17 +185,33 @@ function createList(into, listview)
     }
   };
 
-  // create all entries
-  for (let i = 0; i < amount; i++)
-  {
-    const entry = createEntry();
-    // move it by i times it's own height
-    entry.addEventListener('click', onClick);
-    scrollarea.appendChild(entry);
-    entries.push(entry);
+  const onClick = (ev) => {
+    const index = getEntryPosition(ev.currentTarget);
 
-    setEntryPosition(entry, startIndex + i);
-  }
+    const element = listview.at(index);
+
+    if (!element.isGroup) return;
+
+    listview.collapseGroup(element, !listview.isCollapsed(element));
+  };
+
+  listview.subscribeAmount((amount) => {
+    const create = (index) => {
+      const entry = createEntry();
+      entry.addEventListener('click', onClick);
+      scrollarea.appendChild(entry);
+      setEntryPosition(entry, index);
+
+      return entry;
+    };
+
+    const remove = (entry) => {
+      entry.remove();
+      entry.removeEventListener('click', onClick);
+    };
+
+    resize_array_mod(entries, amount, startIndex, create, remove);
+  });
 
   // connect entries with our list entries
   listview.subscribeElements((index, element, treePosition) => {
@@ -257,6 +262,14 @@ function createList(into, listview)
     ScrollEvent.call(list.scrollTop);
   }, { passive: true });
 
+  const onHeightChanged = (height) => {
+    listview.setAmount(Math.ceil(height / ITEM_HEIGHT) + 1);
+  };
+
+  window.addEventListener('resize', () => {
+    onHeightChanged(list.clientHeight);
+  });
+  onHeightChanged(list.clientHeight);
 
   return {
     subscribeOnScroll: function(cb)
@@ -339,24 +352,54 @@ function createMatrix(dst, listview1, listview2)
 
   //console.log('creating %d x %d matrix', rows, columns);
 
-  for (let i = 0; i < rows; i++)
-  {
-    const row = [];
+  const createCell = (index1, index2) => {
+    const i = index1 % rows;
+    const j = index2 % columns;
+    const cell = document.createElement('div');
 
-    for (let j = 0; j < columns; j++)
+    cell.className = 'cell';
+    cell.addEventListener('click', onClick);
+    setCellPosition(cell, index1, index2);
+    scrollarea.appendChild(cell);
+
+    return cell;
+  };
+
+  const destroyCell = (cell) => {
+    cell.removeEventListener('click', onClick);
+    cell.remove();
+  };
+
+  connectionview.subscribeAmount((_rows, _columns) => {
+    rows = _rows;
+    columns = _columns;
+
+    const createRow = (index1) => {
+      const row = new Array(columns);
+
+      for (let i = 0; i < columns; i++)
+      {
+        const index2 = connectionview.startIndex2 + i;
+        row[index2 % columns] = createCell(index1, index2);
+      }
+
+      return row;
+    };
+
+    const destroyRow = (row) => {
+      row.forEach(destroyCell);
+    };
+
+    resize_array_mod(cells, rows, connectionview.startIndex1, createRow, destroyRow);
+
+    for (let i = 0; i < rows; i++)
     {
-      const cell = document.createElement('div');
-      cell.className = 'cell';
-
-      cell.addEventListener('click', onClick);
-      row.push(cell);
-      scrollarea.appendChild(cell);
-
-      setCellPosition(cell, i, j);
+      const index1 = connectionview.startIndex1 + i;
+      const row = cells[index1 % rows];
+      resize_array_mod(row, columns, connectionview.startIndex2, (index2) => createCell(index1, index2),
+                       destroyCell);
     }
-
-    cells.push(row);
-  }
+  });
 
   const formatCell = (source, sink) => {
     let source_label = source && source.label || '<none>';
