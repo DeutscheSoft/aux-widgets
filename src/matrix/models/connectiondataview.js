@@ -12,7 +12,7 @@ import { GroupData } from './group.js';
 function subscribe_many(apis, cb)
 {
   const values = new Array(apis.length);
-  const has_value = values.map(() => false);
+  const has_value = apis.map(() => false);
   let has_all_values = false;
   let subscriptions = init_subscriptions();
 
