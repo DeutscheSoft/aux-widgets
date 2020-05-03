@@ -37,16 +37,39 @@ function subscribe_many(apis, cb)
   };
 }
 
-function resize_array(array, length, create)
+export function resize_array_mod(array, length, offset, create, remove)
 {
-  while (array.length < length)
+  if (length === array.length) return;
+
+  const tmp = array.slice();
+
+  array.length = length;
+
+  // copy existing entries from their previous position
+  for (let i = 0; i < Math.min(tmp.length, length); i++)
   {
-    array.push(create ? create() : void(0));
+    const index = offset + i;
+
+    array[index % length] = tmp[index % tmp.length];
   }
 
-  if (array.length > length)
+  if (tmp.length < length)
   {
-    array.splice(length, array.length - length);
+    for (let i = tmp.length; i < length; i++)
+    {
+      const index = i + offset;
+
+      array[index % length] = create ? create(index) : void(0);
+    }
+  }
+  else if (remove)
+  {
+    for (let i = length; i < tmp.length; i++)
+    {
+      const index = i + offset;
+
+      remove(tmp[index % tmp.length]);
+    }
   }
 }
 
@@ -293,24 +316,20 @@ export class ConnectionDataView extends Events
 
     // elements, e.g. ports or groups in the rows
     this.rows = [];
-    this.rows_changed = [];
 
     // elements, e.g. ports or groups in the columns
     this.columns = [];
-    this.columns_changed = [];
 
     // maintain the matrix
     this._addSubscription(this.subscribeAmount((rows, columns) => {
-      resize_array(this.rows, rows);
-      resize_array(this.rows_changed, rows, () => false);
+      resize_array_mod(this.rows, rows, this.startIndex1);
 
-      resize_array(this.columns, columns);
-      resize_array(this.columns_changed, columns, () => false);
+      resize_array_mod(this.columns, columns, this.startIndex2);
 
-      resize_array(this.matrix, rows, () => new Array(columns));
+      resize_array_mod(this.matrix, rows, this.startIndex1, () => new Array(columns));
 
       this.matrix.forEach((row) => {
-        resize_array(row, columns);
+        resize_array_mod(row, columns, this.startIndex2);
       });
     }));
 
@@ -356,7 +375,7 @@ export class ConnectionDataView extends Events
 
         for (let n = 0; n < rows.length; n++)
         {
-          const i = (startIndex1 + n) % columns.length;
+          const i = (startIndex1 + n) % rows.length;
           const row_element = rows[i];
 
           let connection = this.getConnectionFor(row_element, column_element);
