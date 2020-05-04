@@ -7,12 +7,12 @@ import { init_subscriptions, add_subscription, unsubscribe_subscriptions } from 
 
 import { Container } from './../../widgets/container.js';
 import { ListEntry } from './listentry.js';
+import { resize_array_mod } from '../models.js';
 
 function collapse (state) {
+    const element = this.get('datum');
     const list = this.parent;
     const listview = list.options.listview;
-    const index = list.entries.indexOf(this);
-    const element = listview.at(listview.startIndex + index);
     if (!element.isGroup) return;
     listview.collapseGroup(element, !listview.isCollapsed(element));
 }
@@ -20,43 +20,14 @@ function collapse (state) {
 function scroll (e) {
     const O = this.options;
     O.scroll = this._scrollbar.scrollTop;
-    draw.call(this);
     this.emit("useraction", "scroll", O.scroll);
-}
 
-function draw () {
-    const O = this.options;
-    
     const listview = O.listview;
-    const size = O.size;
-    const scroll = O.scroll;
-    
-    const micro = scroll % size;
-    const start = Math.floor(scroll / size);
-    const diff = start - listview.startIndex;
-    
-    if (diff) {
-        if (diff < this.amount) {
-            rearrange_entries.call(this, diff);
-            listview.scrollStartIndex(diff);
-        } else {
-            listview.setStartIndex(start);
-        }
-    }
-    for (let i = 0, max = this.entries.length; i < max; ++i) {
-        const element = this.entries[i].element;
-        element.style.transform = sprintf('translateY(%.2fpx)', i * size + scroll - micro);
-    }
-}
 
-function rearrange_entries (diff) {
-    if (diff > 0) {
-        const tmp = this.entries.slice(0, diff);
-        this.entries.splice(0, diff);
-        this.entries = this.entries.concat(tmp);
-    } else {
-        const tmp = this.entries.slice(this.entries.length + diff);
-        this.entries = tmp.concat(this.entries.slice(0, this.entries.length + diff));
+    if (listview)
+    {
+      const startIndex = Math.floor(O.scroll / O.size);
+      listview.scrollStartIndex(startIndex - listview.startIndex);
     }
 }
 
@@ -83,8 +54,7 @@ function compose_depth (tree_position) {
 
 function elements_cb (index, element, tree_position) {
     const listview = this.options.listview;
-    const n = index - listview.startIndex;
-    const entry = this.entries[n];
+    const entry = this.entries[index % this.entries.length];
     if (element) {
         entry.set("depth", compose_depth(tree_position));
         entry.set("collapsable", element.isGroup);
@@ -105,13 +75,6 @@ function elements_cb (index, element, tree_position) {
     entry.set("datum", element);
 }
 
-function start_index_cb (start, last) {
-    const O = this.options;
-    const diff = start - last;
-    this._scrollbar.scrollTop = (1 + start) * O.size;
-    rearrange_entries.call(this, diff);
-}
-
 function size_cb (size) {
     this.set("_scroller_size", size);
 }
@@ -120,9 +83,63 @@ function subscribe_all () {
     const O = this.options;
     const listview = O.listview;
 
-    let sub = listview.subscribeStartIndexChanged(start_index_cb.bind(this));
+    const setEntryPosition = (entry, index) => {
+      entry.element.style.transform = sprintf('translateY(%.2fpx)', index * O.size);
+    };
+
+    let sub = listview.subscribeScrollView((offset) => {
+      if (offset >= listview.amount)
+      {
+        offset = -listview.amount;
+      }
+
+      const entries = this.entries;
+
+      if (offset > 0)
+      {
+        // scrolling down
+        const tmp = listview.startIndex - offset + listview.amount;
+        for (let i = 0; i < offset; i++)
+        {
+          const index = tmp + i;
+          const entry = entries[index % entries.length];
+          setEntryPosition(entry, index);
+        }
+      }
+      else
+      {
+        // scrolling up
+        offset = -offset
+        for (let i = 0; i < offset; i++)
+        {
+          const index = listview.startIndex + i;
+          const entry = entries[index % entries.length];
+          setEntryPosition(entry, index);
+        }
+      }
+    });
+
     sub = add_subscription(sub, listview.subscribeSize(size_cb.bind(this)));
     sub = add_subscription(sub, listview.subscribeElements(elements_cb.bind(this)));
+    sub = add_subscription(sub, listview.subscribeAmount((amount) => {
+      const create = (index) => {
+        const entry = this.create_entry();
+        this._scroller.appendChild(entry.element);
+        setEntryPosition(entry, index);
+        entry.on("collapse", collapse);
+        this.add_child(entry);
+        return entry;
+      };
+
+      const remove = (entry) => {
+        entry.element.remove();
+        entry.off("collapse", collapse);
+        this.remove_child(entry);
+        entry.destroy();
+      };
+
+      resize_array_mod(this.entries, amount, listview.startIndex, create, remove);
+    }));
     
     this.subscriptions = sub;
 }
@@ -163,6 +180,10 @@ export const List = define_class({
         
         scrollbar_size();
     },
+    create_entry: function()
+    {
+        return new this.options.entry_class();
+    },
     draw: function (options, element) {
         Container.prototype.draw.call(this, options, element);
         element.classList.add("aux-list");
@@ -177,11 +198,6 @@ export const List = define_class({
         
         if (I.resized) {
             I.resized = false; 
-            while (this.entries.length > this.amount)
-                this.remove_child(this.entries[this.entries.length - 1]);
-            
-            while (this.entries.length < this.amount)
-                this._scroller.appendChild((this.add_child(new this.options.entry_class())).element);
 
             if (I.listview)
             {
@@ -191,7 +207,6 @@ export const List = define_class({
             if (O.listview) {
                 O.listview.setAmount(this.amount);
             }
-            draw.call(this);
         }
         
         if (I._scroller_size) {
@@ -201,7 +216,7 @@ export const List = define_class({
         
         if (I.scroll) {
             I.scroll = false;
-            this._scrollbar.scrollTop = O.scroll;
+            //this._scrollbar.scrollTop = O.scroll;
         }
         
         Container.prototype.redraw.call(this);
@@ -215,23 +230,6 @@ export const List = define_class({
         this.amount = 1 + Math.ceil(this.height / O.size);
 
         Container.prototype.resize.call(this);
-    },
-    add_child: function (child) {
-        this.entries.push(child);
-        Container.prototype.add_child.call(this, child);
-        child.addEventListener("collapse", collapse.bind(child));
-        this.emit("entryadded", child);
-        return child;
-    },
-    remove_child: function (child) {
-        const entries = this.entries;
-        const i = entries.indexOf(child);
-        if (i !== -1) {
-            let E = this.entries.splice(i, 1);
-            this.emit("entryremoved", E[0]);
-            this._scroller.removeChild(E[0].element);
-        }
-        Container.prototype.remove_child.call(this, child);
     },
 });
 
