@@ -2,10 +2,11 @@ import { define_class, define_child_element } from './../../widget_helpers.js';
 import { inner_width, inner_height, scrollbar_size, add_class, remove_class } from './../../utils/dom.js';
 import { error } from './../../utils/log.js';
 import { sprintf } from '../../index.js';
-import { init_subscriptions, add_subscription, unsubscribe_subscriptions } from '../../utils/subscriptions.js';
+import { Subscriptions } from '../../utils/subscriptions.js';
 
 import { Container } from './../../widgets/container.js';
 import { ListEntry } from './listentry.js';
+import { Timer } from '../../utils/timers.js';
 import { resize_array_mod } from '../models.js';
 
 const SCROLLBAR_SIZE = scrollbar_size();
@@ -18,42 +19,24 @@ function collapse (state) {
     listview.collapseGroup(element, !listview.isCollapsed(element));
 }
 
-function scroll (e) {
-    const O = this.options;
-    
-    const internal = this._internal_scroll;
-    this._internal_scroll = false;
-    
-    O.scroll = this._scrollbar.scrollTop;
-    this.emit("useraction", "scroll", O.scroll);
-
-    const listview = O.listview;
-
-    if (listview)
-    {
-      const startIndex = Math.floor(O.scroll / O.size);
-      listview.scrollStartIndex(startIndex - listview.startIndex);
-    }
-}
-
 function compose_depth (tree_position) {
     let depth = [];
-    
+
     if (tree_position.length == 1)
         return depth;
-        
+
     for (let i = 1, m = tree_position.length - 1; i < m; ++i) {
         if (tree_position[i])
             depth.push("none");
         else
             depth.push("trunk");
     }
-    
+
     if (tree_position[tree_position.length - 1])
         depth.push("end");
     else
         depth.push("branch");
-        
+
     return depth;
 }
 
@@ -61,14 +44,15 @@ function elements_cb (index, element, tree_position) {
     const listview = this.options.listview;
     const entry = this.entries[index % this.entries.length];
     if (element) {
-        entry.set("depth", compose_depth(tree_position));
-        entry.set("collapsable", element.isGroup);
+        entry.update("depth", compose_depth(tree_position));
+        entry.update("collapsable", element.isGroup);
         remove_class(entry.element, "aux-even");
         remove_class(entry.element, "aux-odd");
         add_class(entry.element, index % 2 ? "aux-odd" : "aux-even");
         if (element.isGroup) {
             entry.set("collapsed", listview.isCollapsed(element));
         }
+        // do this in the entry
         for (let i in element.properties) {
             if (element.properties.hasOwnProperty(i) && i !== "id" && i.substr(0, 1) !== "_")
                 entry.set(i, element.properties[i]);
@@ -80,10 +64,6 @@ function elements_cb (index, element, tree_position) {
     entry.set("datum", element);
 }
 
-function size_cb (size) {
-    this.set("_scroller_size", size);
-}
-              
 function subscribe_all () {
     const O = this.options;
     const listview = O.listview;
@@ -92,7 +72,9 @@ function subscribe_all () {
       entry.element.style.transform = sprintf('translateY(%.2fpx)', index * O.size);
     };
 
-    let sub = listview.subscribeScrollView((offset) => {
+    const subs = this.listview_subs;
+
+    subs.add(listview.subscribeScrollView((offset) => {
       if (offset >= listview.amount)
       {
         offset = -listview.amount;
@@ -122,11 +104,13 @@ function subscribe_all () {
           setEntryPosition(entry, index);
         }
       }
-    });
+    }));
 
-    sub = add_subscription(sub, listview.subscribeSize(size_cb.bind(this)));
-    sub = add_subscription(sub, listview.subscribeElements(elements_cb.bind(this)));
-    sub = add_subscription(sub, listview.subscribeAmount((amount) => {
+    subs.add(listview.subscribeSize((size) => {
+      this.update('_scroller_size', size);
+    }));
+    subs.add(listview.subscribeElements(elements_cb.bind(this)));
+    subs.add(listview.subscribeAmount((amount) => {
       const create = (index) => {
         const entry = this.create_entry();
         this._scroller.appendChild(entry.element);
@@ -145,45 +129,51 @@ function subscribe_all () {
 
       resize_array_mod(this.entries, amount, listview.startIndex, create, remove);
     }));
-    
-    this.subscriptions = sub;
 }
 
 export const List = define_class({
     Extends: Container,
-    
     _options: Object.assign(Object.create(Container.prototype._options), {
         _amount: "number",
         _scroller_size: "number",
-        
+        _scroll: "number",
+        _startIndex: 'number',
         size : "number",
-        scroll: "number",
         entry_class: "ListEntry",
         listview: "object",
-        resized: "boolean",
     }),
     options: {
         _amount: 0,
         _scroller_size: 0,
-        
+        _scroll: 0,
+        _startIndex: 0,
         size: 32,
-        scroll: 0,
         entry_class: ListEntry,
-        data_factory: function () {},
     },
     static_events: {
         set_size: function (v) { this.trigger_resize(); },
         set_listview: function (listview) {
-            if (this.subscriptions)
-                this.subscriptions = unsubscribe_subscriptions(this.subscriptions);
-            subscribe_all.call(this);
+            this.listview_subs.unsubscribe();
+        },
+        scrollTopChanged: function(position) {
+          const O = this.options;
+          const startIndex = Math.floor(position / O.size);
+
+          this.update('_startIndex', startIndex);
         },
     },
     initialize: function (options) {
         Container.prototype.initialize.call(this, options);
-        this.subscriptions = null;
+        this.listview_subs = new Subscriptions();
         this.entries = [];
-        this._internal_scroll = false;
+        this._scroll_event_suppressed = false;
+        this._scroll_timer = new Timer(() => {
+          if (!this._scroll_event_suppressed)
+            return;
+
+          this._scroll_event_suppressed = false;
+          this.emit('scrollTopChanged', this._scrollbar.scrollTop);
+        });
     },
     create_entry: function()
     {
@@ -192,40 +182,77 @@ export const List = define_class({
     draw: function (options, element) {
         Container.prototype.draw.call(this, options, element);
         element.classList.add("aux-list");
-        this._scrollbar.addEventListener("scroll", scroll.bind(this), { passive: true });
+        this._scrollbar.addEventListener("scroll", (ev) => {
+          if (this._scroll_timer.active)
+          {
+            this._scroll_event_suppressed = true;
+          }
+          else
+          {
+            this.emit('scrollTopChanged', this._scrollbar.scrollTop);
+          }
+        }, { passive: true });
         if (options.listview)
             this.set("listview", options.listview);
         this.trigger_resize();
+    },
+    scrollTo: function(position)
+    {
+      this.update('_scroll', position);
+      this._scroll_timer.restart(100);
     },
     redraw: function () {
         const O = this.options;
         const I = this.invalid;
         const E = this.element;
-        
-        if (I.resized) {
-            I.resized = false; 
+
+        if (I.listview)
+        {
+            I.listview = false;
+
+            const listview = O.listview;
+
+            if (listview)
+            {
+              subscribe_all.call(this);
+              listview.setAmount(O._amount);
+              listview.scrollStartIndex(O._startIndex - listview.startIndex);
+            }
+        }
+
+        if (I._amount) {
+            I._amount = false;
 
             if (O.listview) {
                 O.listview.setAmount(O._amount);
             }
         }
-        
+
+        if (I._startIndex) {
+            I._startIndex = false;
+
+            const listview = O.listview;
+
+            if (listview) {
+                listview.scrollStartIndex(O._startIndex - listview.startIndex);
+            }
+        }
+
         if (I._scroller_size) {
             I._scroller_size = false;
             this._scroller.style.height = (O._scroller_size * O.size) + "px";
         }
-        
-        if (I.scroll) {
-            I.scroll = false;
-            //this._scrollbar.scrollTop = O.scroll;
+
+        if (I._scroll) {
+            I._scroll = false;
+            this._scrollbar.scrollTop = O.scroll;
         }
-        
+
         Container.prototype.redraw.call(this);
     },
     resize: function () {
         const E = this.element;
         const O = this.options;
-        
         this.set("_amount", 1 + Math.ceil(E.offsetHeight / O.size));
 
         Container.prototype.resize.call(this);
