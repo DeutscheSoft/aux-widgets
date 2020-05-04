@@ -1,5 +1,6 @@
 .entry
 {
+  contain: strict;
   height: 30px;
   border: 1px solid black;
   box-sizing: border-box;
@@ -89,6 +90,7 @@ body
 
 .cell
 {
+  contain: strict;
   height: 30px;
   width: 30px;
   box-sizing: border-box;
