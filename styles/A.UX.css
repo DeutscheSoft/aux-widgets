@@ -288,17 +288,12 @@
 
 /* MATRIX */
 
-.aux-matrix {
-    
+.aux-matrix > .aux-indicators {
+    background: var(--aux-widget-base);
 }
-.aux-matrix > .aux-list {
-    
-}
-.aux-matrix > .aux-list.aux-lista {
-    
-}
-.aux-matrix > .aux-list.aux-listb {
-    
+.aux-matrix .aux-indicator {
+    border-radius: 0;
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 /* METER */

@@ -2,12 +2,13 @@ import { define_class, define_child_element } from './../../widget_helpers.js';
 import { inner_width, inner_height, scrollbar_size, add_class, remove_class } from './../../utils/dom.js';
 import { error } from './../../utils/log.js';
 import { sprintf } from '../../index.js';
-
 import { init_subscriptions, add_subscription, unsubscribe_subscriptions } from '../../utils/subscriptions.js';
 
 import { Container } from './../../widgets/container.js';
 import { ListEntry } from './listentry.js';
 import { resize_array_mod } from '../models.js';
+
+const SCROLLBAR_SIZE = scrollbar_size();
 
 function collapse (state) {
     const element = this.get('datum');
@@ -19,6 +20,10 @@ function collapse (state) {
 
 function scroll (e) {
     const O = this.options;
+    
+    const internal = this._internal_scroll;
+    this._internal_scroll = false;
+    
     O.scroll = this._scrollbar.scrollTop;
     this.emit("useraction", "scroll", O.scroll);
 
@@ -147,12 +152,10 @@ function subscribe_all () {
 export const List = define_class({
     Extends: Container,
     
-    width: 0,
-    height: 0,
-    amount: 0,
-    
     _options: Object.assign(Object.create(Container.prototype._options), {
+        _amount: "number",
         _scroller_size: "number",
+        
         size : "number",
         scroll: "number",
         entry_class: "ListEntry",
@@ -160,7 +163,9 @@ export const List = define_class({
         resized: "boolean",
     }),
     options: {
+        _amount: 0,
         _scroller_size: 0,
+        
         size: 32,
         scroll: 0,
         entry_class: ListEntry,
@@ -169,16 +174,16 @@ export const List = define_class({
     static_events: {
         set_size: function (v) { this.trigger_resize(); },
         set_listview: function (listview) {
-          this.subscriptions = unsubscribe_subscriptions(this.subscriptions);
+            if (this.subscriptions)
+                this.subscriptions = unsubscribe_subscriptions(this.subscriptions);
+            subscribe_all.call(this);
         },
     },
     initialize: function (options) {
         Container.prototype.initialize.call(this, options);
-
         this.subscriptions = null;
         this.entries = [];
-        
-        scrollbar_size();
+        this._internal_scroll = false;
     },
     create_entry: function()
     {
@@ -188,7 +193,8 @@ export const List = define_class({
         Container.prototype.draw.call(this, options, element);
         element.classList.add("aux-list");
         this._scrollbar.addEventListener("scroll", scroll.bind(this), { passive: true });
-        this.set("listview", options.listview);
+        if (options.listview)
+            this.set("listview", options.listview);
         this.trigger_resize();
     },
     redraw: function () {
@@ -199,13 +205,8 @@ export const List = define_class({
         if (I.resized) {
             I.resized = false; 
 
-            if (I.listview)
-            {
-                I.listview = false;
-                subscribe_all.call(this);
-            }
             if (O.listview) {
-                O.listview.setAmount(this.amount);
+                O.listview.setAmount(O._amount);
             }
         }
         
@@ -225,9 +226,7 @@ export const List = define_class({
         const E = this.element;
         const O = this.options;
         
-        this.width = E.offsetWidth;
-        this.height = E.offsetHeight;
-        this.amount = 1 + Math.ceil(this.height / O.size);
+        this.set("_amount", 1 + Math.ceil(E.offsetHeight / O.size));
 
         Container.prototype.resize.call(this);
     },

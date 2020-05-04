@@ -379,37 +379,43 @@
 .aux-matrix > .aux-list {
     width: var(--aux-matrix-list-size);
 }
-.aux-matrix > .aux-list.aux-lista {
+.aux-matrix > .aux-list.aux-listleft {
     top: var(--aux-matrix-list-size);
     left: 0;
     bottom: 0;
     height: auto;
 }
-.aux-matrix > .aux-list.aux-listb {
+.aux-matrix > .aux-list.aux-listtop {
     top: 0;
     left: 0;
     transform-origin: top right;
     transform: rotate(-90deg);
 }
-.aux-matrix > .aux-list.aux-listb .aux-listentry > .aux-label {
+.aux-matrix > .aux-list.aux-listtop .aux-listentry > .aux-label {
     order: 0;
     text-align: right;
 }
-.aux-matrix > .aux-list.aux-listb .aux-listentry > .aux-icon {
+.aux-matrix > .aux-list.aux-listtop .aux-listentry > .aux-icon {
     order: 1;
     transform: rotate(90deg);
 }
-.aux-matrix > .aux-list.aux-listb .aux-listentry > .aux-collapse {
+.aux-matrix > .aux-list.aux-listtop .aux-listentry > .aux-collapse {
     order: 2;
 }
-.aux-matrix > .aux-list.aux-listb .aux-listentry > .aux-indent {
+.aux-matrix > .aux-list.aux-listtop .aux-listentry > .aux-indent {
     order: 3;
     transform: scaleX(-1);
 }
-.aux-matrix > .aux-scrollbar {
+.aux-matrix > .aux-indicators {
     left: var(--aux-matrix-list-size);
     top: var(--aux-matrix-list-size);
 }
+.aux-matrix .aux-indicator {
+    width: var(--aux-listentry-size);
+    height: var(--aux-listentry-size);
+    margin: 0;
+}
+
 
 /* METER */
 

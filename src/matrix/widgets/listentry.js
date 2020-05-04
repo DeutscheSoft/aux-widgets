@@ -1,6 +1,7 @@
 import { define_class } from '../../widget_helpers.js';
 import { define_child_widget } from '../../child_widget.js';
 import { set_text, add_class, remove_class } from '../../utils/dom.js';
+
 import { Container } from '../../widgets/container.js';
 import { Button } from '../../widgets/button.js';
 import { Label } from '../../widgets/label.js';
