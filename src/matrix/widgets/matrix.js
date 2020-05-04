@@ -15,14 +15,14 @@ function set_listviews () {
         case "top-left":
             this.list_top.set("listview", O.sources);
             this.list_left.set("listview", O.sinks);
-            this.indicators.set("listview_top", O.sources);
-            this.indicators.set("listview_left", O.sinks);
+            //this.indicators.set("listview_top", O.sources);
+            //this.indicators.set("listview_left", O.sinks);
             break;
         case "left-top":
             this.list_left.set("listview", O.sources);
             this.list_top.set("listview", O.sinks);
-            this.indicators.set("listview_left", O.sources);
-            this.indicators.set("listview_top", O.sinks);
+            //this.indicators.set("listview_left", O.sources);
+            //this.indicators.set("listview_top", O.sinks);
             break;
     }
 }
