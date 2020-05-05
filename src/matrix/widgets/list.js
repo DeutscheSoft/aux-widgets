@@ -47,26 +47,22 @@ function elements_cb (index, element, tree_position) {
     if (element) {
         entry.update("depth", compose_depth(tree_position));
         entry.update("collapsable", element.isGroup);
-        if (element.isGroup)
-            add_class(entry.element, "aux-group");
-        else
-            remove_class(entry.element, "aux-group");
+        entry.update("collapsed", element.isGroup && listview.isCollapsed(element));
+
         remove_class(entry.element, "aux-even");
         remove_class(entry.element, "aux-odd");
         add_class(entry.element, index % 2 ? "aux-odd" : "aux-even");
-        if (element.isGroup) {
-            entry.set("collapsed", listview.isCollapsed(element));
+        if (entry.hidden())
+        {
+          entry.update('visible', true);
+          this.show_child(entry);
         }
-        // do this in the entry
-        for (let i in element.properties) {
-            if (element.properties.hasOwnProperty(i) && i !== "id" && i.substr(0, 1) !== "_")
-                entry.set(i, element.properties[i]);
-        }
-        entry.show();
-    } else {
-        entry.hide();
+        entry.update("datum", element);
+    } else if (!entry.hidden()) {
+        entry.update('datum', void(0));
+        entry.update('visible', false);
+        this.hide_child(entry);
     }
-    entry.set("datum", element);
 }
 
 function subscribe_all () {
