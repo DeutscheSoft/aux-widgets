@@ -29,6 +29,20 @@
 
               aux_matrix.sources = matrix.createListDataView(0, null, sort);
               aux_matrix.sinks = matrix.createListDataView(0, null, sort);
+
+              aux_matrix.auxWidget.on('toggleConnection', (port1, port2) => {
+                console.log('wants to toggleConnection', port1, port2);
+                const connection = matrix.getConnection(port1, port2);
+
+                if (connection)
+                {
+                  matrix.deleteConnection(connection);
+                }
+                else
+                {
+                  matrix.connect(port1, port2);
+                }
+              });
             });
         </script>
         
