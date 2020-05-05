@@ -289,6 +289,16 @@ export class ConnectionDataView extends Events
     return this.listview2.startIndex;
   }
 
+  get amount1()
+  {
+    return this.listview1.amount;
+  }
+
+  get amount2()
+  {
+    return this.listview2.amount;
+  }
+
   constructor(listview1, listview2)
   {
     typecheck_instance(listview1, ListDataView);
