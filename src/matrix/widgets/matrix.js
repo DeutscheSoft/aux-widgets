@@ -8,22 +8,28 @@ import { Indicator } from './indicator.js';
 import { Patchbay } from './patchbay.js';
 import { List } from './list.js';
 
+import { ConnectionDataView } from '../models.js';
+
 function set_listviews () {
     var O = this.options;
     if (!O.sources || !O.sinks) return;
     switch (O.signal_flow) {
         case "top-left":
+          {
+            const connectionview = new ConnectionDataView(O.sinks, O.sources);
             this.list_top.set("listview", O.sources);
             this.list_left.set("listview", O.sinks);
-            //this.indicators.set("listview_top", O.sources);
-            //this.indicators.set("listview_left", O.sinks);
+            this.indicators.set("connectionview", connectionview);
             break;
+          }
         case "left-top":
+          {
+            const connectionview = new ConnectionDataView(O.sources, O.sinks);
             this.list_left.set("listview", O.sources);
             this.list_top.set("listview", O.sinks);
-            //this.indicators.set("listview_left", O.sources);
-            //this.indicators.set("listview_top", O.sinks);
+            this.indicators.set("connectionview", connectionview);
             break;
+          }
     }
 }
 
@@ -52,24 +58,16 @@ export const Matrix = define_class({
         add_class(this.element, "aux-matrix");
         Patchbay.prototype.draw.call(this, options, element);
         
-        //this.list_left.addEventListener("useraction", (function (key, value) {
-            //if (key !== "scroll") return;
-            //this.indicators.set("scroll_top", value);
-        //}).bind(this));
-        
-        //this.list_top.addEventListener("useraction", (function (key, value) {
-            //if (key !== "scroll") return;
-            //this.indicators.set("scroll_left", value);
-        //}).bind(this));
-        
-        //this.indicators.addEventListener("useraction", (function (key, value) {
-            //if (key === "scroll_left") {
-                //this.list_top.set("scroll", value);
-            //}
-            //if (key === "scroll_top") {
-                //this.list_left.set("scroll", value);
-            //}
-        //}).bind(this));
+        this.list_left.on('scrollTopChanged', (position) => {
+          this.indicators.scrollTopTo(position);
+        });
+        this.list_top.on('scrollTopChanged', (position) => {
+          this.indicators.scrollLeftTo(position);
+        });
+        this.indicators.on('scrollChanged', (yposition, xposition) => {
+          this.list_left.scrollTo(yposition);
+          this.list_top.scrollTo(xposition);
+        });
         
         set_listviews.call(this);
     },

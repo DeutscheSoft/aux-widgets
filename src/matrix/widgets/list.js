@@ -198,8 +198,12 @@ export const List = define_class({
     },
     scrollTo: function(position)
     {
-      this.update('_scroll', position);
       this._scroll_timer.restart(100);
+      this.update('_scroll', position);
+      const O = this.options;
+      const startIndex = Math.floor(position / O.size);
+
+      this.update('_startIndex', startIndex);
     },
     redraw: function () {
         const O = this.options;
@@ -245,7 +249,7 @@ export const List = define_class({
 
         if (I._scroll) {
             I._scroll = false;
-            this._scrollbar.scrollTop = O.scroll;
+            this._scrollbar.scrollTop = O._scroll;
         }
 
         Container.prototype.redraw.call(this);
