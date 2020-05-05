@@ -68,6 +68,9 @@ export const Matrix = define_class({
           this.list_left.scrollTo(yposition);
           this.list_top.scrollTo(xposition);
         });
+        this.indicators.on('indicatorClicked', (source, sink) => {
+          this.emit('toggleConnection', source, sink);
+        });
         
         set_listviews.call(this);
     },

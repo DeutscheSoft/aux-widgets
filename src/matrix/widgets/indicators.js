@@ -11,6 +11,13 @@ import { resize_array_mod } from '../models.js';
 
 const SCROLLBAR_SIZE = scrollbar_size();
 
+function on_indicator_clicked()
+{
+  const indicators = this.parent;
+
+  indicators.emit('indicatorClicked', this.source, this.sink);
+}
+
 export const Indicators = define_class({
     Extends: Container,
     _options: Object.assign(Object.create(Container.prototype._options), {
@@ -97,6 +104,7 @@ export const Indicators = define_class({
             const createIndicator = (index1, index2) => {
               const indicator = this.create_indicator();
 
+              indicator.on('click', on_indicator_clicked);
               setIndicatorPosition(indicator, index1, index2);
 
               this._scroller.appendChild(indicator.element);
@@ -107,6 +115,7 @@ export const Indicators = define_class({
 
             const removeIndicator = (indicator) => {
               indicator.element.remove();
+              indicator.off('click', on_indicator_clicked);
               this.remove_child(indicator);
             };
 
@@ -155,6 +164,13 @@ export const Indicators = define_class({
                   setIndicatorPosition(indicator, index1, index2);
                 }
               }
+            }));
+            sub.add(connectionview.subscribeElements((index1, index2, connection, source, sink) => {
+              const entries = this.entries;
+              const row = entries[index1 % entries.length];
+              const indicator = row[index2 % row.length];
+
+              indicator.updateData(index1, index2, connection, source, sink);
             }));
           }
         }
