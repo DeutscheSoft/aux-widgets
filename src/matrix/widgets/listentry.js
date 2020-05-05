@@ -48,6 +48,7 @@ export const ListEntry = define_class({
         icon_uncollaped: "string",
         icon: "string|boolean",
         odd: "boolean",
+        group: "boolean",
     }),
     options: {
         label: false,
@@ -58,6 +59,7 @@ export const ListEntry = define_class({
         icon_uncollapsed: "arrowup",
         icon: false,
         odd: false,
+        group: false,
     },
     initialize: function (options) {
         Container.prototype.initialize.call(this, options);
@@ -94,6 +96,7 @@ export const ListEntry = define_class({
         {
           this.update('depth', compose_depth(treePosition));
           this.update('collapsable', element.isGroup);
+          this.update('group', element.isGroup);
           this.update('odd', (index & 1) === 0);
           this.update('collapsed', element.isGroup && listview.isCollapsed(element));
           this.update('label', element.label);
@@ -142,6 +145,11 @@ export const ListEntry = define_class({
         if (I.collapsable) {
             I.collapsable = false;
             toggle_class(E, "aux-collapsable", O.collapsable);
+        }
+
+        if (I.group) {
+            I.group = false;
+            toggle_class(E, "aux-group", O.group);
         }
         
         if (I.collapsed) {
