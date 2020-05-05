@@ -13,7 +13,7 @@ import { resize_array_mod } from '../models.js';
 const SCROLLBAR_SIZE = scrollbar_size();
 
 function collapse (state) {
-    const element = this.get('datum');
+    const element = this.data;
     const list = this.parent;
     const listview = list.options.listview;
     if (!element.isGroup) return;
