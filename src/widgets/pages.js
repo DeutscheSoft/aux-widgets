@@ -535,6 +535,8 @@ export const Page = define_class({
      * @param {Object} [options={ }] - An object containing initial options.
      * 
      * @property {String} [options.label=""] - The label of the pages corresponding button
+     * @property {Number} [options.hiding_duration=-1] - Default to auto-determine hiding duration from style.
+     * @property {Number} [options.showing_duration=-1] - Default to auto-determine showing duration from style.
      * 
      * @extends Container
      */
@@ -544,5 +546,7 @@ export const Page = define_class({
     }),
     options: {
         label: "",
+        hiding_duration: -1,
+        showing_duration: -1,
     }
 });

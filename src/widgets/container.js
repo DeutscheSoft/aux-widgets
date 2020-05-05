@@ -62,12 +62,14 @@ export const Container = define_class({
      * @property {String|HTMLElement} [options.content] - The content of the container. It can either be
      *   a string which is interpreted as HTML or a DOM node. Note that this option will remove all
      *   child nodes from the container element including those added via append_child.
-     * @property {Number} [options.hiding_duration] - The duration in ms of the hiding CSS
-     *   transition/animation of this container. If this option is not set, the transition duration
+     * @property {Number} [options.hiding_duration=0] - The duration in ms of the hiding CSS
+     *   transition/animation of this container. If this option is set to -1, the transition duration
      *   will be determined by the computed style, which can be rather
      *   expensive. Setting this option explicitly can therefore be an optimization.
-     * @property {Number} [options.showing_duration] - The duration in ms of the showing CSS
-     *   transition/animation of this container.
+     * @property {Number} [options.showing_duration=0] - The duration in ms of the showing CSS
+     *   transition/animation of this container. If this option is set to -1, the transition duration
+     *   will be determined by the computed style, which can be rather
+     *   expensive. Setting this option explicitly can therefore be an optimization.
      */
     Extends: Widget,
     _options: Object.assign(Object.create(Widget.prototype._options), {
@@ -79,6 +81,8 @@ export const Container = define_class({
     }),
     options: {
         children: [],
+        hiding_duration: 0,
+        showing_duration: 0,
     },
     static_events: {
         set_visible: function(val)
@@ -306,7 +310,7 @@ export const Container = define_class({
             switch (O.visible) {
             case 'hiding':
                 add_class(E, 'aux-hiding');
-                time = O.hiding_duration || get_duration(E);
+                time = O.hiding_duration < 0 ? get_duration(E) : O.hiding_duration;
                 if (time > 0)
                 {
                   this.__hide_id = window.setTimeout(this.__after_hiding, time);
@@ -319,7 +323,7 @@ export const Container = define_class({
                 break;
             case 'showing':
                 add_class(E, 'aux-showing');
-                time = O.showing_duration || get_duration(E);
+                time = O.showing_duration < 0 ? get_duration(E) : O.showing_duration;
                 if (time > 0)
                 {
                   this.__hide_id = window.setTimeout(this.__after_showing, time);
