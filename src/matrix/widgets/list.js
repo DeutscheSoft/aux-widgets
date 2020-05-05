@@ -20,44 +20,17 @@ function collapse (state) {
     listview.collapseGroup(element, !listview.isCollapsed(element));
 }
 
-function compose_depth (tree_position) {
-    let depth = [];
-
-    if (tree_position.length == 1)
-        return depth;
-
-    for (let i = 1, m = tree_position.length - 1; i < m; ++i) {
-        if (tree_position[i])
-            depth.push("none");
-        else
-            depth.push("trunk");
-    }
-
-    if (tree_position[tree_position.length - 1])
-        depth.push("end");
-    else
-        depth.push("branch");
-
-    return depth;
-}
-
 function elements_cb (index, element, tree_position) {
     const listview = this.options.listview;
     const entry = this.entries[index % this.entries.length];
     if (element) {
-        entry.update("depth", compose_depth(tree_position));
-        entry.update("collapsable", element.isGroup);
-        entry.update("collapsed", element.isGroup && listview.isCollapsed(element));
+        entry.updateData(listview, index, element, tree_position);
 
-        remove_class(entry.element, "aux-even");
-        remove_class(entry.element, "aux-odd");
-        add_class(entry.element, index % 2 ? "aux-odd" : "aux-even");
         if (entry.hidden())
         {
           entry.update('visible', true);
           this.show_child(entry);
         }
-        entry.update("datum", element);
     } else if (!entry.hidden()) {
         entry.update('datum', void(0));
         entry.update('visible', false);

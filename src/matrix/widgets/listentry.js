@@ -1,6 +1,8 @@
 import { define_class } from '../../widget_helpers.js';
 import { define_child_widget } from '../../child_widget.js';
-import { set_text, add_class, remove_class } from '../../utils/dom.js';
+import { set_text, add_class, remove_class, toggle_class } from '../../utils/dom.js';
+import { Timer } from '../../utils/timers.js';
+import { Subscriptions } from '../../utils/subscriptions.js';
 
 import { Container } from '../../widgets/container.js';
 import { Button } from '../../widgets/button.js';
@@ -14,38 +16,30 @@ const indent_to_glyph = {
     "none" : "",
 }
 
-function set_datum (datum) {
-    const O = this.options;
-    if (this.datum_subscription) {
-        this.datum_subscription();
-        this.datum_subscription = null;
-    }
-    if (!datum) {
-        this.hide();
-    } else {
-        const props = datum.properties;
-        for (let i in props) {
-            if (props.hasOwnProperty(i) && i !== "id" && i.substr(0, 1) !== "_")
-                this.set(i, props[i]);
-        }
-        this.datum_subscription = datum.subscribe('propertyChanged',
-                                                 (name, value) => datum_property_changed.call(this, name, value));
-        if (!O.datum) {
-            this.show();
-        }
-    }
-}
+function compose_depth (tree_position) {
+    let depth = [];
 
-function datum_property_changed (name, value) {
-    console.log(name, value)
-    if (name !== "id" && name.substr(0, 1) !== "_")
-        this.set(name, value);
+    if (tree_position.length == 1)
+        return depth;
+
+    for (let i = 1, m = tree_position.length - 1; i < m; ++i) {
+        if (tree_position[i])
+            depth.push("none");
+        else
+            depth.push("trunk");
+    }
+
+    if (tree_position[tree_position.length - 1])
+        depth.push("end");
+    else
+        depth.push("branch");
+
+    return depth;
 }
 
 export const ListEntry = define_class({
     Extends: Container,
     _options: Object.assign(Object.create(Container.prototype._options), {
-        datum: "object",
         label: "string|boolean",
         depth: "array|boolean",
         collapsable: "boolean",
@@ -53,6 +47,7 @@ export const ListEntry = define_class({
         icon_collapsed: "string",
         icon_uncollaped: "string",
         icon: "string|boolean",
+        odd: "boolean",
     }),
     options: {
         label: false,
@@ -62,26 +57,60 @@ export const ListEntry = define_class({
         icon_collapsed: "arrowdown",
         icon_uncollapsed: "arrowup",
         icon: false,
-    },
-    static_events: {
-        set_datum: function (datum) { set_datum.call(this, datum); },
+        odd: false,
     },
     initialize: function (options) {
         Container.prototype.initialize.call(this, options);
-        this.datum_subscription = null;
+        this.data_subscriptions = new Subscriptions();
+        this.data = null;
+        this.data_subscription_timer = new Timer(() => {
+          this.subscribeData();
+        });
     },
     draw: function (options, element) {
         Container.prototype.draw.call(this, options, element);
         element.classList.add("aux-listentry");
-        if (options.datum)
-            this.set("datum", options.datum);
+    },
+    // overload this to subscribe to other properties
+    subscribeData: function () {
+        const subs = this.data_subscriptions;
+        const element = this.data;
+
+        if (!element) return;
+
+        subs.add(element.subscribe('propertyChanged', (key, value) => {
+          switch (key)
+          {
+          case 'label': this.update('label', value); break;
+          case 'icon': this.update('icon', value); break;
+          }
+        }));
+    },
+    // overload this to subscribe to other properties
+    updateData: function (listview, index, element, treePosition) {
+        this.data_subscriptions.unsubscribe();
+
+        if (element)
+        {
+          this.update('depth', compose_depth(treePosition));
+          this.update('collapsable', element.isGroup);
+          this.update('odd', (index & 1) === 0);
+          this.update('collapsed', element.isGroup && listview.isCollapsed(element));
+          this.update('label', element.label);
+          this.update('icon', element.icon);
+
+          // start listening to changes after 500ms
+          this.data_subscription_timer.restart(500);
+        }
+        this.data = element;
+
     },
     redraw: function () {
         Container.prototype.redraw.call(this);
         
-        var O = this.options;
-        var E = this.element;
-        var I = this.invalid;
+        const O = this.options;
+        const E = this.element;
+        const I = this.invalid;
         
         if (I.depth) {
             I.depth = false;
@@ -101,13 +130,18 @@ export const ListEntry = define_class({
                 set_text(this.indent.element, s);
             }
         }
+
+        if (I.odd)
+        {
+          I.odd = false;
+          remove_class(E, "aux-even");
+          remove_class(E, "aux-odd");
+          add_class(E, O.odd ? "aux-odd" : "aux-even");
+        }
         
         if (I.collapsable) {
             I.collapsable = false;
-            if (O.collapsable)
-                add_class(E, "aux-collapsable");
-            else
-                remove_class(E, "aux-collapsable");
+            toggle_class(E, "aux-collapsable", O.collapsable);
         }
         
         if (I.collapsed) {
