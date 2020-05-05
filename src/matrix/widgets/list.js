@@ -3,6 +3,7 @@ import { inner_width, inner_height, scrollbar_size, add_class, remove_class } fr
 import { error } from './../../utils/log.js';
 import { sprintf } from '../../index.js';
 import { Subscriptions } from '../../utils/subscriptions.js';
+import { subscribeDOMEvent } from '../../utils/events.js';
 
 import { Container } from './../../widgets/container.js';
 import { ListEntry } from './listentry.js';
@@ -186,16 +187,18 @@ export const List = define_class({
     draw: function (options, element) {
         Container.prototype.draw.call(this, options, element);
         element.classList.add("aux-list");
-        this._scrollbar.addEventListener("scroll", (ev) => {
-          if (this._scroll_timer.active)
-          {
-            this._scroll_event_suppressed = true;
-          }
-          else
-          {
-            this.emit('scrollTopChanged', this._scrollbar.scrollTop);
-          }
-        }, { passive: true });
+        this.addSubscriptions(
+          subscribeDOMEvent(this._scrollbar, 'scroll', (ev) => {
+            if (this._scroll_timer.active)
+            {
+              this._scroll_event_suppressed = true;
+            }
+            else
+            {
+              this.emit('scrollTopChanged', this._scrollbar.scrollTop);
+            }
+          })
+        );
         if (options.listview)
             this.set("listview", options.listview);
         this.trigger_resize();

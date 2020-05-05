@@ -3,6 +3,7 @@ import { scrollbar_size, add_class, remove_class } from './../../utils/dom.js';
 import { sprintf } from '../../index.js';
 import { Subscriptions } from '../../utils/subscriptions.js';
 import { Timer } from '../../utils/timers.js';
+import { subscribeDOMEvent } from '../../utils/events.js';
 
 import { Container } from './../../widgets/container.js';
 import { Indicator } from './indicator.js';
@@ -54,17 +55,19 @@ export const Indicators = define_class({
     draw: function (options, element) {
         Container.prototype.draw.call(this, options, element);
         add_class(element, "aux-indicators");
-        this.element.addEventListener("scroll", (ev) => {
-          if (this._scroll_timer.active)
-          {
-            this._scroll_event_suppressed = true;
-          }
-          else
-          {
-            const element = this.element;
-            this.emit('scrollChanged', element.scrollTop, element.scrollLeft);
-          }
-        }, { passive: true });
+        this.addSubscriptions(
+          subscribeDOMEvent(this.element, 'scroll', (ev) => {
+            if (this._scroll_timer.active)
+            {
+              this._scroll_event_suppressed = true;
+            }
+            else
+            {
+              const element = this.element;
+              this.emit('scrollChanged', element.scrollTop, element.scrollLeft);
+            }
+          })
+        );
     },
     redraw: function () {
         const O = this.options;
