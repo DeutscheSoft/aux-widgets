@@ -373,8 +373,10 @@
 /* MATRIX */
 
 .aux-matrix {
+/*
     min-width: 480px;
     min-height: 480px;
+*/
 }
 .aux-matrix > .aux-list {
     width: var(--aux-matrix-list-size);

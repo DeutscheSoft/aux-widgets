@@ -46,6 +46,10 @@ function elements_cb (index, element, tree_position) {
     if (element) {
         entry.update("depth", compose_depth(tree_position));
         entry.update("collapsable", element.isGroup);
+        if (element.isGroup)
+            add_class(entry.element, "aux-group");
+        else
+            remove_class(entry.element, "aux-group");
         remove_class(entry.element, "aux-even");
         remove_class(entry.element, "aux-odd");
         add_class(entry.element, index % 2 ? "aux-odd" : "aux-even");

@@ -818,7 +818,7 @@ body.aux-cursor-row-resize * {
 .aux-listentry > .aux-collapse {
     display: none;
 }
-.aux-listentry.aux-collapsable > .aux-collapse {
+.aux-listentry.aux-group.aux-collapsable > .aux-collapse {
     display: flex;
 }
 
