@@ -8,6 +8,9 @@ export const Indicator = define_class({
     _options: Object.assign(Object.create(Button.prototype._options), {
       connected: 'boolean',
       connectable: 'boolean',
+      sourceisgroup: "boolean",
+      sinkisgroup: "boolean",
+      isgroup: "boolean",
     }),
     initialize: function (options) {
         Button.prototype.initialize.call(this, options);
@@ -16,7 +19,10 @@ export const Indicator = define_class({
     },
     updateData: function (index1, index2, connection, source, sink) {
       this.update('connected', !!connection);
-
+      this.update('sourceisgroup', source.isGroup);
+      this.update('sinkisgroup', sink.isGroup);
+      this.update('isgroup', sink.isGroup || source.isGroup);
+      
       const connectable = source && sink && !source.isGroup && !sink.isGroup;
       this.update('connectable', connectable);
 
@@ -44,6 +50,24 @@ export const Indicator = define_class({
         {
             I.connectable = false;
             toggle_class(E, 'aux-connectable', O.connectable);
+        }
+        
+        if (I.sourceisgroup)
+        {
+            I.sourceisgroup = false;
+            toggle_class(E, 'aux-sourceisgroup', O.sourceisgroup);
+        }
+        
+        if (I.sinkisgroup)
+        {
+            I.sinkisgroup = false;
+            toggle_class(E, 'aux-sinkisgroup', O.sinkisgroup);
+        }
+        
+        if (I.isgroup)
+        {
+            I.isgroup = false;
+            toggle_class(E, 'aux-isgroup', O.isgroup);
         }
     },
 });
