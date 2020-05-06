@@ -20,24 +20,6 @@ function collapse (state) {
     listview.collapseGroup(element, !listview.isCollapsed(element));
 }
 
-function elements_cb (index, element, tree_position) {
-    const listview = this.options.listview;
-    const entry = this.entries[index % this.entries.length];
-    if (element) {
-        entry.updateData(listview, index, element, tree_position);
-
-        if (entry.hidden())
-        {
-          entry.update('visible', true);
-          this.show_child(entry);
-        }
-    } else if (!entry.hidden()) {
-        entry.update('datum', void(0));
-        entry.update('visible', false);
-        this.hide_child(entry);
-    }
-}
-
 function subscribe_all () {
     const O = this.options;
     const listview = O.listview;
@@ -83,7 +65,6 @@ function subscribe_all () {
     subs.add(listview.subscribeSize((size) => {
       this.update('_scroller_size', size);
     }));
-    subs.add(listview.subscribeElements(elements_cb.bind(this)));
     subs.add(listview.subscribeAmount((amount) => {
       const create = (index) => {
         const entry = this.create_entry();
@@ -102,6 +83,23 @@ function subscribe_all () {
       };
 
       resize_array_mod(this.entries, amount, listview.startIndex, create, remove);
+    }));
+    subs.add(listview.subscribeElements((index, element, treePosition) => {
+      const listview = this.options.listview;
+      const entry = this.entries[index % this.entries.length];
+
+      entry.updateData(listview, index, element, treePosition);
+
+      if (element) {
+          if (entry.hidden())
+          {
+            entry.update('visible', true);
+            this.show_child(entry);
+          }
+      } else if (!entry.hidden()) {
+          entry.update('visible', false);
+          this.hide_child(entry);
+      }
     }));
 }
 
