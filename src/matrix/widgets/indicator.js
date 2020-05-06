@@ -19,9 +19,9 @@ export const Indicator = define_class({
     },
     updateData: function (index1, index2, connection, source, sink) {
       this.update('connected', !!connection);
-      this.update('sourceisgroup', source.isGroup);
-      this.update('sinkisgroup', sink.isGroup);
-      this.update('isgroup', sink.isGroup || source.isGroup);
+      this.update('sourceisgroup', source && source.isGroup);
+      this.update('sinkisgroup', sink && sink.isGroup);
+      this.update('isgroup', sink && sink.isGroup || source && source.isGroup);
       
       const connectable = source && sink && !source.isGroup && !sink.isGroup;
       this.update('connectable', connectable);
