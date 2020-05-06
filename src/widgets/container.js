@@ -309,31 +309,59 @@ export const Container = define_class({
 
             switch (O.visible) {
             case 'hiding':
-                add_class(E, 'aux-hiding');
-                time = O.hiding_duration < 0 ? get_duration(E) : O.hiding_duration;
-                if (time > 0)
+              {
+                let time = O.hiding_duration;
+
+                if (time !== 0)
                 {
-                  this.__hide_id = window.setTimeout(this.__after_hiding, time);
+                  add_class(E, 'aux-hiding');
+
+                  if (time === -1)
+                    time = get_duration(E);
+
+                  if (time > 0)
+                  {
+                    this.__hide_id = window.setTimeout(this.__after_hiding, time);
+                  }
+                  else
+                  {
+                    remove_class(E, 'aux-hiding');
+                    this.set('visible', false);
+                  }
                 }
                 else
                 {
-                  remove_class(E, 'aux-hiding');
-                  this.set('visible', false);
+                    this.set('visible', false);
                 }
                 break;
+              }
             case 'showing':
-                add_class(E, 'aux-showing');
-                time = O.showing_duration < 0 ? get_duration(E) : O.showing_duration;
-                if (time > 0)
+              {
+                let time = O.showing_duration;
+
+                if (time !== 0)
                 {
-                  this.__hide_id = window.setTimeout(this.__after_showing, time);
+                  add_class(E, 'aux-showing');
+
+                  if (time === -1)
+                    time = get_duration(E);
+
+                  if (time > 0)
+                  {
+                    this.__hide_id = window.setTimeout(this.__after_showing, time);
+                  }
+                  else
+                  {
+                    remove_class(E, 'aux-showing');
+                    this.set('visible', true);
+                  }
                 }
                 else
                 {
-                  remove_class(E, 'aux-showing');
                   this.set('visible', true);
                 }
                 break;
+              }
             }
         }
 
