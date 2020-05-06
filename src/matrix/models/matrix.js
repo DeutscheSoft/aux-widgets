@@ -51,31 +51,35 @@ export class MatrixData extends Datum
     nodes.delete(id);
   }
 
-  createPort(port)
+  createPort(port, PortClass)
   {
     if (!(port instanceof PortData))
     {
+      if (!PortClass) PortClass = PortData;
       if (!port) port = {};
       if (!port.id)
       {
         port.id = this.last_id++;
       }
-      port = new PortData(this, port);
+      port = new PortClass(this, port);
     }
 
     return port;
   }
 
-  createGroup(group)
+  createGroup(group, GroupClass)
   {
     if (!(group instanceof GroupData))
     {
+      if (!GroupClass) GroupClass = GroupData;
       if (!group) group = {};
       if (!group.id)
       {
         group.id = this.last_id++;
       }
-      group = new GroupData(this, group);
+      group = new GroupClass(this, group);
+      if (!(group instanceof GroupData))
+        throw new TypeError('GroupClass must extend GroupData.');
     }
 
     return group;
