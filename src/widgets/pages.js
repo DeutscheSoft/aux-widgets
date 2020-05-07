@@ -298,9 +298,10 @@ export const Pages = define_class({
     {
       if (typeof content === "string" || content === void(0))
       {
-        if (!options) options = {}; 
-        options.content = content;
-        return new Page(options);
+        if (!options) options = {};
+        const page = new Page(options);
+        page.element.innerHTML = content;
+        return page;
       }
       else if (is_dom_node(content))
       {
@@ -313,8 +314,11 @@ export const Pages = define_class({
           content.remove();
 
         if (!options) options = {}; 
-        options.content = content;
-        return new Page(options);
+        const page = new Page(options);
+
+        page.element.appendChild(content);
+
+        return page;
       }
       else if (content instanceof Page)
       {
