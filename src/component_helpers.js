@@ -27,6 +27,21 @@ function attribute_for_widget(Widget)
   return attributes;
 }
 
+const FORMAT_TYPES = new Set([
+  "js",
+  "javascript",
+  "json",
+  "html",
+  "string",
+  "number",
+  "int",
+  "sprintf",
+  "regexp",
+  "bool",
+  "boolean",
+  "array"
+]);
+
 function low_parse_attribute(type, x) {
   switch (type) {
   case "js":
@@ -75,42 +90,46 @@ function low_parse_attribute(type, x) {
   }
 }
 
-function parse_attribute(type, value)
+function parse_attribute(option_type, value)
 {
+  const pos = value.indexOf(':');
+
+  if (pos !== -1)
   {
-    const pos = value.indexOf(':');
+    const format = value.substr(0, pos);
 
-    if (pos !== -1)
+    if (FORMAT_TYPES.has(format))
     {
-      try
-      {
-        return low_parse_attribute.call(this, value.substr(0, pos), value.substr(pos+1));
-      }
-      catch (err) { }
-    }
-
-
-    if (type.includes('|'))
-    {
-      const types = type.split('|');
-
-      for (let i = 0; i < types.length; i++)
-      {
-        try
-        {
-          return low_parse_attribute.call(this, types[i], value);
-        }
-        catch (e)
-        {
-          //warn(e);
-        }
-      }
-
-      throw new Error('Could not find any matching format in ' + type);
+      return low_parse_attribute.call(this, format, value.substr(pos+1));
     }
   }
 
-  return low_parse_attribute.call(this, type, value);
+  let types = option_type.includes('|') ? option_type.split('|') : [ option_type ];
+
+  types = types.filter((type) => FORMAT_TYPES.has(type));
+
+  if (!types.length)
+  {
+    throw new Error('Unable to parse attribute without explicit format.');
+  }
+
+  let last_error; 
+
+  for (let i = 0; i < types.length; i++)
+  {
+    const type = types[i];
+
+    try
+    {
+      return low_parse_attribute.call(this, type, value);
+    }
+    catch (e)
+    {
+      last_error = e;
+    }
+  }
+
+  throw last_error;
 }
 
 function create_component (base) {
