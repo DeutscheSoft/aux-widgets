@@ -70,6 +70,14 @@ function redraw(fun) {
 }
 function resize() {
     if (this.is_destructed()) return;
+
+    // we were turned off before we could resize
+    if (!this.is_drawn())
+    {
+      this.trigger_resize();
+      return;
+    }
+
     this.resize();
 }
 function onvisibilitychange() {
