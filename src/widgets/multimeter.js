@@ -67,9 +67,14 @@ export const MultiMeter = define_class({
      * 
      * <ul>
      *   <li>mono</li>
-     *   <li>stereo</li>
+     *   <li>2.1</li>
+     *   <li>3</li>
      *   <li>3.1</li>
+     *   <li>4</li>
+     *   <li>4.1</li>
+     *   <li>5</li>
      *   <li>5.1</li>
+     *   <li>7.1</li>
      *   <li>dolby_digital_1_0</li>
      *   <li>dolby_digital_2_0</li>
      *   <li>dolby_digital_3_0</li>

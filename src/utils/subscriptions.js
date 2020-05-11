@@ -1,4 +1,5 @@
 import { warn } from './log.js';
+import { typecheck_function } from './typecheck.js';
 
 export function init_subscriptions()
 {
@@ -31,6 +32,7 @@ export function add_subscription(subscriptions, subscription)
 
     if (subscription !== null)
     {
+      typecheck_function(subscription);
       subscriptions.push(subscription);
     }
 
@@ -38,6 +40,8 @@ export function add_subscription(subscriptions, subscription)
   }
   else
   {
+    typecheck_function(subscriptions);
+
     if (Array.isArray(subscription))
     {
       return [ subscriptions ].concat(subscription);
@@ -45,6 +49,7 @@ export function add_subscription(subscriptions, subscription)
 
     if (subscription !== null)
     {
+      typecheck_function(subscription);
       return [ subscriptions, subscription ];
     }
 
@@ -84,4 +89,50 @@ export function unsubscribe_subscriptions(subscriptions)
   }
 
   return null;
+}
+
+export class Subscription
+{
+  constructor(subscription)
+  {
+    if (subscription !== void(0))
+    {
+      if (subscription instanceof Subscription)
+      {
+        subscription = subscription.sub;
+      }
+    }
+    else
+    {
+      subscription = init_subscriptions();
+    }
+
+    this.sub = subscription;
+  }
+
+  unsubscribe()
+  {
+    this.sub = unsubscribe_subscriptions(this.sub);
+  }
+}
+
+export class Subscriptions extends Subscription
+{
+  add(subscription)
+  {
+    if (subscription instanceof Subscription)
+    {
+      subscription = subscription.sub;
+    }
+
+    else
+    {
+      this.sub = add_subscription(this.sub, subscription);
+    }
+  }
+
+  unsubscribe()
+  {
+    this.sub = unsubscribe_subscriptions(this.sub);
+  }
 }

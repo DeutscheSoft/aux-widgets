@@ -21,6 +21,7 @@ import { toggle_class, set_styles, add_class, remove_class, has_class, set_style
 import { warn, error } from './../utils/log.js';
 import { define_class } from './../widget_helpers.js';
 import { Base } from './../implements/base.js';
+import { init_subscriptions, add_subscription, unsubscribe_subscriptions } from '../utils/subscriptions.js';
 
 function Invalid(options) {
     for (var key in options) this[key] = true;
@@ -69,6 +70,14 @@ function redraw(fun) {
 }
 function resize() {
     if (this.is_destructed()) return;
+
+    // we were turned off before we could resize
+    if (!this.is_drawn())
+    {
+      this.trigger_resize();
+      return;
+    }
+
     this.resize();
 }
 function onvisibilitychange() {
@@ -307,6 +316,7 @@ export const Widget = define_class({
       this._preset_origins = {};
       this._last_preset;
       this._presetting = false;
+      this._subscriptions = init_subscriptions();
     },
 
     getStyleTarget: function() {
@@ -543,6 +553,12 @@ export const Widget = define_class({
             q[i].call(this, O);
         }
     },
+    addSubscriptions: function(...subs)
+    {
+      subs.forEach((sub) => {
+        this._subscriptions = add_subscription(this._subscriptions, sub);
+      });
+    },
     destroy: function () {
         /**
          * Is fired when a widget is destroyed.
@@ -557,6 +573,8 @@ export const Widget = define_class({
 
         this.disable_draw();
         this.set_parent(void(0));
+
+        this._subscriptions = unsubscribe_subscriptions(this._subscriptions);
 
         if (this.children)
         {

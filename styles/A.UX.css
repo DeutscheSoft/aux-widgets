@@ -251,6 +251,51 @@
                 5px 15px 3px rgba(0, 0, 0, 0.12);
 }
 
+/* LIST */
+
+.aux-list {
+    background: var(--aux-widget-base);
+    color: var(--aux-widget-color);
+}
+
+/* LISTENTRY */
+
+.aux-listentry.aux-odd {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+.aux-listentry > .aux-collapse {
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    background: transparent;
+    border: 1px solid var(--aux-main-text);
+    border-radius: 50%;
+    margin: var(--aux-main-margin);
+    width: calc(var(--aux-listentry-size) - 2 * var(--aux-main-margin));
+    flex: 0 0 calc(var(--aux-listentry-size) - 2 * var(--aux-main-margin));
+    height: calc(var(--aux-listentry-size) - 2 * var(--aux-main-margin));
+}
+.aux-listentry > .aux-indent {
+    font-weight: 200;
+}
+.aux-listentry > .aux-icon {
+    font-size: var(--aux-main-bigfont);
+}
+.aux-listentry.aux-collapsable > .aux-label {
+    font-weight: bold;
+}
+
+/* MATRIX */
+
+.aux-matrix > .aux-indicators {
+    background: var(--aux-widget-base);
+}
+.aux-matrix .aux-indicator {
+    border-radius: 0;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
 /* METER */
 
 .aux-meter .aux-bar {

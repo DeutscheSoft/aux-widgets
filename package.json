@@ -4,6 +4,7 @@
   "description": "A.UX Audio Widget Library",
   "main": "src/index.js",
   "module": "src/index.js",
+  "type": "module",
   "directories": {
     "doc": "doc",
     "test": "tests"

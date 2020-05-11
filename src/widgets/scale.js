@@ -508,8 +508,9 @@ export const Scale = define_class({
     resize: function () {
         Widget.prototype.resize.call(this);
         var O = this.options;
-        this.set("basis", vert(O) ? inner_height(this.element)
-                                  : inner_width(this.element) );
+
+        const basis = vert(O) ? inner_height(this.element) : inner_width(this.element);
+        this.update('basis', basis);
     },
     
     // GETTER & SETTER

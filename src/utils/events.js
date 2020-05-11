@@ -111,3 +111,14 @@ const __native_events = {
 export function is_dom_event(type) {
     return __native_events[type];
 }
+
+export function subscribeDOMEvent(node, event_name, cb)
+{
+  const callback = (...args) => cb(...args);
+
+  node.addEventListener(event_name, callback);
+
+  return () => {
+    node.removeEventListener(event_name, callback);
+  };
+}

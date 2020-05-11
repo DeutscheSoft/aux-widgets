@@ -27,6 +27,11 @@
  */
 
 @import "fonts/A.UX.css";
+@import "fonts/Shapes.css";
+
+body {
+    --aux-scrollbar-size: 0;
+}
 
 /* ######## GENERIC CSS ######## */
 
@@ -775,6 +780,82 @@ body.aux-cursor-row-resize * {
     float: left;
 }
 
+/* LIST */
+
+.aux-list {
+    overflow: hidden;
+    contain: strict;
+}
+
+.aux-list > .aux-scrollbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: calc(-1 * var(--aux-scrollbar-size));
+    bottom: 0;
+    overflow-y: scroll;
+    contain: strict;
+}
+.aux-list > .aux-scrollbar > .aux-scroller {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* LISTENTRY */
+
+.aux-listentry {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+.aux-listentry > .aux-indent {
+    flex: 0 0 0;
+    font-family: Shapes;
+}
+.aux-listentry > .aux-collapse {
+    display: none;
+}
+.aux-listentry.aux-group.aux-collapsable > .aux-collapse {
+    display: flex;
+}
+
+/* MATRIX */
+
+.aux-matrix {
+    overflow: hidden;
+    contain: strict;
+}
+.aux-matrix > * {
+    position: absolute;
+}
+.aux-matrix > .aux-list {
+    margin: 0;
+}
+.aux-matrix > .aux-indicators {
+    position: absolute;
+    overflow: scroll;
+    bottom: calc(-1 * var(--aux-scrollbar-size));
+    right: calc(-1 * var(--aux-scrollbar-size));
+    margin: 0;
+}
+.aux-matrix > .aux-indicators > .aux-scroller {
+    overflow: hidden;
+    contain: strict;
+}
+.aux-matrix .aux-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
 /* MULTIMETER */
 
 .aux-multimeter {
@@ -941,6 +1022,7 @@ body.aux-cursor-row-resize * {
     overflow: auto;
     will-change: transform;
     transform: translate3d(0,0,0);
+    contain: strict;
 }
 
 .aux-pages.aux-forward.aux-vertical > .aux-page.aux-hiding {

@@ -1,0 +1,122 @@
+.entry
+{
+  contain: strict;
+  height: 30px;
+  border: 1px solid black;
+  box-sizing: border-box;
+  font-size: 15px;
+  background-color: #eff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 150px;
+  user-select: none;
+  padding: 0;
+}
+.entry.group
+{
+  background-color: #fef;
+}
+.entry > .indent
+{
+  font-family: Shapes;
+  font-size: 28px;
+}
+.entry > .label
+{
+  font-size: 20px;
+  vertical-align: 40%;
+}
+
+body
+{
+  overflow: hidden;
+}
+
+.list
+{
+  display: inline-block;
+  width: 200px;
+  height: 100%;
+  background: #eee;
+  position: relative;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.list > .scrollarea
+{
+  overflow: hidden;
+  position: relative;
+}
+#list1
+{
+  position: absolute;
+  left: 0;
+  top: 200px;
+  overflow: hidden;
+}
+#list1 > .list
+{
+  height: calc(100vh - 200px);
+}
+#list2 > .list
+{
+  height: calc(100vw - 200px);
+}
+#list2
+{
+  position: absolute;
+  left: 200px;
+  top: 200px;
+  transform-origin: top left;
+  transform: rotate(-90deg)
+}
+#matrix
+{
+  position: absolute;
+  left: 200px;
+  top: 200px;
+  width: calc(100vw - 200px);
+  height: calc(100vh - 200px);
+  overflow: hidden;
+}
+
+#matrix > .scrollarea
+{
+  overflow: hidden;
+  position: relative;
+}
+
+.cell
+{
+  contain: strict;
+  height: 30px;
+  width: 30px;
+  box-sizing: border-box;
+  font-size: 15px;
+  background-color: #eff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0;
+  opacity: 0.3;
+  font-size: 6px;
+  overflow: hidden;
+  font-family: monospace;
+  white-space: pre;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  user-select: none;
+}
+.cell.connectable
+{
+  border: 1px solid black;
+  opacity: 1;
+  cursor: pointer;
+}
+.cell.connected
+{
+  background-color: #0f0;
+}

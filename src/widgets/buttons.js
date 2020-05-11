@@ -451,6 +451,7 @@ export const Buttons = define_class({
     },
     /**
      * @returns {Button[]} The list of {@link Button}s.
+     * @method Buttons#get_buttons
      */
     get_buttons: function()
     {

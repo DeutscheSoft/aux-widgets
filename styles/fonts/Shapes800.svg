@@ -1,0 +1,618 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1024"
+   height="1024"
+   viewBox="0 0 1024 1024"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="Shapes900.svg">
+  <defs
+     id="defs">
+    <font
+       horiz-adv-x="1024"
+       id="MySVGFont"
+       inkscape:label="MySVGFont"
+       vert-origin-x="0"
+       horiz-origin-x="0"
+       horiz-origin-y="0"
+       vert-origin-y="0"
+       vert-adv-y="0">
+      <font-face
+         units-per-em="1024"
+         id="MySVGFont-Face"
+         font-family="Shapes"
+         ascent="1024"
+         stemv="0"
+         stemh="0"
+         slope="0"
+         cap-height="0"
+         x-height="0"
+         accent-height="0"
+         descent="0"
+         ideographic="0"
+         alphabetic="0"
+         mathematical="0"
+         hanging="0"
+         v-ideographic="0"
+         v-alphabetic="0"
+         v-mathematical="0"
+         v-hanging="0"
+         underline-position="0"
+         underline-thickness="0"
+         strikethrough-position="0"
+         strikethrough-thickness="0"
+         overline-position="0"
+         overline-thickness="0" />
+      <missing-glyph
+         d="M0,0h1000v1024h-1000z"
+         id="missing-glyph1757" />
+      <glyph
+         glyph-name="Trunk/Stem/Pipe"
+         id="glyph0"
+         unicode=""
+         d="M 448,1024 H 576 V 0 H 448 Z" />
+      <glyph
+         glyph-name="Branch"
+         id="glyph1"
+         unicode=""
+         d="M 448,1024 V 0 h 128 v 448 h 448 V 576 H 576 v 448 z" />
+      <glyph
+         glyph-name="End"
+         id="glyph2"
+         unicode=""
+         d="M 448,1024 V 448 h 576 V 576 H 576 v 448 z" />
+      <glyph
+         glyph-name="None/Null/Clear"
+         id="glyph3"
+         unicode=""
+         d="M 0,0" />
+      <glyph
+         glyph-name=""
+         id="glyph4"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph5"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph6"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph7"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph8"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph9"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph10"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph11"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph12"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph13"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph14"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph15"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph16"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph17"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph18"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph19"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph20"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph21"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph22"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph23"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph24"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph25"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph26"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph27"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph28"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph29"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph30"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph31"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph32"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph33"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph34"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph35"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph36"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph37"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph38"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph39"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph40"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph41"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph42"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph43"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph44"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph45"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph46"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph47"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph48"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph49"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph50"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph51"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph52"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph53"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph54"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph55"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph56"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph57"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph58"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph59"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph60"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph61"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph62"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph63"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph64"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph65"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph66"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph67"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph68"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph69"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph70"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph71"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph72"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph73"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph74"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph75"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph76"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph77"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph78"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph79"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph80"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph81"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph82"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph83"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph84"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph85"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph86"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph87"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph88"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph89"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph90"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph91"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph92"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph93"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph94"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph95"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph96"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph97"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph98"
+         unicode=""
+         d="" />
+      <glyph
+         glyph-name=""
+         id="glyph99"
+         unicode=""
+         d="" />
+    </font>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.2472709"
+     inkscape:cx="323.03534"
+     inkscape:cy="436.09094"
+     inkscape:document-units="px"
+     inkscape:current-layer="svg2"
+     showgrid="true"
+     units="px"
+     inkscape:window-width="3840"
+     inkscape:window-height="2063"
+     inkscape:window-x="0"
+     inkscape:window-y="57"
+     inkscape:window-maximized="1"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-nodes="true"
+     inkscape:object-paths="true"
+     inkscape:object-nodes="true"
+     inkscape:snap-smooth-nodes="true"
+     inkscape:snap-object-midpoints="true"
+     inkscape:snap-center="true"
+     inkscape:snap-others="false">
+    <inkscape:grid
+       type="xygrid"
+       id="grid1"
+       empspacing="8"
+       spacingx="16"
+       spacingy="16" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,768)" />
+  <path
+     style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:24;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:markers stroke fill;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+     d="m 448,0 v 576 h 576 V 448 H 576 V 0 Z"
+     id="rect1109"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccccc" />
+</svg>
