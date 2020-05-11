@@ -224,7 +224,7 @@ describe('Pager', () => {
       });
     });
 
-    it.only("Preventing changing pages", async () => {
+    it("Preventing changing pages", async () => {
       const pager = new Pager();
       const label = "testing";
       const b1 = pager.add_page('', '');
