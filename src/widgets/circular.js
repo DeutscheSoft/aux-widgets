@@ -111,7 +111,7 @@ function draw_markers() {
     var marker = O.markers_defaults;
     empty(this._markers);
     
-    var stroke  = this._get_stroke();
+    var stroke  = O._stroke_width;
     var outer   = O.size / 2;
     var angle = O.angle;
     
@@ -335,6 +335,7 @@ export const Circular = define_class({
     Extends: Widget,
     Implements: [Warning, Ranged],
     _options: Object.assign(Object.create(Widget.prototype._options), Ranged.prototype._options, {
+        _stroke_width: "number",
         value: "number",
         value_hand: "number",
         value_ring: "number",
@@ -365,7 +366,6 @@ export const Circular = define_class({
         initialized: function() {
             // calculate the stroke here once. this happens before
             // the initial redraw
-            S.after_frame(this._get_stroke.bind(this));
             this.set("value", this.options.value);
         },
         rangedchanged: function () {
@@ -375,6 +375,7 @@ export const Circular = define_class({
         },
     },
     options: {
+        _stroke_width: 0,
         value:      0,
         value_hand: 0,
         value_ring: 0,
@@ -429,6 +430,7 @@ export const Circular = define_class({
     },
 
     resize: function () {
+        this.update("_stroke_width", this._get_stroke());
         this.invalid.labels = true;
         this.trigger_draw();
         Widget.prototype.resize.call(this);
@@ -473,12 +475,12 @@ export const Circular = define_class({
             draw_markers.call(this);
         }
 
-        var stroke  = this._get_stroke();
+        var stroke  = O._stroke_width;
         var inner   = outer - O.thickness;
         var outer_p = outer - stroke / 2 - O.margin;
         var inner_p = inner - stroke / 2 - O.margin;
         
-        if (I.show_value || I.value_ring || I.size) {
+        if (I.show_value || I.value_ring || I.size || I._stroke_width) {
             I.show_value = I.value_ring = false;
             if (O.show_value) {
                 draw_slice.call(this, this.val2coef(this.snap(O.base)) * O.angle, this.val2coef(this.snap(O.value_ring)) * O.angle, inner_p, outer_p, outer,
@@ -488,7 +490,7 @@ export const Circular = define_class({
             }
         }
 
-        if (I.show_base || I.size) {
+        if (I.show_base || I.size || I._stroke_width) {
             I.show_base = false;
             if (O.show_base) {
                 draw_slice.call(this, 0, O.angle, inner_p, outer_p, outer, this._base);
@@ -514,6 +516,7 @@ export const Circular = define_class({
             tmp.setAttribute("transform",
                              format_rotate(this.val2coef(this.snap(O.value_hand)) * O.angle, O.size / 2, O.size / 2));
         }
+        I._stroke_width = false;
     },
     
     destroy: function () {
