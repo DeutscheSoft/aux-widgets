@@ -121,7 +121,7 @@ function low_remove_entry(entry) {
 export const Select = define_class({
     /**
      * Select provides a {@link Button} with a select list to choose from
-     * a list of {@SelectEntry}.
+     * a list of {@link SelectEntry}.
      *
      * @class Select
      * 
@@ -129,14 +129,14 @@ export const Select = define_class({
      *
      * @param {Object} [options={ }] - An object containing initial options.
      * 
-     * @property {Integer|Boolean} [options.selected=false] - The index of the selected {@SelectEntry}.
+     * @property {Integer|Boolean} [options.selected=false] - The index of the selected {@link SelectEntry}.
      *   Set to `false` to unselect any already selected entries.
      * @property {mixed} [options.value] - The value of the selected entry.
      * @property {Boolean} [options.auto_size=true] - If `true`, the Select is
-     *   auto-sized to be as wide as the widest {@SelectEntry}.
-     * @property {Array<Object>} [options.entries=[]] - The list of {@SelectEntry}. Each member is an
+     *   auto-sized to be as wide as the widest {@link SelectEntry}.
+     * @property {Array<Object>} [options.entries=[]] - The list of {@link SelectEntry}. Each member is an
      *   object with the two properties <code>label</code> and <code>value</code>, a string used
-     *   as label for constructing a {@SelectEntry} or an instance of {@SelectEntry}.
+     *   as label for constructing a {@link SelectEntry} or an instance of {@link SelectEntry}.
      * @property {String|Boolean} [options.placeholder=false] - Placeholder test
      *   for the button label. Set to <code>false</code> to have an empty
      *   placeholder. This placeholder is shown when no entry is selected.
