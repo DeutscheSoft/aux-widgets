@@ -125,6 +125,8 @@ export const Navigation = define_class({
     Extends: Container,
     _class: "Navigation",
     _options: Object.assign(Object.create(Container.prototype._options), {
+        _scroll_top: "number",
+        _scroll_left: "number",
         direction: "string",
         arrows: "boolean",
         auto_arrows: "boolean",
@@ -132,6 +134,8 @@ export const Navigation = define_class({
         scroll: "int",
     }),
     options: {
+        _scroll_top: 0,
+        _scroll_left: 0,
         direction: "horizontal",
         arrows: false,
         auto_arrows: true,
@@ -187,7 +191,10 @@ export const Navigation = define_class({
     draw: function(O, element)
     {
       add_class(element, "aux-navigation");
-
+      this.buttons.on("scroll", function () {
+        this.parent.update("_scroll_top", this.element.scrollTop);
+        this.parent.update("_scroll_left", this.element.scrollLeft);
+      });
       Container.prototype.draw.call(this, O, element);
     },
     redraw: function () {
@@ -228,7 +235,7 @@ export const Navigation = define_class({
             if (show >= 0 && show < B.length) {
                 const dir  = O.direction === "vertical";
                 const subd = dir ? 'top' : 'left';
-                const subt = dir ? 'scrollTop' : 'scrollLeft';
+                const subt = dir ? '_scroll_top' : '_scroll_left';
                 const subs = dir ? 'height' : 'width';
                 const butt  = M.buttons[show];
                 const clip = M.clip[subs];
@@ -240,24 +247,25 @@ export const Navigation = define_class({
                     btnpos   = butt[subd];
                 }
                 const pos = (Math.max(0, Math.min(list - clip, btnpos - (clip / 2 - btnsize / 2))));
-                const s = BE[subt];
+                const s = O[subt];
                 const fpos = Math.floor(pos);
                 this._scroll = {to: fpos, from: s, dir: pos > s ? 1 : -1, diff: fpos - s, time: Date.now()};
                 this.invalid._scroll = true;
             }
         }
         if (this.invalid._scroll) {
-            const subt = O.direction === "vertical" ? 'scrollTop' : 'scrollLeft';
-            const s = Math.floor(BE[subt]);
+            const odir = O.direction === "vertical" ? '_scroll_top' : '_scroll_left';
+            const sdir = O.direction === "vertical" ? 'scrollTop' : 'scrollLeft';
+            const s = Math.floor(O[odir]);
             const _s = this._scroll;
             const now = Date.now();
             if ((s >= _s.to && _s.dir > 0) ||
                 (s <= _s.to && _s.dir < 0) ||
                 now > (_s.time + O.scroll)) {
                 this.invalid._scroll = false;
-                BE[subt] = _s.to;
+                BE[sdir] = _s.to;
             } else {
-                BE[subt] = easeInOut(Date.now() - _s.time, _s.from, _s.diff, O.scroll);
+                BE[sdir] = easeInOut(Date.now() - _s.time, _s.from, _s.diff, O.scroll);
                 this.trigger_draw_next();
             }
         }
