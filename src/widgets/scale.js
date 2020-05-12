@@ -467,6 +467,22 @@ export const Scale = define_class({
           /* NOTE: reverse will be validated below */
           toggle_class(E, "aux-reverse", O.reverse);
         }
+        
+        if (this._bar && (I.bar || I.basis || I.base || I.reverse)) {
+            /* NOTE: options will be validated below */
+            const tmpval = this.val2px(this.snap(O.bar));
+            const tmpbase = this.val2px(O.base);
+            const min = Math.min(tmpval, tmpbase);
+            const max = Math.max(tmpval, tmpbase);
+            
+            if (vert(O)) {
+                this._bar.style.top = (O.basis - max) + "px";
+                this._bar.style.bottom = min + "px";
+            } else {
+                this._bar.style.right = (O.basis - max) + "px";
+                this._bar.style.left = min + "px";
+            }
+        }
 
         if (I.validate("base", "show_base", "gap_labels", "min", "show_min", "division", "max", "show_markers",
                        "fixed_dots", "fixed_labels", "levels", "basis", "scale", "reverse", "show_labels")) {
@@ -570,14 +586,4 @@ define_child_element(Scale, "bar", {
     show: false,
     toggle_class: true,
     option: "bar",
-    draw_options: Object.keys(Ranged.prototype._options).concat([ "bar", "basis" ]),
-    draw: function(O) {
-        if (this._bar) {
-            var tmp = this.val2px(this.snap(O.bar)) + "px";
-            if (vert(O))
-                this._bar.style.height = tmp;
-            else
-                this._bar.style.width = tmp;
-        }
-    },
 });
