@@ -780,14 +780,14 @@ body.aux-cursor-row-resize * {
     float: left;
 }
 
-/* LIST */
+/* VIRTUALTREE */
 
-.aux-list {
+.aux-virtualtree {
     overflow: hidden;
     contain: strict;
 }
 
-.aux-list > .aux-scrollbar {
+.aux-virtualtree > .aux-scrollbar {
     position: absolute;
     top: 0;
     left: 0;
@@ -796,7 +796,7 @@ body.aux-cursor-row-resize * {
     overflow-y: scroll;
     contain: strict;
 }
-.aux-list > .aux-scrollbar > .aux-scroller {
+.aux-virtualtree > .aux-scrollbar > .aux-scroller {
     display: block;
     width: 100%;
     overflow: hidden;
@@ -804,23 +804,23 @@ body.aux-cursor-row-resize * {
     position: relative;
 }
 
-/* LISTENTRY */
+/* VIRTUALTREEENTRY */
 
-.aux-listentry {
+.aux-virtualtreeentry {
     display: flex;
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
 }
-.aux-listentry > .aux-indent {
+.aux-virtualtreeentry > .aux-indent {
     flex: 0 0 0;
     font-family: Shapes;
 }
-.aux-listentry > .aux-collapse {
+.aux-virtualtreeentry > .aux-collapse {
     display: none;
 }
-.aux-listentry.aux-group.aux-collapsable > .aux-collapse {
+.aux-virtualtreeentry.aux-group.aux-collapsable > .aux-collapse {
     display: flex;
 }
 
@@ -833,7 +833,7 @@ body.aux-cursor-row-resize * {
 .aux-matrix > * {
     position: absolute;
 }
-.aux-matrix > .aux-list {
+.aux-matrix > .aux-virtualtree {
     margin: 0;
 }
 .aux-matrix > .aux-indicators {

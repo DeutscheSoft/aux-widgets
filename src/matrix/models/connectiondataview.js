@@ -3,7 +3,7 @@ import {
   init_subscriptions, add_subscription, unsubscribe_subscriptions
 } from '../../utils/subscriptions.js';
 import { init_subscribers, add_subscriber, remove_subscriber, call_subscribers } from '../../utils/subscribers.js';
-import { ListDataView } from './listdataview.js';
+import { VirtualTreeDataView } from './virtualtreedataview.js';
 import { Events } from '../../events.js';
 import { call_continuation_if } from './helpers.js';
 import { GroupData } from './group.js';
@@ -237,21 +237,21 @@ export class ConnectionDataView extends Events
 
   _registerConnectionFor(node)
   {
-    this.listview1.matrix.getConnectionsOf(node).forEach((connection) => {
+    this.virtualtreeview1.matrix.getConnectionsOf(node).forEach((connection) => {
       this._registerConnection(connection);
     });
   }
 
   _unregisterConnectionFor(node)
   {
-    this.listview1.matrix.getConnectionsOf(node).forEach((connection) => {
+    this.virtualtreeview1.matrix.getConnectionsOf(node).forEach((connection) => {
       this._unregisterConnection(connection);
     });
   }
 
-  _subscribeAllElements(listview, dst, other)
+  _subscribeAllElements(virtualtreeview, dst, other)
   {
-    const filter = listview.filterFunction;
+    const filter = virtualtreeview.filterFunction;
     const subscribe = (group) => {
       return group.forEachAsync((node) => {
         return call_continuation_if(node, filter, (node) => {
@@ -276,40 +276,40 @@ export class ConnectionDataView extends Events
       });
     };
 
-    return subscribe(listview.group);
+    return subscribe(virtualtreeview.group);
   }
 
   get startIndex1()
   {
-    return this.listview1.startIndex;
+    return this.virtualtreeview1.startIndex;
   }
 
   get startIndex2()
   {
-    return this.listview2.startIndex;
+    return this.virtualtreeview2.startIndex;
   }
 
   get amount1()
   {
-    return this.listview1.amount;
+    return this.virtualtreeview1.amount;
   }
 
   get amount2()
   {
-    return this.listview2.amount;
+    return this.virtualtreeview2.amount;
   }
 
-  constructor(listview1, listview2)
+  constructor(virtualtreeview1, virtualtreeview2)
   {
-    typecheck_instance(listview1, ListDataView);
-    typecheck_instance(listview2, ListDataView);
+    typecheck_instance(virtualtreeview1, VirtualTreeDataView);
+    typecheck_instance(virtualtreeview2, VirtualTreeDataView);
 
-    if (listview1.matrix !== listview2.matrix)
+    if (virtualtreeview1.matrix !== virtualtreeview2.matrix)
       throw new Error('Can only work with ListDataView instance of the same matrix.');
 
     super();
-    this.listview1 = listview1;
-    this.listview2 = listview2;
+    this.virtualtreeview1 = virtualtreeview1;
+    this.virtualtreeview2 = virtualtreeview2;
 
     this.elements1 = new Set();
     this.elements2 = new Set();
@@ -343,7 +343,7 @@ export class ConnectionDataView extends Events
       });
     }));
 
-    this._addSubscription(listview1.subscribeElements(
+    this._addSubscription(virtualtreeview1.subscribeElements(
       (index, row_element) => {
         const rows = this.rows;
         const columns = this.columns;
@@ -371,7 +371,7 @@ export class ConnectionDataView extends Events
       }
     ));
 
-    this._addSubscription(listview2.subscribeElements(
+    this._addSubscription(virtualtreeview2.subscribeElements(
       (index, column_element) => {
         const rows = this.rows;
         const columns = this.columns;
@@ -399,12 +399,12 @@ export class ConnectionDataView extends Events
       },
     ));
 
-    this._addSubscription(this._subscribeAllElements(listview1, this.elements1, this.elements2));
-    this._addSubscription(this._subscribeAllElements(listview2, this.elements2, this.elements1));
+    this._addSubscription(this._subscribeAllElements(virtualtreeview1, this.elements1, this.elements2));
+    this._addSubscription(this._subscribeAllElements(virtualtreeview2, this.elements2, this.elements1));
 
     // collect all connections
     {
-      const matrix = this.listview1.matrix;
+      const matrix = this.virtualtreeview1.matrix;
 
       matrix.forEachConnection((connection) => {
         this._registerConnection(connection);
@@ -419,11 +419,11 @@ export class ConnectionDataView extends Events
       }));
     }
 
-    listview1.subscribeScrollView((offset) => {
+    virtualtreeview1.subscribeScrollView((offset) => {
       this.emit('scrollView', offset, 0);
     });
 
-    listview2.subscribeScrollView((offset) => {
+    virtualtreeview2.subscribeScrollView((offset) => {
       this.emit('scrollView', 0, offset);
     });
   }
@@ -441,25 +441,25 @@ export class ConnectionDataView extends Events
 
   subscribeSize(cb)
   {
-    const listview1 = this.listview1;
-    const listview2 = this.listview2;
+    const virtualtreeview1 = this.virtualtreeview1;
+    const virtualtreeview2 = this.virtualtreeview2;
 
     return subscribe_many(
       [
-        listview1.subscribeSize.bind(listview1),
-        listview2.subscribeSize.bind(listview2)
+        virtualtreeview1.subscribeSize.bind(virtualtreeview1),
+        virtualtreeview2.subscribeSize.bind(virtualtreeview2)
       ], cb);
   }
 
   subscribeAmount(cb)
   {
-    const listview1 = this.listview1;
-    const listview2 = this.listview2;
+    const virtualtreeview1 = this.virtualtreeview1;
+    const virtualtreeview2 = this.virtualtreeview2;
 
     return subscribe_many(
       [
-        listview1.subscribeAmount.bind(listview1),
-        listview2.subscribeAmount.bind(listview2)
+        virtualtreeview1.subscribeAmount.bind(virtualtreeview1),
+        virtualtreeview2.subscribeAmount.bind(virtualtreeview2)
       ], cb);
   }
 

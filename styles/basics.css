@@ -73,7 +73,7 @@
     
     --aux-levelmeter-statesize: 4px;
     
-    --aux-matrix-list-size: 196px;
+    --aux-matrix-virtualtree-size: 196px;
     
     --aux-meter-size: 16px;
     --aux-meter-gridgap: 2px;
@@ -88,7 +88,7 @@
     --aux-notification-padding: 16px;
     --aux-notification-margin: 4px;
     
-    --aux-listentry-size: 32px;
+    --aux-virtualtreeentry-size: 32px;
     
     --aux-scale-minwidth: 40px;
     --aux-scale-minheight: 20px;
@@ -328,42 +328,42 @@
     height: var(--aux-meter-size);
 }
 
-/* LISTENTRY */
+/* VIRTUALTREEENTRY */
 
-.aux-list .aux-listentry {
-    height: var(--aux-listentry-size);
+.aux-virtualtree .aux-virtualtreeentry {
+    height: var(--aux-virtualtreeentry-size);
     align-items: center;
     display: flex;
 }
-.aux-list .aux-listentry {
+.aux-virtualtree .aux-virtualtreeentry {
     /* prevent from being overwritten by aux-widget */
     margin: 0;
 }
-.aux-listentry > .aux-indent {
-    width: calc(var(--aux-listentry-size) * var(--aux-listentry-depth));
-    height: var(--aux-listentry-size);
-    font-size: var(--aux-listentry-size);
-    line-height: var(--aux-listentry-size);
+.aux-virtualtreeentry > .aux-indent {
+    width: calc(var(--aux-virtualtreeentry-size) * var(--aux-virtualtreeentry-depth));
+    height: var(--aux-virtualtreeentry-size);
+    font-size: var(--aux-virtualtreeentry-size);
+    line-height: var(--aux-virtualtreeentry-size);
     order: 0;
     margin: 0;
 }
-.aux-listentry > .aux-collapse {
-    flex: 0 0 var(--aux-listentry-size);
-    width: var(--aux-listentry-size);
-    height: var(--aux-listentry-size);
+.aux-virtualtreeentry > .aux-collapse {
+    flex: 0 0 var(--aux-virtualtreeentry-size);
+    width: var(--aux-virtualtreeentry-size);
+    height: var(--aux-virtualtreeentry-size);
     order: 1;
     margin: 0;
 }
-.aux-listentry > .aux-icon {
-    flex: 0 0 var(--aux-listentry-size);
-    height: var(--aux-listentry-size);
+.aux-virtualtreeentry > .aux-icon {
+    flex: 0 0 var(--aux-virtualtreeentry-size);
+    height: var(--aux-virtualtreeentry-size);
     order: 2;
     margin: 0;
 }
-.aux-listentry > .aux-label {
+.aux-virtualtreeentry > .aux-label {
     flex: 1 1 auto;
     order: 3;
-    line-height: var(--aux-listentry-size);
+    line-height: var(--aux-virtualtreeentry-size);
     margin: 0;
     padding: 0 4px;
     overflow: hidden;
@@ -378,43 +378,43 @@
     min-height: 480px;
 */
 }
-.aux-matrix > .aux-list {
-    width: var(--aux-matrix-list-size);
+.aux-matrix > .aux-virtualtree {
+    width: var(--aux-matrix-virtualtree-size);
 }
-.aux-matrix > .aux-list.aux-listleft {
-    top: var(--aux-matrix-list-size);
+.aux-matrix > .aux-virtualtree.aux-virtualtreeleft {
+    top: var(--aux-matrix-virtualtree-size);
     left: 0;
     bottom: 0;
     height: auto;
 }
-.aux-matrix > .aux-list.aux-listtop {
+.aux-matrix > .aux-virtualtree.aux-virtualtreetop {
     top: 0;
     left: 0;
     transform-origin: top right;
     transform: rotate(-90deg);
 }
-.aux-matrix > .aux-list.aux-listtop .aux-listentry > .aux-label {
+.aux-matrix > .aux-virtualtree.aux-virtualtreetop .aux-virtualtreeentry > .aux-label {
     order: 0;
     text-align: right;
 }
-.aux-matrix > .aux-list.aux-listtop .aux-listentry > .aux-icon {
+.aux-matrix > .aux-virtualtree.aux-virtualtreetop .aux-virtualtreeentry > .aux-icon {
     order: 1;
     transform: rotate(90deg);
 }
-.aux-matrix > .aux-list.aux-listtop .aux-listentry > .aux-collapse {
+.aux-matrix > .aux-virtualtree.aux-virtualtreetop .aux-virtualtreeentry > .aux-collapse {
     order: 2;
 }
-.aux-matrix > .aux-list.aux-listtop .aux-listentry > .aux-indent {
+.aux-matrix > .aux-virtualtree.aux-virtualtreetop .aux-virtualtreeentry > .aux-indent {
     order: 3;
     transform: scaleX(-1);
 }
 .aux-matrix > .aux-indicators {
-    left: var(--aux-matrix-list-size);
-    top: var(--aux-matrix-list-size);
+    left: var(--aux-matrix-virtualtree-size);
+    top: var(--aux-matrix-virtualtree-size);
 }
 .aux-matrix .aux-indicator {
-    width: var(--aux-listentry-size);
-    height: var(--aux-listentry-size);
+    width: var(--aux-virtualtreeentry-size);
+    height: var(--aux-virtualtreeentry-size);
     margin: 0;
 }
 

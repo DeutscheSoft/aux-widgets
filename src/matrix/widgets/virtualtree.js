@@ -6,7 +6,7 @@ import { Subscriptions } from '../../utils/subscriptions.js';
 import { subscribeDOMEvent } from '../../utils/events.js';
 
 import { Container } from './../../widgets/container.js';
-import { ListEntry } from './listentry.js';
+import { VirtualTreeEntry } from './virtualtreeentry.js';
 import { Timer } from '../../utils/timers.js';
 import { resize_array_mod } from '../models.js';
 
@@ -14,26 +14,26 @@ const SCROLLBAR_SIZE = scrollbar_size();
 
 function collapse (state) {
     const element = this.data;
-    const list = this.parent;
-    const listview = list.options.listview;
+    const parent = this.parent;
+    const virtualtreeview = parent.options.virtualtreeview;
     if (!element.isGroup) return;
-    listview.collapseGroup(element, !listview.isCollapsed(element));
+    virtualtreeview.collapseGroup(element, !virtualtreeview.isCollapsed(element));
 }
 
 function subscribe_all () {
     const O = this.options;
-    const listview = O.listview;
+    const virtualtreeview = O.virtualtreeview;
 
     const setEntryPosition = (entry, index) => {
       entry.element.style.transform = sprintf('translateY(%.2fpx)', index * O.size);
     };
 
-    const subs = this.listview_subs;
+    const subs = this.virtualtreeview_subs;
 
-    subs.add(listview.subscribeScrollView((offset) => {
-      if (offset >= listview.amount)
+    subs.add(virtualtreeview.subscribeScrollView((offset) => {
+      if (offset >= virtualtreeview.amount)
       {
-        offset = -listview.amount;
+        offset = -virtualtreeview.amount;
       }
 
       const entries = this.entries;
@@ -41,7 +41,7 @@ function subscribe_all () {
       if (offset > 0)
       {
         // scrolling down
-        const tmp = listview.startIndex - offset + listview.amount;
+        const tmp = virtualtreeview.startIndex - offset + virtualtreeview.amount;
         for (let i = 0; i < offset; i++)
         {
           const index = tmp + i;
@@ -55,17 +55,17 @@ function subscribe_all () {
         offset = -offset
         for (let i = 0; i < offset; i++)
         {
-          const index = listview.startIndex + i;
+          const index = virtualtreeview.startIndex + i;
           const entry = entries[index % entries.length];
           setEntryPosition(entry, index);
         }
       }
     }));
 
-    subs.add(listview.subscribeSize((size) => {
+    subs.add(virtualtreeview.subscribeSize((size) => {
       this.update('_scroller_size', size);
     }));
-    subs.add(listview.subscribeAmount((amount) => {
+    subs.add(virtualtreeview.subscribeAmount((amount) => {
       const create = (index) => {
         const entry = this.create_entry();
         this._scroller.appendChild(entry.element);
@@ -82,13 +82,13 @@ function subscribe_all () {
         entry.destroy();
       };
 
-      resize_array_mod(this.entries, amount, listview.startIndex, create, remove);
+      resize_array_mod(this.entries, amount, virtualtreeview.startIndex, create, remove);
     }));
-    subs.add(listview.subscribeElements((index, element, treePosition) => {
-      const listview = this.options.listview;
+    subs.add(virtualtreeview.subscribeElements((index, element, treePosition) => {
+      const virtualtreeview = this.options.virtualtreeview;
       const entry = this.entries[index % this.entries.length];
 
-      entry.updateData(listview, index, element, treePosition);
+      entry.updateData(virtualtreeview, index, element, treePosition);
 
       if (element) {
           if (entry.hidden())
@@ -103,7 +103,7 @@ function subscribe_all () {
     }));
 }
 
-export const List = define_class({
+export const VirtualTree = define_class({
     Extends: Container,
     _options: Object.assign(Object.create(Container.prototype._options), {
         _amount: "number",
@@ -111,8 +111,8 @@ export const List = define_class({
         _scroll: "number",
         _startIndex: 'number',
         size : "number",
-        entry_class: "ListEntry",
-        listview: "object",
+        entry_class: "VirtualTreeEntry",
+        virtualtreeview: "object",
     }),
     options: {
         _amount: 0,
@@ -120,12 +120,12 @@ export const List = define_class({
         _scroll: 0,
         _startIndex: 0,
         size: 32,
-        entry_class: ListEntry,
+        entry_class: VirtualTreeEntry,
     },
     static_events: {
         set_size: function (v) { this.trigger_resize(); },
-        set_listview: function (listview) {
-            this.listview_subs.unsubscribe();
+        set_virtualtreeview: function (virtualtreeview) {
+            this.virtualtreeview_subs.unsubscribe();
         },
         scrollTopChanged: function(position) {
           const O = this.options;
@@ -136,7 +136,7 @@ export const List = define_class({
     },
     initialize: function (options) {
         Container.prototype.initialize.call(this, options);
-        this.listview_subs = new Subscriptions();
+        this.virtualtreeview_subs = new Subscriptions();
         this.entries = [];
         this._scroll_event_suppressed = false;
         this._scroll_timer = new Timer(() => {
@@ -153,7 +153,7 @@ export const List = define_class({
     },
     draw: function (options, element) {
         Container.prototype.draw.call(this, options, element);
-        element.classList.add("aux-list");
+        element.classList.add("aux-virtualtree");
         this.addSubscriptions(
           subscribeDOMEvent(this._scrollbar, 'scroll', (ev) => {
             if (this._scroll_timer.active)
@@ -166,8 +166,8 @@ export const List = define_class({
             }
           })
         );
-        if (options.listview)
-            this.set("listview", options.listview);
+        if (options.virtualtreeview)
+            this.set("virtualtreeview", options.virtualtreeview);
         this.trigger_resize();
     },
     scrollTo: function(position)
@@ -184,35 +184,35 @@ export const List = define_class({
         const I = this.invalid;
         const E = this.element;
 
-        if (I.listview)
+        if (I.virtualtreeview)
         {
-            I.listview = false;
+            I.virtualtreeview = false;
 
-            const listview = O.listview;
+            const virtualtreeview = O.virtualtreeview;
 
-            if (listview)
+            if (virtualtreeview)
             {
               subscribe_all.call(this);
-              listview.setAmount(O._amount);
-              listview.scrollStartIndex(O._startIndex - listview.startIndex);
+              virtualtreeview.setAmount(O._amount);
+              virtualtreeview.scrollStartIndex(O._startIndex - virtualtreeview.startIndex);
             }
         }
 
         if (I._amount) {
             I._amount = false;
 
-            if (O.listview) {
-                O.listview.setAmount(O._amount);
+            if (O.virtualtreeview) {
+                O.virtualtreeview.setAmount(O._amount);
             }
         }
 
         if (I._startIndex) {
             I._startIndex = false;
 
-            const listview = O.listview;
+            const virtualtreeview = O.virtualtreeview;
 
-            if (listview) {
-                listview.scrollStartIndex(O._startIndex - listview.startIndex);
+            if (virtualtreeview) {
+                virtualtreeview.scrollStartIndex(O._startIndex - virtualtreeview.startIndex);
             }
         }
 
@@ -238,10 +238,10 @@ export const List = define_class({
 });
 
 
-define_child_element(List, "scrollbar", {
+define_child_element(VirtualTree, "scrollbar", {
     show: true,
 });
-define_child_element(List, "scroller", {
+define_child_element(VirtualTree, "scroller", {
     show: true,
     append: function () { this._scrollbar.appendChild(this._scroller); },
 });

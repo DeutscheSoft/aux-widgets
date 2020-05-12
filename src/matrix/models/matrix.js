@@ -1,7 +1,7 @@
 import { Datum } from './datum.js';
 import { PortData } from './port.js';
 import { GroupData } from './group.js';
-import { ListDataView } from './listdataview.js';
+import { VirtualTreeDataView } from './virtualtreedataview.js';
 import { TreeNodeData } from './treenode.js';
 import { ConnectionData } from './connection.js';
 
@@ -259,8 +259,8 @@ export class MatrixData extends Datum
 
   // other public apis
 
-  createListDataView(amount, filterFunction, sortFunction)
+  createVirtualTreeDataView(amount, filterFunction, sortFunction)
   {
-    return new ListDataView(this.root, amount, filterFunction, sortFunction);
+    return new VirtualTreeDataView(this.root, amount, filterFunction, sortFunction);
   }
 }

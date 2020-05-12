@@ -37,7 +37,7 @@ function compose_depth (tree_position) {
     return depth;
 }
 
-export const ListEntry = define_class({
+export const VirtualTreeEntry = define_class({
     Extends: Container,
     _options: Object.assign(Object.create(Container.prototype._options), {
         label: "string|boolean",
@@ -71,7 +71,7 @@ export const ListEntry = define_class({
     },
     draw: function (options, element) {
         Container.prototype.draw.call(this, options, element);
-        element.classList.add("aux-listentry");
+        element.classList.add("aux-virtualtreeentry");
     },
     // overload this to subscribe to other properties
     subscribeData: function () {
@@ -89,7 +89,7 @@ export const ListEntry = define_class({
         }));
     },
     // overload this to subscribe to other properties
-    updateData: function (listview, index, element, treePosition) {
+    updateData: function (virtualtreeview, index, element, treePosition) {
         this.data_subscriptions.unsubscribe();
 
         if (element)
@@ -98,7 +98,7 @@ export const ListEntry = define_class({
           this.update('collapsable', element.isGroup);
           this.update('group', element.isGroup);
           this.update('odd', (index & 1) === 0);
-          this.update('collapsed', element.isGroup && listview.isCollapsed(element));
+          this.update('collapsed', element.isGroup && virtualtreeview.isCollapsed(element));
           this.update('label', element.label);
           this.update('icon', element.icon);
 
@@ -159,21 +159,21 @@ export const ListEntry = define_class({
     },
 });
 
-define_child_widget(ListEntry, "label", {
+define_child_widget(VirtualTreeEntry, "label", {
     create: Label,
     option: "label",
     inherit_options: true,
     toggle_class: true,
 });
 
-define_child_widget(ListEntry, "icon", {
+define_child_widget(VirtualTreeEntry, "icon", {
     create: Icon,
     option: "icon",
     inherit_options: true,
     toggle_class: true,
 });
 
-define_child_widget(ListEntry, "indent", {
+define_child_widget(VirtualTreeEntry, "indent", {
     create: Container,
     option: "depth",
     toggle_class: true,
@@ -182,7 +182,7 @@ define_child_widget(ListEntry, "indent", {
     },
 });
 
-define_child_widget(ListEntry, "collapse", {
+define_child_widget(VirtualTreeEntry, "collapse", {
     create: Button,
     show: true,
     toggle_class: true,

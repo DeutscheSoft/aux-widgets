@@ -150,7 +150,7 @@ function get_child(node)
 }
 
 
-export class ListDataView extends Events
+export class VirtualTreeDataView extends Events
 {
   // PRIVATE APIs
   _offsetFromParent(group, index)

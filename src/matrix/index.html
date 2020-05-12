@@ -27,8 +27,8 @@
             document.addEventListener('DOMContentLoaded', () => {
               const aux_matrix = document.querySelector('aux-matrix');
 
-              aux_matrix.sources = matrix.createListDataView(0, null, sort);
-              aux_matrix.sinks = matrix.createListDataView(0, null, sort);
+              aux_matrix.sources = matrix.createVirtualTreeDataView(0, null, sort);
+              aux_matrix.sinks = matrix.createVirtualTreeDataView(0, null, sort);
 
               aux_matrix.auxWidget.on('toggleConnection', (port1, port2) => {
                 console.log('wants to toggleConnection', port1, port2);

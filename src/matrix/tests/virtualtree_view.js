@@ -1,7 +1,7 @@
 import { MatrixData } from '../models/matrix.js';
 import { assert, test, assert_error } from './helpers.js';
 
-test('ListDataView basics', () => {
+test('VirtualTreeDataView basics', () => {
   const matrix = new MatrixData();
 
   const group = matrix.addGroup({ label: 'group1' });
@@ -23,30 +23,30 @@ test('ListDataView basics', () => {
     return 1;
   };
 
-  const listview = matrix.createListDataView(4, null, sorter);
+  const virtualtreeview = matrix.createVirtualTreeDataView(4, null, sorter);
 
   let current_size = 0;
 
-  listview.subscribeSize((size) => {
+  virtualtreeview.subscribeSize((size) => {
     current_size = size;
   });
 
   const check = () => {
-    listview.check();
-    assert(current_size === listview.size);
+    virtualtreeview.check();
+    assert(current_size === virtualtreeview.size);
   };
 
-  assert(listview.getSubtreeSize(group) === 4);
-  assert(listview.getDepth(group) === 0);
+  assert(virtualtreeview.getSubtreeSize(group) === 4);
+  assert(virtualtreeview.getDepth(group) === 0);
 
   ports.forEach((port) => {
-    assert(listview.getDepth(port) === 1);
+    assert(virtualtreeview.getDepth(port) === 1);
   });
 
   {
     const tmp = [];
 
-    listview.forEach((node) => {
+    virtualtreeview.forEach((node) => {
       if (!node.isGroup)
         tmp.push(node);
     });
@@ -61,39 +61,39 @@ test('ListDataView basics', () => {
 
   {
     let index = 0;
-    listview.forEach((node) => {
-      assert(index === listview.indexOf(node));
+    virtualtreeview.forEach((node) => {
+      assert(index === virtualtreeview.indexOf(node));
       index++;
     });
   }
 
 
   {
-    const size = listview.getSubtreeSize(group);
+    const size = virtualtreeview.getSubtreeSize(group);
 
     const port5 = group.addPort({ label: 'port5' });
 
     check();
-    assert(listview.getSubtreeSize(group) === size + 1);
+    assert(virtualtreeview.getSubtreeSize(group) === size + 1);
 
     group.deletePort(port5);
     check();
 
-    assert(listview.getSubtreeSize(group) === size);
+    assert(virtualtreeview.getSubtreeSize(group) === size);
   }
 
   {
     check();
     const group2 = group.addGroup({ label: 'group2' });
     check();
-    assert(listview.getSubtreeSize(group) === 5);
+    assert(virtualtreeview.getSubtreeSize(group) === 5);
     const port = group2.addPort({ label: 'port5' });
     check();
-    assert(listview.getSubtreeSize(group) === 6);
-    assert(listview.getDepth(port) == 2);
+    assert(virtualtreeview.getSubtreeSize(group) === 6);
+    assert(virtualtreeview.getDepth(port) == 2);
     group.deleteGroup(group2);
     check();
-    assert(listview.getSubtreeSize(group) === 4);
+    assert(virtualtreeview.getSubtreeSize(group) === 4);
   }
 
   {
@@ -105,10 +105,10 @@ test('ListDataView basics', () => {
     group.deleteGroup(group2);
     check();
 
-    assert_error(() => listview.getGroupInfo(group3));
-    assert_error(() => listview.getGroupInfo(group2));
+    assert_error(() => virtualtreeview.getGroupInfo(group3));
+    assert_error(() => virtualtreeview.getGroupInfo(group2));
 
-    assert(listview.getSubtreeSize(group) === 4);
+    assert(virtualtreeview.getSubtreeSize(group) === 4);
   }
 
   {
@@ -116,9 +116,9 @@ test('ListDataView basics', () => {
 
     const check_tmp = () => {
       let n = 0;
-      listview.forEach((node) => {
-        const startIndex = listview.startIndex;
-        const endIndex = startIndex + listview.amount;
+      virtualtreeview.forEach((node) => {
+        const startIndex = virtualtreeview.startIndex;
+        const endIndex = startIndex + virtualtreeview.amount;
         if (n >= startIndex && n < endIndex)
         {
           const child = tmp[n - startIndex];
@@ -131,19 +131,19 @@ test('ListDataView basics', () => {
       check();
     };
 
-    const sub = listview.subscribeElements((i, element) => {
-      tmp[i - listview.startIndex] = element;
+    const sub = virtualtreeview.subscribeElements((i, element) => {
+      tmp[i - virtualtreeview.startIndex] = element;
     });
 
     check_tmp();
 
-    listview.setStartIndex(1);
+    virtualtreeview.setStartIndex(1);
     check_tmp();
 
-    listview.setStartIndex(2);
+    virtualtreeview.setStartIndex(2);
     check_tmp();
 
-    listview.setStartIndex(1);
+    virtualtreeview.setStartIndex(1);
     check_tmp();
     const group2 = group.addGroup({ label: 'group2' });
     check_tmp();
@@ -154,7 +154,7 @@ test('ListDataView basics', () => {
     sub();
   }
 
-  listview.destroy();
+  virtualtreeview.destroy();
 });
 
 test('ListDataView.startIndex behavior', () => {
@@ -187,18 +187,18 @@ test('ListDataView.startIndex behavior', () => {
     return -1;
   };
 
-  const listview = matrix.createListDataView(4, null, sorter);
+  const virtualtreeview = matrix.createListDataView(4, null, sorter);
 
-  listview.check();
+  virtualtreeview.check();
 
-  //console.log(listview.list.map((n) => n.label));
+  //console.log(virtualtreeview.list.map((n) => n.label));
 
   // step over first group + 1
-  listview.setStartIndex(6);
+  virtualtreeview.setStartIndex(6);
 
   const tmp = [];
-  const sub = listview.subscribeElements((i, element) => {
-    tmp[i - listview.startIndex] = element;
+  const sub = virtualtreeview.subscribeElements((i, element) => {
+    tmp[i - virtualtreeview.startIndex] = element;
   });
 
   ports2.forEach((port, i) => {
@@ -207,16 +207,16 @@ test('ListDataView.startIndex behavior', () => {
 
   {
     let removing = false;
-    const tmp_sub = listview.subscribeElements(() => { assert(!removing); });
+    const tmp_sub = virtualtreeview.subscribeElements(() => { assert(!removing); });
     removing = true;
     matrix.deleteGroup(group1);
     removing = false;
   }
 
-  assert(listview.startIndex === 1);
+  assert(virtualtreeview.startIndex === 1);
 
   sub();
-  listview.destroy();
+  virtualtreeview.destroy();
 });
 
 test('ListDataView.setAmount', () => {
@@ -231,7 +231,7 @@ test('ListDataView.setAmount', () => {
     return -1;
   };
 
-  const listview = matrix.createListDataView(4, null, sorter);
+  const virtualtreeview = matrix.createListDataView(4, null, sorter);
 
   const group1 = matrix.addGroup({ label: 'group1' });
 
@@ -252,10 +252,10 @@ test('ListDataView.setAmount', () => {
   ];
 
   const tmp = [];
-  const sub = listview.subscribeElements((i, element) => {
-    tmp[i - listview.startIndex] = element;
+  const sub = virtualtreeview.subscribeElements((i, element) => {
+    tmp[i - virtualtreeview.startIndex] = element;
   });
 
-  listview.setAmount(8);
+  virtualtreeview.setAmount(8);
   assert(tmp.length === 8);
 });
