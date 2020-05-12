@@ -60,11 +60,6 @@ function redraw(fun) {
     }
 
     this.needs_redraw = false;
-    /**
-     * Is fired when a redraw is executed.
-     * 
-     * @event Widget#redraw
-     */
     this.emit("redraw");
     fun.call(this);
 }
@@ -406,21 +401,11 @@ export const Widget = define_class({
     },
 
     resize: function() {
-        /**
-         * Is fired when a resize is requested.
-         * 
-         * @event Widget#resize
-         */
         this.emit("resize");
 
         if (this._options.resized)
             this.set("resized", true);
         
-        /**
-         * Is fired after the resize was executed and the DOM is updated.
-         * 
-         * @event Widget#resized
-         */
         if (this.has_event_listeners("resized")) {
             S.after_frame(this.emit.bind(this, "resized"));
         }
@@ -673,11 +658,6 @@ export const Widget = define_class({
       if (this.needs_redraw) {
           S.add(this._redraw, 1);
       }
-      /**
-       * Is fired when a widget gets enabled for drawing.
-       * 
-       * @event Widget#show
-       */
       this.emit("show");
       this.enable_draw_children();
     },
@@ -699,11 +679,6 @@ export const Widget = define_class({
             S.remove(this._redraw, 1);
             S.remove_next(this._redraw, 1);
         }
-        /**
-         * Is fired when a widget is hidden and not rendered anymore.
-         * 
-         * @event Widget#hide
-         */
         /**
          * Is fired when the visibility state changes. The first argument
          * is the visibility state, which is either <code>true</code>
@@ -839,6 +814,8 @@ export const Widget = define_class({
      * 
      * @param {Widget} child - The child to add.
      * 
+     * @emits Widget#child_added
+     * 
      * @see Container#append_child
      */
     add_child: function(child) {
@@ -863,6 +840,8 @@ export const Widget = define_class({
      * the widget tree and does not change the DOM.
      *
      * @method Widget#remove_child
+     * 
+     * @emits Widget#child_removed
      * 
      * @param {Widget} child - The child to remove.
      */
