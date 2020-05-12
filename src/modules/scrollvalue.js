@@ -33,16 +33,17 @@ function scroll_timeout() {
     remove_class(this.options.classes, "aux-scrolling");
 }
 function scrollwheel(e) {
-    var O = this.options;
+    const O = this.options;
     if (!O.active) return;
     e.preventDefault();
-    var DIR = O.scroll_direction;
-    var d = e.deltaX * DIR[0] + e.deltaY * DIR[1] + e.deltaZ * DIR[2];
-    var direction = d > 0 ? 1 : -1;
-    var range = O.range.call(this);
-    var RO = range.options;
-
-    var v;
+    const range = O.range.call(this);
+    const DIR = O.scroll_direction;
+    const RO = range.options;
+    const rev = e.webkitDirectionInvertedFromDevice ? -1 : 1;
+    const d = e.deltaX * DIR[0] + e.deltaY * DIR[1] + e.deltaZ * DIR[2];
+    let direction = d > 0 ? 1 : -1;
+    direction *= rev;
+    let v;
 
     // timeout for resetting the class
     if (this._wheel) {
@@ -64,7 +65,7 @@ function scrollwheel(e) {
     this.__sto = window.setTimeout(scroll_timeout.bind(this), 200);
     
     // calc step depending on options.step, .shift up and .shift down
-    var step = (RO.step || 1) * direction;
+    let step = (RO.step || 1) * direction;
     if (e.ctrlKey || e.altKey) {
         step *= RO.shift_down;
     } else if (e.shiftKey) {
