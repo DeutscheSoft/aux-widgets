@@ -241,13 +241,14 @@ export const Navigation = define_class({
                 }
                 const pos = (Math.max(0, Math.min(list - clip, btnpos - (clip / 2 - btnsize / 2))));
                 const s = BE[subt];
-                this._scroll = {to: ~~pos, from: s, dir: pos > s ? 1 : -1, diff: ~~pos - s, time: Date.now()};
+                const fpos = Math.floor(pos);
+                this._scroll = {to: fpos, from: s, dir: pos > s ? 1 : -1, diff: fpos - s, time: Date.now()};
                 this.invalid._scroll = true;
             }
         }
         if (this.invalid._scroll) {
             const subt = O.direction === "vertical" ? 'scrollTop' : 'scrollLeft';
-            const s = ~~BE[subt];
+            const s = Math.floor(BE[subt]);
             const _s = this._scroll;
             const now = Date.now();
             if ((s >= _s.to && _s.dir > 0) ||
