@@ -16,7 +16,7 @@ function remove_page(pager, page)
 }
 
 export const PagerComponent = component_from_widget(Pager);
-export const PageComponent = subcomponent_from_widget(Page, Pager, add_page, remove_page);
+export const PageComponent = component_from_widget(Page);
 
 define_component('pager', PagerComponent);
 define_component('page', PageComponent);

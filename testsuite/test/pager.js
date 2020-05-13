@@ -1,13 +1,13 @@
 import {
-    Container,
+    Page,
     Pager,
-    ContainerComponent,
+    PageComponent,
     PagerComponent
   } from '../src/index.js';
 
 import { wait_for_drawn, assert, compare, compare_options } from './helpers.js';
 
-describe('Pager', () => {
+describe.only('Pager', () => {
     let n = 0;
     const check_show = (pager) => {
       const list = pager.get_pages();
@@ -30,7 +30,7 @@ describe('Pager', () => {
            const label = "testing";
            const b1 = await add_page(pager, '', '');
            const b2 = await add_page(pager, '', '');
-           const b3 = await add_page(pager, '', new Container({ content: '' }));
+           const b3 = await add_page(pager, '', new Page({ }));
            assert(compare_options(b1, b2));
            assert(compare_options(b1, b3));
            show_page(pager, b1);
@@ -116,9 +116,9 @@ describe('Pager', () => {
     const add_page2 = (pager, buttonOptions, content, options, position) => {
       let component;
 
-      if (content instanceof Container)
+      if (content instanceof Page)
       {
-        if (content.element.tagName === 'AUX-CONTAINER')
+        if (content.element.tagName === 'AUX-PAGE')
         {
           component = content.element;
         }
@@ -130,17 +130,17 @@ describe('Pager', () => {
 
       if (!component)
       {
-        component = document.createElement('aux-container');
+        component = document.createElement('aux-page');
       }
 
       if (typeof content === 'string')
       {
-        component.content = content;
+        component.innerHTML = content;
       }
 
       if (typeof options === 'object')
       {
-        if (options instanceof Container)
+        if (options instanceof Page)
           options = options.options;
 
         for (let key in options)
@@ -172,7 +172,7 @@ describe('Pager', () => {
     };
 
     const remove_page2 = (pages, page) => {
-      if (page instanceof Container && page.element.tagName === 'AUX-CONTAINER')
+      if (page instanceof Page && page.element.tagName === 'AUX-PAGE')
       {
         page.element.remove();
       }
