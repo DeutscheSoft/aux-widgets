@@ -1,6 +1,9 @@
+/**
+ * @module matrix
+ */
+
 import { TreeNodeData } from './treenode.js';
 import { PortData } from './port.js';
-
 import { init_subscriptions, add_subscription, unsubscribe_subscriptions } from '../../utils/subscriptions.js';
 
 function on_child_treechanged()
@@ -8,8 +11,14 @@ function on_child_treechanged()
   this.parent.emit('treeChanged');
 }
 
+/**
+ * The data model of a group.
+ */
 export class GroupData extends TreeNodeData
 {
+  /**
+   * This property is true.
+   */
   get isGroup() { return true; }
 
   constructor(matrix, o)
@@ -18,6 +27,12 @@ export class GroupData extends TreeNodeData
     this.children = new Set();
   }
 
+  /**
+   * Add a child to this group.
+   *
+   * @emits childAdded
+   * @emits treeChanged
+   */
   addChild(child)
   {
     if (!(child instanceof TreeNodeData))
@@ -39,6 +54,12 @@ export class GroupData extends TreeNodeData
     child.on('treeChanged', on_child_treechanged);
   }
 
+  /**
+   * Removed a child node.
+   *
+   * @emits childRemoved
+   * @emits treeChanged
+   */
   deleteChild(child)
   {
     if (!(child instanceof TreeNodeData))
@@ -60,7 +81,9 @@ export class GroupData extends TreeNodeData
     this.emit('treeChanged', this);
   }
 
-  // adds a port to this group
+  /**
+   * Adds a port to this group.
+   */
   addPort(port)
   {
     if (!(port instanceof PortData))
@@ -70,11 +93,17 @@ export class GroupData extends TreeNodeData
     return port;
   }
 
+  /**
+   * Removes a port from this group.
+   */
   deletePort(port)
   {
     this.deleteChild(port);
   }
 
+  /**
+   * Adds a group to this group.
+   */
   addGroup(group)
   {
     if (!(group instanceof GroupData))
@@ -84,11 +113,20 @@ export class GroupData extends TreeNodeData
     return group;
   }
 
+  /**
+   * Removes a group from this group.
+   */
   deleteGroup(group)
   {
     this.deleteChild(group);
   }
 
+  /**
+   * Iterates all children of this group.
+   *
+   * @param {Function} cb - The callback function to invoke with each child
+   *  node.
+   */
   forEach(cb)
   {
     this.children.forEach(cb);
@@ -115,7 +153,7 @@ export class GroupData extends TreeNodeData
     {
       children.sort(sorter);
     }
-    
+
     if (!Array.isArray(path))
     {
       path = [];
@@ -143,6 +181,14 @@ export class GroupData extends TreeNodeData
     }
   }
 
+  /**
+   * Call a function for each child node asynchronously. Will subscribe to
+   * new children being added and call the callback. The callback function
+   * may return a subscription which is removed once the corresponding child
+   * node is removed from this group.
+   *
+   * @returns {Function} - A subscription. Call this function to unsubscribe.
+   */
   forEachAsync(callback)
   {
     let subs = init_subscriptions();

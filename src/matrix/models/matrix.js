@@ -1,3 +1,7 @@
+/**
+ * @module matrix
+ */
+
 import { Datum } from './datum.js';
 import { PortData } from './port.js';
 import { GroupData } from './group.js';
@@ -5,8 +9,14 @@ import { VirtualTreeDataView } from './virtualtreedataview.js';
 import { TreeNodeData } from './treenode.js';
 import { ConnectionData } from './connection.js';
 
+/**
+ * Represents a matrix, which consists of a tree of groups and port objects;
+ * and a set of connections between ports.
+ */
 export class MatrixData extends Datum
 {
+  /**
+   */
   constructor()
   {
     super();
@@ -51,6 +61,12 @@ export class MatrixData extends Datum
     nodes.delete(id);
   }
 
+  /**
+   * Creates a port object for this matrix.
+   *
+   * @param {Object} port - The data for the port object.
+   * @param {Function} [PortClass=PortData] - The port data class to use.
+   */
   createPort(port, PortClass)
   {
     if (!(port instanceof PortData))
@@ -67,6 +83,12 @@ export class MatrixData extends Datum
     return port;
   }
 
+  /**
+   * Creates a group object for this matrix.
+   *
+   * @param {Object} groupd - The data for the group object.
+   * @param {Function} [GroupClass=GroupData] - The group data class to use.
+   */
   createGroup(group, GroupClass)
   {
     if (!(group instanceof GroupData))
@@ -85,17 +107,27 @@ export class MatrixData extends Datum
     return group;
   }
 
-  // APIs for managing groups
+  /**
+   * Add a group to this matrix. Will be added at the top level of the tree.
+   */
   addGroup(group)
   {
     return this.root.addGroup(group);
   }
 
+  /**
+   * Remove a group from the top level of the tree.
+   */
   deleteGroup(group)
   {
     return this.root.deleteGroup(group);
   }
 
+  /**
+   * Find a group object for the given id.
+   *
+   * @param {any} id.
+   */
   getGroupById(id)
   {
     const group = this.nodes.get(id);
@@ -106,17 +138,27 @@ export class MatrixData extends Datum
 
   // APIs for managing ports
 
-  // adds a port to this matrix (not into a group)
+  /**
+   * Add a port to this matrix. Will be added at the top level of the tree.
+   */
   addPort(port)
   {
     this.root.addPort(port);
   }
 
+  /**
+   * Remove a port from the top level of the tree.
+   */
   deletePort(port)
   {
     this.root.deletePort(port);
   }
 
+  /**
+   * Find a port object for the given id.
+   *
+   * @param {any} id.
+   */
   getPortById(id)
   {
     const port = this.nodes.get(id);
@@ -124,9 +166,6 @@ export class MatrixData extends Datum
     if (port && port instanceof PortData)
       return port;
   }
-
-  // APIs for managing connections
-
 
   _lowRegisterConnection(from, to, connection)
   {
@@ -189,6 +228,9 @@ export class MatrixData extends Datum
     this.emit('connectionRemoved', connection);
   }
 
+  /**
+   * Create a connection object.
+   */
   createConnection(connection)
   {
     if (!(connection instanceof ConnectionData))
@@ -199,6 +241,9 @@ export class MatrixData extends Datum
     return connection;
   }
 
+  /**
+   * Add a connection object.
+   */
   addConnection(connection)
   {
     connection = this.createConnection(connection);
@@ -208,11 +253,20 @@ export class MatrixData extends Datum
     return connection;
   }
 
+  /**
+   * Delete a connection object.
+   */
   deleteConnection(connection)
   {
     this._unregisterConnection(connection);
   }
 
+  /**
+   * Connect two ports.
+   *
+   * @param {PortData} from
+   * @param {PortData} to
+   */
   connect(from, to)
   {
     return this.addConnection({
@@ -221,6 +275,9 @@ export class MatrixData extends Datum
     });
   }
 
+  /**
+   * Return all connections of the given node.
+   */
   getConnectionsOf(node)
   {
     const connections_map = this.connections.get(node);
@@ -228,16 +285,25 @@ export class MatrixData extends Datum
     return connections_map ? Array.from(connections_map.values()) : [];
   }
 
+  /**
+   * Return all connections from this node.
+   */
   getConnectionsFrom(node)
   {
     return this.getConnectionsOf(node).filter((connection) => connection.from === node);
   }
 
+  /**
+   * Return all connections to this node.
+   */
   getConnectionsTo(node)
   {
     return this.getConnectionsOf(node).filter((connection) => connection.to === node);
   }
 
+  /**
+   * Return the connection of the two given ports, if any exists.
+   */
   getConnection(a, b)
   {
     const connections_map = this.connections.get(a);
@@ -247,6 +313,9 @@ export class MatrixData extends Datum
     return connections_map.get(b);
   }
 
+  /**
+   * Iterate all connections.
+   */
   forEachConnection(cb)
   {
     this.connections.forEach((map, port) => {

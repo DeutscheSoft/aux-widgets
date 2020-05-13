@@ -1,3 +1,7 @@
+/**
+ * @module matrix
+ */
+
 import { init_subscriptions, add_subscription, unsubscribe_subscriptions } from '../../utils/subscriptions.js';
 
 export function call_continuation_if(node, subscribe_predicate, continuation)

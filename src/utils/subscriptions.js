@@ -1,3 +1,9 @@
+/**
+ * Utilities for handling subscriptions.
+ *
+ * @module utils/subscriptions
+ */
+
 import { warn } from './log.js';
 import { typecheck_function } from './typecheck.js';
 
@@ -91,6 +97,9 @@ export function unsubscribe_subscriptions(subscriptions)
   return null;
 }
 
+/**
+ * Represents a Subscription.
+ */
 export class Subscription
 {
   constructor(subscription)
@@ -110,14 +119,23 @@ export class Subscription
     this.sub = subscription;
   }
 
+  /**
+   * Unsubscribe from all subscriptions.
+   */
   unsubscribe()
   {
     this.sub = unsubscribe_subscriptions(this.sub);
   }
 }
 
+/**
+ * Represents a set of Subscriptions.
+ */
 export class Subscriptions extends Subscription
 {
+  /**
+   * Add a subscription.
+   */
   add(subscription)
   {
     if (subscription instanceof Subscription)
@@ -129,10 +147,5 @@ export class Subscriptions extends Subscription
     {
       this.sub = add_subscription(this.sub, subscription);
     }
-  }
-
-  unsubscribe()
-  {
-    this.sub = unsubscribe_subscriptions(this.sub);
   }
 }

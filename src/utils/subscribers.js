@@ -1,3 +1,9 @@
+/**
+ * Utilities for handling subscribers.
+ *
+ * @module utils/subscribers
+ */
+
 import { warn } from './log.js';
 
 function expected_subscribers()
@@ -5,16 +11,25 @@ function expected_subscribers()
   throw new TypeError('Expected list of subscribers.');
 }
 
+/**
+ * Initialize a list of subscribers.
+ */
 export function init_subscribers()
 {
   return null;
 }
 
+/**
+ * Returns true if the given subscribers are empty.
+ */
 export function subscribers_is_empty(subscribers)
 {
   return subscribers === null;
 }
 
+/**
+ * Add a subscriber to the given subscribers. Returns the new subscribers.
+ */
 export function add_subscriber(subscribers, cb)
 {
   if (typeof cb !== 'function')
@@ -40,6 +55,10 @@ function subscriber_not_found()
   throw new Error('Subscriber not found.');
 }
 
+/**
+ * Removes a subscriber callback from the list of subscribers and
+ * returns the resulting list of subscribers.
+ */
 export function remove_subscriber(subscribers, cb)
 {
   if (typeof cb !== 'function')
@@ -73,6 +92,9 @@ function subscriber_error(err)
   warn('Subscriber generated an exception:', err); 
 }
 
+/**
+ * Call the list of subscribers.
+ */
 export function call_subscribers(subscribers, ...args)
 {
   if (subscribers === null) return;
@@ -105,6 +127,9 @@ export function call_subscribers(subscribers, ...args)
   else expected_subscribers();
 }
 
+/**
+ * A class for representing a list of subscribers.
+ */
 export class Subscribers
 {
   constructor()
@@ -112,21 +137,39 @@ export class Subscribers
     this.subscribers = init_subscribers();
   }
 
+  /**
+   * Add a subscriber.
+   *
+   * @param {Function} cb
+   */
   add(cb)
   {
     this.subscribers = add_subscriber(this.subscribers, cb);
   }
 
+  /**
+   * Remove a subscriber.
+   *
+   * @param {Function} cb
+   */
   remove(cb)
   {
     this.subscribers = remove_subscriber(this.subscribers, cb);
   }
 
+  /**
+   * Call the subscribers.
+   */
   call(...args)
   {
     call_subscribers(this.subscribers, ...args);
   }
 
+  /**
+   * Subscribe a new subscriber.
+   *
+   * @returns {Function} A subscriptions. Call to function to unsubscribe.
+   */
   subscribe(cb)
   {
     this.add(cb);
@@ -136,6 +179,9 @@ export class Subscribers
     };
   }
 
+  /**
+   * Delete all subscribers.
+   */
   destroy()
   {
     this.subscribers = init_subscribers();

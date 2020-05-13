@@ -1,3 +1,7 @@
+/**
+ * @module matrix
+ */
+
 import { Datum } from './datum.js';
 import { typecheck_object } from '../../utils/typecheck.js';
 

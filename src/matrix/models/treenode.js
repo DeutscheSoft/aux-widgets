@@ -1,7 +1,17 @@
+/**
+ * @module matrix
+ */
+
 import { MatrixDatum } from './matrixdatum.js';
 
+/**
+ * Base class for matrix tree objects, e.g. groups and ports.
+ */
 export class TreeNodeData extends MatrixDatum
 {
+  /**
+   * Is true if this object is a group.
+   */
   get isGroup() { return false; }
 
   constructor(matrix, o)
@@ -10,12 +20,21 @@ export class TreeNodeData extends MatrixDatum
     this.parent = null;
   }
 
+  /**
+   * The tree node label.
+   */
   set label(value) { return this.set('label', value); }
   get label() { return this.get('label'); }
 
+  /**
+   * The tree node icon.
+   */
   set icon(value) { return this.set('icon', value); }
   get icon() { return this.get('icon'); }
   
+  /**
+   * The tree node id.
+   */
   get id() { return this.get('id'); }
 
   setParent(parent)
@@ -31,11 +50,16 @@ export class TreeNodeData extends MatrixDatum
     this.parent = parent;
   }
 
-  isChildOf(parent)
+  /**
+   * Returns true if this node is a child of the given node.
+   *
+   * @param {TreeNodeData} node
+   */
+  isChildOf(node)
   {
-    for (let node = this.parent; node; node = node.parent)
+    for (let _node = this.parent; _node; _node = _node.parent)
     {
-      if (node === parent) return true;
+      if (_node === node) return true;
     }
 
     return false;

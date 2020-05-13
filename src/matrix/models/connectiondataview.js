@@ -1,3 +1,7 @@
+/**
+ * @module matrix
+ */
+
 import { typecheck_instance } from '../../utils/typecheck.js';
 import {
   init_subscriptions, add_subscription, unsubscribe_subscriptions
@@ -82,6 +86,9 @@ function subtract_mod(a, b, n)
   return result;
 }
 
+/**
+ * A dataview for connections.
+ */
 export class ConnectionDataView extends Events
 {
   _addSubscription(sub)

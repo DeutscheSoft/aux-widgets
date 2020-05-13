@@ -1,3 +1,7 @@
+/**
+ * @module matrix
+ */
+
 import { Events } from '../../events.js';
 import { init_subscribers, add_subscriber, remove_subscriber, call_subscribers } from '../../utils/subscribers.js';
 import { init_subscriptions, add_subscription, unsubscribe_subscriptions } from '../../utils/subscriptions.js';
@@ -149,7 +153,11 @@ function get_child(node)
   }
 }
 
-
+/**
+ * The VirtualTreeDataView represents a view of a tree. The view will contain a
+ * fixed number of elements (ports and groups). It can be scrolled within the
+ * full tree.
+ */
 export class VirtualTreeDataView extends Events
 {
   // PRIVATE APIs
@@ -408,16 +416,33 @@ export class VirtualTreeDataView extends Events
 
   // PUBLIC APIs
 
+  /**
+   * Return the corresponding matrix object.
+   */
   get matrix()
   {
     return this.root.group.matrix;
   }
 
+  /**
+   * Return the corresponding root group.
+   */
   get group()
   {
     return this.root.group;
   }
 
+  /**
+   * Constructor.
+   *
+   * @param {GroupData} group - The group this view represents. Note that only
+   *    the children of this group but not this group itself will be part of
+   *    the view.
+   * @param {number} amount - The amount of elements to view.
+   * @param {Function} filterFunction - The function used to filter the tree.
+   * @param {Function} sortFunction - The function used to sort nodes within
+   *    each level of the tree.
+   */
   constructor(group, amount, filterFunction, sortFunction)
   {
       super();
