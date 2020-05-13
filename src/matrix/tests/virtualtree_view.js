@@ -157,7 +157,7 @@ test('VirtualTreeDataView basics', () => {
   virtualtreeview.destroy();
 });
 
-test('ListDataView.startIndex behavior', () => {
+test('VirtualTreeDataView.startIndex behavior', () => {
   const matrix = new MatrixData();
 
   const group1 = matrix.addGroup({ label: 'group1' });
@@ -187,7 +187,7 @@ test('ListDataView.startIndex behavior', () => {
     return -1;
   };
 
-  const virtualtreeview = matrix.createListDataView(4, null, sorter);
+  const virtualtreeview = matrix.createVirtualTreeDataView(4, null, sorter);
 
   virtualtreeview.check();
 
@@ -219,7 +219,7 @@ test('ListDataView.startIndex behavior', () => {
   virtualtreeview.destroy();
 });
 
-test('ListDataView.setAmount', () => {
+test('VirtualTreeDataView.setAmount', () => {
   const matrix = new MatrixData();
 
   const sorter = (a, b) => {
@@ -231,7 +231,7 @@ test('ListDataView.setAmount', () => {
     return -1;
   };
 
-  const virtualtreeview = matrix.createListDataView(4, null, sorter);
+  const virtualtreeview = matrix.createVirtualTreeDataView(4, null, sorter);
 
   const group1 = matrix.addGroup({ label: 'group1' });
 

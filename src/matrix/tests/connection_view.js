@@ -28,7 +28,7 @@ test('ConnectionDataView basics', () => {
     return 1;
   };
 
-  const listview = matrix.createListDataView(4, null, sorter);
+  const listview = matrix.createVirtualTreeDataView(4, null, sorter);
 
   const connectionview = new ConnectionDataView(listview, listview);
 
