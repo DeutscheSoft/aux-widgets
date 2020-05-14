@@ -7,7 +7,7 @@ import {
 
 import { wait_for_drawn, assert, compare, compare_options } from './helpers.js';
 
-describe.only('Pager', () => {
+describe('Pager', () => {
     let n = 0;
     const check_show = (pager) => {
       const list = pager.get_pages();
