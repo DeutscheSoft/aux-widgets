@@ -1,7 +1,7 @@
 import {
-    Container,
+    Page,
     Pages,
-    ContainerComponent,
+    PageComponent,
     PagesComponent
   } from '../src/index.js';
 
@@ -36,7 +36,7 @@ describe('Pages', () => {
            const label = "testing";
            const b1 = await add_page(pages, '');
            const b2 = await add_page(pages, '');
-           const b3 = await add_page(pages, new Container({ content: '' }));
+           const b3 = await add_page(pages, new Page({ }));
            assert(compare_options(b1, b2));
            assert(compare_options(b1, b3));
            await show_page(pages, b1);
@@ -116,9 +116,9 @@ describe('Pages', () => {
     const add_page2 = (pages, content, position, options) => {
       let component;
 
-      if (content instanceof Container)
+      if (content instanceof Page)
       {
-        if (content.element.tagName === 'AUX-CONTAINER')
+        if (content.element.tagName === 'AUX-PAGE')
         {
           component = content.element;
         }
@@ -130,17 +130,17 @@ describe('Pages', () => {
 
       if (!component)
       {
-        component = document.createElement('aux-container');
+        component = document.createElement('aux-page');
       }
 
       if (typeof content === 'string')
       {
-        component.content = content;
+        component.innerHTML = content;
       }
 
       if (typeof options === 'object')
       {
-        if (options instanceof Container)
+        if (options instanceof Page)
           options = options.options;
 
         for (let key in options)
@@ -170,7 +170,7 @@ describe('Pages', () => {
     };
 
     const remove_page2 = (pages, page) => {
-      if (page instanceof Container && page.element.tagName === 'AUX-CONTAINER')
+      if (page instanceof Page && page.element.tagName === 'AUX-PAGE')
       {
         page.element.remove();
       }
