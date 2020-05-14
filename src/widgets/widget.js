@@ -555,12 +555,13 @@ export const Widget = define_class({
           warn("destroy called twice on ", this);
           return;
         }
+
+        this._subscriptions = unsubscribe_subscriptions(this._subscriptions);
+
         this.emit("destroy");
 
         this.disable_draw();
         this.set_parent(void(0));
-
-        this._subscriptions = unsubscribe_subscriptions(this._subscriptions);
 
         if (this.children)
         {
