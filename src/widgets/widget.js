@@ -22,6 +22,7 @@ import { warn, error } from './../utils/log.js';
 import { define_class } from './../widget_helpers.js';
 import { Base } from './../implements/base.js';
 import { init_subscriptions, add_subscription, unsubscribe_subscriptions } from '../utils/subscriptions.js';
+import { typecheck_function } from '../utils/typecheck.js';
 
 function Invalid(options) {
     for (var key in options) this[key] = true;
@@ -608,6 +609,15 @@ export const Widget = define_class({
         return get_style(this.getStyleTarget(), name);
     },
     // GETTER & SETTER
+    /**
+     * Invalidates an option and triggers a redraw() call.
+     *
+     * @param {string} key
+     */
+    invalidate: function (key) {
+        this.invalid[key] = true;
+        this.trigger_draw();
+    },
     /**
      * Sets an option.
      *
