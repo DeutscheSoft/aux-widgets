@@ -795,7 +795,7 @@ export const Widget = define_class({
           if (old_parent !== parent)
           {
             window.addEventListener("resize", this._onresize);
-            document.addEventListener("DOMContentLoaded", this._onresize);
+            window.addEventListener("load", this._onresize);
             document.addEventListener("visibilitychange", this._onvisibilitychange, false);
             this._onvisibilitychange();
           }
@@ -803,7 +803,7 @@ export const Widget = define_class({
         else if (parent !== null && old_parent === null)
         {
           window.removeEventListener("resize", this._onresize);
-          document.removeEventListener("DOMContentLoaded", this._onresize);
+          window.removeEventListener("load", this._onresize);
           document.removeEventListener("visibilitychange", this._onvisibilitychange);
         }
 
