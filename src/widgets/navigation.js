@@ -16,12 +16,90 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
+import { S } from '../dom_scheduler.js';
 import { define_class } from '../widget_helpers.js';
 import { define_child_widget } from '../child_widget.js';
-import { add_class, remove_class, inner_height, inner_width } from '../utils/dom.js';
+import { add_class, remove_class, toggle_class, inner_height, inner_width } from '../utils/dom.js';
 import { Button } from './button.js';
 import { Buttons } from './buttons.js';
 import { Container } from './container.js';
+import { typecheck_number } from '../utils/typecheck.js';
+
+function easeLinear(t)
+{
+  return t;
+}
+
+function easeInOut(t)
+{
+  if (t < 0.5)
+  {
+    return 2 * t * t;
+  }
+  else
+  {
+    return 1 - Math.pow(-2 * t + 2, 2) / 2;
+  }
+}
+
+class ScrollAnimation
+{
+  constructor(options)
+  {
+    this.element = options.element;
+    this.duration = options.duration;
+
+    if (!(this.duration >= 0))
+    {
+      this.duration = 0;
+    }
+
+    this.from = options.from;
+    this.to = options.to;
+    this.vertical = options.vertical;
+    this.easing = options.easing || easeLinear;
+    this.startTime = performance.now();
+    this._draw = () => {
+      let t = this.duration > 0 ? ((performance.now() - this.startTime) / this.duration) : 1;
+
+      // catch NaN
+      if (!(t >= 0)) t = 0;
+      else if (!(t <= 1)) t = 1;
+
+      const pos = this.from + this.easing(t) * (this.to - this.from);
+
+      if (this.vertical)
+      {
+        this.element.scrollTop = pos;
+      }
+      else
+      {
+        this.element.scrollLeft = pos;
+      }
+
+      if (t < 1)
+      {
+        S.add_next(this._draw);
+      }
+    };
+    this.start();
+  }
+
+  stop()
+  {
+    S.remove(this._draw);
+  }
+
+  pause()
+  {
+    S.remove(this._draw);
+  }
+
+  start()
+  {
+    S.add(this._draw);
+  }
+}
 
  /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -46,39 +124,7 @@ function auto_arrows () {
     } else {
         list = 0;
     }
-    if (list > cons)
-        this.set("arrows", true);
-    else
-        this.set("arrows", false);
-}
-
-function measure () {
-    var B = this.buttons.get_buttons();
-    var mm = {
-        clip: {
-            height: inner_height(this.buttons.element),
-            width: inner_width(this.buttons.element),
-        },
-        list: {
-            width: 0,
-            height: 0,
-        },
-        buttons: [],
-    };
-    B.forEach(button => {
-        var e = button.element;
-        var b = e.getBoundingClientRect();
-        mm.buttons.push({
-            width: b.width,
-            height: b.height,
-            left: e.offsetLeft,
-            top: e.offsetTop
-        });
-        mm.list.width = Math.max(mm.list.width, b.width + e.offsetLeft);
-        mm.list.height = Math.max(mm.list.height, b.height + e.offsetTop);
-    });
-    
-    this.measurement = mm;
+    this.update('arrows', list > cons);
 }
 
 function prev_clicked() {
@@ -93,13 +139,6 @@ function next_clicked() {
 }
 function next_dblclicked() {
     this.userset("select", this.buttons.get_buttons().length-1);
-}
-
-function easeInOut (t, b, c, d) {
-    t /= d/2;
-    if (t < 1) return c/2*t*t + b;
-    t--;
-    return -c/2 * (t*(t-2) - 1) + b;
 }
 
 /**
@@ -125,8 +164,12 @@ export const Navigation = define_class({
     Extends: Container,
     _class: "Navigation",
     _options: Object.assign(Object.create(Container.prototype._options), {
-        _scroll_top: "number",
-        _scroll_left: "number",
+        _clip_width: 'number',
+        _clip_height: 'number',
+        _list_width: 'number',
+        _list_height: 'number',
+        _button_positions: 'object',
+
         direction: "string",
         arrows: "boolean",
         auto_arrows: "boolean",
@@ -134,8 +177,6 @@ export const Navigation = define_class({
         scroll: "int",
     }),
     options: {
-        _scroll_top: 0,
-        _scroll_left: 0,
         direction: "horizontal",
         arrows: false,
         auto_arrows: true,
@@ -146,9 +187,53 @@ export const Navigation = define_class({
         set_direction: function(value) {
             this.prev.set("icon", value === "vertical" ? "arrowup" : "arrowleft");//"\u25B2" : "\u25C0");
             this.next.set("icon", value === "vertical" ? "arrowdown" : "arrowright");//"\u25BC" : "\u25B6");
-            measure.call(this);
-            auto_arrows.call(this);
         },
+        hide: function() {
+            if (this._scroll_animation)
+            {
+              this._scroll_animation.pause();
+            }
+        },
+        show: function() {
+            if (this._scroll_animation)
+            {
+              this._scroll_animation.start();
+            }
+        },
+    },
+    _get_button_scroll_position: function ()
+    {
+        const O = this.options;
+        const show = O.select;
+        const button_list = this.buttons.get_buttons();
+
+        if (show < 0 || show >= button_list.length)
+          return 0;
+
+        const button_position = O._button_positions.get(button_list[show]);
+
+        if (!button_position)
+          return 0;
+
+        const is_vertical = O.direction === "vertical";
+        const clip_size = is_vertical ? O._clip_height : O._clip_width;
+        const list_size = is_vertical ? O._list_height : O._list_width;
+        const offset = is_vertical ? button_position.top : button_position.left;
+        const button_size = is_vertical ? button_position.height : button_position.width;
+
+        /*
+        console.log(O, 'clip_size', clip_size, 'list_size', list_size, 'offset', offset,
+                    'button_size', button_size);
+
+        console.log('inner_height', inner_height(this.buttons.element));
+        */
+
+
+        let pos = Math.min(offset + button_size / 2 - clip_size / 2, list_size - clip_size);
+
+        if (!(pos >= 0)) pos = 0;
+
+        return pos;
     },
     initialize: function (options) {
         Container.prototype.initialize.call(this, options);
@@ -166,110 +251,159 @@ export const Navigation = define_class({
          */
         this.next = new Button({class: "aux-next", dblclick:400});
         
-        this.prev.on("added", measure.bind(this));
         this.prev.on("click", prev_clicked.bind(this));
         this.prev.on("doubleclick", prev_dblclicked.bind(this));
-        this.next.on("added", measure.bind(this));
         this.next.on("click", next_clicked.bind(this));
         this.next.on("doubleclick", next_dblclicked.bind(this));
+
+        // these properties contain the scroll position of the buttons child
+        // element
+        this._scroll_left = 0;
+        this._scroll_top = 0;
         
-        this.add_child(this.prev);
-        this.add_child(this.next);
+        this.set('_button_positions', new Map());
         
-        // FIXME: this throws an exception if destroy() is called within
-        // the first 500ms
-        setTimeout((function () {
-            if (this.is_destructed()) return;
-            this.set("auto_arrows", this.options.auto_arrows);
-            this.set("direction", this.options.direction);
-        }).bind(this), 500);
+        this.set("auto_arrows", this.options.auto_arrows);
+        this.set("direction", this.options.direction);
+    },
+    initialized: function () {
+        Container.prototype.initialized.call(this);
+
+        const measure_clip = () => {
+          const buttons = this.buttons;
+
+          this.update('_clip_height', inner_height(buttons.element));
+          this.update('_clip_width', inner_width(buttons.element));
+        };
+
+        this.addSubscriptions(
+          this.buttons.buttons.forEachAsync((button) => {
+            let measured = false;
+            const positions = this.get('_button_positions');
+            const update_length = () => {
+              let list_width = 0;
+              let list_height = 0;
+
+              positions.forEach((info) => {
+                list_width = Math.max(list_width, info.width + info.left);
+                list_height = Math.max(list_height, info.height + info.top);
+              });
+
+              this.update('_list_width', list_width);
+              this.update('_list_height', list_height);
+            };
+
+            const info = {
+              width: 0,
+              height: 0,
+              left: 0,
+              top: 0,
+            };
+            const measure = (button) => {
+              const element = button.element;
+              const bounding_box = element.getBoundingClientRect();
+
+              info.width = bounding_box.width;
+              info.height = bounding_box.height;
+              info.left = element.offsetLeft;
+              info.top = element.offsetTop;
+
+              if (!measured)
+              {
+                measured = true;
+                positions.set(button, info);
+              }
+              update_length();
+              this.invalidate('_button_positions');
+            };
+
+            let sub = button.observeResize(measure);
+
+            return () => {
+              if (!sub) return;
+              sub();
+              sub = null;
+              if (measured)
+              {
+                positions.delete(button);
+                update_length();
+                this.invalidate('_button_positions');
+              }
+            };
+          }),
+          this.buttons.observeResize(measure_clip),
+          this.next.observeResize(measure_clip),
+          this.prev.observeResize(measure_clip),
+          this.buttons.subscribe('scroll', () => {
+            this._scroll_top = this.buttons.element.scrollTop;
+            this._scroll_left = this.buttons.element.scrollLeft;
+          })
+        );
     },
     resize: function () {
-        measure.call(this);
+        auto_arrows.call(this);
         Container.prototype.resize.call(this);
     },
     draw: function(O, element)
     {
       add_class(element, "aux-navigation");
-      this.buttons.on("scroll", function () {
-        this.parent.update("_scroll_top", this.element.scrollTop);
-        this.parent.update("_scroll_left", this.element.scrollLeft);
-      });
       Container.prototype.draw.call(this, O, element);
     },
     redraw: function () {
         var O = this.options;
         var I = this.invalid;
         var E = this.element;
-        var B = this.buttons.get_buttons();
-        var BE = this.buttons.element;
         
         if (I.direction) {
             remove_class(E, "aux-vertical", "aux-horizontal");
             add_class(E, "aux-"+O.direction);
-            measure.call(this);
         }
         if (I.validate("arrows")) {
             if (O.arrows) {
-                if (!this.prev.element.parentElement) {
+                if (!this.prev.element.parentElement)
+                {
                     E.appendChild(this.prev.element);
                     E.appendChild(this.next.element);
+                    this.add_child(this.prev);
+                    this.add_child(this.next);
                 }
-                add_class(E, "aux-over");
             } else {
-                if (this.prev.element.parentElement) {
+                if (this.prev.element.parentElement)
+                {
                     E.removeChild(this.prev.element);
                     E.removeChild(this.next.element);
+                    this.remove_child(this.prev);
+                    this.remove_child(this.next);
                 }
-                remove_class(E, "aux-over");
             }
-            measure.call(this);
-            I.select = true;
+            toggle_class(E, "aux-over", O.arrows);
         }
-        if (I.validate("auto_arrows") || (I.resized && O.auto_arrows)) {
-            auto_arrows.call(this);
-        }
-        if (I.validate("select", "direction", "resized")) {
-            var show = O.select;
-            var M = this.measurement;
-            if (show >= 0 && show < B.length) {
-                const dir  = O.direction === "vertical";
-                const subd = dir ? 'top' : 'left';
-                const subt = dir ? '_scroll_top' : '_scroll_left';
-                const subs = dir ? 'height' : 'width';
-                const butt  = M.buttons[show];
-                const clip = M.clip[subs];
-                const list = M.list[subs];
-                let btnsize = 0;
-                let btnpos = 0;
-                if (M.buttons.length) {
-                    btnsize  = butt[subs];
-                    btnpos   = butt[subd];
-                }
-                const pos = (Math.max(0, Math.min(list - clip, btnpos - (clip / 2 - btnsize / 2))));
-                const s = O[subt];
-                const fpos = Math.floor(pos);
-                this._scroll = {to: fpos, from: s, dir: pos > s ? 1 : -1, diff: fpos - s, time: Date.now()};
-                this.invalid._scroll = true;
+
+        if (I.validate("select", "direction", "_list_width", "_list_height",
+                       "_clip_width", "_clip_height", "_button_positions"))
+        {
+            if (this._scroll_animation)
+            {
+              this._scroll_animation.stop();
+              this._scroll_animation = null;
+            }
+
+            const position = this._get_button_scroll_position();
+            const is_vertical = O.direction === "vertical";
+            const from = is_vertical ? this._scroll_top : this._scroll_left;
+
+            if (position !== from)
+            {
+              this._scroll_animation = new ScrollAnimation({
+                element: this.buttons.element,
+                duration: O.scroll,
+                from: from,
+                to: position,
+                easing: easeInOut,
+                vertical: is_vertical,
+              });
             }
         }
-        if (this.invalid._scroll) {
-            const odir = O.direction === "vertical" ? '_scroll_top' : '_scroll_left';
-            const sdir = O.direction === "vertical" ? 'scrollTop' : 'scrollLeft';
-            const s = Math.floor(O[odir]);
-            const _s = this._scroll;
-            const now = Date.now();
-            if ((s >= _s.to && _s.dir > 0) ||
-                (s <= _s.to && _s.dir < 0) ||
-                now > (_s.time + O.scroll)) {
-                this.invalid._scroll = false;
-                BE[sdir] = _s.to;
-            } else {
-                BE[sdir] = easeInOut(Date.now() - _s.time, _s.from, _s.diff, O.scroll);
-                this.trigger_draw_next();
-            }
-        }
-        I.resized = false;
 
         Container.prototype.redraw.call(this);
     },
@@ -284,6 +418,15 @@ export const Navigation = define_class({
     },
     empty: function (...arg) {
         return this.buttons.empty(...arg);
+    },
+    destroy: function() {
+        Container.prototype.destroy.call(this);
+
+        if (this._scroll_animation)
+        {
+          this._scroll_animation.stop();
+          this._scroll_animation = null;
+        }
     },
 });
 /**
