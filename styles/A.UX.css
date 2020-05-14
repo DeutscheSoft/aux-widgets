@@ -76,7 +76,7 @@
     border-radius: var(--aux-border-radius);
     transition: background var(--aux-transition-duration),
                 color var(--aux-transition-duration),
-                border var(--aux-transition-duration);
+                border-color var(--aux-transition-duration);
 }
 .aux-button:hover {
     color: var(--aux-main-text);
