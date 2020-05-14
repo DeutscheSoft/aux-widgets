@@ -1,5 +1,5 @@
 const connect = require('connect');
-const static = require('serve-static');
+const sstatic = require('serve-static');
 const serveIndex = require('serve-index');
 const path = require('path');
 const fs = require('fs');
@@ -60,8 +60,8 @@ function start(port)
           next();
         }
        })
-      .use(static(HTDOCS))
-      .use(static(TESTS))
+      .use(sstatic(HTDOCS))
+      .use(sstatic(TESTS))
       .use('/tests', serveIndex(TESTS, {
         view: 'details',
        }))
