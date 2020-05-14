@@ -948,6 +948,32 @@ export const Widget = define_class({
         var C = this.children;
         return C !== null ? C : [];
     },
+    /**
+     * Calls a callback whenever the widget resizes. This method will
+     * trigger one resize.
+     *
+     * @param {Function} cb
+     */
+    observeResize: function(cb) {
+      typecheck_function(cb);
+
+      let triggered = false;
+      const callback = () => {
+        triggered = false;
+        if (!this.is_drawn())
+        {
+          this.trigger_resize();
+          return;
+        }
+        cb(this);
+      };
+      this.trigger_resize();
+      return this.subscribe('resize', () => {
+        if (triggered) return;
+        triggered = true;
+        S.add_next(callback);
+      });
+    },
 });
 /**
  * Generic DOM events. Please refer to
