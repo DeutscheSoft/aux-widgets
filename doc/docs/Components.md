@@ -19,17 +19,17 @@ the option. To control how the attribute is interpreted, the
 attribute may be prefixed by the format type.
 
 Example:
-    
-      <aux-fader min='number:-20' max='number:6'></aux-fader>
+
+<aux-fader min='number:-20' max='number:6'></aux-fader>
 
 The format types which exist are
 
-* `js`, `javascript` - interprets the attribute as JavaScript code
-* `json` - parses the attribute as JSON
-* `html` - turns the attribute into a `DocumentFragment`
-* `string` - the attribute is used as-is
-* `number` - parses the attribute using `parseFloat`
-* `int` - parses the attribute using `parseInt`
-* `sprintf` - turns the attribute into a sprintf-like formatting
+- `js`, `javascript` - interprets the attribute as JavaScript code
+- `json` - parses the attribute as JSON
+- `html` - turns the attribute into a `DocumentFragment`
+- `string` - the attribute is used as-is
+- `number` - parses the attribute using `parseFloat`
+- `int` - parses the attribute using `parseInt`
+- `sprintf` - turns the attribute into a sprintf-like formatting
   function
-* `boolean` - `"true"` or `"false"`.
+- `boolean` - `"true"` or `"false"`.

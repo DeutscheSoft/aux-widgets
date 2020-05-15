@@ -19,20 +19,20 @@
 import { define_class } from './../widget_helpers.js';
 import { add_class, remove_class } from '../utils/dom.js';
 
-function reset (element) {
-    var i = this.elements.indexOf(element);
-    if (i < 0) return;
-    remove_class(this.elements[i], "aux-warn");
-    this.elements.splice(i, 1);
-    this.timeouts.splice(i, 1);
-    /**
-     * Gets fired when the warning class was removed.
-     * 
-     * @event Warning#warning_released
-     * 
-     * @param {HTMLElement|SVGElement} element - The element which lost the warning class.
-     */
-    this.emit("warning_released", element);
+function reset(element) {
+  var i = this.elements.indexOf(element);
+  if (i < 0) return;
+  remove_class(this.elements[i], 'aux-warn');
+  this.elements.splice(i, 1);
+  this.timeouts.splice(i, 1);
+  /**
+   * Gets fired when the warning class was removed.
+   *
+   * @event Warning#warning_released
+   *
+   * @param {HTMLElement|SVGElement} element - The element which lost the warning class.
+   */
+  this.emit('warning_released', element);
 }
 
 /**
@@ -43,39 +43,38 @@ function reset (element) {
  * @mixin Warning
  */
 export const Warning = define_class({
-    elements: [],
-    timeouts: [],
-    /** 
-     * Adds the class <code>.aux-warn</code> to the given element and
-     * sets a timeout after which the class is removed again. If there
-     * already is a timeout waiting it gets updated.
+  elements: [],
+  timeouts: [],
+  /**
+   * Adds the class <code>.aux-warn</code> to the given element and
+   * sets a timeout after which the class is removed again. If there
+   * already is a timeout waiting it gets updated.
+   *
+   * @method Warning#warning
+   *
+   * @emits Warning#warning
+   *
+   * @param {HTMLElement|SVGElement} element - The DOM node the class should be set on.
+   * @param {Number} [timeout=250] - The timeout in milliseconds until the class should be removed again.
+   */
+  warning: function (element, timeout) {
+    if (!timeout) timeout = 250;
+    var i;
+    if ((i = this.elements.indexOf(element)) >= 0) {
+      window.clearTimeout(this.timeouts[i]);
+    } else {
+      i = this.elements.length;
+    }
+    this.elements[i] = element;
+    this.timeouts[i] = window.setTimeout(reset.bind(this, element), timeout);
+    add_class(element, 'aux-warn');
+    /**
+     * Gets fired when {@link Warning#warning} was called.
      *
-     * @method Warning#warning
-     * 
-     * @emits Warning#warning
-     * 
-     * @param {HTMLElement|SVGElement} element - The DOM node the class should be set on.
-     * @param {Number} [timeout=250] - The timeout in milliseconds until the class should be removed again.
+     * @event Warning#warning
+     *
+     * @param {HTMLElement|SVGElement} element - The element which received the warning class.
      */
-    warning: function (element, timeout) {
-        if (!timeout) timeout = 250;
-        var i;
-        if ((i = this.elements.indexOf(element)) >= 0) {
-            window.clearTimeout(this.timeouts[i]);
-        } else {
-            i = this.elements.length;
-        }
-        this.elements[i] = element;
-        this.timeouts[i] = window.setTimeout(reset.bind(this, element), timeout);
-        add_class(element, "aux-warn");
-        /**
-         * Gets fired when {@link Warning#warning} was called.
-         * 
-         * @event Warning#warning 
-         * 
-         * @param {HTMLElement|SVGElement} element - The element which received the warning class.
-         */
-        this.emit("warning", element);
-    },
-    
+    this.emit('warning', element);
+  },
 });

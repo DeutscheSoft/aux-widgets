@@ -16,13 +16,13 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
- 
+
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
  * The event is emitted for the option <code>value</code>.
  *
  * @event Knob#useraction
- * 
+ *
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
@@ -35,21 +35,21 @@ import { element, add_class } from '../utils/dom.js';
 import { make_svg } from '../utils/svg.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { object_and, object_sub } from '../utils/object.js';
-     
-var format_viewbox = FORMAT("0 0 %d %d");
+
+var format_viewbox = FORMAT('0 0 %d %d');
 function dblclick() {
-    this.userset("value", this.options.reset);
-    /**
-     * Is fired when the knob receives a double click in order to reset to initial value.
-     * 
-     * @event Knob#doubleclick
-     * 
-     * @param {number} value - The value of the widget.
-     */
-    this.emit("doubleclick", this.options.value);
+  this.userset('value', this.options.reset);
+  /**
+   * Is fired when the knob receives a double click in order to reset to initial value.
+   *
+   * @event Knob#doubleclick
+   *
+   * @param {number} value - The value of the widget.
+   */
+  this.emit('doubleclick', this.options.value);
 }
 function module_range() {
-    return this.parent.circular;
+  return this.parent.circular;
 }
 /**
  * Knob is a {@link Circular} inside of an SVG which can be
@@ -88,163 +88,184 @@ function module_range() {
  *   are a functionality of {@link Widget}.
  */
 export const Knob = define_class({
-    Extends: Widget,
-    _options: Object.assign(Object.create(Widget.prototype._options), Circular.prototype._options,
-                            DragValue.prototype._options, {
-        reset: "number",
-    }),
-    options: Object.assign({}, Circular.prototype.options, {
-        hand: {width: 1, length: 10, margin: 25},
-        margin: 13,
-        thickness: 6,
-        step: 1,
-        shift_up: 4,
-        shift_down: 0.25,
-        dots_defaults: {length: 6, margin: 13, width: 1},
-        markers_defaults: {thickness: 2, margin: 11},
-        labels_defaults: {margin: 12, align: "outer", format: function(val){return val;}},
-        direction: "polar",
-        rotation: 45,
-        blind_angle: 20,
-        basis: 300,
-        preset: "medium",
-        presets: {
-            tiny: {margin:0, thickness:4, hand:{width: 1, length: 6, margin: 8}, dots_defaults:{length:4, margin:0, width:1}, markers_defaults: {thickness: 2, margin: 0}, show_labels:false},
-            small: {margin:0, thickness:5, hand:{width: 1, length: 8, margin: 10}, dots_defaults: {length:5, margin:0,width:1}, markers_defaults: {thickness: 2, margin: 0}, show_labels:false},
-            medium: {},
-            large: {hand:{width:1.5, length:12, margin:26}},
-            huge: {hand:{width:2, length:12, margin:28}},
-        }
-    }),
-    static_events: {
-        dblclick: dblclick,
-    },
-    initialize: function (options) {
-        if (!options.element) options.element = element('div');
-        Widget.prototype.initialize.call(this, options);
-        options = this.options;
-        var S;
-        /**
-         * @member {HTMLDivElement} Knob#element - The main DIV container.
-         *   Has class <code>.aux-knob</code>.
-         */
-
-        /**
-         * @member {SVGImage} Knob#svg - The main SVG image.
-         */
-        this.svg = S = make_svg("svg");
-        
-        var co = object_and(options, Circular.prototype._options);
-        co = object_sub(co, Widget.prototype._options);
-        co.container = S;
-
-        /**
-         * @member {Circular} Knob#circular - The {@link Circular} module.
-         */
-        this.circular = new Circular(co);
-
-        /**
-         * @member {DragValue} Knob#drag - Instance of {@link DragValue} used for the
-         *   interaction.
-         */
-        this.drag = new DragValue(this, {
-            node:        S,
-            classes:     this.element,
-            range:       module_range,
-            direction:   options.direction,
-            rotation:    options.rotation,
-            blind_angle: options.blind_angle,
-            limit:       true,
-        });
-        this.drag.on('startdrag', () => this.startInteracting());
-        this.drag.on('stopdrag', () => this.stopInteracting());
-        /**
-         * @member {ScrollValue} Knob#scroll - Instance of {@link ScrollValue} used for the
-         *   interaction.
-         */
-        this.scroll = new ScrollValue(this, {
-            node:    S,
-            classes: this.element,
-            range:   module_range,
-            limit:   true,
-        });
-        this.scroll.on('scrollstarted', () => this.startInteracting());
-        this.scroll.on('scrollended', () => this.stopInteracting());
-
-        this.set("base", options.base);
-        if (options.reset === void(0))
-            options.reset = options.value;
-        this.add_child(this.circular);
-    },
-
-    get_range: function() {
-        return this.circular;
-    },
-
-    draw: function(O, element)
+  Extends: Widget,
+  _options: Object.assign(
+    Object.create(Widget.prototype._options),
+    Circular.prototype._options,
+    DragValue.prototype._options,
     {
-      add_class(element, "aux-knob");
-      element.appendChild(this.svg);
-
-      Widget.prototype.draw.call(this, O, element);
+      reset: 'number',
+    }
+  ),
+  options: Object.assign({}, Circular.prototype.options, {
+    hand: { width: 1, length: 10, margin: 25 },
+    margin: 13,
+    thickness: 6,
+    step: 1,
+    shift_up: 4,
+    shift_down: 0.25,
+    dots_defaults: { length: 6, margin: 13, width: 1 },
+    markers_defaults: { thickness: 2, margin: 11 },
+    labels_defaults: {
+      margin: 12,
+      align: 'outer',
+      format: function (val) {
+        return val;
+      },
     },
-    
-    destroy: function () {
-        this.drag.destroy();
-        this.scroll.destroy();
-        this.circular.destroy();
-        Widget.prototype.destroy.call(this);
+    direction: 'polar',
+    rotation: 45,
+    blind_angle: 20,
+    basis: 300,
+    preset: 'medium',
+    presets: {
+      tiny: {
+        margin: 0,
+        thickness: 4,
+        hand: { width: 1, length: 6, margin: 8 },
+        dots_defaults: { length: 4, margin: 0, width: 1 },
+        markers_defaults: { thickness: 2, margin: 0 },
+        show_labels: false,
+      },
+      small: {
+        margin: 0,
+        thickness: 5,
+        hand: { width: 1, length: 8, margin: 10 },
+        dots_defaults: { length: 5, margin: 0, width: 1 },
+        markers_defaults: { thickness: 2, margin: 0 },
+        show_labels: false,
+      },
+      medium: {},
+      large: { hand: { width: 1.5, length: 12, margin: 26 } },
+      huge: { hand: { width: 2, length: 12, margin: 28 } },
     },
-    
-    resize: function () {
-        var rect = this.element.getBoundingClientRect();
-        var size = Math.min(rect.width, rect.height);
-        this.set("size", size);
-    },
-
-    redraw: function() {
-        var I = this.invalid;
-        var O = this.options;
-
-        if (I.size) {
-            I.size = false;
-            this.svg.setAttribute("viewBox", format_viewbox(O.size, O.size));
-        }
-
-        Widget.prototype.redraw.call(this);
-    },
+  }),
+  static_events: {
+    dblclick: dblclick,
+  },
+  initialize: function (options) {
+    if (!options.element) options.element = element('div');
+    Widget.prototype.initialize.call(this, options);
+    options = this.options;
+    var S;
     /**
-     * This is an alias for {@link Circular#add_label} of the internal
-     * circular instance.
-     *
-     * @method Knob#add_label
+     * @member {HTMLDivElement} Knob#element - The main DIV container.
+     *   Has class <code>.aux-knob</code>.
      */
-    add_label: function(x) {
-        return this.circular.add_label(x);
-    },
 
     /**
-     * This is an alias for {@link Circular#remove_label} of the internal
-     * circular instance.
-     *
-     * @method Knob#remove_label
+     * @member {SVGImage} Knob#svg - The main SVG image.
      */
-    remove_label: function(x) {
-        this.circular.remove_label(x);
-    },
+    this.svg = S = make_svg('svg');
 
-    set: function(key, value) {
-        var O = this.options;
-        if (key === "base") {
-            if (value === false) value = this.options.min;
-        }
-        // Circular does the snapping
-        if (!Widget.prototype._options[key]) {
-            if (Circular.prototype._options[key])
-                value = this.circular.set(key, value);
-            if (DragValue.prototype._options[key])
-                this.drag.set(key, value);
-        }
-        return Widget.prototype.set.call(this, key, value);
-    },
+    var co = object_and(options, Circular.prototype._options);
+    co = object_sub(co, Widget.prototype._options);
+    co.container = S;
+
+    /**
+     * @member {Circular} Knob#circular - The {@link Circular} module.
+     */
+    this.circular = new Circular(co);
+
+    /**
+     * @member {DragValue} Knob#drag - Instance of {@link DragValue} used for the
+     *   interaction.
+     */
+    this.drag = new DragValue(this, {
+      node: S,
+      classes: this.element,
+      range: module_range,
+      direction: options.direction,
+      rotation: options.rotation,
+      blind_angle: options.blind_angle,
+      limit: true,
+    });
+    this.drag.on('startdrag', () => this.startInteracting());
+    this.drag.on('stopdrag', () => this.stopInteracting());
+    /**
+     * @member {ScrollValue} Knob#scroll - Instance of {@link ScrollValue} used for the
+     *   interaction.
+     */
+    this.scroll = new ScrollValue(this, {
+      node: S,
+      classes: this.element,
+      range: module_range,
+      limit: true,
+    });
+    this.scroll.on('scrollstarted', () => this.startInteracting());
+    this.scroll.on('scrollended', () => this.stopInteracting());
+
+    this.set('base', options.base);
+    if (options.reset === void 0) options.reset = options.value;
+    this.add_child(this.circular);
+  },
+
+  get_range: function () {
+    return this.circular;
+  },
+
+  draw: function (O, element) {
+    add_class(element, 'aux-knob');
+    element.appendChild(this.svg);
+
+    Widget.prototype.draw.call(this, O, element);
+  },
+
+  destroy: function () {
+    this.drag.destroy();
+    this.scroll.destroy();
+    this.circular.destroy();
+    Widget.prototype.destroy.call(this);
+  },
+
+  resize: function () {
+    var rect = this.element.getBoundingClientRect();
+    var size = Math.min(rect.width, rect.height);
+    this.set('size', size);
+  },
+
+  redraw: function () {
+    var I = this.invalid;
+    var O = this.options;
+
+    if (I.size) {
+      I.size = false;
+      this.svg.setAttribute('viewBox', format_viewbox(O.size, O.size));
+    }
+
+    Widget.prototype.redraw.call(this);
+  },
+  /**
+   * This is an alias for {@link Circular#add_label} of the internal
+   * circular instance.
+   *
+   * @method Knob#add_label
+   */
+  add_label: function (x) {
+    return this.circular.add_label(x);
+  },
+
+  /**
+   * This is an alias for {@link Circular#remove_label} of the internal
+   * circular instance.
+   *
+   * @method Knob#remove_label
+   */
+  remove_label: function (x) {
+    this.circular.remove_label(x);
+  },
+
+  set: function (key, value) {
+    var O = this.options;
+    if (key === 'base') {
+      if (value === false) value = this.options.min;
+    }
+    // Circular does the snapping
+    if (!Widget.prototype._options[key]) {
+      if (Circular.prototype._options[key])
+        value = this.circular.set(key, value);
+      if (DragValue.prototype._options[key]) this.drag.set(key, value);
+    }
+    return Widget.prototype.set.call(this, key, value);
+  },
 });

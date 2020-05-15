@@ -3,9 +3,7 @@ import { SelectComponent, SelectEntryComponent, Select } from '../src/index.js';
 import { assert, wait_for_event } from './helpers.js';
 
 describe('Select', () => {
-
-  function check_select(widget)
-  {
+  function check_select(widget) {
     assert(widget.current_value() === false);
     widget.set('selected', 0);
     assert(widget.current_value() == 42);
@@ -21,8 +19,8 @@ describe('Select', () => {
       entries: [
         {
           value: 42,
-          label: 'the answer'
-        }
+          label: 'the answer',
+        },
       ],
     });
 
@@ -34,8 +32,7 @@ describe('Select', () => {
     check_select(widget);
   });
 
-  function make_entry_component(value, label)
-  {
+  function make_entry_component(value, label) {
     const entry_component = document.createElement('aux-select-entry');
     entry_component.value = value;
     entry_component.label = label;
@@ -43,15 +40,15 @@ describe('Select', () => {
   }
 
   it('append component children', async () => {
-    const select = document.createElement('aux-select'); 
+    const select = document.createElement('aux-select');
     const widget = select.auxWidget;
 
     const entry42 = make_entry_component(42, 'the answer');
-    const entry23 = make_entry_component(23, 'the other answer'); 
+    const entry23 = make_entry_component(23, 'the other answer');
     const entry0 = make_entry_component(0, 'hello');
 
     select.appendChild(entry42);
-    
+
     document.body.appendChild(select);
 
     await wait_for_event(widget, 'redraw');

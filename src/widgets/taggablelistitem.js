@@ -22,16 +22,15 @@ import { Taggable } from './taggable.js';
 import { add_class } from '../utils/dom.js';
 
 export const TaggableListItem = define_class({
-    Extends: ListItem,
-    Implements: Taggable,
-    initialize: function (options) {
-        ListItem.prototype.initialize.call(this, options);
-        Taggable.prototype.initialize.call(this);
-    },
-    draw: function(O, element)
-    {
-      add_class(element, "aux-taggablelistitem");
+  Extends: ListItem,
+  Implements: Taggable,
+  initialize: function (options) {
+    ListItem.prototype.initialize.call(this, options);
+    Taggable.prototype.initialize.call(this);
+  },
+  draw: function (O, element) {
+    add_class(element, 'aux-taggablelistitem');
 
-      ListItem.prototype.draw.call(this, O, element);
-    },
+    ListItem.prototype.draw.call(this, O, element);
+  },
 });

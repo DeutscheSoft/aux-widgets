@@ -1,82 +1,82 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <title>AUX Matrix Test</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <script type=module>
-            
-            import { MatrixData } from './models/matrix.js';
-            
-            const sort = (a, b) => {
-                const la = a.id;
-                const lb = b.id;
-                if (la === lb) return 0;
-                return la > lb ? 1 : -1;
-            };
-            window.matrix = new MatrixData();
-            const ports = ["L","C","R","L'","R'","LF"];
-            const outputs = matrix.addGroup({ label: 'Outputs', icon: 'speaker' });
-            for (let i = 0; i < 100; i++) {
-                const group = outputs.addGroup({ label: 'Output #' + (i+1), icon: 'mc5_1' });
-                for (let j = 0; j < 6; j++) {
-                    const port = group.addPort({ label: 'Channel ' + ports[j], icon: 'disconnected' });
-                }
-            }
+  <head>
+    <meta charset="utf-8" />
+    <title>AUX Matrix Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="module">
+      import { MatrixData } from './models/matrix.js';
 
-            document.addEventListener('DOMContentLoaded', () => {
-              const aux_matrix = document.querySelector('aux-matrix');
+      const sort = (a, b) => {
+        const la = a.id;
+        const lb = b.id;
+        if (la === lb) return 0;
+        return la > lb ? 1 : -1;
+      };
+      window.matrix = new MatrixData();
+      const ports = ['L', 'C', 'R', "L'", "R'", 'LF'];
+      const outputs = matrix.addGroup({ label: 'Outputs', icon: 'speaker' });
+      for (let i = 0; i < 100; i++) {
+        const group = outputs.addGroup({
+          label: 'Output #' + (i + 1),
+          icon: 'mc5_1',
+        });
+        for (let j = 0; j < 6; j++) {
+          const port = group.addPort({
+            label: 'Channel ' + ports[j],
+            icon: 'disconnected',
+          });
+        }
+      }
 
-              aux_matrix.sources = matrix.createVirtualTreeDataView(0, null, sort);
-              aux_matrix.sinks = matrix.createVirtualTreeDataView(0, null, sort);
+      document.addEventListener('DOMContentLoaded', () => {
+        const aux_matrix = document.querySelector('aux-matrix');
 
-              aux_matrix.auxWidget.on('toggleConnection', (port1, port2) => {
-                console.log('wants to toggleConnection', port1, port2);
-                const connection = matrix.getConnection(port1, port2);
+        aux_matrix.sources = matrix.createVirtualTreeDataView(0, null, sort);
+        aux_matrix.sinks = matrix.createVirtualTreeDataView(0, null, sort);
 
-                if (connection)
-                {
-                  matrix.deleteConnection(connection);
-                }
-                else
-                {
-                  matrix.connect(port1, port2);
-                }
-              });
-            });
-        </script>
-        
-        
-        <script type=module src="../index.js"></script>
-        
-        <link rel=stylesheet href="../../styles/default.css">
-        
-        <style>
-            
-            body, html {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                height: 100%;
-                font-family: sans-serif;
-            }
-            
-            .aux-root {
-                width: 100%;
-                height: 100%;
-                margin: 0;
-            }
-            .aux-matrix {
-                display: block;
-                width: 100%;
-                height: 480px;
-            }
-            
-        </style>
-    </head>
-    <body>
-        <aux-root>
-            <aux-matrix></aux-matrix>
-        </aux-root>
-    </body>
+        aux_matrix.auxWidget.on('toggleConnection', (port1, port2) => {
+          console.log('wants to toggleConnection', port1, port2);
+          const connection = matrix.getConnection(port1, port2);
+
+          if (connection) {
+            matrix.deleteConnection(connection);
+          } else {
+            matrix.connect(port1, port2);
+          }
+        });
+      });
+    </script>
+
+    <script type="module" src="../index.js"></script>
+
+    <link rel="stylesheet" href="../../styles/default.css" />
+
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        font-family: sans-serif;
+      }
+
+      .aux-root {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+      }
+      .aux-matrix {
+        display: block;
+        width: 100%;
+        height: 480px;
+      }
+    </style>
+  </head>
+  <body>
+    <aux-root>
+      <aux-matrix></aux-matrix>
+    </aux-root>
+  </body>
 </html>

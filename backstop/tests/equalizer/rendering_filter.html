@@ -1,25 +1,39 @@
-<aux-equalizer style='width: 100%; height: 480px;'
-    range_x="js:{min:10, max:20000, scale:'frequency'}"
-    range_y="js:{min:-24, max:24}"
-    range_z="js:{min:0.1, max:20, reverse:true}"
+<aux-equalizer
+  style="width: 100%; height: 480px;"
+  range_x="js:{min:10, max:20000, scale:'frequency'}"
+  range_y="js:{min:-24, max:24}"
+  range_z="js:{min:0.1, max:20, reverse:true}"
 >
-  <aux-equalizer-band freq=450 gain=6 q=0.5 auxtitle='P#1' active=false>
+  <aux-equalizer-band freq="450" gain="6" q="0.5" auxtitle="P#1" active="false">
   </aux-equalizer-band>
-  <aux-equalizer-band freq=1500 gain=-6 q=2 auxtitle='P#2' active=false>
+  <aux-equalizer-band freq="1500" gain="-6" q="2" auxtitle="P#2" active="false">
   </aux-equalizer-band>
-  <aux-equalizer-band freq=10000 q=1 auxtitle='LP' type=lowpass3 active=false>
+  <aux-equalizer-band
+    freq="10000"
+    q="1"
+    auxtitle="LP"
+    type="lowpass3"
+    active="false"
+  >
   </aux-equalizer-band>
 </aux-equalizer>
-<aux-equalizer style='width: 100%; height: 480px;'
-    range_x="js:{min:10, max:20000, scale:'frequency'}"
-    range_y="js:{min:-24, max:24}"
-    range_z="js:{min:0.1, max:20, reverse:true}"
-    rendering_filter='js:function() { return true; }'
+<aux-equalizer
+  style="width: 100%; height: 480px;"
+  range_x="js:{min:10, max:20000, scale:'frequency'}"
+  range_y="js:{min:-24, max:24}"
+  range_z="js:{min:0.1, max:20, reverse:true}"
+  rendering_filter="js:function() { return true; }"
 >
-  <aux-equalizer-band freq=450 gain=6 q=0.5 auxtitle='P#1' active=false>
+  <aux-equalizer-band freq="450" gain="6" q="0.5" auxtitle="P#1" active="false">
   </aux-equalizer-band>
-  <aux-equalizer-band freq=1500 gain=-6 q=2 auxtitle='P#2' active=false>
+  <aux-equalizer-band freq="1500" gain="-6" q="2" auxtitle="P#2" active="false">
   </aux-equalizer-band>
-  <aux-equalizer-band freq=10000 q=1 auxtitle='LP' type=lowpass3 active=false>
+  <aux-equalizer-band
+    freq="10000"
+    q="1"
+    auxtitle="LP"
+    type="lowpass3"
+    active="false"
+  >
   </aux-equalizer-band>
 </aux-equalizer>

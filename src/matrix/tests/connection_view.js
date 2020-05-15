@@ -71,11 +71,9 @@ test('ConnectionDataView basics', () => {
       tmp[i][j] = connection;
     });
 
-    for (let i = 0; i < 4; i++)
-    {
-      for (let j = 0; j < 4; j++)
-      {
-        assert(tmp[i][j] === void(0));
+    for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 4; j++) {
+        assert(tmp[i][j] === void 0);
       }
     }
 

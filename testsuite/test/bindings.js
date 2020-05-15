@@ -1,5 +1,10 @@
 import { Widget, WidgetComponent } from '../src/index.js';
-import { intercept_option, observe_option, observe_useraction, DebounceBinding } from '../src/utils/binding.js';
+import {
+  intercept_option,
+  observe_option,
+  observe_useraction,
+  DebounceBinding,
+} from '../src/utils/binding.js';
 
 import { assert, assert_error, sleep } from './helpers.js';
 
@@ -41,7 +46,8 @@ describe('Bindings', () => {
     o.set('disabled', false);
     assert(!called);
     o.userset('disabled', true);
-    assert(called); called = false;
+    assert(called);
+    called = false;
     unsubscribe();
 
     o.userset('disabled', false);
@@ -65,7 +71,8 @@ describe('Bindings', () => {
     o.set('disabled', false);
     assert(!called);
     o.userset('disabled', true);
-    assert(called); called = false;
+    assert(called);
+    called = false;
     assert(!o.get('disabled'));
     unsubscribe();
 
@@ -111,8 +118,7 @@ describe('DebounceBinding', () => {
     // backend sets it to true
     d.set(true);
 
-    for (let i = 0; i < 10; i++)
-    {
+    for (let i = 0; i < 10; i++) {
       assert(!o.get('disabled'));
       // this should restart the timer
       o.userset('disabled', true);
@@ -160,7 +166,5 @@ describe('DebounceBinding', () => {
     d.destroy();
     await sleep(75);
     assert(!o.get('disabled'));
-    
   });
 });
-

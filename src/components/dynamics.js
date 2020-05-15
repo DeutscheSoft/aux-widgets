@@ -1,7 +1,14 @@
 import {
-    component_from_widget, define_component
-  } from './../component_helpers.js';
-import { Dynamics, Compressor, Expander, Gate, Limiter } from './../widgets/dynamics.js';
+  component_from_widget,
+  define_component,
+} from './../component_helpers.js';
+import {
+  Dynamics,
+  Compressor,
+  Expander,
+  Gate,
+  Limiter,
+} from './../widgets/dynamics.js';
 
 /**
  * WebComponent for the Dynamics widget. Available in the DOM as `aux-dynamics`.
@@ -48,4 +55,4 @@ define_component('dynamics', DynamicsComponent);
 define_component('compressor', CompressorComponent);
 define_component('expander', ExpanderComponent);
 define_component('gate', GateComponent);
-define_component('limiter',LimiterComponent);
+define_component('limiter', LimiterComponent);

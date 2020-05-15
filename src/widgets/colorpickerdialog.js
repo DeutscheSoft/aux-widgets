@@ -22,57 +22,56 @@ import { Dialog } from './dialog.js';
 import { ColorPicker } from './colorpicker.js';
 import { add_class } from '../utils/dom.js';
 
-function cancel () {
-    var self = this.parent;
-    self.emit.call(self, "cancel");
-    self.close();
+function cancel() {
+  var self = this.parent;
+  self.emit.call(self, 'cancel');
+  self.close();
 }
 
-function apply (color) {
-    var self = this.parent;
-    self.emit.call(self, "apply", color);
-    self.close();
+function apply(color) {
+  var self = this.parent;
+  self.emit.call(self, 'apply', color);
+  self.close();
 }
 
 export const ColorPickerDialog = define_class({
-    /**
-     * A {@link Dialog} window containing a {@link ColorPicker}. It can be opened
-     * programatically and closes automatically on the appropriate user
-     * interactions like hitting ESC or clicking `apply`. ColorPickerDialog
-     * inherits all options of ColorPicker.
-     * 
-     * @class ColorPickerDialog
-     * 
-     * @extends Dialog
-     * 
-     */
-    
-    Extends: Dialog,
-    
-    initialize: function (options) {
-        Dialog.prototype.initialize.call(this, options);
-        /** @member {HTMLDivElement} ColorPickerDialog#element - The main DIV container.
-         * Has class <code>.aux-colorpickerdialog</code>.
-         */
-    },
-    draw: function(O, element)
-    {
-      add_class(element, "aux-colorpickerdialog");
+  /**
+   * A {@link Dialog} window containing a {@link ColorPicker}. It can be opened
+   * programatically and closes automatically on the appropriate user
+   * interactions like hitting ESC or clicking `apply`. ColorPickerDialog
+   * inherits all options of ColorPicker.
+   *
+   * @class ColorPickerDialog
+   *
+   * @extends Dialog
+   *
+   */
 
-      Dialog.prototype.draw.call(this, O, element);
-    },
+  Extends: Dialog,
+
+  initialize: function (options) {
+    Dialog.prototype.initialize.call(this, options);
+    /** @member {HTMLDivElement} ColorPickerDialog#element - The main DIV container.
+     * Has class <code>.aux-colorpickerdialog</code>.
+     */
+  },
+  draw: function (O, element) {
+    add_class(element, 'aux-colorpickerdialog');
+
+    Dialog.prototype.draw.call(this, O, element);
+  },
 });
-    
+
 /**
  * @member {ColorPicker} ColorPickerDialog#colorpicker - The {@link ColorPicker} widget.
  */
-define_child_widget(ColorPickerDialog, "colorpicker", {
-    create: ColorPicker,
-    show: true,
-    inherit_options: true,
-    userset_delegate: true,
-    static_events: {
-        cancel: cancel,
-        apply: apply,
-    },
+define_child_widget(ColorPickerDialog, 'colorpicker', {
+  create: ColorPicker,
+  show: true,
+  inherit_options: true,
+  userset_delegate: true,
+  static_events: {
+    cancel: cancel,
+    apply: apply,
+  },
 });

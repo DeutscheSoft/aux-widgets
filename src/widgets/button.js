@@ -24,96 +24,95 @@ import { Icon } from './icon.js';
 import { Label } from './label.js';
 
 export const Button = define_class({
-    /**
-     * Button is a simple, clickable widget containing an
-     * {@link Icon} and a {@link Label} to trigger functions.
-     * Button serves as base for other widgets, too, e.g.
-     * {@link Toggle}, {@link ConfirmButton} and {@link Select}.
-     * 
-     * @param {Object} [options={ }] - An object containing initial options.
-     * 
-     * @property {String|Boolean} [options.label=false] - Text for the
-     *   button label. Set to <code>false</code> to remove the label
-     *   from DOM.
-     * @property {String|Boolean} [options.icon=false] - URL to an image
-     *   file or an icon class (see styles/fonts/AUX.html). If set
-     *   to <code>false</code>, the icon is removed from DOM.
-     * @property {Boolean} [options.state=false] - State of the button,
-     *   reflected as class <code>.aux-active</code>.
-     * @property {String} [options.layout="horizontal"] - Define the
-     *   arrangement of label and icon. <code>vertical</code> means icon
-     *   above the label, <code>horizontal</code> places the icon left
-     *   to the label.
-     * 
-     * @extends Widget
-     * 
-     * @class Button
-     */
-    /**
-     * @member {HTMLDivElement} Button#element - The main DIV element.
-     *   Has class <code>.aux-button</code>.
-     */
-    Extends: Widget,
-    _options: Object.assign(Object.create(Widget.prototype._options), {
-        label: "string|boolean",
-        icon: "string|boolean",
-        state: "boolean",
-        layout: "string",
-    }),
-    options: {
-        label:            false,
-        icon:            false,
-        state:            false,
-        layout:           "horizontal"
-    },
-    initialize: function (options) {
-        if (!options.element) options.element = element('div');
-        Widget.prototype.initialize.call(this, options);
-    },
-    destroy: function () {
-        Widget.prototype.destroy.call(this);
-    },
-    draw: function(O, element)
-    {
-      add_class(element, "aux-button");
+  /**
+   * Button is a simple, clickable widget containing an
+   * {@link Icon} and a {@link Label} to trigger functions.
+   * Button serves as base for other widgets, too, e.g.
+   * {@link Toggle}, {@link ConfirmButton} and {@link Select}.
+   *
+   * @param {Object} [options={ }] - An object containing initial options.
+   *
+   * @property {String|Boolean} [options.label=false] - Text for the
+   *   button label. Set to <code>false</code> to remove the label
+   *   from DOM.
+   * @property {String|Boolean} [options.icon=false] - URL to an image
+   *   file or an icon class (see styles/fonts/AUX.html). If set
+   *   to <code>false</code>, the icon is removed from DOM.
+   * @property {Boolean} [options.state=false] - State of the button,
+   *   reflected as class <code>.aux-active</code>.
+   * @property {String} [options.layout="horizontal"] - Define the
+   *   arrangement of label and icon. <code>vertical</code> means icon
+   *   above the label, <code>horizontal</code> places the icon left
+   *   to the label.
+   *
+   * @extends Widget
+   *
+   * @class Button
+   */
+  /**
+   * @member {HTMLDivElement} Button#element - The main DIV element.
+   *   Has class <code>.aux-button</code>.
+   */
+  Extends: Widget,
+  _options: Object.assign(Object.create(Widget.prototype._options), {
+    label: 'string|boolean',
+    icon: 'string|boolean',
+    state: 'boolean',
+    layout: 'string',
+  }),
+  options: {
+    label: false,
+    icon: false,
+    state: false,
+    layout: 'horizontal',
+  },
+  initialize: function (options) {
+    if (!options.element) options.element = element('div');
+    Widget.prototype.initialize.call(this, options);
+  },
+  destroy: function () {
+    Widget.prototype.destroy.call(this);
+  },
+  draw: function (O, element) {
+    add_class(element, 'aux-button');
 
-      Widget.prototype.draw.call(this, O, element);
-    },
-    redraw: function() {
-        Widget.prototype.redraw.call(this);
-        var I = this.invalid;
-        var O = this.options;
-        var E = this.element;
-        
-        if (I.layout) {
-            I.layout = false;
-            toggle_class(E, "aux-vertical", O.layout === "vertical");
-            toggle_class(E, "aux-horizontal", O.layout !== "vertical");
-        }
+    Widget.prototype.draw.call(this, O, element);
+  },
+  redraw: function () {
+    Widget.prototype.redraw.call(this);
+    var I = this.invalid;
+    var O = this.options;
+    var E = this.element;
 
-        if (I.state) {
-            I.state = false;
-            toggle_class(E, "aux-active", O.state);
-        }
-    },
+    if (I.layout) {
+      I.layout = false;
+      toggle_class(E, 'aux-vertical', O.layout === 'vertical');
+      toggle_class(E, 'aux-horizontal', O.layout !== 'vertical');
+    }
+
+    if (I.state) {
+      I.state = false;
+      toggle_class(E, 'aux-active', O.state);
+    }
+  },
 });
 
 /**
  * @member {Icon} Button#icon - The {@link Icon} widget.
  */
-define_child_widget(Button, "icon", {
-    create: Icon,
-    option: "icon",
-    inherit_options: true,
-    toggle_class: true,
+define_child_widget(Button, 'icon', {
+  create: Icon,
+  option: 'icon',
+  inherit_options: true,
+  toggle_class: true,
 });
 
 /**
  * @member {Label} Button#label - The {@link Label} of the button.
  */
-define_child_widget(Button, "label", {
-    create: Label,
-    option: "label",
-    inherit_options: true,
-    toggle_class: true,
+define_child_widget(Button, 'label', {
+  create: Label,
+  option: 'label',
+  inherit_options: true,
+  toggle_class: true,
 });

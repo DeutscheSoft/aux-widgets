@@ -21,24 +21,23 @@ import { Container } from './container.js';
 import { element, add_class } from '../utils/dom.js';
 
 export const ListItem = define_class({
-    /**
-     * ListItem is a member {@link Container} of {@link List}s. The
-     * element is a `LI` instead of a `DIV`.
-     * 
-     * @class ListItem
-     * 
-     * @extends Container
-     */
-    Extends: Container,
-    
-    initialize: function (options) {
-        if (!options.element) options.element = element("li");
-        Container.prototype.initialize.call(this, options);
-    },
-    draw: function(O, element)
-    {
-      add_class(element, "aux-listitem");
+  /**
+   * ListItem is a member {@link Container} of {@link List}s. The
+   * element is a `LI` instead of a `DIV`.
+   *
+   * @class ListItem
+   *
+   * @extends Container
+   */
+  Extends: Container,
 
-      Container.prototype.draw.call(this, O, element);
-    },
+  initialize: function (options) {
+    if (!options.element) options.element = element('li');
+    Container.prototype.initialize.call(this, options);
+  },
+  draw: function (O, element) {
+    add_class(element, 'aux-listitem');
+
+    Container.prototype.draw.call(this, O, element);
+  },
 });

@@ -21,57 +21,56 @@ import { Container } from './container.js';
 import { element, add_class } from '../utils/dom.js';
 
 export const List = define_class({
-    /**
-     * List is a sortable {@link Container} for {@ListItems}s.
-     *   the element is a UL instead of a DIV.
-     * 
-     * @param {Object} [options={ }] - An object containing initial options.
-     * 
-     * @property {Function|Boolean} [options.sort=false] - A function
-     *   expecting arguments A and B, returning a number < 0, if A comes first and > 0,
-     *   if B comes first. 0 keeps both elements in place. Please refer to the
-     *   compareFunction at <a href="https://www.w3schools.com/jsref/jsref_sort.asp">W3Schools</a>
-     *   for any further information.
-     * 
-     * @class List
-     * 
-     * @extends Container
-     */
-    _options: Object.assign(Object.create(Container.prototype._options), {
-      sort: "function",
-    }),
-    Extends: Container,
-    
-    initialize: function (options) {
-        if (!options.element) options.element = element("ul");
-        Container.prototype.initialize.call(this, options);
-    },
-    static_events: {
-      set_sort: function(f) {
-        if (typeof(f) === "function") {
-          var C = this.children.slice(0);
-          C.sort(f);
-          for (var i = 0; i < C.length; i++) {
-            this.element.appendChild(C[i].element);
-          }
-        }
-      },
-    },
-    draw: function(O, element)
-    {
-      add_class(element, "aux-list");
+  /**
+   * List is a sortable {@link Container} for {@ListItems}s.
+   *   the element is a UL instead of a DIV.
+   *
+   * @param {Object} [options={ }] - An object containing initial options.
+   *
+   * @property {Function|Boolean} [options.sort=false] - A function
+   *   expecting arguments A and B, returning a number < 0, if A comes first and > 0,
+   *   if B comes first. 0 keeps both elements in place. Please refer to the
+   *   compareFunction at <a href="https://www.w3schools.com/jsref/jsref_sort.asp">W3Schools</a>
+   *   for any further information.
+   *
+   * @class List
+   *
+   * @extends Container
+   */
+  _options: Object.assign(Object.create(Container.prototype._options), {
+    sort: 'function',
+  }),
+  Extends: Container,
 
-      Container.prototype.draw.call(this, O, element);
-    },
-    append_child: function(w) {
-      Container.prototype.append_child.call(this, w);
-      var O = this.options;
-      var C = this.children;
-      if (O.sort) {
-        C.sort(O.sort);
-        var pos = C.indexOf(w);
-        if (pos !== C.length - 1)
-          this.element.insertBefore(w.element, C[pos+1].element);
+  initialize: function (options) {
+    if (!options.element) options.element = element('ul');
+    Container.prototype.initialize.call(this, options);
+  },
+  static_events: {
+    set_sort: function (f) {
+      if (typeof f === 'function') {
+        var C = this.children.slice(0);
+        C.sort(f);
+        for (var i = 0; i < C.length; i++) {
+          this.element.appendChild(C[i].element);
+        }
       }
     },
+  },
+  draw: function (O, element) {
+    add_class(element, 'aux-list');
+
+    Container.prototype.draw.call(this, O, element);
+  },
+  append_child: function (w) {
+    Container.prototype.append_child.call(this, w);
+    var O = this.options;
+    var C = this.children;
+    if (O.sort) {
+      C.sort(O.sort);
+      var pos = C.indexOf(w);
+      if (pos !== C.length - 1)
+        this.element.insertBefore(w.element, C[pos + 1].element);
+    }
+  },
 });

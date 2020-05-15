@@ -22,19 +22,17 @@ import { Taggable } from './taggable.js';
 import { add_class } from '../utils/dom.js';
 
 export const TaggableTreeItem = define_class({
-    
-    Extends: TreeItem,
-    Implements: Taggable,
-    
-    initialize: function (options) {
-        TreeItem.prototype.initialize.call(this, options);
-        Taggable.prototype.initialize.call(this);
-        add_class(this.element, "aux-taggabletreeitem");
-    },
-    draw: function(O, element)
-    {
-      add_class(element, "aux-taggabletreeitem");
+  Extends: TreeItem,
+  Implements: Taggable,
 
-      TreeItem.prototype.draw.call(this, O, element);
-    },
+  initialize: function (options) {
+    TreeItem.prototype.initialize.call(this, options);
+    Taggable.prototype.initialize.call(this);
+    add_class(this.element, 'aux-taggabletreeitem');
+  },
+  draw: function (O, element) {
+    add_class(element, 'aux-taggabletreeitem');
+
+    TreeItem.prototype.draw.call(this, O, element);
+  },
 });

@@ -139,8 +139,8 @@ The `auxBind` can be used to prevent such issues when binding options to backend
 data. It internally uses the `DebounceBinding` class which is part of AUX. It
 delays received values
 
-* while the `interacting` option is `true` on a widget or
-* for a certain number of milliseconds after the option was changed by user
+- while the `interacting` option is `true` on a widget or
+- for a certain number of milliseconds after the option was changed by user
   action.
 
 The delay used in the `auxBind` option is 250 milliseconds.
@@ -173,7 +173,7 @@ will become a no-op.
 ## Order of options
 
 In principle the order of options should not matter. However, there are
-*currently* some exceptions to this rule. For instance, the `value` option is
+_currently_ some exceptions to this rule. For instance, the `value` option is
 usually clipped to the range `min .. max` when being set. For these situations
 it is important to make sure that options such as `min` and `max` are set before
 setting the value. When using standard WebComponents with attributes, the set of

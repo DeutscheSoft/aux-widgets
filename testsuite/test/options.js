@@ -1,31 +1,28 @@
-import {
-    OptionsComponent,
-    ButtonComponent
-  } from '../src/index.js';
+import { OptionsComponent, ButtonComponent } from '../src/index.js';
 
-import {
-    canvas,
-    assert
-  } from './helpers.js';
+import { canvas, assert } from './helpers.js';
 
-function createElement(name, attr)
-{
+function createElement(name, attr) {
   const element = document.createElement(name);
 
-  if (attr) for (let key in attr)
-  {
-    element.setAttribute(key, attr[key]);
-  }
+  if (attr)
+    for (let key in attr) {
+      element.setAttribute(key, attr[key]);
+    }
 
   return element;
 }
 
-function createOptions(attr) { return createElement('aux-options', attr); }
-function createButton(attr) { return createElement('aux-button', attr); }
+function createOptions(attr) {
+  return createElement('aux-options', attr);
+}
+function createButton(attr) {
+  return createElement('aux-button', attr);
+}
 
-describe("AUX-OPTIONS", () => {
-  it("adding and removing aux-options", async () => {
-    const c = canvas(); 
+describe('AUX-OPTIONS', () => {
+  it('adding and removing aux-options', async () => {
+    const c = canvas();
 
     const div = createElement('div');
     const options = createOptions({ label: 'foo', name: 'options1' });
@@ -46,13 +43,13 @@ describe("AUX-OPTIONS", () => {
     div.remove();
   });
 
-  it("changing options attributes", async () => {
-    const c = canvas(); 
+  it('changing options attributes', async () => {
+    const c = canvas();
 
     const div = createElement('div');
     const options = createOptions({ label: 'foo', name: 'options1' });
-    const button1 = createButton({ });
-    const button2 = createButton({ });
+    const button1 = createButton({});
+    const button2 = createButton({});
 
     c.appendChild(div);
     div.appendChild(button1);
@@ -71,14 +68,14 @@ describe("AUX-OPTIONS", () => {
     div.remove();
   });
 
-  it("inheriting options", async () => {
-    const c = canvas(); 
+  it('inheriting options', async () => {
+    const c = canvas();
 
     const div = createElement('div');
     const options1 = createOptions({ options: 'options2', name: 'options1' });
     const options2 = createOptions({ label: 'foo', name: 'options2' });
-    const button1 = createButton({ });
-    const button2 = createButton({ });
+    const button1 = createButton({});
+    const button2 = createButton({});
 
     c.appendChild(div);
     div.appendChild(button1);

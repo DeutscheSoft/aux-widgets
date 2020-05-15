@@ -26,53 +26,47 @@ import { add_class } from '../utils/dom.js';
 /* TODO */
 
 function build_dragcapture() {
-    this.dragcapture = new DragCapture(this, {
-        state: true,
-        onstartcapture: function () {
-            return true;
-        },
-        onmovecapture: function () {
-        },
-        onstopcapture: function () {
-        }
-    });
+  this.dragcapture = new DragCapture(this, {
+    state: true,
+    onstartcapture: function () {
+      return true;
+    },
+    onmovecapture: function () {},
+    onstopcapture: function () {},
+  });
 }
 
 export const SortableList = define_class({
-    
-    Extends: List,
-    
-    _options: Object.assign(Object.create(Container.prototype._options), {
-        sortable: "boolean",
-    }),
-    options: {
-        sortable: false,
-        item_class: SortableListItem,
-    },
-    initialize: function (options) {
-        List.prototype.initialize.call(this, options);
-    },
-    draw: function(O, element)
-    {
-      add_class(element, "aux-sortablelist");
+  Extends: List,
 
-      List.prototype.draw.call(this, O, element);
-    },
-    add_item: function (item, pos) {
-        var O = this.options;
-        item = List.prototype.add_item.call(this, item, pos);
-        item.set("sortable", O.sortable);
-    },
-    set: function (key, value) {
-        switch (key) {
-            case "sortable":
-                var I = this.options.items;
-                for (var i = 0; i < I.length; i++)
-                    I[i].set("sortable", value);
-                if (value && !this.dragcapture)
-                    build_dragcapture.call(this);
-                break;
-        }
-        return List.prototype.set.call(this, key, value);
+  _options: Object.assign(Object.create(Container.prototype._options), {
+    sortable: 'boolean',
+  }),
+  options: {
+    sortable: false,
+    item_class: SortableListItem,
+  },
+  initialize: function (options) {
+    List.prototype.initialize.call(this, options);
+  },
+  draw: function (O, element) {
+    add_class(element, 'aux-sortablelist');
+
+    List.prototype.draw.call(this, O, element);
+  },
+  add_item: function (item, pos) {
+    var O = this.options;
+    item = List.prototype.add_item.call(this, item, pos);
+    item.set('sortable', O.sortable);
+  },
+  set: function (key, value) {
+    switch (key) {
+      case 'sortable':
+        var I = this.options.items;
+        for (var i = 0; i < I.length; i++) I[i].set('sortable', value);
+        if (value && !this.dragcapture) build_dragcapture.call(this);
+        break;
     }
+    return List.prototype.set.call(this, key, value);
+  },
 });

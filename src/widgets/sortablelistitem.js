@@ -22,45 +22,43 @@ import { Button } from './button.js';
 import { add_class } from '../utils/dom.js';
 
 function build_sorter() {
-    this.sorter = new Button({"class":"aux-sorter",container:this.element});
-    this.add_child(this.sorter);
+  this.sorter = new Button({ class: 'aux-sorter', container: this.element });
+  this.add_child(this.sorter);
 }
 
 export const SortableListItem = define_class({
-    Extends: ListItem,
-    _options: Object.assign(Object.create(ListItem.prototype._options), {
-        sortable: "boolean",
-    }),
-    options: {
-        sortable: false,
-    },
-    initialize: function (options) {
-        ListItem.prototype.initialize.call(this, options);
-    },
-    draw: function(O, element)
-    {
-      add_class(element, "aux-sortablelistitem");
+  Extends: ListItem,
+  _options: Object.assign(Object.create(ListItem.prototype._options), {
+    sortable: 'boolean',
+  }),
+  options: {
+    sortable: false,
+  },
+  initialize: function (options) {
+    ListItem.prototype.initialize.call(this, options);
+  },
+  draw: function (O, element) {
+    add_class(element, 'aux-sortablelistitem');
 
-      ListItem.prototype.draw.call(this, O, element);
-    },
-    redraw: function () {
-        ListItem.prototype.redraw.call(this);
-        var I = this.invalid;
-        var O = this.options;
-        if (I.sortable) {
-            if (O.sortable) {
-                if (!this.sorter) {
-                    build_sorter.call(this);
-                } else {
-                    this.element.appendChild(this.sorter.element);
-                }
-            } else {
-                if (this.sorter)
-                    this.element.removeChild(this.sorter.element);
-            }
+    ListItem.prototype.draw.call(this, O, element);
+  },
+  redraw: function () {
+    ListItem.prototype.redraw.call(this);
+    var I = this.invalid;
+    var O = this.options;
+    if (I.sortable) {
+      if (O.sortable) {
+        if (!this.sorter) {
+          build_sorter.call(this);
+        } else {
+          this.element.appendChild(this.sorter.element);
         }
-    },
-    set: function (key, value) {
-        return ListItem.prototype.set.call(this, key, value);
+      } else {
+        if (this.sorter) this.element.removeChild(this.sorter.element);
+      }
     }
+  },
+  set: function (key, value) {
+    return ListItem.prototype.set.call(this, key, value);
+  },
 });

@@ -22,50 +22,49 @@ import { define_class } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 
 export const Label = define_class({
-    /**
-     * Label is a simple text field displaying strings.
-     *
-     * @class Label
-     * 
-     * @extends Widget
-     * 
-     * @property {Mixed} [options.label=""] - The content of the label. Can be formatted via `options.format`.
-     * @property {Function|Boolean} [options.format=false] - Optional format function.
+  /**
+   * Label is a simple text field displaying strings.
+   *
+   * @class Label
+   *
+   * @extends Widget
+   *
+   * @property {Mixed} [options.label=""] - The content of the label. Can be formatted via `options.format`.
+   * @property {Function|Boolean} [options.format=false] - Optional format function.
+   */
+  Extends: Widget,
+  _options: Object.assign(Object.create(Widget.prototype._options), {
+    label: 'string',
+    format: 'function|boolean',
+  }),
+  options: {
+    label: '',
+    format: false,
+  },
+  initialize: function (options) {
+    if (!options.element) options.element = element('div');
+    Widget.prototype.initialize.call(this, options);
+    /** @member {HTMLDivElement} Label#element - The main DIV container.
+     * Has class <code>.aux-label</code>.
      */
-    Extends: Widget,
-    _options: Object.assign(Object.create(Widget.prototype._options), {
-        label: "string",
-        format: "function|boolean"
-    }),
-    options: {
-        label: "",
-        format: false,
-    },
-    initialize: function (options) {
-        if (!options.element) options.element = element("div");
-        Widget.prototype.initialize.call(this, options);
-        /** @member {HTMLDivElement} Label#element - The main DIV container.
-         * Has class <code>.aux-label</code>.
-         */
-        this._text = document.createTextNode("");
-    },
-    draw: function(O, element)
-    {
-      add_class(element, "aux-label");
-      element.appendChild(this._text);
+    this._text = document.createTextNode('');
+  },
+  draw: function (O, element) {
+    add_class(element, 'aux-label');
+    element.appendChild(this._text);
 
-      Widget.prototype.draw.call(this, O, element);
-    },
-    
-    redraw: function () {
-        var I = this.invalid;
-        var O = this.options;
+    Widget.prototype.draw.call(this, O, element);
+  },
 
-        Widget.prototype.redraw.call(this);
+  redraw: function () {
+    var I = this.invalid;
+    var O = this.options;
 
-        if (I.label || I.format) {
-            I.label = I.format = false;
-            this._text.data = O.format ? O.format.call(this, O.label) : O.label;
-        }
-    },
+    Widget.prototype.redraw.call(this);
+
+    if (I.label || I.format) {
+      I.label = I.format = false;
+      this._text.data = O.format ? O.format.call(this, O.label) : O.label;
+    }
+  },
 });

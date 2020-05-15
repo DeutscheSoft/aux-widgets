@@ -2,10 +2,13 @@
  * @module matrix
  */
 
-import { init_subscriptions, add_subscription, unsubscribe_subscriptions } from '../../utils/subscriptions.js';
+import {
+  init_subscriptions,
+  add_subscription,
+  unsubscribe_subscriptions,
+} from '../../utils/subscriptions.js';
 
-export function call_continuation_if(node, subscribe_predicate, continuation)
-{
+export function call_continuation_if(node, subscribe_predicate, continuation) {
   let active = false;
   let inner_subscription = init_subscriptions();
 
@@ -15,13 +18,9 @@ export function call_continuation_if(node, subscribe_predicate, continuation)
 
     active = value;
 
-
-    if (value)
-    {
+    if (value) {
       inner_subscription = continuation(node);
-    }
-    else
-    {
+    } else {
       inner_subscription = unsubscribe_subscriptions(inner_subscription);
     }
   });
@@ -31,4 +30,3 @@ export function call_continuation_if(node, subscribe_predicate, continuation)
     inner_subscription = unsubscribe_subscriptions(inner_subscription);
   };
 }
-

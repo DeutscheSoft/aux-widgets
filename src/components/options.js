@@ -1,7 +1,10 @@
-import { registerOptions, unregisterOptions, subscribeOptionsAttributes } from '../options.js';
+import {
+  registerOptions,
+  unregisterOptions,
+  subscribeOptionsAttributes,
+} from '../options.js';
 
-function triggerUpdate(parentAttributes)
-{
+function triggerUpdate(parentAttributes) {
   const attributes = this._auxAttributes;
 
   attributes.clear();
@@ -9,8 +12,7 @@ function triggerUpdate(parentAttributes)
   {
     const attr = this.attributes;
 
-    for (let i = 0; i < attr.length; i++)
-    {
+    for (let i = 0; i < attr.length; i++) {
       const name = attr[i].name;
       const value = attr[i].value;
 
@@ -20,8 +22,7 @@ function triggerUpdate(parentAttributes)
     }
   }
 
-  if (parentAttributes)
-  {
+  if (parentAttributes) {
     parentAttributes.forEach((value, key) => {
       if (attributes.has(key)) return;
       attributes.set(key, value);
@@ -31,15 +32,12 @@ function triggerUpdate(parentAttributes)
   this.dispatchEvent(new CustomEvent('auxAttributesChanged'));
 }
 
-export class OptionsComponent extends HTMLElement
-{
-  static get observedAttributes()
-  {
-    return [ 'name', 'options' ];
+export class OptionsComponent extends HTMLElement {
+  static get observedAttributes() {
+    return ['name', 'options'];
   }
 
-  constructor()
-  {
+  constructor() {
     super();
     this.name = null;
     this._auxOptionsSubscription = null;
@@ -47,19 +45,16 @@ export class OptionsComponent extends HTMLElement
     this._parent = null;
   }
 
-  auxAttributes()
-  {
+  auxAttributes() {
     return this._auxAttributes;
   }
 
-  connectedCallback()
-  {
+  connectedCallback() {
     this.style.display = 'none';
 
     const name = this.getAttribute('name');
 
-    if (!name)
-    {
+    if (!name) {
       throw new Error('AUX-OPTIONS must have a name attribute.');
     }
 
@@ -67,14 +62,15 @@ export class OptionsComponent extends HTMLElement
 
     const options = this.getAttribute('options');
 
-    if (options)
-    {
-      this._auxOptionsSubscriptions = subscribeOptionsAttributes(this.parentNode, options, (attr) => {
-        triggerUpdate.call(this, attr);
-      });
-    }
-    else
-    {
+    if (options) {
+      this._auxOptionsSubscriptions = subscribeOptionsAttributes(
+        this.parentNode,
+        options,
+        (attr) => {
+          triggerUpdate.call(this, attr);
+        }
+      );
+    } else {
       triggerUpdate.call(this, null);
     }
 
@@ -82,29 +78,26 @@ export class OptionsComponent extends HTMLElement
     registerOptions(this.parentNode, name, this);
   }
 
-  disconnectedCallback()
-  {
+  disconnectedCallback() {
     const name = this.name;
 
     if (!name) return;
 
     unregisterOptions(this._parent, name, this);
 
-    this._parent = null
+    this._parent = null;
     this.name = null;
 
     const subscription = this._auxOptionsSubscriptions;
 
-    if (subscription)
-    {
+    if (subscription) {
       this._auxOptionsSubscriptions = null;
 
       subscription();
     }
   }
 
-  attributeChangedCallback(key, new_value, old_value)
-  {
+  attributeChangedCallback(key, new_value, old_value) {
     if (!this.isConnected) return;
     if (!this.name) return;
     this.disconnectedCallback();

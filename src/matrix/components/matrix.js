@@ -1,6 +1,7 @@
 import {
-    component_from_widget, define_component
-  } from './../../component_helpers.js';
+  component_from_widget,
+  define_component,
+} from './../../component_helpers.js';
 import { Matrix } from './../widgets/matrix.js';
 
 /**

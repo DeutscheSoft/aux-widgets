@@ -16,7 +16,11 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-import { define_class, define_child_element, add_static_event } from '../widget_helpers.js';
+import {
+  define_class,
+  define_child_element,
+  add_static_event,
+} from '../widget_helpers.js';
 import { define_child_widget } from '../child_widget.js';
 import { Container } from './container.js';
 import { Value } from './value.js';
@@ -28,100 +32,118 @@ import { add_class } from '../utils/dom.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { rgb2bw, rgb2hex, rgb2hsl, hsl2rgb, hex2rgb } from '../utils/colors.js';
 
-var color_options = [ "rgb", "hsl", "hex", "hue", "saturation", "lightness", "red", "green", "blue" ];
+var color_options = [
+  'rgb',
+  'hsl',
+  'hex',
+  'hue',
+  'saturation',
+  'lightness',
+  'red',
+  'green',
+  'blue',
+];
 
 function checkinput(e) {
-    var I = this.hex.element;
-    if (e.keyCode && e.keyCode == 13) {
-        apply.call(this);
-        return;
-    }
-    if (e.keyCode && e.keyCode == 27) {
-        cancel.call(this);
-        return;
-    }
-    if (I.value.substr(0, 1) == "#")
-        I.value = I.value.substr(1);
-    if (e.type == "paste" && I.value.length == 3) {
-        I.value = I.value[0] + I.value[0] +
-                  I.value[1] + I.value[1] +
-                  I.value[2] + I.value[2];
-    }
-    if (I.value.length == 6) {
-        this.set("hex", I.value);
-    }
+  var I = this.hex.element;
+  if (e.keyCode && e.keyCode == 13) {
+    apply.call(this);
+    return;
+  }
+  if (e.keyCode && e.keyCode == 27) {
+    cancel.call(this);
+    return;
+  }
+  if (I.value.substr(0, 1) == '#') I.value = I.value.substr(1);
+  if (e.type == 'paste' && I.value.length == 3) {
+    I.value =
+      I.value[0] +
+      I.value[0] +
+      I.value[1] +
+      I.value[1] +
+      I.value[2] +
+      I.value[2];
+  }
+  if (I.value.length == 6) {
+    this.set('hex', I.value);
+  }
 }
 function cancel() {
-    /**
-     * Is fired whenever the cancel button gets clicked or ESC is hit on input.
-     * 
-     * @event ColorPicker#cancel
-     */
-    fevent.call(this, "cancel");
+  /**
+   * Is fired whenever the cancel button gets clicked or ESC is hit on input.
+   *
+   * @event ColorPicker#cancel
+   */
+  fevent.call(this, 'cancel');
 }
 function apply() {
-    /**
-     * Is fired whenever the apply button gets clicked or return is hit on input.
-     * 
-     * @event ColorPicker#apply
-     * @param {object} colors - Object containing all color objects: `rgb`, `hsl`, `hex`, `hue`, `saturation`, `lightness`, `red`, `green`, `blue`
-     */
-    fevent.call(this, "apply", true);
+  /**
+   * Is fired whenever the apply button gets clicked or return is hit on input.
+   *
+   * @event ColorPicker#apply
+   * @param {object} colors - Object containing all color objects: `rgb`, `hsl`, `hex`, `hue`, `saturation`, `lightness`, `red`, `green`, `blue`
+   */
+  fevent.call(this, 'apply', true);
 }
 
-function fevent (e, useraction) {
-    var O = this.options;
-    if (useraction) {
-        this.emit("userset", "rgb", O.rgb);
-        this.emit("userset", "hsl", O.hsl);
-        this.emit("userset", "hex", O.hex);
-        this.emit("userset", "hue", O.hue);
-        this.emit("userset", "saturation", O.saturation);
-        this.emit("userset", "lightness", O.lightness);
-        this.emit("userset", "red", O.red);
-        this.emit("userset", "green", O.green);
-        this.emit("userset", "blue", O.blue);
+function fevent(e, useraction) {
+  var O = this.options;
+  if (useraction) {
+    this.emit('userset', 'rgb', O.rgb);
+    this.emit('userset', 'hsl', O.hsl);
+    this.emit('userset', 'hex', O.hex);
+    this.emit('userset', 'hue', O.hue);
+    this.emit('userset', 'saturation', O.saturation);
+    this.emit('userset', 'lightness', O.lightness);
+    this.emit('userset', 'red', O.red);
+    this.emit('userset', 'green', O.green);
+    this.emit('userset', 'blue', O.blue);
+  }
+  this.emit(e, {
+    rgb: O.rgb,
+    hsl: O.hsl,
+    hex: O.hex,
+    hue: O.hue,
+    saturation: O.saturation,
+    lightness: O.lightness,
+    red: O.red,
+    green: O.green,
+    blue: O.blue,
+  });
+}
+
+var color_atoms = {
+  hue: 'hsl',
+  saturation: 'hsl',
+  lightness: 'hsl',
+  red: 'rgb',
+  green: 'rgb',
+  blue: 'rgb',
+};
+
+function set_atoms(key) {
+  var O = this.options;
+  var atoms = Object.keys(color_atoms);
+  for (var i = 0; i < atoms.length; i++) {
+    var atom = atoms[i];
+    if (key !== atom) {
+      O[atom] = O[color_atoms[atom]][atom.substr(0, 1)];
+      this[atom].set('value', O[atom]);
     }
-    this.emit(e, {
-        rgb: O.rgb,
-        hsl: O.hsl,
-        hex: O.hex,
-        hue: O.hue,
-        saturation: O.saturation,
-        lightness: O.lightness,
-        red: O.red,
-        green: O.green,
-        blue: O.blue,
-    });
+  }
+  if (key !== 'hex') O.hex = rgb2hex(O.rgb);
 }
-
-var color_atoms = { "hue":"hsl", "saturation":"hsl", "lightness":"hsl", "red":"rgb", "green":"rgb", "blue":"rgb" };
-
-function set_atoms (key) {
-    var O = this.options;
-    var atoms = Object.keys(color_atoms);
-    for ( var i = 0; i < atoms.length; i++) {
-        var atom = atoms[i];
-        if (key !== atom) {
-            O[atom] = O[color_atoms[atom]][atom.substr(0,1)];
-            this[atom].set("value", O[atom]);
-        }
-    }
-    if (key !== "hex")
-        O.hex = rgb2hex(O.rgb);
-}
-
 
 /**
  * ColorPicker provides a collection of widgets to select a color in
  * RGB or HSL color space.
- * 
+ *
  * @class ColorPicker
- * 
+ *
  * @extends Container
- * 
+ *
  * @param {Object} [options={ }] - An object containing initial options.
- * 
+ *
  * @property {object} [hsl={h:0, s:0.5, l:0}] - An object containing members `h`ue, `s`aturation and `l`ightness as numerical values.
  * @property {object} [rgb={r:0, r:0, b:0}] - An object containing members `r`ed, `g`reen and `b`lue as numerical values.
  * @property {string} [hex=000000] - A HEX color value, either with or without leading `#`.
@@ -145,449 +167,520 @@ function set_atoms (key) {
  * @property {boolean} [show_indicator=true] - Set to `false` to hide the color indicator.
  */
 
-
 export const ColorPicker = define_class({
-    
-    Extends: Container,
-    
-    _options: Object.assign(Object.create(Container.prototype._options), {
-        hsl: "object",
-        rgb: "object",
-        hex: "string",
-        hue: "number",
-        saturation: "number",
-        lightness: "number",
-        red: "number",
-        green: "number",
-        blue: "number",
-    }),
-    options: {
-        hsl: {h:0, s:0.5, l:0},
-        rgb: {r:0, g:0, b:0},
-        hex: "000000",
-        hue: 0,
-        saturation: 0.5,
-        lightness:  0,
-        red: 0,
-        green: 0,
-        blue: 0,
-    },
-    initialize: function (options) {
-        Container.prototype.initialize.call(this, options);
-        options = this.options;
+  Extends: Container,
 
-        /** @member {HTMLDivElement} ColorPicker#element - The main DIV container.
-         * Has class <code>.aux-colorpicker</code>.
-         */
-        
-        /**
-         * @member {Range} ColorPicker#range_x - The {@link Range} for the x axis. 
-         */
-        this.range_x = new Range({
-            min: 0,
-            max: 1,
-        });
-        
-        /**
-         * @member {Range} ColorPicker#range_y - The {@link Range} for the y axis.
-         */
-        this.range_y = new Range({
-            min: 0,
-            max: 1,
-            reverse: true,
-        });
-        
-        /**
-         * @member {Range} ColorPicker#drag_x - The {@link DragValue} for the x axis.
-         */
-        this.drag_x = new DragValue(this, {
-            range: (function () { return this.range_x; }).bind(this),
-            get: function () { return this.parent.options.hue; },
-            set: function (v) { this.parent.userset("hue", this.parent.range_x.snap(v)); },
-            direction: "horizontal",
-            cursor: false,
-            onstartcapture: function (e) {
-                if (e.start.target.classList.contains("aux-indicator")) return;
-                var ev = e.stouch ? e.stouch : e.start;
-                var x = ev.clientX - this.parent._canvas.getBoundingClientRect().left;
-                this.parent.set("hue", this.options.range().px2val(x));
-            }
-        });
-        /**
-         * @member {Range} ColorPicker#drag_y - The {@link DragValue} for the y axis.
-         */
-        this.drag_y = new DragValue(this, {
-            range: (function () { return this.range_y; }).bind(this),
-            get: function () { return this.parent.options.lightness; },
-            set: function (v) { this.parent.userset("lightness", this.parent.range_y.snap(v)); },
-            direction: "vertical",
-            cursor: false,
-            onstartcapture: function (e) {
-                if (e.start.target.classList.contains("aux-indicator")) return;
-                var ev = e.stouch ? e.stouch : e.start;
-                var y = ev.clientY - this.parent._canvas.getBoundingClientRect().top;
-                this.parent.set("lightness", 1 - this.options.range().px2val(y));
-            }
-        });
+  _options: Object.assign(Object.create(Container.prototype._options), {
+    hsl: 'object',
+    rgb: 'object',
+    hex: 'string',
+    hue: 'number',
+    saturation: 'number',
+    lightness: 'number',
+    red: 'number',
+    green: 'number',
+    blue: 'number',
+  }),
+  options: {
+    hsl: { h: 0, s: 0.5, l: 0 },
+    rgb: { r: 0, g: 0, b: 0 },
+    hex: '000000',
+    hue: 0,
+    saturation: 0.5,
+    lightness: 0,
+    red: 0,
+    green: 0,
+    blue: 0,
+  },
+  initialize: function (options) {
+    Container.prototype.initialize.call(this, options);
+    options = this.options;
 
-    },
-    resize: function () {
-        var rect = this._canvas.getBoundingClientRect();
-        this.range_x.set("basis", rect.width);
-        this.range_y.set("basis", rect.height);
-    },
-    draw: function(O, element)
-    {
-      add_class(element, "aux-colorpicker");
+    /** @member {HTMLDivElement} ColorPicker#element - The main DIV container.
+     * Has class <code>.aux-colorpicker</code>.
+     */
 
-      Container.prototype.draw.call(this, O, element);
-    },
-    redraw: function () {
-        Container.prototype.redraw.call(this);
-        var I = this.invalid;
-        var O = this.options;
-        var E = this.element;
-        if (I.validate("rgb", "hsl", "hex", "hue", "saturation", "lightness", "red", "green", "blue")) {
-            var bw = rgb2bw(O.rgb);
-            var bg = "rgb("+parseInt(O.red)+","+parseInt(O.green)+","+parseInt(O.blue)+")";
-            this.hex._input.style.backgroundColor = bg;
-            this.hex._input.style.color = bw;
-            this.hex.set("value", O.hex);
-            
-            this._indicator.style.left = (O.hue * 100) + "%";
-            this._indicator.style.top  = (O.lightness * 100) + "%";
-            this._indicator.style.backgroundColor = bg;
-            this._indicator.style.color = bw;
-            
-            this._grayscale.style.opacity = 1 - O.saturation;
-        }
-    },
-    set: function (key, value) {
-        var O = this.options;
-        if (color_options.indexOf(key) > -1) {
-            switch (key) {
-                case "rgb":
-                    O.hsl = rgb2hsl(value);
-                    break;
-                case "hsl":
-                    O.rgb = hsl2rgb(value);
-                    break;
-                case "hex":
-                    O.rgb = hex2rgb(value);
-                    O.hsl = rgb2hsl(O.rgb);
-                    break;
-                case "hue":
-                    O.hsl = {h:Math.min(1,Math.max(0,value)), s:O.saturation, l:O.lightness};
-                    O.rgb = hsl2rgb(O.hsl);
-                    break;
-                case "saturation":
-                    O.hsl = {h:O.hue, s:Math.min(1,Math.max(0,value)), l:O.lightness};
-                    O.rgb = hsl2rgb(O.hsl);
-                    break;
-                case "lightness":
-                    O.hsl = {h:O.hue, s:O.saturation, l:Math.min(1,Math.max(0,value))};
-                    O.rgb = hsl2rgb(O.hsl);
-                    break;
-                case "red":
-                    O.rgb = {r:Math.min(255,Math.max(0,value)), g:O.green, b:O.blue};
-                    O.hsl = rgb2hsl(O.rgb);
-                    break;
-                case "green":
-                    O.rgb = {r:O.red, g:Math.min(255,Math.max(0,value)), b:O.blue};
-                    O.hsl = rgb2hsl(O.rgb);
-                    break;
-                case "blue":
-                    O.rgb = {r:O.red, g:O.green, b:Math.min(255,Math.max(0,value))};
-                    O.hsl = rgb2hsl(O.rgb);
-                    break;
-            }
-            set_atoms.call(this, key, value);
-        }
-        return Container.prototype.set.call(this, key, value);
+    /**
+     * @member {Range} ColorPicker#range_x - The {@link Range} for the x axis.
+     */
+    this.range_x = new Range({
+      min: 0,
+      max: 1,
+    });
+
+    /**
+     * @member {Range} ColorPicker#range_y - The {@link Range} for the y axis.
+     */
+    this.range_y = new Range({
+      min: 0,
+      max: 1,
+      reverse: true,
+    });
+
+    /**
+     * @member {Range} ColorPicker#drag_x - The {@link DragValue} for the x axis.
+     */
+    this.drag_x = new DragValue(this, {
+      range: function () {
+        return this.range_x;
+      }.bind(this),
+      get: function () {
+        return this.parent.options.hue;
+      },
+      set: function (v) {
+        this.parent.userset('hue', this.parent.range_x.snap(v));
+      },
+      direction: 'horizontal',
+      cursor: false,
+      onstartcapture: function (e) {
+        if (e.start.target.classList.contains('aux-indicator')) return;
+        var ev = e.stouch ? e.stouch : e.start;
+        var x = ev.clientX - this.parent._canvas.getBoundingClientRect().left;
+        this.parent.set('hue', this.options.range().px2val(x));
+      },
+    });
+    /**
+     * @member {Range} ColorPicker#drag_y - The {@link DragValue} for the y axis.
+     */
+    this.drag_y = new DragValue(this, {
+      range: function () {
+        return this.range_y;
+      }.bind(this),
+      get: function () {
+        return this.parent.options.lightness;
+      },
+      set: function (v) {
+        this.parent.userset('lightness', this.parent.range_y.snap(v));
+      },
+      direction: 'vertical',
+      cursor: false,
+      onstartcapture: function (e) {
+        if (e.start.target.classList.contains('aux-indicator')) return;
+        var ev = e.stouch ? e.stouch : e.start;
+        var y = ev.clientY - this.parent._canvas.getBoundingClientRect().top;
+        this.parent.set('lightness', 1 - this.options.range().px2val(y));
+      },
+    });
+  },
+  resize: function () {
+    var rect = this._canvas.getBoundingClientRect();
+    this.range_x.set('basis', rect.width);
+    this.range_y.set('basis', rect.height);
+  },
+  draw: function (O, element) {
+    add_class(element, 'aux-colorpicker');
+
+    Container.prototype.draw.call(this, O, element);
+  },
+  redraw: function () {
+    Container.prototype.redraw.call(this);
+    var I = this.invalid;
+    var O = this.options;
+    var E = this.element;
+    if (
+      I.validate(
+        'rgb',
+        'hsl',
+        'hex',
+        'hue',
+        'saturation',
+        'lightness',
+        'red',
+        'green',
+        'blue'
+      )
+    ) {
+      var bw = rgb2bw(O.rgb);
+      var bg =
+        'rgb(' +
+        parseInt(O.red) +
+        ',' +
+        parseInt(O.green) +
+        ',' +
+        parseInt(O.blue) +
+        ')';
+      this.hex._input.style.backgroundColor = bg;
+      this.hex._input.style.color = bw;
+      this.hex.set('value', O.hex);
+
+      this._indicator.style.left = O.hue * 100 + '%';
+      this._indicator.style.top = O.lightness * 100 + '%';
+      this._indicator.style.backgroundColor = bg;
+      this._indicator.style.color = bw;
+
+      this._grayscale.style.opacity = 1 - O.saturation;
     }
+  },
+  set: function (key, value) {
+    var O = this.options;
+    if (color_options.indexOf(key) > -1) {
+      switch (key) {
+        case 'rgb':
+          O.hsl = rgb2hsl(value);
+          break;
+        case 'hsl':
+          O.rgb = hsl2rgb(value);
+          break;
+        case 'hex':
+          O.rgb = hex2rgb(value);
+          O.hsl = rgb2hsl(O.rgb);
+          break;
+        case 'hue':
+          O.hsl = {
+            h: Math.min(1, Math.max(0, value)),
+            s: O.saturation,
+            l: O.lightness,
+          };
+          O.rgb = hsl2rgb(O.hsl);
+          break;
+        case 'saturation':
+          O.hsl = {
+            h: O.hue,
+            s: Math.min(1, Math.max(0, value)),
+            l: O.lightness,
+          };
+          O.rgb = hsl2rgb(O.hsl);
+          break;
+        case 'lightness':
+          O.hsl = {
+            h: O.hue,
+            s: O.saturation,
+            l: Math.min(1, Math.max(0, value)),
+          };
+          O.rgb = hsl2rgb(O.hsl);
+          break;
+        case 'red':
+          O.rgb = {
+            r: Math.min(255, Math.max(0, value)),
+            g: O.green,
+            b: O.blue,
+          };
+          O.hsl = rgb2hsl(O.rgb);
+          break;
+        case 'green':
+          O.rgb = { r: O.red, g: Math.min(255, Math.max(0, value)), b: O.blue };
+          O.hsl = rgb2hsl(O.rgb);
+          break;
+        case 'blue':
+          O.rgb = {
+            r: O.red,
+            g: O.green,
+            b: Math.min(255, Math.max(0, value)),
+          };
+          O.hsl = rgb2hsl(O.rgb);
+          break;
+      }
+      set_atoms.call(this, key, value);
+    }
+    return Container.prototype.set.call(this, key, value);
+  },
 });
 
 /**
  * @member {HTMLDivElement} ColorPicker#canvas - The color background.
  *   Has class .aux-canvas`,
  */
-define_child_element(ColorPicker, "canvas", {
-    show: true,
-    append: function () {
-        this.element.appendChild(this._canvas);
-        this.drag_x.set("node", this._canvas);
-        this.drag_y.set("node", this._canvas);
-    },
+define_child_element(ColorPicker, 'canvas', {
+  show: true,
+  append: function () {
+    this.element.appendChild(this._canvas);
+    this.drag_x.set('node', this._canvas);
+    this.drag_y.set('node', this._canvas);
+  },
 });
 /**
  * @member {HTMLDivElement} ColorPicker#grayscale - The grayscale background.
  *   Has class .aux-grayscale`,
  */
-define_child_element(ColorPicker, "grayscale", {
-    show: true,
-    append: function () {
-        this._canvas.appendChild(this._grayscale);
-    },
+define_child_element(ColorPicker, 'grayscale', {
+  show: true,
+  append: function () {
+    this._canvas.appendChild(this._grayscale);
+  },
 });
 /**
  * @member {HTMLDivElement} ColorPicker#indicator - The indicator element.
  *   Has class .aux-indicator`,
  */
-define_child_element(ColorPicker, "indicator", {
-    show: true,
-    append: function () {
-        this._canvas.appendChild(this._indicator);
-    },
+define_child_element(ColorPicker, 'indicator', {
+  show: true,
+  append: function () {
+    this._canvas.appendChild(this._indicator);
+  },
 });
 
 /**
  * @member {Value} ColorPicker#hex - The {@link Value} for the HEX color.
  *   Has class .aux-hex`,
  */
-define_child_widget(ColorPicker, "hex", {
-    create: Value,
-    show: true,
-    static_events: {
-        "userset": function (key, val) {
-            if (key == "value") this.parent.userset("hex", val);
-        },
-        "keyup": function (e) { checkinput.call(this.parent, e); },
-        "paste": function (e) { checkinput.call(this.parent, e); },
+define_child_widget(ColorPicker, 'hex', {
+  create: Value,
+  show: true,
+  static_events: {
+    userset: function (key, val) {
+      if (key == 'value') this.parent.userset('hex', val);
     },
-    default_options: {
-        format: FORMAT("%s"),
-        "class": "aux-hex",
-        set: function (v) {
-            var p=0, tmp;
-            if (v[0] == "#")
-                v = v.substring(1);
-            while (v.length < 6) {
-                tmp = v.slice(0, p+1);
-                tmp += v[p];
-                tmp += v.slice(p+1);
-                v = tmp;
-                p+=2;
-            }
-            return v;
-        },
-        size: 7,
-        maxlength: 7,
+    keyup: function (e) {
+      checkinput.call(this.parent, e);
     },
-    map_options: {
-        "hex" : "value"
+    paste: function (e) {
+      checkinput.call(this.parent, e);
     },
-    inherit_options: true,
+  },
+  default_options: {
+    format: FORMAT('%s'),
+    class: 'aux-hex',
+    set: function (v) {
+      var p = 0,
+        tmp;
+      if (v[0] == '#') v = v.substring(1);
+      while (v.length < 6) {
+        tmp = v.slice(0, p + 1);
+        tmp += v[p];
+        tmp += v.slice(p + 1);
+        v = tmp;
+        p += 2;
+      }
+      return v;
+    },
+    size: 7,
+    maxlength: 7,
+  },
+  map_options: {
+    hex: 'value',
+  },
+  inherit_options: true,
 });
 
 /**
  * @member {ValueKnob} ColorPicker#hue - The {@link ValueKnob} for the hue.
  *   Has class .aux-hue`,
  */
-define_child_widget(ColorPicker, "hue", {
-    create: ValueKnob,
-    option: "show_hsl",
-    show: true,
-    static_events: {
-        "userset": function (key, val) {
-            if (key == "value") this.parent.userset("hue", val);
-        },
+define_child_widget(ColorPicker, 'hue', {
+  create: ValueKnob,
+  option: 'show_hsl',
+  show: true,
+  static_events: {
+    userset: function (key, val) {
+      if (key == 'value') this.parent.userset('hue', val);
     },
-    default_options: {
-        label: "Hue",
-        min: 0,
-        max: 1,
-        "class": "aux-hue",
-        "value.format": function (v) { return v.toFixed(2); },
-        layout: "left",
+  },
+  default_options: {
+    label: 'Hue',
+    min: 0,
+    max: 1,
+    class: 'aux-hue',
+    'value.format': function (v) {
+      return v.toFixed(2);
     },
-    map_options: {
-        "hue" : "value"
-    },
-    inherit_options: true,
-    blacklist_options: ["x", "y", "value"],
+    layout: 'left',
+  },
+  map_options: {
+    hue: 'value',
+  },
+  inherit_options: true,
+  blacklist_options: ['x', 'y', 'value'],
 });
 /**
  * @member {ValueKnob} ColorPicker#saturation - The {@link ValueKnob} for the saturation.
  *   Has class .aux-saturation`,
  */
-define_child_widget(ColorPicker, "saturation", {
-    create: ValueKnob,
-    show: true,
-    static_events: {
-        "userset": function (key, val) {
-            if (key == "value") this.parent.userset("saturation", val);
-        },
+define_child_widget(ColorPicker, 'saturation', {
+  create: ValueKnob,
+  show: true,
+  static_events: {
+    userset: function (key, val) {
+      if (key == 'value') this.parent.userset('saturation', val);
     },
-    default_options: {
-        label: "Saturation",
-        min: 0,
-        max: 1,
-        "class": "aux-saturation",
-        "value.format": function (v) { return v.toFixed(2); },
-        layout: "left",
+  },
+  default_options: {
+    label: 'Saturation',
+    min: 0,
+    max: 1,
+    class: 'aux-saturation',
+    'value.format': function (v) {
+      return v.toFixed(2);
     },
-    map_options: {
-        "saturation" : "value"
-    },
-    inherit_options: true,
-    blacklist_options: ["x", "y", "value"],
+    layout: 'left',
+  },
+  map_options: {
+    saturation: 'value',
+  },
+  inherit_options: true,
+  blacklist_options: ['x', 'y', 'value'],
 });
 /**
  * @member {ValueKnob} ColorPicker#lightness - The {@link ValueKnob} for the lightness.
  *   Has class .aux-lightness`,
  */
-define_child_widget(ColorPicker, "lightness", {
-    create: ValueKnob,
-    option: "show_hsl",
-    show: true,
-    static_events: {
-        "userset": function (key, val) {
-            if (key == "value") this.parent.userset("lightness", val);
-        },
+define_child_widget(ColorPicker, 'lightness', {
+  create: ValueKnob,
+  option: 'show_hsl',
+  show: true,
+  static_events: {
+    userset: function (key, val) {
+      if (key == 'value') this.parent.userset('lightness', val);
     },
-    default_options: {
-        label: "Lightness",
-        min: 0,
-        max: 1,
-        "class": "aux-lightness",
-        "value.format": function (v) { return v.toFixed(2); },
-        layout: "left",
+  },
+  default_options: {
+    label: 'Lightness',
+    min: 0,
+    max: 1,
+    class: 'aux-lightness',
+    'value.format': function (v) {
+      return v.toFixed(2);
     },
-    map_options: {
-        "lightness" : "value"
-    },
-    inherit_options: true,
-    blacklist_options: ["x", "y", "value"],
+    layout: 'left',
+  },
+  map_options: {
+    lightness: 'value',
+  },
+  inherit_options: true,
+  blacklist_options: ['x', 'y', 'value'],
 });
 /**
  * @member {ValueKnob} ColorPicker#red - The {@link ValueKnob} for the red color.
  *   Has class .aux-red`,
  */
-define_child_widget(ColorPicker, "red", {
-    create: ValueKnob,
-    option: "show_rgb",
-    show: true,
-    static_events: {
-        "userset": function (key, val) {
-            if (key == "value") this.parent.userset("red", val);
-        },
+define_child_widget(ColorPicker, 'red', {
+  create: ValueKnob,
+  option: 'show_rgb',
+  show: true,
+  static_events: {
+    userset: function (key, val) {
+      if (key == 'value') this.parent.userset('red', val);
     },
-    default_options: {
-        label: "Red",
-        min: 0,
-        max: 255,
-        snap: 1,
-        "value.format": function (v) { return parseInt(v); },
-        set: function (v) { return Math.round(v); },
-        "class": "aux-red",
-        layout: "right",
+  },
+  default_options: {
+    label: 'Red',
+    min: 0,
+    max: 255,
+    snap: 1,
+    'value.format': function (v) {
+      return parseInt(v);
     },
-    map_options: {
-        "red" : "value"
+    set: function (v) {
+      return Math.round(v);
     },
-    inherit_options: true,
-    blacklist_options: ["x", "y", "value"],
+    class: 'aux-red',
+    layout: 'right',
+  },
+  map_options: {
+    red: 'value',
+  },
+  inherit_options: true,
+  blacklist_options: ['x', 'y', 'value'],
 });
 /**
  * @member {ValueKnob} ColorPicker#green - The {@link ValueKnob} for the green color.
  *   Has class .aux-green`,
  */
-define_child_widget(ColorPicker, "green", {
-    create: ValueKnob,
-    option: "show_rgb",
-    show: true,
-    static_events: {
-        "userset": function (key, val) {
-            if (key == "value") this.parent.userset("green", val);
-        },
+define_child_widget(ColorPicker, 'green', {
+  create: ValueKnob,
+  option: 'show_rgb',
+  show: true,
+  static_events: {
+    userset: function (key, val) {
+      if (key == 'value') this.parent.userset('green', val);
     },
-    default_options: {
-        label: "Green",
-        min: 0,
-        max: 255,
-        snap: 1,
-        "value.format": function (v) { return parseInt(v); },
-        set: function (v) { return Math.round(v); },
-        "class": "aux-green",
-        layout: "right",
+  },
+  default_options: {
+    label: 'Green',
+    min: 0,
+    max: 255,
+    snap: 1,
+    'value.format': function (v) {
+      return parseInt(v);
     },
-    map_options: {
-        "green" : "value"
+    set: function (v) {
+      return Math.round(v);
     },
-    inherit_options: true,
-    blacklist_options: ["x", "y", "value"],
+    class: 'aux-green',
+    layout: 'right',
+  },
+  map_options: {
+    green: 'value',
+  },
+  inherit_options: true,
+  blacklist_options: ['x', 'y', 'value'],
 });
 /**
  * @member {ValueKnob} ColorPicker#blue - The {@link ValueKnob} for the blue color.
  *   Has class .aux-blue`,
  */
-define_child_widget(ColorPicker, "blue", {
-    create: ValueKnob,
-    option: "show_rgb",
-    show: true,
-    static_events: {
-        "userset": function (key, val) {
-            if (key == "value") this.parent.userset("blue", val);
-        },
+define_child_widget(ColorPicker, 'blue', {
+  create: ValueKnob,
+  option: 'show_rgb',
+  show: true,
+  static_events: {
+    userset: function (key, val) {
+      if (key == 'value') this.parent.userset('blue', val);
     },
-    default_options: {
-        label: "Blue",
-        min: 0,
-        max: 255,
-        snap: 1,
-        "value.format": function (v) { return parseInt(v); },
-        set: function (v) { return Math.round(v); },
-        "class": "aux-blue",
-        layout: "right",
+  },
+  default_options: {
+    label: 'Blue',
+    min: 0,
+    max: 255,
+    snap: 1,
+    'value.format': function (v) {
+      return parseInt(v);
     },
-    map_options: {
-        "blue" : "value"
+    set: function (v) {
+      return Math.round(v);
     },
-    inherit_options: true,
-    blacklist_options: ["x", "y", "value"],
+    class: 'aux-blue',
+    layout: 'right',
+  },
+  map_options: {
+    blue: 'value',
+  },
+  inherit_options: true,
+  blacklist_options: ['x', 'y', 'value'],
 });
 /**
  * @member {Button} ColorPicker#apply - The {@link Button} to apply.
  *   Has class .aux-apply`,
  */
-define_child_widget(ColorPicker, "apply", {
-    create: Button,
-    show: true,
-    static_events: {
-        "click": function () { apply.call(this.parent); },
+define_child_widget(ColorPicker, 'apply', {
+  create: Button,
+  show: true,
+  static_events: {
+    click: function () {
+      apply.call(this.parent);
     },
-    default_options: {
-        "label" : "Apply",
-        "class": "aux-apply",
-    },
+  },
+  default_options: {
+    label: 'Apply',
+    class: 'aux-apply',
+  },
 });
 /**
  * @member {Button} ColorPicker#cancel - The {@link Button} to cancel.
  *   Has class .aux-cancel`,
  */
-define_child_widget(ColorPicker, "cancel", {
-    create: Button,
-    show: true,
-    static_events: {
-        "click": function () { cancel.call(this.parent); },
+define_child_widget(ColorPicker, 'cancel', {
+  create: Button,
+  show: true,
+  static_events: {
+    click: function () {
+      cancel.call(this.parent);
     },
-    default_options: {
-        "label" : "Cancel",
-        "class" : "aux-cancel",
-    },
+  },
+  default_options: {
+    label: 'Cancel',
+    class: 'aux-cancel',
+  },
 });
 
 // This has to happen after all children are initialized
-add_static_event(ColorPicker, "initialized", function() {
-    const options = {};
-    color_options.forEach((name) => {
-      if (this.options[name] !== this.get_default(name))
-      {
-        options[name] = this.options[name];
-      }
-    });
-    for (let key in options)
-    {
-      this.set(key, options[key]);
+add_static_event(ColorPicker, 'initialized', function () {
+  const options = {};
+  color_options.forEach((name) => {
+    if (this.options[name] !== this.get_default(name)) {
+      options[name] = this.options[name];
     }
   });
+  for (let key in options) {
+    this.set(key, options[key]);
+  }
+});

@@ -1,35 +1,44 @@
 <aux-scale
-    min='-96' max=24 scale=decibel
-    style='height:300px'
-    layout=left
-    pointer=-6
-  ></aux-scale>
+  min="-96"
+  max="24"
+  scale="decibel"
+  style="height: 300px;"
+  layout="left"
+  pointer="-6"
+></aux-scale>
 <aux-scale
-    min='-96' max=24 scale=decibel
-    style='height:300px'
-    layout=right
-    bar=-6
-  ></aux-scale>
-<br>
-<br>
+  min="-96"
+  max="24"
+  scale="decibel"
+  style="height: 300px;"
+  layout="right"
+  bar="-6"
+></aux-scale>
+<br />
+<br />
 <aux-scale
-    min='-96' max=24 scale=decibel
-    style='width:300px'
-    layout=top
-    pointer=-6
-  ></aux-scale>
-<br>
+  min="-96"
+  max="24"
+  scale="decibel"
+  style="width: 300px;"
+  layout="top"
+  pointer="-6"
+></aux-scale>
+<br />
 <aux-scale
-    min='-96' max=24 scale=decibel
-    style='width:300px'
-    layout=bottom
-    bar=-6
-  ></aux-scale>
+  min="-96"
+  max="24"
+  scale="decibel"
+  style="width: 300px;"
+  layout="bottom"
+  bar="-6"
+></aux-scale>
 
-<h2> x &#8614; x * x </h2>
+<h2>x &#8614; x * x</h2>
 <aux-scale
-    min=0 max=100
-    scale='javascript:
+  min="0"
+  max="100"
+  scale="javascript:
       function(x, options, inverse) {
         if (inverse)
         {
@@ -43,15 +52,16 @@
         }
         return x;
       }
-    '
-    style='width:300px'
-    layout=bottom
-  ></aux-scale>
+    "
+  style="width: 300px;"
+  layout="bottom"
+></aux-scale>
 
 <h2>sigmoid function</h2>
 <aux-scale
-    min=-100 max=100
-    scale='javascript:
+  min="-100"
+  max="100"
+  scale="javascript:
       function(x, options, inverse) {
         if (inverse)
         {
@@ -63,15 +73,16 @@
         }
         return x;
       }
-    '
-    style='width:300px'
-    layout=bottom
-  ></aux-scale>
+    "
+  style="width: 300px;"
+  layout="bottom"
+></aux-scale>
 
 <h2>piece-wise linear</h2>
 <aux-scale
-    min=0 max=100
-    scale='json:[
+  min="0"
+  max="100"
+  scale="json:[
       0,
       0.1,
       0.2,
@@ -95,7 +106,7 @@
       99,
       100
     ]
-    '
-    style='width:300px'
-    layout=bottom
-  ></aux-scale>
+    "
+  style="width: 300px;"
+  layout="bottom"
+></aux-scale>

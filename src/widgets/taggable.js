@@ -22,135 +22,130 @@ import { Tags } from './tags.js';
 import { Container } from './container.js';
 import { Button } from './button.js';
 
-function add (e) {
-    this.emit("addtag", e);
+function add(e) {
+  this.emit('addtag', e);
 }
 
-function remove (e, tagnode) {
-    this.emit("removetag", tagnode);
-    if (!this.options.async)
-        this.remove_tag(tagnode.tag, tagnode);
+function remove(e, tagnode) {
+  this.emit('removetag', tagnode);
+  if (!this.options.async) this.remove_tag(tagnode.tag, tagnode);
 }
 
 export const Taggable = define_class({
-    _options: {
-        tags: "array",
-        backend: "object",
-        add_label: "string",
-        show_add: "boolean",
-        async: "boolean",
-        tag_class: "object",
-        tag_options: "object",
+  _options: {
+    tags: 'array',
+    backend: 'object',
+    add_label: 'string',
+    show_add: 'boolean',
+    async: 'boolean',
+    tag_class: 'object',
+    tag_options: 'object',
+  },
+  options: {
+    tags: [],
+    backend: false,
+    add_label: '✚',
+    show_add: true,
+    async: false,
+    tag_class: Tag,
+    tag_options: {},
+  },
+  static_events: {
+    destroy: function () {
+      this.tags.destroy();
+      this.add.destroy();
     },
-    options: {
-        tags: [],
-        backend: false,
-        add_label: "✚",
-        show_add: true,
-        async: false,
-        tag_class: Tag,
-        tag_options: {},
-    },
-    static_events: {
-      destroy: function() {
-        this.tags.destroy();
-        this.add.destroy();
-      },
-    },
-    initialize: function () {
-        var O = this.options;
-        this.taglist = [];
-        if (!O.backend)
-            O.backend = new Tags({});
-            
-        this.tags = new Container({
-            "class" : "aux-tags"
-        });
-        this.append_child(this.tags);
-        
-        this.add = new Button({
-            container: this.element,
-            label: O.add_label,
-            "class": "aux-add",
-            "onclick": add.bind(this),
-        });
-        this.append_child(this.add);
-        
-        this.add_tags(O.tags);
-    },
-    
-    request_tag: function (tag, tag_class, tag_options) {
-        return this.options.backend.request_tag(
-            tag,
-            tag_class || this.options.tag_class,
-            tag_options || this.options.tag_options);
-    },
-    add_tags: function (tags) {
-        for (var i = 0; i < tags.length; i++)
-            this.add_tag(tags[i]);
-    },
-    add_tag: function (tag, options) {
-        var B = this.options.backend;
-        tag = B.request_tag(tag, options);
-        if (this.has_tag(tag)) return;
-        
-        var node = tag.create_node(options);
-        this.tags.append_child(node);
-        
-        node.on("remove", remove.bind(this));
-        
-        var t = {tag:tag, node:node};
-        this.taglist.push(t);
-        this.emit("tagadded", tag, node);
-        return t;
-    },
-    has_tag: function (tag) {
-        tag = this.request_tag(tag);
-        for (var i = 0; i < this.taglist.length; i++) {
-            if (this.taglist[i].tag === tag)
-                return true;
+  },
+  initialize: function () {
+    var O = this.options;
+    this.taglist = [];
+    if (!O.backend) O.backend = new Tags({});
+
+    this.tags = new Container({
+      class: 'aux-tags',
+    });
+    this.append_child(this.tags);
+
+    this.add = new Button({
+      container: this.element,
+      label: O.add_label,
+      class: 'aux-add',
+      onclick: add.bind(this),
+    });
+    this.append_child(this.add);
+
+    this.add_tags(O.tags);
+  },
+
+  request_tag: function (tag, tag_class, tag_options) {
+    return this.options.backend.request_tag(
+      tag,
+      tag_class || this.options.tag_class,
+      tag_options || this.options.tag_options
+    );
+  },
+  add_tags: function (tags) {
+    for (var i = 0; i < tags.length; i++) this.add_tag(tags[i]);
+  },
+  add_tag: function (tag, options) {
+    var B = this.options.backend;
+    tag = B.request_tag(tag, options);
+    if (this.has_tag(tag)) return;
+
+    var node = tag.create_node(options);
+    this.tags.append_child(node);
+
+    node.on('remove', remove.bind(this));
+
+    var t = { tag: tag, node: node };
+    this.taglist.push(t);
+    this.emit('tagadded', tag, node);
+    return t;
+  },
+  has_tag: function (tag) {
+    tag = this.request_tag(tag);
+    for (var i = 0; i < this.taglist.length; i++) {
+      if (this.taglist[i].tag === tag) return true;
+    }
+    return false;
+  },
+  remove_tag: function (tag, node, purge) {
+    var B = this.options.backend;
+    tag = B.request_tag(tag);
+    if (!this.has_tag(tag)) return;
+    for (var i = 0; i < this.taglist.length; i++) {
+      if (this.taglist[i].tag === tag) {
+        this.taglist.splice(i, 1);
+        break;
+      }
+    }
+
+    if (!node) {
+      var c = this.tags.children;
+      if (c) {
+        for (let i = 0; i < c.length; i++) {
+          var tagnode = c[i];
+          if (tagnode.tag === tag) {
+            tag.remove_node(tagnode);
+            this.remove_child(tagnode);
+            break;
+          }
         }
-        return false;
-    },
-    remove_tag: function (tag, node, purge) {
-        var B = this.options.backend;
-        tag = B.request_tag(tag);
-        if (!this.has_tag(tag)) return;
-        for (var i = 0; i < this.taglist.length; i++) {
-            if (this.taglist[i].tag === tag) {
-                this.taglist.splice(i, 1);
-                break;
-            }
-        }
-        
-        if (!node) {
-            var c = this.tags.children;
-            if (c) {
-                for (let i = 0; i < c.length; i++) {
-                    var tagnode = c[i];
-                    if (tagnode.tag === tag) {
-                        tag.remove_node(tagnode);
-                        this.remove_child(tagnode);
-                        break;
-                    }
-                }
-            }
-        } else {
-            tag.remove_node(node);
-        }
-        if (purge)
-            B.remove_tag(tag);
-        this.emit("tagremoved", tag);
-    },
-    empty: function () {
-        var T = this.taglist;
-        while (T.length)
-            this.remove_tag(T[0].tag, T[0].node);
-    },
-    tag_to_string: function (tag) {
-        return this.options.backend.tag_to_string.call(this, tag);
-    },
-    find_tag: function (tag) {
-        this.options.backend.find_tag.call(this, tag);
-    },
+      }
+    } else {
+      tag.remove_node(node);
+    }
+    if (purge) B.remove_tag(tag);
+    this.emit('tagremoved', tag);
+  },
+  empty: function () {
+    var T = this.taglist;
+    while (T.length) this.remove_tag(T[0].tag, T[0].node);
+  },
+  tag_to_string: function (tag) {
+    return this.options.backend.tag_to_string.call(this, tag);
+  },
+  find_tag: function (tag) {
+    this.options.backend.find_tag.call(this, tag);
+  },
 });

@@ -1,29 +1,25 @@
 import { warn } from './utils/log.js';
 
-function add_event_handler(to, event, fun)
-{
-    if (to === null)
-      to = new Map();
+function add_event_handler(to, event, fun) {
+  if (to === null) to = new Map();
 
-    let tmp = to.get(event);
+  let tmp = to.get(event);
 
-    if (!tmp) {
-        tmp = fun;
-    } else if (Array.isArray(tmp)) {
-        tmp = tmp.concat([ fun ]);
-    } else {
-        tmp = [ tmp, fun ];
-    }
+  if (!tmp) {
+    tmp = fun;
+  } else if (Array.isArray(tmp)) {
+    tmp = tmp.concat([fun]);
+  } else {
+    tmp = [tmp, fun];
+  }
 
-    to.set(event, tmp);
+  to.set(event, tmp);
 
-    return to;
+  return to;
 }
 
-function remove_event_handler(to, event, fun)
-{
-  if (to === null)
-    return null;
+function remove_event_handler(to, event, fun) {
+  if (to === null) return null;
 
   let tmp = to.get(event);
 
@@ -35,71 +31,57 @@ function remove_event_handler(to, event, fun)
     tmp = null;
   }
 
-  if (tmp === null)
-  {
+  if (tmp === null) {
     to.delete(event);
-    if (to.size === 0)
-      to = null;
-  }
-  else
-  {
+    if (to.size === 0) to = null;
+  } else {
     to.set(event, tmp);
   }
 
   return to;
 }
 
-function has_event_handler(handlers, name, callback)
-{
+function has_event_handler(handlers, name, callback) {
   if (handlers === null) return false;
 
   const tmp = handlers.get(name);
 
-  if (tmp === void(0)) return false;
+  if (tmp === void 0) return false;
 
   if (typeof callback === 'undefined') return true;
 
-  if (typeof callback !== "function")
-      throw new TypeError("Expected function.");
+  if (typeof callback !== 'function') throw new TypeError('Expected function.');
 
-  if (Array.isArray(tmp))
-  {
+  if (Array.isArray(tmp)) {
     return tmp.indexOf(callback) !== -1;
-  }
-  else
-  {
+  } else {
     return tmp === callback;
   }
 }
 
 function call_event_handler(fun, self, args) {
-    try {
-        return fun.apply(self, args);
-    } catch (e) {
-        warn("event handler", fun, "threw", e);
-    }
+  try {
+    return fun.apply(self, args);
+  } catch (e) {
+    warn('event handler', fun, 'threw', e);
+  }
 }
 
-function emit_event(handlers, name, self, args)
-{
+function emit_event(handlers, name, self, args) {
   if (handlers === null) return;
 
   const tmp = handlers.get(name);
 
-  if (tmp === void(0)) return;
+  if (tmp === void 0) return;
 
-  if (Array.isArray(tmp))
-  {
-    for (let i = 0; i < tmp.length; i++)
-    {
+  if (Array.isArray(tmp)) {
+    for (let i = 0; i < tmp.length; i++) {
       const ret = call_event_handler(tmp[i], self, args);
 
-      if (ret !== void(0)) return ret;
+      if (ret !== void 0) return ret;
     }
     return;
-  }
-  else
-  {
+  } else {
     return call_event_handler(tmp, self, args);
   }
 }
@@ -107,10 +89,8 @@ function emit_event(handlers, name, self, args)
 /**
  * This class implements event handling.
  */
-export class Events
-{
-  constructor()
-  {
+export class Events {
+  constructor() {
     this._event_handlers = null;
   }
 
@@ -121,26 +101,26 @@ export class Events
    * @param {string} name - The event name.
    * @param {Function} callback - The event callback.
    */
-  on(name, callback)
-  {
-    if (typeof name !== "string")
-        throw new TypeError("Expected string.");
+  on(name, callback) {
+    if (typeof name !== 'string') throw new TypeError('Expected string.');
 
-    if (typeof callback !== "function")
-        throw new TypeError("Expected function.");
+    if (typeof callback !== 'function')
+      throw new TypeError('Expected function.');
 
     if (this.hasEventListener(name, callback))
-        throw new Error('Event handler already registered.');
+      throw new Error('Event handler already registered.');
 
-    this._event_handlers = add_event_handler(this._event_handlers,
-                                             name, callback);
+    this._event_handlers = add_event_handler(
+      this._event_handlers,
+      name,
+      callback
+    );
   }
 
   /**
    * Alias for on.
    */
-  addEventListener(name, callback)
-  {
+  addEventListener(name, callback) {
     return this.on(name, callback);
   }
 
@@ -150,23 +130,23 @@ export class Events
    * @param {string} name - The event name.
    * @param {Function} callback - The event callback.
    */
-  off(name, callback)
-  {
-    if (typeof name !== "string")
-        throw new TypeError("Expected string.");
+  off(name, callback) {
+    if (typeof name !== 'string') throw new TypeError('Expected string.');
 
-    if (typeof callback !== "function")
-        throw new TypeError("Expected function.");
+    if (typeof callback !== 'function')
+      throw new TypeError('Expected function.');
 
-    this._event_handlers = remove_event_handler(this._event_handlers,
-                                                name, callback);
+    this._event_handlers = remove_event_handler(
+      this._event_handlers,
+      name,
+      callback
+    );
   }
 
   /**
    * Alias for off.
    */
-  removeEventListener(name, callback)
-  {
+  removeEventListener(name, callback) {
     return this.off(name, callback);
   }
 
@@ -178,10 +158,8 @@ export class Events
    * @param {string} name - The event name.
    * @param {Function} callback - The event callback.
    */
-  hasEventListener(name, callback)
-  {
-    if (typeof name !== "string")
-        throw new TypeError("Expected string.");
+  hasEventListener(name, callback) {
+    if (typeof name !== 'string') throw new TypeError('Expected string.');
 
     const handlers = this._event_handlers;
 
@@ -203,10 +181,8 @@ export class Events
    * @returns - Returns the value returned by the last event handler
    *            called or undefined.
    */
-  emit(name, ...args)
-  {
-    if (typeof name !== "string")
-        throw new TypeError("Expected string.");
+  emit(name, ...args) {
+    if (typeof name !== 'string') throw new TypeError('Expected string.');
 
     return emit_event(this._event_handlers, name, this, args);
   }
@@ -223,9 +199,8 @@ export class Events
    *                      by returning something other than undefined.
    *                      Otherwise, the return value is true.
    */
-  dispatchEvent(name, ...args)
-  {
-    return this.emit(name, ...args) === void(0);
+  dispatchEvent(name, ...args) {
+    return this.emit(name, ...args) === void 0;
   }
 
   /**
@@ -240,10 +215,8 @@ export class Events
    * @returns {Function} - The return value is a function which can
    *                       be called to remove the event subscription.
    */
-  subscribe(event, func)
-  {
-    if (this.hasEventListener(event, func))
-    {
+  subscribe(event, func) {
+    if (this.hasEventListener(event, func)) {
       throw new Error('Event handler already registered.');
     }
 
@@ -266,8 +239,7 @@ export class Events
    * @returns {Function} - The return value is a function which can
    *                       be called to remove the event subscription.
    */
-  once(event, func)
-  {
+  once(event, func) {
     const sub = this.subscribe(event, (...args) => {
       sub();
       return func(...args);
@@ -279,8 +251,7 @@ export class Events
   /**
    * Removes all event handlers.
    */
-  destroy()
-  {
+  destroy() {
     this._event_handlers = null;
   }
 }

@@ -21,90 +21,88 @@ import { add_class, remove_class } from '../utils/dom.js';
 import { Module } from './module.js';
 
 function scroll_timeout() {
-    /**
-     * Is fired when scrolling ended.
-     * 
-     * @event ScrollValue#scrollended
-     */
-    fire_event.call(this, "scrollended");
-    this._wheel = false;
-    this.__sto = false;
-    this.set("scrolling", false);
-    remove_class(this.options.classes, "aux-scrolling");
+  /**
+   * Is fired when scrolling ended.
+   *
+   * @event ScrollValue#scrollended
+   */
+  fire_event.call(this, 'scrollended');
+  this._wheel = false;
+  this.__sto = false;
+  this.set('scrolling', false);
+  remove_class(this.options.classes, 'aux-scrolling');
 }
 function scrollwheel(e) {
-    const O = this.options;
-    if (!O.active) return;
-    e.preventDefault();
-    const range = O.range.call(this);
-    const DIR = O.scroll_direction;
-    const RO = range.options;
-    const rev = e.webkitDirectionInvertedFromDevice ? -1 : 1;
-    const d = e.deltaX * DIR[0] + e.deltaY * DIR[1] + e.deltaZ * DIR[2];
-    let direction = d > 0 ? 1 : -1;
-    direction *= rev;
-    let v;
+  const O = this.options;
+  if (!O.active) return;
+  e.preventDefault();
+  const range = O.range.call(this);
+  const DIR = O.scroll_direction;
+  const RO = range.options;
+  const rev = e.webkitDirectionInvertedFromDevice ? -1 : 1;
+  const d = e.deltaX * DIR[0] + e.deltaY * DIR[1] + e.deltaZ * DIR[2];
+  let direction = d > 0 ? 1 : -1;
+  direction *= rev;
+  let v;
 
-    // timeout for resetting the class
-    if (this._wheel) {
-        v = this._raw_value;
-        window.clearTimeout(this.__sto);
-    } else {
-        this._raw_value = v = O.get.call(this);
-        add_class(O.classes, "aux-scrolling");
-        /**
-         * Is fired when scrolling starts.
-         * 
-         * @event ScrollValue#scrollstarted
-         * 
-         * @param {DOMEvent} event - The native DOM event.
-         */
-        fire_event.call(this, "scrollstarted", e);
-        this._wheel = true;
-    }
-    this.__sto = window.setTimeout(scroll_timeout.bind(this), 200);
-    
-    // calc step depending on options.step, .shift up and .shift down
-    let step = (RO.step || 1) * direction;
-    if (e.ctrlKey || e.altKey) {
-        step *= RO.shift_down;
-    } else if (e.shiftKey) {
-        step *= RO.shift_up;
-    }
-
-    var pos = range.val2px(v);
-
-    pos += step;
-
-    v = range.px2val(pos);
-
-    if (O.limit)
-        O.set.call(this, Math.min(RO.max, Math.max(RO.min, v)));
-    else
-        O.set.call(this, v);
-    
+  // timeout for resetting the class
+  if (this._wheel) {
+    v = this._raw_value;
+    window.clearTimeout(this.__sto);
+  } else {
+    this._raw_value = v = O.get.call(this);
+    add_class(O.classes, 'aux-scrolling');
     /**
-     * Is fired while scrolling happens.
-     * 
-     * @event ScrollValue#scrolling
-     * 
+     * Is fired when scrolling starts.
+     *
+     * @event ScrollValue#scrollstarted
+     *
      * @param {DOMEvent} event - The native DOM event.
      */
-    fire_event.call(this, "scrolling", e);
+    fire_event.call(this, 'scrollstarted', e);
+    this._wheel = true;
+  }
+  this.__sto = window.setTimeout(scroll_timeout.bind(this), 200);
 
-    /* do not remember out of range values */
-    if (v > RO.min && v < RO.max)
-        this._raw_value = v;
-    
-    return false;
+  // calc step depending on options.step, .shift up and .shift down
+  let step = (RO.step || 1) * direction;
+  if (e.ctrlKey || e.altKey) {
+    step *= RO.shift_down;
+  } else if (e.shiftKey) {
+    step *= RO.shift_up;
+  }
+
+  var pos = range.val2px(v);
+
+  pos += step;
+
+  v = range.px2val(pos);
+
+  if (O.limit) O.set.call(this, Math.min(RO.max, Math.max(RO.min, v)));
+  else O.set.call(this, v);
+
+  /**
+   * Is fired while scrolling happens.
+   *
+   * @event ScrollValue#scrolling
+   *
+   * @param {DOMEvent} event - The native DOM event.
+   */
+  fire_event.call(this, 'scrolling', e);
+
+  /* do not remember out of range values */
+  if (v > RO.min && v < RO.max) this._raw_value = v;
+
+  return false;
 }
 function fire_event(title, event) {
-    var O = this.options;
-    // fire an event on this drag object and one with more
-    // information on the draggified element
-    this.emit(title, this, event);
-    var e = O.events.call(this);
-    if (e) e.emit(title, event, O.get.call(this), O.node, this, O.range.call(this));
+  var O = this.options;
+  // fire an event on this drag object and one with more
+  // information on the draggified element
+  this.emit(title, this, event);
+  var e = O.events.call(this);
+  if (e)
+    e.emit(title, event, O.get.call(this), O.node, this, O.range.call(this));
 }
 /**
  * ScrollValue enables the scroll wheel for setting a value of an
@@ -112,11 +110,11 @@ function fire_event(title, event) {
  * the knob using the scroll wheel.
  *
  * @class ScrollValue
- * 
+ *
  * @extends Module
- * 
+ *
  * @param {Object} [options={ }] - An object containing initial options.
- * 
+ *
  * @property {HTMLElement} options.node - The element receiving the scroll event.
  * @property {Function} [options.get=function () { return this.parent.options.value; }] - Callback returning the value.
  * @property {Function} [options.set=function (v) { return this.parent.userset("value", v); }] - Callback setting the value.
@@ -126,50 +124,58 @@ function fire_event(title, event) {
  * @property {HTMLElement|Boolean} [options.classes=false] - Element receiving
  *   classes or <code>false</code> to set classes on the main element.
  * @property {Boolean} [options.active=true] - Disable the scroll event.
- * @property {Array<Number>} [options.scroll_direction=[0, -1, 0]] - An array 
+ * @property {Array<Number>} [options.scroll_direction=[0, -1, 0]] - An array
  *   containing values for x, y and z defining the direction of scrolling.
  * @property {Boolean} [options.limit=false] - Limit the returned value to min and max of the range.
  */
 export const ScrollValue = define_class({
-    Extends: Module,
-    _options: {
-        get: "function",
-        set: "function",
-        range: "function",
-        events: "function",
-        classes: "object|boolean",
-        node: "object|boolean",
-        active: "boolean",
-        scroll_direction: "array",
-        limit: "boolean",
+  Extends: Module,
+  _options: {
+    get: 'function',
+    set: 'function',
+    range: 'function',
+    events: 'function',
+    classes: 'object|boolean',
+    node: 'object|boolean',
+    active: 'boolean',
+    scroll_direction: 'array',
+    limit: 'boolean',
+  },
+  options: {
+    range: function () {
+      return this.parent;
     },
-    options: {
-        range:     function () { return this.parent; },
-        events:    function () { return this.parent; },
-        classes:   false,
-        get:       function () { return this.parent.options.value; },
-        set:       function (v) { return this.parent.userset("value", v); },
-        active:    true,
-        scroll_direction: [0, -1, 0],
-        limit: false,
+    events: function () {
+      return this.parent;
     },
-    initialize: function (widget, options) {
-        Module.prototype.initialize.call(this, widget, options);
-        this._wheel = false;
-        this._raw_value = 0.0;
-        this.set("node", this.options.node);
-        this.set("events", this.options.events);
-        this.set("classes", this.options.classes);
+    classes: false,
+    get: function () {
+      return this.parent.options.value;
     },
-    static_events: {
-        set_node: function(value) {
-            this.delegate_events(value);
-            if (value && !this.options.classes) this.set("classes", value);
-        },
-        wheel: scrollwheel,
+    set: function (v) {
+      return this.parent.userset('value', v);
     },
-    set: function (key, value) {
-        if ((key === "classes") && !value) value = this.options.node;
-        return Module.prototype.set.call(this, key, value);
-    }
+    active: true,
+    scroll_direction: [0, -1, 0],
+    limit: false,
+  },
+  initialize: function (widget, options) {
+    Module.prototype.initialize.call(this, widget, options);
+    this._wheel = false;
+    this._raw_value = 0.0;
+    this.set('node', this.options.node);
+    this.set('events', this.options.events);
+    this.set('classes', this.options.classes);
+  },
+  static_events: {
+    set_node: function (value) {
+      this.delegate_events(value);
+      if (value && !this.options.classes) this.set('classes', value);
+    },
+    wheel: scrollwheel,
+  },
+  set: function (key, value) {
+    if (key === 'classes' && !value) value = this.options.node;
+    return Module.prototype.set.call(this, key, value);
+  },
 });

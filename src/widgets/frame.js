@@ -24,43 +24,42 @@ import { add_class } from '../utils/dom.js';
 
 /**
  * Frame is a {@link Container} with a {@link Label} on top.
- * 
+ *
  * @extends Container
- * 
+ *
  * @param {Object} [options={ }] - An object containing initial options.
- * 
+ *
  * @property {String|Boolean} [options.label=false] - The label of the frame. Set to `false` to remove it from the DOM.
- * 
+ *
  * @class Frame
  */
 export const Frame = define_class({
-    Extends: Container,
-    _options: Object.create(Container.prototype._options),
-    options: {
-        label: false,
-    },
-    initialize: function (options) {
-        Container.prototype.initialize.call(this, options);
-        /**
-         * @member {HTMLDivElement} Frame#element - The main DIV container.
-         *   Has class <code>.aux-frame</code>.
-         */
-    },
-    draw: function(O, element)
-    {
-      add_class(element, "aux-frame");
+  Extends: Container,
+  _options: Object.create(Container.prototype._options),
+  options: {
+    label: false,
+  },
+  initialize: function (options) {
+    Container.prototype.initialize.call(this, options);
+    /**
+     * @member {HTMLDivElement} Frame#element - The main DIV container.
+     *   Has class <code>.aux-frame</code>.
+     */
+  },
+  draw: function (O, element) {
+    add_class(element, 'aux-frame');
 
-      Container.prototype.draw.call(this, O, element);
-    },
+    Container.prototype.draw.call(this, O, element);
+  },
 });
 /**
  * @member {Label} Frame#label - The {@link Label} of the frame.
  */
-define_child_widget(Frame, "label", {
-    create: Label,
-    option: "label",
-    inherit_options: true,
-    default_options: {
-        class: "aux-framelabel"
-    },
+define_child_widget(Frame, 'label', {
+  create: Label,
+  option: 'label',
+  inherit_options: true,
+  default_options: {
+    class: 'aux-framelabel',
+  },
 });

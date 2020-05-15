@@ -1,5 +1,4 @@
-.entry
-{
+.entry {
   contain: strict;
   height: 30px;
   border: 1px solid black;
@@ -13,28 +12,23 @@
   user-select: none;
   padding: 0;
 }
-.entry.group
-{
+.entry.group {
   background-color: #fef;
 }
-.entry > .indent
-{
+.entry > .indent {
   font-family: Shapes;
   font-size: 28px;
 }
-.entry > .label
-{
+.entry > .label {
   font-size: 20px;
   vertical-align: 40%;
 }
 
-body
-{
+body {
   overflow: hidden;
 }
 
-.list
-{
+.list {
   display: inline-block;
   width: 200px;
   height: 100%;
@@ -44,36 +38,30 @@ body
   overflow-x: hidden;
 }
 
-.list > .scrollarea
-{
+.list > .scrollarea {
   overflow: hidden;
   position: relative;
 }
-#list1
-{
+#list1 {
   position: absolute;
   left: 0;
   top: 200px;
   overflow: hidden;
 }
-#list1 > .list
-{
+#list1 > .list {
   height: calc(100vh - 200px);
 }
-#list2 > .list
-{
+#list2 > .list {
   height: calc(100vw - 200px);
 }
-#list2
-{
+#list2 {
   position: absolute;
   left: 200px;
   top: 200px;
   transform-origin: top left;
-  transform: rotate(-90deg)
+  transform: rotate(-90deg);
 }
-#matrix
-{
+#matrix {
   position: absolute;
   left: 200px;
   top: 200px;
@@ -82,14 +70,12 @@ body
   overflow: hidden;
 }
 
-#matrix > .scrollarea
-{
+#matrix > .scrollarea {
   overflow: hidden;
   position: relative;
 }
 
-.cell
-{
+.cell {
   contain: strict;
   height: 30px;
   width: 30px;
@@ -110,13 +96,11 @@ body
   border: 1px solid rgba(0, 0, 0, 0.4);
   user-select: none;
 }
-.cell.connectable
-{
+.cell.connectable {
   border: 1px solid black;
   opacity: 1;
   cursor: pointer;
 }
-.cell.connected
-{
+.cell.connected {
   background-color: #0f0;
 }

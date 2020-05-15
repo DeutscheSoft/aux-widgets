@@ -7,15 +7,15 @@ import { MatrixDatum } from './matrixdatum.js';
 /**
  * Base class for matrix tree objects, e.g. groups and ports.
  */
-export class TreeNodeData extends MatrixDatum
-{
+export class TreeNodeData extends MatrixDatum {
   /**
    * Is true if this object is a group.
    */
-  get isGroup() { return false; }
+  get isGroup() {
+    return false;
+  }
 
-  constructor(matrix, o)
-  {
+  constructor(matrix, o) {
     super(matrix, o);
     this.parent = null;
   }
@@ -23,24 +23,32 @@ export class TreeNodeData extends MatrixDatum
   /**
    * The tree node label.
    */
-  set label(value) { return this.set('label', value); }
-  get label() { return this.get('label'); }
+  set label(value) {
+    return this.set('label', value);
+  }
+  get label() {
+    return this.get('label');
+  }
 
   /**
    * The tree node icon.
    */
-  set icon(value) { return this.set('icon', value); }
-  get icon() { return this.get('icon'); }
-  
+  set icon(value) {
+    return this.set('icon', value);
+  }
+  get icon() {
+    return this.get('icon');
+  }
+
   /**
    * The tree node id.
    */
-  get id() { return this.get('id'); }
+  get id() {
+    return this.get('id');
+  }
 
-  setParent(parent)
-  {
-    if (parent !== null && this.parent !== null)
-    {
+  setParent(parent) {
+    if (parent !== null && this.parent !== null) {
       throw new Error('Node already has a parent.');
     }
 
@@ -55,22 +63,19 @@ export class TreeNodeData extends MatrixDatum
    *
    * @param {TreeNodeData} node
    */
-  isChildOf(node)
-  {
-    for (let _node = this.parent; _node; _node = _node.parent)
-    {
+  isChildOf(node) {
+    for (let _node = this.parent; _node; _node = _node.parent) {
       if (_node === node) return true;
     }
 
     return false;
   }
 
-  getPath()
-  {
+  getPath() {
     const parent = this.parent;
 
     if (!parent) return [];
 
-    return parent.getPath().concat([ parent ]);
+    return parent.getPath().concat([parent]);
   }
 }

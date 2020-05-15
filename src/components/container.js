@@ -1,6 +1,7 @@
 import {
-    component_from_widget, define_component
-  } from './../component_helpers.js';
+  component_from_widget,
+  define_component,
+} from './../component_helpers.js';
 import { Container } from './../widgets/container.js';
 
 /**

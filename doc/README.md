@@ -1,12 +1,11 @@
 # Setup
 
 Run
-        npm ci
+npm ci
 
 # Building documentation
 
 Run
-        npm run build
+npm run build
 
 The documentation output will be generated into the directory `out`.
-

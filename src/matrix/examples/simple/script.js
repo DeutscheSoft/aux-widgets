@@ -1,63 +1,57 @@
 import { MatrixData } from '../../models/matrix.js';
 import { ListDataView } from '../../models/listdataview.js';
-import { ConnectionDataView, resize_array_mod } from '../../models/connectiondataview.js';
+import {
+  ConnectionDataView,
+  resize_array_mod,
+} from '../../models/connectiondataview.js';
 import { sprintf } from '../../../utils/sprintf.js';
 import { Subscribers } from '../../../utils/subscribers.js';
 import { Timer } from '../../../utils/timers.js';
 
-function treePositionToShapes(treePosition)
-{
+function treePositionToShapes(treePosition) {
   let text = '';
-  const TRUNK = "";
-  const BRANCH = "";
-  const NONE = "";
-  const END = "";
+  const TRUNK = '';
+  const BRANCH = '';
+  const NONE = '';
+  const END = '';
 
   // we ignore the top level
   if (treePosition.length === 1) return text;
 
-  for (let i = 1; i < treePosition.length - 1; i++)
-  {
+  for (let i = 1; i < treePosition.length - 1; i++) {
     const isLastChild = treePosition[i];
 
-    if (isLastChild)
-    {
+    if (isLastChild) {
       text += NONE;
-    }
-    else
-    {
+    } else {
       text += TRUNK;
     }
   }
 
-  if (treePosition[treePosition.length - 1])
-  {
+  if (treePosition[treePosition.length - 1]) {
     text += END;
-  }
-  else
-  {
+  } else {
     text += BRANCH;
   }
 
   return text;
 }
 
-function createEntry()
-{
-    const entry = document.createElement('div');
-    entry.className = 'entry';
+function createEntry() {
+  const entry = document.createElement('div');
+  entry.className = 'entry';
 
-    const indent = document.createElement('span');
-    indent.className = 'indent';
+  const indent = document.createElement('span');
+  indent.className = 'indent';
 
-    entry.appendChild(indent);
+  entry.appendChild(indent);
 
-    const label = document.createElement('span');
-    label.className = 'label';
+  const label = document.createElement('span');
+  label.className = 'label';
 
-    entry.appendChild(label);
+  entry.appendChild(label);
 
-    return entry;
+  return entry;
 }
 
 const matrix = new MatrixData();
@@ -77,32 +71,27 @@ const PORTS = 4;
 
 const outputs = matrix.addGroup({ label: 'Outputs' });
 
-for (let i = 0; i < GROUPS; i++)
-{
+for (let i = 0; i < GROUPS; i++) {
   const group = outputs.addGroup({ label: 'Group ' + i });
 
-  for (let j = 0; j < PORTS; j++)
-  {
+  for (let j = 0; j < PORTS; j++) {
     const port = group.addPort({ label: 'Sink ' + (i * 10 + j) });
   }
 }
 
 const inputs = matrix.addGroup({ label: 'Inputs' });
 
-for (let i = 0; i < GROUPS; i++)
-{
+for (let i = 0; i < GROUPS; i++) {
   const group = inputs.addGroup({ label: 'Group ' + i });
 
-  for (let j = 0; j < PORTS; j++)
-  {
+  for (let j = 0; j < PORTS; j++) {
     const port = group.addPort({ label: 'Source ' + (i * 10 + j) });
   }
 }
 
 const ITEM_HEIGHT = 30;
 
-function createList(into, listview)
-{
+function createList(into, listview) {
   const ScrollEvent = new Subscribers();
 
   const scrollarea = document.createElement('div');
@@ -126,7 +115,7 @@ function createList(into, listview)
   };
 
   const updateEntryPosition = (index) => {
-    const entry = entries[index % entries.length]; 
+    const entry = entries[index % entries.length];
 
     //console.log('updateEntryPosition', index);
 
@@ -134,8 +123,7 @@ function createList(into, listview)
   };
 
   listview.subscribeStartIndexChanged((new_value, old_value) => {
-    if (startIndex === new_value)
-      return;
+    if (startIndex === new_value) return;
 
     startIndex = new_value;
 
@@ -147,27 +135,21 @@ function createList(into, listview)
     // We have to scroll our entries by the given offset
 
     // if we scrolled more than all entries, we update all positions
-    if (Math.abs(diff) >= listview.amount)
-    {
+    if (Math.abs(diff) >= listview.amount) {
       diff = -listview.amount;
     }
 
-    if (diff > 0)
-    {
+    if (diff > 0) {
       // we have to update diff entries at the end
-      for (let i = 0; i < diff; i++)
-      {
+      for (let i = 0; i < diff; i++) {
         const index = startIndex - diff + listview.amount + i;
         updateEntryPosition(index);
       }
-    }
-    else
-    {
+    } else {
       // we have to update -diff entries at the end
       diff = -diff;
-      for (let i = 0; i < diff; i++)
-      {
-        const index = (i + startIndex);
+      for (let i = 0; i < diff; i++) {
+        const index = i + startIndex;
         updateEntryPosition(index);
       }
     }
@@ -179,8 +161,7 @@ function createList(into, listview)
 
     const diff = startIndex - listview.startIndex;
 
-    if (diff)
-    {
+    if (diff) {
       listview.scrollStartIndex(diff);
     }
   };
@@ -223,19 +204,16 @@ function createList(into, listview)
                 listview.startIndex, index, n);
                 */
 
-    if (element)
-    {
+    if (element) {
       entry.children[0].textContent = treePositionToShapes(treePosition);
       entry.children[1].textContent = element.label;
       entry.style.removeProperty('display');
       entry.classList.toggle('group', element.isGroup);
-    }
-    else
-    {
+    } else {
       entry.style.display = 'none';
     }
   });
-  
+
   // give the fake scroll area the right size
   listview.subscribeSize((size) => {
     //console.log('size', size);
@@ -246,21 +224,22 @@ function createList(into, listview)
 
   let got_scroll_event = false;
   let send_scroll_timer = new Timer(() => {
-
-    if (!got_scroll_event)
-      return;
+    if (!got_scroll_event) return;
 
     ScrollEvent.call(list.scrollTop);
   });
 
-  list.addEventListener('scroll', (ev) => {
-    if (send_scroll_timer.active)
-    {
-      got_scroll_event = true;
-      return;
-    }
-    ScrollEvent.call(list.scrollTop);
-  }, { passive: true });
+  list.addEventListener(
+    'scroll',
+    (ev) => {
+      if (send_scroll_timer.active) {
+        got_scroll_event = true;
+        return;
+      }
+      ScrollEvent.call(list.scrollTop);
+    },
+    { passive: true }
+  );
 
   const onHeightChanged = (height) => {
     listview.setAmount(Math.ceil(height / ITEM_HEIGHT) + 1);
@@ -272,12 +251,10 @@ function createList(into, listview)
   onHeightChanged(list.clientHeight);
 
   return {
-    subscribeOnScroll: function(cb)
-    {
+    subscribeOnScroll: function (cb) {
       return ScrollEvent.subscribe(cb);
     },
-    setScrollTop: function(value)
-    {
+    setScrollTop: function (value) {
       if (list.scrollTop === value) return;
       send_scroll_timer.restart(200);
       got_scroll_event = false;
@@ -287,8 +264,7 @@ function createList(into, listview)
   };
 }
 
-function createMatrix(dst, listview1, listview2)
-{
+function createMatrix(dst, listview1, listview2) {
   const ScrollEvent = new Subscribers();
   let rows = listview1.amount;
   let columns = listview2.amount;
@@ -310,14 +286,17 @@ function createMatrix(dst, listview1, listview2)
   };
 
   const setCellPosition = (cell, index1, index2) => {
-    cell.style.transform = sprintf('translateY(%dpx) translateX(%dpx)',
-                                   index1 * ITEM_HEIGHT, index2 * ITEM_HEIGHT);
+    cell.style.transform = sprintf(
+      'translateY(%dpx) translateX(%dpx)',
+      index1 * ITEM_HEIGHT,
+      index2 * ITEM_HEIGHT
+    );
     cell._index1 = index1;
     cell._index2 = index2;
   };
 
   const getCellPosition = (cell, index1, index2) => {
-    return [ cell._index1, cell._index2 ];
+    return [cell._index1, cell._index2];
   };
 
   const updateCellPosition = (index1, index2) => {
@@ -328,27 +307,21 @@ function createMatrix(dst, listview1, listview2)
   const onClick = (ev) => {
     const cell = ev.currentTarget;
 
-    const [ index1, index2 ] = getCellPosition(cell);
+    const [index1, index2] = getCellPosition(cell);
 
     const source = listview1.at(index1);
     const sink = listview2.at(index2);
 
-    if (may_connect(source, sink))
-    {
+    if (may_connect(source, sink)) {
       const connection = matrix.getConnection(source, sink);
 
-      if (connection)
-      {
+      if (connection) {
         matrix.deleteConnection(connection);
-      }
-      else
-      {
+      } else {
         matrix.connect(source, sink);
       }
-
     }
   };
-
 
   //console.log('creating %d x %d matrix', rows, columns);
 
@@ -377,8 +350,7 @@ function createMatrix(dst, listview1, listview2)
     const createRow = (index1) => {
       const row = new Array(columns);
 
-      for (let i = 0; i < columns; i++)
-      {
+      for (let i = 0; i < columns; i++) {
         const index2 = connectionview.startIndex2 + i;
         row[index2 % columns] = createCell(index1, index2);
       }
@@ -390,41 +362,55 @@ function createMatrix(dst, listview1, listview2)
       row.forEach(destroyCell);
     };
 
-    resize_array_mod(cells, rows, connectionview.startIndex1, createRow, destroyRow);
+    resize_array_mod(
+      cells,
+      rows,
+      connectionview.startIndex1,
+      createRow,
+      destroyRow
+    );
 
-    for (let i = 0; i < rows; i++)
-    {
+    for (let i = 0; i < rows; i++) {
       const index1 = connectionview.startIndex1 + i;
       const row = cells[index1 % rows];
-      resize_array_mod(row, columns, connectionview.startIndex2, (index2) => createCell(index1, index2),
-                       destroyCell);
+      resize_array_mod(
+        row,
+        columns,
+        connectionview.startIndex2,
+        (index2) => createCell(index1, index2),
+        destroyCell
+      );
     }
   });
 
   const formatCell = (source, sink) => {
-    let source_label = source && source.label || '<none>';
-    let sink_label = sink && sink.label || '<none>';
+    let source_label = (source && source.label) || '<none>';
+    let sink_label = (sink && sink.label) || '<none>';
 
-    source_label = source_label.replace('Group', 'Grp').replace('Source', 'Src');
+    source_label = source_label
+      .replace('Group', 'Grp')
+      .replace('Source', 'Src');
     sink_label = sink_label.replace('Group', 'Grp').replace('Sink', 'Snk');
 
     return '\n' + source_label + '\n->\n' + sink_label;
   };
 
-  connectionview.subscribeElements((index1, index2, connection, source, sink) => {
-    const i = index1 % rows;
-    const j = index2 % columns;
+  connectionview.subscribeElements(
+    (index1, index2, connection, source, sink) => {
+      const i = index1 % rows;
+      const j = index2 % columns;
 
-    const cell = cells[i][j];
+      const cell = cells[i][j];
 
-    cell.textContent = formatCell(source, sink);
+      cell.textContent = formatCell(source, sink);
 
-    cell.classList.toggle('connected', !!connection);
+      cell.classList.toggle('connected', !!connection);
 
-    const may_connect = source && sink && !source.isGroup && !sink.isGroup;
+      const may_connect = source && sink && !source.isGroup && !sink.isGroup;
 
-    cell.classList.toggle('connectable', may_connect);
-  });
+      cell.classList.toggle('connectable', may_connect);
+    }
+  );
 
   connectionview.subscribeScrollView((offset_rows, offset_columns) => {
     const startIndex1 = connectionview.startIndex1;
@@ -432,10 +418,8 @@ function createMatrix(dst, listview1, listview2)
 
     //if (Math.abs(offset_rows) > rows || Math.abs(offset_columns) > columns)
     {
-      for (let i = 0; i < rows; i++)
-      {
-        for (let j = 0; j < columns; j++)
-        {
+      for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < columns; j++) {
           updateCellPosition(startIndex1 + i, startIndex2 + j);
         }
       }
@@ -444,43 +428,41 @@ function createMatrix(dst, listview1, listview2)
 
   let got_scroll_event = false;
   let send_scroll_timer = new Timer(() => {
-
-    if (!got_scroll_event)
-      return;
+    if (!got_scroll_event) return;
 
     ScrollEvent.call(dst.scrollTop, dst.scrollLeft);
   });
 
   dst.appendChild(scrollarea);
 
-  dst.addEventListener('scroll', function(ev) {
-    if (send_scroll_timer.active)
-    {
-      got_scroll_event = true;
-      return;
-    }
+  dst.addEventListener(
+    'scroll',
+    function (ev) {
+      if (send_scroll_timer.active) {
+        got_scroll_event = true;
+        return;
+      }
 
-    ScrollEvent.call(dst.scrollTop, dst.scrollLeft);
-  }, { passive: true });
+      ScrollEvent.call(dst.scrollTop, dst.scrollLeft);
+    },
+    { passive: true }
+  );
 
   // public API
   return {
-    setScrollTop: function(value)
-    {
+    setScrollTop: function (value) {
       if (dst.scrollTop === value) return;
       send_scroll_timer.restart(200);
       got_scroll_event = false;
       dst.scrollTop = value;
     },
-    setScrollLeft: function(value)
-    {
+    setScrollLeft: function (value) {
       if (dst.scrollLeft === value) return;
       send_scroll_timer.restart(200);
       got_scroll_event = false;
       dst.scrollLeft = value;
     },
-    subscribeOnScroll: function(cb)
-    {
+    subscribeOnScroll: function (cb) {
       return ScrollEvent.subscribe(cb);
     },
   };
@@ -501,7 +483,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const sinks = matrix.createListDataView(AMOUNT + 1, filter_sinks, sorter);
   const ListWidget2 = createList(document.querySelector('#list2'), sinks);
 
-  const MatrixWidget = createMatrix(document.querySelector('#matrix'), sources, sinks);
+  const MatrixWidget = createMatrix(
+    document.querySelector('#matrix'),
+    sources,
+    sinks
+  );
 
   ListWidget1.subscribeOnScroll((position) => {
     //console.log('ListWidget1.OnScroll %d', position);
@@ -517,5 +503,4 @@ document.addEventListener('DOMContentLoaded', () => {
     ListWidget1.setScrollTop(yposition);
     ListWidget2.setScrollTop(xposition);
   });
-
 });

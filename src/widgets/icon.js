@@ -17,74 +17,77 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { element, add_class, is_class_name, remove_class } from './../utils/dom.js';
+import {
+  element,
+  add_class,
+  is_class_name,
+  remove_class,
+} from './../utils/dom.js';
 import { define_class } from './../widget_helpers.js';
 import { Widget } from './widget.js';
-    
+
 export const Icon = define_class({
+  /**
+   * Icon represents a <code>&lt;DIV></code> element showing either
+   * icons from the AUX font or dedicated image files as CSS background.
+   *
+   * @class Icon
+   *
+   * @extends Widget
+   *
+   * @param {Object} [options={ }] - An object containing initial options.
+   *
+   * @property {String} [options.icon] - The icon to show. It can either be
+   *   a string which is interpreted as class name (if <code>[A-Za-z0-9_\-]</code>) or as URI.
+   */
+  Extends: Widget,
+  _options: Object.assign(Object.create(Widget.prototype._options), {
+    icon: 'string',
+  }),
+  options: {
+    icon: false,
+  },
+  initialize: function (options) {
+    if (!options.element) options.element = element('div');
+    Widget.prototype.initialize.call(this, options);
     /**
-     * Icon represents a <code>&lt;DIV></code> element showing either
-     * icons from the AUX font or dedicated image files as CSS background.
-     *
-     * @class Icon
-     * 
-     * @extends Widget
-     *
-     * @param {Object} [options={ }] - An object containing initial options.
-     * 
-     * @property {String} [options.icon] - The icon to show. It can either be
-     *   a string which is interpreted as class name (if <code>[A-Za-z0-9_\-]</code>) or as URI.
+     * @member {HTMLDivElement} Icon#element - The main DIV element. Has class <code>.aux-icon</code>
      */
-    Extends: Widget,
-    _options: Object.assign(Object.create(Widget.prototype._options), {
-        icon: "string",
-    }),
-    options: {
-        icon: false,
-    },
-    initialize: function (options) {
-        if (!options.element) options.element = element('div');
-        Widget.prototype.initialize.call(this, options);
-        /** 
-         * @member {HTMLDivElement} Icon#element - The main DIV element. Has class <code>.aux-icon</code> 
-         */
-        this._icon_old = [];
-    },
-    draw: function(O, element)
-    {
-      add_class(element, "aux-icon");
+    this._icon_old = [];
+  },
+  draw: function (O, element) {
+    add_class(element, 'aux-icon');
 
-      Widget.prototype.draw.call(this, O, element);
-    },
-    redraw: function() {
-        var O = this.options;
-        var I = this.invalid;
-        var E = this.element;
+    Widget.prototype.draw.call(this, O, element);
+  },
+  redraw: function () {
+    var O = this.options;
+    var I = this.invalid;
+    var E = this.element;
 
-        Widget.prototype.redraw.call(this);
-        
-        if (I.icon) {
-            I.icon = false;
-            var old = this._icon_old;
-            for (var i = 0; i < old.length; i++) {
-                if (old[i] && is_class_name(old[i])) {
-                    remove_class(E, old[i]);
-                }
-            }
-            this._icon_old = [];
-            if (is_class_name(O.icon)) {
-                E.style["background-image"] = null;
-                if (O.icon)
-                    add_class(E, O.icon);
-            } else if (O.icon) {
-                E.style["background-image"] = "url(\"" + O.icon + "\")";
-            }
+    Widget.prototype.redraw.call(this);
+
+    if (I.icon) {
+      I.icon = false;
+      var old = this._icon_old;
+      for (var i = 0; i < old.length; i++) {
+        if (old[i] && is_class_name(old[i])) {
+          remove_class(E, old[i]);
         }
-    },
-    set: function (key, val) {
-        if (key === "icon") {
-            this._icon_old.push(this.options.icon);
-        }
-        return Widget.prototype.set.call(this, key, val);
-    },
+      }
+      this._icon_old = [];
+      if (is_class_name(O.icon)) {
+        E.style['background-image'] = null;
+        if (O.icon) add_class(E, O.icon);
+      } else if (O.icon) {
+        E.style['background-image'] = 'url("' + O.icon + '")';
+      }
+    }
+  },
+  set: function (key, val) {
+    if (key === 'icon') {
+      this._icon_old.push(this.options.icon);
+    }
+    return Widget.prototype.set.call(this, key, val);
+  },
 });

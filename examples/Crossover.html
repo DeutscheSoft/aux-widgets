@@ -1,24 +1,26 @@
 <style>
-aux-crossover
-{
-  width:300px;
-  height:240px;
-}
+  aux-crossover {
+    width: 300px;
+    height: 240px;
+  }
 </style>
 
 <h2>Simple crossover with one band</h2>
 <aux-crossover>
-    <aux-crossover-band freq=1000></aux-crossover-band>
+  <aux-crossover-band freq="1000"></aux-crossover-band>
 </aux-crossover>
 
 <h2>Crossover with two bands (which may be moved across each other)</h2>
 <aux-crossover>
-    <aux-crossover-band freq=1000></aux-crossover-band>
-    <aux-crossover-band freq=2000></aux-crossover-band>
+  <aux-crossover-band freq="1000"></aux-crossover-band>
+  <aux-crossover-band freq="2000"></aux-crossover-band>
 </aux-crossover>
 
-<h2>Crossover with two bands (no moving accross and minimal distance <code>0.2</code>)</h2>
-<aux-crossover leap=false distance=0.2>
-    <aux-crossover-band freq=1000></aux-crossover-band>
-    <aux-crossover-band freq=2000></aux-crossover-band>
+<h2>
+  Crossover with two bands (no moving accross and minimal distance
+  <code>0.2</code>)
+</h2>
+<aux-crossover leap="false" distance="0.2">
+  <aux-crossover-band freq="1000"></aux-crossover-band>
+  <aux-crossover-band freq="2000"></aux-crossover-band>
 </aux-crossover>

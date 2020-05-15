@@ -9,14 +9,14 @@ should always be a widget which is a subclass of Root. The Root widget takes
 care of tracking resize events and (possibly) document visibility changes.
 
 By default all Widgets are represented by DOM Elements with `display: inline-block`.
-When laying out an interface they can therefore be absolutely positioned inside 
+When laying out an interface they can therefore be absolutely positioned inside
 a container.
 Alternatively, they can also simply be floating, which makes it easier to build grid-like layouts
 which reorganize themselves depending on window size.
 
 However, utilizing CSS features like grid and flexbox is recommended.
 
-All widgets can be given a size using CSS alone. 
+All widgets can be given a size using CSS alone.
 This makes it possible to build fully responsive layouts by using CSS only.
 Some widgets need to redraw parts of themselves when they are resized.
 The Root widgets therefore fires a `resize` event on the full widget tree.

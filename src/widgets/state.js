@@ -34,11 +34,11 @@ import { element, add_class } from '../utils/dom.js';
  * changes the opacity of the mask element.
  *
  * @class State
- * 
+ *
  * @extends Widget
  *
  * @param {Object} [options={ }] - An object containing initial options.
- * 
+ *
  * @property {Number} [options.state=0] - The state. To toggle between `on|off` set to `1|0`.
  *   Set to fractions of `1` to change "brightness", e.g. `0.5`. Values > 0 trigger setting
  *   the class .aux-state-on`, while a state of `0` results in class .aux-state-off`.
@@ -46,70 +46,67 @@ import { element, add_class } from '../utils/dom.js';
  *   `false` to set the background via external CSS.
  */
 export const State = define_class({
-    Extends: Widget,
-    _options: Object.assign(Object.create(Widget.prototype._options), {
-        state: "number|boolean",
-        color: "string|boolean",
-    }),
-    options: {
-        state:           0,     // the initial state (0 ... 1)
-        color:           false, // the base color
-    },
-    initialize: function (options) {
-        if (!options.element) options.element = element("div");
-        Widget.prototype.initialize.call(this, options);
+  Extends: Widget,
+  _options: Object.assign(Object.create(Widget.prototype._options), {
+    state: 'number|boolean',
+    color: 'string|boolean',
+  }),
+  options: {
+    state: 0, // the initial state (0 ... 1)
+    color: false, // the base color
+  },
+  initialize: function (options) {
+    if (!options.element) options.element = element('div');
+    Widget.prototype.initialize.call(this, options);
 
-        /**
-         * @member {HTMLDivElement} State#element - The main DIV container.
-         *   Has class <code>.aux-state</code>.
-         */
-        
-        /**
-         * @member {HTMLDivElement} State#_mask - A DIV for masking the background.
-         *   Has class <code>.aux-mask</code>.
-         */
-        this._mask   = element("div","aux-mask");
-    },
-    destroy: function () {
-        this._mask.remove();
-        Widget.prototype.destroy.call(this);
-    },
+    /**
+     * @member {HTMLDivElement} State#element - The main DIV container.
+     *   Has class <code>.aux-state</code>.
+     */
 
-    draw: function(O, element)
-    {
-      add_class(element, "aux-state");
-      element.appendChild(this._mask);
+    /**
+     * @member {HTMLDivElement} State#_mask - A DIV for masking the background.
+     *   Has class <code>.aux-mask</code>.
+     */
+    this._mask = element('div', 'aux-mask');
+  },
+  destroy: function () {
+    this._mask.remove();
+    Widget.prototype.destroy.call(this);
+  },
 
-      Widget.prototype.draw.call(this, O, element);
-    },
+  draw: function (O, element) {
+    add_class(element, 'aux-state');
+    element.appendChild(this._mask);
 
-    redraw: function() {
-        Widget.prototype.redraw.call(this);
-        var I = this.invalid;
-        var O = this.options;
+    Widget.prototype.draw.call(this, O, element);
+  },
 
-        if (I.color) {
-            I.color = false;
-            if (O.color)
-                this.element.style["background-color"] = O.color;
-            else
-                this.element.style["background-color"] = void 0;
-        }
+  redraw: function () {
+    Widget.prototype.redraw.call(this);
+    var I = this.invalid;
+    var O = this.options;
 
-        if (I.state) {
-            I.state = false;
-            var v = +O.state;
-            if (!(v >= 0)) v = 0;
-            if (!(v <= 1)) v = 1;
-
-            if (!O.state) {
-                this.remove_class("aux-state-on");
-                this.add_class("aux-state-off");
-            } else {
-                this.remove_class("aux-state-off");
-                this.add_class("aux-state-on");
-            }
-            this._mask.style.opacity = "" + (1 - v);
-        }
+    if (I.color) {
+      I.color = false;
+      if (O.color) this.element.style['background-color'] = O.color;
+      else this.element.style['background-color'] = void 0;
     }
+
+    if (I.state) {
+      I.state = false;
+      var v = +O.state;
+      if (!(v >= 0)) v = 0;
+      if (!(v <= 1)) v = 1;
+
+      if (!O.state) {
+        this.remove_class('aux-state-on');
+        this.add_class('aux-state-off');
+      } else {
+        this.remove_class('aux-state-off');
+        this.add_class('aux-state-on');
+      }
+      this._mask.style.opacity = '' + (1 - v);
+    }
+  },
 });

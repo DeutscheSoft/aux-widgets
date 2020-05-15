@@ -27,44 +27,44 @@ import { add_class, remove_class } from '../utils/dom.js';
  * @mixin GlobalCursor
  */
 export const GlobalCursor = define_class({
+  /**
+   * Adds a class <code>"aux-cursor-" + cursor</code> to the <code>document.body</code> to show a specific cursor.
+   *
+   * @method GlobalCursor#global_cursor
+   *
+   * @param {string} cursor - The name of the <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">cursor</a> to show.
+   *
+   * @emits GlobalCursor#globalcursor
+   */
+  global_cursor: function (cursor) {
+    add_class(document.body, 'aux-cursor-' + cursor);
     /**
-     * Adds a class <code>"aux-cursor-" + cursor</code> to the <code>document.body</code> to show a specific cursor.
-     * 
-     * @method GlobalCursor#global_cursor
-     * 
-     * @param {string} cursor - The name of the <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">cursor</a> to show.
-     * 
-     * @emits GlobalCursor#globalcursor
-     */
-    global_cursor: function (cursor) {
-        add_class(document.body, "aux-cursor-" + cursor);
-        /**
-         * Is fired when a cursor gets set.
-         * 
-         * @event GlobalCursor#globalcursor
-         * 
-         * @param {string} cursor - The name of the <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">cursor</a> to show. 
-         */
-        this.emit("globalcursor", cursor);
-    },
-    /**
-     * Removes the class from <code>document.body</code> node.
+     * Is fired when a cursor gets set.
      *
-     * @method GlobalCursor#remove_cursor
-     * 
-     * @param {string} cursor - The name of the <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">cursor</a> to remome.
-     * 
-     * @emits GlobalCursor#cursorremoved
+     * @event GlobalCursor#globalcursor
+     *
+     * @param {string} cursor - The name of the <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">cursor</a> to show.
      */
-    remove_cursor: function (cursor) {
-        remove_class(document.body, "aux-cursor-" + cursor);
-        /**
-         * Is fired when a cursor is removed.
-         * 
-         * @event GlobalCursor#cursorremoved
-         * 
-         * @param {string} cursor - The name of the <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">cursor</a> to remove.
-         */
-        this.emit("cursorremoved", cursor);
-    }
+    this.emit('globalcursor', cursor);
+  },
+  /**
+   * Removes the class from <code>document.body</code> node.
+   *
+   * @method GlobalCursor#remove_cursor
+   *
+   * @param {string} cursor - The name of the <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">cursor</a> to remome.
+   *
+   * @emits GlobalCursor#cursorremoved
+   */
+  remove_cursor: function (cursor) {
+    remove_class(document.body, 'aux-cursor-' + cursor);
+    /**
+     * Is fired when a cursor is removed.
+     *
+     * @event GlobalCursor#cursorremoved
+     *
+     * @param {string} cursor - The name of the <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">cursor</a> to remove.
+     */
+    this.emit('cursorremoved', cursor);
+  },
 });

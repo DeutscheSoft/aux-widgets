@@ -11,19 +11,17 @@
  * @module utils/binding
  */
 
-
 /* generic code, supports node arrays */
 export function add_event_listener(e, type, cb, options) {
-    if (Array.isArray(e)) {
-        for (var i = 0; i < e.length; i++)
-            e[i].addEventListener(type, cb, options);
-    } else e.addEventListener(type, cb, options);
+  if (Array.isArray(e)) {
+    for (var i = 0; i < e.length; i++) e[i].addEventListener(type, cb, options);
+  } else e.addEventListener(type, cb, options);
 }
 export function remove_event_listener(e, type, cb, options) {
-    if (Array.isArray(e)) {
-        for (var i = 0; i < e.length; i++)
-            e[i].removeEventListener(type, cb, options);
-    } else e.removeEventListener(type, cb, options);
+  if (Array.isArray(e)) {
+    for (var i = 0; i < e.length; i++)
+      e[i].removeEventListener(type, cb, options);
+  } else e.removeEventListener(type, cb, options);
 }
 
 /* Detect if the 'passive' option is supported.
@@ -31,16 +29,16 @@ export function remove_event_listener(e, type, cb, options) {
 var passiveSupported = false;
 
 try {
-  var options = Object.defineProperty({}, "passive", {
-    get: function() {
+  var options = Object.defineProperty({}, 'passive', {
+    get: function () {
       passiveSupported = true;
       return true;
-    }
+    },
   });
 
-  window.addEventListener("test", null, options);
-  window.removeEventListener("test", null);
-} catch(err) {}
+  window.addEventListener('test', null, options);
+  window.removeEventListener('test', null);
+} catch (err) {}
 
 var active_options, passive_options;
 
@@ -65,55 +63,54 @@ export function remove_passive_event_listener(e, type, cb) {
   remove_event_listener(e, type, cb, passive_options);
 }
 const __native_events = {
-    // mouse
-    mouseenter : true,
-    mouseleave : true,
-    mousedown  : true,
-    mouseup    : true,
-    mousemove  : true,
-    mouseover  : true,
+  // mouse
+  mouseenter: true,
+  mouseleave: true,
+  mousedown: true,
+  mouseup: true,
+  mousemove: true,
+  mouseover: true,
 
-    click      : true,
-    dblclick   : true,
+  click: true,
+  dblclick: true,
 
-    startdrag  : true,
-    stopdrag   : true,
-    drag       : true,
-    dragenter  : true,
-    dragleave  : true,
-    dragover   : true,
-    drop       : true,
-    dragend    : true,
+  startdrag: true,
+  stopdrag: true,
+  drag: true,
+  dragenter: true,
+  dragleave: true,
+  dragover: true,
+  drop: true,
+  dragend: true,
 
-    // touch
-    touchstart : true,
-    touchend   : true,
-    touchmove  : true,
-    touchenter : true,
-    touchleave : true,
-    touchcancel: true,
+  // touch
+  touchstart: true,
+  touchend: true,
+  touchmove: true,
+  touchenter: true,
+  touchleave: true,
+  touchcancel: true,
 
-    keydown    : true,
-    keypress   : true,
-    keyup      : true,
-    scroll     : true,
-    focus      : true,
-    blur       : true,
+  keydown: true,
+  keypress: true,
+  keyup: true,
+  scroll: true,
+  focus: true,
+  blur: true,
 
-    // mousewheel
-    mousewheel : true,
-    DOMMouseScroll : true,
-    wheel : true,
+  // mousewheel
+  mousewheel: true,
+  DOMMouseScroll: true,
+  wheel: true,
 
-    submit     : true,
-    contextmenu: true,
+  submit: true,
+  contextmenu: true,
 };
 export function is_dom_event(type) {
-    return __native_events[type];
+  return __native_events[type];
 }
 
-export function subscribeDOMEvent(node, event_name, cb)
-{
+export function subscribeDOMEvent(node, event_name, cb) {
   const callback = (...args) => cb(...args);
 
   node.addEventListener(event_name, callback);

@@ -12,15 +12,15 @@
  * @function merge
  */
 export function merge(dst) {
-    //console.log("merging", src, "into", dst);
-    var key, i, src;
-    for (i = 1; i < arguments.length; i++) {
-        src = arguments[i];
-        for (key in src) {
-            dst[key] = src[key];
-        }
+  //console.log("merging", src, "into", dst);
+  var key, i, src;
+  for (i = 1; i < arguments.length; i++) {
+    src = arguments[i];
+    for (key in src) {
+      dst[key] = src[key];
     }
-    return dst;
+  }
+  return dst;
 }
 
 /**
@@ -31,11 +31,11 @@ export function merge(dst) {
  * @function object_and
  */
 export function object_and(orig, filter) {
-    var ret = {};
-    for (var key in orig) {
-        if (filter[key]) ret[key] = orig[key];
-    }
-    return ret;
+  var ret = {};
+  for (var key in orig) {
+    if (filter[key]) ret[key] = orig[key];
+  }
+  return ret;
 }
 
 /**
@@ -46,11 +46,11 @@ export function object_and(orig, filter) {
  * @function object_sub
  */
 export function object_sub(orig, filter) {
-    var ret = {};
-    for (var key in orig) {
-        if (!filter[key]) ret[key] = orig[key];
-    }
-    return ret;
+  var ret = {};
+  for (var key in orig) {
+    if (!filter[key]) ret[key] = orig[key];
+  }
+  return ret;
 }
 
 /**
@@ -60,12 +60,12 @@ export function object_sub(orig, filter) {
  * @function to_array
  */
 export function to_array(collection) {
-    var ret = new Array(collection.length);
-    var i;
+  var ret = new Array(collection.length);
+  var i;
 
-    for (i = 0; i < ret.length; i++) {
-        ret[i] = collection[i];
-    }
+  for (i = 0; i < ret.length; i++) {
+    ret[i] = collection[i];
+  }
 
-    return ret;
+  return ret;
 }

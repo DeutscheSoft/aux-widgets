@@ -20,12 +20,12 @@ aux-levelmeter .aux-mask {
 }
 
 div.segment .aux-bar {
-  background-color:#269;
+  background-color: #269;
   background-image: linear-gradient(white 2px, transparent 2px),
-  linear-gradient(90deg, white 2px, transparent 2px),
-  linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px),
-  linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 1px);
-  background-position:-2px -2px, -2px -2px, -1px -1px, -1px -1px;
+    linear-gradient(90deg, white 2px, transparent 2px),
+    linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+  background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
   background-position-y: bottom, bottom, bottom, bottom;
 }
 

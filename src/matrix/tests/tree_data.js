@@ -22,23 +22,22 @@ test('Adding and removing ports', () => {
       assert(node === ports[path[0].index]);
     });
 
-    for (let i = 0; i < tmp.length; i++)
-    {
+    for (let i = 0; i < tmp.length; i++) {
       assert(tmp[i] === ports[i]);
     }
   }
 
   {
-    try
-    {
+    try {
       group.addPort(ports[0]);
       assert(false);
-    }
-    catch (e) {}
+    } catch (e) {}
   }
 
   ports.forEach((port) => group.deletePort(port));
-  group.forEachNode((node) => { assert(false, 'Should be empty.'); });
+  group.forEachNode((node) => {
+    assert(false, 'Should be empty.');
+  });
 });
 
 test('forEachAsync', () => {

@@ -7,31 +7,25 @@ import { Events } from '../../events.js';
 /**
  * Base class for data model objects.
  */
-export class Datum extends Events
-{
-  constructor(o)
-  {
+export class Datum extends Events {
+  constructor(o) {
     super();
     this.properties = {};
 
-    if (o)
-    {
-      for (let name in o)
-      {
+    if (o) {
+      for (let name in o) {
         this.set(name, o[name]);
       }
     }
   }
 
-  set(name, value)
-  {
+  set(name, value) {
     this.properties[name] = value;
     this.emit('propertyChanged', name, value);
     return value;
   }
 
-  get(name)
-  {
+  get(name) {
     return this.properties[name];
   }
 
@@ -43,8 +37,7 @@ export class Datum extends Events
    * @param {string} name The property name.
    * @param {Function} callback The callback function.
    */
-  observe(name, callback)
-  {
+  observe(name, callback) {
     callback(this[name]);
 
     return this.subscribe('propertyChanged', (key, value) => {

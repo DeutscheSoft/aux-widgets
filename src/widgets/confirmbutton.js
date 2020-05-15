@@ -16,9 +16,9 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-import { add_class } from "./../utils/dom.js";
-import { define_class } from "./../widget_helpers.js";
-import { Button } from "./button.js";
+import { add_class } from './../utils/dom.js';
+import { define_class } from './../widget_helpers.js';
+import { Button } from './button.js';
 
 function reset(e) {
   if (!this.options.state) return;
@@ -37,68 +37,63 @@ function state_set() {
   var O = this.options;
   if (O.label_confirm) {
     T.label = O.label;
-    this.set("label", O.label_confirm);
+    this.set('label', O.label_confirm);
   }
-  
+
   if (O.icon_confirm) {
     T.icon = O.icon;
-    this.set("icon", O.icon_confirm);
+    this.set('icon', O.icon_confirm);
   }
-  
-  T.reset = reset.bind(this); 
-  document.addEventListener("click", T.reset, true);
-  
-  if (O.timeout)
-    T.timeout = setTimeout(T.reset, O.timeout);
-  
+
+  T.reset = reset.bind(this);
+  document.addEventListener('click', T.reset, true);
+
+  if (O.timeout) T.timeout = setTimeout(T.reset, O.timeout);
+
   T.click = Date.now();
-  
-  this.set("state", true);
+
+  this.set('state', true);
 }
 
 function state_reset() {
   var T = this.__temp;
-  if (T.label)
-    this.set("label", T.label);
-    
-  if (T.icon)
-    this.set("icon", T.icon);
-    
-  if (T.timeout >= 0)
-    window.clearTimeout(T.timeout);
-  
-  if (T.reset)
-    document.removeEventListener("click", T.reset, true);
-  
+  if (T.label) this.set('label', T.label);
+
+  if (T.icon) this.set('icon', T.icon);
+
+  if (T.timeout >= 0) window.clearTimeout(T.timeout);
+
+  if (T.reset) document.removeEventListener('click', T.reset, true);
+
   T.reset = null;
   T.timeout = -1;
-  T.label = "";
-  T.icon = "";
+  T.label = '';
+  T.icon = '';
   T.click = 0;
-  
-  this.set("state", false);
+
+  this.set('state', false);
 }
 
 /**
  * Is fired when the button was hit two times with at least
  *   <code>interrupt</code> milliseconds between both clicks.
- * 
+ *
  * @event ConfirmButton#confirmed
  */
-         
+
 function clicked() {
   var T = this.__temp;
   var O = this.options;
   if (!O.confirm) {
-    this.emit("confirmed");
+    this.emit('confirmed');
   } else if (O.state && Date.now() > T.click + O.interrupt) {
-    this.emit("confirmed");
+    this.emit('confirmed');
     state_reset.call(this);
   } else if (!O.state) {
     state_set.call(this);
   }
 }
-  
+
 export const ConfirmButton = define_class({
   /**
    * ConfirmButton is a {@link Button} firing the `confirmed` event
@@ -109,11 +104,11 @@ export const ConfirmButton = define_class({
    * the confirmation.
    *
    * @class ConfirmButton
-   * 
+   *
    * @extends Button
    *
    * @param {Object} [options={ }] - An object containing initial options.
-   * 
+   *
    * @property {Boolean} [options.confirm=true] - Defines if the button acts as <code>ConfirmButton</code> or normal <code>Button</code>.
    * @property {Number} [options.timeout=2000] - Defines a time in milliseconds after the button resets to defaults if no second click happens.
    * @property {Number} [options.interrupt=0] - Defines a duration in milliseconds within further clicks are ignored. Set to avoid double-clicks being recognized as confirmation.
@@ -121,45 +116,44 @@ export const ConfirmButton = define_class({
    * @property {String} [options.icon_confirm] - The icon to be used while in active state.
    */
   Extends: Button,
-  
+
   _options: Object.assign(Object.create(Button.prototype._options), {
-    confirm: "boolean",
-    timeout: "number",
-    interrupt: "number",
-    label_confirm : "string",
-    icon_confirm: "string",
+    confirm: 'boolean',
+    timeout: 'number',
+    interrupt: 'number',
+    label_confirm: 'string',
+    icon_confirm: 'string',
   }),
   options: {
     confirm: true,
     timeout: 2000,
     interrupt: 0,
-    label_confirm: "",
-    icon_confirm: "",
+    label_confirm: '',
+    icon_confirm: '',
   },
-  
+
   initialize: function (options) {
     Button.prototype.initialize.call(this, options);
-    this.on("click", clicked.bind(this));
+    this.on('click', clicked.bind(this));
     this.__temp = {
-      label: "",
-      icon: "",
+      label: '',
+      icon: '',
       timeout: -1,
       reset: null,
       click: 0,
     };
   },
 
-  draw: function(O, element)
-  {
-    add_class(element, "aux-confirmbutton");
+  draw: function (O, element) {
+    add_class(element, 'aux-confirmbutton');
 
     Button.prototype.draw.call(this, O, element);
   },
-  
+
   set: function (key, value) {
-    if (key == "confirm" && value == false) {
-      this.set("state", false);
+    if (key == 'confirm' && value == false) {
+      this.set('state', false);
     }
     Button.prototype.set.call(this, key, value);
-  }
+  },
 });

@@ -3,24 +3,45 @@
 
   Many different eq bands of different types.
 -->
-<aux-equalizer style='width: 100%; height: 480px;'
-    range_x="js:{min:10, max:20000, scale:'frequency'}"
-    range_y="js:{min:-24, max:24}"
-    range_z="js:{min:0.1, max:20, reverse:true}"
+<aux-equalizer
+  style="width: 100%; height: 480px;"
+  range_x="js:{min:10, max:20000, scale:'frequency'}"
+  range_y="js:{min:-24, max:24}"
+  range_z="js:{min:0.1, max:20, reverse:true}"
 >
-  <aux-equalizer-band freq=30 q=1 label='HP' type=highpass3 active=true>
+  <aux-equalizer-band freq="30" q="1" label="HP" type="highpass3" active="true">
   </aux-equalizer-band>
-  <aux-equalizer-band freq=100 gain=-3 q=1 label='LS' type=low-shelf active=true>
+  <aux-equalizer-band
+    freq="100"
+    gain="-3"
+    q="1"
+    label="LS"
+    type="low-shelf"
+    active="true"
+  >
   </aux-equalizer-band>
-  <aux-equalizer-band freq=450 gain=6 q=0.5 label='P#1' active=true>
+  <aux-equalizer-band freq="450" gain="6" q="0.5" label="P#1" active="true">
   </aux-equalizer-band>
-  <aux-equalizer-band freq=1500 gain=-6 q=2 label='P#2' active=true>
+  <aux-equalizer-band freq="1500" gain="-6" q="2" label="P#2" active="true">
   </aux-equalizer-band>
-  <aux-equalizer-band freq=3000 gain=-12 q=10 label='P#3' active=true>
+  <aux-equalizer-band freq="3000" gain="-12" q="10" label="P#3" active="true">
   </aux-equalizer-band>
-  <aux-equalizer-band freq=5000 gain=3 q=1 label='HS' type=high-shelf active=true>
+  <aux-equalizer-band
+    freq="5000"
+    gain="3"
+    q="1"
+    label="HS"
+    type="high-shelf"
+    active="true"
+  >
   </aux-equalizer-band>
-  <aux-equalizer-band freq=10000 q=1 label='LP' type=lowpass3 active=true>
+  <aux-equalizer-band
+    freq="10000"
+    q="1"
+    label="LP"
+    type="lowpass3"
+    active="true"
+  >
   </aux-equalizer-band>
 </aux-equalizer>
 
@@ -29,25 +50,32 @@
 
   Equalizer where each band has an individual curve while interacting.
 -->
-<aux-equalizer style='width: 100%; height: 480px;' class='extra_curve'
-    range_x="js:{min:10, max:20000, scale:'frequency'}"
-    range_y="js:{min:-24, max:24}"
-    range_z="js:{min:0.1, max:20, reverse:true}"
+<aux-equalizer
+  style="width: 100%; height: 480px;"
+  class="extra_curve"
+  range_x="js:{min:10, max:20000, scale:'frequency'}"
+  range_y="js:{min:-24, max:24}"
+  range_z="js:{min:0.1, max:20, reverse:true}"
 >
-  <aux-equalizer-band freq=450 gain=6 q=0.5 label='P#1' active=true>
+  <aux-equalizer-band freq="450" gain="6" q="0.5" label="P#1" active="true">
   </aux-equalizer-band>
-  <aux-equalizer-band freq=1500 gain=-6 q=2 label='P#2' active=true>
+  <aux-equalizer-band freq="1500" gain="-6" q="2" label="P#2" active="true">
   </aux-equalizer-band>
-  <aux-equalizer-band freq=10000 q=1 label='LP' type=lowpass3 active=true>
+  <aux-equalizer-band
+    freq="10000"
+    q="1"
+    label="LP"
+    type="lowpass3"
+    active="true"
+  >
   </aux-equalizer-band>
 </aux-equalizer>
 <style>
-.aux-graph.highlite
-{
-  stroke: red;
-}
+  .aux-graph.highlite {
+    stroke: red;
+  }
 </style>
-<script type='text/javascript'>
+<script type="text/javascript">
   const eq = document.querySelector('aux-equalizer.extra_curve').auxWidget;
   const EqualizerGraph = eq.baseline.constructor;
 
@@ -55,14 +83,11 @@
     let graph;
     band.subscribe('set_interacting', (interacting) => {
       if (!!graph == interacting) return;
-      if (interacting)
-      {
-        graph = new EqualizerGraph({ class: "highlite" });
+      if (interacting) {
+        graph = new EqualizerGraph({ class: 'highlite' });
         graph.add_band(band);
         eq.add_graph(graph);
-      }
-      else
-      {
+      } else {
         eq.remove_graph(graph);
         graph.remove_band(band);
         graph = null;
@@ -76,10 +101,12 @@
 
   Empty equalizer.
 -->
-<aux-equalizer style='width: 100%; height: 480px;' class='extra_curve'
-    range_x="js:{min:10, max:20000, scale:'frequency'}"
-    range_y="js:{min:-24, max:24}"
-    range_z="js:{min:0.1, max:20, reverse:true}"
+<aux-equalizer
+  style="width: 100%; height: 480px;"
+  class="extra_curve"
+  range_x="js:{min:10, max:20000, scale:'frequency'}"
+  range_y="js:{min:-24, max:24}"
+  range_z="js:{min:0.1, max:20, reverse:true}"
 >
 </aux-equalizer>
 
@@ -89,35 +116,41 @@
   Equalizer with additional curves for each equalizer band.
   Empty equalizer.
 -->
-<aux-equalizer style='width: 100%; height: 480px;' class='individual_curve'
-    range_x="js:{min:10, max:20000, scale:'frequency'}"
-    range_y="js:{min:-24, max:24}"
-    range_z="js:{min:0.1, max:20, reverse:true}"
+<aux-equalizer
+  style="width: 100%; height: 480px;"
+  class="individual_curve"
+  range_x="js:{min:10, max:20000, scale:'frequency'}"
+  range_y="js:{min:-24, max:24}"
+  range_z="js:{min:0.1, max:20, reverse:true}"
 >
-  <aux-equalizer-band freq=450 gain=6 q=0.5 label='P#1' active=true>
+  <aux-equalizer-band freq="450" gain="6" q="0.5" label="P#1" active="true">
   </aux-equalizer-band>
-  <aux-equalizer-band freq=1500 gain=-6 q=2 label='P#2' active=true>
+  <aux-equalizer-band freq="1500" gain="-6" q="2" label="P#2" active="true">
   </aux-equalizer-band>
-  <aux-equalizer-band freq=10000 q=1 label='LP' type=lowpass3 active=true>
+  <aux-equalizer-band
+    freq="10000"
+    q="1"
+    label="LP"
+    type="lowpass3"
+    active="true"
+  >
   </aux-equalizer-band>
 </aux-equalizer>
 <style>
-.aux-graph.individual
-{
-  opacity: 0.2;
-  stroke: white;
-}
-.aux-graph.interacting
-{
-  opacity: 0.8;
-}
+  .aux-graph.individual {
+    opacity: 0.2;
+    stroke: white;
+  }
+  .aux-graph.interacting {
+    opacity: 0.8;
+  }
 </style>
-<script type='text/javascript'>
+<script type="text/javascript">
   const eq = document.querySelector('aux-equalizer.individual_curve').auxWidget;
   const EqualizerGraph = eq.baseline.constructor;
 
   eq.bands.forEach((band) => {
-    let graph = new EqualizerGraph({ class: "individual" });
+    let graph = new EqualizerGraph({ class: 'individual' });
     graph.add_band(band);
     eq.add_graph(graph);
     band.on('set_interacting', (interacting) => {

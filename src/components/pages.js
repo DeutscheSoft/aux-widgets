@@ -1,15 +1,15 @@
 import {
-    component_from_widget, define_component, subcomponent_from_widget
-  } from './../component_helpers.js';
+  component_from_widget,
+  define_component,
+  subcomponent_from_widget,
+} from './../component_helpers.js';
 import { Pages } from './../widgets/pages.js';
 
-function add_page(pages, page)
-{
+function add_page(pages, page) {
   pages.add_page(page);
 }
 
-function remove_page(pages, page)
-{
+function remove_page(pages, page) {
   pages.remove_page(page);
 }
 

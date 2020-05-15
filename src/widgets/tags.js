@@ -21,66 +21,65 @@ import { Widget } from './widget.js';
 import { Tag } from './tag.js';
 
 export const Tags = define_class({
-    
-    Extends: Widget,
-    
-    _options: Object.assign(Object.create(Widget.prototype._options), {
-        tag_class: "object",
-    }),
-    options: {
-        tag_class: Tag,
-    },
-    
-    initialize: function (options) {
-        this.tags = new Map();
-        this.tag_to_name = new Map();
-        Widget.prototype.initialize.call(this, options);
-    },
-    tag_to_string: function (tag) {
-        if (typeof tag == "string") {
-            return tag;
-        } else if (Tag.prototype.isPrototypeOf(tag)) {
-            if (!tag.is_destructed()) {
-              return tag.options.tag;
-            } else {
-              return this.tag_to_name.get(tag);
-            }
-        } else {
-            return tag.tag;
-        }
-    },
-    find_tag: function (tag) {
-        return this.tags.get(this.tag_to_string(tag));
-    },
-    request_tag: function (tag, options) {
-        var C = this.options.tag_class;
-        var t = this.tag_to_string(tag);
+  Extends: Widget,
 
-        if (this.tags.has(t)) {
-          tag = this.tags.get(t);
-          if (!tag.is_destructed()) return tag;
-        }
+  _options: Object.assign(Object.create(Widget.prototype._options), {
+    tag_class: 'object',
+  }),
+  options: {
+    tag_class: Tag,
+  },
 
-        if (typeof tag == "string") {
-            var o = Object.assign(options || {}, {tag:tag});
-            tag = new C(o);
-        } else if (C.prototype.isPrototypeOf(tag)) {
-            tag = tag;
-        } else {
-            tag = new C(tag);
-        }
-        tag.show();
-        this.tags.set(t, tag);
-        this.tag_to_name.set(tag, t);
-        return tag;
-    },
-    remove_tag: function (tag) {
-        tag = this.find_tag(tag);
-        this.tags.delete(this.tag_to_string(tag));
-        this.tag_to_name.delete(tag);
-    },
-    empty: function() {
-        this.tags = new Map();
-        this.tag_to_name = new Map();
-    },
+  initialize: function (options) {
+    this.tags = new Map();
+    this.tag_to_name = new Map();
+    Widget.prototype.initialize.call(this, options);
+  },
+  tag_to_string: function (tag) {
+    if (typeof tag == 'string') {
+      return tag;
+    } else if (Tag.prototype.isPrototypeOf(tag)) {
+      if (!tag.is_destructed()) {
+        return tag.options.tag;
+      } else {
+        return this.tag_to_name.get(tag);
+      }
+    } else {
+      return tag.tag;
+    }
+  },
+  find_tag: function (tag) {
+    return this.tags.get(this.tag_to_string(tag));
+  },
+  request_tag: function (tag, options) {
+    var C = this.options.tag_class;
+    var t = this.tag_to_string(tag);
+
+    if (this.tags.has(t)) {
+      tag = this.tags.get(t);
+      if (!tag.is_destructed()) return tag;
+    }
+
+    if (typeof tag == 'string') {
+      var o = Object.assign(options || {}, { tag: tag });
+      tag = new C(o);
+    } else if (C.prototype.isPrototypeOf(tag)) {
+      tag = tag;
+    } else {
+      tag = new C(tag);
+    }
+    tag.show();
+    this.tags.set(t, tag);
+    this.tag_to_name.set(tag, t);
+    return tag;
+  },
+  remove_tag: function (tag) {
+    tag = this.find_tag(tag);
+    this.tags.delete(this.tag_to_string(tag));
+    this.tag_to_name.delete(tag);
+  },
+  empty: function () {
+    this.tags = new Map();
+    this.tag_to_name = new Map();
+  },
 });

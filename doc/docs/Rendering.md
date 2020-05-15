@@ -37,9 +37,9 @@ can achieve.
 There are several other optimizations which can be used when DOM manipulations
 are not performed immediately.
 
-* DOM manipulations can be completely disabled for widgets, which are not currently
+- DOM manipulations can be completely disabled for widgets, which are not currently
   visible.
-* In modern browsers (especially on tablets and phones) rendering can be completely
+- In modern browsers (especially on tablets and phones) rendering can be completely
   turned off when the application window is in the background. Note that this can
   not be easily done by completely disabling the application, since the application
   logic might need to continue running.
@@ -51,7 +51,7 @@ The run time performance of code operating on the DOM tree can be substantially
 influenced by the amount of reflows and style recalculations which it
 triggers. Style recalculations might be triggered by asking for the value of
 a computed style of an element. Likewise reflow operations might be necessary
-when asking for pixel positions or dimensions of an element, e.g. by reading 
+when asking for pixel positions or dimensions of an element, e.g. by reading
 `element.offsetWidth`. Ideally, these kinds of operations are avoided entirely,
 however in some situations that might not be possible. Inside of AUX there
 are several widgets which need to measure dimensions when rendering, for instance
@@ -60,7 +60,7 @@ in order to position the scale and background correctly.
 
 On the other hand, the operations which might trigger reflows and style
 recalculations do so only if the DOM tree has been previously modified. If the DOM
-tree is *clean*, these operations are relatively cheap. Therefore the obvious
+tree is _clean_, these operations are relatively cheap. Therefore the obvious
 way to improve the performance of code which triggers many reflows is to reorder
 operations on the DOM in such a way as to reduce reflows to a minimum. It is rather
 straightforward to apply this technique to individual pieces of code, however that

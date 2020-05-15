@@ -1,35 +1,30 @@
-import { Events } from '../events.js'; 
-import { init_subscriptions, add_subscription, unsubscribe_subscriptions } from './subscriptions.js';
+import { Events } from '../events.js';
+import {
+  init_subscriptions,
+  add_subscription,
+  unsubscribe_subscriptions,
+} from './subscriptions.js';
 
-function make_filter(filter)
-{
-  if (typeof(filter) === 'function')
-  {
-    if (filter.prototype)
-    {
+function make_filter(filter) {
+  if (typeof filter === 'function') {
+    if (filter.prototype) {
       return function (o) {
         return o instanceof filter;
       };
-    }
-    else
-    {
+    } else {
       return filter;
     }
-  }
-  else if (filter === void(0))
-  {
-    return function () { return true; };
-  }
-  else
-  {
-    throw new Error('Unsupported filter type: ' + typeof(filter));
+  } else if (filter === void 0) {
+    return function () {
+      return true;
+    };
+  } else {
+    throw new Error('Unsupported filter type: ' + typeof filter);
   }
 }
 
-export class ChildWidgets extends Events
-{
-  constructor(widget, options)
-  {
+export class ChildWidgets extends Events {
+  constructor(widget, options) {
     super();
     if (!options) options = {};
     this.widget = widget;
@@ -53,62 +48,55 @@ export class ChildWidgets extends Events
     ];
   }
 
-  sortByDOM()
-  {
+  sortByDOM() {
     // TODO: this method currently assumes that the children are all
     // children of the same parent. this might not always be the case
     const list = this.list;
 
     if (!list.length) return;
 
-    const parentNode = list[0].element.parentNode; 
+    const parentNode = list[0].element.parentNode;
     const nodes = Array.from(parentNode.children);
 
     list.sort(function (child1, child2) {
       if (child1 === child2) return 0;
-      return nodes.indexOf(child1.element) < nodes.indexOf(child2.element) ? -1 : 1;
+      return nodes.indexOf(child1.element) < nodes.indexOf(child2.element)
+        ? -1
+        : 1;
     });
   }
 
-  sort()
-  {
+  sort() {
     this.sortByDOM();
     this.emit('changed');
   }
 
-  indexOf(child)
-  {
+  indexOf(child) {
     return this.list.indexOf(child);
   }
 
-  includes(child)
-  {
+  includes(child) {
     return this.list.indexOf(child) !== -1;
   }
 
-  forEach(cb)
-  {
+  forEach(cb) {
     this.list.forEach(cb);
   }
 
-  getList()
-  {
+  getList() {
     return this.list;
   }
 
-  at(index)
-  {
+  at(index) {
     return this.list[index];
   }
 
-  destroy()
-  {
+  destroy() {
     this.subscriptions.forEach((cb) => cb());
     this.widget = null;
   }
 
-  forEachAsync(callback)
-  {
+  forEachAsync(callback) {
     let subs = init_subscriptions();
     const child_subscriptions = new Map();
 
@@ -116,14 +104,20 @@ export class ChildWidgets extends Events
       child_subscriptions.set(child, callback(child, position) || null);
     });
 
-    subs = add_subscription(subs, this.subscribe('child_added', (child, position) => {
-      child_subscriptions.set(child, callback(child, position) || null);
-    }));
+    subs = add_subscription(
+      subs,
+      this.subscribe('child_added', (child, position) => {
+        child_subscriptions.set(child, callback(child, position) || null);
+      })
+    );
 
-    subs = add_subscription(subs, this.subscribe('child_removed', (child, position) => {
-      unsubscribe_subscriptions(child_subscriptions.get(child));
-      child_subscriptions.delete(child);
-    }));
+    subs = add_subscription(
+      subs,
+      this.subscribe('child_removed', (child, position) => {
+        unsubscribe_subscriptions(child_subscriptions.get(child));
+        child_subscriptions.delete(child);
+      })
+    );
 
     return () => {
       subs = unsubscribe_subscriptions(subs);

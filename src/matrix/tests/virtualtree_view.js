@@ -47,14 +47,12 @@ test('VirtualTreeDataView basics', () => {
     const tmp = [];
 
     virtualtreeview.forEach((node) => {
-      if (!node.isGroup)
-        tmp.push(node);
+      if (!node.isGroup) tmp.push(node);
     });
 
     tmp.reverse();
 
-    for (let i = 0; i < tmp.length; i++)
-    {
+    for (let i = 0; i < tmp.length; i++) {
       assert(tmp[i] === ports[i]);
     }
   }
@@ -66,7 +64,6 @@ test('VirtualTreeDataView basics', () => {
       index++;
     });
   }
-
 
   {
     const size = virtualtreeview.getSubtreeSize(group);
@@ -119,8 +116,7 @@ test('VirtualTreeDataView basics', () => {
       virtualtreeview.forEach((node) => {
         const startIndex = virtualtreeview.startIndex;
         const endIndex = startIndex + virtualtreeview.amount;
-        if (n >= startIndex && n < endIndex)
-        {
+        if (n >= startIndex && n < endIndex) {
           const child = tmp[n - startIndex];
           //console.log('%d %o %o %o', n, node.label, child.label, node === child);
           assert(child === node);
@@ -207,7 +203,9 @@ test('VirtualTreeDataView.startIndex behavior', () => {
 
   {
     let removing = false;
-    const tmp_sub = virtualtreeview.subscribeElements(() => { assert(!removing); });
+    const tmp_sub = virtualtreeview.subscribeElements(() => {
+      assert(!removing);
+    });
     removing = true;
     matrix.deleteGroup(group1);
     removing = false;

@@ -3,10 +3,8 @@ import { warn } from './utils/log.js';
 // Map<Node, Map<string, OptionsComponent>>
 const optionsChildren = new Map();
 
-function findOptions(parent, name)
-{
-  for (;parent; parent = parent.parentNode)
-  {
+function findOptions(parent, name) {
+  for (; parent; parent = parent.parentNode) {
     const tmp = optionsChildren.get(parent);
 
     if (tmp && tmp.has(name)) return tmp.get(name);
@@ -15,33 +13,26 @@ function findOptions(parent, name)
   return null;
 }
 
-class OptionsSubscriber
-{
-  constructor(parent, name, callback)
-  {
+class OptionsSubscriber {
+  constructor(parent, name, callback) {
     this.parent = parent;
     this.name = name;
     this.callback = callback;
-    this.options = void(0);
+    this.options = void 0;
     this.update();
   }
 
-  update()
-  {
+  update() {
     const options = findOptions(this.parent, this.name);
 
-    if (options !== this.options)
-    {
+    if (options !== this.options) {
       this.options = options;
-      
+
       const cb = this.callback;
 
-      try
-      {
+      try {
         cb(options);
-      }
-      catch (err)
-      {
+      } catch (err) {
         warn('Subscriber of AUX-OPTIONS generated an error %o', err);
       }
     }
@@ -51,8 +42,7 @@ class OptionsSubscriber
 // Map<String, Set<OptionsSubscriber>>
 const optionsSubscribers = new Map();
 
-function triggerUpdate(name)
-{
+function triggerUpdate(name) {
   const subscribers = optionsSubscribers.get(name);
 
   if (!subscribers) return;
@@ -60,29 +50,24 @@ function triggerUpdate(name)
   subscribers.forEach((subscriber) => subscriber.update());
 }
 
-function normalize_parent(parent)
-{
-  if (parent.tagName === 'HEAD' || parent.tagName === 'BODY')
-  {
+function normalize_parent(parent) {
+  if (parent.tagName === 'HEAD' || parent.tagName === 'BODY') {
     parent = parent.parentNode;
   }
 
   return parent;
 }
 
-export function registerOptions(parent, name, options)
-{
+export function registerOptions(parent, name, options) {
   parent = normalize_parent(parent);
 
   let tmp = optionsChildren.get(parent);
 
-  if (!tmp)
-  {
-    optionsChildren.set(parent, tmp = new Map());
+  if (!tmp) {
+    optionsChildren.set(parent, (tmp = new Map()));
   }
 
-  if (tmp.has(name))
-  {
+  if (tmp.has(name)) {
     throw new Error('AUX-OPTIONS with name ' + name + ' defined twice.');
   }
 
@@ -91,19 +76,16 @@ export function registerOptions(parent, name, options)
   triggerUpdate(name);
 }
 
-export function unregisterOptions(parent, name, options)
-{
+export function unregisterOptions(parent, name, options) {
   parent = normalize_parent(parent);
 
   let tmp = optionsChildren.get(parent);
 
-  if (!tmp)
-  {
+  if (!tmp) {
     throw new Error('Unknown AUX-OPTIONS');
   }
 
-  if (tmp.get(name) !== options)
-  {
+  if (tmp.get(name) !== options) {
     throw new Error('Found wrong AUX-OPTIONS in unregisterOptions');
   }
 
@@ -125,15 +107,13 @@ export function unregisterOptions(parent, name, options)
  * @returns {Function} - Returns a function which must be called in order to
  *      unsubscribe from the options.
  */
-export function subscribeOptions(parent, name, callback)
-{
+export function subscribeOptions(parent, name, callback) {
   parent = normalize_parent(parent);
 
   let subscribers = optionsSubscribers.get(name);
 
-  if (!subscribers)
-  {
-    optionsSubscribers.set(name, subscribers = new Set());
+  if (!subscribers) {
+    optionsSubscribers.set(name, (subscribers = new Set()));
   }
 
   const subscriber = new OptionsSubscriber(parent, name, callback);
@@ -157,34 +137,34 @@ export function subscribeOptions(parent, name, callback)
  * @returns {Function} - Returns a function which must be called in order to
  *      unsubscribe from the options.
  */
-export function subscribeOptionsAttributes(parent, name, callback)
-{
+export function subscribeOptionsAttributes(parent, name, callback) {
   let current_options = null;
 
   const attributesChangedCallback = () => {
     const attr = current_options ? current_options.auxAttributes() : null;
 
-    try
-    {
+    try {
       callback(attr);
-    }
-    catch (err)
-    {
+    } catch (err) {
       warn('OptionsAttributes subscriber generated an exception %o', err);
     }
   };
 
   const subs = subscribeOptions(parent, name, (options) => {
-    if (current_options)
-    {
-      current_options.removeEventListener('auxAttributesChanged', attributesChangedCallback);
+    if (current_options) {
+      current_options.removeEventListener(
+        'auxAttributesChanged',
+        attributesChangedCallback
+      );
     }
 
     current_options = options;
 
-    if (options)
-    {
-      options.addEventListener('auxAttributesChanged', attributesChangedCallback);
+    if (options) {
+      options.addEventListener(
+        'auxAttributesChanged',
+        attributesChangedCallback
+      );
     }
 
     attributesChangedCallback();
@@ -193,6 +173,9 @@ export function subscribeOptionsAttributes(parent, name, callback)
   return () => {
     subs();
     if (current_options)
-      current_options.removeEventListener('auxAttributesChanged', attributesChangedCallback);
+      current_options.removeEventListener(
+        'auxAttributesChanged',
+        attributesChangedCallback
+      );
   };
 }

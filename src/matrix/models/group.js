@@ -4,25 +4,28 @@
 
 import { TreeNodeData } from './treenode.js';
 import { PortData } from './port.js';
-import { init_subscriptions, add_subscription, unsubscribe_subscriptions } from '../../utils/subscriptions.js';
+import {
+  init_subscriptions,
+  add_subscription,
+  unsubscribe_subscriptions,
+} from '../../utils/subscriptions.js';
 
-function on_child_treechanged()
-{
+function on_child_treechanged() {
   this.parent.emit('treeChanged');
 }
 
 /**
  * The data model of a group.
  */
-export class GroupData extends TreeNodeData
-{
+export class GroupData extends TreeNodeData {
   /**
    * This property is true.
    */
-  get isGroup() { return true; }
+  get isGroup() {
+    return true;
+  }
 
-  constructor(matrix, o)
-  {
+  constructor(matrix, o) {
     super(matrix, o);
     this.children = new Set();
   }
@@ -33,8 +36,7 @@ export class GroupData extends TreeNodeData
    * @emits childAdded
    * @emits treeChanged
    */
-  addChild(child)
-  {
+  addChild(child) {
     if (!(child instanceof TreeNodeData))
       throw new TypeError('Expected TreeDataNode');
 
@@ -60,15 +62,13 @@ export class GroupData extends TreeNodeData
    * @emits childRemoved
    * @emits treeChanged
    */
-  deleteChild(child)
-  {
+  deleteChild(child) {
     if (!(child instanceof TreeNodeData))
       throw new TypeError('Expected TreeDataNode');
 
     const children = this.children;
 
-    if (!children.has(child))
-      throw new Error('Unknown child.');
+    if (!children.has(child)) throw new Error('Unknown child.');
 
     this.matrix.unregisterNode(child);
 
@@ -84,10 +84,8 @@ export class GroupData extends TreeNodeData
   /**
    * Adds a port to this group.
    */
-  addPort(port)
-  {
-    if (!(port instanceof PortData))
-      port = this.matrix.createPort(port);
+  addPort(port) {
+    if (!(port instanceof PortData)) port = this.matrix.createPort(port);
 
     this.addChild(port);
     return port;
@@ -96,18 +94,15 @@ export class GroupData extends TreeNodeData
   /**
    * Removes a port from this group.
    */
-  deletePort(port)
-  {
+  deletePort(port) {
     this.deleteChild(port);
   }
 
   /**
    * Adds a group to this group.
    */
-  addGroup(group)
-  {
-    if (!(group instanceof GroupData))
-      group = this.matrix.createGroup(group);
+  addGroup(group) {
+    if (!(group instanceof GroupData)) group = this.matrix.createGroup(group);
 
     this.addChild(group);
     return group;
@@ -116,8 +111,7 @@ export class GroupData extends TreeNodeData
   /**
    * Removes a group from this group.
    */
-  deleteGroup(group)
-  {
+  deleteGroup(group) {
     this.deleteChild(group);
   }
 
@@ -127,8 +121,7 @@ export class GroupData extends TreeNodeData
    * @param {Function} cb - The callback function to invoke with each child
    *  node.
    */
-  forEach(cb)
-  {
+  forEach(cb) {
     this.children.forEach(cb);
   }
 
@@ -145,37 +138,32 @@ export class GroupData extends TreeNodeData
    * @param sorter {Function} - An optional sort function. Will be used as an
    *  argument to Array.prototype.sort for each list of child nodes.
    */
-  forEachNode(cb, sorter, path)
-  {
+  forEachNode(cb, sorter, path) {
     const children = Array.from(this.children);
 
-    if (sorter)
-    {
+    if (sorter) {
       children.sort(sorter);
     }
 
-    if (!Array.isArray(path))
-    {
+    if (!Array.isArray(path)) {
       path = [];
     }
 
-    for (let i = 0; i < children.length; i++)
-    {
+    for (let i = 0; i < children.length; i++) {
       const child = children[i];
       const current_path = path.concat([
         {
           parent: this,
           index: i,
           length: children.length,
-        }
+        },
       ]);
 
       const retval = cb(child, current_path);
 
-      if (retval !== void(0) && !retval) continue;
+      if (retval !== void 0 && !retval) continue;
 
-      if (child instanceof GroupData)
-      {
+      if (child instanceof GroupData) {
         child.forEachNode(cb, sorter, current_path);
       }
     }
@@ -189,8 +177,7 @@ export class GroupData extends TreeNodeData
    *
    * @returns {Function} - A subscription. Call this function to unsubscribe.
    */
-  forEachAsync(callback)
-  {
+  forEachAsync(callback) {
     let subs = init_subscriptions();
     const child_subscriptions = new Map();
 
@@ -198,14 +185,20 @@ export class GroupData extends TreeNodeData
       child_subscriptions.set(node, callback(node) || null);
     });
 
-    subs = add_subscription(subs, this.subscribe('childAdded', (child) => {
-      child_subscriptions.set(child, callback(child) || null);
-    }));
+    subs = add_subscription(
+      subs,
+      this.subscribe('childAdded', (child) => {
+        child_subscriptions.set(child, callback(child) || null);
+      })
+    );
 
-    subs = add_subscription(subs, this.subscribe('childRemoved', (child) => {
-      unsubscribe_subscriptions(child_subscriptions.get(child));
-      child_subscriptions.delete(child);
-    }));
+    subs = add_subscription(
+      subs,
+      this.subscribe('childRemoved', (child) => {
+        unsubscribe_subscriptions(child_subscriptions.get(child));
+        child_subscriptions.delete(child);
+      })
+    );
 
     return () => {
       subs = unsubscribe_subscriptions(subs);

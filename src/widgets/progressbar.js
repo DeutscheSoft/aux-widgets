@@ -23,34 +23,35 @@ import { add_class } from '../utils/dom.js';
 /**
  * ProgressBar is a pre-configured {@link LevelMeter} to display
  * progress in percent.
- * 
+ *
  * @extends Meter
- * 
+ *
  * @class ProgressBar
  */
 export const ProgressBar = define_class({
-    Extends: Meter,
-    _options: Object.create(Meter.prototype._options),
-    options: {
-        min: 0,
-        max: 100,
-        show_scale: false,
-        show_value: true,
-        format_value: function (v) { return v.toFixed(2) + "%"; },
-        layout: "top",
+  Extends: Meter,
+  _options: Object.create(Meter.prototype._options),
+  options: {
+    min: 0,
+    max: 100,
+    show_scale: false,
+    show_value: true,
+    format_value: function (v) {
+      return v.toFixed(2) + '%';
     },
-    initialize: function (options) {
-        Meter.prototype.initialize.call(this, options);
-        /**
-         * @member {HTMLDivElement} ProgressBar#element - The main DIV container.
-         *   Has class <code>.aux-progressbar</code>.
-         */
-        this.set_parent(null);
-    },
-    draw: function(O, element)
-    {
-      add_class(element, "aux-progressbar");
+    layout: 'top',
+  },
+  initialize: function (options) {
+    Meter.prototype.initialize.call(this, options);
+    /**
+     * @member {HTMLDivElement} ProgressBar#element - The main DIV container.
+     *   Has class <code>.aux-progressbar</code>.
+     */
+    this.set_parent(null);
+  },
+  draw: function (O, element) {
+    add_class(element, 'aux-progressbar');
 
-      Meter.prototype.draw.call(this, O, element);
-    },
+    Meter.prototype.draw.call(this, O, element);
+  },
 });

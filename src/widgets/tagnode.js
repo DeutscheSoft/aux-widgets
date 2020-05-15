@@ -26,32 +26,30 @@ import { rgb2bw, hex2rgb } from '../utils/colors.js';
 import { add_class } from '../utils/dom.js';
 
 export const TagNode = define_class({
-  
   Extends: Container,
-  
+
   _options: Object.assign(Object.create(Container.prototype._options), {
-    label: "string",
-    color: "string|null",
-    confirm: "boolean",
+    label: 'string',
+    color: 'string|null',
+    confirm: 'boolean',
   }),
   options: {
-    label: "",
+    label: '',
     color: null,
     confirm: false,
   },
-  
+
   initialize: function (options, tag) {
     Container.prototype.initialize.call(this, options);
     this.tag = tag;
   },
 
-  draw: function(O, element)
-  {
-    add_class(element, "aux-tag");
+  draw: function (O, element) {
+    add_class(element, 'aux-tag');
 
     Container.prototype.draw.call(this, O, element);
   },
-  
+
   redraw: function () {
     Container.prototype.redraw.call(this);
     var I = this.invalid;
@@ -59,43 +57,45 @@ export const TagNode = define_class({
     if (I.color) {
       I.color = false;
       this.element.style.backgroundColor = O.color;
-      if (O.color)
-        this.element.style.color = rgb2bw(hex2rgb(O.color));
-      else
-        this.element.style.color = null;
+      if (O.color) this.element.style.color = rgb2bw(hex2rgb(O.color));
+      else this.element.style.color = null;
     }
-  }
+  },
 });
 
-define_child_widget(TagNode, "label", {
-    create: Label,
-    show: true,
-    map_options: {
-        tag: "label",
-    },
-    toggle_class: true,
+define_child_widget(TagNode, 'label', {
+  create: Label,
+  show: true,
+  map_options: {
+    tag: 'label',
+  },
+  toggle_class: true,
 });
-define_child_widget(TagNode, "colorize", {
-    create: Button,
-    show: false,
-    toggle_class: true,
-    static_events: {
-      click: function (e) { this.parent.emit("colorize", e); }
+define_child_widget(TagNode, 'colorize', {
+  create: Button,
+  show: false,
+  toggle_class: true,
+  static_events: {
+    click: function (e) {
+      this.parent.emit('colorize', e);
     },
-    default_options: {
-        class: "aux-colorize"
-    },
+  },
+  default_options: {
+    class: 'aux-colorize',
+  },
 });
-define_child_widget(TagNode, "remove", {
-    create: ConfirmButton,
-    show: true,
-    toggle_class: true,
-    static_events: {
-      confirmed: function (e) { this.parent.emit("remove", e, this.parent); }
+define_child_widget(TagNode, 'remove', {
+  create: ConfirmButton,
+  show: true,
+  toggle_class: true,
+  static_events: {
+    confirmed: function (e) {
+      this.parent.emit('remove', e, this.parent);
     },
-    default_options: {
-        class: "aux-remove",
-        label : "",
-        confirm: false,
-    },
+  },
+  default_options: {
+    class: 'aux-remove',
+    label: '',
+    confirm: false,
+  },
 });

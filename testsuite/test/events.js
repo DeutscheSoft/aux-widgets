@@ -1,25 +1,28 @@
 import { Base } from '../src/index.js';
 import { Events } from '../src/events.js';
 
-for (let C of [Base, Events])
-{
+for (let C of [Base, Events]) {
   describe('Events', () => {
     it('on()', () => {
       {
         const o = new C();
         let called = false;
-        o.on("foo", () => { called = true; });
-        o.emit("foo");
-        if (!called) throw new Error("not called");
+        o.on('foo', () => {
+          called = true;
+        });
+        o.emit('foo');
+        if (!called) throw new Error('not called');
       }
       {
         const o = new C();
         let called = false;
-        o.on('foo', ()=>{});
-        o.on("foo", () => { called = true; });
-        o.on('foo', ()=>{});
-        o.emit("foo");
-        if (!called) throw new Error("not called");
+        o.on('foo', () => {});
+        o.on('foo', () => {
+          called = true;
+        });
+        o.on('foo', () => {});
+        o.emit('foo');
+        if (!called) throw new Error('not called');
       }
     });
     it('off()', () => {
@@ -27,21 +30,25 @@ for (let C of [Base, Events])
         const o = new C();
         let called = false;
 
-        const cb = () => { called = true; };
-        o.on("foo", cb);
-        o.off("foo", cb);
-        o.emit("foo");
+        const cb = () => {
+          called = true;
+        };
+        o.on('foo', cb);
+        o.off('foo', cb);
+        o.emit('foo');
         if (called) throw new Error('called');
       }
       {
-          const o = new C();
-          let called = false;
+        const o = new C();
+        let called = false;
 
-        const cb = () => { called = true; };
-        o.on("foo", cb);
+        const cb = () => {
+          called = true;
+        };
+        o.on('foo', cb);
         o.on('foo', () => {});
-        o.off("foo", cb);
-        o.emit("foo");
+        o.off('foo', cb);
+        o.emit('foo');
         if (called) throw new Error('called');
       }
     });
@@ -51,24 +58,24 @@ for (let C of [Base, Events])
       const cb = () => {
         called = true;
       };
-      const sub = o.subscribe("foo", cb);
+      const sub = o.subscribe('foo', cb);
 
       // check that subscription works
-      o.dispatchEvent("foo");
-      if (!called) throw new Error("not called");
+      o.dispatchEvent('foo');
+      if (!called) throw new Error('not called');
 
       // check that unsubscribe works
       called = false;
       sub();
-      o.dispatchEvent("foo");
-      if (called) throw new Error("called");
+      o.dispatchEvent('foo');
+      if (called) throw new Error('called');
 
       // check that unsubscribe can be called twice
       called = false;
-      const sub2 = o.subscribe("foo", cb);
+      const sub2 = o.subscribe('foo', cb);
       sub();
-      o.dispatchEvent("foo");
-      if (!called) throw new Error("not called");
+      o.dispatchEvent('foo');
+      if (!called) throw new Error('not called');
       sub2();
     });
     it('once()', () => {
@@ -77,23 +84,23 @@ for (let C of [Base, Events])
       const cb = () => {
         called = true;
       };
-      const sub = o.once("foo", cb);
+      const sub = o.once('foo', cb);
 
       // check that subscription works
-      o.dispatchEvent("foo");
-      if (!called) throw new Error("not called");
+      o.dispatchEvent('foo');
+      if (!called) throw new Error('not called');
 
       // check that unsubscribe works
       called = false;
-      o.dispatchEvent("foo");
-      if (called) throw new Error("called");
+      o.dispatchEvent('foo');
+      if (called) throw new Error('called');
 
       // check that unsubscribe can be called twice
       called = false;
-      const sub2 = o.once("foo", cb);
+      const sub2 = o.once('foo', cb);
       sub2();
-      o.dispatchEvent("foo");
-      if (called) throw new Error("called");
+      o.dispatchEvent('foo');
+      if (called) throw new Error('called');
     });
     it('reentrance', () => {
       {
@@ -134,8 +141,8 @@ for (let C of [Base, Events])
         if (called) throw new Error('called');
       }
     });
-    it('error handling', function() {
-       {
+    it('error handling', function () {
+      {
         const o = new C();
         let called = false;
 
@@ -143,13 +150,15 @@ for (let C of [Base, Events])
           called = true;
         };
 
-        o.on('foo', () => { throw new Error('ignore me')});
+        o.on('foo', () => {
+          throw new Error('ignore me');
+        });
         o.on('foo', cb);
         o.emit('foo');
 
         if (!called) throw new Error('not called');
-       }
-       {
+      }
+      {
         const o = new C();
         let called = false;
 
@@ -163,9 +172,9 @@ for (let C of [Base, Events])
         called = false;
         o.emit('foo');
         if (called) throw new Error('called');
-       }
+      }
     });
-    it('event termination', function() {
+    it('event termination', function () {
       {
         const o = new C();
         let called = false;
@@ -174,7 +183,9 @@ for (let C of [Base, Events])
           called = true;
         };
 
-        o.on('foo', () => { return false; });
+        o.on('foo', () => {
+          return false;
+        });
         o.on('foo', cb);
         o.emit('foo');
 
@@ -184,20 +195,23 @@ for (let C of [Base, Events])
         const o = new C();
         let called = false;
 
-        o.once('foo', () => { return false; });
-        o.on('foo', () => { called = true; });
+        o.once('foo', () => {
+          return false;
+        });
+        o.on('foo', () => {
+          called = true;
+        });
         o.emit('foo');
 
         if (called) throw new Error('called');
-        if (!o.hasEventListener('foo'))
-          throw new Error('lost');
+        if (!o.hasEventListener('foo')) throw new Error('lost');
         o.emit('foo');
         if (!called) throw new Error('not called');
       }
     });
-    it('event termination', function() {
-        const o = new C();
-        o.emit('this_event_does_not_exist');
+    it('event termination', function () {
+      const o = new C();
+      o.emit('this_event_does_not_exist');
     });
   });
 }

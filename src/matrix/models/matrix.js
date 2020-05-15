@@ -13,12 +13,10 @@ import { ConnectionData } from './connection.js';
  * Represents a matrix, which consists of a tree of groups and port objects;
  * and a set of connections between ports.
  */
-export class MatrixData extends Datum
-{
+export class MatrixData extends Datum {
   /**
    */
-  constructor()
-  {
+  constructor() {
     super();
     this.root = this.createGroup();
     this.nodes = new Map();
@@ -28,8 +26,7 @@ export class MatrixData extends Datum
     this.connections = new Map();
   }
 
-  registerNode(node)
-  {
+  registerNode(node) {
     if (!(node instanceof TreeNodeData))
       throw new TypeError('Expected TreeDataNode');
 
@@ -37,22 +34,19 @@ export class MatrixData extends Datum
 
     const nodes = this.nodes;
 
-    if (nodes.has(id))
-      throw new Error('Node with same id already defined.');
+    if (nodes.has(id)) throw new Error('Node with same id already defined.');
 
     nodes.set(id, node);
   }
 
-  unregisterNode(node)
-  {
+  unregisterNode(node) {
     if (!(node instanceof TreeNodeData))
       throw new TypeError('Expected TreeDataNode');
 
     const id = node.id;
     const nodes = this.nodes;
 
-    if (nodes.get(id) !== node)
-      throw new Error('Removing unknown node.');
+    if (nodes.get(id) !== node) throw new Error('Removing unknown node.');
 
     this.getConnectionsOf(node).forEach((connection) => {
       this.deleteConnection(connection);
@@ -67,14 +61,11 @@ export class MatrixData extends Datum
    * @param {Object} port - The data for the port object.
    * @param {Function} [PortClass=PortData] - The port data class to use.
    */
-  createPort(port, PortClass)
-  {
-    if (!(port instanceof PortData))
-    {
+  createPort(port, PortClass) {
+    if (!(port instanceof PortData)) {
       if (!PortClass) PortClass = PortData;
       if (!port) port = {};
-      if (!port.id)
-      {
+      if (!port.id) {
         port.id = this.last_id++;
       }
       port = new PortClass(this, port);
@@ -89,14 +80,11 @@ export class MatrixData extends Datum
    * @param {Object} groupd - The data for the group object.
    * @param {Function} [GroupClass=GroupData] - The group data class to use.
    */
-  createGroup(group, GroupClass)
-  {
-    if (!(group instanceof GroupData))
-    {
+  createGroup(group, GroupClass) {
+    if (!(group instanceof GroupData)) {
       if (!GroupClass) GroupClass = GroupData;
       if (!group) group = {};
-      if (!group.id)
-      {
+      if (!group.id) {
         group.id = this.last_id++;
       }
       group = new GroupClass(this, group);
@@ -110,16 +98,14 @@ export class MatrixData extends Datum
   /**
    * Add a group to this matrix. Will be added at the top level of the tree.
    */
-  addGroup(group)
-  {
+  addGroup(group) {
     return this.root.addGroup(group);
   }
 
   /**
    * Remove a group from the top level of the tree.
    */
-  deleteGroup(group)
-  {
+  deleteGroup(group) {
     return this.root.deleteGroup(group);
   }
 
@@ -128,12 +114,10 @@ export class MatrixData extends Datum
    *
    * @param {any} id.
    */
-  getGroupById(id)
-  {
+  getGroupById(id) {
     const group = this.nodes.get(id);
 
-    if (group && group instanceof GroupData)
-      return group;
+    if (group && group instanceof GroupData) return group;
   }
 
   // APIs for managing ports
@@ -141,16 +125,14 @@ export class MatrixData extends Datum
   /**
    * Add a port to this matrix. Will be added at the top level of the tree.
    */
-  addPort(port)
-  {
+  addPort(port) {
     this.root.addPort(port);
   }
 
   /**
    * Remove a port from the top level of the tree.
    */
-  deletePort(port)
-  {
+  deletePort(port) {
     this.root.deletePort(port);
   }
 
@@ -159,26 +141,21 @@ export class MatrixData extends Datum
    *
    * @param {any} id.
    */
-  getPortById(id)
-  {
+  getPortById(id) {
     const port = this.nodes.get(id);
 
-    if (port && port instanceof PortData)
-      return port;
+    if (port && port instanceof PortData) return port;
   }
 
-  _lowRegisterConnection(from, to, connection)
-  {
+  _lowRegisterConnection(from, to, connection) {
     let connections_from = this.connections.get(from);
 
-    if (!connections_from)
-    {
+    if (!connections_from) {
       connections_from = new Map();
       this.connections.set(from, connections_from);
     }
 
-    if (connections_from.has(to))
-    {
+    if (connections_from.has(to)) {
       throw new Error('Connection already exists.');
     }
 
@@ -187,20 +164,16 @@ export class MatrixData extends Datum
     connections_from.set(to, connection);
   }
 
-  _lowUnregisterConnection(from, to, connection)
-  {
+  _lowUnregisterConnection(from, to, connection) {
     let connections_from = this.connections.get(from);
 
-    if (connections_from)
-    {
+    if (connections_from) {
       const con = connections_from.get(to);
 
-      if (con === connection)
-      {
+      if (con === connection) {
         connections_from.delete(to);
 
-        if (!connections_from.size)
-        {
+        if (!connections_from.size) {
           this.connections.delete(from);
         }
 
@@ -211,8 +184,7 @@ export class MatrixData extends Datum
     throw new Error('Could not find connection.');
   }
 
-  _registerConnection(connection)
-  {
+  _registerConnection(connection) {
     this._lowRegisterConnection(connection.from, connection.to, connection);
 
     if (connection.to !== connection.from)
@@ -220,8 +192,7 @@ export class MatrixData extends Datum
     this.emit('connectionAdded', connection);
   }
 
-  _unregisterConnection(connection)
-  {
+  _unregisterConnection(connection) {
     this._lowUnregisterConnection(connection.from, connection.to, connection);
     if (connection.to !== connection.from)
       this._lowUnregisterConnection(connection.to, connection.from, connection);
@@ -231,10 +202,8 @@ export class MatrixData extends Datum
   /**
    * Create a connection object.
    */
-  createConnection(connection)
-  {
-    if (!(connection instanceof ConnectionData))
-    {
+  createConnection(connection) {
+    if (!(connection instanceof ConnectionData)) {
       connection = new ConnectionData(this, connection);
     }
 
@@ -244,8 +213,7 @@ export class MatrixData extends Datum
   /**
    * Add a connection object.
    */
-  addConnection(connection)
-  {
+  addConnection(connection) {
     connection = this.createConnection(connection);
 
     this._registerConnection(connection);
@@ -256,8 +224,7 @@ export class MatrixData extends Datum
   /**
    * Delete a connection object.
    */
-  deleteConnection(connection)
-  {
+  deleteConnection(connection) {
     this._unregisterConnection(connection);
   }
 
@@ -267,8 +234,7 @@ export class MatrixData extends Datum
    * @param {PortData} from
    * @param {PortData} to
    */
-  connect(from, to)
-  {
+  connect(from, to) {
     return this.addConnection({
       from: from,
       to: to,
@@ -278,8 +244,7 @@ export class MatrixData extends Datum
   /**
    * Return all connections of the given node.
    */
-  getConnectionsOf(node)
-  {
+  getConnectionsOf(node) {
     const connections_map = this.connections.get(node);
 
     return connections_map ? Array.from(connections_map.values()) : [];
@@ -288,24 +253,25 @@ export class MatrixData extends Datum
   /**
    * Return all connections from this node.
    */
-  getConnectionsFrom(node)
-  {
-    return this.getConnectionsOf(node).filter((connection) => connection.from === node);
+  getConnectionsFrom(node) {
+    return this.getConnectionsOf(node).filter(
+      (connection) => connection.from === node
+    );
   }
 
   /**
    * Return all connections to this node.
    */
-  getConnectionsTo(node)
-  {
-    return this.getConnectionsOf(node).filter((connection) => connection.to === node);
+  getConnectionsTo(node) {
+    return this.getConnectionsOf(node).filter(
+      (connection) => connection.to === node
+    );
   }
 
   /**
    * Return the connection of the two given ports, if any exists.
    */
-  getConnection(a, b)
-  {
+  getConnection(a, b) {
     const connections_map = this.connections.get(a);
 
     if (!connections_map) return;
@@ -316,20 +282,22 @@ export class MatrixData extends Datum
   /**
    * Iterate all connections.
    */
-  forEachConnection(cb)
-  {
+  forEachConnection(cb) {
     this.connections.forEach((map, port) => {
       map.forEach((connection) => {
-        if (connection.from === port)
-          cb(connection);
+        if (connection.from === port) cb(connection);
       });
     });
   }
 
   // other public apis
 
-  createVirtualTreeDataView(amount, filterFunction, sortFunction)
-  {
-    return new VirtualTreeDataView(this.root, amount, filterFunction, sortFunction);
+  createVirtualTreeDataView(amount, filterFunction, sortFunction) {
+    return new VirtualTreeDataView(
+      this.root,
+      amount,
+      filterFunction,
+      sortFunction
+    );
   }
 }

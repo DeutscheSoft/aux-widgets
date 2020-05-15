@@ -5,11 +5,9 @@ import { assert, assert_error } from './helpers.js';
 describe('Options', () => {
   it('set()', (done) => {
     const o = new Widget();
-    o.set("disabled", true);
-    if (o.options.disabled !== true)
-      throw new Error('fail.');
-    if (!o.invalid.disabled)
-      throw new Error('fail.');
+    o.set('disabled', true);
+    if (o.options.disabled !== true) throw new Error('fail.');
+    if (!o.invalid.disabled) throw new Error('fail.');
     done();
   });
 });
@@ -17,18 +15,17 @@ describe('Options', () => {
 describe('Components', () => {
   it('setAttribute()', () => {
     const o = document.createElement('aux-widget');
-    o.setAttribute("disabled", true);
+    o.setAttribute('disabled', true);
     const widget = o.auxWidget;
     if (widget.options.disabled !== true)
       throw new Error('fail: ' + widget.options.disabled);
-    if (!widget.invalid.disabled)
-      throw new Error('fail.');
+    if (!widget.invalid.disabled) throw new Error('fail.');
   });
   it('removeAttribute()', () => {
     const o = document.createElement('aux-widget');
     const widget = o.auxWidget;
 
-    o.setAttribute("disabled", true);
+    o.setAttribute('disabled', true);
     assert(widget.get('disabled'));
     o.removeAttribute('disabled');
     assert(!widget.get('disabled'));
@@ -43,7 +40,7 @@ describe('Components', () => {
     const o = document.createElement('aux-widget');
     const widget = o.auxWidget;
 
-    o.setAttribute("disabled", true);
+    o.setAttribute('disabled', true);
     assert(widget.get('disabled'));
     o.removeAttribute('disabled');
     assert(!widget.get('disabled'));
@@ -57,7 +54,9 @@ describe('Components', () => {
   });
   it('removeEventListener', (done) => {
     const o = document.createElement('aux-widget');
-    const cb = (ev) => { done(new Error('fail.')); };
+    const cb = (ev) => {
+      done(new Error('fail.'));
+    };
 
     o.addEventListener('set_disabled', cb);
     o.removeEventListener('set_disabled', cb);
@@ -78,17 +77,13 @@ describe('Components', () => {
 
     {
       let ok = false;
-      try
-      {
+      try {
         o.get_default('this_option_does_not_exist');
-      }
-      catch (e)
-      {
+      } catch (e) {
         ok = true;
       }
 
       if (!ok) throw new Error('Expected error for unknown option');
-
     }
   });
   it('child handling', () => {
@@ -110,7 +105,6 @@ describe('Components', () => {
       c1.set_parent();
 
       assert(!w2.has_child(c1), 'set_parent failed.');
-
 
       assert_error(() => w2.remove_child(c1));
 
