@@ -1,4 +1,4 @@
-# ![AUX](logo.png)
+# ![AUX](AUXLogo.png)
 
 AUX is a JavaScript widget library with special focus on building low
 latency user interfaces for audio applications. It contains a wide range
