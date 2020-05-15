@@ -1,7 +1,7 @@
 {
   "name": "aux-documentation",
   "version": "1.0.0",
-  "description": "documentation generator for A.UX",
+  "description": "documentation generator for AUX",
   "main": "index.html",
   "directories": {},
   "scripts": {

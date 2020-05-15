@@ -1,6 +1,7 @@
 <html>
   <head>
     <title>[title]</title>
+    <meta charset="utf-8">
     <link href="[name].css" rel="stylesheet" type="text/css">
     <style>
       body {

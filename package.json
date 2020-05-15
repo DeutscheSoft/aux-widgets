@@ -1,7 +1,7 @@
 {
   "name": "@deutschesoft/a.ux",
   "version": "1.0.12",
-  "description": "A.UX Audio Widget Library",
+  "description": "AUX Audio Widget Library",
   "main": "src/index.js",
   "module": "src/index.js",
   "type": "module",

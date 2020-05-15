@@ -14,9 +14,9 @@
    viewBox="0 0 452.38699 96.166519"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
-   sodipodi:docname="A.UX.svg"
-   inkscape:export-filename="/home/markus/DeusO/Development/AUX/AUX.png"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="AUXLogo.svg"
+   inkscape:export-filename="/home/markus/DeusO/Development/AUX/AUXLogo.png"
    inkscape:export-xdpi="300"
    inkscape:export-ydpi="300">
   <defs
@@ -28,9 +28,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="8"
-     inkscape:cx="272.8612"
-     inkscape:cy="59.117672"
+     inkscape:zoom="4"
+     inkscape:cx="80.29907"
+     inkscape:cy="78.733471"
      inkscape:document-units="px"
      inkscape:current-layer="svg2"
      showgrid="false"
@@ -112,19 +112,29 @@
      height="68.554947"
      x="9.75"
      y="15.209897" />
-  <path
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:24px;line-height:100%;font-family:'Zurich BdEx BT';-inkscape-font-specification:'Zurich BdEx BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0.12px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;fill:#ee6b11;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     d="M 21.382812 50.771484 L 12.722656 68.056641 L 16.847656 68.056641 L 18.816406 63.814453 L 28.25 63.814453 L 30.195312 68.056641 L 32.394531 68.056641 A 4.234375 4.234375 0 0 1 31.59375 65.587891 A 4.234375 4.234375 0 0 1 32.257812 63.320312 L 26.140625 50.771484 L 21.382812 50.771484 z M 23.738281 53.771484 L 26.9375 60.908203 L 20.210938 60.908203 L 23.738281 53.771484 z "
-     id="path1470" />
-  <path
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:24px;line-height:100%;font-family:'Zurich BdEx BT';-inkscape-font-specification:'Zurich BdEx BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0.12px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;fill:#222525;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     d="M 37.355469 50.771484 L 37.355469 60.779297 C 37.355469 61.086387 37.366631 61.372055 37.380859 61.652344 A 4.234375 4.234375 0 0 1 40.0625 65.587891 A 4.234375 4.234375 0 0 1 39.880859 66.808594 C 40.556895 67.300736 41.34614 67.69045 42.265625 67.962891 C 43.328125 68.267578 44.523436 68.419922 45.851562 68.419922 C 47.187496 68.419922 48.390624 68.267578 49.460938 67.962891 C 50.539064 67.650391 51.429686 67.201172 52.132812 66.615234 C 52.960933 65.935546 53.542966 65.169921 53.878906 64.318359 C 54.222653 63.466797 54.394531 62.28711 54.394531 60.779297 L 54.394531 50.771484 L 50.738281 50.771484 L 50.738281 59.326172 C 50.738281 60.607422 50.671869 61.564453 50.539062 62.197266 C 50.414062 62.822266 50.195312 63.341797 49.882812 63.755859 C 49.468746 64.310547 48.937496 64.728516 48.289062 65.009766 C 47.648436 65.283203 46.882814 65.419922 45.992188 65.419922 C 45.109374 65.419922 44.324219 65.275391 43.636719 64.986328 C 42.957032 64.689453 42.414059 64.263672 42.007812 63.708984 C 41.718746 63.310546 41.507813 62.791015 41.375 62.150391 C 41.25 61.509765 41.1875 60.568359 41.1875 59.326172 L 41.1875 50.771484 L 37.355469 50.771484 z "
-     id="path1472" />
-  <path
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:24px;line-height:100%;font-family:'Zurich BdEx BT';-inkscape-font-specification:'Zurich BdEx BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0.12px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;fill:#000000;fill-opacity:0.99299753;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     inkscape:connector-curvature="0"
-     id="path1474"
-     d="M 52.32152,68.056875 60.33715,59.01 53.16527,50.771719 h 4.60547 l 5.13282,6.082031 5.05078,-6.082031 h 4.51172 l -7.20704,8.496093 7.51172,8.789063 H 68.1184 l -5.58984,-6.574219 -5.47266,6.574219 z" />
+  <g
+     aria-label="AUX"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:24px;line-height:100%;font-family:'Zurich BdEx BT';-inkscape-font-specification:'Zurich BdEx BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0.12px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     id="text1468"
+     transform="translate(871.45362,63.387014)"
+     inkscape:export-xdpi="298.48499"
+     inkscape:export-ydpi="298.48499">
+    <path
+       d="m -849.24266,-2.4785767 h 6.72656 l -3.19922,-7.1367187 z m -7.48828,7.1484375 8.66015,-17.2851558 h 4.75782 l 8.42578,17.2851558 h -4.3711 l -1.94531,-4.24218746 h -9.43359 l -1.96875,4.24218746 z"
+       style="fill:#ee6b11;fill-opacity:1"
+       id="path1470"
+       inkscape:connector-curvature="0" />
+    <path
+       d="m -836.09746,-12.615295 h 3.83203 v 8.5546871 q 0,1.8632812 0.1875,2.8242187 0.19922,0.96093754 0.63282,1.55859379 0.60937,0.83203121 1.6289,1.27734371 1.03125,0.4335938 2.35547,0.4335938 1.33594,0 2.29688,-0.4101563 0.97265,-0.421875 1.59375,-1.25390621 0.46875,-0.62109375 0.65625,-1.55859379 0.19921,-0.9492187 0.19921,-2.8710937 v -8.5546871 h 3.65625 v 10.0078121 q 0,2.26171874 -0.51562,3.53906249 -0.50391,1.27734371 -1.74609,2.29687501 -1.05469,0.8789062 -2.67188,1.3476562 -1.60547,0.4570313 -3.60937,0.4570313 -1.99219,0 -3.58594,-0.4570313 -1.58203,-0.46875 -2.6836,-1.3710937 -1.21875,-1.0078125 -1.72265,-2.28515626 -0.50391,-1.2890625 -0.50391,-3.52734374 z"
+       id="path1472"
+       inkscape:connector-curvature="0"
+       style="fill:#222525;fill-opacity:1" />
+    <path
+       d="m -821.1321,4.6698608 8.01563,-9.046875 -7.17188,-8.2382808 h 4.60547 l 5.13282,6.0820308 5.05078,-6.0820308 h 4.51172 l -7.20704,8.4960933 7.51172,8.7890625 h -4.65234 l -5.58984,-6.5742187 -5.47266,6.5742187 z"
+       id="path1474"
+       inkscape:connector-curvature="0"
+       style="fill:#000000;fill-opacity:0.99299753" />
+  </g>
   <g
      transform="matrix(0.77857717,0,0,0.77857717,15.770383,185.91725)"
      id="g1497"
@@ -147,58 +157,90 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccccccccccccccccccccccccccscccccscccccc" />
   </g>
-  <path
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:24px;line-height:100%;font-family:'Zurich BdEx BT';-inkscape-font-specification:'Zurich BdEx BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0.12px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;fill:#a8a8a8;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     d="M 111.38281 50.771484 L 102.72266 68.056641 L 106.84766 68.056641 L 108.81641 63.814453 L 118.25 63.814453 L 120.19531 68.056641 L 122.39453 68.056641 A 4.234375 4.234375 0 0 1 121.59375 65.587891 A 4.234375 4.234375 0 0 1 122.25781 63.320312 L 116.14062 50.771484 L 111.38281 50.771484 z M 113.73828 53.771484 L 116.9375 60.908203 L 110.21094 60.908203 L 113.73828 53.771484 z "
-     id="path1499" />
-  <path
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:24px;line-height:100%;font-family:'Zurich BdEx BT';-inkscape-font-specification:'Zurich BdEx BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0.12px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;fill:#222525;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     d="M 127.35547 50.771484 L 127.35547 60.779297 C 127.35547 61.086387 127.36663 61.372055 127.38086 61.652344 A 4.234375 4.234375 0 0 1 130.0625 65.587891 A 4.234375 4.234375 0 0 1 129.88086 66.808594 C 130.5569 67.300736 131.34614 67.69045 132.26562 67.962891 C 133.32812 68.267578 134.52344 68.419922 135.85156 68.419922 C 137.1875 68.419922 138.39062 68.267578 139.46094 67.962891 C 140.53906 67.650391 141.42969 67.201172 142.13281 66.615234 C 142.96093 65.935546 143.54297 65.169921 143.87891 64.318359 C 144.22265 63.466797 144.39453 62.28711 144.39453 60.779297 L 144.39453 50.771484 L 140.73828 50.771484 L 140.73828 59.326172 C 140.73828 60.607422 140.67187 61.564453 140.53906 62.197266 C 140.41406 62.822266 140.19531 63.341797 139.88281 63.755859 C 139.46875 64.310547 138.9375 64.728516 138.28906 65.009766 C 137.64844 65.283203 136.88281 65.419922 135.99219 65.419922 C 135.10937 65.419922 134.32422 65.275391 133.63672 64.986328 C 132.95703 64.689453 132.41406 64.263672 132.00781 63.708984 C 131.71875 63.310546 131.50781 62.791015 131.375 62.150391 C 131.25 61.509765 131.1875 60.568359 131.1875 59.326172 L 131.1875 50.771484 L 127.35547 50.771484 z "
-     id="path1501" />
-  <path
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:24px;line-height:100%;font-family:'Zurich BdEx BT';-inkscape-font-specification:'Zurich BdEx BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0.12px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;fill:#222525;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     d="M 142.32152,68.056875 150.33715,59.01 143.16527,50.771719 h 4.60547 l 5.13282,6.082031 5.05078,-6.082031 h 4.51172 l -7.20704,8.496093 7.51172,8.789063 h -4.65234 l -5.58984,-6.574219 -5.47266,6.574219 z"
-     id="path1503"
-     inkscape:connector-curvature="0" />
-  <path
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:24px;line-height:100%;font-family:'Zurich BdEx BT';-inkscape-font-specification:'Zurich BdEx BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0.12px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;fill:#222525;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     d="M 201.38281 50.771484 L 192.72266 68.056641 L 196.84766 68.056641 L 198.81641 63.814453 L 208.25 63.814453 L 210.19531 68.056641 L 212.39453 68.056641 A 4.234375 4.234375 0 0 1 211.59375 65.587891 A 4.234375 4.234375 0 0 1 212.25781 63.320312 L 206.14062 50.771484 L 201.38281 50.771484 z M 203.73828 53.771484 L 206.9375 60.908203 L 200.21094 60.908203 L 203.73828 53.771484 z "
-     id="path1529" />
-  <path
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:24px;line-height:100%;font-family:'Zurich BdEx BT';-inkscape-font-specification:'Zurich BdEx BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0.12px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;fill:#222525;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     d="M 217.35547 50.771484 L 217.35547 60.779297 C 217.35547 61.086387 217.36663 61.372055 217.38086 61.652344 A 4.234375 4.234375 0 0 1 220.0625 65.587891 A 4.234375 4.234375 0 0 1 219.88086 66.808594 C 220.5569 67.300736 221.34614 67.69045 222.26562 67.962891 C 223.32813 68.267578 224.52344 68.419922 225.85156 68.419922 C 227.1875 68.419922 228.39062 68.267578 229.46094 67.962891 C 230.53906 67.650391 231.42969 67.201172 232.13281 66.615234 C 232.96093 65.935546 233.54297 65.169921 233.87891 64.318359 C 234.22265 63.466797 234.39453 62.28711 234.39453 60.779297 L 234.39453 50.771484 L 230.73828 50.771484 L 230.73828 59.326172 C 230.73828 60.607422 230.67187 61.564453 230.53906 62.197266 C 230.41406 62.822266 230.19531 63.341797 229.88281 63.755859 C 229.46875 64.310547 228.9375 64.728516 228.28906 65.009766 C 227.64844 65.283203 226.88281 65.419922 225.99219 65.419922 C 225.10937 65.419922 224.32422 65.275391 223.63672 64.986328 C 222.95703 64.689453 222.41406 64.263672 222.00781 63.708984 C 221.71875 63.310546 221.50781 62.791015 221.375 62.150391 C 221.25 61.509765 221.1875 60.568359 221.1875 59.326172 L 221.1875 50.771484 L 217.35547 50.771484 z "
-     id="path1531" />
-  <path
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:24px;line-height:100%;font-family:'Zurich BdEx BT';-inkscape-font-specification:'Zurich BdEx BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0.12px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     inkscape:connector-curvature="0"
-     id="path1533"
-     d="M 232.3215,68.056875 240.33713,59.01 233.16525,50.771719 h 4.60547 l 5.13282,6.082031 5.05078,-6.082031 h 4.51172 l -7.20704,8.496093 7.51172,8.789063 h -4.65234 l -5.58984,-6.574219 -5.47266,6.574219 z" />
-  <path
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:24px;line-height:100%;font-family:'Zurich BdEx BT';-inkscape-font-specification:'Zurich BdEx BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0.12px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;fill:#ee6b11;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     d="M 291.38281 50.771484 L 282.72266 68.056641 L 286.84766 68.056641 L 288.81641 63.814453 L 298.25 63.814453 L 300.19531 68.056641 L 302.39453 68.056641 A 4.234375 4.234375 0 0 1 301.59375 65.587891 A 4.234375 4.234375 0 0 1 302.25781 63.320312 L 296.14062 50.771484 L 291.38281 50.771484 z M 293.73828 53.771484 L 296.9375 60.908203 L 290.21094 60.908203 L 293.73828 53.771484 z "
-     id="path1559" />
-  <path
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:24px;line-height:100%;font-family:'Zurich BdEx BT';-inkscape-font-specification:'Zurich BdEx BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0.12px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     d="M 307.35547 50.771484 L 307.35547 60.779297 C 307.35547 61.086387 307.36663 61.372055 307.38086 61.652344 A 4.234375 4.234375 0 0 1 310.0625 65.587891 A 4.234375 4.234375 0 0 1 309.88086 66.808594 C 310.5569 67.300736 311.34614 67.69045 312.26562 67.962891 C 313.32813 68.267578 314.52344 68.419922 315.85156 68.419922 C 317.1875 68.419922 318.39062 68.267578 319.46094 67.962891 C 320.53906 67.650391 321.42969 67.201172 322.13281 66.615234 C 322.96093 65.935546 323.54297 65.169921 323.87891 64.318359 C 324.22265 63.466797 324.39453 62.28711 324.39453 60.779297 L 324.39453 50.771484 L 320.73828 50.771484 L 320.73828 59.326172 C 320.73828 60.607422 320.67187 61.564453 320.53906 62.197266 C 320.41406 62.822266 320.19531 63.341797 319.88281 63.755859 C 319.46875 64.310547 318.9375 64.728516 318.28906 65.009766 C 317.64844 65.283203 316.88281 65.419922 315.99219 65.419922 C 315.10937 65.419922 314.32422 65.275391 313.63672 64.986328 C 312.95703 64.689453 312.41406 64.263672 312.00781 63.708984 C 311.71875 63.310546 311.50781 62.791015 311.375 62.150391 C 311.25 61.509765 311.1875 60.568359 311.1875 59.326172 L 311.1875 50.771484 L 307.35547 50.771484 z "
-     id="path1561" />
-  <path
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:24px;line-height:100%;font-family:'Zurich BdEx BT';-inkscape-font-specification:'Zurich BdEx BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0.12px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     d="M 322.3215,68.056875 330.33713,59.01 323.16525,50.771719 h 4.60547 l 5.13282,6.082031 5.05078,-6.082031 h 4.51172 l -7.20704,8.496093 7.51172,8.789063 h -4.65234 l -5.58984,-6.574219 -5.47266,6.574219 z"
-     id="path1563"
-     inkscape:connector-curvature="0" />
-  <path
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:24px;line-height:100%;font-family:'Zurich BdEx BT';-inkscape-font-specification:'Zurich BdEx BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0.12px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     d="M 381.38281 50.771484 L 372.72266 68.056641 L 376.84766 68.056641 L 378.81641 63.814453 L 388.25 63.814453 L 390.19531 68.056641 L 392.39453 68.056641 A 4.234375 4.234375 0 0 1 391.59375 65.587891 A 4.234375 4.234375 0 0 1 392.25781 63.320312 L 386.14062 50.771484 L 381.38281 50.771484 z M 383.73828 53.771484 L 386.9375 60.908203 L 380.21094 60.908203 L 383.73828 53.771484 z "
-     id="path1589" />
-  <path
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:24px;line-height:100%;font-family:'Zurich BdEx BT';-inkscape-font-specification:'Zurich BdEx BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0.12px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     d="M 397.35547 50.771484 L 397.35547 60.779297 C 397.35547 61.086387 397.36663 61.372055 397.38086 61.652344 A 4.234375 4.234375 0 0 1 400.0625 65.587891 A 4.234375 4.234375 0 0 1 399.88086 66.808594 C 400.5569 67.300736 401.34614 67.69045 402.26562 67.962891 C 403.32813 68.267578 404.52344 68.419922 405.85156 68.419922 C 407.1875 68.419922 408.39062 68.267578 409.46094 67.962891 C 410.53906 67.650391 411.42969 67.201172 412.13281 66.615234 C 412.96093 65.935546 413.54297 65.169921 413.87891 64.318359 C 414.22265 63.466797 414.39453 62.28711 414.39453 60.779297 L 414.39453 50.771484 L 410.73828 50.771484 L 410.73828 59.326172 C 410.73828 60.607422 410.67187 61.564453 410.53906 62.197266 C 410.41406 62.822266 410.19531 63.341797 409.88281 63.755859 C 409.46875 64.310547 408.9375 64.728516 408.28906 65.009766 C 407.64844 65.283203 406.88281 65.419922 405.99219 65.419922 C 405.10937 65.419922 404.32422 65.275391 403.63672 64.986328 C 402.95703 64.689453 402.41406 64.263672 402.00781 63.708984 C 401.71875 63.310546 401.50781 62.791015 401.375 62.150391 C 401.25 61.509765 401.1875 60.568359 401.1875 59.326172 L 401.1875 50.771484 L 397.35547 50.771484 z "
-     id="path1591" />
-  <path
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:24px;line-height:100%;font-family:'Zurich BdEx BT';-inkscape-font-specification:'Zurich BdEx BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0.12px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     inkscape:connector-curvature="0"
-     id="path1593"
-     d="M 412.3215,68.056875 420.33713,59.01 413.16525,50.771719 h 4.60547 l 5.13282,6.082031 5.05078,-6.082031 h 4.51172 l -7.20704,8.496093 7.51172,8.789063 h -4.65234 l -5.58984,-6.574219 -5.47266,6.574219 z" />
+  <g
+     transform="translate(961.45362,63.387014)"
+     id="g1505"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:24px;line-height:100%;font-family:'Zurich BdEx BT';-inkscape-font-specification:'Zurich BdEx BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0.12px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     aria-label="AUX">
+    <path
+       inkscape:connector-curvature="0"
+       id="path1499"
+       style="fill:#a8a8a8;fill-opacity:1"
+       d="m -849.24266,-2.4785767 h 6.72656 l -3.19922,-7.1367187 z m -7.48828,7.1484375 8.66015,-17.2851558 h 4.75782 l 8.42578,17.2851558 h -4.3711 l -1.94531,-4.24218746 h -9.43359 l -1.96875,4.24218746 z" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path1501"
+       d="m -836.09746,-12.615295 h 3.83203 v 8.5546871 q 0,1.8632812 0.1875,2.8242187 0.19922,0.96093754 0.63282,1.55859379 0.60937,0.83203121 1.6289,1.27734371 1.03125,0.4335938 2.35547,0.4335938 1.33594,0 2.29688,-0.4101563 0.97265,-0.421875 1.59375,-1.25390621 0.46875,-0.62109375 0.65625,-1.55859379 0.19921,-0.9492187 0.19921,-2.8710937 v -8.5546871 h 3.65625 v 10.0078121 q 0,2.26171874 -0.51562,3.53906249 -0.50391,1.27734371 -1.74609,2.29687501 -1.05469,0.8789062 -2.67188,1.3476562 -1.60547,0.4570313 -3.60937,0.4570313 -1.99219,0 -3.58594,-0.4570313 -1.58203,-0.46875 -2.6836,-1.3710937 -1.21875,-1.0078125 -1.72265,-2.28515626 -0.50391,-1.2890625 -0.50391,-3.52734374 z"
+       style="fill:#222525;fill-opacity:1" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path1503"
+       d="m -821.1321,4.6698608 8.01563,-9.046875 -7.17188,-8.2382808 h 4.60547 l 5.13282,6.0820308 5.05078,-6.0820308 h 4.51172 l -7.20704,8.4960933 7.51172,8.7890625 h -4.65234 l -5.58984,-6.5742187 -5.47266,6.5742187 z"
+       style="fill:#222525;fill-opacity:1" />
+  </g>
+  <g
+     aria-label="AUX"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:24px;line-height:100%;font-family:'Zurich BdEx BT';-inkscape-font-specification:'Zurich BdEx BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0.12px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     id="g1535"
+     transform="translate(1051.4536,63.387014)">
+    <path
+       d="m -849.24266,-2.4785767 h 6.72656 l -3.19922,-7.1367187 z m -7.48828,7.1484375 8.66015,-17.2851558 h 4.75782 l 8.42578,17.2851558 h -4.3711 l -1.94531,-4.24218746 h -9.43359 l -1.96875,4.24218746 z"
+       style="fill:#222525;fill-opacity:1"
+       id="path1529"
+       inkscape:connector-curvature="0" />
+    <path
+       d="m -836.09746,-12.615295 h 3.83203 v 8.5546871 q 0,1.8632812 0.1875,2.8242187 0.19922,0.96093754 0.63282,1.55859379 0.60937,0.83203121 1.6289,1.27734371 1.03125,0.4335938 2.35547,0.4335938 1.33594,0 2.29688,-0.4101563 0.97265,-0.421875 1.59375,-1.25390621 0.46875,-0.62109375 0.65625,-1.55859379 0.19921,-0.9492187 0.19921,-2.8710937 v -8.5546871 h 3.65625 v 10.0078121 q 0,2.26171874 -0.51562,3.53906249 -0.50391,1.27734371 -1.74609,2.29687501 -1.05469,0.8789062 -2.67188,1.3476562 -1.60547,0.4570313 -3.60937,0.4570313 -1.99219,0 -3.58594,-0.4570313 -1.58203,-0.46875 -2.6836,-1.3710937 -1.21875,-1.0078125 -1.72265,-2.28515626 -0.50391,-1.2890625 -0.50391,-3.52734374 z"
+       id="path1531"
+       inkscape:connector-curvature="0"
+       style="fill:#222525;fill-opacity:1" />
+    <path
+       d="m -821.1321,4.6698608 8.01563,-9.046875 -7.17188,-8.2382808 h 4.60547 l 5.13282,6.0820308 5.05078,-6.0820308 h 4.51172 l -7.20704,8.4960933 7.51172,8.7890625 h -4.65234 l -5.58984,-6.5742187 -5.47266,6.5742187 z"
+       id="path1533"
+       inkscape:connector-curvature="0"
+       style="fill:#000000" />
+  </g>
+  <g
+     transform="translate(1141.4536,63.387014)"
+     id="g1565"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:24px;line-height:100%;font-family:'Zurich BdEx BT';-inkscape-font-specification:'Zurich BdEx BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0.12px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     aria-label="AUX">
+    <path
+       inkscape:connector-curvature="0"
+       id="path1559"
+       style="fill:#ee6b11;fill-opacity:1"
+       d="m -849.24266,-2.4785767 h 6.72656 l -3.19922,-7.1367187 z m -7.48828,7.1484375 8.66015,-17.2851558 h 4.75782 l 8.42578,17.2851558 h -4.3711 l -1.94531,-4.24218746 h -9.43359 l -1.96875,4.24218746 z" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path1561"
+       d="m -836.09746,-12.615295 h 3.83203 v 8.5546871 q 0,1.8632812 0.1875,2.8242187 0.19922,0.96093754 0.63282,1.55859379 0.60937,0.83203121 1.6289,1.27734371 1.03125,0.4335938 2.35547,0.4335938 1.33594,0 2.29688,-0.4101563 0.97265,-0.421875 1.59375,-1.25390621 0.46875,-0.62109375 0.65625,-1.55859379 0.19921,-0.9492187 0.19921,-2.8710937 v -8.5546871 h 3.65625 v 10.0078121 q 0,2.26171874 -0.51562,3.53906249 -0.50391,1.27734371 -1.74609,2.29687501 -1.05469,0.8789062 -2.67188,1.3476562 -1.60547,0.4570313 -3.60937,0.4570313 -1.99219,0 -3.58594,-0.4570313 -1.58203,-0.46875 -2.6836,-1.3710937 -1.21875,-1.0078125 -1.72265,-2.28515626 -0.50391,-1.2890625 -0.50391,-3.52734374 z"
+       style="fill:#ffffff;fill-opacity:1" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path1563"
+       d="m -821.1321,4.6698608 8.01563,-9.046875 -7.17188,-8.2382808 h 4.60547 l 5.13282,6.0820308 5.05078,-6.0820308 h 4.51172 l -7.20704,8.4960933 7.51172,8.7890625 h -4.65234 l -5.58984,-6.5742187 -5.47266,6.5742187 z"
+       style="fill:#ffffff;fill-opacity:1" />
+  </g>
+  <g
+     aria-label="AUX"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:24px;line-height:100%;font-family:'Zurich BdEx BT';-inkscape-font-specification:'Zurich BdEx BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0.12px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     id="g1595"
+     transform="translate(1231.4536,63.387014)">
+    <path
+       d="m -849.24266,-2.4785767 h 6.72656 l -3.19922,-7.1367187 z m -7.48828,7.1484375 8.66015,-17.2851558 h 4.75782 l 8.42578,17.2851558 h -4.3711 l -1.94531,-4.24218746 h -9.43359 l -1.96875,4.24218746 z"
+       style="fill:#ffffff"
+       id="path1589"
+       inkscape:connector-curvature="0" />
+    <path
+       d="m -836.09746,-12.615295 h 3.83203 v 8.5546871 q 0,1.8632812 0.1875,2.8242187 0.19922,0.96093754 0.63282,1.55859379 0.60937,0.83203121 1.6289,1.27734371 1.03125,0.4335938 2.35547,0.4335938 1.33594,0 2.29688,-0.4101563 0.97265,-0.421875 1.59375,-1.25390621 0.46875,-0.62109375 0.65625,-1.55859379 0.19921,-0.9492187 0.19921,-2.8710937 v -8.5546871 h 3.65625 v 10.0078121 q 0,2.26171874 -0.51562,3.53906249 -0.50391,1.27734371 -1.74609,2.29687501 -1.05469,0.8789062 -2.67188,1.3476562 -1.60547,0.4570313 -3.60937,0.4570313 -1.99219,0 -3.58594,-0.4570313 -1.58203,-0.46875 -2.6836,-1.3710937 -1.21875,-1.0078125 -1.72265,-2.28515626 -0.50391,-1.2890625 -0.50391,-3.52734374 z"
+       id="path1591"
+       inkscape:connector-curvature="0"
+       style="fill:#ffffff" />
+    <path
+       d="m -821.1321,4.6698608 8.01563,-9.046875 -7.17188,-8.2382808 h 4.60547 l 5.13282,6.0820308 5.05078,-6.0820308 h 4.51172 l -7.20704,8.4960933 7.51172,8.7890625 h -4.65234 l -5.58984,-6.5742187 -5.47266,6.5742187 z"
+       id="path1593"
+       inkscape:connector-curvature="0"
+       style="fill:#ffffff" />
+  </g>
   <g
      transform="matrix(0.77857717,0,0,0.77857717,-795.08366,172.07306)"
      id="g1818" />
@@ -285,26 +327,76 @@
   </g>
   <text
      xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.74751568px;line-height:100%;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:-0.672764px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#222525;fill-opacity:1;stroke:none;stroke-width:1.80449748px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     x="43.036686"
-     y="77.36322"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;line-height:100%;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:-0.63652426px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#222525;fill-opacity:1;stroke:none;stroke-width:1.80449748px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;"
+     x="42.399609"
+     y="76.240242"
      id="text1373"
      inkscape:export-xdpi="298.48499"
      inkscape:export-ydpi="298.48499"><tspan
-       dx="0 0 0 -0.34979117 0.087447792 0 -2.9894607 2.1096418e-09 -0.076864392 -0.076864392 -0.076864392 -2.1096418e-09 0"
+       dx="0 0 0 -0.33094898 0.082737245 0 -2.8284276 1.9960018e-09 -0.07272394 -0.07272394 -0.07272394 -1.9960018e-09 0"
        sodipodi:role="line"
        id="tspan1371"
-       x="42.700302"
-       y="77.36322"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.74751568px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:-0.672764px;writing-mode:lr-tb;text-anchor:middle;fill:#222525;fill-opacity:1;stroke-width:1.80449748px"><tspan
-   style="fill:#222525;fill-opacity:1;stroke-width:1.80449748px"
+       x="42.081345"
+       y="76.240242"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:-0.63652426px;writing-mode:lr-tb;text-anchor:middle;fill:#222525;fill-opacity:1;stroke-width:1.80449748px;"><tspan
+   style="fill:#222525;fill-opacity:1;"
    id="tspan1387">Audio</tspan> Widgets</tspan></text>
-  <circle
-     style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:stroke fill markers;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-     id="path879"
-     cx="35.832371"
-     cy="65.61393"
-     r="2.7324564" />
+  <text
+     id="text1395"
+     y="76.240242"
+     x="132.39961"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;line-height:100%;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:-0.63652426px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#222525;fill-opacity:1;stroke:none;stroke-width:1.80449748px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;"
+     xml:space="preserve"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:-0.63652426px;writing-mode:lr-tb;text-anchor:middle;fill:#222525;fill-opacity:1;stroke-width:1.80449748px;"
+       y="76.240242"
+       x="132.08136"
+       id="tspan1393"
+       sodipodi:role="line"
+       dx="0 0 0 -0.33094898 0.082737245 0 -2.8284276 1.9960018e-09 -0.07272394 -0.07272394 -0.07272394 -1.9960018e-09 0"><tspan
+   id="tspan1391"
+   style="fill:#222525;fill-opacity:1;">Audio</tspan> Widgets</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;line-height:100%;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:-0.63652426px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#222525;fill-opacity:1;stroke:none;stroke-width:1.80449748px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;"
+     x="222.39961"
+     y="76.240242"
+     id="text1401"><tspan
+       dx="0 0 0 -0.33094898 0.082737245 0 -2.8284276 1.9960018e-09 -0.07272394 -0.07272394 -0.07272394 -1.9960018e-09 0"
+       sodipodi:role="line"
+       id="tspan1399"
+       x="222.08134"
+       y="76.240242"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:-0.63652426px;writing-mode:lr-tb;text-anchor:middle;fill:#222525;fill-opacity:1;stroke-width:1.80449748px;"><tspan
+   style="fill:#222525;fill-opacity:1;"
+   id="tspan1397">Audio</tspan> Widgets</tspan></text>
+  <text
+     id="text1407"
+     y="76.240242"
+     x="312.3996"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;line-height:100%;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:-0.63652426px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.80449748px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;"
+     xml:space="preserve"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:-0.63652426px;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke-width:1.80449748px;"
+       y="76.240242"
+       x="312.08133"
+       id="tspan1405"
+       sodipodi:role="line"
+       dx="0 0 0 -0.33094898 0.082737245 0 -2.8284276 1.9960018e-09 -0.07272394 -0.07272394 -0.07272394 -1.9960018e-09 0"><tspan
+   id="tspan1403"
+   style="fill:#ffffff;fill-opacity:1;">Audio</tspan> Widgets</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;line-height:100%;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:-0.63652426px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.80449748px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;"
+     x="402.3996"
+     y="76.240242"
+     id="text1413"><tspan
+       dx="0 0 0 -0.33094898 0.082737245 0 -2.8284276 1.9960018e-09 -0.07272394 -0.07272394 -0.07272394 -1.9960018e-09 0"
+       sodipodi:role="line"
+       id="tspan1411"
+       x="402.08133"
+       y="76.240242"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:-0.63652426px;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke-width:1.80449748px;"><tspan
+   style="fill:#ffffff;fill-opacity:1;"
+   id="tspan1409">Audio</tspan> Widgets</tspan></text>
   <rect
      style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#2577a1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:64;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:normal;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
      id="rect872"
@@ -347,92 +439,4 @@
      height="25.809399"
      x="186.85297"
      y="-53.502682" />
-  <text
-     inkscape:export-ydpi="298.48499"
-     inkscape:export-xdpi="298.48499"
-     id="text885"
-     y="77.36322"
-     x="133.03668"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.74751568px;line-height:100%;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:-0.672764px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#222525;fill-opacity:1;stroke:none;stroke-width:1.80449748px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     xml:space="preserve"><tspan
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.74751568px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:-0.672764px;writing-mode:lr-tb;text-anchor:middle;fill:#222525;fill-opacity:1;stroke-width:1.80449748px"
-       y="77.36322"
-       x="132.7003"
-       id="tspan883"
-       sodipodi:role="line"
-       dx="0 0 0 -0.34979117 0.087447792 0 -2.9894607 2.1096418e-09 -0.076864392 -0.076864392 -0.076864392 -2.1096418e-09 0"><tspan
-   id="tspan881"
-   style="fill:#222525;fill-opacity:1;stroke-width:1.80449748px">Audio</tspan> Widgets</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.74751568px;line-height:100%;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:-0.672764px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#222525;fill-opacity:1;stroke:none;stroke-width:1.80449748px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     x="223.03668"
-     y="77.36322"
-     id="text891"
-     inkscape:export-xdpi="298.48499"
-     inkscape:export-ydpi="298.48499"><tspan
-       dx="0 0 0 -0.34979117 0.087447792 0 -2.9894607 2.1096418e-09 -0.076864392 -0.076864392 -0.076864392 -2.1096418e-09 0"
-       sodipodi:role="line"
-       id="tspan889"
-       x="222.7003"
-       y="77.36322"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.74751568px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:-0.672764px;writing-mode:lr-tb;text-anchor:middle;fill:#222525;fill-opacity:1;stroke-width:1.80449748px"><tspan
-   style="fill:#222525;fill-opacity:1;stroke-width:1.80449748px"
-   id="tspan887">Audio</tspan> Widgets</tspan></text>
-  <text
-     inkscape:export-ydpi="298.48499"
-     inkscape:export-xdpi="298.48499"
-     id="text897"
-     y="77.36322"
-     x="313.03668"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.74751568px;line-height:100%;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:-0.672764px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.80449748px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;"
-     xml:space="preserve"><tspan
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.74751568px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:-0.672764px;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke-width:1.80449748px;"
-       y="77.36322"
-       x="312.70029"
-       id="tspan895"
-       sodipodi:role="line"
-       dx="0 0 0 -0.34979117 0.087447792 0 -2.9894607 2.1096418e-09 -0.076864392 -0.076864392 -0.076864392 -2.1096418e-09 0"><tspan
-   id="tspan893"
-   style="fill:#ffffff;fill-opacity:1;stroke-width:1.80449748px;">Audio</tspan> Widgets</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.74751568px;line-height:100%;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:-0.672764px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.80449748px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     x="403.03668"
-     y="77.36322"
-     id="text903"
-     inkscape:export-xdpi="298.48499"
-     inkscape:export-ydpi="298.48499"><tspan
-       dx="0 0 0 -0.34979117 0.087447792 0 -2.9894607 2.1096418e-09 -0.076864392 -0.076864392 -0.076864392 -2.1096418e-09 0"
-       sodipodi:role="line"
-       id="tspan901"
-       x="402.70029"
-       y="77.36322"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.74751568px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:-0.672764px;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke-width:1.80449748px"><tspan
-   style="fill:#ffffff;fill-opacity:1;stroke-width:1.80449748px"
-   id="tspan899">Audio</tspan> Widgets</tspan></text>
-  <circle
-     r="2.7324564"
-     cy="65.61393"
-     cx="305.83237"
-     id="circle905"
-     style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:stroke fill markers;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
-  <circle
-     style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:stroke fill markers;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-     id="circle907"
-     cx="395.83237"
-     cy="65.61393"
-     r="2.7324564" />
-  <circle
-     r="2.7324564"
-     cy="65.61393"
-     cx="125.83237"
-     id="circle909"
-     style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:stroke fill markers;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
-  <circle
-     style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:stroke fill markers;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-     id="circle911"
-     cx="215.83237"
-     cy="65.61393"
-     r="2.7324564" />
 </svg>

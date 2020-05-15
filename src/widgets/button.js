@@ -1,12 +1,12 @@
 /*
- * This file is part of A.UX.
+ * This file is part of AUX.
  *
- * A.UX is free software; you can redistribute it and/or
+ * AUX is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
  *
- * A.UX is distributed in the hope that it will be useful,
+ * AUX is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
@@ -36,7 +36,7 @@ export const Button = define_class({
      *   button label. Set to <code>false</code> to remove the label
      *   from DOM.
      * @property {String|Boolean} [options.icon=false] - URL to an image
-     *   file or an icon class (see styles/fonts/A.UX.html). If set
+     *   file or an icon class (see styles/fonts/AUX.html). If set
      *   to <code>false</code>, the icon is removed from DOM.
      * @property {Boolean} [options.state=false] - State of the button,
      *   reflected as class <code>.aux-active</code>.

@@ -1,0 +1,63 @@
+@font-face {
+  font-family: "AUXShapes";
+  font-style: normal;
+  font-weight: 100;
+  src: url("AUXShapes100.ttf") format("truetype");
+}
+@font-face {
+  font-family: "AUXShapes";
+  font-style: normal;
+  font-weight: 200;
+  src: url("AUXShapes200.ttf") format("truetype");
+}
+@font-face {
+  font-family: "AUXShapes";
+  font-style: normal;
+  font-weight: 300;
+  src: url("AUXShapes300.ttf") format("truetype");
+}
+@font-face {
+  font-family: "AUXShapes";
+  font-style: normal;
+  font-weight: 400;
+  src: url("AUXShapes400.ttf") format("truetype");
+}
+@font-face {
+  font-family: "AUXShapes";
+  font-style: normal;
+  font-weight: 500;
+  src: url("AUXShapes500.ttf") format("truetype");
+}
+@font-face {
+  font-family: "AUXShapes";
+  font-style: normal;
+  font-weight: 600;
+  src: url("AUXShapes600.ttf") format("truetype");
+}
+@font-face {
+  font-family: "AUXShapes";
+  font-style: normal;
+  font-weight: 700;
+  src: url("AUXShapes700.ttf") format("truetype");
+}
+@font-face {
+  font-family: "AUXShapes";
+  font-style: normal;
+  font-weight: 800;
+  src: url("AUXShapes800.ttf") format("truetype");
+}
+@font-face {
+  font-family: "AUXShapes";
+  font-style: normal;
+  font-weight: 900;
+  src: url("AUXShapes900.ttf") format("truetype");
+}
+
+.aux-icon.trunk::before           { font-family: 'AUXShapes'; content: ''; }
+.aux-icon.stem::before            { font-family: 'AUXShapes'; content: ''; }
+.aux-icon.pipe::before            { font-family: 'AUXShapes'; content: ''; }
+.aux-icon.branch::before          { font-family: 'AUXShapes'; content: ''; }
+.aux-icon.end::before             { font-family: 'AUXShapes'; content: ''; }
+.aux-icon.none::before            { font-family: 'AUXShapes'; content: ''; }
+.aux-icon.null::before            { font-family: 'AUXShapes'; content: ''; }
+.aux-icon.clear::before           { font-family: 'AUXShapes'; content: ''; }

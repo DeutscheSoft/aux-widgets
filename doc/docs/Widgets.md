@@ -1,6 +1,6 @@
 # Widgets inside the DOM
 
-This document describes briefly how A.UX widgets can be used inside of a HTML layout.
+This document describes briefly how AUX widgets can be used inside of a HTML layout.
 
 Widgets are organized in a tree. This tree will usually be similar to the DOM
 tree, where each widget consists of at least one DOM element. There may be

@@ -15,13 +15,13 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
-   sodipodi:docname="Shapes200.svg">
+   sodipodi:docname="AUXShapes300.svg">
   <defs
      id="defs">
     <font
        horiz-adv-x="1024"
-       id="MySVGFont"
-       inkscape:label="MySVGFont"
+       id="AUXShapes300"
+       inkscape:label="AUXShapes300"
        vert-origin-x="0"
        horiz-origin-x="0"
        horiz-origin-y="0"
@@ -29,8 +29,8 @@
        vert-adv-y="0">
       <font-face
          units-per-em="1024"
-         id="MySVGFont-Face"
-         font-family="Shapes"
+         id="AUXShapes300"
+         font-family="AUXShapes"
          ascent="1024"
          stemv="0"
          stemh="0"
@@ -60,17 +60,17 @@
          glyph-name="Trunk/Stem/Pipe"
          id="glyph0"
          unicode=""
-         d="m 496,1024 h 32 V 0 h -32 z" />
+         d="m 488,1024 h 48 V 0 h -48 z" />
       <glyph
          glyph-name="Branch"
          id="glyph1"
          unicode=""
-         d="M 496,1024 V 0 h 32 v 496 h 496 v 32 H 528 v 496 z" />
+         d="M 488,1024 V 0 h 48 v 488 h 488 v 48 H 536 v 488 z" />
       <glyph
          glyph-name="End"
          id="glyph2"
          unicode=""
-         d="M 496,1024 V 496 h 528 v 32 H 528 v 496 z" />
+         d="M 488,1024 V 480 l 536,8 v 48 H 536 v 488 z" />
       <glyph
          glyph-name="None/Null/Clear"
          id="glyph3"
@@ -565,9 +565,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.88195372"
-     inkscape:cx="361.83265"
-     inkscape:cy="529.93426"
+     inkscape:zoom="1.2472709"
+     inkscape:cx="262.29349"
+     inkscape:cy="492.23577"
      inkscape:document-units="px"
      inkscape:current-layer="svg2"
      showgrid="true"

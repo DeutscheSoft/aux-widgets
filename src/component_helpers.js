@@ -537,7 +537,7 @@ export function define_component(name, component, options)
 }
 
 /**
- * Interface implemented by all WebComponents based on A.UX Widgets.
+ * Interface implemented by all WebComponents based on AUX Widgets.
  *
  * Each Component maps both attributes and properties onto options of the same
  * name. The mapping of attributes is only one-directional, i.e. attributes are
@@ -551,8 +551,8 @@ export function define_component(name, component, options)
  * 'title' option in the widget.
  *
  * @interface Component
- * @property auxWidget {Widget} - The A.UX widget object of this component.
- * @property isAuxWidget {boolean} - Returns true. This can be used to detect A.UX components.
+ * @property auxWidget {Widget} - The AUX widget object of this component.
+ * @property isAuxWidget {boolean} - Returns true. This can be used to detect AUX components.
  */
 /**
  * Trigger a resize. This leads the widget to recalculates its size. Some

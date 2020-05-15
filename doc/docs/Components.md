@@ -1,7 +1,7 @@
 # Components
 
-Most A.UX widgets have corresponding WebComponents implementations.
-The component implementation maps options of A.UX widgets onto both
+Most AUX widgets have corresponding WebComponents implementations.
+The component implementation maps options of AUX widgets onto both
 attributes and properties. This means that components have getters and
 setters for each widget option. Exceptions to this are those options
 which would collide with properties of the component base class.
