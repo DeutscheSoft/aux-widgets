@@ -6,6 +6,7 @@
 *.svg
 *.in
 *.png
+*.py
 
 ../.git
 
