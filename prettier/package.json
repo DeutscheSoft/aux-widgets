@@ -1,0 +1,14 @@
+{
+  "name": "aux-prettier",
+  "version": "1.0.0",
+  "description": "Prettify AUX code",
+  "directories": {},
+  "scripts": {
+    "prettier": "prettier --write --single-quote --jsx-bracket-same-line ../**/*"
+  },
+  "author": "Markus Schmidt",
+  "private": true,
+  "dependencies": {
+    "prettier": "^2.0.5"
+  }
+}
