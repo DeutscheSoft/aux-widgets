@@ -29,7 +29,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="4"
-     inkscape:cx="22.669211"
+     inkscape:cx="-161.58079"
      inkscape:cy="52.829214"
      inkscape:document-units="px"
      inkscape:current-layer="svg2"
@@ -139,33 +139,63 @@
   <g
      id="g889"
      transform="translate(-9.75,-15.209897)">
-    <text
-       inkscape:export-ydpi="298.48499"
-       inkscape:export-xdpi="298.48499"
-       id="text1373"
-       y="76.240242"
-       x="13.680927"
+    <g
+       aria-label="Audio"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;line-height:100%;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:-0.63652426px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#ee6b11;fill-opacity:1;stroke:none;stroke-width:1.80449748px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       xml:space="preserve"><tspan
+       id="text1373">
+      <path
+         d="m 13.680927,76.240242 3.079371,-5.960724 h 1.026457 l 3.002588,5.960724 h -0.957757 l -0.779945,-1.588179 h -3.673423 l -0.820357,1.588179 z m 2.044832,-2.28326 h 2.986423 l -1.446738,-2.998548 z"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:-0.63652426px;writing-mode:lr-tb;text-anchor:start;fill:#ee6b11;fill-opacity:1;stroke-width:1.80449748px"
-         y="76.240242"
-         x="13.680927"
-         id="tspan1371"
-         sodipodi:role="line"
-         dx="0 0 0 -0.33094898 0.082737245">Audio</tspan></text>
-    <text
-       xml:space="preserve"
+         id="path831" />
+      <path
+         d="m 25.293186,72.08592 v 2.812654 q 0,0.258635 0.01617,0.602134 0.02021,0.343499 0.05253,0.739534 h -0.804193 l -0.04849,-0.719328 q -0.319252,0.41624 -0.735493,0.610216 -0.412199,0.189935 -0.986045,0.189935 -0.998168,0 -1.470985,-0.468775 Q 20.8479,75.379473 20.8479,74.377263 V 72.08592 h 0.79611 v 2.323673 q 0,0.682957 0.323294,1.026456 0.323293,0.339459 0.96988,0.339459 0.662752,0 1.099198,-0.396035 0.436447,-0.400076 0.436447,-1.010292 V 72.08592 Z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:-0.63652426px;writing-mode:lr-tb;text-anchor:start;fill:#ee6b11;fill-opacity:1;stroke-width:1.80449748px"
+         id="path833" />
+      <path
+         d="m 29.829357,70.279518 h 0.788028 v 4.768579 q 0,0.383911 0.01617,0.662752 0.02021,0.274799 0.05658,0.529393 h -0.808234 l -0.06062,-0.638505 q -0.315211,0.375829 -0.739534,0.557682 -0.420282,0.181852 -0.973922,0.181852 -1.014333,0 -1.616467,-0.59001 -0.602134,-0.594052 -0.602134,-1.596262 0,-0.990086 0.610216,-1.580097 0.614258,-0.590011 1.632632,-0.590011 0.509188,0 0.925428,0.165688 0.420281,0.165688 0.771863,0.505146 z m -3.119782,3.891646 q 0,0.751657 0.412199,1.17598 0.41624,0.420281 1.151733,0.420281 0.719328,0 1.163857,-0.436446 0.444528,-0.436446 0.444528,-1.143651 0,-0.775904 -0.424322,-1.208309 -0.424323,-0.436446 -1.175981,-0.436446 -0.731451,0 -1.151733,0.432405 -0.420281,0.432405 -0.420281,1.196186 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:-0.63652426px;writing-mode:lr-tb;text-anchor:start;fill:#ee6b11;fill-opacity:1;stroke-width:1.80449748px"
+         id="path835" />
+      <path
+         d="M 31.298709,76.240242 V 72.08592 h 0.792069 v 4.154322 z m 0.792069,-5.960724 v 0.860769 h -0.792069 v -0.860769 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:-0.63652426px;writing-mode:lr-tb;text-anchor:start;fill:#ee6b11;fill-opacity:1;stroke-width:1.80449748px"
+         id="path837" />
+      <path
+         d="m 35.194249,71.984891 q 1.143651,0 1.778114,0.573846 0.638505,0.573846 0.638505,1.604344 0,1.030498 -0.638505,1.604344 -0.634463,0.573846 -1.778114,0.573846 -1.143651,0 -1.782155,-0.573846 -0.634464,-0.573846 -0.634464,-1.604344 0,-1.030498 0.634464,-1.604344 0.638504,-0.573846 1.782155,-0.573846 z m -1.604344,2.17819 q 0,0.707205 0.44857,1.155775 0.44857,0.448569 1.155774,0.448569 0.707205,0 1.155774,-0.448569 0.452611,-0.452611 0.452611,-1.155775 0,-0.707204 -0.452611,-1.159815 -0.45261,-0.452611 -1.155774,-0.452611 -0.707204,0 -1.155774,0.452611 -0.44857,0.452611 -0.44857,1.159815 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:-0.63652426px;writing-mode:lr-tb;text-anchor:start;fill:#ee6b11;fill-opacity:1;stroke-width:1.80449748px"
+         id="path839" />
+    </g>
+    <g
+       aria-label=" Widgets"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;line-height:100%;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:end;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:-0.63652426px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:end;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#222525;fill-opacity:1;stroke:none;stroke-width:1.80449748px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       x="71.206673"
-       y="76.240242"
-       id="text883"
-       inkscape:export-xdpi="298.48499"
-       inkscape:export-ydpi="298.48499"><tspan
-         dx="0 -2.8284276 1.9960018e-09 -0.07272394 -0.07272394 -0.07272394 -1.9960018e-09 0"
-         sodipodi:role="line"
-         id="tspan881"
-         x="70.570145"
-         y="76.240242"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;letter-spacing:-0.63652426px;writing-mode:lr-tb;text-anchor:end;fill:#222525;fill-opacity:1;stroke-width:1.80449748px"> Widgets</tspan></text>
+       id="text883">
+      <path
+         d="m 37.063027,70.279518 h 0.868851 l 1.705373,5.148449 1.850856,-5.148449 h 1.087074 l 1.778114,5.192902 1.753868,-5.192902 h 0.771863 l -2.020584,5.960724 h -1.058787 l -1.79832,-5.22119 -1.875102,5.22119 h -1.042622 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;letter-spacing:-0.63652426px;writing-mode:lr-tb;text-anchor:end;fill:#222525;fill-opacity:1;stroke-width:1.80449748px"
+         id="path842" />
+      <path
+         d="M 47.220464,76.240242 V 72.08592 h 0.79207 v 4.154322 z m 0.79207,-5.960724 v 0.860769 h -0.79207 v -0.860769 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;letter-spacing:-0.63652426px;writing-mode:lr-tb;text-anchor:end;fill:#222525;fill-opacity:1;stroke-width:1.80449748px"
+         id="path844" />
+      <path
+         d="m 52.50831,70.279518 h 0.788028 v 4.768579 q 0,0.383911 0.01617,0.662752 0.02021,0.274799 0.05658,0.529393 h -0.808234 l -0.06062,-0.638505 q -0.315211,0.375829 -0.739534,0.557682 -0.420282,0.181852 -0.973922,0.181852 -1.014333,0 -1.616467,-0.59001 -0.602134,-0.594052 -0.602134,-1.596262 0,-0.990086 0.610216,-1.580097 0.614258,-0.590011 1.632632,-0.590011 0.509188,0 0.925428,0.165688 0.420282,0.165688 0.771863,0.505146 z m -3.119782,3.891646 q 0,0.751657 0.412199,1.17598 0.416241,0.420281 1.151733,0.420281 0.719328,0 1.163857,-0.436446 0.444528,-0.436446 0.444528,-1.143651 0,-0.775904 -0.424322,-1.208309 -0.424323,-0.436446 -1.17598,-0.436446 -0.731452,0 -1.151734,0.432405 -0.420281,0.432405 -0.420281,1.196186 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;letter-spacing:-0.63652426px;writing-mode:lr-tb;text-anchor:end;fill:#222525;fill-opacity:1;stroke-width:1.80449748px"
+         id="path846" />
+      <path
+         d="m 57.759787,75.488585 q -0.335417,0.315211 -0.771864,0.472816 -0.432405,0.153565 -0.982004,0.153565 -0.986045,0 -1.588179,-0.561723 -0.598093,-0.561722 -0.598093,-1.491191 0,-0.941592 0.602134,-1.507356 0.606175,-0.569805 1.616468,-0.569805 0.561722,0 0.986045,0.17377 0.428364,0.173771 0.72741,0.521311 l 0.06062,-0.594052 h 0.792069 q -0.03637,0.254594 -0.05658,0.529394 -0.01616,0.274799 -0.01616,0.654669 v 0.2061 2.28326 q 0,0.630422 -0.07678,0.921386 -0.07678,0.295006 -0.254594,0.501105 -0.303088,0.351582 -0.832481,0.525352 -0.529393,0.173771 -1.305297,0.173771 -1.014334,0 -1.551809,-0.375829 -0.533434,-0.375829 -0.545558,-1.091116 h 0.816316 q 0.02425,0.460694 0.363705,0.674875 0.3435,0.218224 1.042622,0.218224 0.808234,0 1.188103,-0.319253 0.383912,-0.315211 0.383912,-0.977963 z m -1.596262,-2.958136 q -0.727411,0 -1.131527,0.400076 -0.400076,0.400075 -0.400076,1.123445 0,0.707204 0.412199,1.10728 0.412199,0.400076 1.127486,0.400076 0.735493,0 1.147692,-0.408158 0.416241,-0.4122 0.416241,-1.13961 0,-0.666793 -0.432406,-1.074951 -0.432405,-0.408158 -1.139609,-0.408158 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;letter-spacing:-0.63652426px;writing-mode:lr-tb;text-anchor:end;fill:#222525;fill-opacity:1;stroke-width:1.80449748px"
+         id="path848" />
+      <path
+         d="m 59.883397,73.831705 h 2.840942 v -0.05658 q 0,-0.590011 -0.375829,-0.921386 -0.375829,-0.331376 -1.042621,-0.331376 -0.618299,0 -1.006251,0.355623 -0.383911,0.351581 -0.416241,0.953715 z m 3.576435,1.127486 q -0.117194,0.69104 -0.65467,1.03454 -0.537475,0.339458 -1.515438,0.339458 -1.050704,0 -1.652838,-0.565764 -0.598093,-0.565763 -0.598093,-1.55585 0,-1.022415 0.634463,-1.62455 0.638505,-0.602134 1.72558,-0.602134 1.030498,0 1.584138,0.55364 0.557681,0.55364 0.557681,1.584139 0,0.03637 -0.004,0.109111 -0.004,0.0687 -0.004,0.10507 h -3.681505 q 0.01212,0.695082 0.400076,1.07091 0.391993,0.375829 1.10728,0.375829 0.529393,0 0.856728,-0.214182 0.327334,-0.218223 0.391993,-0.610217 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;letter-spacing:-0.63652426px;writing-mode:lr-tb;text-anchor:end;fill:#222525;fill-opacity:1;stroke-width:1.80449748px"
+         id="path850" />
+      <path
+         d="m 65.203556,70.986723 v 1.099197 h 1.200227 v 0.553641 h -1.200227 v 1.935719 q 0,0.812275 0.117194,0.998169 0.117194,0.185894 0.432405,0.185894 0.133359,0 0.299047,-0.02021 0.169729,-0.02021 0.351581,-0.06062 v 0.594051 q -0.214182,0.03233 -0.412199,0.04849 -0.193976,0.02021 -0.363705,0.02021 -0.686999,0 -0.957757,-0.262676 -0.266717,-0.262676 -0.266717,-0.921386 V 72.639561 H 63.360783 V 72.08592 h 1.042622 v -0.743575 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;letter-spacing:-0.63652426px;writing-mode:lr-tb;text-anchor:end;fill:#222525;fill-opacity:1;stroke-width:1.80449748px"
+         id="path852" />
+      <path
+         d="m 66.522957,75.02385 h 0.824399 q 0.0081,0.367747 0.331376,0.561723 0.327334,0.189935 0.945633,0.189935 0.674875,0 1.014333,-0.165688 0.3435,-0.165688 0.3435,-0.497064 0,-0.400076 -1.115363,-0.594052 -0.03233,-0.004 -0.05253,-0.0081 -1.365915,-0.230347 -1.741744,-0.497064 -0.375828,-0.266717 -0.375828,-0.804193 0,-0.577887 0.517269,-0.90118 0.51727,-0.323294 1.45078,-0.323294 0.965839,0 1.458862,0.303088 0.497063,0.303088 0.525352,0.913304 h -0.792069 q -0.04849,-0.34754 -0.327335,-0.509187 -0.278841,-0.161647 -0.832481,-0.161647 -0.594052,0 -0.901181,0.161647 -0.307128,0.161647 -0.307128,0.468775 0,0.391994 1.289132,0.62234 0.06062,0.0081 0.09699,0.01617 0.04849,0.0081 0.153564,0.02829 1.010292,0.181853 1.232556,0.319253 0.266718,0.161646 0.391994,0.383911 0.129317,0.218223 0.129317,0.517269 0,0.642546 -0.549599,0.977963 -0.545558,0.331376 -1.600303,0.331376 -1.054745,0 -1.580097,-0.331376 -0.525352,-0.335417 -0.529393,-1.00221 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:expanded;font-size:8.27631378px;font-family:'Zurich Ex BT';-inkscape-font-specification:'Zurich Ex BT, Expanded';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;letter-spacing:-0.63652426px;writing-mode:lr-tb;text-anchor:end;fill:#222525;fill-opacity:1;stroke-width:1.80449748px"
+         id="path854" />
+    </g>
   </g>
 </svg>
