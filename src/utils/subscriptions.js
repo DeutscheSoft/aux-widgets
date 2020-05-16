@@ -74,7 +74,7 @@ function safe_call(cb) {
   try {
     cb();
   } catch (err) {
-    warn('Unsubscription handler threw and exception: %o', err);
+    warn('Unsubscription handler threw an exception: %o', err);
   }
 }
 
