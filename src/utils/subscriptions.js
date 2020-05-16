@@ -117,6 +117,14 @@ export class Subscription {
   unsubscribe() {
     this.sub = unsubscribe_subscriptions(this.sub);
   }
+
+  /**
+   * A binary flag which indicates that this subscription has
+   * already been unsubscribed.
+   */
+  get closed() {
+    return this.sub === null;
+  }
 }
 
 /**
