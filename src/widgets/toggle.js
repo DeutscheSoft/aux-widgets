@@ -26,19 +26,19 @@ function toggle(O) {
 }
 function press_start(e) {
   let O = this.options;
-  if (O.press || O.delay)
-    toggle.call(this, O);
+  if (O.press || O.delay) toggle.call(this, O);
 }
 function press_end(e) {
   let O = this.options;
-  if (O.press && e.timeStamp > this.__time_stamp + O.press
-     || (!O.press && !O.delay))
+  if (
+    (O.press && e.timeStamp > this.__time_stamp + O.press) ||
+    (!O.press && !O.delay)
+  )
     toggle.call(this, O);
 }
 function press_cancel(e) {
   let O = this.options;
-  if (O.press)
-    toggle.call(this, O);
+  if (O.press) toggle.call(this, O);
 }
 
 export const Toggle = define_class({

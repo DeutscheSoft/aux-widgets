@@ -48,7 +48,7 @@ function press_start(e) {
      *
      * @event Button#press_delayed
      */
-    this.emit("press_delayed");
+    this.emit('press_delayed');
     return;
   }
   this.remove_class('aux-delayed');
@@ -59,10 +59,10 @@ function press_start(e) {
    * as the delay time is over.
    *
    * @event Button#press_start
-   * 
+   *
    * @param {Event} event - Either the MouseEvent or the TouchEvent.
    */
-  this.emit("press_start", e);
+  this.emit('press_start', e);
 }
 function press_end(e) {
   let O = this.options;
@@ -75,10 +75,10 @@ function press_end(e) {
    * `press_delayed` was fired.
    *
    * @event Button#press_end
-   * 
+   *
    * @param {Event} event - Either the MouseEvent or the TouchEvent.
    */
-  this.emit("press_end", e);
+  this.emit('press_end', e);
 }
 function press_cancel(e) {
   let O = this.options;
@@ -91,10 +91,10 @@ function press_cancel(e) {
    * button element.
    *
    * @event Button#press_cancel
-   * 
+   *
    * @param {Event} event - Either the MouseEvent or the TouchEvent.
    */
-  this.emit("press_cancel", e);
+  this.emit('press_cancel', e);
 }
 
 /* MOUSE handling */
