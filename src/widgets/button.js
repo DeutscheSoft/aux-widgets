@@ -49,7 +49,6 @@ function press_start(e) {
      * @event Button#press_delayed
      */
     this.emit("press_delayed");
-    console.log("press_delayed");
     return;
   }
   this.remove_class('aux-delayed');
@@ -64,7 +63,6 @@ function press_start(e) {
    * @param {Event} event - Either the MouseEvent or the TouchEvent.
    */
   this.emit("press_start", e);
-  console.log("press_start");
 }
 function press_end(e) {
   let O = this.options;
@@ -81,7 +79,6 @@ function press_end(e) {
    * @param {Event} event - Either the MouseEvent or the TouchEvent.
    */
   this.emit("press_end", e);
-  console.log("press_end");
 }
 function press_cancel(e) {
   let O = this.options;
@@ -98,7 +95,6 @@ function press_cancel(e) {
    * @param {Event} event - Either the MouseEvent or the TouchEvent.
    */
   this.emit("press_cancel", e);
-  console.log("press_cancel");
 }
 
 /* MOUSE handling */
