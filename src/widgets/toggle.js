@@ -20,128 +20,25 @@ import { add_class } from './../utils/dom.js';
 import { define_class } from './../widget_helpers.js';
 import { Button } from './button.js';
 
-/* Abstract toggle logic */
-
-function reset_delay_to() {
-  window.clearTimeout(this.__delayed_to);
-  this.__delayed_to = -1;
-  this.remove_class('aux-delayed');
-}
-
 function toggle(O) {
   if (this.userset('state', !O.state) === false) return;
   this.emit('toggled', O.state);
 }
-function press_start() {
-  var O = this.options;
-  this.__press_start_time = Date.now();
-  if (O.delay && this.__delayed_to < 0) {
-    this.__delayed_to = window.setTimeout(
-      (function (t) {
-        return function () {
-          press_start.call(t);
-        };
-      })(this),
-      O.delay
-    );
-    this.add_class('aux-delayed');
-    return;
-  }
-  this.remove_class('aux-delayed');
-  if (O.delay && this.__delayed_to >= 0) {
+function press_start(e) {
+  let O = this.options;
+  if (O.press || O.delay)
     toggle.call(this, O);
-  }
-  if (O.press) toggle.call(this, O);
 }
-function press_end() {
-  var O = this.options;
-  if (O.delay && this.__delayed_to >= 0) {
-    reset_delay_to.call(this);
-    return;
-  }
-  var t = Date.now() - this.__press_start_time;
-  if ((O.toggle && (!O.press || t > O.press)) || (!O.toggle && O.press)) {
+function press_end(e) {
+  let O = this.options;
+  if (O.press && e.timeStamp > this.__time_stamp + O.press
+     || (!O.press && !O.delay))
     toggle.call(this, O);
-  }
 }
-function press_cancel() {
-  var O = this.options;
-  if (O.delay && this.__delayed_to >= 0) {
-    reset_delay_to.call(this);
-    return;
-  }
-  /* this is definitely not a click, its a cancel by leaving the
-   * button with mouse or finger while pressing */
-  if (O.press) toggle.call(this, O);
-}
-
-/* MOUSE handling */
-function mouseup() {
-  this.off('mouseup', mouseup);
-  this.off('mouseleave', mouseleave);
-  press_end.call(this);
-}
-function mouseleave() {
-  this.off('mouseup', mouseup);
-  this.off('mouseleave', mouseleave);
-  press_cancel.call(this);
-}
-function mousedown(e) {
-  /* only left click please */
-  if (e.button) return true;
-  press_start.call(this);
-  this.on('mouseup', mouseup);
-  this.on('mouseleave', mouseleave);
-}
-
-/* TOUCH handling */
-function is_current_touch(ev) {
-  var id = this.__touch_id;
-  var i;
-  for (i = 0; i < ev.changedTouches.length; i++) {
-    if (ev.changedTouches[i].identifier === id) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-function touchend(e) {
-  if (!is_current_touch.call(this, e)) return;
-  this.__touch_id = false;
-  e.preventDefault();
-  press_end.call(this);
-
-  this.off('touchend', touchend);
-  this.off('touchcancel', touchleave);
-  this.off('touchleave', touchleave);
-}
-function touchleave(e) {
-  if (!is_current_touch.call(this, e)) return;
-  this.__touch_id = false;
-  e.preventDefault();
-  press_cancel.call(this);
-
-  this.off('touchend', touchend);
-  this.off('touchcancel', touchleave);
-  this.off('touchleave', touchleave);
-}
-function touchstart(e) {
-  if (this.__touch_id !== false) return;
-  this.__touch_id = e.targetTouches[0].identifier;
-  press_start.call(this);
-  this.on('touchend', touchend);
-  this.on('touchcancel', touchleave);
-  this.on('touchleave', touchleave);
-  e.preventDefault();
-  e.stopPropagation();
-  return false;
-}
-function contextmenu(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  return false;
+function press_cancel(e) {
+  let O = this.options;
+  if (O.press)
+    toggle.call(this, O);
 }
 
 export const Toggle = define_class({
@@ -175,7 +72,6 @@ export const Toggle = define_class({
     label_active: 'string',
     icon_active: 'string',
     press: 'int',
-    delay: 'int',
     toggle: 'boolean',
   }),
   options: {
@@ -183,28 +79,15 @@ export const Toggle = define_class({
     icon_active: false,
     icon_inactive: false,
     press: 0,
-    delay: 0,
     toggle: true,
   },
   static_events: {
-    mousedown: mousedown,
-    touchstart: touchstart,
-    contextmenu: contextmenu,
-  },
-
-  initialize: function (options) {
-    Button.prototype.initialize.call(this, options);
-    /**
-     * @member {HTMLDivElement} Toggle#element - The main DIV container.
-     *   Has class <code>.aux-toggle</code>.
-     */
-    this.__press_start_time = 0;
-    this.__touch_id = false;
-    this.__delayed_to = -1;
+    press_start: press_start,
+    press_end: press_end,
+    press_cancel: press_cancel,
   },
   draw: function (O, element) {
     add_class(element, 'aux-toggle');
-
     Button.prototype.draw.call(this, O, element);
   },
 
