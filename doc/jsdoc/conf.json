@@ -26,6 +26,8 @@
   "docdash": {
     "mainpagetitle": "Introduction",
     "collapse": true,
-    "sectionOrder": ["Tutorials", "Classes", "Modules", "Mixins", "Interfaces"]
+    "search": true,
+    "sectionOrder": ["Tutorials", "Classes", "Modules", "Mixins", "Interfaces"],
+    "scripts": ["./jsdoc/screen.css", "./screen.css"]
   }
 }
