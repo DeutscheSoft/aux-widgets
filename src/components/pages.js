@@ -13,6 +13,13 @@ function remove_page(pages, page) {
   pages.remove_page(page);
 }
 
+/**
+ * WebComponent for the Pages widget. Available in the DOM as
+ * `aux-pages`.
+ *
+ * @class PagesComponent
+ * @implements Component
+ */
 export const PagesComponent = component_from_widget(Pages);
 
 define_component('pages', PagesComponent);

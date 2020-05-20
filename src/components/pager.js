@@ -15,7 +15,22 @@ function remove_page(pager, page) {
   pager.remove_page(page);
 }
 
+/**
+ * WebComponent for the Pager widget. Available in the DOM as
+ * `aux-pager`.
+ *
+ * @class PagerComponent
+ * @implements Component
+ */
 export const PagerComponent = component_from_widget(Pager);
+
+/**
+ * WebComponent for the Page widget. Available in the DOM as
+ * `aux-page`.
+ *
+ * @class PageComponent
+ * @implements Component
+ */
 export const PageComponent = component_from_widget(Page);
 
 define_component('pager', PagerComponent);
