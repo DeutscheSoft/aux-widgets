@@ -47,9 +47,9 @@ export function merge(dst) {
  * @param {object} origin - The object to filter
  * @param {object} filter - The object containing the white list
  * @returns {object} The filtered result
- * @function object_and
+ * @function objectAnd
  */
-export function object_and(orig, filter) {
+export function objectAnd(orig, filter) {
   var ret = {};
   for (var key in orig) {
     if (filter[key]) ret[key] = orig[key];
@@ -62,9 +62,9 @@ export function object_and(orig, filter) {
  * @param {object} origin - The object to filter
  * @param {object} filter - The object containing the black list
  * @returns {object} The filtered result
- * @function object_sub
+ * @function objectSub
  */
-export function object_sub(orig, filter) {
+export function objectSub(orig, filter) {
   var ret = {};
   for (var key in orig) {
     if (!filter[key]) ret[key] = orig[key];
@@ -76,9 +76,9 @@ export function object_sub(orig, filter) {
  * Convert any collection (like NodeList) into an array.
  * @param {collection} collection - The collection to convert into an array
  * @returns {array}
- * @function to_array
+ * @function toArray
  */
-export function to_array(collection) {
+export function toArray(collection) {
   var ret = new Array(collection.length);
   var i;
 

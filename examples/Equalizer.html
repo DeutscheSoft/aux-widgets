@@ -85,11 +85,11 @@
       if (!!graph == interacting) return;
       if (interacting) {
         graph = new EqualizerGraph({ class: 'highlite' });
-        graph.add_band(band);
-        eq.add_graph(graph);
+        graph.addBand(band);
+        eq.addGraph(graph);
       } else {
-        eq.remove_graph(graph);
-        graph.remove_band(band);
+        eq.removeGraph(graph);
+        graph.removeBand(band);
         graph = null;
       }
     });
@@ -151,8 +151,8 @@
 
   eq.bands.forEach((band) => {
     let graph = new EqualizerGraph({ class: 'individual' });
-    graph.add_band(band);
-    eq.add_graph(graph);
+    graph.addBand(band);
+    eq.addGraph(graph);
     band.on('set_interacting', (interacting) => {
       graph.element.classList.toggle('interacting', interacting);
     });

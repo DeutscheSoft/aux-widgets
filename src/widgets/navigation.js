@@ -18,19 +18,19 @@
  */
 
 import { S } from '../dom_scheduler.js';
-import { define_class } from '../widget_helpers.js';
-import { define_child_widget } from '../child_widget.js';
+import { defineClass } from '../widget_helpers.js';
+import { defineChildWidget } from '../child_widget.js';
 import {
-  add_class,
-  remove_class,
-  toggle_class,
-  inner_height,
-  inner_width,
+  addClass,
+  removeClass,
+  toggleClass,
+  innerHeight,
+  innerWidth,
 } from '../utils/dom.js';
 import { Button } from './button.js';
 import { Buttons } from './buttons.js';
 import { Container } from './container.js';
-import { typecheck_number } from '../utils/typecheck.js';
+import { typecheckNumber } from '../utils/typecheck.js';
 
 function easeLinear(t) {
   return t;
@@ -77,7 +77,7 @@ class ScrollAnimation {
       }
 
       if (t < 1) {
-        S.add_next(this._draw);
+        S.addNext(this._draw);
       }
     };
     this.start();
@@ -105,14 +105,14 @@ class ScrollAnimation {
  * @param {mixed} value - The new value of the option
  */
 
-function auto_arrows() {
+function autoArrows() {
   var O = this.options;
   if (!O.auto_arrows) return;
-  var B = this.buttons.get_buttons();
+  var B = this.buttons.getButtons();
   var vert = O.direction === 'vertical';
   var cons = vert
-    ? inner_height(this.buttons.element)
-    : inner_width(this.buttons.element);
+    ? innerHeight(this.buttons.element)
+    : innerWidth(this.buttons.element);
   var list;
   if (B.length) {
     var lastb = B[B.length - 1].element;
@@ -126,21 +126,21 @@ function auto_arrows() {
   this.update('arrows', list > cons);
 }
 
-function prev_clicked() {
+function prevClicked() {
   this.userset('select', Math.max(0, this.options.select - 1));
 }
-function prev_dblclicked() {
+function prevDblClicked() {
   this.userset('select', 0);
 }
 
-function next_clicked() {
+function nextClicked() {
   this.userset(
     'select',
-    Math.min(this.buttons.get_buttons().length - 1, this.options.select + 1)
+    Math.min(this.buttons.getButtons().length - 1, this.options.select + 1)
   );
 }
-function next_dblclicked() {
-  this.userset('select', this.buttons.get_buttons().length - 1);
+function nextDblClicked() {
+  this.userset('select', this.buttons.getButtons().length - 1);
 }
 
 /**
@@ -162,7 +162,7 @@ function next_dblclicked() {
  *
  * @class Navigation
  */
-export const Navigation = define_class({
+export const Navigation = defineClass({
   Extends: Container,
   _class: 'Navigation',
   _options: Object.assign(Object.create(Container.prototype._options), {
@@ -201,10 +201,10 @@ export const Navigation = define_class({
       }
     },
   },
-  _get_button_scroll_position: function () {
+  _getButtonScrollPosition: function () {
     const O = this.options;
     const show = O.select;
-    const button_list = this.buttons.get_buttons();
+    const button_list = this.buttons.getButtons();
 
     if (show < 0 || show >= button_list.length) return 0;
 
@@ -224,7 +224,7 @@ export const Navigation = define_class({
         console.log(O, 'clip_size', clip_size, 'list_size', list_size, 'offset', offset,
                     'button_size', button_size);
 
-        console.log('inner_height', inner_height(this.buttons.element));
+        console.log('innerHeight', innerHeight(this.buttons.element));
         */
 
     let pos = Math.min(
@@ -252,10 +252,10 @@ export const Navigation = define_class({
      */
     this.next = new Button({ class: 'aux-next', dblclick: 400 });
 
-    this.prev.on('click', prev_clicked.bind(this));
-    this.prev.on('doubleclick', prev_dblclicked.bind(this));
-    this.next.on('click', next_clicked.bind(this));
-    this.next.on('doubleclick', next_dblclicked.bind(this));
+    this.prev.on('click', prevClicked.bind(this));
+    this.prev.on('doubleclick', prevDblClicked.bind(this));
+    this.next.on('click', nextClicked.bind(this));
+    this.next.on('doubleclick', nextDblClicked.bind(this));
 
     // these properties contain the scroll position of the buttons child
     // element
@@ -273,15 +273,15 @@ export const Navigation = define_class({
     const measure_clip = () => {
       const buttons = this.buttons;
 
-      this.update('_clip_height', inner_height(buttons.element));
-      this.update('_clip_width', inner_width(buttons.element));
+      this.update('_clip_height', innerHeight(buttons.element));
+      this.update('_clip_width', innerWidth(buttons.element));
     };
 
     this.addSubscriptions(
       this.buttons.buttons.forEachAsync((button) => {
         let measured = false;
         const positions = this.get('_button_positions');
-        const update_length = () => {
+        const updateLength = () => {
           let list_width = 0;
           let list_height = 0;
 
@@ -313,7 +313,7 @@ export const Navigation = define_class({
             measured = true;
             positions.set(button, info);
           }
-          update_length();
+          updateLength();
           this.invalidate('_button_positions');
         };
 
@@ -325,7 +325,7 @@ export const Navigation = define_class({
           sub = null;
           if (measured) {
             positions.delete(button);
-            update_length();
+            updateLength();
             this.invalidate('_button_positions');
           }
         };
@@ -340,11 +340,11 @@ export const Navigation = define_class({
     );
   },
   resize: function () {
-    auto_arrows.call(this);
+    autoArrows.call(this);
     Container.prototype.resize.call(this);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-navigation');
+    addClass(element, 'aux-navigation');
     Container.prototype.draw.call(this, O, element);
   },
   redraw: function () {
@@ -353,26 +353,26 @@ export const Navigation = define_class({
     var E = this.element;
 
     if (I.direction) {
-      remove_class(E, 'aux-vertical', 'aux-horizontal');
-      add_class(E, 'aux-' + O.direction);
+      removeClass(E, 'aux-vertical', 'aux-horizontal');
+      addClass(E, 'aux-' + O.direction);
     }
     if (I.validate('arrows')) {
       if (O.arrows) {
         if (!this.prev.element.parentElement) {
           E.appendChild(this.prev.element);
           E.appendChild(this.next.element);
-          this.add_child(this.prev);
-          this.add_child(this.next);
+          this.addChild(this.prev);
+          this.addChild(this.next);
         }
       } else {
         if (this.prev.element.parentElement) {
           E.removeChild(this.prev.element);
           E.removeChild(this.next.element);
-          this.remove_child(this.prev);
-          this.remove_child(this.next);
+          this.removeChild(this.prev);
+          this.removeChild(this.next);
         }
       }
-      toggle_class(E, 'aux-over', O.arrows);
+      toggleClass(E, 'aux-over', O.arrows);
     }
 
     if (
@@ -391,7 +391,7 @@ export const Navigation = define_class({
         this._scroll_animation = null;
       }
 
-      const position = this._get_button_scroll_position();
+      const position = this._getButtonScrollPosition();
       const is_vertical = O.direction === 'vertical';
       const from = is_vertical ? this._scroll_top : this._scroll_left;
 
@@ -409,14 +409,14 @@ export const Navigation = define_class({
 
     Container.prototype.redraw.call(this);
   },
-  add_button: function (...arg) {
-    return this.buttons.add_button(...arg);
+  addButton: function (...arg) {
+    return this.buttons.addButton(...arg);
   },
-  add_buttons: function (...arg) {
-    return this.buttons.add_buttons(...arg);
+  addButtons: function (...arg) {
+    return this.buttons.addButtons(...arg);
   },
-  remove_button: function (...arg) {
-    return this.buttons.remove_button(...arg);
+  removeButton: function (...arg) {
+    return this.buttons.removeButton(...arg);
   },
   empty: function (...arg) {
     return this.buttons.empty(...arg);
@@ -433,37 +433,9 @@ export const Navigation = define_class({
 /**
  * @member {Buttons} Navigation#buttons - The {@link Buttons} of the Navigation.
  */
-define_child_widget(Navigation, 'buttons', {
+defineChildWidget(Navigation, 'buttons', {
   create: Buttons,
   show: true,
   inherit_options: true,
   userset_delegate: true,
 });
-///**
-//* @member {Button} Navigation#prev - The {@link Button} to switch to the previous selection.
-//*/
-//define_child_widget(Navigation, "prev", {
-//create: Button,
-//default_options: {
-//class: "aux-prev",
-//},
-//static_events: {
-//added: measure.bind(this),
-//click: prev_clicked.bind(this.parent),
-//doubleclick: prev_dblclicked.bind(this.parent,
-//},
-//});
-///**
-//* @member {Button} Navigation#next - The {@link Button} to switch to the next selection.
-//*/
-//define_child_widget(Navigation, "next", {
-//create: Button,
-//default_options: {
-//class: "aux-next",
-//},
-//static_events: {
-//added: measure.bind(this),
-//click: next_clicked.bind(this.parent),
-//doubleclick: next_dblclicked.bind(this.parent),
-//},
-//});

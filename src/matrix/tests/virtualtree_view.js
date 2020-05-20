@@ -18,7 +18,7 @@
  */
 
 import { MatrixData } from '../models/matrix.js';
-import { assert, test, assert_error } from './helpers.js';
+import { assert, test, assertError } from './helpers.js';
 
 test('VirtualTreeDataView basics', () => {
   const matrix = new MatrixData();
@@ -121,8 +121,8 @@ test('VirtualTreeDataView basics', () => {
     group.deleteGroup(group2);
     check();
 
-    assert_error(() => virtualtreeview.getGroupInfo(group3));
-    assert_error(() => virtualtreeview.getGroupInfo(group2));
+    assertError(() => virtualtreeview.getGroupInfo(group3));
+    assertError(() => virtualtreeview.getGroupInfo(group2));
 
     assert(virtualtreeview.getSubtreeSize(group) === 4);
   }

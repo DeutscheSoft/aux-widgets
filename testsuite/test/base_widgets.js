@@ -19,7 +19,7 @@
 
 import { Widget, WidgetComponent } from '../src/index.js';
 
-import { assert, assert_error } from './helpers.js';
+import { assert, assertError } from './helpers.js';
 
 describe('Options', () => {
   it('set()', (done) => {
@@ -82,22 +82,22 @@ describe('Components', () => {
     o.auxWidget.set('disabled', true);
     done();
   });
-  it('get_option_type()', () => {
+  it('getOptionType()', () => {
     const o = new Widget();
 
-    if (o.get_option_type('disabled') !== 'boolean')
+    if (o.getOptionType('disabled') !== 'boolean')
       throw new Error('bad type for disabled');
   });
-  it('get_default()', () => {
+  it('getDefault()', () => {
     const o = new Widget();
 
-    if (o.get_default('disabled') !== false)
+    if (o.getDefault('disabled') !== false)
       throw new Error('bad default value for disabled');
 
     {
       let ok = false;
       try {
-        o.get_default('this_option_does_not_exist');
+        o.getDefault('this_option_does_not_exist');
       } catch (e) {
         ok = true;
       }
@@ -111,21 +111,21 @@ describe('Components', () => {
       const w2 = new Widget();
       const c1 = new Widget();
       const c2 = new Widget();
-      w1.add_child(c1);
-      w2.add_child(c2);
+      w1.addChild(c1);
+      w2.addChild(c2);
 
-      assert(w1.has_child(c1), 'add_child failed.');
+      assert(w1.hasChild(c1), 'addChild failed.');
 
-      w2.add_child(c1);
+      w2.addChild(c1);
 
-      assert(!w1.has_child(c1), 'add_child failed.');
-      assert(w2.has_child(c1), 'add_child failed.');
+      assert(!w1.hasChild(c1), 'addChild failed.');
+      assert(w2.hasChild(c1), 'addChild failed.');
 
-      c1.set_parent();
+      c1.setParent();
 
-      assert(!w2.has_child(c1), 'set_parent failed.');
+      assert(!w2.hasChild(c1), 'setParent failed.');
 
-      assert_error(() => w2.remove_child(c1));
+      assertError(() => w2.removeChild(c1));
 
       w1.destroy();
       w2.destroy();
@@ -137,14 +137,14 @@ describe('Components', () => {
       const w = new Widget({ element: document.createElement('div') });
       const c = new Widget({ element: document.createElement('div') });
 
-      assert(w.is_drawn() === c.is_drawn());
-      w.add_child(c);
-      assert(w.is_drawn() === c.is_drawn());
+      assert(w.isDrawn() === c.isDrawn());
+      w.addChild(c);
+      assert(w.isDrawn() === c.isDrawn());
       w.show();
-      assert(w.is_drawn() && w.is_drawn() === c.is_drawn());
-      w.force_hide();
-      w.disable_draw();
-      assert(!w.is_drawn() && w.is_drawn() === c.is_drawn());
+      assert(w.isDrawn() && w.isDrawn() === c.isDrawn());
+      w.forceHide();
+      w.disableDraw();
+      assert(!w.isDrawn() && w.isDrawn() === c.isDrawn());
 
       w.destroy();
       c.destroy();
@@ -154,12 +154,12 @@ describe('Components', () => {
       const w = new Widget({ element: document.createElement('div') });
       const c = new Widget({ element: document.createElement('div') });
 
-      w.add_child(c);
+      w.addChild(c);
 
-      w.set_parent(null);
+      w.setParent(null);
 
-      assert(w.is_drawn() === c.is_drawn());
-      assert(w.is_drawn() !== document.hidden);
+      assert(w.isDrawn() === c.isDrawn());
+      assert(w.isDrawn() !== document.hidden);
 
       w.destroy();
       c.destroy();

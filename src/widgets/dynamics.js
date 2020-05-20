@@ -17,23 +17,22 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from './../widget_helpers.js';
+import { defineClass } from './../widget_helpers.js';
 import { Chart } from './chart.js';
 import {
-  add_class,
-  remove_class,
-  css_space,
-  inner_width,
-  inner_height,
+  addClass,
+  removeClass,
+  innerWidth,
+  innerHeight,
 } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 
-function range_set(value, key) {
+function rangeSet(value, key) {
   this.range_x.set(key, value);
   this.range_y.set(key, value);
 }
 
-function drag_handle(key, value) {
+function dragHandle(key, value) {
   if (key == 'z') {
     this.set('ratio', value);
     return true;
@@ -44,7 +43,7 @@ function drag_handle(key, value) {
   return false;
 }
 
-export const Dynamics = define_class({
+export const Dynamics = defineClass({
   /**
    * Dynamics are based on {@link Chart} and display the characteristics of dynamic
    * processors. They are square widgets drawing a {@link Grid} automatically based on
@@ -111,9 +110,9 @@ export const Dynamics = define_class({
     square: true,
   },
   static_events: {
-    set_min: range_set,
-    set_max: range_set,
-    set_scale: range_set,
+    set_min: rangeSet,
+    set_max: rangeSet,
+    set_scale: rangeSet,
     set_threshold: function (v) {
       this.handle.set('x', v);
       this.handle.set('y', v);
@@ -139,7 +138,7 @@ export const Dynamics = define_class({
     /**
      * @member {Graph} Dynamics#steady - The graph drawing the zero line. Has class <code>.aux-steady</code>
      */
-    this.steady = this.add_graph({
+    this.steady = this.addGraph({
       dots: [
         { x: O.min, y: O.min },
         { x: O.max, y: O.max },
@@ -150,12 +149,12 @@ export const Dynamics = define_class({
     /**
      * @member {ChartHandle} Dynamics#handle - The handle to set threshold. Has class <code>.aux-handle</code>
      */
-    this.handle = this.add_handle({
+    this.handle = this.addHandle({
       range_x: this.range_x,
       range_y: this.range_y,
       range_z: this.range_z,
     });
-    this.handle.addEventListener('userset', drag_handle.bind(this));
+    this.handle.addEventListener('userset', dragHandle.bind(this));
 
     this.set('handle_label', this.options.handle_label);
     this.set('ratio', this.options.ratio);
@@ -163,7 +162,7 @@ export const Dynamics = define_class({
   },
 
   draw: function (O, element) {
-    add_class(element, 'aux-dynamics');
+    addClass(element, 'aux-dynamics');
 
     Chart.prototype.draw.call(this, O, element);
   },
@@ -207,8 +206,8 @@ export const Dynamics = define_class({
     }
 
     if (I.type) {
-      if (O._last_type) remove_class(this.element, 'aux-' + O._last_type);
-      add_class(this.element, 'aux-' + O.type);
+      if (O._last_type) removeClass(this.element, 'aux-' + O._last_type);
+      addClass(this.element, 'aux-' + O.type);
     }
 
     if (
@@ -222,15 +221,15 @@ export const Dynamics = define_class({
         'type'
       )
     ) {
-      this.draw_graph();
+      this.drawGraph();
     }
   },
 
-  draw_graph: function () {
+  drawGraph: function () {
     var O = this.options;
     if (O.type === false) return;
     if (!this.graph) {
-      this.graph = this.add_graph({
+      this.graph = this.addGraph({
         dots: [
           { x: O.min, y: O.min },
           { x: O.max, y: O.max },
@@ -340,7 +339,7 @@ export const Dynamics = define_class({
  * @extends Dynamics
  * @class Compressor
  */
-export const Compressor = define_class({
+export const Compressor = defineClass({
   Extends: Dynamics,
   options: { type: 'compressor' },
   draw: function (O, element) {
@@ -348,7 +347,7 @@ export const Compressor = define_class({
      * @member {HTMLDivElement} Compressor#element - The main DIV container.
      *   Has class <code>.aux-compressor</code>.
      */
-    add_class(element, 'aux-compressor');
+    addClass(element, 'aux-compressor');
     Dynamics.prototype.draw.call(this, O, element);
   },
 });
@@ -357,7 +356,7 @@ export const Compressor = define_class({
  * @extends Dynamics
  * @class Expander
  */
-export const Expander = define_class({
+export const Expander = defineClass({
   Extends: Dynamics,
   options: { type: 'expander' },
   draw: function (O, element) {
@@ -365,7 +364,7 @@ export const Expander = define_class({
      * @member {HTMLDivElement} Expander#element - The main DIV container.
      *   Has class <code>.aux-expander</code>.
      */
-    add_class(element, 'aux-expander');
+    addClass(element, 'aux-expander');
     Dynamics.prototype.draw.call(this, O, element);
   },
 });
@@ -374,7 +373,7 @@ export const Expander = define_class({
  * @extends Dynamics
  * @class Gate
  */
-export const Gate = define_class({
+export const Gate = defineClass({
   Extends: Dynamics,
   options: { type: 'gate', range_z: { min: 1, max: 1 } },
   draw: function (O, element) {
@@ -382,7 +381,7 @@ export const Gate = define_class({
      * @member {HTMLDivElement} Gate#element - The main DIV container.
      *   Has class <code>.aux-gate</code>.
      */
-    add_class(element, 'aux-gate');
+    addClass(element, 'aux-gate');
     Dynamics.prototype.draw.call(this, O, element);
   },
 });
@@ -391,7 +390,7 @@ export const Gate = define_class({
  * @extends Dynamics
  * @class Limiter
  */
-export const Limiter = define_class({
+export const Limiter = defineClass({
   Extends: Dynamics,
   options: { type: 'limiter', range_z: { min: 1, max: 1 } },
   draw: function (O, element) {
@@ -399,7 +398,7 @@ export const Limiter = define_class({
      * @member {HTMLDivElement} Limiter#element - The main DIV container.
      *   Has class <code>.aux-limiter</code>.
      */
-    add_class(element, 'aux-limiter');
+    addClass(element, 'aux-limiter');
     Dynamics.prototype.draw.call(this, O, element);
   },
 });

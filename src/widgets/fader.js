@@ -26,7 +26,7 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { define_class } from './../widget_helpers.js';
+import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 import { Ranged } from '../implements/ranged.js';
 import { Warning } from '../implements/warning.js';
@@ -38,21 +38,21 @@ import { Value } from './value.js';
 import { Label } from './label.js';
 import {
   element,
-  add_class,
-  remove_class,
+  addClass,
+  removeClass,
   supports_transform,
-  css_space,
-  outer_height,
-  inner_height,
-  outer_width,
-  inner_width,
+  CSSSpace,
+  outerHeight,
+  innerHeight,
+  outerWidth,
+  innerWidth,
 } from '../utils/dom.js';
-import { define_child_widget } from '../child_widget.js';
+import { defineChildWidget } from '../child_widget.js';
 
 function vert(O) {
   return O.layout === 'left' || O.layout === 'right';
 }
-function get_value(ev) {
+function getValue(ev) {
   var is_vertical = vert(this.options);
   var real, hsize, pad;
   hsize = this._handle_size / 2;
@@ -63,7 +63,7 @@ function get_value(ev) {
   } else {
     real = ev.offsetX - hsize + pad.left;
   }
-  return this.px2val(real);
+  return this.pixelToValue(real);
 }
 function clicked(ev) {
   var value;
@@ -71,9 +71,9 @@ function clicked(ev) {
   if (this.value.element.contains(ev.target)) return;
   if (this.label.element.contains(ev.target)) return;
   if (this.scale.element.contains(ev.target)) return;
-  value = this.userset('value', get_value.call(this, ev));
+  value = this.userset('value', getValue.call(this, ev));
 }
-function dblclick() {
+function dblClick() {
   this.userset('value', this.options.reset);
   /**
    * Is fired when the handle receives a double click.
@@ -116,7 +116,7 @@ function dblclick() {
  * @property {Boolean} [options.show_value=false] - If true, a {@link Value} widget is added to the fader.
  * @property {String|Boolean} [options.label=false] - Add a label to the fader. Set to `false` to remove the label from the DOM.
  */
-export const Fader = define_class({
+export const Fader = defineClass({
   Extends: Widget,
   Implements: [Ranged, Warning, GlobalCursor],
   _options: Object.assign(
@@ -159,8 +159,8 @@ export const Fader = define_class({
       else this.off('click', clicked);
     },
     set_bind_dblclick: function (value) {
-      if (value) this.on('dblclick', dblclick);
-      else this.off('dblclick', dblclick);
+      if (value) this.on('dblclick', dblClick);
+      else this.off('dblclick', dblClick);
     },
     set_layout: function () {
       this.options.direction = vert(this.options) ? 'vertical' : 'horizontal';
@@ -225,7 +225,7 @@ export const Fader = define_class({
     this.set('bind_dblclick', O.bind_dblclick);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-fader');
+    addClass(element, 'aux-fader');
     element.appendChild(this._track);
 
     Widget.prototype.draw.call(this, O, element);
@@ -242,7 +242,7 @@ export const Fader = define_class({
     if (I.layout) {
       I.layout = false;
       value = O.layout;
-      remove_class(
+      removeClass(
         E,
         'aux-vertical',
         'aux-horizontal',
@@ -251,8 +251,8 @@ export const Fader = define_class({
         'aux-top',
         'aux-bottom'
       );
-      add_class(E, vert(O) ? 'aux-vertical' : 'aux-horizontal');
-      add_class(E, 'aux-' + value);
+      addClass(E, vert(O) ? 'aux-vertical' : 'aux-horizontal');
+      addClass(E, 'aux-' + value);
 
       if (supports_transform) this._handle.style.transform = null;
       else {
@@ -269,7 +269,7 @@ export const Fader = define_class({
       I.value = false;
       // TODO: value is snapped already in set(). This is not enough for values which are set during
       // initialization.
-      tmp = this.val2px(this.snap(O.value)) + 'px';
+      tmp = this.valueToPixel(this.snap(O.value)) + 'px';
 
       if (vert(O)) {
         if (supports_transform)
@@ -290,14 +290,14 @@ export const Fader = define_class({
 
     Widget.prototype.resize.call(this);
 
-    this._padding = css_space(T, 'padding', 'border');
+    this._padding = CSSSpace(T, 'padding', 'border');
 
     if (vert(O)) {
-      this._handle_size = outer_height(H, true);
-      basis = inner_height(T) - this._handle_size;
+      this._handle_size = outerHeight(H, true);
+      basis = innerHeight(T) - this._handle_size;
     } else {
-      this._handle_size = outer_width(H, true);
-      basis = inner_width(T) - this._handle_size;
+      this._handle_size = outerWidth(H, true);
+      basis = innerWidth(T) - this._handle_size;
     }
 
     this.set('basis', basis);
@@ -329,7 +329,7 @@ export const Fader = define_class({
 /**
  * @member {Scale} Fader#scale - A {@link Scale} to display a scale next to the fader.
  */
-define_child_widget(Fader, 'scale', {
+defineChildWidget(Fader, 'scale', {
   create: Scale,
   show: true,
   inherit_options: true,
@@ -351,7 +351,7 @@ define_child_widget(Fader, 'scale', {
 /**
  * @member {Label} Fader#label - A {@link Label} to display a title.
  */
-define_child_widget(Fader, 'label', {
+defineChildWidget(Fader, 'label', {
   create: Label,
   show: false,
   toggle_class: true,
@@ -363,7 +363,7 @@ define_child_widget(Fader, 'label', {
 /**
  * @member {Value} Fader#value - A {@link Value} to display the current value, offering a way to enter a value via keyboard.
  */
-define_child_widget(Fader, 'value', {
+defineChildWidget(Fader, 'value', {
   create: Value,
   show: false,
   userset_delegate: true,

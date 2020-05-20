@@ -25,28 +25,28 @@
 
 import { warn } from './log.js';
 
-function expected_subscribers() {
+function expectedSubscribers() {
   throw new TypeError('Expected list of subscribers.');
 }
 
 /**
  * Initialize a list of subscribers.
  */
-export function init_subscribers() {
+export function initSubscribers() {
   return null;
 }
 
 /**
  * Returns true if the given subscribers are empty.
  */
-export function subscribers_is_empty(subscribers) {
+export function subscribersIsEmpty(subscribers) {
   return subscribers === null;
 }
 
 /**
  * Add a subscriber to the given subscribers. Returns the new subscribers.
  */
-export function add_subscriber(subscribers, cb) {
+export function addSubscriber(subscribers, cb) {
   if (typeof cb !== 'function') throw new TypeError('Expected function.');
 
   if (subscribers === null) {
@@ -55,10 +55,10 @@ export function add_subscriber(subscribers, cb) {
     return [subscribers, cb];
   } else if (Array.isArray(subscribers)) {
     return subscribers.concat([cb]);
-  } else expected_subscribers();
+  } else expectedSubscribers();
 }
 
-function subscriber_not_found() {
+function subscriberNotFound() {
   throw new Error('Subscriber not found.');
 }
 
@@ -66,49 +66,49 @@ function subscriber_not_found() {
  * Removes a subscriber callback from the list of subscribers and
  * returns the resulting list of subscribers.
  */
-export function remove_subscriber(subscribers, cb) {
+export function removeSubscriber(subscribers, cb) {
   if (typeof cb !== 'function') throw new TypeError('Expected function.');
 
   if (subscribers === null) {
-    subscriber_not_found();
+    subscriberNotFound();
   } else if (typeof subscribers === 'function') {
-    if (subscribers !== cb) subscriber_not_found();
+    if (subscribers !== cb) subscriberNotFound();
 
     return null;
   } else if (Array.isArray(subscribers)) {
     const tmp = subscribers.filter((_cb) => _cb !== cb);
 
-    if (tmp.length === subscribers.length) subscriber_not_found();
+    if (tmp.length === subscribers.length) subscriberNotFound();
 
     return tmp.length === 1 ? tmp[0] : tmp;
-  } else expected_subscribers();
+  } else expectedSubscribers();
 }
 
-function subscriber_error(err) {
+function subscriberError(err) {
   warn('Subscriber generated an exception:', err);
 }
 
 /**
  * Call the list of subscribers.
  */
-export function call_subscribers(subscribers, ...args) {
+export function callSubscribers(subscribers, ...args) {
   if (subscribers === null) return;
 
   if (typeof subscribers === 'function') {
     try {
       subscribers(...args);
     } catch (err) {
-      subscriber_error(err);
+      subscriberError(err);
     }
   } else if (Array.isArray(subscribers)) {
     for (let i = 0; i < subscribers.length; i++) {
       try {
         subscribers[i](...args);
       } catch (err) {
-        subscriber_error(err);
+        subscriberError(err);
       }
     }
-  } else expected_subscribers();
+  } else expectedSubscribers();
 }
 
 /**
@@ -116,7 +116,7 @@ export function call_subscribers(subscribers, ...args) {
  */
 export class Subscribers {
   constructor() {
-    this.subscribers = init_subscribers();
+    this.subscribers = initSubscribers();
   }
 
   /**
@@ -125,7 +125,7 @@ export class Subscribers {
    * @param {Function} cb
    */
   add(cb) {
-    this.subscribers = add_subscriber(this.subscribers, cb);
+    this.subscribers = addSubscriber(this.subscribers, cb);
   }
 
   /**
@@ -134,14 +134,14 @@ export class Subscribers {
    * @param {Function} cb
    */
   remove(cb) {
-    this.subscribers = remove_subscriber(this.subscribers, cb);
+    this.subscribers = removeSubscriber(this.subscribers, cb);
   }
 
   /**
    * Call the subscribers.
    */
   call(...args) {
-    call_subscribers(this.subscribers, ...args);
+    callSubscribers(this.subscribers, ...args);
   }
 
   /**
@@ -161,6 +161,6 @@ export class Subscribers {
    * Delete all subscribers.
    */
   destroy() {
-    this.subscribers = init_subscribers();
+    this.subscribers = initSubscribers();
   }
 }

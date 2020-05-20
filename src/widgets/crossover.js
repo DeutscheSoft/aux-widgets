@@ -17,15 +17,15 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
-import { add_class } from '../utils/dom.js';
+import { defineClass } from '../widget_helpers.js';
+import { addClass } from '../utils/dom.js';
 import { error } from '../utils/log.js';
 import { sprintf } from '../utils/sprintf.js';
 import { EqualizerGraph, Equalizer } from './equalizer.js';
 import { EqBand } from './eqband.js';
 import { Filter } from '../modules/filter.js';
 
-export const CrossoverBand = define_class({
+export const CrossoverBand = defineClass({
   /**
    * CrossoverBand is a {@link EqBand} with an additional filter.
    *
@@ -101,13 +101,13 @@ export const CrossoverBand = define_class({
     this.set('upper', this.options.upper);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-crossoverband');
+    addClass(element, 'aux-crossoverband');
 
     EqBand.prototype.draw.call(this, O, element);
   },
 });
 
-export const CrossoverGraph = define_class({
+export const CrossoverGraph = defineClass({
   Extends: EqualizerGraph,
   _options: Object.assign(Object.create(EqualizerGraph.prototype._options), {
     index: 'number',
@@ -127,24 +127,24 @@ export const CrossoverGraph = define_class({
     const filters = [];
 
     if (index < bands.length) {
-      filters.push(bands[index].lower.get_freq2gain());
+      filters.push(bands[index].lower.getFrequencyToGain());
     }
 
     if (index > 0) {
-      filters.push(bands[index - 1].upper.get_freq2gain());
+      filters.push(bands[index - 1].upper.getFrequencyToGain());
     }
 
     return filters;
   },
 });
 
-function sort_bands() {
+function sortBands() {
   this.bands.sort(function (a, b) {
     return a.options.freq - b.options.freq;
   });
 }
 
-function unlimit_bands() {
+function unlimitBands() {
   this.bands.forEach((band) => {
     band.set('x_min', false);
     band.set('x_max', false);
@@ -154,7 +154,7 @@ function unlimit_bands() {
 /*
  * Limit the movement of bands based on the frequency in a given band.
  */
-function limit_band(bands, i, distance) {
+function limitBand(bands, i, distance) {
   const band = bands[i];
   const prev = i ? bands[i - 1] : null;
   const next = i + 1 < bands.length ? bands[i + 1] : null;
@@ -173,16 +173,16 @@ function limit_band(bands, i, distance) {
   }
 }
 
-function limit_bands() {
+function limitBands() {
   if (this.options.leap) return;
-  sort_bands.call(this);
+  sortBands.call(this);
 
   const distance = Math.abs(this.get('distance'));
   for (var i = 0; i < this.bands.length; i++)
-    limit_band(this.bands, i, distance);
+    limitBand(this.bands, i, distance);
 }
 
-function set_freq(band) {
+function setFreq(band) {
   if (this.options.leap) return;
   var i = this.bands.indexOf(band);
   if (i < 0) {
@@ -190,10 +190,10 @@ function set_freq(band) {
     return;
   }
   const distance = Math.abs(this.get('distance'));
-  limit_band(this.bands, i, distance);
+  limitBand(this.bands, i, distance);
 }
 
-export const Crossover = define_class({
+export const Crossover = defineClass({
   /**
    * Crossover is a {@link Equalizer} displaying the response
    * of a multi-band crossover filter. Crossover  uses {@link CrossoverBand}
@@ -223,9 +223,9 @@ export const Crossover = define_class({
   },
   static_events: {
     set_leap: function (v) {
-      (v ? unlimit_bands : limit_bands).call(this);
+      (v ? unlimitBands : limitBands).call(this);
     },
-    set_distance: limit_bands,
+    set_distance: limitBands,
     initialized: function () {
       this.set('leap', this.options.leap);
       this.set('distance', this.options.distance);
@@ -240,26 +240,26 @@ export const Crossover = define_class({
 
     var self = this;
     this.set_freq_cb = function () {
-      set_freq.call(self, this);
+      setFreq.call(self, this);
     };
-    this.remove_child(this.baseline);
-    const graph = this.add_graph(new CrossoverGraph({ index: 0 }));
+    this.removeChild(this.baseline);
+    const graph = this.addGraph(new CrossoverGraph({ index: 0 }));
     this.crossover_graphs = [graph];
   },
   draw: function (O, element) {
-    add_class(element, 'aux-crossover');
+    addClass(element, 'aux-crossover');
 
     Equalizer.prototype.draw.call(this, O, element);
   },
-  add_child: function (child) {
-    Equalizer.prototype.add_child.call(this, child);
+  addChild: function (child) {
+    Equalizer.prototype.addChild.call(this, child);
     if (child instanceof CrossoverBand) {
       // add this band to all crossover graphs
-      this.crossover_graphs.forEach((g) => g.add_band(child));
+      this.crossover_graphs.forEach((g) => g.addBand(child));
       child.on('set_freq', this.set_freq_cb);
-      limit_bands.call(this);
+      limitBands.call(this);
       // add an additional crossover graph
-      const graph = this.add_graph(
+      const graph = this.addGraph(
         new CrossoverGraph({ index: this.crossover_graphs.length })
       );
       this.crossover_graphs.push(graph);
@@ -267,24 +267,24 @@ export const Crossover = define_class({
       // add all bands to this crossover
       this.children
         .filter((child) => child instanceof CrossoverBand)
-        .forEach((band) => child.add_band(band));
+        .forEach((band) => child.addBand(band));
     }
   },
-  remove_child: function (child) {
-    Equalizer.prototype.remove_child.call(this, child);
+  removeChild: function (child) {
+    Equalizer.prototype.removeChild.call(this, child);
     if (child instanceof CrossoverBand) {
       const graph = this.crossover_graphs.pop();
-      this.remove_graph(graph);
+      this.removeGraph(graph);
       child.off('set_freq', this.set_freq_cb);
-      limit_bands.call(this);
-      this.crossover_graphs.forEach((g) => g.remove_band(child));
+      limitBands.call(this);
+      this.crossover_graphs.forEach((g) => g.removeBand(child));
     } else if (child instanceof CrossoverGraph) {
       this.children
         .filter((child) => child instanceof CrossoverBand)
-        .forEach((band) => child.remove_band(band));
+        .forEach((band) => child.removeBand(band));
     }
   },
-  add_band: function (options, type) {
+  addBand: function (options, type) {
     let band;
 
     if (options instanceof CrossoverBand) {
@@ -293,7 +293,7 @@ export const Crossover = define_class({
       type = type || CrossoverBand;
       band = new type(options);
     }
-    this.add_child(band);
+    this.addChild(band);
     return band;
   },
 });

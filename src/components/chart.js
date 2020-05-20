@@ -18,9 +18,9 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
-  subcomponent_from_widget,
+  componentFromWidget,
+  defineComponent,
+  subcomponentFromWidget,
 } from './../component_helpers.js';
 import { Chart } from './../widgets/chart.js';
 import { ChartHandle } from './../widgets/charthandle.js';
@@ -32,7 +32,7 @@ import { Graph } from './../widgets/graph.js';
  * @class ChartComponent
  * @implements Component
  */
-export const ChartComponent = component_from_widget(Chart);
+export const ChartComponent = componentFromWidget(Chart);
 
 /**
  * WebComponent for the ChartHandle widget. Available in the DOM as
@@ -41,10 +41,7 @@ export const ChartComponent = component_from_widget(Chart);
  * @class ChartHandleComponent
  * @implements Component
  */
-export const ChartHandleComponent = subcomponent_from_widget(
-  ChartHandle,
-  Chart
-);
+export const ChartHandleComponent = subcomponentFromWidget(ChartHandle, Chart);
 
 /**
  * WebComponent for the Graph widget. Available in the DOM as `aux-chart-graph`.
@@ -52,8 +49,8 @@ export const ChartHandleComponent = subcomponent_from_widget(
  * @class GraphComponent
  * @implements Component
  */
-export const GraphComponent = subcomponent_from_widget(Graph, Chart);
+export const GraphComponent = subcomponentFromWidget(Graph, Chart);
 
-define_component('chart', ChartComponent);
-define_component('chart-handle', ChartHandleComponent);
-define_component('chart-graph', GraphComponent);
+defineComponent('chart', ChartComponent);
+defineComponent('chart-handle', ChartHandleComponent);
+defineComponent('chart-graph', GraphComponent);

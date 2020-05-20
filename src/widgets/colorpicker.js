@@ -18,20 +18,26 @@
  */
 
 import {
-  define_class,
-  define_child_element,
-  add_static_event,
+  defineClass,
+  defineChildElement,
+  addStaticEvent,
 } from '../widget_helpers.js';
-import { define_child_widget } from '../child_widget.js';
+import { defineChildWidget } from '../child_widget.js';
 import { Container } from './container.js';
 import { Value } from './value.js';
 import { ValueKnob } from './valueknob.js';
 import { Button } from './button.js';
 import { Range } from '../modules/range.js';
 import { DragValue } from '../modules/dragvalue.js';
-import { add_class } from '../utils/dom.js';
+import { addClass } from '../utils/dom.js';
 import { FORMAT } from '../utils/sprintf.js';
-import { rgb2bw, rgb2hex, rgb2hsl, hsl2rgb, hex2rgb } from '../utils/colors.js';
+import {
+  RGBToBW,
+  RGBToHex,
+  RGBToHSL,
+  HSLToRGB,
+  hexToRGB,
+} from '../utils/colors.js';
 
 var color_options = [
   'rgb',
@@ -45,7 +51,7 @@ var color_options = [
   'blue',
 ];
 
-function checkinput(e) {
+function checkInput(e) {
   var I = this.hex.element;
   if (e.keyCode && e.keyCode == 13) {
     apply.call(this);
@@ -75,7 +81,7 @@ function cancel() {
    *
    * @event ColorPicker#cancel
    */
-  fevent.call(this, 'cancel');
+  fEvent.call(this, 'cancel');
 }
 function apply() {
   /**
@@ -84,10 +90,10 @@ function apply() {
    * @event ColorPicker#apply
    * @param {object} colors - Object containing all color objects: `rgb`, `hsl`, `hex`, `hue`, `saturation`, `lightness`, `red`, `green`, `blue`
    */
-  fevent.call(this, 'apply', true);
+  fEvent.call(this, 'apply', true);
 }
 
-function fevent(e, useraction) {
+function fEvent(e, useraction) {
   var O = this.options;
   if (useraction) {
     this.emit('userset', 'rgb', O.rgb);
@@ -122,7 +128,7 @@ var color_atoms = {
   blue: 'rgb',
 };
 
-function set_atoms(key) {
+function setAtoms(key) {
   var O = this.options;
   var atoms = Object.keys(color_atoms);
   for (var i = 0; i < atoms.length; i++) {
@@ -132,7 +138,7 @@ function set_atoms(key) {
       this[atom].set('value', O[atom]);
     }
   }
-  if (key !== 'hex') O.hex = rgb2hex(O.rgb);
+  if (key !== 'hex') O.hex = RGBToHex(O.rgb);
 }
 
 /**
@@ -168,7 +174,7 @@ function set_atoms(key) {
  * @property {boolean} [show_indicator=true] - Set to `false` to hide the color indicator.
  */
 
-export const ColorPicker = define_class({
+export const ColorPicker = defineClass({
   Extends: Container,
 
   _options: Object.assign(Object.create(Container.prototype._options), {
@@ -237,7 +243,7 @@ export const ColorPicker = define_class({
         if (e.start.target.classList.contains('aux-indicator')) return;
         var ev = e.stouch ? e.stouch : e.start;
         var x = ev.clientX - this.parent._canvas.getBoundingClientRect().left;
-        this.parent.set('hue', this.options.range().px2val(x));
+        this.parent.set('hue', this.options.range().pixelToValue(x));
       },
     });
     /**
@@ -259,7 +265,7 @@ export const ColorPicker = define_class({
         if (e.start.target.classList.contains('aux-indicator')) return;
         var ev = e.stouch ? e.stouch : e.start;
         var y = ev.clientY - this.parent._canvas.getBoundingClientRect().top;
-        this.parent.set('lightness', 1 - this.options.range().px2val(y));
+        this.parent.set('lightness', 1 - this.options.range().pixelToValue(y));
       },
     });
   },
@@ -269,7 +275,7 @@ export const ColorPicker = define_class({
     this.range_y.set('basis', rect.height);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-colorpicker');
+    addClass(element, 'aux-colorpicker');
 
     Container.prototype.draw.call(this, O, element);
   },
@@ -291,7 +297,7 @@ export const ColorPicker = define_class({
         'blue'
       )
     ) {
-      var bw = rgb2bw(O.rgb);
+      var bw = RGBToBW(O.rgb);
       var bg =
         'rgb(' +
         parseInt(O.red) +
@@ -317,14 +323,14 @@ export const ColorPicker = define_class({
     if (color_options.indexOf(key) > -1) {
       switch (key) {
         case 'rgb':
-          O.hsl = rgb2hsl(value);
+          O.hsl = RGBToHSL(value);
           break;
         case 'hsl':
-          O.rgb = hsl2rgb(value);
+          O.rgb = HSLToRGB(value);
           break;
         case 'hex':
-          O.rgb = hex2rgb(value);
-          O.hsl = rgb2hsl(O.rgb);
+          O.rgb = hexToRGB(value);
+          O.hsl = RGBToHSL(O.rgb);
           break;
         case 'hue':
           O.hsl = {
@@ -332,7 +338,7 @@ export const ColorPicker = define_class({
             s: O.saturation,
             l: O.lightness,
           };
-          O.rgb = hsl2rgb(O.hsl);
+          O.rgb = HSLToRGB(O.hsl);
           break;
         case 'saturation':
           O.hsl = {
@@ -340,7 +346,7 @@ export const ColorPicker = define_class({
             s: Math.min(1, Math.max(0, value)),
             l: O.lightness,
           };
-          O.rgb = hsl2rgb(O.hsl);
+          O.rgb = HSLToRGB(O.hsl);
           break;
         case 'lightness':
           O.hsl = {
@@ -348,7 +354,7 @@ export const ColorPicker = define_class({
             s: O.saturation,
             l: Math.min(1, Math.max(0, value)),
           };
-          O.rgb = hsl2rgb(O.hsl);
+          O.rgb = HSLToRGB(O.hsl);
           break;
         case 'red':
           O.rgb = {
@@ -356,11 +362,11 @@ export const ColorPicker = define_class({
             g: O.green,
             b: O.blue,
           };
-          O.hsl = rgb2hsl(O.rgb);
+          O.hsl = RGBToHSL(O.rgb);
           break;
         case 'green':
           O.rgb = { r: O.red, g: Math.min(255, Math.max(0, value)), b: O.blue };
-          O.hsl = rgb2hsl(O.rgb);
+          O.hsl = RGBToHSL(O.rgb);
           break;
         case 'blue':
           O.rgb = {
@@ -368,10 +374,10 @@ export const ColorPicker = define_class({
             g: O.green,
             b: Math.min(255, Math.max(0, value)),
           };
-          O.hsl = rgb2hsl(O.rgb);
+          O.hsl = RGBToHSL(O.rgb);
           break;
       }
-      set_atoms.call(this, key, value);
+      setAtoms.call(this, key, value);
     }
     return Container.prototype.set.call(this, key, value);
   },
@@ -381,7 +387,7 @@ export const ColorPicker = define_class({
  * @member {HTMLDivElement} ColorPicker#canvas - The color background.
  *   Has class .aux-canvas`,
  */
-define_child_element(ColorPicker, 'canvas', {
+defineChildElement(ColorPicker, 'canvas', {
   show: true,
   append: function () {
     this.element.appendChild(this._canvas);
@@ -393,7 +399,7 @@ define_child_element(ColorPicker, 'canvas', {
  * @member {HTMLDivElement} ColorPicker#grayscale - The grayscale background.
  *   Has class .aux-grayscale`,
  */
-define_child_element(ColorPicker, 'grayscale', {
+defineChildElement(ColorPicker, 'grayscale', {
   show: true,
   append: function () {
     this._canvas.appendChild(this._grayscale);
@@ -403,7 +409,7 @@ define_child_element(ColorPicker, 'grayscale', {
  * @member {HTMLDivElement} ColorPicker#indicator - The indicator element.
  *   Has class .aux-indicator`,
  */
-define_child_element(ColorPicker, 'indicator', {
+defineChildElement(ColorPicker, 'indicator', {
   show: true,
   append: function () {
     this._canvas.appendChild(this._indicator);
@@ -414,7 +420,7 @@ define_child_element(ColorPicker, 'indicator', {
  * @member {Value} ColorPicker#hex - The {@link Value} for the HEX color.
  *   Has class .aux-hex`,
  */
-define_child_widget(ColorPicker, 'hex', {
+defineChildWidget(ColorPicker, 'hex', {
   create: Value,
   show: true,
   static_events: {
@@ -422,10 +428,10 @@ define_child_widget(ColorPicker, 'hex', {
       if (key == 'value') this.parent.userset('hex', val);
     },
     keyup: function (e) {
-      checkinput.call(this.parent, e);
+      checkInput.call(this.parent, e);
     },
     paste: function (e) {
-      checkinput.call(this.parent, e);
+      checkInput.call(this.parent, e);
     },
   },
   default_options: {
@@ -457,7 +463,7 @@ define_child_widget(ColorPicker, 'hex', {
  * @member {ValueKnob} ColorPicker#hue - The {@link ValueKnob} for the hue.
  *   Has class .aux-hue`,
  */
-define_child_widget(ColorPicker, 'hue', {
+defineChildWidget(ColorPicker, 'hue', {
   create: ValueKnob,
   option: 'show_hsl',
   show: true,
@@ -486,7 +492,7 @@ define_child_widget(ColorPicker, 'hue', {
  * @member {ValueKnob} ColorPicker#saturation - The {@link ValueKnob} for the saturation.
  *   Has class .aux-saturation`,
  */
-define_child_widget(ColorPicker, 'saturation', {
+defineChildWidget(ColorPicker, 'saturation', {
   create: ValueKnob,
   show: true,
   static_events: {
@@ -514,7 +520,7 @@ define_child_widget(ColorPicker, 'saturation', {
  * @member {ValueKnob} ColorPicker#lightness - The {@link ValueKnob} for the lightness.
  *   Has class .aux-lightness`,
  */
-define_child_widget(ColorPicker, 'lightness', {
+defineChildWidget(ColorPicker, 'lightness', {
   create: ValueKnob,
   option: 'show_hsl',
   show: true,
@@ -543,7 +549,7 @@ define_child_widget(ColorPicker, 'lightness', {
  * @member {ValueKnob} ColorPicker#red - The {@link ValueKnob} for the red color.
  *   Has class .aux-red`,
  */
-define_child_widget(ColorPicker, 'red', {
+defineChildWidget(ColorPicker, 'red', {
   create: ValueKnob,
   option: 'show_rgb',
   show: true,
@@ -576,7 +582,7 @@ define_child_widget(ColorPicker, 'red', {
  * @member {ValueKnob} ColorPicker#green - The {@link ValueKnob} for the green color.
  *   Has class .aux-green`,
  */
-define_child_widget(ColorPicker, 'green', {
+defineChildWidget(ColorPicker, 'green', {
   create: ValueKnob,
   option: 'show_rgb',
   show: true,
@@ -609,7 +615,7 @@ define_child_widget(ColorPicker, 'green', {
  * @member {ValueKnob} ColorPicker#blue - The {@link ValueKnob} for the blue color.
  *   Has class .aux-blue`,
  */
-define_child_widget(ColorPicker, 'blue', {
+defineChildWidget(ColorPicker, 'blue', {
   create: ValueKnob,
   option: 'show_rgb',
   show: true,
@@ -642,7 +648,7 @@ define_child_widget(ColorPicker, 'blue', {
  * @member {Button} ColorPicker#apply - The {@link Button} to apply.
  *   Has class .aux-apply`,
  */
-define_child_widget(ColorPicker, 'apply', {
+defineChildWidget(ColorPicker, 'apply', {
   create: Button,
   show: true,
   static_events: {
@@ -659,7 +665,7 @@ define_child_widget(ColorPicker, 'apply', {
  * @member {Button} ColorPicker#cancel - The {@link Button} to cancel.
  *   Has class .aux-cancel`,
  */
-define_child_widget(ColorPicker, 'cancel', {
+defineChildWidget(ColorPicker, 'cancel', {
   create: Button,
   show: true,
   static_events: {
@@ -674,10 +680,10 @@ define_child_widget(ColorPicker, 'cancel', {
 });
 
 // This has to happen after all children are initialized
-add_static_event(ColorPicker, 'initialized', function () {
+addStaticEvent(ColorPicker, 'initialized', function () {
   const options = {};
   color_options.forEach((name) => {
-    if (this.options[name] !== this.get_default(name)) {
+    if (this.options[name] !== this.getDefault(name)) {
       options[name] = this.options[name];
     }
   });

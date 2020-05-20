@@ -65,7 +65,7 @@ export function log() {
   } catch (e) {}
 }
 
-export function print_widget_tree(w, depth) {
+export function printWidgetTree(w, depth) {
   if (!depth) depth = 0;
 
   var print = function (fmt) {
@@ -96,6 +96,6 @@ export function print_widget_tree(w, depth) {
   print('%s (%s, children: %o)', w._class, state.join(' '), nchildren);
 
   if (C) {
-    for (var i = 0; i < C.length; i++) print_widget_tree(C[i], depth + 1);
+    for (var i = 0; i < C.length; i++) printWidgetTree(C[i], depth + 1);
   }
 }

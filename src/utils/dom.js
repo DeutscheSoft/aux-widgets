@@ -30,9 +30,9 @@ import { warn } from './log.js';
  * @param {HTMLElement|SVGElement} node - The DOM node.
  * @param {string} name - The class name.
  * @returns {boolean}
- * @function has_class
+ * @function hasClass
  */
-export function has_class(e, cls) {
+export function hasClass(e, cls) {
   return e.classList.contains(cls);
 }
 
@@ -41,9 +41,9 @@ export function has_class(e, cls) {
  *
  * @param {HTMLElement|SVGElement} node - The DOM node.
  * @param {...*} names - The class names.
- * @function add_class
+ * @function addClass
  */
-export function add_class(e) {
+export function addClass(e) {
   var i;
   e = e.classList;
   for (i = 1; i < arguments.length; i++) {
@@ -55,9 +55,9 @@ export function add_class(e) {
  * Removes a CSS class from a DOM node.
  * @param {HTMLElement|SVGElement} node - The DOM node.
  * @param {...*} names - The class names.
- * @function remove_class
+ * @function removeClass
  */
-export function remove_class(e) {
+export function removeClass(e) {
   var i;
   e = e.classList;
   for (i = 1; i < arguments.length; i++) e.remove(arguments[i]);
@@ -66,16 +66,16 @@ export function remove_class(e) {
  * Toggles a CSS class from a DOM node.
  * @param {HTMLElement|SVGElement} node - The DOM node.
  * @param {string} name - The class name.
- * @function toggle_class
+ * @function toggleClass
  */
-export function toggle_class(e, cls, cond) {
+export function toggleClass(e, cls, cond) {
   /* The second argument to toggle is not implemented in IE,
    * so we never use it */
   if (arguments.length >= 3) {
     if (cond) {
-      add_class(e, cls);
+      addClass(e, cls);
     } else {
-      remove_class(e, cls);
+      removeClass(e, cls);
     }
   } else e.classList.toggle(cls);
 }
@@ -87,9 +87,9 @@ export function toggle_class(e, cls, cond) {
  * @param {string} property - The CSS property name.
  * @returns {string}
  *
- * @function get_style
+ * @function getStyle
  */
-export function get_style(e, style) {
+export function getStyle(e, style) {
   return window.getComputedStyle(e).getPropertyValue(style);
 }
 
@@ -98,10 +98,10 @@ const class_regex = /[^A-Za-z0-9_-]/;
 /**
  * Returns true ii a string could be a class name.
  * @param {string} string - The string to test
- * @function is_class_name
+ * @function isClassName
  * @returns {boolean}
  */
-export function is_class_name(str) {
+export function isClassName(str) {
   return !class_regex.test(str);
 }
 
@@ -109,12 +109,12 @@ export function is_class_name(str) {
  * Returns the maximum value (float)  of a comma separated string. It is used
  * to find the longest CSS animation in a set of multiple animations.
  * @param {string} string - The comma separated string.
- * @function get_max_time
+ * @function getMaxTime
  * @returns {number}
  * @example
- * get_max_time(get_style(DOMNode, "animation-duration"));
+ * getMaxTime(getStyle(DOMNode, "animation-duration"));
  */
-export function get_max_time(string) {
+export function getMaxTime(string) {
   var ret = 0,
     i,
     tmp,
@@ -138,25 +138,25 @@ export function get_max_time(string) {
 /**
  * Returns the longest animation duration of CSS animations and transitions.
  * @param {HTMLElement} element - The element to evalute the animation duration for.
- * @function get_duration
+ * @function getDuration
  * @returns {number}
  */
-export function get_duration(element) {
+export function getDuration(element) {
   return Math.max(
-    get_max_time(get_style(element, 'animation-duration')) +
-      get_max_time(get_style(element, 'animation-delay')),
-    get_max_time(get_style(element, 'transition-duration')) +
-      get_max_time(get_style(element, 'transition-delay'))
+    getMaxTime(getStyle(element, 'animation-duration')) +
+      getMaxTime(getStyle(element, 'animation-delay')),
+    getMaxTime(getStyle(element, 'transition-duration')) +
+      getMaxTime(getStyle(element, 'transition-delay'))
   );
 }
 
 /**
  * Returns the DOM node with the given ID. Shorthand for document.getElementById.
  * @param {string} id - The ID to search for
- * @function get_id
+ * @function getId
  * @returns {HTMLElement}
  */
-export function get_id(id) {
+export function getId(id) {
   return document.getElementById(id);
 }
 
@@ -166,9 +166,9 @@ export function get_id(id) {
  * @param {string} class - The name of the class
  * @param {DOMNode} element - Limit search to child nodes of this element. Optional.
  * @returns {NodeList}
- * @function get_class
+ * @function getClass
  */
-export function get_class(cls, element) {
+export function getClass(cls, element) {
   return (element ? element : document).getElementsByClassName(cls);
 }
 
@@ -178,9 +178,9 @@ export function get_class(cls, element) {
  * @param {string} tag - The name of the tag
  * @param {DOMNode} element - Limit search to child nodes of this element. Optional.
  * @returns {NodeList}
- * @function get_tag
+ * @function getTag
  */
-export function get_tag(tag, element) {
+export function getTag(tag, element) {
   return (element ? element : document).getElementsByTagName(tag);
 }
 
@@ -202,7 +202,7 @@ export function element(tag) {
         if (v.hasOwnProperty(key)) n.setAttribute(key, v[key]);
       }
     } else if (typeof v === 'string') {
-      add_class(n, v);
+      addClass(n, v);
     } else throw new Error('unsupported argument to element');
   }
   return n;
@@ -221,9 +221,9 @@ export function empty(element) {
  * Sets a string as new exclusive text node of an HTMLElement.
  * @param {HTMLElement} element - The element to clean up
  * @param {string} text - The string to set as text content
- * @function set_text
+ * @function setText
  */
-export function set_text(element, text) {
+export function setText(element, text) {
   if (
     element.childNodes.length === 1 &&
     typeof element.childNodes[0].data === 'string'
@@ -236,9 +236,9 @@ export function set_text(element, text) {
  * Returns a documentFragment containing the result of a string parsed as HTML.
  * @param {string} html - A string to parse as HTML
  * @returns {HTMLFragment}
- * @function html
+ * @function HTML
  */
-export function html(string) {
+export function HTML(string) {
   /* NOTE: setting innerHTML on a document fragment is not supported */
   var e = document.createElement('div');
   var f = document.createDocumentFragment();
@@ -251,18 +251,18 @@ export function html(string) {
  * Sets the (exclusive) content of an HTMLElement.
  * @param {HTMLElement} element - The element receiving the content
  * @param{string|HTMLElement} content - A string or HTMLElement to set as content
- * @function set_content
+ * @function setContent
  */
-export function set_content(element, content) {
-  if (is_dom_node(content)) {
+export function setContent(element, content) {
+  if (isDomNode(content)) {
     empty(element);
     if (content.parentNode) {
-      warn('set_content: possible reuse of a DOM node. cloning\n');
+      warn('setContent: possible reuse of a DOM node. cloning\n');
       content = content.cloneNode(true);
     }
     element.appendChild(content);
   } else {
-    set_text(element, content + '');
+    setText(element, content + '');
   }
 }
 
@@ -270,9 +270,9 @@ export function set_content(element, content) {
  * Inserts one HTMLELement after another in the DOM tree.
  * @param {HTMLElement} newnode - The new node to insert into the DOM tree
  * @param {HTMLElement} refnode - The reference element to add the new element after
- * @function insert_after
+ * @function insertAfter
  */
-export function insert_after(newnode, refnode) {
+export function insertAfter(newnode, refnode) {
   if (refnode.parentNode)
     refnode.parentNode.insertBefore(newnode, refnode.nextSibling);
 }
@@ -281,9 +281,9 @@ export function insert_after(newnode, refnode) {
  * Inserts one HTMLELement before another in the DOM tree.
  * @param {HTMLElement} newnode - The new node to insert into the DOM tree
  * @param {HTMLElement} refnode - The reference element to add the new element before
- * @function insert_before
+ * @function insertBefore
  */
-export function insert_before(newnode, refnode) {
+export function insertBefore(newnode, refnode) {
   if (refnode.parentNode) refnode.parentNode.insertBefore(newnode, refnode);
 }
 
@@ -317,9 +317,9 @@ export function height() {
  * Returns the amount of CSS pixels the document or an optional element is scrolled from top.
  * @param {HTMLElement} element - The element to evaluate. Optional.
  * @returns {number}
- * @function scroll_top
+ * @function scrollTop
  */
-export function scroll_top(element) {
+export function scrollTop(element) {
   if (element) return element.scrollTop;
   return Math.max(
     document.documentElement.scrollTop || 0,
@@ -332,9 +332,9 @@ export function scroll_top(element) {
  * Returns the amount of CSS pixels the document or an optional element is scrolled from left.
  * @param {HTMLElement} element - The element to evaluate. Optional.
  * @returns {number}
- * @function scroll_left
+ * @function scrollLeft
  */
-export function scroll_left(element) {
+export function scrollLeft(element) {
   if (element) return element.scrollLeft;
   return Math.max(
     document.documentElement.scrollLeft,
@@ -347,9 +347,9 @@ export function scroll_left(element) {
  * Returns the sum of CSS pixels an element and all of its parents are scrolled from top.
  * @param {HTMLElement} element - The element to evaluate
  * @returns {number}
- * @function scroll_all_top
+ * @function scrollAllTop
  */
-export function scroll_all_top(element) {
+export function scrollAllTop(element) {
   var v = 0;
   while ((element = element.parentNode)) v += element.scrollTop || 0;
   return v;
@@ -359,9 +359,9 @@ export function scroll_all_top(element) {
  * Returns the sum of CSS pixels an element and all of its parents are scrolled from left.
  * @param {HTMLElement} element - The element to evaluate
  * @returns {number}
- * @function scroll_all_left
+ * @function scrollAllLeft
  */
-export function scroll_all_left(element) {
+export function scrollAllLeft(element) {
   var v = 0;
   while ((element = element.parentNode)) v += element.scrollLeft || 0;
   return v;
@@ -373,12 +373,12 @@ export function scroll_all_left(element) {
  * @param {HTMLElement} element - The element to evaluate
  * @param {HTMLElement} relation - The element to use as reference. Optional.
  * @returns {number}
- * @function position_top
+ * @function positionTop
  */
-export function position_top(e, rel) {
+export function positionTop(e, rel) {
   var top = parseInt(e.getBoundingClientRect().top);
-  var f = fixed(e) ? 0 : scroll_top();
-  return top + f - (rel ? position_top(rel) : 0);
+  var f = fixed(e) ? 0 : scrollTop();
+  return top + f - (rel ? positionTop(rel) : 0);
 }
 
 /**
@@ -387,12 +387,12 @@ export function position_top(e, rel) {
  * @param {HTMLElement} element - The element to evaluate
  * @param {HTMLElement} relation - The element to use as reference. Optional.
  * @returns {number}
- * @function position_left
+ * @function positionLeft
  */
-export function position_left(e, rel) {
+export function positionLeft(e, rel) {
   var left = parseInt(e.getBoundingClientRect().left);
-  var f = fixed(e) ? 0 : scroll_left();
-  return left + f - (rel ? position_left(rel) : 0);
+  var f = fixed(e) ? 0 : scrollLeft();
+  return left + f - (rel ? positionLeft(rel) : 0);
 }
 
 /**
@@ -412,9 +412,9 @@ export function fixed(e) {
  * @param {boolean} margin - Determine if margin is included
  * @param {number} width - If defined the elements outer width is set to this value
  * @returns {number}
- * @function outer_width
+ * @function outerWidth
  */
-export function outer_width(element, margin, width) {
+export function outerWidth(element, margin, width) {
   var m = 0;
   if (margin) {
     var cs = getComputedStyle(element);
@@ -422,8 +422,8 @@ export function outer_width(element, margin, width) {
     m += parseFloat(cs.getPropertyValue('margin-right'));
   }
   if (width !== void 0) {
-    if (box_sizing(element) === 'content-box') {
-      var css = css_space(element, 'padding', 'border');
+    if (boxSizing(element) === 'content-box') {
+      var css = CSSSpace(element, 'padding', 'border');
       width -= css.left + css.right;
     }
     width -= m;
@@ -444,9 +444,9 @@ export function outer_width(element, margin, width) {
  * @param {boolean} margin - Determine if margin is included
  * @param {number} height - If defined the elements outer height is set to this value
  * @returns {number}
- * @function outer_height
+ * @function outerHeight
  */
-export function outer_height(element, margin, height) {
+export function outerHeight(element, margin, height) {
   var m = 0;
   if (margin) {
     var cs = getComputedStyle(element, null);
@@ -454,8 +454,8 @@ export function outer_height(element, margin, height) {
     m += parseFloat(cs.getPropertyValue('margin-bottom'));
   }
   if (height !== void 0) {
-    if (box_sizing(element) === 'content-box') {
-      var css = css_space(element, 'padding', 'border');
+    if (boxSizing(element) === 'content-box') {
+      var css = CSSSpace(element, 'padding', 'border');
       height -= css.top + css.bottom;
     }
     height -= m;
@@ -475,13 +475,13 @@ export function outer_height(element, margin, height) {
  * @param {HTMLElement} element - the element to evaluate / manipulate
  * @param {number} width - If defined the elements inner width is set to this value
  * @returns {number}
- * @function inner_width
+ * @function innerWidth
  */
-export function inner_width(element, width) {
-  var css = css_space(element, 'padding', 'border');
+export function innerWidth(element, width) {
+  var css = CSSSpace(element, 'padding', 'border');
   var x = css.left + css.right;
   if (width !== void 0) {
-    if (box_sizing(element) === 'border-box') width += x;
+    if (boxSizing(element) === 'border-box') width += x;
     // TODO: fixme
     if (width < 0) return 0;
     element.style.width = width + 'px';
@@ -498,13 +498,13 @@ export function inner_width(element, width) {
  * @param {HTMLElement} element - the element to evaluate / manipulate
  * @param {number} height - If defined the elements outer height is set to this value
  * @returns {number}
- * @function inner_height
+ * @function innerHeight
  */
-export function inner_height(element, height) {
-  var css = css_space(element, 'padding', 'border');
+export function innerHeight(element, height) {
+  var css = CSSSpace(element, 'padding', 'border');
   var y = css.top + css.bottom;
   if (height !== void 0) {
-    if (box_sizing(element) === 'border-box') height += y;
+    if (boxSizing(element) === 'border-box') height += y;
     // TODO: fixme
     if (height < 0) return 0;
     element.style.height = height + 'px';
@@ -519,9 +519,9 @@ export function inner_height(element, height) {
  * Returns the box-sizing method of an HTMLElement.
  * @param {HTMLElement} element - The element to evaluate
  * @returns {string}
- * @function box_sizing
+ * @function boxSizing
  */
-export function box_sizing(element) {
+export function boxSizing(element) {
   var cs = getComputedStyle(element, null);
   if (cs.getPropertyValue('box-sizing'))
     return cs.getPropertyValue('box-sizing');
@@ -540,11 +540,11 @@ export function box_sizing(element) {
  * @param {HTMLElement} element - The element to evaluate
  * @param{...string} The CSS attributes to take into account
  * @returns {object} An object with the members "top", "bottom", "lfet", "right"
- * @function css_space
+ * @function CSSSpace
  * @example
- * css_space(element, "padding", "border");
+ * CSSSpace(element, "padding", "border");
  */
-export function css_space(element) {
+export function CSSSpace(element) {
   var cs = getComputedStyle(element, null);
   var o = { top: 0, right: 0, bottom: 0, left: 0 };
   var a;
@@ -566,11 +566,11 @@ export function css_space(element) {
  * Set multiple CSS styles onto an HTMLElement.
  * @param {HTMLElement} element - the element to add the styles to
  * @param {object} styles - A mapping containing all styles to add
- * @function set_styles
+ * @function setStyles
  * @example
- * set_styles(element, {"width":"100px", "height":"100px"});
+ * setStyles(element, {"width":"100px", "height":"100px"});
  */
-export function set_styles(elem, styles) {
+export function setStyles(elem, styles) {
   var key, v;
   var s = elem.style;
   for (key in styles)
@@ -590,15 +590,15 @@ export function set_styles(elem, styles) {
  * @param {HTMLElement} element - The element to set the style to
  * @param {string} style - The CSS attribute to set
  * @param {string|number} value - The value to set the CSS attribute to
- * @function set_style
+ * @function setStyle
  */
-export function set_style(e, style, value) {
+export function setStyle(e, style, value) {
   if (typeof value === 'number') {
     /* By default, numbers are transformed to px. I believe this is a very _dangerous_ default
      * behavior, because it breaks other number like properties _without_ warning.
      * this is now deprecated. */
     warn(
-      'set_style: use of implicit px conversion is _deprecated_ and will be removed in the future.'
+      'setStyle: use of implicit px conversion is _deprecated_ and will be removed in the future.'
     );
     value = value.toFixed(3) + 'px';
   }
@@ -610,9 +610,9 @@ var _id_cnt = 0;
 /**
  * Generate a unique ID string.
  * @returns {string}
- * @function unique_id
+ * @function uniqueId
  */
-export function unique_id() {
+export function uniqueId() {
   var id;
   do {
     id = 'tk-' + _id_cnt++;
@@ -623,9 +623,9 @@ export function unique_id() {
 /**
  * Check if an object is a DOMNode
  * @returns {boolean}
- * @function is_dom_node
+ * @function isDomNode
  */
-export function is_dom_node(o) {
+export function isDomNode(o) {
   /* this is broken for SVG */
   return typeof o === 'object' && o instanceof Node;
 }
@@ -639,9 +639,9 @@ export const supports_transform =
 /**
  * Check if a device is touch-enabled.
  * @returns {boolean}
- * @function is_touch
+ * @function isTouch
  */
-export function is_touch() {
+export function isTouch() {
   return (
     'ontouchstart' in window || 'onmsgesturechange' in window // works on most browsers
   ); // works on ie10
@@ -651,11 +651,11 @@ export function is_touch() {
  * Evaluate size of scroll bars. The size is set as CSS variable
  * `--aux-scrollbar-size` on the `body` element.
  * @returns {integer} Size in pixel.
- * @function scrollbar_size
+ * @function scrollbarSize
  */
 var _scrollbar_size;
 
-export function scrollbar_size() {
+export function scrollbarSize() {
   if (typeof _scrollbar_size === 'undefined') {
     var div = element('div');
     div.style.overflow = 'scroll';

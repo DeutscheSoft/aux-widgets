@@ -17,11 +17,11 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { Container } from './container.js';
-import { element, add_class } from '../utils/dom.js';
+import { element, addClass } from '../utils/dom.js';
 
-export const List = define_class({
+export const List = defineClass({
   /**
    * List is a sortable {@link Container} for {@ListItems}s.
    *   the element is a UL instead of a DIV.
@@ -59,12 +59,12 @@ export const List = define_class({
     },
   },
   draw: function (O, element) {
-    add_class(element, 'aux-list');
+    addClass(element, 'aux-list');
 
     Container.prototype.draw.call(this, O, element);
   },
-  append_child: function (w) {
-    Container.prototype.append_child.call(this, w);
+  appendChild: function (w) {
+    Container.prototype.appendChild.call(this, w);
     var O = this.options;
     var C = this.children;
     if (O.sort) {

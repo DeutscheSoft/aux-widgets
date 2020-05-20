@@ -26,7 +26,7 @@ import sys
 import argparse
 import subprocess
 
-def parse_glyphs (font):
+def parseGlyphs (font):
   
   length = []
   for glyph in font.getElementsByTagName("glyph"):
@@ -58,7 +58,7 @@ def parse_glyphs (font):
 
 
 
-def prepare_template (fname, ftype, family, title, name, path, prefix, css, html, ttf):
+def prepareTemplate (fname, ftype, family, title, name, path, prefix, css, html, ttf):
   if not os.path.isfile(fname):
     print "%s template %s is missing." % (ftype, fname)
     sys.exit(1)
@@ -80,8 +80,8 @@ def prepare_template (fname, ftype, family, title, name, path, prefix, css, html
 
 
 
-def generate_css (fname, font, glyphs, family, title, name, path, prefix, css, html, ttf):
-  css = prepare_template(fname, "CSS", family, title, name, path, prefix, css, html, ttf)
+def generateCSS (fname, font, glyphs, family, title, name, path, prefix, css, html, ttf):
+  css = prepareTemplate(fname, "CSS", family, title, name, path, prefix, css, html, ttf)
   
   for g in glyphs:
     for i in range(0, len(g["icons"])):
@@ -92,8 +92,8 @@ def generate_css (fname, font, glyphs, family, title, name, path, prefix, css, h
 
 
 
-def generate_html (fname, font, glyphs, family, title, name, path, prefix, css, html, ttf):
-  html = prepare_template(fname, "HTML", family, title, name, path, prefix, css, html, ttf)
+def generateHTML (fname, font, glyphs, family, title, name, path, prefix, css, html, ttf):
+  html = prepareTemplate(fname, "HTML", family, title, name, path, prefix, css, html, ttf)
   
   table = "\n<table>\n"
   table += "<tr><th>Icon</th><th>Char</th><th>Name</th><th>CSS</th><th>HTML</th></tr>\n"
@@ -152,13 +152,13 @@ def main (args):
   for font in fonts:
     title = font.getAttribute("id")
     family = font.getElementsByTagName("font-face")[0].getAttribute("font-family")
-    glyphs = parse_glyphs(font)
+    glyphs = parseGlyphs(font)
     
     if args.css:
-      generate_css(os.path.join(path, "%s.css.in" % name), font, glyphs, family, title, name, path, prefix, css, html, ttf)
+      generateCSS(os.path.join(path, "%s.css.in" % name), font, glyphs, family, title, name, path, prefix, css, html, ttf)
     
     if args.html:
-      generate_html(os.path.join(path, "%s.html.in" % name), font, glyphs, family, title, name, path, prefix, css, html, ttf)
+      generateHTML(os.path.join(path, "%s.html.in" % name), font, glyphs, family, title, name, path, prefix, css, html, ttf)
 
     if args.ttf:
       exe = subprocess.call("type fontforge", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) == 0

@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { Toggle } from './../widgets/toggle.js';
 
@@ -29,6 +29,6 @@ import { Toggle } from './../widgets/toggle.js';
  * @class ToggleComponent
  * @implements Component
  */
-export const ToggleComponent = component_from_widget(Toggle);
+export const ToggleComponent = componentFromWidget(Toggle);
 
-define_component('toggle', ToggleComponent);
+defineComponent('toggle', ToggleComponent);

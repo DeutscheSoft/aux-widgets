@@ -17,11 +17,11 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
-import { define_child_widget } from '../child_widget.js';
+import { defineClass } from '../widget_helpers.js';
+import { defineChildWidget } from '../child_widget.js';
 import { Dialog } from './dialog.js';
 import { ColorPicker } from './colorpicker.js';
-import { add_class } from '../utils/dom.js';
+import { addClass } from '../utils/dom.js';
 
 function cancel() {
   var self = this.parent;
@@ -35,7 +35,7 @@ function apply(color) {
   self.close();
 }
 
-export const ColorPickerDialog = define_class({
+export const ColorPickerDialog = defineClass({
   /**
    * A {@link Dialog} window containing a {@link ColorPicker}. It can be opened
    * programatically and closes automatically on the appropriate user
@@ -57,7 +57,7 @@ export const ColorPickerDialog = define_class({
      */
   },
   draw: function (O, element) {
-    add_class(element, 'aux-colorpickerdialog');
+    addClass(element, 'aux-colorpickerdialog');
 
     Dialog.prototype.draw.call(this, O, element);
   },
@@ -66,7 +66,7 @@ export const ColorPickerDialog = define_class({
 /**
  * @member {ColorPicker} ColorPickerDialog#colorpicker - The {@link ColorPicker} widget.
  */
-define_child_widget(ColorPickerDialog, 'colorpicker', {
+defineChildWidget(ColorPickerDialog, 'colorpicker', {
   create: ColorPicker,
   show: true,
   inherit_options: true,

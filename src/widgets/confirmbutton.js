@@ -17,8 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { add_class } from './../utils/dom.js';
-import { define_class } from './../widget_helpers.js';
+import { addClass } from './../utils/dom.js';
+import { defineClass } from './../widget_helpers.js';
 import { Button } from './button.js';
 
 function reset(e) {
@@ -30,10 +30,10 @@ function reset(e) {
       t = t.parentElement;
     }
   }
-  state_reset.call(this);
+  stateReset.call(this);
 }
 
-function state_set() {
+function stateSet() {
   var T = this.__temp;
   var O = this.options;
   if (O.label_confirm) {
@@ -56,7 +56,7 @@ function state_set() {
   this.set('state', true);
 }
 
-function state_reset() {
+function stateReset() {
   var T = this.__temp;
   if (T.label) this.set('label', T.label);
 
@@ -89,13 +89,13 @@ function clicked() {
     this.emit('confirmed');
   } else if (O.state && Date.now() > T.click + O.interrupt) {
     this.emit('confirmed');
-    state_reset.call(this);
+    stateReset.call(this);
   } else if (!O.state) {
-    state_set.call(this);
+    stateSet.call(this);
   }
 }
 
-export const ConfirmButton = define_class({
+export const ConfirmButton = defineClass({
   /**
    * ConfirmButton is a {@link Button} firing the `confirmed` event
    * after it was hit a second time. While waiting for the confirmation, a
@@ -146,7 +146,7 @@ export const ConfirmButton = define_class({
   },
 
   draw: function (O, element) {
-    add_class(element, 'aux-confirmbutton');
+    addClass(element, 'aux-confirmbutton');
 
     Button.prototype.draw.call(this, O, element);
   },

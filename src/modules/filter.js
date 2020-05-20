@@ -17,13 +17,13 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { Base } from '../implements/base.js';
 import { error } from '../utils/log.js';
-import { StandardBiquadFilters } from '../utils/biquad.js';
+import { standardBiquadFilters } from '../utils/biquad.js';
 
 function reset() {
-  this.freq2gain = null;
+  this.frequencyToGain = null;
   /**
    * Is fired when a filters drawing function is reset.
    *
@@ -42,7 +42,7 @@ function reset() {
  * Calculates the frequency response of the filter, e.g. the effective change in
  * gain applied by this filter to a signal of a certain frequency.
  *
- * @method EqFilter#freq2gain
+ * @method EqFilter#frequencyToGain
  *
  * @param {number} frequency - The frequency in Hz.
  * @returns {number} gain - The change in gain in dB.
@@ -67,7 +67,7 @@ function reset() {
  * @return {EqFilter}
  */
 
-export const Filter = define_class({
+export const Filter = defineClass({
   /**
    * Filter provides the math for calculating a gain from
    * a given frequency for different types of biquad filters.
@@ -92,7 +92,7 @@ export const Filter = define_class({
   /**
    * Returns the gain for a given frequency
    *
-   * @method Filter#freq2gain
+   * @method Filter#frequencyToGain
    *
    * @param {number} frequency - The frequency to calculate the gain for.
    *
@@ -121,12 +121,12 @@ export const Filter = define_class({
     set_gain: reset,
     initialized: reset,
   },
-  create_freq2gain: function () {
+  createFrequencyToGain: function () {
     var O = this.options;
     var m;
 
     if (typeof O.type === 'string') {
-      m = StandardBiquadFilters[O.type];
+      m = standardBiquadFilters[O.type];
 
       if (!m) {
         error('Unknown standard filter: ' + O.type);
@@ -138,11 +138,11 @@ export const Filter = define_class({
       error("Unsupported option 'type'.");
       return;
     }
-    this.freq2gain = m(O).freq2gain;
+    this.frequencyToGain = m(O).freqtogain;
   },
-  get_freq2gain: function () {
-    if (this.freq2gain === null) this.create_freq2gain();
-    return this.freq2gain;
+  getFrequencyToGain: function () {
+    if (this.frequencyToGain === null) this.createFrequencyToGain();
+    return this.frequencyToGain;
   },
   reset: reset,
 });

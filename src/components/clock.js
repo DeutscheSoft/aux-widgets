@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { Clock } from './../widgets/clock.js';
 
@@ -29,6 +29,6 @@ import { Clock } from './../widgets/clock.js';
  * @class ClockComponent
  * @implements Component
  */
-export const ClockComponent = component_from_widget(Clock);
+export const ClockComponent = componentFromWidget(Clock);
 
-define_component('clock', ClockComponent);
+defineComponent('clock', ClockComponent);

@@ -19,18 +19,18 @@
 
 import { SelectComponent, SelectEntryComponent, Select } from '../src/index.js';
 
-import { assert, wait_for_event } from './helpers.js';
+import { assert, waitForEvent } from './helpers.js';
 
 describe('Select', () => {
-  function check_select(widget) {
-    assert(widget.current_value() === false);
+  function checkSelect(widget) {
+    assert(widget.currentValue() === false);
     widget.set('selected', 0);
-    assert(widget.current_value() == 42);
+    assert(widget.currentValue() == 42);
     widget.set('selected', 1);
-    assert(widget.current_value() == 23);
-    widget.add_entry({ value: 'foo', label: 'bar' });
+    assert(widget.currentValue() == 23);
+    widget.addEntry({ value: 'foo', label: 'bar' });
     assert(widget.get('selected') === 1);
-    assert(widget.current_value() === 23);
+    assert(widget.currentValue() === 23);
   }
 
   it('appending entries', () => {
@@ -44,14 +44,14 @@ describe('Select', () => {
     });
 
     // nothing selected
-    assert(widget.current_value() === false);
+    assert(widget.currentValue() === false);
 
-    widget.add_entry({ value: 23, label: 'the other answer' });
+    widget.addEntry({ value: 23, label: 'the other answer' });
 
-    check_select(widget);
+    checkSelect(widget);
   });
 
-  function make_entry_component(value, label) {
+  function makeEntryComponent(value, label) {
     const entry_component = document.createElement('aux-select-entry');
     entry_component.value = value;
     entry_component.label = label;
@@ -62,30 +62,30 @@ describe('Select', () => {
     const select = document.createElement('aux-select');
     const widget = select.auxWidget;
 
-    const entry42 = make_entry_component(42, 'the answer');
-    const entry23 = make_entry_component(23, 'the other answer');
-    const entry0 = make_entry_component(0, 'hello');
+    const entry42 = makeEntryComponent(42, 'the answer');
+    const entry23 = makeEntryComponent(23, 'the other answer');
+    const entry0 = makeEntryComponent(0, 'hello');
 
     select.appendChild(entry42);
 
     document.body.appendChild(select);
 
-    await wait_for_event(widget, 'redraw');
+    await waitForEvent(widget, 'redraw');
 
-    assert(widget.current_value() === false);
+    assert(widget.currentValue() === false);
 
     select.appendChild(entry23);
 
-    check_select(widget);
+    checkSelect(widget);
 
     select.insertBefore(entry0, select.firstChild);
 
     widget.set('selected', 0);
-    assert(widget.current_value() === 0);
+    assert(widget.currentValue() === 0);
 
     select.insertBefore(entry23, entry42);
     widget.set('selected', 1);
-    assert(widget.current_value() === 23);
+    assert(widget.currentValue() === 23);
 
     select.remove();
     widget.destroy();

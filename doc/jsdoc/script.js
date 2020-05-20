@@ -16,7 +16,7 @@
     url = url.substring(url.lastIndexOf('/') + 1);
 
     function setscroll(e) {
-      if (!TK.get_id('nf_input').value)
+      if (!TK.getId('nf_input').value)
         this.href = this.href.split('#')[0] + '#nav:' + parseInt(nav.scrollTop);
     }
 
@@ -41,8 +41,8 @@
       }
     }
 
-    var nfinput = TK.get_id('nf_input');
-    var nfclear = TK.get_id('nf_clear');
+    var nfinput = TK.getId('nf_input');
+    var nfclear = TK.getId('nf_clear');
     nfinput.addEventListener('keyup', function () {
       filter_nav(this.value.toLowerCase());
     });
@@ -51,7 +51,7 @@
       filter_nav('');
     });
 
-    TK.get_id('h1').appendChild(
+    TK.getId('h1').appendChild(
       document.querySelector('header h1').cloneNode(true)
     );
   };
@@ -103,7 +103,7 @@
     if (!code.length) return;
 
     for (var i = 0; i < code.length; i++) {
-      if (TK.has_class(code[i], 'css')) {
+      if (TK.hasClass(code[i], 'css')) {
         setup_stylesheet(current, code[i]);
       } else {
         setup_javascript(current, code[i]);

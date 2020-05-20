@@ -46,12 +46,12 @@ function log10(value) {
  * Calculates 10^(value / factor).
  * Transforms a dBFS value to the corresponding gain.
  *
- * @function db2gain
+ * @function dBToGain
  *
  * @param {number} value - A decibel value in dBFS.
  * @param {number} [factor=20] - The factor.
  */
-export function db2gain(value, factor) {
+export function dBToGain(value, factor) {
   value = +value;
   factor = +factor;
 
@@ -67,12 +67,12 @@ export function db2gain(value, factor) {
  * Calculates factor * log10(value).
  * Transforms a gain value to the corresponding dBFS value.
  *
- * @function gain2db
+ * @function gainToDB
  *
  * @param {number} value - A gain factor.
  * @param {number} [factor=20] - The factor.
  */
-export function gain2db(value, factor) {
+export function gainToDB(value, factor) {
   value = +value;
   factor = +factor;
 
@@ -87,7 +87,7 @@ export function gain2db(value, factor) {
  * Calculates a linear value between 0.0 and 1.0
  * from a value and its lower and upper boundaries in decibels.
  *
- * @function db2coef
+ * @function dBToCoef
  *
  * @param {number} value - The value in decibels.
  * @param {number} min - The minimum value in decibels.
@@ -97,7 +97,7 @@ export function gain2db(value, factor) {
  *
  * @returns {number} A value between 0.0 (min) and 1.0 (max).
  */
-export function db2coef(value, min, max, reverse, factor) {
+export function dBToCoef(value, min, max, reverse, factor) {
   value = +value;
   min = +min;
   max = +max;
@@ -116,7 +116,7 @@ export function db2coef(value, min, max, reverse, factor) {
  * Calculates a value in decibels from a value
  * between 0.0 and 1.0 and some lower and upper boundaries in decibels.
  *
- * @function coef2db
+ * @function coefToDB
  *
  * @param {number} coef - A value between 0.0 and 1.0.
  * @param {number} min - The minimum value in decibels.
@@ -126,7 +126,7 @@ export function db2coef(value, min, max, reverse, factor) {
  *
  * @returns {number} The result in decibels.
  */
-export function coef2db(coef, min, max, reverse, factor) {
+export function coefToDB(coef, min, max, reverse, factor) {
   coef = +coef;
   min = +min;
   max = +max;
@@ -145,7 +145,7 @@ export function coef2db(coef, min, max, reverse, factor) {
  * Calculates a linear value between 0.0 and scale.
  * from a value and its lower and upper boundaries in decibels.
  *
- * @function db2scale
+ * @function dBToScale
  *
  * @param {number} value - The value in decibels.
  * @param {number} min - The minimum value in decibels.
@@ -155,7 +155,7 @@ export function coef2db(coef, min, max, reverse, factor) {
  *
  * @returns {number} A value between 0.0 and scale.
  */
-export function db2scale(value, min, max, scale, reverse, factor) {
+export function dBToScale(value, min, max, scale, reverse, factor) {
   value = +value;
   min = +min;
   max = +max;
@@ -175,7 +175,7 @@ export function db2scale(value, min, max, scale, reverse, factor) {
  * Calculates a value in decibels from a value
  * between 0.0 and scale and some lower and upper boundaries in decibels.
  *
- * @function scale2db
+ * @function scaleToDB
  *
  * @param {number} value - A value between 0.0 and scale.
  * @param {number} min - The minimum value in decibels.
@@ -185,7 +185,7 @@ export function db2scale(value, min, max, scale, reverse, factor) {
  *
  * @returns {number} The result in decibels.
  */
-export function scale2db(value, min, max, scale, reverse, factor) {
+export function scaleToDB(value, min, max, scale, reverse, factor) {
   value = +value;
   min = +min;
   max = +max;
@@ -206,7 +206,7 @@ export function scale2db(value, min, max, scale, reverse, factor) {
  * Calculates a linear value between 0.0 and 1.0
  * from a value and its lower and upper boundaries in hertz.
  *
- * @function freq2coef
+ * @function freqToCoef
  *
  * @param {number} value - The value in hertz.
  * @param {number} min - The minimum value in hertz.
@@ -215,7 +215,7 @@ export function scale2db(value, min, max, scale, reverse, factor) {
  *
  * @returns {number} A value between 0.0 (min) and 1.0 (max).
  */
-export function freq2coef(value, min, max, reverse /*, prescaled, factor*/) {
+export function freqToCoef(value, min, max, reverse /*, prescaled, factor*/) {
   value = +value;
   min = +min;
   max = +max;
@@ -233,7 +233,7 @@ export function freq2coef(value, min, max, reverse /*, prescaled, factor*/) {
  * Calculates a value in hertz from a value
  * between 0.0 and 1.0 and some lower and upper boundaries in hertz.
  *
- * @function coef2freq
+ * @function coefToFreq
  *
  * @param {number} coef - A value between 0.0 and 1.0.
  * @param {number} min - The minimum value in hertz.
@@ -243,7 +243,7 @@ export function freq2coef(value, min, max, reverse /*, prescaled, factor*/) {
  *
  * @returns {number} The result in hertz.
  */
-export function coef2freq(coef, min, max, reverse) {
+export function coefToFreq(coef, min, max, reverse) {
   coef = +coef;
   min = +min;
   max = +max;
@@ -260,7 +260,7 @@ export function coef2freq(coef, min, max, reverse) {
  * Calculates a linear value between 0.0 and scale
  * from a value and its lower and upper boundaries in hertz.
  *
- * @function freq2scale
+ * @function freqToScale
  *
  * @param {number} value - The value in hertz.
  * @param {number} min - The minimum value in hertz.
@@ -269,7 +269,7 @@ export function coef2freq(coef, min, max, reverse) {
  *
  * @returns {number} A value between 0.0 and scale.
  */
-export function freq2scale(value, min, max, scale, reverse) {
+export function freqToScale(value, min, max, scale, reverse) {
   value = +value;
   min = +min;
   max = +max;
@@ -287,7 +287,7 @@ export function freq2scale(value, min, max, scale, reverse) {
  * Calculates a value in hertz from a value
  * between 0.0 and scale and some lower and upper boundaries in hertz.
  *
- * @function scale2freq
+ * @function scaleToFreq
  *
  * @param {number} value - A value between 0.0 and scale.
  * @param {number} min - The minimum value in hertz.
@@ -297,7 +297,7 @@ export function freq2scale(value, min, max, scale, reverse) {
  *
  * @returns {number} The result in hertz.
  */
-export function scale2freq(value, min, max, scale, reverse) {
+export function scaleToFreq(value, min, max, scale, reverse) {
   value = +value;
   min = +min;
   max = +max;

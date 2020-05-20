@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { Scale } from './../widgets/scale.js';
 
@@ -29,6 +29,6 @@ import { Scale } from './../widgets/scale.js';
  * @class ScaleComponent
  * @implements Component
  */
-export const ScaleComponent = component_from_widget(Scale);
+export const ScaleComponent = componentFromWidget(Scale);
 
-define_component('scale', ScaleComponent);
+defineComponent('scale', ScaleComponent);

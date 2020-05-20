@@ -20,28 +20,28 @@
 /* jshint -W018 */
 /* jshint -W086 */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { DragCapture } from './dragcapture.js';
 import { GlobalCursor } from '../implements/globalcursor.js';
 import { warn } from '../utils/log.js';
-import { add_class, remove_class } from '../utils/dom.js';
+import { addClass, removeClass } from '../utils/dom.js';
 import { S } from '../dom_scheduler.js';
 
-function start_drag(value) {
+function startDrag(value) {
   if (!value) return;
   var O = this.options;
-  this.start_pos = O.range.call(this).val2px(O.get.call(this));
+  this.start_pos = O.range.call(this).valueToPixel(O.get.call(this));
   this.emit('startdrag', this.drag_state.start);
   if (O.events) O.events.call(this).emit('startdrag', this.drag_state.start);
 }
 
 /* This version integrates movements, instead
  * of using the global change since the beginning */
-function movecapture_int(O, range, state) {
+function moveCaptureInt(O, range, state) {
   /* O.direction is always 'polar' here */
 
   /* movement since last event */
-  var v = state.prev_distance();
+  var v = state.prevDistance();
   var RO = range.options;
 
   if (!v[0] && !v[1]) return;
@@ -68,7 +68,7 @@ function movecapture_int(O, range, state) {
   dist *= multi;
   let start_pos = this.start_pos + dist;
 
-  var nval = range.px2val(start_pos);
+  var nval = range.pixelToValue(start_pos);
   if (O.limit) O.set.call(this, Math.min(RO.max, Math.max(RO.min, nval)));
   else O.set.call(this, nval);
 
@@ -77,17 +77,17 @@ function movecapture_int(O, range, state) {
   this.start_pos = start_pos;
 }
 
-function movecapture_abs(O, range, state) {
+function moveCaptureAbs(O, range, state) {
   var dist;
   var RO = range.options;
   switch (O.direction) {
     case 'vertical':
-      dist = -state.vdistance()[1];
+      dist = -state.vDistance()[1];
       break;
     default:
       warn('Unsupported direction:', O.direction);
     case 'horizontal':
-      dist = state.vdistance()[0];
+      dist = state.vDistance()[0];
       break;
   }
   if (O.reverse) dist *= -1;
@@ -103,13 +103,13 @@ function movecapture_abs(O, range, state) {
 
   dist *= multi;
 
-  var nval = range.px2val(this.start_pos + dist);
+  var nval = range.pixelToValue(this.start_pos + dist);
 
   if (O.limit) O.set.call(this, Math.min(RO.max, Math.max(RO.min, nval)));
   else O.set.call(this, nval);
 }
 
-function movecapture(state) {
+function moveCapture(state) {
   var O = this.options;
 
   if (O.active === false) return false;
@@ -118,41 +118,41 @@ function movecapture(state) {
   var range = O.range.call(this);
 
   if (O.direction === 'polar') {
-    movecapture_int.call(this, O, range, state);
+    moveCaptureInt.call(this, O, range, state);
   } else {
-    movecapture_abs.call(this, O, range, state);
+    moveCaptureAbs.call(this, O, range, state);
   }
 
   this.emit('dragging', state.current);
   if (O.events) O.events.call(this).emit('dragging', state.current);
 }
 
-function stop_drag(state, ev) {
+function stopDrag(state, ev) {
   this.emit('stopdrag', ev);
   var O = this.options;
   if (O.events) O.events.call(this).emit('stopdrag', ev);
 }
 
-function set_cursor() {
+function setCursor() {
   switch (this.options.direction) {
     case 'vertical':
-      this.global_cursor('row-resize');
+      this.globalCursor('row-resize');
       break;
     case 'horizontal':
-      this.global_cursor('col-resize');
+      this.globalCursor('col-resize');
       break;
     case 'polar':
-      this.global_cursor('move');
+      this.globalCursor('move');
       break;
   }
 }
-function remove_cursor() {
-  this.remove_cursor('row-resize');
-  this.remove_cursor('col-resize');
-  this.remove_cursor('move');
+function removeCursor() {
+  this.removeCursor('row-resize');
+  this.removeCursor('col-resize');
+  this.removeCursor('move');
 }
 
-export const DragValue = define_class({
+export const DragValue = defineClass({
   /**
    * DragValue enables dragging an element and setting a
    * value according to the dragged distance. DragValue is for example
@@ -254,8 +254,8 @@ export const DragValue = define_class({
    * @param {DOMEvent} event - The native DOM event.
    */
   static_events: {
-    set_state: start_drag,
-    stopcapture: stop_drag,
+    set_state: startDrag,
+    stopcapture: stopDrag,
     startcapture: function () {
       if (this.options.active) return true;
     },
@@ -267,14 +267,14 @@ export const DragValue = define_class({
       v *= Math.PI / 360;
       this.set('_cutoff', Math.cos(v));
     },
-    movecapture: movecapture,
+    movecapture: moveCapture,
     startdrag: function () {
       S.add(
         function () {
           var O = this.options;
-          add_class(O.classes || O.node, 'aux-dragging');
+          addClass(O.classes || O.node, 'aux-dragging');
           if (O.cursor) {
-            set_cursor.call(this);
+            setCursor.call(this);
           }
         }.bind(this),
         1
@@ -284,9 +284,9 @@ export const DragValue = define_class({
       S.add(
         function () {
           var O = this.options;
-          remove_class(O.classes || O.node, 'aux-dragging');
+          removeClass(O.classes || O.node, 'aux-dragging');
           if (O.cursor) {
-            remove_cursor.call(this);
+            removeCursor.call(this);
           }
         }.bind(this),
         1

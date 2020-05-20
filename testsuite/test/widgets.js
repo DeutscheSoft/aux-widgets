@@ -61,7 +61,7 @@ import {
  * Boston, MA  02110-1301  USA
  */
 
-import { wait_for_drawn, assert, compare, object_minus } from './helpers.js';
+import { waitForDrawn, assert, compare, objectMinus } from './helpers.js';
 
 const widgets = [
   Container,
@@ -153,11 +153,11 @@ describe('Widgets', () => {
       standalone_widgets.map(async (w, i) => {
         const widget = new w({ id: 'foobar' });
         widget.show();
-        await wait_for_drawn(widget);
+        await waitForDrawn(widget);
         assert(widget.element.getAttribute('id') === 'foobar');
 
         widget.set('title', 'foobar');
-        await wait_for_drawn(widget);
+        await waitForDrawn(widget);
         assert(widget.element.getAttribute('title') === 'foobar');
 
         widget.destroy();
@@ -165,14 +165,14 @@ describe('Widgets', () => {
     );
   });
 
-  function assert_hidden(widget) {
+  function assertHidden(widget) {
     assert(widget.hidden());
     assert(!widget.get('visible'));
     assert(!widget.element.classList.contains('aux-show'));
     assert(widget.element.classList.contains('aux-hide'));
   }
 
-  function assert_visible(widget) {
+  function assertVisible(widget) {
     assert(!widget.hidden());
     assert(widget.get('visible'));
     assert(widget.element.classList.contains('aux-show'));
@@ -186,30 +186,30 @@ describe('Widgets', () => {
 
         // show()
         widget.show();
-        assert(widget.is_drawn());
-        await wait_for_drawn(widget);
-        assert_visible(widget);
+        assert(widget.isDrawn());
+        await waitForDrawn(widget);
+        assertVisible(widget);
 
         // hide()
         widget.hide();
-        await wait_for_drawn(widget);
-        assert_hidden(widget);
+        await waitForDrawn(widget);
+        assertHidden(widget);
 
         // set visible = true
         widget.set('visible', true);
-        await wait_for_drawn(widget);
-        assert_visible(widget);
+        await waitForDrawn(widget);
+        assertVisible(widget);
 
         // set visible = false
         widget.set('visible', false);
-        await wait_for_drawn(widget);
-        assert_hidden(widget);
+        await waitForDrawn(widget);
+        assertHidden(widget);
 
-        widget.force_show();
-        assert_visible(widget);
+        widget.forceShow();
+        assertVisible(widget);
 
-        widget.force_hide();
-        assert_hidden(widget);
+        widget.forceHide();
+        assertHidden(widget);
 
         widget.destroy();
       })
@@ -243,11 +243,11 @@ describe('Equalizer', () => {
   it('creating bands', (done) => {
     const eq = new Equalizer();
 
-    const b1 = eq.add_band({});
-    const b2 = eq.add_band(new EqBand());
+    const b1 = eq.addBand({});
+    const b2 = eq.addBand(new EqBand());
 
-    const o1 = object_minus(b1.options, ['id']);
-    const o2 = object_minus(b2.options, ['id']);
+    const o1 = objectMinus(b1.options, ['id']);
+    const o2 = objectMinus(b2.options, ['id']);
 
     if (!compare(o1, o2)) {
       console.error(b1.options, b2.options);
@@ -262,11 +262,11 @@ describe('Crossover', () => {
   it('creating bands', (done) => {
     const eq = new Crossover();
 
-    const b1 = eq.add_band({});
-    const b2 = eq.add_band(new CrossoverBand());
+    const b1 = eq.addBand({});
+    const b2 = eq.addBand(new CrossoverBand());
 
-    const o1 = object_minus(b1.options, ['id']);
-    const o2 = object_minus(b2.options, ['id']);
+    const o1 = objectMinus(b1.options, ['id']);
+    const o2 = objectMinus(b2.options, ['id']);
 
     if (!compare(o1, o2)) {
       console.error(b1.options, b2.options);

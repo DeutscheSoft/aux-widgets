@@ -17,8 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class, define_child_element } from './../../widget_helpers.js';
-import { scrollbar_size, add_class, remove_class } from './../../utils/dom.js';
+import { defineClass, defineChildElement } from './../../widget_helpers.js';
+import { scrollbarSize, addClass, removeClass } from './../../utils/dom.js';
 import { sprintf } from '../../index.js';
 import { Subscriptions } from '../../utils/subscriptions.js';
 import { Timer } from '../../utils/timers.js';
@@ -26,17 +26,17 @@ import { subscribeDOMEvent } from '../../utils/events.js';
 
 import { Container } from './../../widgets/container.js';
 import { Indicator } from './indicator.js';
-import { resize_array_mod } from '../models.js';
+import { resizeArrayMod } from '../models.js';
 
-const SCROLLBAR_SIZE = scrollbar_size();
+const SCROLLBAR_SIZE = scrollbarSize();
 
-function on_indicator_clicked() {
+function onIndicatorClicked() {
   const indicators = this.parent;
 
   indicators.emit('indicatorClicked', this.source, this.sink);
 }
 
-export const Indicators = define_class({
+export const Indicators = defineClass({
   Extends: Container,
   _options: Object.assign(Object.create(Container.prototype._options), {
     indicator_class: 'object',
@@ -72,12 +72,12 @@ export const Indicators = define_class({
     this._scroll_timer.stop();
     this.connectionview_subs.unsubscribe();
   },
-  create_indicator: function () {
+  createIndicator: function () {
     return new this.options.indicator_class();
   },
   draw: function (options, element) {
     Container.prototype.draw.call(this, options, element);
-    add_class(element, 'aux-indicators');
+    addClass(element, 'aux-indicators');
     this.addSubscriptions(
       subscribeDOMEvent(this.element, 'scroll', (ev) => {
         if (this._scroll_timer.active) {
@@ -118,21 +118,21 @@ export const Indicators = define_class({
         };
 
         const createIndicator = (index1, index2) => {
-          const indicator = this.create_indicator();
+          const indicator = this.createIndicator();
 
-          indicator.on('click', on_indicator_clicked);
+          indicator.on('click', onIndicatorClicked);
           setIndicatorPosition(indicator, index1, index2);
 
           this._scroller.appendChild(indicator.element);
-          this.add_child(indicator);
+          this.addChild(indicator);
 
           return indicator;
         };
 
         const removeIndicator = (indicator) => {
           indicator.element.remove();
-          indicator.off('click', on_indicator_clicked);
-          this.remove_child(indicator);
+          indicator.off('click', onIndicatorClicked);
+          this.removeChild(indicator);
         };
 
         sub.add(
@@ -152,7 +152,7 @@ export const Indicators = define_class({
               row.forEach(removeIndicator);
             };
 
-            resize_array_mod(
+            resizeArrayMod(
               this.entries,
               rows,
               connectionview.startIndex1,
@@ -163,7 +163,7 @@ export const Indicators = define_class({
             for (let i = 0; i < rows; i++) {
               const index1 = connectionview.startIndex1 + i;
               const row = this.entries[index1 % rows];
-              resize_array_mod(
+              resizeArrayMod(
                 row,
                 columns,
                 connectionview.startIndex2,
@@ -226,6 +226,6 @@ export const Indicators = define_class({
   },
 });
 
-define_child_element(Indicators, 'scroller', {
+defineChildElement(Indicators, 'scroller', {
   show: true,
 });

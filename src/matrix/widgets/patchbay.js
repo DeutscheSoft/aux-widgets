@@ -17,19 +17,18 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class, define_child_element } from './../../widget_helpers.js';
-import { define_child_widget } from './../../child_widget.js';
+import { defineClass, defineChildElement } from './../../widget_helpers.js';
+import { defineChildWidget } from './../../child_widget.js';
 import {
-  inner_width,
-  inner_height,
-  scrollbar_size,
-  add_class,
-  remove_class,
+  innerWidth,
+  innerHeight,
+  addClass,
+  removeClass,
 } from './../../utils/dom.js';
 
 import { Container } from './../../widgets/container.js';
 
-export const Patchbay = define_class({
+export const Patchbay = defineClass({
   Extends: Container,
   _options: Object.assign(Object.create(Container.prototype._options), {
     sources: 'object',
@@ -43,7 +42,7 @@ export const Patchbay = define_class({
     Container.prototype.initialize.call(this, options);
   },
   draw: function (options, element) {
-    add_class(this.element, 'aux-patchbay');
+    addClass(this.element, 'aux-patchbay');
     Container.prototype.draw.call(this, options, element);
   },
 });

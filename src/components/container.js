@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { Container } from './../widgets/container.js';
 
@@ -29,6 +29,6 @@ import { Container } from './../widgets/container.js';
  * @class ContainerComponent
  * @implements Component
  */
-export const ContainerComponent = component_from_widget(Container);
+export const ContainerComponent = componentFromWidget(Container);
 
-define_component('container', ContainerComponent);
+defineComponent('container', ContainerComponent);

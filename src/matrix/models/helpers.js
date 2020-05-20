@@ -22,14 +22,14 @@
  */
 
 import {
-  init_subscriptions,
-  add_subscription,
-  unsubscribe_subscriptions,
+  initSubscriptions,
+  addSubscription,
+  unsubscribeSubscriptions,
 } from '../../utils/subscriptions.js';
 
-export function call_continuation_if(node, subscribe_predicate, continuation) {
+export function callContinuationIf(node, subscribe_predicate, continuation) {
   let active = false;
-  let inner_subscription = init_subscriptions();
+  let inner_subscription = initSubscriptions();
 
   let subscription = subscribe_predicate(node, (value) => {
     // nothing todo
@@ -40,12 +40,12 @@ export function call_continuation_if(node, subscribe_predicate, continuation) {
     if (value) {
       inner_subscription = continuation(node);
     } else {
-      inner_subscription = unsubscribe_subscriptions(inner_subscription);
+      inner_subscription = unsubscribeSubscriptions(inner_subscription);
     }
   });
 
   return () => {
-    subscription = unsubscribe_subscriptions(subscription);
-    inner_subscription = unsubscribe_subscriptions(inner_subscription);
+    subscription = unsubscribeSubscriptions(subscription);
+    inner_subscription = unsubscribeSubscriptions(inner_subscription);
   };
 }

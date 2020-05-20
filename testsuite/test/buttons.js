@@ -24,12 +24,12 @@ import {
   ButtonsComponent,
 } from '../src/index.js';
 
-import { wait_for_drawn, assert, compare, compare_options } from './helpers.js';
+import { waitForDrawn, assert, compare, compareOptions } from './helpers.js';
 
 describe('Buttons', () => {
   let n = 0;
-  const check_select = (buttons) => {
-    const list = buttons.get_buttons();
+  const checkSelect = (buttons) => {
+    const list = buttons.getButtons();
     const selected = list.filter((b) => b.get('state'));
     const notselected = list.filter((b) => !b.get('state'));
 
@@ -46,63 +46,63 @@ describe('Buttons', () => {
       assert(!select.includes(list.indexOf(b)));
     });
   };
-  const test = (add_button, remove_button, select_button) => {
-    it('add_button() variants ' + n, async () => {
+  const test = (addButton, removeButton, selectButton) => {
+    it('addButton() variants ' + n, async () => {
       {
         const buttons = new Buttons();
         const label = 'testing';
-        const b1 = await add_button(buttons, label);
-        const b2 = await add_button(buttons, { label: label });
-        const b3 = await add_button(buttons, new Button({ label: label }));
-        assert(compare_options(b1, b2));
-        assert(compare_options(b1, b3));
-        select_button(buttons, b1);
-        select_button(buttons, b2);
-        select_button(buttons, b3);
-        await remove_button(buttons, b1);
-        await remove_button(buttons, b2);
-        await remove_button(buttons, b3);
+        const b1 = await addButton(buttons, label);
+        const b2 = await addButton(buttons, { label: label });
+        const b3 = await addButton(buttons, new Button({ label: label }));
+        assert(compareOptions(b1, b2));
+        assert(compareOptions(b1, b3));
+        selectButton(buttons, b1);
+        selectButton(buttons, b2);
+        selectButton(buttons, b3);
+        await removeButton(buttons, b1);
+        await removeButton(buttons, b2);
+        await removeButton(buttons, b3);
       }
       {
         // position argument
         const buttons = new Buttons();
-        const b1 = await add_button(buttons, '1');
-        const b2 = await add_button(buttons, '2', 0);
-        const b3 = await add_button(buttons, '3', 1);
+        const b1 = await addButton(buttons, '1');
+        const b2 = await addButton(buttons, '2', 0);
+        const b3 = await addButton(buttons, '3', 1);
         let res = buttons
-          .get_buttons()
+          .getButtons()
           .map((b) => b.get('label'))
           .join('');
         assert(res === '231');
-        await remove_button(buttons, b1);
-        await remove_button(buttons, b2);
-        await remove_button(buttons, b3);
+        await removeButton(buttons, b1);
+        await removeButton(buttons, b2);
+        await removeButton(buttons, b3);
       }
       {
         const buttons = new Buttons({ select: 0 });
-        const b1 = await add_button(buttons, '1');
+        const b1 = await addButton(buttons, '1');
         assert(b1.get('state'));
-        await remove_button(buttons, b1);
+        await removeButton(buttons, b1);
         assert(buttons.get('select') === -1);
-        await add_button(buttons, b1);
+        await addButton(buttons, b1);
         assert(buttons.get('select') === 0);
       }
     });
     it('select ' + n, async () => {
       const ba = new Buttons({ buttons: ['1', '2', '3'] });
 
-      const buttons = ba.get_buttons();
+      const buttons = ba.getButtons();
 
       buttons.forEach((button) => assert(!button.get('state')));
 
       for (let i = 0; i < buttons.length; i++) {
-        select_button(ba, buttons[i]);
+        selectButton(ba, buttons[i]);
         for (let j = 0; j < buttons.length; j++) {
           if (i !== j) assert(!buttons[j].get('state'));
         }
       }
 
-      const button = await add_button(ba, { label: 'foo', state: true });
+      const button = await addButton(ba, { label: 'foo', state: true });
       //button.set('state', true);
       assert(button.get('state'));
     });
@@ -111,7 +111,7 @@ describe('Buttons', () => {
         const ba = new Buttons({ multi_select: 1, buttons: ['1', '2', '3'] });
         var sel = [];
         var test = [];
-        for (var i = 0; i < ba.get_buttons().length; i++) {
+        for (var i = 0; i < ba.getButtons().length; i++) {
           sel.push(i);
           test.push(i);
           ba.set('select', sel);
@@ -121,7 +121,7 @@ describe('Buttons', () => {
       {
         const ba = new Buttons({ multi_select: 2, buttons: ['1', '2', '3'] });
         var sel = [];
-        for (var i = 0; i < ba.get_buttons().length; i++) {
+        for (var i = 0; i < ba.getButtons().length; i++) {
           sel.push(i);
           ba.set('select', sel);
           assert(ba.get('select').length <= 2);
@@ -132,11 +132,11 @@ describe('Buttons', () => {
     n++;
   };
 
-  const add_button1 = (buttons, ...args) => {
-    return buttons.add_button(...args);
+  const addButton1 = (buttons, ...args) => {
+    return buttons.addButton(...args);
   };
 
-  const add_button2 = (buttons, options, position) => {
+  const addButton2 = (buttons, options, position) => {
     const component = document.createElement('aux-button');
 
     if (typeof options === 'string') {
@@ -149,7 +149,7 @@ describe('Buttons', () => {
       }
     }
 
-    const node = buttons.get_buttons()[position];
+    const node = buttons.getButtons()[position];
 
     if (node) {
       buttons.element.insertBefore(component, node.element);
@@ -160,25 +160,25 @@ describe('Buttons', () => {
     return component.auxWidget;
   };
 
-  const remove_button1 = (buttons, ...args) => {
-    return buttons.remove_button(...args);
+  const removeButton1 = (buttons, ...args) => {
+    return buttons.removeButton(...args);
   };
 
-  const remove_button2 = (buttons, button) => {
+  const removeButton2 = (buttons, button) => {
     if (button instanceof Button && button.element.tagName === 'AUX-BUTTON') {
       button.element.remove();
     } else {
-      buttons.remove_button(button);
+      buttons.removeButton(button);
     }
   };
 
-  const select_button1 = (buttons, button) => {
+  const selectButton1 = (buttons, button) => {
     button.set('state', true);
   };
 
-  const select_button2 = (buttons, button) => {
+  const selectButton2 = (buttons, button) => {
     let select = buttons.get('select');
-    const position = buttons.get_buttons().indexOf(button);
+    const position = buttons.getButtons().indexOf(button);
 
     if (Array.isArray(select)) {
       select = [position].concat(select);
@@ -189,39 +189,39 @@ describe('Buttons', () => {
     buttons.set('select', select);
   };
 
-  const select_button3 = (buttons, button) => {
+  const selectButton3 = (buttons, button) => {
     button.userset('state', true);
   };
 
-  const select_button4 = (buttons, button) => {
+  const selectButton4 = (buttons, button) => {
     button.element.dispatchEvent(new CustomEvent('click'));
   };
 
-  [add_button1, add_button2].forEach((low_add_button) => {
-    const add_button = async (buttons, ...args) => {
-      const n = buttons.get_buttons().length;
-      const button = low_add_button(buttons, ...args);
-      await wait_for_drawn(buttons);
-      assert(buttons.get_buttons().length === n + 1);
-      check_select(buttons);
+  [addButton1, addButton2].forEach((lowAddButton) => {
+    const addButton = async (buttons, ...args) => {
+      const n = buttons.getButtons().length;
+      const button = lowAddButton(buttons, ...args);
+      await waitForDrawn(buttons);
+      assert(buttons.getButtons().length === n + 1);
+      checkSelect(buttons);
       return button;
     };
-    [remove_button1, remove_button2].forEach((low_remove_button) => {
-      const remove_button = async (buttons, ...args) => {
-        const n = buttons.get_buttons().length;
-        low_remove_button(buttons, ...args);
-        await wait_for_drawn(buttons);
-        assert(buttons.get_buttons().length === n - 1);
-        check_select(buttons);
+    [removeButton1, removeButton2].forEach((lowRemoveButton) => {
+      const removeButton = async (buttons, ...args) => {
+        const n = buttons.getButtons().length;
+        lowRemoveButton(buttons, ...args);
+        await waitForDrawn(buttons);
+        assert(buttons.getButtons().length === n - 1);
+        checkSelect(buttons);
       };
-      [select_button1, select_button2, select_button3, select_button4].forEach(
-        (low_select_button) => {
-          const select_button = (buttons, button) => {
-            low_select_button(buttons, button);
+      [selectButton1, selectButton2, selectButton3, selectButton4].forEach(
+        (lowSelectButton) => {
+          const selectButton = (buttons, button) => {
+            lowSelectButton(buttons, button);
             assert(button.get('state'));
-            check_select(buttons);
+            checkSelect(buttons);
           };
-          test(add_button, remove_button, select_button);
+          test(addButton, removeButton, selectButton);
         }
       );
     });

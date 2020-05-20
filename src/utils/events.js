@@ -31,12 +31,12 @@
  */
 
 /* generic code, supports node arrays */
-export function add_event_listener(e, type, cb, options) {
+export function addEventListener(e, type, cb, options) {
   if (Array.isArray(e)) {
     for (var i = 0; i < e.length; i++) e[i].addEventListener(type, cb, options);
   } else e.addEventListener(type, cb, options);
 }
-export function remove_event_listener(e, type, cb, options) {
+export function removeEventListener(e, type, cb, options) {
   if (Array.isArray(e)) {
     for (var i = 0; i < e.length; i++)
       e[i].removeEventListener(type, cb, options);
@@ -69,17 +69,17 @@ if (passiveSupported) {
   passive_options = false;
 }
 
-export function add_active_event_listener(e, type, cb) {
-  add_event_listener(e, type, cb, active_options);
+export function addActiveEventListener(e, type, cb) {
+  addEventListener(e, type, cb, active_options);
 }
-export function remove_active_event_listener(e, type, cb) {
-  remove_event_listener(e, type, cb, active_options);
+export function removeActiveEventListener(e, type, cb) {
+  removeEventListener(e, type, cb, active_options);
 }
-export function add_passive_event_listener(e, type, cb) {
-  add_event_listener(e, type, cb, passive_options);
+export function addPassiveEventListener(e, type, cb) {
+  addEventListener(e, type, cb, passive_options);
 }
-export function remove_passive_event_listener(e, type, cb) {
-  remove_event_listener(e, type, cb, passive_options);
+export function removePassiveEventListener(e, type, cb) {
+  removeEventListener(e, type, cb, passive_options);
 }
 const __native_events = {
   // mouse
@@ -125,7 +125,7 @@ const __native_events = {
   submit: true,
   contextmenu: true,
 };
-export function is_dom_event(type) {
+export function isDOMEvent(type) {
   return __native_events[type];
 }
 

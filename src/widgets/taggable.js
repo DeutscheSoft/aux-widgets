@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { Tag } from './tag.js';
 import { Tags } from './tags.js';
 import { Container } from './container.js';
@@ -29,10 +29,10 @@ function add(e) {
 
 function remove(e, tagnode) {
   this.emit('removetag', tagnode);
-  if (!this.options.async) this.remove_tag(tagnode.tag, tagnode);
+  if (!this.options.async) this.removeTag(tagnode.tag, tagnode);
 }
 
-export const Taggable = define_class({
+export const Taggable = defineClass({
   _options: {
     tags: 'array',
     backend: 'object',
@@ -65,7 +65,7 @@ export const Taggable = define_class({
     this.tags = new Container({
       class: 'aux-tags',
     });
-    this.append_child(this.tags);
+    this.appendChild(this.tags);
 
     this.add = new Button({
       container: this.element,
@@ -73,28 +73,28 @@ export const Taggable = define_class({
       class: 'aux-add',
       onclick: add.bind(this),
     });
-    this.append_child(this.add);
+    this.appendChild(this.add);
 
-    this.add_tags(O.tags);
+    this.addTags(O.tags);
   },
 
-  request_tag: function (tag, tag_class, tag_options) {
-    return this.options.backend.request_tag(
+  requestTag: function (tag, tag_class, tag_options) {
+    return this.options.backend.requestTag(
       tag,
       tag_class || this.options.tag_class,
       tag_options || this.options.tag_options
     );
   },
-  add_tags: function (tags) {
-    for (var i = 0; i < tags.length; i++) this.add_tag(tags[i]);
+  addTags: function (tags) {
+    for (var i = 0; i < tags.length; i++) this.addTag(tags[i]);
   },
-  add_tag: function (tag, options) {
+  addTag: function (tag, options) {
     var B = this.options.backend;
-    tag = B.request_tag(tag, options);
-    if (this.has_tag(tag)) return;
+    tag = B.requestTag(tag, options);
+    if (this.hasTag(tag)) return;
 
-    var node = tag.create_node(options);
-    this.tags.append_child(node);
+    var node = tag.createNode(options);
+    this.tags.appendChild(node);
 
     node.on('remove', remove.bind(this));
 
@@ -103,17 +103,17 @@ export const Taggable = define_class({
     this.emit('tagadded', tag, node);
     return t;
   },
-  has_tag: function (tag) {
-    tag = this.request_tag(tag);
+  hasTag: function (tag) {
+    tag = this.requestTag(tag);
     for (var i = 0; i < this.taglist.length; i++) {
       if (this.taglist[i].tag === tag) return true;
     }
     return false;
   },
-  remove_tag: function (tag, node, purge) {
+  removeTag: function (tag, node, purge) {
     var B = this.options.backend;
-    tag = B.request_tag(tag);
-    if (!this.has_tag(tag)) return;
+    tag = B.requestTag(tag);
+    if (!this.hasTag(tag)) return;
     for (var i = 0; i < this.taglist.length; i++) {
       if (this.taglist[i].tag === tag) {
         this.taglist.splice(i, 1);
@@ -127,26 +127,26 @@ export const Taggable = define_class({
         for (let i = 0; i < c.length; i++) {
           var tagnode = c[i];
           if (tagnode.tag === tag) {
-            tag.remove_node(tagnode);
-            this.remove_child(tagnode);
+            tag.removeNode(tagnode);
+            this.removeChild(tagnode);
             break;
           }
         }
       }
     } else {
-      tag.remove_node(node);
+      tag.removeNode(node);
     }
-    if (purge) B.remove_tag(tag);
+    if (purge) B.removeTag(tag);
     this.emit('tagremoved', tag);
   },
   empty: function () {
     var T = this.taglist;
-    while (T.length) this.remove_tag(T[0].tag, T[0].node);
+    while (T.length) this.removeTag(T[0].tag, T[0].node);
   },
-  tag_to_string: function (tag) {
-    return this.options.backend.tag_to_string.call(this, tag);
+  tagToString: function (tag) {
+    return this.options.backend.tagToString.call(this, tag);
   },
-  find_tag: function (tag) {
-    this.options.backend.find_tag.call(this, tag);
+  findTag: function (tag) {
+    this.options.backend.findTag.call(this, tag);
   },
 });

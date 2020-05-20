@@ -17,24 +17,24 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { error } from '../utils/log.js';
-import { empty, add_class, get_style } from '../utils/dom.js';
-import { make_svg } from '../utils/svg.js';
+import { empty, addClass, getStyle } from '../utils/dom.js';
+import { makeSVG } from '../utils/svg.js';
 import { S } from '../dom_scheduler.js';
 import { Warning } from '../implements/warning.js';
 import { Ranged } from '../implements/ranged.js';
-import { define_child_element } from '../widget_helpers.js';
+import { defineChildElement } from '../widget_helpers.js';
 import { Widget } from './widget.js';
 
-function interpret_label(x) {
+function interpretLabel(x) {
   if (typeof x === 'object') return x;
   if (typeof x === 'number') return { pos: x };
   error('Unsupported label type ', x);
 }
 var __rad = Math.PI / 180;
-function _get_coords(deg, inner, outer, pos) {
+function _getCoords(deg, inner, outer, pos) {
   deg = +deg;
   inner = +inner;
   outer = +outer;
@@ -47,7 +47,7 @@ function _get_coords(deg, inner, outer, pos) {
     y2: Math.sin(deg) * inner + pos,
   };
 }
-function _get_coords_single(deg, inner, pos) {
+function _getCoordsSingle(deg, inner, pos) {
   deg = +deg;
   inner = +inner;
   pos = +pos;
@@ -57,14 +57,14 @@ function _get_coords_single(deg, inner, pos) {
     y: Math.sin(deg) * inner + pos,
   };
 }
-var format_path = FORMAT(
+var formatPath = FORMAT(
   'M %f,%f ' + 'A %f,%f 0 %d,%d %f,%f ' + 'L %f,%f ' + 'A %f,%f 0 %d,%d %f,%f z'
 );
-var format_translate = FORMAT('translate(%f, %f)');
-var format_translate_rotate = FORMAT('translate(%f %f) rotate(%f %f %f)');
-var format_rotate = FORMAT('rotate(%f %f %f)');
+var formatTranslate = FORMAT('translate(%f, %f)');
+var formatTranslateRotate = FORMAT('translate(%f %f) rotate(%f %f %f)');
+var formatRotate = FORMAT('rotate(%f %f %f)');
 
-function draw_dots() {
+function drawDots() {
   // depends on dots, dot, min, max, size
   var _dots = this._dots;
   var O = this.options;
@@ -76,7 +76,7 @@ function draw_dots() {
     var m = dots[i];
     if (typeof m == 'number') m = { pos: m };
 
-    var r = make_svg('rect', { class: 'aux-dot' });
+    var r = makeSVG('rect', { class: 'aux-dot' });
 
     var length = m.length === void 0 ? dot.length : m.length;
     var width = m.width === void 0 ? dot.width : m.width;
@@ -84,7 +84,7 @@ function draw_dots() {
     var pos = Math.min(O.max, Math.max(O.min, m.pos));
     // TODO: consider adding them all at once
     _dots.appendChild(r);
-    if (m['class']) add_class(r, m['class']);
+    if (m['class']) addClass(r, m['class']);
     if (m.color) r.style.fill = m.color;
 
     r.setAttribute('x', O.size - length - margin);
@@ -96,7 +96,7 @@ function draw_dots() {
     r.setAttribute(
       'transform',
       'rotate(' +
-        this.val2coef(this.snap(pos)) * angle +
+        this.valueToCoef(this.snap(pos)) * angle +
         ' ' +
         O.size / 2 +
         ' ' +
@@ -110,7 +110,7 @@ function draw_dots() {
    */
   this.emit('dotsdrawn');
 }
-function draw_markers() {
+function drawMarkers() {
   // depends on size, markers, marker, min, max
   var O = this.options;
   var markers = O.markers;
@@ -136,19 +136,19 @@ function draw_markers() {
     if (m.to === void 0) to = O.max;
     else to = Math.min(O.max, Math.max(O.min, m.to));
 
-    var s = make_svg('path', { class: 'aux-marker' });
+    var s = makeSVG('path', { class: 'aux-marker' });
     this._markers.appendChild(s);
 
-    if (m['class']) add_class(s, m['class']);
+    if (m['class']) addClass(s, m['class']);
     if (m.color) s.style.fill = m.color;
     if (!m.nosnap) {
       from = this.snap(from);
       to = this.snap(to);
     }
-    from = this.val2coef(from) * angle;
-    to = this.val2coef(to) * angle;
+    from = this.valueToCoef(from) * angle;
+    to = this.valueToCoef(to) * angle;
 
-    draw_slice.call(this, from, to, inner_p, outer_p, outer, s);
+    drawSlice.call(this, from, to, inner_p, outer_p, outer, s);
   }
   /**
    * Is fired when markers are (re)drawn.
@@ -156,7 +156,7 @@ function draw_markers() {
    */
   this.emit('markersdrawn');
 }
-function draw_labels() {
+function drawLabels() {
   // depends on size, labels, label, min, max, start
   var _labels = this._labels;
   var O = this.options;
@@ -176,12 +176,12 @@ function draw_labels() {
 
   for (i = 0; i < labels.length; i++) {
     l = labels[i];
-    p = make_svg('text', {
+    p = makeSVG('text', {
       class: 'aux-label',
       style: 'dominant-baseline: central;',
     });
 
-    if (l['class']) add_class(p, l['class']);
+    if (l['class']) addClass(p, l['class']);
     if (l.color) p.style.fill = l.color;
 
     if (l.label !== void 0) p.textContent = l.label;
@@ -205,9 +205,10 @@ function draw_labels() {
         var align = (l.align !== void 0 ? l.align : label.align) === 'inner';
         var pos = Math.min(O.max, Math.max(O.min, l.pos));
         var bb = p.getBBox();
-        var angle = (this.val2coef(this.snap(pos)) * O.angle + O.start) % 360;
+        var angle =
+          (this.valueToCoef(this.snap(pos)) * O.angle + O.start) % 360;
         var outer_p = outer - margin;
-        var coords = _get_coords_single(angle, outer_p, outer);
+        var coords = _getCoordsSingle(angle, outer_p, outer);
 
         var mx =
           (((coords.x - outer) / outer_p) * (bb.width + bb.height / 2.5)) /
@@ -215,7 +216,7 @@ function draw_labels() {
         var my =
           (((coords.y - outer) / outer_p) * bb.height) / (align ? -2 : 2);
 
-        positions[i] = format_translate(coords.x + mx, coords.y + my);
+        positions[i] = formatTranslate(coords.x + mx, coords.y + my);
       }
 
       S.add(
@@ -235,7 +236,7 @@ function draw_labels() {
     }.bind(this)
   );
 }
-function draw_slice(a_from, a_to, r_inner, r_outer, pos, slice) {
+function drawSlice(a_from, a_to, r_inner, r_outer, pos, slice) {
   a_from = +a_from;
   a_to = +a_to;
   r_inner = +r_inner;
@@ -261,10 +262,10 @@ function draw_slice(a_from, a_to, r_inner, r_outer, pos, slice) {
   if (Math.abs(a_from - a_to) >= 180) large = 1;
   else large = 0;
   // draw this slice
-  var from = _get_coords(a_from, r_inner, r_outer, pos);
-  var to = _get_coords(a_to, r_inner, r_outer, pos);
+  var from = _getCoords(a_from, r_inner, r_outer, pos);
+  var to = _getCoords(a_to, r_inner, r_outer, pos);
 
-  var path = format_path(
+  var path = formatPath(
     from.x1,
     from.y1,
     r_outer,
@@ -284,7 +285,7 @@ function draw_slice(a_from, a_to, r_inner, r_outer, pos, slice) {
   );
   slice.setAttribute('d', path);
 }
-export const Circular = define_class({
+export const Circular = defineClass({
   /**
    * Circular is a SVG group element containing two paths for displaying
    * numerical values in a circular manner. Circular is able to draw labels,
@@ -398,7 +399,7 @@ export const Circular = define_class({
     rangedchanged: function () {
       let I = this.invalid;
       I.size = I.markers = I.dots = I.labels = true;
-      this.trigger_draw();
+      this.triggerDraw();
     },
   },
   options: {
@@ -433,7 +434,7 @@ export const Circular = define_class({
   },
 
   initialize: function (options) {
-    if (!options.element) options.element = make_svg('g');
+    if (!options.element) options.element = makeSVG('g');
     Widget.prototype.initialize.call(this, options);
 
     /**
@@ -444,32 +445,32 @@ export const Circular = define_class({
      * @member {SVGPath} Circular#_base - The base of the ring.
      *      Has class <code>.aux-base</code>
      */
-    this._base = make_svg('path', { class: 'aux-base' });
+    this._base = makeSVG('path', { class: 'aux-base' });
 
     /**
      * @member {SVGPath} Circular#_value - The ring showing the value.
      *      Has class <code>.aux-value</code>
      */
-    this._value = make_svg('path', { class: 'aux-value' });
+    this._value = makeSVG('path', { class: 'aux-value' });
 
     /**
      * @member {SVGRect} Circular#_hand - The hand of the knob.
      *      Has class <code>.aux-hand</code>
      */
-    this._hand = make_svg('rect', { class: 'aux-hand' });
+    this._hand = makeSVG('rect', { class: 'aux-hand' });
 
     if (this.options.labels) this.set('labels', this.options.labels);
   },
 
   resize: function () {
-    this.update('_stroke_width', this._get_stroke());
+    this.update('_stroke_width', this.getStroke());
     this.invalid.labels = true;
-    this.trigger_draw();
+    this.triggerDraw();
     Widget.prototype.resize.call(this);
   },
 
   draw: function (O, element) {
-    add_class(element, 'aux-circular');
+    addClass(element, 'aux-circular');
     element.insertBefore(this._value, this._markers);
     element.insertBefore(this._base, this._value);
     element.appendChild(this._hand);
@@ -488,12 +489,12 @@ export const Circular = define_class({
     if (I.validate('x', 'y') || I.start || I.size) {
       E.setAttribute(
         'transform',
-        format_translate_rotate(O.x, O.y, O.start, outer, outer)
+        formatTranslateRotate(O.x, O.y, O.start, outer, outer)
       );
       if (this._labels)
         this._labels.setAttribute(
           'transform',
-          format_rotate(-O.start, outer, outer)
+          formatRotate(-O.start, outer, outer)
         );
     }
 
@@ -505,14 +506,14 @@ export const Circular = define_class({
         I.max ||
         I.start)
     ) {
-      draw_labels.call(this);
+      drawLabels.call(this);
     }
 
     if (
       O.show_dots &&
       (I.validate('show_dots', 'dots', 'dot') || I.min || I.max || I.size)
     ) {
-      draw_dots.call(this);
+      drawDots.call(this);
     }
 
     if (
@@ -522,7 +523,7 @@ export const Circular = define_class({
         I.min ||
         I.max)
     ) {
-      draw_markers.call(this);
+      drawMarkers.call(this);
     }
 
     var stroke = O._stroke_width;
@@ -533,10 +534,10 @@ export const Circular = define_class({
     if (I.show_value || I.value_ring || I.size || I._stroke_width) {
       I.show_value = I.value_ring = false;
       if (O.show_value) {
-        draw_slice.call(
+        drawSlice.call(
           this,
-          this.val2coef(this.snap(O.base)) * O.angle,
-          this.val2coef(this.snap(O.value_ring)) * O.angle,
+          this.valueToCoef(this.snap(O.base)) * O.angle,
+          this.valueToCoef(this.snap(O.value_ring)) * O.angle,
           inner_p,
           outer_p,
           outer,
@@ -550,7 +551,7 @@ export const Circular = define_class({
     if (I.show_base || I.size || I._stroke_width) {
       I.show_base = false;
       if (O.show_base) {
-        draw_slice.call(this, 0, O.angle, inner_p, outer_p, outer, this._base);
+        drawSlice.call(this, 0, O.angle, inner_p, outer_p, outer, this._base);
       } else {
         /* TODO: make this a child element */
         this._base.removeAttribute('d');
@@ -572,8 +573,8 @@ export const Circular = define_class({
       tmp.setAttribute('height', O.hand.width);
       tmp.setAttribute(
         'transform',
-        format_rotate(
-          this.val2coef(this.snap(O.value_hand)) * O.angle,
+        formatRotate(
+          this.valueToCoef(this.snap(O.value_hand)) * O.angle,
           O.size / 2,
           O.size / 2
         )
@@ -589,10 +590,10 @@ export const Circular = define_class({
     this._value.remove();
     Widget.prototype.destroy.call(this);
   },
-  _get_stroke: function () {
+  getStroke: function () {
     if (this.hasOwnProperty('_stroke')) return this._stroke;
-    var strokeb = parseInt(get_style(this._base, 'stroke-width')) || 0;
-    var strokev = parseInt(get_style(this._value, 'stroke-width')) || 0;
+    var strokeb = parseInt(getStyle(this._base, 'stroke-width')) || 0;
+    var strokev = parseInt(getStyle(this._value, 'stroke-width')) || 0;
     this._stroke = Math.max(strokeb, strokev);
     return this._stroke;
   },
@@ -600,24 +601,24 @@ export const Circular = define_class({
   /**
    * Adds a label.
    *
-   * @method Circular#add_label
+   * @method Circular#addLabel
    * @param {Object|Number} label - The label. Please refer to the `options`
    *   to learn more about possible values.
    * @returns {Object} label - The interpreted object to build the label from.
    */
-  add_label: function (label) {
+  addLabel: function (label) {
     var O = this.options;
 
     if (!O.labels) {
       O.labels = [];
     }
 
-    label = interpret_label(label);
+    label = interpretLabel(label);
 
     if (label) {
       O.labels.push(label);
       this.invalid.labels = true;
-      this.trigger_draw();
+      this.triggerDraw();
       return label;
     }
   },
@@ -625,11 +626,11 @@ export const Circular = define_class({
   /**
    * Removes a label.
    *
-   * @method Circular#remove_label
-   * @param {Object} label - The label object as returned from `add_label`.
+   * @method Circular#removeLabel
+   * @param {Object} label - The label object as returned from `addLabel`.
    * @returns {Object} label - The removed label object.
    */
-  remove_label: function (label) {
+  removeLabel: function (label) {
     var O = this.options;
 
     if (!O.labels) return;
@@ -640,7 +641,7 @@ export const Circular = define_class({
 
     O.labels.splice(i);
     this.invalid.labels = true;
-    this.trigger_draw();
+    this.triggerDraw();
   },
 
   // GETTERS & SETTERS
@@ -662,7 +663,7 @@ export const Circular = define_class({
       case 'labels':
         if (value)
           for (var i = 0; i < value.length; i++) {
-            value[i] = interpret_label(value[i]);
+            value[i] = interpretLabel(value[i]);
           }
         break;
     }
@@ -674,35 +675,35 @@ export const Circular = define_class({
  * @member {SVGGroup} Circular#_markers - A group containing all markers.
  *      Has class <code>.aux-markers</code>
  */
-define_child_element(Circular, 'markers', {
+defineChildElement(Circular, 'markers', {
   //option: "markers",
   //display_check: function(v) { return !!v.length; },
   show: true,
   create: function () {
-    return make_svg('g', { class: 'aux-markers' });
+    return makeSVG('g', { class: 'aux-markers' });
   },
 });
 /**
  * @member {SVGGroup} Circular#_dots - A group containing all dots.
  *      Has class <code>.aux-dots</code>
  */
-define_child_element(Circular, 'dots', {
+defineChildElement(Circular, 'dots', {
   //option: "dots",
   //display_check: function(v) { return !!v.length; },
   show: true,
   create: function () {
-    return make_svg('g', { class: 'aux-dots' });
+    return makeSVG('g', { class: 'aux-dots' });
   },
 });
 /**
  * @member {SVGGroup} Circular#_labels - A group containing all labels.
  *      Has class <code>.aux-labels</code>
  */
-define_child_element(Circular, 'labels', {
+defineChildElement(Circular, 'labels', {
   //option: "labels",
   //display_check: function(v) { return !!v.length; },
   show: true,
   create: function () {
-    return make_svg('g', { class: 'aux-labels' });
+    return makeSVG('g', { class: 'aux-labels' });
   },
 });

@@ -24,12 +24,12 @@
 import { TreeNodeData } from './treenode.js';
 import { PortData } from './port.js';
 import {
-  init_subscriptions,
-  add_subscription,
-  unsubscribe_subscriptions,
+  initSubscriptions,
+  addSubscription,
+  unsubscribeSubscriptions,
 } from '../../utils/subscriptions.js';
 
-function on_child_treechanged() {
+function onChildTreechanged() {
   this.parent.emit('treeChanged');
 }
 
@@ -72,7 +72,7 @@ export class GroupData extends TreeNodeData {
     this.emit('childAdded', child);
     this.emit('treeChanged', this);
 
-    child.on('treeChanged', on_child_treechanged);
+    child.on('treeChanged', onChildTreechanged);
   }
 
   /**
@@ -94,7 +94,7 @@ export class GroupData extends TreeNodeData {
     child.setParent(null);
     children.delete(child);
 
-    child.off('treeChanged', on_child_treechanged);
+    child.off('treeChanged', onChildTreechanged);
 
     this.emit('childRemoved', child);
     this.emit('treeChanged', this);
@@ -197,31 +197,31 @@ export class GroupData extends TreeNodeData {
    * @returns {Function} - A subscription. Call this function to unsubscribe.
    */
   forEachAsync(callback) {
-    let subs = init_subscriptions();
+    let subs = initSubscriptions();
     const child_subscriptions = new Map();
 
     this.children.forEach((node) => {
       child_subscriptions.set(node, callback(node) || null);
     });
 
-    subs = add_subscription(
+    subs = addSubscription(
       subs,
       this.subscribe('childAdded', (child) => {
         child_subscriptions.set(child, callback(child) || null);
       })
     );
 
-    subs = add_subscription(
+    subs = addSubscription(
       subs,
       this.subscribe('childRemoved', (child) => {
-        unsubscribe_subscriptions(child_subscriptions.get(child));
+        unsubscribeSubscriptions(child_subscriptions.get(child));
         child_subscriptions.delete(child);
       })
     );
 
     return () => {
-      subs = unsubscribe_subscriptions(subs);
-      child_subscriptions.forEach((subs) => unsubscribe_subscriptions(subs));
+      subs = unsubscribeSubscriptions(subs);
+      child_subscriptions.forEach((subs) => unsubscribeSubscriptions(subs));
       child_subscriptions.clear();
     };
   }

@@ -17,9 +17,9 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from './../widget_helpers.js';
+import { defineClass } from './../widget_helpers.js';
 import { Module } from './module.js';
-import { add_event_listener, remove_event_listener } from '../utils/events.js';
+import { addEventListener, removeEventListener } from '../utils/events.js';
 
 /* this has no global symbol */
 function CaptureState(start) {
@@ -30,27 +30,27 @@ function CaptureState(start) {
 CaptureState.prototype = {
   /* distance from start */
   distance: function () {
-    var v = this.vdistance();
+    var v = this.vDistance();
     return Math.sqrt(v[0] * v[0] + v[1] * v[1]);
   },
-  set_current: function (ev) {
+  setCurrent: function (ev) {
     this.prev = this.current;
     this.current = ev;
     return true;
   },
-  vdistance: function () {
+  vDistance: function () {
     var start = this.start;
     var current = this.current;
     return [current.clientX - start.clientX, current.clientY - start.clientY];
   },
-  prev_distance: function () {
+  prevDistance: function () {
     var prev = this.prev;
     var current = this.current;
     return [current.clientX - prev.clientX, current.clientY - prev.clientY];
   },
 };
 /* general api */
-function startcapture(state) {
+function startCapture(state) {
   /* do nothing, let other handlers be called */
   if (this.drag_state) return;
 
@@ -64,15 +64,15 @@ function startcapture(state) {
 
   return v;
 }
-function movecapture(ev) {
+function moveCapture(ev) {
   var d = this.drag_state;
 
-  if (!d.set_current(ev) || this.emit('movecapture', d) === false) {
-    stopcapture.call(this, ev);
+  if (!d.setCurrent(ev) || this.emit('movecapture', d) === false) {
+    stopCapture.call(this, ev);
     return false;
   }
 }
-function stopcapture(ev) {
+function stopCapture(ev) {
   var s = this.drag_state;
   if (s === null) return;
 
@@ -91,14 +91,14 @@ function MouseCaptureState(start) {
 MouseCaptureState.prototype = Object.assign(
   Object.create(CaptureState.prototype),
   {
-    set_current: function (ev) {
+    setCurrent: function (ev) {
       /* If the buttons have changed, we assume that the capture has ended */
-      if (!this.is_dragged_by(ev)) return false;
-      return CaptureState.prototype.set_current.call(this, ev);
+      if (!this.isDraggedBy(ev)) return false;
+      return CaptureState.prototype.setCurrent.call(this, ev);
     },
     init: function (widget) {
-      this.__mouseup = mouseup.bind(widget);
-      this.__mousemove = mousemove.bind(widget);
+      this.__mouseup = mouseUp.bind(widget);
+      this.__mousemove = mouseMove.bind(widget);
       document.addEventListener('mousemove', this.__mousemove);
       document.addEventListener('mouseup', this.__mouseup);
     },
@@ -108,7 +108,7 @@ MouseCaptureState.prototype = Object.assign(
       this.__mouseup = null;
       this.__mousemove = null;
     },
-    is_dragged_by: function (ev) {
+    isDraggedBy: function (ev) {
       var start = this.start;
       if (start.buttons !== ev.buttons || start.which !== ev.which)
         return false;
@@ -116,9 +116,9 @@ MouseCaptureState.prototype = Object.assign(
     },
   }
 );
-function mousedown(ev) {
+function mouseDown(ev) {
   var s = new MouseCaptureState(ev);
-  var v = startcapture.call(this, s);
+  var v = startCapture.call(this, s);
 
   /* ignore this event */
   if (v === void 0) return;
@@ -131,11 +131,11 @@ function mousedown(ev) {
 
   return false;
 }
-function mousemove(ev) {
-  movecapture.call(this, ev);
+function mouseMove(ev) {
+  moveCapture.call(this, ev);
 }
-function mouseup(ev) {
-  stopcapture.call(this, ev);
+function mouseUp(ev) {
+  stopCapture.call(this, ev);
 }
 
 /* touch handling */
@@ -145,7 +145,7 @@ function mouseup(ev) {
  * and simply update the coordinates, etc. This is a bug, which we work around by
  * cloning the information we need.
  */
-function clone_touch(t) {
+function cloneTouch(t) {
   return {
     clientX: t.clientX,
     clientY: t.clientY,
@@ -156,7 +156,7 @@ function clone_touch(t) {
 function TouchCaptureState(start) {
   CaptureState.call(this, start);
   var touch = start.changedTouches.item(0);
-  touch = clone_touch(touch);
+  touch = cloneTouch(touch);
   this.stouch = touch;
   this.ptouch = touch;
   this.ctouch = touch;
@@ -164,7 +164,7 @@ function TouchCaptureState(start) {
 TouchCaptureState.prototype = Object.assign(
   Object.create(CaptureState.prototype),
   {
-    find_touch: function (ev) {
+    findTouch: function (ev) {
       var id = this.stouch.identifier;
       var touches = ev.changedTouches;
       var touch;
@@ -176,36 +176,36 @@ TouchCaptureState.prototype = Object.assign(
 
       return null;
     },
-    set_current: function (ev) {
-      var touch = clone_touch(this.find_touch(ev));
+    setCurrent: function (ev) {
+      var touch = cloneTouch(this.findTouch(ev));
       this.ptouch = this.ctouch;
       this.ctouch = touch;
-      return CaptureState.prototype.set_current.call(this, ev);
+      return CaptureState.prototype.setCurrent.call(this, ev);
     },
-    vdistance: function () {
+    vDistance: function () {
       var start = this.stouch;
       var current = this.ctouch;
       return [current.clientX - start.clientX, current.clientY - start.clientY];
     },
-    prev_distance: function () {
+    prevDistance: function () {
       var prev = this.ptouch;
       var current = this.ctouch;
       return [current.clientX - prev.clientX, current.clientY - prev.clientY];
     },
     destroy: function () {},
-    is_dragged_by: function (ev) {
-      return this.find_touch(ev) !== null;
+    isDraggedBy: function (ev) {
+      return this.findTouch(ev) !== null;
     },
   }
 );
-function touchstart(ev) {
+function touchStart(ev) {
   /* if cancelable is false, this is an async touchstart, which happens
    * during scrolling */
   if (!ev.cancelable) return;
 
   /* the startcapture event handler has return false. we do not handle this
    * pointer */
-  var v = startcapture.call(this, new TouchCaptureState(ev));
+  var v = startCapture.call(this, new TouchCaptureState(ev));
 
   if (v === void 0) return;
 
@@ -213,37 +213,37 @@ function touchstart(ev) {
   ev.stopPropagation();
   return false;
 }
-function touchmove(ev) {
+function touchMove(ev) {
   if (!this.drag_state) return;
   /* we are scrolling, ignore the event */
   if (!ev.cancelable) return;
   /* if we cannot find the right touch, some other touchpoint
    * triggered this event and we do not care about that */
-  if (!this.drag_state.find_touch(ev)) return;
+  if (!this.drag_state.findTouch(ev)) return;
   /* if movecapture returns false, the capture has ended */
-  if (movecapture.call(this, ev) !== false) {
+  if (moveCapture.call(this, ev) !== false) {
     ev.preventDefault();
     ev.stopPropagation();
     return false;
   }
 }
-function touchend(ev) {
+function touchEnd(ev) {
   var s;
   if (!ev.cancelable) return;
   s = this.drag_state;
   /* either we are not dragging or it is another touch point */
-  if (!s || !s.find_touch(ev)) return;
-  stopcapture.call(this, ev);
+  if (!s || !s.findTouch(ev)) return;
+  stopCapture.call(this, ev);
   ev.stopPropagation();
   ev.preventDefault();
   return false;
 }
-function touchcancel(ev) {
-  return touchend.call(this, ev);
+function touchCancel(ev) {
+  return touchEnd.call(this, ev);
 }
 var dummy = function () {};
 
-function get_parents(e) {
+function getParents(e) {
   var ret = [];
   if (Array.isArray(e))
     e.map(function (e) {
@@ -256,7 +256,7 @@ function get_parents(e) {
 
 var static_events = {
   set_node: function (value) {
-    this.delegate_events(value);
+    this.delegateEvents(value);
   },
   contextmenu: function () {
     return false;
@@ -264,22 +264,22 @@ var static_events = {
   delegated: [
     function (element, old_element) {
       /* cancel the current capture */
-      if (old_element) stopcapture.call(this);
+      if (old_element) stopCapture.call(this);
     },
     function (elem, old) {
       /* NOTE: this works around a bug in chrome (#673102) */
-      if (old) remove_event_listener(get_parents(old), 'touchstart', dummy);
-      if (elem) add_event_listener(get_parents(elem), 'touchstart', dummy);
+      if (old) removeEventListener(getParents(old), 'touchstart', dummy);
+      if (elem) addEventListener(getParents(elem), 'touchstart', dummy);
     },
   ],
-  touchstart: touchstart,
-  touchmove: touchmove,
-  touchend: touchend,
-  touchcancel: touchcancel,
-  mousedown: mousedown,
+  touchstart: touchStart,
+  touchmove: touchMove,
+  touchend: touchEnd,
+  touchcancel: touchCancel,
+  mousedown: mouseDown,
 };
 
-export const DragCapture = define_class({
+export const DragCapture = defineClass({
   /**
    * DragCapture is a low-level class for tracking drag interaction using both
    *   touch and mouse events. It can be used for implementing drag'n'drop
@@ -351,16 +351,16 @@ export const DragCapture = define_class({
   },
   destroy: function () {
     Module.prototype.destroy.call(this);
-    stopcapture.call(this);
+    stopCapture.call(this);
   },
-  cancel_drag: stopcapture,
+  cancelDrag: stopCapture,
   dragging: function () {
     return this.options.state;
   },
   state: function () {
     return this.drag_state;
   },
-  is_dragged_by: function (ev) {
-    return this.drag_state !== null && this.drag_state.is_dragged_by(ev);
+  isDraggedBy: function (ev) {
+    return this.drag_state !== null && this.drag_state.isDraggedBy(ev);
   },
 });

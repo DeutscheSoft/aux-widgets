@@ -28,7 +28,7 @@
 import { warn } from './log.js';
 import { Timer } from './timers.js';
 
-function call_all(a) {
+function callAll(a) {
   for (let i = 0; i < a.length; i++) {
     try {
       a[i]();
@@ -44,14 +44,14 @@ function call_all(a) {
  * which can be called to unsubsribe.
  *
  * @example
- *      const unsubcribe = observe_useraction(fader, 'value', (value) => {
+ *      const unsubcribe = observeUseraction(fader, 'value', (value) => {
  *        console.log('Fader value changed to %o', value);
  *      });
  *
  *      setTimeout(unsubscribe, 1000);
  */
-export function observe_useraction(widget, name, callback) {
-  if (!widget.get_option_type(name) && !name.startsWith('_'))
+export function observeUseraction(widget, name, callback) {
+  if (!widget.getOptionType(name) && !name.startsWith('_'))
     throw new Error('No such options: ' + name);
 
   return widget.subscribe('useraction', (key, value) => {
@@ -64,14 +64,14 @@ export function observe_useraction(widget, name, callback) {
  * Returns a function which can be called to unsubsribe.
  *
  * @example
- *      const unsubcribe = observe_useraction(fader, 'value', (value) => {
+ *      const unsubcribe = observeUseraction(fader, 'value', (value) => {
  *        console.log('Fader value is %o now.', value);
  *      });
  *
  *      setTimeout(unsubscribe, 1000);
  */
-export function observe_option(widget, name, callback) {
-  if (!widget.get_option_type(name) && !name.startsWith('_'))
+export function observeOption(widget, name, callback) {
+  if (!widget.getOptionType(name) && !name.startsWith('_'))
     throw new Error('No such options: ' + name);
 
   callback(widget.get(name));
@@ -81,8 +81,8 @@ export function observe_option(widget, name, callback) {
   });
 }
 
-export function intercept_option(widget, name, callback) {
-  if (!widget.get_option_type(name) && !name.startsWith('_'))
+export function interceptOption(widget, name, callback) {
+  if (!widget.getOptionType(name) && !name.startsWith('_'))
     throw new Error('No such options: ' + name);
 
   return widget.subscribe('userset', (_name, value) => {
@@ -122,10 +122,10 @@ export class DebounceBinding {
     this._has_value = false;
     this._locked = 0;
 
-    if (widget.get_option_type('interacting')) {
+    if (widget.getOptionType('interacting')) {
       let interacting = false;
       this._subscriptions.push(
-        observe_option(widget, 'interacting', (value) => {
+        observeOption(widget, 'interacting', (value) => {
           if (value === interacting) return;
           interacting = value;
           if (value) {
@@ -144,7 +144,7 @@ export class DebounceBinding {
 
     if (time) {
       this._subscriptions.push(
-        observe_useraction(widget, name, () => {
+        observeUseraction(widget, name, () => {
           if (!this._timer.active) this.lock();
 
           this._timer.restart(time);
@@ -191,7 +191,7 @@ export class DebounceBinding {
    * has been delayed, it will not be passed to the widget.
    */
   destroy() {
-    call_all(this._subscriptions);
+    callAll(this._subscriptions);
     this._subscriptions = [];
   }
 }

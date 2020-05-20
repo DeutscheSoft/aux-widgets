@@ -18,13 +18,13 @@
  */
 
 import { S } from '../dom_scheduler.js';
-import { define_class } from './../widget_helpers.js';
-import { add_class, get_style, empty } from '../utils/dom.js';
-import { make_svg } from '../utils/svg.js';
+import { defineClass } from './../widget_helpers.js';
+import { addClass, getStyle, empty } from '../utils/dom.js';
+import { makeSVG } from '../utils/svg.js';
 import { Widget } from './widget.js';
 import { Ranges } from '../implements/ranges.js';
 
-function draw_lines(a, mode, last) {
+function drawLines(a, mode, last) {
   var labels = new Array(a.length);
   var coords = new Array(a.length);
   var i, label, obj;
@@ -33,12 +33,12 @@ function draw_lines(a, mode, last) {
     obj = a[i];
     if (typeof obj === 'number') obj = { pos: obj };
     if (obj.label) {
-      label = make_svg('text');
+      label = makeSVG('text');
       label.textContent = obj.label;
       label.style['dominant-baseline'] = 'central';
-      add_class(label, 'aux-gridlabel');
-      add_class(label, mode ? 'aux-horizontal' : 'aux-vertical');
-      if (obj['class']) add_class(label, obj['class']);
+      addClass(label, 'aux-gridlabel');
+      addClass(label, mode ? 'aux-horizontal' : 'aux-vertical');
+      if (obj['class']) addClass(label, obj['class']);
 
       this.element.appendChild(label);
       labels[i] = label;
@@ -68,7 +68,7 @@ function draw_lines(a, mode, last) {
         }
         var tw = bb.width;
         var th = bb.height;
-        var p = get_style(label, 'padding').split(' ');
+        var p = getStyle(label, 'padding').split(' ');
         if (p.length < 2) p[1] = p[2] = p[3] = p[0];
         if (p.length < 3) {
           p[2] = p[0];
@@ -83,7 +83,7 @@ function draw_lines(a, mode, last) {
         if (mode) {
           y = Math.max(
             th / 2,
-            Math.min(h - th / 2 - pt, this.range_y.val2px(obj.pos))
+            Math.min(h - th / 2 - pt, this.range_y.valueToPixel(obj.pos))
           );
           if (y > last) continue;
           x = w - tw - pl;
@@ -96,7 +96,7 @@ function draw_lines(a, mode, last) {
         } else {
           x = Math.max(
             pl,
-            Math.min(w - tw - pl, this.range_x.val2px(obj.pos) - tw / 2)
+            Math.min(w - tw - pl, this.range_x.valueToPixel(obj.pos) - tw / 2)
           );
           if (x < last) continue;
           y = h - th / 2 - pt;
@@ -145,21 +145,21 @@ function draw_lines(a, mode, last) {
               (!mode && obj.pos === this.range_x.options.max)
             )
               continue;
-            var line = make_svg('path');
-            add_class(line, 'aux-gridline');
-            add_class(line, mode ? 'aux-horizontal' : 'aux-vertical');
-            if (obj['class']) add_class(line, obj['class']);
+            var line = makeSVG('path');
+            addClass(line, 'aux-gridline');
+            addClass(line, mode ? 'aux-horizontal' : 'aux-vertical');
+            if (obj['class']) addClass(line, obj['class']);
             if (obj.color) line.setAttribute('style', 'stroke:' + obj.color);
             if (mode) {
               // line from left to right
               line.setAttribute(
                 'd',
                 'M0 ' +
-                  Math.round(this.range_y.val2px(obj.pos)) +
+                  Math.round(this.range_y.valueToPixel(obj.pos)) +
                   '.5 L' +
                   (this.range_x.options.basis - m) +
                   ' ' +
-                  Math.round(this.range_y.val2px(obj.pos)) +
+                  Math.round(this.range_y.valueToPixel(obj.pos)) +
                   '.5'
               );
             } else {
@@ -167,9 +167,9 @@ function draw_lines(a, mode, last) {
               line.setAttribute(
                 'd',
                 'M' +
-                  Math.round(this.range_x.val2px(obj.pos)) +
+                  Math.round(this.range_x.valueToPixel(obj.pos)) +
                   '.5 0 L' +
-                  Math.round(this.range_x.val2px(obj.pos)) +
+                  Math.round(this.range_x.valueToPixel(obj.pos)) +
                   '.5 ' +
                   (this.range_y.options.basis - m)
               );
@@ -182,7 +182,7 @@ function draw_lines(a, mode, last) {
     }.bind(this)
   );
 }
-export const Grid = define_class({
+export const Grid = defineClass({
   /**
    * Grid creates a couple of lines and labels in a SVG
    * image on the x and y axis. It is used in e.g. {@link Graph} and
@@ -238,7 +238,7 @@ export const Grid = define_class({
     height: 0,
   },
   initialize: function (options) {
-    if (!options.element) options.element = make_svg('g');
+    if (!options.element) options.element = makeSVG('g');
     Widget.prototype.initialize.call(this, options);
     /**
      * @member {SVGGroup} Grid#element - The main SVG group containing all grid elements. Has class <code>.aux-grid</code>.
@@ -249,20 +249,20 @@ export const Grid = define_class({
     /**
      * @member {Range} Grid#range_y - The range for the y axis.
      */
-    this.add_range(this.options.range_x, 'range_x');
-    this.add_range(this.options.range_y, 'range_y');
+    this.addRange(this.options.range_x, 'range_x');
+    this.addRange(this.options.range_y, 'range_y');
     if (this.options.width) this.set('width', this.options.width);
     if (this.options.height) this.set('height', this.options.width);
     this.invalidate_ranges = function () {
       this.invalid.range_x = true;
       this.invalid.range_y = true;
-      this.trigger_draw();
+      this.triggerDraw();
     }.bind(this);
     this.range_x.on('set', this.invalidate_ranges);
     this.range_y.on('set', this.invalidate_ranges);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-grid');
+    addClass(element, 'aux-grid');
 
     Widget.prototype.draw.call(this, O, element);
   },
@@ -273,8 +273,8 @@ export const Grid = define_class({
     if (I.validate('grid_x', 'grid_y', 'range_x', 'range_y')) {
       empty(this.element);
 
-      draw_lines.call(this, O.grid_x, false, 0);
-      draw_lines.call(this, O.grid_y, true, this.range_y.options.basis);
+      drawLines.call(this, O.grid_x, false, 0);
+      drawLines.call(this, O.grid_y, true, this.range_y.options.basis);
     }
     Widget.prototype.redraw.call(this);
   },

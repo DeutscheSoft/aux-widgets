@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { ColorPicker } from './../widgets/colorpicker.js';
 
@@ -30,6 +30,6 @@ import { ColorPicker } from './../widgets/colorpicker.js';
  * @class ColorPickerComponent
  * @implements Component
  */
-export const ColorPickerComponent = component_from_widget(ColorPicker);
+export const ColorPickerComponent = componentFromWidget(ColorPicker);
 
-define_component('colorpicker', ColorPickerComponent);
+defineComponent('colorpicker', ColorPickerComponent);

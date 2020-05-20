@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { Gauge } from './../widgets/gauge.js';
 
@@ -29,6 +29,6 @@ import { Gauge } from './../widgets/gauge.js';
  * @class GaugeComponent
  * @implements Component
  */
-export const GaugeComponent = component_from_widget(Gauge);
+export const GaugeComponent = componentFromWidget(Gauge);
 
-define_component('gauge', GaugeComponent);
+defineComponent('gauge', GaugeComponent);

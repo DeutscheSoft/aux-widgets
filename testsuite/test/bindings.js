@@ -19,13 +19,13 @@
 
 import { Widget, WidgetComponent } from '../src/index.js';
 import {
-  intercept_option,
-  observe_option,
-  observe_useraction,
+  interceptOption,
+  observeOption,
+  observeUseraction,
   DebounceBinding,
 } from '../src/utils/binding.js';
 
-import { assert, assert_error, sleep } from './helpers.js';
+import { assert, assertError, sleep } from './helpers.js';
 
 describe('Bindings', () => {
   it('observe_option', () => {
@@ -33,7 +33,7 @@ describe('Bindings', () => {
 
     let called = false;
 
-    const unsubscribe = observe_option(o, 'disabled', (value) => {
+    const unsubscribe = observeOption(o, 'disabled', (value) => {
       if (value) called = true;
     });
 
@@ -56,7 +56,7 @@ describe('Bindings', () => {
 
     let called = false;
 
-    const unsubscribe = observe_useraction(o, 'disabled', (value) => {
+    const unsubscribe = observeUseraction(o, 'disabled', (value) => {
       called = true;
     });
 
@@ -81,7 +81,7 @@ describe('Bindings', () => {
 
     let called = false;
 
-    const unsubscribe = intercept_option(o, 'disabled', (value) => {
+    const unsubscribe = interceptOption(o, 'disabled', (value) => {
       called = true;
     });
 

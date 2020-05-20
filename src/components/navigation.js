@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { Navigation } from './../widgets/navigation.js';
 
@@ -30,6 +30,6 @@ import { Navigation } from './../widgets/navigation.js';
  * @class NavigationComponent
  * @implements Component
  */
-export const NavigationComponent = component_from_widget(Navigation);
+export const NavigationComponent = componentFromWidget(Navigation);
 
-define_component('navigation', NavigationComponent);
+defineComponent('navigation', NavigationComponent);

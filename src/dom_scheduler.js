@@ -20,7 +20,7 @@
 import { warn, log } from './utils/log.js';
 import { sprintf } from './utils/sprintf.js';
 
-function low_add(Q, o, prio) {
+function lowAdd(Q, o, prio) {
   prio = prio << 1;
   var q = Q[prio];
   var len = Q[prio + 1];
@@ -31,7 +31,7 @@ function low_add(Q, o, prio) {
   q[len++] = o;
   Q[prio + 1] = len;
 }
-function low_remove(Q, o, prio) {
+function lowRemove(Q, o, prio) {
   prio = prio << 1;
   var q = Q[prio];
   var len = Q[prio + 1];
@@ -44,7 +44,7 @@ function low_remove(Q, o, prio) {
   }
   Q[prio + 1] = len;
 }
-function low_has(Q, o, prio) {
+function lowHas(Q, o, prio) {
   prio = prio << 1;
   var q = Q[prio];
   var len = Q[prio + 1];
@@ -136,42 +136,42 @@ Scheduler.prototype = {
     return runs;
   },
   add: function (o, prio) {
-    low_add(this.Q, o, prio);
+    lowAdd(this.Q, o, prio);
   },
-  add_next: function (o, prio) {
-    low_add(this.Q_next, o, prio);
+  addNext: function (o, prio) {
+    lowAdd(this.Q_next, o, prio);
   },
   remove: function (o, prio) {
-    low_remove(this.Q, o, prio);
+    lowRemove(this.Q, o, prio);
   },
-  remove_next: function (o, prio) {
-    low_remove(this.Q_next, o, prio);
+  removeNext: function (o, prio) {
+    lowRemove(this.Q_next, o, prio);
   },
   has: function (o, prio) {
-    return low_has(this.Q, o, prio);
+    return lowHas(this.Q, o, prio);
   },
-  has_next: function (o, prio) {
-    return low_has(this.Q_next, o, prio);
+  hasNext: function (o, prio) {
+    return lowHas(this.Q_next, o, prio);
   },
-  after_frame: function (fun) {
+  afterFrame: function (fun) {
     this.after_frame_cbs.push(fun);
   },
-  get_frame_count: function () {
+  getFrameCount: function () {
     return this.frame_count;
   },
-  get_current_priority: function () {
+  getCurrentPriority: function () {
     return this.current_priority;
   },
-  get_current_cycle: function () {
+  getCurrentCycle: function () {
     return this.current_cycle;
   },
-  describe_now: function () {
+  describeNow: function () {
     if (this.running) {
       return sprintf(
         '<frame: %d, prio: %d, cycle: %d>',
-        this.get_frame_count(),
-        this.get_current_priority(),
-        this.get_current_cycle()
+        this.getFrameCount(),
+        this.getCurrentPriority(),
+        this.getCurrentCycle()
       );
     } else {
       return '<not scheduled>';
@@ -185,8 +185,8 @@ function DOMScheduler() {
   this.bound_run = this.run.bind(this);
 }
 DOMScheduler.prototype = Object.create(Scheduler.prototype);
-DOMScheduler.prototype.add_next = function (o, prio) {
-  Scheduler.prototype.add_next.call(this, o, prio);
+DOMScheduler.prototype.addNext = function (o, prio) {
+  Scheduler.prototype.addNext.call(this, o, prio);
 
   if (this.will_render) return;
   this.will_render = true;
@@ -210,8 +210,8 @@ DOMScheduler.prototype.run = function () {
   this.running = false;
   if (this.will_render) window.requestAnimationFrame(this.bound_run);
 };
-DOMScheduler.prototype.after_frame = function (fun) {
-  Scheduler.prototype.after_frame.call(this, fun);
+DOMScheduler.prototype.afterFrame = function (fun) {
+  Scheduler.prototype.afterFrame.call(this, fun);
   if (this.will_render) return;
   if (this.running) return;
   this.will_render = true;

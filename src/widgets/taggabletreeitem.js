@@ -17,22 +17,22 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { TreeItem } from './treeitem.js';
 import { Taggable } from './taggable.js';
-import { add_class } from '../utils/dom.js';
+import { addClass } from '../utils/dom.js';
 
-export const TaggableTreeItem = define_class({
+export const TaggableTreeItem = defineClass({
   Extends: TreeItem,
   Implements: Taggable,
 
   initialize: function (options) {
     TreeItem.prototype.initialize.call(this, options);
     Taggable.prototype.initialize.call(this);
-    add_class(this.element, 'aux-taggabletreeitem');
+    addClass(this.element, 'aux-taggabletreeitem');
   },
   draw: function (O, element) {
-    add_class(element, 'aux-taggabletreeitem');
+    addClass(element, 'aux-taggabletreeitem');
 
     TreeItem.prototype.draw.call(this, O, element);
   },

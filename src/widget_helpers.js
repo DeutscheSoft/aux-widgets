@@ -17,9 +17,9 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { toggle_class, element } from './utils/dom.js';
+import { toggleClass, element } from './utils/dom.js';
 
-export function add_event(to, event, fun) {
+export function addEvent(to, event, fun) {
   var tmp = to[event];
 
   if (!tmp) {
@@ -31,7 +31,7 @@ export function add_event(to, event, fun) {
   }
 }
 
-export function remove_event(from, event, fun) {
+export function removeEvent(from, event, fun) {
   var tmp = from[event];
   if (!tmp) return;
   if (Array.isArray(tmp)) {
@@ -43,7 +43,7 @@ export function remove_event(from, event, fun) {
   }
 }
 
-export function add_static_event(w, event, fun) {
+export function addStaticEvent(w, event, fun) {
   var p = w.prototype,
     e;
   if (!p.hasOwnProperty('static_events')) {
@@ -53,12 +53,12 @@ export function add_static_event(w, event, fun) {
       p.static_events = e = {};
     }
   } else e = p.static_events;
-  add_event(e, event, fun);
+  addEvent(e, event, fun);
 }
 
-export function define_child_element(widget, name, config) {
+export function defineChildElement(widget, name, config) {
   /**
-   * @function define_child_element
+   * @function defineChildElement
    *
    * @description Creates a HTMLElement as a child for a widget. Is used to simplify
    * widget definitions. E.g. the tiny marker used to display the back-end
@@ -110,17 +110,17 @@ export function define_child_element(widget, name, config) {
    * inside of the constructor. Otherwise, if we add the widget later
    * might be turned into a generic mapping.
    */
-  add_static_event(widget, 'initialize', function () {
+  addStaticEvent(widget, 'initialize', function () {
     this[index] = null;
   });
 
   /* trigger child element creation after initialization */
-  add_static_event(widget, 'initialize_children', function () {
+  addStaticEvent(widget, 'initialize_children', function () {
     this.set(show_option, this.options[show_option]);
   });
 
   /* clean up on destroy */
-  add_static_event(widget, 'destroy', function () {
+  addStaticEvent(widget, 'destroy', function () {
     if (this[index]) {
       this[index].remove();
       this[index] = null;
@@ -139,7 +139,7 @@ export function define_child_element(widget, name, config) {
       this.element.appendChild(this[index]);
     };
 
-  add_static_event(widget, 'set_' + show_option, function (value) {
+  addStaticEvent(widget, 'set_' + show_option, function (value) {
     var C = this[index];
     var show = display_check ? display_check(value) : value !== false;
     if (show === !!C) return;
@@ -151,9 +151,8 @@ export function define_child_element(widget, name, config) {
       this[index] = null;
       C.remove();
     }
-    if (config.toggle_class)
-      toggle_class(this.element, 'aux-has-' + name, show);
-    this.trigger_resize();
+    if (config.toggle_class) toggleClass(this.element, 'aux-has-' + name, show);
+    this.triggerResize();
   });
 
   if (config.draw) {
@@ -163,11 +162,11 @@ export function define_child_element(widget, name, config) {
     else m.push(show_option);
 
     for (var i = 0; i < m.length; i++) {
-      add_static_event(widget, 'set_' + m[i], function () {
+      addStaticEvent(widget, 'set_' + m[i], function () {
         var value = this.options[show_option];
         var show = display_check ? display_check(value) : value !== false;
 
-        if (show) this.draw_once(config.draw);
+        if (show) this.drawOnce(config.draw);
       });
     }
   }
@@ -183,7 +182,7 @@ function arrayify(x) {
   return x;
 }
 
-function merge_static_events(a, b) {
+function mergeStaticEvents(a, b) {
   var event;
   if (!a) return b;
   if (!b) return Object.assign({}, a);
@@ -219,7 +218,7 @@ function mixin(dst, src) {
   return dst;
 }
 
-export function define_class(o) {
+export function defineClass(o) {
   var methods;
   var tmp, i, c;
 
@@ -231,7 +230,7 @@ export function define_class(o) {
     const tmp = Extends.prototype;
     o.options = Object.assign(Object.create(tmp.options), o.options);
     if (o.static_events)
-      o.static_events = merge_static_events(tmp.static_events, o.static_events);
+      o.static_events = mergeStaticEvents(tmp.static_events, o.static_events);
     methods = Object.assign(Object.create(tmp), o);
   } else {
     methods = o;
@@ -253,7 +252,7 @@ export function define_class(o) {
       }
       if (c.static_events) {
         if (methods.static_events) {
-          methods.static_events = merge_static_events(
+          methods.static_events = mergeStaticEvents(
             c.static_events,
             Object.assign({}, methods.static_events)
           );

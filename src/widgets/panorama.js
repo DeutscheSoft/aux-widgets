@@ -17,11 +17,11 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { Chart } from './chart.js';
 import { ChartHandle } from './charthandle.js';
-import { add_class, remove_class } from '../utils/dom.js';
-import { define_child_widget } from '../child_widget.js';
+import { addClass, removeClass } from '../utils/dom.js';
+import { defineChildWidget } from '../child_widget.js';
 import { warn } from '../utils/log.js';
 
 /**
@@ -44,7 +44,7 @@ import { warn } from '../utils/log.js';
  *
  * @class Panorama
  */
-export const Panorama = define_class({
+export const Panorama = defineClass({
   Extends: Chart,
   _options: Object.assign(Object.create(Chart.prototype._options), {
     mode: 'string',
@@ -71,7 +71,7 @@ export const Panorama = define_class({
   },
   static_events: {
     set_mode: function (v) {
-      remove_class(this.element, 'aux-balance', 'aux-surround');
+      removeClass(this.element, 'aux-balance', 'aux-surround');
       switch (v) {
         default:
           warn('Unsupported mode', v);
@@ -83,12 +83,12 @@ export const Panorama = define_class({
         case 'balance':
           this.handle1.set('mode', 'line-vertical');
           this.handle2.show();
-          add_class(this.element, 'aux-balance');
+          addClass(this.element, 'aux-balance');
           break;
         case 'surround':
           this.handle1.set('mode', 'circular');
           this.handle2.hide();
-          add_class(this.element, 'aux-surround');
+          addClass(this.element, 'aux-surround');
           break;
       }
       this.handle1.set('_mode', v);
@@ -111,7 +111,7 @@ export const Panorama = define_class({
      * @member {SVGElement} Panorama#element - The main SVG image.
      *   Has class <code>.aux-panorama</code>.
      */
-    this.set_parent(null);
+    this.setParent(null);
   },
   initialized: function () {
     Chart.prototype.initialized.call(this);
@@ -121,12 +121,12 @@ export const Panorama = define_class({
     this.set('mode', O.mode);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-panorama');
+    addClass(element, 'aux-panorama');
 
     Chart.prototype.draw.call(this, O, element);
   },
 });
-function handle_label(label, x, y, z) {
+function handleLabel(label, x, y, z) {
   var O = this.options;
   var s = '';
   if (O._mode == 'balance') s += label + '\n';
@@ -138,7 +138,7 @@ function handle_label(label, x, y, z) {
   }
   return s;
 }
-function handle_label2(label, x, y, z) {
+function handleLabel2(label, x, y, z) {
   var O = this.options;
   var s = label + '\n';
   var lr = y ? (y < 0 ? 'L' : 'R') : '';
@@ -151,7 +151,7 @@ function handle_label2(label, x, y, z) {
  *   In panorama mode it affects the `x` parameter, in surround it
  *   affects both, `x` and `y` parameters.
  */
-define_child_widget(Panorama, 'handle1', {
+defineChildWidget(Panorama, 'handle1', {
   create: ChartHandle,
   show: true,
   toggle_class: true,
@@ -160,7 +160,7 @@ define_child_widget(Panorama, 'handle1', {
     y: 'y',
   },
   default_options: {
-    format_label: handle_label,
+    format_label: handleLabel,
     preferences: ['top', 'bottom', 'left', 'right'],
     label: 'In 1',
   },
@@ -170,7 +170,7 @@ define_child_widget(Panorama, 'handle1', {
  *   displaying/setting the position of the second channel in balance
  *   mode. It affects the `y` parameter.
  */
-define_child_widget(Panorama, 'handle2', {
+defineChildWidget(Panorama, 'handle2', {
   create: ChartHandle,
   show: true,
   toggle_class: true,
@@ -178,7 +178,7 @@ define_child_widget(Panorama, 'handle2', {
     y: 'x',
   },
   default_options: {
-    format_label: handle_label,
+    format_label: handleLabel,
     mode: 'line-vertical',
     preferences: ['top', 'bottom', 'left', 'right'],
     label: 'In 2',

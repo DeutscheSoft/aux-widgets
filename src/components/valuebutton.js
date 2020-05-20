@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { ValueButton } from './../widgets/valuebutton.js';
 
@@ -30,6 +30,6 @@ import { ValueButton } from './../widgets/valuebutton.js';
  * @class ValueButtonComponent
  * @implements Component
  */
-export const ValueButtonComponent = component_from_widget(ValueButton);
+export const ValueButtonComponent = componentFromWidget(ValueButton);
 
-define_component('valuebutton', ValueButtonComponent);
+defineComponent('valuebutton', ValueButtonComponent);

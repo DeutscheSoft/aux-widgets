@@ -19,7 +19,7 @@
 
 import { Timer } from '../src/index.js';
 
-function expect_timeout(t, cb) {
+function expectTimeout(t, cb) {
   return new Promise((resolve, reject) => {
     const now = performance.now();
     cb(() => {
@@ -32,7 +32,7 @@ function expect_timeout(t, cb) {
 
 describe('Timers', () => {
   it('restart() with increasing time', () => {
-    return expect_timeout(40, (cb) => {
+    return expectTimeout(40, (cb) => {
       const t = new Timer(cb);
       t.restart(10);
       t.restart(20);
@@ -41,7 +41,7 @@ describe('Timers', () => {
     });
   });
   it('restart() with decreasing time', () => {
-    return expect_timeout(40, (cb) => {
+    return expectTimeout(40, (cb) => {
       const t = new Timer(cb);
       t.restart(100);
       t.restart(80);
@@ -50,7 +50,7 @@ describe('Timers', () => {
     });
   });
   it('restart() with both', () => {
-    return expect_timeout(40, (cb) => {
+    return expectTimeout(40, (cb) => {
       const t = new Timer(cb);
       t.restart(10);
       t.restart(20);

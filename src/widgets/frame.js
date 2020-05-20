@@ -17,11 +17,11 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
-import { define_child_widget } from '../child_widget.js';
+import { defineClass } from '../widget_helpers.js';
+import { defineChildWidget } from '../child_widget.js';
 import { Label } from './label.js';
 import { Container } from './container.js';
-import { add_class } from '../utils/dom.js';
+import { addClass } from '../utils/dom.js';
 
 /**
  * Frame is a {@link Container} with a {@link Label} on top.
@@ -34,7 +34,7 @@ import { add_class } from '../utils/dom.js';
  *
  * @class Frame
  */
-export const Frame = define_class({
+export const Frame = defineClass({
   Extends: Container,
   _options: Object.create(Container.prototype._options),
   options: {
@@ -48,7 +48,7 @@ export const Frame = define_class({
      */
   },
   draw: function (O, element) {
-    add_class(element, 'aux-frame');
+    addClass(element, 'aux-frame');
 
     Container.prototype.draw.call(this, O, element);
   },
@@ -56,7 +56,7 @@ export const Frame = define_class({
 /**
  * @member {Label} Frame#label - The {@link Label} of the frame.
  */
-define_child_widget(Frame, 'label', {
+defineChildWidget(Frame, 'label', {
   create: Label,
   option: 'label',
   inherit_options: true,

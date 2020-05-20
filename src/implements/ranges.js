@@ -17,11 +17,11 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from './../widget_helpers.js';
+import { defineClass } from './../widget_helpers.js';
 import { Ranged } from './ranged.js';
 import { Range } from '../modules/range.js';
 
-function range_changed(value, name) {
+function rangeChanged(value, name) {
   var range = this[name];
   for (var i in value) {
     range.set(i, value[i]);
@@ -34,13 +34,13 @@ function range_changed(value, name) {
  *
  * @mixin Ranges
  */
-export const Ranges = define_class({
+export const Ranges = defineClass({
   /**
    * Add a new {@link Range}. If <code>name</code> is set and <code>this.options[name]</code>
    * exists, is an object and <code>from</code> is an object, too, both are merged
    * before a range is created.
    *
-   * @method Ranges#add_range
+   * @method Ranges#addRange
    *
    * @param {Function|Object} from - A function returning a {@link Range}
    *   instance or an object containing options for a new {@link Range}.
@@ -53,7 +53,7 @@ export const Ranges = define_class({
    *
    * @returns {Range} The new {@link Range}.
    */
-  add_range: function (from, name) {
+  addRange: function (from, name) {
     var r;
     if (typeof from === 'function') {
       r = from();
@@ -68,7 +68,7 @@ export const Ranges = define_class({
     }
     if (name) {
       this[name] = r;
-      this.on('set_' + name, range_changed);
+      this.on('set_' + name, rangeChanged);
     }
     /**
      * Gets fired when a new range is added

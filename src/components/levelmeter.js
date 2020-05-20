@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { LevelMeter } from './../widgets/levelmeter.js';
 
@@ -30,6 +30,6 @@ import { LevelMeter } from './../widgets/levelmeter.js';
  * @class LevelMeterComponent
  * @implements Component
  */
-export const LevelMeterComponent = component_from_widget(LevelMeter);
+export const LevelMeterComponent = componentFromWidget(LevelMeter);
 
-define_component('levelmeter', LevelMeterComponent);
+defineComponent('levelmeter', LevelMeterComponent);

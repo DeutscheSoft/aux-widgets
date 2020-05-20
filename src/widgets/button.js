@@ -17,32 +17,32 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { element, add_class, toggle_class } from './../utils/dom.js';
-import { define_class } from './../widget_helpers.js';
-import { define_child_widget } from './../child_widget.js';
+import { element, addClass, toggleClass } from './../utils/dom.js';
+import { defineClass } from './../widget_helpers.js';
+import { defineChildWidget } from './../child_widget.js';
 import { Widget } from './widget.js';
 import { Icon } from './icon.js';
 import { Label } from './label.js';
 
-function reset_delay_to() {
+function resetDelayTo() {
   window.clearTimeout(this.__delayed_to);
   this.__delayed_to = -1;
-  this.remove_class('aux-delayed');
+  this.removeClass('aux-delayed');
 }
 
-function press_start(e) {
+function pressStart(e) {
   let O = this.options;
   this.__time_stamp = e.timeStamp;
   if (O.delay && this.__delayed_to < 0) {
     this.__delayed_to = window.setTimeout(
       (function (t) {
         return function () {
-          press_start.call(t, e);
+          pressStart.call(t, e);
         };
       })(this),
       O.delay
     );
-    this.add_class('aux-delayed');
+    this.addClass('aux-delayed');
     /**
      * Is fired after either a mousedown or a touchstart happened
      * but `delay` is set so firing `press_start` will be delayed.
@@ -52,7 +52,7 @@ function press_start(e) {
     this.emit('press_delayed');
     return;
   }
-  this.remove_class('aux-delayed');
+  this.removeClass('aux-delayed');
   /**
    * Is fired after either a mousedown or a touchstart happened and
    * `delay` is set to `0`. If a delay is set, `press_delayed` is fired
@@ -65,10 +65,10 @@ function press_start(e) {
    */
   this.emit('press_start', e);
 }
-function press_end(e) {
+function pressEnd(e) {
   let O = this.options;
   if (O.delay && this.__delayed_to >= 0) {
-    reset_delay_to.call(this);
+    resetDelayTo.call(this);
   }
   /**
    * Is fired after either a mouseup or a touchend happened and the
@@ -81,10 +81,10 @@ function press_end(e) {
    */
   this.emit('press_end', e);
 }
-function press_cancel(e) {
+function pressCancel(e) {
   let O = this.options;
   if (O.delay && this.__delayed_to >= 0) {
-    reset_delay_to.call(this);
+    resetDelayTo.call(this);
   }
   /**
    * Is fired after `press_start` or `press_delay` and before
@@ -102,23 +102,23 @@ function press_cancel(e) {
 function mouseup(e) {
   this.off('mouseup', mouseup);
   this.off('mouseleave', mouseleave);
-  press_end.call(this, e);
+  pressEnd.call(this, e);
 }
 function mouseleave(e) {
   this.off('mouseup', mouseup);
   this.off('mouseleave', mouseleave);
-  press_cancel.call(this, e);
+  pressCancel.call(this, e);
 }
 function mousedown(e) {
   /* only left click please */
   if (e.button) return true;
-  press_start.call(this, e);
+  pressStart.call(this, e);
   this.on('mouseup', mouseup);
   this.on('mouseleave', mouseleave);
 }
 
 /* TOUCH handling */
-function is_current_touch(ev) {
+function isCurrentTouch(ev) {
   var id = this.__touch_id;
   var i;
   for (i = 0; i < ev.changedTouches.length; i++) {
@@ -131,20 +131,20 @@ function is_current_touch(ev) {
 }
 
 function touchend(e) {
-  if (!is_current_touch.call(this, e)) return;
+  if (!isCurrentTouch.call(this, e)) return;
   this.__touch_id = false;
   e.preventDefault();
-  press_end.call(this, e);
+  pressEnd.call(this, e);
 
   this.off('touchend', touchend);
   this.off('touchcancel', touchleave);
   this.off('touchleave', touchleave);
 }
 function touchleave(e) {
-  if (!is_current_touch.call(this, e)) return;
+  if (!isCurrentTouch.call(this, e)) return;
   this.__touch_id = false;
   e.preventDefault();
-  press_cancel.call(this, e);
+  pressCancel.call(this, e);
 
   this.off('touchend', touchend);
   this.off('touchcancel', touchleave);
@@ -153,7 +153,7 @@ function touchleave(e) {
 function touchstart(e) {
   if (this.__touch_id !== false) return;
   this.__touch_id = e.targetTouches[0].identifier;
-  press_start.call(this, e);
+  pressStart.call(this, e);
   this.on('touchend', touchend);
   this.on('touchcancel', touchleave);
   this.on('touchleave', touchleave);
@@ -167,7 +167,7 @@ function contextmenu(e) {
   return false;
 }
 
-export const Button = define_class({
+export const Button = defineClass({
   /**
    * Button is a simple, clickable widget containing an
    * {@link Icon} and a {@link Label} to trigger functions.
@@ -225,7 +225,7 @@ export const Button = define_class({
     Widget.prototype.initialize.call(this, options);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-button');
+    addClass(element, 'aux-button');
     Widget.prototype.draw.call(this, O, element);
   },
   redraw: function () {
@@ -236,13 +236,13 @@ export const Button = define_class({
 
     if (I.layout) {
       I.layout = false;
-      toggle_class(E, 'aux-vertical', O.layout === 'vertical');
-      toggle_class(E, 'aux-horizontal', O.layout !== 'vertical');
+      toggleClass(E, 'aux-vertical', O.layout === 'vertical');
+      toggleClass(E, 'aux-horizontal', O.layout !== 'vertical');
     }
 
     if (I.state) {
       I.state = false;
-      toggle_class(E, 'aux-active', O.state);
+      toggleClass(E, 'aux-active', O.state);
     }
   },
 });
@@ -250,19 +250,19 @@ export const Button = define_class({
 /**
  * @member {Icon} Button#icon - The {@link Icon} widget.
  */
-define_child_widget(Button, 'icon', {
+defineChildWidget(Button, 'icon', {
   create: Icon,
   option: 'icon',
   inherit_options: true,
-  toggle_class: true,
+  toggleClass: true,
 });
 
 /**
  * @member {Label} Button#label - The {@link Label} of the button.
  */
-define_child_widget(Button, 'label', {
+defineChildWidget(Button, 'label', {
   create: Label,
   option: 'label',
   inherit_options: true,
-  toggle_class: true,
+  toggleClass: true,
 });

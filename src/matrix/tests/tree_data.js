@@ -18,7 +18,7 @@
  */
 
 import { MatrixData } from '../models/matrix.js';
-import { assert, test, assert_error } from './helpers.js';
+import { assert, test, assertError } from './helpers.js';
 
 test('Adding and removing ports', () => {
   const matrix = new MatrixData();
@@ -131,13 +131,13 @@ test('Connections', () => {
   {
     const connection = matrix.connect(port1, port2);
 
-    assert_error(() => {
+    assertError(() => {
       matrix.connect(port1, port2);
     });
 
     matrix.deleteConnection(connection);
 
-    assert_error(() => {
+    assertError(() => {
       matrix.deleteConnection(connection);
     });
   }
@@ -148,7 +148,7 @@ test('Connections', () => {
 
     group.deletePort(port1);
 
-    assert_error(() => {
+    assertError(() => {
       matrix.deleteConnection(connection);
     });
 

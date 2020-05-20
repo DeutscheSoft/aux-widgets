@@ -17,15 +17,15 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from './../widget_helpers.js';
-import { add_class } from '../utils/dom.js';
+import { defineClass } from './../widget_helpers.js';
+import { addClass } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 import { FrequencyResponse } from './frequencyresponse.js';
 import { EqBand } from './eqband.js';
 import { Graph } from './graph.js';
-import { inherit_child_options } from '../child_widget.js';
+import { inheritChildOptions } from '../child_widget.js';
 
-function fast_draw_plinear(X, Y) {
+function fastDrawPLinear(X, Y) {
   var ret = [];
   var i,
     len = X.length;
@@ -64,15 +64,15 @@ function fast_draw_plinear(X, Y) {
 
   return ret.join('');
 }
-function draw_graph(bands) {
+function drawGraph(bands) {
   var O = this.options;
   var c = 0;
   var end = this.range_x.get('basis') | 0;
   var step = O.accuracy;
   var over = O.oversampling;
   var thres = O.threshold;
-  var x_px_to_val = this.range_x.px2val;
-  var y_val_to_px = this.range_y.val2px;
+  var x_px_to_val = this.range_x.pixelToValue;
+  var y_val_to_px = this.range_y.valueToPixel;
   var i, j, k;
   var x, y;
   var pursue;
@@ -111,14 +111,14 @@ function draw_graph(bands) {
     }
   }
 
-  return fast_draw_plinear(X, Y);
+  return fastDrawPLinear(X, Y);
 }
-function invalidate_bands() {
+function invalidateBands() {
   this.invalid.bands = true;
-  this.trigger_draw();
+  this.triggerDraw();
 }
 
-export const EqualizerGraph = define_class({
+export const EqualizerGraph = defineClass({
   /**
    * EqualizerGraph is a special {@link Graph}, which contains a list of {@link EqBand}s and draws the
    * resulting frequency response curve.
@@ -158,7 +158,7 @@ export const EqualizerGraph = define_class({
   },
   initialize: function (options) {
     Graph.prototype.initialize.call(this, options);
-    this._invalidate_bands = invalidate_bands.bind(this);
+    this._invalidate_bands = invalidateBands.bind(this);
   },
   redraw: function () {
     var I = this.invalid;
@@ -181,22 +181,22 @@ export const EqualizerGraph = define_class({
    */
   getFilterFunctions: function () {
     var bands = this.options.bands.filter(this.options.rendering_filter);
-    return bands.map((b) => b.filter.get_freq2gain());
+    return bands.map((b) => b.filter.getFrequencyToGain());
   },
   /**
    * Draws an SVG path for the current frequency response curve.
    */
   drawPath: function () {
-    return draw_graph.call(this, this.getFilterFunctions());
+    return drawGraph.call(this, this.getFilterFunctions());
   },
   resize: function () {
-    invalidate_bands.call(this);
+    invalidateBands.call(this);
   },
-  add_band: function (band) {
+  addBand: function (band) {
     band.on('set', this._invalidate_bands);
     this.set('bands', this.options.bands.concat([band]));
   },
-  remove_band: function (band) {
+  removeBand: function (band) {
     var O = this.options;
     this.set(
       'bands',
@@ -208,7 +208,7 @@ export const EqualizerGraph = define_class({
   },
 });
 
-export const Equalizer = define_class({
+export const Equalizer = defineClass({
   /**
    * Equalizer is a {@link FrequencyResponse}, utilizing {@link EqBand}s instead of
    * simple {@link ChartHandle}s. An Equalizer - by default - has one
@@ -231,8 +231,8 @@ export const Equalizer = define_class({
   },
   static_events: {
     set_bands: function (value) {
-      if (this.bands.length) this.remove_bands();
-      this.add_bands(value);
+      if (this.bands.length) this.removeBands();
+      this.addBands(value);
     },
     set_show_bands: function (value) {
       this.set('show_handles', value);
@@ -256,7 +256,7 @@ export const Equalizer = define_class({
      *   Has class <code>.aux-eqbands</code>.
      */
     this._bands = this._handles;
-    add_class(this._bands, 'aux-eqbands');
+    addClass(this._bands, 'aux-eqbands');
 
     /**
      * @member {Graph} Equalizer#baseline - The graph drawing the zero line.
@@ -267,8 +267,8 @@ export const Equalizer = define_class({
       range_y: this.range_y,
       class: 'aux-baseline',
     });
-    this.add_graph(this.baseline);
-    this.add_bands(this.options.bands);
+    this.addGraph(this.baseline);
+    this.addBands(this.options.bands);
   },
 
   destroy: function () {
@@ -277,7 +277,7 @@ export const Equalizer = define_class({
     FrequencyResponse.prototype.destroy.call(this);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-equalizer');
+    addClass(element, 'aux-equalizer');
 
     FrequencyResponse.prototype.draw.call(this, O, element);
   },
@@ -285,15 +285,15 @@ export const Equalizer = define_class({
    * Add a new band to the equalizer. Options is an object containing
    * options for the {@link EqBand}
    *
-   * @method Equalizer#add_band
+   * @method Equalizer#addBand
    *
    * @param {Object} [options={ }] - An object containing initial options for the {@link EqBand}.
    * @param {Object} [type=EqBand] - A widget class to be used for the new band.
    *
    * @emits Equalizer#bandadded
    */
-  add_child: function (child) {
-    FrequencyResponse.prototype.add_child.call(this, child);
+  addChild: function (child) {
+    FrequencyResponse.prototype.addChild.call(this, child);
 
     if (child instanceof EqBand) {
       /**
@@ -304,10 +304,10 @@ export const Equalizer = define_class({
        * @param {EqBand} band - The {@link EqBand} which was added.
        */
       this.emit('bandadded', child);
-      this.baseline.add_band(child);
+      this.baseline.addBand(child);
     }
   },
-  remove_child: function (child) {
+  removeChild: function (child) {
     if (child instanceof EqBand) {
       /**
        * Is fired when a band was removed.
@@ -317,12 +317,12 @@ export const Equalizer = define_class({
        * @param {EqBand} band - The {@link EqBand} which was removed.
        */
       this.emit('bandremoved', child);
-      this.baseline.remove_band(child);
+      this.baseline.removeBand(child);
     }
 
-    FrequencyResponse.prototype.remove_child.call(this, child);
+    FrequencyResponse.prototype.removeChild.call(this, child);
   },
-  add_band: function (options, type) {
+  addBand: function (options, type) {
     let b;
 
     if (options instanceof EqBand) {
@@ -332,7 +332,7 @@ export const Equalizer = define_class({
       b = new type(options);
     }
 
-    this.add_child(b);
+    this.addChild(b);
 
     return b;
   },
@@ -340,38 +340,38 @@ export const Equalizer = define_class({
    * Add multiple new {@link EqBand}s to the equalizer. Options is an array
    * of objects containing options for the new instances of {@link EqBand}
    *
-   * @method Equalizer#add_bands
+   * @method Equalizer#addBands
    *
    * @param {Array<Object>} options - An array of options objects for the {@link EqBand}.
    * @param {Object} [type=EqBand] - A widget class to be used for the new band.
    */
-  add_bands: function (bands, type) {
-    for (var i = 0; i < bands.length; i++) this.add_band(bands[i], type);
+  addBands: function (bands, type) {
+    for (var i = 0; i < bands.length; i++) this.addBand(bands[i], type);
   },
   /**
    * Remove a band from the widget.
    *
-   * @method Equalizer#remove_handle
+   * @method Equalizer#removeBand
    *
    * @param {EqBand} band - The {@link EqBand} to remove.
    *
    * @emits Equalizer#bandremoved
    */
-  remove_band: function (h) {
-    this.remove_child(h);
+  removeBand: function (h) {
+    this.removeChild(h);
   },
   /**
    * Remove multiple {@link EqBand} from the equalizer. Options is an array
    * of {@link EqBand} instances.
    *
-   * @method Equalizer#remove_bands
+   * @method Equalizer#removeBands
    *
    * @param {Array<EqBand>} bands - An array of {@link EqBand} instances.
    */
-  remove_bands: function (bands) {
+  removeBands: function (bands) {
     if (!bands) bands = this.bands.slice(0);
 
-    for (let i = 0; i < bands.length; i++) this.remove_band(bands[i]);
+    for (let i = 0; i < bands.length; i++) this.removeBand(bands[i]);
     /**
      * Is fired when all bands are removed.
      *
@@ -381,4 +381,4 @@ export const Equalizer = define_class({
   },
 });
 
-inherit_child_options(Equalizer, 'baseline', EqualizerGraph);
+inheritChildOptions(Equalizer, 'baseline', EqualizerGraph);

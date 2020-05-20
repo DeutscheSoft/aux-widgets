@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { Frame } from './../widgets/frame.js';
 
@@ -29,6 +29,6 @@ import { Frame } from './../widgets/frame.js';
  * @class FrameComponent
  * @implements Component
  */
-export const FrameComponent = component_from_widget(Frame);
+export const FrameComponent = componentFromWidget(Frame);
 
-define_component('frame', FrameComponent);
+defineComponent('frame', FrameComponent);

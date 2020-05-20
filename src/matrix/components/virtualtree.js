@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../../component_helpers.js';
 import { VirtualTree } from './../widgets/virtualtree.js';
 
@@ -30,6 +30,6 @@ import { VirtualTree } from './../widgets/virtualtree.js';
  * @class VirtualTreeComponent
  * @implements Component
  */
-export const VirtualTreeComponent = component_from_widget(VirtualTree);
+export const VirtualTreeComponent = componentFromWidget(VirtualTree);
 
-define_component('virtualtree', VirtualTreeComponent);
+defineComponent('virtualtree', VirtualTreeComponent);

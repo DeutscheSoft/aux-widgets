@@ -17,16 +17,16 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
-import { define_child_widget } from '../child_widget.js';
+import { defineClass } from '../widget_helpers.js';
+import { defineChildWidget } from '../child_widget.js';
 import { Container } from './container.js';
 import { Label } from './label.js';
 import { Button } from './button.js';
 import { ConfirmButton } from './confirmbutton.js';
-import { rgb2bw, hex2rgb } from '../utils/colors.js';
-import { add_class } from '../utils/dom.js';
+import { RGBToBW, hexToRGB } from '../utils/colors.js';
+import { addClass } from '../utils/dom.js';
 
-export const TagNode = define_class({
+export const TagNode = defineClass({
   Extends: Container,
 
   _options: Object.assign(Object.create(Container.prototype._options), {
@@ -46,7 +46,7 @@ export const TagNode = define_class({
   },
 
   draw: function (O, element) {
-    add_class(element, 'aux-tag');
+    addClass(element, 'aux-tag');
 
     Container.prototype.draw.call(this, O, element);
   },
@@ -58,13 +58,13 @@ export const TagNode = define_class({
     if (I.color) {
       I.color = false;
       this.element.style.backgroundColor = O.color;
-      if (O.color) this.element.style.color = rgb2bw(hex2rgb(O.color));
+      if (O.color) this.element.style.color = RGBToBW(hexToRGB(O.color));
       else this.element.style.color = null;
     }
   },
 });
 
-define_child_widget(TagNode, 'label', {
+defineChildWidget(TagNode, 'label', {
   create: Label,
   show: true,
   map_options: {
@@ -72,7 +72,7 @@ define_child_widget(TagNode, 'label', {
   },
   toggle_class: true,
 });
-define_child_widget(TagNode, 'colorize', {
+defineChildWidget(TagNode, 'colorize', {
   create: Button,
   show: false,
   toggle_class: true,
@@ -85,7 +85,7 @@ define_child_widget(TagNode, 'colorize', {
     class: 'aux-colorize',
   },
 });
-define_child_widget(TagNode, 'remove', {
+defineChildWidget(TagNode, 'remove', {
   create: ConfirmButton,
   show: true,
   toggle_class: true,

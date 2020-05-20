@@ -24,7 +24,7 @@ export function assert(x, msg) {
   ok++;
 }
 
-export function assert_error(cb) {
+export function assertError(cb) {
   try {
     cb();
     assert(false, 'Expected an error.');

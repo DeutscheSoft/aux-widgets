@@ -17,9 +17,9 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from './../widget_helpers.js';
+import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
-import { element, add_class, remove_class } from './../utils/dom.js';
+import { element, addClass, removeClass } from './../utils/dom.js';
 
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -30,11 +30,11 @@ import { element, add_class, remove_class } from './../utils/dom.js';
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-function value_clicked() {
+function valueClicked() {
   var O = this.options;
   if (O.set === false) return;
   if (this.__editing) return false;
-  add_class(this.element, 'aux-active');
+  addClass(this.element, 'aux-active');
   this._input.setAttribute('value', O.value);
   this.__editing = true;
   this._input.focus();
@@ -48,14 +48,14 @@ function value_clicked() {
    */
   this.emit('valueclicked', O.value);
 }
-function value_typing(e) {
+function valueTyping(e) {
   var O = this.options;
   if (O.set === false) return;
   if (!this.__editing) return;
   switch (e.keyCode) {
     case 27:
       // ESC
-      value_done.call(this);
+      valueDone.call(this);
       /**
        * Is fired when the ESC key was pressed while editing the value.
        *
@@ -71,7 +71,7 @@ function value_typing(e) {
         'value',
         O.set ? O.set(this._input.value) : this._input.value
       );
-      value_done.call(this);
+      valueDone.call(this);
       /**
        * Is fired after the value has been set and editing has ended.
        *
@@ -94,17 +94,17 @@ function value_typing(e) {
    */
   this.emit('valuetyping', e, O.value);
 }
-function value_input() {
+function valueInput() {
   var O = this.options;
   if (O.set === false) return;
   if (!this.__editing) return;
   if (O.editmode == 'immediate')
     this.userset('value', O.set ? O.set(this._input.value) : this._input.value);
 }
-function value_done() {
+function valueDone() {
   if (!this.__editing) return;
   this.__editing = false;
-  remove_class(this.element, 'aux-active');
+  removeClass(this.element, 'aux-active');
   this._input.blur();
   /**
    * Is fired when editing of the value ends.
@@ -116,13 +116,13 @@ function value_done() {
   this.emit('valuedone', this.options.value);
   this.invalid.value = true;
   this.stopInteracting();
-  this.trigger_draw();
+  this.triggerDraw();
 }
-function value_focus() {
+function valueFocus() {
   this.startInteracting();
 }
 
-function submit_cb(e) {
+function submitCallback(e) {
   e.preventDefault();
   return false;
 }
@@ -150,7 +150,7 @@ function submit_cb(e) {
  * @property {string} [options.editmode="onenter"] - Sets the event to trigger the userset event. Can be one out of `onenter` or `immediate`.
  *
  */
-export const Value = define_class({
+export const Value = defineClass({
   Extends: Widget,
   _options: Object.assign(Object.create(Widget.prototype._options), {
     value: 'number|string',
@@ -199,25 +199,25 @@ export const Value = define_class({
     this._input = element('input');
     this.element.appendChild(this._input);
 
-    this._value_typing = value_typing.bind(this);
-    this._value_done = value_done.bind(this);
-    this._value_input = value_input.bind(this);
-    this._value_clicked = value_clicked.bind(this);
-    this._value_focus = value_focus.bind(this);
+    this._value_typing = valueTyping.bind(this);
+    this._value_done = valueDone.bind(this);
+    this._value_input = valueInput.bind(this);
+    this._value_clicked = valueClicked.bind(this);
+    this._value_focus = valueFocus.bind(this);
 
     this.__editing = false;
   },
 
   draw: function (O, elmnt) {
-    add_class(elmnt, 'aux-value');
-    add_class(this._input, 'aux-input');
+    addClass(elmnt, 'aux-value');
+    addClass(this._input, 'aux-input');
 
     this._input.addEventListener('keyup', this._value_typing);
     this._input.addEventListener('input', this._value_input);
     this._input.addEventListener('blur', this._value_done);
     this._input.addEventListener('focus', this._value_focus);
     this._input.addEventListener('click', this._value_clicked);
-    this._input.addEventListener('submit', submit_cb);
+    this._input.addEventListener('submit', submitCallback);
 
     Widget.prototype.draw.call(this, O, elmnt);
   },
@@ -268,7 +268,7 @@ export const Value = define_class({
     this._input.removeEventListener('input', this._value_input);
     this._input.removeEventListener('focus', this._value_focus);
     this._input.removeEventListener('click', this._value_clicked);
-    this._input.removeEventListener('submit', submit_cb);
+    this._input.removeEventListener('submit', submitCallback);
     Widget.prototype.destroy.call(this);
   },
 });

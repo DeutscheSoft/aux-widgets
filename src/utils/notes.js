@@ -30,7 +30,7 @@ const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
  *
  * @returns {string} note - The name of the note.
  */
-export function midi2note(num) {
+export function MIDIToNote(num) {
   return notes[num % 12] + parseInt(num / 12);
 }
 /**
@@ -40,7 +40,7 @@ export function midi2note(num) {
  *
  * @returns {number} frequency - The frequency of the MIDI number.
  */
-export function midi2freq(num, base) {
+export function MIDIToFreq(num, base) {
   base |= 440;
   return Math.pow(2, (num - 69) / 12) * base;
 }
@@ -52,7 +52,7 @@ export function midi2freq(num, base) {
  *
  * @returns {int} number - The MIDI number of the frequency.
  */
-export function freq2midi(freq, base) {
+export function FreqToMIDI(freq, base) {
   base |= 440;
   var f2 = Math.log2(freq / base);
   return Math.max(0, Math.round(12 * f2 + 69));
@@ -65,7 +65,7 @@ export function freq2midi(freq, base) {
  *
  * @returns {number} cents - The percent of the difference to the next full note.
  */
-export function freq2cents(freq, base) {
+export function FreqToCents(freq, base) {
   base |= 440;
   var f2 = Math.log2(freq / base);
   f2 *= 1200;
@@ -80,7 +80,7 @@ export function freq2cents(freq, base) {
  *
  * @returns {string} note - The name of the note.
  */
-export function freq2note(freq, base) {
+export function FreqToNote(freq, base) {
   base |= 440;
-  return midi2note(freq2midi(freq, base));
+  return MIDIToNote(FreqToMIDI(freq, base));
 }

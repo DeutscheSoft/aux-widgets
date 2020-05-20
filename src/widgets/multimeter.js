@@ -17,24 +17,24 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class, add_static_event } from '../widget_helpers.js';
-import { define_child_widget } from '../child_widget.js';
+import { defineClass, addStaticEvent } from '../widget_helpers.js';
+import { defineChildWidget } from '../child_widget.js';
 import { LevelMeter } from './levelmeter.js';
 import { Label } from './label.js';
 import { Container } from './container.js';
-import { add_class, remove_class, toggle_class } from '../utils/dom.js';
-import { object_sub } from '../utils/object.js';
+import { addClass, removeClass, toggleClass } from '../utils/dom.js';
+import { objectSub } from '../utils/object.js';
 
-function add_meter(options) {
+function addMeter(options) {
   var l = this.meters.length;
   var O = options;
-  var opt = extract_child_options(O, l);
+  var opt = extractChildOptions(O, l);
   var m = new LevelMeter(opt);
 
   this.meters.push(m);
-  this.append_child(m);
+  this.appendChild(m);
 }
-function remove_meter(meter) {
+function removeMeter(meter) {
   /* meter can be int or meter instance */
   var M = this.meters;
 
@@ -50,14 +50,14 @@ function remove_meter(meter) {
     }
   }
   if (m < 0 || m > M.length - 1) return;
-  this.remove_child(M[m]);
+  this.removeChild(M[m]);
   M[m].element.remove();
   // TODO: no destroy function in levelmeter at this point?
   //this.meters[m].destroy();
   M = M.splice(m, 1);
 }
 
-export const MultiMeter = define_class({
+export const MultiMeter = defineClass({
   /**
    * MultiMeter is a collection of {@link LevelMeter}s to show levels of channels
    * containing multiple audio streams. It offers all options of {@link LevelMeter} and
@@ -196,7 +196,7 @@ export const MultiMeter = define_class({
     var O = this.options;
   },
   draw: function (O, element) {
-    add_class(element, 'aux-multimeter');
+    addClass(element, 'aux-multimeter');
 
     Container.prototype.draw.call(this, O, element);
   },
@@ -207,19 +207,19 @@ export const MultiMeter = define_class({
     var M = this.meters;
 
     if (I.count) {
-      while (M.length > O.count) remove_meter.call(this, M[M.length - 1]);
-      while (M.length < O.count) add_meter.call(this, O);
+      while (M.length > O.count) removeMeter.call(this, M[M.length - 1]);
+      while (M.length < O.count) addMeter.call(this, O);
       E.setAttribute(
         'class',
         E.getAttribute('class').replace(/aux-count-[0-9]*/g, '')
       );
       E.setAttribute('class', E.getAttribute('class').replace(/ +/g, ' '));
-      add_class(E, 'aux-count-' + O.count);
+      addClass(E, 'aux-count-' + O.count);
     }
 
     if (I.layout || I.count) {
       I.count = I.layout = false;
-      remove_class(
+      removeClass(
         E,
         'aux-vertical',
         'aux-horizontal',
@@ -230,16 +230,16 @@ export const MultiMeter = define_class({
       );
       switch (O.layout) {
         case 'left':
-          add_class(E, 'aux-vertical', 'aux-left');
+          addClass(E, 'aux-vertical', 'aux-left');
           break;
         case 'right':
-          add_class(E, 'aux-vertical', 'aux-right');
+          addClass(E, 'aux-vertical', 'aux-right');
           break;
         case 'top':
-          add_class(E, 'aux-horizontal', 'aux-top');
+          addClass(E, 'aux-horizontal', 'aux-top');
           break;
         case 'bottom':
-          add_class(E, 'aux-horizontal', 'aux-bottom');
+          addClass(E, 'aux-horizontal', 'aux-bottom');
           break;
         default:
           throw new Error('unsupported layout');
@@ -261,12 +261,12 @@ export const MultiMeter = define_class({
 
     if (I.show_value) {
       I.show_value = false;
-      toggle_class(E, 'aux-has-values', O.show_value !== false);
+      toggleClass(E, 'aux-has-values', O.show_value !== false);
     }
 
     if (I.labels) {
       I.labels = false;
-      toggle_class(E, 'aux-has-labels', O.labels !== false);
+      toggleClass(E, 'aux-has-labels', O.labels !== false);
     }
 
     Container.prototype.redraw.call(this);
@@ -276,7 +276,7 @@ export const MultiMeter = define_class({
 /**
  * @member {HTMLDivElement} MultiMeter#label - The {@link Label} widget displaying the meters title.
  */
-define_child_widget(MultiMeter, 'label', {
+defineChildWidget(MultiMeter, 'label', {
   create: Label,
   show: false,
   option: 'label',
@@ -286,7 +286,7 @@ define_child_widget(MultiMeter, 'label', {
 });
 
 /*
- * This could be moved into define_child_widgets(),
+ * This could be moved into defineChildWidgets(),
  * which could in similar ways be used in the navigation,
  * pager, etc.
  *
@@ -297,13 +297,13 @@ var mapped_options = {
   layout: 'layout',
 };
 
-function map_child_option_simple(value, key) {
+function mapChildOptionSimple(value, key) {
   var M = this.meters,
     i;
   for (i = 0; i < M.length; i++) M[i].set(key, value);
 }
 
-function map_child_option(value, key) {
+function mapChildOption(value, key) {
   var M = this.meters,
     i;
   if (Array.isArray(value)) {
@@ -313,7 +313,7 @@ function map_child_option(value, key) {
   }
 }
 
-for (var key in object_sub(
+for (var key in objectSub(
   LevelMeter.prototype._options,
   Container.prototype._options
 )) {
@@ -322,17 +322,17 @@ for (var key in object_sub(
   if (type.search('array') !== -1) {
     MultiMeter.prototype._options[key] = type;
     mapped_options[key] = key;
-    add_static_event(MultiMeter, 'set_' + key, map_child_option_simple);
+    addStaticEvent(MultiMeter, 'set_' + key, mapChildOptionSimple);
   } else {
     MultiMeter.prototype._options[key] = 'array|' + type;
     mapped_options[key] = key;
-    add_static_event(MultiMeter, 'set_' + key, map_child_option);
+    addStaticEvent(MultiMeter, 'set_' + key, mapChildOption);
   }
   if (key in LevelMeter.prototype.options)
     MultiMeter.prototype.options[key] = LevelMeter.prototype.options[key];
 }
 
-function extract_child_options(O, i) {
+function extractChildOptions(O, i) {
   var o = {},
     value,
     type;

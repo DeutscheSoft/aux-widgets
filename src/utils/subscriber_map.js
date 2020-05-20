@@ -18,11 +18,11 @@
  */
 
 import {
-  init_subscribers,
-  add_subscriber,
-  remove_subscriber,
-  call_subscribers,
-  subscribers_is_empty,
+  initSubscribers,
+  addSubscriber,
+  removeSubscriber,
+  callSubscribers,
+  subscribersIsEmpty,
 } from './subscribers.js';
 
 export class SubscriberMap {
@@ -31,18 +31,15 @@ export class SubscriberMap {
   }
 
   add(key, subscriber) {
-    const subscribers = this.subscribers.get(key) || init_subscribers();
+    const subscribers = this.subscribers.get(key) || initSubscribers();
 
-    this.subscribers.set(key, add_subscriber(subscribers, subscriber));
+    this.subscribers.set(key, addSubscriber(subscribers, subscriber));
   }
 
   remove(key, subscriber) {
-    const subscribers = remove_subscriber(
-      this.subscribers.get(key),
-      subscriber
-    );
+    const subscribers = removeSubscriber(this.subscribers.get(key), subscriber);
 
-    if (subscribers_is_empty(subscribers)) {
+    if (subscribersIsEmpty(subscribers)) {
       this.subscribers.delete(key);
     } else {
       this.subscribers.set(key, subscribers);
@@ -50,9 +47,9 @@ export class SubscriberMap {
   }
 
   call(key, ...args) {
-    const subscribers = this.subscribers.get(key) || init_subscribers();
+    const subscribers = this.subscribers.get(key) || initSubscribers();
 
-    call_subscribers(subscribers, ...args);
+    callSubscribers(subscribers, ...args);
   }
 
   subscribe(key, cb) {

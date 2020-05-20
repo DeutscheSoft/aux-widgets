@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../../component_helpers.js';
 import { Matrix } from './../widgets/matrix.js';
 
@@ -30,6 +30,6 @@ import { Matrix } from './../widgets/matrix.js';
  * @class MatrixComponent
  * @implements Component
  */
-export const MatrixComponent = component_from_widget(Matrix);
+export const MatrixComponent = componentFromWidget(Matrix);
 
-define_component('matrix', MatrixComponent);
+defineComponent('matrix', MatrixComponent);

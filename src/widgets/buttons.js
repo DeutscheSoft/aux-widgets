@@ -17,8 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from './../widget_helpers.js';
-import { add_class, remove_class } from './../utils/dom.js';
+import { defineClass } from './../widget_helpers.js';
+import { addClass, removeClass } from './../utils/dom.js';
 import { Container } from './container.js';
 import { Button } from './button.js';
 import { Warning } from '../implements/warning.js';
@@ -33,8 +33,8 @@ import { ChildWidgets } from '../utils/child_widgets.js';
  * @param {mixed} value - The new value of the option
  */
 
-function calculate_select(buttons) {
-  const list = buttons.get_buttons();
+function calculateSelect(buttons) {
+  const list = buttons.getButtons();
   const old_select = buttons.get('select');
 
   const should_be_selected = list
@@ -57,7 +57,7 @@ function calculate_select(buttons) {
   return old_select;
 }
 
-function update_select(select, position, add) {
+function updateSelect(select, position, add) {
   if (Array.isArray(select)) {
     if (add === select.includes(position)) return select;
 
@@ -75,7 +75,7 @@ function update_select(select, position, add) {
   return select;
 }
 
-function enforce_multi_select(select, multi_select) {
+function enforceMultiSelect(select, multi_select) {
   const is_array = Array.isArray(select);
 
   if (!is_array && !multi_select) return select;
@@ -94,11 +94,11 @@ function enforce_multi_select(select, multi_select) {
   }
 }
 
-function on_button_click() {
+function onButtonClick() {
   this.userset('state', !this.get('state'));
 }
 
-function on_button_userset(key, value) {
+function onButtonUserset(key, value) {
   if (key !== 'state') return;
 
   // make sure this is a boolean
@@ -108,8 +108,8 @@ function on_button_userset(key, value) {
 
   const O = parent.options;
   const position = parent.buttons.indexOf(this);
-  let select = enforce_multi_select(
-    update_select(O.select, position, value),
+  let select = enforceMultiSelect(
+    updateSelect(O.select, position, value),
     O.multi_select
   );
 
@@ -118,7 +118,7 @@ function on_button_userset(key, value) {
   return parent.userset('select', select);
 }
 
-function on_button_set_state(value) {
+function onButtonSetState(value) {
   // make sure this is a boolean
   value = !!value;
 
@@ -126,8 +126,8 @@ function on_button_set_state(value) {
 
   const O = parent.options;
   const position = parent.buttons.indexOf(this);
-  let select = enforce_multi_select(
-    update_select(O.select, position, value),
+  let select = enforceMultiSelect(
+    updateSelect(O.select, position, value),
     O.multi_select
   );
 
@@ -136,17 +136,17 @@ function on_button_set_state(value) {
   return parent.set('select', select);
 }
 
-function on_button_added(button, position) {
+function onButtonAdded(button, position) {
   const buttons = this.widget;
 
-  button.on('click', on_button_click);
-  button.on('userset', on_button_userset);
-  button.on('set_state', on_button_set_state);
+  button.on('click', onButtonClick);
+  button.on('userset', onButtonUserset);
+  button.on('set_state', onButtonSetState);
 
   let select = buttons.get('select');
-  let length = buttons.get_buttons().length;
+  let length = buttons.getButtons().length;
 
-  const correct_index = (index) => {
+  const correctIndex = (index) => {
     if (index >= position && position < length - 1) {
       return index + 1;
     }
@@ -155,31 +155,31 @@ function on_button_added(button, position) {
   };
 
   if (Array.isArray(select)) {
-    select = select.map(correct_index);
+    select = select.map(correctIndex);
     if (button.get('state') && select.indexOf(position) === -1)
       select = [position].concat(select);
   } else {
-    select = correct_index(select);
+    select = correctIndex(select);
     if (button.get('state')) select = position;
   }
 
   buttons.set('select', select);
   buttons.emit('added', button);
 
-  buttons.trigger_resize();
+  buttons.triggerResize();
 }
 
-function on_button_removed(button, position) {
+function onButtonRemoved(button, position) {
   const buttons = this.widget;
 
-  button.off('click', on_button_click);
-  button.off('userset', on_button_userset);
-  button.off('set_state', on_button_set_state);
+  button.off('click', onButtonClick);
+  button.off('userset', onButtonUserset);
+  button.off('set_state', onButtonSetState);
 
   let select = buttons.get('select');
-  let length = buttons.get_buttons().length;
+  let length = buttons.getButtons().length;
 
-  const correct_index = (index) => {
+  const correctIndex = (index) => {
     if (index > position && position < length + 1) {
       return index - 1;
     }
@@ -188,22 +188,22 @@ function on_button_removed(button, position) {
   };
 
   if (Array.isArray(select)) {
-    select = select.filter((index) => index !== position).map(correct_index);
+    select = select.filter((index) => index !== position).map(correctIndex);
   } else {
     if (select === position) {
       select = -1;
     } else {
-      select = correct_index(select);
+      select = correctIndex(select);
     }
   }
 
   buttons.set('select', select);
   buttons.emit('removed', button);
 
-  buttons.trigger_resize();
+  buttons.triggerResize();
 }
 
-export const Buttons = define_class({
+export const Buttons = defineClass({
   /**
    * Buttons is a list of ({@link Button})s, arranged
    * either vertically or horizontally. Single buttons can be selected by clicking.
@@ -298,7 +298,7 @@ export const Buttons = define_class({
     set_multi_select: function (multi_select) {
       const O = this.options;
 
-      let select = enforce_multi_select(O.select, multi_select);
+      let select = enforceMultiSelect(O.select, multi_select);
 
       this.update('select', select);
     },
@@ -316,8 +316,8 @@ export const Buttons = define_class({
     this.buttons = new ChildWidgets(this, {
       filter: Button,
     });
-    this.buttons.on('child_added', on_button_added);
-    this.buttons.on('child_removed', on_button_removed);
+    this.buttons.on('child_added', onButtonAdded);
+    this.buttons.on('child_removed', onButtonRemoved);
 
     this.set('direction', this.options.direction);
     this.set('multi_select', this.options.multi_select);
@@ -328,25 +328,25 @@ export const Buttons = define_class({
     this.set('buttons', buttons);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-buttons');
+    addClass(element, 'aux-buttons');
 
     Container.prototype.draw.call(this, O, element);
   },
   /**
    * Adds an array of buttons to the end of the list.
    *
-   * @method Buttons#add_buttons
+   * @method Buttons#addButtons
    *
    * @param {Array.<string|object>} list - An Array containing
    *   Button instances, objects
    *   with options for the buttons (see {@link Button} for more
    *   information) or strings for the buttons labels.
    */
-  add_buttons: function (list) {
-    return list.map((options) => this.add_button(options));
+  addButtons: function (list) {
+    return list.map((options) => this.addButton(options));
   },
 
-  create_button: function (options) {
+  createButton: function (options) {
     if (options instanceof Button) {
       return options;
     } else {
@@ -364,7 +364,7 @@ export const Buttons = define_class({
   /**
    * Adds a {@link Button} to Buttons.
    *
-   * @method Buttons#add_button
+   * @method Buttons#addButton
    *
    * @param {Button|Object|String} options - An alread instantiated {@link Button},
    *   an object containing options for a new {@link Button} to add
@@ -374,9 +374,9 @@ export const Buttons = define_class({
    *
    * @returns {Button} The {@link Button} instance.
    */
-  add_button: function (options, position) {
-    const button = this.create_button(options);
-    const buttons = this.get_buttons();
+  addButton: function (options, position) {
+    const button = this.createButton(options);
+    const buttons = this.getButtons();
     const element = this.element;
 
     if (!(position >= 0 && position < buttons.length)) {
@@ -387,8 +387,8 @@ export const Buttons = define_class({
 
     if (button.parent !== this) {
       // if this button is a web component, the above appendChild would have
-      // already triggered a call to add_child
-      this.add_child(button);
+      // already triggered a call to addChild
+      this.addChild(button);
     }
 
     return button;
@@ -396,13 +396,13 @@ export const Buttons = define_class({
   /**
    * Removes a {@link Button} from Buttons.
    *
-   * @method Buttons#remove_button
+   * @method Buttons#removeButton
    *
    * @param {integer|Button} button - button index or the {@link Button}
    *   instance to be removed.
    * @param {Boolean} destroy - destroy the {@link Button} after removal.
    */
-  remove_button: function (button, destroy) {
+  removeButton: function (button, destroy) {
     const buttons = this.buttons;
     let position = -1;
 
@@ -419,17 +419,17 @@ export const Buttons = define_class({
 
     if (buttons.at(position) === button) {
       // NOTE: if we remove a child which is a web component,
-      // it will itself call remove_child
-      this.remove_child(button);
+      // it will itself call removeChild
+      this.removeChild(button);
     }
 
     if (destroy) button.destroy();
   },
   /**
    * @returns {Button[]} The list of {@link Button}s.
-   * @method Buttons#get_buttons
+   * @method Buttons#getButtons
    */
-  get_buttons: function () {
+  getButtons: function () {
     return this.buttons.getList();
   },
   /**
@@ -438,7 +438,7 @@ export const Buttons = define_class({
    * @method Buttons#empty
    */
   empty: function () {
-    this.buttons.forEach((button) => this.remove_button(button, true));
+    this.buttons.forEach((button) => this.removeButton(button, true));
   },
   destroy: function () {
     this.buttons.destroy();
@@ -454,20 +454,20 @@ export const Buttons = define_class({
     if (I.direction) {
       I.direction = false;
       var E = this.element;
-      remove_class(E, 'aux-vertical', 'aux-horizontal');
-      add_class(E, 'aux-' + O.direction);
+      removeClass(E, 'aux-vertical', 'aux-horizontal');
+      addClass(E, 'aux-' + O.direction);
     }
   },
   /**
    * Checks if an index or {@link Button} is selected.
    *
-   * @method Buttons#is_selected
+   * @method Buttons#isSelected
    *
    * @param {Integer|Button} button - button index or {@link Button} instance.
    *
    * @returns {Boolean}
    */
-  is_selected: function (probe) {
+  isSelected: function (probe) {
     const button = typeof probe === 'number' ? this.buttons.at(probe) : probe;
 
     if (!button) throw new Error('Unknown button.');
@@ -477,10 +477,10 @@ export const Buttons = define_class({
   set: function (key, value) {
     if (key === 'buttons') {
       // remove all buttons which were added using this option
-      this.options.buttons.forEach((b) => this.remove_button(b, true));
-      value = this.add_buttons(value || []);
+      this.options.buttons.forEach((b) => this.removeButton(b, true));
+      value = this.addButtons(value || []);
     } else if (key === 'select') {
-      value = enforce_multi_select(value, this.options.multi_select);
+      value = enforceMultiSelect(value, this.options.multi_select);
     }
 
     return Container.prototype.set.call(this, key, value);

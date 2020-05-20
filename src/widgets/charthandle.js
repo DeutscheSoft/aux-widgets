@@ -19,21 +19,16 @@
 
 /* jshint -W086 */
 
-import { define_class } from './../widget_helpers.js';
+import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 import { GlobalCursor } from '../implements/globalcursor.js';
 import { Warning } from '../implements/warning.js';
 import { S } from '../dom_scheduler.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { warn } from '../utils/log.js';
-import { add_event_listener, remove_event_listener } from '../utils/events.js';
-import {
-  set_text,
-  remove_class,
-  add_class,
-  toggle_class,
-} from '../utils/dom.js';
-import { make_svg } from '../utils/svg.js';
+import { addEventListener, removeEventListener } from '../utils/events.js';
+import { setText, removeClass, addClass, toggleClass } from '../utils/dom.js';
+import { makeSVG } from '../utils/svg.js';
 import { Range } from '../modules/range.js';
 
 import { DragCapture } from '../modules/dragcapture.js';
@@ -53,7 +48,7 @@ function normalize(v) {
   v[0] /= n;
   v[1] /= n;
 }
-function scrollwheel(e) {
+function scrollWheel(e) {
   var direction;
   e.preventDefault();
   e.stopPropagation();
@@ -68,11 +63,11 @@ function scrollwheel(e) {
 
   if (this.__sto) window.clearTimeout(this.__sto);
   this.set('dragging', true);
-  add_class(this.element, 'aux-active');
+  addClass(this.element, 'aux-active');
   this.__sto = window.setTimeout(
     function () {
       this.set('dragging', false);
-      remove_class(this.element, 'aux-active');
+      removeClass(this.element, 'aux-active');
       this.emit('zchangeended', this.options.z);
       this._zwheel = false;
     }.bind(this),
@@ -105,7 +100,7 @@ const ZHANDLE_POSITION_circular = {
   'top-left': ROT((Math.PI * 5) / 4),
 };
 
-function get_zhandle_position_movable(O, X) {
+function getZHandlePositionMovable(O, X) {
   var vec = ZHANDLE_POSITION_circular[O.z_handle];
   var x = (X[0] + X[2]) / 2;
   var y = (X[1] + X[3]) / 2;
@@ -137,7 +132,7 @@ function Z_HANDLE_SIZE(pos) {
   }
 }
 
-function get_zhandle_size(O, X) {
+function getZHandleSize(O, X) {
   var vec = Z_HANDLE_SIZE(O.z_handle);
   var z_handle_size = O.z_handle_size;
   var z_handle_centered = O.z_handle_centered;
@@ -173,7 +168,7 @@ const Z_HANDLE_POS = {
   center: [0, 0],
 };
 
-function get_zhandle_position(O, X, zhandle_size) {
+function getZHandlePosition(O, X, zhandle_size) {
   var x = +(+X[0] + X[2] - +zhandle_size[0]) / 2;
   var y = +(+X[1] + X[3] - +zhandle_size[1]) / 2;
   var width = +X[2] - +X[0];
@@ -186,7 +181,7 @@ function get_zhandle_position(O, X, zhandle_size) {
   return [x, y];
 }
 
-function mode_to_handle(mode) {
+function modeToHandle(mode) {
   if (
     mode === 'block-left' ||
     mode === 'block-right' ||
@@ -244,8 +239,8 @@ const LABEL_ALIGN = {
   },
 };
 
-function get_label_align(O, pos) {
-  return LABEL_ALIGN[mode_to_handle(O.mode)][pos];
+function getLabelAlign(O, pos) {
+  return LABEL_ALIGN[modeToHandle(O.mode)][pos];
 }
 
 /* The following arrays contain multipliers, alternating x and y, starting with x.
@@ -301,7 +296,7 @@ const LABEL_POSITION = {
   },
 };
 
-function get_label_position(O, X, pos, label_size) {
+function getLabelPosition(O, X, pos, label_size) {
   /* X: array containing [X0, Y0, X1, Y1] of the handle
    * pos: string describing the position of the label ("top", "bottom-right", ...)
    * label_size: array containing width and height of the label
@@ -317,7 +312,7 @@ function get_label_position(O, X, pos, label_size) {
   var height = +X[3] - +X[1];
 
   // multipliers
-  var vec = LABEL_POSITION[mode_to_handle(O.mode)][pos];
+  var vec = LABEL_POSITION[modeToHandle(O.mode)][pos];
 
   x += (vec[0] * width) / 2 + vec[2] * label_size[0] + vec[4] * m;
   y += (vec[1] * height) / 2 + vec[3] * label_size[1] + vec[5] * m;
@@ -328,7 +323,7 @@ function get_label_position(O, X, pos, label_size) {
   return [x, y];
 }
 
-function remove_zhandle() {
+function removeZHandle() {
   var E = this._zhandle;
   if (!E) return;
   this._zhandle = null;
@@ -337,13 +332,13 @@ function remove_zhandle() {
   E.remove();
 }
 
-function create_zhandle() {
+function createZHandle() {
   var E;
   var O = this.options;
 
-  if (this._zhandle) remove_zhandle.call(this);
+  if (this._zhandle) removeZHandle.call(this);
 
-  E = make_svg(O.mode === 'circular' ? 'circle' : 'rect', {
+  E = makeSVG(O.mode === 'circular' ? 'circle' : 'rect', {
     class: 'aux-zhandle',
   });
 
@@ -351,24 +346,24 @@ function create_zhandle() {
   if (this.z_drag.get('node') !== document) this.z_drag.set('node', E);
 }
 
-function create_line1() {
-  if (this._line1) remove_line1.call(this);
-  this._line1 = make_svg('path', {
+function createLine1() {
+  if (this._line1) removeLine1.call(this);
+  this._line1 = makeSVG('path', {
     class: 'aux-line aux-line1',
   });
 }
-function create_line2() {
-  if (this._line2) remove_line2.call(this);
-  this._line2 = make_svg('path', {
+function createLine2() {
+  if (this._line2) removeLine2.call(this);
+  this._line2 = makeSVG('path', {
     class: 'aux-line aux-line2',
   });
 }
-function remove_line1() {
+function removeLine1() {
   if (!this._line1) return;
   this._line1.remove();
   this._line1 = null;
 }
-function remove_line2() {
+function removeLine2() {
   if (!this._line2) return;
   this._line2.remove();
   this._line2 = null;
@@ -376,11 +371,11 @@ function remove_line2() {
 
 /* Prints a line, making sure that an offset of 0.5 px aligns them on
  * pixel boundaries */
-const format_line = FORMAT('M %.0f.5 %.0f.5 L %.0f.5 %.0f.5');
+const formatLine = FORMAT('M %.0f.5 %.0f.5 L %.0f.5 %.0f.5');
 
 /* calculates the actual label positions based on given alignment
  * and dimensions */
-function get_label_dimensions(align, X, label_size) {
+function getLabelDimensions(align, X, label_size) {
   switch (align) {
     case 'start':
       return [X[0], X[1], X[0] + label_size[0], X[1] + label_size[1]];
@@ -396,11 +391,11 @@ function get_label_dimensions(align, X, label_size) {
   }
 }
 
-function redraw_handle(O, X) {
+function redrawHandle(O, X) {
   var _handle = this._handle;
 
   if (!O.show_handle) {
-    if (_handle) remove_handle.call(this);
+    if (_handle) removeHandle.call(this);
     return;
   }
 
@@ -410,9 +405,9 @@ function redraw_handle(O, X) {
 
   if (!range_x.options.basis || !range_y.options.basis) return;
 
-  var x = range_x.val2px(O.x);
-  var y = range_y.val2px(O.y);
-  var z = range_z.val2coef(O.z) || 0;
+  var x = range_x.valueToPixel(O.x);
+  var y = range_y.valueToPixel(O.y);
+  var z = range_z.valueToCoef(O.z) || 0;
 
   var tmp;
 
@@ -438,10 +433,11 @@ function redraw_handle(O, X) {
     _handle.setAttribute('width', Math.round(+X[2] - X[0]).toFixed(0));
     _handle.setAttribute('height', Math.round(+X[3] - X[1]).toFixed(0));
   } else {
-    var x_min = O.x_min !== false ? range_x.val2px(range_x.snap(O.x_min)) : 0;
+    var x_min =
+      O.x_min !== false ? range_x.valueToPixel(range_x.snap(O.x_min)) : 0;
     var x_max =
       O.x_max !== false
-        ? range_x.val2px(range_x.snap(O.x_max))
+        ? range_x.valueToPixel(range_x.snap(O.x_max))
         : range_x.options.basis;
 
     if (x_min > x_max) {
@@ -450,10 +446,11 @@ function redraw_handle(O, X) {
       x_max = tmp;
     }
 
-    var y_min = O.y_min !== false ? range_y.val2px(range_y.snap(O.y_min)) : 0;
+    var y_min =
+      O.y_min !== false ? range_y.valueToPixel(range_y.snap(O.y_min)) : 0;
     var y_max =
       O.y_max !== false
-        ? range_y.val2px(range_y.snap(O.y_max))
+        ? range_y.valueToPixel(range_y.snap(O.y_max))
         : range_y.options.basis;
 
     if (y_min > y_max) {
@@ -523,13 +520,13 @@ function redraw_handle(O, X) {
   }
 }
 
-function redraw_zhandle(O, X) {
+function redrawZHandle(O, X) {
   var vec;
   var size;
   var zhandle = this._zhandle;
 
   if (!O.show_handle || O.z_handle === false) {
-    if (zhandle) remove_zhandle.call(this);
+    if (zhandle) removeZHandle.call(this);
     return;
   }
 
@@ -541,7 +538,7 @@ function redraw_zhandle(O, X) {
     /*
      * position the z_handle on the circle.
      */
-    vec = get_zhandle_position_movable(O, X);
+    vec = getZHandlePositionMovable(O, X);
     /* width and height are equal here */
     zhandle.setAttribute('cx', vec[0].toFixed(1));
     zhandle.setAttribute('cy', vec[1].toFixed(1));
@@ -552,7 +549,7 @@ function redraw_zhandle(O, X) {
     /*
      * position the z_handle on the box.
      */
-    vec = get_zhandle_position_movable(O, X);
+    vec = getZHandlePositionMovable(O, X);
     size = O.z_handle_size / 2;
     /* width and height are equal here */
     zhandle.setAttribute('x', vec[0].toFixed(0) - size);
@@ -563,12 +560,12 @@ function redraw_zhandle(O, X) {
     this.zhandle_position = vec;
   } else {
     // all other handle types (lines/blocks)
-    this.zhandle_position = vec = get_zhandle_size(O, X);
+    this.zhandle_position = vec = getZHandleSize(O, X);
 
     zhandle.setAttribute('width', vec[0].toFixed(0));
     zhandle.setAttribute('height', vec[1].toFixed(0));
 
-    vec = get_zhandle_position(O, X, vec);
+    vec = getZHandlePosition(O, X, vec);
 
     zhandle.setAttribute('x', vec[0].toFixed(0));
     zhandle.setAttribute('y', vec[1].toFixed(0));
@@ -585,63 +582,63 @@ function redraw_zhandle(O, X) {
   normalize(this.zhandle_position);
 }
 
-function prevent_default(e) {
+function preventDefault(e) {
   e.preventDefault();
   return false;
 }
 
-function create_label() {
+function createLabel() {
   var E;
-  this._label = E = make_svg('text', {
+  this._label = E = makeSVG('text', {
     class: 'aux-label',
   });
-  add_event_listener(E, 'mousewheel', this._scrollwheel);
-  add_event_listener(E, 'DOMMouseScroll', this._scrollwheel);
-  add_event_listener(E, 'contextmenu', prevent_default);
+  addEventListener(E, 'mousewheel', this._scrollwheel);
+  addEventListener(E, 'DOMMouseScroll', this._scrollwheel);
+  addEventListener(E, 'contextmenu', preventDefault);
 }
 
-function remove_label() {
+function removeLabel() {
   var E = this._label;
   this._label = null;
   E.remove();
-  remove_event_listener(E, 'mousewheel', this._scrollwheel);
-  remove_event_listener(E, 'DOMMouseScroll', this._scrollwheel);
-  remove_event_listener(E, 'contextmenu', prevent_default);
+  removeEventListener(E, 'mousewheel', this._scrollwheel);
+  removeEventListener(E, 'DOMMouseScroll', this._scrollwheel);
+  removeEventListener(E, 'contextmenu', preventDefault);
 
   this.label = [0, 0, 0, 0];
 }
 
-function create_handle() {
+function createHandle() {
   var O = this.options;
   var E;
 
-  if (this._handle) remove_handle.call(this);
+  if (this._handle) removeHandle.call(this);
 
-  E = make_svg(O.mode === 'circular' ? 'circle' : 'rect', {
+  E = makeSVG(O.mode === 'circular' ? 'circle' : 'rect', {
     class: 'aux-handle',
   });
-  add_event_listener(E, 'mousewheel', this._scrollwheel);
-  add_event_listener(E, 'DOMMouseScroll', this._scrollwheel);
-  add_event_listener(E, 'selectstart', prevent_default);
-  add_event_listener(E, 'contextmenu', prevent_default);
+  addEventListener(E, 'mousewheel', this._scrollwheel);
+  addEventListener(E, 'DOMMouseScroll', this._scrollwheel);
+  addEventListener(E, 'selectstart', preventDefault);
+  addEventListener(E, 'contextmenu', preventDefault);
   this._handle = E;
   this.element.appendChild(E);
 }
 
-function remove_handle() {
+function removeHandle() {
   var E = this._handle;
   if (!E) return;
   this._handle = null;
   E.remove();
-  remove_event_listener(E, 'mousewheel', this._scrollwheel);
-  remove_event_listener(E, 'DOMMouseScroll', this._scrollwheel);
-  remove_event_listener(E, 'selectstart', prevent_default);
-  remove_event_listener(E, 'contextmenu', prevent_default);
+  removeEventListener(E, 'mousewheel', this._scrollwheel);
+  removeEventListener(E, 'DOMMouseScroll', this._scrollwheel);
+  removeEventListener(E, 'selectstart', preventDefault);
+  removeEventListener(E, 'contextmenu', preventDefault);
 }
 
-function redraw_label(O, X) {
+function redrawLabel(O, X) {
   if (!O.show_handle || O.format_label === false) {
-    if (this._label) remove_label.call(this);
+    if (this._label) removeLabel.call(this);
     return false;
   }
 
@@ -649,13 +646,13 @@ function redraw_label(O, X) {
   var c = this._label.childNodes;
 
   while (c.length < a.length) {
-    this._label.appendChild(make_svg('tspan', { dy: '1.0em' }));
+    this._label.appendChild(makeSVG('tspan', { dy: '1.0em' }));
   }
   while (c.length > a.length) {
     this._label.removeChild(this._label.lastChild);
   }
   for (var i = 0; i < a.length; i++) {
-    set_text(c[i], a[i]);
+    setText(c[i], a[i]);
   }
 
   if (!this._label.parentNode) this.element.appendChild(this._label);
@@ -693,13 +690,13 @@ function redraw_label(O, X) {
            */
           for (let i = 0; i < pref.length; i++) {
             /* get alignment */
-            var align = get_label_align(O, pref[i]);
+            var align = getLabelAlign(O, pref[i]);
 
             /* get label position */
-            var LX = get_label_position(O, X, pref[i], label_size);
+            var LX = getLabelPosition(O, X, pref[i], label_size);
 
             /* calculate the label bounding box using anchor and dimensions */
-            var pos = get_label_dimensions(align, LX, label_size);
+            var pos = getLabelDimensions(align, LX, label_size);
 
             tmp = O.intersect(pos, this);
 
@@ -724,7 +721,7 @@ function redraw_label(O, X) {
           var c = this._label.childNodes;
           for (let i = 0; i < c.length; i++) c[i].setAttribute('x', tmp);
 
-          redraw_lines.call(this, O, X);
+          redrawLines.call(this, O, X);
         }.bind(this),
         1
       );
@@ -734,10 +731,10 @@ function redraw_label(O, X) {
   return true;
 }
 
-function redraw_lines(O, X) {
+function redrawLines(O, X) {
   if (!O.show_handle) {
-    if (this._line1) remove_line1.call(this);
-    if (this._line2) remove_line2.call(this);
+    if (this._line1) removeLine1.call(this);
+    if (this._line2) removeLine2.call(this);
     return;
   }
 
@@ -745,15 +742,15 @@ function redraw_lines(O, X) {
   var range_x = O.range_x;
   var range_y = O.range_y;
 
-  var x = range_x.val2px(O.x);
-  var y = range_y.val2px(O.y);
+  var x = range_x.valueToPixel(O.x);
+  var y = range_y.valueToPixel(O.y);
   switch (O.mode) {
     case 'circular':
     case 'block':
       if (O.show_axis) {
         this._line1.setAttribute(
           'd',
-          format_line(
+          formatLine(
             (y >= pos[1] && y <= pos[3] ? Math.max(X[2], pos[2]) : X[2]) +
               O.margin,
             y,
@@ -763,7 +760,7 @@ function redraw_lines(O, X) {
         );
         this._line2.setAttribute(
           'd',
-          format_line(
+          formatLine(
             x,
             (x >= pos[0] && x <= pos[2] ? Math.max(X[3], pos[3]) : X[3]) +
               O.margin,
@@ -772,34 +769,34 @@ function redraw_lines(O, X) {
           )
         );
       } else {
-        if (this._line1) remove_line1.call(this);
-        if (this._line2) remove_line2.call(this);
+        if (this._line1) removeLine1.call(this);
+        if (this._line2) removeLine2.call(this);
       }
       break;
     case 'line-vertical':
     case 'block-left':
     case 'block-right':
-      this._line1.setAttribute('d', format_line(x, X[1], x, X[3]));
+      this._line1.setAttribute('d', formatLine(x, X[1], x, X[3]));
       if (O.show_axis) {
         this._line2.setAttribute(
           'd',
-          format_line(0, y, range_x.options.basis, y)
+          formatLine(0, y, range_x.options.basis, y)
         );
       } else if (this._line2) {
-        remove_line2.call(this);
+        removeLine2.call(this);
       }
       break;
     case 'line-horizontal':
     case 'block-top':
     case 'block-bottom':
-      this._line1.setAttribute('d', format_line(X[0], y, X[2], y));
+      this._line1.setAttribute('d', formatLine(X[0], y, X[2], y));
       if (O.show_axis) {
         this._line2.setAttribute(
           'd',
-          format_line(x, 0, x, range_y.options.basis)
+          formatLine(x, 0, x, range_y.options.basis)
         );
       } else if (this._line2) {
-        remove_line2.call(this);
+        removeLine2.call(this);
       }
       break;
     default:
@@ -812,19 +809,19 @@ function redraw_lines(O, X) {
     this.element.appendChild(this._line2);
 }
 
-function set_main_class(O) {
+function setMainClass(O) {
   var E = this.element;
   var i;
 
-  for (i = 0; i < MODES.length; i++) remove_class(E, 'aux-' + MODES[i]);
+  for (i = 0; i < MODES.length; i++) removeClass(E, 'aux-' + MODES[i]);
 
-  remove_class(E, 'aux-line');
-  remove_class(E, 'aux-block');
+  removeClass(E, 'aux-line');
+  removeClass(E, 'aux-block');
 
   switch (O.mode) {
     case 'line-vertical':
     case 'line-horizontal':
-      add_class(E, 'aux-line');
+      addClass(E, 'aux-line');
     case 'circular':
       break;
     case 'block-left':
@@ -832,42 +829,42 @@ function set_main_class(O) {
     case 'block-top':
     case 'block-bottom':
     case 'block':
-      add_class(E, 'aux-block');
+      addClass(E, 'aux-block');
       break;
     default:
       warn('Unsupported mode:', O.mode);
       return;
   }
 
-  add_class(E, 'aux-' + O.mode);
+  addClass(E, 'aux-' + O.mode);
 }
 
-function startdrag() {
-  this.draw_once(function () {
+function startDrag() {
+  this.drawOnce(function () {
     var e = this.element;
     var p = e.parentNode;
-    add_class(e, 'aux-active');
+    addClass(e, 'aux-active');
     this.set('dragging', true);
 
     /* TODO: move this into the parent */
-    add_class(this.parent.element, 'aux-dragging');
+    addClass(this.parent.element, 'aux-dragging');
 
-    this.global_cursor('move');
+    this.globalCursor('move');
 
     if (p.lastChild !== e) p.appendChild(e);
   });
 }
 
-function enddrag() {
-  this.draw_once(function () {
+function stopDrag() {
+  this.drawOnce(function () {
     var e = this.element;
-    remove_class(e, 'aux-active');
+    removeClass(e, 'aux-active');
     this.set('dragging', false);
 
     /* TODO: move this into the parent */
-    remove_class(this.parent.element, 'aux-dragging');
+    removeClass(this.parent.element, 'aux-dragging');
 
-    this.remove_cursor('move');
+    this.removeCursor('move');
   });
 }
 
@@ -935,19 +932,19 @@ function enddrag() {
  * @member {SVGPath} ChartHandle#_line2 - The second line. Has class <code>.aux-line .aux-line2</code>.
  */
 
-function set_min(value, key) {
+function setMin(value, key) {
   var name = key.substr(0, 1);
   var O = this.options;
   if (value !== false && O[name] < value) this.set(name, value);
 }
 
-function set_max(value, key) {
+function setMax(value, key) {
   var name = key.substr(0, 1);
   var O = this.options;
   if (value !== false && O[name] > value) this.set(name, value);
 }
 
-function set_range(range, key) {
+function setRange(range, key) {
   var name = key.substr(6);
   this.set(name, range.snap(this.get(name)));
 }
@@ -964,7 +961,7 @@ function set_range(range, key) {
  * @mixes GlobalCursor
  * @mixes Warning
  */
-export const ChartHandle = define_class({
+export const ChartHandle = defineClass({
   Extends: Widget,
   Implements: [GlobalCursor, Warning],
   _options: Object.assign(Object.create(Widget.prototype._options), {
@@ -1041,11 +1038,11 @@ export const ChartHandle = define_class({
   static_events: {
     set_show_axis: function () {
       var O = this.options;
-      if (O.mode === 'circular') create_line1.call(this);
-      create_line2.call(this);
+      if (O.mode === 'circular') createLine1.call(this);
+      createLine2.call(this);
     },
     set_format_label: function (value) {
-      if (value !== false && !this._label) create_label.call(this);
+      if (value !== false && !this._label) createLabel.call(this);
     },
     set_show_handle: function () {
       this.set('mode', this.options.mode);
@@ -1055,19 +1052,19 @@ export const ChartHandle = define_class({
     set_mode: function (value) {
       var O = this.options;
       if (!O.show_handle) return;
-      create_handle.call(this);
-      if (O.z_handle !== false) create_zhandle.call(this);
-      if (value !== 'circular') create_line1.call(this);
+      createHandle.call(this);
+      if (O.z_handle !== false) createZHandle.call(this);
+      if (value !== 'circular') createLine1.call(this);
     },
-    set_x_min: set_min,
-    set_y_min: set_min,
-    set_z_min: set_min,
-    set_x_max: set_max,
-    set_y_max: set_max,
-    set_z_max: set_max,
-    set_range_x: set_range,
-    set_range_y: set_range,
-    set_range_z: set_range,
+    set_x_min: setMin,
+    set_y_min: setMin,
+    set_z_min: setMin,
+    set_x_max: setMax,
+    set_y_max: setMax,
+    set_z_max: setMax,
+    set_range_x: setRange,
+    set_range_y: setRange,
+    set_range_z: setRange,
     mouseenter: function () {
       this.set('hover', true);
     },
@@ -1093,7 +1090,7 @@ export const ChartHandle = define_class({
     this.handle = [0, 0, 0, 0];
     this._zwheel = false;
     this.__sto = 0;
-    if (!options.element) options.element = make_svg('g');
+    if (!options.element) options.element = makeSVG('g');
     Widget.prototype.initialize.call(this, options);
     var O = this.options;
 
@@ -1110,9 +1107,9 @@ export const ChartHandle = define_class({
     this.set('range_y', O.range_y);
     this.set('range_z', O.range_z);
 
-    var set_cb = function () {
+    var setCallback = function () {
       this.invalid.x = true;
-      this.trigger_draw();
+      this.triggerDraw();
     }.bind(this);
 
     /**
@@ -1128,7 +1125,7 @@ export const ChartHandle = define_class({
      *      Has class <code>.aux-zhandle</code>.
      */
 
-    this._scrollwheel = scrollwheel.bind(this);
+    this._scrollwheel = scrollWheel.bind(this);
 
     this._handle = this._zhandle = this._line1 = this._line2 = this._label = null;
 
@@ -1137,7 +1134,7 @@ export const ChartHandle = define_class({
       onstartcapture: function (state) {
         var self = this.parent;
         var O = self.options;
-        state.z = O.range_z.val2px(O.z);
+        state.z = O.range_z.valueToPixel(O.z);
 
         var pstate = self.pos_drag.state();
         if (pstate) {
@@ -1160,7 +1157,7 @@ export const ChartHandle = define_class({
          * @param {number} z - The z value.
          */
         self.emit('zchangestarted', O.z);
-        startdrag.call(self);
+        startDrag.call(self);
         return true;
       },
       onmovecapture: function (state) {
@@ -1168,7 +1165,7 @@ export const ChartHandle = define_class({
         var O = self.options;
 
         var zv = state.vector;
-        var v = state.vdistance();
+        var v = state.vDistance();
 
         var d = zv[0] * v[0] + zv[1] * v[1];
 
@@ -1176,7 +1173,7 @@ export const ChartHandle = define_class({
         if (O.min_drag > 0 && O.min_drag > d) return;
 
         var range_z = O.range_z;
-        var z = range_z.px2val(state.z + d);
+        var z = range_z.pixelToValue(state.z + d);
 
         self.userset('z', z);
       },
@@ -1191,7 +1188,7 @@ export const ChartHandle = define_class({
          * @param {number} z - The z value.
          */
         self.emit('zchangeended', self.options.z);
-        enddrag.call(self);
+        stopDrag.call(self);
       },
     });
     this.pos_drag = new DragCapture(this, {
@@ -1210,7 +1207,7 @@ export const ChartHandle = define_class({
         /* right click triggers move to the back */
         if (ev.button === 2) {
           if (E !== p.firstChild)
-            self.draw_once(function () {
+            self.drawOnce(function () {
               var e = this.element;
               var p = e.parentNode;
               if (p && e !== p.firstChild) p.insertBefore(e, p.firstChild);
@@ -1221,8 +1218,8 @@ export const ChartHandle = define_class({
           return false;
         }
 
-        state.x = O.range_x.val2px(O.x);
-        state.y = O.range_y.val2px(O.y);
+        state.x = O.range_x.valueToPixel(O.x);
+        state.y = O.range_y.valueToPixel(O.y);
         /**
          * Is fired when the main handle is grabbed by the user.
          * The argument is an object with the following members:
@@ -1243,7 +1240,7 @@ export const ChartHandle = define_class({
           pos_x: state.x,
           pos_y: state.y,
         });
-        startdrag.call(self);
+        startDrag.call(self);
         return true;
       },
       onmovecapture: function (state) {
@@ -1256,7 +1253,7 @@ export const ChartHandle = define_class({
         /* we are changing z right now using a gesture, irgnore this movement */
         if (self.z_drag.dragging()) return;
 
-        var v = state.vdistance();
+        var v = state.vDistance();
         var range_x = O.range_x;
         var range_y = O.range_y;
         var ox = range_x.options;
@@ -1264,11 +1261,11 @@ export const ChartHandle = define_class({
 
         var x = Math.min(
           ox.max,
-          Math.max(ox.min, range_x.px2val(state.x + v[0]))
+          Math.max(ox.min, range_x.pixelToValue(state.x + v[0]))
         );
         var y = Math.min(
           oy.max,
-          Math.max(oy.min, range_y.px2val(state.y + v[1]))
+          Math.max(oy.min, range_y.pixelToValue(state.y + v[1]))
         );
 
         self.userset('x', x);
@@ -1294,10 +1291,10 @@ export const ChartHandle = define_class({
         self.emit('handlereleased', {
           x: O.x,
           y: O.y,
-          pos_x: O.range_x.val2px(O.x),
-          pos_y: O.range_y.val2px(O.y),
+          pos_x: O.range_x.valueToPixel(O.x),
+          pos_y: O.range_y.valueToPixel(O.y),
         });
-        enddrag.call(self);
+        stopDrag.call(self);
         self.z_drag.set('node', self._zhandle);
       },
     });
@@ -1313,7 +1310,7 @@ export const ChartHandle = define_class({
   },
 
   draw: function (O, element) {
-    add_class(element, 'aux-charthandle');
+    addClass(element, 'aux-charthandle');
 
     Widget.prototype.draw.call(this, O, element);
   },
@@ -1330,38 +1327,37 @@ export const ChartHandle = define_class({
     /* These are the coordinates of the corners (x1, y1, x2, y2)
      * NOTE: x,y are not necessarily in the midde. */
     var X = this.handle;
-
-    if (I.mode) set_main_class.call(this, O);
+    if (I.mode) setMainClass.call(this, O);
 
     if (I.hover) {
       I.hover = false;
-      toggle_class(this.element, 'aux-hover', O.hover);
+      toggleClass(this.element, 'aux-hover', O.hover);
     }
     if (I.dragging) {
       I.dragging = false;
-      toggle_class(this.element, 'aux-dragging', O.dragging);
+      toggleClass(this.element, 'aux-dragging', O.dragging);
     }
 
     var moved = I.validate('x', 'y', 'z', 'mode', 'show_handle');
 
-    if (moved) redraw_handle.call(this, O, X);
+    if (moved) redrawHandle.call(this, O, X);
 
     // Z-HANDLE
 
     if (I.validate('z_handle') || moved) {
-      redraw_zhandle.call(this, O, X);
+      redrawZHandle.call(this, O, X);
     }
 
     var delay_lines;
 
     // LABEL
     if (I.validate('format_label', 'label', 'preference') || moved) {
-      delay_lines = redraw_label.call(this, O, X);
+      delay_lines = redrawLabel.call(this, O, X);
     }
 
     // LINES
     if (I.validate('show_axis') || moved) {
-      if (!delay_lines) redraw_lines.call(this, O, X);
+      if (!delay_lines) redrawLines.call(this, O, X);
     }
   },
   set: function (key, value) {
@@ -1377,7 +1373,7 @@ export const ChartHandle = define_class({
           warn('Unsupported z_handle option:', value);
           value = false;
         }
-        if (value !== false) create_zhandle.call(this);
+        if (value !== false) createZHandle.call(this);
         break;
       case 'x':
         value = O.range_x.snap(value);
@@ -1423,7 +1419,7 @@ export const ChartHandle = define_class({
             'set',
             function () {
               this.invalid.x = true;
-              this.trigger_draw();
+              this.triggerDraw();
             }.bind(this)
           );
         }
@@ -1433,11 +1429,11 @@ export const ChartHandle = define_class({
     return Widget.prototype.set.call(this, key, value);
   },
   destroy: function () {
-    remove_zhandle.call(this);
-    remove_line1.call(this);
-    remove_line2.call(this);
-    remove_label.call(this);
-    remove_handle.call(this);
+    removeZHandle.call(this);
+    removeLine1.call(this);
+    removeLine2.call(this);
+    removeLabel.call(this);
+    removeHandle.call(this);
     Widget.prototype.destroy.call(this);
   },
 });

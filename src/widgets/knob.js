@@ -26,18 +26,18 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { Widget } from './widget.js';
 import { Circular } from './circular.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
-import { element, add_class } from '../utils/dom.js';
-import { make_svg } from '../utils/svg.js';
+import { element, addClass } from '../utils/dom.js';
+import { makeSVG } from '../utils/svg.js';
 import { FORMAT } from '../utils/sprintf.js';
-import { object_and, object_sub } from '../utils/object.js';
+import { objectAnd, objectSub } from '../utils/object.js';
 
-var format_viewbox = FORMAT('0 0 %d %d');
-function dblclick() {
+var formatViewbox = FORMAT('0 0 %d %d');
+function dblClick() {
   this.userset('value', this.options.reset);
   /**
    * Is fired when the knob receives a double click in order to reset to initial value.
@@ -48,7 +48,7 @@ function dblclick() {
    */
   this.emit('doubleclick', this.options.value);
 }
-function module_range() {
+function moduleRange() {
   return this.parent.circular;
 }
 /**
@@ -87,7 +87,7 @@ function module_range() {
         }] - A set of available presets. Presets
  *   are a functionality of {@link Widget}.
  */
-export const Knob = define_class({
+export const Knob = defineClass({
   Extends: Widget,
   _options: Object.assign(
     Object.create(Widget.prototype._options),
@@ -141,7 +141,7 @@ export const Knob = define_class({
     },
   }),
   static_events: {
-    dblclick: dblclick,
+    dblclick: dblClick,
   },
   initialize: function (options) {
     if (!options.element) options.element = element('div');
@@ -156,10 +156,10 @@ export const Knob = define_class({
     /**
      * @member {SVGImage} Knob#svg - The main SVG image.
      */
-    this.svg = S = make_svg('svg');
+    this.svg = S = makeSVG('svg');
 
-    var co = object_and(options, Circular.prototype._options);
-    co = object_sub(co, Widget.prototype._options);
+    var co = objectAnd(options, Circular.prototype._options);
+    co = objectSub(co, Widget.prototype._options);
     co.container = S;
 
     /**
@@ -174,7 +174,7 @@ export const Knob = define_class({
     this.drag = new DragValue(this, {
       node: S,
       classes: this.element,
-      range: module_range,
+      range: moduleRange,
       direction: options.direction,
       rotation: options.rotation,
       blind_angle: options.blind_angle,
@@ -189,7 +189,7 @@ export const Knob = define_class({
     this.scroll = new ScrollValue(this, {
       node: S,
       classes: this.element,
-      range: module_range,
+      range: moduleRange,
       limit: true,
     });
     this.scroll.on('scrollstarted', () => this.startInteracting());
@@ -197,15 +197,15 @@ export const Knob = define_class({
 
     this.set('base', options.base);
     if (options.reset === void 0) options.reset = options.value;
-    this.add_child(this.circular);
+    this.addChild(this.circular);
   },
 
-  get_range: function () {
+  getRange: function () {
     return this.circular;
   },
 
   draw: function (O, element) {
-    add_class(element, 'aux-knob');
+    addClass(element, 'aux-knob');
     element.appendChild(this.svg);
 
     Widget.prototype.draw.call(this, O, element);
@@ -230,29 +230,29 @@ export const Knob = define_class({
 
     if (I.size) {
       I.size = false;
-      this.svg.setAttribute('viewBox', format_viewbox(O.size, O.size));
+      this.svg.setAttribute('viewBox', formatViewbox(O.size, O.size));
     }
 
     Widget.prototype.redraw.call(this);
   },
   /**
-   * This is an alias for {@link Circular#add_label} of the internal
+   * This is an alias for {@link Circular#addLabel} of the internal
    * circular instance.
    *
-   * @method Knob#add_label
+   * @method Knob#addLabel
    */
-  add_label: function (x) {
-    return this.circular.add_label(x);
+  addLabel: function (x) {
+    return this.circular.addLabel(x);
   },
 
   /**
-   * This is an alias for {@link Circular#remove_label} of the internal
+   * This is an alias for {@link Circular#removeLabel} of the internal
    * circular instance.
    *
-   * @method Knob#remove_label
+   * @method Knob#removeLabel
    */
-  remove_label: function (x) {
-    this.circular.remove_label(x);
+  removeLabel: function (x) {
+    this.circular.removeLabel(x);
   },
 
   set: function (key, value) {

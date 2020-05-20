@@ -24,7 +24,7 @@
 /**
  * Returns real x and y values from a relative positioning.
  *
- * @function translate_anchor
+ * @function translateAnchor
  *
  * @param {string} [anchor="top-left"] - Position of the anchor. Can be one out of
  *   `top-left`, `top`, `top-right`, `left`, `center`, `right`, `bottom-left`,
@@ -37,7 +37,7 @@
  *
  * @returns {object} Object with members x and y as numbers
  */
-export function translate_anchor(anchor, x, y, width, height) {
+export function translateAnchor(anchor, x, y, width, height) {
   var amnt = anchor.split('%').length - 1;
   if (amnt) {
     if (amnt == 1) {

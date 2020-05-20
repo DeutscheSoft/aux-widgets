@@ -20,61 +20,61 @@
 /* jshint -W014 */
 /* jshint -W086 */
 
-import { define_class } from './../widget_helpers.js';
+import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 import { Ranges } from '../implements/ranges.js';
-import { add_class, remove_class } from '../utils/dom.js';
-import { make_svg } from '../utils/svg.js';
+import { addClass, removeClass } from '../utils/dom.js';
+import { makeSVG } from '../utils/svg.js';
 import { error } from '../utils/log.js';
 
-function range_change_cb() {
-  this.invalidate_all();
-  this.trigger_draw();
+function rangeChangeCallback() {
+  this.invalidateAll();
+  this.triggerDraw();
 }
 // this is not really a rounding operation but simply adds 0.5. we do this to make sure
 // that integer pixel positions result in actual pixels, instead of being spread across
 // two pixels with half opacity
-function svg_round(x) {
+function SVGRound(x) {
   x = +x;
   return x + 0.5;
 }
-function get_px(value, range) {
-  return svg_round(range.val2px(value));
+function getPixels(value, range) {
+  return SVGRound(range.valueToPixel(value));
 }
 
 function _start(d, s) {
   var h = this.range_y.options.basis;
   var t = d[0].type || this.options.type;
   var m = this.options.mode;
-  var x = this.range_x.val2px(d[0].x);
-  var y = this.range_y.val2px(d[0].y);
+  var x = this.range_x.valueToPixel(d[0].x);
+  var y = this.range_y.valueToPixel(d[0].y);
   switch (m) {
     case 'bottom':
       // fill the lower part of the graph
       s.push(
-        'M ' + svg_round(x - 1) + ' ',
-        svg_round(h + 1) + ' ' + t + ' ',
-        svg_round(x - 1) + ' ',
-        svg_round(y)
+        'M ' + SVGRound(x - 1) + ' ',
+        SVGRound(h + 1) + ' ' + t + ' ',
+        SVGRound(x - 1) + ' ',
+        SVGRound(y)
       );
       break;
     case 'top':
       // fill the upper part of the graph
       s.push(
-        'M ' + svg_round(x - 1) + ' ' + svg_round(-1),
-        ' ' + t + ' ' + svg_round(x - 1) + ' ',
-        svg_round(y)
+        'M ' + SVGRound(x - 1) + ' ' + SVGRound(-1),
+        ' ' + t + ' ' + SVGRound(x - 1) + ' ',
+        SVGRound(y)
       );
       break;
     case 'center':
       // fill from the mid
-      s.push('M ' + svg_round(x - 1) + ' ', svg_round(0.5 * h));
+      s.push('M ' + SVGRound(x - 1) + ' ', SVGRound(0.5 * h));
       break;
     case 'base':
       // fill from variable point
       s.push(
-        'M ' + svg_round(x - 1) + ' ',
-        svg_round((1 - this.options.base) * h)
+        'M ' + SVGRound(x - 1) + ' ',
+        SVGRound((1 - this.options.base) * h)
       );
       break;
     default:
@@ -82,7 +82,7 @@ function _start(d, s) {
     /* FALL THROUGH */
     case 'line':
       // fill nothing
-      s.push('M ' + svg_round(x) + ' ' + svg_round(y));
+      s.push('M ' + SVGRound(x) + ' ' + SVGRound(y));
       break;
   }
 }
@@ -91,26 +91,24 @@ function _end(d, s) {
   var h = this.range_y.options.basis;
   var t = dot.type || this.options.type;
   var m = this.options.mode;
-  var x = this.range_x.val2px(dot.x);
+  var x = this.range_x.valueToPixel(dot.x);
   switch (m) {
     case 'bottom':
       // fill the graph below
-      s.push(' ' + t + ' ' + svg_round(x) + ' ' + svg_round(h + 1) + ' Z');
+      s.push(' ' + t + ' ' + SVGRound(x) + ' ' + SVGRound(h + 1) + ' Z');
       break;
     case 'top':
       // fill the upper part of the graph
-      s.push(' ' + t + ' ' + svg_round(x + 1) + ' ' + svg_round(-1) + ' Z');
+      s.push(' ' + t + ' ' + SVGRound(x + 1) + ' ' + SVGRound(-1) + ' Z');
       break;
     case 'center':
       // fill from mid
-      s.push(
-        ' ' + t + ' ' + svg_round(x + 1) + ' ' + svg_round(0.5 * h) + ' Z'
-      );
+      s.push(' ' + t + ' ' + SVGRound(x + 1) + ' ' + SVGRound(0.5 * h) + ' Z');
       break;
     case 'base':
       // fill from variable point
       s.push(
-        ' ' + t + ' ' + svg_round(x + 1) + ' ' + svg_round((-m + 1) * h) + ' Z'
+        ' ' + t + ' ' + SVGRound(x + 1) + ' ' + SVGRound((-m + 1) * h) + ' Z'
       );
       break;
     default:
@@ -122,7 +120,7 @@ function _end(d, s) {
   }
 }
 
-export const Graph = define_class({
+export const Graph = defineClass({
   /**
    * Graph is a single SVG path element. It provides
    * some functions to easily draw paths inside Charts and other
@@ -194,7 +192,7 @@ export const Graph = define_class({
   },
 
   initialize: function (options) {
-    if (!options.element) options.element = make_svg('path');
+    if (!options.element) options.element = makeSVG('path');
     Widget.prototype.initialize.call(this, options);
     /** @member {SVGPath} Graph#element - The SVG path. Has class <code>.aux-graph</code>
      */
@@ -208,7 +206,7 @@ export const Graph = define_class({
     this.set('mode', this.options.mode);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-graph');
+    addClass(element, 'aux-graph');
 
     Widget.prototype.draw.call(this, O, element);
   },
@@ -225,9 +223,9 @@ export const Graph = define_class({
 
     if (I.mode) {
       I.mode = false;
-      remove_class(E, 'aux-filled');
-      remove_class(E, 'aux-outline');
-      add_class(E, O.mode === 'line' ? 'aux-outline' : 'aux-filled');
+      removeClass(E, 'aux-filled');
+      removeClass(E, 'aux-outline');
+      addClass(E, O.mode === 'line' ? 'aux-outline' : 'aux-filled');
     }
 
     if (I.validate('dots', 'type')) {
@@ -252,10 +250,10 @@ export const Graph = define_class({
         if (i === 0 && (dots[i].type || type).startsWith('H')) {
           i++;
           const dot = dots[i];
-          const X = get_px(dot.x, RX);
-          const X1 = get_px(dot.x1, RX);
-          const Y = get_px(dot.y, RY);
-          const Y1 = get_px(dot.y1, RY);
+          const X = getPixels(dot.x, RX);
+          const X1 = getPixels(dot.x1, RX);
+          const Y = getPixels(dot.y, RY);
+          const Y1 = getPixels(dot.y1, RY);
 
           s.push(' S' + X + ',' + Y + ' ' + X + ',' + Y);
         }
@@ -268,29 +266,29 @@ export const Graph = define_class({
           switch (t) {
             case 'L':
             case 'T': {
-              const X = get_px(dot.x, RX);
-              const Y = get_px(dot.y, RY);
+              const X = getPixels(dot.x, RX);
+              const Y = getPixels(dot.y, RY);
 
               s.push(' ' + t + ' ' + X + ' ' + Y);
               break;
             }
             case 'Q':
             case 'S': {
-              const X = get_px(dot.x, RX);
-              const X1 = get_px(dot.x1, RX);
-              const Y = get_px(dot.y, RY);
-              const Y1 = get_px(dot.y1, RY);
+              const X = getPixels(dot.x, RX);
+              const X1 = getPixels(dot.x1, RX);
+              const Y = getPixels(dot.y, RY);
+              const Y1 = getPixels(dot.y1, RY);
 
               s.push(' ' + t + ' ' + X1 + ',' + Y1 + ' ' + X + ',' + Y);
               break;
             }
             case 'C': {
-              const X = get_px(dot.x, RX);
-              const X1 = get_px(dot.x1, RX);
-              const X2 = get_px(dot.x2, RX);
-              const Y = get_px(dot.y, RY);
-              const Y1 = get_px(dot.y1, RY);
-              const Y2 = get_px(dot.y2, RY);
+              const X = getPixels(dot.x, RX);
+              const X1 = getPixels(dot.x1, RX);
+              const X2 = getPixels(dot.x2, RX);
+              const Y = getPixels(dot.y, RY);
+              const Y1 = getPixels(dot.y1, RY);
+              const Y2 = getPixels(dot.y2, RY);
 
               s.push(
                 ' ' +
@@ -312,9 +310,9 @@ export const Graph = define_class({
             }
             case 'H': {
               const f = _type.length > 1 ? parseFloat(type.substr(1)) : 3;
-              const X = get_px(dot.x, RX);
-              const Y = get_px(dot.y, RY);
-              const X1 = get_px(
+              const X = getPixels(dot.x, RX);
+              const Y = getPixels(dot.y, RY);
+              const X1 = getPixels(
                 dot.x - Math.round(dot.x - dots[i - 1].x) / f,
                 RX
               );
@@ -340,8 +338,8 @@ export const Graph = define_class({
     switch (key) {
       case 'range_x':
       case 'range_y':
-        this.add_range(value, key);
-        value.on('set', range_change_cb.bind(this));
+        this.addRange(value, key);
+        value.on('set', rangeChangeCallback.bind(this));
         break;
     }
   },

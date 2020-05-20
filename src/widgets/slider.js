@@ -26,16 +26,16 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { Widget } from './widget.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
 import { Ranged } from '../implements/ranged.js';
 import { Warning } from '../implements/warning.js';
-import { element, add_class, outer_width, outer_height } from '../utils/dom.js';
+import { element, addClass, outerWidth, outerHeight } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 
-function dblclick() {
+function dblClick() {
   this.userset('value', this.options.reset);
   /**
    * Is fired when the slider receives a double click in order to reset to initial value.
@@ -47,7 +47,7 @@ function dblclick() {
   this.emit('doubleclick', this.options.value);
 }
 
-function set_background(horiz, vert, size) {
+function setBackground(horiz, vert, size) {
   var E = this.element;
   E.style['background-position'] = '-' + horiz + 'px -' + vert + 'px';
 
@@ -90,7 +90,7 @@ function set_background(horiz, vert, size) {
  *     Set to `false` to set the background image via external CSS.
  *
  */
-export const Slider = define_class({
+export const Slider = defineClass({
   Extends: Widget,
   Implements: [Ranged, Warning],
   _options: Object.assign(
@@ -118,7 +118,7 @@ export const Slider = define_class({
     basis: 300,
   },
   static_events: {
-    dblclick: dblclick,
+    dblclick: dblClick,
   },
   initialize: function (options) {
     if (!options.element) options.element = element('div');
@@ -161,7 +161,7 @@ export const Slider = define_class({
   },
 
   draw: function (O, element) {
-    add_class(element, 'aux-slider');
+    addClass(element, 'aux-slider');
 
     Widget.prototype.draw.call(this, O, element);
   },
@@ -183,7 +183,7 @@ export const Slider = define_class({
       I.value = false;
       I.alignment = false;
       I.frames = false;
-      var coef = this.val2coef(O.value);
+      var coef = this.valueToCoef(O.value);
       var frame = Math.round(Math.max(0, O.frames - 1) * coef);
       switch (O.alignment) {
         default:
@@ -192,10 +192,10 @@ export const Slider = define_class({
           );
           break;
         case 'vertical':
-          set_background.call(this, 0, frame * O._width, '100% auto');
+          setBackground.call(this, 0, frame * O._width, '100% auto');
           break;
         case 'horizontal':
-          set_background.call(this, frame * O._height, 0, 'auto 100%');
+          setBackground.call(this, frame * O._height, 0, 'auto 100%');
           break;
       }
     }
@@ -204,8 +204,8 @@ export const Slider = define_class({
   },
 
   resize: function () {
-    this.set('_width', outer_width(this.element));
-    this.set('_height', outer_height(this.element));
+    this.set('_width', outerWidth(this.element));
+    this.set('_height', outerHeight(this.element));
   },
 
   set: function (key, value) {

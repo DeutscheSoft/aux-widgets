@@ -33,7 +33,7 @@
  *
  * @implements {@link BiquadTransform}
  */
-export function Null(O) {
+export function NULL(O) {
   /* this biquad does not do anything */
   return {
     b0: 1,
@@ -51,7 +51,7 @@ export function Null(O) {
  *
  * @implements {@link BiquadTransform}
  */
-export function LowShelf(O) {
+export function lowShelf(O) {
   var cos = Math.cos,
     sqrt = Math.sqrt,
     A = Math.pow(10, O.gain / 40),
@@ -73,7 +73,7 @@ export function LowShelf(O) {
  *
  * @implements {@link BiquadTransform}
  */
-export function HighShelf(O) {
+export function highShelf(O) {
   var cos = Math.cos;
   var sqrt = Math.sqrt;
   var A = Math.pow(10, O.gain / 40);
@@ -95,7 +95,7 @@ export function HighShelf(O) {
  *
  * @implements {@link BiquadTransform}
  */
-export function Peaking(O) {
+export function peaking(O) {
   var cos = Math.cos;
   var A = Math.pow(10, O.gain / 40);
   var w0 = (2 * Math.PI * O.freq) / O.sample_rate;
@@ -112,11 +112,11 @@ export function Peaking(O) {
 }
 
 /**
- * Notch filter.
+ * notch filter.
  *
  * @implements {@link BiquadTransform}
  */
-export function Notch(O) {
+export function notch(O) {
   var cos = Math.cos;
   var w0 = (2 * Math.PI * O.freq) / O.sample_rate;
   var alpha = Math.sin(w0) / (2 * O.q);
@@ -137,7 +137,7 @@ export function Notch(O) {
  *
  * @implements {@link BiquadTransform}
  */
-export function LowPass1(O) {
+export function lowPass1(O) {
   var w0 = (2 * Math.PI * O.freq) / O.sample_rate,
     s0 = Math.sin(w0),
     c0 = Math.cos(w0);
@@ -155,7 +155,7 @@ export function LowPass1(O) {
 /**
  * @implements {@link BiquadTransform}
  */
-export function LowPass2(O) {
+export function lowPass2(O) {
   var cos = Math.cos;
   var w0 = (2 * Math.PI * O.freq) / O.sample_rate;
   var alpha = Math.sin(w0) / (2 * O.q);
@@ -173,7 +173,7 @@ export function LowPass2(O) {
 /**
  * @implements {@link BiquadTransform}
  */
-export function LowPass4(O) {
+export function lowPass4(O) {
   O = LowPass2(O);
   O.factor = 2;
   return O;
@@ -185,7 +185,7 @@ export function LowPass4(O) {
  *
  * @implements {@link BiquadTransform}
  */
-export function HighPass1(O) {
+export function highPass1(O) {
   var w0 = (2 * Math.PI * O.freq) / O.sample_rate,
     s0 = Math.sin(w0),
     c0 = Math.cos(w0);
@@ -203,7 +203,7 @@ export function HighPass1(O) {
 /**
  * @implements {@link BiquadTransform}
  */
-export function HighPass2(O) {
+export function highPass2(O) {
   var cos = Math.cos;
   var w0 = (2 * Math.PI * O.freq) / O.sample_rate;
   var alpha = Math.sin(w0) / (2 * O.q);
@@ -221,7 +221,7 @@ export function HighPass2(O) {
 /**
  * @implements {@link BiquadTransform}
  */
-export function HighPass4(O) {
+export function highPass4(O) {
   O = HighPass2(O);
   O.factor = 2;
   return O;
@@ -232,42 +232,42 @@ export function HighPass4(O) {
  *
  * @property {Filter~filter_factory} null - The trivial filter, which does not
  *      change the gain.
- * @property {Filter~filter_factory} parametric - Peaking.
- * @property {Filter~filter_factory} notch -  Notch.
- * @property {Filter~filter_factory} low-shelf - LowShelf.
- * @property {Filter~filter_factory} high-shelf - HighShelf.
- * @property {Filter~filter_factory} lowpass1 - LowPass1.
- * @property {Filter~filter_factory} lowpass2 - LowPass2.
- * @property {Filter~filter_factory} lowpass3 - LowPass3.
- * @property {Filter~filter_factory} lowpass4 - LowPass4.
- * @property {Filter~filter_factory} highpass1 - HighPass1.
- * @property {Filter~filter_factory} highpass2 - HighPass2.
- * @property {Filter~filter_factory} highpass3 - HighPass3.
- * @property {Filter~filter_factory} highpass4 - HighPass4.
+ * @property {Filter~filter_factory} parametric - peaking.
+ * @property {Filter~filter_factory} notch -  notch.
+ * @property {Filter~filter_factory} low-shelf - lowShelf.
+ * @property {Filter~filter_factory} high-shelf - highShelf.
+ * @property {Filter~filter_factory} lowpass1 - lowPass1.
+ * @property {Filter~filter_factory} lowpass2 - lowPass2.
+ * @property {Filter~filter_factory} lowpass3 - lowPass3.
+ * @property {Filter~filter_factory} lowpass4 - lowPass4.
+ * @property {Filter~filter_factory} highpass1 - highPass1.
+ * @property {Filter~filter_factory} highpass2 - highPass2.
+ * @property {Filter~filter_factory} highpass3 - highPass3.
+ * @property {Filter~filter_factory} highpass4 - highPass4.
  */
-export const StandardBiquadFilters = {
-  null: BiquadFilter(Null),
-  'low-shelf': BiquadFilter(LowShelf),
-  'high-shelf': BiquadFilter(HighShelf),
-  parametric: BiquadFilter(Peaking),
-  notch: BiquadFilter(Notch),
-  lowpass1: BiquadFilter(LowPass1),
-  lowpass2: BiquadFilter(LowPass2),
-  lowpass3: BiquadFilter(LowPass1, LowPass2),
-  lowpass4: BiquadFilter(LowPass4),
-  highpass1: BiquadFilter(HighPass1),
-  highpass2: BiquadFilter(HighPass2),
-  highpass3: BiquadFilter(HighPass1, HighPass2),
-  highpass4: BiquadFilter(HighPass4),
+export const standardBiquadFilters = {
+  null: biquadFilter(NULL),
+  'low-shelf': biquadFilter(lowShelf),
+  'high-shelf': biquadFilter(highShelf),
+  parametric: biquadFilter(peaking),
+  notch: biquadFilter(notch),
+  lowpass1: biquadFilter(lowPass1),
+  lowpass2: biquadFilter(lowPass2),
+  lowpass3: biquadFilter(lowPass1, lowPass2),
+  lowpass4: biquadFilter(lowPass4),
+  highpass1: biquadFilter(highPass1),
+  highpass2: biquadFilter(highPass2),
+  highpass3: biquadFilter(highPass1, highPass2),
+  highpass4: biquadFilter(highPass4),
 };
 
-var NullModule = {
-  freq2gain: function () {
+var nullModule = {
+  freqToGain: function () {
     return 0.0;
   },
 };
 
-function BilinearModule(O) {
+function bilinearModule(O) {
   var log = Math.log;
   var sin = Math.sin;
 
@@ -278,19 +278,19 @@ function BilinearModule(O) {
   var Ya = +(O.a1 * O.a0);
   var Yb = +(O.b1 * O.b0);
 
-  if (Ra === Rb && Ya === Yb) return NullModule;
+  if (Ra === Rb && Ya === Yb) return nullModule;
 
-  function freq2gain(f) {
+  function frequencyToGain(f) {
     f = +f;
     var S = +sin(PI * f);
     S *= S;
     return LN10_10 * log((Rb - S * Yb) / (Ra - S * Ya));
   }
 
-  return { freq2gain: freq2gain };
+  return { freqtogain: frequencyToGain };
 }
 
-function BiquadModule(O) {
+function biquadModule(O) {
   var log = Math.log;
   var sin = Math.sin;
 
@@ -303,9 +303,9 @@ function BiquadModule(O) {
   var Xb = +(4 * O.b0 * O.b2);
   var Yb = +(O.b1 * (O.b0 + O.b2));
 
-  if (Ra === Rb && Ya === Yb && Xa === Xb) return NullModule;
+  if (Ra === Rb && Ya === Yb && Xa === Xb) return nullModule;
 
-  function freq2gain(f) {
+  function frequencyToGain(f) {
     f = +f;
     var S = +sin(PI * f);
     S *= S;
@@ -315,28 +315,28 @@ function BiquadModule(O) {
     );
   }
 
-  return { freq2gain: freq2gain };
+  return { freqtogain: frequencyToGain };
 }
 
-function BiquadFilter1(trafo) {
+function biquadFilter1(trafo) {
   function factory(O) {
-    return BiquadModule(trafo(O));
+    return biquadModule(trafo(O));
   }
 
   return factory;
 }
 
-function BiquadFilterN(trafos) {
+function biquadFilterN(trafos) {
   function factory(O) {
     var A = new Array(trafos.length);
     var i;
 
     for (i = 0; i < trafos.length; i++) {
-      A[i] = BiquadModule(trafos[i](O)).freq2gain;
+      A[i] = biquadModule(trafos[i](O)).freqtogain;
     }
 
     return {
-      freq2gain: function (f) {
+      freqtogain: function (f) {
         var ret = 0.0;
         var i;
 
@@ -353,7 +353,7 @@ function BiquadFilterN(trafos) {
 }
 
 /**
- * @callback BiquadTransform
+ * @callback biquadTransform
  *
  * @param {Object} options - The filter parameters.
  * @param {number} options.freq - The current frequency, i.e. the x position in
@@ -378,8 +378,8 @@ function BiquadFilterN(trafos) {
  *      interface.
  * @returns {EqFilter} - The filter object.
  */
-export function BiquadFilter() {
-  if (arguments.length === 1) return BiquadFilter1(arguments[0]);
+export function biquadFilter() {
+  if (arguments.length === 1) return biquadFilter1(arguments[0]);
 
-  return BiquadFilterN.call(this, Array.prototype.slice.call(arguments));
+  return biquadFilterN.call(this, Array.prototype.slice.call(arguments));
 }

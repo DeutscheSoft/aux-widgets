@@ -17,28 +17,28 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class, define_child_element } from './../widget_helpers.js';
+import { defineClass, defineChildElement } from './../widget_helpers.js';
 import { S } from '../dom_scheduler.js';
 import {
   empty,
-  css_space,
-  get_style,
+  CSSSpace,
+  getStyle,
   element,
-  add_class,
-  inner_width,
-  toggle_class,
-  inner_height,
+  addClass,
+  innerWidth,
+  toggleClass,
+  innerHeight,
 } from '../utils/dom.js';
-import { make_svg } from '../utils/svg.js';
+import { makeSVG } from '../utils/svg.js';
 import { error, warn } from '../utils/log.js';
 import { Widget } from './widget.js';
 import { Ranges } from '../implements/ranges.js';
 import { Graph } from './graph.js';
 import { ChartHandle } from './charthandle.js';
-import { define_child_widget } from '../child_widget.js';
+import { defineChildWidget } from '../child_widget.js';
 import { Grid } from './grid.js';
 
-function calculate_overlap(X, Y) {
+function calculateOverlap(X, Y) {
   /* no overlap, return 0 */
   if (X[2] < Y[0] || Y[2] < X[0] || X[3] < Y[1] || Y[3] < X[1]) return 0;
 
@@ -48,19 +48,19 @@ function calculate_overlap(X, Y) {
   );
 }
 
-function show_handles() {
+function showHandles() {
   var handles = this.handles;
 
   for (var i = 0; i < handles.length; i++) {
-    this.add_child(handles[i]);
+    this.addChild(handles[i]);
   }
 }
 
-function hide_handles() {
+function hideHandles() {
   var handles = this.handles;
 
   for (var i = 0; i < handles.length; i++) {
-    this.remove_child(handles[i]);
+    this.removeChild(handles[i]);
   }
 }
 
@@ -69,7 +69,7 @@ function STOP(e) {
   e.stopPropagation();
   return false;
 }
-function draw_key() {
+function drawKey() {
   var __key, bb;
 
   var _key = this._key;
@@ -84,15 +84,15 @@ function draw_key() {
   var O = this.options;
 
   var disp = 'none';
-  var gpad = css_space(_key, 'padding');
-  var gmarg = css_space(_key, 'margin');
+  var gpad = CSSSpace(_key, 'padding');
+  var gmarg = CSSSpace(_key, 'margin');
   var c = 0;
   var w = 0;
   var top = 0;
   var lines = [];
   for (let i = 0; i < this.graphs.length; i++) {
     if (this.graphs[i].get('key') !== false) {
-      var t = make_svg('tspan', {
+      var t = makeSVG('tspan', {
         class: 'aux-label',
         style: 'dominant-baseline: central;',
       });
@@ -101,11 +101,11 @@ function draw_key() {
       _key.firstChild.appendChild(t);
 
       if (!bb) bb = _key.getBoundingClientRect();
-      top += c ? parseInt(get_style(t, 'line-height')) : gpad.top;
+      top += c ? parseInt(getStyle(t, 'line-height')) : gpad.top;
       t.setAttribute('y', top + bb.height / 2);
 
       lines.push({
-        x: parseInt(get_style(t, 'margin-right')) || 0,
+        x: parseInt(getStyle(t, 'margin-right')) || 0,
         y: Math.round(top),
         width: Math.round(bb.width),
         height: Math.round(bb.height),
@@ -119,7 +119,7 @@ function draw_key() {
     }
   }
   for (let i = 0; i < lines.length; i++) {
-    var b = make_svg('rect', {
+    var b = makeSVG('rect', {
       class: lines[i]['class'] + '.aux-rect',
       color: lines[i].color,
       style: lines[i].style,
@@ -184,7 +184,7 @@ function draw_key() {
   _key_bg.setAttribute('width', __key.x2 - __key.x1);
   _key_bg.setAttribute('height', __key.y2 - __key.y1);
 }
-function draw_label() {
+function drawLabel() {
   var _label = this._label;
   if (!_label) return;
 
@@ -193,10 +193,10 @@ function draw_label() {
   /* FORCE_RELAYOUT */
   S.add(
     function () {
-      var mtop = parseInt(get_style(_label, 'margin-top') || 0);
-      var mleft = parseInt(get_style(_label, 'margin-left') || 0);
-      //var mbottom = parseInt(get_style(_label, "margin-bottom") || 0);
-      var mright = parseInt(get_style(_label, 'margin-right') || 0);
+      var mtop = parseInt(getStyle(_label, 'margin-top') || 0);
+      var mleft = parseInt(getStyle(_label, 'margin-left') || 0);
+      //var mbottom = parseInt(getStyle(_label, "margin-bottom") || 0);
+      var mright = parseInt(getStyle(_label, 'margin-right') || 0);
       var bb = _label.getBoundingClientRect();
       var x,
         y,
@@ -324,11 +324,11 @@ function draw_label() {
  * @property {Boolean} [options.square=false] - Keep the Graph as a square.
  *
  */
-function geom_set(value, key) {
-  this.set_style(key, value + 'px');
+function geomSet(value, key) {
+  this.setStyle(key, value + 'px');
   error("using deprecated '" + key + "' options");
 }
-export const Chart = define_class({
+export const Chart = defineClass({
   Extends: Widget,
   Implements: Ranges,
   _options: Object.assign(Object.create(Widget.prototype._options), {
@@ -379,8 +379,8 @@ export const Chart = define_class({
     square: false,
   },
   static_events: {
-    set_width: geom_set,
-    set_height: geom_set,
+    set_width: geomSet,
+    set_height: geomSet,
 
     mousewheel: STOP,
     DOMMouseScroll: STOP,
@@ -388,7 +388,7 @@ export const Chart = define_class({
       this.range_z.set('basis', value);
     },
     set_show_handles: function (value) {
-      (value ? show_handles : hide_handles).call(this);
+      (value ? showHandles : hideHandles).call(this);
     },
   },
   initialize: function (options) {
@@ -410,9 +410,9 @@ export const Chart = define_class({
     /**
      * @member {Range} Chart#range_y - The {@link Range} for the y axis.
      */
-    this.add_range(this.options.range_x, 'range_x');
-    this.add_range(this.options.range_y, 'range_y');
-    this.add_range(this.options.range_z, 'range_z');
+    this.addRange(this.options.range_x, 'range_x');
+    this.addRange(this.options.range_y, 'range_y');
+    this.addRange(this.options.range_z, 'range_z');
     this.range_y.set('reverse', true, true, true);
 
     /**
@@ -420,7 +420,7 @@ export const Chart = define_class({
      *   Has class <code>.aux-chart</code>.
      */
 
-    this.svg = S = make_svg('svg');
+    this.svg = S = makeSVG('svg');
 
     if (!this.options.width) this.options.width = this.range_x.options.basis;
     if (!this.options.height) this.options.height = this.range_y.options.basis;
@@ -429,7 +429,7 @@ export const Chart = define_class({
      * @member {SVGGroup} Chart#_graphs - The SVG group containing all graphs.
      *      Has class <code>.aux-graphs</code>.
      */
-    this._graphs = make_svg('g', { class: 'aux-graphs' });
+    this._graphs = makeSVG('g', { class: 'aux-graphs' });
     S.appendChild(this._graphs);
 
     if (this.options.width) this.set('width', this.options.width);
@@ -439,15 +439,15 @@ export const Chart = define_class({
      * @member {SVGGroup} Chart#_handles - The SVG group containing all handles.
      *      Has class <code>.aux-handles</code>.
      */
-    this._handles = make_svg('g', { class: 'aux-handles' });
+    this._handles = makeSVG('g', { class: 'aux-handles' });
     S.appendChild(this._handles);
     S.onselectstart = function () {
       return false;
     };
-    this.add_handles(this.options.handles);
+    this.addHandles(this.options.handles);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-chart');
+    addClass(element, 'aux-chart');
     element.appendChild(this.svg);
 
     Widget.prototype.draw.call(this, O, element);
@@ -459,13 +459,13 @@ export const Chart = define_class({
 
     Widget.prototype.resize.call(this);
 
-    var tmp = css_space(S, 'border', 'padding');
-    var w = inner_width(E) - tmp.left - tmp.right;
-    var h = inner_height(E) - tmp.top - tmp.bottom;
+    var tmp = CSSSpace(S, 'border', 'padding');
+    var w = innerWidth(E) - tmp.left - tmp.right;
+    var h = innerHeight(E) - tmp.top - tmp.bottom;
 
-    var tmp = css_space(S, 'border', 'padding');
-    var w = inner_width(E) - tmp.left - tmp.right;
-    var h = inner_height(E) - tmp.top - tmp.bottom;
+    var tmp = CSSSpace(S, 'border', 'padding');
+    var w = innerWidth(E) - tmp.left - tmp.right;
+    var h = innerHeight(E) - tmp.top - tmp.bottom;
 
     if (O.square) {
       var s = Math.min(h, w);
@@ -476,13 +476,13 @@ export const Chart = define_class({
       this.set('_width', w);
       this.range_x.set('basis', w);
       this.invalid._width = true;
-      this.trigger_draw();
+      this.triggerDraw();
     }
     if (h > 0 && O._height !== h) {
       this.set('_height', h);
       this.range_y.set('basis', h);
       this.invalid._height = true;
-      this.trigger_draw();
+      this.triggerDraw();
     }
   },
   redraw: function () {
@@ -511,10 +511,10 @@ export const Chart = define_class({
       }
     }
     if (I.validate('label', 'label_position')) {
-      draw_label.call(this);
+      drawLabel.call(this);
     }
     if (I.validate('key', 'key_size', 'graphs')) {
-      draw_key.call(this);
+      drawKey.call(this);
     }
     if (I.show_handles) {
       I.show_handles = false;
@@ -533,9 +533,9 @@ export const Chart = define_class({
     this._handles.remove();
     Widget.prototype.destroy.call(this);
   },
-  add_child: function (child) {
+  addChild: function (child) {
     if (!(child instanceof ChartHandle) || this.options.show_handles)
-      Widget.prototype.add_child.call(this, child);
+      Widget.prototype.addChild.call(this, child);
 
     if (child instanceof Graph) {
       const g = child;
@@ -549,7 +549,7 @@ export const Chart = define_class({
         function (key) {
           if (key === 'color' || key === 'class' || key === 'key') {
             this.invalid.graphs = true;
-            this.trigger_draw();
+            this.triggerDraw();
           }
         }.bind(this)
       );
@@ -565,7 +565,7 @@ export const Chart = define_class({
       this.emit('graphadded', g, this.graphs.length - 1);
 
       this.invalid.graphs = true;
-      this.trigger_draw();
+      this.triggerDraw();
     } else if (child instanceof ChartHandle) {
       child.set('intersect', this.intersect.bind(this));
       child.set('range_x', () => this.range_x);
@@ -583,7 +583,7 @@ export const Chart = define_class({
       this.emit('handleadded', child);
     }
   },
-  remove_child: function (child) {
+  removeChild: function (child) {
     if (child instanceof Graph) {
       const G = this.graphs;
       const i = G.indexOf(child);
@@ -602,7 +602,7 @@ export const Chart = define_class({
         this.graphs.splice(i, 1);
         child.element.remove();
         this.invalid.graphs = true;
-        this.trigger_draw();
+        this.triggerDraw();
       }
     } else if (child instanceof ChartHandle) {
       const H = this.handles;
@@ -621,12 +621,12 @@ export const Chart = define_class({
       }
     }
 
-    Widget.prototype.remove_child.call(this, child);
+    Widget.prototype.removeChild.call(this, child);
   },
   /**
    * Add a graph to the chart.
    *
-   * @method Chart#add_graph
+   * @method Chart#addGraph
    *
    * @param {Object} graph - The graph to add. This can be either an
    *  instance of {@link Graph} or an object of options to
@@ -636,7 +636,7 @@ export const Chart = define_class({
    *
    * @emits Chart#graphadded
    */
-  add_graph: function (options) {
+  addGraph: function (options) {
     var g;
 
     if (options instanceof Graph) {
@@ -645,21 +645,21 @@ export const Chart = define_class({
       g = new Graph(options);
     }
 
-    this.add_child(g);
+    this.addChild(g);
 
     return g;
   },
   /**
    * Remove a graph from the chart.
    *
-   * @method Chart#remove_graph
+   * @method Chart#removeGraph
    *
    * @param {Graph} graph - The {@link Graph} to remove.
    *
    * @emits Chart#graphremoved
    */
-  remove_graph: function (g) {
-    this.remove_child(g);
+  removeGraph: function (g) {
+    this.removeChild(g);
   },
   /**
    * Remove all graphs from the chart.
@@ -669,7 +669,7 @@ export const Chart = define_class({
    * @emits Chart#emptied
    */
   empty: function () {
-    this.graphs.map(this.remove_graph, this);
+    this.graphs.map(this.removeGraph, this);
     /**
      * Is fired when all graphs are removed from the chart.
      *
@@ -682,14 +682,14 @@ export const Chart = define_class({
    * Add a new handle to the widget. Options is an object containing
    * options for the {@link ChartHandle}.
    *
-   * @method Chart#add_handle
+   * @method Chart#addHandle
    *
    * @param {Object} [options={ }] - An object containing initial options. - The options for the {@link ChartHandle}.
    * @param {Object} [type=ChartHandle] - A widget class to be used as the new handle.
    *
    * @emits Chart#handleadded
    */
-  add_handle: function (options, type) {
+  addHandle: function (options, type) {
     let handle;
 
     if (options instanceof ChartHandle) {
@@ -699,7 +699,7 @@ export const Chart = define_class({
       handle = new type(options);
     }
 
-    this.add_child(handle);
+    this.addChild(handle);
 
     return handle;
   },
@@ -707,39 +707,39 @@ export const Chart = define_class({
    * Add multiple new {@link ChartHandle} to the widget. Options is an array
    * of objects containing options for the new instances of {@link ChartHandle}.
    *
-   * @method Chart#add_handles
+   * @method Chart#addHandles
    *
    * @param {Array<Object>} options - An array of options objects for the {@link ChartHandle}.
    * @param {Object} [type=ChartHandle] - A widget class to be used for the new handles.
    */
-  add_handles: function (handles, type) {
-    for (var i = 0; i < handles.length; i++) this.add_handle(handles[i], type);
+  addHandles: function (handles, type) {
+    for (var i = 0; i < handles.length; i++) this.addHandle(handles[i], type);
   },
   /**
    * Remove a handle from the widget.
    *
-   * @method Chart#remove_handle
+   * @method Chart#removeHandle
    *
    * @param {ChartHandle} handle - The {@link ChartHandle} to remove.
    *
    * @emits Chart#handleremoved
    */
-  remove_handle: function (handle) {
-    this.remove_child(handle);
+  removeHandle: function (handle) {
+    this.removeChild(handle);
   },
   /**
    * Remove multiple or all {@link ChartHandle} from the widget.
    *
-   * @method Chart#remove_handles
+   * @method Chart#removeHandles
    *
    * @param {Array<ChartHandle>} handles - An array of
    *   {@link ChartHandle} instances. If the argument reveals to
    *   `false`, all handles are removed from the widget.
    */
-  remove_handles: function (handles) {
+  removeHandles: function (handles) {
     var H = handles || this.handles.slice();
     for (var i = 0; i < H.length; i++) {
-      this.remove_handle(H[i]);
+      this.removeHandle(H[i]);
     }
     if (!handles) {
       this.handles = [];
@@ -768,14 +768,14 @@ export const Chart = define_class({
     for (let i = 0; i < this.handles.length; i++) {
       var h = this.handles[i];
       if (h === handle || !h.get('active') || !h.get('show_handle')) continue;
-      _a = calculate_overlap(X, h.handle);
+      _a = calculateOverlap(X, h.handle);
 
       if (_a) {
         c++;
         a += _a * importance_handle;
       }
 
-      _a = calculate_overlap(X, h.label);
+      _a = calculateOverlap(X, h.label);
 
       if (_a) {
         c++;
@@ -786,14 +786,14 @@ export const Chart = define_class({
       for (let i = 0; i < this.bands.length; i++) {
         var b = this.bands[i];
         if (b === handle || !b.get('active') || !b.get('show_handle')) continue;
-        _a = calculate_overlap(X, b.handle);
+        _a = calculateOverlap(X, b.handle);
 
         if (_a > 0) {
           c++;
           a += _a * importance_handle;
         }
 
-        _a = calculate_overlap(X, b.label);
+        _a = calculateOverlap(X, b.label);
         if (_a > 0) {
           c++;
           a += _a * importance_label;
@@ -801,7 +801,7 @@ export const Chart = define_class({
       }
     }
     /* calculate intersection with border */
-    _a = calculate_overlap(X, [
+    _a = calculateOverlap(X, [
       0,
       0,
       this.range_x.options.basis,
@@ -815,7 +815,7 @@ export const Chart = define_class({
  * @member {Grid} Chart#grid - The grid element of the chart.
  *   Has class <code>.aux-grid</code>.
  */
-define_child_widget(Chart, 'grid', {
+defineChildWidget(Chart, 'grid', {
   create: Grid,
   show: true,
   append: function () {
@@ -832,25 +832,25 @@ define_child_widget(Chart, 'grid', {
     };
   },
 });
-function key_hover_cb(ev) {
+function keyHoverCallback(ev) {
   var b = ev.type === 'mouseenter';
-  toggle_class(this, 'aux-hover', b);
+  toggleClass(this, 'aux-hover', b);
   /* this.nextSibling is the key */
-  toggle_class(this.nextSibling, 'aux-hover', b);
+  toggleClass(this.nextSibling, 'aux-hover', b);
 }
 /**
  * @member {SVGRect} Chart#_key_background - The SVG rectangle of the key.
  *   Has class <code>.aux-background</code>.
  */
-define_child_element(Chart, 'key_background', {
+defineChildElement(Chart, 'key_background', {
   option: 'key',
   display_check: function (v) {
     return !!v;
   },
   create: function () {
-    var k = make_svg('rect', { class: 'aux-background' });
-    k.addEventListener('mouseenter', key_hover_cb);
-    k.addEventListener('mouseleave', key_hover_cb);
+    var k = makeSVG('rect', { class: 'aux-background' });
+    k.addEventListener('mouseenter', keyHoverCallback);
+    k.addEventListener('mouseleave', keyHoverCallback);
     return k;
   },
   append: function () {
@@ -861,14 +861,14 @@ define_child_element(Chart, 'key_background', {
  * @member {SVGGroup} Chart#_key - The SVG group containing all descriptions.
  *   Has class <code>.aux-key</code>.
  */
-define_child_element(Chart, 'key', {
+defineChildElement(Chart, 'key', {
   option: 'key',
   display_check: function (v) {
     return !!v;
   },
   create: function () {
-    var key = make_svg('g', { class: 'aux-key' });
-    key.appendChild(make_svg('text', { class: 'aux-keytext' }));
+    var key = makeSVG('g', { class: 'aux-key' });
+    key.appendChild(makeSVG('text', { class: 'aux-keytext' }));
     return key;
   },
   append: function () {
@@ -879,13 +879,13 @@ define_child_element(Chart, 'key', {
  * @member {SVGText} Chart#_label - The label of the chart.
  *   Has class <code>.aux-label</code>.
  */
-define_child_element(Chart, 'label', {
+defineChildElement(Chart, 'label', {
   option: 'label',
   display_check: function (v) {
     return typeof v === 'string' && v.length;
   },
   create: function () {
-    return make_svg('text', {
+    return makeSVG('text', {
       class: 'aux-label',
       style: 'dominant-baseline: central;',
     });

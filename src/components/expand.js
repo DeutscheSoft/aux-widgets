@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { Expand } from './../widgets/expand.js';
 
@@ -29,6 +29,6 @@ import { Expand } from './../widgets/expand.js';
  * @class ExpandComponent
  * @implements Component
  */
-export const ExpandComponent = component_from_widget(Expand);
+export const ExpandComponent = componentFromWidget(Expand);
 
-define_component('expand', ExpandComponent);
+defineComponent('expand', ExpandComponent);

@@ -17,8 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from './../widget_helpers.js';
-import { add_class, remove_class } from '../utils/dom.js';
+import { defineClass } from './../widget_helpers.js';
+import { addClass, removeClass } from '../utils/dom.js';
 
 /**
  * GlobalCursor adds global cursor classes to ensure
@@ -27,18 +27,18 @@ import { add_class, remove_class } from '../utils/dom.js';
  *
  * @mixin GlobalCursor
  */
-export const GlobalCursor = define_class({
+export const GlobalCursor = defineClass({
   /**
    * Adds a class <code>"aux-cursor-" + cursor</code> to the <code>document.body</code> to show a specific cursor.
    *
-   * @method GlobalCursor#global_cursor
+   * @method GlobalCursor#globalCursor
    *
    * @param {string} cursor - The name of the <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">cursor</a> to show.
    *
    * @emits GlobalCursor#globalcursor
    */
-  global_cursor: function (cursor) {
-    add_class(document.body, 'aux-cursor-' + cursor);
+  globalCursor: function (cursor) {
+    addClass(document.body, 'aux-cursor-' + cursor);
     /**
      * Is fired when a cursor gets set.
      *
@@ -51,14 +51,14 @@ export const GlobalCursor = define_class({
   /**
    * Removes the class from <code>document.body</code> node.
    *
-   * @method GlobalCursor#remove_cursor
+   * @method GlobalCursor#removeCursor
    *
    * @param {string} cursor - The name of the <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">cursor</a> to remome.
    *
    * @emits GlobalCursor#cursorremoved
    */
-  remove_cursor: function (cursor) {
-    remove_class(document.body, 'aux-cursor-' + cursor);
+  removeCursor: function (cursor) {
+    removeClass(document.body, 'aux-cursor-' + cursor);
     /**
      * Is fired when a cursor is removed.
      *

@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { Icon } from './../widgets/icon.js';
 
@@ -29,6 +29,6 @@ import { Icon } from './../widgets/icon.js';
  * @class IconComponent
  * @implements Component
  */
-export const IconComponent = component_from_widget(Icon);
+export const IconComponent = componentFromWidget(Icon);
 
-define_component('icon', IconComponent);
+defineComponent('icon', IconComponent);

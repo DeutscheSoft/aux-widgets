@@ -26,18 +26,18 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { define_class } from '../widget_helpers.js';
-import { add_class, remove_class, is_dom_node } from '../utils/dom.js';
+import { defineClass } from '../widget_helpers.js';
+import { addClass, removeClass, isDomNode } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 import { Container } from './container.js';
 import { ChildWidgets } from '../utils/child_widgets.js';
 
-function on_page_set_active(value) {
+function onPageSetActive(value) {
   const pages = this.parent;
 
   if (value) {
-    const index = pages.get_pages().indexOf(this);
-    pages.show_child(this);
+    const index = pages.getPages().indexOf(this);
+    pages.showChild(this);
     pages.update('show', index);
     /**
      * The page to show has changed.
@@ -49,15 +49,15 @@ function on_page_set_active(value) {
      */
     pages.emit('changed', this, index);
   } else {
-    pages.hide_child(this);
+    pages.hideChild(this);
   }
 }
 
-function on_page_added(page, position) {
+function onPageAdded(page, position) {
   const pages = this.widget;
 
-  page.add_class('aux-page');
-  page.on('set_active', on_page_set_active);
+  page.addClass('aux-page');
+  page.on('set_active', onPageSetActive);
 
   const current = pages.current();
 
@@ -79,11 +79,11 @@ function on_page_added(page, position) {
   // the new page is active
   if (page.get('active')) {
     // we don't want any animation
-    page.force_show();
+    page.forceShow();
 
-    if (current && current !== page) current.force_hide();
+    if (current && current !== page) current.forceHide();
   } else {
-    page.force_hide();
+    page.forceHide();
   }
 
   /**
@@ -96,11 +96,11 @@ function on_page_added(page, position) {
   pages.emit('added', page, position);
 }
 
-function on_page_removed(page, position) {
+function onPageRemoved(page, position) {
   const pages = this.widget;
 
-  page.remove_class('aux-page');
-  page.off('set_active', on_page_set_active);
+  page.removeClass('aux-page');
+  page.off('set_active', onPageSetActive);
 
   const show = pages.get('show');
   const length = this.getList().length;
@@ -129,7 +129,7 @@ function on_page_removed(page, position) {
   pages.emit('removed', page, position);
 }
 
-export const Pages = define_class({
+export const Pages = defineClass({
   /**
    * Pages contains different pages ({@link Page}s) which can
    * be swiched via option.
@@ -193,17 +193,17 @@ export const Pages = define_class({
     this.pages = new ChildWidgets(this, {
       filter: Page,
     });
-    this.pages.on('child_added', on_page_added);
-    this.pages.on('child_removed', on_page_removed);
+    this.pages.on('child_added', onPageAdded);
+    this.pages.on('child_removed', onPageRemoved);
   },
 
   initialized: function () {
     Container.prototype.initialized.call(this);
-    this.add_pages(this.options.pages);
+    this.addPages(this.options.pages);
     this.set('show', this.options.show);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-pages');
+    addClass(element, 'aux-pages');
 
     Container.prototype.draw.call(this, O, element);
   },
@@ -216,19 +216,19 @@ export const Pages = define_class({
 
     if (I.direction) {
       I.direction = false;
-      remove_class(E, 'aux-forward', 'aux-backward');
-      add_class(E, 'aux-' + O.direction);
+      removeClass(E, 'aux-forward', 'aux-backward');
+      addClass(E, 'aux-' + O.direction);
     }
 
     if (I.animation) {
       I.animation = false;
-      remove_class(E, 'aux-vertical', 'aux-horizontal');
+      removeClass(E, 'aux-vertical', 'aux-horizontal');
       switch (O.animation) {
         case 'vertical':
-          add_class(E, 'aux-vertical');
+          addClass(E, 'aux-vertical');
           break;
         case 'horizontal':
-          add_class(E, 'aux-horizontal');
+          addClass(E, 'aux-horizontal');
           break;
         default:
           warn('Unsupported animation', O.animation);
@@ -237,13 +237,13 @@ export const Pages = define_class({
 
     if (I.show) {
       I.show = false;
-      const pages = this.get_pages();
+      const pages = this.getPages();
 
       for (let i = 0; i < pages.length; i++) {
         const page = pages[i];
 
-        if (i === O.show) page.add_class('aux-active');
-        else page.remove_class('aux-active');
+        if (i === O.show) page.addClass('aux-active');
+        else page.removeClass('aux-active');
       }
     }
   },
@@ -251,7 +251,7 @@ export const Pages = define_class({
   /**
    * Adds an array of pages.
    *
-   * @method Pages#add_pages
+   * @method Pages#addPages
    *
    * @property {Array<Page|DOMNode|String>} [options.pages=[]] -
    *   An array of either an instance of {@link Page} (or derivate),
@@ -259,20 +259,20 @@ export const Pages = define_class({
    *
    * @example
    * var p = new Pages();
-   * p.add_pages(['foobar']);
+   * p.addPages(['foobar']);
    *
    */
-  add_pages: function (pages) {
-    for (var i = 0; i < pages.length; i++) this.add_page(pages[i]);
+  addPages: function (pages) {
+    for (var i = 0; i < pages.length; i++) this.addPage(pages[i]);
   },
 
-  create_page: function (content, options) {
+  createPage: function (content, options) {
     if (typeof content === 'string' || content === void 0) {
       if (!options) options = {};
       const page = new Page(options);
       page.element.innerHTML = content;
       return page;
-    } else if (is_dom_node(content)) {
+    } else if (isDomNode(content)) {
       if (content.tagName === 'TEMPLATE') {
         content = content.content.cloneNode(true);
       }
@@ -296,7 +296,7 @@ export const Pages = define_class({
    * Adds a {@link Page} to the pages and a corresponding {@link Button}
    *   to the pages {@link Navigation}.
    *
-   * @method Pages#add_page
+   * @method Pages#addPage
    *
    * @param {Page|DOMNode|String} content - The content of the page.
    *   Either an instance of a {@link Page} (or derivate) widget,
@@ -309,9 +309,9 @@ export const Pages = define_class({
    *   either a string or a DOMNode.
    * @emits Pages#added
    */
-  add_page: function (content, position, options) {
-    const page = this.create_page(content, options);
-    const pages = this.get_pages();
+  addPage: function (content, position, options) {
+    const page = this.createPage(content, options);
+    const pages = this.getPages();
     const element = this.element;
     const length = pages.length;
 
@@ -326,8 +326,8 @@ export const Pages = define_class({
 
     if (page.parent !== this) {
       // if this page is a web component, the above appendChild would have
-      // already triggered a call to add_child
-      this.add_child(page);
+      // already triggered a call to addChild
+      this.addChild(page);
     }
 
     return page;
@@ -335,15 +335,15 @@ export const Pages = define_class({
   /**
    * Removes a page from the Pages.
    *
-   * @method Pages#remove_page
+   * @method Pages#removePage
    *
    * @param {integer|Page} page - The container to remove. Either an
-   *   index or the {@link Page} widget generated by <code>add_page</code>.
+   *   index or the {@link Page} widget generated by <code>addPage</code>.
    * @param {Boolean} destroy - destroy the {@link Page} after removal.
    *
    * @emits Pages#removed
    */
-  remove_page: function (page, destroy) {
+  removePage: function (page, destroy) {
     let position = -1;
 
     if (page instanceof Page) {
@@ -359,8 +359,8 @@ export const Pages = define_class({
 
     if (this.pages.at(position) === page) {
       // NOTE: if we remove a child which is a web component,
-      // it will itself call remove_child
-      this.remove_child(page);
+      // it will itself call removeChild
+      this.removeChild(page);
     }
 
     if (destroy) page.destroy();
@@ -372,7 +372,7 @@ export const Pages = define_class({
    * @method Pages#empty
    */
   empty: function () {
-    while (this.get_pages().length) this.remove_page(0);
+    while (this.getPages().length) this.removePage(0);
   },
 
   current: function () {
@@ -393,7 +393,7 @@ export const Pages = define_class({
    * @returns {Boolean} True if successful, false otherwise.
    */
   first: function () {
-    if (this.get_pages().length) {
+    if (this.getPages().length) {
       this.set('show', 0);
       return true;
     }
@@ -408,7 +408,7 @@ export const Pages = define_class({
    * @returns {Boolean} True if successful, false otherwise.
    */
   last: function () {
-    const length = this.get_pages().length;
+    const length = this.getPages().length;
     if (length) {
       this.set('show', length - 1);
       return true;
@@ -426,7 +426,7 @@ export const Pages = define_class({
    */
   next: function () {
     const show = this.options.show;
-    const length = this.get_pages().length;
+    const length = this.getPages().length;
 
     if (show + 1 < length) {
       this.set('show', show + 1);
@@ -445,7 +445,7 @@ export const Pages = define_class({
    */
   prev: function () {
     const show = this.options.show;
-    const length = this.get_pages().length;
+    const length = this.getPages().length;
 
     if (show === 0) return false;
 
@@ -464,17 +464,17 @@ export const Pages = define_class({
         }
       }
     } else if (key === 'pages') {
-      this.options.pages.forEach((page) => this.remove_page(page, true));
-      value = this.add_pages(value || []);
+      this.options.pages.forEach((page) => this.removePage(page, true));
+      value = this.addPages(value || []);
     }
     return Container.prototype.set.call(this, key, value);
   },
-  get_pages: function () {
+  getPages: function () {
     return this.pages.getList();
   },
 });
 
-export const Page = define_class({
+export const Page = defineClass({
   /**
    * Page is the child widget to be used in {@link Pages}.
    *

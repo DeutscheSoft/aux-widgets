@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { Meter } from './../widgets/meter.js';
 
@@ -29,6 +29,6 @@ import { Meter } from './../widgets/meter.js';
  * @class MeterComponent
  * @implements Component
  */
-export const MeterComponent = component_from_widget(Meter);
+export const MeterComponent = componentFromWidget(Meter);
 
-define_component('meter', MeterComponent);
+defineComponent('meter', MeterComponent);

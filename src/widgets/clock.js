@@ -17,17 +17,17 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { Widget } from './widget.js';
 import { Circular } from './circular.js';
-import { set_text, element, add_class, get_style } from '../utils/dom.js';
-import { make_svg } from '../utils/svg.js';
+import { setText, element, addClass, getStyle } from '../utils/dom.js';
+import { makeSVG } from '../utils/svg.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { S } from '../dom_scheduler.js';
 
-var format_viewbox = FORMAT('0 0 %d %d');
+var formatViewbox = FORMAT('0 0 %d %d');
 
-function draw_time(force) {
+function drawTime(force) {
   var tmp, drawn;
   var O = this.options;
   var t = O.time;
@@ -47,17 +47,17 @@ function draw_time(force) {
 
   var args = [t, O.fps, O.months, O.days];
   if ((tmp = O.label.apply(this, args)) !== this.__label || force) {
-    set_text(this._label, tmp);
+    setText(this._label, tmp);
     this.__label = tmp;
     drawn = true;
   }
   if ((tmp = O.label_upper.apply(this, args)) !== this.__upper || force) {
-    set_text(this._label_upper, tmp);
+    setText(this._label_upper, tmp);
     this.__upper = tmp;
     drawn = true;
   }
   if ((tmp = O.label_lower.apply(this, args)) !== this.__lower || force) {
-    set_text(this._label_lower, tmp);
+    setText(this._label_lower, tmp);
     this.__lower = tmp;
     drawn = true;
   }
@@ -72,7 +72,7 @@ function draw_time(force) {
      */
     this.emit('timedrawn', O.time);
 }
-function set_labels() {
+function setLabels() {
   var O = this.options;
   var E = this._label;
   var s = O.label(
@@ -89,7 +89,7 @@ function set_labels() {
     O.months,
     O.days
   );
-  set_text(E, s);
+  setText(E, s);
 
   E.setAttribute('transform', '');
 
@@ -99,10 +99,10 @@ function set_labels() {
     function () {
       var bb = E.getBoundingClientRect();
       if (bb.width === 0) return; // we are hidden
-      var mleft = parseInt(get_style(E, 'margin-left')) || 0;
-      var mright = parseInt(get_style(E, 'margin-right')) || 0;
-      var mtop = parseInt(get_style(E, 'margin-top')) || 0;
-      var mbottom = parseInt(get_style(E, 'margin-bottom')) || 0;
+      var mleft = parseInt(getStyle(E, 'margin-left')) || 0;
+      var mright = parseInt(getStyle(E, 'margin-right')) || 0;
+      var mtop = parseInt(getStyle(E, 'margin-top')) || 0;
+      var mbottom = parseInt(getStyle(E, 'margin-bottom')) || 0;
       var space = O.size - mleft - mright - this._margin * 2;
       var scale = space / bb.width;
       var pos = O.size / 2;
@@ -144,7 +144,7 @@ function set_labels() {
                       scale * O.label_scale +
                       ')'
                   );
-                  draw_time.call(this, true);
+                  drawTime.call(this, true);
                 }.bind(this),
                 1
               );
@@ -185,7 +185,7 @@ function onhide() {
   }
 }
 
-export const Clock = define_class({
+export const Clock = defineClass({
   /**
    * Clock shows a customized clock with circulars displaying hours, minutes
    * and seconds. It additionally offers three freely formattable labels.
@@ -319,12 +319,12 @@ export const Clock = define_class({
     /**
      * @member {SVGImage} Clock#svg - The main SVG image.
      */
-    this.svg = S = make_svg('svg');
+    this.svg = S = makeSVG('svg');
 
     /**
      * @member {SVGText} Clock#_label - The center label showing the time. Has class<code>.aux-label</code>
      */
-    this._label = make_svg('text', {
+    this._label = makeSVG('text', {
       class: 'aux-label',
       'text-anchor': 'middle',
       style: 'dominant-baseline: central;',
@@ -332,14 +332,14 @@ export const Clock = define_class({
     /**
      * @member {SVGText} Clock#_label_upper - The upper label showing the day. Has class<code>.aux-upperlabel</code>
      */
-    this._label_upper = make_svg('text', {
+    this._label_upper = makeSVG('text', {
       class: 'aux-upperlabel',
       'text-anchor': 'middle',
       style: 'dominant-baseline: central;',
     });
     /** @member {SVGText} Clock#_label_lower - The lower label showing the date. Has class<code>.aux-lowerlabel</code>
      */
-    this._label_lower = make_svg('text', {
+    this._label_lower = makeSVG('text', {
       class: 'aux-lowerlabel',
       'text-anchor': 'middle',
       style: 'dominant-baseline: central;',
@@ -370,16 +370,16 @@ export const Clock = define_class({
       Object.assign({}, circ_options, { max: 12, class: 'aux-hours' })
     );
 
-    this.add_child(this.circulars.seconds);
-    this.add_child(this.circulars.minutes);
-    this.add_child(this.circulars.hours);
+    this.addChild(this.circulars.seconds);
+    this.addChild(this.circulars.minutes);
+    this.addChild(this.circulars.hours);
 
     // start the clock
     this.__timeout = timeout.bind(this);
   },
 
   draw: function (O, element) {
-    add_class(element, 'aux-clock');
+    addClass(element, 'aux-clock');
     element.appendChild(this.svg);
 
     Widget.prototype.draw.call(this, O, element);
@@ -392,7 +392,7 @@ export const Clock = define_class({
     Widget.prototype.redraw.call(this);
 
     if (I.size) {
-      this.svg.setAttribute('viewBox', format_viewbox(O.size, O.size));
+      this.svg.setAttribute('viewBox', formatViewbox(O.size, O.size));
     }
 
     if (
@@ -415,7 +415,7 @@ export const Clock = define_class({
           circ.set('size', O.size);
           circ.set('margin', margin);
           margin += O.thickness;
-          margin += circ._get_stroke();
+          margin += circ.getStroke();
           margin += O.margin;
         } else {
           circ.set('show_base', false);
@@ -427,18 +427,18 @@ export const Clock = define_class({
       } else {
         this._margin = margin;
       }
-      // force set_labels
+      // force setLabels
       I.label = true;
     }
 
     if (I.validate('label', 'months', 'days', 'size', 'label_scale')) {
-      set_labels.call(this);
+      setLabels.call(this);
     }
 
     if (
       I.validate('time', 'label', 'label_upper', 'label_lower', 'label_scale')
     ) {
-      draw_time.call(this, false);
+      drawTime.call(this, false);
     }
   },
 

@@ -23,7 +23,7 @@
  * @module utils/svg
  */
 
-import { get_style, has_class, get_tag } from './dom.js';
+import { getStyle, hasClass, getTag } from './dom.js';
 
 const data_store = new WeakMap();
 
@@ -65,11 +65,11 @@ function retrieve(e, key) {
 /**
  * Move SVG for some sub-pixel if their position in viewport is not int.
  * @param {SVGElement} svg - The SVG to manipulate
- * @function seat_svg
+ * @function seatSVG
  */
-export function seat_svg(e) {
+export function seatSVG(e) {
   if (retrieve(e, 'margin-left') === null) {
-    store(e, 'margin-left', parseFloat(get_style(e, 'margin-left')));
+    store(e, 'margin-left', parseFloat(getStyle(e, 'margin-left')));
   } else {
     e.style.marginLeft = retrieve(e, 'margin-left') || 0;
   }
@@ -80,12 +80,12 @@ export function seat_svg(e) {
     if (x < 0.5) l -= x;
     else l += 1 - x;
   }
-  if (e.parentElement && get_style(e.parentElement, 'text-align') === 'center')
+  if (e.parentElement && getStyle(e.parentElement, 'text-align') === 'center')
     l += 0.5;
   e.style.marginLeft = l + 'px';
   //console.log(l);
   if (retrieve(e, 'margin-top') === null) {
-    store(e, 'margin-top', parseFloat(get_style(e, 'margin-top')));
+    store(e, 'margin-top', parseFloat(getStyle(e, 'margin-top')));
   } else {
     e.style.marginTop = retrieve(e, 'margin-top') || 0;
   }
@@ -104,12 +104,12 @@ export function seat_svg(e) {
  * Searches for all SVG that don't have the class "svg-fixed" and re-positions them
  * in order to avoid blurry lines.
  * @param {HTMLElement} parent - If set only children of parent are searched
- * @function seat_all_svg
+ * @function seatAllSVG
  */
-export function seat_all_svg(parent) {
-  var a = get_tag('svg', parent);
+export function seatAllSVG(parent) {
+  var a = getTag('svg', parent);
   for (var i = 0; i < a.length; i++) {
-    if (!has_class(a[i], 'svg-fixed')) seat_svg(a[i]);
+    if (!hasClass(a[i], 'svg-fixed')) seatSVG(a[i]);
   }
 }
 
@@ -119,7 +119,7 @@ export function seat_all_svg(parent) {
  * @param {object} arguments - The attributes to set onto the element
  * @returns {SVGElement}
  */
-export function make_svg(tag, args) {
+export function makeSVG(tag, args) {
   var el = document.createElementNS('http://www.w3.org/2000/svg', 'svg:' + tag);
   for (var k in args) el.setAttribute(k, args[k]);
   return el;

@@ -17,11 +17,11 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { Widget } from './widget.js';
 import { Tag } from './tag.js';
 
-export const Tags = define_class({
+export const Tags = defineClass({
   Extends: Widget,
 
   _options: Object.assign(Object.create(Widget.prototype._options), {
@@ -36,11 +36,11 @@ export const Tags = define_class({
     this.tag_to_name = new Map();
     Widget.prototype.initialize.call(this, options);
   },
-  tag_to_string: function (tag) {
+  tagToString: function (tag) {
     if (typeof tag == 'string') {
       return tag;
     } else if (Tag.prototype.isPrototypeOf(tag)) {
-      if (!tag.is_destructed()) {
+      if (!tag.isDestructed()) {
         return tag.options.tag;
       } else {
         return this.tag_to_name.get(tag);
@@ -49,16 +49,16 @@ export const Tags = define_class({
       return tag.tag;
     }
   },
-  find_tag: function (tag) {
-    return this.tags.get(this.tag_to_string(tag));
+  findTag: function (tag) {
+    return this.tags.get(this.tagToString(tag));
   },
-  request_tag: function (tag, options) {
+  requestTag: function (tag, options) {
     var C = this.options.tag_class;
-    var t = this.tag_to_string(tag);
+    var t = this.tagToString(tag);
 
     if (this.tags.has(t)) {
       tag = this.tags.get(t);
-      if (!tag.is_destructed()) return tag;
+      if (!tag.isDestructed()) return tag;
     }
 
     if (typeof tag == 'string') {
@@ -74,9 +74,9 @@ export const Tags = define_class({
     this.tag_to_name.set(tag, t);
     return tag;
   },
-  remove_tag: function (tag) {
-    tag = this.find_tag(tag);
-    this.tags.delete(this.tag_to_string(tag));
+  removeTag: function (tag) {
+    tag = this.findTag(tag);
+    this.tags.delete(this.tagToString(tag));
     this.tag_to_name.delete(tag);
   },
   empty: function () {
