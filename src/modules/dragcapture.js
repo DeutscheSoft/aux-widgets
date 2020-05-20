@@ -16,6 +16,7 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
+
 import { define_class } from './../widget_helpers.js';
 import { Module } from './module.js';
 import { add_event_listener, remove_event_listener } from '../utils/events.js';

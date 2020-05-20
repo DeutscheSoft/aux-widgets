@@ -16,6 +16,7 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
+
 import { define_class, add_static_event } from '../widget_helpers.js';
 import { define_child_widget } from '../child_widget.js';
 import { LevelMeter } from './levelmeter.js';

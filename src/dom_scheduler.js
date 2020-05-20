@@ -16,6 +16,7 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
+
 import { warn, log } from './utils/log.js';
 import { sprintf } from './utils/sprintf.js';
 

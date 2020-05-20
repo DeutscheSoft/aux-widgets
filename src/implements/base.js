@@ -1,10 +1,3 @@
-import { warn } from './../utils/log.js';
-import {
-  remove_event_listener,
-  add_event_listener,
-} from './../utils/events.js';
-import { define_class, add_event, remove_event } from './../widget_helpers.js';
-
 /*
  * This file is part of AUX.
  *
@@ -23,6 +16,14 @@ import { define_class, add_event, remove_event } from './../widget_helpers.js';
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
+
+import { warn } from './../utils/log.js';
+import {
+  remove_event_listener,
+  add_event_listener,
+} from './../utils/events.js';
+import { define_class, add_event, remove_event } from './../widget_helpers.js';
+
 function call_handler(self, fun, args) {
   try {
     return fun.apply(self, args);
