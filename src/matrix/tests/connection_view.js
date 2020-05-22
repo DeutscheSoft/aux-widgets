@@ -40,8 +40,6 @@ test('ConnectionDataView basics', () => {
     const labela = a.label;
     const labelb = b.label;
 
-    console.log('sorting %o and %o', labela, labelb);
-
     if (labela > labelb) return -1;
     if (labela === labelb) return 0;
     return 1;
@@ -98,9 +96,8 @@ test('ConnectionDataView basics', () => {
 
     const connection = matrix.connect(ports[2], ports[1]);
 
-    console.log(tmp);
-
-    assert(tmp[0][1] === connection);
+    assert(tmp[2][3] === connection);
+    assert(tmp[3][2] === connection);
   }
 
   connectionview.destroy();
