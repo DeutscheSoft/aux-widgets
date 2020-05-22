@@ -13,3 +13,4 @@ export * from './buttons.js';
 export * from './options.js';
 export * from './pages.js';
 export * from './pager.js';
+export * from './subscriptions.js';

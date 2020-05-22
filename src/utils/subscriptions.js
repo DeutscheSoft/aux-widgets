@@ -100,15 +100,23 @@ export function unsubscribe_subscriptions(subscriptions) {
  */
 export class Subscription {
   constructor(subscription) {
-    if (subscription !== void 0) {
-      if (subscription instanceof Subscription) {
-        subscription = subscription.sub;
-      }
+    if (subscription === void 0) {
+      this.sub = init_subscriptions();
+    } else if (
+      typeof subscription === 'function' ||
+      Array.isArray(subscription)
+    ) {
+      this.sub = subscription;
     } else {
-      subscription = init_subscriptions();
+      if (
+        typeof subscription === 'object' &&
+        typeof subscription.unsubscribe === 'function'
+      ) {
+        this.sub = subscription.unsubscribe.bind(subscription);
+      } else {
+        throw new TypeError('Unsupported argument.');
+      }
     }
-
-    this.sub = subscription;
   }
 
   /**
@@ -135,10 +143,13 @@ export class Subscriptions extends Subscription {
    * Add a subscription.
    */
   add(subscription) {
-    if (subscription instanceof Subscription) {
-      subscription = subscription.sub;
-    } else {
-      this.sub = add_subscription(this.sub, subscription);
+    if (
+      typeof subscription === 'object' &&
+      typeof subscription.unsubscribe === 'function'
+    ) {
+      subscription = subscription.unsubscribe.bind(subscription);
     }
+
+    this.sub = add_subscription(this.sub, subscription);
   }
 }
