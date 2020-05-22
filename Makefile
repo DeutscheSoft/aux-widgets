@@ -1,3 +1,8 @@
+.PHONY: prettier icons all
+
+all:
+	@echo tell me what do to
+
 icons: Makefile
 	./tools/icongen.py -p aux- styles/fonts/AUXIcons
 	./tools/icongen.py -p aux- styles/fonts/AUXShapes
@@ -10,3 +15,6 @@ icons: Makefile
 	./tools/icongen.py -c -h styles/fonts/AUXShapes700
 	./tools/icongen.py -c -h styles/fonts/AUXShapes800
 	./tools/icongen.py -c -h styles/fonts/AUXShapes900
+
+prettier:
+	cd prettier && npm run prettier
