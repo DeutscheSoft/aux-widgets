@@ -1,7 +1,6 @@
 .PHONY: prettier icons all
 
-all:
-	@echo tell me what do to
+all: check
 
 icons: Makefile
 	./tools/icongen.py -p aux- styles/fonts/AUXIcons
@@ -18,3 +17,6 @@ icons: Makefile
 
 prettier:
 	cd prettier && npm run prettier
+
+check:
+	cd jshint && npm run check
