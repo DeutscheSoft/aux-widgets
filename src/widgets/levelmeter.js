@@ -198,6 +198,18 @@ export const LevelMeter = defineClass({
   destroy: function () {
     Meter.prototype.destroy.call(this);
   },
+  effectiveValue: function () {
+    const O = this.options;
+
+    return effectiveValue(
+      +O.value,
+      +O.base,
+      +O.falling,
+      +O.falling_duration,
+      +O.falling_init,
+      +this.value_time.value
+    );
+  },
   /**
    * Resets the value.
    *
@@ -208,17 +220,7 @@ export const LevelMeter = defineClass({
   resetValue: function () {
     let O = this.options;
     clearTimeout(this.__lto);
-    this.set(
-      'value_label',
-      effectiveValue(
-        +O.value,
-        +O.base,
-        +O.falling,
-        +O.falling_duration,
-        +O.falling_init,
-        +this.value_time.value
-      )
-    );
+    this.set('value_label', this.effectiveValue());
     /**
      * Is fired when the value label was reset.
      *
@@ -251,18 +253,7 @@ export const LevelMeter = defineClass({
    * @emits LevelMeter#resettop
    */
   resetTop: function () {
-    let O = this.options;
-    this.set(
-      'top',
-      effectiveValue(
-        +O.value,
-        +O.base,
-        +O.falling,
-        +O.falling_duration,
-        +O.falling_init,
-        +this.value_time.value
-      )
-    );
+    this.set('top', this.effectiveValue());
     /**
      * Is fired when the top hold was reset.
      *
@@ -278,18 +269,7 @@ export const LevelMeter = defineClass({
    * @emits LevelMeter#resetbottom
    */
   resetBottom: function () {
-    let O = this.options;
-    this.set(
-      'bottom',
-      effectiveValue(
-        +O.value,
-        +O.base,
-        +O.falling,
-        +O.falling_duration,
-        +O.falling_init,
-        +this.value_time.value
-      )
-    );
+    this.set('bottom', this.effectiveValue());
     /**
      * Is fired when the bottom hold was reset.
      *
@@ -329,14 +309,7 @@ export const LevelMeter = defineClass({
 
     // this is a bit unelegant...
     if (falling) {
-      value = effectiveValue(
-        +O.value,
-        +O.base,
-        +O.falling,
-        +O.falling_duration,
-        +O.falling_init,
-        +this.value_time.value
-      );
+      value = this.effectiveValue();
       // continue animation
       if (value !== base) {
         this.invalid.value = true;
@@ -401,14 +374,7 @@ export const LevelMeter = defineClass({
       value = this.snap(value);
 
       if (O.falling) {
-        var v = effectiveValue(
-          +O.value,
-          +O.base,
-          +O.falling,
-          +O.falling_duration,
-          +O.falling_init,
-          +this.value_time.value
-        );
+        var v = this.effectiveValue();
         if (
           (v >= base && value >= base && value < v) ||
           (v <= base && value <= base && value > v)
