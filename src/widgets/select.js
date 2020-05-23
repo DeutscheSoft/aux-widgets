@@ -40,7 +40,6 @@ import {
   removeClass,
 } from '../utils/dom.js';
 import { S } from '../dom_scheduler.js';
-import { error } from '../utils/log.js';
 
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -104,11 +103,6 @@ function lowRemoveEntry(entry) {
   var id = entries.indexOf(entry);
 
   if (id === -1) {
-    error(
-      'element %o not found in %o',
-      entry.get('value'),
-      entries.map((e) => e.get('value'))
-    );
     throw new Error('Entry removed twice.');
   }
 

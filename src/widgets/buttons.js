@@ -33,30 +33,6 @@ import { ChildWidgets } from '../utils/child_widgets.js';
  * @param {mixed} value - The new value of the option
  */
 
-//function calculateSelect(buttons) {
-//const list = buttons.getButtons();
-//const old_select = buttons.get('select');
-
-//const should_be_selected = list
-//.filter((b) => b.get('state'))
-//.map((b) => list.indexOf(b));
-//const are_selected = Array.isArray(old_select)
-//? old_select
-//: old_select === -1
-//? []
-//: [old_select];
-
-//if (are_selected.length !== should_be_selected.length)
-//return should_be_selected;
-
-//for (let i = 0; i < are_selected.length; i++) {
-//if (should_be_selected.indexOf(are_selected[i]) === -1)
-//return should_be_selected;
-//}
-
-//return old_select;
-//}
-
 function updateSelect(select, position, add) {
   if (Array.isArray(select)) {
     if (add === select.includes(position)) return select;

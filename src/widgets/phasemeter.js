@@ -60,7 +60,4 @@ export const PhaseMeter = defineClass({
     }
     LevelMeter.prototype.draw.call(this, O, element);
   },
-  static_events: {
-    set_value: function (v) {},
-  },
 });
