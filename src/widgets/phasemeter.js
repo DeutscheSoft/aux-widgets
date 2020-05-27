@@ -37,12 +37,8 @@ export const PhaseMeter = defineClass({
     layout: 'top',
     min: -1,
     max: 1,
-    scale_base: 0,
     base: 0,
     levels: [0.05, 0.1, 0.5, 1],
-    format_labels: function (v) {
-      return (v > 0 ? '+' : v < 0 ? '-' : '') + v.toFixed(1);
-    },
   },
   initialize: function (options) {
     if (!options.element) options.element = element('div');
@@ -54,7 +50,14 @@ export const PhaseMeter = defineClass({
   },
   draw: function (O, element) {
     addClass(element, 'aux-phasemeter');
-
+    if (!O.hasOwnProperty("scale.labels")) {
+      this.scale.set("labels", function (v) {
+        return (v > 0 ? '+' : v < 0 ? '-' : '') + v.toFixed(1);
+      });
+    }
+    if (!O.hasOwnProperty("scale.base")) {
+      this.scale.set("base", 0);
+    }
     LevelMeter.prototype.draw.call(this, O, element);
   },
   static_events: {

@@ -134,9 +134,6 @@ export const Meter = defineClass({
    * Meter uses {@link Gradient} and contains a {@link Scale} widget.
    * Meter inherits all options from {@link Scale}.
    *
-   * Note that the two options <code>format_labels</code> and
-   * <code>scale_base</code> have different names here.
-   *
    * Note that level meters with high update frequencies can be very demanding when it comes
    * to rendering performance. These performance requirements can be reduced by increasing the
    * segment size using the <code>segment</code> option. Using a segment, the different level
@@ -177,10 +174,8 @@ export const Meter = defineClass({
    * @property {Boolean} [options.show_label=false] - If set to <code>true</code> a label is displayed.
    * @property {Number} [options.label=false] - The title of the Meter. Set to `false` to hide it.
    * @property {Boolean} [options.show_scale=true] - Set to <code>false</code> to hide the scale.
-   * @property {Number|Boolean} [options.scale_base=false] - Base of the meter scale, see {@link Scale} for more information.
    * @property {Boolean} [options.show_labels=true] - If <code>true</code>, display labels on the
    *   scale.
-   * @property {Function} [options.format_labels=FORMAT("%.2f")] - Function for formatting the
    *   scale labels. This is passed to Scale as option <code>labels</code>.
    * @property {Number} [options.value_label=0] - The value to be drawn in the value label.
    * @property {Boolean} [options.sync_value=true] - Synchronize the value on the bar with
@@ -204,9 +199,7 @@ export const Meter = defineClass({
       label: 'string|boolean',
       sync_value: 'boolean',
       format_value: 'function',
-      scale_base: 'number|boolean',
       show_labels: 'boolean',
-      format_labels: 'function',
       background: 'string|boolean',
       gradient: 'object|boolean',
     }
@@ -221,9 +214,7 @@ export const Meter = defineClass({
     sync_value: true,
     format_value: FORMAT('%.2f'),
     levels: [1, 5, 10], // array of steps where to draw labels
-    scale_base: false,
     show_labels: true,
-    format_labels: FORMAT('%.2f'),
     background: false,
     gradient: false,
   },
@@ -493,9 +484,8 @@ export const Meter = defineClass({
  */
 defineChildWidget(Meter, 'scale', {
   create: Scale,
-  map_options: {
-    format_labels: 'labels',
-    scale_base: 'base',
+  default_options: {
+    labels: FORMAT("%.2f"),
   },
   inherit_options: true,
   show: true,
