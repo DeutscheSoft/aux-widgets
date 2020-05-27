@@ -369,7 +369,6 @@ defineChildWidget(Fader, 'value', {
   userset_delegate: true,
   map_options: {
     value: 'value',
-    format: 'format',
   },
   toggle_class: true,
 });
