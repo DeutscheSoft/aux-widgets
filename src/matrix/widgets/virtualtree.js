@@ -17,13 +17,13 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class, define_child_element } from './../../widget_helpers.js';
+import { defineClass, defineChildElement } from './../../widget_helpers.js';
 import {
-  inner_width,
-  inner_height,
-  scrollbar_size,
-  add_class,
-  remove_class,
+  innerWidth,
+  innerHeight,
+  scrollbarSize,
+  addClass,
+  removeClass,
 } from './../../utils/dom.js';
 import { error } from './../../utils/log.js';
 import { sprintf } from '../../index.js';
@@ -33,9 +33,9 @@ import { subscribeDOMEvent } from '../../utils/events.js';
 import { Container } from './../../widgets/container.js';
 import { VirtualTreeEntry } from './virtualtreeentry.js';
 import { Timer } from '../../utils/timers.js';
-import { resize_array_mod } from '../models.js';
+import { resizeArrayMod } from '../models.js';
 
-const SCROLLBAR_SIZE = scrollbar_size();
+const SCROLLBAR_SIZE = scrollbarSize();
 
 function collapse(state) {
   const element = this.data;
@@ -45,7 +45,7 @@ function collapse(state) {
   virtualtreeview.collapseGroup(element, !virtualtreeview.isCollapsed(element));
 }
 
-function subscribe_all() {
+function subscribeAll() {
   const O = this.options;
   const virtualtreeview = O.virtualtreeview;
 
@@ -95,22 +95,22 @@ function subscribe_all() {
   subs.add(
     virtualtreeview.subscribeAmount((amount) => {
       const create = (index) => {
-        const entry = this.create_entry();
+        const entry = this.createEntry();
         this._scroller.appendChild(entry.element);
         setEntryPosition(entry, index);
         entry.on('collapse', collapse);
-        this.add_child(entry);
+        this.addChild(entry);
         return entry;
       };
 
       const remove = (entry) => {
         entry.element.remove();
         entry.off('collapse', collapse);
-        this.remove_child(entry);
+        this.removeChild(entry);
         entry.destroy();
       };
 
-      resize_array_mod(
+      resizeArrayMod(
         this.entries,
         amount,
         virtualtreeview.startIndex,
@@ -129,17 +129,17 @@ function subscribe_all() {
       if (element) {
         if (entry.hidden()) {
           entry.update('visible', true);
-          this.show_child(entry);
+          this.showChild(entry);
         }
       } else if (!entry.hidden()) {
         entry.update('visible', false);
-        this.hide_child(entry);
+        this.hideChild(entry);
       }
     })
   );
 }
 
-export const VirtualTree = define_class({
+export const VirtualTree = defineClass({
   Extends: Container,
   _options: Object.assign(Object.create(Container.prototype._options), {
     _amount: 'number',
@@ -160,7 +160,7 @@ export const VirtualTree = define_class({
   },
   static_events: {
     set_size: function (v) {
-      this.trigger_resize();
+      this.triggerResize();
     },
     set_virtualtreeview: function (virtualtreeview) {
       this.virtualtreeview_subs.unsubscribe();
@@ -184,7 +184,7 @@ export const VirtualTree = define_class({
       this.emit('scrollTopChanged', this._scrollbar.scrollTop);
     });
   },
-  create_entry: function () {
+  createEntry: function () {
     return new this.options.entry_class();
   },
   draw: function (options, element) {
@@ -201,7 +201,7 @@ export const VirtualTree = define_class({
     );
     if (options.virtualtreeview)
       this.set('virtualtreeview', options.virtualtreeview);
-    this.trigger_resize();
+    this.triggerResize();
   },
   scrollTo: function (position) {
     this._scroll_timer.restart(100);
@@ -222,7 +222,7 @@ export const VirtualTree = define_class({
       const virtualtreeview = O.virtualtreeview;
 
       if (virtualtreeview) {
-        subscribe_all.call(this);
+        subscribeAll.call(this);
         virtualtreeview.setAmount(O._amount);
         virtualtreeview.scrollStartIndex(
           O._startIndex - virtualtreeview.startIndex
@@ -271,10 +271,10 @@ export const VirtualTree = define_class({
   },
 });
 
-define_child_element(VirtualTree, 'scrollbar', {
+defineChildElement(VirtualTree, 'scrollbar', {
   show: true,
 });
-define_child_element(VirtualTree, 'scroller', {
+defineChildElement(VirtualTree, 'scroller', {
   show: true,
   append: function () {
     this._scrollbar.appendChild(this._scroller);

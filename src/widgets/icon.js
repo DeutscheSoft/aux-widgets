@@ -17,16 +17,11 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  element,
-  add_class,
-  is_class_name,
-  remove_class,
-} from './../utils/dom.js';
-import { define_class } from './../widget_helpers.js';
+import { element, addClass, isClassName, removeClass } from './../utils/dom.js';
+import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 
-export const Icon = define_class({
+export const Icon = defineClass({
   /**
    * Icon represents a <code>&lt;DIV></code> element showing either
    * icons from the AUX font or dedicated image files as CSS background.
@@ -56,7 +51,7 @@ export const Icon = define_class({
     this._icon_old = [];
   },
   draw: function (O, element) {
-    add_class(element, 'aux-icon');
+    addClass(element, 'aux-icon');
 
     Widget.prototype.draw.call(this, O, element);
   },
@@ -71,14 +66,14 @@ export const Icon = define_class({
       I.icon = false;
       var old = this._icon_old;
       for (var i = 0; i < old.length; i++) {
-        if (old[i] && is_class_name(old[i])) {
-          remove_class(E, old[i]);
+        if (old[i] && isClassName(old[i])) {
+          removeClass(E, old[i]);
         }
       }
       this._icon_old = [];
-      if (is_class_name(O.icon)) {
+      if (isClassName(O.icon)) {
         E.style['background-image'] = null;
-        if (O.icon) add_class(E, O.icon);
+        if (O.icon) addClass(E, O.icon);
       } else if (O.icon) {
         E.style['background-image'] = 'url("' + O.icon + '")';
       }

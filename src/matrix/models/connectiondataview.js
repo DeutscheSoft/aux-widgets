@@ -21,29 +21,29 @@
  * @module matrix
  */
 
-import { typecheck_instance } from '../../utils/typecheck.js';
+import { typecheckInstance } from '../../utils/typecheck.js';
 import {
-  init_subscriptions,
-  add_subscription,
-  unsubscribe_subscriptions,
+  initSubscriptions,
+  addSubscription,
+  unsubscribeSubscriptions,
 } from '../../utils/subscriptions.js';
 import {
-  init_subscribers,
-  add_subscriber,
-  remove_subscriber,
-  call_subscribers,
+  initSubscribers,
+  addSubscriber,
+  removeSubscriber,
+  callSubscribers,
 } from '../../utils/subscribers.js';
 import { VirtualTreeDataView } from './virtualtreedataview.js';
 import { Events } from '../../events.js';
-import { call_continuation_if } from './helpers.js';
+import { callContinuationIf } from './helpers.js';
 import { GroupData } from './group.js';
 
 // last argument will be a callback
-function subscribe_many(apis, cb) {
+function subscribeMany(apis, cb) {
   const values = new Array(apis.length);
   const has_value = apis.map(() => false);
   let has_all_values = false;
-  let subscriptions = init_subscriptions();
+  let subscriptions = initSubscriptions();
 
   apis
     .map((api, i) => {
@@ -59,15 +59,15 @@ function subscribe_many(apis, cb) {
       });
     })
     .forEach((sub) => {
-      subscriptions = add_subscription(subscriptions, sub);
+      subscriptions = addSubscription(subscriptions, sub);
     });
 
   return () => {
-    subscriptions = unsubscribe_subscriptions(subscriptions);
+    subscriptions = unsubscribeSubscriptions(subscriptions);
   };
 }
 
-export function resize_array_mod(array, length, offset, create, remove) {
+export function resizeArrayMod(array, length, offset, create, remove) {
   if (length === array.length) return;
 
   const tmp = array.slice();
@@ -96,7 +96,7 @@ export function resize_array_mod(array, length, offset, create, remove) {
   }
 }
 
-function subtract_mod(a, b, n) {
+function subtractMod(a, b, n) {
   let result = (a - b) % n;
 
   if (result < 0) result += n;
@@ -109,7 +109,7 @@ function subtract_mod(a, b, n) {
  */
 export class ConnectionDataView extends Events {
   _addSubscription(sub) {
-    this.subscriptions = add_subscription(this.subscriptions, sub);
+    this.subscriptions = addSubscription(this.subscriptions, sub);
   }
 
   _notifyPair(row_element, column_element, connection) {
@@ -131,10 +131,10 @@ export class ConnectionDataView extends Events {
 
     matrix[n][m] = connection;
 
-    let index1 = startIndex1 + subtract_mod(n, startIndex1, rows.length);
-    let index2 = startIndex2 + subtract_mod(m, startIndex2, columns.length);
+    let index1 = startIndex1 + subtractMod(n, startIndex1, rows.length);
+    let index2 = startIndex2 + subtractMod(m, startIndex2, columns.length);
 
-    call_subscribers(
+    callSubscribers(
       this.subscribers,
       index1,
       index2,
@@ -292,13 +292,13 @@ export class ConnectionDataView extends Events {
     const filter = virtualtreeview.filterFunction;
     const subscribe = (group) => {
       return group.forEachAsync((node) => {
-        return call_continuation_if(node, filter, (node) => {
+        return callContinuationIf(node, filter, (node) => {
           dst.add(node);
 
           if (node instanceof GroupData) {
             let subscriptions = subscribe(node);
 
-            return add_subscription(subscriptions, () => dst.delete(node));
+            return addSubscription(subscriptions, () => dst.delete(node));
           } else {
             this._registerConnectionFor(node);
 
@@ -331,8 +331,8 @@ export class ConnectionDataView extends Events {
   }
 
   constructor(virtualtreeview1, virtualtreeview2) {
-    typecheck_instance(virtualtreeview1, VirtualTreeDataView);
-    typecheck_instance(virtualtreeview2, VirtualTreeDataView);
+    typecheckInstance(virtualtreeview1, VirtualTreeDataView);
+    typecheckInstance(virtualtreeview2, VirtualTreeDataView);
 
     if (virtualtreeview1.matrix !== virtualtreeview2.matrix)
       throw new Error(
@@ -348,10 +348,10 @@ export class ConnectionDataView extends Events {
     // map of all connections. also contains the list of
     // connections in each group as a set
     this.connections = new Map();
-    this.subscriptions = init_subscriptions();
+    this.subscriptions = initSubscriptions();
 
     // subscribers to subscribeElements
-    this.subscribers = init_subscribers();
+    this.subscribers = initSubscribers();
 
     // matrix of currently visible connections
     this.matrix = [];
@@ -365,11 +365,11 @@ export class ConnectionDataView extends Events {
     // maintain the matrix
     this._addSubscription(
       this.subscribeAmount((rows, columns) => {
-        resize_array_mod(this.rows, rows, this.startIndex1);
+        resizeArrayMod(this.rows, rows, this.startIndex1);
 
-        resize_array_mod(this.columns, columns, this.startIndex2);
+        resizeArrayMod(this.columns, columns, this.startIndex2);
 
-        resize_array_mod(
+        resizeArrayMod(
           this.matrix,
           rows,
           this.startIndex1,
@@ -377,7 +377,7 @@ export class ConnectionDataView extends Events {
         );
 
         this.matrix.forEach((row) => {
-          resize_array_mod(row, columns, this.startIndex2);
+          resizeArrayMod(row, columns, this.startIndex2);
         });
       })
     );
@@ -403,7 +403,7 @@ export class ConnectionDataView extends Events {
           // actually update and tell our subscribers
           matrix[i][j] = connection;
 
-          call_subscribers(
+          callSubscribers(
             subscribers,
             index,
             startIndex2 + n,
@@ -436,7 +436,7 @@ export class ConnectionDataView extends Events {
           // actually update and tell our subscribers
           matrix[i][j] = connection;
 
-          call_subscribers(
+          callSubscribers(
             subscribers,
             startIndex1 + n,
             index,
@@ -507,7 +507,7 @@ export class ConnectionDataView extends Events {
     const virtualtreeview1 = this.virtualtreeview1;
     const virtualtreeview2 = this.virtualtreeview2;
 
-    return subscribe_many(
+    return subscribeMany(
       [
         virtualtreeview1.subscribeSize.bind(virtualtreeview1),
         virtualtreeview2.subscribeSize.bind(virtualtreeview2),
@@ -520,7 +520,7 @@ export class ConnectionDataView extends Events {
     const virtualtreeview1 = this.virtualtreeview1;
     const virtualtreeview2 = this.virtualtreeview2;
 
-    return subscribe_many(
+    return subscribeMany(
       [
         virtualtreeview1.subscribeAmount.bind(virtualtreeview1),
         virtualtreeview2.subscribeAmount.bind(virtualtreeview2),
@@ -530,7 +530,7 @@ export class ConnectionDataView extends Events {
   }
 
   subscribeElements(cb) {
-    this.subscribers = add_subscriber(this.subscribers, cb);
+    this.subscribers = addSubscriber(this.subscribers, cb);
 
     const matrix = this.matrix;
     const rows = this.rows;
@@ -548,7 +548,7 @@ export class ConnectionDataView extends Events {
         const j = (startIndex2 + m) % columns.length;
         const column_element = columns[j];
 
-        call_subscribers(
+        callSubscribers(
           cb,
           startIndex1 + n,
           startIndex2 + m,
@@ -560,7 +560,7 @@ export class ConnectionDataView extends Events {
     }
 
     return () => {
-      this.subscribers = remove_subscriber(this.subscribers, cb);
+      this.subscribers = removeSubscriber(this.subscribers, cb);
     };
   }
 
@@ -570,6 +570,6 @@ export class ConnectionDataView extends Events {
 
   destroy() {
     super.destroy();
-    this.subscriptions = unsubscribe_subscriptions(this.subscriptions);
+    this.subscriptions = unsubscribeSubscriptions(this.subscriptions);
   }
 }

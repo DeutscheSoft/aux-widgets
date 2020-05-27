@@ -17,15 +17,15 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { Widget } from './widget.js';
 import { TagNode } from './tagnode.js';
 import { ColorPickerDialog } from './colorpickerdialog.js';
-import { rgb2gray, hex2rgb } from '../utils/colors.js';
+import { RGBToGray, hexToRGB } from '../utils/colors.js';
 
 function remove(e, node) {
   this.emit('remove', node);
-  if (!this.options.async) this.remove_node(node);
+  if (!this.options.async) this.removeNode(node);
 }
 
 function colorize(e) {
@@ -44,7 +44,7 @@ function colorize(e) {
   this.colorpicker = c;
 }
 
-export const Tag = define_class({
+export const Tag = defineClass({
   Extends: Widget,
 
   _options: Object.assign(Object.create(Widget.prototype._options), {
@@ -65,7 +65,7 @@ export const Tag = define_class({
   },
   destroy: function () {
     var l = this.nodes.length;
-    for (var i = 0; i < l; i++) this.remove_node(this.nodes[i]);
+    for (var i = 0; i < l; i++) this.removeNode(this.nodes[i]);
     Widget.prototype.destroy.call(this);
   },
 
@@ -78,7 +78,7 @@ export const Tag = define_class({
         this.nodes[i].element.style.backgroundColor = O.color;
         if (O.color)
           this.nodes[i].element.style.color =
-            rgb2gray(hex2rgb(O.color)) > 0.5 ? 'black' : 'white';
+            RGBToGray(hexToRGB(O.color)) > 0.5 ? 'black' : 'white';
         else this.nodes[i].element.style.color = null;
       }
     }
@@ -89,7 +89,7 @@ export const Tag = define_class({
     }
     Widget.prototype.redraw.call(this);
   },
-  remove_node: function (node) {
+  removeNode: function (node) {
     var O = this.options;
     for (var i = 0; i < this.nodes.length; i++) {
       if (this.nodes[i] == node) {
@@ -101,7 +101,7 @@ export const Tag = define_class({
       }
     }
   },
-  create_node: function (options) {
+  createNode: function (options) {
     var O = this.options;
     options = options || {};
     options.color = O.color;

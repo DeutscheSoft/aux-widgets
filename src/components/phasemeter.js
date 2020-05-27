@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { PhaseMeter } from './../widgets/phasemeter.js';
 
@@ -30,6 +30,6 @@ import { PhaseMeter } from './../widgets/phasemeter.js';
  * @class PhaseMeterComponent
  * @implements Component
  */
-export const PhaseMeterComponent = component_from_widget(PhaseMeter);
+export const PhaseMeterComponent = componentFromWidget(PhaseMeter);
 
-define_component('phasemeter', PhaseMeterComponent);
+defineComponent('phasemeter', PhaseMeterComponent);

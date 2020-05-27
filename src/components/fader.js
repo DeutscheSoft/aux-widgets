@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { Fader } from './../widgets/fader.js';
 
@@ -29,6 +29,6 @@ import { Fader } from './../widgets/fader.js';
  * @class FaderComponent
  * @implements Component
  */
-export const FaderComponent = component_from_widget(Fader);
+export const FaderComponent = componentFromWidget(Fader);
 
-define_component('fader', FaderComponent);
+defineComponent('fader', FaderComponent);

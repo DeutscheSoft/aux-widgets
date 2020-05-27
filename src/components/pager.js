@@ -18,20 +18,20 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
-  subcomponent_from_widget,
+  componentFromWidget,
+  defineComponent,
+  subcomponentFromWidget,
 } from './../component_helpers.js';
 import { Pager } from './../widgets/pager.js';
 import { Page } from './../widgets/pages.js';
 
-function add_page(pager, page) {
+function addPage(pager, page) {
   const element = page.element;
-  pager.add_page(element.getAttribute('label'), page);
+  pager.addPage(element.getAttribute('label'), page);
 }
 
-function remove_page(pager, page) {
-  pager.remove_page(page);
+function removePage(pager, page) {
+  pager.removePage(page);
 }
 
 /**
@@ -41,7 +41,7 @@ function remove_page(pager, page) {
  * @class PagerComponent
  * @implements Component
  */
-export const PagerComponent = component_from_widget(Pager);
+export const PagerComponent = componentFromWidget(Pager);
 
 /**
  * WebComponent for the Page widget. Available in the DOM as
@@ -50,7 +50,7 @@ export const PagerComponent = component_from_widget(Pager);
  * @class PageComponent
  * @implements Component
  */
-export const PageComponent = component_from_widget(Page);
+export const PageComponent = componentFromWidget(Page);
 
-define_component('pager', PagerComponent);
-define_component('page', PageComponent);
+defineComponent('pager', PagerComponent);
+defineComponent('page', PageComponent);

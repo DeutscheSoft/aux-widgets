@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { Panorama } from './../widgets/panorama.js';
 
@@ -29,6 +29,6 @@ import { Panorama } from './../widgets/panorama.js';
  * @class PanoramaComponent
  * @implements Component
  */
-export const PanoramaComponent = component_from_widget(Panorama);
+export const PanoramaComponent = componentFromWidget(Panorama);
 
-define_component('panorama', PanoramaComponent);
+defineComponent('panorama', PanoramaComponent);

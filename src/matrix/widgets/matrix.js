@@ -17,21 +17,20 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from './../../widget_helpers.js';
-import { define_child_widget } from './../../child_widget.js';
+import { defineClass } from './../../widget_helpers.js';
+import { defineChildWidget } from './../../child_widget.js';
 import {
-  inner_width,
-  inner_height,
-  outer_width,
-  outer_height,
-  scrollbar_size,
-  add_class,
-  remove_class,
+  innerWidth,
+  innerHeight,
+  outerWidth,
+  outerHeight,
+  addClass,
+  removeClass,
 } from './../../utils/dom.js';
 import {
-  init_subscriptions,
-  add_subscription,
-  unsubscribe_subscriptions,
+  initSubscriptions,
+  addSubscription,
+  unsubscribeSubscriptions,
 } from '../../utils/subscriptions.js';
 
 import { Indicators } from './indicators.js';
@@ -41,7 +40,7 @@ import { VirtualTree } from './virtualtree.js';
 
 import { ConnectionDataView } from '../models.js';
 
-function set_virtualtreeviews() {
+function setVirtualtreeviews() {
   var O = this.options;
   if (!O.sources || !O.sinks) return;
   switch (O.signal_flow) {
@@ -62,7 +61,7 @@ function set_virtualtreeviews() {
   }
 }
 
-export const Matrix = define_class({
+export const Matrix = defineClass({
   Extends: Patchbay,
   _options: Object.assign(Object.create(Patchbay.prototype._options), {
     _virtualtree_size: 'number',
@@ -75,16 +74,16 @@ export const Matrix = define_class({
     signal_flow: 'left-top',
   },
   static_events: {
-    set_signal_flow: set_virtualtreeviews,
-    set_sources: set_virtualtreeviews,
-    set_sinks: set_virtualtreeviews,
+    set_signal_flow: setVirtualtreeviews,
+    set_sources: setVirtualtreeviews,
+    set_sinks: setVirtualtreeviews,
   },
   initialize: function (options) {
     Patchbay.prototype.initialize.call(this, options);
   },
   draw: function (options, element) {
     const O = this.options;
-    add_class(this.element, 'aux-matrix');
+    addClass(this.element, 'aux-matrix');
     Patchbay.prototype.draw.call(this, options, element);
 
     this.virtualtree_left.on('scrollTopChanged', (position) => {
@@ -101,7 +100,7 @@ export const Matrix = define_class({
       this.emit('toggleConnection', source, sink);
     });
 
-    set_virtualtreeviews.call(this);
+    setVirtualtreeviews.call(this);
   },
   redraw: function () {
     const O = this.options;
@@ -112,7 +111,7 @@ export const Matrix = define_class({
       I._virtualtree_size = false;
       const virtualtree = this.virtualtree_top;
       virtualtree.element.style.height = O._virtualtree_size + 'px';
-      virtualtree.trigger_resize();
+      virtualtree.triggerResize();
     }
 
     Patchbay.prototype.redraw.call(this);
@@ -120,13 +119,13 @@ export const Matrix = define_class({
   resize: function () {
     this.set(
       '_virtualtree_size',
-      inner_width(this.element) - outer_width(this.virtualtree_left.element)
+      innerWidth(this.element) - outerWidth(this.virtualtree_left.element)
     );
     Patchbay.prototype.resize.call(this);
   },
 });
 
-define_child_widget(Matrix, 'virtualtree_left', {
+defineChildWidget(Matrix, 'virtualtree_left', {
   create: VirtualTree,
   show: true,
   map_options: {
@@ -137,7 +136,7 @@ define_child_widget(Matrix, 'virtualtree_left', {
   },
 });
 
-define_child_widget(Matrix, 'virtualtree_top', {
+defineChildWidget(Matrix, 'virtualtree_top', {
   create: VirtualTree,
   show: true,
   map_options: {
@@ -148,7 +147,7 @@ define_child_widget(Matrix, 'virtualtree_top', {
   },
 });
 
-define_child_widget(Matrix, 'indicators', {
+defineChildWidget(Matrix, 'indicators', {
   create: Indicators,
   show: true,
   map_options: {

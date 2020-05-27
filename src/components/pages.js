@@ -18,18 +18,18 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
-  subcomponent_from_widget,
+  componentFromWidget,
+  defineComponent,
+  subcomponentFromWidget,
 } from './../component_helpers.js';
 import { Pages } from './../widgets/pages.js';
 
-function add_page(pages, page) {
-  pages.add_page(page);
+function addPage(pages, page) {
+  pages.addPage(page);
 }
 
-function remove_page(pages, page) {
-  pages.remove_page(page);
+function removePage(pages, page) {
+  pages.removePage(page);
 }
 
 /**
@@ -39,6 +39,6 @@ function remove_page(pages, page) {
  * @class PagesComponent
  * @implements Component
  */
-export const PagesComponent = component_from_widget(Pages);
+export const PagesComponent = componentFromWidget(Pages);
 
-define_component('pages', PagesComponent);
+defineComponent('pages', PagesComponent);

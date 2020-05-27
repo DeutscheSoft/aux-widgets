@@ -19,20 +19,20 @@
 
 import { Container, Widget } from '../src/index.js';
 
-import { define_class } from '../src/widget_helpers.js';
+import { defineClass } from '../src/widget_helpers.js';
 
-import { check_visibility } from '../src/utils/debug.js';
+import { checkVisibility } from '../src/utils/debug.js';
 
 import {
-  define_component,
-  component_from_widget,
+  defineComponent,
+  componentFromWidget,
 } from '../src/component_helpers.js';
 
-import { wait_for_drawn, canvas } from './helpers.js';
+import { waitForDrawn, canvas } from './helpers.js';
 
 const errors = [];
 
-function check_errors() {
+function checkErrors() {
   if (errors.length) {
     const tmp = errors.slice(0);
     errors.length = 0;
@@ -40,8 +40,8 @@ function check_errors() {
   }
 }
 
-function make_debug_widget(Base) {
-  const DebugWidget = define_class({
+function makeDebugWidget(Base) {
+  const DebugWidget = defineClass({
     Extends: Base,
     initialize: function (options) {
       options.element = document.createElement('DIV');
@@ -49,58 +49,58 @@ function make_debug_widget(Base) {
     },
     resize: function () {
       Base.prototype.resize.call(this);
-      this.check_visibility();
+      this.checkVisibility();
     },
-    check_visibility: function () {
+    checkVisibility: function () {
       try {
-        check_visibility(this);
+        checkVisibility(this);
       } catch (err) {
         errors.push(err);
       }
     },
     redraw: function () {
       Base.prototype.redraw.call(this);
-      this.check_visibility();
+      this.checkVisibility();
     },
   });
 
   return DebugWidget;
 }
 
-const DebugWidget = make_debug_widget(Widget);
-const DebugContainer = make_debug_widget(Container);
+const DebugWidget = makeDebugWidget(Widget);
+const DebugContainer = makeDebugWidget(Container);
 
-const DebugWidgetComponent = component_from_widget(DebugWidget);
-const DebugContainerComponent = component_from_widget(DebugContainer);
+const DebugWidgetComponent = componentFromWidget(DebugWidget);
+const DebugContainerComponent = componentFromWidget(DebugContainer);
 
-define_component('debug-widget', DebugWidgetComponent);
-define_component('debug-container', DebugContainerComponent);
+defineComponent('debug-widget', DebugWidgetComponent);
+defineComponent('debug-container', DebugContainerComponent);
 
 describe('Visibility', () => {
   it('Widget(Widget)', async () => {
     const w = new DebugWidget();
-    w.append_child(new DebugWidget());
+    w.appendChild(new DebugWidget());
     w.show();
-    await wait_for_drawn(w);
-    check_errors();
+    await waitForDrawn(w);
+    checkErrors();
   });
   it('Container(Widget)', async () => {
     const container = new DebugContainer();
     const widget = new DebugWidget();
-    container.append_child(widget);
+    container.appendChild(widget);
     container.show();
 
     const check = async () => {
-      container.trigger_draw();
-      widget.trigger_draw();
-      await wait_for_drawn(container);
-      check_errors();
+      container.triggerDraw();
+      widget.triggerDraw();
+      await waitForDrawn(container);
+      checkErrors();
     };
 
     await check();
-    container.hide_child(widget);
+    container.hideChild(widget);
     await check();
-    container.show_child(widget);
+    container.showChild(widget);
     await check();
     container.hide();
     await check();
@@ -111,23 +111,23 @@ describe('Visibility', () => {
     const widget = new DebugWidget();
 
     const check = async () => {
-      outer.trigger_draw();
-      inner.trigger_draw();
-      widget.trigger_draw();
-      await wait_for_drawn(outer);
-      check_errors();
+      outer.triggerDraw();
+      inner.triggerDraw();
+      widget.triggerDraw();
+      await waitForDrawn(outer);
+      checkErrors();
     };
 
-    outer.append_child(inner);
-    inner.append_child(widget);
+    outer.appendChild(inner);
+    inner.appendChild(widget);
     outer.show();
 
     await check();
-    inner.hide_child(widget);
+    inner.hideChild(widget);
     await check();
-    inner.show_child(widget);
+    inner.showChild(widget);
     await check();
-    outer.hide_child(inner);
+    outer.hideChild(inner);
     await check();
   });
   it('ContainerComponent(ContainerComponent(WidgetComponent))', async () => {
@@ -143,21 +143,21 @@ describe('Visibility', () => {
     const widget = widgetComponent.auxWidget;
 
     const check = async () => {
-      outer.trigger_draw();
-      inner.trigger_draw();
-      widget.trigger_draw();
-      await wait_for_drawn(outer);
-      check_errors();
+      outer.triggerDraw();
+      inner.triggerDraw();
+      widget.triggerDraw();
+      await waitForDrawn(outer);
+      checkErrors();
     };
 
     canvas().appendChild(outerComponent);
 
     await check();
-    inner.hide_child(widget);
+    inner.hideChild(widget);
     await check();
-    inner.show_child(widget);
+    inner.showChild(widget);
     await check();
-    outer.hide_child(inner);
+    outer.hideChild(inner);
     await check();
 
     outerComponent.remove();

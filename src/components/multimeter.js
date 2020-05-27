@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { MultiMeter } from './../widgets/multimeter.js';
 
@@ -30,6 +30,6 @@ import { MultiMeter } from './../widgets/multimeter.js';
  * @class MultiMeterComponent
  * @implements Component
  */
-export const MultiMeterComponent = component_from_widget(MultiMeter);
+export const MultiMeterComponent = componentFromWidget(MultiMeter);
 
-define_component('multimeter', MultiMeterComponent);
+defineComponent('multimeter', MultiMeterComponent);

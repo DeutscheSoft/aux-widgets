@@ -17,16 +17,16 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { DragCapture } from '../modules/dragcapture.js';
 import { List } from './list.js';
 import { Container } from './container.js';
 import { SortableListItem } from './sortablelistitem.js';
-import { add_class } from '../utils/dom.js';
+import { addClass } from '../utils/dom.js';
 
 /* TODO */
 
-function build_dragcapture() {
+function buildDragCapture() {
   this.dragcapture = new DragCapture(this, {
     state: true,
     onstartcapture: function () {
@@ -37,7 +37,7 @@ function build_dragcapture() {
   });
 }
 
-export const SortableList = define_class({
+export const SortableList = defineClass({
   Extends: List,
 
   _options: Object.assign(Object.create(Container.prototype._options), {
@@ -51,13 +51,13 @@ export const SortableList = define_class({
     List.prototype.initialize.call(this, options);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-sortablelist');
+    addClass(element, 'aux-sortablelist');
 
     List.prototype.draw.call(this, O, element);
   },
-  add_item: function (item, pos) {
+  addItem: function (item, pos) {
     var O = this.options;
-    item = List.prototype.add_item.call(this, item, pos);
+    item = List.prototype.addItem.call(this, item, pos);
     item.set('sortable', O.sortable);
   },
   set: function (key, value) {
@@ -65,7 +65,7 @@ export const SortableList = define_class({
       case 'sortable':
         var I = this.options.items;
         for (var i = 0; i < I.length; i++) I[i].set('sortable', value);
-        if (value && !this.dragcapture) build_dragcapture.call(this);
+        if (value && !this.dragcapture) buildDragCapture.call(this);
         break;
     }
     return List.prototype.set.call(this, key, value);

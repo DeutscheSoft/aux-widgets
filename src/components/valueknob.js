@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { ValueKnob } from './../widgets/valueknob.js';
 
@@ -29,6 +29,6 @@ import { ValueKnob } from './../widgets/valueknob.js';
  * @class ValueKnobComponent
  * @implements Component
  */
-export const ValueKnobComponent = component_from_widget(ValueKnob);
+export const ValueKnobComponent = componentFromWidget(ValueKnob);
 
-define_component('valueknob', ValueKnobComponent);
+defineComponent('valueknob', ValueKnobComponent);

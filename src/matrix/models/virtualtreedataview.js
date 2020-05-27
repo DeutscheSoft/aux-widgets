@@ -23,23 +23,23 @@
 
 import { Events } from '../../events.js';
 import {
-  init_subscribers,
-  add_subscriber,
-  remove_subscriber,
-  call_subscribers,
+  initSubscribers,
+  addSubscriber,
+  removeSubscriber,
+  callSubscribers,
 } from '../../utils/subscribers.js';
 import {
-  init_subscriptions,
-  add_subscription,
-  unsubscribe_subscriptions,
+  initSubscriptions,
+  addSubscription,
+  unsubscribeSubscriptions,
 } from '../../utils/subscriptions.js';
 import { SubscriberMap } from '../../utils/subscriber_map.js';
-import { typecheck_function } from '../../utils/typecheck.js';
+import { typecheckFunction } from '../../utils/typecheck.js';
 
 import { GroupData } from './group.js';
-import { call_continuation_if } from './helpers.js';
+import { callContinuationIf } from './helpers.js';
 
-function interval_union(a, b) {
+function intervalUnion(a, b) {
   if (a === null) return b;
   if (b === null) return a;
 
@@ -53,7 +53,7 @@ function interval_union(a, b) {
 
 function allowAll(node, callback) {
   callback(true);
-  return init_subscriptions();
+  return initSubscriptions();
 }
 
 class SuperGroup {
@@ -147,7 +147,7 @@ class SuperGroup {
   }
 }
 
-function get_child(node) {
+function getChild(node) {
   if (node instanceof SuperGroup) {
     return node.group;
   } else {
@@ -186,8 +186,8 @@ export class VirtualTreeDataView extends Events {
   }
 
   _childAdded(parent, node, index) {
-    let sub = init_subscriptions();
-    const child = get_child(node);
+    let sub = initSubscriptions();
+    const child = getChild(node);
 
     // increase size by one
     this._updateSize(parent, 1);
@@ -217,12 +217,12 @@ export class VirtualTreeDataView extends Events {
     }
 
     if (node instanceof SuperGroup) {
-      sub = add_subscription(sub, this._subscribe(node));
+      sub = addSubscription(sub, this._subscribe(node));
     }
 
     if (parent.children.length === index + 1) {
       parent.updateTreePosition();
-      notify_interval = interval_union(notify_interval, parent.getInterval());
+      notify_interval = intervalUnion(notify_interval, parent.getInterval());
     } else if (node instanceof SuperGroup) {
       node.updateTreePosition();
     }
@@ -236,7 +236,7 @@ export class VirtualTreeDataView extends Events {
   }
 
   _childRemoved(parent, node, index) {
-    const child = get_child(node);
+    const child = getChild(node);
     // NOTE: the subtree is always empty now, since
     // it is automatically removed before
     const size = node instanceof SuperGroup ? 1 + node.size : 1;
@@ -283,7 +283,7 @@ export class VirtualTreeDataView extends Events {
     // we have to update the tree positions
     if (index === parent.children.length) {
       parent.updateTreePosition();
-      notify_interval = interval_union(notify_interval, parent.getInterval());
+      notify_interval = intervalUnion(notify_interval, parent.getInterval());
     }
 
     this.emit('childRemoved', child);
@@ -298,7 +298,7 @@ export class VirtualTreeDataView extends Events {
 
     const sub = group.forEachAsync((node) => {
       return this._filter(node, (node) => {
-        let sub = init_subscriptions();
+        let sub = initSubscriptions();
 
         node = super_group.createChildNode(node);
 
@@ -306,12 +306,12 @@ export class VirtualTreeDataView extends Events {
         // TODO: needs to be dynamic
         list.sort(this._sorter);
 
-        sub = add_subscription(
+        sub = addSubscription(
           sub,
           this._childAdded(super_group, node, list.indexOf(node))
         );
 
-        sub = add_subscription(sub, () => {
+        sub = addSubscription(sub, () => {
           if (node === null) return;
 
           const index = list.indexOf(node);
@@ -367,13 +367,13 @@ export class VirtualTreeDataView extends Events {
     const subscribers = this.subscribers;
 
     this._forEachWithTreePosition(from, to, (i, element, treePosition) => {
-      call_subscribers(subscribers, i, element, treePosition);
+      callSubscribers(subscribers, i, element, treePosition);
     });
     this.emit('elementsChanged');
   }
 
   _filterCollapsed(node, continuation) {
-    return call_continuation_if(
+    return callContinuationIf(
       node,
       (node, callback) => {
         return this.subscribeCollapsed(node.parent, (is_collapsed) =>
@@ -386,7 +386,7 @@ export class VirtualTreeDataView extends Events {
 
   _filter(node, continuation) {
     return this._filterCollapsed(node, (node) => {
-      return call_continuation_if(node, this.filterFunction, continuation);
+      return callContinuationIf(node, this.filterFunction, continuation);
     });
   }
 
@@ -424,10 +424,10 @@ export class VirtualTreeDataView extends Events {
     this.amount = amount;
     this.filterFunction = filterFunction || allowAll;
     this.sortFunction = sortFunction;
-    this.subscribers = init_subscribers();
+    this.subscribers = initSubscribers();
 
     this._sorter = (node1, node2) => {
-      return this.sortFunction(get_child(node1), get_child(node2));
+      return this.sortFunction(getChild(node1), getChild(node2));
     };
 
     // global flat list
@@ -562,7 +562,7 @@ export class VirtualTreeDataView extends Events {
 
   destroy() {
     super.destroy();
-    this.subscriptions = unsubscribe_subscriptions(this.subscriptions);
+    this.subscriptions = unsubscribeSubscriptions(this.subscriptions);
   }
 
   check() {
@@ -601,7 +601,7 @@ export class VirtualTreeDataView extends Events {
   forEach(cb) {
     const rec = (super_group) => {
       super_group.children.forEach((node) => {
-        cb(get_child(node));
+        cb(getChild(node));
         if (node instanceof SuperGroup) rec(node);
       });
     };
@@ -610,36 +610,36 @@ export class VirtualTreeDataView extends Events {
   }
 
   subscribeElements(cb, done_cb) {
-    typecheck_function(cb);
+    typecheckFunction(cb);
 
-    if (done_cb) typecheck_function(done_cb);
+    if (done_cb) typecheckFunction(done_cb);
 
-    this.subscribers = add_subscriber(this.subscribers, cb);
+    this.subscribers = addSubscriber(this.subscribers, cb);
 
     const from = this.startIndex;
     const to = from + this.amount;
     const list = this.list;
-    let subscriptions = init_subscriptions();
+    let subscriptions = initSubscriptions();
 
-    subscriptions = add_subscription(subscriptions, () => {
-      this.subscribers = remove_subscriber(this.subscribers, cb);
+    subscriptions = addSubscription(subscriptions, () => {
+      this.subscribers = removeSubscriber(this.subscribers, cb);
     });
 
     this._forEachWithTreePosition(from, to, (i, element, treePosition) => {
-      call_subscribers(cb, i, element, treePosition);
+      callSubscribers(cb, i, element, treePosition);
     });
 
     if (done_cb) {
-      call_subscribers(done_cb);
+      callSubscribers(done_cb);
 
-      subscriptions = add_subscription(
+      subscriptions = addSubscription(
         subscriptions,
         this.subscribe('elementsChanged', done_cb)
       );
     }
 
     return () => {
-      subscriptions = unsubscribe_subscriptions(subscriptions);
+      subscriptions = unsubscribeSubscriptions(subscriptions);
     };
   }
 
@@ -647,13 +647,13 @@ export class VirtualTreeDataView extends Events {
    * Emits the size of the list.
    */
   subscribeSize(cb) {
-    call_subscribers(cb, this.root.size);
+    callSubscribers(cb, this.root.size);
 
     return this.subscribe('sizeChanged', cb);
   }
 
   subscribeAmount(cb) {
-    call_subscribers(cb, this.amount);
+    callSubscribers(cb, this.amount);
 
     return this.subscribe('amountChanged', cb);
   }

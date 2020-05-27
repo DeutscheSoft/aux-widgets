@@ -17,11 +17,11 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { element, add_class } from './../utils/dom.js';
-import { define_class } from './../widget_helpers.js';
+import { element, addClass } from './../utils/dom.js';
+import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 
-export const Label = define_class({
+export const Label = defineClass({
   /**
    * Label is a simple text field displaying strings.
    *
@@ -50,7 +50,7 @@ export const Label = define_class({
     this._text = document.createTextNode('');
   },
   draw: function (O, element) {
-    add_class(element, 'aux-label');
+    addClass(element, 'aux-label');
     element.appendChild(this._text);
 
     Widget.prototype.draw.call(this, O, element);

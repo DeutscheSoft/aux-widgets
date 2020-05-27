@@ -17,13 +17,13 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from './../widget_helpers.js';
+import { defineClass } from './../widget_helpers.js';
 import { Range } from './range.js';
 import { DragValue } from './dragvalue.js';
 import { Base } from '../implements/base.js';
-import { add_class, remove_class } from '../utils/dom.js';
+import { addClass, removeClass } from '../utils/dom.js';
 
-function extract_matrix(t) {
+function extractMatrix(t) {
   var a = t.indexOf('matrix(');
   if (a < 0) return;
   t = t.substr(a + 7);
@@ -35,12 +35,12 @@ function extract_matrix(t) {
     });
 }
 
-function xy_from_transform(t) {
-  var mx = extract_matrix(t);
+function xyFromTransform(t) {
+  var mx = extractMatrix(t);
   return !mx || !mx.length ? [0, 0] : [mx[4], mx[5]];
 }
 
-function startdrag(e) {
+function startDrag(e) {
   this._dragged = 0;
   var O = this.options;
   if (!O.active) return;
@@ -48,19 +48,19 @@ function startdrag(e) {
   this._xstart = this._xlast = e.pageX;
   this._ystart = this._ylast = e.pageY;
   if (O.transform) {
-    var xy = xy_from_transform(this._style.transform);
+    var xy = xyFromTransform(this._style.transform);
     this._xpos = xy[0];
     this._ypos = xy[1];
   } else {
     this._xpos = O.node.offsetLeft;
     this._ypos = O.node.offsetTop;
   }
-  add_class(O.node, 'aux-dragging');
+  addClass(O.node, 'aux-dragging');
 }
-function stopdrag(e) {
+function stopDrag(e) {
   if (!this.options.active) return;
   if (e.button !== void 0 && e.button > 0) return;
-  remove_class(this.options.node, 'aux-dragging');
+  removeClass(this.options.node, 'aux-dragging');
 }
 function dragging(e) {
   var O = this.options;
@@ -79,7 +79,7 @@ function dragging(e) {
   if (O.max.y !== false) y = Math.min(O.max.y, y);
   if (O.transform) {
     var t = this._style.transform;
-    var mx = extract_matrix(t);
+    var mx = extractMatrix(t);
     mx[4] = x;
     mx[5] = y;
     var nt = t.replace(/matrix\([0-9 \,]*\)/, 'matrix(' + mx.join(',') + ')');
@@ -89,7 +89,7 @@ function dragging(e) {
     O.node.style.left = x + 'px';
   }
 }
-function set_handle() {
+function setHandle() {
   var h = this.options.handle;
   if (this.drag) this.drag.destroy();
   var range = new Range({});
@@ -123,7 +123,7 @@ function set_handle() {
  *
  * @class Drag
  */
-export const Drag = define_class({
+export const Drag = defineClass({
   Extends: Base,
   _options: {
     node: 'object',
@@ -165,9 +165,9 @@ export const Drag = define_class({
    * @param {DOMEvent} event - The native DOM event.
    */
   static_events: {
-    startdrag: startdrag,
+    startdrag: startDrag,
     dragging: dragging,
-    stopdrag: stopdrag,
+    stopdrag: stopDrag,
   },
   initialize: function (options) {
     Base.prototype.initialize.call(this, options);
@@ -181,7 +181,7 @@ export const Drag = define_class({
 
     Base.prototype.set.call(this, key, value);
 
-    if (key === 'handle') set_handle.call(this);
+    if (key === 'handle') setHandle.call(this);
     if (key === 'initial' && this.drag) this.drag.set('initial', value);
   },
 });

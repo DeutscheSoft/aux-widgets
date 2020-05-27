@@ -19,32 +19,32 @@
 
 /* jshint -W086 */
 
-import { define_class } from './../widget_helpers.js';
+import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 import { S } from '../dom_scheduler.js';
 import {
   element,
-  add_class,
-  remove_class,
-  get_duration,
+  addClass,
+  removeClass,
+  getDuration,
   empty,
-  is_dom_node,
+  isDomNode,
 } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 
-function after_hiding() {
+function afterHiding() {
   this.__hide_id = false;
   if (this.options.visible !== 'hiding') return;
-  remove_class(this.element, 'aux-hiding');
+  removeClass(this.element, 'aux-hiding');
   this.set('visible', false);
 }
-function after_showing() {
+function afterShowing() {
   this.__hide_id = false;
   if (this.options.visible === 'showing')
-    remove_class(this.element, 'aux-showing');
+    removeClass(this.element, 'aux-showing');
   this.set('visible', true);
 }
-export const Container = define_class({
+export const Container = defineClass({
   /**
    * Container represents a <code>&lt;DIV></code> element contining various
    *   other widgets or DOMNodes.
@@ -53,11 +53,11 @@ export const Container = define_class({
    * <code>showing</code> and <code>hiding</code>. Each of these states has a corresponding
    * CSS class called <code>.aux-show</code>, <code>.aux-hide</code>, <code>.aux-showing</code>
    * and <code>.aux-hiding</code>, respectively. The display state can be controlled using
-   * the methods {@link Container#show}, {@link Container#hide} and {@link Widget#toggle_hidden}.
+   * the methods {@link Container#show}, {@link Container#hide} and {@link Widget#toggleHidden}.
    *
    * A container can keep track of the display states of its child widgets.
-   * The display state of a child can be changed using {@link Container#hide_child},
-   * {@link Container#show_child} and {@link Container#toggle_child}.
+   * The display state of a child can be changed using {@link Container#hideChild},
+   * {@link Container#showChild} and {@link Container#toggleChild}.
    *
    * @class Container
    *
@@ -68,7 +68,7 @@ export const Container = define_class({
    *
    * @property {String|HTMLElement} [options.content] - The content of the container. It can either be
    *   a string which is interpreted as HTML or a DOM node. Note that this option will remove all
-   *   child nodes from the container element including those added via append_child.
+   *   child nodes from the container element including those added via appendChild.
    * @property {Number} [options.hiding_duration=0] - The duration in ms of the hiding CSS
    *   transition/animation of this container. If this option is set to -1, the transition duration
    *   will be determined by the computed style, which can be rather
@@ -94,7 +94,7 @@ export const Container = define_class({
   static_events: {
     set_visible: function (val) {
       if (val === 'showing') {
-        if (!this.is_drawn()) this.enable_draw();
+        if (!this.isDrawn()) this.enableDraw();
       }
     },
   },
@@ -106,14 +106,14 @@ export const Container = define_class({
      * @member {HTMLDivElement} Container#element - The main DIV element. Has class <code>.aux-container</code>
      */
 
-    this.__after_hiding = after_hiding.bind(this);
-    this.__after_showing = after_showing.bind(this);
+    this.__after_hiding = afterHiding.bind(this);
+    this.__after_showing = afterShowing.bind(this);
     this.__hide_id = false;
 
-    if (this.options.children) this.append_children(this.options.children);
+    if (this.options.children) this.appendChildren(this.options.children);
   },
 
-  set_parent: function (parent, no_remove_child) {
+  setParent: function (parent, no_remove_child) {
     if (parent && !(parent instanceof Container)) {
       warn(
         'Container %o should not be child of non-container %o',
@@ -121,35 +121,35 @@ export const Container = define_class({
         parent
       );
     }
-    Widget.prototype.set_parent.call(this, parent, no_remove_child);
+    Widget.prototype.setParent.call(this, parent, no_remove_child);
   },
-  add_child: function (child) {
+  addChild: function (child) {
     var H = this.hidden_children;
     if (!H) this.hidden_children = H = [];
     H.push(false);
-    Widget.prototype.add_child.call(this, child);
+    Widget.prototype.addChild.call(this, child);
   },
-  remove_child: function (child) {
+  removeChild: function (child) {
     var C = this.children;
     var i;
 
-    // if this child is not found, Widget.remove_child will generate an
+    // if this child is not found, Widget.removeChild will generate an
     // error for us
     if (C !== null && (i = C.indexOf(child)) !== -1) {
       this.hidden_children.splice(i, 1);
     }
 
-    Widget.prototype.remove_child.call(this, child);
+    Widget.prototype.removeChild.call(this, child);
   },
-  enable_draw_children: function () {
+  enableDrawChildren: function () {
     var C = this.children;
     var H = this.hidden_children;
-    if (C) for (var i = 0; i < C.length; i++) if (!H[i]) C[i].enable_draw();
+    if (C) for (var i = 0; i < C.length; i++) if (!H[i]) C[i].enableDraw();
   },
-  disable_draw_children: function () {
+  disableDrawChildren: function () {
     var C = this.children;
     var H = this.hidden_children;
-    if (C) for (var i = 0; i < C.length; i++) if (!H[i]) C[i].disable_draw();
+    if (C) for (var i = 0; i < C.length; i++) if (!H[i]) C[i].disableDraw();
   },
   /**
    * Starts the transition of the <code>visible</code> to <code>false</code>.
@@ -160,11 +160,11 @@ export const Container = define_class({
   hide: function () {
     if (!this.hidden()) this.update('visible', 'hiding');
   },
-  force_hide: function () {
+  forceHide: function () {
     const E = this.element;
     this.set('visible', false);
-    add_class(E, 'aux-hide');
-    remove_class(E, 'aux-show', 'aux-hiding', 'aux-showing');
+    addClass(E, 'aux-hide');
+    removeClass(E, 'aux-show', 'aux-hiding', 'aux-showing');
   },
   /**
    * Starts the transition of the <code>visible</code> to <code>true</code>.
@@ -173,34 +173,34 @@ export const Container = define_class({
    *
    */
   show: function () {
-    if (!this.is_drawn()) this.enable_draw();
+    if (!this.isDrawn()) this.enableDraw();
     if (this.hidden()) this.update('visible', 'showing');
   },
-  force_show: function () {
+  forceShow: function () {
     const E = this.element;
     this.set('visible', true);
-    add_class(E, 'aux-show');
-    remove_class(E, 'aux-hide', 'aux-hiding', 'aux-showing');
+    addClass(E, 'aux-show');
+    removeClass(E, 'aux-hide', 'aux-hiding', 'aux-showing');
   },
-  show_nodraw_children: function () {
+  showNoDrawChildren: function () {
     var C = this.children;
     var H = this.hidden_children;
-    if (C) for (let i = 0; i < C.length; i++) if (!H[i]) C[i].show_nodraw();
+    if (C) for (let i = 0; i < C.length; i++) if (!H[i]) C[i].showNoDraw();
   },
-  hide_nodraw_children: function () {
+  hideNoDrawChildren: function () {
     var C = this.children;
     var H = this.hidden_children;
-    if (C) for (let i = 0; i < C.length; i++) if (!H[i]) C[i].hide_nodraw();
+    if (C) for (let i = 0; i < C.length; i++) if (!H[i]) C[i].hideNoDraw();
   },
   /**
    * Switches the hidden state of a child to <code>hidden</code>.
    * The argument is either the child index or the child itself.
    *
-   * @method Container#hide_child
+   * @method Container#hideChild
    * @param {Object|integer} child - Child or its index.
    *
    */
-  hide_child: function (i) {
+  hideChild: function (i) {
     var C = this.children;
     var H = this.hidden_children;
 
@@ -214,10 +214,10 @@ export const Container = define_class({
 
     H[i] = true;
 
-    if (this.is_drawn()) {
+    if (this.isDrawn()) {
       child.hide();
     } else {
-      child.force_hide();
+      child.forceHide();
     }
   },
 
@@ -225,11 +225,11 @@ export const Container = define_class({
    * Switches the hidden state of a child to <code>shown</code>.
    * The argument is either the child index or the child itself.
    *
-   * @method Container#show_child
+   * @method Container#showChild
    * @param {Object|integer} child - Child or its index.
    *
    */
-  show_child: function (i) {
+  showChild: function (i) {
     var C = this.children;
     var H = this.hidden_children;
 
@@ -243,8 +243,8 @@ export const Container = define_class({
 
     if (H[i]) {
       H[i] = false;
-      if (this.is_drawn()) C[i].show();
-      else C[i].force_show();
+      if (this.isDrawn()) C[i].show();
+      else C[i].forceShow();
     }
   },
 
@@ -252,11 +252,11 @@ export const Container = define_class({
    * Toggles the hidden state of a child.
    * The argument is either the child index or the child itself.
    *
-   * @method Container#toggle_child
+   * @method Container#toggleChild
    * @param {Object|integer} child - Child or its index.
    *
    */
-  toggle_child: function (i) {
+  toggleChild: function (i) {
     var C = this.children;
     var H = this.hidden_children;
 
@@ -264,11 +264,11 @@ export const Container = define_class({
       i = C.indexOf(i);
       if (i === -1) throw new Error('Cannot find child.');
     }
-    if (H[i]) this.show_child(i);
-    else this.hide_child(i);
+    if (H[i]) this.showChild(i);
+    else this.hideChild(i);
   },
 
-  visible_children: function (a) {
+  visibleChildren: function (a) {
     if (!a) a = [];
     var C = this.children;
     var H = this.hidden_children;
@@ -276,7 +276,7 @@ export const Container = define_class({
       for (var i = 0; i < C.length; i++) {
         if (H[i]) continue;
         a.push(C[i]);
-        C[i].visible_children(a);
+        C[i].visibleChildren(a);
       }
     return a;
   },
@@ -287,8 +287,8 @@ export const Container = define_class({
   },
 
   draw: function (O, element) {
-    add_class(element, 'aux-container');
-    add_class(element, 'aux-show');
+    addClass(element, 'aux-container');
+    addClass(element, 'aux-show');
 
     Widget.prototype.draw.call(this, O, element);
   },
@@ -300,7 +300,7 @@ export const Container = define_class({
 
     if (I.visible) {
       var time;
-      remove_class(E, 'aux-hiding', 'aux-showing', 'aux-hide', 'aux-show');
+      removeClass(E, 'aux-hiding', 'aux-showing', 'aux-hide', 'aux-show');
 
       if (this.__hide_id !== false) {
         window.clearTimeout(this.__hide_id);
@@ -312,14 +312,14 @@ export const Container = define_class({
           let time = O.hiding_duration;
 
           if (time !== 0) {
-            add_class(E, 'aux-hiding');
+            addClass(E, 'aux-hiding');
 
-            if (time === -1) time = get_duration(E);
+            if (time === -1) time = getDuration(E);
 
             if (time > 0) {
               this.__hide_id = window.setTimeout(this.__after_hiding, time);
             } else {
-              remove_class(E, 'aux-hiding');
+              removeClass(E, 'aux-hiding');
               this.set('visible', false);
             }
           } else {
@@ -331,14 +331,14 @@ export const Container = define_class({
           let time = O.showing_duration;
 
           if (time !== 0) {
-            add_class(E, 'aux-showing');
+            addClass(E, 'aux-showing');
 
-            if (time === -1) time = get_duration(E);
+            if (time === -1) time = getDuration(E);
 
             if (time > 0) {
               this.__hide_id = window.setTimeout(this.__after_showing, time);
             } else {
-              remove_class(E, 'aux-showing');
+              removeClass(E, 'aux-showing');
               this.set('visible', true);
             }
           } else {
@@ -357,7 +357,7 @@ export const Container = define_class({
       empty(E);
       if (typeof content === 'string') {
         E.innerHTML = content;
-      } else if (is_dom_node(content)) {
+      } else if (isDomNode(content)) {
         E.appendChild(content);
       } else if (content !== void 0) {
         warn('Unsupported content option: %o', content);

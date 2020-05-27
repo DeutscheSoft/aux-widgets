@@ -21,23 +21,23 @@ function typecheck(v, typename) {
   if (typeof v !== typename) throw new TypeError('expected ' + typename + '.');
 }
 
-export function typecheck_function(v) {
+export function typecheckFunction(v) {
   typecheck(v, 'function');
 }
 
-export function typecheck_number(v) {
+export function typecheckNumber(v) {
   typecheck(v, 'number');
 }
 
-export function typecheck_object(v) {
+export function typecheckObject(v) {
   typecheck(v, 'object');
 }
 
-export function typecheck_string(v) {
+export function typecheckString(v) {
   typecheck(v, 'string');
 }
 
-export function typecheck_instance(v, cl) {
+export function typecheckInstance(v, cl) {
   if (typeof v !== 'object' || !(v instanceof cl))
     throw new TypeError('expected instance of ' + cl.name);
 }

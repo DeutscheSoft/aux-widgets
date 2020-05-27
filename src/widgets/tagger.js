@@ -17,26 +17,26 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { Dialog } from './dialog.js';
 import { Taggable } from './taggable.js';
-import { add_class, element, remove_class } from '../utils/dom.js';
+import { addClass, element, removeClass } from '../utils/dom.js';
 
-function keyup(e) {
+function keyUp(e) {
   if (e.keyCode != 13) return;
-  new_tag_from_input.call(this);
+  newTagFromInput.call(this);
 }
-function new_tag_from_input() {
+function newTagFromInput() {
   var val = this.element.value;
   if (!val) return;
   this.element.value = '';
   var t = false;
-  if (!this.options.async) t = this.add_tag(val);
+  if (!this.options.async) t = this.addTag(val);
   this.emit('newtag', val, t);
   if (this.options.closenew) this.close();
 }
 
-export const Tagger = define_class({
+export const Tagger = defineClass({
   Extends: Dialog,
   Implements: Taggable,
 
@@ -53,7 +53,7 @@ export const Tagger = define_class({
     Dialog.prototype.initialize.call(this, options);
 
     Taggable.prototype.initialize.call(this);
-    this.on('addtag', new_tag_from_input.bind(this));
+    this.on('addtag', newTagFromInput.bind(this));
 
     this.set('add', this.options.add);
   },
@@ -61,7 +61,7 @@ export const Tagger = define_class({
     Dialog.prototype.destroy.call(this);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-tagger');
+    addClass(element, 'aux-tagger');
 
     Dialog.prototype.draw.call(this, O, element);
   },
@@ -74,25 +74,25 @@ export const Tagger = define_class({
       if (O.add) {
         if (!this.element) {
           this.element = element('input', 'aux-input');
-          this.element.addEventListener('keyup', keyup.bind(this), true);
+          this.element.addEventListener('keyup', keyUp.bind(this), true);
           this.element.type = 'text';
           this.element.placeholder = 'New tag';
           this.element.appendChild(this.element);
         }
         this.element.appendChild(this.add.element);
-        add_class(this.element, 'aux-has-input');
+        addClass(this.element, 'aux-has-input');
       } else if (!O.add) {
         if (this.element) {
           this.element.removeChild(this.element);
           this.element = null;
         }
         this.add.element.remove();
-        remove_class(this.element, 'aux-has-input');
+        removeClass(this.element, 'aux-has-input');
       }
     }
   },
-  add_tag: function (tag, options) {
-    var t = Taggable.prototype.add_tag.call(this, tag, options);
+  addTag: function (tag, options) {
+    var t = Taggable.prototype.addTag.call(this, tag, options);
     if (!t) return;
     t.node.label.on(
       'click',
@@ -105,8 +105,8 @@ export const Tagger = define_class({
     if (this.options.visible) this.reposition();
     return t;
   },
-  remove_tag: function (tag, node, purge) {
-    Taggable.prototype.remove_tag.call(this, tag, node, purge);
+  removeTag: function (tag, node, purge) {
+    Taggable.prototype.removeTag.call(this, tag, node, purge);
     if (!this.taglist.length) this.close();
     if (this.options.visible) this.reposition();
   },

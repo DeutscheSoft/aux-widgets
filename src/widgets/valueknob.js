@@ -17,13 +17,13 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
-import { define_child_widget } from '../child_widget.js';
+import { defineClass } from '../widget_helpers.js';
+import { defineChildWidget } from '../child_widget.js';
 import { Widget } from './widget.js';
 import { Knob } from './knob.js';
 import { Value } from './value.js';
 import { Label } from './label.js';
-import { add_class, remove_class, element } from '../utils/dom.js';
+import { addClass, removeClass, element } from '../utils/dom.js';
 
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -34,7 +34,7 @@ import { add_class, remove_class, element } from '../utils/dom.js';
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-function value_clicked() {
+function valueClicked() {
   var self = this.parent;
   var knob = self.knob;
   knob.scroll.set('active', false);
@@ -48,7 +48,7 @@ function value_clicked() {
    */
   self.emit('valueedit', this.options.value);
 }
-function value_done() {
+function valueDone() {
   var self = this.parent;
   var knob = self.knob;
   knob.scroll.set('active', true);
@@ -62,7 +62,7 @@ function value_done() {
    */
   self.emit('valueset', this.options.value);
 }
-export const ValueKnob = define_class({
+export const ValueKnob = defineClass({
   /**
    * This widget combines a {@link Knob}, a {@link Label}  and a {@link Value} whose
    * value is synchronized. It inherits all options from {@link Knob} and {@link Value}.
@@ -94,7 +94,7 @@ export const ValueKnob = define_class({
      */
   },
   draw: function (O, element) {
-    add_class(element, 'aux-valueknob');
+    addClass(element, 'aux-valueknob');
 
     this.knob.drag.set('classes', this.element);
     this.knob.scroll.set('classes', this.element);
@@ -109,18 +109,12 @@ export const ValueKnob = define_class({
     if (I.layout) {
       I.layout = false;
       var value = O.layout;
-      remove_class(
-        E,
-        'aux-vertical',
-        'aux-horizontal',
-        'aux-left',
-        'aux-right'
-      );
-      add_class(E, 'aux-' + value);
+      removeClass(E, 'aux-vertical', 'aux-horizontal', 'aux-left', 'aux-right');
+      addClass(E, 'aux-' + value);
     }
   },
-  get_range: function () {
-    return this.knob.get_range();
+  getRange: function () {
+    return this.knob.getRange();
   },
   set: function (key, value) {
     /* this gets triggered twice, but we need it in order to make the snapping work */
@@ -132,7 +126,7 @@ export const ValueKnob = define_class({
 /**
  * @member {Label} ValueKnob#label - The {@link Label} widget.
  */
-define_child_widget(ValueKnob, 'label', {
+defineChildWidget(ValueKnob, 'label', {
   create: Label,
   option: 'label',
   toggle_class: true,
@@ -143,7 +137,7 @@ define_child_widget(ValueKnob, 'label', {
 /**
  * @member {Knob} ValueKnob#knob - The {@link Knob} widget.
  */
-define_child_widget(ValueKnob, 'knob', {
+defineChildWidget(ValueKnob, 'knob', {
   create: Knob,
   show: true,
   inherit_options: true,
@@ -153,7 +147,7 @@ define_child_widget(ValueKnob, 'knob', {
 /**
  * @member {Value} ValueKnob#value - The {@link Value} widget.
  */
-define_child_widget(ValueKnob, 'value', {
+defineChildWidget(ValueKnob, 'value', {
   create: Value,
   show: true,
   inherit_options: true,
@@ -161,8 +155,8 @@ define_child_widget(ValueKnob, 'value', {
     value: 'value',
   },
   static_events: {
-    valueclicked: value_clicked,
-    valuedone: value_done,
+    valueclicked: valueClicked,
+    valuedone: valueDone,
   },
   toggle_class: true,
 });

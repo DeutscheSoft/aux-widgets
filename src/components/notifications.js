@@ -18,18 +18,18 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
-  subcomponent_from_widget,
+  componentFromWidget,
+  defineComponent,
+  subcomponentFromWidget,
 } from './../component_helpers.js';
 import { Notifications, Notification } from './../widgets/notifications.js';
 
-function add_notification(notifications, notification) {
+function addNotification(notifications, notification) {
   notifications.notify(notification);
 }
 
-function remove_notification(notifications, notification) {
-  notifications.remove_notification(notification);
+function removeNotification(notifications, notification) {
+  notifications.removeNotification(notification);
 }
 
 /**
@@ -39,7 +39,7 @@ function remove_notification(notifications, notification) {
  * @class NotificationsComponent
  * @implements Component
  */
-export const NotificationsComponent = component_from_widget(Notifications);
+export const NotificationsComponent = componentFromWidget(Notifications);
 
 /**
  * WebComponent for the Notification widget. Available in the DOM as
@@ -48,12 +48,12 @@ export const NotificationsComponent = component_from_widget(Notifications);
  * @class NotificationComponent
  * @implements Component
  */
-export const NotificationComponent = subcomponent_from_widget(
+export const NotificationComponent = subcomponentFromWidget(
   Notification,
   Notifications,
-  add_notification,
-  remove_notification
+  addNotification,
+  removeNotification
 );
 
-define_component('notifications', NotificationsComponent);
-define_component('notification', NotificationComponent);
+defineComponent('notifications', NotificationsComponent);
+defineComponent('notification', NotificationComponent);

@@ -17,8 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
-export function check_visibility(widget) {
-  let drawn = widget.is_drawn();
+export function checkVisibility(widget) {
+  let drawn = widget.isDrawn();
 
   if (drawn)
     while (widget) {

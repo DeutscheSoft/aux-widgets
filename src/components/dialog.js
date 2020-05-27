@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { Dialog } from './../widgets/dialog.js';
 
@@ -30,6 +30,6 @@ import { Dialog } from './../widgets/dialog.js';
  * @class DialogComponent
  * @implements Component
  */
-export const DialogComponent = component_from_widget(Dialog);
+export const DialogComponent = componentFromWidget(Dialog);
 
-define_component('dialog', DialogComponent);
+defineComponent('dialog', DialogComponent);

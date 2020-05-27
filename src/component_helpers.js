@@ -19,11 +19,11 @@
 
 import { warn, error } from './utils/log.js';
 import { sprintf, FORMAT } from './utils/sprintf.js';
-import { html } from './utils/dom.js';
-import { is_native_event } from './implements/base.js';
+import { HTML } from './utils/dom.js';
+import { isNativeEvent } from './implements/base.js';
 import { subscribeOptionsAttributes } from './options.js';
 
-function attribute_for_widget(Widget) {
+function attributeForWidget(Widget) {
   const attributes = [];
   const skip = ['class', 'id', 'container', 'element', 'styles'];
   const rename = ['title'];
@@ -57,7 +57,7 @@ const FORMAT_TYPES = new Set([
   'array',
 ]);
 
-function low_parse_attribute(type, x) {
+function lowParseAttribute(type, x) {
   switch (type) {
     case 'js':
     case 'javascript':
@@ -65,7 +65,7 @@ function low_parse_attribute(type, x) {
     case 'json':
       return JSON.parse(x);
     case 'html':
-      return html(x);
+      return HTML(x);
     case 'string':
       return x;
     case 'number': {
@@ -95,22 +95,22 @@ function low_parse_attribute(type, x) {
       throw new Error(sprintf('Malformed boolean "%s"', x));
     case 'array':
       try {
-        return low_parse_attribute.call(this, 'json', x);
+        return lowParseAttribute.call(this, 'json', x);
       } catch (err) {}
-      return low_parse_attribute.call(this, 'js', x);
+      return lowParseAttribute.call(this, 'js', x);
     default:
       throw new Error(sprintf('Unsupported attribute type "%s"', type));
   }
 }
 
-function parse_attribute(option_type, value) {
+function parseAttribute(option_type, value) {
   const pos = value.indexOf(':');
 
   if (pos !== -1) {
     const format = value.substr(0, pos);
 
     if (FORMAT_TYPES.has(format)) {
-      return low_parse_attribute.call(this, format, value.substr(pos + 1));
+      return lowParseAttribute.call(this, format, value.substr(pos + 1));
     }
   }
 
@@ -130,7 +130,7 @@ function parse_attribute(option_type, value) {
     const type = types[i];
 
     try {
-      return low_parse_attribute.call(this, type, value);
+      return lowParseAttribute.call(this, type, value);
     } catch (e) {
       last_error = e;
     }
@@ -139,7 +139,7 @@ function parse_attribute(option_type, value) {
   throw last_error;
 }
 
-function create_component(base) {
+function createComponent(base) {
   if (!base) base = HTMLElement;
   return class extends base {
     _auxCalculateAttributes(parentAttributes) {
@@ -176,7 +176,7 @@ function create_component(base) {
         const widget = this.auxWidget;
         const type = widget._options[name];
         if (newValue !== null) {
-          const value = parse_attribute.call(this, type, newValue);
+          const value = parseAttribute.call(this, type, newValue);
           widget.set(name, value);
         } else {
           widget.reset(name);
@@ -231,7 +231,7 @@ function create_component(base) {
         const type = _options[option_name];
         const attribute_value = attributes.get(name);
 
-        ret[option_name] = parse_attribute.call(this, type, attribute_value);
+        ret[option_name] = parseAttribute.call(this, type, attribute_value);
       }
 
       return ret;
@@ -309,7 +309,7 @@ function create_component(base) {
     }
 
     addEventListener(type, ...args) {
-      if (!is_native_event(type) && this.auxWidget) {
+      if (!isNativeEvent(type) && this.auxWidget) {
         let handlers = this._auxEventHandlers;
 
         if (handlers === null) {
@@ -336,12 +336,12 @@ function create_component(base) {
     }
 
     auxResize() {
-      this.auxWidget.trigger_resize();
+      this.auxWidget.triggerResize();
     }
   };
 }
 
-function find_parent_node(node) {
+function findParentNode(node) {
   do {
     if (node.isAuxWidget) {
       return node;
@@ -352,8 +352,8 @@ function find_parent_node(node) {
   return null;
 }
 
-function find_parent_widget(node) {
-  const parentNode = find_parent_node(node);
+function findParentWidget(node) {
+  const parentNode = findParentNode(node);
 
   if (parentNode) return parentNode.auxWidget;
 
@@ -362,7 +362,7 @@ function find_parent_widget(node) {
 
 let a_div;
 
-function define_options_as_properties(component, options) {
+function defineOptionsAsProperties(component, options) {
   if (!a_div) a_div = document.createElement('div');
 
   options.forEach((name) => {
@@ -380,9 +380,9 @@ function define_options_as_properties(component, options) {
   });
 }
 
-export function component_from_widget(Widget, base) {
-  let compbase = create_component(base);
-  const attributes = attribute_for_widget(Widget);
+export function componentFromWidget(Widget, base) {
+  let compbase = createComponent(base);
+  const attributes = attributeForWidget(Widget);
 
   const component = class extends compbase {
     static get observedAttributes() {
@@ -402,44 +402,44 @@ export function component_from_widget(Widget, base) {
     connectedCallback() {
       super.connectedCallback();
       const widget = this.auxWidget;
-      const parent = find_parent_widget(this.parentNode);
+      const parent = findParentWidget(this.parentNode);
       if (parent) {
-        parent.add_child(widget);
+        parent.addChild(widget);
       } else {
-        widget.set_parent(null);
+        widget.setParent(null);
       }
     }
 
     disconnectedCallback() {
       super.disconnectedCallback();
-      this.auxWidget.set_parent(void 0);
-      this.auxWidget.disable_draw();
+      this.auxWidget.setParent(void 0);
+      this.auxWidget.disableDraw();
     }
   };
 
-  define_options_as_properties(component, attributes);
+  defineOptionsAsProperties(component, attributes);
 
   return component;
 }
 
-export function subcomponent_from_widget(
+export function subcomponentFromWidget(
   Widget,
   ParentWidget,
-  append_cb,
-  remove_cb,
+  appendCallback,
+  removeCallback,
   base
 ) {
-  let compbase = create_component(base);
-  const attributes = attribute_for_widget(Widget);
+  let compbase = createComponent(base);
+  const attributes = attributeForWidget(Widget);
 
-  if (!append_cb)
-    append_cb = (parent, child) => {
-      parent.add_child(child);
+  if (!appendCallback)
+    appendCallback = (parent, child) => {
+      parent.addChild(child);
     };
 
-  if (!remove_cb)
-    remove_cb = (parent, child) => {
-      parent.remove_child(child);
+  if (!removeCallback)
+    removeCallback = (parent, child) => {
+      parent.removeChild(child);
     };
 
   const component = class extends compbase {
@@ -459,11 +459,11 @@ export function subcomponent_from_widget(
       super.connectedCallback();
       this.style.display = 'none';
 
-      const parent = find_parent_widget(this.parentNode);
+      const parent = findParentWidget(this.parentNode);
 
       if (parent instanceof ParentWidget) {
         this.auxParent = parent;
-        append_cb(parent, this.auxWidget, this);
+        appendCallback(parent, this.auxWidget, this);
       } else {
         error('Missing parent widget.', this);
       }
@@ -475,18 +475,18 @@ export function subcomponent_from_widget(
       const parent = this.auxParent;
 
       if (parent) {
-        remove_cb(parent, this.auxWidget, this);
+        removeCallback(parent, this.auxWidget, this);
         this.auxParent = null;
       }
     }
   };
 
-  define_options_as_properties(component, attributes);
+  defineOptionsAsProperties(component, attributes);
 
   return component;
 }
 
-export function define_component(name, component, options) {
+export function defineComponent(name, component, options) {
   customElements.define('aux-' + name, component, options);
 }
 

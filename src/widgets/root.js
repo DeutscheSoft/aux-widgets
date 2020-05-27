@@ -17,9 +17,9 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { Container } from './container.js';
-import { add_class } from '../utils/dom.js';
+import { addClass } from '../utils/dom.js';
 
 /**
  * Root is a Container which can be used as the top level when building
@@ -31,7 +31,7 @@ import { add_class } from '../utils/dom.js';
  *
  * @class Root
  */
-export const Root = define_class({
+export const Root = defineClass({
   Extends: Container,
   _options: Object.create(Container.prototype._options),
   initialize: function (options) {
@@ -40,10 +40,10 @@ export const Root = define_class({
      * @member {HTMLDivElement} Root#element - The main DIV container.
      *   Has class <code>.aux-root</code>.
      */
-    this.set_parent(null);
+    this.setParent(null);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-root');
+    addClass(element, 'aux-root');
 
     Container.prototype.draw.call(this, O, element);
   },

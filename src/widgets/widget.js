@@ -19,23 +19,23 @@
 
 import { S } from '../dom_scheduler.js';
 import {
-  toggle_class,
-  set_styles,
-  add_class,
-  remove_class,
-  has_class,
-  set_style,
-  get_style,
+  toggleClass,
+  setStyles,
+  addClass,
+  removeClass,
+  hasClass,
+  setStyle,
+  getStyle,
 } from './../utils/dom.js';
 import { warn, error } from './../utils/log.js';
-import { define_class } from './../widget_helpers.js';
+import { defineClass } from './../widget_helpers.js';
 import { Base } from './../implements/base.js';
 import {
-  init_subscriptions,
-  add_subscription,
-  unsubscribe_subscriptions,
+  initSubscriptions,
+  addSubscription,
+  unsubscribeSubscriptions,
 } from '../utils/subscriptions.js';
-import { typecheck_function } from '../utils/typecheck.js';
+import { typecheckFunction } from '../utils/typecheck.js';
 
 function Invalid(options) {
   for (var key in options) this[key] = true;
@@ -79,27 +79,27 @@ function redraw(fun) {
   fun.call(this);
 }
 function resize() {
-  if (this.is_destructed()) return;
+  if (this.isDestructed()) return;
 
   // we were turned off before we could resize
-  if (!this.is_drawn()) {
-    this.trigger_resize();
+  if (!this.isDrawn()) {
+    this.triggerResize();
     return;
   }
 
   this.resize();
 }
-function onvisibilitychange() {
+function onVisibilityChange() {
   if (document.hidden) {
-    this.disable_draw();
+    this.disableDraw();
   } else {
-    this.enable_draw();
+    this.enableDraw();
   }
 }
-function onresize() {
-  this.trigger_resize();
+function onResize() {
+  this.triggerResize();
 }
-function dblclick(e) {
+function dblClick(e) {
   /**
    * Is fired after a double click appeared. Set `dblclick` to 0 to
    * disable click event handling.
@@ -122,14 +122,14 @@ function dblclick(e) {
   }
 }
 
-function set_preset(preset) {
+function setPreset(preset) {
   let O = this.options;
   let _O = this.options;
   let key, val;
   if (this._last_preset) {
-    this.remove_class('aux-preset-' + this._last_preset);
+    this.removeClass('aux-preset-' + this._last_preset);
   }
-  this.add_class('aux-preset-' + preset);
+  this.addClass('aux-preset-' + preset);
   this._last_preset = preset;
 
   let preset_options = O.presets[preset] || {};
@@ -144,7 +144,7 @@ function set_preset(preset) {
   this._presetting = false;
 }
 
-export const Widget = define_class({
+export const Widget = defineClass({
   /**
    * Widget is the base class for all widgets drawing DOM elements. It
    * provides basic functionality like delegating events, setting options and
@@ -270,7 +270,7 @@ export const Widget = define_class({
       if (v > 0) this.set('dblclick', v);
     },
     set_preset: function (v) {
-      set_preset.call(this, v);
+      setPreset.call(this, v);
     },
     set: function (key, val) {
       if (!this._presetting && this._preset_origins.hasOwnProperty(key)) {
@@ -279,7 +279,7 @@ export const Widget = define_class({
     },
     set_visible: function (val) {
       if (val === true) {
-        if (!this.is_drawn()) this.enable_draw();
+        if (!this.isDrawn()) this.enableDraw();
       }
     },
   },
@@ -303,19 +303,19 @@ export const Widget = define_class({
     this._drawn = false;
     this._redraw = redraw.bind(this, this.redraw);
     this.__resize = resize.bind(this);
-    this._schedule_resize = this.schedule_resize.bind(this);
+    this._schedule_resize = this.scheduleResize.bind(this);
     this.parent = void 0;
     this.children = null;
     this.draw_queue = null;
     this.__lastclick = 0;
-    this.__dblclick_cb = dblclick.bind(this);
-    this._onresize = onresize.bind(this);
-    this._onvisibilitychange = onvisibilitychange.bind(this);
+    this.__dblclick_cb = dblClick.bind(this);
+    this._onresize = onResize.bind(this);
+    this._onvisibilitychange = onVisibilityChange.bind(this);
     this._interaction_count = 0;
     this._preset_origins = {};
     this._last_preset;
     this._presetting = false;
-    this._subscriptions = init_subscriptions();
+    this._subscriptions = initSubscriptions();
   },
 
   getStyleTarget: function () {
@@ -330,7 +330,7 @@ export const Widget = define_class({
     return this.element;
   },
 
-  is_destructed: function () {
+  isDestructed: function () {
     return this.options === null;
   },
 
@@ -345,7 +345,7 @@ export const Widget = define_class({
     }
   },
 
-  invalidate_all: function () {
+  invalidateAll: function () {
     for (var key in this.options) {
       if (!this._options[key]) {
         if (key.charCodeAt(0) !== 95)
@@ -354,7 +354,7 @@ export const Widget = define_class({
     }
   },
 
-  assert_none_invalid: function () {
+  assertNoneInvalid: function () {
     var warn = [];
     for (var key in this.invalid) {
       if (this.invalid[key] === true) {
@@ -367,9 +367,9 @@ export const Widget = define_class({
     }
   },
 
-  trigger_resize: function () {
+  triggerResize: function () {
     if (!this.options.needs_resize) {
-      if (this.is_destructed()) {
+      if (this.isDestructed()) {
         // This object was destroyed but trigger resize was still scheduled for the next frame.
         // FIXME: fix this whole problem properly
         return;
@@ -382,22 +382,22 @@ export const Widget = define_class({
       if (!C) return;
 
       for (var i = 0; i < C.length; i++) {
-        C[i].trigger_resize();
+        C[i].triggerResize();
       }
     }
   },
 
-  trigger_resize_children: function () {
+  triggerResizeChildren: function () {
     var C = this.children;
 
     if (!C) return;
 
     for (var i = 0; i < C.length; i++) {
-      C[i].trigger_resize();
+      C[i].triggerResize();
     }
   },
 
-  schedule_resize: function () {
+  scheduleResize: function () {
     if (this.__resize === null) return;
     S.add(this.__resize, 0);
   },
@@ -407,22 +407,22 @@ export const Widget = define_class({
 
     if (this._options.resized) this.set('resized', true);
 
-    if (this.has_event_listeners('resized')) {
-      S.after_frame(this.emit.bind(this, 'resized'));
+    if (this.hasEventListeners('resized')) {
+      S.afterFrame(this.emit.bind(this, 'resized'));
     }
   },
 
-  trigger_draw: function () {
+  triggerDraw: function () {
     if (!this.needs_redraw) {
       this.needs_redraw = true;
       if (this._drawn) S.add(this._redraw, 1);
     }
   },
 
-  trigger_draw_next: function () {
+  triggerDrawNext: function () {
     if (!this.needs_redraw) {
       this.needs_redraw = true;
-      if (this._drawn) S.add_next(this._redraw, 1);
+      if (this._drawn) S.addNext(this._redraw, 1);
     }
   },
 
@@ -434,13 +434,13 @@ export const Widget = define_class({
      * @event Widget#initialized
      */
     Base.prototype.initialized.call(this);
-    this.trigger_draw();
+    this.triggerDraw();
 
     if (this.options.preset) {
       this.set('preset', this.options.preset);
     }
   },
-  draw_once: function (fun) {
+  drawOnce: function (fun) {
     var q = this.draw_queue;
 
     if (q === null) {
@@ -449,27 +449,27 @@ export const Widget = define_class({
       for (var i = 0; i < q.length; i++) if (q[i] === fun) return;
       q[i] = fun;
     }
-    this.trigger_draw();
+    this.triggerDraw();
   },
   draw: function (O, element) {
     let E;
 
     if (O.container) O.container.appendChild(element);
 
-    add_class(element, 'aux-widget');
+    addClass(element, 'aux-widget');
 
     if (O.id) element.setAttribute('id', O.id);
 
     if (O.class && (E = this.getClassTarget())) {
       const tmp = O.class.split(' ');
-      for (let i = 0; i < tmp.length; i++) add_class(E, tmp[i]);
+      for (let i = 0; i < tmp.length; i++) addClass(E, tmp[i]);
     }
 
     if (O.styles && (E = this.getStyleTarget())) {
-      set_styles(E, O.styles);
+      setStyles(E, O.styles);
     }
 
-    this.schedule_resize();
+    this.scheduleResize();
   },
   redraw: function () {
     var I = this.invalid;
@@ -482,12 +482,12 @@ export const Widget = define_class({
       const visible = O.visible;
 
       if (visible === true) {
-        remove_class(E, 'aux-hide');
-        add_class(E, 'aux-show');
+        removeClass(E, 'aux-hide');
+        addClass(E, 'aux-show');
       } else if (visible === false) {
-        remove_class(E, 'aux-show');
-        add_class(E, 'aux-hide');
-        this.disable_draw();
+        removeClass(E, 'aux-show');
+        addClass(E, 'aux-hide');
+        this.disableDraw();
         return;
       }
     }
@@ -497,12 +497,12 @@ export const Widget = define_class({
     if (E) {
       if (I.active) {
         I.active = false;
-        toggle_class(E, 'aux-inactive', !O.active);
+        toggleClass(E, 'aux-inactive', !O.active);
       }
 
       if (I.disabled) {
         I.disabled = false;
-        toggle_class(E, 'aux-disabled', O.disabled);
+        toggleClass(E, 'aux-disabled', O.disabled);
       }
     }
 
@@ -512,7 +512,7 @@ export const Widget = define_class({
       if (O.needs_resize) {
         O.needs_resize = false;
 
-        S.after_frame(this._schedule_resize);
+        S.afterFrame(this._schedule_resize);
       }
     }
 
@@ -532,7 +532,7 @@ export const Widget = define_class({
   },
   addSubscriptions: function (...subs) {
     subs.forEach((sub) => {
-      this._subscriptions = add_subscription(this._subscriptions, sub);
+      this._subscriptions = addSubscription(this._subscriptions, sub);
     });
   },
   destroy: function () {
@@ -541,20 +541,20 @@ export const Widget = define_class({
      *
      * @event Widget#destroy
      */
-    if (this.is_destructed()) {
+    if (this.isDestructed()) {
       warn('destroy called twice on ', this);
       return;
     }
 
-    this._subscriptions = unsubscribe_subscriptions(this._subscriptions);
+    this._subscriptions = unsubscribeSubscriptions(this._subscriptions);
 
     this.emit('destroy');
 
-    this.disable_draw();
-    this.set_parent(void 0);
+    this.disableDraw();
+    this.setParent(void 0);
 
     if (this.children) {
-      this.remove_children(this.children);
+      this.removeChildren(this.children);
       this.children = null;
     }
 
@@ -570,33 +570,33 @@ export const Widget = define_class({
       this.element = null;
     }
   },
-  add_class: function (cls) {
-    add_class(this.getClassTarget(), cls);
+  addClass: function (cls) {
+    addClass(this.getClassTarget(), cls);
   },
-  remove_class: function (cls) {
-    remove_class(this.getClassTarget(), cls);
+  removeClass: function (cls) {
+    removeClass(this.getClassTarget(), cls);
   },
-  has_class: function (cls) {
-    return has_class(this.getClassTarget(), cls);
+  hasClass: function (cls) {
+    return hasClass(this.getClassTarget(), cls);
   },
-  set_style: function (name, value) {
-    set_style(this.getStyleTarget(), name, value);
+  setStyle: function (name, value) {
+    setStyle(this.getStyleTarget(), name, value);
   },
   /**
    * Sets a CSS style property in this widget's DOM element.
    *
-   * @method Widget#set_style
+   * @method Widget#setStyle
    */
-  set_styles: function (styles) {
-    set_styles(this.getStyleTarget(), styles);
+  setStyles: function (styles) {
+    setStyles(this.getStyleTarget(), styles);
   },
   /**
    * Returns the computed style of this widget's DOM element.
    *
-   * @method Widget#get_style
+   * @method Widget#getStyle
    */
-  get_style: function (name) {
-    return get_style(this.getStyleTarget(), name);
+  getStyle: function (name) {
+    return getStyle(this.getStyleTarget(), name);
   },
   // GETTER & SETTER
   /**
@@ -606,7 +606,7 @@ export const Widget = define_class({
    */
   invalidate: function (key) {
     this.invalid[key] = true;
-    this.trigger_draw();
+    this.triggerDraw();
   },
   /**
    * Sets an option.
@@ -623,7 +623,7 @@ export const Widget = define_class({
       this.invalid[key] = true;
       if (this.value_time && this.value_time[key])
         this.value_time[key] = Date.now();
-      this.trigger_draw();
+      this.triggerDraw();
     } else if (key.charCodeAt(0) !== 95) {
       warn(
         '%O: %s.set(%s, %O): unknown option.',
@@ -636,53 +636,53 @@ export const Widget = define_class({
     Base.prototype.set.call(this, key, value);
     return value;
   },
-  track_option: function (key) {
+  trackOption: function (key) {
     if (!this.value_time) this.value_time = {};
     this.value_time[key] = Date.now();
   },
-  enable_draw_self: function () {},
+  enableDrawSelf: function () {},
   /**
    * Enables rendering for all children of this widget.
    *
-   * @method Widget#enable_draw_children
+   * @method Widget#enableDrawChildren
    */
-  enable_draw_children: function () {
+  enableDrawChildren: function () {
     var C = this.children;
-    if (C) for (var i = 0; i < C.length; i++) C[i].enable_draw();
+    if (C) for (var i = 0; i < C.length; i++) C[i].enableDraw();
   },
   /**
    * Schedules this widget for drawing.
    *
-   * @method Widget#enable_draw
+   * @method Widget#enableDraw
    *
    * @emits Widget#show
    */
-  enable_draw: function () {
+  enableDraw: function () {
     if (this._drawn) return;
     this._drawn = true;
     if (this.needs_redraw) {
       S.add(this._redraw, 1);
     }
     this.emit('show');
-    this.enable_draw_children();
+    this.enableDrawChildren();
   },
-  disable_draw_children: function () {
+  disableDrawChildren: function () {
     var C = this.children;
-    if (C) for (var i = 0; i < C.length; i++) C[i].disable_draw();
+    if (C) for (var i = 0; i < C.length; i++) C[i].disableDraw();
   },
   /**
    * Stop drawing this widget.
    *
-   * @method Widget#enable_draw
+   * @method Widget#enableDraw
    *
    * @emits Widget#hide
    */
-  disable_draw: function () {
+  disableDraw: function () {
     if (!this._drawn) return;
     this._drawn = false;
     if (this.needs_redraw) {
       S.remove(this._redraw, 1);
-      S.remove_next(this._redraw, 1);
+      S.removeNext(this._redraw, 1);
     }
     /**
      * Is fired when the visibility state changes. The first argument
@@ -692,7 +692,7 @@ export const Widget = define_class({
      * @event Widget#visibility
      */
     this.emit('hide');
-    this.disable_draw_children();
+    this.disableDrawChildren();
   },
   /**
    * Make the widget visible. This will apply the class <code>aux-show</code>
@@ -702,19 +702,19 @@ export const Widget = define_class({
    */
   show: function () {
     if (this.hidden()) this.set('visible', true);
-    if (!this.is_drawn()) this.enable_draw();
+    if (!this.isDrawn()) this.enableDraw();
   },
   /**
    * Show the widget immediately by applying the class <code>aux-show</code>.
-   * Does not call enable_draw().
+   * Does not call enableDraw().
    *
-   * @method Widget#force_show
+   * @method Widget#forceShow
    */
-  force_show: function () {
+  forceShow: function () {
     const E = this.element;
     this.set('visible', true);
-    add_class(E, 'aux-show');
-    remove_class(E, 'aux-hide');
+    addClass(E, 'aux-show');
+    removeClass(E, 'aux-hide');
   },
   /**
    * Hide the widget. This will result in the class <code>aux-hide</code>
@@ -727,33 +727,33 @@ export const Widget = define_class({
   },
   /**
    * Hide the widget immediately by applying the class <code>aux-hide</code>.
-   * Does not call disable_draw().
+   * Does not call disableDraw().
    *
-   * @method Widget#force_hide
+   * @method Widget#forceHide
    */
-  force_hide: function () {
+  forceHide: function () {
     const E = this.element;
     this.set('visible', false);
-    remove_class(E, 'aux-show');
-    add_class(E, 'aux-hide');
+    removeClass(E, 'aux-show');
+    addClass(E, 'aux-hide');
   },
-  show_nodraw_children: function () {
+  showNoDrawChildren: function () {
     var C = this.children;
-    if (C) for (let i = 0; i < C.length; i++) C[i].show_nodraw();
+    if (C) for (let i = 0; i < C.length; i++) C[i].showNoDraw();
   },
-  show_nodraw: function () {
+  showNoDraw: function () {
     if (this.options.visible === true) return;
     this.update('visible', true);
-    this.show_nodraw_children();
+    this.showNoDrawChildren();
   },
-  hide_nodraw_children: function () {
+  hideNoDrawChildren: function () {
     var C = this.children;
-    if (C) for (let i = 0; i < C.length; i++) C[i].hide_nodraw();
+    if (C) for (let i = 0; i < C.length; i++) C[i].hideNoDraw();
   },
-  hide_nodraw: function () {
+  hideNoDraw: function () {
     if (this.options.visible === false) return;
     this.update('visible', false);
-    this.hide_nodraw_children();
+    this.hideNoDrawChildren();
   },
   /**
    * Returns the current hidden status.
@@ -763,20 +763,20 @@ export const Widget = define_class({
   hidden: function () {
     return this.options.visible === false;
   },
-  is_drawn: function () {
+  isDrawn: function () {
     return this._drawn;
   },
   /**
    * Toggle the hidden status. This is equivalent to calling hide() or show(), depending on
    * the current hidden status of this widget.
    *
-   * @method Widget#toggle_hidden
+   * @method Widget#toggleHidden
    */
-  toggle_hidden: function () {
+  toggleHidden: function () {
     if (this.hidden()) this.show();
     else this.hide();
   },
-  set_parent: function (parent, no_remove_child) {
+  setParent: function (parent, no_remove_child) {
     const old_parent = this.parent;
 
     if (old_parent === parent) return;
@@ -804,10 +804,10 @@ export const Widget = define_class({
     }
 
     if (old_parent && !no_remove_child) {
-      old_parent.remove_child(this);
+      old_parent.removeChild(this);
     }
   },
-  has_child: function (child) {
+  hasChild: function (child) {
     const C = this.children;
 
     return C !== null && C.indexOf(child) !== -1;
@@ -815,44 +815,44 @@ export const Widget = define_class({
   /**
    * Registers a widget as a child widget. This method is used to build up the widget tree. It does not modify the DOM tree.
    *
-   * @method Widget#add_child
+   * @method Widget#addChild
    *
    * @param {Widget} child - The child to add.
    *
    * @emits Widget#child_added
    *
-   * @see Container#append_child
+   * @see Container#appendChild
    */
-  add_child: function (child) {
+  addChild: function (child) {
     var C = this.children;
     if (!C) this.children = C = [];
 
     if (C.indexOf(child) !== -1) throw new Error('Adding child twice.');
 
-    child.set_parent(this);
+    child.setParent(this);
     C.push(child);
-    if (this.is_drawn()) {
-      child.enable_draw();
+    if (this.isDrawn()) {
+      child.enableDraw();
     } else {
-      child.disable_draw();
+      child.disableDraw();
     }
-    child.trigger_resize();
+    child.triggerResize();
     this.emit('child_added', child);
   },
   /**
    * Removes a child widget. Note that this method only modifies
    * the widget tree and does not change the DOM.
    *
-   * @method Widget#remove_child
+   * @method Widget#removeChild
    *
    * @emits Widget#child_removed
    *
    * @param {Widget} child - The child to remove.
    */
-  remove_child: function (child) {
-    if (this.is_destructed()) return;
-    if (child.parent === this) child.set_parent(void 0, true);
-    child.disable_draw();
+  removeChild: function (child) {
+    if (this.isDestructed()) return;
+    if (child.parent === this) child.setParent(void 0, true);
+    child.disableDraw();
     var C = this.children;
     var i;
     if (C !== null && (i = C.indexOf(child)) !== -1) {
@@ -864,60 +864,60 @@ export const Widget = define_class({
     }
   },
   /**
-   * Calls {@link Widget#append_child} for an array of widgets.
+   * Calls {@link Widget#appendChild} for an array of widgets.
    *
-   * @method Widget#append_children
+   * @method Widget#appendChildren
    *
    * @param {Array.<Widget>} children - The child widgets to append.
    */
-  append_children: function (a) {
-    a.map(this.append_child, this);
+  appendChildren: function (a) {
+    a.map(this.appendChild, this);
   },
   /**
    * Appends <code>child.element</code> to the widget element and
    * registers <code>child</code> as a child widget.
    *
-   * @method Widget#append_child
+   * @method Widget#appendChild
    *
    * @param {Widget} child - The child widget to append.
    */
-  append_child: function (child) {
+  appendChild: function (child) {
     this.element.appendChild(child.element);
-    this.add_child(child);
+    this.addChild(child);
   },
   /**
    * Removes an array of children.
    *
-   * @method Widget#remove_children
+   * @method Widget#removeChildren
    *
    * @param {Array.<Widget>} a - An array of Widgets.
    */
-  remove_children: function (a) {
-    a.map(this.remove_child, this);
+  removeChildren: function (a) {
+    a.map(this.removeChild, this);
   },
   /**
    * Registers an array of widgets as children.
    *
-   * @method Widget#add_children
+   * @method Widget#addChildren
    *
    * @param {Array.<Widget>} a - An array of Widgets.
    */
-  add_children: function (a) {
-    a.map(this.add_child, this);
+  addChildren: function (a) {
+    a.map(this.addChild, this);
   },
 
   /**
    * Returns an array of all visible children.
    *
-   * @method Widget#visible_children
+   * @method Widget#visibleChildren
    */
-  visible_children: function (a) {
+  visibleChildren: function (a) {
     if (!a) a = [];
     var C = this.children;
     if (C)
       for (var i = 0; i < C.length; i++) {
         a.push(C[i]);
-        C[i].visible_children(a);
+        C[i].visibleChildren(a);
       }
     return a;
   },
@@ -925,20 +925,20 @@ export const Widget = define_class({
   /**
    * Returns an array of all children.
    *
-   * @method Widget#all_children
+   * @method Widget#allChildren
    */
-  all_children: function (a) {
+  allChildren: function (a) {
     if (!a) a = [];
     var C = this.children;
     if (C)
       for (var i = 0; i < C.length; i++) {
         a.push(C[i]);
-        C[i].all_children(a);
+        C[i].allChildren(a);
       }
     return a;
   },
 
-  get_children: function () {
+  getChildren: function () {
     var C = this.children;
     return C !== null ? C : [];
   },
@@ -949,22 +949,22 @@ export const Widget = define_class({
    * @param {Function} cb
    */
   observeResize: function (cb) {
-    typecheck_function(cb);
+    typecheckFunction(cb);
 
     let triggered = false;
     const callback = () => {
       triggered = false;
-      if (!this.is_drawn()) {
-        this.trigger_resize();
+      if (!this.isDrawn()) {
+        this.triggerResize();
         return;
       }
       cb(this);
     };
-    this.trigger_resize();
+    this.triggerResize();
     return this.subscribe('resize', () => {
       if (triggered) return;
       triggered = true;
-      S.add_next(callback);
+      S.addNext(callback);
     });
   },
 });

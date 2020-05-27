@@ -17,13 +17,13 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from './../widget_helpers.js';
-import { add_class, remove_class } from '../utils/dom.js';
+import { defineClass } from './../widget_helpers.js';
+import { addClass, removeClass } from '../utils/dom.js';
 
 function reset(element) {
   var i = this.elements.indexOf(element);
   if (i < 0) return;
-  remove_class(this.elements[i], 'aux-warn');
+  removeClass(this.elements[i], 'aux-warn');
   this.elements.splice(i, 1);
   this.timeouts.splice(i, 1);
   /**
@@ -43,7 +43,7 @@ function reset(element) {
  *
  * @mixin Warning
  */
-export const Warning = define_class({
+export const Warning = defineClass({
   elements: [],
   timeouts: [],
   /**
@@ -68,7 +68,7 @@ export const Warning = define_class({
     }
     this.elements[i] = element;
     this.timeouts[i] = window.setTimeout(reset.bind(this, element), timeout);
-    add_class(element, 'aux-warn');
+    addClass(element, 'aux-warn');
     /**
      * Gets fired when {@link Warning#warning} was called.
      *

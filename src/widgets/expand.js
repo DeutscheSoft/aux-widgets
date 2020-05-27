@@ -17,11 +17,11 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
-import { define_child_widget } from '../child_widget.js';
+import { defineClass } from '../widget_helpers.js';
+import { defineChildWidget } from '../child_widget.js';
 import { Container } from './container.js';
 import { Button } from './button.js';
-import { add_class } from '../utils/dom.js';
+import { addClass } from '../utils/dom.js';
 
 function toggle(e) {
   var self = this.parent;
@@ -33,24 +33,24 @@ function collapse(state) {
   this.userset('expanded', state);
   return false;
 }
-function visible_when_expanded(widget) {
+function visibleWhenExpanded(widget) {
   var v = widget.options._expanded;
   return v !== false;
 }
-function visible_when_collapsed(widget) {
+function visibleWhenCollapsed(widget) {
   var v = widget.options._collapsed;
   return v === true;
 }
-function is_visible(widget) {
+function isVisible(widget) {
   var value = this.options.always_expanded || this.options.expanded;
 
   if (value) {
-    return visible_when_expanded(widget);
+    return visibleWhenExpanded(widget);
   } else {
-    return visible_when_collapsed(widget);
+    return visibleWhenCollapsed(widget);
   }
 }
-function changed_expanded(value) {
+function changedExpanded(value) {
   var group = this.options.group;
   var other_expand;
   var grp;
@@ -67,9 +67,9 @@ function changed_expanded(value) {
       if (grp.default) grp.default.set('expanded', true);
     }
   }
-  update_visibility.call(this);
+  updateVisibility.call(this);
 }
-function add_to_group(group) {
+function addToGroup(group) {
   var grp;
   var O = this.options;
   if (!(grp = expand_groups[group]))
@@ -83,10 +83,10 @@ function add_to_group(group) {
     }
   }
 
-  if (O.expanded) changed_expanded.call(this, O.expanded);
+  if (O.expanded) changedExpanded.call(this, O.expanded);
 }
 
-function remove_from_group(group) {
+function removeFromGroup(group) {
   var grp = expand_groups[group];
 
   if (grp.default === this) grp.default = false;
@@ -95,20 +95,20 @@ function remove_from_group(group) {
     if (grp.default) grp.default.set('expanded', true);
   }
 }
-function remove_group_default(group) {
+function removeGroupDefault(group) {
   if (!group) return;
   var grp = expand_groups[group];
   grp.default = false;
 }
-function update_visibility() {
+function updateVisibility() {
   var C = this.children;
   var value = this.options.always_expanded || this.options.expanded;
 
   if (C) {
-    var test = value ? visible_when_expanded : visible_when_collapsed;
+    var test = value ? visibleWhenExpanded : visibleWhenCollapsed;
     for (var i = 0; i < C.length; i++) {
-      if (test(C[i])) this.show_child(i);
-      else this.hide_child(i);
+      if (test(C[i])) this.showChild(i);
+      else this.hideChild(i);
     }
   }
 
@@ -129,7 +129,7 @@ function update_visibility() {
   }
 }
 var expand_groups = {};
-export const Expand = define_class({
+export const Expand = defineClass({
   /**
    * Expand is a container which can be toggled between two different states,
    * expanded and collapsed. It can be used to implement overlay popups, but it is
@@ -177,10 +177,10 @@ export const Expand = define_class({
     icon: '',
   },
   static_events: {
-    set_expanded: changed_expanded,
-    set_always_expanded: update_visibility,
+    set_expanded: changedExpanded,
+    set_always_expanded: updateVisibility,
     set_group: function (value) {
-      if (value) add_to_group.call(this, value);
+      if (value) addToGroup.call(this, value);
     },
   },
   Extends: Container,
@@ -199,7 +199,7 @@ export const Expand = define_class({
     Container.prototype.redraw.call(this);
 
     if (I.always_expanded) {
-      this[O.always_expanded ? 'add_class' : 'remove_class'](
+      this[O.always_expanded ? 'addClass' : 'removeClass'](
         'aux-always-expanded'
       );
     }
@@ -207,8 +207,8 @@ export const Expand = define_class({
     if (I.expanded || I.always_expanded) {
       I.always_expanded = I.expanded = false;
       var v = O.always_expanded || O.expanded;
-      this[v ? 'add_class' : 'remove_class']('aux-expanded');
-      this.trigger_resize();
+      this[v ? 'addClass' : 'removeClass']('aux-expanded');
+      this.triggerResize();
     }
   },
   initialize: function (options) {
@@ -218,26 +218,26 @@ export const Expand = define_class({
      *   Has class <code>.aux-expand</code>.
      */
 
-    this._update_visibility = update_visibility.bind(this);
+    this._update_visibility = updateVisibility.bind(this);
 
-    if (this.options.group) add_to_group.call(this, this.options.group);
+    if (this.options.group) addToGroup.call(this, this.options.group);
 
     this.set('expanded', this.options.expanded);
     this.set('always_expanded', this.options.always_expanded);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-expand');
+    addClass(element, 'aux-expand');
 
     Container.prototype.draw.call(this, O, element);
   },
-  add_child: function (child) {
-    Container.prototype.add_child.call(this, child);
-    if (!is_visible.call(this, child)) this.hide_child(child);
+  addChild: function (child) {
+    Container.prototype.addChild.call(this, child);
+    if (!isVisible.call(this, child)) this.hideChild(child);
     child.on('set__expanded', this._update_visibility);
     child.on('set__collapsed', this._update_visibility);
   },
-  remove_child: function (child) {
-    Container.prototype.remove_child.call(this, child);
+  removeChild: function (child) {
+    Container.prototype.removeChild.call(this, child);
     child.off('set__expanded', this._update_visibility);
     child.off('set__collapsed', this._update_visibility);
   },
@@ -247,10 +247,10 @@ export const Expand = define_class({
       group = this.options.group;
       // this is reached from init, where this element was never added
       // to the group.
-      if (group && value !== group) remove_from_group.call(this, group);
+      if (group && value !== group) removeFromGroup.call(this, group);
     } else if (key === 'group_default') {
       if (!value && this.options.group_default)
-        remove_group_default.call(this, this.options.group);
+        removeGroupDefault.call(this, this.options.group);
     }
     return Container.prototype.set.call(this, key, value);
   },
@@ -258,7 +258,7 @@ export const Expand = define_class({
 /**
  * @member {Button} Expand#button - The button for toggling the state of the expand.
  */
-define_child_widget(Expand, 'button', {
+defineChildWidget(Expand, 'button', {
   create: Button,
   show: true,
   map_options: {

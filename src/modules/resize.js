@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from './../widget_helpers.js';
+import { defineClass } from './../widget_helpers.js';
 import { Range } from './range.js';
 import { DragValue } from './dragvalue.js';
 import { Base } from '../implements/base.js';
@@ -75,7 +75,7 @@ function dragging(e) {
    */
   this.emit('resizing', e, w, h);
 }
-function set_handle() {
+function setHandle() {
   var h = this.options.handle;
   if (this.drag) this.drag.destroy();
   var range = new Range({});
@@ -108,7 +108,7 @@ function set_handle() {
  * @property {Object} [options.max={x: -1, y: -1}] - Object containing x
  *   and y determining maximum size. A value of -1 means no maximum.
  */
-export const Resize = define_class({
+export const Resize = defineClass({
   // Resize enables resizing of elements on the screen.
   Extends: Base,
   _options: {
@@ -133,7 +133,7 @@ export const Resize = define_class({
   set: function (key, value) {
     if (key === 'handle') {
       if (!value) value = this.options.node;
-      set_handle.call(this);
+      setHandle.call(this);
     }
     Base.prototype.set.call(this, key, value);
   },

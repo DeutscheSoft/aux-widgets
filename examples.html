@@ -44,13 +44,13 @@
         "ValueKnob"
       ];
 
-      import { html } from './src/utils/dom.js';
+      import { HTML } from './src/utils/dom.js';
 
       function isint(v) {
         return typeof v !== "undefined" && parseInt(v).toString() === v.toString();
       }
 
-      async function load_example(widget) {
+      async function loadExample(widget) {
         var file = widget + ".html";
 
         const header = document.createElement("h3");
@@ -59,7 +59,7 @@
         const cont = document.createElement('aux-container');
 
         const res = await window.fetch('examples/' + file);
-        cont.appendChild(html(await res.text()));
+        cont.appendChild(HTML(await res.text()));
         const scripts = cont.querySelectorAll('script');
 
         return (root) => {
@@ -71,7 +71,7 @@
         };
       }
 
-      function decode_hash()
+      function decodeHash()
       {
         const atoms = window.location.hash.substr(1).split(",");
         let widgets = [];
@@ -92,14 +92,14 @@
         return [ all, scroll, widgets ];
       }
 
-      function update_hash_silent(hash)
+      function updateHashSilent(hash)
       {
         window.location.hash = hash;
       }
 
-      function update_scroll()
+      function updateScroll()
       {
-        const [ all, scroll, widgets ] = decode_hash();
+        const [ all, scroll, widgets ] = decodeHash();
 
         const root = document.querySelector('aux-root');
         let s = parseInt(root.scrollTop);
@@ -109,10 +109,10 @@
         else
           h += widgets.join(",");
 
-        update_hash_silent(h);
+        updateHashSilent(h);
       }
 
-      function build_list_entry (item, name, is_active) {
+      function buildListEntry (item, name, is_active) {
         var li = document.createElement("li");
         li.innerHTML = name ? name : item;
         li.addEventListener("click", function (e) {
@@ -138,14 +138,14 @@
         return function(v) { return name === v; };
       }
 
-      function build_navigation (list) {
+      function buildNavigation (list) {
         var ul = document.createElement("ul");
         ul.setAttribute("id", "navigation");
-        const home = build_list_entry("", "Home", current => current === void(0));
+        const home = buildListEntry("", "Home", current => current === void(0));
         ul.appendChild(home);
-        ul.appendChild(build_list_entry("*", "All", current => current === null));
+        ul.appendChild(buildListEntry("*", "All", current => current === null));
         for (var i = 0; i < list.length; i++) {
-          const li = build_list_entry(list[i], "", cmp(list[i]))
+          const li = buildListEntry(list[i], "", cmp(list[i]))
           ul.appendChild(li);
         }
         return ul;
@@ -153,10 +153,10 @@
 
       let last_info = null;
 
-      function load_examples()
+      function loadExamples()
       {
         const root = document.querySelector('aux-root');
-        const [ all, scroll, widgets ] = decode_hash();
+        const [ all, scroll, widgets ] = decodeHash();
 
         if (last_info)
         {
@@ -174,14 +174,14 @@
 
         introduction.style.display = widgets.length ? 'none' : null;
 
-        const tasks = widgets.map(load_example);
+        const tasks = widgets.map(loadExample);
 
         Promise.all(tasks).then((cbs) => {
           cbs.forEach((cb) => cb(root));
           setTimeout(function () {
             root.scrollTo(0, scroll);
             root.addEventListener("scroll", function () {
-              update_scroll(root.scrollTop);
+              updateScroll(root.scrollTop);
             });
 
             document.querySelectorAll('.aux-widget').forEach((node) => {
@@ -205,14 +205,14 @@
       }
 
       window.addEventListener('hashchange', function() {
-        load_examples();
+        loadExamples();
       });
 
       window.addEventListener('load', function() {
-        const ul = build_navigation(examples);
+        const ul = buildNavigation(examples);
         document.body.appendChild(ul);
 
-        load_examples();
+        loadExamples();
       });
 
     </script>

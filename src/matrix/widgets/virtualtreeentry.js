@@ -17,13 +17,13 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../../widget_helpers.js';
-import { define_child_widget } from '../../child_widget.js';
+import { defineClass } from '../../widget_helpers.js';
+import { defineChildWidget } from '../../child_widget.js';
 import {
-  set_text,
-  add_class,
-  remove_class,
-  toggle_class,
+  setText,
+  addClass,
+  removeClass,
+  toggleClass,
 } from '../../utils/dom.js';
 import { Timer } from '../../utils/timers.js';
 import { Subscriptions } from '../../utils/subscriptions.js';
@@ -40,7 +40,7 @@ const indent_to_glyph = {
   none: '',
 };
 
-function compose_depth(tree_position) {
+function composeDepth(tree_position) {
   let depth = [];
 
   if (tree_position.length == 1) return depth;
@@ -56,7 +56,7 @@ function compose_depth(tree_position) {
   return depth;
 }
 
-export const VirtualTreeEntry = define_class({
+export const VirtualTreeEntry = defineClass({
   Extends: Container,
   _options: Object.assign(Object.create(Container.prototype._options), {
     label: 'string|boolean',
@@ -117,7 +117,7 @@ export const VirtualTreeEntry = define_class({
     this.data_subscriptions.unsubscribe();
 
     if (element) {
-      this.update('depth', compose_depth(treePosition));
+      this.update('depth', composeDepth(treePosition));
       this.update('collapsable', element.isGroup);
       this.update('group', element.isGroup);
       this.update('odd', (index & 1) === 0);
@@ -155,25 +155,25 @@ export const VirtualTreeEntry = define_class({
         for (var i = 0; i < d; ++i) {
           s += indent_to_glyph[O.depth[i]];
         }
-        set_text(this.indent.element, s);
+        setText(this.indent.element, s);
       }
     }
 
     if (I.odd) {
       I.odd = false;
-      remove_class(E, 'aux-even');
-      remove_class(E, 'aux-odd');
-      add_class(E, O.odd ? 'aux-odd' : 'aux-even');
+      removeClass(E, 'aux-even');
+      removeClass(E, 'aux-odd');
+      addClass(E, O.odd ? 'aux-odd' : 'aux-even');
     }
 
     if (I.collapsable) {
       I.collapsable = false;
-      toggle_class(E, 'aux-collapsable', O.collapsable);
+      toggleClass(E, 'aux-collapsable', O.collapsable);
     }
 
     if (I.group) {
       I.group = false;
-      toggle_class(E, 'aux-group', O.group);
+      toggleClass(E, 'aux-group', O.group);
     }
 
     if (I.collapsed) {
@@ -186,21 +186,21 @@ export const VirtualTreeEntry = define_class({
   },
 });
 
-define_child_widget(VirtualTreeEntry, 'label', {
+defineChildWidget(VirtualTreeEntry, 'label', {
   create: Label,
   option: 'label',
   inherit_options: true,
   toggle_class: true,
 });
 
-define_child_widget(VirtualTreeEntry, 'icon', {
+defineChildWidget(VirtualTreeEntry, 'icon', {
   create: Icon,
   option: 'icon',
   inherit_options: true,
   toggle_class: true,
 });
 
-define_child_widget(VirtualTreeEntry, 'indent', {
+defineChildWidget(VirtualTreeEntry, 'indent', {
   create: Container,
   option: 'depth',
   toggle_class: true,
@@ -209,7 +209,7 @@ define_child_widget(VirtualTreeEntry, 'indent', {
   },
 });
 
-define_child_widget(VirtualTreeEntry, 'collapse', {
+defineChildWidget(VirtualTreeEntry, 'collapse', {
   create: Button,
   show: true,
   toggle_class: true,

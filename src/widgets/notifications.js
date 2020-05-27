@@ -17,9 +17,9 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
-import { define_child_widget } from '../child_widget.js';
-import { add_class } from '../utils/dom.js';
+import { defineClass } from '../widget_helpers.js';
+import { defineChildWidget } from '../child_widget.js';
+import { addClass } from '../utils/dom.js';
 import { Container } from './container.js';
 import { Button } from './button.js';
 import { Icon } from './icon.js';
@@ -39,7 +39,7 @@ import { S } from '../dom_scheduler.js';
  *   is appended to the container, either `end` or `start`.
  */
 
-export const Notifications = define_class({
+export const Notifications = defineClass({
   Extends: Container,
 
   _options: Object.assign(Object.create(Container.prototype._options), {
@@ -53,7 +53,7 @@ export const Notifications = define_class({
     Container.prototype.initialize.call(this, options);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-notifications');
+    addClass(element, 'aux-notifications');
 
     Container.prototype.draw.call(this, O, element);
   },
@@ -69,7 +69,7 @@ export const Notifications = define_class({
      */
     if (options instanceof Notification) n = options;
     else var n = new Notification(options);
-    this.add_child(n);
+    this.addChild(n);
     if (this.options.stack == 'start')
       this.element.insertBefore(n.element, this.element.firstChild);
     else this.element.appendChild(n.element);
@@ -80,17 +80,17 @@ export const Notifications = define_class({
   /**
    * Remove a notification instantly.
    *
-   * @method Notifications#remove_notification
+   * @method Notifications#removeNotification
    *
    * @param {Notification} [notification] - The Notification to remove.
    */
-  remove_notification: function (n) {
-    this.remove_child(n);
+  removeNotification: function (n) {
+    this.removeChild(n);
     return n;
   },
 });
 
-function close_clicked() {
+function closeClicked() {
   /**
    * Is fired when the user clicks on the close button.
    *
@@ -100,17 +100,17 @@ function close_clicked() {
   close.call(this.parent);
 }
 
-function after_hide() {
-  S.after_frame(
+function afterHide() {
+  S.afterFrame(
     function () {
-      if (this.is_destructed()) return;
+      if (this.isDestructed()) return;
       this.destroy();
     }.bind(this)
   );
 }
 
 function close() {
-  this.on('hide', after_hide);
+  this.on('hide', afterHide);
   this.hide();
   /**
    * Is fired when the notification was removed from the DOM after the hiding animation.
@@ -142,7 +142,7 @@ function timeout() {
  * @property {Boolean} [options.show_close=false] - Show a close button.
  */
 
-export const Notification = define_class({
+export const Notification = defineClass({
   Extends: Container,
 
   _options: Object.assign(Object.create(Container.prototype._options), {
@@ -167,7 +167,7 @@ export const Notification = define_class({
     this.set('timeout', O.timeout);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-notification');
+    addClass(element, 'aux-notification');
 
     Container.prototype.draw.call(this, O, element);
   },
@@ -199,12 +199,12 @@ export const Notification = define_class({
 /**
  * @member {Button} Notification#close - The Button for closing the notification.
  */
-define_child_widget(Notification, 'close', {
+defineChildWidget(Notification, 'close', {
   create: Button,
   show: false,
   toggle_class: true,
   static_events: {
-    click: close_clicked,
+    click: closeClicked,
   },
   default_options: {
     icon: 'close',
@@ -215,7 +215,7 @@ define_child_widget(Notification, 'close', {
 /**
  * @member {Icon} Notification#icon - The Icon widget.
  */
-define_child_widget(Notification, 'icon', {
+defineChildWidget(Notification, 'icon', {
   create: Icon,
   show: false,
   toggle_class: true,

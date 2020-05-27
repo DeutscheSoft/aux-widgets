@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { ConfirmButton } from './../widgets/confirmbutton.js';
 
@@ -30,6 +30,6 @@ import { ConfirmButton } from './../widgets/confirmbutton.js';
  * @class ConfirmButtonComponent
  * @implements Component
  */
-export const ConfirmButtonComponent = component_from_widget(ConfirmButton);
+export const ConfirmButtonComponent = componentFromWidget(ConfirmButton);
 
-define_component('confirmbutton', ConfirmButtonComponent);
+defineComponent('confirmbutton', ConfirmButtonComponent);

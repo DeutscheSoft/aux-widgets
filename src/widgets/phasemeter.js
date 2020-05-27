@@ -17,11 +17,11 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { LevelMeter } from './levelmeter.js';
-import { add_class, element } from '../utils/dom.js';
+import { addClass, element } from '../utils/dom.js';
 
-export const PhaseMeter = define_class({
+export const PhaseMeter = defineClass({
   /**
    * PhaseMeter is a {@link LevelMeter} configured to display phase
    * correlation.
@@ -53,7 +53,7 @@ export const PhaseMeter = define_class({
      */
   },
   draw: function (O, element) {
-    add_class(element, 'aux-phasemeter');
+    addClass(element, 'aux-phasemeter');
 
     LevelMeter.prototype.draw.call(this, O, element);
   },

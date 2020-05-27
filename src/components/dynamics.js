@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import {
   Dynamics,
@@ -35,7 +35,7 @@ import {
  * @class DynamicsComponent
  * @implements Component
  */
-export const DynamicsComponent = component_from_widget(Dynamics);
+export const DynamicsComponent = componentFromWidget(Dynamics);
 
 /**
  * WebComponent for the Compressor widget. Available in the DOM as
@@ -44,7 +44,7 @@ export const DynamicsComponent = component_from_widget(Dynamics);
  * @class CompressorComponent
  * @implements Component
  */
-export const CompressorComponent = component_from_widget(Compressor);
+export const CompressorComponent = componentFromWidget(Compressor);
 
 /**
  * WebComponent for the Expander widget. Available in the DOM as `aux-expander`.
@@ -52,7 +52,7 @@ export const CompressorComponent = component_from_widget(Compressor);
  * @class ExpanderComponent
  * @implements Component
  */
-export const ExpanderComponent = component_from_widget(Expander);
+export const ExpanderComponent = componentFromWidget(Expander);
 
 /**
  * WebComponent for the Gate widget. Available in the DOM as `aux-gate`.
@@ -60,7 +60,7 @@ export const ExpanderComponent = component_from_widget(Expander);
  * @class GateComponent
  * @implements Component
  */
-export const GateComponent = component_from_widget(Gate);
+export const GateComponent = componentFromWidget(Gate);
 
 /**
  * WebComponent for the Limiter widget. Available in the DOM as `aux-limiter`.
@@ -68,10 +68,10 @@ export const GateComponent = component_from_widget(Gate);
  * @class LimiterComponent
  * @implements Component
  */
-export const LimiterComponent = component_from_widget(Limiter);
+export const LimiterComponent = componentFromWidget(Limiter);
 
-define_component('dynamics', DynamicsComponent);
-define_component('compressor', CompressorComponent);
-define_component('expander', ExpanderComponent);
-define_component('gate', GateComponent);
-define_component('limiter', LimiterComponent);
+defineComponent('dynamics', DynamicsComponent);
+defineComponent('compressor', CompressorComponent);
+defineComponent('expander', ExpanderComponent);
+defineComponent('gate', GateComponent);
+defineComponent('limiter', LimiterComponent);

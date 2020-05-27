@@ -18,9 +18,9 @@
  */
 
 import {
-  component_from_widget,
-  subcomponent_from_widget,
-  define_component,
+  componentFromWidget,
+  subcomponentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { Crossover } from './../widgets/crossover.js';
 import { CrossoverBand } from './../widgets/crossover.js';
@@ -31,7 +31,7 @@ import { CrossoverBand } from './../widgets/crossover.js';
  * @class CrossoverComponent
  * @implements Component
  */
-export const CrossoverComponent = component_from_widget(Crossover);
+export const CrossoverComponent = componentFromWidget(Crossover);
 
 /**
  * WebComponent for the CrossoverBand widget. Available in the DOM as
@@ -40,10 +40,10 @@ export const CrossoverComponent = component_from_widget(Crossover);
  * @class CrossoverBandComponent
  * @implements Component
  */
-export const CrossoverBandComponent = subcomponent_from_widget(
+export const CrossoverBandComponent = subcomponentFromWidget(
   CrossoverBand,
   Crossover
 );
 
-define_component('crossover', CrossoverComponent);
-define_component('crossover-band', CrossoverBandComponent);
+defineComponent('crossover', CrossoverComponent);
+defineComponent('crossover-band', CrossoverBandComponent);

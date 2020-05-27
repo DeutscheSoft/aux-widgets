@@ -17,12 +17,12 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { Container } from './container.js';
-import { translate_anchor } from '../utils/anchor.js';
-import { add_class } from '../utils/dom.js';
+import { translateAnchor } from '../utils/anchor.js';
+import { addClass } from '../utils/dom.js';
 
-function autoclose_cb(e) {
+function autocloseCallback(e) {
   var curr = e.target;
   while (curr) {
     // TODO: if a dialog is opened out of a dialog both should avoid
@@ -38,19 +38,19 @@ function autoclose_cb(e) {
   this.close();
 }
 
-function activate_autoclose() {
+function activateAutoclose() {
   if (this._autoclose_active) return;
   document.body.addEventListener('click', this._autoclose_cb);
   this._autoclose_active = true;
 }
 
-function deactivate_autoclose() {
+function deactivateAutoclose() {
   if (!this._autoclose_active) return;
   document.body.removeEventListener('click', this._autoclose_cb);
   this._autoclose_active = false;
 }
 
-export const Dialog = define_class({
+export const Dialog = defineClass({
   /**
    * Dialog provides a hovering area which can be closed by clicking/tapping
    * anywhere on the screen. It can be automatically pushed to the topmost
@@ -91,7 +91,7 @@ export const Dialog = define_class({
   },
   static_events: {
     hide: function () {
-      deactivate_autoclose.call(this);
+      deactivateAutoclose.call(this);
       if (this.options.auto_remove) this.element.remove();
       this.emit('close');
     },
@@ -99,10 +99,10 @@ export const Dialog = define_class({
       var O = this.options;
 
       if (val === true) {
-        if (O.auto_close) activate_autoclose.call(this);
-        this.trigger_resize();
+        if (O.auto_close) activateAutoclose.call(this);
+        this.triggerResize();
       } else {
-        deactivate_autoclose.call(this);
+        deactivateAutoclose.call(this);
       }
 
       if (val === 'showing') {
@@ -113,15 +113,15 @@ export const Dialog = define_class({
     },
     set_auto_close: function (val) {
       if (val) {
-        if (!this.hidden()) activate_autoclose.call(this);
+        if (!this.hidden()) activateAutoclose.call(this);
       } else {
-        deactivate_autoclose.call(this);
+        deactivateAutoclose.call(this);
       }
     },
     set_visible: function (val) {
       var O = this.options;
       if (val) {
-        deactivate_autoclose.call(this);
+        deactivateAutoclose.call(this);
         if (
           O.toplevel &&
           O.container.tagName !== 'AWML-ROOT' &&
@@ -147,14 +147,14 @@ export const Dialog = define_class({
      * is not defined there */
     if (!O.container) O.container = window.document.body;
     this._autoclose_active = false;
-    this._autoclose_cb = autoclose_cb.bind(this);
+    this._autoclose_cb = autocloseCallback.bind(this);
     this.set('visible', O.visible);
   },
   resize: function () {
     if (this.options.visible) this.reposition();
   },
   draw: function (O, element) {
-    add_class(element, 'aux-dialog');
+    addClass(element, 'aux-dialog');
 
     Container.prototype.draw.call(this, O, element);
   },
@@ -172,7 +172,7 @@ export const Dialog = define_class({
       E.style.top = O.y + 'px';
     }
     if (I.anchor) {
-      var pos = translate_anchor(O.anchor, 0, 0, -100, -100);
+      var pos = translateAnchor(O.anchor, 0, 0, -100, -100);
       this.element.style.transform =
         'translate(' + pos.x + '%, ' + pos.y + '%)';
     }

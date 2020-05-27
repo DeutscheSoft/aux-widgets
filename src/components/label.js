@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { Label } from './../widgets/label.js';
 
@@ -29,6 +29,6 @@ import { Label } from './../widgets/label.js';
  * @class LabelComponent
  * @implements Component
  */
-export const LabelComponent = component_from_widget(Label);
+export const LabelComponent = componentFromWidget(Label);
 
-define_component('label', LabelComponent);
+defineComponent('label', LabelComponent);

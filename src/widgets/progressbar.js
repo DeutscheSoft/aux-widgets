@@ -17,9 +17,9 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { Meter } from './meter.js';
-import { add_class } from '../utils/dom.js';
+import { addClass } from '../utils/dom.js';
 
 /**
  * ProgressBar is a pre-configured {@link LevelMeter} to display
@@ -29,7 +29,7 @@ import { add_class } from '../utils/dom.js';
  *
  * @class ProgressBar
  */
-export const ProgressBar = define_class({
+export const ProgressBar = defineClass({
   Extends: Meter,
   _options: Object.create(Meter.prototype._options),
   options: {
@@ -48,10 +48,10 @@ export const ProgressBar = define_class({
      * @member {HTMLDivElement} ProgressBar#element - The main DIV container.
      *   Has class <code>.aux-progressbar</code>.
      */
-    this.set_parent(null);
+    this.setParent(null);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-progressbar');
+    addClass(element, 'aux-progressbar');
 
     Meter.prototype.draw.call(this, O, element);
   },

@@ -17,10 +17,10 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from './../widget_helpers.js';
+import { defineClass } from './../widget_helpers.js';
 import { Base } from './../implements/base.js';
 
-export const Module = define_class({
+export const Module = defineClass({
   Extends: Base,
   initialize: function (widget, options) {
     this.parent = widget;

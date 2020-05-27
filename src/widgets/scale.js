@@ -19,39 +19,39 @@
 
 /* jshint -W018 */
 
-import { define_class, define_child_element } from '../widget_helpers.js';
+import { defineClass, defineChildElement } from '../widget_helpers.js';
 import { Widget } from './widget.js';
 import { Ranged } from '../implements/ranged.js';
 import {
-  set_content,
-  add_class,
-  outer_width,
-  outer_height,
+  setContent,
+  addClass,
+  outerWidth,
+  outerHeight,
   element,
-  remove_class,
-  toggle_class,
+  removeClass,
+  toggleClass,
   empty,
-  inner_height,
-  inner_width,
+  innerHeight,
+  innerWidth,
   supports_transform,
 } from '../utils/dom.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { warn } from '../utils/log.js';
 import { S } from '../dom_scheduler.js';
 
-function get_base(O) {
+function getBase(O) {
   return Math.max(Math.min(O.max, O.base), O.min);
 }
 function vert(O) {
   return O.layout === 'left' || O.layout === 'right';
 }
-function fill_interval(range, levels, i, from, to, min_gap, result) {
+function fillInterval(range, levels, i, from, to, min_gap, result) {
   var level = levels[i];
   var x, j, pos, last_pos, last;
   var diff;
 
-  var to_pos = range.val2px(to);
-  last_pos = range.val2px(from);
+  var to_pos = range.valueToPixel(to);
+  last_pos = range.valueToPixel(from);
 
   if (Math.abs(to_pos - last_pos) < min_gap) return;
 
@@ -72,13 +72,13 @@ function fill_interval(range, levels, i, from, to, min_gap, result) {
     j > 0;
     x += level, j--
   ) {
-    pos = range.val2px(x);
+    pos = range.valueToPixel(x);
     diff = Math.abs(last_pos - pos);
     if (Math.abs(to_pos - pos) < min_gap) break;
     if (diff >= min_gap) {
       if (i > 0 && diff >= min_gap * 2) {
         // we have a chance to fit some more labels in
-        fill_interval(range, levels, i - 1, last, x, min_gap, result);
+        fillInterval(range, levels, i - 1, last, x, min_gap, result);
       }
       values.push(x);
       positions.push(pos);
@@ -88,13 +88,13 @@ function fill_interval(range, levels, i, from, to, min_gap, result) {
   }
 
   if (i > 0 && Math.abs(last_pos - to_pos) >= min_gap * 2) {
-    fill_interval(range, levels, i - 1, last, to, min_gap, result);
+    fillInterval(range, levels, i - 1, last, to, min_gap, result);
   }
 
   return result;
 }
 // remove collisions from a with b given a minimum gap
-function remove_collisions(a, b, min_gap, vert) {
+function removeCollisions(a, b, min_gap, vert) {
   var pa = a.positions,
     pb = b.positions;
   var va = a.values;
@@ -157,7 +157,7 @@ function remove_collisions(a, b, min_gap, vert) {
     positions: positions,
   };
 }
-function create_dom_nodes(data, create) {
+function createDOMNodes(data, create) {
   var nodes = [];
   var values, positions;
   var i;
@@ -173,7 +173,7 @@ function create_dom_nodes(data, create) {
     E.appendChild(node);
   }
 }
-function create_label(value, position) {
+function createLabel(value, position) {
   var O = this.options;
   var elem = document.createElement('SPAN');
   elem.className = 'aux-label';
@@ -184,15 +184,15 @@ function create_label(value, position) {
     elem.style.left = position.toFixed(1) + 'px';
   }
 
-  set_content(elem, O.labels(value));
+  setContent(elem, O.labels(value));
 
-  if (get_base(O) === value) add_class(elem, 'aux-base');
-  else if (O.max === value) add_class(elem, 'aux-max');
-  else if (O.min === value) add_class(elem, 'aux-min');
+  if (getBase(O) === value) addClass(elem, 'aux-base');
+  else if (O.max === value) addClass(elem, 'aux-max');
+  else if (O.min === value) addClass(elem, 'aux-min');
 
   return elem;
 }
-function create_dot(value, position) {
+function createDot(value, position) {
   var O = this.options;
   var elem = document.createElement('DIV');
   elem.className = 'aux-dot';
@@ -203,36 +203,36 @@ function create_dot(value, position) {
     elem.style.left = Math.round(position - 0.5) + 'px';
   }
 
-  if (get_base(O) === value) add_class(elem, 'aux-base');
-  if (O.max === value) add_class(elem, 'aux-max');
-  if (O.min === value) add_class(elem, 'aux-min');
+  if (getBase(O) === value) addClass(elem, 'aux-base');
+  if (O.max === value) addClass(elem, 'aux-max');
+  if (O.min === value) addClass(elem, 'aux-min');
 
   return elem;
 }
-function measure_dimensions(data) {
+function measureDimensions(data) {
   var nodes = data.nodes;
   var width = [];
   var height = [];
 
   for (var i = 0; i < nodes.length; i++) {
-    width.push(outer_width(nodes[i]));
-    height.push(outer_height(nodes[i]));
+    width.push(outerWidth(nodes[i]));
+    height.push(outerHeight(nodes[i]));
   }
 
   data.width = width;
   data.height = height;
 }
-function handle_end(O, labels, i) {
+function handleEnd(O, labels, i) {
   var node = labels.nodes[i];
   var v = labels.values[i];
 
   if (v === O.min) {
-    add_class(node, 'aux-min');
+    addClass(node, 'aux-min');
   } else if (v === O.max) {
-    add_class(node, 'aux-max');
+    addClass(node, 'aux-max');
   } else return;
 }
-function generate_scale(from, to, include_from, show_to) {
+function generateScale(from, to, include_from, show_to) {
   var O = this.options;
   var labels;
 
@@ -250,7 +250,7 @@ function generate_scale(from, to, include_from, show_to) {
   var tmp;
 
   if (include_from) {
-    tmp = this.val2px(from);
+    tmp = this.valueToPixel(from);
 
     if (labels) {
       labels.values.push(from);
@@ -263,12 +263,12 @@ function generate_scale(from, to, include_from, show_to) {
 
   var levels = O.levels;
 
-  fill_interval(this, levels, levels.length - 1, from, to, O.gap_dots, dots);
+  fillInterval(this, levels, levels.length - 1, from, to, O.gap_dots, dots);
 
   if (labels) {
     if (O.levels_labels) levels = O.levels_labels;
 
-    fill_interval(
+    fillInterval(
       this,
       levels,
       levels.length - 1,
@@ -278,9 +278,9 @@ function generate_scale(from, to, include_from, show_to) {
       labels
     );
 
-    tmp = this.val2px(to);
+    tmp = this.valueToPixel(to);
 
-    if (show_to || Math.abs(tmp - this.val2px(from)) >= O.gap_labels) {
+    if (show_to || Math.abs(tmp - this.valueToPixel(from)) >= O.gap_labels) {
       labels.values.push(to);
       labels.positions.push(tmp);
 
@@ -289,14 +289,14 @@ function generate_scale(from, to, include_from, show_to) {
     }
   } else {
     dots.values.push(to);
-    dots.positions.push(this.val2px(to));
+    dots.positions.push(this.valueToPixel(to));
   }
 
   if (O.show_labels) {
-    create_dom_nodes.call(this, labels, create_label.bind(this));
+    createDOMNodes.call(this, labels, createLabel.bind(this));
 
-    if (labels.values.length && labels.values[0] === get_base(O)) {
-      add_class(labels.nodes[0], 'aux-base');
+    if (labels.values.length && labels.values[0] === getBase(O)) {
+      addClass(labels.nodes[0], 'aux-base');
     }
   }
 
@@ -308,36 +308,36 @@ function generate_scale(from, to, include_from, show_to) {
         values: labels.values,
         positions: labels.positions,
       };
-      create_dom_nodes.call(this, markers, create_dot.bind(this));
+      createDOMNodes.call(this, markers, createDot.bind(this));
       for (var i = 0; i < markers.nodes.length; i++)
-        add_class(markers.nodes[i], 'aux-marker');
+        addClass(markers.nodes[i], 'aux-marker');
     }
 
     if (O.show_labels && labels.values.length > 1) {
-      handle_end(O, labels, 0);
-      handle_end(O, labels, labels.nodes.length - 1);
+      handleEnd(O, labels, 0);
+      handleEnd(O, labels, labels.nodes.length - 1);
     }
 
     if (O.avoid_collisions && O.show_labels) {
-      dots = remove_collisions(dots, labels, O.gap_dots, is_vert);
+      dots = removeCollisions(dots, labels, O.gap_dots, is_vert);
     } else if (markers) {
-      dots = remove_collisions(dots, markers, O.gap_dots);
+      dots = removeCollisions(dots, markers, O.gap_dots);
     }
 
-    create_dom_nodes.call(this, dots, create_dot.bind(this));
+    createDOMNodes.call(this, dots, createDot.bind(this));
   };
 
   if (O.show_labels && O.avoid_collisions)
     S.add(
       function () {
-        measure_dimensions(labels);
+        measureDimensions(labels);
         S.add(render_cb.bind(this), 3);
       }.bind(this),
       2
     );
   else render_cb.call(this);
 }
-function mark_markers(labels, dots) {
+function markMarkers(labels, dots) {
   var i, j;
 
   var a = labels.values;
@@ -348,7 +348,7 @@ function mark_markers(labels, dots) {
     if (a[i] < b[j]) i++;
     else if (a[i] > b[j]) j++;
     else {
-      add_class(nodes[j], 'aux-marker');
+      addClass(nodes[j], 'aux-marker');
       i++;
       j++;
     }
@@ -397,7 +397,7 @@ function mark_markers(labels, dots) {
  * @property {Number|Boolean} [options.pointer=false] - The value to set the pointers position to. Set to `false` to hide the pointer.
  * @property {Number|Boolean} [options.bar=false] - The value to set the bars height to. Set to `false` to hide the bar.
  */
-export const Scale = define_class({
+export const Scale = defineClass({
   Extends: Widget,
   Implements: [Ranged],
   _options: Object.assign(
@@ -452,7 +452,7 @@ export const Scale = define_class({
      */
   },
   draw: function (O, element) {
-    add_class(element, 'aux-scale');
+    addClass(element, 'aux-scale');
 
     Widget.prototype.draw.call(this, O, element);
   },
@@ -466,7 +466,7 @@ export const Scale = define_class({
 
     if (I.layout) {
       I.layout = false;
-      remove_class(
+      removeClass(
         E,
         'aux-vertical',
         'aux-horizontal',
@@ -477,16 +477,16 @@ export const Scale = define_class({
       );
       switch (O.layout) {
         case 'left':
-          add_class(E, 'aux-vertical', 'aux-left');
+          addClass(E, 'aux-vertical', 'aux-left');
           break;
         case 'right':
-          add_class(E, 'aux-vertical', 'aux-right');
+          addClass(E, 'aux-vertical', 'aux-right');
           break;
         case 'top':
-          add_class(E, 'aux-horizontal', 'aux-top');
+          addClass(E, 'aux-horizontal', 'aux-top');
           break;
         case 'bottom':
-          add_class(E, 'aux-horizontal', 'aux-bottom');
+          addClass(E, 'aux-horizontal', 'aux-bottom');
           break;
         default:
           warn('Unsupported layout setting:', O.layout);
@@ -495,13 +495,13 @@ export const Scale = define_class({
 
     if (I.reverse) {
       /* NOTE: reverse will be validated below */
-      toggle_class(E, 'aux-reverse', O.reverse);
+      toggleClass(E, 'aux-reverse', O.reverse);
     }
 
     if (this._bar && (I.bar || I.basis || I.base || I.reverse)) {
       /* NOTE: options will be validated below */
-      const tmpval = this.val2px(this.snap(O.bar));
-      const tmpbase = this.val2px(O.base);
+      const tmpval = this.valueToPixel(this.snap(O.bar));
+      const tmpbase = this.valueToPixel(O.base);
       const min = Math.min(tmpval, tmpbase);
       const max = Math.max(tmpval, tmpbase);
 
@@ -541,27 +541,27 @@ export const Scale = define_class({
         if (O.show_labels) {
           labels = {
             values: O.fixed_labels,
-            positions: O.fixed_labels.map(this.val2px, this),
+            positions: O.fixed_labels.map(this.valueToPixel, this),
           };
-          create_dom_nodes.call(this, labels, create_label.bind(this));
+          createDOMNodes.call(this, labels, createLabel.bind(this));
         }
 
         var dots = {
           values: O.fixed_dots,
-          positions: O.fixed_dots.map(this.val2px, this),
+          positions: O.fixed_dots.map(this.valueToPixel, this),
         };
-        create_dom_nodes.call(this, dots, create_dot.bind(this));
+        createDOMNodes.call(this, dots, createDot.bind(this));
 
         if (O.show_markers && labels) {
-          mark_markers(labels, dots);
+          markMarkers(labels, dots);
         }
       } else {
-        var base = get_base(O);
+        var base = getBase(O);
 
         if (base !== O.max)
-          generate_scale.call(this, base, O.max, true, O.show_max);
+          generateScale.call(this, base, O.max, true, O.show_max);
         if (base !== O.min)
-          generate_scale.call(this, base, O.min, base === O.max, O.show_min);
+          generateScale.call(this, base, O.min, base === O.max, O.show_min);
       }
       if (this._bar) this.element.appendChild(this._bar);
       if (this._pointer) this.element.appendChild(this._pointer);
@@ -573,8 +573,8 @@ export const Scale = define_class({
     var O = this.options;
 
     const basis = vert(O)
-      ? inner_height(this.element)
-      : inner_width(this.element);
+      ? innerHeight(this.element)
+      : innerWidth(this.element);
     this.update('basis', basis);
   },
 
@@ -605,7 +605,7 @@ export const Scale = define_class({
 /**
  * @member {HTMLDivElement} Fader#_pointer - The DIV element of the pointer. It can be used to e.g. visualize the value set in the backend.
  */
-define_child_element(Scale, 'pointer', {
+defineChildElement(Scale, 'pointer', {
   show: false,
   toggle_class: true,
   option: 'pointer',
@@ -615,7 +615,7 @@ define_child_element(Scale, 'pointer', {
   ]),
   draw: function (O) {
     if (this._pointer) {
-      var tmp = this.val2px(this.snap(O.pointer)) + 'px';
+      var tmp = this.valueToPixel(this.snap(O.pointer)) + 'px';
       if (vert(O)) {
         if (supports_transform)
           this._pointer.style.transform = 'translateY(-' + tmp + ')';
@@ -632,7 +632,7 @@ define_child_element(Scale, 'pointer', {
 /**
  * @member {HTMLDivElement} Fader#_bar - The DIV element of the bar. It can be used to e.g. visualize the value set in the backend or to draw a simple levelmeter.
  */
-define_child_element(Scale, 'bar', {
+defineChildElement(Scale, 'bar', {
   show: false,
   toggle_class: true,
   option: 'bar',

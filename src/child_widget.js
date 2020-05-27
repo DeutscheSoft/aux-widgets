@@ -17,12 +17,12 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class, add_static_event } from './widget_helpers.js';
-import { add_class, remove_class } from './utils/dom.js';
+import { defineClass, addStaticEvent } from './widget_helpers.js';
+import { addClass, removeClass } from './utils/dom.js';
 import { warn } from './utils/log.js';
 import { Widget } from './widgets/widget.js';
 
-function get_child_options(parent, name, options, config) {
+function getChildOptions(parent, name, options, config) {
   var ret = {};
   var pref = name + '.';
 
@@ -56,7 +56,7 @@ function get_child_options(parent, name, options, config) {
   if (map_options) {
     for (let key in map_options) {
       if (key in options) {
-        if (key in ret && options[key] === parent.get_default(key)) {
+        if (key in ret && options[key] === parent.getDefault(key)) {
           continue;
         }
 
@@ -68,10 +68,10 @@ function get_child_options(parent, name, options, config) {
   return ret;
 }
 
-export function inherit_child_options(dst, child_name, src, blacklist) {
+export function inheritChildOptions(dst, child_name, src, blacklist) {
   if (!blacklist) blacklist = [];
 
-  const set_cb = function (value, key) {
+  const setCallback = function (value, key) {
     const C = this[child_name];
 
     if (C) C.set(key, value);
@@ -80,7 +80,7 @@ export function inherit_child_options(dst, child_name, src, blacklist) {
   for (let tmp in src.prototype._options) {
     if (tmp in dst.prototype._options) continue;
     if (blacklist.indexOf(tmp) > -1) continue;
-    add_static_event(dst, 'set_' + tmp, set_cb);
+    addStaticEvent(dst, 'set_' + tmp, setCallback);
     if (!dst.prototype._options[tmp])
       dst.prototype._options[tmp] = src.prototype._options[tmp];
     if (!dst.prototype.options[tmp])
@@ -88,9 +88,9 @@ export function inherit_child_options(dst, child_name, src, blacklist) {
   }
 }
 
-export function define_child_widget(widget, name, config) {
+export function defineChildWidget(widget, name, config) {
   /**
-   * @function define_child_widget
+   * @function defineChildWidget
    *
    * @description Defines a {@link Widget} as a child for another widget. This function
    * is used internally to simplify widget definitions. E.g. the {@link Icon} of a
@@ -178,17 +178,17 @@ export function define_child_widget(widget, name, config) {
     };
   }
 
-  const ChildWidget = define_class({
+  const ChildWidget = defineClass({
     Extends: config.create,
     static_events: static_events,
   });
 
   /* trigger child widget creation after initialization */
-  add_static_event(widget, 'initialize', function () {
+  addStaticEvent(widget, 'initialize', function () {
     /* we do not want to trash the class cache */
     this[name] = null;
   });
-  add_static_event(widget, 'initialize_children', function () {
+  addStaticEvent(widget, 'initialize_children', function () {
     /* we do not want to trash the class cache */
     if (!this[name]) {
       this.set(key, this.options[key]);
@@ -196,7 +196,7 @@ export function define_child_widget(widget, name, config) {
   });
 
   /* clean up on destroy */
-  add_static_event(widget, 'destroy', function () {
+  addStaticEvent(widget, 'destroy', function () {
     const child = this[name];
 
     if (child) {
@@ -211,32 +211,32 @@ export function define_child_widget(widget, name, config) {
   if (append === void 0) append = true;
 
   /* child widget creation */
-  add_static_event(widget, 'set_' + key, function (val) {
+  addStaticEvent(widget, 'set_' + key, function (val) {
     var C = this[name];
     var show = fixed || val !== false;
     if (show && !C) {
-      var O = get_child_options(this, name, this.options, config);
+      var O = getChildOptions(this, name, this.options, config);
       var w = new ChildWidget(O);
-      this.add_child(w);
+      this.addChild(w);
       this[name] = w;
     } else if (!show && C) {
       if (map_interacting && C.get('interacting')) {
         this.stopInteracting();
       }
       this[name] = null;
-      if (config.toggle_class) remove_class(this.element, 'aux-has-' + name);
+      if (config.toggle_class) removeClass(this.element, 'aux-has-' + name);
       C.destroy();
     }
-    this.trigger_resize();
+    this.triggerResize();
   });
-  add_static_event(widget, 'redraw', function () {
+  addStaticEvent(widget, 'redraw', function () {
     const show = fixed || this.options[key];
     let C = this[name];
 
     if (show && C && !C.element.parentNode) {
       const E = this.element;
 
-      if (config.toggle_class) add_class(E, 'aux-has-' + name);
+      if (config.toggle_class) addClass(E, 'aux-has-' + name);
 
       if (append === true) {
         E.appendChild(C.element);
@@ -244,33 +244,33 @@ export function define_child_widget(widget, name, config) {
         append.call(this);
       }
 
-      this.trigger_resize();
+      this.triggerResize();
     }
   });
-  var set_cb = function (val, key) {
+  var setCallback = function (val, key) {
     if (this[name]) this[name].set(key.substr(name.length + 1), val);
   };
 
   for (tmp in ChildWidget.prototype._options) {
-    add_static_event(widget, 'set_' + name + '.' + tmp, set_cb);
+    addStaticEvent(widget, 'set_' + name + '.' + tmp, setCallback);
     p._options[name + '.' + tmp] = ChildWidget.prototype._options[tmp];
   }
 
   /* direct option inherit */
   var blacklist_options = config.blacklist_options || [];
   if (config.inherit_options) {
-    set_cb = function (val, key) {
+    setCallback = function (val, key) {
       if (this[name]) this[name].set(key, val);
     };
     for (tmp in ChildWidget.prototype._options) {
       if (tmp in Widget.prototype._options) continue;
       if (blacklist_options.indexOf(tmp) > -1) continue;
-      add_static_event(widget, 'set_' + tmp, set_cb);
+      addStaticEvent(widget, 'set_' + tmp, setCallback);
       if (!p._options[tmp])
         p._options[tmp] = ChildWidget.prototype._options[tmp];
     }
   }
-  set_cb = function (key) {
+  setCallback = function (key) {
     return function (val) {
       if (this[name]) this[name].set(key, val);
     };
@@ -286,7 +286,7 @@ export function define_child_widget(widget, name, config) {
         p._options[parent_key] = ChildWidget.prototype._options[child_key];
         p.options[parent_key] = ChildWidget.prototype.options[child_key];
       }
-      add_static_event(widget, 'set_' + parent_key, set_cb(child_key));
+      addStaticEvent(widget, 'set_' + parent_key, setCallback(child_key));
     }
   }
   if (!config.options) {

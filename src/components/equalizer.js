@@ -18,9 +18,9 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
-  subcomponent_from_widget,
+  componentFromWidget,
+  defineComponent,
+  subcomponentFromWidget,
 } from './../component_helpers.js';
 import { Equalizer } from './../widgets/equalizer.js';
 import { EqBand } from './../widgets/eqband.js';
@@ -31,7 +31,7 @@ import { EqBand } from './../widgets/eqband.js';
  * @class EqualizerComponent
  * @implements Component
  */
-export const EqualizerComponent = component_from_widget(Equalizer);
+export const EqualizerComponent = componentFromWidget(Equalizer);
 
 /**
  * WebComponent for the EqBand widget. Available in the DOM as
@@ -40,7 +40,7 @@ export const EqualizerComponent = component_from_widget(Equalizer);
  * @class EqBandComponent
  * @implements Component
  */
-export const EqBandComponent = subcomponent_from_widget(EqBand, Equalizer);
+export const EqBandComponent = subcomponentFromWidget(EqBand, Equalizer);
 
-define_component('equalizer', EqualizerComponent);
-define_component('equalizer-band', EqBandComponent);
+defineComponent('equalizer', EqualizerComponent);
+defineComponent('equalizer-band', EqBandComponent);

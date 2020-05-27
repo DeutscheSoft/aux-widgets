@@ -35,7 +35,7 @@ export function compare(a, b) {
   return false;
 }
 
-export function object_minus(o, list) {
+export function objectMinus(o, list) {
   const ret = Object.assign({}, o);
 
   for (let i = 0; i < list.length; i++) {
@@ -45,7 +45,7 @@ export function object_minus(o, list) {
   return ret;
 }
 
-export function compare_options(w1, w2) {
+export function compareOptions(w1, w2) {
   const o1 = {},
     o2 = {};
   for (var key in w1._options) {
@@ -64,10 +64,10 @@ export function assert(v, msg) {
   }
 }
 
-export function assert_error(cb, msg) {
+export function assertError(cb, msg) {
   let ok = true;
   try {
-    w2.remove_child(c1);
+    w2.removeChild(c1);
     ok = false;
   } catch (err) {}
 
@@ -78,7 +78,7 @@ export function sleep(n) {
   return new Promise((resolve) => setTimeout(resolve, n));
 }
 
-export function wait_for_event(widget, name) {
+export function waitForEvent(widget, name) {
   return new Promise((resolve, reject) => {
     const unsubscribe = widget.subscribe(name, () => {
       resolve();
@@ -99,14 +99,14 @@ export function canvas() {
   return _canvas;
 }
 
-export function wait_for_drawn(widget) {
+export function waitForDrawn(widget) {
   if (!widget.element.parentNode) {
     canvas().appendChild(widget.element);
-    widget.enable_draw();
+    widget.enableDraw();
   }
 
   return new Promise((resolve, reject) => {
-    S.after_frame(resolve);
+    S.afterFrame(resolve);
   });
 }
 
@@ -114,10 +114,10 @@ export function defer() {
   return new Promise((resolve) => setTimeout(resolve), 0);
 }
 
-export function wait_for_connected(widget) {
+export function waitForConnected(widget) {
   if (!widget.element.parentNode) {
     canvas().appendChild(widget.element);
-    widget.enable_draw();
+    widget.enableDraw();
   }
 
   return defer();

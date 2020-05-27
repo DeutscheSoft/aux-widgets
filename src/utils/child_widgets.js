@@ -19,12 +19,12 @@
 
 import { Events } from '../events.js';
 import {
-  init_subscriptions,
-  add_subscription,
-  unsubscribe_subscriptions,
+  initSubscriptions,
+  addSubscription,
+  unsubscribeSubscriptions,
 } from './subscriptions.js';
 
-function make_filter(filter) {
+function makeFilter(filter) {
   if (typeof filter === 'function') {
     if (filter.prototype) {
       return function (o) {
@@ -47,8 +47,8 @@ export class ChildWidgets extends Events {
     super();
     if (!options) options = {};
     this.widget = widget;
-    this.filter = make_filter(options.filter);
-    this.list = widget.get_children().filter(this.filter);
+    this.filter = makeFilter(options.filter);
+    this.list = widget.getChildren().filter(this.filter);
     this.subscriptions = [
       widget.subscribe('child_added', (child) => {
         if (!this.filter(child)) return;
@@ -116,31 +116,31 @@ export class ChildWidgets extends Events {
   }
 
   forEachAsync(callback) {
-    let subs = init_subscriptions();
+    let subs = initSubscriptions();
     const child_subscriptions = new Map();
 
     this.getList().forEach((child, position) => {
       child_subscriptions.set(child, callback(child, position) || null);
     });
 
-    subs = add_subscription(
+    subs = addSubscription(
       subs,
       this.subscribe('child_added', (child, position) => {
         child_subscriptions.set(child, callback(child, position) || null);
       })
     );
 
-    subs = add_subscription(
+    subs = addSubscription(
       subs,
       this.subscribe('child_removed', (child, position) => {
-        unsubscribe_subscriptions(child_subscriptions.get(child));
+        unsubscribeSubscriptions(child_subscriptions.get(child));
         child_subscriptions.delete(child);
       })
     );
 
     return () => {
-      subs = unsubscribe_subscriptions(subs);
-      child_subscriptions.forEach((subs) => unsubscribe_subscriptions(subs));
+      subs = unsubscribeSubscriptions(subs);
+      child_subscriptions.forEach((subs) => unsubscribeSubscriptions(subs));
       child_subscriptions.clear();
     };
   }

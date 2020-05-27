@@ -26,20 +26,20 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { define_class } from '../widget_helpers.js';
-import { define_child_widget } from '../child_widget.js';
-import { add_class, remove_class } from '../utils/dom.js';
+import { defineClass } from '../widget_helpers.js';
+import { defineChildWidget } from '../child_widget.js';
+import { addClass, removeClass } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 import {
-  init_subscriptions,
-  add_subscription,
-  unsubscribe_subscriptions,
+  initSubscriptions,
+  addSubscription,
+  unsubscribeSubscriptions,
 } from '../utils/subscriptions.js';
 import { Pages } from './pages.js';
 import { Container } from './container.js';
 import { Navigation } from './navigation.js';
 
-export const Pager = define_class({
+export const Pager = defineClass({
   /**
    * Pager, also known as Notebook in other UI toolkits, provides
    * multiple containers for displaying contents via {@link Pages}
@@ -97,7 +97,7 @@ export const Pager = define_class({
   },
 
   initializePages: function () {
-    this.pages_subscriptions = unsubscribe_subscriptions(
+    this.pages_subscriptions = unsubscribeSubscriptions(
       this.pages_subscriptions
     );
 
@@ -109,30 +109,30 @@ export const Pager = define_class({
     // create one button for each page and keep the label synchronized
     // with the page label
     let subs = pages.pages.forEachAsync((page, position) => {
-      let subs = init_subscriptions();
+      let subs = initSubscriptions();
 
-      const button = navigation.add_button(
+      const button = navigation.addButton(
         { label: page.get('label') },
         position
       );
 
       this.page_to_button.set(page, button);
 
-      subs = add_subscription(
+      subs = addSubscription(
         subs,
         page.subscribe('set_label', (label) => {
           button.set('label', label);
         })
       );
 
-      subs = add_subscription(subs, () => {
-        navigation.remove_button(button);
+      subs = addSubscription(subs, () => {
+        navigation.removeButton(button);
         this.page_to_button.delete(page);
       });
 
       this.emit('added', page);
 
-      subs = add_subscription(subs, () => {
+      subs = addSubscription(subs, () => {
         this.emit('removed', page);
       });
 
@@ -140,7 +140,7 @@ export const Pager = define_class({
     });
 
     // delegate the userset action from pages to pager
-    subs = add_subscription(
+    subs = addSubscription(
       subs,
       pages.subscribe('userset', (key, value) => {
         if (key !== 'show') return;
@@ -149,7 +149,7 @@ export const Pager = define_class({
     );
 
     // delegate the set_show action from pages to pager
-    subs = add_subscription(
+    subs = addSubscription(
       subs,
       pages.subscribe('set_show', (value) => {
         return this.update('show', value);
@@ -157,7 +157,7 @@ export const Pager = define_class({
     );
 
     // delegate the userset action from navigation to pager
-    subs = add_subscription(
+    subs = addSubscription(
       subs,
       navigation.subscribe('userset', (key, value) => {
         if (key !== 'select') return;
@@ -166,7 +166,7 @@ export const Pager = define_class({
     );
 
     // delegate the set_select action from navigation to pager
-    subs = add_subscription(
+    subs = addSubscription(
       subs,
       navigation.subscribe('set_select', (value) => {
         this.update('show', value);
@@ -174,7 +174,7 @@ export const Pager = define_class({
     );
 
     // delegate the set_show action from pager to both pages and navigation
-    subs = add_subscription(
+    subs = addSubscription(
       subs,
       this.subscribe('set_show', (value) => {
         pages.update('show', value);
@@ -183,7 +183,7 @@ export const Pager = define_class({
     );
 
     // delegate the added and removed events from pages
-    subs = add_subscription(
+    subs = addSubscription(
       subs,
       this.subscribe('set_show', (value) => {
         pages.update('show', value);
@@ -209,23 +209,23 @@ export const Pager = define_class({
      *
      * @member Pager#element
      */
-    this.pages_subscriptions = init_subscriptions();
+    this.pages_subscriptions = initSubscriptions();
     this.page_to_button = new Map();
   },
 
   initialized: function () {
     Container.prototype.initialized.call(this);
-    this.add_pages(this.options.pages);
+    this.addPages(this.options.pages);
     this.set('position', this.options.position);
     this.set('show', this.options.show);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-pager');
+    addClass(element, 'aux-pager');
 
     Container.prototype.draw.call(this, O, element);
   },
 
-  remove_child: function (child) {
+  removeChild: function (child) {
     if (child instanceof Pages) {
       if (this.pages === child) {
         this.pages.element.remove();
@@ -240,16 +240,16 @@ export const Pager = define_class({
       }
     }
 
-    Container.prototype.remove_child.call(this, child);
+    Container.prototype.removeChild.call(this, child);
   },
 
-  add_child: function (child) {
-    Container.prototype.add_child.call(this, child);
+  addChild: function (child) {
+    Container.prototype.addChild.call(this, child);
 
     if (child instanceof Pages) {
       if (this.pages && this.pages !== child) {
         // this.pages is being replaced by a new instance (set by the user)
-        this.remove_child(this.pages);
+        this.removeChild(this.pages);
       }
 
       this.pages = child;
@@ -265,7 +265,7 @@ export const Pager = define_class({
 
     if (I.position) {
       I.position = false;
-      remove_class(
+      removeClass(
         E,
         'aux-top',
         'aux-right',
@@ -276,16 +276,16 @@ export const Pager = define_class({
       );
       switch (O.position) {
         case 'top':
-          add_class(E, 'aux-top', 'aux-vertical');
+          addClass(E, 'aux-top', 'aux-vertical');
           break;
         case 'bottom':
-          add_class(E, 'aux-bottom', 'aux-vertical');
+          addClass(E, 'aux-bottom', 'aux-vertical');
           break;
         case 'left':
-          add_class(E, 'aux-left', 'aux-horizontal');
+          addClass(E, 'aux-left', 'aux-horizontal');
           break;
         case 'right':
-          add_class(E, 'aux-right', 'aux-horizontal');
+          addClass(E, 'aux-right', 'aux-horizontal');
           break;
         default:
           warn('Unsupported position', O.position);
@@ -296,7 +296,7 @@ export const Pager = define_class({
   /**
    * Adds an array of pages.
    *
-   * @method Pager#add_pages
+   * @method Pager#addPages
    *
    * @param {Array<Object>} options - An Array of objects with members
    *   `content` and all options available in {@link Button}.
@@ -307,7 +307,7 @@ export const Pager = define_class({
    *
    * @example
    * var p = new Pager();
-   * p.add_pages([
+   * p.addPages([
    *   {
    *     label: "Page 1",
    *     icon: "gear",
@@ -316,7 +316,7 @@ export const Pager = define_class({
    * ]);
    *
    */
-  add_pages: function (pages) {
+  addPages: function (pages) {
     if (!Array.isArray(pages))
       throw new TypeError('Expected array of objects.');
 
@@ -329,7 +329,7 @@ export const Pager = define_class({
       const content = options.content;
       delete options.content;
 
-      this.add_page(options, content);
+      this.addPage(options, content);
     }
   },
 
@@ -337,7 +337,7 @@ export const Pager = define_class({
    * Adds a {@link Container} to the pager and a corresponding {@link Button}
    *   to the pagers {@link Navigation}.
    *
-   * @method Pager#add_page
+   * @method Pager#addPage
    *
    * @param {string|Object} buttonOptions - A string with the {@link Button}s label or
    *   an object containing options for the {@link Button} instance.
@@ -353,8 +353,8 @@ export const Pager = define_class({
    *
    * @emits Pager#added
    */
-  add_page: function (buttonOptions, content, options, position) {
-    const p = this.pages.add_page(content, position, options);
+  addPage: function (buttonOptions, content, options, position) {
+    const p = this.pages.addPage(content, position, options);
 
     const button = this.getButtonForPage(p);
 
@@ -378,15 +378,15 @@ export const Pager = define_class({
   /**
    * Removes a page from the Pager.
    *
-   * @method Pager#remove_page
+   * @method Pager#removePage
    *
    * @param {integer|Container} page - The container to remove. Either an
-   *   index or the {@link Container} widget generated by <code>add_page</code>.
+   *   index or the {@link Container} widget generated by <code>addPage</code>.
    *
    * @emits Pager#removed
    */
-  remove_page: function (page) {
-    this.pages.remove_page(page);
+  removePage: function (page) {
+    this.pages.removePage(page);
   },
   /**
    * Returns the currently displayed page or null.
@@ -404,7 +404,7 @@ export const Pager = define_class({
    * @method Pager#first
    */
   first: function () {
-    if (this.pages.get_pages().length) {
+    if (this.pages.getPages().length) {
       this.set('show', 0);
       return true;
     }
@@ -417,8 +417,8 @@ export const Pager = define_class({
    * @method Pager#last
    */
   last: function () {
-    if (this.pages.get_pages().length) {
-      this.set('show', this.pages.get_pages().length - 1);
+    if (this.pages.getPages().length) {
+      this.set('show', this.pages.getPages().length - 1);
       return true;
     }
     return false;
@@ -445,8 +445,8 @@ export const Pager = define_class({
     return this.set('show', c - 1) !== c;
   },
 
-  get_pages: function () {
-    return this.pages.get_pages();
+  getPages: function () {
+    return this.pages.getPages();
   },
 });
 
@@ -455,7 +455,7 @@ export const Pager = define_class({
  *
  * @member Pager#navigation
  */
-define_child_widget(Pager, 'navigation', {
+defineChildWidget(Pager, 'navigation', {
   create: Navigation,
   show: true,
   map_options: {
@@ -494,7 +494,7 @@ define_child_widget(Pager, 'navigation', {
  * @param {Container} page - The {@link Container} which was added as a page.
  */
 
-define_child_widget(Pager, 'pages', {
+defineChildWidget(Pager, 'pages', {
   create: Pages,
   show: true,
   inherit_options: true,

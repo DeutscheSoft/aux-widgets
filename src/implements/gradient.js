@@ -17,11 +17,11 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { Ranged } from './ranged.js';
 import { sprintf } from '../utils/sprintf.js';
 
-export const Gradient = define_class({
+export const Gradient = defineClass({
   /**
    * Gradient provides a function to set the background of a
    * DOM element to a CSS gradient according to a {@link Range}.
@@ -49,7 +49,7 @@ export const Gradient = define_class({
     gradient: false,
     background: false,
   },
-  draw_gradient: function (element, gradient, fallback, range) {
+  drawGradient: function (element, gradient, fallback, range) {
     /**
      * This function generates a string from a given
      * gradient object to set as a CSS background for a DOM element.
@@ -60,7 +60,7 @@ export const Gradient = define_class({
      * is set Gradient assumes that the implementing instance has
      * {@link Range} functionality.
      *
-     * @method Gradient#draw_gradient
+     * @method Gradient#drawGradient
      *
      * @param {DOMNode} element - The DOM node to apply the gradient to.
      * @param {Object} [gradient=this.options.gradient] - Gradient definition for the background, e.g. <code>{"-96": "rgb(30,87,153)", "-0.001": "rgb(41,137,216)", "0": "rgb(32,124,202)", "24": "rgb(125,185,232)"}</code>.
@@ -110,7 +110,7 @@ export const Gradient = define_class({
       );
 
       for (let i = 0; i < keys.length; i++) {
-        const ps = (100 * range.val2coef(range.snap(keys[i]))).toFixed(2);
+        const ps = (100 * range.valueToCoef(range.snap(keys[i]))).toFixed(2);
         m_regular += sprintf(c_regular, gradient[keys[i] + ''], ps);
       }
       m_regular = m_regular.substr(0, m_regular.length - 2);

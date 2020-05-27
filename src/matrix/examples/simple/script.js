@@ -21,7 +21,7 @@ import { MatrixData } from '../../models/matrix.js';
 import { ListDataView } from '../../models/listdataview.js';
 import {
   ConnectionDataView,
-  resize_array_mod,
+  resizeArrayMod,
 } from '../../models/connectiondataview.js';
 import { sprintf } from '../../../utils/sprintf.js';
 import { Subscribers } from '../../../utils/subscribers.js';
@@ -210,7 +210,7 @@ function createList(into, listview) {
       entry.removeEventListener('click', onClick);
     };
 
-    resize_array_mod(entries, amount, startIndex, create, remove);
+    resizeArrayMod(entries, amount, startIndex, create, remove);
   });
 
   // connect entries with our list entries
@@ -300,7 +300,7 @@ function createMatrix(dst, listview1, listview2) {
     scrollarea.style.width = columns * ITEM_HEIGHT + 'px';
   });
 
-  const may_connect = (source, sink) => {
+  const mayConnect = (source, sink) => {
     return source && sink && !source.isGroup && !sink.isGroup;
   };
 
@@ -331,7 +331,7 @@ function createMatrix(dst, listview1, listview2) {
     const source = listview1.at(index1);
     const sink = listview2.at(index2);
 
-    if (may_connect(source, sink)) {
+    if (mayConnect(source, sink)) {
       const connection = matrix.getConnection(source, sink);
 
       if (connection) {
@@ -381,7 +381,7 @@ function createMatrix(dst, listview1, listview2) {
       row.forEach(destroyCell);
     };
 
-    resize_array_mod(
+    resizeArrayMod(
       cells,
       rows,
       connectionview.startIndex1,
@@ -392,7 +392,7 @@ function createMatrix(dst, listview1, listview2) {
     for (let i = 0; i < rows; i++) {
       const index1 = connectionview.startIndex1 + i;
       const row = cells[index1 % rows];
-      resize_array_mod(
+      resizeArrayMod(
         row,
         columns,
         connectionview.startIndex2,
@@ -425,9 +425,9 @@ function createMatrix(dst, listview1, listview2) {
 
       cell.classList.toggle('connected', !!connection);
 
-      const may_connect = source && sink && !source.isGroup && !sink.isGroup;
+      const mayConnect = source && sink && !source.isGroup && !sink.isGroup;
 
-      cell.classList.toggle('connectable', may_connect);
+      cell.classList.toggle('connectable', mayConnect);
     }
   );
 

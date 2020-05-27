@@ -17,11 +17,11 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from './../widget_helpers.js';
+import { defineClass } from './../widget_helpers.js';
 import { Chart } from './chart.js';
-import { add_class } from '../utils/dom.js';
+import { addClass } from '../utils/dom.js';
 
-function calculate_grid(range, step) {
+function calculateGrid(range, step) {
   var min = range.get('min');
   var max = range.get('max');
   var grid = [];
@@ -43,7 +43,7 @@ function calculate_grid(range, step) {
   return grid;
 }
 
-export const FrequencyResponse = define_class({
+export const FrequencyResponse = defineClass({
   /**
    * FrequencyResponse is a {@link Chart} drawing frequencies on the x axis and dB
    * values on the y axis. This widget automatically draws a {@link Grid} depending
@@ -119,7 +119,7 @@ export const FrequencyResponse = define_class({
       this.range_y.set('scale', value);
     },
     set_db_grid: function (value) {
-      this.set('grid_y', calculate_grid(this.range_y, value));
+      this.set('grid_y', calculateGrid(this.range_y, value));
     },
   },
   initialize: function (options) {
@@ -136,7 +136,7 @@ export const FrequencyResponse = define_class({
      * @member {SVGGroup} Chart#_handles - The SVG group containing all handles.
      *      Has class <code>.aux-charthandles</code>.
      */
-    add_class(this._handles, 'aux-charthandles');
+    addClass(this._handles, 'aux-charthandles');
 
     // do not overwrite custom grids, please
     if (this.options.db_grid && !this.options.grid_y.length)
@@ -150,7 +150,7 @@ export const FrequencyResponse = define_class({
     if (this.options.depth) this.set('depth', this.options.depth);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-frequencyresponse');
+    addClass(element, 'aux-frequencyresponse');
 
     Chart.prototype.draw.call(this, O, element);
   },

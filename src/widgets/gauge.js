@@ -17,23 +17,23 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from './../widget_helpers.js';
+import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 import { Circular } from './circular.js';
-import { element, add_class } from '../utils/dom.js';
-import { make_svg } from '../utils/svg.js';
+import { element, addClass } from '../utils/dom.js';
+import { makeSVG } from '../utils/svg.js';
 import { FORMAT } from '../utils/sprintf.js';
-import { object_and, object_sub } from '../utils/object.js';
+import { objectAnd, objectSub } from '../utils/object.js';
 
-function _get_coords_single(deg, inner, pos) {
+function getCoordsSingle(deg, inner, pos) {
   deg = (deg * Math.PI) / 180;
   return {
     x: Math.cos(deg) * inner + pos,
     y: Math.sin(deg) * inner + pos,
   };
 }
-var format_translate = FORMAT('translate(%f, %f)');
-var format_viewbox = FORMAT('0 0 %d %d');
+var formatTranslate = FORMAT('translate(%f, %f)');
+var formatViewbox = FORMAT('0 0 %d %d');
 /**
  * Gauge draws a single {@link Circular} into a SVG image. It inherits
  * all options of {@link Circular}.
@@ -57,7 +57,7 @@ var format_viewbox = FORMAT('0 0 %d %d');
  * @property {String} [options.label.align] - Alignment of the label, either
  *   <code>inner</code> or <code>outer</code>.
  */
-export const Gauge = define_class({
+export const Gauge = defineClass({
   Extends: Widget,
   _options: Object.assign(Object.create(Circular.prototype._options), {
     width: 'number',
@@ -83,7 +83,7 @@ export const Gauge = define_class({
     /**
      * @member {SVGImage} Gauge#svg - The main SVG image.
      */
-    this.svg = S = make_svg('svg');
+    this.svg = S = makeSVG('svg');
 
     /**
      * @member {HTMLDivElement} Gauge#element - The main DIV container.
@@ -94,26 +94,26 @@ export const Gauge = define_class({
      * @member {SVGText} Gauge#_label - The label of the gauge.
      *   Has class <code>.aux-label</code>.
      */
-    this._label = make_svg('text', { class: 'aux-label' });
+    this._label = makeSVG('text', { class: 'aux-label' });
     S.appendChild(this._label);
 
-    var co = object_and(O, Circular.prototype._options);
-    co = object_sub(co, Widget.prototype._options);
+    var co = objectAnd(O, Circular.prototype._options);
+    co = objectSub(co, Widget.prototype._options);
     co.container = S;
 
     /**
      * @member {Circular} Gauge#circular - The {@link Circular} module.
      */
     this.circular = new Circular(co);
-    this.add_child(this.circular);
+    this.addChild(this.circular);
   },
   resize: function () {
     Widget.prototype.resize.call(this);
     this.invalid.label = true;
-    this.trigger_draw();
+    this.triggerDraw();
   },
   draw: function (O, element) {
-    add_class(element, 'aux-gauge');
+    addClass(element, 'aux-gauge');
     element.appendChild(this.svg);
 
     Widget.prototype.draw.call(this, O, element);
@@ -126,7 +126,7 @@ export const Gauge = define_class({
     Widget.prototype.redraw.call(this);
 
     if (I.validate('width', 'height')) {
-      S.setAttribute('viewBox', format_viewbox(O.width, O.height));
+      S.setAttribute('viewBox', formatViewbox(O.width, O.height));
     }
 
     if (I.validate('label', 'size', 'x', 'y')) {
@@ -143,7 +143,7 @@ export const Gauge = define_class({
             var bb = _label.getBoundingClientRect();
             var angle = t.pos % 360;
             var outer_p = outer - margin;
-            var coords = _get_coords_single(angle, outer_p, outer);
+            var coords = getCoordsSingle(angle, outer_p, outer);
 
             var mx =
               (((coords.x - outer) / outer_p) * (bb.width + bb.height / 2.5)) /
@@ -158,7 +158,7 @@ export const Gauge = define_class({
               function () {
                 _label.setAttribute(
                   'transform',
-                  format_translate(coords.x + mx, coords.y + my)
+                  formatTranslate(coords.x + mx, coords.y + my)
                 );
                 _label.setAttribute('text-anchor', 'middle');
               }.bind(this),

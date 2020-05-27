@@ -19,9 +19,9 @@
 
 /* jshint -W018 */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { Widget } from './widget.js';
-import { element, add_class } from '../utils/dom.js';
+import { element, addClass } from '../utils/dom.js';
 
 /**
  * The State widget is a multi-functional adaption of a traditional LED. It
@@ -45,7 +45,7 @@ import { element, add_class } from '../utils/dom.js';
  * @property {String|Boolean} [options.color=false] - A CSS color string for the state LED or
  *   `false` to set the background via external CSS.
  */
-export const State = define_class({
+export const State = defineClass({
   Extends: Widget,
   _options: Object.assign(Object.create(Widget.prototype._options), {
     state: 'number|boolean',
@@ -76,7 +76,7 @@ export const State = define_class({
   },
 
   draw: function (O, element) {
-    add_class(element, 'aux-state');
+    addClass(element, 'aux-state');
     element.appendChild(this._mask);
 
     Widget.prototype.draw.call(this, O, element);
@@ -100,11 +100,11 @@ export const State = define_class({
       if (!(v <= 1)) v = 1;
 
       if (!O.state) {
-        this.remove_class('aux-state-on');
-        this.add_class('aux-state-off');
+        this.removeClass('aux-state-on');
+        this.addClass('aux-state-off');
       } else {
-        this.remove_class('aux-state-off');
-        this.add_class('aux-state-on');
+        this.removeClass('aux-state-off');
+        this.addClass('aux-state-on');
       }
       this._mask.style.opacity = '' + (1 - v);
     }

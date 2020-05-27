@@ -17,17 +17,17 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { ListItem } from './listitem.js';
 import { Button } from './button.js';
-import { add_class } from '../utils/dom.js';
+import { addClass } from '../utils/dom.js';
 
-function build_sorter() {
+function buildSorter() {
   this.sorter = new Button({ class: 'aux-sorter', container: this.element });
-  this.add_child(this.sorter);
+  this.addChild(this.sorter);
 }
 
-export const SortableListItem = define_class({
+export const SortableListItem = defineClass({
   Extends: ListItem,
   _options: Object.assign(Object.create(ListItem.prototype._options), {
     sortable: 'boolean',
@@ -39,7 +39,7 @@ export const SortableListItem = define_class({
     ListItem.prototype.initialize.call(this, options);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-sortablelistitem');
+    addClass(element, 'aux-sortablelistitem');
 
     ListItem.prototype.draw.call(this, O, element);
   },
@@ -50,7 +50,7 @@ export const SortableListItem = define_class({
     if (I.sortable) {
       if (O.sortable) {
         if (!this.sorter) {
-          build_sorter.call(this);
+          buildSorter.call(this);
         } else {
           this.element.appendChild(this.sorter.element);
         }

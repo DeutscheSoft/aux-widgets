@@ -69,7 +69,7 @@ function triggerUpdate(name) {
   subscribers.forEach((subscriber) => subscriber.update());
 }
 
-function normalize_parent(parent) {
+function normalizeParent(parent) {
   if (parent.tagName === 'HEAD' || parent.tagName === 'BODY') {
     parent = parent.parentNode;
   }
@@ -78,7 +78,7 @@ function normalize_parent(parent) {
 }
 
 export function registerOptions(parent, name, options) {
-  parent = normalize_parent(parent);
+  parent = normalizeParent(parent);
 
   let tmp = optionsChildren.get(parent);
 
@@ -96,7 +96,7 @@ export function registerOptions(parent, name, options) {
 }
 
 export function unregisterOptions(parent, name, options) {
-  parent = normalize_parent(parent);
+  parent = normalizeParent(parent);
 
   let tmp = optionsChildren.get(parent);
 
@@ -127,7 +127,7 @@ export function unregisterOptions(parent, name, options) {
  *      unsubscribe from the options.
  */
 export function subscribeOptions(parent, name, callback) {
-  parent = normalize_parent(parent);
+  parent = normalizeParent(parent);
 
   let subscribers = optionsSubscribers.get(name);
 

@@ -17,12 +17,12 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from './../../widget_helpers.js';
-import { add_class, toggle_class } from './../../utils/dom.js';
+import { defineClass } from './../../widget_helpers.js';
+import { addClass, toggleClass } from './../../utils/dom.js';
 
 import { Button } from './../../widgets/button.js';
 
-export const Indicator = define_class({
+export const Indicator = defineClass({
   Extends: Button,
   _options: Object.assign(Object.create(Button.prototype._options), {
     connected: 'boolean',
@@ -52,7 +52,7 @@ export const Indicator = define_class({
     this.sink = sink;
   },
   draw: function (options, element) {
-    add_class(this.element, 'aux-indicator');
+    addClass(this.element, 'aux-indicator');
     Button.prototype.draw.call(this, options, element);
   },
   redraw: function () {
@@ -64,27 +64,27 @@ export const Indicator = define_class({
 
     if (I.connected) {
       I.connected = false;
-      toggle_class(E, 'aux-connected', O.connected);
+      toggleClass(E, 'aux-connected', O.connected);
     }
 
     if (I.connectable) {
       I.connectable = false;
-      toggle_class(E, 'aux-connectable', O.connectable);
+      toggleClass(E, 'aux-connectable', O.connectable);
     }
 
     if (I.sourceisgroup) {
       I.sourceisgroup = false;
-      toggle_class(E, 'aux-sourceisgroup', O.sourceisgroup);
+      toggleClass(E, 'aux-sourceisgroup', O.sourceisgroup);
     }
 
     if (I.sinkisgroup) {
       I.sinkisgroup = false;
-      toggle_class(E, 'aux-sinkisgroup', O.sinkisgroup);
+      toggleClass(E, 'aux-sinkisgroup', O.sinkisgroup);
     }
 
     if (I.isgroup) {
       I.isgroup = false;
-      toggle_class(E, 'aux-isgroup', O.isgroup);
+      toggleClass(E, 'aux-isgroup', O.isgroup);
     }
   },
 });

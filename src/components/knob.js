@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { Knob } from './../widgets/knob.js';
 
@@ -29,6 +29,6 @@ import { Knob } from './../widgets/knob.js';
  * @class KnobComponent
  * @implements Component
  */
-export const KnobComponent = component_from_widget(Knob);
+export const KnobComponent = componentFromWidget(Knob);
 
-define_component('knob', KnobComponent);
+defineComponent('knob', KnobComponent);

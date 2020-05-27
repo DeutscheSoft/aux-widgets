@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { ProgressBar } from './../widgets/progressbar.js';
 
@@ -30,6 +30,6 @@ import { ProgressBar } from './../widgets/progressbar.js';
  * @class ProgressBarComponent
  * @implements Component
  */
-export const ProgressBarComponent = component_from_widget(ProgressBar);
+export const ProgressBarComponent = componentFromWidget(ProgressBar);
 
-define_component('progressbar', ProgressBarComponent);
+defineComponent('progressbar', ProgressBarComponent);

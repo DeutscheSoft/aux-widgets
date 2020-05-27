@@ -17,12 +17,12 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { ListItem } from './listitem.js';
 import { Taggable } from './taggable.js';
-import { add_class } from '../utils/dom.js';
+import { addClass } from '../utils/dom.js';
 
-export const TaggableListItem = define_class({
+export const TaggableListItem = defineClass({
   Extends: ListItem,
   Implements: Taggable,
   initialize: function (options) {
@@ -30,7 +30,7 @@ export const TaggableListItem = define_class({
     Taggable.prototype.initialize.call(this);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-taggablelistitem');
+    addClass(element, 'aux-taggablelistitem');
 
     ListItem.prototype.draw.call(this, O, element);
   },

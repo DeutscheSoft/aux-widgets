@@ -18,13 +18,13 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
-  subcomponent_from_widget,
+  componentFromWidget,
+  defineComponent,
+  subcomponentFromWidget,
 } from './../component_helpers.js';
 import { Select, SelectEntry } from './../widgets/select.js';
 
-function find_previous_entry(node) {
+function findPreviousEntry(node) {
   node = node.previousSibling;
 
   while (node) {
@@ -38,7 +38,7 @@ function find_previous_entry(node) {
   }
 }
 
-function find_next_entry(node) {
+function findNextEntry(node) {
   node = node.nextSibling;
 
   while (node) {
@@ -52,23 +52,23 @@ function find_next_entry(node) {
   }
 }
 
-function add_entry(select, entry, entry_component) {
-  const prev = find_previous_entry(entry_component);
-  const next = find_next_entry(entry_component);
+function addEntry(select, entry, entry_component) {
+  const prev = findPreviousEntry(entry_component);
+  const next = findNextEntry(entry_component);
 
   let position;
 
   if (prev) {
-    position = select.index_by_entry(prev) + 1;
+    position = select.indexByEntry(prev) + 1;
   } else if (next) {
-    position = select.index_by_entry(next);
+    position = select.indexByEntry(next);
   }
 
-  select.add_entry(entry, position === false ? undefined : position);
+  select.addEntry(entry, position === false ? undefined : position);
 }
 
-function remove_entry(select, entry) {
-  select.remove_entry(entry);
+function removeEntry(select, entry) {
+  select.removeEntry(entry);
 }
 
 /**
@@ -77,7 +77,7 @@ function remove_entry(select, entry) {
  * @class SelectComponent
  * @implements Component
  */
-export const SelectComponent = component_from_widget(Select);
+export const SelectComponent = componentFromWidget(Select);
 
 /**
  * WebComponent for the SelectEntry widget. Available in the DOM as
@@ -86,12 +86,12 @@ export const SelectComponent = component_from_widget(Select);
  * @class SelectEntryComponent
  * @implements Component
  */
-export const SelectEntryComponent = subcomponent_from_widget(
+export const SelectEntryComponent = subcomponentFromWidget(
   SelectEntry,
   Select,
-  add_entry,
-  remove_entry
+  addEntry,
+  removeEntry
 );
 
-define_component('select', SelectComponent);
-define_component('select-entry', SelectEntryComponent);
+defineComponent('select', SelectComponent);
+defineComponent('select-entry', SelectEntryComponent);

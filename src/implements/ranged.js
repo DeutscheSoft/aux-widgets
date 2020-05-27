@@ -19,12 +19,12 @@
 
 /* jshint -W018 */
 
-import { define_class } from './../widget_helpers.js';
+import { defineClass } from './../widget_helpers.js';
 import {
-  db2scale,
-  scale2db,
-  freq2scale,
-  scale2freq,
+  dBToScale,
+  scaleToDB,
+  freqToScale,
+  scaleToFreq,
 } from '../utils/audiomath.js';
 import { error, warn } from './../utils/log.js';
 
@@ -37,7 +37,7 @@ function LinearSnapModule(stdlib, foreign) {
   var floor = stdlib.Math.floor;
   var ceil = stdlib.Math.ceil;
 
-  function low_snap(v, direction) {
+  function lowSnap(v, direction) {
     v = +v;
     direction = +direction;
     var n = 0.0;
@@ -69,29 +69,29 @@ function LinearSnapModule(stdlib, foreign) {
   /**
    * Returns the nearest value on the grid which is bigger than <code>value</code>.
    *
-   * @method Ranged#snap_up
+   * @method Ranged#snapUp
    *
    * @param {number} value - The value to snap.
    *
    * @returns {number} The snapped value.
    */
-  function snap_up(v) {
+  function snapUp(v) {
     v = +v;
-    return +low_snap(v, 1.0);
+    return +lowSnap(v, 1.0);
   }
 
   /**
    * Returns the nearest value on the grid which is smaller than <code>value</code>.
    *
-   * @method Ranged#snap_down
+   * @method Ranged#snapDown
    *
    * @param {number} value - The value to snap.
    *
    * @returns {number} The snapped value.
    */
-  function snap_down(v) {
+  function snapDown(v) {
     v = +v;
-    return +low_snap(v, -1.0);
+    return +lowSnap(v, -1.0);
   }
 
   /**
@@ -106,12 +106,12 @@ function LinearSnapModule(stdlib, foreign) {
    */
   function snap(v) {
     v = +v;
-    return +low_snap(v, 0.0);
+    return +lowSnap(v, 0.0);
   }
 
   return {
-    snap_up: snap_up,
-    snap_down: snap_down,
+    snapUp: snapUp,
+    snapDown: snapDown,
     snap: snap,
   };
 }
@@ -122,7 +122,7 @@ function ArraySnapModule(stdlib, foreign, heap) {
   var min = +(foreign.min !== void 0 ? foreign.min : values[0]);
   var max = +(foreign.max !== void 0 ? foreign.max : values[len - 1]);
 
-  function low_snap(v, direction) {
+  function lowSnap(v, direction) {
     v = +v;
     direction = +direction;
     var a = 0;
@@ -154,24 +154,24 @@ function ArraySnapModule(stdlib, foreign, heap) {
     return +values[(a << 3) >> 3];
   }
 
-  function snap_up(v) {
+  function snapUp(v) {
     v = +v;
-    return +low_snap(v, 1.0);
+    return +lowSnap(v, 1.0);
   }
 
-  function snap_down(v) {
+  function snapDown(v) {
     v = +v;
-    return +low_snap(v, -1.0);
+    return +lowSnap(v, -1.0);
   }
 
   function snap(v) {
     v = +v;
-    return +low_snap(v, 0.0);
+    return +lowSnap(v, 0.0);
   }
 
   return {
-    snap_up: snap_up,
-    snap_down: snap_down,
+    snapUp: snapUp,
+    snapDown: snapDown,
     snap: snap,
   };
 }
@@ -188,24 +188,24 @@ function NullSnapModule(stdlib, foreign) {
 
   return {
     snap: snap,
-    snap_up: snap,
-    snap_down: snap,
+    snapUp: snap,
+    snapDown: snap,
   };
 }
-function num_sort(a) {
+function numSort(a) {
   a = a.slice(0);
   a.sort(function (a, b) {
     return a - b;
   });
   return a;
 }
-function update_snap() {
+function updateSnap() {
   var O = this.options;
   // Notify that the ranged options have been modified
   if (Array.isArray(O.snap)) {
     Object.assign(
       this,
-      ArraySnapModule(window, O, new Float64Array(num_sort(O.snap)).buffer)
+      ArraySnapModule(window, O, new Float64Array(numSort(O.snap)).buffer)
     );
   } else if (typeof O.snap === 'number' && O.snap > 0.0) {
     Object.assign(
@@ -230,10 +230,10 @@ function update_snap() {
       snap: function (v) {
         return +v;
       },
-      snap_up: function (v) {
+      snapUp: function (v) {
         return +v;
       },
-      snap_down: function (v) {
+      snapDown: function (v) {
         return +v;
       },
     });
@@ -246,7 +246,7 @@ function TRAFO_PIECEWISE(stdlib, foreign, heap) {
   var Y = new Float64Array(heap, l * 8, l);
   var basis = +foreign.basis;
 
-  function val2based(coef, size) {
+  function valueToBased(coef, size) {
     var a = 0,
       b = (l - 1) | 0,
       mid = 0,
@@ -280,7 +280,7 @@ function TRAFO_PIECEWISE(stdlib, foreign, heap) {
 
     return t;
   }
-  function based2val(coef, size) {
+  function basedToValue(coef, size) {
     var a = 0,
       b = (l - 1) | 0,
       mid = 0,
@@ -310,64 +310,64 @@ function TRAFO_PIECEWISE(stdlib, foreign, heap) {
 
     return +Y[(a << 3) >> 3] + (coef - +X[(a << 3) >> 3]) * t;
   }
-  function val2px(n) {
-    return val2based(n, basis || 1);
+  function valueToPixel(n) {
+    return valueToBased(n, basis || 1);
   }
-  function px2val(n) {
-    return based2val(n, basis || 1);
+  function pixelToValue(n) {
+    return basedToValue(n, basis || 1);
   }
-  function val2coef(n) {
-    return val2based(n, 1);
+  function valueToCoef(n) {
+    return valueToBased(n, 1);
   }
-  function coef2val(n) {
-    return based2val(n, 1);
+  function coefToValue(n) {
+    return basedToValue(n, 1);
   }
   return {
-    val2based: val2based,
-    based2val: based2val,
-    val2px: val2px,
-    px2val: px2val,
-    val2coef: val2coef,
-    coef2val: coef2val,
+    valueToBased: valueToBased,
+    basedToValue: basedToValue,
+    valueToPixel: valueToPixel,
+    pixelToValue: pixelToValue,
+    valueToCoef: valueToCoef,
+    coefToValue: coefToValue,
   };
 }
 function TRAFO_FUNCTION(stdlib, foreign) {
   var reverse = foreign.reverse | 0;
   var scale = foreign.scale;
   var basis = +foreign.basis;
-  function val2based(value, size) {
+  function valueToBased(value, size) {
     value = +value;
     size = +size;
     value = scale(value, foreign, false) * size;
     if (reverse) value = size - value;
     return value;
   }
-  function based2val(coef, size) {
+  function basedToValue(coef, size) {
     coef = +coef;
     size = +size;
     if (reverse) coef = size - coef;
     coef = scale(coef / size, foreign, true);
     return coef;
   }
-  function val2px(n) {
-    return val2based(n, basis || 1);
+  function valueToPixel(n) {
+    return valueToBased(n, basis || 1);
   }
-  function px2val(n) {
-    return based2val(n, basis || 1);
+  function pixelToValue(n) {
+    return basedToValue(n, basis || 1);
   }
-  function val2coef(n) {
-    return val2based(n, 1);
+  function valueToCoef(n) {
+    return valueToBased(n, 1);
   }
-  function coef2val(n) {
-    return based2val(n, 1);
+  function coefToValue(n) {
+    return basedToValue(n, 1);
   }
   return {
-    val2based: val2based,
-    based2val: based2val,
-    val2px: val2px,
-    px2val: px2val,
-    val2coef: val2coef,
-    coef2val: coef2val,
+    valueToBased: valueToBased,
+    basedToValue: basedToValue,
+    valueToPixel: valueToPixel,
+    pixelToValue: pixelToValue,
+    valueToCoef: valueToCoef,
+    coefToValue: coefToValue,
   };
 }
 function TRAFO_LINEAR(stdlib, foreign) {
@@ -375,14 +375,14 @@ function TRAFO_LINEAR(stdlib, foreign) {
   var min = +foreign.min;
   var max = +foreign.max;
   var basis = +foreign.basis;
-  function val2based(value, size) {
+  function valueToBased(value, size) {
     value = +value;
     size = +size;
     value = ((value - min) / (max - min)) * size;
     if (reverse) value = size - value;
     return value;
   }
-  function based2val(coef, size) {
+  function basedToValue(coef, size) {
     coef = +coef;
     size = +size;
     if (reverse) coef = size - coef;
@@ -391,91 +391,91 @@ function TRAFO_LINEAR(stdlib, foreign) {
   }
   // just a wrapper for having understandable code and backward
   // compatibility
-  function val2px(n) {
+  function valueToPixel(n) {
     n = +n;
     if (basis == 0.0) basis = 1.0;
-    return +val2based(n, basis);
+    return +valueToBased(n, basis);
   }
   // just a wrapper for having understandable code and backward
   // compatibility
-  function px2val(n) {
+  function pixelToValue(n) {
     n = +n;
     if (basis == 0.0) basis = 1.0;
-    return +based2val(n, basis);
+    return +basedToValue(n, basis);
   }
   // calculates a coefficient for the value
-  function val2coef(n) {
+  function valueToCoef(n) {
     n = +n;
-    return +val2based(n, 1.0);
+    return +valueToBased(n, 1.0);
   }
   // calculates a value from a coefficient
-  function coef2val(n) {
+  function coefToValue(n) {
     n = +n;
-    return +based2val(n, 1.0);
+    return +basedToValue(n, 1.0);
   }
   return {
     /**
      * Transforms a value from the coordinate system to the interval <code>0</code>...<code>basis</code>.
      *
-     * @method Ranged#val2based
+     * @method Ranged#valueToBased
      *
      * @param {number} value
      * @param {number} [basis=1]
      *
      * @returns {number}
      */
-    val2based: val2based,
+    valueToBased: valueToBased,
     /**
      * Transforms a value from the interval <code>0</code>...<code>basis</code> to the coordinate system.
      *
-     * @method Ranged#based2val
+     * @method Ranged#basedToValue
      *
      * @param {number} value
      * @param {number} [basis=1]
      *
      * @returns {number}
      */
-    based2val: based2val,
+    basedToValue: basedToValue,
     /**
-     * This is an alias for {@link Ranged#val2px}.
+     * This is an alias for {@link Ranged#valueToPixel}.
      *
-     * @method Ranged#val2px
+     * @method Ranged#valueToPixel
      *
      * @param {number} value
      *
      * @returns {number}
      */
-    val2px: val2px,
+    valueToPixel: valueToPixel,
     /**
-     * This is an alias for {@link Ranged#px2val}.
+     * This is an alias for {@link Ranged#pixelToValue}.
      *
-     * @method Ranged#px2val
+     * @method Ranged#pixelToValue
      *
      * @param {number} value
      *
      * @returns {number}
      */
-    px2val: px2val,
+    pixelToValue: pixelToValue,
     /**
-     * Calls {@link based2val} with <code>basis = 1</code>.
+     * Calls {@link basedToValue} with <code>basis = 1</code>.
      *
-     * @method Ranged#val2coef
+     * @method Ranged#valueToCoef
      *
      * @param {number} value
      *
      * @returns {number}
      */
-    val2coef: val2coef,
+    valueToCoef: valueToCoef,
     /**
-     * Calls {@link based2val} with <code>basis = 1</code>.
+     * Calls {@link basedToValue} with <code>basis = 1</code>.
      *
-     * @method Ranged#coef2val
+     * @method Ranged#coefToValue
      *
      * @param {number} value
      *
      * @returns {number}
      */
-    coef2val: coef2val,
+    coefToValue: coefToValue,
   };
 }
 function TRAFO_LOG(stdlib, foreign) {
@@ -485,39 +485,39 @@ function TRAFO_LOG(stdlib, foreign) {
   var log_factor = +foreign.log_factor;
   var trafo_reverse = foreign.trafo_reverse | 0;
   var basis = +foreign.basis;
-  function val2based(value, size) {
+  function valueToBased(value, size) {
     value = +value;
     size = +size;
-    value = +db2scale(value, min, max, size, trafo_reverse, log_factor);
+    value = +dBToScale(value, min, max, size, trafo_reverse, log_factor);
     if (reverse) value = size - value;
     return value;
   }
-  function based2val(coef, size) {
+  function basedToValue(coef, size) {
     coef = +coef;
     size = +size;
     if (reverse) coef = size - coef;
-    coef = +scale2db(coef, min, max, size, trafo_reverse, log_factor);
+    coef = +scaleToDB(coef, min, max, size, trafo_reverse, log_factor);
     return coef;
   }
-  function val2px(n) {
-    return val2based(n, basis || 1);
+  function valueToPixel(n) {
+    return valueToBased(n, basis || 1);
   }
-  function px2val(n) {
-    return based2val(n, basis || 1);
+  function pixelToValue(n) {
+    return basedToValue(n, basis || 1);
   }
-  function val2coef(n) {
-    return val2based(n, 1);
+  function valueToCoef(n) {
+    return valueToBased(n, 1);
   }
-  function coef2val(n) {
-    return based2val(n, 1);
+  function coefToValue(n) {
+    return basedToValue(n, 1);
   }
   return {
-    val2based: val2based,
-    based2val: based2val,
-    val2px: val2px,
-    px2val: px2val,
-    val2coef: val2coef,
-    coef2val: coef2val,
+    valueToBased: valueToBased,
+    basedToValue: basedToValue,
+    valueToPixel: valueToPixel,
+    pixelToValue: pixelToValue,
+    valueToCoef: valueToCoef,
+    coefToValue: coefToValue,
   };
 }
 function TRAFO_FREQ(stdlib, foreign) {
@@ -526,42 +526,42 @@ function TRAFO_FREQ(stdlib, foreign) {
   var max = +foreign.max;
   var trafo_reverse = foreign.trafo_reverse | 0;
   var basis = +foreign.basis;
-  function val2based(value, size) {
+  function valueToBased(value, size) {
     value = +value;
     size = +size;
-    value = +freq2scale(value, min, max, size, trafo_reverse);
+    value = +freqToScale(value, min, max, size, trafo_reverse);
     if (reverse) value = size - value;
     return value;
   }
-  function based2val(coef, size) {
+  function basedToValue(coef, size) {
     coef = +coef;
     size = +size;
     if (reverse) coef = size - coef;
-    coef = +scale2freq(coef, min, max, size, trafo_reverse);
+    coef = +scaleToFreq(coef, min, max, size, trafo_reverse);
     return coef;
   }
-  function val2px(n) {
-    return val2based(n, basis || 1);
+  function valueToPixel(n) {
+    return valueToBased(n, basis || 1);
   }
-  function px2val(n) {
-    return based2val(n, basis || 1);
+  function pixelToValue(n) {
+    return basedToValue(n, basis || 1);
   }
-  function val2coef(n) {
-    return val2based(n, 1);
+  function valueToCoef(n) {
+    return valueToBased(n, 1);
   }
-  function coef2val(n) {
-    return based2val(n, 1);
+  function coefToValue(n) {
+    return basedToValue(n, 1);
   }
   return {
-    val2based: val2based,
-    based2val: based2val,
-    val2px: val2px,
-    px2val: px2val,
-    val2coef: val2coef,
-    coef2val: coef2val,
+    valueToBased: valueToBased,
+    basedToValue: basedToValue,
+    valueToPixel: valueToPixel,
+    pixelToValue: pixelToValue,
+    valueToCoef: valueToCoef,
+    coefToValue: coefToValue,
   };
 }
-function update_transformation() {
+function updateTransformation() {
   var O = this.options;
   var scale = O.scale;
 
@@ -614,18 +614,18 @@ function update_transformation() {
 
   Object.assign(this, module);
 }
-function set_cb(key) {
+function setCallback(key) {
   switch (key) {
     case 'min':
     case 'max':
     case 'snap':
-      update_snap.call(this);
+      updateSnap.call(this);
     /* fall through */
     case 'log_factor':
     case 'scale':
     case 'reverse':
     case 'basis':
-      update_transformation.call(this);
+      updateTransformation.call(this);
       this.emit('rangedchanged');
       break;
   }
@@ -645,7 +645,7 @@ function set_cb(key) {
  *
  * @returns {number} The transformed value.
  */
-export const Ranged = define_class({
+export const Ranged = defineClass({
   /**
    * Ranged combines functionality for two distinct purposes.
    * Firstly, Ranged can be used to snap values to a virtual grid.
@@ -736,7 +736,7 @@ export const Ranged = define_class({
     trafo_reverse: 'boolean',
   },
   static_events: {
-    set: set_cb,
+    set: setCallback,
     initialized: function () {
       var O = this.options;
       if (!(O.min <= O.max))
@@ -748,8 +748,8 @@ export const Ranged = define_class({
           ', options:',
           O
         );
-      update_snap.call(this);
-      update_transformation.call(this);
+      updateSnap.call(this);
+      updateTransformation.call(this);
     },
   },
 });

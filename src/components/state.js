@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { State } from './../widgets/state.js';
 
@@ -29,6 +29,6 @@ import { State } from './../widgets/state.js';
  * @class StateComponent
  * @implements Component
  */
-export const StateComponent = component_from_widget(State);
+export const StateComponent = componentFromWidget(State);
 
-define_component('state', StateComponent);
+defineComponent('state', StateComponent);

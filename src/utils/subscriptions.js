@@ -24,9 +24,9 @@
  */
 
 import { warn } from './log.js';
-import { typecheck_function } from './typecheck.js';
+import { typecheckFunction } from './typecheck.js';
 
-export function init_subscriptions() {
+export function initSubscriptions() {
   return null;
 }
 
@@ -40,7 +40,7 @@ function copy(sub) {
  * This function returns the new subscriptions. It may modify the first
  * argument.
  */
-export function add_subscription(subscriptions, subscription) {
+export function addSubscription(subscriptions, subscription) {
   if (subscriptions === null) {
     return copy(subscription);
   } else if (Array.isArray(subscriptions)) {
@@ -49,20 +49,20 @@ export function add_subscription(subscriptions, subscription) {
     }
 
     if (subscription !== null) {
-      typecheck_function(subscription);
+      typecheckFunction(subscription);
       subscriptions.push(subscription);
     }
 
     return subscriptions;
   } else {
-    typecheck_function(subscriptions);
+    typecheckFunction(subscriptions);
 
     if (Array.isArray(subscription)) {
       return [subscriptions].concat(subscription);
     }
 
     if (subscription !== null) {
-      typecheck_function(subscription);
+      typecheckFunction(subscription);
       return [subscriptions, subscription];
     }
 
@@ -70,7 +70,7 @@ export function add_subscription(subscriptions, subscription) {
   }
 }
 
-function safe_call(cb) {
+function safeCall(cb) {
   try {
     cb();
   } catch (err) {
@@ -81,15 +81,15 @@ function safe_call(cb) {
 /**
  * Unsubscribe all subscriptions.
  */
-export function unsubscribe_subscriptions(subscriptions) {
+export function unsubscribeSubscriptions(subscriptions) {
   if (subscriptions === null) return null;
 
   if (Array.isArray(subscriptions)) {
     for (let i = 0; i < subscriptions.length; i++) {
-      safe_call(subscriptions[i]);
+      safeCall(subscriptions[i]);
     }
   } else {
-    safe_call(subscriptions);
+    safeCall(subscriptions);
   }
 
   return null;
@@ -101,7 +101,7 @@ export function unsubscribe_subscriptions(subscriptions) {
 export class Subscription {
   constructor(subscription) {
     if (subscription === void 0) {
-      this.sub = init_subscriptions();
+      this.sub = initSubscriptions();
     } else if (
       typeof subscription === 'function' ||
       Array.isArray(subscription)
@@ -123,7 +123,7 @@ export class Subscription {
    * Unsubscribe from all subscriptions.
    */
   unsubscribe() {
-    this.sub = unsubscribe_subscriptions(this.sub);
+    this.sub = unsubscribeSubscriptions(this.sub);
   }
 
   /**
@@ -150,6 +150,6 @@ export class Subscriptions extends Subscription {
       subscription = subscription.unsubscribe.bind(subscription);
     }
 
-    this.sub = add_subscription(this.sub, subscription);
+    this.sub = addSubscription(this.sub, subscription);
   }
 }

@@ -17,11 +17,11 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { Container } from './container.js';
-import { element, add_class } from '../utils/dom.js';
+import { element, addClass } from '../utils/dom.js';
 
-export const ListItem = define_class({
+export const ListItem = defineClass({
   /**
    * ListItem is a member {@link Container} of {@link List}s. The
    * element is a `LI` instead of a `DIV`.
@@ -37,7 +37,7 @@ export const ListItem = define_class({
     Container.prototype.initialize.call(this, options);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-listitem');
+    addClass(element, 'aux-listitem');
 
     Container.prototype.draw.call(this, O, element);
   },

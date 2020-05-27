@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { ColorPickerDialog } from './../widgets/colorpickerdialog.js';
 
@@ -30,8 +30,8 @@ import { ColorPickerDialog } from './../widgets/colorpickerdialog.js';
  * @class ColorPickerDialogComponent
  * @implements Component
  */
-export const ColorPickerDialogComponent = component_from_widget(
+export const ColorPickerDialogComponent = componentFromWidget(
   ColorPickerDialog
 );
 
-define_component('colorpickerdialog', ColorPickerDialogComponent);
+defineComponent('colorpickerdialog', ColorPickerDialogComponent);

@@ -17,21 +17,21 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
-import { define_child_widget } from '../child_widget.js';
+import { defineClass } from '../widget_helpers.js';
+import { defineChildWidget } from '../child_widget.js';
 import { Widget } from './widget.js';
 import { Label } from './label.js';
 import { Gradient } from '../implements/gradient.js';
 import { Scale } from './scale.js';
 import {
   element,
-  add_class,
-  get_style,
-  toggle_class,
-  remove_class,
-  insert_after,
-  inner_width,
-  inner_height,
+  addClass,
+  getStyle,
+  toggleClass,
+  removeClass,
+  insertAfter,
+  innerWidth,
+  innerHeight,
 } from '../utils/dom.js';
 
 import { FORMAT } from '../utils/sprintf.js';
@@ -40,7 +40,7 @@ import { S } from '../dom_scheduler.js';
 function vert(O) {
   return O.layout === 'left' || O.layout === 'right';
 }
-function fill_interval(ctx, w, h, a, is_vertical) {
+function fillInterval(ctx, w, h, a, is_vertical) {
   var i;
   if (is_vertical) {
     for (i = 0; i < a.length; i += 2) {
@@ -52,7 +52,7 @@ function fill_interval(ctx, w, h, a, is_vertical) {
     }
   }
 }
-function clear_interval(ctx, w, h, a, is_vertical) {
+function clearInterval(ctx, w, h, a, is_vertical) {
   var i;
   if (is_vertical) {
     for (i = 0; i < a.length; i += 2) {
@@ -64,11 +64,11 @@ function clear_interval(ctx, w, h, a, is_vertical) {
     }
   }
 }
-function draw_full(ctx, w, h, a, is_vertical) {
+function drawFull(ctx, w, h, a, is_vertical) {
   ctx.fillRect(0, 0, w, h);
-  clear_interval(ctx, w, h, a, is_vertical);
+  clearInterval(ctx, w, h, a, is_vertical);
 }
-function make_interval(a) {
+function makeInterval(a) {
   var i, tmp, again;
 
   do {
@@ -98,7 +98,7 @@ function make_interval(a) {
     }
   }
 }
-function cmp_intervals(a, b) {
+function cmpIntervals(a, b) {
   var ret = 0;
   var i;
 
@@ -112,7 +112,7 @@ function cmp_intervals(a, b) {
   }
   return ret;
 }
-function subtract_intervals(a, b) {
+function subtractIntervals(a, b) {
   var i;
   var ret = [];
 
@@ -128,7 +128,7 @@ function subtract_intervals(a, b) {
 
   return ret;
 }
-export const Meter = define_class({
+export const Meter = defineClass({
   /**
    * Meter is a base class to build different meters from, such as {@link LevelMeter}.
    * Meter uses {@link Gradient} and contains a {@link Scale} widget.
@@ -253,7 +253,7 @@ export const Meter = define_class({
       var O = this.options;
       this.set('value', O.value);
       this.set('min', O.min);
-      this.trigger_resize();
+      this.triggerResize();
     },
     initialized: function () {
       this.set('value', this.get('value'));
@@ -275,7 +275,7 @@ export const Meter = define_class({
      *   Has class <code>.aux-mask</code>.
      */
     this._canvas = document.createElement('canvas');
-    add_class(this._canvas, 'aux-mask');
+    addClass(this._canvas, 'aux-mask');
 
     this._fillstyle = false;
 
@@ -300,7 +300,7 @@ export const Meter = define_class({
     Widget.prototype.destroy.call(this);
   },
   draw: function (O, element) {
-    add_class(element, 'aux-meter');
+    addClass(element, 'aux-meter');
     element.appendChild(this._bar);
 
     Widget.prototype.draw.call(this, O, element);
@@ -314,7 +314,7 @@ export const Meter = define_class({
       this._canvas.style.removeProperty('background-color');
       S.add(
         function () {
-          this._fillstyle = get_style(this._canvas, 'background-color');
+          this._fillstyle = getStyle(this._canvas, 'background-color');
           S.add(
             function () {
               this._canvas.getContext('2d').fillStyle = this._fillstyle;
@@ -323,7 +323,7 @@ export const Meter = define_class({
                 'transparent',
                 'important'
               );
-              this.trigger_draw();
+              this.triggerDraw();
             }.bind(this),
             3
           );
@@ -334,18 +334,18 @@ export const Meter = define_class({
 
     if (I.reverse) {
       I.reverse = false;
-      toggle_class(E, 'aux-reverse', O.reverse);
+      toggleClass(E, 'aux-reverse', O.reverse);
     }
     if (I.gradient || I.background) {
       I.gradient = I.background = false;
-      this.draw_gradient(this._bar, O.gradient, O.background);
+      this.drawGradient(this._bar, O.gradient, O.background);
     }
 
     Widget.prototype.redraw.call(this);
 
     if (I.layout) {
       I.layout = false;
-      remove_class(
+      removeClass(
         E,
         'aux-vertical',
         'aux-horizontal',
@@ -358,20 +358,20 @@ export const Meter = define_class({
       var bar = this._bar;
       switch (O.layout) {
         case 'left':
-          add_class(E, 'aux-vertical', 'aux-left');
-          if (scale) insert_after(scale, bar);
+          addClass(E, 'aux-vertical', 'aux-left');
+          if (scale) insertAfter(scale, bar);
           break;
         case 'right':
-          add_class(E, 'aux-vertical', 'aux-right');
-          if (scale) insert_after(bar, scale);
+          addClass(E, 'aux-vertical', 'aux-right');
+          if (scale) insertAfter(bar, scale);
           break;
         case 'top':
-          add_class(E, 'aux-horizontal', 'aux-top');
-          if (scale) insert_after(scale, bar);
+          addClass(E, 'aux-horizontal', 'aux-top');
+          if (scale) insertAfter(scale, bar);
           break;
         case 'bottom':
-          add_class(E, 'aux-horizontal', 'aux-bottom');
-          if (scale) insert_after(bar, scale);
+          addClass(E, 'aux-horizontal', 'aux-bottom');
+          if (scale) insertAfter(bar, scale);
           break;
         default:
           throw new Error('unsupported layout');
@@ -391,15 +391,15 @@ export const Meter = define_class({
 
     if (I.value || I.basis || I.min || I.max || I.segment) {
       I.basis = I.value = I.min = I.max = I.segment = false;
-      this.draw_meter();
+      this.drawMeter();
     }
   },
 
   resize: function () {
     var O = this.options;
     Widget.prototype.resize.call(this);
-    var w = inner_width(this._bar);
-    var h = inner_height(this._bar);
+    var w = innerWidth(this._bar);
+    var h = innerHeight(this._bar);
     this.set('_width', w);
     this.set('_height', h);
     var i = vert(O) ? h : w;
@@ -408,7 +408,7 @@ export const Meter = define_class({
     this._fillstyle = false;
   },
 
-  calculate_meter: function (to, value, i) {
+  calculateMeter: function (to, value, i) {
     var O = this.options;
     // Set the mask elements according to options.value to show a value in
     // the meter bar
@@ -420,8 +420,8 @@ export const Meter = define_class({
      */
 
     /* canvas coordinates are reversed */
-    var v1 = this.val2px(base) | 0;
-    var v2 = this.val2px(value) | 0;
+    var v1 = this.valueToPixel(base) | 0;
+    var v2 = this.valueToPixel(value) | 0;
 
     if (segment !== 1) v2 = segment * (Math.round(v2 / segment) | 0);
 
@@ -436,7 +436,7 @@ export const Meter = define_class({
     return i;
   },
 
-  draw_meter: function () {
+  drawMeter: function () {
     var O = this.options;
     var w = Math.round(O._width);
     var h = Math.round(O._height);
@@ -447,9 +447,9 @@ export const Meter = define_class({
     var a = this._current_meters;
     var tmp = this._last_meters;
 
-    i = this.calculate_meter(a, O.value, 0);
+    i = this.calculateMeter(a, O.value, 0);
     if (i < a.length) a.length = i;
-    make_interval(a);
+    makeInterval(a);
 
     this._last_meters = a;
     this._current_meters = tmp;
@@ -457,7 +457,7 @@ export const Meter = define_class({
     var diff;
 
     if (tmp.length === a.length) {
-      diff = cmp_intervals(tmp, a) | 0;
+      diff = cmpIntervals(tmp, a) | 0;
     } else diff = 4;
 
     if (!diff) return;
@@ -471,29 +471,19 @@ export const Meter = define_class({
 
     if (diff === 1) {
       /* a - tmp is non-empty */
-      clear_interval(ctx, w, h, subtract_intervals(a, tmp), is_vertical);
+      clearInterval(ctx, w, h, subtractIntervals(a, tmp), is_vertical);
       return;
     }
     if (diff === 2) {
       /* tmp - a is non-empty */
-      fill_interval(ctx, w, h, subtract_intervals(tmp, a), is_vertical);
+      fillInterval(ctx, w, h, subtractIntervals(tmp, a), is_vertical);
       return;
     }
 
-    draw_full(ctx, w, h, a, is_vertical);
+    drawFull(ctx, w, h, a, is_vertical);
   },
 
-  // HELPERS & STUFF
-  _val2seg: function (val) {
-    // rounds values to fit in the segments size
-    // always returns values without taking options.reverse into account
-    var s = +this.val2px(this.snap(val));
-    s -= s % +this.options.segment;
-    if (this.options.reverse) s = +this.options.basis - s;
-    return s;
-  },
-
-  has_base: function () {
+  hasBase: function () {
     var O = this.options;
     return O.base > O.min;
   },
@@ -501,7 +491,7 @@ export const Meter = define_class({
 /**
  * @member {Scale} Meter#scale - The {@link Scale} of the meter.
  */
-define_child_widget(Meter, 'scale', {
+defineChildWidget(Meter, 'scale', {
   create: Scale,
   map_options: {
     format_labels: 'labels',
@@ -521,7 +511,7 @@ define_child_widget(Meter, 'scale', {
  * @member {Label} Meter#label - The {@link Label} displaying the title.
  *   Has class <code>.aux-label</code>.
  */
-define_child_widget(Meter, 'label', {
+defineChildWidget(Meter, 'label', {
   create: Label,
   show: false,
   option: 'label',
@@ -531,7 +521,7 @@ define_child_widget(Meter, 'label', {
 /**
  * @member {Label} Meter#value - The {@link Label} displaying the value.
  */
-define_child_widget(Meter, 'value', {
+defineChildWidget(Meter, 'value', {
   create: Label,
   show: false,
   toggle_class: true,

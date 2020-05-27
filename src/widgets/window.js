@@ -19,8 +19,8 @@
 
 /* jshint -W014 */
 
-import { define_class } from '../widget_helpers.js';
-import { define_child_widget } from '../child_widget.js';
+import { defineClass } from '../widget_helpers.js';
+import { defineChildWidget } from '../child_widget.js';
 import { Container } from './container.js';
 import { Icon } from './icon.js';
 import { Label } from './label.js';
@@ -28,39 +28,39 @@ import { Button } from './button.js';
 import { Drag } from '../modules/drag.js';
 import { Resize } from '../modules/resize.js';
 import { GlobalCursor } from '../implements/globalcursor.js';
-import { translate_anchor } from '../utils/anchor.js';
+import { translateAnchor } from '../utils/anchor.js';
 import {
-  add_class,
-  remove_class,
-  outer_width,
-  outer_height,
-  position_left,
-  position_top,
+  addClass,
+  removeClass,
+  outerWidth,
+  outerHeight,
+  positionLeft,
+  positionTop,
   width,
-  inner_width,
-  inner_height,
+  innerWidth,
+  innerHeight,
   height,
-  toggle_class,
-  set_content,
+  toggleClass,
+  setContent,
 } from '../utils/dom.js';
 
-function header_action() {
+function headerAction() {
   var that = this.parent;
   switch (that.options.header_action) {
     case 'shrink':
-      that.toggle_shrink();
+      that.toggleShrink();
       break;
     case 'maximize':
-      that.toggle_maximize();
+      that.toggleMaximize();
       break;
     case 'maximizehorizontal':
-      that.toggle_maximize_horizontal();
+      that.toggleMaximizeHorizontal();
       break;
     case 'maximizevertical':
-      that.toggle_maximize_vertical();
+      that.toggleMaximizeVertical();
       break;
     case 'minimize':
-      that.toggle_minimize();
+      that.toggleMinimize();
       break;
     case 'close':
       that.destroy();
@@ -75,18 +75,18 @@ function header_action() {
 }
 function mout() {
   if (this.options.auto_active && !this.dragging && !this.resizing)
-    remove_class(this.element, 'aux-active');
+    removeClass(this.element, 'aux-active');
 }
 function mover() {
-  if (this.options.auto_active) add_class(this.element, 'aux-active');
+  if (this.options.auto_active) addClass(this.element, 'aux-active');
 }
-function max_height() {
+function maxHeight() {
   // returns the max height of the window
   return this.options.max_height < 0
     ? Number.MAX_SAFE_INTEGER
     : this.options.max_height;
 }
-function max_width() {
+function maxWidth() {
   // returns the max width of the window
   return this.options.max_width < 0
     ? Number.MAX_SAFE_INTEGER
@@ -101,7 +101,7 @@ function close() {
   if (this.options.auto_close) this.destroy();
 }
 function maximize() {
-  if (this.options.auto_maximize) this.toggle_maximize();
+  if (this.options.auto_maximize) this.toggleMaximize();
   /**
    * The user clicked the maximize button.
    * @event Window.maximizeclicked
@@ -109,8 +109,8 @@ function maximize() {
    */
   this.emit('maximizeclicked', this.options.maximize);
 }
-function maximizevertical() {
-  if (this.options.auto_maximize) this.toggle_maximize_vertical();
+function maximizeVertical() {
+  if (this.options.auto_maximize) this.toggleMaximizeVertical();
   /**
    * The user clicked the maximize-vertical button.
    * @event Window.maximizeverticalclicked
@@ -118,8 +118,8 @@ function maximizevertical() {
    */
   this.emit('maximizeverticalclicked', this.options.maximize.y);
 }
-function maximizehorizontal() {
-  if (this.options.auto_maximize) this.toggle_maximize_horizontal();
+function maximizeHorizontal() {
+  if (this.options.auto_maximize) this.toggleMaximizeHorizontal();
   /**
    * The user clicked the maximize-horizontal button.
    * @event Window.maximizehorizontalclicked
@@ -128,7 +128,7 @@ function maximizehorizontal() {
   this.emit('maximizehorizontalclicked', this.options.maximize.x);
 }
 function minimize() {
-  if (this.options.auto_minimize) this.toggle_minimize();
+  if (this.options.auto_minimize) this.toggleMinimize();
   /**
    * The user clicked the minimize button.
    * @event Window.minimizeclicked
@@ -137,7 +137,7 @@ function minimize() {
   this.emit('minimizeclicked', this.options.minimize);
 }
 function shrink() {
-  if (this.options.auto_shrink) this.toggle_shrink();
+  if (this.options.auto_shrink) this.toggleShrink();
   /**
    * The user clicked the shrink button.
    * @event Window.shrinkclicked
@@ -145,10 +145,10 @@ function shrink() {
    */
   this.emit('shrinkclicked', this.options.shrink);
 }
-function start_resize(el, ev) {
-  this.global_cursor('se-resize');
+function startResize(el, ev) {
+  this.globalCursor('se-resize');
   this.resizing = true;
-  add_class(this.element, 'aux-resizing');
+  addClass(this.element, 'aux-resizing');
   /**
    * The user starts resizing the window.
    * @event Window.startresize
@@ -156,12 +156,12 @@ function start_resize(el, ev) {
    */
   this.emit('startresize', ev);
 }
-function stop_resize(el, ev) {
-  this.remove_cursor('se-resize');
+function stopResize(el, ev) {
+  this.removeCursor('se-resize');
   this.resizing = false;
-  remove_class(this.element, 'aux-resizing');
-  this.trigger_resize_children();
-  calculate_dimensions.call(this);
+  removeClass(this.element, 'aux-resizing');
+  this.triggerResizeChildren();
+  calculateDimensions.call(this);
   /**
    * The user stops resizing the window.
    * @event Window.stopresize
@@ -171,8 +171,8 @@ function stop_resize(el, ev) {
 }
 function resizing(el, ev) {
   if (this.options.resizing === 'continuous') {
-    this.trigger_resize_children();
-    calculate_dimensions.call(this);
+    this.triggerResizeChildren();
+    calculateDimensions.call(this);
   }
   /**
    * The user resizes the window.
@@ -181,18 +181,18 @@ function resizing(el, ev) {
    */
   this.emit('resizing', ev);
 }
-function calculate_dimensions() {
-  var x = outer_width(this.element, true);
-  var y = outer_height(this.element, true);
+function calculateDimensions() {
+  var x = outerWidth(this.element, true);
+  var y = outerHeight(this.element, true);
   this.dimensions.width = this.options.width = x;
   this.dimensions.height = this.options.height = y;
   this.dimensions.x2 = x + this.dimensions.x1;
   this.dimensions.y2 = y + this.dimensions.y1;
 }
-function calculate_position() {
-  var posx = position_left(this.element);
-  var posy = position_top(this.element);
-  var pos1 = translate_anchor(
+function calculatePosition() {
+  var posx = positionLeft(this.element);
+  var posy = positionTop(this.element);
+  var pos1 = translateAnchor(
     this.options.anchor,
     posx,
     posy,
@@ -206,29 +206,29 @@ function calculate_position() {
   this.dimensions.x2 = posx + this.dimensions.width;
   this.dimensions.y2 = posy + this.dimensions.height;
 }
-function horiz_max() {
+function horizMax() {
   // returns true if maximized horizontally
   return this.options.maximize.x;
 }
-function vert_max() {
+function vertMax() {
   // returns if maximized vertically
   return this.options.maximize.y;
 }
-function start_drag(ev) {
-  this.global_cursor('move');
-  add_class(this.element, 'aux-dragging');
+function startDrag(ev) {
+  this.globalCursor('move');
+  addClass(this.element, 'aux-dragging');
   // if window is maximized, we have to replace the window according
   // to the position of the mouse
   let y = 0,
     x = 0;
-  if (vert_max.call(this)) {
+  if (vertMax.call(this)) {
     y = !this.options.fixed ? window.scrollY : 0;
   }
-  if (horiz_max.call(this)) {
+  if (horizMax.call(this)) {
     x = ev.clientX - (ev.clientX / width()) * this.options.width;
     x += !this.options.fixed ? window.scrollX : 0;
   }
-  var pos = translate_anchor(
+  var pos = translateAnchor(
     this.options.anchor,
     x,
     y,
@@ -236,8 +236,8 @@ function start_drag(ev) {
     this.options.height
   );
 
-  if (horiz_max.call(this)) this.options.x = pos.x;
-  if (vert_max.call(this)) this.options.y = pos.y;
+  if (horizMax.call(this)) this.options.x = pos.x;
+  if (vertMax.call(this)) this.options.y = pos.y;
 
   this.drag._xpos += x;
   this.drag._ypos += y;
@@ -249,10 +249,10 @@ function start_drag(ev) {
    */
   this.emit('startdrag', ev);
 }
-function stop_drag(ev) {
+function stopDrag(ev) {
   this.dragging = false;
-  calculate_position.call(this);
-  this.remove_cursor('move');
+  calculatePosition.call(this);
+  this.removeCursor('move');
   /**
    * The user stops dragging the window.
    * @event Window.stopdrag
@@ -264,14 +264,14 @@ function dragging(ev) {
   if (!this.dragging) {
     this.dragging = true;
     // un-maximize
-    if (horiz_max.call(this)) {
+    if (horizMax.call(this)) {
       this.set('maximize', { x: false });
     }
-    if (vert_max.call(this)) {
+    if (vertMax.call(this)) {
       this.set('maximize', { y: false });
     }
   }
-  calculate_position.call(this);
+  calculatePosition.call(this);
   /**
    * The user is dragging the window.
    * @event Window.dragging
@@ -279,37 +279,37 @@ function dragging(ev) {
    */
   this.emit('dragging', ev);
 }
-function init_position(pos) {
+function initPosition(pos) {
   var O = this.options;
   if (pos) {
     var x0 = O.fixed ? 0 : window.scrollX;
     var y0 = O.fixed ? 0 : window.scrollY;
-    var pos1 = translate_anchor(
+    var pos1 = translateAnchor(
       O.open,
       x0,
       y0,
       window.innerWidth - O.width,
       window.innerHeight - O.height
     );
-    var pos2 = translate_anchor(O.anchor, pos1.x, pos1.y, O.width, O.height);
+    var pos2 = translateAnchor(O.anchor, pos1.x, pos1.y, O.width, O.height);
     O.x = pos2.x;
     O.y = pos2.y;
   }
-  set_dimensions.call(this);
-  set_position.call(this);
+  setDimensions.call(this);
+  setPosition.call(this);
 }
-function set_position() {
+function setPosition() {
   var O = this.options;
   var D = this.dimensions;
-  var width = inner_width(this.element);
-  var height = inner_height(this.element);
-  var pos = translate_anchor(O.anchor, O.x, O.y, -width, -height);
-  if (horiz_max.call(this)) {
+  var width = innerWidth(this.element);
+  var height = innerHeight(this.element);
+  var pos = translateAnchor(O.anchor, O.x, O.y, -width, -height);
+  if (horizMax.call(this)) {
     this.element.style.left = (O.fixed ? 0 : window.scrollX) + 'px';
   } else {
     this.element.style.left = pos.x + 'px';
   }
-  if (vert_max.call(this)) {
+  if (vertMax.call(this)) {
     this.element.style.top = (O.fixed ? 0 : window.scrollY) + 'px';
   } else {
     this.element.style.top = pos.y + 'px';
@@ -327,35 +327,32 @@ function set_position() {
    */
   this.emit('positionchanged', D);
 }
-function set_dimensions() {
+function setDimensions() {
   var O = this.options;
   var D = this.dimensions;
   if (O.width >= 0) {
-    O.width = Math.min(max_width.call(this), Math.max(O.width, O.min_width));
-    if (horiz_max.call(this)) {
-      outer_width(this.element, true, width());
+    O.width = Math.min(maxWidth.call(this), Math.max(O.width, O.min_width));
+    if (horizMax.call(this)) {
+      outerWidth(this.element, true, width());
       D.width = width();
     } else {
-      outer_width(this.element, true, O.width);
+      outerWidth(this.element, true, O.width);
       D.width = O.width;
     }
   } else {
-    D.width = outer_width(this.element);
+    D.width = outerWidth(this.element);
   }
   if (O.height >= 0) {
-    O.height = Math.min(
-      max_height.call(this),
-      Math.max(O.height, O.min_height)
-    );
-    if (vert_max.call(this)) {
-      outer_height(this.element, true, height());
+    O.height = Math.min(maxHeight.call(this), Math.max(O.height, O.min_height));
+    if (vertMax.call(this)) {
+      outerHeight(this.element, true, height());
       D.height = height();
     } else {
-      outer_height(this.element, true, O.height);
+      outerHeight(this.element, true, O.height);
       D.height = O.height;
     }
   } else {
-    D.height = outer_height(this.element, true);
+    D.height = outerHeight(this.element, true);
   }
   D.x2 = D.x1 + D.width;
   D.y2 = D.y1 + D.height;
@@ -366,19 +363,19 @@ function set_dimensions() {
    */
   this.emit('dimensionschanged', this.dimensions);
 }
-function build_header() {
-  build_from_const.call(this, 'header');
+function buildHeader() {
+  buildFromConst.call(this, 'header');
   if (!this.drag) {
     this.drag = new Drag({
       node: this.element,
       handle: this.header.element,
-      onStartdrag: start_drag.bind(this),
-      onStopdrag: stop_drag.bind(this),
+      onStartdrag: startDrag.bind(this),
+      onStopdrag: stopDrag.bind(this),
       onDragging: dragging.bind(this),
       min: { x: 0 - this.options.width + 20, y: 0 },
       max: { x: width() - 20, y: height() - 20 },
     });
-    //this.header.on("dblclick", header_action.bind(this));
+    //this.header.on("dblclick", headerAction.bind(this));
   }
   /**
    * The header changed.
@@ -386,15 +383,15 @@ function build_header() {
    */
   this.emit('headerchanged');
 }
-function build_footer() {
-  build_from_const.call(this, 'footer');
+function buildFooter() {
+  buildFromConst.call(this, 'footer');
   /**
    * The footer changed.
    * @event Window.footerchanged
    */
   this.emit('footerchanged');
 }
-function build_from_const(element) {
+function buildFromConst(element) {
   var E = this[element].element;
   var L = this.options[element];
   var O = this.options;
@@ -409,9 +406,9 @@ function build_from_const(element) {
           node: this.element,
           handle: this.size.element,
           min: { x: O.min_width, y: O.min_height },
-          max: { x: max_width.call(this), y: max_height.call(this) },
-          onResizestart: start_resize.bind(this),
-          onResizestop: stop_resize.bind(this),
+          max: { x: maxWidth.call(this), y: maxHeight.call(this) },
+          onResizestart: startResize.bind(this),
+          onResizestop: stopResize.bind(this),
           onResizing: resizing.bind(this),
           active: O.resizable,
         });
@@ -422,7 +419,7 @@ function build_from_const(element) {
   }
 }
 
-function status_timeout() {
+function statusTimeout() {
   var O = this.options;
   if (this.__status_to !== false) window.clearTimeout(this.__status_to);
   if (!O.hide_status) return;
@@ -436,7 +433,7 @@ function status_timeout() {
     );
 }
 
-export const Window = define_class({
+export const Window = defineClass({
   /**
    * This widget is a flexible overlay window.
    *
@@ -534,7 +531,7 @@ export const Window = define_class({
     draggable: 'boolean',
     resizable: 'boolean',
     resizing: 'int',
-    header_action: 'int',
+    header_action: 'string',
     active: 'boolean',
     hide_status: 'int',
   }),
@@ -593,62 +590,62 @@ export const Window = define_class({
     Container.prototype.initialize.call(this, options);
     var O = this.options;
     this.__status_to = false;
-    init_position.call(this, this.options.open);
+    initPosition.call(this, this.options.open);
     this.set('maximize', this.options.maximize);
     this.set('minimize', this.options.minimize);
   },
 
   /**
    * Appends a new child to the window content area.
-   * @method Window#append_child
+   * @method Window#appendChild
    * @param {Widget} child - The child widget to add to the windows content area.
    */
-  append_child: function (child) {
+  appendChild: function (child) {
     this.content.appendChild(child.element);
-    this.add_child(child);
+    this.addChild(child);
   },
 
   /**
    * Toggles the overall maximize state of the window.
-   * @method Window#toggle_maximize
+   * @method Window#toggleMaximize
    * @param {Boolean} maximize - State of maximization. If window is already
    *   maximized in one or both directions it is un-maximized, otherwise maximized.
    */
-  toggle_maximize: function () {
-    if (!vert_max.call(this) || !horiz_max.call(this))
+  toggleMaximize: function () {
+    if (!vertMax.call(this) || !horizMax.call(this))
       this.set('maximize', { x: true, y: true });
     else this.set('maximize', { x: false, y: false });
   },
   /**
    * Toggles the vertical maximize state of the window.
-   * @method Window#toggle_maximize_vertical
+   * @method Window#toggleMaximizeVertical
    * @param {Boolean} maximize - The new vertical maximization.
    */
-  toggle_maximize_vertical: function () {
+  toggleMaximizeVertical: function () {
     this.set('maximize', { y: !this.options.maximize.y });
   },
   /**
    * Toggles the horizontal maximize state of the window.
-   * @method Window#toggle_maximize_horizontal
+   * @method Window#toggleMaximizeHorizontal
    * @param {Boolean} maximize - The new horizontal maximization.
    */
-  toggle_maximize_horizontal: function () {
+  toggleMaximizeHorizontal: function () {
     this.set('maximize', { x: !this.options.maximize.x });
   },
   /**
    * Toggles the minimize state of the window.
-   * @method Window#toggle_minimize
+   * @method Window#toggleMinimize
    * @param {Boolean} minimize - The new minimization.
    */
-  toggle_minimize: function () {
+  toggleMinimize: function () {
     this.set('minimize', !this.options.minimize);
   },
   /**
    * Toggles the shrink state of the window.
-   * @method Window#toggle_shrink
+   * @method Window#toggleShrink
    * @param {Boolean} shrink - The new shrink state.
    */
-  toggle_shrink: function () {
+  toggleShrink: function () {
     this.set('shrink', !this.options.shrink);
   },
 
@@ -659,7 +656,7 @@ export const Window = define_class({
   },
 
   draw: function (O, element) {
-    add_class(element, 'aux-window');
+    addClass(element, 'aux-window');
 
     Container.prototype.draw.call(this, O, element);
   },
@@ -678,8 +675,8 @@ export const Window = define_class({
         O.shrink = false;
         I.shrink = true;
       }
-      toggle_class(this.element, 'aux-maximized-horizontal', O.maximize.x);
-      toggle_class(this.element, 'aux-maximized-vertical', O.maximize.y);
+      toggleClass(this.element, 'aux-maximized-horizontal', O.maximize.x);
+      toggleClass(this.element, 'aux-maximized-vertical', O.maximize.y);
       setD = true;
     }
     if (I.anchor) {
@@ -702,16 +699,16 @@ export const Window = define_class({
     if (I.header) {
       I.header = false;
       this.set('show_header', !!O.header);
-      if (O.header) build_header.call(this);
+      if (O.header) buildHeader.call(this);
     }
     if (I.footer) {
       I.footer = false;
       this.set('show_footer', !!O.footer);
-      if (O.footer) build_footer.call(this);
+      if (O.footer) buildFooter.call(this);
     }
     if (I.status) {
       I.status = false;
-      status_timeout.call(this);
+      statusTimeout.call(this);
     }
     if (I.fixed) {
       this.element.style.position = O.fixed ? 'fixed' : 'absolute';
@@ -719,37 +716,37 @@ export const Window = define_class({
     }
     if (I.active) {
       I.active = false;
-      toggle_class(this.element, 'aux-active', O.active);
+      toggleClass(this.element, 'aux-active', O.active);
     }
     if (I.shrink) {
       I.shrink = false;
       this.options.maximize.y = false;
-      toggle_class(this.element, 'aux-shrinked', O.shrink);
+      toggleClass(this.element, 'aux-shrinked', O.shrink);
     }
     if (I.draggable) {
       I.draggable = false;
-      toggle_class(this.element, 'aux-draggable', O.draggable);
+      toggleClass(this.element, 'aux-draggable', O.draggable);
     }
     if (I.resizable) {
       I.resizable = false;
-      toggle_class(this.element, 'aux-resizable', O.resizable);
+      toggleClass(this.element, 'aux-resizable', O.resizable);
     }
     if (I.content) {
       I.content = false;
       if (O.content) {
         if (Container.prototype.isPrototypeOf(O.content)) {
-          set_content(this.content.element, '');
-          this.append_child(O.content);
+          setContent(this.content.element, '');
+          this.appendChild(O.content);
         } else {
-          set_content(this.content.element, O.content);
+          setContent(this.content.element, O.content);
         }
       }
       setD = true;
       setP = true;
     }
 
-    if (setD) set_dimensions.call(this);
-    if (setP) set_position.call(this);
+    if (setD) setDimensions.call(this);
+    if (setP) setPosition.call(this);
     Container.prototype.redraw.call(this);
   },
 
@@ -790,7 +787,7 @@ export const Window = define_class({
 /**
  * @member {Icon} Window#icon - A {@link Icon} widget to display the window icon.
  */
-define_child_widget(Window, 'icon', {
+defineChildWidget(Window, 'icon', {
   create: Icon,
   map_options: { icon: 'icon' },
   toggle_class: true,
@@ -798,7 +795,7 @@ define_child_widget(Window, 'icon', {
 /**
  * @member {Label} Window#title - A {@link Label} to display the window title.
  */
-define_child_widget(Window, 'title', {
+defineChildWidget(Window, 'title', {
   create: Label,
   default_options: { class: 'aux-title' },
   map_options: { title: 'label' },
@@ -807,7 +804,7 @@ define_child_widget(Window, 'title', {
 /**
  * @member {Label} Window#status - A {@link Label} to display the window status.
  */
-define_child_widget(Window, 'status', {
+defineChildWidget(Window, 'status', {
   create: Label,
   default_options: { class: 'aux-status' },
   map_options: { status: 'label' },
@@ -832,8 +829,8 @@ define_child_widget(Window, 'status', {
  * @member {Button} Window#shrink - The shrink button.
  */
 
-function bfactory(name, handler) {
-  define_child_widget(Window, name, {
+function bFactory(name, handler) {
+  defineChildWidget(Window, name, {
     create: Button,
     default_options: {
       class: 'aux-' + name,
@@ -849,24 +846,24 @@ function bfactory(name, handler) {
     },
   });
 }
-bfactory('close', close);
-bfactory('minimize', minimize);
-bfactory('maximize', maximize);
-bfactory('maximizevertical', maximizevertical);
-bfactory('maximizehorizontal', maximizehorizontal);
-bfactory('shrink', shrink);
+bFactory('close', close);
+bFactory('minimize', minimize);
+bFactory('maximize', maximize);
+bFactory('maximizevertical', maximizeVertical);
+bFactory('maximizehorizontal', maximizeHorizontal);
+bFactory('shrink', shrink);
 
 /**
  * @member {Icon} Window#size - A {@link Icon} acting as handle for window resize.
  */
-define_child_widget(Window, 'size', {
+defineChildWidget(Window, 'size', {
   create: Icon,
   default_options: { icon: 'windowresize', class: 'aux-size' },
 });
 /**
  * @member {Container} Window#content - A {@link Container} for the window content.
  */
-define_child_widget(Window, 'content', {
+defineChildWidget(Window, 'content', {
   create: Container,
   toggle_class: true,
   show: true,
@@ -875,29 +872,29 @@ define_child_widget(Window, 'content', {
 /**
  * @member {Container} Window#header - The top header bar.
  */
-define_child_widget(Window, 'header', {
+defineChildWidget(Window, 'header', {
   create: Container,
   toggle_class: true,
   show: true,
   default_options: { class: 'aux-header' },
   static_events: {
-    dblclick: header_action,
+    dblclick: headerAction,
   },
   append: function () {
-    build_header.call(this);
+    buildHeader.call(this);
     this.element.appendChild(this.header.element);
   },
 });
 /**
  * @member {Container} Window#footer - The bottom footer bar.
  */
-define_child_widget(Window, 'footer', {
+defineChildWidget(Window, 'footer', {
   create: Container,
   toggle_class: true,
   show: false,
   default_options: { class: 'aux-footer' },
   append: function () {
-    build_footer.call(this);
+    buildFooter.call(this);
     this.element.appendChild(this.footer.element);
   },
 });

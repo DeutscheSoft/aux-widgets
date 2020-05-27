@@ -17,19 +17,19 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { add_class } from './../utils/dom.js';
-import { define_class } from './../widget_helpers.js';
+import { addClass } from './../utils/dom.js';
+import { defineClass } from './../widget_helpers.js';
 import { Button } from './button.js';
 
 function toggle(O) {
   if (this.userset('state', !O.state) === false) return;
   this.emit('toggled', O.state);
 }
-function press_start(e) {
+function pressStart(e) {
   let O = this.options;
   if (O.press || O.delay) toggle.call(this, O);
 }
-function press_end(e) {
+function pressEnd(e) {
   let O = this.options;
   if (
     (O.press && e.timeStamp > this.__time_stamp + O.press) ||
@@ -37,12 +37,12 @@ function press_end(e) {
   )
     toggle.call(this, O);
 }
-function press_cancel(e) {
+function pressCancel(e) {
   let O = this.options;
   if (O.press) toggle.call(this, O);
 }
 
-export const Toggle = define_class({
+export const Toggle = defineClass({
   /**
    * A toggle button. The toggle button can either be pressed (which means that it will
    * switch its state as long as it is pressed) or toggled permanently. Its behavior is
@@ -83,12 +83,12 @@ export const Toggle = define_class({
     toggle: true,
   },
   static_events: {
-    press_start: press_start,
-    press_end: press_end,
-    press_cancel: press_cancel,
+    press_start: pressStart,
+    press_end: pressEnd,
+    press_cancel: pressCancel,
   },
   draw: function (O, element) {
-    add_class(element, 'aux-toggle');
+    addClass(element, 'aux-toggle');
     Button.prototype.draw.call(this, O, element);
   },
 

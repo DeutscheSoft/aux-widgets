@@ -19,48 +19,48 @@
 
 /* jshint -W018 */
 
-import { define_class, define_child_element } from '../widget_helpers.js';
-import { define_child_widget } from '../child_widget.js';
+import { defineClass, defineChildElement } from '../widget_helpers.js';
+import { defineChildWidget } from '../child_widget.js';
 import { Meter } from './meter.js';
 import { State } from './state.js';
-import { add_class, toggle_class, element, set_text } from '../utils/dom.js';
+import { addClass, toggleClass, element } from '../utils/dom.js';
 import { FORMAT } from '../utils/sprintf.js';
-import { effective_value } from '../modules/range.js';
+import { effectiveValue } from '../modules/range.js';
 
 function vert(O) {
   return O.layout === 'left' || O.layout === 'right';
 }
 
-function clear_timeout(to) {
+function clearTimeout(to) {
   if (to >= 0) window.clearTimeout(to);
 }
 
-function clip_timeout() {
+function clipTimeout() {
   var O = this.options;
   if (!O.auto_clip || O.auto_clip < 0) return false;
-  clear_timeout(this.__cto);
+  clearTimeout(this.__cto);
   this.__cto = window.setTimeout(this._reset_clip, O.auto_clip);
 }
-function value_timeout() {
+function valueTimeout() {
   var peak_value = 0 | this.options.peak_value;
   if (peak_value <= 0) return false;
-  clear_timeout(this.__lto);
+  clearTimeout(this.__lto);
   this.__lto = window.setTimeout(this._reset_value, peak_value);
 }
-function top_timeout() {
+function topTimeout() {
   var O = this.options;
   if (!O.auto_hold || O.auto_hold < 0) return false;
-  clear_timeout(this.__tto);
+  clearTimeout(this.__tto);
   this.__tto = window.setTimeout(this._reset_top, O.auto_hold);
 }
-function bottom_timeout() {
+function bottomTimeout() {
   var O = this.options;
   if (!O.auto_hold || O.auto_hold < 0) return false;
-  clear_timeout(this.__bto);
+  clearTimeout(this.__bto);
   this.__bto = window.setTimeout(this._reset_bottom, O.auto_hold);
 }
 
-export const LevelMeter = define_class({
+export const LevelMeter = defineClass({
   /**
    * LevelMeter is a fully functional meter bar displaying numerical values.
    * LevelMeter is an enhanced {@link Meter} containing a clip LED and hold markers.
@@ -150,12 +150,12 @@ export const LevelMeter = define_class({
 
   initialize: function (options) {
     /* track the age of the value option */
-    this.track_option('value');
+    this.trackOption('value');
     Meter.prototype.initialize.call(this, options);
-    this._reset_value = this.reset_value.bind(this);
-    this._reset_clip = this.reset_clip.bind(this);
-    this._reset_top = this.reset_top.bind(this);
-    this._reset_bottom = this.reset_bottom.bind(this);
+    this._reset_value = this.resetValue.bind(this);
+    this._reset_clip = this.resetClip.bind(this);
+    this._reset_top = this.resetTop.bind(this);
+    this._reset_bottom = this.resetBottom.bind(this);
 
     /**
      * @member {HTMLDivElement} LevelMeter#element - The main DIV container.
@@ -169,7 +169,7 @@ export const LevelMeter = define_class({
   },
 
   draw: function (O, element) {
-    add_class(element, 'aux-levelmeter');
+    addClass(element, 'aux-levelmeter');
 
     Meter.prototype.draw.call(this, O, element);
   },
@@ -181,7 +181,7 @@ export const LevelMeter = define_class({
 
     if (I.show_hold) {
       I.show_hold = false;
-      toggle_class(E, 'aux-has-hold', O.show_hold);
+      toggleClass(E, 'aux-has-hold', O.show_hold);
     }
 
     if (I.top || I.bottom) {
@@ -197,7 +197,7 @@ export const LevelMeter = define_class({
 
     if (I.clip) {
       I.clip = false;
-      toggle_class(E, 'aux-clipping', O.clip);
+      toggleClass(E, 'aux-clipping', O.clip);
     }
   },
   destroy: function () {
@@ -206,15 +206,15 @@ export const LevelMeter = define_class({
   /**
    * Resets the value.
    *
-   * @method LevelMeter#reset_value
+   * @method LevelMeter#resetValue
    *
    * @emits LevelMeter#resetvalue
    */
-  reset_value: function () {
-    clear_timeout(this.__lto);
+  resetValue: function () {
+    clearTimeout(this.__lto);
     this.set(
       'value_label',
-      effective_value(
+      effectiveValue(
         +O.value,
         +O.base,
         +O.falling,
@@ -233,12 +233,12 @@ export const LevelMeter = define_class({
   /**
    * Resets the clipping LED.
    *
-   * @method LevelMeter#reset_clip
+   * @method LevelMeter#resetClip
    *
    * @emits LevelMeter#resetclip
    */
-  reset_clip: function () {
-    clear_timeout(this.__cto);
+  resetClip: function () {
+    clearTimeout(this.__cto);
     this.set('clip', false);
     /**
      * Is fired when the clipping LED was reset.
@@ -250,14 +250,14 @@ export const LevelMeter = define_class({
   /**
    * Resets the top hold.
    *
-   * @method LevelMeter#reset_top
+   * @method LevelMeter#resetTop
    *
    * @emits LevelMeter#resettop
    */
-  reset_top: function () {
+  resetTop: function () {
     this.set(
       'top',
-      effective_value(
+      effectiveValue(
         +O.value,
         +O.base,
         +O.falling,
@@ -276,14 +276,14 @@ export const LevelMeter = define_class({
   /**
    * Resets the bottom hold.
    *
-   * @method LevelMeter#reset_bottom
+   * @method LevelMeter#resetBottom
    *
    * @emits LevelMeter#resetbottom
    */
-  reset_bottom: function () {
+  resetBottom: function () {
     this.set(
       'bottom',
-      effective_value(
+      effectiveValue(
         +O.value,
         +O.base,
         +O.falling,
@@ -302,18 +302,18 @@ export const LevelMeter = define_class({
   /**
    * Resets all hold features.
    *
-   * @method LevelMeter#reset_all
+   * @method LevelMeter#resetAll
    *
    * @emits LevelMeter#resetvalue
    * @emits LevelMeter#resetclip
    * @emits LevelMeter#resettop
    * @emits LevelMeter#resetbottom
    */
-  reset_all: function () {
-    this.reset_value();
-    this.reset_clip();
-    this.reset_top();
-    this.reset_bottom();
+  resetAll: function () {
+    this.resetValue();
+    this.resetClip();
+    this.resetTop();
+    this.resetBottom();
   },
 
   /*
@@ -323,7 +323,7 @@ export const LevelMeter = define_class({
    * of performance in cases where the segment size is > 1 or on small devices where
    * the meter has a relatively small pixel size.
    */
-  calculate_meter: function (to, value, i) {
+  calculateMeter: function (to, value, i) {
     var O = this.options;
     var falling = +O.falling;
     var base = +O.base;
@@ -331,7 +331,7 @@ export const LevelMeter = define_class({
 
     // this is a bit unelegant...
     if (falling) {
-      value = effective_value(
+      value = effectiveValue(
         +O.value,
         +O.base,
         +O.falling,
@@ -343,11 +343,11 @@ export const LevelMeter = define_class({
       if (value !== base) {
         this.invalid.value = true;
         // request another frame
-        this.trigger_draw_next();
+        this.triggerDrawNext();
       }
     }
 
-    i = Meter.prototype.calculate_meter.call(this, to, value, i);
+    i = Meter.prototype.calculateMeter.call(this, to, value, i);
 
     if (!O.show_hold) return i;
 
@@ -359,11 +359,11 @@ export const LevelMeter = define_class({
 
     if (!(hold_size > 0)) return i;
 
-    var pos_base = +this.val2px(base);
+    var pos_base = +this.valueToPixel(base);
 
     if (hold > base) {
       /* TODO: lets snap in set() */
-      pos = this.val2px(hold) | 0;
+      pos = this.valueToPixel(hold) | 0;
       if (segment !== 1) pos = segment * (Math.round(pos / segment) | 0);
 
       if (pos > pos_base) {
@@ -378,7 +378,7 @@ export const LevelMeter = define_class({
     hold = +O.bottom;
 
     if (hold < base) {
-      pos = this.val2px(hold) | 0;
+      pos = this.valueToPixel(hold) | 0;
       if (segment !== 1) pos = segment * (Math.round(pos / segment) | 0);
 
       if (pos > pos_base) {
@@ -403,7 +403,7 @@ export const LevelMeter = define_class({
       value = this.snap(value);
 
       if (O.falling) {
-        var v = effective_value(
+        var v = effectiveValue(
           +O.value,
           +O.base,
           +O.falling,
@@ -418,17 +418,17 @@ export const LevelMeter = define_class({
           /* NOTE: we are doing a falling animation, but maybe its not running */
           if (!this.invalid.value) {
             this.invalid.value = true;
-            this.trigger_draw();
+            this.triggerDraw();
           }
           return;
         }
       }
-      if (O.auto_clip !== false && value >= O.clipping && !this.has_base()) {
-        clear_timeout(this.__cto);
+      if (O.auto_clip !== false && value >= O.clipping && !this.hasBase()) {
+        clearTimeout(this.__cto);
         this.set('clip', true);
       }
-      if (O.auto_clip !== false && value < O.clipping && !this.has_base()) {
-        clip_timeout.call(this);
+      if (O.auto_clip !== false && value < O.clipping && !this.hasBase()) {
+        clipTimeout.call(this);
       }
       if (
         O.show_value &&
@@ -436,7 +436,7 @@ export const LevelMeter = define_class({
         ((value > O.value_label && value > base) ||
           (value < O.value_label && value < base))
       ) {
-        clear_timeout(this.__lto);
+        clearTimeout(this.__lto);
         this.set('value_label', value);
       }
       if (
@@ -445,31 +445,31 @@ export const LevelMeter = define_class({
         ((value < O.value_label && value > base) ||
           (value > O.value_label && value < base))
       ) {
-        value_timeout.call(this);
+        valueTimeout.call(this);
       }
       if (O.auto_hold !== false && O.show_hold && value > O.top) {
-        clear_timeout(this.__tto);
+        clearTimeout(this.__tto);
         this.set('top', value);
       }
       if (O.auto_hold !== false && O.show_hold && value < O.top) {
-        top_timeout.call(this);
+        topTimeout.call(this);
       }
       if (
         O.auto_hold !== false &&
         O.show_hold &&
         value < O.bottom &&
-        this.has_base()
+        this.hasBase()
       ) {
-        clear_timeout(this.__bto);
+        clearTimeout(this.__bto);
         this.set('bottom', value);
       }
       if (
         O.auto_hold !== false &&
         O.show_hold &&
         value > O.bottom &&
-        this.has_base()
+        this.hasBase()
       ) {
-        bottom_timeout.call(this);
+        bottomTimeout.call(this);
       }
     } else if (key === 'top' || key === 'bottom') {
       value = this.snap(value);
@@ -483,7 +483,7 @@ export const LevelMeter = define_class({
  * @member {HTMLDivElement} LevelMeter#clip.element - The DIV element of the clipping LED.
  *   Has class <code>.aux-clip</code>.
  */
-define_child_widget(LevelMeter, 'clip', {
+defineChildWidget(LevelMeter, 'clip', {
   create: State,
   show: false,
   map_options: {

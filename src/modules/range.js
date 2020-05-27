@@ -17,11 +17,11 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from './../widget_helpers.js';
+import { defineClass } from './../widget_helpers.js';
 import { Base } from '../implements/base.js';
 import { Ranged } from '../implements/ranged.js';
 
-export const Range = define_class({
+export const Range = defineClass({
   /**
    * Range is used for calculating linear scales from
    * different values. They are useful for building coordinate systems,
@@ -103,7 +103,7 @@ export const Range = define_class({
   },
 });
 
-export function effective_value(value, base, falling, duration, init, age) {
+export function effectiveValue(value, base, falling, duration, init, age) {
   // +O.value, +O.base, +O.falling, +O.falling_duration, +O.falling_init, +this.value_time.value
   if (falling <= 0) return value;
   if (!(age > 0)) age = Date.now();

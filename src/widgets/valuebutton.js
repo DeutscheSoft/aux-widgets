@@ -17,8 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
-import { define_child_widget } from '../child_widget.js';
+import { defineClass } from '../widget_helpers.js';
+import { defineChildWidget } from '../child_widget.js';
 import { Button } from './button.js';
 import { Value } from './value.js';
 import { Warning } from '../implements/warning.js';
@@ -26,7 +26,7 @@ import { Ranged } from '../implements/ranged.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { Scale } from './scale.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
-import { add_class } from '../utils/dom.js';
+import { addClass } from '../utils/dom.js';
 import { FORMAT } from '../utils/sprintf.js';
 
 /**
@@ -38,7 +38,7 @@ import { FORMAT } from '../utils/sprintf.js';
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-export const ValueButton = define_class({
+export const ValueButton = defineClass({
   /**
    * This widget combines a {@link Button}, a {@link Scale} and a {@link Value}.
    * ValueButton uses {@link DragValue} and {@link ScrollValue}
@@ -149,7 +149,7 @@ export const ValueButton = define_class({
     );
   },
   draw: function (O, element) {
-    add_class(element, 'aux-valuebutton');
+    addClass(element, 'aux-valuebutton');
 
     Button.prototype.draw.call(this, O, element);
   },
@@ -170,7 +170,7 @@ export const ValueButton = define_class({
     return Button.prototype.set.call(this, key, value);
   },
 });
-function value_clicked() {
+function valueClicked() {
   var self = this.parent;
   self.scroll.set('active', false);
   self.drag.set('active', false);
@@ -183,7 +183,7 @@ function value_clicked() {
    */
   self.emit('valueedit', self.options.value);
 }
-function value_done() {
+function valueDone() {
   var self = this.parent;
   self.scroll.set('active', true);
   self.drag.set('active', true);
@@ -199,7 +199,7 @@ function value_done() {
 /**
  * @member {Value} ValueButton#value - The value widget for editing the value manually.
  */
-define_child_widget(ValueButton, 'value', {
+defineChildWidget(ValueButton, 'value', {
   create: Value,
   show: true,
   map_options: {
@@ -216,15 +216,15 @@ define_child_widget(ValueButton, 'value', {
     dblclick: function (e) {
       e.stopPropagation();
     },
-    valueclicked: value_clicked,
-    valuedone: value_done,
+    valueclicked: valueClicked,
+    valuedone: valueDone,
   },
 });
 
 /**
  * @member {Scale} ValueButton#scale - The {@link Scale} showing the value.
  */
-define_child_widget(ValueButton, 'scale', {
+defineChildWidget(ValueButton, 'scale', {
   create: Scale,
   show: true,
   toggle_class: true,

@@ -19,25 +19,25 @@
 
 /* jshint -W014 */
 
-import { define_class } from './../widget_helpers.js';
+import { defineClass } from './../widget_helpers.js';
 import { Button } from './button.js';
 import { Label } from './label.js';
 import {
   element,
-  add_class,
-  outer_width,
+  addClass,
+  outerWidth,
   width,
   height,
-  scroll_left,
-  scroll_top,
-  set_styles,
-  outer_height,
-  position_top,
-  position_left,
-  set_style,
-  get_duration,
+  scrollLeft,
+  scrollTop,
+  setStyles,
+  outerHeight,
+  positionTop,
+  positionLeft,
+  setStyle,
+  getDuration,
   empty,
-  remove_class,
+  removeClass,
 } from '../utils/dom.js';
 import { S } from '../dom_scheduler.js';
 
@@ -51,53 +51,53 @@ import { S } from '../dom_scheduler.js';
  * @param {mixed} value - The new value of the option
  */
 
-function hide_list() {
+function hideList() {
   this.__transition = false;
   this.__timeout = false;
   if (!this.__open) {
     this._list.remove();
   } else {
-    document.addEventListener('touchstart', this._global_touch_start);
-    document.addEventListener('mousedown', this._global_touch_start);
+    document.addEventListener('touchstart', this._globalTouchStart);
+    document.addEventListener('mousedown', this._globalTouchStart);
   }
 }
-function show_list(show) {
+function showList(show) {
   if (show) {
-    var ew = outer_width(this.element, true);
+    var ew = outerWidth(this.element, true);
     document.body.appendChild(this._list);
     var cw = width();
     var ch = height();
-    var sx = scroll_left();
-    var sy = scroll_top();
-    set_styles(this._list, {
+    var sx = scrollLeft();
+    var sy = scrollTop();
+    setStyles(this._list, {
       opacity: '0',
       maxHeight: ch + 'px',
       maxWidth: cw + 'px',
       minWidth: ew + 'px',
     });
-    var lw = outer_width(this._list, true);
-    var lh = outer_height(this._list, true);
-    set_styles(this._list, {
+    var lw = outerWidth(this._list, true);
+    var lh = outerHeight(this._list, true);
+    setStyles(this._list, {
       top:
         Math.min(
-          position_top(this.element) + outer_height(this.element, true),
+          positionTop(this.element) + outerHeight(this.element, true),
           ch + sy - lh
         ) + 'px',
-      left: Math.min(position_left(this.element), cw + sx - lw) + 'px',
+      left: Math.min(positionLeft(this.element), cw + sx - lw) + 'px',
     });
   } else {
-    document.removeEventListener('touchstart', this._global_touch_start);
-    document.removeEventListener('mousedown', this._global_touch_start);
+    document.removeEventListener('touchstart', this._globalTouchStart);
+    document.removeEventListener('mousedown', this._globalTouchStart);
   }
-  set_style(this._list, 'opacity', show ? '1' : '0');
+  setStyle(this._list, 'opacity', show ? '1' : '0');
   this.__transition = true;
   this.__open = show;
   if (this.__timeout !== false) window.clearTimeout(this.__timeout);
-  var dur = get_duration(this._list);
-  this.__timeout = window.setTimeout(hide_list.bind(this), dur);
+  var dur = getDuration(this._list);
+  this.__timeout = window.setTimeout(hideList.bind(this), dur);
 }
 
-function low_remove_entry(entry) {
+function lowRemoveEntry(entry) {
   var li = entry.element;
   var entries = this.entries;
   var id = entries.indexOf(entry);
@@ -137,7 +137,7 @@ function low_remove_entry(entry) {
   this.emit('entryremoved', entry);
 }
 
-export const Select = define_class({
+export const Select = defineClass({
   /**
    * Select provides a {@link Button} with a select list to choose from
    * a list of {@link SelectEntry}.
@@ -210,14 +210,14 @@ export const Select = define_class({
      *   Has class <code>.aux-selectlist</code>.
      */
     this._list = element('div', 'aux-selectlist');
-    this._global_touch_start = function (e) {
+    this._globalTouchStart = function (e) {
       if (
         this.__open &&
         !this.__transition &&
         !this._list.contains(e.target) &&
         !this.element.contains(e.target)
       ) {
-        this.show_list(false);
+        this.showList(false);
       }
     }.bind(this);
     var sel = this.options.selected;
@@ -238,12 +238,12 @@ export const Select = define_class({
   /**
    * Show or hide the select list
    *
-   * @method Select#show_list
+   * @method Select#showList
    *
    * @param {boolean} show - `true` to show and `false` to hide the list
    *   of {@link SelectEntry}.
    */
-  show_list: function (s) {
+  showList: function (s) {
     this.set('show_list', !!s);
   },
 
@@ -260,55 +260,55 @@ export const Select = define_class({
   /**
    * Select a {@link SelectEntry} by its value.
    *
-   * @method Select#select_value
+   * @method Select#selectValue
    *
    * @param {mixed} value - The value of the {@link SelectEntry} to select.
    */
-  select_value: function (value) {
-    var id = this.index_by_value.call(this, value);
+  selectValue: function (value) {
+    var id = this.indexByValue.call(this, value);
     this.set('selected', id);
   },
   /**
    * Select a {@link SelectEntry} by its label.
    *
-   * @method Select#select_label
+   * @method Select#selectLabel
    *
    * @param {mixed} label - The label of the {@link SelectEntry} to select.
    */
-  select_label: function (label) {
-    var id = this.index_by_label.call(this, label);
+  selectLabel: function (label) {
+    var id = this.indexByLabel.call(this, label);
     this.set('selected', id);
   },
   /**
    * Replaces the list of {@link SelectEntry} to select from with an entirely new one.
    *
-   * @method Select#set_entries
+   * @method Select#setEntries
    *
    * @param {Array} entries - An array of {@link SelectEntry} to set as the new list to select from.
-   *   Please refer to {@link Select#add_entry} for more details.
+   *   Please refer to {@link Select#addEntry} for more details.
    */
-  set_entries: function (entries) {
+  setEntries: function (entries) {
     // Replace all entries with a new options list
     this.clear();
-    this.add_entries(entries);
-    this.select(this.index_by_value.call(this, this.options.value));
+    this.addEntries(entries);
+    this.select(this.indexByValue.call(this, this.options.value));
   },
   /**
    * Adds new {@link SelectEntry} to the end of the list to select from.
    *
-   * @method Select#add_entries
+   * @method Select#addEntries
    *
    * @param {Array} entries - An array of {@link SelectEntry} to add to the end of the list
-   *   of {@link SelectEntry} to select from. Please refer to {@link Select#add_entry}
+   *   of {@link SelectEntry} to select from. Please refer to {@link Select#addEntry}
    *   for more details.
    */
-  add_entries: function (entries) {
-    for (var i = 0; i < entries.length; i++) this.add_entry(entries[i]);
+  addEntries: function (entries) {
+    for (var i = 0; i < entries.length; i++) this.addEntry(entries[i]);
   },
   /**
    * Adds a single {@link SelectEntry} to the end of the list.
    *
-   * @method Select#add_entry
+   * @method Select#addEntry
    *
    * @param {mixed} entry - A string to be displayed and used as the value,
    *   an object with members <code>label</code> and <code>value</code>
@@ -318,7 +318,7 @@ export const Select = define_class({
    *
    * @emits Select.entryadded
    */
-  add_entry: function (ent, position) {
+  addEntry: function (ent, position) {
     var entry;
 
     if (typeof ent === 'object' && ent instanceof SelectEntry) {
@@ -347,10 +347,10 @@ export const Select = define_class({
       this.entries.splice(position, 0, entry);
     }
 
-    this.add_child(entry);
+    this.addChild(entry);
   },
-  add_child: function (child) {
-    Button.prototype.add_child.call(this, child);
+  addChild: function (child) {
+    Button.prototype.addChild.call(this, child);
 
     if (!(child instanceof SelectEntry)) return;
 
@@ -373,7 +373,7 @@ export const Select = define_class({
     if (selected !== false && selected >= index) {
       this.set('selected', selected + 1);
     }
-    this.trigger_draw();
+    this.triggerDraw();
     /**
      * Is fired when a new {@link SelectEntry} is added to the list.
      *
@@ -386,71 +386,71 @@ export const Select = define_class({
   /**
    * Remove a {@link SelectEntry} from the list by its index.
    *
-   * @method Select#remove_id
+   * @method Select#removeIndex
    *
    * @param {Integer} index - The index of the {@link SelectEntry} to be removed from the list.
    *
    * @emits Select#entryremoved
    */
-  remove_index: function (index) {
+  removeIndex: function (index) {
     var entry = this.entries[index];
-    this.remove_child(entry);
+    this.removeChild(entry);
   },
   /**
    * Remove a {@link SelectEntry} from the list by its value.
    *
-   * @method Select#remove_value
+   * @method Select#removeValue
    *
    * @param {mixed} value - The value of the {@link SelectEntry} to be removed from the list.
    *
    * @emits Select#entryremoved
    */
-  remove_value: function (val) {
-    this.remove_id(this.index_by_value.call(this, val));
+  removeValue: function (val) {
+    this.removeIndex(this.indexByValue.call(this, val));
   },
   /**
    * Remove an entry from the list by its label.
    *
-   * @method Select#remove_label
+   * @method Select#removeLabel
    *
    * @param {string} label - The label of the entry to be removed from the list.
    *
    * @emits Select#entryremoved
    */
-  remove_label: function (label) {
-    this.remove_id(this.index_by_label.call(this, label));
+  removeLabel: function (label) {
+    this.removeIndex(this.indexByLabel.call(this, label));
   },
   /**
    * Remove an entry from the list.
    *
-   * @method Select#remove_entry
+   * @method Select#removeEntry
    *
    * @param {SelectEntry} entry - The {@link SelectEntry} to be removed from the list.
    *
    * @emits Select#entryremoved
    */
-  remove_entry: function (entry) {
-    this.remove_child(entry);
+  removeEntry: function (entry) {
+    this.removeChild(entry);
   },
-  remove_entries: function (a) {
-    for (var i = 0; i < a.length; i++) this.remove_entry(a[i]);
+  removeEntries: function (a) {
+    for (var i = 0; i < a.length; i++) this.removeEntry(a[i]);
   },
-  remove_child: function (child) {
-    Button.prototype.remove_child.call(this, child);
+  removeChild: function (child) {
+    Button.prototype.removeChild.call(this, child);
     if (SelectEntry.prototype.isPrototypeOf(child)) {
-      low_remove_entry.call(this, child);
+      lowRemoveEntry.call(this, child);
     }
   },
   /**
    * Get the index of a {@link SelectEntry} by its value.
    *
-   * @method Select#index_by_value
+   * @method Select#indexByValue
    *
    * @param {Mixed} value - The value of the {@link SelectEntry}.
    *
    * @returns {Integer|Boolean} The index of the entry or `false`.
    */
-  index_by_value: function (val) {
+  indexByValue: function (val) {
     var entries = this.entries;
     for (var i = 0; i < entries.length; i++) {
       if (entries[i].options.value === val) return i;
@@ -460,13 +460,13 @@ export const Select = define_class({
   /**
    * Get the index of a {@link SelectEntry} by its label/label.
    *
-   * @method Select#index_by_label
+   * @method Select#indexByLabel
    *
    * @param {String} label - The label/label of the {@link SelectEntry}.
    *
    * @returns {Integer|Boolean} The index of the entry or `false`.
    */
-  index_by_label: function (label) {
+  indexByLabel: function (label) {
     var entries = this.entries;
     for (var i = 0; i < entries.length; i++) {
       if (entries[i].options.label === label) return i;
@@ -476,26 +476,26 @@ export const Select = define_class({
   /**
    * Get the index of a {@link SelectEntry} by the {@link SelectEntry} itself.
    *
-   * @method Select#index_by_entry
+   * @method Select#indexByEntry
    *
    * @param {SelectEntry} entry - The {@link SelectEntry}.
    *
    * @returns {Integer|Boolean} The index of the entry or `false`.
    */
-  index_by_entry: function (entry) {
+  indexByEntry: function (entry) {
     var pos = this.entries.indexOf(entry);
     return pos === -1 ? false : pos;
   },
   /**
    * Get a {@link SelectEntry} by its value.
    *
-   * @method Select#entry_by_value
+   * @method Select#entryByValue
    *
    * @param {Mixed} value - The value of the {@link SelectEntry}.
    *
    * @returns {SelectEntry|False} The {@link SelectEntry} or `false`.
    */
-  entry_by_value: function (val) {
+  entryByValue: function (val) {
     var entries = this.entries;
     for (var i = 0; i < entries.length; i++) {
       if (entries[i].options.value === val) return entries[i];
@@ -505,13 +505,13 @@ export const Select = define_class({
   /**
    * Get a {@link SelectEntry} by its label/label.
    *
-   * @method Select#entry_by_label
+   * @method Select#entryByLabel
    *
    * @param {String} label - The label of the {@link SelectEntry}.
    *
    * @returns {SelectEntry|Boolean} The {@link SelectEntry} or `false`.
    */
-  entry_by_label: function (label) {
+  entryByLabel: function (label) {
     var entries = this.entries;
     for (var i = 0; i < entries.length; i++) {
       if (entries[i].options.label === label) return entries[i];
@@ -521,13 +521,13 @@ export const Select = define_class({
   /**
    * Get a {@link SelectEntry} by its index.
    *
-   * @method Select#entry_by_index
+   * @method Select#entryByIndex
    *
    * @param {Integer} index - The index of the {@link SelectEntry}.
    *
    * @returns {SelectEntry|Boolean} The {@link SelectEntry} or `false`.
    */
-  entry_by_index: function (index) {
+  entryByIndex: function (index) {
     var entries = this.entries;
     if (index >= 0 && index < entries.length && entries[index])
       return entries[index];
@@ -536,13 +536,13 @@ export const Select = define_class({
   /**
    * Get a value by its {@link SelectEntry} index.
    *
-   * @method Select#value_by_index
+   * @method Select#valueByIndex
    *
    * @param {Integer} index - The index of the {@link SelectEntry}.
    *
    * @returns {Mixed|Boolean} The value of the {@link SelectEntry} or `false`.
    */
-  value_by_index: function (index) {
+  valueByIndex: function (index) {
     var entries = this.entries;
     if (index >= 0 && index < entries.length && entries[index]) {
       return entries[index].options.value;
@@ -552,25 +552,25 @@ export const Select = define_class({
   /**
    * Get the value of a {@link SelectEntry}.
    *
-   * @method Select#value_by_entry
+   * @method Select#valueByEntry
    *
    * @param {SelectEntry} entry - The {@link SelectEntry}.
    *
    * @returns {mixed} The value of the {@link SelectEntry}.
    */
-  value_by_entry: function (entry) {
+  valueByEntry: function (entry) {
     return entry.options.value;
   },
   /**
    * Get the value of a {@link SelectEntry} by its label/label.
    *
-   * @method Select#value_by_label
+   * @method Select#valueByLabel
    *
    * @param {String} label - The label of the {@link SelectEntry}.
    *
    * @returns {Mixed|Boolean} The value of the {@link SelectEntry} or `false`.
    */
-  value_by_label: function (label) {
+  valueByLabel: function (label) {
     var entries = this.entries;
     for (var i = 0; i < entries.length; i++) {
       if (entries[i].options.label === label) return entries[i].options.value;
@@ -589,7 +589,7 @@ export const Select = define_class({
     this.select(false);
     var entries = this.entries.slice(0);
     for (var i = 0; i < entries.length; i++) {
-      this.remove_child(entries[i]);
+      this.removeChild(entries[i]);
     }
     /**
      * Is fired when the list is cleared.
@@ -599,7 +599,7 @@ export const Select = define_class({
     this.emit('cleared');
   },
   draw: function (O, element) {
-    add_class(element, 'aux-select');
+    addClass(element, 'aux-select');
 
     Button.prototype.draw.call(this, O, element);
   },
@@ -625,13 +625,13 @@ export const Select = define_class({
     if (I.selected || I.value) {
       I.selected = I.value = false;
       if (this._active) {
-        remove_class(this._active, 'aux-active');
+        removeClass(this._active, 'aux-active');
       }
       var entry = this.entries[O.selected];
 
       if (entry) {
         this._active = entry.element;
-        add_class(entry.element, 'aux-active');
+        addClass(entry.element, 'aux-active');
       } else {
         this._active = null;
       }
@@ -653,18 +653,18 @@ export const Select = define_class({
           L.appendChild(document.createElement('BR'));
         }
         S.add(function () {
-          width = outer_width(E, true);
+          width = outerWidth(E, true);
           S.add(function () {
             while (L.firstChild) L.removeChild(L.firstChild);
             L.appendChild(orig_content);
-            outer_width(E, true, width);
+            outerWidth(E, true, width);
           }, 1);
         });
       }
     }
 
     if (I.validate('show_list', 'resized')) {
-      show_list.call(this, O.show_list);
+      showList.call(this, O.show_list);
     }
   },
   /**
@@ -683,28 +683,28 @@ export const Select = define_class({
    * Get the currently selected {@link SelectEntry}'s index. Just for the sake of completeness, this
    *   function abstracts `options.selected`.
    *
-   * @method Select#current_index
+   * @method Select#currentIndex
    *
    * @returns {Integer|Boolean} The index of the currently selected {@link SelectEntry} or `false`.
    */
-  current_index: function () {
+  currentIndex: function () {
     return this.options.selected;
   },
   /**
    * Get the currently selected {@link SelectEntry}'s value.
    *
-   * @method Select#current_value
+   * @method Select#currentValue
    *
    * @returns {Mixed|Boolean} The value of the currently selected {@link SelectEntry} or `false`.
    */
-  current_value: function () {
+  currentValue: function () {
     var w = this.current();
     if (w) return w.get('value');
     return false;
   },
   set: function (key, value) {
     if (key === 'value') {
-      this.set('selected', this.index_by_value.call(this, value));
+      this.set('selected', this.indexByValue.call(this, value));
       return;
     }
 
@@ -722,16 +722,16 @@ export const Select = define_class({
         }
         break;
       case 'entries':
-        this.set_entries(value);
+        this.setEntries(value);
         break;
     }
     return value;
   },
 });
 
-function on_select(e) {
+function onSelect(e) {
   var w = this.parent;
-  var id = w.index_by_entry(this);
+  var id = w.indexByEntry(this);
   var entry = this;
   e.stopPropagation();
   e.preventDefault();
@@ -749,12 +749,12 @@ function on_select(e) {
    * @param {string} value - The label of the selected entry.
    */
   w.emit('select', entry.options.value, id, entry.options.label);
-  w.show_list(false);
+  w.showList(false);
 
   return false;
 }
 
-export const SelectEntry = define_class({
+export const SelectEntry = defineClass({
   /**
    * SelectEntry provides a {@link Label} as an entry for {@link Select}.
    *
@@ -779,9 +779,9 @@ export const SelectEntry = define_class({
   initialize: function (options) {
     if (!options.element) options.element = element('div');
     Label.prototype.initialize.call(this, options);
-    add_class(this.element, 'aux-selectentry');
+    addClass(this.element, 'aux-selectentry');
   },
   static_events: {
-    click: on_select,
+    click: onSelect,
   },
 });

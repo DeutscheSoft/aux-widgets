@@ -17,10 +17,10 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { Filter } from '../modules/filter.js';
 import { ChartHandle } from './charthandle.js';
-import { add_class, toggle_class } from '../utils/dom.js';
+import { addClass, toggleClass } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 
 const type_to_mode = {
@@ -125,7 +125,7 @@ const type_to_pref = {
   'high-shelf': ['left', 'right', 'top', 'bottom'],
 };
 
-export const EqBand = define_class({
+export const EqBand = defineClass({
   /**
    * An EqBand extends a {@link ChartHandle} and holds a
    * dependent {@link Filter}. It is used as a fully functional representation
@@ -208,7 +208,7 @@ export const EqBand = define_class({
     this.filter.reset();
   },
   draw: function (O, element) {
-    add_class(element, 'aux-eqband');
+    addClass(element, 'aux-eqband');
 
     ChartHandle.prototype.draw.call(this, O, element);
   },
@@ -217,7 +217,7 @@ export const EqBand = define_class({
     var O = this.options;
     if (I.active) {
       I.active = false;
-      toggle_class(this.element, 'aux-inactive', !O.active);
+      toggleClass(this.element, 'aux-inactive', !O.active);
     }
     ChartHandle.prototype.redraw.call(this);
   },
@@ -225,14 +225,14 @@ export const EqBand = define_class({
   /**
    * Calculate the gain for a given frequency in Hz.
    *
-   * @method EqBand#freq2gain
+   * @method EqBand#frequencyToGain
    *
    * @param {number} freq - The frequency.
    *
    * @returns {number} The gain at the given frequency.
    */
-  freq2gain: function (freq) {
-    return this.filter.get_freq2gain()(freq);
+  frequencyToGain: function (freq) {
+    return this.filter.getFrequencyToGain()(freq);
   },
 
   // GETTER & SETTER

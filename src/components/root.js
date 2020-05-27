@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { Root } from './../widgets/root.js';
 
@@ -30,6 +30,6 @@ import { Root } from './../widgets/root.js';
  * @class RootComponent
  * @implements Component
  */
-export const RootComponent = component_from_widget(Root);
+export const RootComponent = componentFromWidget(Root);
 
-define_component('root', RootComponent);
+defineComponent('root', RootComponent);

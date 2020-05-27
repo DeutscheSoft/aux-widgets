@@ -30,7 +30,7 @@ const frame = fs.readFileSync(path.join(HTDOCS, 'frame.html'), {
   encoding: 'utf8',
 });
 
-function maybe_add_style(fname) {
+function maybeAddStyle(fname) {
   let ret = '';
   if (fs.existsSync(fname)) {
     const pathname = '/' + fname.substr(HTDOCS.length);
@@ -61,8 +61,8 @@ function start(port) {
       if (test) {
         let head = '';
 
-        head += maybe_add_style(fname.replace('html', 'css'));
-        head += maybe_add_style(path.join(path.dirname(fname), 'styles.css'));
+        head += maybeAddStyle(fname.replace('html', 'css'));
+        head += maybeAddStyle(path.join(path.dirname(fname), 'styles.css'));
 
         let data = frame
           .replace('NAME', test_name)

@@ -18,8 +18,8 @@
  */
 
 import {
-  component_from_widget,
-  define_component,
+  componentFromWidget,
+  defineComponent,
 } from './../component_helpers.js';
 import { Value } from './../widgets/value.js';
 
@@ -29,6 +29,6 @@ import { Value } from './../widgets/value.js';
  * @class ValueComponent
  * @implements Component
  */
-export const ValueComponent = component_from_widget(Value);
+export const ValueComponent = componentFromWidget(Value);
 
-define_component('value', ValueComponent);
+defineComponent('value', ValueComponent);

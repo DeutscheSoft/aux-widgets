@@ -17,23 +17,23 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { define_class } from '../widget_helpers.js';
-import { add_class, remove_class } from '../utils/dom.js';
+import { defineClass } from '../widget_helpers.js';
+import { addClass, removeClass } from '../utils/dom.js';
 import { Module } from './module.js';
 
-function scroll_timeout() {
+function scrollTimeout() {
   /**
    * Is fired when scrolling ended.
    *
    * @event ScrollValue#scrollended
    */
-  fire_event.call(this, 'scrollended');
+  fireEvent.call(this, 'scrollended');
   this._wheel = false;
   this.__sto = false;
   this.set('scrolling', false);
-  remove_class(this.options.classes, 'aux-scrolling');
+  removeClass(this.options.classes, 'aux-scrolling');
 }
-function scrollwheel(e) {
+function scrollWheel(e) {
   const O = this.options;
   if (!O.active) return;
   e.preventDefault();
@@ -52,7 +52,7 @@ function scrollwheel(e) {
     window.clearTimeout(this.__sto);
   } else {
     this._raw_value = v = O.get.call(this);
-    add_class(O.classes, 'aux-scrolling');
+    addClass(O.classes, 'aux-scrolling');
     /**
      * Is fired when scrolling starts.
      *
@@ -60,10 +60,10 @@ function scrollwheel(e) {
      *
      * @param {DOMEvent} event - The native DOM event.
      */
-    fire_event.call(this, 'scrollstarted', e);
+    fireEvent.call(this, 'scrollstarted', e);
     this._wheel = true;
   }
-  this.__sto = window.setTimeout(scroll_timeout.bind(this), 200);
+  this.__sto = window.setTimeout(scrollTimeout.bind(this), 200);
 
   // calc step depending on options.step, .shift up and .shift down
   let step = (RO.step || 1) * direction;
@@ -73,11 +73,11 @@ function scrollwheel(e) {
     step *= RO.shift_up;
   }
 
-  var pos = range.val2px(v);
+  var pos = range.valueToPixel(v);
 
   pos += step;
 
-  v = range.px2val(pos);
+  v = range.pixelToValue(pos);
 
   if (O.limit) O.set.call(this, Math.min(RO.max, Math.max(RO.min, v)));
   else O.set.call(this, v);
@@ -89,14 +89,14 @@ function scrollwheel(e) {
    *
    * @param {DOMEvent} event - The native DOM event.
    */
-  fire_event.call(this, 'scrolling', e);
+  fireEvent.call(this, 'scrolling', e);
 
   /* do not remember out of range values */
   if (v > RO.min && v < RO.max) this._raw_value = v;
 
   return false;
 }
-function fire_event(title, event) {
+function fireEvent(title, event) {
   var O = this.options;
   // fire an event on this drag object and one with more
   // information on the draggified element
@@ -129,7 +129,7 @@ function fire_event(title, event) {
  *   containing values for x, y and z defining the direction of scrolling.
  * @property {Boolean} [options.limit=false] - Limit the returned value to min and max of the range.
  */
-export const ScrollValue = define_class({
+export const ScrollValue = defineClass({
   Extends: Module,
   _options: {
     get: 'function',
@@ -170,10 +170,10 @@ export const ScrollValue = define_class({
   },
   static_events: {
     set_node: function (value) {
-      this.delegate_events(value);
+      this.delegateEvents(value);
       if (value && !this.options.classes) this.set('classes', value);
     },
-    wheel: scrollwheel,
+    wheel: scrollWheel,
   },
   set: function (key, value) {
     if (key === 'classes' && !value) value = this.options.node;
