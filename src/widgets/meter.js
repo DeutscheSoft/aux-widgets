@@ -485,7 +485,7 @@ export const Meter = defineClass({
 defineChildWidget(Meter, 'scale', {
   create: Scale,
   default_options: {
-    labels: FORMAT("%.2f"),
+    labels: FORMAT('%.2f'),
   },
   inherit_options: true,
   show: true,

@@ -50,13 +50,13 @@ export const PhaseMeter = defineClass({
   },
   draw: function (O, element) {
     addClass(element, 'aux-phasemeter');
-    if (!O.hasOwnProperty("scale.labels")) {
-      this.scale.set("labels", function (v) {
+    if (!O.hasOwnProperty('scale.labels')) {
+      this.scale.set('labels', function (v) {
         return (v > 0 ? '+' : v < 0 ? '-' : '') + v.toFixed(1);
       });
     }
-    if (!O.hasOwnProperty("scale.base")) {
-      this.scale.set("base", 0);
+    if (!O.hasOwnProperty('scale.base')) {
+      this.scale.set('base', 0);
     }
     LevelMeter.prototype.draw.call(this, O, element);
   },
