@@ -30,6 +30,8 @@
  * @returns {object}
  * @function merge
  */
+
+/* jshint -W089 */
 export function merge(dst) {
   //console.log("merging", src, "into", dst);
   var key, i, src;
@@ -41,6 +43,7 @@ export function merge(dst) {
   }
   return dst;
 }
+/* jshint +W089 */
 
 /**
  * Filter an object via white list.
@@ -64,6 +67,8 @@ export function objectAnd(orig, filter) {
  * @returns {object} The filtered result
  * @function objectSub
  */
+
+/* jshint -W089 */
 export function objectSub(orig, filter) {
   var ret = {};
   for (var key in orig) {
@@ -71,6 +76,7 @@ export function objectSub(orig, filter) {
   }
   return ret;
 }
+/* jshint +W089 */
 
 /**
  * Convert any collection (like NodeList) into an array.

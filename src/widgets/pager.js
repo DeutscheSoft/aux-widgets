@@ -109,7 +109,7 @@ export const Pager = defineClass({
     // create one button for each page and keep the label synchronized
     // with the page label
     let subs = pages.pages.forEachAsync((page, position) => {
-      let subs = initSubscriptions();
+      let _subs = initSubscriptions();
 
       const button = navigation.addButton(
         { label: page.get('label') },
@@ -118,25 +118,25 @@ export const Pager = defineClass({
 
       this.page_to_button.set(page, button);
 
-      subs = addSubscription(
-        subs,
+      _subs = addSubscription(
+        _subs,
         page.subscribe('set_label', (label) => {
           button.set('label', label);
         })
       );
 
-      subs = addSubscription(subs, () => {
+      _subs = addSubscription(_subs, () => {
         navigation.removeButton(button);
         this.page_to_button.delete(page);
       });
 
       this.emit('added', page);
 
-      subs = addSubscription(subs, () => {
+      _subs = addSubscription(_subs, () => {
         this.emit('removed', page);
       });
 
-      return subs;
+      return _subs;
     });
 
     // delegate the userset action from pages to pager
@@ -366,7 +366,8 @@ export const Pager = defineClass({
       if (label) p.set('label', label);
 
       for (var key in buttonOptions) {
-        button.set(key, buttonOptions[key]);
+        if (buttonOptions.hasOwnProperty(key))
+          button.set(key, buttonOptions[key]);
       }
     } else {
       throw new TypeError('Unsupported API.');

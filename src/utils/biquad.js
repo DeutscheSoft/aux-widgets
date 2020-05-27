@@ -174,7 +174,7 @@ export function lowPass2(O) {
  * @implements {@link BiquadTransform}
  */
 export function lowPass4(O) {
-  O = LowPass2(O);
+  O = lowPass2(O);
   O.factor = 2;
   return O;
 }
@@ -222,7 +222,7 @@ export function highPass2(O) {
  * @implements {@link BiquadTransform}
  */
 export function highPass4(O) {
-  O = HighPass2(O);
+  O = highPass2(O);
   O.factor = 2;
   return O;
 }
@@ -267,28 +267,28 @@ var nullModule = {
   },
 };
 
-function bilinearModule(O) {
-  var log = Math.log;
-  var sin = Math.sin;
+//function bilinearModule(O) {
+//var log = Math.log;
+//var sin = Math.sin;
 
-  var LN10_10 = ((O.factor || 1.0) * 10) / Math.LN10;
-  var PI = +(Math.PI / O.sample_rate);
-  var Ra = +(((O.a0 + O.a1) * (O.a0 + O.a1)) / 4);
-  var Rb = +(((O.b0 + O.b1) * (O.b0 + O.b1)) / 4);
-  var Ya = +(O.a1 * O.a0);
-  var Yb = +(O.b1 * O.b0);
+//var LN10_10 = ((O.factor || 1.0) * 10) / Math.LN10;
+//var PI = +(Math.PI / O.sample_rate);
+//var Ra = +(((O.a0 + O.a1) * (O.a0 + O.a1)) / 4);
+//var Rb = +(((O.b0 + O.b1) * (O.b0 + O.b1)) / 4);
+//var Ya = +(O.a1 * O.a0);
+//var Yb = +(O.b1 * O.b0);
 
-  if (Ra === Rb && Ya === Yb) return nullModule;
+//if (Ra === Rb && Ya === Yb) return nullModule;
 
-  function frequencyToGain(f) {
-    f = +f;
-    var S = +sin(PI * f);
-    S *= S;
-    return LN10_10 * log((Rb - S * Yb) / (Ra - S * Ya));
-  }
+//function frequencyToGain(f) {
+//f = +f;
+//var S = +sin(PI * f);
+//S *= S;
+//return LN10_10 * log((Rb - S * Yb) / (Ra - S * Ya));
+//}
 
-  return { freqtogain: frequencyToGain };
-}
+//return { freqtogain: frequencyToGain };
+//}
 
 function biquadModule(O) {
   var log = Math.log;
@@ -338,10 +338,10 @@ function biquadFilterN(trafos) {
     return {
       freqtogain: function (f) {
         var ret = 0.0;
-        var i;
+        var j;
 
-        for (i = 0; i < A.length; i++) {
-          ret += A[i](f);
+        for (j = 0; j < A.length; j++) {
+          ret += A[j](f);
         }
 
         return ret;

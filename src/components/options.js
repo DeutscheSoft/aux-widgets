@@ -124,4 +124,6 @@ export class OptionsComponent extends HTMLElement {
   }
 }
 
+/* jshint -W117 */
 customElements.define('aux-options', OptionsComponent);
+/* jshint +W117 */

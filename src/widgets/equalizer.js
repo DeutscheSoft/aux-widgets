@@ -107,7 +107,6 @@ function drawGraph(bands) {
     if (!isFinite(Y[i])) {
       warn('Singular filter in Equalizer.');
       return void 0;
-      return;
     }
   }
 

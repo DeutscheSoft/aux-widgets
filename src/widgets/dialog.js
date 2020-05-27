@@ -110,18 +110,8 @@ export const Dialog = defineClass({
         if (C) C.appendChild(this.element);
         this.reposition();
       }
-    },
-    set_auto_close: function (val) {
+
       if (val) {
-        if (!this.hidden()) activateAutoclose.call(this);
-      } else {
-        deactivateAutoclose.call(this);
-      }
-    },
-    set_visible: function (val) {
-      var O = this.options;
-      if (val) {
-        deactivateAutoclose.call(this);
         if (
           O.toplevel &&
           O.container.tagName !== 'AWML-ROOT' &&
@@ -137,6 +127,13 @@ export const Dialog = defineClass({
         }
       } else {
         O.container = this.element.parentElement;
+      }
+    },
+    set_auto_close: function (val) {
+      if (val) {
+        if (!this.hidden()) activateAutoclose.call(this);
+      } else {
+        deactivateAutoclose.call(this);
       }
     },
   },

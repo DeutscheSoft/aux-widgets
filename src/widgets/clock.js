@@ -303,7 +303,7 @@ export const Clock = defineClass({
     timeout: timeout,
   },
   initialize: function (options) {
-    var E, S;
+    var E, SVG;
     /**
      * @member {Object} Clock#circulars - An object holding all three Circular as members <code>seconds</code>, <code>minutes</code> and <code>hours</code>.
      */
@@ -319,7 +319,7 @@ export const Clock = defineClass({
     /**
      * @member {SVGImage} Clock#svg - The main SVG image.
      */
-    this.svg = S = makeSVG('svg');
+    this.svg = SVG = makeSVG('svg');
 
     /**
      * @member {SVGText} Clock#_label - The center label showing the time. Has class<code>.aux-label</code>
@@ -344,12 +344,12 @@ export const Clock = defineClass({
       'text-anchor': 'middle',
       style: 'dominant-baseline: central;',
     });
-    S.appendChild(this._label);
-    S.appendChild(this._label_upper);
-    S.appendChild(this._label_lower);
+    SVG.appendChild(this._label);
+    SVG.appendChild(this._label_upper);
+    SVG.appendChild(this._label_lower);
 
     var circ_options = {
-      container: S,
+      container: SVG,
       show_hand: false,
       start: 270,
       angle: 360,
@@ -407,6 +407,7 @@ export const Clock = defineClass({
     ) {
       var margin = 0;
       for (var i in this.circulars) {
+        if (!this.circulars.hasOwnProperty(i)) continue;
         var circ = this.circulars[i];
         if (O['show_' + i]) {
           circ.set('thickness', O.thickness);

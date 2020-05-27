@@ -21,6 +21,8 @@ import { defineClass } from './../widget_helpers.js';
 import { Base } from '../implements/base.js';
 import { Ranged } from '../implements/ranged.js';
 
+/* jshint -W079 */
+
 export const Range = defineClass({
   /**
    * Range is used for calculating linear scales from
@@ -103,10 +105,12 @@ export const Range = defineClass({
   },
 });
 
+/* jshint +W079 */
+
 export function effectiveValue(value, base, falling, duration, init, age) {
   // +O.value, +O.base, +O.falling, +O.falling_duration, +O.falling_init, +this.value_time.value
   if (falling <= 0) return value;
-  if (!(age > 0)) age = Date.now();
+  if (age <= 0) age = Date.now();
   else age = +(Date.now() - age);
   var diff = age * (falling / duration);
 

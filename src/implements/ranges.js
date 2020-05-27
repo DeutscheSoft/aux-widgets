@@ -24,7 +24,7 @@ import { Range } from '../modules/range.js';
 function rangeChanged(value, name) {
   var range = this[name];
   for (var i in value) {
-    range.set(i, value[i]);
+    if (value.hasOwnProperty(i)) range.set(i, value[i]);
   }
 }
 

@@ -18,6 +18,7 @@
  */
 
 /* jshint -W014 */
+/* jshint -W079 */
 
 import { defineClass } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
@@ -301,9 +302,9 @@ function initPosition(pos) {
 function setPosition() {
   var O = this.options;
   var D = this.dimensions;
-  var width = innerWidth(this.element);
-  var height = innerHeight(this.element);
-  var pos = translateAnchor(O.anchor, O.x, O.y, -width, -height);
+  var _width = innerWidth(this.element);
+  var _height = innerHeight(this.element);
+  var pos = translateAnchor(O.anchor, O.x, O.y, -_width, -_height);
   if (horizMax.call(this)) {
     this.element.style.left = (O.fixed ? 0 : window.scrollX) + 'px';
   } else {

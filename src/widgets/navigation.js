@@ -30,7 +30,6 @@ import {
 import { Button } from './button.js';
 import { Buttons } from './buttons.js';
 import { Container } from './container.js';
-import { typecheckNumber } from '../utils/typecheck.js';
 
 function easeLinear(t) {
   return t;
@@ -49,7 +48,7 @@ class ScrollAnimation {
     this.element = options.element;
     this.duration = options.duration;
 
-    if (!(this.duration >= 0)) {
+    if (this.duration < 0) {
       this.duration = 0;
     }
 
@@ -65,8 +64,8 @@ class ScrollAnimation {
           : 1;
 
       // catch NaN
-      if (!(t >= 0)) t = 0;
-      else if (!(t <= 1)) t = 1;
+      if (t < 0) t = 0;
+      else if (t > 1) t = 1;
 
       const pos = this.from + this.easing(t) * (this.to - this.from);
 
@@ -232,7 +231,7 @@ export const Navigation = defineClass({
       list_size - clip_size
     );
 
-    if (!(pos >= 0)) pos = 0;
+    if (pos < 0) pos = 0;
 
     return pos;
   },
@@ -300,8 +299,8 @@ export const Navigation = defineClass({
           left: 0,
           top: 0,
         };
-        const measure = (button) => {
-          const element = button.element;
+        const measure = (_button) => {
+          const element = _button.element;
           const bounding_box = element.getBoundingClientRect();
 
           info.width = bounding_box.width;
@@ -311,7 +310,7 @@ export const Navigation = defineClass({
 
           if (!measured) {
             measured = true;
-            positions.set(button, info);
+            positions.set(_button, info);
           }
           updateLength();
           this.invalidate('_button_positions');

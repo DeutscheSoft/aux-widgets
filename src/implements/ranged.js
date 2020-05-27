@@ -192,12 +192,12 @@ function NullSnapModule(stdlib, foreign) {
     snapDown: snap,
   };
 }
-function numSort(a) {
-  a = a.slice(0);
-  a.sort(function (a, b) {
+function numSort(arr) {
+  arr = arr.slice(0);
+  arr.sort(function (a, b) {
     return a - b;
   });
-  return a;
+  return arr;
 }
 function updateSnap() {
   var O = this.options;

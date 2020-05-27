@@ -195,7 +195,7 @@ function drawLabel() {
     function () {
       var mtop = parseInt(getStyle(_label, 'margin-top') || 0);
       var mleft = parseInt(getStyle(_label, 'margin-left') || 0);
-      //var mbottom = parseInt(getStyle(_label, "margin-bottom") || 0);
+      var mbottom = parseInt(getStyle(_label, 'margin-bottom') || 0);
       var mright = parseInt(getStyle(_label, 'margin-right') || 0);
       var bb = _label.getBoundingClientRect();
       var x,
@@ -392,7 +392,7 @@ export const Chart = defineClass({
     },
   },
   initialize: function (options) {
-    var S;
+    var SVG;
     /**
      * @member {Array} Chart#graphs - An array containing all SVG paths acting as graphs.
      */
@@ -420,7 +420,7 @@ export const Chart = defineClass({
      *   Has class <code>.aux-chart</code>.
      */
 
-    this.svg = S = makeSVG('svg');
+    this.svg = SVG = makeSVG('svg');
 
     if (!this.options.width) this.options.width = this.range_x.options.basis;
     if (!this.options.height) this.options.height = this.range_y.options.basis;
@@ -430,7 +430,7 @@ export const Chart = defineClass({
      *      Has class <code>.aux-graphs</code>.
      */
     this._graphs = makeSVG('g', { class: 'aux-graphs' });
-    S.appendChild(this._graphs);
+    SVG.appendChild(this._graphs);
 
     if (this.options.width) this.set('width', this.options.width);
     if (this.options.height) this.set('height', this.options.height);
@@ -440,8 +440,8 @@ export const Chart = defineClass({
      *      Has class <code>.aux-handles</code>.
      */
     this._handles = makeSVG('g', { class: 'aux-handles' });
-    S.appendChild(this._handles);
-    S.onselectstart = function () {
+    SVG.appendChild(this._handles);
+    SVG.onselectstart = function () {
       return false;
     };
     this.addHandles(this.options.handles);
@@ -455,15 +455,11 @@ export const Chart = defineClass({
   resize: function () {
     var E = this.element;
     var O = this.options;
-    var S = this.svg;
+    var SVG = this.svg;
 
     Widget.prototype.resize.call(this);
 
-    var tmp = CSSSpace(S, 'border', 'padding');
-    var w = innerWidth(E) - tmp.left - tmp.right;
-    var h = innerHeight(E) - tmp.top - tmp.bottom;
-
-    var tmp = CSSSpace(S, 'border', 'padding');
+    var tmp = CSSSpace(SVG, 'border', 'padding');
     var w = innerWidth(E) - tmp.left - tmp.right;
     var h = innerHeight(E) - tmp.top - tmp.bottom;
 

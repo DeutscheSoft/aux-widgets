@@ -33,6 +33,9 @@
  * @param {...*} args
  * @function error
  */
+
+/* jshint -W117 */
+
 export function error() {
   try {
     console.error.apply(console, arguments);
@@ -64,6 +67,8 @@ export function log() {
     console.log.apply(console, arguments);
   } catch (e) {}
 }
+
+/* jshint +W117 */
 
 export function printWidgetTree(w, depth) {
   if (!depth) depth = 0;

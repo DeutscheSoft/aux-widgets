@@ -80,7 +80,6 @@ export const ValueButton = defineClass({
     }
   ),
   options: {
-    layout: 'bottom',
     value: 0,
     direction: 'polar',
     rotation: 45,

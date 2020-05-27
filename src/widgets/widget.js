@@ -37,9 +37,12 @@ import {
 } from '../utils/subscriptions.js';
 import { typecheckFunction } from '../utils/typecheck.js';
 
+/* jshint -W089 */
 function Invalid(options) {
   for (var key in options) this[key] = true;
 }
+/* jshint +W089 */
+
 Invalid.prototype = {
   validate: function () {
     var i = 0,
@@ -124,7 +127,6 @@ function dblClick(e) {
 
 function setPreset(preset) {
   let O = this.options;
-  let _O = this.options;
   let key, val;
   if (this._last_preset) {
     this.removeClass('aux-preset-' + this._last_preset);
@@ -313,7 +315,7 @@ export const Widget = defineClass({
     this._onvisibilitychange = onVisibilityChange.bind(this);
     this._interaction_count = 0;
     this._preset_origins = {};
-    this._last_preset;
+    this._last_preset = null;
     this._presetting = false;
     this._subscriptions = initSubscriptions();
   },
@@ -335,7 +337,8 @@ export const Widget = defineClass({
   },
 
   startInteracting: function () {
-    if (!this._interaction_count++) {
+    ++this._interaction_count;
+    if (!this._interaction_count) {
       this.set('interacting', true);
     }
   },
@@ -355,15 +358,15 @@ export const Widget = defineClass({
   },
 
   assertNoneInvalid: function () {
-    var warn = [];
+    var _warn = [];
     for (var key in this.invalid) {
       if (this.invalid[key] === true) {
-        warn.push(key);
+        _warn.push(key);
       }
     }
 
-    if (warn.length) {
-      warn('found', warn.length, 'invalid in', this, ':', warn);
+    if (_warn.length) {
+      warn('found', _warn.length, 'invalid in', this, ':', _warn);
     }
   },
 

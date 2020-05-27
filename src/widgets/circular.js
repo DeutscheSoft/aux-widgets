@@ -196,15 +196,15 @@ function drawLabels() {
 
   S.add(
     function () {
-      var i, p;
-      for (i = 0; i < labels.length; i++) {
-        l = labels[i];
-        p = a[i];
+      var j, q;
+      for (j = 0; j < labels.length; j++) {
+        l = labels[j];
+        q = a[j];
 
         var margin = l.margin !== void 0 ? l.margin : label.margin;
         var align = (l.align !== void 0 ? l.align : label.align) === 'inner';
         var pos = Math.min(O.max, Math.max(O.min, l.pos));
-        var bb = p.getBBox();
+        var bb = q.getBBox();
         var angle =
           (this.valueToCoef(this.snap(pos)) * O.angle + O.start) % 360;
         var outer_p = outer - margin;
@@ -216,14 +216,14 @@ function drawLabels() {
         var my =
           (((coords.y - outer) / outer_p) * bb.height) / (align ? -2 : 2);
 
-        positions[i] = formatTranslate(coords.x + mx, coords.y + my);
+        positions[j] = formatTranslate(coords.x + mx, coords.y + my);
       }
 
       S.add(
         function () {
-          for (i = 0; i < labels.length; i++) {
-            p = a[i];
-            p.setAttribute('transform', positions[i]);
+          for (j = 0; j < labels.length; j++) {
+            q = a[j];
+            q.setAttribute('transform', positions[j]);
           }
           /**
            * Is fired when labels are (re)drawn.

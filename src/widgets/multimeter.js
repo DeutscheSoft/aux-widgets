@@ -313,10 +313,13 @@ function mapChildOption(value, key) {
   }
 }
 
-for (var key in objectSub(
+let obj = objectSub(
   LevelMeter.prototype._options,
   Container.prototype._options
-)) {
+);
+
+for (var key in obj) {
+  if (!obj.hasOwnProperty(key)) continue;
   if (MultiMeter.prototype._options[key]) continue;
   var type = LevelMeter.prototype._options[key];
   if (type.search('array') !== -1) {
@@ -335,14 +338,14 @@ for (var key in objectSub(
 function extractChildOptions(O, i) {
   var o = {},
     value,
-    type;
+    _type;
 
-  for (var key in mapped_options) {
-    var ckey = mapped_options[key];
-    if (!O.hasOwnProperty(key)) continue;
-    value = O[key];
-    type = LevelMeter.prototype._options[key] || '';
-    if (Array.isArray(value) && type.search('array') === -1) {
+  for (var _key in mapped_options) {
+    if (!O.hasOwnProperty(_key)) continue;
+    var ckey = mapped_options[_key];
+    value = O[_key];
+    _type = LevelMeter.prototype._options[_key] || '';
+    if (Array.isArray(value) && _type.search('array') === -1) {
       if (i < value.length) o[ckey] = value[i];
     } else {
       o[ckey] = value;

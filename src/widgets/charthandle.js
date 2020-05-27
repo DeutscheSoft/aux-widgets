@@ -644,6 +644,7 @@ function redrawLabel(O, X) {
 
   var a = O.format_label.call(this, O.label, O.x, O.y, O.z).split('\n');
   var c = this._label.childNodes;
+  var i;
 
   while (c.length < a.length) {
     this._label.appendChild(makeSVG('tspan', { dy: '1.0em' }));
@@ -651,7 +652,7 @@ function redrawLabel(O, X) {
   while (c.length > a.length) {
     this._label.removeChild(this._label.lastChild);
   }
-  for (var i = 0; i < a.length; i++) {
+  for (i = 0; i < a.length; i++) {
     setText(c[i], a[i]);
   }
 
@@ -660,7 +661,7 @@ function redrawLabel(O, X) {
   S.add(
     function () {
       var w = 0;
-      for (var i = 0; i < a.length; i++) {
+      for (i = 0; i < a.length; i++) {
         w = Math.max(w, c[i].getComputedTextLength());
       }
 
@@ -683,17 +684,18 @@ function redrawLabel(O, X) {
           var text_position;
           var text_anchor;
           var tmp;
+          var j;
 
           /*
            * Calculate possible positions of the labels and calculate their intersections. Choose
            * that position which has the smallest intersection area with all other handles and labels
            */
-          for (let i = 0; i < pref.length; i++) {
+          for (j = 0; j < pref.length; j++) {
             /* get alignment */
-            var align = getLabelAlign(O, pref[i]);
+            var align = getLabelAlign(O, pref[j]);
 
             /* get label position */
-            var LX = getLabelPosition(O, X, pref[i], label_size);
+            var LX = getLabelPosition(O, X, pref[j], label_size);
 
             /* calculate the label bounding box using anchor and dimensions */
             var pos = getLabelDimensions(align, LX, label_size);
@@ -718,8 +720,8 @@ function redrawLabel(O, X) {
           this._label.setAttribute('x', tmp);
           this._label.setAttribute('y', Math.round(text_position[1]) + 'px');
           this._label.setAttribute('text-anchor', text_anchor);
-          var c = this._label.childNodes;
-          for (let i = 0; i < c.length; i++) c[i].setAttribute('x', tmp);
+          var cn = this._label.childNodes;
+          for (j = 0; j < cn.length; j++) cn[j].setAttribute('x', tmp);
 
           redrawLines.call(this, O, X);
         }.bind(this),
@@ -1133,8 +1135,8 @@ export const ChartHandle = defineClass({
       node: null,
       onstartcapture: function (state) {
         var self = this.parent;
-        var O = self.options;
-        state.z = O.range_z.valueToPixel(O.z);
+        var _O = self.options;
+        state.z = _O.range_z.valueToPixel(O.z);
 
         var pstate = self.pos_drag.state();
         if (pstate) {
@@ -1162,7 +1164,7 @@ export const ChartHandle = defineClass({
       },
       onmovecapture: function (state) {
         var self = this.parent;
-        var O = self.options;
+        var _O = self.options;
 
         var zv = state.vector;
         var v = state.vDistance();
@@ -1170,9 +1172,9 @@ export const ChartHandle = defineClass({
         var d = zv[0] * v[0] + zv[1] * v[1];
 
         /* ignore small movements */
-        if (O.min_drag > 0 && O.min_drag > d) return;
+        if (_O.min_drag > 0 && _O.min_drag > d) return;
 
-        var range_z = O.range_z;
+        var range_z = _O.range_z;
         var z = range_z.pixelToValue(state.z + d);
 
         self.userset('z', z);
@@ -1195,7 +1197,7 @@ export const ChartHandle = defineClass({
       node: this.element,
       onstartcapture: function (state) {
         var self = this.parent;
-        var O = self.options;
+        var _O = self.options;
 
         var button = state.current.button;
         var E = self.element;
@@ -1209,8 +1211,8 @@ export const ChartHandle = defineClass({
           if (E !== p.firstChild)
             self.drawOnce(function () {
               var e = this.element;
-              var p = e.parentNode;
-              if (p && e !== p.firstChild) p.insertBefore(e, p.firstChild);
+              var _p = e.parentNode;
+              if (_p && e !== _p.firstChild) _p.insertBefore(e, _p.firstChild);
             });
           /* cancel everything else, but do not drag */
           ev.preventDefault();
@@ -1218,8 +1220,8 @@ export const ChartHandle = defineClass({
           return false;
         }
 
-        state.x = O.range_x.valueToPixel(O.x);
-        state.y = O.range_y.valueToPixel(O.y);
+        state.x = _O.range_x.valueToPixel(O.x);
+        state.y = _O.range_y.valueToPixel(O.y);
         /**
          * Is fired when the main handle is grabbed by the user.
          * The argument is an object with the following members:
@@ -1235,8 +1237,8 @@ export const ChartHandle = defineClass({
          * @param {Object} positions - An object containing all relevant positions of the pointer.
          */
         self.emit('handlegrabbed', {
-          x: O.x,
-          y: O.y,
+          x: _O.x,
+          y: _O.y,
           pos_x: state.x,
           pos_y: state.y,
         });
@@ -1245,17 +1247,17 @@ export const ChartHandle = defineClass({
       },
       onmovecapture: function (state) {
         var self = this.parent;
-        var O = self.options;
+        var _O = self.options;
 
         /* ignore small movements */
-        if (O.min_drag > 0 && O.min_drag > state.distance()) return;
+        if (_O.min_drag > 0 && O.min_drag > state.distance()) return;
 
         /* we are changing z right now using a gesture, irgnore this movement */
         if (self.z_drag.dragging()) return;
 
         var v = state.vDistance();
-        var range_x = O.range_x;
-        var range_y = O.range_y;
+        var range_x = _O.range_x;
+        var range_y = _O.range_y;
         var ox = range_x.options;
         var oy = range_y.options;
 
@@ -1287,12 +1289,12 @@ export const ChartHandle = defineClass({
          * @param {Object} positions - An object containing all relevant positions of the pointer.
          */
         var self = this.parent;
-        var O = self.options;
+        var _O = self.options;
         self.emit('handlereleased', {
-          x: O.x,
-          y: O.y,
-          pos_x: O.range_x.valueToPixel(O.x),
-          pos_y: O.range_y.valueToPixel(O.y),
+          x: _O.x,
+          y: _O.y,
+          pos_x: _O.range_x.valueToPixel(O.x),
+          pos_y: _O.range_y.valueToPixel(O.y),
         });
         stopDrag.call(self);
         self.z_drag.set('node', self._zhandle);

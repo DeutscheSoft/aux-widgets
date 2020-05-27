@@ -688,6 +688,6 @@ addStaticEvent(ColorPicker, 'initialized', function () {
     }
   });
   for (let key in options) {
-    this.set(key, options[key]);
+    if (options.hasOwnProperty(key)) this.set(key, options[key]);
   }
 });

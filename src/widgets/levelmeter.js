@@ -19,17 +19,12 @@
 
 /* jshint -W018 */
 
-import { defineClass, defineChildElement } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
 import { Meter } from './meter.js';
 import { State } from './state.js';
-import { addClass, toggleClass, element } from '../utils/dom.js';
-import { FORMAT } from '../utils/sprintf.js';
+import { addClass, toggleClass } from '../utils/dom.js';
 import { effectiveValue } from '../modules/range.js';
-
-function vert(O) {
-  return O.layout === 'left' || O.layout === 'right';
-}
 
 function clearTimeout(to) {
   if (to >= 0) window.clearTimeout(to);
@@ -211,6 +206,7 @@ export const LevelMeter = defineClass({
    * @emits LevelMeter#resetvalue
    */
   resetValue: function () {
+    let O = this.options;
     clearTimeout(this.__lto);
     this.set(
       'value_label',
@@ -255,6 +251,7 @@ export const LevelMeter = defineClass({
    * @emits LevelMeter#resettop
    */
   resetTop: function () {
+    let O = this.options;
     this.set(
       'top',
       effectiveValue(
@@ -281,6 +278,7 @@ export const LevelMeter = defineClass({
    * @emits LevelMeter#resetbottom
    */
   resetBottom: function () {
+    let O = this.options;
     this.set(
       'bottom',
       effectiveValue(

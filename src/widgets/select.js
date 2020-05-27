@@ -40,6 +40,7 @@ import {
   removeClass,
 } from '../utils/dom.js';
 import { S } from '../dom_scheduler.js';
+import { error } from '../utils/log.js';
 
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -103,7 +104,7 @@ function lowRemoveEntry(entry) {
   var id = entries.indexOf(entry);
 
   if (id === -1) {
-    console.error(
+    error(
       'element %o not found in %o',
       entry.get('value'),
       entries.map((e) => e.get('value'))
@@ -643,7 +644,7 @@ export const Select = defineClass({
       var L;
 
       if (O.auto_size && (L = this._label)) {
-        var width = 0;
+        var w = 0;
         E.style.width = 'auto';
         var orig_content = document.createDocumentFragment();
         while (L.firstChild) orig_content.appendChild(L.firstChild);
@@ -653,11 +654,11 @@ export const Select = defineClass({
           L.appendChild(document.createElement('BR'));
         }
         S.add(function () {
-          width = outerWidth(E, true);
+          w = outerWidth(E, true);
           S.add(function () {
             while (L.firstChild) L.removeChild(L.firstChild);
             L.appendChild(orig_content);
-            outerWidth(E, true, width);
+            outerWidth(E, true, w);
           }, 1);
         });
       }

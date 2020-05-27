@@ -96,9 +96,9 @@ export const Tagger = defineClass({
     if (!t) return;
     t.node.label.on(
       'click',
-      (function (that, tag) {
+      (function (that, _tag) {
         return function () {
-          that.emit('tagclicked', tag.tag, tag.node);
+          that.emit('tagclicked', _tag.tag, _tag.node);
         };
       })(this, t)
     );

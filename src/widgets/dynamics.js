@@ -19,12 +19,7 @@
 
 import { defineClass } from './../widget_helpers.js';
 import { Chart } from './chart.js';
-import {
-  addClass,
-  removeClass,
-  innerWidth,
-  innerHeight,
-} from '../utils/dom.js';
+import { addClass, removeClass } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 
 function rangeSet(value, key) {

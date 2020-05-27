@@ -141,11 +141,11 @@ export const TreeItem = defineClass({
           S.add(function () {
             s.height = 'auto';
             S.add(function () {
-              var h = list.offsetHeight;
+              var _h = list.offsetHeight;
               S.add(function () {
                 s.height = h0 + 'px';
                 S.addNext(function () {
-                  s.height = h + 'px';
+                  s.height = _h + 'px';
 
                   setTimeout(function () {
                     s.height = null;

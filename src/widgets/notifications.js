@@ -17,6 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
+/* jshint -W079 */
+
 import { defineClass } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
 import { addClass } from '../utils/dom.js';
@@ -67,8 +69,9 @@ export const Notifications = defineClass({
      * @param {Object} [options={ }] - An object containing initial options. - Options for the {@link Notification} to add
      *
      */
+    let n;
     if (options instanceof Notification) n = options;
-    else var n = new Notification(options);
+    else n = new Notification(options);
     this.addChild(n);
     if (this.options.stack == 'start')
       this.element.insertBefore(n.element, this.element.firstChild);

@@ -138,13 +138,6 @@ function handleLabel(label, x, y, z) {
   }
   return s;
 }
-function handleLabel2(label, x, y, z) {
-  var O = this.options;
-  var s = label + '\n';
-  var lr = y ? (y < 0 ? 'L' : 'R') : '';
-  s = lr + ' ' + Math.abs(y).toFixed(+O._digits);
-  return s;
-}
 /**
  * @member {ChartHandle} Panorama#handle1 - The {@link ChartHandle}
  *   displaying/setting the position on panorama and surround modes.

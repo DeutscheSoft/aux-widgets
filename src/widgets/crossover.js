@@ -266,7 +266,7 @@ export const Crossover = defineClass({
     } else if (child instanceof CrossoverGraph) {
       // add all bands to this crossover
       this.children
-        .filter((child) => child instanceof CrossoverBand)
+        .filter((_child) => _child instanceof CrossoverBand)
         .forEach((band) => child.addBand(band));
     }
   },
@@ -280,7 +280,7 @@ export const Crossover = defineClass({
       this.crossover_graphs.forEach((g) => g.removeBand(child));
     } else if (child instanceof CrossoverGraph) {
       this.children
-        .filter((child) => child instanceof CrossoverBand)
+        .filter((_child) => _child instanceof CrossoverBand)
         .forEach((band) => child.removeBand(band));
     }
   },

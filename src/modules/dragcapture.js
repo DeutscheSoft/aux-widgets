@@ -243,14 +243,14 @@ function touchCancel(ev) {
 }
 var dummy = function () {};
 
-function getParents(e) {
+function getParents(element) {
   var ret = [];
-  if (Array.isArray(e))
-    e.map(function (e) {
+  if (Array.isArray(element))
+    element.map(function (e) {
       e = e.parentNode;
       if (e) ret.push(e);
     });
-  else if ((e = e.parentNode)) ret.push(e);
+  else if ((element = element.parentNode)) ret.push(element);
   return ret;
 }
 

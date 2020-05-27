@@ -140,7 +140,7 @@ export class ChildWidgets extends Events {
 
     return () => {
       subs = unsubscribeSubscriptions(subs);
-      child_subscriptions.forEach((subs) => unsubscribeSubscriptions(subs));
+      child_subscriptions.forEach((_subs) => unsubscribeSubscriptions(_subs));
       child_subscriptions.clear();
     };
   }

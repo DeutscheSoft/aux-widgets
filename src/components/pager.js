@@ -20,19 +20,9 @@
 import {
   componentFromWidget,
   defineComponent,
-  subcomponentFromWidget,
 } from './../component_helpers.js';
 import { Pager } from './../widgets/pager.js';
 import { Page } from './../widgets/pages.js';
-
-function addPage(pager, page) {
-  const element = page.element;
-  pager.addPage(element.getAttribute('label'), page);
-}
-
-function removePage(pager, page) {
-  pager.removePage(page);
-}
 
 /**
  * WebComponent for the Pager widget. Available in the DOM as

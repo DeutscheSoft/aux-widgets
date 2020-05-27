@@ -21,7 +21,6 @@
 
 import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
-import { S } from '../dom_scheduler.js';
 import {
   element,
   addClass,
@@ -299,7 +298,7 @@ export const Container = defineClass({
     var E = this.element;
 
     if (I.visible) {
-      var time;
+      let time;
       removeClass(E, 'aux-hiding', 'aux-showing', 'aux-hide', 'aux-show');
 
       if (this.__hide_id !== false) {
@@ -309,7 +308,7 @@ export const Container = defineClass({
 
       switch (O.visible) {
         case 'hiding': {
-          let time = O.hiding_duration;
+          time = O.hiding_duration;
 
           if (time !== 0) {
             addClass(E, 'aux-hiding');
@@ -328,7 +327,7 @@ export const Container = defineClass({
           break;
         }
         case 'showing': {
-          let time = O.showing_duration;
+          time = O.showing_duration;
 
           if (time !== 0) {
             addClass(E, 'aux-showing');

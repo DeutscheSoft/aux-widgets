@@ -114,13 +114,13 @@ function drawLines(a, mode, last) {
           var elements = this.element.querySelectorAll(
             '.aux-gridline.aux-' + (mode ? 'horizontal' : 'vertical')
           );
-          for (var i = 0; i < elements.length; i++) {
-            elements[i].parentElement.removeChild(elements[i]);
+          for (var j = 0; j < elements.length; j++) {
+            elements[j].parentElement.removeChild(elements[j]);
           }
-          for (i = 0; i < a.length; i++) {
-            label = labels[i];
+          for (j = 0; j < a.length; j++) {
+            label = labels[j];
             if (label) {
-              obj = coords[i];
+              obj = coords[j];
               if (obj) {
                 label.setAttribute('x', obj.x);
                 label.setAttribute('y', obj.y);
@@ -131,9 +131,9 @@ function drawLines(a, mode, last) {
             }
           }
 
-          for (i = 0; i < a.length; i++) {
-            obj = a[i];
-            label = coords[i];
+          for (j = 0; j < a.length; j++) {
+            obj = a[j];
+            label = coords[j];
             var m;
             if (label) m = label.m;
             else m = 0;

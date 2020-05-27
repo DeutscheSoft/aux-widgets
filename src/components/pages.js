@@ -20,17 +20,8 @@
 import {
   componentFromWidget,
   defineComponent,
-  subcomponentFromWidget,
 } from './../component_helpers.js';
 import { Pages } from './../widgets/pages.js';
-
-function addPage(pages, page) {
-  pages.addPage(page);
-}
-
-function removePage(pages, page) {
-  pages.removePage(page);
-}
 
 /**
  * WebComponent for the Pages widget. Available in the DOM as
