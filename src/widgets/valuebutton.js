@@ -231,10 +231,8 @@ defineChildWidget(ValueButton, 'scale', {
   map_options: {
     value: 'bar',
   },
-  static_events: {
-    set_layout: function (v) {
-      if (v == 'horizontal') this.scale.set('layout', 'bottom');
-      if (v == 'vertical') this.scale.set('layout', 'left');
-    },
+  blacklist_options: [ 'layout' ],
+  default_options: {
+    layout: 'top'
   },
 });

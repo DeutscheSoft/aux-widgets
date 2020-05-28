@@ -1339,15 +1339,22 @@ body.aux-cursor-row-resize * {
 
 .aux-valuebutton {
   display: inline-grid;
-
   justify-content: stretch;
   align-items: center;
-
+}
+.aux-valuebutton.aux-horizontal {
   grid-template-columns: auto 1fr auto;
   grid-template-rows: auto auto;
   grid-template-areas:
     'icon label value'
     'scale scale value';
+  
+}
+.aux-valuebutton.aux-vertical {
+  grid-template-areas:
+    'icon label'
+    'value value'
+    'scale scale';
 }
 .aux-valuebutton > .aux-icon {
   grid-area: icon;

@@ -777,6 +777,10 @@
     var(--aux-valuebutton-paddingvertical) var(--aux-button-paddinghorizontal);
   grid-gap: 0 var(--aux-valuebutton-gap);
 }
+.aux-valuebutton.aux-vertical {
+  height: auto;
+  padding: var(--aux-button-paddingvertical) var(--aux-button-paddinghorizontal);
+}
 .aux-valuebutton > .aux-widget {
   margin: 0;
 }
@@ -787,13 +791,19 @@
 .aux-valuebutton > .aux-label {
   justify-self: start;
 }
-.aux-valuebutton > .aux-value {
+.aux-valuebutton.aux-horizontal > .aux-value {
   height: 100%;
   margin: 0 0 0 var(--aux-valuebutton-gap);
 }
-.aux-valuebutton > .aux-value > .aux-input {
+.aux-valuebutton.aux-vertical > .aux-value {
+  margin: var(--aux-valuebutton-gap) 0;
+}
+.aux-valuebutton.aux-horizontal > .aux-value > .aux-input {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+}
+.aux-valuebutton.aux-vertical > .aux-value > .aux-input {
+  border-radius: 0;
 }
 .aux-valuebutton > .aux-scale {
   font-size: var(--aux-main-tinyfont);
