@@ -42,6 +42,7 @@ function getChildOptions(parent, name, options, config) {
     if (key.startsWith(pref)) {
       ret[key.substr(pref.length)] = options[key];
     } else if (inherit_options && blacklist_options.indexOf(key) < 0) {
+      if (options.hasOwnProperty(pref + key)) continue;
       if (
         key in config.create.prototype._options &&
         !(key in Widget.prototype._options)
