@@ -304,12 +304,13 @@ function mapChildOptionSimple(value, key) {
 }
 
 function mapChildOption(value, key) {
-  var M = this.meters,
-    i;
+  const M = this.meters;
+
   if (Array.isArray(value)) {
-    for (i = 0; i < M.length && i < value.length; i++) M[i].set(key, value[i]);
+    for (let i = 0; i < M.length && i < value.length; i++)
+      M[i].set(key, value[i]);
   } else {
-    for (i = 0; i < M.length; i++) M[i].set(key, value);
+    for (let i = 0; i < M.length; i++) M[i].set(key, value);
   }
 }
 
