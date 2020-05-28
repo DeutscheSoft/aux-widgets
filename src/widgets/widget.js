@@ -337,13 +337,14 @@ export const Widget = defineClass({
   },
 
   startInteracting: function () {
-    ++this._interaction_count;
-    if (!this._interaction_count) {
+    const count = this._interaction_count++;
+    if (!count) {
       this.set('interacting', true);
     }
   },
   stopInteracting: function () {
-    if (!--this._interaction_count) {
+    const count = --this._interaction_count;
+    if (!count) {
       this.set('interacting', false);
     }
   },
