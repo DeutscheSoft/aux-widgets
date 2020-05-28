@@ -459,13 +459,12 @@ export const Chart = defineClass({
 
     Widget.prototype.resize.call(this);
 
-    var tmp = CSSSpace(SVG, 'border', 'padding');
-    var w = innerWidth(E) - tmp.left - tmp.right;
-    var h = innerHeight(E) - tmp.top - tmp.bottom;
+    const tmp = CSSSpace(S, 'border', 'padding');
+    let w = innerWidth(E) - tmp.left - tmp.right;
+    let h = innerHeight(E) - tmp.top - tmp.bottom;
 
     if (O.square) {
-      var s = Math.min(h, w);
-      w = h = s;
+      w = h = Math.min(h, w);
     }
 
     if (w > 0 && O._width !== w) {
