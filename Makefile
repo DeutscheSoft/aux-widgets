@@ -20,3 +20,9 @@ prettier:
 
 check:
 	cd jshint && npm run check
+
+docs:
+	cd doc && npm run build
+
+backstop:
+	cd backstop && npm run test
