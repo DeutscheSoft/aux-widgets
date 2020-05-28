@@ -114,7 +114,7 @@ export const MultiMeter = defineClass({
    */
   Extends: Container,
 
-  /* TODO: The following sucks cause we need to maintain it according to
+  /* TODO: The following is not ideal cause we need to maintain it according to
     LevelMeters and Meter options. */
   _options: Object.assign(Object.create(Container.prototype._options), {
     count: 'int',
