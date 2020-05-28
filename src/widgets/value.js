@@ -207,6 +207,10 @@ export const Value = defineClass({
 
     this.__editing = false;
   },
+  
+  getEventTarget: function () {
+    return this._input;
+  },
 
   draw: function (O, elmnt) {
     addClass(elmnt, 'aux-value');
