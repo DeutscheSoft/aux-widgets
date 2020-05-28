@@ -28,6 +28,24 @@ import {
 
 import { Container } from './../../widgets/container.js';
 
+/**
+ * Patchbay is a generic widget for managing connections between sources
+ * and sinks. It relies on various data models like
+ * two {@link VirtualTreeDataView} and a {@link ConnectionDataView}.
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {Object} options.sources - A {@link VirtualTreeDataView} containing
+ *   sources data.
+ * @property {Object} options.sinks - A {@link VirtualTreeDataView} containing
+ *   sinks data.
+ * @porperty {Integer} [options.size=32] - The size of a single entry in the
+ *   {@link VirtualTree}s.
+ *
+ * @extends Container
+ *
+ * @class Patchbay
+ */
 export const Patchbay = defineClass({
   Extends: Container,
   _options: Object.assign(Object.create(Container.prototype._options), {

@@ -20,6 +20,16 @@
 import { defineClass, defineChildElement } from './../../widget_helpers.js';
 import { Widget } from './../../widgets/widget.js';
 
+/**
+ * Canvas is an SVG drawing connection paths in {@link Topology} and
+ * {@link Juxtaposition} patchpay widgets.
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @extends Widget
+ *
+ * @class Canvas
+ */
 export const Canvas = defineClass({
   Extends: Widget,
   _options: Object.assign(Object.create(Widget.prototype._options), {}),

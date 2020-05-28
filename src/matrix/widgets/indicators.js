@@ -36,6 +36,27 @@ function onIndicatorClicked() {
   indicators.emit('indicatorClicked', this.source, this.sink);
 }
 
+/**
+ * Indicators is an area inside {@link Matrix} containing a matrix of
+ *   {@link Indicator}s displaying and managing connections.
+ *
+ * @param {Object}[options={ }] - An object containing initioal options.
+ *
+ * @property {Object} [options.indicator_class=Indicator] - the class to
+ *   derive new {@link Indicator}s from. Has to be a subclass of
+ *   {@link Indicator}.
+ * @property {Integer} [options.scroll_top=0] - The scroll position from
+ *   top.
+ * @property {Integer} [options.scroll_left=0] - The scroll position
+ *   from the left.
+ * @property {ConnectionView} options.connectionview - The
+ *   {@link ConnectionView} data model.
+ *
+ * @extends Container
+ *
+ * @class Indicators
+ */
+
 export const Indicators = defineClass({
   Extends: Container,
   _options: Object.assign(Object.create(Container.prototype._options), {
@@ -63,6 +84,14 @@ export const Indicators = defineClass({
 
       this._scroll_event_suppressed = false;
       const element = this.element;
+      /**
+       * Is fired on scrolling the area.
+       *
+       * @event Indicators#scrollChanged
+       *
+       * @param {Integer} scroll_top - The scroll position from top.
+       * @param {Integer} scroll_left - The scroll position from left.
+       */
       this.emit('scrollChanged', element.scrollTop, element.scrollLeft);
     });
     this.entries = [];
@@ -215,17 +244,35 @@ export const Indicators = defineClass({
       this.element.scrollTop = O.scroll_top;
     }
   },
-
+  /**
+   * Scroll the indicators area to this vertical (top) position.
+   *
+   * @param {Integer} position - the position in pixels to scroll to.
+   *
+   * @method Indicators#scrollTopTo
+   */
   scrollTopTo: function (position) {
     this.update('scroll_top', position);
     this._scroll_timer.restart(100);
   },
+  /**
+   * Scroll the indicators area to this horizontal (left) position.
+   *
+   * @param {Integer} position - the position in pixels to scroll to.
+   *
+   * @method Indicators#scrollLeftTo
+   */
   scrollLeftTo: function (position) {
     this.update('scroll_left', position);
     this._scroll_timer.restart(100);
   },
 });
 
+/**
+ * @member {HTMLDiv} Indicators#_scroller - The container for hiding
+ *   the scroll bar.
+ *   Has class <code>.aux-scroller</code>.
+ */
 defineChildElement(Indicators, 'scroller', {
   show: true,
 });

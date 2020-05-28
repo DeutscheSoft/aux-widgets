@@ -139,6 +139,27 @@ function subscribeAll() {
   );
 }
 
+/**
+ * VirtualTree is a scrollable list of {@link VirtualTreeEntry}s. It
+ * relies on a data model {@link VirtualTreeDataView}. Its purpose is
+ * to reduce the amount of elements in DOM by only holding the entries
+ * which fit inside the area. On scrolling the entries are re-sorted,
+ * re-subscribed and micro-scrolled to give the impression of seamless
+ * scrolling. It is used to display collapsable lists of hundrets or
+ * even thousands of entries in a CPU-friendly way.
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {Integer} [options.size=32] - The size of a single entry in
+ *   the list.
+ * @property {Object} [options.entry_class=VirtualTreeEntry] - The class
+ *   to derive new entries from.
+ * @property {Object} options.virtualtreeview - The {@link VirtualTreeDataView}.
+ *
+ * @extends Container
+ *
+ * @class VirtualTree
+ */
 export const VirtualTree = defineClass({
   Extends: Container,
   _options: Object.assign(Object.create(Container.prototype._options), {
@@ -165,7 +186,7 @@ export const VirtualTree = defineClass({
     set_virtualtreeview: function (virtualtreeview) {
       this.virtualtreeview_subs.unsubscribe();
     },
-    scrollTopChanged: function (position) {
+    scrolltopchanged: function (position) {
       const O = this.options;
       const startIndex = Math.floor(position / O.size);
 
@@ -181,9 +202,23 @@ export const VirtualTree = defineClass({
       if (!this._scroll_event_suppressed) return;
 
       this._scroll_event_suppressed = false;
+      /**
+       * Is fired on scrolling the list.
+       *
+       * @event VirtualTree#scrollTopChanged
+       *
+       * @param {Integer} scroll - The amount of pixels scrolled from top.
+       */
       this.emit('scrollTopChanged', this._scrollbar.scrollTop);
     });
   },
+  /**
+   * Create and return a new entry based on `options.entry_class`.
+   *
+   * @method VirtualTree#createEntry
+   *
+   * @returns {Object} entry - The newly created entry instance.
+   */
   createEntry: function () {
     return new this.options.entry_class();
   },
@@ -203,6 +238,13 @@ export const VirtualTree = defineClass({
       this.set('virtualtreeview', options.virtualtreeview);
     this.triggerResize();
   },
+  /**
+   * Scroll the VirtualTree to this position.
+   *
+   * @param {Integer} position - The position to scroll to.
+   *
+   * @method VirtualTree#scrollTo
+   */
   scrollTo: function (position) {
     this._scroll_timer.restart(100);
     this.update('_scroll', position);
@@ -270,10 +312,17 @@ export const VirtualTree = defineClass({
     Container.prototype.resize.call(this);
   },
 });
-
+/**
+ * @member {HTMLDiv} VirtualTree#_scrollbar - A container for hiding
+ *   scrollbars. Has class <code>.aux-scrollbar</code>.
+ */
 defineChildElement(VirtualTree, 'scrollbar', {
   show: true,
 });
+/**
+ * @member {HTMLDiv} VirtualTree#_scroller - A container holding the
+ *   {@link VirtualTreeEntry}s. Has class <code>.aux-scroller</code>.
+ */
 defineChildElement(VirtualTree, 'scroller', {
   show: true,
   append: function () {

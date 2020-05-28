@@ -22,6 +22,26 @@ import { addClass, toggleClass } from './../../utils/dom.js';
 
 import { Button } from './../../widgets/button.js';
 
+/**
+ * Indicator is a button element inside the {@link Indicators} widget
+ * for the {@link Matrix}. All properties are reflected as class onto
+ * the element.
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {Boolean} [options.connected] - Sink and source represented by this
+ *   indicator are connected.
+ * @property {Boolean} [options.connectable] - Sink and source represented by
+ *   this indicator can be connected, no restrictions.
+ * @property {Boolean} [options.sourceisgroup] - The source is a group header.
+ * @property {Boolean} [options.sinkisgroup] - The sink is a group header.
+ * @property {Boolean} [options.isgroup] - Either source or sink is a group header.
+ *
+ * @extends Button
+ *
+ * @class Indicator
+ */
+
 export const Indicator = defineClass({
   Extends: Button,
   _options: Object.assign(Object.create(Button.prototype._options), {
@@ -36,6 +56,18 @@ export const Indicator = defineClass({
     this.source = null;
     this.sink = null;
   },
+  /**
+   * Updates the Indicator with the relevant data.
+   *
+   * @method updateData
+   *
+   * @param {Integer} index1 - The index of the entry in the first list.
+   * @param {Integer} index2 - The index of the entry in the second list.
+   * @param {ConnectionData} connection - The connection data.
+   * @param {PortData} source - The source data.
+   * @param {PortData} sink - The sink data.
+   *
+   */
   updateData: function (index1, index2, connection, source, sink) {
     this.update('connected', !!connection);
     this.update('sourceisgroup', source && source.isGroup);

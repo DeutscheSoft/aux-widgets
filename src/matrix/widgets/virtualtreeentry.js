@@ -56,6 +56,42 @@ function composeDepth(tree_position) {
   return depth;
 }
 
+/**
+ * VirtualTreeEntry is the base class used in {@link VirtualTree}. It
+ * consists of a {@link Label}, an {@link Icon}, a {@link Button} for
+ * collapsing grouped entries and a {@link Label} displaying indentation
+ * icons. Overload this class if you want to add more items.
+ *
+ * @param {Object} [options={ }] - An onject containing initial options.
+ *
+ * @property {String} [options.label=false] - Set to a string to display a label,
+ *   set to `false` to entirely remove it from the DOM.
+ * @property {String} [options.icon=false] - Set to a string to display an icon,
+ *   set to `false` to entirely remove it from the DOM.
+ * @property {Array|Boolean} [options.depth=false] - An array containing
+ *   strings defining the indentation icons. Possible strings are
+ *   `trunk`, `branch`, `end` and `none`. Set to `false` to remove the
+ *   element from the DOM.
+ * @property {Boolean} [options.collapsable=false] - Defines if the entry
+ *   is collapsable. Collapsable items are displayed as group headers
+ *   with a button to toggle collapsed state.
+ * @property {Boolean}[options.collapsed=false] - Defines the collapsed
+ *   state of a group header and its descendants.
+ * @property {String} [options.icon_collapsed='arrowup'] - The icon to
+ *   display in groups collapse button for collapsed state.
+ * @property {String} [options.icon_uncollapsed='arrowdown'] - The icon to
+ *   display in groups collapse button for uncollapsed (open) state.
+ * @property {Boolean} [options.odd=false] - Defines the divisibility by two
+ *   of the index of the entry in the list. This sets the class aux-odd
+ *   to style alternating entries.
+ * @property {Boolean} [options.group=false] - Define if this entry is a
+ *   group header.
+ *
+ * @extends Container
+ *
+ * @class VirtualTreeEntry
+ */
+
 export const VirtualTreeEntry = defineClass({
   Extends: Container,
   _options: Object.assign(Object.create(Container.prototype._options), {
@@ -92,7 +128,13 @@ export const VirtualTreeEntry = defineClass({
     Container.prototype.draw.call(this, options, element);
     element.classList.add('aux-virtualtreeentry');
   },
-  // overload this to subscribe to other properties
+  /**
+   * This function is called internally to subscribe to properties
+   * Overload in order to handle additional data being displayed
+   * on custom entry classes.
+   *
+   * @method VirtualTree#subscribeData
+   */
   subscribeData: function () {
     const subs = this.data_subscriptions;
     const element = this.data;
@@ -112,7 +154,19 @@ export const VirtualTreeEntry = defineClass({
       })
     );
   },
-  // overload this to subscribe to other properties
+  /**
+   * This function is called internally on scroll to update the entries'
+   * content. Overload in order to handle additional data being displayed
+   * on custom entry classes.
+   *
+   * @method VirtualTree#subscribeData
+   *
+   * @param {Object} virtualtreeview - The VirtualTreeViewData object.
+   * @param {Integer} index - the index of the entry inside the list.
+   * @param {Object} data - The data model holding the properties values.
+   * @param {Integer} treeposition - An array containing information
+   *   about the entries indentation inside the tree.
+   */
   updateData: function (virtualtreeview, index, element, treePosition) {
     this.data_subscriptions.unsubscribe();
 

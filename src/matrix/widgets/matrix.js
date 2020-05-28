@@ -61,6 +61,25 @@ function setVirtualtreeviews() {
   }
 }
 
+/**
+ * A patchbay widget for handling connections between sources and sinks
+ * with matrix layout.
+ * It includes two {@link VirtualTree}s on top and left hand side and a
+ * {@link Indicators} widget displaying and handling the connections.
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {Object} [options.indicator_class=Indicator] - The class to derive the
+ *   indicators inside the {@link Indicators} from.
+ * @property {String} [options.signal_flow='left-top'] - Define the direction of
+ *   the signal flow. Can be either `top-left` or `left-top`. This defines
+ *   the position of sinks and sources {@link VirtualTreeView} on the
+ *   screen.
+ *
+ * @extends Patchbay
+ *
+ * @class Matrix
+ */
 export const Matrix = defineClass({
   Extends: Patchbay,
   _options: Object.assign(Object.create(Patchbay.prototype._options), {
@@ -124,7 +143,10 @@ export const Matrix = defineClass({
     Patchbay.prototype.resize.call(this);
   },
 });
-
+/**
+ * @member {VirtualTree} Matrix#virtualtree_left - The {@link VirtualTree}
+ *   on the left hand side. Has class <code>.aux-virtualtreeleft</code>.
+ */
 defineChildWidget(Matrix, 'virtualtree_left', {
   create: VirtualTree,
   show: true,
@@ -135,7 +157,10 @@ defineChildWidget(Matrix, 'virtualtree_left', {
     class: 'aux-virtualtreeleft',
   },
 });
-
+/**
+ * @member {VirtualTree} Matrix#virtualtree_left - The {@link VirtualTree}
+ *   on top. Has class <code>.aux-virtualtreetop</code>.
+ */
 defineChildWidget(Matrix, 'virtualtree_top', {
   create: VirtualTree,
   show: true,
@@ -146,7 +171,10 @@ defineChildWidget(Matrix, 'virtualtree_top', {
     class: 'aux-virtualtreetop',
   },
 });
-
+/**
+ * @member {Indicators} Matrix#indicators - The {@link Indicators}
+ *   widget. Has class <code>.aux-indicators</code>.
+ */
 defineChildWidget(Matrix, 'indicators', {
   create: Indicators,
   show: true,
