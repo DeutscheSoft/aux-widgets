@@ -459,7 +459,7 @@ export const Chart = defineClass({
 
     Widget.prototype.resize.call(this);
 
-    const tmp = CSSSpace(S, 'border', 'padding');
+    const tmp = CSSSpace(SVG, 'border', 'padding');
     let w = innerWidth(E) - tmp.left - tmp.right;
     let h = innerHeight(E) - tmp.top - tmp.bottom;
 
