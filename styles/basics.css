@@ -632,6 +632,15 @@
   margin: var(--aux-notification-margin);
 }
 
+/* PAGER */
+
+.aux-pager > .aux-pages {
+  margin: 0 !important;
+}
+.aux-pager > .aux-pages > .aux-page {
+  margin: 0 !important;
+}
+
 /* ROOT */
 
 .aux-root {
