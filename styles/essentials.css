@@ -875,7 +875,7 @@ body.aux-cursor-row-resize * {
 
 .aux-multimeter {
   display: inline-flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
   align-items: stretch;
   align-content: center;
