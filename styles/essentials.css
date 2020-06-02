@@ -431,6 +431,7 @@ body {
 .aux-fader > .aux-track {
   grid-area: track;
   position: relative;
+  justify-self: center;
 }
 .aux-fader > .aux-scale {
   grid-area: scale;
