@@ -76,7 +76,7 @@ export const ValueKnob = defineClass({
    * @property {String} [options.label=false] - Label of the knob. Set to `false` to hide the element from the DOM.
    * @property {Number} [options.show_value=true] - Set to `false` to hide the {@link Value}.
    * @property {Number} [options.show_knob=true] - Set to `false` to hide the {@link Knob}.
-   * @property {String} [options.layout="default"] - Layout of the knob. Select from `horizontal`, `vertical` (default), `left` and `right`.
+   * @property {String} [options.layout="vertical"] - Layout of the knob. Select from `horizontal`, `vertical` (default), `left` and `right`.
    */
   Extends: Widget,
   _options: Object.assign(Object.create(Widget.prototype._options), {
