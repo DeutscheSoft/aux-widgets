@@ -57,7 +57,7 @@
 }
 
 ::selection {
-  color: var(--aux-active-color);
+  color: var(--aux-active-text);
   background: var(--aux-active-base);
 }
 
