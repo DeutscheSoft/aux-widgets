@@ -168,15 +168,12 @@ export const Meter = defineClass({
    * @property {Number} [options.base=false] - The base value of the meter. If set to <code>false</code>,
    *   the base will coincide with the minimum value <code>options.min</code>. The meter level is drawn
    *   starting from the base to the value.
-   * @property {Number} [options.label=0] - Value to be displayed on the label.
-   * @property {Function} [options.format_label=FORMAT("%.2f")] - Function for formatting the
+   * @property {Number} [options.value_label=0] - Value to be displayed on the label.
+   * @property {Function} [options.format_value=FORMAT("%.2f")] - Function for formatting the
    *   label.
    * @property {Boolean} [options.show_label=false] - If set to <code>true</code> a label is displayed.
    * @property {Number} [options.label=false] - The title of the Meter. Set to `false` to hide it.
    * @property {Boolean} [options.show_scale=true] - Set to <code>false</code> to hide the scale.
-   * @property {Boolean} [options.show_labels=true] - If <code>true</code>, display labels on the
-   *   scale.
-   *   scale labels. This is passed to Scale as option <code>labels</code>.
    * @property {Number} [options.value_label=0] - The value to be drawn in the value label.
    * @property {Boolean} [options.sync_value=true] - Synchronize the value on the bar with
    *   the value label using `options.format_value` function.
@@ -194,12 +191,9 @@ export const Meter = defineClass({
       value: 'number',
       value_label: 'number',
       base: 'number|boolean',
-      min: 'number',
-      max: 'number',
       label: 'string|boolean',
       sync_value: 'boolean',
       format_value: 'function',
-      show_labels: 'boolean',
       background: 'string|boolean',
       gradient: 'object|boolean',
     }
@@ -214,7 +208,6 @@ export const Meter = defineClass({
     sync_value: true,
     format_value: FORMAT('%.2f'),
     levels: [1, 5, 10], // array of steps where to draw labels
-    show_labels: true,
     background: false,
     gradient: false,
   },
