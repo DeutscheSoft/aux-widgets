@@ -648,9 +648,9 @@ export const Circular = defineClass({
   set: function (key, value) {
     var O = this.options;
     switch (key) {
-      case 'dot':
-      case 'marker':
-      case 'label':
+      case 'dots_defaults':
+      case 'markers_defaults':
+      case 'labels_defaults':
         value = Object.assign(O[key], value);
         break;
       case 'base':
