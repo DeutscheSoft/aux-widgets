@@ -187,8 +187,8 @@ function createLabel(value, position) {
   setContent(elem, O.labels(value));
 
   if (getBase(O) === value) addClass(elem, 'aux-base');
-  else if (O.max === value) addClass(elem, 'aux-max');
-  else if (O.min === value) addClass(elem, 'aux-min');
+  if (O.max === value) addClass(elem, 'aux-max');
+  if (O.min === value) addClass(elem, 'aux-min');
 
   return elem;
 }
