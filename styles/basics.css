@@ -32,7 +32,7 @@
 
   --aux-main-fontsize: 14px;
 
-  --aux-main-tinyfont: 8px;
+  --aux-main-tinyfont: 7px;
   --aux-main-smallfont: 11px;
   --aux-main-bigfont: 18px;
   --aux-main-hugefont: 22px;
@@ -62,12 +62,13 @@
   --aux-grid-labelpadding: 0 3px;
 
   --aux-knob-tiny: 40px;
-  --aux-knob-small: 56px;
+  --aux-knob-small: 64px;
   --aux-knob-medium: 96px;
   --aux-knob-large: 144px;
   --aux-knob-huge: 192px;
-  --aux-knob-bgmargintiny: 7px;
-  --aux-knob-bgmarginsmall: 8px;
+  --aux-knob-bgmargintiny: 6.5px;
+  --aux-knob-bgmarginsmall: 14px;
+  --aux-knob-bgmarginmedium: 22px;
   --aux-knob-bgmargin: 23px;
 
   --aux-levelmeter-statesize: 4px;
@@ -305,6 +306,14 @@
 .aux-knob.aux-preset-medium {
   width: var(--aux-knob-medium);
   height: var(--aux-knob-medium);
+}
+.aux-knob.aux-preset-medium::before {
+  width: calc(100% - var(--aux-knob-bgmarginmedium) * 2);
+  height: calc(100% - var(--aux-knob-bgmarginmedium) * 2);
+}
+.aux-knob.aux-preset-medium::after {
+  width: calc(100% - var(--aux-knob-bgmarginmedium) * 2 - 1px);
+  height: calc(100% - var(--aux-knob-bgmarginmedium) * 2 - 1px);
 }
 .aux-knob.aux-preset-large {
   width: var(--aux-knob-large);
@@ -836,9 +845,11 @@
 .aux-valueknob > .aux-value {
   z-index: 0;
 }
+/*
 .aux-valueknob.aux-vertical > .aux-knob {
   margin: var(--aux-valueknob-gridgap) 0;
 }
+*/
 .aux-valueknob.aux-horizontal > .aux-knob {
   margin: 0 var(--aux-valueknob-gridgap);
 }
