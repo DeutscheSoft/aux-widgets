@@ -1180,6 +1180,7 @@ body.aux-cursor-row-resize * {
 }
 .aux-progressbar.aux-horizontal > .aux-bar {
   min-width: 100px;
+  align-self: center;
 }
 .aux-progressbar.aux-vertical > .aux-bar {
   min-height: 100px;

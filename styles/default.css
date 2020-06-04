@@ -29,11 +29,11 @@
                          includes essentials.css */
 
 :root {
-  --aux-main-fontfamily: sans-serif;
-  --aux-main-fontsize: 14px;
-
-  --aux-main-tinyfont: 7px;
-  --aux-main-smallfont: 11px;
+  --aux-main-fontsize: 15px;
+  --aux-main-lineheight: 1.2em;
+  
+  --aux-main-tinyfont: 9px;
+  --aux-main-smallfont: 12px;
   --aux-main-bigfont: 18px;
 
   --aux-main-base: #e0e0e0;
@@ -56,6 +56,8 @@
   --aux-border-radius: 4px;
 }
 
+/* ######## GENERIC CSS ######## */
+
 ::selection {
   color: var(--aux-active-text);
   background: var(--aux-active-base);
@@ -64,6 +66,8 @@
 .aux-disabled {
   filter: grayscale(100%) contrast(50%);
 }
+
+/* ######## WIDGETS ######## */
 
 /* BUTTON */
 
@@ -121,10 +125,10 @@
   fill: var(--aux-main-text);
 }
 .aux-circular .aux-dots .aux-dot {
-  fill: var(--aux-main-text);
+  fill: var(--aux-widget-base);
 }
 .aux-circular .aux-markers .aux-marker {
-  fill: var(--aux-main-text);
+  fill: var(--aux-warn-base);
 }
 .aux-circular.aux-warn .aux-base {
   fill: var(--aux-warn-base);
@@ -367,7 +371,6 @@
 /* ROOT */
 
 .aux-root {
-  font-family: var(--aux-main-fontfamily);
   font-size: var(--aux-main-fontsize);
   background: var(--aux-main-base);
   color: var(--aux-main-text);

@@ -26,14 +26,17 @@
  */
 
 @import 'essentials.css'; /* technical dependency */
+@import 'fonts/Pragati.css';
 
 :root {
+  --aux-main-fontfamily: Pragati,sans-serif;
   --aux-main-margin: 2px;
 
-  --aux-main-fontsize: 14px;
+  --aux-main-fontsize: 15px;
+  --aux-main-lineheight: 1.2em;
 
-  --aux-main-tinyfont: 7px;
-  --aux-main-smallfont: 11px;
+  --aux-main-tinyfont: 9px;
+  --aux-main-smallfont: 12px;
   --aux-main-bigfont: 18px;
   --aux-main-hugefont: 22px;
 
@@ -94,7 +97,8 @@
   --aux-scale-minheight: 20px;
   --aux-scale-dotsize: 3px;
   --aux-scale-markersize: 5px;
-  --aux-scale-labelmargin: 8px;
+  --aux-scale-labelmarginvertical: 8px;
+  --aux-scale-labelmarginhorizontal: 6px;
   --aux-scale-barsize: 5px;
   --aux-scale-pointersize: 5px;
 
@@ -110,10 +114,20 @@
   --aux-valuebutton-gap: 4px;
   --aux-valuebutton-paddingvertical: 0px;
   --aux-valuebutton-scaleheight: 16px;
-  --aux-valuebutton-scalemargin: 6px;
+  --aux-valuebutton-scalemargin: 2px;
 
   --aux-valueknob-gridgap: 4px;
 }
+
+/* ######## GENERIC CSS ######## */
+
+.aux-widget {
+  margin: var(--aux-main-margin);
+  font-family: var(--aux-main-fontfamily);
+  line-height: var(--aux-main-lineheight);
+}
+
+/* ######## WIDGETS ######## */
 
 /* BUTTON */
 
@@ -644,10 +658,10 @@
 /* PAGER */
 
 .aux-pager > .aux-pages {
-  margin: 0 !important;
+  margin: 0;
 }
 .aux-pager > .aux-pages > .aux-page {
-  margin: 0 !important;
+  margin: 0;
 }
 
 /* ROOT */
@@ -691,16 +705,16 @@
   bottom: 0;
 }
 .aux-scale.aux-top > .aux-label {
-  top: var(--aux-scale-labelmargin);
+  top: var(--aux-scale-labelmarginhorizontal);
 }
 .aux-scale.aux-left > .aux-label {
-  left: var(--aux-scale-labelmargin);
+  left: var(--aux-scale-labelmarginvertical);
 }
 .aux-scale.aux-right > .aux-label {
-  right: var(--aux-scale-labelmargin);
+  right: var(--aux-scale-labelmarginvertical);
 }
 .aux-scale.aux-bottom > .aux-label {
-  bottom: var(--aux-scale-labelmargin);
+  bottom: var(--aux-scale-labelmarginhorizontal);
 }
 /*
  * enable to keep labels inside the scales container
@@ -852,10 +866,4 @@
 */
 .aux-valueknob.aux-horizontal > .aux-knob {
   margin: 0 var(--aux-valueknob-gridgap);
-}
-
-/* WIDGET */
-
-.aux-widget {
-  margin: var(--aux-main-margin);
 }
