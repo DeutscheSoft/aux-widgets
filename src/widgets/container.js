@@ -76,6 +76,9 @@ export const Container = defineClass({
    *   transition/animation of this container. If this option is set to -1, the transition duration
    *   will be determined by the computed style, which can be rather
    *   expensive. Setting this option explicitly can therefore be an optimization.
+   * @property {boolean} [options.render_while_hiding=false] - If false, child
+   *   widgets stops rendering while the hiding animation of this container is
+   *   running.
    */
   Extends: Widget,
   _options: Object.assign(Object.create(Widget.prototype._options), {
@@ -84,17 +87,19 @@ export const Container = defineClass({
     hiding_duration: 'number',
     showing_duration: 'number',
     children: 'array',
+    render_while_hiding: 'boolean',
   }),
   options: {
     children: [],
     hiding_duration: 0,
     showing_duration: 0,
+    render_while_hiding: false,
   },
   static_events: {
     set_visible: function (val) {
-      if (val === 'showing') {
-        if (!this.isDrawn()) this.enableDraw();
-      }
+      if (val === 'showing') this.enableDraw();
+      if (val === 'hiding' && !this.options.render_while_hiding)
+        this.disableDrawChildren();
     },
   },
   initialize: function (options) {

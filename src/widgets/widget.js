@@ -280,9 +280,8 @@ export const Widget = defineClass({
       }
     },
     set_visible: function (val) {
-      if (val === true) {
-        if (!this.isDrawn()) this.enableDraw();
-      }
+      if (val === true) this.enableDraw();
+      if (val === false) this.disableDrawChildren();
     },
   },
   constructor: function (options) {
