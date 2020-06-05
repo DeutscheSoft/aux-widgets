@@ -451,6 +451,8 @@ export function subcomponentFromWidget(
       super();
       const options = this.auxOptions(Widget);
 
+      options.class = this.getAttribute('class');
+
       this.auxWidget = new Widget(options);
       this.auxParent = null;
     }
