@@ -22,6 +22,7 @@ import { sprintf, FORMAT } from './utils/sprintf.js';
 import { HTML } from './utils/dom.js';
 import { isNativeEvent } from './implements/base.js';
 import { subscribeOptionsAttributes } from './options.js';
+import { SubscriberMap } from './utils/subscriber_map.js';
 
 function attributeForWidget(Widget) {
   const attributes = [];
@@ -342,11 +343,35 @@ function createComponent(base) {
   };
 }
 
+const whenDefinedSubscribers = new SubscriberMap();
+
+function subscribeWhenDefined(tagName, callback) {
+  tagName = tagName.toLowerCase();
+
+  if (!whenDefinedSubscribers.has(tagName)) {
+    customElements.whenDefined(tagName).then(() => {
+      whenDefinedSubscribers.call(tagName);
+      whenDefinedSubscribers.removeAll(tagName);
+    });
+  }
+
+  return whenDefinedSubscribers.subscribe(tagName, callback);
+}
+
 function findParentNode(node) {
   do {
-    if (node.isAuxWidget) {
+    if (node.isAuxWidget)
       return node;
-    }
+
+    // if the parent looks like a WebComponent which has not been upgraded, we
+    // speculatively return it.
+    const tagName = node.tagName;
+
+    if (typeof tagName !== 'string') return null;
+
+    if (tagName.includes('-') && !customElements.get(tagName.toLowerCase()))
+      return node;
+
     node = node.parentNode;
   } while (node);
 
@@ -398,24 +423,47 @@ export function componentFromWidget(Widget, base) {
       options.element = this;
 
       this.auxWidget = new Widget(options);
+      this._findParentSubscription = null;
+    }
+
+    _attachToParent() {
+      const parentNode = findParentNode(this.parentNode);
+
+      if (parentNode === null) {
+        this.auxWidget.setParent(null);
+      } else {
+        if (parentNode.isAuxWidget) {
+          const parent = parentNode.auxWidget;
+
+          if (parent) {
+            parent.addChild(this.auxWidget);
+          }
+        } else {
+          this._findParentSubscription = subscribeWhenDefined(parentNode.tagName, () => {
+            this._findParentSubscription = null;
+            this._attachToParent();
+          });
+        }
+      }
     }
 
     connectedCallback() {
       if (!this.isConnected) return;
       super.connectedCallback();
-      const widget = this.auxWidget;
-      const parent = findParentWidget(this.parentNode);
-      if (parent) {
-        parent.addChild(widget);
-      } else {
-        widget.setParent(null);
-      }
+      this._attachToParent();
     }
 
     disconnectedCallback() {
       super.disconnectedCallback();
       this.auxWidget.setParent(void 0);
       this.auxWidget.disableDraw();
+
+      const sub = this._findParentSubscription;
+
+      if (sub !== null) {
+        sub();
+        this._findParentSubscription = null;
+      }
     }
   };
 
