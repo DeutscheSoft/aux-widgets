@@ -245,6 +245,7 @@ function createComponent(base) {
     }
 
     connectedCallback() {
+      if (!this.isConnected) return;
       const options = this.getAttribute('options');
 
       if (options) {
@@ -400,6 +401,7 @@ export function componentFromWidget(Widget, base) {
     }
 
     connectedCallback() {
+      if (!this.isConnected) return;
       super.connectedCallback();
       const widget = this.auxWidget;
       const parent = findParentWidget(this.parentNode);

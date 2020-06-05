@@ -69,6 +69,7 @@ export class OptionsComponent extends HTMLElement {
   }
 
   connectedCallback() {
+    if (!this.isConnected) return;
     this.style.display = 'none';
 
     const name = this.getAttribute('name');
