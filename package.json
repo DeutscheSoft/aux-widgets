@@ -1,16 +1,14 @@
 {
-  "name": "@deutschesoft/a.ux",
+  "name": "@deutschesoft/aux-widgets",
   "version": "1.0.12",
   "description": "AUX Audio Widget Library",
   "main": "src/index.js",
   "module": "src/index.js",
+  "browser": "src/index.js",
   "type": "module",
   "directories": {
     "doc": "doc",
     "test": "tests"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
