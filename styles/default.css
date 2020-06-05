@@ -29,13 +29,6 @@
                          includes essentials.css */
 
 :root {
-  --aux-main-fontsize: 15px;
-  --aux-main-lineheight: 1.2em;
-  
-  --aux-main-tinyfont: 9px;
-  --aux-main-smallfont: 12px;
-  --aux-main-bigfont: 18px;
-
   --aux-main-base: #e0e0e0;
   --aux-main-text: #212424;
 
@@ -107,7 +100,6 @@
 .aux-chart .aux-title {
   fill: var(--aux-contrast-text);
   opacity: 0.5;
-  font-size: var(--aux-main-bigfont);
 }
 
 /* CIRCULAR */
@@ -143,7 +135,6 @@
 /* CHARTHANDLE */
 
 .aux-charthandle {
-  font-size: var(--aux-main-smallfont);
   fill: var(--aux-contrast-text);
 }
 .aux-charthandle > .aux-handle {
@@ -272,7 +263,6 @@
 
 .aux-gridlabel {
   fill: var(--aux-contrast-text);
-  font-size: var(--aux-main-tinyfont);
   opacity: 0.5;
 }
 .aux-gridline {
@@ -282,9 +272,6 @@
 
 /* KNOB */
 
-.aux-knob {
-  font-size: var(--aux-main-tinyfont);
-}
 .aux-knob::before {
   background: linear-gradient(
     to bottom,
@@ -327,7 +314,7 @@
   font-weight: 200;
 }
 .aux-virtualtreeentry > .aux-icon {
-  font-size: var(--aux-main-bigfont);
+  font-size: var(--aux-main-bigfontsize);
 }
 .aux-virtualtreeentry.aux-collapsable > .aux-label {
   font-weight: bold;
@@ -371,16 +358,12 @@
 /* ROOT */
 
 .aux-root {
-  font-size: var(--aux-main-fontsize);
   background: var(--aux-main-base);
   color: var(--aux-main-text);
 }
 
 /* SCALE */
 
-.aux-scale {
-  font-size: var(--aux-main-tinyfont);
-}
 .aux-scale > .aux-dot {
   background: var(--aux-main-text);
   opacity: 0.25;
@@ -435,7 +418,6 @@
   background: var(--aux-widget-base);
   color: var(--aux-widget-text);
   border-radius: var(--aux-border-radius);
-  font-size: var(--aux-main-bigfont);
 }
 .aux-value.aux-active > .aux-input {
   background: var(--aux-contrast-base);

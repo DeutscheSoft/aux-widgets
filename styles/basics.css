@@ -26,19 +26,25 @@
  */
 
 @import 'essentials.css'; /* technical dependency */
+@import 'fonts/Oswald.css';
 @import 'fonts/Pragati.css';
 
 :root {
-  --aux-main-fontfamily: Pragati,sans-serif;
-  --aux-main-margin: 2px;
-
-  --aux-main-fontsize: 15px;
+  --aux-main-fontfamily: Pragati;
+  --aux-main-fontsize: 14px;
+  --aux-main-fontweight: 300;
   --aux-main-lineheight: 1.2em;
-
-  --aux-main-tinyfont: 9px;
-  --aux-main-smallfont: 12px;
-  --aux-main-bigfont: 18px;
-  --aux-main-hugefont: 22px;
+  
+  --aux-main-tinyfontsize: 8px;
+  --aux-main-smallfontsize: 11px;
+  --aux-main-bigfontsize: 17px;
+  
+  --aux-scale-fontfamily: Oswald;
+  --aux-scale-fontsize: var(--aux-main-tinyfontsize);
+  --aux-scale-fontweight: normal;
+  --aux-scale-lineheight: 1em;
+  
+  --aux-main-margin: 2px;
 
   --aux-clickable-size: 40px;
 
@@ -114,7 +120,7 @@
   --aux-valuebutton-gap: 4px;
   --aux-valuebutton-paddingvertical: 0px;
   --aux-valuebutton-scaleheight: 16px;
-  --aux-valuebutton-scalemargin: 2px;
+  --aux-valuebutton-scalemargin: 6px;
 
   --aux-valueknob-gridgap: 4px;
 }
@@ -124,6 +130,8 @@
 .aux-widget {
   margin: var(--aux-main-margin);
   font-family: var(--aux-main-fontfamily);
+  font-size: var(--aux-main-fontsize);
+  font-weight: var(--aux-main-fontweight);
   line-height: var(--aux-main-lineheight);
 }
 
@@ -147,10 +155,26 @@
 
 .aux-chart .aux-title {
   margin: var(--aux-chart-titlemargin);
+  font-size: var(--aux-main-bigfontsize);
+}
+
+/* CIRCULAR (out of order because .aux-charthandle.aux-circular overrides) */
+
+.aux-circular {
+  font-family: var(--aux-scale-fontfamily);
+  font-size: var(--aux-scale-fontsize);
+  font-weight: var(--aux-scale-fontweight);
+  line-height: var(--aux-scale-lineheight);
 }
 
 /* CHARTHANDLE */
 
+.aux-charthandle {
+  font-family: var(--aux-main-fontfamily);
+  font-size: var(--aux-main-smallfontsize);
+  font-weight: var(--aux-main-fontweight);
+  line-height: var(--aux-main-lineheight);
+}
 .aux-charthandle:hover {
   cursor: pointer;
 }
@@ -257,6 +281,10 @@
 
 .aux-gridlabel {
   padding: var(--aux-grid-labelpadding);
+  font-family: var(--aux-scale-fontfamily);
+  font-size: var(--aux-scale-fontsize);
+  font-weight: var(--aux-scale-fontweight);
+  line-height: var(--aux-scale-lineheight);
 }
 
 /* ICON */
@@ -511,7 +539,7 @@
   margin: var(--aux-multimeter-gridgap) 0;
 }
 .aux-multimeter .aux-meter > .aux-label {
-  font-size: var(--aux-main-smallfont);
+  font-size: var(--aux-main-smallfontsize);
 }
 .aux-multimeter.aux-count-5 .aux-meter > .aux-label,
 .aux-multimeter.aux-count-6 .aux-meter > .aux-label,
@@ -519,7 +547,10 @@
 .aux-multimeter.aux-count-8 .aux-meter > .aux-label,
 .aux-multimeter.aux-count-9 .aux-meter > .aux-label,
 .aux-multimeter.aux-count-10 .aux-meter > .aux-label {
-  font-size: var(--aux-main-tinyfont);
+  font-family: var(--aux-scale-fontfamily);
+  font-size: var(--aux-scale-fontsize);
+  font-weight: var(--aux-scale-fontweight);
+  line-height: var(--aux-scale-lineheight);
 }
 .aux-multimeter.aux-horizontal .aux-meter > .aux-label {
   width: var(--aux-multimeter-labelwidth);
@@ -704,6 +735,12 @@
 .aux-scale.aux-bottom > .aux-dot {
   bottom: 0;
 }
+.aux-scale > .aux-label {
+  font-family: var(--aux-scale-fontfamily);
+  font-size: var(--aux-scale-fontsize);
+  font-weight: var(--aux-scale-fontweight);
+  line-height: var(--aux-scale-lineheight);
+}
 .aux-scale.aux-top > .aux-label {
   top: var(--aux-scale-labelmarginhorizontal);
 }
@@ -800,6 +837,10 @@
 }
 .aux-value > .aux-input {
   -webkit-appearance: none;
+  font-family: var(--aux-main-fontfamily);
+  font-size: var(--aux-main-bigfontsize);
+  font-weight: var(--aux-main-fontweight);
+  line-height: var(--aux-main-lineheight);
 }
 
 /* VALUEBUTTON */
@@ -838,7 +879,7 @@
   border-radius: 0;
 }
 .aux-valuebutton > .aux-scale {
-  font-size: var(--aux-main-tinyfont);
+  font-size: var(--aux-main-tinyfontsize);
   min-height: var(--aux-valuebutton-scaleheight);
 }
 .aux-valuebutton > .aux-scale .aux-label {
