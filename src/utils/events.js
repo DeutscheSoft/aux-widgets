@@ -138,3 +138,16 @@ export function subscribeDOMEvent(node, event_name, cb) {
     node.removeEventListener(event_name, callback);
   };
 }
+
+export function subscribeDOMEventOnce(node, event_name, cb) {
+  const callback = (...args) => {
+    node.addEventListener(event_name, callback);
+    return cb(...args);
+  };
+
+  node.addEventListener(event_name, callback);
+
+  return () => {
+    node.removeEventListener(event_name, callback);
+  };
+}
