@@ -1,0 +1,99 @@
+<html>
+  <head>
+    <script type="module">
+      const tests = [
+        'loading_order.html',
+      ];
+
+      function _log(msg) {
+        const span = document.createElement('span');
+        const text = document.createTextNode(msg);
+        const log = document.querySelector('#log');
+
+        span.appendChild(text);
+        log.appendChild(span);
+
+        return span;
+      }
+
+      function log(msg) {
+        return _log(msg + '\n');
+      }
+
+      function error(msg) {
+        const span = log(msg);
+        span.className = 'error';
+        return span;
+      }
+
+      function warn(msg) {
+        const span = log(msg);
+        span.className = 'warn';
+        return span;
+      }
+
+      function runTest(url, timeout) {
+        if (!timeout) timeout = 2000;
+
+        const iframe = document.querySelector('iframe');
+
+        return new Promise((resolve, reject) => {
+          const onmessage = (ev) => {
+            const data = ev.data;
+            window.removeEventListener('message', onmessage);
+
+            if (data.ok) {
+              resolve(data.count);
+            } else {
+              reject(data.error);
+            }
+          };
+
+          window.addEventListener('message', onmessage);
+          iframe.src = url;
+        });
+      }
+
+      window.addEventListener('load', async () => {
+        log('Running ' + tests.length + ' test files.');
+
+        let count = 0;
+
+        for (let i = 0; i < tests.length; i++) {
+          const url = tests[i];
+          const t1 = performance.now();
+          try {
+            _log('Running test ' + url + ' ... ');
+            const n = await runTest(url);
+            const time = performance.now() - t1;
+            log(['OK ( ', n, ' tests, ', time.toFixed(0), 'ms )'].join(''));
+            count += n;
+          } catch (err) {
+            error('Failed: ' + err.toString());
+          }
+        }
+
+        log('Done ' + count + ' tests.');
+      });
+    </script>
+    <style>
+      iframe {
+        visibility: hidden;
+        position: fixed;
+      }
+      #log {
+        width: 100%;
+        font-family: monospace;
+        white-space: pre;
+      }
+
+      #log > .error {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="log"></div>
+    <iframe loading="eager"></iframe>
+  </body>
+</html>

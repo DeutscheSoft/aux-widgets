@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <script type=module src="../../src/index.js"></script>
+    <link rel="stylesheet" id=stylesheet href="../../styles/default.css" />
+    <script type=module>
+      import { define, assertEqual } from './testing.js';
+
+      define(() => {
+        const faders = document.querySelectorAll('aux-fader');
+        const levelmeter = document.querySelector('aux-levelmeter');
+
+        // check that parent-child relationships are correct
+        assertEqual(faders[0].auxWidget.parent, null);
+        assertEqual(levelmeter.auxWidget.parent, faders[0].auxWidget);
+        assertEqual(faders[1].auxWidget.parent, levelmeter.auxWidget);
+      });
+    </script>
+  </head>
+  <body>
+    <aux-fader>
+      <aux-levelmeter>
+        <aux-fader>
+        </aux-fader>
+      </aux-levelmeter>
+    </aux-fader>
+  </body>
+</html>
