@@ -36,6 +36,14 @@ export class SubscriberMap {
     this.subscribers.set(key, addSubscriber(subscribers, subscriber));
   }
 
+  has(key) {
+    return this.subscribers.has(key);
+  }
+
+  removeAll(key) {
+    this.subscribers.delete(key);
+  }
+
   remove(key, subscriber) {
     const subscribers = removeSubscriber(this.subscribers.get(key), subscriber);
 
