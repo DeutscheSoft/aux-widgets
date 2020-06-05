@@ -157,11 +157,12 @@ export const Container = defineClass({
    *
    */
   hide: function () {
-    if (!this.hidden()) this.update('visible', 'hiding');
+    if (this.hidden()) return;
+    this.update('visible', 'hiding');
   },
   forceHide: function () {
-    const E = this.element;
     this.set('visible', false);
+    const E = this.element;
     addClass(E, 'aux-hide');
     removeClass(E, 'aux-show', 'aux-hiding', 'aux-showing');
   },

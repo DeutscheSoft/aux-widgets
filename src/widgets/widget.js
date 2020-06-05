@@ -727,7 +727,8 @@ export const Widget = defineClass({
    * @method Widget#hide
    */
   hide: function () {
-    if (!this.hidden()) this.set('visible', false);
+    if (this.hidden()) return;
+    this.set('visible', false);
   },
   /**
    * Hide the widget immediately by applying the class <code>aux-hide</code>.
@@ -736,8 +737,8 @@ export const Widget = defineClass({
    * @method Widget#forceHide
    */
   forceHide: function () {
-    const E = this.element;
     this.set('visible', false);
+    const E = this.element;
     removeClass(E, 'aux-show');
     addClass(E, 'aux-hide');
   },
