@@ -360,8 +360,7 @@ function subscribeWhenDefined(tagName, callback) {
 
 function findParentNode(node) {
   do {
-    if (node.isAuxWidget)
-      return node;
+    if (node.isAuxWidget) return node;
 
     // if the parent looks like a WebComponent which has not been upgraded, we
     // speculatively return it.
@@ -439,10 +438,13 @@ export function componentFromWidget(Widget, base) {
             parent.addChild(this.auxWidget);
           }
         } else {
-          this._findParentSubscription = subscribeWhenDefined(parentNode.tagName, () => {
-            this._findParentSubscription = null;
-            this._attachToParent();
-          });
+          this._findParentSubscription = subscribeWhenDefined(
+            parentNode.tagName,
+            () => {
+              this._findParentSubscription = null;
+              this._attachToParent();
+            }
+          );
         }
       }
     }

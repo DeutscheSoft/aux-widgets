@@ -231,8 +231,8 @@ defineChildWidget(ValueButton, 'scale', {
   map_options: {
     value: 'bar',
   },
-  blacklist_options: [ 'layout' ],
+  blacklist_options: ['layout'],
   default_options: {
-    layout: 'top'
+    layout: 'top',
   },
 });

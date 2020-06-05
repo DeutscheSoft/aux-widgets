@@ -207,7 +207,7 @@ export const Value = defineClass({
 
     this.__editing = false;
   },
-  
+
   getEventTarget: function () {
     return this._input;
   },
