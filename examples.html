@@ -68,6 +68,7 @@
           scripts.forEach((script) => {
             eval(script.innerText);
           });
+          window.dispatchEvent(new UIEvent('resize'));
         };
       }
 
