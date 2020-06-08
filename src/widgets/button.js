@@ -82,6 +82,7 @@ function pressEnd(e) {
    * @param {Event} event - Either the MouseEvent or the TouchEvent.
    */
   this.emit('press_end', e);
+  this.emit('click', e);
 }
 function pressCancel(e) {
   let O = this.options;
