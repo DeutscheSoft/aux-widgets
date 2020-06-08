@@ -402,7 +402,7 @@ export const Widget = defineClass({
 
   scheduleResize: function () {
     if (this.__resize === null) return;
-    S.add(this.__resize, 0);
+    S.addNext(this.__resize, 0);
   },
 
   resize: function () {
