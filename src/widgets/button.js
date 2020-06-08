@@ -30,6 +30,8 @@ function resetDelayTo() {
   this.removeClass('aux-delayed');
 }
 
+let _touchmoveHandler;
+
 function pressStart(e) {
   let O = this.options;
   this.__time_stamp = e.timeStamp;
@@ -134,32 +136,46 @@ function touchend(e) {
   if (!isCurrentTouch.call(this, e)) return;
   this.__touch_id = false;
   e.preventDefault();
+  
+  this.off('touchend', touchend);
+  this.off('touchcancel', touchcancel);
+  document.removeEventListener("touchmove", _touchmoveHandler);
+  
+  let E = document.elementFromPoint(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+    if (this.element !== E)
+      return;
+
   pressEnd.call(this, e);
-
-  this.off('touchend', touchend);
-  this.off('touchcancel', touchleave);
-  this.off('touchleave', touchleave);
-}
-function touchleave(e) {
-  if (!isCurrentTouch.call(this, e)) return;
-  this.__touch_id = false;
-  e.preventDefault();
-  pressCancel.call(this, e);
-
-  this.off('touchend', touchend);
-  this.off('touchcancel', touchleave);
-  this.off('touchleave', touchleave);
 }
 function touchstart(e) {
   if (this.__touch_id !== false) return;
   this.__touch_id = e.targetTouches[0].identifier;
-  pressStart.call(this, e);
-  this.on('touchend', touchend);
-  this.on('touchcancel', touchleave);
-  this.on('touchleave', touchleave);
   e.preventDefault();
   e.stopPropagation();
+  
+  this.on('touchend', touchend);
+  this.on('touchcancel', touchcancel);
+  _touchmoveHandler = touchmove.bind(this)
+  document.addEventListener("touchmove", _touchmoveHandler);
+  
+  pressStart.call(this, e);
   return false;
+}
+function touchcancel(e) {
+  if (!isCurrentTouch.call(this, e)) return;
+  this.__touch_id = false;
+  
+  this.off('touchend', touchend);
+  this.off('touchcancel', touchcancel);
+  document.removeEventListener("touchmove", _touchmoveHandler);
+
+  pressCancel.call(this, e);
+}
+function touchmove(e) {
+  let E = document.elementFromPoint(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+  if (this.element !== E) {
+    touchcancel.call(this, e);
+  }
 }
 function contextmenu(e) {
   e.preventDefault();
