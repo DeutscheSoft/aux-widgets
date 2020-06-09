@@ -143,12 +143,12 @@ function submitCallback(e) {
  * @property {Null|Integer} [options.maxlength=null] - Maxlength attribute of the input element. `null` to unset.
  * @property {Function} [options.set=function (val) { return parseFloat(val || 0); }] -
  *   A function which is called to parse user input.
- * @property {boolean} [options.auto_select=false] - Select the entire text if clicked .
- * @property {boolean} [options.readonly=false] - Sets the readonly attribute.
- * @property {string} [options.placeholder=""] - Sets the placeholder attribute.
- * @property {string} [options.type="text"] - Sets the type attribute. Type can be either `text` or `password`.
- * @property {string} [options.editmode="onenter"] - Sets the event to trigger the userset event. Can be one out of `onenter` or `immediate`.
- *
+ * @property {Boolean} [options.auto_select=false] - Select the entire text if clicked .
+ * @property {Boolean} [options.readonly=false] - Sets the readonly attribute.
+ * @property {String} [options.placeholder=""] - Sets the placeholder attribute.
+ * @property {String} [options.type="text"] - Sets the type attribute. Type can be either `text` or `password`.
+ * @property {String} [options.editmode="onenter"] - Sets the event to trigger the userset event. Can be one out of `onenter` or `immediate`.
+ * @property {String|Boolean} [options.autocomplete=false} - Set a unique identifier to enable browsers internal auto completion.
  */
 export const Value = defineClass({
   Extends: Widget,
@@ -163,6 +163,7 @@ export const Value = defineClass({
     placeholder: 'string',
     type: 'string',
     editmode: 'string',
+    autocomplete: 'string|boolean',
   }),
   options: {
     value: 0,
@@ -183,6 +184,7 @@ export const Value = defineClass({
     placeholder: '',
     type: 'text',
     editmode: 'onenter',
+    autocomplete: false,
   },
   initialize: function (options) {
     if (!options.element) options.element = element('div');
@@ -264,6 +266,17 @@ export const Value = defineClass({
     if (I.type) {
       I.type = false;
       E.setAttribute('type', O.type);
+    }
+    
+    if (I.autocomplete) {
+      I.autocomplete = false;
+      if (O.autocomplete) {
+        E.setAttribute('name', O.autocomplete);
+        E.setAttribute('autocomplete', 'on');
+      } else {
+        E.removeAttribute('name');
+        E.removeAttribute('autocomplete');
+      }
     }
   },
   destroy: function () {
