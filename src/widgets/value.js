@@ -36,7 +36,6 @@ function valueClicked() {
   if (this.__editing) return false;
   addClass(this.element, 'aux-active');
   this._input.setAttribute('value', O.value);
-  this.__editing = true;
   this._input.focus();
   if (O.auto_select) this._input.setSelectionRange(0, this._input.value.length);
   /**
@@ -119,6 +118,7 @@ function valueDone() {
   this.triggerDraw();
 }
 function valueFocus() {
+  this.__editing = true;
   this.startInteracting();
 }
 
