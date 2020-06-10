@@ -38,6 +38,7 @@ import { typecheckFunction } from '../../utils/typecheck.js';
 
 import { GroupData } from './group.js';
 import { callContinuationIf } from './helpers.js';
+import { error } from '../utils/log.js';
 
 function intervalUnion(a, b) {
   if (a === null) return b;
@@ -583,7 +584,7 @@ export class VirtualTreeDataView extends Events {
         const index = this.getSuperGroup(child).index;
 
         if (this.list[index] !== child) {
-          console.error(
+          error(
             'Found group at position %d. Found %o vs. %o.\n',
             index,
             child.label,
@@ -599,7 +600,7 @@ export class VirtualTreeDataView extends Events {
         const distance = super_group.childDistance(index);
 
         if (this.list[super_group.index + distance] !== child) {
-          console.error(
+          error(
             'Found group at position %d. Found %o vs. %o.\n',
             index,
             child.label,
