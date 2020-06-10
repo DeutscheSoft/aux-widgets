@@ -17,14 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass, defineChildElement } from './../../widget_helpers.js';
-import { defineChildWidget } from './../../child_widget.js';
-import {
-  innerWidth,
-  innerHeight,
-  addClass,
-  removeClass,
-} from './../../utils/dom.js';
+import { defineClass } from './../../widget_helpers.js';
+import { addClass } from './../../utils/dom.js';
 
 import { Container } from './../../widgets/container.js';
 

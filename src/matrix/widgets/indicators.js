@@ -18,7 +18,7 @@
  */
 
 import { defineClass, defineChildElement } from './../../widget_helpers.js';
-import { scrollbarSize, addClass, removeClass } from './../../utils/dom.js';
+import { scrollbarSize, addClass } from './../../utils/dom.js';
 import { sprintf } from '../../index.js';
 import { Subscriptions } from '../../utils/subscriptions.js';
 import { Timer } from '../../utils/timers.js';
@@ -28,7 +28,7 @@ import { Container } from './../../widgets/container.js';
 import { Indicator } from './indicator.js';
 import { resizeArrayMod } from '../models.js';
 
-const SCROLLBAR_SIZE = scrollbarSize();
+scrollbarSize();
 
 function onIndicatorClicked() {
   const indicators = this.parent;
@@ -112,7 +112,9 @@ export const Indicators = defineClass({
         if (this._scroll_timer.active) {
           this._scroll_event_suppressed = true;
         } else {
+          // jshint -W123
           const element = this.element;
+          // jshint +W123
           this.emit('scrollChanged', element.scrollTop, element.scrollLeft);
         }
       })

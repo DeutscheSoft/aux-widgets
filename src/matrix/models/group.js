@@ -221,7 +221,7 @@ export class GroupData extends TreeNodeData {
 
     return () => {
       subs = unsubscribeSubscriptions(subs);
-      child_subscriptions.forEach((subs) => unsubscribeSubscriptions(subs));
+      child_subscriptions.forEach((sub) => unsubscribeSubscriptions(sub));
       child_subscriptions.clear();
     };
   }

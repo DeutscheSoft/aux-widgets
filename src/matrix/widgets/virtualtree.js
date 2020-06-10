@@ -18,14 +18,7 @@
  */
 
 import { defineClass, defineChildElement } from './../../widget_helpers.js';
-import {
-  innerWidth,
-  innerHeight,
-  scrollbarSize,
-  addClass,
-  removeClass,
-} from './../../utils/dom.js';
-import { error } from './../../utils/log.js';
+import { scrollbarSize } from './../../utils/dom.js';
 import { sprintf } from '../../index.js';
 import { Subscriptions } from '../../utils/subscriptions.js';
 import { subscribeDOMEvent } from '../../utils/events.js';
@@ -35,7 +28,7 @@ import { VirtualTreeEntry } from './virtualtreeentry.js';
 import { Timer } from '../../utils/timers.js';
 import { resizeArrayMod } from '../models.js';
 
-const SCROLLBAR_SIZE = scrollbarSize();
+scrollbarSize();
 
 function collapse(state) {
   const element = this.data;
@@ -121,7 +114,9 @@ function subscribeAll() {
   );
   subs.add(
     virtualtreeview.subscribeElements((index, element, treePosition) => {
+      // jshint -W123
       const virtualtreeview = this.options.virtualtreeview;
+      // jshint +W123
       const entry = this.entries[index % this.entries.length];
 
       entry.updateData(virtualtreeview, index, element, treePosition);

@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass, defineChildElement } from './../../widget_helpers.js';
+import { defineClass } from './../../widget_helpers.js';
 import { Widget } from './../../widgets/widget.js';
 
 /**

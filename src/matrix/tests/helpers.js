@@ -44,7 +44,9 @@ export function test(name, cb) {
     err = e;
   }
 
+  /* jshint -W117 */
   console.log(' - %s .. %s (%d checks)', name, err ? 'FAIL' : 'OK', ok);
 
   if (err) console.error(err);
+  /* jshint +W117 */
 }

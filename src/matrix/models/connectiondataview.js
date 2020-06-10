@@ -293,7 +293,9 @@ export class ConnectionDataView extends Events {
     const filter = virtualtreeview.filterFunction;
     const subscribe = (group) => {
       return group.forEachAsync((node) => {
+        // jshint -W123
         return callContinuationIf(node, filter, (node) => {
+          // jshint +W123
           dst.add(node);
 
           if (node instanceof GroupData) {

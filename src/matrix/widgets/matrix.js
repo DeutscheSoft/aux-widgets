@@ -19,19 +19,7 @@
 
 import { defineClass } from './../../widget_helpers.js';
 import { defineChildWidget } from './../../child_widget.js';
-import {
-  innerWidth,
-  innerHeight,
-  outerWidth,
-  outerHeight,
-  addClass,
-  removeClass,
-} from './../../utils/dom.js';
-import {
-  initSubscriptions,
-  addSubscription,
-  unsubscribeSubscriptions,
-} from '../../utils/subscriptions.js';
+import { innerWidth, outerWidth, addClass } from './../../utils/dom.js';
 
 import { Indicators } from './indicators.js';
 import { Indicator } from './indicator.js';

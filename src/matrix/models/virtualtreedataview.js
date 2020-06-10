@@ -298,8 +298,10 @@ export class VirtualTreeDataView extends Events {
     const group = super_group.group;
 
     const sub = group.forEachAsync((node) => {
+      // jshint -W123
       return this._filter(node, (node) => {
         let sub = initSubscriptions();
+        // jshint +W123
 
         node = super_group.createChildNode(node);
 
@@ -376,7 +378,9 @@ export class VirtualTreeDataView extends Events {
   _filterCollapsed(node, continuation) {
     return callContinuationIf(
       node,
+      // jshint -W123
       (node, callback) => {
+        // jshint +W123
         return this.subscribeCollapsed(node.parent, (is_collapsed) =>
           callback(!is_collapsed)
         );
@@ -386,7 +390,9 @@ export class VirtualTreeDataView extends Events {
   }
 
   _filter(node, continuation) {
+    // jshint -W123
     return this._filterCollapsed(node, (node) => {
+      // jshint +W123
       return callContinuationIf(node, this.filterFunction, continuation);
     });
   }
