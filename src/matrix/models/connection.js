@@ -23,7 +23,7 @@
 
 import { MatrixDatum } from './matrixdatum.js';
 import { TreeNodeData } from './treenode.js';
-import { typecheckInstance } from '../../utils/typecheck.js';
+import { typecheckInstance, typecheckString } from '../../utils/typecheck.js';
 
 /**
  * An object representing a connection between two ports.
