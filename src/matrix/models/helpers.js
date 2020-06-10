@@ -23,7 +23,6 @@
 
 import {
   initSubscriptions,
-  addSubscription,
   unsubscribeSubscriptions,
 } from '../../utils/subscriptions.js';
 

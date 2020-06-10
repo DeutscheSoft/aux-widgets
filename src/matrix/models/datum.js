@@ -32,9 +32,10 @@ export class Datum extends Events {
     this.properties = {};
 
     if (o) {
-      for (let name in o) {
-        this.set(name, o[name]);
-      }
+      for (let name in o)
+        if (o.hasOwnProperty(name)) {
+          this.set(name, o[name]);
+        }
     }
   }
 
