@@ -26,6 +26,7 @@ import {
   initSubscriptions,
   addSubscription,
   unsubscribeSubscriptions,
+  combineSubscriptions,
 } from '../../utils/subscriptions.js';
 import {
   initSubscribers,
@@ -571,5 +572,63 @@ export class ConnectionDataView extends Events {
   destroy() {
     super.destroy();
     this.subscriptions = unsubscribeSubscriptions(this.subscriptions);
+  }
+
+  _observeConnectionsFor(element, list1, list2, callback) {
+    const matrix = list1.matrix;
+
+    if (!list1.includes(element)) throw new Error('Could not find child.');
+
+    const result = new Set();
+
+    matrix.getConnectionsOf(element).forEach((connection) => {
+      const other = connection.to === element ? connection.from : connection.to;
+
+      if (!list2.includes(other)) return;
+      result.add(connection);
+    });
+
+    callSubscribers(callback, result);
+
+    return combineSubscriptions(
+      matrix.subscribe('connectionRemoved', (connection) => {
+        if (connection.to !== element && connection.from !== element) return;
+
+        const other =
+          connection.to === element ? connection.from : connection.to;
+        if (!list2.includes(other)) return;
+
+        result.delete(connection);
+        callSubscribers(callback, result);
+      }),
+      matrix.subscribe('connectionAdded', (connection) => {
+        if (connection.to !== element && connection.from !== element) return;
+
+        const other =
+          connection.to === element ? connection.from : connection.to;
+        if (!list2.includes(other)) return;
+
+        result.add(connection);
+        callSubscribers(callback, result);
+      })
+    );
+  }
+
+  observeConnectionsForRow(row_element, callback) {
+    return this._observeConnectionsFor(
+      row_element,
+      this.listview1,
+      this.listview2,
+      callback
+    );
+  }
+
+  observeConnectionsForColumn(column_element, callback) {
+    return this._observeConnectionsFor(
+      column_element,
+      this.listview2,
+      this.listview1,
+      callback
+    );
   }
 }

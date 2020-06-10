@@ -496,6 +496,18 @@ export class VirtualTreeDataView extends Events {
     }
   }
 
+  includes(child) {
+    if (child instanceof GroupData) {
+      return this.groups.has(child);
+    } else {
+      const super_group = this.groups.get(child.parent);
+
+      if (super_group === void 0) return false;
+
+      return super_group.indexOf(child) !== -1;
+    }
+  }
+
   setAmount(amount) {
     const oldAmount = this.amount;
     this.amount = amount;
