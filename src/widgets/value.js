@@ -267,7 +267,7 @@ export const Value = defineClass({
       I.type = false;
       E.setAttribute('type', O.type);
     }
-    
+
     if (I.autocomplete) {
       I.autocomplete = false;
       if (O.autocomplete) {
