@@ -153,3 +153,14 @@ export class Subscriptions extends Subscription {
     this.sub = addSubscription(this.sub, subscription);
   }
 }
+
+export function combineSubscriptions(...args) {
+  let subscriptions = initSubscriptions();
+
+  for (let i = 0; i < args.length; i++)
+    subscriptions = addSubscription(subscriptions, args[i]);
+
+  return () => {
+    subscriptions = unsubscribeSubscriptions(subscriptions);
+  };
+}
