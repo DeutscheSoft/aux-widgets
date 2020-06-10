@@ -46,6 +46,7 @@ function setVirtualtreeviews() {
   switch (O.signal_flow) {
     case 'top-left': {
       const connectionview = new ConnectionDataView(O.sinks, O.sources);
+      this.connectionview = connectionview;
       this.virtualtree_top.set('virtualtreeview', O.sources);
       this.virtualtree_left.set('virtualtreeview', O.sinks);
       this.indicators.set('connectionview', connectionview);
@@ -53,6 +54,7 @@ function setVirtualtreeviews() {
     }
     case 'left-top': {
       const connectionview = new ConnectionDataView(O.sources, O.sinks);
+      this.connectionview = connectionview;
       this.virtualtree_left.set('virtualtreeview', O.sources);
       this.virtualtree_top.set('virtualtreeview', O.sinks);
       this.indicators.set('connectionview', connectionview);
@@ -99,6 +101,7 @@ export const Matrix = defineClass({
   },
   initialize: function (options) {
     Patchbay.prototype.initialize.call(this, options);
+    this.connectionview = null;
   },
   draw: function (options, element) {
     const O = this.options;
