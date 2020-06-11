@@ -1,5 +1,8 @@
-testsuite
-doc
-backstop
-examples
-jshint
+/backstop/
+/brand/
+/doc/
+/examples/
+/jshint/
+/prettier/
+/testsuite/
+/tools/
