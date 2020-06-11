@@ -38,7 +38,7 @@ import { typecheckFunction } from '../../utils/typecheck.js';
 
 import { GroupData } from './group.js';
 import { callContinuationIf } from './helpers.js';
-import { error } from '../utils/log.js';
+import { error } from '../../utils/log.js';
 
 function intervalUnion(a, b) {
   if (a === null) return b;
