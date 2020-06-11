@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" id=stylesheet href="../../styles/default.css" />
+    <title>AUX Examples</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type=module src="../../src/index.js"></script>
+    <style>
+      aux-pager {
+        width: 48% !important;
+        height: 240px !important;
+        display: inline-flex !important;
+        border: 1px solid black;
+      }
+
+      aux-pager aux-pager {
+        width: 90% !important;
+        height: 90% !important;
+        display: inline-flex !important;
+      }
+
+      aux-fader {
+        width: 215px;
+      }
+
+      .aux-pages.aux-forward.aux-vertical > .aux-page.aux-hiding {
+        animation: aux-page-vertical-out-forward 5s ease-in-out;
+        transform: translateY(-100%);
+      }
+      .aux-pages.aux-forward.aux-vertical > .aux-page.aux-showing {
+        animation: aux-page-vertical-in-forward 5s ease-in-out;
+      }
+
+      .aux-pages.aux-backward.aux-vertical > .aux-page.aux-hiding {
+        animation: aux-page-vertical-out-backward 5s ease-in-out;
+        transform: translateY(100%);
+      }
+      .aux-pages.aux-backward.aux-vertical > .aux-page.aux-showing {
+        animation: aux-page-vertical-in-backward 5s ease-in-out;
+      }
+
+      .aux-pages.aux-forward.aux-horizontal > .aux-page.aux-hiding {
+        animation: aux-page-horizontal-out-forward 5s ease-in-out;
+        transform: translateX(-100%);
+      }
+      .aux-pages.aux-forward.aux-horizontal > .aux-page.aux-showing {
+        animation: aux-page-horizontal-in-forward 5s ease-in-out;
+      }
+
+      .aux-pages.aux-backward.aux-horizontal > .aux-page.aux-hiding {
+        animation: aux-page-horizontal-out-backward 5s ease-in-out;
+        transform: translateX(100%);
+      }
+      .aux-pages.aux-backward.aux-horizontal > .aux-page.aux-showing {
+        animation: aux-page-horizontal-in-backward 5s ease-in-out;
+      }
+    </style>
+    <script>
+      window.addEventListener('load', () => {
+        const meters = document.querySelectorAll('aux-levelmeter');
+
+        setInterval(() => {
+          meters.forEach((meter) => {
+            meter.value = Math.random() * 100;
+          });
+        }, 100);
+      });
+    </script>
+  </head>
+  <body>
+    <h2>Pager showing the effect of disable draw in children being hidden</h2>
+
+    <aux-pager show="0" position="right">
+      <aux-pages>
+        <aux-page label="Page 1">
+          <aux-levelmeter min=0 max=100 falling=20></aux-levelmeter>
+          <aux-levelmeter min=0 max=100 falling=20></aux-levelmeter>
+        </aux-page>
+        <aux-page label="Page 2" render_while_hiding=true>
+          <aux-levelmeter min=0 max=100 falling=20></aux-levelmeter>
+          <aux-levelmeter min=0 max=100 falling=20></aux-levelmeter>
+        </aux-page>
+      </aux-pages>
+    </aux-pager>
+  </body>
+</html>
+
