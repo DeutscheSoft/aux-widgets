@@ -82,7 +82,8 @@ function pressEnd(e) {
    * @param {Event} event - Either the MouseEvent or the TouchEvent.
    */
   this.emit('press_end', e);
-  this.emit('click', e);
+  if (e instanceof TouchEvent)
+    this.emit('click', e);
 }
 function pressCancel(e) {
   let O = this.options;
@@ -183,9 +184,8 @@ function touchmove(e) {
     touchcancel.call(this, e);
   }
 }
-function contextmenu(e) {
+function dismiss(e) {
   e.preventDefault();
-  e.stopPropagation();
   return false;
 }
 
@@ -237,7 +237,7 @@ export const Button = defineClass({
   static_events: {
     mousedown: mousedown,
     touchstart: touchstart,
-    contextmenu: contextmenu,
+    contextmenu: dismiss,
   },
   initialize: function (options) {
     if (!options.element) options.element = element('div');
