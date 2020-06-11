@@ -2,12 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" id=stylesheet href="../../styles/default.css" />
+    <link rel="stylesheet" id="stylesheet" href="../../styles/default.css" />
     <title>AUX Examples</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type=module src="../../src/index.js"></script>
-    <style>
-    </style>
+    <script type="module" src="../../src/index.js"></script>
+    <style></style>
     <script>
       window.addEventListener('load', () => {
         const meter = document.querySelector('template').content;
@@ -27,10 +26,13 @@
       });
     </script>
     <template>
-      <aux-levelmeter min=0 max=100 falling=20 show_scale=false></aux-levelmeter>
+      <aux-levelmeter
+        min="0"
+        max="100"
+        falling="20"
+        show_scale="false"
+      ></aux-levelmeter>
     </template>
   </head>
-  <body>
-  </body>
+  <body></body>
 </html>
-
