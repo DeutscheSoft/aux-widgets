@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" id=stylesheet href="../../styles/default.css" />
+    <title>AUX Examples</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type=module src="../../src/index.js"></script>
+    <style>
+    </style>
+    <script>
+      window.addEventListener('load', () => {
+        const meter = document.querySelector('template').content;
+
+        for (let i = 0; i < 200; i++) {
+          const clone = document.importNode(meter, true);
+          document.body.appendChild(clone);
+        }
+
+        const meters = Array.from(document.querySelectorAll('aux-levelmeter'));
+
+        setInterval(() => {
+          meters.forEach((meter) => {
+            meter.value = Math.random() * 100;
+          });
+        }, 100);
+      });
+    </script>
+    <template>
+      <aux-levelmeter min=0 max=100 falling=20 show_scale=false></aux-levelmeter>
+    </template>
+  </head>
+  <body>
+  </body>
+</html>
+

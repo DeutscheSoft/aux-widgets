@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" id=stylesheet href="../../styles/default.css" />
+    <title>AUX Examples</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type=module src="../../src/index.js"></script>
+    <style>
+      aux-scale {
+        height: 300px;
+      }
+    </style>
+    <script>
+      window.addEventListener('load', () => {
+        const scale = document.querySelector('template');
+
+        for (let i = 0; i < 200; i++) {
+          document.body.appendChild(document.importNode(scale.content, true));
+        }
+      });
+    </script>
+    <template>
+      <aux-scale min=0 max=100></aux-scale>
+    </template>
+  </head>
+  <body>
+  </body>
+</html>
+
