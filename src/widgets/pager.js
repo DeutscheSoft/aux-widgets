@@ -106,13 +106,13 @@ export const Pager = defineClass({
 
     if (!pages || !navigation) return;
 
-    // create one button for each page and keep the label synchronized
-    // with the page label
+    // create one button for each page and keep label and icon synchronized
+    // with the page label/icon
     let subs = pages.pages.forEachAsync((page, position) => {
       let _subs = initSubscriptions();
 
       const button = navigation.addButton(
-        { label: page.get('label') },
+        { label: page.get('label') || false, icon: page.get('icon') || false },
         position
       );
 
@@ -122,6 +122,13 @@ export const Pager = defineClass({
         _subs,
         page.subscribe('set_label', (label) => {
           button.set('label', label);
+        })
+      );
+      
+      _subs = addSubscription(
+        _subs,
+        page.subscribe('set_icon', (icon) => {
+          button.set('icon', icon);
         })
       );
 
