@@ -19,10 +19,7 @@
 
 import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
-import {
-  element,
-  addClass,
-} from '../utils/dom.js';
+import { element, addClass } from '../utils/dom.js';
 
 /**
  * The ScrollArea widget disables or enabled rendering in its child widgets
@@ -72,27 +69,26 @@ export const ScrollArea = defineClass({
     addClass(element, 'aux-scroller');
     Widget.prototype.draw.call(this, O, element);
   },
-  enableDrawChildren: function() {
+  enableDrawChildren: function () {
     var C = this.children;
     if (!C) return;
 
     for (let i = 0; i < C.length; i++) {
       const child = C[i];
-      if (this._visible.has(child))
-        child.enableDraw();
+      if (this._visible.has(child)) child.enableDraw();
     }
   },
-  addChild: function(child) {
+  addChild: function (child) {
     Widget.prototype.addChild.call(this, child);
     this._elementToWidget.set(child.element, child);
     this._observer.observe(child.element);
   },
-  removeChild: function(child) {
+  removeChild: function (child) {
     Widget.prototype.removeChild.call(this, child);
     this._elementToWidget.delete(child.element);
     this._observer.unobserve(child.element);
   },
-  destroy: function() {
+  destroy: function () {
     Widget.prototype.destroy.call(this);
     this._observer.disconnect();
   },

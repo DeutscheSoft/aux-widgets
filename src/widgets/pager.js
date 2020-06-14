@@ -124,7 +124,7 @@ export const Pager = defineClass({
           button.set('label', label);
         })
       );
-      
+
       _subs = addSubscription(
         _subs,
         page.subscribe('set_icon', (icon) => {

@@ -491,7 +491,7 @@ export const Page = defineClass({
   Extends: Container,
   _options: Object.assign(Object.create(Container.prototype._options), {
     label: 'string',
-    icon: 'string'
+    icon: 'string',
   }),
   options: {
     label: '',
