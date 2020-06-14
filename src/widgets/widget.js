@@ -36,6 +36,8 @@ import {
   unsubscribeSubscriptions,
 } from '../utils/subscriptions.js';
 import { typecheckFunction } from '../utils/typecheck.js';
+import { GlobalResize } from '../utils/global_resize.js';
+import { GlobalVisibilityChange } from '../utils/global_visibility_change.js';
 
 /* jshint -W089 */
 function Invalid(options) {
@@ -789,22 +791,13 @@ export const Widget = defineClass({
 
     if (parent === null) {
       if (old_parent !== parent) {
-        window.addEventListener('resize', this._onresize);
-        window.addEventListener('load', this._onresize);
-        document.addEventListener(
-          'visibilitychange',
-          this._onvisibilitychange,
-          false
-        );
+        GlobalResize.add(this._onresize);
+        GlobalVisibilityChange.add(this._onvisibilitychange);
         this._onvisibilitychange();
       }
     } else if (parent !== null && old_parent === null) {
-      window.removeEventListener('resize', this._onresize);
-      window.removeEventListener('load', this._onresize);
-      document.removeEventListener(
-        'visibilitychange',
-        this._onvisibilitychange
-      );
+      GlobalResize.delete(this._onresize);
+      GlobalVisibilityChange.delete(this._onvisibilitychange);
     }
 
     if (old_parent && !no_remove_child) {

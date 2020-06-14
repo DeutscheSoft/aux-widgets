@@ -84,7 +84,7 @@ export function removeSubscriber(subscribers, cb) {
   } else expectedSubscribers();
 }
 
-function subscriberError(err) {
+export function subscriberError(err) {
   warn('Subscriber generated an exception:', err);
 }
 
