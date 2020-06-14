@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" id="stylesheet" href="../../styles/default.css" />
+    <title>AUX Examples</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style></style>
+    <script type=module src='../../src/utils/global_resize.js'></script>
+    <script type=module>
+
+      function fun1() {
+        let count = 0;
+        for (let i = 0; i < 10000; i++) {
+          const cb = () => {
+            count ++;
+          };
+          window.addEventListener('load', cb);
+          window.addEventListener('resize', cb);
+        }
+        window.addEventListener('load', () => {
+          console.log('count1', count);
+        });
+      }
+
+      const subscribers = new Set();
+
+      import { GlobalResize } from '../../src/utils/global_resize.js';
+
+      function fun2() {
+        let count = 0;
+
+        for (let i = 0; i < 10000; i++) {
+          GlobalResize.add(() => {
+            count++;
+          });
+        }
+
+        GlobalResize.add(() => {
+          console.log('count2:', count);
+        });
+      }
+
+      const t1 = performance.now();
+      fun1();
+      console.log('fun1', performance.now() - t1);
+
+      const t2 = performance.now();
+      fun2();
+      console.log('fun2', performance.now() - t2);
+    </script>
+  </head>
+  <body></body>
+</html>
