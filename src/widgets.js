@@ -56,6 +56,7 @@ export * from './widgets/progressbar.js';
 export * from './widgets/charthandle.js';
 export * from './widgets/root.js';
 export * from './widgets/scale.js';
+export * from './widgets/scrollarea.js';
 export * from './widgets/select.js';
 export * from './widgets/slider.js';
 export * from './widgets/sortablelist.js';

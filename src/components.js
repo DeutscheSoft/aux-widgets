@@ -49,6 +49,7 @@ export * from './components/phasemeter.js';
 export * from './components/progressbar.js';
 export * from './components/root.js';
 export * from './components/scale.js';
+export * from './components/scrollarea.js';
 export * from './components/select.js';
 export * from './components/slider.js';
 export * from './components/state.js';
