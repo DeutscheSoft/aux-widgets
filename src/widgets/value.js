@@ -34,10 +34,8 @@ function valueClicked() {
   var O = this.options;
   if (O.set === false) return;
   if (this.__editing) return false;
-  addClass(this.element, 'aux-active');
   this._input.setAttribute('value', O.value);
   this._input.focus();
-  if (O.auto_select) this._input.setSelectionRange(0, this._input.value.length);
   /**
    * Is fired when the value was clicked.
    *
@@ -118,7 +116,10 @@ function valueDone() {
   this.triggerDraw();
 }
 function valueFocus() {
+  var O = this.options;
   this.__editing = true;
+  addClass(this.element, 'aux-active');
+  if (O.auto_select) this._input.setSelectionRange(0, this._input.value.length);
   this.startInteracting();
 }
 
