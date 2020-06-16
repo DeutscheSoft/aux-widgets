@@ -43,6 +43,10 @@ body {
   display: none !important;
 }
 
+.aux-notransition {
+  transition: none !important;
+}
+
 .aux-widget {
   contain: style layout;
   display: inline-block;

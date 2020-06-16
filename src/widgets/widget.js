@@ -603,6 +603,22 @@ export const Widget = defineClass({
   getStyle: function (name) {
     return getStyle(this.getStyleTarget(), name);
   },
+  /**
+   * Disable all possibly set CSS transitions.
+   *
+   * @method Widget#disableTansitions
+   */
+  disableTransitions: function () {
+    addClass(this.element, 'aux-notransition');
+  },
+  /**
+   * Allow possibly set CSS transitions.
+   *
+   * @method Widget#enableTransitions
+   */
+  enableTransitions: function () {
+    removeClass(this.element, 'aux-notransition');
+  },
   // GETTER & SETTER
   /**
    * Invalidates an option and triggers a redraw() call.
