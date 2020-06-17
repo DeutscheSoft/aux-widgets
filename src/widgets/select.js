@@ -151,9 +151,11 @@ export const Select = defineClass({
    * @property {Array<Object>} [options.entries=[]] - The list of {@link SelectEntry}. Each member is an
    *   object with the two properties <code>label</code> and <code>value</code>, a string used
    *   as label for constructing a {@link SelectEntry} or an instance of {@link SelectEntry}.
-   * @property {String|Boolean} [options.placeholder=false] - Placeholder test
+   * @property {String|Boolean} [options.placeholder=false] - Placeholder
    *   for the button label. Set to <code>false</code> to have an empty
    *   placeholder. This placeholder is shown when no entry is selected.
+   * @property {String|Boolean} [options.list_class] - A CSS class to be set on the list. This is
+   *   a static option and can only be set once on initializaion.
    *
    */
   Extends: Button,
@@ -166,6 +168,7 @@ export const Select = defineClass({
     sort: 'function',
     resized: 'boolean',
     placeholder: 'string|boolean',
+    list_class: 'string',
   }),
   options: {
     entries: [], // A list of strings or objects {label: "Title", value: 1} or SelectEntry instance
@@ -175,6 +178,7 @@ export const Select = defineClass({
     show_list: false,
     icon: 'arrowdown',
     placeholder: false,
+    list_class: '',
   },
   static_events: {
     click: function () {
@@ -205,6 +209,9 @@ export const Select = defineClass({
      *   Has class <code>.aux-selectlist</code>.
      */
     this._list = element('div', 'aux-selectlist');
+    if (options.list_class)
+      addClass(this._list, options.list_class);
+      
     this._globalTouchStart = function (e) {
       if (
         this.__open &&
