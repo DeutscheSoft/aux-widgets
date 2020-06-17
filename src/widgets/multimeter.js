@@ -297,18 +297,23 @@ var mapped_options = {
   layout: 'layout',
 };
 
+addStaticEvent(MultiMeter, 'set_labels', mapChildOption);
+addStaticEvent(MultiMeter, 'set_layout', mapChildOption);
+
+MultiMeter.prototype._options.labels = 'array|string';
+
 function mapChildOptionSimple(value, key) {
   var M = this.meters,
     i;
-  for (i = 0; i < M.length; i++) M[i].set(key, value);
+  for (i = 0; i < M.length; i++) M[i].set(mapped_options[key], value);
 }
 
-function mapChildOption(value, key) {
+function mapChildOption(value, key) {console.log("mapChildOption",key, value)
   const M = this.meters;
 
   if (Array.isArray(value)) {
     for (let i = 0; i < M.length && i < value.length; i++)
-      M[i].set(key, value[i]);
+      M[i].set(mapped_options[key], value[i]);
   } else {
     for (let i = 0; i < M.length; i++) M[i].set(key, value);
   }
