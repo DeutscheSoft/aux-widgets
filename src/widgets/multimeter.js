@@ -308,7 +308,7 @@ function mapChildOptionSimple(value, key) {
   for (i = 0; i < M.length; i++) M[i].set(mapped_options[key], value);
 }
 
-function mapChildOption(value, key) {console.log("mapChildOption",key, value)
+function mapChildOption(value, key) {
   const M = this.meters;
 
   if (Array.isArray(value)) {
