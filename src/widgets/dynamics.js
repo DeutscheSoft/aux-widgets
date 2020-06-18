@@ -118,6 +118,9 @@ export const Dynamics = defineClass({
     set_handle_label: function (v) {
       this.handle.set('format_label', v);
     },
+    set_show_handle: function (v) {
+      this.handle.set("visible", v);
+    },
   },
   initialize: function (options) {
     Chart.prototype.initialize.call(this, options, true);
@@ -152,6 +155,7 @@ export const Dynamics = defineClass({
     this.handle.addEventListener('userset', dragHandle.bind(this));
 
     this.set('handle_label', this.options.handle_label);
+    this.set('show_handle', this.options.show_handle);
     this.set('ratio', this.options.ratio);
     this.set('threshold', this.options.threshold);
   },
