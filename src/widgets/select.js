@@ -706,8 +706,8 @@ export const Select = defineClass({
   },
   set: function (key, value) {
     if (key === 'value') {
-      this.set('selected', this.indexByValue.call(this, value));
-      return;
+      this.update('selected', this.indexByValue.call(this, value));
+      return this.currentValue();
     }
 
     value = Button.prototype.set.call(this, key, value);
