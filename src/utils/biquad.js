@@ -262,7 +262,7 @@ export const standardBiquadFilters = {
 };
 
 var nullModule = {
-  freqToGain: function () {
+  freqtogain: function () {
     return 0.0;
   },
 };
