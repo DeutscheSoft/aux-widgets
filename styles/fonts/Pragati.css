@@ -3,12 +3,12 @@
   font-style: normal;
   font-weight: normal;
   src: local('PragatiNarrow-Regular'),
-    url('PragatiNarrow-Regular.ttf') format('truetype');
+    url('PragatiNarrow-Regular.woff') format('woff');
 }
 @font-face {
   font-family: 'Pragati';
   font-style: normal;
   font-weight: bold;
   src: local('PragatiNarrow-Bold'),
-    url('PragatiNarrow-Bold.ttf') format('truetype');
+    url('PragatiNarrow-Bold.woff') format('woff');
 }
