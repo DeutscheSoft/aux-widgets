@@ -157,6 +157,7 @@ defineChildWidget(Panorama, 'handle1', {
     preferences: ['top', 'bottom', 'left', 'right'],
     label: 'In 1',
   },
+  userset_delegate: true,
 });
 /**
  * @member {ChartHandle} Panorama#handle2 - The {@link ChartHandle}
