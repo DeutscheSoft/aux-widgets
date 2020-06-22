@@ -966,6 +966,7 @@ export const Widget = defineClass({
 
     let triggered = false;
     const callback = () => {
+      if (this.isDestructed()) return;
       triggered = false;
       if (!this.isDrawn()) {
         this.triggerResize();
