@@ -301,6 +301,8 @@ body {
   right: 10px;
   left: auto;
   bottom: auto;
+  width: auto;
+  height: auto;
 }
 
 /* drawer right */
