@@ -326,9 +326,10 @@ export const Circular = defineClass({
    * @property {Number} [options.dots_defaults.width=2] - Width of the dots.
    * @property {Number} [options.dots_defaults.length=2] - Length of the dots.
    * @property {Number} [options.dots_defaults.margin=5] - Margin of the dots.
-   * @property {Array<Object>} [options.dots=[]] - An array of objects describing where dots should be placed
+   * @property {Array<Object|Number>} [options.dots=[]] - An array of objects describing where dots should be placed
    *   along the circle. Members are position <code>pos</code> in the value range and optionally
    *   <code>color</code> and <code>class</code> and any of the properties of <code>options.dot</code>.
+   *   Optionally a number defining the position can be set.
    * @property {Boolean} [options.show_markers=true] - Show/hide all markers.
    * @property {Object} [options.markers_defaults] - This option acts as default values of the individual markers
    *   specified in <code>options.markers</code>.
