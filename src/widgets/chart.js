@@ -813,6 +813,7 @@ export const Chart = defineClass({
 defineChildWidget(Chart, 'grid', {
   create: Grid,
   show: true,
+  no_resize: true,
   append: function () {
     this.svg.insertBefore(this.grid.element, this.svg.firstChild);
   },

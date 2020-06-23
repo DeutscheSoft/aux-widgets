@@ -143,6 +143,8 @@ export function defineChildWidget(widget, name, config) {
    *     which are skipped on `inherit_options`.
    * @param {boolean} [config.map_interacting=true] - If true, the interacting
    *     property will be true if it is true in the child.
+   * @param {boolean} [config.no_resize=false] - If true, no `triggerResize` is called on the parent
+   *     as soon as a child is added or removed.
    */
 
   var p = widget.prototype;
@@ -228,7 +230,8 @@ export function defineChildWidget(widget, name, config) {
       if (config.toggle_class) removeClass(this.element, 'aux-has-' + name);
       C.destroy();
     }
-    this.triggerResize();
+    if (!config.no_resize)
+      this.triggerResize();
   });
   addStaticEvent(widget, 'redraw', function () {
     const show = fixed || this.options[key];
@@ -244,8 +247,8 @@ export function defineChildWidget(widget, name, config) {
       } else if (typeof append === 'function') {
         append.call(this);
       }
-
-      this.triggerResize();
+      if (!config.no_resize)
+        this.triggerResize();
     }
   });
   var setCallback = function (val, key) {
