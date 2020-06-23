@@ -1270,8 +1270,8 @@ export const ChartHandle = defineClass({
           Math.max(oy.min, range_y.pixelToValue(state.y + v[1]))
         );
 
-        self.userset('x', x);
-        self.userset('y', y);
+        self.userset('x', _O.range_x.snap(x));
+        self.userset('y', _O.range_y.snap(y));
       },
       onstopcapture: function () {
         /**
