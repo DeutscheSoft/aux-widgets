@@ -50,6 +50,7 @@ function normalize(v) {
 }
 function scrollWheel(e) {
   var direction;
+  let O = this.options;
   e.preventDefault();
   e.stopPropagation();
   var d = e.wheelDelta !== void 0 && e.wheelDelta ? e.wheelDelta : e.detail;
@@ -59,7 +60,7 @@ function scrollWheel(e) {
     direction = -1;
   } else return;
 
-  var range_z = this.options.range_z;
+  var R = O.range_z;
 
   if (this.__sto) window.clearTimeout(this.__sto);
   this.set('dragging', true);
@@ -73,10 +74,18 @@ function scrollWheel(e) {
     }.bind(this),
     250
   );
-  var s = range_z.get('step') * direction;
-  if (e.ctrlKey && e.shiftKey) s *= range_z.get('shift_down');
-  else if (e.shiftKey) s *= range_z.get('shift_up');
-  this.userset('z', this.get('z') + s);
+  let snap = R.options.snap;
+  if (Array.isArray(snap)) {
+    let i = snap.indexOf(O.z);
+    i = Math.max(0, Math.min(snap.length -1, i + direction));
+    console.log(i, snap[i])
+    this.userset('z', snap[i]);
+  } else {
+    var s = R.get('step') * direction;
+    if (e.ctrlKey && e.shiftKey) s *= R.get('shift_down');
+    else if (e.shiftKey) s *= R.get('shift_up');
+    this.userset('z', Math.max(R.min, Math.min(R.snap(this.get('z') + s, R.max))));
+  }
   if (!this._zwheel) this.emit('zchangestarted', this.options.z);
   this._zwheel = true;
 }
