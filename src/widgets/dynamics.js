@@ -29,11 +29,11 @@ function rangeSet(value, key) {
 
 function dragHandle(key, value) {
   if (key == 'z') {
-    this.set('ratio', value);
+    this.userset('ratio', value);
     return true;
   }
   if (key == 'y') {
-    this.set('threshold', value);
+    this.userset('threshold', value);
   }
   return false;
 }
