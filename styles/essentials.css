@@ -302,7 +302,7 @@ body {
   left: auto;
   bottom: auto;
   width: auto;
-  height: auto;
+  height: var(--aux-clickable-size);
 }
 
 /* drawer right */
