@@ -1359,6 +1359,13 @@ body.aux-cursor-row-resize * {
   align-self: start;
 }
 
+.aux-valueknob.aux-left > .aux-value > .aux-input {
+  text-align: left;
+}
+.aux-valueknob.aux-right > .aux-value > .aux-input {
+  text-align: right;
+}
+
 /* WINDOW */
 
 .aux-window {
