@@ -14,3 +14,4 @@ export * from './options.js';
 export * from './pages.js';
 export * from './pager.js';
 export * from './subscriptions.js';
+export * from './regressions.js';

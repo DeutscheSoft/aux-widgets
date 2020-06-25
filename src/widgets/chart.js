@@ -49,7 +49,10 @@ function calculateOverlap(X, Y) {
 }
 
 function showHandles() {
-  var handles = this.handles;
+  const handles = this.handles;
+
+  if (handles.lemgth === 0) return;
+  if (handles[0].parent === this) return;
 
   for (var i = 0; i < handles.length; i++) {
     this.addChild(handles[i]);
@@ -57,7 +60,10 @@ function showHandles() {
 }
 
 function hideHandles() {
-  var handles = this.handles;
+  const handles = this.handles;
+
+  if (handles.lemgth === 0) return;
+  if (handles[0].parent !== this) return;
 
   for (var i = 0; i < handles.length; i++) {
     this.removeChild(handles[i]);
