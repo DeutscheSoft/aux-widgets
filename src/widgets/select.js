@@ -331,10 +331,8 @@ export const Select = defineClass({
         label: ent,
       });
     } else if (typeof ent === 'object' && 'value' in ent && 'label' in ent) {
-      entry = new SelectEntry({
-        value: ent.value,
-        label: ent.label,
-      });
+      ent.element = null;
+      entry = new SelectEntry(ent);
     } else {
       throw new TypeError('Unsupported type of entry.');
     }
