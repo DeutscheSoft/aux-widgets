@@ -136,7 +136,8 @@ function isCurrentTouch(ev) {
 function touchend(e) {
   if (!isCurrentTouch.call(this, e)) return;
   this.__touch_id = false;
-  e.preventDefault();
+  if (e.cancelable)
+    e.preventDefault();
 
   this.off('touchend', touchend);
   this.off('touchcancel', touchcancel);
@@ -153,8 +154,10 @@ function touchend(e) {
 function touchstart(e) {
   if (this.__touch_id !== false) return;
   this.__touch_id = e.targetTouches[0].identifier;
-  e.preventDefault();
-  e.stopPropagation();
+  if (e.cancelable) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
 
   this.on('touchend', touchend);
   this.on('touchcancel', touchcancel);
@@ -184,7 +187,8 @@ function touchmove(e) {
   }
 }
 function dismiss(e) {
-  e.preventDefault();
+  if (e.cancelable)
+    e.preventDefault();
   return false;
 }
 
