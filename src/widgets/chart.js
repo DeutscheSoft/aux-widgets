@@ -51,7 +51,7 @@ function calculateOverlap(X, Y) {
 function showHandles() {
   const handles = this.handles;
 
-  if (handles.lemgth === 0) return;
+  if (handles.length === 0) return;
   if (handles[0].parent === this) return;
 
   for (var i = 0; i < handles.length; i++) {
@@ -62,7 +62,7 @@ function showHandles() {
 function hideHandles() {
   const handles = this.handles;
 
-  if (handles.lemgth === 0) return;
+  if (handles.length === 0) return;
   if (handles[0].parent !== this) return;
 
   for (var i = 0; i < handles.length; i++) {
