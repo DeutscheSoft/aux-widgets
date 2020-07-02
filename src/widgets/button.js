@@ -83,7 +83,7 @@ function pressEnd(e) {
    */
   this.emit('press_end', e);
   if (e instanceof TouchEvent) {
-    this.emit('click', e);
+    //this.emit('click', e);
     this.element.dispatchEvent(new Event('click'));
   }
 }
