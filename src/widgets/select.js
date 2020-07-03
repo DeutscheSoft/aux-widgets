@@ -62,8 +62,12 @@ function hideList() {
   }
 }
 function showList(show) {
+  const E = this.element;
+  const O = this.options;
   if (show) {
-    var ew = outerWidth(this.element, true);
+    var ew = outerWidth(E, true);
+    if (O.list_class)
+      this._list.classList.add(O.list_class);
     document.body.appendChild(this._list);
     var cw = width();
     var ch = height();
@@ -80,10 +84,10 @@ function showList(show) {
     setStyles(this._list, {
       top:
         Math.min(
-          positionTop(this.element) + outerHeight(this.element, true),
+          positionTop(E) + outerHeight(E, true),
           ch + sy - lh
         ) + 'px',
-      left: Math.min(positionLeft(this.element), cw + sx - lw) + 'px',
+      left: Math.min(positionLeft(E), cw + sx - lw) + 'px',
     });
   } else {
     document.removeEventListener('touchstart', this._globalTouchStart);
@@ -209,8 +213,6 @@ export const Select = defineClass({
      *   Has class <code>.aux-selectlist</code>.
      */
     this._list = element('div', 'aux-selectlist');
-    if (options.list_class)
-      addClass(this._list, options.list_class);
       
     this._globalTouchStart = function (e) {
       if (
