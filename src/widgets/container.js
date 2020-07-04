@@ -170,6 +170,7 @@ export const Container = defineClass({
     const E = this.element;
     addClass(E, 'aux-hide');
     removeClass(E, 'aux-show', 'aux-hiding', 'aux-showing');
+    this.disableDraw();
   },
   /**
    * Starts the transition of the <code>visible</code> to <code>true</code>.
@@ -186,16 +187,6 @@ export const Container = defineClass({
     this.set('visible', true);
     addClass(E, 'aux-show');
     removeClass(E, 'aux-hide', 'aux-hiding', 'aux-showing');
-  },
-  showNoDrawChildren: function () {
-    var C = this.children;
-    var H = this.hidden_children;
-    if (C) for (let i = 0; i < C.length; i++) if (!H[i]) C[i].showNoDraw();
-  },
-  hideNoDrawChildren: function () {
-    var C = this.children;
-    var H = this.hidden_children;
-    if (C) for (let i = 0; i < C.length; i++) if (!H[i]) C[i].hideNoDraw();
   },
   /**
    * Switches the hidden state of a child to <code>hidden</code>.
@@ -249,7 +240,7 @@ export const Container = defineClass({
     if (H[i]) {
       H[i] = false;
       if (this.isDrawn()) C[i].show();
-      else C[i].forceShow();
+      else C[i].showNoDraw();
     }
   },
 

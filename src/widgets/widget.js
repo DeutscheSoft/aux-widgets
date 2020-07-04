@@ -758,24 +758,18 @@ export const Widget = defineClass({
     const E = this.element;
     removeClass(E, 'aux-show');
     addClass(E, 'aux-hide');
-  },
-  showNoDrawChildren: function () {
-    var C = this.children;
-    if (C) for (let i = 0; i < C.length; i++) C[i].showNoDraw();
+    this.disableDraw();
   },
   showNoDraw: function () {
     if (this.options.visible === true) return;
-    this.update('visible', true);
-    this.showNoDrawChildren();
-  },
-  hideNoDrawChildren: function () {
-    var C = this.children;
-    if (C) for (let i = 0; i < C.length; i++) C[i].hideNoDraw();
+    if (this.isDrawn()) this.update('visible', true);
+    else {
+      this.options.visible = true;
+    }
   },
   hideNoDraw: function () {
     if (this.options.visible === false) return;
     this.update('visible', false);
-    this.hideNoDrawChildren();
   },
   /**
    * Returns the current hidden status.
