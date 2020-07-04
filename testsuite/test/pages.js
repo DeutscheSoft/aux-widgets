@@ -211,6 +211,7 @@ describe('Pages', () => {
       const page = lowAddPage(pages, ...args);
       await waitForConnected(pages);
       assert(pages.getPages().length === n + 1);
+      await waitForDrawn(pages);
       checkShow(pages);
       return page;
     };
@@ -220,6 +221,7 @@ describe('Pages', () => {
         lowRemovePage(pages, ...args);
         await waitForConnected(pages);
         assert(pages.getPages().length === n - 1);
+        await waitForDrawn(pages);
         checkShow(pages);
       };
       [showPage1, showPage2, showPage3].forEach((lowShowPage) => {
@@ -227,6 +229,7 @@ describe('Pages', () => {
           lowShowPage(pages, page);
           await waitForDrawn(pages);
           assert(page.get('active'));
+          await waitForDrawn(pages);
           checkShow(pages);
         };
         test(addPage, removePage, showPage);
