@@ -24,7 +24,7 @@ import {
 import { waitForDrawn, assert, compare, objectMinus } from './helpers.js';
 
 describe('Regressions', () => {
-  it.only('#230', () => {
+  it('#230', () => {
      const chart = new Chart();
      chart.addHandle();
 
