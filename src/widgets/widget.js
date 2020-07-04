@@ -462,6 +462,11 @@ export const Widget = defineClass({
     if (O.container) O.container.appendChild(element);
 
     addClass(element, 'aux-widget');
+    this.disableTransitions();
+    S.addNext(() => {
+      if (this.isDestructed()) return;
+      this.enableTransitions();
+    }, 1);
 
     if (O.id) element.setAttribute('id', O.id);
 
