@@ -726,6 +726,8 @@ export const Select = defineClass({
       case 'entries':
         this.setEntries(value);
         break;
+      case 'placeholder':
+        this.set("selected", this.options.selected);
     }
     return value;
   },
