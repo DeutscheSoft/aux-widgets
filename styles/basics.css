@@ -683,10 +683,12 @@
   width: 100%;
   max-width: var(--aux-notification-maxwidth);
   transform: translate3d(0, 0, 0);
+  text-align: right;
 }
 .aux-notification {
   padding: var(--aux-notification-padding);
   margin: var(--aux-notification-margin);
+  text-align: left;
 }
 
 /* PAGER */
