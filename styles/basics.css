@@ -680,7 +680,6 @@
 .aux-notifications {
   bottom: 0;
   right: 0;
-  width: 100%;
   max-width: var(--aux-notification-maxwidth);
   transform: translate3d(0, 0, 0);
   text-align: right;
@@ -689,6 +688,11 @@
   padding: var(--aux-notification-padding);
   margin: var(--aux-notification-margin);
   text-align: left;
+  display: flex;
+  align-items: center;
+}
+.aux-notification > .aux-close {
+  order: 3;
 }
 
 /* PAGER */
