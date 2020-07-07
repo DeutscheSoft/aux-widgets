@@ -119,7 +119,7 @@ export const Dynamics = defineClass({
       this.handle.set('format_label', v);
     },
     set_show_handle: function (v) {
-      this.handle.set("visible", v);
+      this.handle.set('visible', v);
     },
   },
   initialize: function (options) {

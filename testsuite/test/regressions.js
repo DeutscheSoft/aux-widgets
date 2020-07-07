@@ -1,6 +1,4 @@
-import {
-  Chart,
-} from '../src/index.js';
+import { Chart } from '../src/index.js';
 
 /*
  * This file is part of AUX.
@@ -25,9 +23,9 @@ import { waitForDrawn, assert, compare, objectMinus } from './helpers.js';
 
 describe('Regressions', () => {
   it('#230', () => {
-     const chart = new Chart();
-     chart.addHandle();
+    const chart = new Chart();
+    chart.addHandle();
 
-     chart.set('show_handles', true);
+    chart.set('show_handles', true);
   });
 });

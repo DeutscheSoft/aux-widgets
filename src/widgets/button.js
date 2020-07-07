@@ -139,8 +139,7 @@ function isCurrentTouch(ev) {
 function touchend(e) {
   if (!isCurrentTouch.call(this, e)) return;
   this.__touch_id = false;
-  if (e.cancelable)
-    e.preventDefault();
+  if (e.cancelable) e.preventDefault();
 
   this.off('touchend', touchend);
   this.off('touchcancel', touchcancel);
@@ -190,8 +189,7 @@ function touchmove(e) {
   }
 }
 function dismiss(e) {
-  if (e.cancelable)
-    e.preventDefault();
+  if (e.cancelable) e.preventDefault();
   return false;
 }
 

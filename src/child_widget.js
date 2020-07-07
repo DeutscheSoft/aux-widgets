@@ -230,8 +230,7 @@ export function defineChildWidget(widget, name, config) {
       if (config.toggle_class) removeClass(this.element, 'aux-has-' + name);
       C.destroy();
     }
-    if (!config.no_resize)
-      this.triggerResize();
+    if (!config.no_resize) this.triggerResize();
   });
   addStaticEvent(widget, 'redraw', function () {
     const show = fixed || this.options[key];
@@ -247,8 +246,7 @@ export function defineChildWidget(widget, name, config) {
       } else if (typeof append === 'function') {
         append.call(this);
       }
-      if (!config.no_resize)
-        this.triggerResize();
+      if (!config.no_resize) this.triggerResize();
     }
   });
   var setCallback = function (val, key) {

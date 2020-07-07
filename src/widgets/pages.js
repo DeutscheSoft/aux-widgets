@@ -82,8 +82,7 @@ function onPageAdded(page, position) {
     if (current && current !== page) pages.hideChild(current);
 
     // we do not want to animate pages when they are being added
-    if (pages.isDrawn())
-      page.set('visible', true);
+    if (pages.isDrawn()) page.set('visible', true);
     pages.showChild(page);
   } else {
     page.forceHide();

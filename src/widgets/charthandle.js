@@ -77,14 +77,17 @@ function scrollWheel(e) {
   let snap = R.options.snap;
   if (Array.isArray(snap)) {
     let i = snap.indexOf(O.z);
-    i = Math.max(0, Math.min(snap.length -1, i + direction));
-    console.log(i, snap[i])
+    i = Math.max(0, Math.min(snap.length - 1, i + direction));
+    console.log(i, snap[i]);
     this.userset('z', snap[i]);
   } else {
     var s = R.get('step') * direction;
     if (e.ctrlKey && e.shiftKey) s *= R.get('shift_down');
     else if (e.shiftKey) s *= R.get('shift_up');
-    this.userset('z', Math.max(R.min, Math.min(R.snap(this.get('z') + s, R.max))));
+    this.userset(
+      'z',
+      Math.max(R.min, Math.min(R.snap(this.get('z') + s, R.max)))
+    );
   }
   if (!this._zwheel) this.emit('zchangestarted', this.options.z);
   this._zwheel = true;

@@ -176,9 +176,9 @@ export const EqBand = defineClass({
       this.set('z', v);
     },
     userset: function (key, value) {
-      if (key == "x") this.emit("useraction", "freq", value);
-      if (key == "y") this.emit("useraction", "gain", value);
-      if (key == "z") this.emit("useraction", "q", value);
+      if (key == 'x') this.emit('useraction', 'freq', value);
+      if (key == 'y') this.emit('useraction', 'gain', value);
+      if (key == 'z') this.emit('useraction', 'q', value);
     },
   },
 
