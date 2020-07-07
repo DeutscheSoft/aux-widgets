@@ -31,6 +31,7 @@ function drawTime(force) {
   var tmp, drawn;
   var O = this.options;
   var t = O.time;
+  if (!t instanceof Date || isNaN(t)) t = new Date();
 
   if ((tmp = t.getSeconds()) !== this.__sec || force) {
     this.circulars.seconds.set('value', tmp);
@@ -98,12 +99,19 @@ function setLabels() {
   S.add(
     function () {
       var bb = E.getBoundingClientRect();
+      var eb = this.svg.getBoundingClientRect();
+      let size = Math.min(eb.width, eb.height);
       if (bb.width === 0) return; // we are hidden
       var mleft = parseInt(getStyle(E, 'margin-left')) || 0;
       var mright = parseInt(getStyle(E, 'margin-right')) || 0;
       var mtop = parseInt(getStyle(E, 'margin-top')) || 0;
       var mbottom = parseInt(getStyle(E, 'margin-bottom')) || 0;
-      var space = O.size - mleft - mright - this._margin * 2;
+      var space =
+        size -
+        mleft -
+        mright -
+        this._margin * 2 -
+        (O.label_margin / 100) * size * 2;
       var scale = space / bb.width;
       var pos = O.size / 2;
 
@@ -212,6 +220,7 @@ export const Clock = defineClass({
    * @property {Function} [options.label_upper=function (date, fps, months, days) { return days[date.getDay()]; }] - Callback to format the upper label.
    * @property {Function} [options.label_lower=function (date, fps, months, days) { var d = date.getDate(); var m = date.getMonth(); var y = date.getFullYear()return ((d < 10) ? ("0" + d) : d) + ". " + months[m] + " " + y; }] - Callback to format the lower label.
    * @property {Number} [options.label_scale=0.33] - The scale of `label_upper` and `label_lower` compared to the main label.
+   * @property {Number} [options.label_margin=10] - Margin between the rings and the main label in percent of the overall size.
    * @property {Number|String|Date} [options.time] - Set a specific time and date. To avoid auto-udates, set `timeout` to 0.
    *   For more information about the value, please refer to <a href="https://www.w3schools.com/jsref/jsref_obj_date.asp">W3Schools</a>.
    */
@@ -233,6 +242,7 @@ export const Clock = defineClass({
     label_upper: 'function',
     label_lower: 'function',
     label_scale: 'number',
+    label_margin: 'number',
     time: 'object|string|number',
   }),
   options: {
@@ -296,6 +306,7 @@ export const Clock = defineClass({
     },
     label_scale: 0.33, // the scale of the upper and lower labels
     // compared to the main label
+    label_margin: 10,
   },
   static_events: {
     hide: onhide,
