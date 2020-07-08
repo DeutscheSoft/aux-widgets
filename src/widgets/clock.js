@@ -106,12 +106,12 @@ function setLabels() {
       var mright = parseInt(getStyle(E, 'margin-right')) || 0;
       var mtop = parseInt(getStyle(E, 'margin-top')) || 0;
       var mbottom = parseInt(getStyle(E, 'margin-bottom')) || 0;
+      var mlabel = (O.label_margin / 100) * size;
       var space =
         size -
         mleft -
         mright -
-        this._margin * 2 -
-        (O.label_margin / 100) * size * 2;
+        this._margin * 2 - mlabel * 2;
       var scale = space / bb.width;
       var pos = O.size / 2;
 
@@ -135,7 +135,7 @@ function setLabels() {
                     'translate(' +
                       pos +
                       ',' +
-                      (pos - bb.height / 2 - mtop) +
+                      (O.label_upper_pos * O.size) +
                       ') ' +
                       'scale(' +
                       scale * O.label_scale +
@@ -146,7 +146,7 @@ function setLabels() {
                     'translate(' +
                       pos +
                       ',' +
-                      (pos + bb.height / 2 + mbottom) +
+                      (O.label_lower_pos * O.size) +
                       ') ' +
                       'scale(' +
                       scale * O.label_scale +
@@ -221,6 +221,8 @@ export const Clock = defineClass({
    * @property {Function} [options.label_lower=function (date, fps, months, days) { var d = date.getDate(); var m = date.getMonth(); var y = date.getFullYear()return ((d < 10) ? ("0" + d) : d) + ". " + months[m] + " " + y; }] - Callback to format the lower label.
    * @property {Number} [options.label_scale=0.33] - The scale of `label_upper` and `label_lower` compared to the main label.
    * @property {Number} [options.label_margin=10] - Margin between the rings and the main label in percent of the overall size.
+   * @property {Number} [options.label_upper_pos=0.33] - Position of the upper label as fraction of the overall height.
+   * @property {Number} [options.label_lower_pos=0.66] - Position of the lower label as fraction of the overall height.
    * @property {Number|String|Date} [options.time] - Set a specific time and date. To avoid auto-udates, set `timeout` to 0.
    *   For more information about the value, please refer to <a href="https://www.w3schools.com/jsref/jsref_obj_date.asp">W3Schools</a>.
    */
@@ -243,6 +245,8 @@ export const Clock = defineClass({
     label_lower: 'function',
     label_scale: 'number',
     label_margin: 'number',
+    label_upper_pos: 'number',
+    label_lower_pos: 'number',
     time: 'object|string|number',
   }),
   options: {
@@ -307,6 +311,8 @@ export const Clock = defineClass({
     label_scale: 0.33, // the scale of the upper and lower labels
     // compared to the main label
     label_margin: 10,
+    label_upper_pos: 0.33,
+    label_lower_pos: 0.66,
   },
   static_events: {
     hide: onhide,
