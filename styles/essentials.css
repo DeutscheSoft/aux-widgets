@@ -707,6 +707,7 @@ body.aux-cursor-row-resize * {
   position: relative;
   overflow: hidden;
   contain: style layout;
+  background: transparent !important;
 }
 .aux-meter.aux-vertical > .aux-bar {
   height: 100%;
@@ -730,6 +731,7 @@ body.aux-cursor-row-resize * {
   justify-self: start;
   align-self: center;
 }
+.aux-meter > .aux-bar > .aux-backdrop,
 .aux-meter > .aux-bar > .aux-mask {
   position: absolute;
   left: 0;

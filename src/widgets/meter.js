@@ -255,6 +255,12 @@ export const Meter = defineClass({
      */
     this._bar = element('div', 'aux-bar');
     /**
+     * @member {HTMLCanvas} Meter#_backdrop - The canvas element drawing the background.
+     *   Has class <code>.aux-backdrop</code>.
+     */
+    this._backdrop = document.createElement('canvas');
+    addClass(this._backdrop, 'aux-backdrop');
+    /**
      * @member {HTMLCanvas} Meter#_canvas - The canvas element drawing the mask.
      *   Has class <code>.aux-mask</code>.
      */
@@ -263,6 +269,7 @@ export const Meter = defineClass({
 
     this._fillstyle = false;
 
+    this._bar.appendChild(this._backdrop);
     this._bar.appendChild(this._canvas);
 
     /**
@@ -320,10 +327,6 @@ export const Meter = defineClass({
       I.reverse = false;
       toggleClass(E, 'aux-reverse', O.reverse);
     }
-    if (I.gradient || I.background) {
-      I.gradient = I.background = false;
-      this.drawGradient(this._bar, O.gradient, O.background);
-    }
 
     Widget.prototype.redraw.call(this);
 
@@ -371,6 +374,17 @@ export const Meter = defineClass({
       this._canvas.style.width = O._width + 'px';
       this._canvas.style.height = O._height + 'px';
       this._canvas.getContext('2d').fillStyle = this._fillstyle;
+      
+      this._backdrop.setAttribute('height', Math.round(O._height));
+      this._backdrop.setAttribute('width', Math.round(O._width));
+      /* FIXME: I am not sure why this is even necessary */
+      this._backdrop.style.width = O._width + 'px';
+      this._backdrop.style.height = O._height + 'px';
+    }
+    
+    if (I.gradient || I.background) {
+      I.gradient = I.background = false;
+      this.drawGradient(this._backdrop, O.gradient, O.background);
     }
 
     if (I.value || I.basis || I.min || I.max || I.segment) {
@@ -390,6 +404,7 @@ export const Meter = defineClass({
     this.set('basis', i);
     this._last_meters.length = 0;
     this._fillstyle = false;
+    this.set("gradient", O.gradient);
   },
 
   calculateMeter: function (to, value, i) {

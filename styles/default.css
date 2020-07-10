@@ -332,9 +332,6 @@
 
 /* METER */
 
-.aux-meter .aux-bar {
-  background: var(--aux-active-base);
-}
 .aux-meter .aux-mask {
   background: var(--aux-main-base);
   opacity: 0.86;
