@@ -78,7 +78,6 @@ function scrollWheel(e) {
   if (Array.isArray(snap)) {
     let i = snap.indexOf(O.z);
     i = Math.max(0, Math.min(snap.length - 1, i + direction));
-    console.log(i, snap[i]);
     this.userset('z', snap[i]);
   } else {
     var s = R.get('step') * direction;
