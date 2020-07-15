@@ -20,7 +20,7 @@
 import { defineClass } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
 import { Container } from './container.js';
-import { Button } from './button.js';
+import { Toggle } from './toggle.js';
 import { addClass } from '../utils/dom.js';
 
 function toggle(e) {
@@ -158,6 +158,7 @@ export const Expand = defineClass({
    * @property {Boolean} [options.group_default=false] - If set, this expand is expanded
    *   if all other group members are collapsed.
    * @property {String} [options.icon=""] - Icon of the {@link Button} which toggles expanded state.
+   * @property {String} [options.icon_active=""] - Icon of the active {@link Button} which toggles expanded state.
    * @property {String} [options.label=""] - Label of the {@link Button} which toggles expanded state.
    * @property {Boolean} [options.show_button=true] - Set to `false` to hide the {@link Button} toggling expanded state.
    */
@@ -168,6 +169,7 @@ export const Expand = defineClass({
     group_default: 'boolean',
     label: 'string',
     icon: 'string',
+    icon_active: 'string',
   }),
   options: {
     expanded: false,
@@ -175,6 +177,7 @@ export const Expand = defineClass({
     group_default: false,
     label: '',
     icon: '',
+    icon_active: '',
   },
   static_events: {
     set_expanded: changedExpanded,
@@ -256,14 +259,16 @@ export const Expand = defineClass({
   },
 });
 /**
- * @member {Button} Expand#button - The button for toggling the state of the expand.
+ * @member {Toggle} Expand#button - The button for toggling the state of the expand.
  */
 defineChildWidget(Expand, 'button', {
-  create: Button,
+  create: Toggle,
   show: true,
   map_options: {
+    expanded: 'state',
     label: 'label',
     icon: 'icon',
+    icon_active: 'icon_active',
   },
   default_options: {
     _expanded: true,
