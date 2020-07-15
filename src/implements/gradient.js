@@ -107,17 +107,17 @@ export const Gradient = defineClass({
         var vert = O.layout == "left" || O.layout == "right";
         var ctx = element.getContext("2d");
         var grd = ctx.createLinearGradient(0, 0,
-          vert ? 0 : O._width,
-          vert ? O._height : 0
+          vert ? 0 : O._width||0,
+          vert ? O._height||0 : 0
         );
         for (var i = 0; i < keys.length; i++) {
-          var pos = range.val2coef(range.snap(keys[i]));
+          var pos = range.valueToCoef(range.snap(keys[i]));
           if (vert) pos = 1 - pos;
           grd.addColorStop(pos, gradient[keys[i] + ""]);
         }
         ctx.fillStyle = grd;
         ctx.fillRect(0, 0, O._width, O._height); 
-        this.fire_event("backgroundchanged", element, gradient);
+        this.emit("backgroundchanged", element, gradient);
         return;
       }
             
