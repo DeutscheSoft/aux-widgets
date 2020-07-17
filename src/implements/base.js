@@ -18,7 +18,7 @@
  */
 
 import { warn } from './../utils/log.js';
-import { removeEventListener, addEventListener } from './../utils/events.js';
+import { removeActiveEventListener, addActiveEventListener } from './../utils/events.js';
 import { defineClass, addEvent, removeEvent } from './../widget_helpers.js';
 
 function callHandler(self, fun, args) {
@@ -93,11 +93,11 @@ function removeNativeEvents(element) {
   var handler = this.__native_handler;
 
   for (type in s)
-    if (isNativeEvent(type)) removeEventListener(element, type, handler);
+    if (isNativeEvent(type)) removeActiveEventListener(element, type, handler);
 
   for (type in d)
     if (isNativeEvent(type) && (!s || !s.hasOwnProperty(type)))
-      removeEventListener(element, type, handler);
+      removeActiveEventListener(element, type, handler);
 }
 function addNativeEvents(element) {
   var type;
@@ -106,11 +106,11 @@ function addNativeEvents(element) {
   var handler = this.__native_handler;
 
   for (type in s)
-    if (isNativeEvent(type)) addEventListener(element, type, handler);
+    if (isNativeEvent(type)) addActiveEventListener(element, type, handler);
 
   for (type in d)
     if (isNativeEvent(type) && (!s || !s.hasOwnProperty(type)))
-      addEventListener(element, type, handler);
+      addActiveEventListener(element, type, handler);
 }
 function nativeHandler(ev) {
   /* FIXME:
@@ -463,7 +463,7 @@ export const Base = defineClass({
     // remove native DOM event listener from getEventTarget()
     if (isNativeEvent(event) && !this.hasEventListeners(event)) {
       var ev = this.getEventTarget();
-      if (ev) removeEventListener(ev, event, this.__native_handler);
+      if (ev) removeActiveEventListener(ev, event, this.__native_handler);
     }
   },
   removeEventListener: function (event, func) {
