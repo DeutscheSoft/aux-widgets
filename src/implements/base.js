@@ -403,7 +403,7 @@ export const Base = defineClass({
       (ev = this.getEventTarget()) &&
       !this.hasEventListeners(event)
     )
-      addEventListener(ev, event, this.__native_handler);
+      addActiveEventListener(ev, event, this.__native_handler);
     ev = this.__events;
     addEvent(ev, event, func);
   },
