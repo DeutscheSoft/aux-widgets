@@ -775,10 +775,8 @@ export const Widget = defineClass({
   },
   showNoDraw: function () {
     if (this.options.visible === true) return;
-    if (this.isDrawn()) this.update('visible', true);
-    else {
-      this.options.visible = true;
-    }
+    this.options.visible = true;
+    this.invalidate('visible');
   },
   hideNoDraw: function () {
     if (this.options.visible === false) return;
