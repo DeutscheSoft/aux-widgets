@@ -27,7 +27,7 @@ import {
   setStyle,
   getStyle,
 } from './../utils/dom.js';
-import { warn, error } from './../utils/log.js';
+import { log, warn, error } from './../utils/log.js';
 import { defineClass } from './../widget_helpers.js';
 import { Base } from './../implements/base.js';
 import {
@@ -231,6 +231,7 @@ export const Widget = defineClass({
     container: 'object',
     // a id to set on the element. If omitted a random
     // string is generated.
+    debug: 'boolean',
     id: 'string',
     styles: 'object',
     disabled: 'boolean',
@@ -246,6 +247,7 @@ export const Widget = defineClass({
   },
   options: {
     // these options are of less use and only here to show what we need
+    debug: false,
     disabled: false, // Widgets can be disabled by setting this to true
     visible: true,
     needs_resize: true,
@@ -764,6 +766,12 @@ export const Widget = defineClass({
     removeClass(E, 'aux-show');
     addClass(E, 'aux-hide');
     this.disableDraw();
+  },
+  log: function (fmt, ...args) {
+    const O = this.options;
+    if (!O.debug) return;
+
+    log(fmt, ...args);
   },
   showNoDraw: function () {
     if (this.options.visible === true) return;
