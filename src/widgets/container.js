@@ -208,6 +208,8 @@ export const Container = defineClass({
 
     if (!child) throw new Error('Cannot find child.');
 
+    if (H[i]) return;
+
     H[i] = true;
 
     if (this.isDrawn()) {
@@ -237,10 +239,14 @@ export const Container = defineClass({
 
     if (!child) throw new Error('Cannot find child.');
 
-    if (H[i]) {
-      H[i] = false;
-      if (this.isDrawn()) C[i].show();
-      else C[i].showNoDraw();
+    if (!H[i]) return;
+
+    H[i] = false;
+
+    if (this.isDrawn()) {
+      child.show();
+    } else {
+      child.showNoDraw();
     }
   },
 
