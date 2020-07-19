@@ -163,7 +163,7 @@ export const Container = defineClass({
    */
   hide: function () {
     if (this.hidden()) return;
-    this.update('visible', 'hiding');
+    this.update('visible', this.transitionsDisabled() ? false : 'hiding');
   },
   forceHide: function () {
     this.set('visible', false);
@@ -180,7 +180,9 @@ export const Container = defineClass({
    */
   show: function () {
     if (!this.isDrawn()) this.enableDraw();
-    if (this.hidden()) this.update('visible', 'showing');
+    if (!this.hidden()) return;
+
+    this.update('visible', this.transitionsDisabled() ? true : 'showing');
   },
   forceShow: function () {
     const E = this.element;

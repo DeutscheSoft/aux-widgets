@@ -180,6 +180,8 @@ export const Widget = defineClass({
    *   options are reset to the default. Defaults are updated on initialization and runtime.
    * @property {Object} [options.presets={}] - An object with available preset
    *   specific options. Refer to `options.preset` for more information.
+   * @property {number} [options.notransitions_duration=500] - A time in
+   *    milliseconds until transitions are activated.
    */
   /**
    * The <code>set</code> event is emitted when an option was set using the {@link Widget#set}
@@ -241,6 +243,8 @@ export const Widget = defineClass({
     needs_resize: 'boolean',
     dblclick: 'number',
     interacting: 'boolean',
+    notransitions: 'boolean',
+    notransitions_duration: 'number',
     presets: 'object',
     preset: 'string',
     title: 'string',
@@ -248,11 +252,13 @@ export const Widget = defineClass({
   options: {
     // these options are of less use and only here to show what we need
     debug: false,
+    notransitions: void 0,
     disabled: false, // Widgets can be disabled by setting this to true
     visible: true,
     needs_resize: true,
     dblclick: 0,
     interacting: false,
+    notransitions_duration: 500,
     presets: {},
   },
   static_events: {
@@ -313,6 +319,7 @@ export const Widget = defineClass({
     this.children = null;
     this.draw_queue = null;
     this.__lastclick = 0;
+    this._creation_time = performance.now();
     this.__dblclick_cb = dblClick.bind(this);
     this._onresize = onResize.bind(this);
     this._onvisibilitychange = onVisibilityChange.bind(this);
@@ -443,8 +450,10 @@ export const Widget = defineClass({
     Base.prototype.initialized.call(this);
     this.triggerDraw();
 
-    if (this.options.preset) {
-      this.set('preset', this.options.preset);
+    const O = this.options;
+
+    if (O.preset) {
+      this.set('preset', O.preset);
     }
   },
   drawOnce: function (fun) {
@@ -461,14 +470,27 @@ export const Widget = defineClass({
   draw: function (O, element) {
     let E;
 
-    if (O.container) O.container.appendChild(element);
+    let notransitions = O.notransitions;
 
+    if (notransitions === void 0) {
+      O.notransitions = true;
+
+      const time = O.notransitions_duration - (performance.now() - this._creation_time);
+
+      const do_enable = () => {
+        if (this.isDestructed()) return;
+        this.enableTransitions();
+      };
+
+      if (time > 0) {
+        setTimeout(do_enable, time);
+      } else {
+        S.addNext(do_enable);
+      }
+    }
+
+    toggleClass(element, 'aux-notransitions', O.notransitions);
     addClass(element, 'aux-widget');
-    this.disableTransitions();
-    S.addNext(() => {
-      if (this.isDestructed()) return;
-      this.enableTransitions();
-    }, 1);
 
     if (O.id) element.setAttribute('id', O.id);
 
@@ -481,12 +503,19 @@ export const Widget = defineClass({
       setStyles(E, O.styles);
     }
 
+    if (O.container) O.container.appendChild(element);
+
     this.scheduleResize();
   },
   redraw: function () {
     var I = this.invalid;
     var O = this.options;
     var E = this.element;
+
+    if (I.notransitions) {
+      I.notransitions = false;
+      toggleClass(E, 'aux-notransitions', O.notransitions);
+    }
 
     if (I.visible) {
       I.visible = false;
@@ -611,20 +640,33 @@ export const Widget = defineClass({
     return getStyle(this.getStyleTarget(), name);
   },
   /**
-   * Disable all possibly set CSS transitions.
+   * Returns true if transitions are currently disabled on this widget.
+   */
+  transitionsDisabled: function() {
+    const O = this.options;
+    const notransitions = O.notransitions;
+
+    if (notransitions === void 0) {
+      return (performance.now() - this._creation_time) < O.notransitions_duration;
+    } else {
+      return notransitions;
+    }
+  },
+  /**
+   * Disable CSS transitions.
    *
    * @method Widget#disableTansitions
    */
   disableTransitions: function () {
-    addClass(this.element, 'aux-notransition');
+    this.update('notransitions', true);
   },
   /**
-   * Allow possibly set CSS transitions.
+   * Enable CSS transitions.
    *
    * @method Widget#enableTransitions
    */
   enableTransitions: function () {
-    removeClass(this.element, 'aux-notransition');
+    this.update('notransitions', false);
   },
   // GETTER & SETTER
   /**
