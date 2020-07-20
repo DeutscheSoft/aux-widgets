@@ -30,6 +30,7 @@ import { addEventListener, removeEventListener } from '../utils/events.js';
 import { setText, removeClass, addClass, toggleClass } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
 import { Range } from '../modules/range.js';
+import { Timer } from '../utils/timers.js';
 
 import { DragCapture } from '../modules/dragcapture.js';
 
@@ -47,49 +48,6 @@ function normalize(v) {
   var n = Math.sqrt(v[0] * v[0] + v[1] * v[1]);
   v[0] /= n;
   v[1] /= n;
-}
-function scrollWheel(e) {
-  var direction;
-  let O = this.options;
-  e.preventDefault();
-  e.stopPropagation();
-  var d = e.wheelDelta !== void 0 && e.wheelDelta ? e.wheelDelta : e.detail;
-  if (d > 0) {
-    direction = 1;
-  } else if (d < 0) {
-    direction = -1;
-  } else return;
-
-  var R = O.range_z;
-
-  if (this.__sto) window.clearTimeout(this.__sto);
-  this.set('dragging', true);
-  addClass(this.element, 'aux-active');
-  this.__sto = window.setTimeout(
-    function () {
-      this.set('dragging', false);
-      removeClass(this.element, 'aux-active');
-      this.emit('zchangeended', this.options.z);
-      this._zwheel = false;
-    }.bind(this),
-    250
-  );
-  let snap = R.options.snap;
-  if (Array.isArray(snap)) {
-    let i = snap.indexOf(O.z);
-    i = Math.max(0, Math.min(snap.length - 1, i + direction));
-    this.userset('z', snap[i]);
-  } else {
-    var s = R.get('step') * direction;
-    if (e.ctrlKey && e.shiftKey) s *= R.get('shift_down');
-    else if (e.shiftKey) s *= R.get('shift_up');
-    this.userset(
-      'z',
-      Math.max(R.min, Math.min(R.snap(this.get('z') + s, R.max)))
-    );
-  }
-  if (!this._zwheel) this.emit('zchangestarted', this.options.z);
-  this._zwheel = true;
 }
 
 /* The following functions turn positioning options
@@ -603,8 +561,7 @@ function createLabel() {
   this._label = E = makeSVG('text', {
     class: 'aux-label',
   });
-  addEventListener(E, 'mousewheel', this._scrollwheel);
-  addEventListener(E, 'DOMMouseScroll', this._scrollwheel);
+  addEventListener(E, 'wheel', this._onWheel);
   addEventListener(E, 'contextmenu', preventDefault);
 }
 
@@ -612,8 +569,7 @@ function removeLabel() {
   var E = this._label;
   this._label = null;
   E.remove();
-  removeEventListener(E, 'mousewheel', this._scrollwheel);
-  removeEventListener(E, 'DOMMouseScroll', this._scrollwheel);
+  removeEventListener(E, 'wheel', this._onWheel);
   removeEventListener(E, 'contextmenu', preventDefault);
 
   this.label = [0, 0, 0, 0];
@@ -628,8 +584,7 @@ function createHandle() {
   E = makeSVG(O.mode === 'circular' ? 'circle' : 'rect', {
     class: 'aux-handle',
   });
-  addEventListener(E, 'mousewheel', this._scrollwheel);
-  addEventListener(E, 'DOMMouseScroll', this._scrollwheel);
+  addEventListener(E, 'wheel', this._onWheel);
   addEventListener(E, 'selectstart', preventDefault);
   addEventListener(E, 'contextmenu', preventDefault);
   this._handle = E;
@@ -641,8 +596,7 @@ function removeHandle() {
   if (!E) return;
   this._handle = null;
   E.remove();
-  removeEventListener(E, 'mousewheel', this._scrollwheel);
-  removeEventListener(E, 'DOMMouseScroll', this._scrollwheel);
+  removeEventListener(E, 'wheel', this._onWheel);
   removeEventListener(E, 'selectstart', preventDefault);
   removeEventListener(E, 'contextmenu', preventDefault);
 }
@@ -1097,12 +1051,55 @@ export const ChartHandle = defineClass({
       this.stopInteracting();
     },
   },
+  onWheel: function (e) {
+    if (e.deltaY === 0) return;
 
+    e.preventDefault();
+    e.stopPropagation();
+
+    const direction = e.deltaY < 0 ? -1 : 1;
+    const range = this.options.range_z;
+
+    let diff = direction;
+
+    if (e.getModifierState('Shift')) {
+      diff *= range.get(
+        e.getModifierState('Control') ? 'shift_down' : 'shift_up'
+      );
+    }
+
+    let z = this.get('z');
+
+    if (direction === 1) {
+      z = range.snapUp(z + diff);
+    } else {
+      z = range.snapDown(z + diff);
+    }
+
+    this.userset('z', z);
+
+    let timer = this._wheel_timer;
+
+    if (timer === null) {
+      this._wheel_timer = timer = new Timer(() => {
+        this.set('dragging', false);
+        removeClass(this.element, 'aux-active');
+        this.emit('zchangeended', this.options.z);
+      });
+    }
+
+    if (!timer.active) {
+      this.emit('zchangestarted', this.options.z);
+      this.set('dragging', true);
+      addClass(this.element, 'aux-active');
+    }
+
+    timer.restart(250);
+  },
   initialize: function (options) {
     this.label = [0, 0, 0, 0];
     this.handle = [0, 0, 0, 0];
-    this._zwheel = false;
-    this.__sto = 0;
+    this._wheel_timer = null;
     if (!options.element) options.element = makeSVG('g');
     Widget.prototype.initialize.call(this, options);
     var O = this.options;
@@ -1138,7 +1135,7 @@ export const ChartHandle = defineClass({
      *      Has class <code>.aux-zhandle</code>.
      */
 
-    this._scrollwheel = scrollWheel.bind(this);
+    this._onWheel = (e) => this.onWheel(e);
 
     this._handle = this._zhandle = this._line1 = this._line2 = this._label = null;
 
