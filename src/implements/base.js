@@ -18,7 +18,10 @@
  */
 
 import { warn } from './../utils/log.js';
-import { removeActiveEventListener, addActiveEventListener } from './../utils/events.js';
+import {
+  removeActiveEventListener,
+  addActiveEventListener,
+} from './../utils/events.js';
 import { defineClass, addEvent, removeEvent } from './../widget_helpers.js';
 
 function callHandler(self, fun, args) {

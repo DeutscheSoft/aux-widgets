@@ -107,11 +107,7 @@ function setLabels() {
       var mtop = parseInt(getStyle(E, 'margin-top')) || 0;
       var mbottom = parseInt(getStyle(E, 'margin-bottom')) || 0;
       var mlabel = (O.label_margin / 100) * size;
-      var space =
-        size -
-        mleft -
-        mright -
-        this._margin * 2 - mlabel * 2;
+      var space = size - mleft - mright - this._margin * 2 - mlabel * 2;
       var scale = space / bb.width;
       var pos = O.size / 2;
 
@@ -135,7 +131,7 @@ function setLabels() {
                     'translate(' +
                       pos +
                       ',' +
-                      (O.label_upper_pos * O.size) +
+                      O.label_upper_pos * O.size +
                       ') ' +
                       'scale(' +
                       scale * O.label_scale +
@@ -146,7 +142,7 @@ function setLabels() {
                     'translate(' +
                       pos +
                       ',' +
-                      (O.label_lower_pos * O.size) +
+                      O.label_lower_pos * O.size +
                       ') ' +
                       'scale(' +
                       scale * O.label_scale +

@@ -475,7 +475,8 @@ export const Widget = defineClass({
     if (notransitions === void 0) {
       O.notransitions = true;
 
-      const time = O.notransitions_duration - (performance.now() - this._creation_time);
+      const time =
+        O.notransitions_duration - (performance.now() - this._creation_time);
 
       const do_enable = () => {
         if (this.isDestructed()) return;
@@ -642,12 +643,12 @@ export const Widget = defineClass({
   /**
    * Returns true if transitions are currently disabled on this widget.
    */
-  transitionsDisabled: function() {
+  transitionsDisabled: function () {
     const O = this.options;
     const notransitions = O.notransitions;
 
     if (notransitions === void 0) {
-      return (performance.now() - this._creation_time) < O.notransitions_duration;
+      return performance.now() - this._creation_time < O.notransitions_duration;
     } else {
       return notransitions;
     }

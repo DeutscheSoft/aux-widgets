@@ -374,14 +374,14 @@ export const Meter = defineClass({
       this._canvas.style.width = O._width + 'px';
       this._canvas.style.height = O._height + 'px';
       this._canvas.getContext('2d').fillStyle = this._fillstyle;
-      
+
       this._backdrop.setAttribute('height', Math.round(O._height));
       this._backdrop.setAttribute('width', Math.round(O._width));
       /* FIXME: I am not sure why this is even necessary */
       this._backdrop.style.width = O._width + 'px';
       this._backdrop.style.height = O._height + 'px';
     }
-    
+
     if (I.gradient || I.background) {
       I.gradient = I.background = false;
       this.drawGradient(this._backdrop, O.gradient, O.background);
@@ -404,7 +404,7 @@ export const Meter = defineClass({
     this.set('basis', i);
     this._last_meters.length = 0;
     this._fillstyle = false;
-    this.set("gradient", O.gradient);
+    this.set('gradient', O.gradient);
   },
 
   calculateMeter: function (to, value, i) {

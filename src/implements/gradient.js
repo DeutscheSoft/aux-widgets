@@ -79,48 +79,57 @@ export const Gradient = defineClass({
     //  {"-96": "rgb(30,87,153)", "-0.001": "rgb(41,137,216)", "0": "rgb(32,124,202)", "24": "rgb(125,185,232)"}
     // becomes:
     // background: linear-gradient(to bottom, rgb(30,87,153) 0%,rgb(41,137,216) 50%,rgb(32,124,202) 51%,rgb(125,185,232) 100%);
-    
+
     const O = this.options;
     var bg = '';
     range = range || this;
-    
+
     if (!gradient && !O.gradient) {
       bg = fallback || O.background;
-      if (element.tagName === "CANVAS") {
-        var ctx = element.getContext("2d");
+      if (element.tagName === 'CANVAS') {
+        var ctx = element.getContext('2d');
         ctx.fillStyle = bg;
-        ctx.fillRect(0, 0, O._width, O._height); 
-        this.emit("backgroundchanged", element, bg);
+        ctx.fillRect(0, 0, O._width, O._height);
+        this.emit('backgroundchanged', element, bg);
         return;
       }
     } else {
       gradient = gradient || this.options.gradient;
-      
+
       var keys = Object.keys(gradient);
       for (var i = 0; i < keys.length; i++) {
         keys[i] = parseFloat(keys[i]);
       }
-      keys = keys.sort(O.reverse ?
-        function (a,b) { return b-a } : function (a,b) { return a-b });
-      
-      if (element.tagName === "CANVAS") {
-        var vert = O.layout == "left" || O.layout == "right";
-        var ctx = element.getContext("2d");
-        var grd = ctx.createLinearGradient(0, 0,
-          vert ? 0 : O._width||0,
-          vert ? O._height||0 : 0
+      keys = keys.sort(
+        O.reverse
+          ? function (a, b) {
+              return b - a;
+            }
+          : function (a, b) {
+              return a - b;
+            }
+      );
+
+      if (element.tagName === 'CANVAS') {
+        var vert = O.layout == 'left' || O.layout == 'right';
+        var ctx = element.getContext('2d');
+        var grd = ctx.createLinearGradient(
+          0,
+          0,
+          vert ? 0 : O._width || 0,
+          vert ? O._height || 0 : 0
         );
         for (var i = 0; i < keys.length; i++) {
           var pos = range.valueToCoef(range.snap(keys[i]));
           if (vert) pos = 1 - pos;
-          grd.addColorStop(pos, gradient[keys[i] + ""]);
+          grd.addColorStop(pos, gradient[keys[i] + '']);
         }
         ctx.fillStyle = grd;
-        ctx.fillRect(0, 0, O._width, O._height); 
-        this.emit("backgroundchanged", element, gradient);
+        ctx.fillRect(0, 0, O._width, O._height);
+        this.emit('backgroundchanged', element, gradient);
         return;
       }
-            
+
       var m_regular = '';
       var s_regular = 'linear-gradient(%s, %s)';
       var c_regular = '%s %s%%, ';
