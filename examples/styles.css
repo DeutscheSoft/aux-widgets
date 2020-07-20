@@ -116,14 +116,18 @@ p {
 
 h1 {
   font-size: 32px;
-  color: var(--aux-contrast-base);
+  line-height: 1.2em;
+  font-weight: normal;
+  color: var(--aux-warn-base);
   margin-bottom: 0.5em;
   border-bottom: 1px solid #aaa;
 }
 
 h3 {
   font-size: 24px;
-  color: var(--aux-contrast-base);
+  line-height: 1.2em;
+  font-weight: normal;
+  color: var(--aux-warn-base);
   margin-bottom: 0.5em;
   border-bottom: 1px solid #aaa;
   text-align: right;
@@ -137,7 +141,7 @@ h3 {
 }
 .aux-root {
   clear: both;
-  padding: 16px;
+  padding: 16px 144px 16px 16px;
   height: 100%;
   margin: 0;
   margin-right: 128px;
