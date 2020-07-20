@@ -33,6 +33,11 @@ import { ChildWidgets } from '../utils/child_widgets.js';
  * @param {mixed} value - The new value of the option
  */
 
+function compare (arr1, arr2) {
+  return arr1.length === arr2.length
+    && arr1.every((val, i) => val === arr2[i])
+}
+
 function updateSelect(select, position, add) {
   if (Array.isArray(select)) {
     if (add === select.includes(position)) return select;
@@ -89,8 +94,12 @@ function onButtonUserset(key, value) {
     O.multi_select
   );
 
-  if (select === O.select) return;
-
+  if (select === O.select || O.multi_select
+    && compare(select, O.select)) {
+    parent.warning(this.element, 500);
+    return;
+  }
+  
   return parent.userset('select', select);
 }
 
