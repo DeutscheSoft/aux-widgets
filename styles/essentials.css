@@ -26,9 +26,6 @@
  * And better DO NOT EDIT this one.
  */
 
-@import 'fonts/AUXIcons.css';
-@import 'fonts/AUXShapes.css';
-
 body {
   --aux-scrollbar-size: 0;
 }

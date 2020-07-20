@@ -1,0 +1,455 @@
+/*
+ * This file is part of AUX.
+ *
+ * AUX is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * AUX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU General
+ * Public License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ */
+
+/*
+ * This is the default AUX style. Use it to get your development started,
+ * concentrating on the design later. If you like the overall appearance
+ * and just feel like changing colors, take a look at the variables
+ * section below. Edit or overwrite these variables to change the color
+ * scheme.
+ */
+
+@import 'basics.css'; /* Some general defaults */
+
+:root {
+  --aux-main-base: #e0e0e0;
+  --aux-main-text: #212424;
+
+  --aux-widget-base: #ffffff;
+  --aux-widget-text: var(--aux-main-text);
+
+  --aux-active-base: #2577a1;
+  --aux-active-text: #ffffff;
+  
+  --aux-fader-handle1: #5d6666;
+  --aux-fader-handle2: #363a3a;
+  --aux-fader-handle3: #1e2121;
+  --aux-fader-handle4: #353a3a;
+  --aux-fader-handle5: #353a3a;
+  --aux-fader-handle6: #353a3a;
+  --aux-fader-handle7: #212424;
+  --aux-fader-handle8: #191c1c;
+  
+  --aux-warn-base: #ee6b11;
+  --aux-warn-text: #ffffff;
+
+  --aux-contrast-base: var(--aux-main-text);
+  --aux-contrast-text: #ffffff;
+
+  --aux-transition-duration: 0.33s;
+
+  --aux-border-radius: 4px;
+}
+
+/* ######## GENERIC CSS ######## */
+
+::selection {
+  color: var(--aux-active-text);
+  background: var(--aux-active-base);
+}
+
+.aux-disabled {
+  filter: grayscale(100%) contrast(50%);
+}
+
+/* ######## WIDGETS ######## */
+
+/* BUTTON */
+
+.aux-button {
+  background: var(--aux-widget-base);
+  color: var(--aux-widget-text);
+  border: 1px solid var(--aux-widget-base);
+  border-radius: var(--aux-border-radius);
+  transition: background var(--aux-transition-duration),
+    color var(--aux-transition-duration),
+    border-color var(--aux-transition-duration);
+}
+.aux-button:hover {
+  color: var(--aux-main-text);
+  border-color: var(--aux-active-base);
+  cursor: pointer;
+}
+.aux-button.aux-active {
+  background: var(--aux-active-base);
+  color: var(--aux-active-text);
+  border-color: var(--aux-active-base);
+}
+.aux-button.aux-active:hover {
+  border-color: var(--aux-active-text);
+}
+.aux-button.aux-warn {
+  background: var(--aux-warn-base);
+  color: var(--aux-warn-text);
+  border-color: var(--aux-warn-base);
+}
+
+/* CHART */
+
+.aux-chart > svg {
+  background: var(--aux-contrast-base);
+}
+.aux-chart .aux-title {
+  fill: var(--aux-contrast-text);
+  opacity: 0.5;
+}
+
+/* CIRCULAR */
+
+.aux-circular .aux-base {
+  fill: var(--aux-widget-base);
+}
+.aux-circular .aux-value {
+  fill: var(--aux-active-base);
+}
+.aux-circular .aux-hand {
+  fill: var(--aux-widget-base);
+}
+.aux-circular .aux-labels .aux-label {
+  fill: var(--aux-main-text);
+}
+.aux-circular .aux-dots .aux-dot {
+  fill: var(--aux-widget-base);
+}
+.aux-circular .aux-markers .aux-marker {
+  fill: var(--aux-warn-base);
+}
+.aux-circular.aux-warn .aux-base {
+  fill: var(--aux-warn-base);
+}
+.aux-circular.aux-warn .aux-value {
+  fill: var(--aux-warn-base);
+}
+.aux-circular.aux-warn .aux-hand {
+  fill: var(--aux-warn-base);
+}
+
+/* CHARTHANDLE */
+
+.aux-charthandle {
+  fill: var(--aux-contrast-text);
+}
+.aux-charthandle > .aux-handle {
+  opacity: 0.25;
+  stroke: var(--aux-contrast-text);
+  stroke-opacity: 0.5;
+}
+.aux-charthandle > .aux-line1 {
+  stroke: var(--aux-contrast-text);
+  opacity: 0.5;
+}
+.aux-charthandle > .aux-line2 {
+  stroke: var(--aux-contrast-text);
+  opacity: 0.5;
+}
+
+/* FADER */
+
+.aux-fader .aux-handle {
+  border-radius: var(--aux-border-radius);
+  box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.5), 1px 3px 3px rgba(0, 0, 0, 0.2),
+    2px 6px 3px rgba(0, 0, 0, 0.18), 3px 9px 3px rgba(0, 0, 0, 0.16);
+}
+.aux-fader.aux-vertical .aux-handle {
+  background: linear-gradient(
+    to bottom,
+    var(--aux-fader-handle1) 0%,
+    var(--aux-fader-handle2) 20%,
+    var(--aux-fader-handle3) 22%,
+    var(--aux-fader-handle4) 48%,
+    var(--aux-active-base)   49%,
+    var(--aux-active-base)   51%,
+    var(--aux-fader-handle5) 52%,
+    var(--aux-fader-handle6) 78%,
+    var(--aux-fader-handle7) 80%,
+    var(--aux-fader-handle8) 100%
+  );
+}
+.aux-fader.aux-vertical.aux-warn .aux-handle {
+  background: linear-gradient(
+    to bottom,
+    var(--aux-fader-handle1) 0%,
+    var(--aux-fader-handle2) 20%,
+    var(--aux-fader-handle3) 22%,
+    var(--aux-fader-handle4) 48%,
+    var(--aux-warn-base) 49%,
+    var(--aux-warn-base) 51%,
+    var(--aux-fader-handle5) 52%,
+    var(--aux-fader-handle6) 78%,
+    var(--aux-fader-handle7) 80%,
+    var(--aux-fader-handle8) 100%
+  );
+}
+.aux-fader.aux-horizontal .aux-handle {
+  background: linear-gradient(
+    to right,
+    var(--aux-fader-handle1) 0%,
+    var(--aux-fader-handle2) 20%,
+    var(--aux-fader-handle3) 22%,
+    var(--aux-fader-handle4) 48%,
+    var(--aux-active-base)   49%,
+    var(--aux-active-base)   51%,
+    var(--aux-fader-handle5) 52%,
+    var(--aux-fader-handle6) 78%,
+    var(--aux-fader-handle7) 80%,
+    var(--aux-fader-handle8) 100%
+  );
+}
+.aux-fader.aux-horizontal.aux-warn .aux-handle {
+  background: linear-gradient(
+    to right,
+    var(--aux-fader-handle1) 0%,
+    var(--aux-fader-handle2) 20%,
+    var(--aux-fader-handle3) 22%,
+    var(--aux-fader-handle4) 48%,
+    var(--aux-warn-base) 49%,
+    var(--aux-warn-base) 51%,
+    var(--aux-fader-handle5) 52%,
+    var(--aux-fader-handle6) 78%,
+    var(--aux-fader-handle7) 80%,
+    var(--aux-fader-handle8) 100%
+  );
+}
+.aux-fader > .aux-track::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  background: black;
+  transform: translate(-50%, -50%);
+}
+.aux-fader.aux-vertical > .aux-track::before {
+  width: 2px;
+  height: calc(100% - var(--aux-fader-handleheight));
+}
+.aux-fader.aux-horizontal > .aux-track::before {
+  width: calc(100% - var(--aux-fader-handleheight));
+  height: 2px;
+}
+
+/* FRAME */
+
+.aux-frame {
+  margin-top: var(--aux-main-fontsize);
+  border: 1px solid var(--aux-contrast-base);
+  border-radius: var(--aux-border-radius);
+}
+.aux-frame > .aux-framelabel {
+  background: var(--aux-contrast-base);
+  color: var(--aux-contrast-text);
+  border: 1px solid var(--aux-contrast-base);
+  border-bottom-right-radius: var(--aux-border-radius);
+}
+
+/* GRAPH */
+
+.aux-graph {
+  stroke: var(--aux-active-base);
+}
+.aux-graph.aux-steady {
+  stroke: var(--aux-contrast-text);
+}
+
+/* GRID */
+
+.aux-gridlabel {
+  fill: var(--aux-contrast-text);
+  opacity: 0.5;
+}
+.aux-gridline {
+  stroke: var(--aux-contrast-text);
+  opacity: 0.1;
+}
+
+/* KNOB */
+
+.aux-knob::before {
+  background: linear-gradient(
+    to bottom,
+    rgba(56, 61, 61, 1) 0%,
+    rgba(18, 20, 20, 1) 100%
+  );
+}
+.aux-knob::after {
+  box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.5), 1px 3px 3px rgba(0, 0, 0, 0.2),
+    2px 6px 3px rgba(0, 0, 0, 0.18), 3px 9px 3px rgba(0, 0, 0, 0.16),
+    4px 12px 3px rgba(0, 0, 0, 0.14), 5px 15px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* VIRTUALTREE */
+
+.aux-virtualtree {
+  background: var(--aux-widget-base);
+  color: var(--aux-widget-color);
+}
+
+/* VIRTUALTREEENTRY */
+
+.aux-virtualtreeentry.aux-odd {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.aux-virtualtreeentry > .aux-collapse {
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  border: none;
+  background: transparent;
+  border: 1px solid var(--aux-main-text);
+  border-radius: 50%;
+  margin: var(--aux-main-margin);
+  width: calc(var(--aux-virtualtreeentry-size) - 2 * var(--aux-main-margin));
+  flex: 0 0 calc(var(--aux-virtualtreeentry-size) - 2 * var(--aux-main-margin));
+  height: calc(var(--aux-virtualtreeentry-size) - 2 * var(--aux-main-margin));
+}
+.aux-virtualtreeentry > .aux-indent {
+  font-weight: 200;
+}
+.aux-virtualtreeentry > .aux-icon {
+  font-size: var(--aux-main-bigfontsize);
+}
+.aux-virtualtreeentry.aux-collapsable > .aux-label {
+  font-weight: bold;
+}
+
+/* MATRIX */
+
+.aux-matrix > .aux-indicators {
+  background: var(--aux-widget-base);
+}
+.aux-matrix .aux-indicator {
+  border-radius: 0;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* METER */
+
+.aux-meter .aux-mask {
+  background: var(--aux-main-base);
+  opacity: 0.86;
+}
+
+/* NOTIFICATIONS */
+
+.aux-notification {
+  background: var(--aux-contrast-base);
+  color: var(--aux-contrast-text);
+  border-radius: var(--aux-border-radius);
+}
+
+/* PANORAMA */
+
+.aux-panorama .aux-center {
+  stroke: var(--aux-warn-base);
+  opacity: 1;
+}
+
+/* ROOT */
+
+.aux-root {
+  background: var(--aux-main-base);
+  color: var(--aux-main-text);
+}
+
+/* SCALE */
+
+.aux-scale > .aux-dot {
+  background: var(--aux-main-text);
+  opacity: 0.25;
+}
+.aux-scale > .aux-dot.aux-marker {
+  opacity: 1;
+}
+.aux-scale > .aux-label.aux-base {
+  color: var(--aux-active-base);
+}
+.aux-scale > .aux-bar {
+  background: var(--aux-active-base);
+}
+.aux-scale.aux-top > .aux-pointer {
+  border-bottom-color: var(--aux-warn-base);
+}
+.aux-scale.aux-left > .aux-pointer {
+  border-right-color: var(--aux-warn-base);
+}
+.aux-scale.aux-right > .aux-pointer {
+  border-left-color: var(--aux-warn-base);
+}
+.aux-scale.aux-bottom > .aux-pointer {
+  border-top-color: var(--aux-warn-base);
+}
+
+/* SELECT */
+
+.aux-selectlist {
+  transition: opacity var(--aux-transition-duration);
+  background: var(--aux-contrast-base);
+  color: var(--aux-contrast-text);
+  box-shadow: 2px 6px 12px rgba(0, 0, 0, 0.25);
+}
+.aux-selectlist > .aux-selectentry {
+  transition: background var(--aux-transition-duration),
+    color var(--aux-transition-duration);
+}
+.aux-selectlist > .aux-selectentry.aux-active {
+  background: var(--aux-active-base);
+}
+
+/* STATE */
+
+.aux-state {
+  background: var(--aux-warn-base);
+}
+
+/* VALUE */
+
+.aux-value > .aux-input {
+  background: var(--aux-widget-base);
+  color: var(--aux-widget-text);
+  border-radius: var(--aux-border-radius);
+}
+.aux-value.aux-active > .aux-input {
+  background: var(--aux-contrast-base);
+  color: var(--aux-contrast-text);
+}
+
+/* VALUEBUTTON */
+
+.aux-valuebutton {
+  border-width: 0px;
+}
+.aux-valuebutton > .aux-value > .aux-input {
+  background: var(--aux-active-base);
+  color: var(--aux-active-text);
+}
+.aux-valuebutton > .aux-value.aux-active > .aux-input {
+  background: var(--aux-contrast-base);
+  color: var(--aux-contrast-text);
+}
+.aux-valuebutton > .aux-bar {
+  background: var(--aux-active-base);
+}
+.aux-valuebutton.aux-warn {
+  background: var(--aux-widget-base);
+  color: var(--aux-widget-color);
+}
+.aux-valuebutton.aux-warn .aux-bar,
+.aux-valuebutton.aux-warn .aux-value {
+  background: var(--aux-warn-base) !important;
+}

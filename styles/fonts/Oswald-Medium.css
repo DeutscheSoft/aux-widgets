@@ -16,17 +16,10 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
-
-/*
- * This is the default AUX theme. Use it to get your development started,
- * concentrating on the design later. This file includes all fonts needed
- * for the full experience, including variants to be used in custom themes.
- */
-
-@import 'styles.css';
-
-@import 'fonts/Oswald-Regular.css';
-@import 'fonts/PragatiNarrow-Regular.css';
-
-@import 'fonts/AUXIcons.css';
-@import 'fonts/AUXShapes.css';
+ 
+@font-face {
+  font-family: 'Oswald';
+  font-style: normal;
+  font-weight: 500;
+  src: url('Oswald-Medium.woff2') format('woff2');
+}

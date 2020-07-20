@@ -26,11 +26,9 @@
  */
 
 @import 'essentials.css'; /* technical dependency */
-@import 'fonts/Oswald.css';
-@import 'fonts/Pragati.css';
 
 :root {
-  --aux-main-fontfamily: Pragati, sans-serif;
+  --aux-main-fontfamily: PragatiNarrow, sans-serif;
   --aux-main-fontsize: 14px;
   --aux-main-fontweight: 300;
   --aux-main-lineheight: 1.2em;

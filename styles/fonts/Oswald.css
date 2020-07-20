@@ -1,36 +1,25 @@
-@font-face {
-  font-family: 'Oswald';
-  font-style: normal;
-  font-weight: 200;
-  src: url('Oswald-ExtraLight.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Oswald';
-  font-style: normal;
-  font-weight: 300;
-  src: url('Oswald-Light.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Oswald';
-  font-style: normal;
-  font-weight: 400;
-  src: url('Oswald-Regular.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Oswald';
-  font-style: normal;
-  font-weight: 500;
-  src: url('Oswald-Medium.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Oswald';
-  font-style: normal;
-  font-weight: 600;
-  src: url('Oswald-SemiBold.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Oswald';
-  font-style: normal;
-  font-weight: 700;
-  src: url('Oswald-Bold.woff2') format('woff2');
-}
+/*
+ * This file is part of AUX.
+ *
+ * AUX is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * AUX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU General
+ * Public License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ */
+ 
+@import 'fonts/Oswald-ExtraLight.css';
+@import 'fonts/Oswald-Light.css';
+@import 'fonts/Oswald-Medium.css';
+@import 'fonts/Oswald-Regular.css';
+@import 'fonts/Oswald-SemiBold.css';
+@import 'fonts/Oswald-Bold.css';
