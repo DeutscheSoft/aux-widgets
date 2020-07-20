@@ -115,6 +115,7 @@
   --aux-charthandle-strokewarn: 20;
 
   --aux-value-height: 32px;
+  --aux-value-padding: 2px;
 
   --aux-valuebutton-gap: 4px;
   --aux-valuebutton-paddingvertical: 0px;
@@ -956,6 +957,7 @@
   font-size: var(--aux-main-bigfontsize);
   font-weight: var(--aux-main-fontweight);
   line-height: var(--aux-main-lineheight);
+  padding: var(--aux-value-padding);
 }
 
 /* VALUEBUTTON */
