@@ -36,7 +36,7 @@
 
   --aux-active-base: #2577a1;
   --aux-active-text: #ffffff;
-  
+
   --aux-fader-handle1: #5d6666;
   --aux-fader-handle2: #363a3a;
   --aux-fader-handle3: #1e2121;
@@ -45,7 +45,7 @@
   --aux-fader-handle6: #353a3a;
   --aux-fader-handle7: #212424;
   --aux-fader-handle8: #191c1c;
-  
+
   --aux-warn-base: #ee6b11;
   --aux-warn-text: #ffffff;
 
@@ -173,8 +173,8 @@
     var(--aux-fader-handle2) 20%,
     var(--aux-fader-handle3) 22%,
     var(--aux-fader-handle4) 48%,
-    var(--aux-active-base)   49%,
-    var(--aux-active-base)   51%,
+    var(--aux-active-base) 49%,
+    var(--aux-active-base) 51%,
     var(--aux-fader-handle5) 52%,
     var(--aux-fader-handle6) 78%,
     var(--aux-fader-handle7) 80%,
@@ -203,8 +203,8 @@
     var(--aux-fader-handle2) 20%,
     var(--aux-fader-handle3) 22%,
     var(--aux-fader-handle4) 48%,
-    var(--aux-active-base)   49%,
-    var(--aux-active-base)   51%,
+    var(--aux-active-base) 49%,
+    var(--aux-active-base) 51%,
     var(--aux-fader-handle5) 52%,
     var(--aux-fader-handle6) 78%,
     var(--aux-fader-handle7) 80%,
