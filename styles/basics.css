@@ -30,7 +30,7 @@
 @import 'fonts/Pragati.css';
 
 :root {
-  --aux-main-fontfamily: Pragati;
+  --aux-main-fontfamily: Pragati, sans-serif;
   --aux-main-fontsize: 14px;
   --aux-main-fontweight: 300;
   --aux-main-lineheight: 1.2em;
@@ -39,7 +39,7 @@
   --aux-main-smallfontsize: 11px;
   --aux-main-bigfontsize: 17px;
 
-  --aux-scale-fontfamily: Oswald;
+  --aux-scale-fontfamily: Oswald, sans-serif;
   --aux-scale-fontsize: var(--aux-main-tinyfontsize);
   --aux-scale-fontweight: normal;
   --aux-scale-lineheight: 1em;
