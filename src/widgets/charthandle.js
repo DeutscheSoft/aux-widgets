@@ -1052,6 +1052,12 @@ export const ChartHandle = defineClass({
     },
   },
   onWheel: function (e) {
+    {
+      const result = this.emit('wheel', e);
+
+      if (result !== void 0) return result;
+    }
+
     if (e.deltaY === 0) return;
 
     e.preventDefault();
