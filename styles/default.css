@@ -37,7 +37,16 @@
 
   --aux-active-base: #2577a1;
   --aux-active-text: #ffffff;
-
+  
+  --aux-fader-handle1: #5d6666;
+  --aux-fader-handle2: #363a3a;
+  --aux-fader-handle3: #1e2121;
+  --aux-fader-handle4: #353a3a;
+  --aux-fader-handle5: #353a3a;
+  --aux-fader-handle6: #353a3a;
+  --aux-fader-handle7: #212424;
+  --aux-fader-handle8: #191c1c;
+  
   --aux-warn-base: #ee6b11;
   --aux-warn-text: #ffffff;
 
@@ -161,61 +170,61 @@
 .aux-fader.aux-vertical .aux-handle {
   background: linear-gradient(
     to bottom,
-    #5d6666 0%,
-    #363a3a 20%,
-    #1e2121 22%,
-    #353a3a 48%,
-    var(--aux-active-base) 49%,
-    var(--aux-active-base) 51%,
-    #353a3a 52%,
-    #464c4c 78%,
-    #212424 80%,
-    #191c1c 100%
+    var(--aux-fader-handle1) 0%,
+    var(--aux-fader-handle2) 20%,
+    var(--aux-fader-handle3) 22%,
+    var(--aux-fader-handle4) 48%,
+    var(--aux-active-base)   49%,
+    var(--aux-active-base)   51%,
+    var(--aux-fader-handle5) 52%,
+    var(--aux-fader-handle6) 78%,
+    var(--aux-fader-handle7) 80%,
+    var(--aux-fader-handle8) 100%
   );
 }
 .aux-fader.aux-vertical.aux-warn .aux-handle {
   background: linear-gradient(
     to bottom,
-    #5d6666 0%,
-    #363a3a 20%,
-    #1e2121 22%,
-    #353a3a 48%,
+    var(--aux-fader-handle1) 0%,
+    var(--aux-fader-handle2) 20%,
+    var(--aux-fader-handle3) 22%,
+    var(--aux-fader-handle4) 48%,
     var(--aux-warn-base) 49%,
     var(--aux-warn-base) 51%,
-    #353a3a 52%,
-    #464c4c 78%,
-    #212424 80%,
-    #191c1c 100%
+    var(--aux-fader-handle5) 52%,
+    var(--aux-fader-handle6) 78%,
+    var(--aux-fader-handle7) 80%,
+    var(--aux-fader-handle8) 100%
   );
 }
 .aux-fader.aux-horizontal .aux-handle {
   background: linear-gradient(
     to right,
-    #5d6666 0%,
-    #363a3a 20%,
-    #1e2121 22%,
-    #353a3a 48%,
-    var(--aux-active-base) 49%,
-    var(--aux-active-base) 51%,
-    #353a3a 52%,
-    #464c4c 78%,
-    #212424 80%,
-    #191c1c 100%
+    var(--aux-fader-handle1) 0%,
+    var(--aux-fader-handle2) 20%,
+    var(--aux-fader-handle3) 22%,
+    var(--aux-fader-handle4) 48%,
+    var(--aux-active-base)   49%,
+    var(--aux-active-base)   51%,
+    var(--aux-fader-handle5) 52%,
+    var(--aux-fader-handle6) 78%,
+    var(--aux-fader-handle7) 80%,
+    var(--aux-fader-handle8) 100%
   );
 }
 .aux-fader.aux-horizontal.aux-warn .aux-handle {
   background: linear-gradient(
     to right,
-    #5d6666 0%,
-    #363a3a 20%,
-    #1e2121 22%,
-    #353a3a 48%,
+    var(--aux-fader-handle1) 0%,
+    var(--aux-fader-handle2) 20%,
+    var(--aux-fader-handle3) 22%,
+    var(--aux-fader-handle4) 48%,
     var(--aux-warn-base) 49%,
     var(--aux-warn-base) 51%,
-    #353a3a 52%,
-    #464c4c 78%,
-    #212424 80%,
-    #191c1c 100%
+    var(--aux-fader-handle5) 52%,
+    var(--aux-fader-handle6) 78%,
+    var(--aux-fader-handle7) 80%,
+    var(--aux-fader-handle8) 100%
   );
 }
 .aux-fader > .aux-track::before {
