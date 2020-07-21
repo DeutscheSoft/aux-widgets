@@ -133,6 +133,11 @@ h3 {
   text-align: right;
 }
 
+code {
+  color: #999;
+  padding: 0 3px;
+}
+
 #logo {
   width: 128px;
   height: 128px;
@@ -150,6 +155,21 @@ h3 {
 .aux-root > .aux-container {
   display: block;
   margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: 30% auto;
+  align-items: center;
+  grid-gap: 16px;
+}
+.aux-root > .aux-container > * {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  justify-self: start;
+}
+.aux-root > .aux-container > span {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  justify-self: end;
+  text-align: right;
 }
 
 #navigation > li {

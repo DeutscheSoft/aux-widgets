@@ -3,13 +3,19 @@
     width: 48% !important;
     height: 240px !important;
     display: inline-flex !important;
-    border: 1px solid black;
+  }
+  aux-pager .aux-pages {
+    background: rgba(0, 0, 0, 0.1);
+  }
+  aux-pager .aux-page {
+    padding: 8px;
   }
 
   aux-pager aux-pager {
-    width: 90% !important;
-    height: 90% !important;
+    width: 100% !important;
+    height: 100% !important;
     display: inline-flex !important;
+    margin: 0 !important;
   }
 
   aux-fader {
@@ -17,24 +23,27 @@
   }
 </style>
 
-<h2>Pagers with different button positions</h2>
+<span>Pagers with <code>layout="top"</code></span>
 <aux-pager
   pages="js:[{label:'foobar',content:'foobar'},{label:'barfoo',content:'barfoo'}]"
   show="0"
 >
 </aux-pager>
+<span>Pagers with <code>layout="bottom"</code></span>
 <aux-pager
   pages="js:[{label:'foobar',content:'foobar'},{label:'barfoo',content:'barfoo'}]"
   show="0"
   position="bottom"
 >
 </aux-pager>
+<span>Pagers with <code>layout="left"</code></span>
 <aux-pager
   pages="js:[{label:'foobar',content:'foobar'},{label:'barfoo',content:'barfoo'}]"
   show="0"
   position="left"
 >
 </aux-pager>
+<span>Pagers with <code>layout="right"</code></span>
 <aux-pager
   pages="js:[{label:'foobar',content:'foobar'},{label:'barfoo',content:'barfoo'}]"
   show="0"
@@ -42,7 +51,7 @@
 >
 </aux-pager>
 
-<h2>Pager definition using WebComponents</h2>
+<span>Pager definition using WebComponents</span>
 
 <aux-pager show="0" position="right">
   <aux-pages>
@@ -57,8 +66,6 @@
   </aux-pages>
 </aux-pager>
 
-<h2>Pager definition using js attributes</h2>
-
 <div id="page2">
   Fader 2<br />
   <aux-fader min="-12" max="3" layout="top"></aux-fader>
@@ -68,14 +75,14 @@
   <aux-fader min="-12" max="3" layout="top"></aux-fader>
 </div>
 
-<h2>Take pages from the DOM</h2>
+<span>Pager taking pages from the DOM</span>
 <aux-pager
   pages="js:[{label:'page 1',content:this.parentNode.querySelector('#page1')},{label:'page 2',content:this.parentNode.querySelector('#page2')}]"
   show="0"
   position="right"
 >
 </aux-pager>
-<h2>Nested pages</h2>
+<span>Pager with nested pages</span>
 
 <aux-pager show="0" position="top">
   <aux-pages>

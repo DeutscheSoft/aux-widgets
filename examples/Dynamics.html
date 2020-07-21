@@ -1,3 +1,4 @@
+<span>Dynamics with <code>type="compressor"</code></span>
 <aux-dynamics
   type="compressor"
   ratio="2"
@@ -8,10 +9,11 @@
   style="width: 300px; height: 300px;"
 ></aux-dynamics>
 
+<span>Dynamics with <code>type="expander"</code> and <code>range=-24</code></span>
 <aux-dynamics
-  type="compressor"
+  type="expander"
   gain="0"
-  knee="24"
+  range="-24"
   ratio="4"
   threshold="-24"
   reference="0"
@@ -22,42 +24,24 @@
   style="width: 300px; height: 300px;"
 ></aux-dynamics>
 
+<span>Dynamics with <code>type="limiter"</code> and <code>makeup=6</code></span>
 <aux-dynamics
-  type="compressor"
-  gain="-10"
-  knee="24"
-  ratio="4"
+  type="limiter"
   threshold="-24"
-  reference="0"
-  makeup="0"
+  makeup="6"
   show_handle="true"
   range_z="js:{min:1,max:25,step:0.1,scale:'log2'}"
   handle.min_size="10"
   style="width: 300px; height: 300px;"
 ></aux-dynamics>
 
+<span>Dynamics with <code>type="gate"</code></span>
 <aux-dynamics
-  type="compressor"
+  type="gate"
   gain="0"
-  knee="24"
   ratio="4"
   threshold="-24"
   reference="0"
-  makeup="12"
-  show_handle="true"
-  range_z="js:{min:1,max:25,step:0.1,scale:'log2'}"
-  handle.min_size="10"
-  style="width: 300px; height: 300px;"
-></aux-dynamics>
-
-<aux-dynamics
-  type="compressor"
-  gain="0"
-  knee="24"
-  ratio="4"
-  threshold="-24"
-  reference="12"
-  makeup="0"
   show_handle="true"
   range_z="js:{min:1,max:25,step:0.1,scale:'log2'}"
   handle.min_size="10"

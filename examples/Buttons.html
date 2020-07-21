@@ -1,18 +1,19 @@
+<span>Simple Buttons</span>
+<aux-buttons buttons="js:['Button #1','Button #2','Button #3']"> </aux-buttons>
+<span>Buttons with <code>multi-select=2</code></span>
 <aux-buttons
   multi_select="2"
   buttons="js:['Button #1','Button #2','Button #3','Button #4']"
 >
 </aux-buttons>
-<br />
-<aux-buttons buttons="js:['Button #1','Button #2','Button #3']"> </aux-buttons>
-<br />
+<span>Vertical Buttons with <code>deselect=true</code></span>
 <aux-buttons
   direction="vertical"
   deselect="true"
   buttons="js:['Button #1','Button #2','Button #3']"
 >
 </aux-buttons>
-<br />
+<span>Buttons created via DOM nodes</span>
 <aux-buttons>
   <aux-button state="true" label="Button #1"></aux-button>
   <aux-button label="Button #2"></aux-button>

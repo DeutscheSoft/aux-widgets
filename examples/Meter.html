@@ -5,9 +5,6 @@
   aux-meter.aux-horizontal {
     width: 300px;
   }
-  aux-meter > .aux-bar {
-    background-color: red;
-  }
 
   aux-meter .aux-mask {
     opacity: 0.8;
@@ -37,25 +34,28 @@
     background-size: 100px 100px, 100px 100px, 16px 10px, 16px 10px;
   }
 </style>
+<span>Simple Meter</span>
 <aux-meter
   min="-96"
   max="6"
   scale="decibel"
   value="-10"
   label="MyMeter"
+  scale.base="0"
+  background="#2577a1"
+></aux-meter>
+<span>Meter with <code>show_value=true</code>, <code>base=-20</code> and a gradient</span>
+<aux-meter
+  min="-96"
+  max="6"
+  scale="decibel"
   show_value="true"
+  value="-60"
+  base="-20"
   scale.base="0"
-  background="#2577a1"
+  gradient="js:{'-96':'#2577a1','6':'#ee6b11'}"
 ></aux-meter>
-<aux-meter
-  min="-96"
-  max="6"
-  scale="decibel"
-  value="-10"
-  base="-96"
-  scale.base="0"
-  background="#2577a1"
-></aux-meter>
+<span>Meter with <code>reverse=true</code></span>
 <aux-meter
   min="-96"
   max="6"
@@ -65,7 +65,19 @@
   scale.base="0"
   background="#2577a1"
 ></aux-meter>
+<span>Meter with <code>layout=top</code> and a gradient</span>
 <aux-meter
+  layout="top"
+  min="-96"
+  max="6"
+  scale="decibel"
+  value="-10"
+  scale.base="0"
+  gradient="js:{'-96':'#2577a1','6':'#ee6b11'}"
+></aux-meter>
+<span>Meter with <code>layout=bottom</code> and <code>reverse=true</code></span>
+<aux-meter
+  layout="bottom"
   min="-96"
   max="6"
   scale="decibel"
@@ -75,29 +87,7 @@
   scale.base="0"
   background="#2577a1"
 ></aux-meter>
-
-<br />
-<aux-meter
-  layout="top"
-  min="-96"
-  max="6"
-  scale="decibel"
-  value="-10"
-  scale.base="0"
-  background="#2577a1"
-></aux-meter>
-<br />
-<aux-meter
-  layout="top"
-  min="-96"
-  max="6"
-  scale="decibel"
-  value="-10"
-  base="-96"
-  scale.base="0"
-  background="#2577a1"
-></aux-meter>
-<br />
+<span>Meter with <code>layout=top</code> and <code>reverse=true</code></span>
 <aux-meter
   layout="top"
   min="-96"
@@ -108,109 +98,3 @@
   scale.base="0"
   background="#2577a1"
 ></aux-meter>
-<br />
-<aux-meter
-  layout="top"
-  min="-96"
-  max="6"
-  scale="decibel"
-  value="-10"
-  base="-96"
-  reverse
-  scale.base="0"
-  background="#2577a1"
-></aux-meter>
-
-<br />
-
-<div class="segment">
-  <aux-meter
-    segment="10"
-    min="-96"
-    max="6"
-    scale="decibel"
-    value="-10"
-    scale.base="0"
-    background="#2577a1"
-  ></aux-meter>
-  <aux-meter
-    segment="10"
-    min="-96"
-    max="6"
-    scale="decibel"
-    value="-10"
-    base="-96"
-    scale.base="0"
-    background="#2577a1"
-  ></aux-meter>
-  <aux-meter
-    segment="10"
-    min="-96"
-    max="6"
-    scale="decibel"
-    value="-10"
-    reverse
-    scale.base="0"
-    background="#2577a1"
-  ></aux-meter>
-  <aux-meter
-    segment="10"
-    min="-96"
-    max="6"
-    scale="decibel"
-    value="-10"
-    base="-96"
-    reverse
-    scale.base="0"
-    background="#2577a1"
-  ></aux-meter>
-
-  <br />
-  <aux-meter
-    layout="top"
-    segment="10"
-    min="-96"
-    max="6"
-    scale="decibel"
-    value="-10"
-    scale.base="0"
-    background="#2577a1"
-  ></aux-meter>
-  <br />
-  <aux-meter
-    layout="top"
-    segment="10"
-    min="-96"
-    max="6"
-    scale="decibel"
-    value="-10"
-    base="-96"
-    scale.base="0"
-    background="#2577a1"
-  ></aux-meter>
-  <br />
-  <aux-meter
-    layout="top"
-    segment="10"
-    min="-96"
-    max="6"
-    scale="decibel"
-    value="-10"
-    reverse
-    scale.base="0"
-    background="#2577a1"
-  ></aux-meter>
-  <br />
-  <aux-meter
-    layout="top"
-    segment="10"
-    min="-96"
-    max="6"
-    scale="decibel"
-    value="-10"
-    base="-96"
-    reverse
-    scale.base="0"
-    background="#2577a1"
-  ></aux-meter>
-</div>

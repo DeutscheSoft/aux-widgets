@@ -1,7 +1,62 @@
+<span>Simple Compressor</span>
 <aux-compressor
-  ratio="6"
+  ratio="2"
   threshold="-24"
-  knee="8"
+  show_handle="true"
   range_z="js:{min:1,max:25,step:0.1,scale:'log2'}"
->
-</aux-compressor>
+  handle.min_size="10"
+  style="width: 300px; height: 300px;"
+></aux-compressor>
+
+<span>Compressor with <code>knee=24</code></span>
+<aux-compressor
+  gain="0"
+  knee="24"
+  ratio="4"
+  threshold="-24"
+  reference="0"
+  makeup="0"
+  show_handle="true"
+  range_z="js:{min:1,max:25,step:0.1,scale:'log2'}"
+  handle.min_size="10"
+  style="width: 300px; height: 300px;"
+></aux-compressor>
+
+<span>Compressor with <code>gain=-10</code></span>
+<aux-compressor
+  gain="-10"
+  ratio="4"
+  threshold="-24"
+  reference="0"
+  makeup="0"
+  show_handle="true"
+  range_z="js:{min:1,max:25,step:0.1,scale:'log2'}"
+  handle.min_size="10"
+  style="width: 300px; height: 300px;"
+></aux-compressor>
+
+<span>Compressor with <code>makeup=12</code></span>
+<aux-compressor
+  gain="0"
+  ratio="4"
+  threshold="-24"
+  reference="0"
+  makeup="12"
+  show_handle="true"
+  range_z="js:{min:1,max:25,step:0.1,scale:'log2'}"
+  handle.min_size="10"
+  style="width: 300px; height: 300px;"
+></aux-compressor>
+
+<span>Compressor with <code>reference=12</code></span>
+<aux-compressor
+  gain="0"
+  ratio="4"
+  threshold="-24"
+  reference="12"
+  makeup="0"
+  show_handle="true"
+  range_z="js:{min:1,max:25,step:0.1,scale:'log2'}"
+  handle.min_size="10"
+  style="width: 300px; height: 300px;"
+></aux-compressor>

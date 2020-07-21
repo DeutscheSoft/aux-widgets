@@ -1,3 +1,4 @@
+<span>Scale with <code>layout="left"</code> and <code>pointer=-6</code></span>
 <aux-scale
   min="-96"
   max="24"
@@ -6,16 +7,15 @@
   layout="left"
   pointer="-6"
 ></aux-scale>
+<span>Scale with <code>layout="right"</code> and <code>bar=-6</code></span>
 <aux-scale
   min="-96"
   max="24"
   scale="decibel"
   style="height: 300px;"
   layout="right"
-  bar="-6"
 ></aux-scale>
-<br />
-<br />
+<span>Scale with <code>layout="top"</code> and <code>pointer=-6</code></span>
 <aux-scale
   min="-96"
   max="24"
@@ -24,7 +24,7 @@
   layout="top"
   pointer="-6"
 ></aux-scale>
-<br />
+<span>Scale with <code>layout="bottom"</code> and <code>bar=-6</code></span>
 <aux-scale
   min="-96"
   max="24"
@@ -34,7 +34,7 @@
   bar="-6"
 ></aux-scale>
 
-<h2>x &#8614; x * x</h2>
+<span>Scale using <code>x &#8614; x * x</code> as scale</span>
 <aux-scale
   min="0"
   max="100"
@@ -43,7 +43,7 @@
         if (inverse)
         {
           x = Math.sqrt(x);
-          x = options.min + x * (options.max - optoins.min);
+          x = options.min + x * (options.max - options.min);
         }
         else
         {
@@ -57,7 +57,7 @@
   layout="bottom"
 ></aux-scale>
 
-<h2>sigmoid function</h2>
+<span>Scale using sigmoid function</span>
 <aux-scale
   min="-100"
   max="100"
@@ -78,7 +78,7 @@
   layout="bottom"
 ></aux-scale>
 
-<h2>piece-wise linear</h2>
+<span>Scale using piece-wise linear scale</span>
 <aux-scale
   min="0"
   max="100"
