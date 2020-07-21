@@ -186,6 +186,11 @@ export const Value = defineClass({
     type: 'text',
     editmode: 'onenter',
     autocomplete: false,
+    presets: {'string': {
+      format: v=>v+'',
+      set: v=>v+'',
+      value: ''
+    }},
   },
   initialize: function (options) {
     if (!options.element) options.element = element('div');
