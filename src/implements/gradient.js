@@ -81,13 +81,13 @@ export const Gradient = defineClass({
     // background: linear-gradient(to bottom, rgb(30,87,153) 0%,rgb(41,137,216) 50%,rgb(32,124,202) 51%,rgb(125,185,232) 100%);
 
     const O = this.options;
-    var bg = '';
+    let bg = '';
     range = range || this;
 
     if (!gradient && !O.gradient) {
       bg = fallback || O.background;
       if (element.tagName === 'CANVAS') {
-        var ctx = element.getContext('2d');
+        const ctx = element.getContext('2d');
         ctx.fillStyle = bg;
         ctx.fillRect(0, 0, O._width, O._height);
         this.emit('backgroundchanged', element, bg);
@@ -96,8 +96,8 @@ export const Gradient = defineClass({
     } else {
       gradient = gradient || this.options.gradient;
 
-      var keys = Object.keys(gradient);
-      for (var i = 0; i < keys.length; i++) {
+      let keys = Object.keys(gradient);
+      for (let i = 0; i < keys.length; i++) {
         keys[i] = parseFloat(keys[i]);
       }
       keys = keys.sort(
@@ -111,16 +111,16 @@ export const Gradient = defineClass({
       );
 
       if (element.tagName === 'CANVAS') {
-        var vert = O.layout == 'left' || O.layout == 'right';
-        var ctx = element.getContext('2d');
-        var grd = ctx.createLinearGradient(
+        const vert = O.layout == 'left' || O.layout == 'right';
+        const ctx = element.getContext('2d');
+        const grd = ctx.createLinearGradient(
           0,
           0,
           vert ? 0 : O._width || 0,
           vert ? O._height || 0 : 0
         );
-        for (var i = 0; i < keys.length; i++) {
-          var pos = range.valueToCoef(range.snap(keys[i]));
+        for (let i = 0; i < keys.length; i++) {
+          let pos = range.valueToCoef(range.snap(keys[i]));
           if (vert) pos = 1 - pos;
           grd.addColorStop(pos, gradient[keys[i] + '']);
         }
@@ -130,9 +130,9 @@ export const Gradient = defineClass({
         return;
       }
 
-      var m_regular = '';
-      var s_regular = 'linear-gradient(%s, %s)';
-      var c_regular = '%s %s%%, ';
+      let m_regular = '';
+      const s_regular = 'linear-gradient(%s, %s)';
+      const c_regular = '%s %s%%, ';
 
       var d_w3c = {};
       d_w3c.sleft = 'to top';
