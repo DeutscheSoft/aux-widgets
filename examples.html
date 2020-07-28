@@ -189,11 +189,10 @@
               if (!node.tagName.startsWith('AUX')) return;
               node.addEventListener('dblclick', (ev) => {
                 console.log(node.tagName);
-                node.constructor.observedAttributes.forEach((widget) => {
-                  if (!node.hasAttribute(widget)) return;
-                  const W = node.auxWidget;
-                  console.log('%s %o %o', W, node.getAttribute(W),
-                              W.get(W));
+                node.constructor.observedAttributes.forEach((name) => {
+                  if (!node.hasAttribute(name)) return;
+                  const widget = node.auxWidget;
+                  console.log('%s %o %o', name, node.getAttribute(name), widget.get(name));
                 });
                 ev.stopPropagation();
               });
