@@ -21,6 +21,7 @@ const backstop = require('backstopjs');
 const start_http = require('./http_server.js').start;
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 
 function find_chromes() {
   const locations = [
@@ -40,6 +41,13 @@ function find_chromes() {
 
   return chromes;
 }
+
+// we assume 500mb for each chrome
+const captureLimit = Math.round(Math.max(Math.min(os.freemem() / 500E6, os.cpus().length), 1));
+// and 100mb for each nodejs
+const compareLimit = Math.round(Math.max(Math.min(os.freemem() / 100E6, 2 * os.cpus().length), 1));
+
+console.log('Running %d browsers and %d compare processes in parallel.', captureLimit, compareLimit);
 
 const config = {
   id: 'backstop_default',
@@ -71,8 +79,8 @@ const config = {
     args: ['--no-sandbox'],
     executablePath: null,
   },
-  asyncCaptureLimit: 5,
-  asyncCompareLimit: 50,
+  asyncCaptureLimit: captureLimit,
+  asyncCompareLimit: compareLimit,
   debug: false,
   debugWindow: false,
 };
