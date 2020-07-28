@@ -252,11 +252,10 @@ function drawSlice(a_from, a_to, r_inner, r_outer, pos, slice) {
   // get drawing direction (sweep = clock-wise)
   let sweep;
   if (
-    (this.options.reverse && a_to <= a_from) ||
-    (!this.options.reverse && a_to > a_from)
+    (this.options.reverse && a_to <= a_from)
   )
-    sweep = 1;
-  else sweep = 0;
+    sweep = 0;
+  else sweep = 1;
   // get large flag
   let large;
   if (Math.abs(a_from - a_to) >= 180) large = 1;
