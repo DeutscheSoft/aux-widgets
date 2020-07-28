@@ -99,7 +99,7 @@ function binaryContains(list, value) {
   if (length === 0 || !(value >= list[0]) || !(value <= list[length - 1]))
     return false;
 
-  for (let start = 0, end = length - 1; start <= end;) {
+  for (let start = 0, end = length - 1; start <= end; ) {
     const mid = start + ((end - start) >> 1);
     const pivot = list[mid];
 
@@ -389,7 +389,7 @@ function markMarkers(labels, dots) {
  * @property {number} value - The value where the dot is located at.
  * @property {string|string[]} [class] - An optional class string for the generated
  *      `span.aux-label` element.
- * @property {string} [label] - The label string. If omitted, the 
+ * @property {string} [label] - The label string. If omitted, the
  *      `options.labels(value)` is used.
  */
 /**
@@ -605,8 +605,9 @@ export const Scale = defineClass({
     }
   },
   _highlightMarkers(labels, dots, dotNodes) {
-    labels = labels.map((args) => typeof args === 'number' ? args : args.value)
-        .sort((a, b) => a - b);
+    labels = labels
+      .map((args) => (typeof args === 'number' ? args : args.value))
+      .sort((a, b) => a - b);
 
     for (let i = 0; i < dots.length; i++) {
       const value = typeof dots[i] === 'number' ? dots[i] : dots[i].value;
@@ -634,8 +635,7 @@ export const Scale = defineClass({
       if (typeof cl === 'string') {
         addClass(node, cl);
       } else if (Array.isArray(cl)) {
-        for (let i = 0; i < cl.length; i++)
-          addClass(node, cl[i]);
+        for (let i = 0; i < cl.length; i++) addClass(node, cl[i]);
       }
     }
 
@@ -682,8 +682,7 @@ export const Scale = defineClass({
       if (typeof cl === 'string') {
         addClass(node, cl);
       } else if (Array.isArray(cl)) {
-        for (let i = 0; i < cl.length; i++)
-          addClass(node, cl[i]);
+        for (let i = 0; i < cl.length; i++) addClass(node, cl[i]);
       }
 
       if (args.label === void 0) {

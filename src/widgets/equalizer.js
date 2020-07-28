@@ -86,11 +86,11 @@ function drawGraph(bands) {
   }
   X[X.length - 2] = end + 10;
   X[X.length - 1] = end + 10;
-  
+
   var Y = new Array(end / step + 4);
   Y[0] = y_val_to_px(0);
   Y[Y.length - 1] = y_val_to_px(0);
-  
+
   for (i = 2; i < X.length - 2; i++) {
     x = x_px_to_val(X[i]);
     y = 0.0;
@@ -110,7 +110,7 @@ function drawGraph(bands) {
         i++;
       }
     }
-    
+
     Y[1] = Y[2];
     Y[Y.length - 2] = Y[Y.length - 3];
 

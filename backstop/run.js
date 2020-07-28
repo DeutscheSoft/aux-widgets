@@ -43,11 +43,19 @@ function find_chromes() {
 }
 
 // we assume 500mb for each chrome
-const captureLimit = Math.round(Math.max(Math.min(os.freemem() / 500E6, os.cpus().length), 1));
+const captureLimit = Math.round(
+  Math.max(Math.min(os.freemem() / 500e6, os.cpus().length), 1)
+);
 // and 100mb for each nodejs
-const compareLimit = Math.round(Math.max(Math.min(os.freemem() / 100E6, 2 * os.cpus().length), 1));
+const compareLimit = Math.round(
+  Math.max(Math.min(os.freemem() / 100e6, 2 * os.cpus().length), 1)
+);
 
-console.log('Running %d browsers and %d compare processes in parallel.', captureLimit, compareLimit);
+console.log(
+  'Running %d browsers and %d compare processes in parallel.',
+  captureLimit,
+  compareLimit
+);
 
 const config = {
   id: 'backstop_default',

@@ -311,7 +311,7 @@ function biquadModule(O) {
       LN10_10 *
       log((Rb - S * (Xb * (1 - S) + Yb)) / (Ra - S * (Xa * (1 - S) + Ya)))
     );
-  }
+  };
 }
 
 function biquadFilter1(trafo) {
