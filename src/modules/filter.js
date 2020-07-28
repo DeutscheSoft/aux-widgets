@@ -138,7 +138,7 @@ export const Filter = defineClass({
       error("Unsupported option 'type'.");
       return;
     }
-    this.frequencyToGain = m(O).freqtogain;
+    this.frequencyToGain = m(O).freq2gain;
   },
   getFrequencyToGain: function () {
     if (this.frequencyToGain === null) this.createFrequencyToGain();

@@ -262,7 +262,7 @@ export const standardBiquadFilters = {
 };
 
 var nullModule = {
-  freqtogain: function () {
+  freq2gain: function () {
     return 0.0;
   },
 };
@@ -287,7 +287,7 @@ var nullModule = {
 //return LN10_10 * log((Rb - S * Yb) / (Ra - S * Ya));
 //}
 
-//return { freqtogain: frequencyToGain };
+//return { freq2gain: frequencyToGain };
 //}
 
 function biquadModule(O) {
@@ -315,7 +315,7 @@ function biquadModule(O) {
     );
   }
 
-  return { freqtogain: frequencyToGain };
+  return { freq2gain: frequencyToGain };
 }
 
 function biquadFilter1(trafo) {
@@ -332,11 +332,11 @@ function biquadFilterN(trafos) {
     var i;
 
     for (i = 0; i < trafos.length; i++) {
-      A[i] = biquadModule(trafos[i](O)).freqtogain;
+      A[i] = biquadModule(trafos[i](O)).freq2gain;
     }
 
     return {
-      freqtogain: function (f) {
+      freq2gain: function (f) {
         var ret = 0.0;
         var j;
 
