@@ -737,6 +737,7 @@ body.aux-cursor-row-resize * {
   height: 100%;
   will-change: transform;
   transform: translate3d(0, 0, 0);
+  background: transparent !important;
 }
 
 /* LEVELMETER */

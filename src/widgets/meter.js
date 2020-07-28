@@ -177,6 +177,9 @@ export const Meter = defineClass({
    * @property {Number} [options.value_label=0] - The value to be drawn in the value label.
    * @property {Boolean} [options.sync_value=true] - Synchronize the value on the bar with
    *   the value label using `options.format_value` function.
+   * @property {String|Boolean} [options.foreground] - Color to draw the overlay. Has to be set
+   *   via option for performance reasons. Use pure opaque color. If opacity is needed, set via CSS
+   *   on `.aux-meter > .aux-bar > .aux-mask`.
    */
 
   Extends: Widget,
@@ -196,6 +199,7 @@ export const Meter = defineClass({
       format_value: 'function',
       background: 'string|boolean',
       gradient: 'object|boolean',
+      foreground: 'string|boolean',
     }
   ),
   options: {
@@ -210,6 +214,7 @@ export const Meter = defineClass({
     levels: [1, 5, 10], // array of steps where to draw labels
     background: false,
     gradient: false,
+    foreground: false,
   },
   static_events: {
     set_base: function (value) {
@@ -267,8 +272,6 @@ export const Meter = defineClass({
     this._canvas = document.createElement('canvas');
     addClass(this._canvas, 'aux-mask');
 
-    this._fillstyle = false;
-
     this._bar.appendChild(this._backdrop);
     this._bar.appendChild(this._canvas);
 
@@ -300,28 +303,6 @@ export const Meter = defineClass({
     var I = this.invalid;
     var O = this.options;
     var E = this.element;
-
-    if (this._fillstyle === false) {
-      this._canvas.style.removeProperty('background-color');
-      S.add(
-        function () {
-          this._fillstyle = getStyle(this._canvas, 'background-color');
-          S.add(
-            function () {
-              this._canvas.getContext('2d').fillStyle = this._fillstyle;
-              this._canvas.style.setProperty(
-                'background-color',
-                'transparent',
-                'important'
-              );
-              this.triggerDraw();
-            }.bind(this),
-            3
-          );
-        }.bind(this),
-        2
-      );
-    }
 
     if (I.reverse) {
       I.reverse = false;
@@ -365,7 +346,7 @@ export const Meter = defineClass({
       }
     }
 
-    if (this._fillstyle === false) return;
+    if (O.foreground === false) return;
 
     if (I.basis && O._height > 0 && O._width > 0) {
       this._canvas.setAttribute('height', Math.round(O._height));
@@ -373,7 +354,7 @@ export const Meter = defineClass({
       /* FIXME: I am not sure why this is even necessary */
       this._canvas.style.width = O._width + 'px';
       this._canvas.style.height = O._height + 'px';
-      this._canvas.getContext('2d').fillStyle = this._fillstyle;
+      this._canvas.getContext('2d').fillStyle = O.foreground;
 
       this._backdrop.setAttribute('height', Math.round(O._height));
       this._backdrop.setAttribute('width', Math.round(O._width));
@@ -387,8 +368,8 @@ export const Meter = defineClass({
       this.drawGradient(this._backdrop, O.gradient, O.background);
     }
 
-    if (I.value || I.basis || I.min || I.max || I.segment) {
-      I.basis = I.value = I.min = I.max = I.segment = false;
+    if (I.value || I.basis || I.min || I.max || I.segment || I.foreground) {
+      I.basis = I.value = I.min = I.max = I.segment = I.foreground = false;
       this.drawMeter();
     }
   },
@@ -403,7 +384,6 @@ export const Meter = defineClass({
     var i = vert(O) ? h : w;
     this.set('basis', i);
     this._last_meters.length = 0;
-    this._fillstyle = false;
     this.set('gradient', O.gradient);
   },
 
@@ -465,7 +445,7 @@ export const Meter = defineClass({
     if (diff == 1) diff = 4;
 
     var ctx = this._canvas.getContext('2d');
-    ctx.fillStyle = this._fillstyle;
+    ctx.fillStyle = O.foreground;
     var is_vertical = vert(O);
 
     if (diff === 1) {
