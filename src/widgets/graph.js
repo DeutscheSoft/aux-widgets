@@ -331,6 +331,39 @@ export const Graph = defineClass({
     }
     Widget.prototype.redraw.call(this);
   },
+  
+  /**
+   * Moves the graph to the front, i.e. add as last element to the containing
+   * SVG group element.
+   * 
+   * @method Graph#toFront
+   */
+  toFront: function () {
+    const E = this.element;
+    const P = E.parentElement;
+    if (P && E !== P.lastChild)
+      this.drawOnce(function () {
+        var e = this.element;
+        var _p = e.parentNode;
+        if (_p && e !== _p.lastChild) _p.appendChild(e);
+      });
+  },
+  /**
+   * Moves the graph to the back, i.e. add as first element to the containing
+   * SVG group element.
+   * 
+   * @method Graph#toBack
+   */
+  toBack: function () {
+    const E = this.element;
+    const P = E.parentElement;
+    if (P && E !== P.firstChild)
+      this.drawOnce(function () {
+        var e = this.element;
+        var _p = e.parentNode;
+        if (_p && e !== _p.firstChild) _p.insertBefore(e, _p.firstChild);
+      });
+  },
 
   // GETTER & SETTER
   set: function (key, value) {

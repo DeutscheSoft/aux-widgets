@@ -1222,12 +1222,7 @@ export const ChartHandle = defineClass({
 
         /* right click triggers move to the back */
         if (ev.button === 2) {
-          if (E !== p.firstChild)
-            self.drawOnce(function () {
-              var e = this.element;
-              var _p = e.parentNode;
-              if (_p && e !== _p.firstChild) _p.insertBefore(e, _p.firstChild);
-            });
+          self.toBack.call(self);
           /* cancel everything else, but do not drag */
           ev.preventDefault();
           ev.stopPropagation();
@@ -1376,6 +1371,42 @@ export const ChartHandle = defineClass({
       if (!delay_lines) redrawLines.call(this, O, X);
     }
   },
+  
+  /**
+   * Moves the handle to the front, i.e. add as last element to the containing
+   * SVG group element.
+   * 
+   * @method ChartHandle#toFront
+   */
+  toFront: function () {
+    const E = this.element;
+    const P = E.parentElement;
+    if (P && E !== P.lastChild)
+      this.drawOnce(function () {
+        var e = this.element;
+        var _p = e.parentNode;
+        if (_p && e !== _p.lastChild) _p.appendChild(e);
+      });
+  },
+  
+  /**
+   * Moves the handle to the back, i.e. add as first element to the containing
+   * SVG group element.
+   * 
+   * @method ChartHandle#toFront
+   */
+  toBack: function () {
+    const E = this.element;
+    const P = E.parentElement;
+    if (P && E !== P.firstChild) {
+      this.drawOnce(function () {
+        var e = this.element;
+        var _p = e.parentNode;
+        if (_p && e !== _p.firstChild) _p.insertBefore(e, _p.firstChild);
+      });
+    }
+  },
+  
   set: function (key, value) {
     var O = this.options;
 

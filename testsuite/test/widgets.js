@@ -2,10 +2,11 @@ import {
   Button,
   Buttons,
   Container,
-  ChartHandle,
   EqBand,
   Chart,
+  ChartHandle,
   Equalizer,
+  Graph,
   Value,
   Knob,
   State,
@@ -236,6 +237,83 @@ describe('Widgets', () => {
       fader.set('value.format', bar);
       assert(fader.value.get('format') === bar);
     }
+  });
+});
+
+describe('Chart', () => {
+  it('creating graphs', (done) => {
+    const chart = new Chart();
+
+    const g1 = chart.addGraph({});
+    const g2 = chart.addGraph(new Graph());
+
+    const o1 = objectMinus(g1.options, ['id']);
+    const o2 = objectMinus(g2.options, ['id']);
+
+    if (!compare(o1, o2)) {
+      console.error(g1.options, g2.options);
+      throw new Error('Graph options mismatch.');
+    }
+
+    done();
+  });
+  it('switching graphs position', (done) => {
+    const chart = new Chart();
+
+    const g1 = chart.addGraph({});
+    const g2 = chart.addGraph({});
+    g2.redraw();
+    
+    g2.toBack();
+    g2.redraw();
+    
+    if (g2.element !== g2.element.parentElement.firstChild)
+      throw new Error('Graph.toBack() failed.');
+      
+    g2.toFront();
+    g2.redraw();
+    
+    if (g2.element !== g2.element.parentElement.lastChild)
+      throw new Error('Graph.toFront() failed.');
+
+    done();
+  });
+  it('creating handles', (done) => {
+    const chart = new Chart();
+
+    const h1 = chart.addHandle({});
+    const h2 = chart.addHandle(new ChartHandle());
+
+    const o1 = objectMinus(h1.options, ['id']);
+    const o2 = objectMinus(h2.options, ['id']);
+
+    if (!compare(o1, o2)) {
+      console.error(h1.options, h2.options);
+      throw new Error('Handle options mismatch.');
+    }
+
+    done();
+  });
+  it('switching handles position', (done) => {
+    const chart = new Chart();
+
+    const h1 = chart.addHandle({});
+    const h2 = chart.addHandle({});
+    chart.redraw();
+    
+    h2.toBack();
+    h2.redraw();
+    
+    if (h2.element !== h2.element.parentElement.firstChild)
+      throw new Error('ChartHandle.toBack() failed.');
+      
+    h2.toFront();
+    h2.redraw();
+    
+    if (h2.element !== h2.element.parentElement.lastChild)
+      throw new Error('ChartHandle.toFront() failed.');
+
+    done();
   });
 });
 
