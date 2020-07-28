@@ -1,0 +1,27 @@
+<aux-scale
+  min="-96"
+  max="24"
+  scale="decibel"
+  style="height: 300px;"
+  layout="left"
+  fixed_dots='[-96, -70, { value: -45, class: "green"}, { value: -23, class: [ "green", "large" ] }, 0, 12, 22]'
+  fixed_labels='[-96, { value: -70, label: "foo", class: "red" }, -45, { value: -23, class: [ "green", "large" ] }, 0, 12, 22]'
+  show_markers
+></aux-scale>
+
+<style>
+  .aux-scale .aux-label.red {
+    color: red;
+  }
+  .aux-scale .aux-dot.green {
+    background-color: green;
+    opacity: 1;
+  }
+  .aux-scale .aux-label.green {
+    color: green;
+    opacity: 1;
+  }
+  .aux-scale .large {
+    transform: scale(1, 5) !important;
+  }
+</style>

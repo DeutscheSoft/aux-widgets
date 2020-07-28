@@ -93,6 +93,28 @@ function fillInterval(range, levels, i, from, to, min_gap, result) {
 
   return result;
 }
+
+function binaryContains(list, value) {
+  const length = list.length;
+  if (length === 0 || !(value >= list[0]) || !(value <= list[length - 1]))
+    return false;
+
+  for (let start = 0, end = length - 1; start <= end;) {
+    const mid = start + ((end - start) >> 1);
+    const pivot = list[mid];
+
+    if (value === pivot) return true;
+
+    if (value < pivot) {
+      end = mid - 1;
+    } else {
+      start = mid + 1;
+    }
+  }
+
+  return false;
+}
+
 // remove collisions from a with b given a minimum gap
 function removeCollisions(a, b, min_gap, vert) {
   var pa = a.positions,
@@ -355,6 +377,22 @@ function markMarkers(labels, dots) {
   }
 }
 /**
+ * Interface for dots passed to the `fixed_dots` option of `Scale`.
+ * @interface ScaleDot
+ * @property {number} value - The value where the dot is located at.
+ * @property {string|string[]} [class] - An optional class for the generated
+ *      `div.aux-dot` element.
+ */
+/**
+ * Interface for labels passed to the `fixed_labels` option of `Scale`.
+ * @interface ScaleLabel
+ * @property {number} value - The value where the dot is located at.
+ * @property {string|string[]} [class] - An optional class string for the generated
+ *      `span.aux-label` element.
+ * @property {string} [label] - The label string. If omitted, the 
+ *      `options.labels(value)` is used.
+ */
+/**
  * Scale can be used to draw scales. It is used in {@link Meter} and
  * {@link Fader}. Scale draws labels and markers based on its parameters
  * and the available space. Scales can be drawn both vertically and horizontally.
@@ -386,12 +424,10 @@ function markMarkers(labels, dots) {
  *   dot for the 'min' value.
  * @property {Boolean} [options.show_base=true] - If <code>true</code>, display a label and a
  *   dot for the 'base' value.
- * @property {Array<Number>|Boolean} [options.fixed_dots] - This option can be used to specify fixed positions
- *   for the markers to be drawn at. The values must be sorted in ascending order. <code>false</code> disables
- *   fixed markers.
- * @property {Array<Number>|Boolean} [options.fixed_labels] - This option can be used to specify fixed positions
- *   for the labels to be drawn at. The values must be sorted in ascending order. <code>false</code> disables
- *   fixed labels.
+ * @property {ScaleDot[]|number[]|Boolean} [options.fixed_dots] - This option can be used to specify fixed positions
+ *   for the markers to be drawn at. <code>false</code> disables fixed dots.
+ * @property {ScaleLabel[]|number[]|Boolean} [options.fixed_labels] - This option can be used to specify fixed positions
+ *   for the labels to be drawn at. <code>false</code> disables fixed labels.
  * @property {Boolean} [options.show_markers=true] - If true, every dot which is located at the same
  *   position as a label has the <code>.aux-marker</code> class set.
  * @property {Number|Boolean} [options.pointer=false] - The value to set the pointers position to. Set to `false` to hide the pointer.
@@ -534,40 +570,146 @@ export const Scale = defineClass({
       )
     ) {
       empty(E);
+      const fixedDots = O.fixed_dots;
+      const fixedLabels = O.fixed_labels;
 
-      if (O.fixed_dots && O.fixed_labels) {
-        var labels;
+      if (fixedDots && fixedLabels) {
+        const dotNodes = this._createDots(fixedDots);
 
         if (O.show_labels) {
-          labels = {
-            values: O.fixed_labels,
-            positions: O.fixed_labels.map(this.valueToPixel, this),
-          };
-          createDOMNodes.call(this, labels, createLabel.bind(this));
+          const labelNodes = this._createLabels(fixedLabels);
+
+          if (O.show_markers) {
+            this._highlightMarkers(fixedLabels, fixedDots, dotNodes);
+          }
+
+          labelNodes.forEach((node) => E.appendChild(node));
         }
 
-        var dots = {
-          values: O.fixed_dots,
-          positions: O.fixed_dots.map(this.valueToPixel, this),
-        };
-        createDOMNodes.call(this, dots, createDot.bind(this));
-
-        if (O.show_markers && labels) {
-          markMarkers(labels, dots);
-        }
+        dotNodes.forEach((node) => E.appendChild(node));
       } else {
-        var base = getBase(O);
+        const base = getBase(O);
 
         if (base !== O.max)
           generateScale.call(this, base, O.max, true, O.show_max);
         if (base !== O.min)
           generateScale.call(this, base, O.min, base === O.max, O.show_min);
       }
-      if (this._bar) this.element.appendChild(this._bar);
-      if (this._pointer) this.element.appendChild(this._pointer);
+
+      {
+        const _bar = this._bar;
+        const _pointer = this._pointer;
+        if (_bar) E.appendChild(_bar);
+        if (_pointer) E.appendChild(_pointer);
+      }
     }
   },
+  _highlightMarkers(labels, dots, dotNodes) {
+    labels = labels.map((args) => typeof args === 'number' ? args : args.value)
+        .sort((a, b) => a - b);
 
+    for (let i = 0; i < dots.length; i++) {
+      const value = typeof dots[i] === 'number' ? dots[i] : dots[i].value;
+
+      if (!binaryContains(labels, value)) continue;
+
+      addClass(dotNodes[i], 'aux-marker');
+    }
+  },
+  _createDot(args) {
+    const O = this.options;
+    const node = document.createElement('DIV');
+
+    addClass(node, 'aux-dot');
+
+    let value;
+
+    if (typeof args === 'number') {
+      value = args;
+    } else {
+      value = args.value;
+
+      const cl = args.class;
+
+      if (typeof cl === 'string') {
+        addClass(node, cl);
+      } else if (Array.isArray(cl)) {
+        for (let i = 0; i < cl.length; i++)
+          addClass(node, cl[i]);
+      }
+    }
+
+    const position = this.valueToPixel(value);
+
+    if (O.layout === 'left' || O.layout === 'right') {
+      node.style.bottom = Math.round(position + 0.5) + 'px';
+    } else {
+      node.style.left = Math.round(position - 0.5) + 'px';
+    }
+
+    if (getBase(O) === value) addClass(node, 'aux-base');
+    if (O.max === value) addClass(node, 'aux-max');
+    if (O.min === value) addClass(node, 'aux-min');
+
+    return node;
+  },
+  _createDots(values) {
+    return values.map((value) => this._createDot(value));
+  },
+  _createLabel(args) {
+    const O = this.options;
+
+    let position, label;
+
+    const node = document.createElement('SPAN');
+
+    addClass(node, 'aux-label');
+
+    let value;
+
+    if (typeof args === 'number') {
+      value = args;
+      position = this.valueToPixel(value);
+
+      label = O.labels(value);
+    } else {
+      value = args.value;
+
+      position = this.valueToPixel(value);
+
+      const cl = args.class;
+
+      if (typeof cl === 'string') {
+        addClass(node, cl);
+      } else if (Array.isArray(cl)) {
+        for (let i = 0; i < cl.length; i++)
+          addClass(node, cl[i]);
+      }
+
+      if (args.label === void 0) {
+        label = O.labels(value);
+      } else {
+        label = args.label;
+      }
+    }
+
+    if (vert(O)) {
+      node.style.bottom = position.toFixed(1) + 'px';
+    } else {
+      node.style.left = position.toFixed(1) + 'px';
+    }
+
+    setContent(node, label);
+
+    if (getBase(O) === value) addClass(node, 'aux-base');
+    if (O.max === value) addClass(node, 'aux-max');
+    if (O.min === value) addClass(node, 'aux-min');
+
+    return node;
+  },
+  _createLabels(values) {
+    return values.map((value) => this._createLabel(value));
+  },
   resize: function () {
     Widget.prototype.resize.call(this);
     var O = this.options;
