@@ -261,11 +261,9 @@ export const standardBiquadFilters = {
   highpass4: biquadFilter(highPass4),
 };
 
-var nullModule = {
-  freq2gain: function () {
-    return 0.0;
-  },
-};
+function nullFilter() {
+  return 0;
+}
 
 //function bilinearModule(O) {
 //var log = Math.log;
@@ -287,7 +285,7 @@ var nullModule = {
 //return LN10_10 * log((Rb - S * Yb) / (Ra - S * Ya));
 //}
 
-//return { freq2gain: frequencyToGain };
+//return frequencyToGain;
 //}
 
 function biquadModule(O) {
@@ -303,9 +301,9 @@ function biquadModule(O) {
   var Xb = +(4 * O.b0 * O.b2);
   var Yb = +(O.b1 * (O.b0 + O.b2));
 
-  if (Ra === Rb && Ya === Yb && Xa === Xb) return nullModule;
+  if (Ra === Rb && Ya === Yb && Xa === Xb) return nullFilter;
 
-  function frequencyToGain(f) {
+  return function (f) {
     f = +f;
     var S = +sin(PI * f);
     S *= S;
@@ -314,8 +312,6 @@ function biquadModule(O) {
       log((Rb - S * (Xb * (1 - S) + Yb)) / (Ra - S * (Xa * (1 - S) + Ya)))
     );
   }
-
-  return { freq2gain: frequencyToGain };
 }
 
 function biquadFilter1(trafo) {
@@ -332,20 +328,18 @@ function biquadFilterN(trafos) {
     var i;
 
     for (i = 0; i < trafos.length; i++) {
-      A[i] = biquadModule(trafos[i](O)).freq2gain;
+      A[i] = biquadModule(trafos[i](O));
     }
 
-    return {
-      freq2gain: function (f) {
-        var ret = 0.0;
-        var j;
+    return function (f) {
+      var ret = 0.0;
+      var j;
 
-        for (j = 0; j < A.length; j++) {
-          ret += A[j](f);
-        }
+      for (j = 0; j < A.length; j++) {
+        ret += A[j](f);
+      }
 
-        return ret;
-      },
+      return ret;
     };
   }
 

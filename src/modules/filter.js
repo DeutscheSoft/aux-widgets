@@ -122,23 +122,30 @@ export const Filter = defineClass({
     initialized: reset,
   },
   createFrequencyToGain: function () {
-    var O = this.options;
-    var m;
+    const O = this.options;
+    let factory;
 
     if (typeof O.type === 'string') {
-      m = standardBiquadFilters[O.type];
+      factory = standardBiquadFilters[O.type];
 
-      if (!m) {
+      if (!factory) {
         error('Unknown standard filter: ' + O.type);
         return;
       }
     } else if (typeof O.type === 'function') {
-      m = O.type;
+      factory = O.type;
     } else {
       error("Unsupported option 'type'.");
       return;
     }
-    this.frequencyToGain = m(O).freq2gain;
+
+    const filter = factory(O);
+
+    if (typeof filter === 'object') {
+      filter = filter.freq2gain;
+    }
+
+    this.frequencyToGain = filter;
   },
   getFrequencyToGain: function () {
     if (this.frequencyToGain === null) this.createFrequencyToGain();
