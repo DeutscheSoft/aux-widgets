@@ -1,5 +1,7 @@
 <span>Simple Chart with a Graph and a ChartHandle as DOM nodes</span>
 <aux-chart
+  grid.x_max=-5
+  grid.y_max=-18
   range_x="js:{scale:'linear',min:-60,max:0,base:0}"
   range_y="js:{scale:'linear',min:-24,max:24,base:0}"
   grid_x="js:[{pos:-60,label:'60s'},{pos:-55},{pos:-50,label:'50s'},{pos:-45},{pos:-40,label:'40s'},{pos:-35},{pos:-30,label:'30s'},{pos:-25},{pos:-20,label:'20s'},{pos:-15},{pos:-10,label:'10s'},{pos:-5},{pos:0,label:'0s'}]"
@@ -20,7 +22,7 @@
 <aux-chart
   range_x="js:{scale:'linear',min:-60,max:0,base:0,snap:5}"
   range_y="js:{scale:'linear',min:-24,max:24,base:0,snap:3}"
-  grid_x="js:[{pos:-60,label:'60s'},{pos:-55},{pos:-50,label:'50s'},{pos:-45},{pos:-40,label:'40s'},{pos:-35},{pos:-30,label:'30s'},{pos:-25},{pos:-20,label:'20s'},{pos:-15},{pos:-10,label:'10s'},{pos:-5},{pos:0,label:'0s'}]"
+  grid_x="js:[{pos:-60,label:'60s'},{pos:-55,y_max:-18},{pos:-50,label:'50s'},{pos:-45,y_max:-18},{pos:-40,label:'40s'},{pos:-35,y_max:-18},{pos:-30,label:'30s'},{pos:-25,y_max:-18},{pos:-20,label:'20s'},{pos:-15,y_max:-18},{pos:-10,label:'10s'},{pos:-5,y_max:-18},{pos:0,label:'0s'}]"
   grid_y="js:[{pos:-24,label:'-24dB'},{pos:-18},{pos:-12,label:'-12dB'},{pos:-6},{pos:0,label:'0dB',class:'aux-highlight'},{pos:6},{pos:12,label:'12dB'},{pos:18},{pos:24,label:'24dB'}]"
   title="My Chart"
   style="width: 320px; height: 128px;"

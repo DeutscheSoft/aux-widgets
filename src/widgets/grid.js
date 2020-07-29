@@ -91,6 +91,8 @@ function drawLines(a, mode, last) {
             x: x,
             y: y,
             m: tw + pl + pr,
+            x_min: a[i].x_min,
+            x_max: a[i].x_max,
           };
           last = y - th;
         } else {
@@ -104,6 +106,8 @@ function drawLines(a, mode, last) {
             x: x,
             y: y,
             m: th + pt + pb,
+            y_min: a[i].y_min,
+            y_max: a[i].y_max,
           };
           last = x + tw;
         }
@@ -111,6 +115,7 @@ function drawLines(a, mode, last) {
 
       S.add(
         function () {
+          const O = this.options;
           var elements = this.element.querySelectorAll(
             '.aux-gridline.aux-' + (mode ? 'horizontal' : 'vertical')
           );
@@ -134,7 +139,7 @@ function drawLines(a, mode, last) {
           for (j = 0; j < a.length; j++) {
             obj = a[j];
             label = coords[j];
-            var m;
+            let m, x_min, x_max, y_min, y_max, x, y;
             if (label) m = label.m;
             else m = 0;
 
@@ -152,26 +157,41 @@ function drawLines(a, mode, last) {
             if (obj.color) line.setAttribute('style', 'stroke:' + obj.color);
             if (mode) {
               // line from left to right
+              if (typeof obj.x_min === 'number')
+                x_min = Math.max(0, this.range_x.valueToPixel(obj.x_min));
+              else if (O.x_min !== false)
+                x_min = Math.max(0, this.range_x.valueToPixel(O.x_min));
+              else
+                x_min = 0;
+              if (typeof obj.x_max === 'number')
+                x_max = Math.min(this.range_x.options.basis - m, this.range_x.valueToPixel(obj.x_max));
+              else if (O.x_max !== false)
+                x_max = Math.min(this.range_x.options.basis - m, this.range_x.valueToPixel(O.x_max));
+              else
+                x_max = this.range_x.options.basis - m;
+              y = Math.round(this.range_y.valueToPixel(obj.pos));
               line.setAttribute(
                 'd',
-                'M0 ' +
-                  Math.round(this.range_y.valueToPixel(obj.pos)) +
-                  '.5 L' +
-                  (this.range_x.options.basis - m) +
-                  ' ' +
-                  Math.round(this.range_y.valueToPixel(obj.pos)) +
-                  '.5'
+                'M' + x_min + ' ' + y + '.5 L' + x_max + ' ' + y + '.5',
               );
             } else {
               // line from top to bottom
+              if (typeof obj.y_min === 'number')
+                y_min = Math.max(0, this.range_y.valueToPixel(obj.y_min));
+              else if (O.y_min !== false)
+                y_min = Math.max(0, this.range_y.valueToPixel(O.y_min));
+              else
+                y_min = 0;
+              if (typeof obj.y_max === 'number')
+                y_max = Math.min(this.range_y.options.basis - m, this.range_y.valueToPixel(obj.y_max));
+              else if (O.y_max !== false)
+                y_max = Math.min(this.range_y.options.basis - m, this.range_y.valueToPixel(O.y_max));
+              else
+                y_max = this.range_y.options.basis - m;
+              x = Math.round(this.range_x.valueToPixel(obj.pos))
               line.setAttribute(
                 'd',
-                'M' +
-                  Math.round(this.range_x.valueToPixel(obj.pos)) +
-                  '.5 0 L' +
-                  Math.round(this.range_x.valueToPixel(obj.pos)) +
-                  '.5 ' +
-                  (this.range_y.options.basis - m)
+                'M' + x + '.5 ' + y_min + ' L' + x + '.5 ' + y_max,
               );
             }
             this.element.appendChild(line);
@@ -200,12 +220,16 @@ export const Grid = defineClass({
    * @property {String} [options.grid_x.color] - A valid CSS color string to colorize the elements.
    * @property {String} [options.grid_x.class] - A class name for the elements.
    * @property {String} [options.grid_x.label] - A label string.
+   * @property {String} [options.grid_x.y_min] - Start this line at this values position instead of 0.
+   * @property {String} [options.grid_x.y_max] - End this line at this values position instead of maximum height.
    * @property {Array<Object|Number>} [options.grid_y=[]] - Array for horizontal grid lines
    *   containing either positions or objects with the members:
    * @property {Number} [options.grid_y.pos] - The value where to draw grid line and corresponding label.
    * @property {String} [options.grid_y.color] - A valid CSS color string to colorize the elements.
    * @property {String} [options.grid_y.class] - A class name for the elements.
    * @property {String} [options.grid_y.label] - A label string.
+   * @property {String} [options.grid_y.x_min] - Start this line at this values position instead of 0.
+   * @property {String} [options.grid_y.x_max] - End this line at this values position instead of maximum width.
    * @property {Function|Object} [options.range_x={}] - A function returning
    *   a {@link Range} instance for vertical grid lines or an object
    *   containing options. for a new {@link Range}.
@@ -214,6 +238,15 @@ export const Grid = defineClass({
    *   containing options. for a new {@link Range}.
    * @property {Number} [options.width=0] - Width of the grid.
    * @property {Number} [options.height=0] - Height of the grid.
+   * @property {Number} [options.x_min=false] - Value to start horizontal
+   *   lines at this position instead of 0.
+   * @property {Number} [options.x_max=false] - Value to end horizontal
+   *   lines at this position instead of maximum width.
+   * @property {Number} [options.y_min=false] - Value to start vertical
+   *   lines at this position instead of 0.
+   * @property {Number} [options.y_max=false] - Value to end vertical
+   *   lines at this position instead of maximum height.
+   * 
    *
    * @extends Widget
    *
@@ -228,6 +261,10 @@ export const Grid = defineClass({
     range_y: 'object',
     width: 'number',
     height: 'number',
+    x_min: 'boolean|number',
+    x_max: 'boolean|number',
+    y_min: 'boolean|number',
+    y_max: 'boolean|number',
   }),
   options: {
     grid_x: [],
@@ -236,6 +273,10 @@ export const Grid = defineClass({
     range_y: {},
     width: 0,
     height: 0,
+    x_min: false,
+    x_max: false,
+    y_min: false,
+    y_max: false,
   },
   initialize: function (options) {
     if (!options.element) options.element = makeSVG('g');
