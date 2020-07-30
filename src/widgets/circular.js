@@ -249,13 +249,13 @@ function drawSlice(a_from, a_to, r_inner, r_outer, pos, slice) {
   while (a_to < 0) a_to += 360;
   if (a_from > 360) a_from %= 360;
   if (a_to > 360) a_to %= 360;
-  // get drawing direction (sweep = clock-wise)
-  let sweep;
-  if (
-    (this.options.reverse && a_to <= a_from)
-  )
-    sweep = 0;
-  else sweep = 1;
+  
+  if (a_from > a_to) {
+    let tmp = a_from;
+    a_from = a_to;
+    a_to = tmp;
+  }
+  
   // get large flag
   let large;
   if (Math.abs(a_from - a_to) >= 180) large = 1;
@@ -270,7 +270,7 @@ function drawSlice(a_from, a_to, r_inner, r_outer, pos, slice) {
     r_outer,
     r_outer,
     large,
-    sweep,
+    1,
     to.x1,
     to.y1,
     to.x2,
@@ -278,7 +278,7 @@ function drawSlice(a_from, a_to, r_inner, r_outer, pos, slice) {
     r_inner,
     r_inner,
     large,
-    !sweep,
+    0,
     from.x2,
     from.y2
   );
