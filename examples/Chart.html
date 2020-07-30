@@ -29,3 +29,22 @@
 >
   <aux-chart-handle x="-30" y="0" label="Handle#1"></aux-chart-handle>
 </aux-chart>
+
+<span>Chart with centered label which changes size</span>
+
+<style>
+  .aux-chart.animate .aux-active .aux-label {
+    font-size: 200%;
+  }
+</style>
+
+<aux-chart class=animate
+  range_x="js:{scale:'linear',min:-60,max:0,base:0}"
+  range_y="js:{scale:'linear',min:-24,max:24,base:0}"
+  style="width: 320px; height: 128px;"
+>
+  <aux-chart-handle
+    x="-30" y="0" label="X" preferences='[ "center" ]'
+    format_label='js:(label) => label'
+  ></aux-chart-handle>
+</aux-chart>
