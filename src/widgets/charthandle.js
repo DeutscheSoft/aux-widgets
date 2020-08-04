@@ -812,7 +812,7 @@ function startDrag() {
     var p = e.parentNode;
     addClass(e, 'aux-active');
     this.set('dragging', true);
-    this.startInteraction();
+    this.startInteracting();
 
     /* TODO: move this into the parent */
     addClass(this.parent.element, 'aux-dragging');
@@ -828,7 +828,7 @@ function stopDrag() {
     var e = this.element;
     removeClass(e, 'aux-active');
     this.set('dragging', false);
-    this.stopInteraction();
+    this.stopInteracting();
 
     /* TODO: move this into the parent */
     removeClass(this.parent.element, 'aux-dragging');
