@@ -6,8 +6,16 @@
     width: 300px;
   }
 </style>
+<script>
+  function runDemo () {
+    const value = Math.random() * 120 - 96;
+    document.getElementById("demometer").auxWidget.set("value", value);
+  }
+  window.setInterval(runDemo, 2000);
+</script>
 <span>LevelMeter with <code>layout="right"</code> and <code>top=12</code></span>
 <aux-levelmeter
+  id=demometer
   min="-96"
   max="24"
   value="-24"
@@ -26,6 +34,9 @@
   layout="right"
   background="#2577a1"
   foreground="#e0e0e0"
+  falling=24
+  auto_hold=1000
+  show_hold=true
 >
 </aux-levelmeter>
 <span>LevelMeter with <code>layout="left"</code></span>
