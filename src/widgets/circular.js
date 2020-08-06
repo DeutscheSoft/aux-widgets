@@ -348,7 +348,7 @@ export const Circular = defineClass({
    *   Receives the label value as first argument.
    * @property {Array<Object>} [options.labels=[]] - An array containing objects which describe labels
    *   to be displayed. Either a value or an object whose members are the position <code>pos</code>
-   *   insie the value range and optionally <code>color</code>, <code>class</code> and any of the
+   *   inside the value range and optionally <code>label</code>, <code>color</code>, <code>class</code> and any of the
    *   properties of <code>options.labels_defaults</code>.
    *
    * @extends Widget
