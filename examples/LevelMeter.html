@@ -7,11 +7,18 @@
   }
 </style>
 <script>
-  function runDemo () {
-    const value = Math.random() * 120 - 96;
-    document.getElementById("demometer").auxWidget.set("value", value);
+  if (!('levelMeterSimulation' in window)) {
+    let levelMeterSimulation = function () {
+      const value = Math.random() * 120 - 96;
+      const demoMeter = document.getElementById("demometer");
+
+      if (!demoMeter) return;
+
+      demoMeter.auxWidget.set("value", value);
+    }
+    window.levelMeterSimulation = levelMeterSimulation;
+    window.setInterval(levelMeterSimulation, 2000);
   }
-  window.setInterval(runDemo, 2000);
 </script>
 <span>LevelMeter with <code>layout="right"</code> and <code>top=12</code></span>
 <aux-levelmeter
