@@ -138,8 +138,8 @@ export const LevelMeter = defineClass({
       this.set('_sync_value', v);
     },
     set_auto_hold: function (value) {
-      if (this.__tto >= 0 && 0 | (value <= 0)) window.clearTimeout(this.__tto);
-      if (this.__bto >= 0 && 0 | (value <= 0)) window.clearTimeout(this.__bto);
+      if (this.__tto >= 0 && value === -1) window.clearTimeout(this.__tto);
+      if (this.__bto >= 0 && value === -1) window.clearTimeout(this.__bto);
     },
   },
 
