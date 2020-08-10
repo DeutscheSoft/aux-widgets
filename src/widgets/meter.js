@@ -388,21 +388,23 @@ export const Meter = defineClass({
   },
 
   calculateMeter: function (to, value, i) {
-    var O = this.options;
+    const O = this.options;
     // Set the mask elements according to options.value to show a value in
     // the meter bar
-    var base = O.base;
-    var segment = O.segment | 0;
+    const base = O.base;
+    const segment = O.segment | 0;
 
     /* At this point the whole meter bar is filled. We now want
      * to clear the area between base and value.
      */
 
     /* canvas coordinates are reversed */
-    var v1 = this.valueToPixel(base) | 0;
-    var v2 = this.valueToPixel(value) | 0;
+    const v1 = this.valueToPixel(base) | 0;
+    let v2 = this.valueToPixel(value) | 0;
 
-    if (segment !== 1) v2 = segment * (Math.round(v2 / segment) | 0);
+    if (segment !== 1) {
+      v2 = v1 + segment * Math.round((v2 - v1)/segment) | 0;
+    }
 
     if (v2 < v1) {
       to[i++] = v2;
