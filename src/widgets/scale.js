@@ -511,6 +511,13 @@ export const Scale = defineClass({
         'aux-right',
         'aux-left'
       );
+      if (this._bar) {
+        this._bar.style.removeProperty('top');
+        this._bar.style.removeProperty('bottom');
+        this._bar.style.removeProperty('left');
+        this._bar.style.removeProperty('right');
+        I.bar = true;
+      }
       switch (O.layout) {
         case 'left':
           addClass(E, 'aux-vertical', 'aux-left');
