@@ -504,14 +504,15 @@ export const Circular = defineClass({
         I.size ||
         I.min ||
         I.max ||
-        I.start)
+        I.start ||
+        I.angle)
     ) {
       drawLabels.call(this);
     }
 
     if (
       O.show_dots &&
-      (I.validate('show_dots', 'dots', 'dot') || I.min || I.max || I.size)
+      (I.validate('show_dots', 'dots', 'dot') || I.min || I.max || I.size || I.base || I.angle)
     ) {
       drawDots.call(this);
     }
@@ -521,7 +522,9 @@ export const Circular = defineClass({
       (I.validate('show_markers', 'markers', 'marker') ||
         I.size ||
         I.min ||
-        I.max)
+        I.max ||
+        I.start ||
+        I.angle)
     ) {
       drawMarkers.call(this);
     }
@@ -531,7 +534,7 @@ export const Circular = defineClass({
     var outer_p = outer - stroke / 2 - O.margin;
     var inner_p = inner - stroke / 2 - O.margin;
 
-    if (I.show_value || I.value_ring || I.size || I._stroke_width) {
+    if (I.show_value || I.value_ring || I.size || I._stroke_width || I.base || I.angle) {
       I.show_value = I.value_ring = false;
       if (O.show_value) {
         drawSlice.call(
@@ -548,7 +551,7 @@ export const Circular = defineClass({
       }
     }
 
-    if (I.show_base || I.size || I._stroke_width) {
+    if (I.show_base || I.size || I._stroke_width || I.base || I.angle) {
       I.show_base = false;
       if (O.show_base) {
         drawSlice.call(this, 0, O.angle, inner_p, outer_p, outer, this._base);
@@ -557,7 +560,7 @@ export const Circular = defineClass({
         this._base.removeAttribute('d');
       }
     }
-    if (I.show_hand || I.size) {
+    if (I.show_hand || I.size || I.base || I.angle) {
       I.show_hand = false;
       if (O.show_hand) {
         this._hand.style.display = 'block';
@@ -565,7 +568,7 @@ export const Circular = defineClass({
         this._hand.style.display = 'none';
       }
     }
-    if (I.validate('size', 'value_hand', 'hand', 'min', 'max', 'start')) {
+    if (I.validate('size', 'value_hand', 'hand', 'min', 'max', 'start', 'base', 'angle')) {
       tmp = this._hand;
       tmp.setAttribute('x', O.size - O.hand.length - O.hand.margin);
       tmp.setAttribute('y', (O.size - O.hand.width) / 2.0);
