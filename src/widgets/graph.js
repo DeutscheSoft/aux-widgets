@@ -222,13 +222,12 @@ export const Graph = defineClass({
     }
 
     if (I.mode) {
-      I.mode = false;
       removeClass(E, 'aux-filled');
       removeClass(E, 'aux-outline');
       addClass(E, O.mode === 'line' ? 'aux-outline' : 'aux-filled');
     }
 
-    if (I.validate('dots', 'type')) {
+    if (I.validate('dots', 'type', 'mode')) {
       const dots = O.dots;
       const type = O.type;
       const RX = this.range_x;
