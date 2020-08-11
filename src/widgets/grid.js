@@ -161,18 +161,22 @@ function drawLines(a, mode, last) {
                 x_min = Math.max(0, this.range_x.valueToPixel(obj.x_min));
               else if (O.x_min !== false)
                 x_min = Math.max(0, this.range_x.valueToPixel(O.x_min));
-              else
-                x_min = 0;
+              else x_min = 0;
               if (typeof obj.x_max === 'number')
-                x_max = Math.min(this.range_x.options.basis - m, this.range_x.valueToPixel(obj.x_max));
+                x_max = Math.min(
+                  this.range_x.options.basis - m,
+                  this.range_x.valueToPixel(obj.x_max)
+                );
               else if (O.x_max !== false)
-                x_max = Math.min(this.range_x.options.basis - m, this.range_x.valueToPixel(O.x_max));
-              else
-                x_max = this.range_x.options.basis - m;
+                x_max = Math.min(
+                  this.range_x.options.basis - m,
+                  this.range_x.valueToPixel(O.x_max)
+                );
+              else x_max = this.range_x.options.basis - m;
               y = Math.round(this.range_y.valueToPixel(obj.pos));
               line.setAttribute(
                 'd',
-                'M' + x_min + ' ' + y + '.5 L' + x_max + ' ' + y + '.5',
+                'M' + x_min + ' ' + y + '.5 L' + x_max + ' ' + y + '.5'
               );
             } else {
               // line from top to bottom
@@ -180,18 +184,22 @@ function drawLines(a, mode, last) {
                 y_min = Math.max(0, this.range_y.valueToPixel(obj.y_min));
               else if (O.y_min !== false)
                 y_min = Math.max(0, this.range_y.valueToPixel(O.y_min));
-              else
-                y_min = 0;
+              else y_min = 0;
               if (typeof obj.y_max === 'number')
-                y_max = Math.min(this.range_y.options.basis - m, this.range_y.valueToPixel(obj.y_max));
+                y_max = Math.min(
+                  this.range_y.options.basis - m,
+                  this.range_y.valueToPixel(obj.y_max)
+                );
               else if (O.y_max !== false)
-                y_max = Math.min(this.range_y.options.basis - m, this.range_y.valueToPixel(O.y_max));
-              else
-                y_max = this.range_y.options.basis - m;
-              x = Math.round(this.range_x.valueToPixel(obj.pos))
+                y_max = Math.min(
+                  this.range_y.options.basis - m,
+                  this.range_y.valueToPixel(O.y_max)
+                );
+              else y_max = this.range_y.options.basis - m;
+              x = Math.round(this.range_x.valueToPixel(obj.pos));
               line.setAttribute(
                 'd',
-                'M' + x + '.5 ' + y_min + ' L' + x + '.5 ' + y_max,
+                'M' + x + '.5 ' + y_min + ' L' + x + '.5 ' + y_max
               );
             }
             this.element.appendChild(line);
@@ -246,7 +254,7 @@ export const Grid = defineClass({
    *   lines at this position instead of 0.
    * @property {Number} [options.y_max=false] - Value to end vertical
    *   lines at this position instead of maximum height.
-   * 
+   *
    *
    * @extends Widget
    *

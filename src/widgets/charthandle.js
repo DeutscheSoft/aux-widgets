@@ -1374,11 +1374,11 @@ export const ChartHandle = defineClass({
       if (!delay_lines) redrawLines.call(this, O, X);
     }
   },
-  
+
   /**
    * Moves the handle to the front, i.e. add as last element to the containing
    * SVG group element.
-   * 
+   *
    * @method ChartHandle#toFront
    */
   toFront: function () {
@@ -1391,11 +1391,11 @@ export const ChartHandle = defineClass({
         if (_p && e !== _p.lastChild) _p.appendChild(e);
       });
   },
-  
+
   /**
    * Moves the handle to the back, i.e. add as first element to the containing
    * SVG group element.
-   * 
+   *
    * @method ChartHandle#toFront
    */
   toBack: function () {
@@ -1409,7 +1409,7 @@ export const ChartHandle = defineClass({
       });
     }
   },
-  
+
   set: function (key, value) {
     var O = this.options;
 

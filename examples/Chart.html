@@ -1,7 +1,7 @@
 <span>Simple Chart with a Graph and a ChartHandle as DOM nodes</span>
 <aux-chart
-  grid.x_max=-5
-  grid.y_max=-18
+  grid.x_max="-5"
+  grid.y_max="-18"
   range_x="js:{scale:'linear',min:-60,max:0,base:0}"
   range_y="js:{scale:'linear',min:-24,max:24,base:0}"
   grid_x="js:[{pos:-60,label:'60s'},{pos:-55},{pos:-50,label:'50s'},{pos:-45},{pos:-40,label:'40s'},{pos:-35},{pos:-30,label:'30s'},{pos:-25},{pos:-20,label:'20s'},{pos:-15},{pos:-10,label:'10s'},{pos:-5},{pos:0,label:'0s'}]"
@@ -38,13 +38,17 @@
   }
 </style>
 
-<aux-chart class=animate
+<aux-chart
+  class="animate"
   range_x="js:{scale:'linear',min:-60,max:0,base:0}"
   range_y="js:{scale:'linear',min:-24,max:24,base:0}"
   style="width: 320px; height: 128px;"
 >
   <aux-chart-handle
-    x="-30" y="0" label="X" preferences='[ "center" ]'
-    format_label='js:(label) => label'
+    x="-30"
+    y="0"
+    label="X"
+    preferences='[ "center" ]'
+    format_label="js:(label) => label"
   ></aux-chart-handle>
 </aux-chart>

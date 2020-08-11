@@ -330,11 +330,11 @@ export const Graph = defineClass({
     }
     Widget.prototype.redraw.call(this);
   },
-  
+
   /**
    * Moves the graph to the front, i.e. add as last element to the containing
    * SVG group element.
-   * 
+   *
    * @method Graph#toFront
    */
   toFront: function () {
@@ -350,7 +350,7 @@ export const Graph = defineClass({
   /**
    * Moves the graph to the back, i.e. add as first element to the containing
    * SVG group element.
-   * 
+   *
    * @method Graph#toBack
    */
   toBack: function () {

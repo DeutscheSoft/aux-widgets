@@ -263,16 +263,16 @@ describe('Chart', () => {
     const g1 = chart.addGraph({});
     const g2 = chart.addGraph({});
     g2.redraw();
-    
+
     g2.toBack();
     g2.redraw();
-    
+
     if (g2.element !== g2.element.parentElement.firstChild)
       throw new Error('Graph.toBack() failed.');
-      
+
     g2.toFront();
     g2.redraw();
-    
+
     if (g2.element !== g2.element.parentElement.lastChild)
       throw new Error('Graph.toFront() failed.');
 
@@ -300,16 +300,16 @@ describe('Chart', () => {
     const h1 = chart.addHandle({});
     const h2 = chart.addHandle({});
     chart.redraw();
-    
+
     h2.toBack();
     h2.redraw();
-    
+
     if (h2.element !== h2.element.parentElement.firstChild)
       throw new Error('ChartHandle.toBack() failed.');
-      
+
     h2.toFront();
     h2.redraw();
-    
+
     if (h2.element !== h2.element.parentElement.lastChild)
       throw new Error('ChartHandle.toFront() failed.');
 

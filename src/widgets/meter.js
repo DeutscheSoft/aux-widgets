@@ -403,7 +403,7 @@ export const Meter = defineClass({
     let v2 = this.valueToPixel(value) | 0;
 
     if (segment !== 1) {
-      v2 = v1 + segment * Math.round((v2 - v1)/segment) | 0;
+      v2 = (v1 + segment * Math.round((v2 - v1) / segment)) | 0;
     }
 
     if (v2 < v1) {

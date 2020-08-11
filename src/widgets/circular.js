@@ -249,13 +249,13 @@ function drawSlice(a_from, a_to, r_inner, r_outer, pos, slice) {
   while (a_to < 0) a_to += 360;
   if (a_from > 360) a_from %= 360;
   if (a_to > 360) a_to %= 360;
-  
+
   if (a_from > a_to) {
     let tmp = a_from;
     a_from = a_to;
     a_to = tmp;
   }
-  
+
   // get large flag
   let large;
   if (Math.abs(a_from - a_to) >= 180) large = 1;
@@ -512,7 +512,12 @@ export const Circular = defineClass({
 
     if (
       O.show_dots &&
-      (I.validate('show_dots', 'dots', 'dot') || I.min || I.max || I.size || I.base || I.angle)
+      (I.validate('show_dots', 'dots', 'dot') ||
+        I.min ||
+        I.max ||
+        I.size ||
+        I.base ||
+        I.angle)
     ) {
       drawDots.call(this);
     }
@@ -534,7 +539,14 @@ export const Circular = defineClass({
     var outer_p = outer - stroke / 2 - O.margin;
     var inner_p = inner - stroke / 2 - O.margin;
 
-    if (I.show_value || I.value_ring || I.size || I._stroke_width || I.base || I.angle) {
+    if (
+      I.show_value ||
+      I.value_ring ||
+      I.size ||
+      I._stroke_width ||
+      I.base ||
+      I.angle
+    ) {
       I.show_value = I.value_ring = false;
       if (O.show_value) {
         drawSlice.call(
@@ -568,7 +580,18 @@ export const Circular = defineClass({
         this._hand.style.display = 'none';
       }
     }
-    if (I.validate('size', 'value_hand', 'hand', 'min', 'max', 'start', 'base', 'angle')) {
+    if (
+      I.validate(
+        'size',
+        'value_hand',
+        'hand',
+        'min',
+        'max',
+        'start',
+        'base',
+        'angle'
+      )
+    ) {
       tmp = this._hand;
       tmp.setAttribute('x', O.size - O.hand.length - O.hand.margin);
       tmp.setAttribute('y', (O.size - O.hand.width) / 2.0);
