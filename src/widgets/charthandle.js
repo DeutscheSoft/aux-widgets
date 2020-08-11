@@ -567,6 +567,7 @@ function createLabel() {
 
 function removeLabel() {
   var E = this._label;
+  if (!E) return;
   this._label = null;
   E.remove();
   removeEventListener(E, 'wheel', this._onWheel);
