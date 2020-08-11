@@ -573,7 +573,8 @@ export const Scale = defineClass({
         'basis',
         'scale',
         'reverse',
-        'show_labels'
+        'show_labels',
+        'labels'
       )
     ) {
       empty(E);
