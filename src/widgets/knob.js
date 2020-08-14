@@ -38,6 +38,7 @@ import { objectAnd, objectSub } from '../utils/object.js';
 
 var formatViewbox = FORMAT('0 0 %d %d');
 function dblClick() {
+  if (!this.get('bind_dblclick')) return;
   this.userset('value', this.options.reset);
   /**
    * Is fired when the knob receives a double click in order to reset to initial value.
@@ -66,6 +67,8 @@ function moduleRange() {
  * @param {Object} [options={ }] - An object containing initial options.
  * 
  * @property {Number} [options.reset] - Reset to this value on double click.
+ * @property {boolean} [options.bind_dblclick=true] - If true, bind the dblclick
+ *      event to reset the value to the `reset` option.
  * @property {Object} [options.hand={width: 1, length: 12, margin: 24}]
  * @property {Number} [options.margin=13]
  * @property {Number} [options.thickness=6]
@@ -95,6 +98,7 @@ export const Knob = defineClass({
     DragValue.prototype._options,
     {
       reset: 'number',
+      bind_dblclick: 'boolean',
     }
   ),
   options: Object.assign({}, Circular.prototype.options, {
@@ -139,6 +143,7 @@ export const Knob = defineClass({
       large: { hand: { width: 1.5, length: 12, margin: 26 } },
       huge: { hand: { width: 2, length: 12, margin: 28 } },
     },
+    bind_dblclick: true,
   }),
   static_events: {
     dblclick: dblClick,
