@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.deuso.eu:WebUI/AUX.git"
+    "url": "https://github.com/DeutscheSoft/aux-widgets"
   },
   "author": {
     "name": "Markus Schmidt",
