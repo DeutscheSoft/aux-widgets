@@ -25,7 +25,7 @@ default theme(s) contained in this repository.
 AUX can be installed using `npm`. In order to gain access to all components,
 simply import them all using
 
-    import '@deutschesoft/a.ux';
+    import '@deutschesoft/aux-widgets';
 
 and include the default theme into your web application.
 
