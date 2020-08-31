@@ -388,10 +388,7 @@ export const LevelMeter = defineClass({
         }
       }
       if (O.auto_clip !== false && value >= O.clipping && !this.hasBase()) {
-        clearTimeout(this.__cto);
         this.set('clip', true);
-      }
-      if (O.auto_clip !== false && value < O.clipping && !this.hasBase()) {
         clipTimeout.call(this);
       }
       if (
