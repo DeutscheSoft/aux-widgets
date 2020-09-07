@@ -110,9 +110,11 @@ export const Pager = defineClass({
     // with the page label/icon
     let subs = pages.pages.forEachAsync((page, position) => {
       let _subs = initSubscriptions();
-
+      let id = page.element.id || false;
       const button = navigation.addButton(
-        { label: page.get('label') || false, icon: page.get('icon') || false },
+        { label: page.get('label') || false,
+          icon: page.get('icon') || false,
+          id: id ? id + '-button' : false },
         position
       );
 
