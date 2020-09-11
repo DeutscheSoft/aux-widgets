@@ -21,7 +21,62 @@ import { defineClass } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
 import { Container } from './container.js';
 import { Toggle } from './toggle.js';
+import { Timer } from './../utils/timers.js';
 import { addClass } from '../utils/dom.js';
+
+function set_class (cls) {
+  const classes = [
+    "aux-expanding",
+    "aux-expanded",
+    "aux-collapsing",
+    "aux-collapsed",
+  ]
+  for (let i = 0, m = classes.length; i < m; ++i) {
+    if (classes[i] != cls)
+      this.removeClass(classes[i]);
+  }
+  this.addClass(cls);
+  this.triggerResize();
+}
+
+function expand_cb () {
+  set_class.call(this, "aux-expanded");
+}
+
+function collapse_cb () {
+  set_class.call(this, "aux-collapsed");
+}
+
+function expand () {
+  const O = this.options;
+  if (O.expanded) {
+    if (this.timer_collapse.active)
+      this.timer_collapse.stop();
+    if (O.showing_duration && !this.timer_expand.active) {
+      set_class.call(this, "aux-expanding");
+      this.timer_expand.start(O.showing_duration);
+    }
+    else if (O.showing_duration && this.timer_expand.active) {
+      return;
+    }
+    else {
+      set_class.call(this, "aux-expanded");
+    }
+  } else {
+    if (this.timer_expand.active)
+      this.timer_expand.stop();
+    if (O.hiding_duration && !this.timer_collapse.active) {
+      set_class.call(this, "aux-collapsing");
+      this.timer_collapse.start(O.hiding_duration);
+    }
+    else if (O.showing_duration) {
+      return;
+    }
+    else {
+      set_class.call(this, "aux-collapsed");
+    }
+  }
+}
 
 function toggle(e) {
   var self = this.parent;
@@ -209,18 +264,15 @@ export const Expand = defineClass({
 
     if (I.expanded || I.always_expanded) {
       I.always_expanded = I.expanded = false;
-      var v = O.always_expanded || O.expanded;
-      this[v ? 'addClass' : 'removeClass']('aux-expanded');
-      this.triggerResize();
+      expand.call(this);
     }
   },
   initialize: function (options) {
     Container.prototype.initialize.call(this, options);
-    /**
-     * @member {HTMLDivElement} Expand#element - The main DIV container.
-     *   Has class <code>.aux-expand</code>.
-     */
-
+    
+    this.timer_expand = new Timer(expand_cb.bind(this));
+    this.timer_collapse = new Timer(collapse_cb.bind(this));
+    
     this._update_visibility = updateVisibility.bind(this);
 
     if (this.options.group) addToGroup.call(this, this.options.group);
@@ -229,6 +281,10 @@ export const Expand = defineClass({
     this.set('always_expanded', this.options.always_expanded);
   },
   draw: function (O, element) {
+    /**
+     * @member {HTMLDivElement} Expand#element - The main DIV container.
+     *   Has class <code>.aux-expand</code>.
+     */
     addClass(element, 'aux-expand');
 
     Container.prototype.draw.call(this, O, element);
