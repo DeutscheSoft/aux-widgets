@@ -41,10 +41,12 @@ function set_class (cls) {
 
 function expand_cb () {
   set_class.call(this, "aux-expanded");
+  this.emit("expanded");
 }
 
 function collapse_cb () {
   set_class.call(this, "aux-collapsed");
+  this.emit("collapsed");
 }
 
 function expand () {
