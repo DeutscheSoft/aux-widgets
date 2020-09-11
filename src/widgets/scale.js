@@ -220,9 +220,9 @@ function createDot(value, position) {
   elem.className = 'aux-dot';
 
   if (O.layout === 'left' || O.layout === 'right') {
-    elem.style.bottom = ((position + 0.5) / O.basis * 100) + '%';
+    elem.style.bottom = (position / O.basis * 100) + '%';
   } else {
-    elem.style.left = ((position + 0.5) / O.basis * 100) + '%';
+    elem.style.left = (position / O.basis * 100) + '%';
   }
 
   if (getBase(O) === value) addClass(elem, 'aux-base');
@@ -650,9 +650,9 @@ export const Scale = defineClass({
     const position = this.valueToPixel(value);
 
     if (O.layout === 'left' || O.layout === 'right') {
-      node.style.bottom = ((position + 0.5) / O.basis * 100) + '%';
+      node.style.bottom = (position / O.basis * 100) + '%';
     } else {
-      node.style.left = ((position - 0.5) / O.basis * 100) + '%';
+      node.style.left = (position / O.basis * 100) + '%';
     }
 
     if (getBase(O) === value) addClass(node, 'aux-base');
