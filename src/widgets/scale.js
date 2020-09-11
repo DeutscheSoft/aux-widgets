@@ -199,7 +199,6 @@ function createLabel(value, position) {
   var O = this.options;
   var elem = document.createElement('SPAN');
   elem.className = 'aux-label';
-  console.log(O.basis)
   if (vert(O)) {
     elem.style.bottom = (position / O.basis * 100) + '%';
   } else {
