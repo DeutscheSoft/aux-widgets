@@ -61,6 +61,12 @@ function expand () {
     }
     else {
       set_class.call(this, "aux-expanded");
+      /**
+       * Is fired after the expand was expanded
+       *
+       * @event Expand#expanded
+       */
+      this.emit("expanded");
     }
   } else {
     if (this.timer_expand.active)
@@ -74,6 +80,12 @@ function expand () {
     }
     else {
       set_class.call(this, "aux-collapsed");
+      /**
+       * Is fired after the expand was collapsed
+       *
+       * @event Expand#collapsed
+       */
+      this.emit("collapsed");
     }
   }
 }
