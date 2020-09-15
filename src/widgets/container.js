@@ -39,8 +39,8 @@ function afterHiding() {
 }
 function afterShowing() {
   this.__hide_id = false;
-  if (this.options.visible === 'showing')
-    removeClass(this.element, 'aux-showing');
+  if (this.options.visible !== 'showing') return;
+  removeClass(this.element, 'aux-showing');
   this.set('visible', true);
 }
 export const Container = defineClass({
