@@ -1,5 +1,3 @@
-import { Chart } from '../src/index.js';
-
 /*
  * This file is part of AUX.
  *
@@ -19,6 +17,7 @@ import { Chart } from '../src/index.js';
  * Boston, MA  02110-1301  USA
  */
 
+import { Chart, Graph } from '../src/index.js';
 import { waitForDrawn, assert, compare, objectMinus } from './helpers.js';
 
 describe('Regressions', () => {
@@ -27,5 +26,14 @@ describe('Regressions', () => {
     chart.addHandle();
 
     chart.set('show_handles', true);
+  });
+
+  it('#246', async () => {
+    const chart = new Chart();
+    const graph = new Graph({ dots: [] });
+
+    chart.addChild(graph);
+
+    await waitForDrawn(chart);
   });
 });

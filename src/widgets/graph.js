@@ -239,12 +239,14 @@ export const Graph = defineClass({
         E.setAttribute('d', dots);
       } else if (!dots) {
         E.setAttribute('d', '');
-      } else {
+      } else if (Array.isArray(dots)) {
         // if we are drawing a line, _start will do the first point
         let i = O.mode === 'line' ? 1 : 0;
         const s = [];
 
-        _start.call(this, dots, s);
+        if (dots.length > 0) {
+          _start.call(this, dots, s);
+        }
 
         if (i === 0 && (dots[i].type || type).startsWith('H')) {
           i++;
@@ -324,8 +326,13 @@ export const Graph = defineClass({
           }
         }
 
-        _end.call(this, dots, s);
+        if (dots.length > 0) {
+          _end.call(this, dots, s);
+        }
+
         E.setAttribute('d', s.join(''));
+      } else {
+        error('Unsupported "dots" type', dots);
       }
     }
     Widget.prototype.redraw.call(this);
