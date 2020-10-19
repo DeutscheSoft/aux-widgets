@@ -765,13 +765,9 @@ defineChildElement(Scale, 'pointer', {
     if (this._pointer) {
       var tmp = (this.valueToCoef(this.snap(O.pointer)) * 100) + '%';
       if (vert(O)) {
-        if (supports_transform)
-          this._pointer.style.transform = 'translateY(-' + tmp + ')';
-        else this._pointer.style.bottom = tmp;
+        this._pointer.style.bottom = tmp;
       } else {
-        if (supports_transform)
-          this._pointer.style.transform = 'translateX(' + tmp + ')';
-        else this._pointer.style.left = tmp;
+        this._pointer.style.left = tmp;
       }
     }
   },
