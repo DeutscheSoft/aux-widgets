@@ -285,9 +285,6 @@ export const Meter = defineClass({
     this.set('label', O.label);
     this.set('base', O.base);
   },
-  getEventTarget: function () {
-    return this._bar;
-  },
 
   destroy: function () {
     this._bar.remove();
