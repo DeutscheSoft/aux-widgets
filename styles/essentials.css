@@ -592,6 +592,8 @@ body.aux-cursor-row-resize * {
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* KNOB */
