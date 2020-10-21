@@ -152,7 +152,9 @@ export const Dialog = defineClass({
   },
   draw: function (O, element) {
     addClass(element, 'aux-dialog');
-
+    this.set("anchor", this.options.anchor);
+    this.set("x", this.options.x);
+    this.set("y", this.options.y);
     Container.prototype.draw.call(this, O, element);
   },
   redraw: function () {
@@ -160,6 +162,11 @@ export const Dialog = defineClass({
     var I = this.invalid;
     var O = this.options;
     var E = this.element;
+    if (I.anchor) {
+      var pos = translateAnchor(O.anchor, 0, 0, -100, -100);
+      this.element.style.transform =
+        'translate(' + pos.x + '%, ' + pos.y + '%)';
+    }
     if (I.x) {
       I.x = false;
       E.style.left = O.x + 'px';
@@ -167,11 +174,6 @@ export const Dialog = defineClass({
     if (I.y) {
       I.y = false;
       E.style.top = O.y + 'px';
-    }
-    if (I.anchor) {
-      var pos = translateAnchor(O.anchor, 0, 0, -100, -100);
-      this.element.style.transform =
-        'translate(' + pos.x + '%, ' + pos.y + '%)';
     }
   },
   /**
