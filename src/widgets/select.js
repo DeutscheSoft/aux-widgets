@@ -674,9 +674,10 @@ export const Select = defineClass({
    * @returns {SelectEntry|Boolean} The currently selected {@link SelectEntry} or `false`.
    */
   current: function () {
-    if (this.options.selected !== false)
-      return this.entries[this.options.selected];
-    return false;
+    let entry = false;
+    if (this.options.selected !== false && this.entries[this.options.selected])
+      entry = this.entries[this.options.selected];
+    return entry;
   },
   /**
    * Get the currently selected {@link SelectEntry}'s index. Just for the sake of completeness, this
