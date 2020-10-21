@@ -53,6 +53,8 @@ function pressStart(e) {
      */
     this.emit('press_delayed');
     return;
+  } else {
+    resetDelayTo.call(this);
   }
   this.removeClass('aux-delayed');
   /**
@@ -71,6 +73,27 @@ function pressEnd(e) {
   let O = this.options;
   if (O.delay && this.__delayed_to >= 0) {
     resetDelayTo.call(this);
+    /**
+     * Is fired if a delay is set, after the pointer is released and
+     * the timeout hasn't finished yet. Doesn't fire after the timeout
+     * finished.
+     *
+     * @event Button#clicked
+     *
+     * @param {Event} event - Either the MouseEvent or the TouchEvent.
+     */
+    this.emit('clicked', e);
+  } else if (O.delay) {
+    /**
+     * Is fired if a delay is set, after the pointer is released and
+     * the timeout has finished. Doesn't fire before the timeout
+     * finished.
+     *
+     * @event Button#pressed
+     *
+     * @param {Event} event - Either the MouseEvent or the TouchEvent.
+     */
+    this.emit('pressed', e);
   }
   /**
    * Is fired after either a mouseup or a touchend happened and the
