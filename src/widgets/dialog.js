@@ -152,9 +152,6 @@ export const Dialog = defineClass({
   },
   draw: function (O, element) {
     addClass(element, 'aux-dialog');
-    this.set("anchor", this.options.anchor);
-    this.set("x", this.options.x);
-    this.set("y", this.options.y);
     Container.prototype.draw.call(this, O, element);
   },
   redraw: function () {
@@ -185,10 +182,10 @@ export const Dialog = defineClass({
    * @param {Number} [y] - New Y-position of the dialog.
    */
   open: function (x, y) {
-    this.emit('open');
-    this.userset('visible', true);
     if (typeof x !== 'undefined') this.set('x', x);
     if (typeof y !== 'undefined') this.set('y', y);
+    this.userset('visible', true);
+    this.emit('open');
   },
   /**
    * Close the dialog. The node is removed from DOM if `auto_remove` is set to `true`.
@@ -205,6 +202,7 @@ export const Dialog = defineClass({
    */
   reposition: function () {
     var O = this.options;
+    this.set('anchor', O.anchor);
     this.set('x', O.x);
     this.set('y', O.y);
   },
