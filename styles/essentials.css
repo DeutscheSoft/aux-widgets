@@ -608,6 +608,7 @@ body.aux-cursor-row-resize * {
 
 .aux-button.aux-select > .aux-label {
   text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 /* METER */
