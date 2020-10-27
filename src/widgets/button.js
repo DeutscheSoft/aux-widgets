@@ -234,6 +234,11 @@ export const Button = defineClass({
    *   arrangement of label and icon. <code>vertical</code> means icon
    *   above the label, <code>horizontal</code> places the icon left
    *   to the label.
+   * @property {Integer} [options.delay=0] - Enable delayed events. The
+   *   value is set in milliseconds. If
+   *   this is set to >0, Button fires some additional events, most importantly
+   *   `press_start` after the delay has finished without the user leaving
+   *   the button or lifting the pointer.
    *
    * @extends Widget
    *
