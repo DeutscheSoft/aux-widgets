@@ -22,9 +22,14 @@ import { Ranged } from './ranged.js';
 import { Range } from '../modules/range.js';
 
 function rangeChanged(value, name) {
-  var range = this[name];
-  for (var i in value) {
-    if (value.hasOwnProperty(i)) range.set(i, value[i]);
+  const range = this[name];
+
+  // FIXME: issue #248
+  if (value instanceof Range)
+    throw new TypeError('Impossible to update range options with Range objects.');
+
+  for (const key in value) {
+    if (value.hasOwnProperty(key)) range.set(key, value[key]);
   }
 }
 
@@ -57,9 +62,9 @@ export const Ranges = defineClass({
     var r;
     if (typeof from === 'function') {
       r = from();
-    } else if (Ranged.prototype.isPrototypeOf(from)) {
+    } else if (from instanceof Ranged) {
       r = new Range(from.options);
-    } else if (Range.prototype.isPrototypeOf(from)) {
+    } else if (from instanceof Range) {
       r = from;
     } else {
       if (name && this.options[name] && typeof this.options[name] === 'object')
