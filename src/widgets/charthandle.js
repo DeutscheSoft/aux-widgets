@@ -1465,6 +1465,7 @@ export const ChartHandle = defineClass({
           }
 
           // FIXME: solve this better
+          // see #248
           value.on(
             'set',
             function () {
