@@ -1,0 +1,27 @@
+<aux-chart
+  range_x="js:{scale:'linear',min:-10,max:0,base:0}"
+  range_y="js:{scale:'linear',min:-24,max:24,base:0}"
+>
+  <aux-chart-graph
+    id="graph"
+    type="L"
+    dots='js:[{"x":-60,"y":-24},{"x":0,"y":24}]'
+  ></aux-chart-graph>
+</aux-chart>
+
+<script>
+window.addEventListener('load', function() {
+  console.log('helo');
+
+  const chart = document.querySelector('aux-chart');
+
+  id = setTimeout(() => {
+    chart.range_x = {
+      scale: 'linear',
+      min: -60,
+      max: 0,
+      base: 0,
+    };
+  }, 50);
+});
+</script>

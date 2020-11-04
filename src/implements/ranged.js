@@ -33,6 +33,7 @@ function LinearSnapModule(stdlib, foreign) {
   var max = +foreign.max;
   var step = +foreign.step;
   var base = +foreign.base;
+  const clip = !!foreign.clip;
 
   var floor = stdlib.Math.floor;
   var ceil = stdlib.Math.ceil;
@@ -43,12 +44,14 @@ function LinearSnapModule(stdlib, foreign) {
     var n = 0.0;
     var t = 0.0;
 
-    if (!(v > min)) {
-      v = min;
-      direction = 1.0;
-    } else if (!(v < max)) {
-      v = max;
-      direction = +1.0;
+    if (clip) {
+      if (!(v > min)) {
+        v = min;
+        direction = 1.0;
+      } else if (!(v < max)) {
+        v = max;
+        direction = +1.0;
+      }
     }
 
     t = (v - base) / step;
@@ -121,6 +124,7 @@ function ArraySnapModule(stdlib, foreign, heap) {
   var len = (heap.byteLength >> 3) | 0;
   var min = +(foreign.min !== void 0 ? foreign.min : values[0]);
   var max = +(foreign.max !== void 0 ? foreign.max : values[len - 1]);
+  const clip = !!foreign.clip;
 
   function lowSnap(v, direction) {
     v = +v;
@@ -132,8 +136,10 @@ function ArraySnapModule(stdlib, foreign, heap) {
 
     b = len - 1;
 
-    if (!(v > min)) v = min;
-    if (!(v < max)) v = max;
+    if (clip) {
+      if (!(v > min)) v = min;
+      if (!(v < max)) v = max;
+    }
 
     if (!(v < +values[(b << 3) >> 3])) return +values[(b << 3) >> 3];
     if (!(v > +values[0])) return +values[0];
@@ -178,11 +184,14 @@ function ArraySnapModule(stdlib, foreign, heap) {
 function NullSnapModule(stdlib, foreign) {
   var min = +foreign.min;
   var max = +foreign.max;
+  const clip = !!foreign.clip;
 
   function snap(v) {
     v = +v;
-    if (!(v < max)) v = max;
-    if (!(v > min)) v = min;
+    if (clip) {
+      if (!(v < max)) v = max;
+      if (!(v > min)) v = min;
+    }
     return v;
   }
 
@@ -215,6 +224,7 @@ function updateSnap() {
         max: Math.max(O.min, O.max),
         step: O.snap,
         base: O.base || 0,
+        clip: O.clip,
       })
     );
   } else if (O.min < Infinity && O.max > -Infinity) {
@@ -223,6 +233,7 @@ function updateSnap() {
       NullSnapModule(window, {
         min: Math.min(O.min, O.max),
         max: Math.max(O.min, O.max),
+        clip: O.clip,
       })
     );
   } else {
@@ -245,6 +256,9 @@ function TRAFO_PIECEWISE(stdlib, foreign, heap) {
   var X = new Float64Array(heap, 0, l);
   var Y = new Float64Array(heap, l * 8, l);
   var basis = +foreign.basis;
+
+  if (!(l >= 2))
+    throw new TypeError('piece-wise linear transformations need at least 2 entries.');
 
   function valueToBased(coef, size) {
     var a = 0,
@@ -619,6 +633,7 @@ function setCallback(key) {
     case 'min':
     case 'max':
     case 'snap':
+    case 'clip':
       updateSnap.call(this);
     /* fall through */
     case 'log_factor':
@@ -680,6 +695,8 @@ export const Ranged = defineClass({
    * @property {Boolean} [options.reverse=false] - Reverse the scale of the range.
    * @property {Number} [options.basis=1] - The size of the linear scale. Set to pixel width or height
    * if used for drawing purposes or to 100 for percentages.
+   * @property {Boolean} [options.clip=true] - If true, snap() will clip values
+   *  into the interval between min and max.
    * @property {Number} [options.min=0] - Minimum value of the range.
    * @property {Number} [options.max=1] - Maximum value of the range.
    * @property {Number} [options.log_factor=1] - Used to overexpand logarithmic curves. 1 keeps the
@@ -709,6 +726,7 @@ export const Ranged = defineClass({
     scale: 'linear',
     reverse: false,
     basis: 1,
+    clip: true,
     min: 0,
     max: 1,
     base: 0,
@@ -724,6 +742,7 @@ export const Ranged = defineClass({
     scale: 'string|array|function',
     reverse: 'boolean',
     basis: 'number',
+    clip: 'boolean',
     min: 'number',
     max: 'number',
     base: 'number',
