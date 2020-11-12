@@ -23,6 +23,8 @@
  * for the full experience, including variants to be used in custom themes.
  */
 
+@charset "UTF-8";
+
 @import 'styles.css';
 
 @import 'fonts/Oswald-Regular.css';

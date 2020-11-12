@@ -17,6 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
+@charset "UTF-8";
+
 @import 'fonts/Oswald-ExtraLight.css';
 @import 'fonts/Oswald-Light.css';
 @import 'fonts/Oswald-Medium.css';

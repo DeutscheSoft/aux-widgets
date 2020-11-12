@@ -25,6 +25,8 @@
  * scheme.
  */
 
+@charset "UTF-8";
+
 @import 'basics.css'; /* Some general defaults */
 
 :root {

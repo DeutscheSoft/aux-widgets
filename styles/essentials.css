@@ -26,6 +26,8 @@
  * And better DO NOT EDIT this one.
  */
 
+@charset "UTF-8";
+
 body {
   --aux-scrollbar-size: 0;
 }
