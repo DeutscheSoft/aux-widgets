@@ -27,7 +27,7 @@
 
 @charset "UTF-8";
 
-@import 'essentials.css'; /* technical dependency */
+@import './essentials.css'; /* technical dependency */
 
 :root {
   --aux-main-fontfamily: PragatiNarrow, sans-serif;
