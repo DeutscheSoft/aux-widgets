@@ -26,7 +26,9 @@ function rangeChanged(value, name) {
 
   // FIXME: issue #248
   if (value instanceof Range)
-    throw new TypeError('Impossible to update range options with Range objects.');
+    throw new TypeError(
+      'Impossible to update range options with Range objects.'
+    );
 
   for (const key in value) {
     if (value.hasOwnProperty(key)) range.set(key, value[key]);

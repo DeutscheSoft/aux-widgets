@@ -200,9 +200,9 @@ function createLabel(value, position) {
   var elem = document.createElement('SPAN');
   elem.className = 'aux-label';
   if (vert(O)) {
-    elem.style.bottom = (position / O.basis * 100) + '%';
+    elem.style.bottom = (position / O.basis) * 100 + '%';
   } else {
-    elem.style.left = (position / O.basis * 100) + '%';
+    elem.style.left = (position / O.basis) * 100 + '%';
   }
 
   setContent(elem, O.labels(value));
@@ -219,9 +219,9 @@ function createDot(value, position) {
   elem.className = 'aux-dot';
 
   if (O.layout === 'left' || O.layout === 'right') {
-    elem.style.bottom = (position / O.basis * 100) + '%';
+    elem.style.bottom = (position / O.basis) * 100 + '%';
   } else {
-    elem.style.left = (position / O.basis * 100) + '%';
+    elem.style.left = (position / O.basis) * 100 + '%';
   }
 
   if (getBase(O) === value) addClass(elem, 'aux-base');
@@ -548,11 +548,11 @@ export const Scale = defineClass({
       const max = Math.max(tmpval, tmpbase);
 
       if (vert(O)) {
-        this._bar.style.top = ((O.basis - max) / O.basis * 100) + '%';
-        this._bar.style.bottom = (min / O.basis * 100) + '%';
+        this._bar.style.top = ((O.basis - max) / O.basis) * 100 + '%';
+        this._bar.style.bottom = (min / O.basis) * 100 + '%';
       } else {
-        this._bar.style.right = ((O.basis - max) / O.basis * 100) + '%';
-        this._bar.style.left = (min / O.basis * 100) + '%';
+        this._bar.style.right = ((O.basis - max) / O.basis) * 100 + '%';
+        this._bar.style.left = (min / O.basis) * 100 + '%';
       }
     }
 
@@ -649,9 +649,9 @@ export const Scale = defineClass({
     const position = this.valueToPixel(value);
 
     if (O.layout === 'left' || O.layout === 'right') {
-      node.style.bottom = (position / O.basis * 100) + '%';
+      node.style.bottom = (position / O.basis) * 100 + '%';
     } else {
-      node.style.left = (position / O.basis * 100) + '%';
+      node.style.left = (position / O.basis) * 100 + '%';
     }
 
     if (getBase(O) === value) addClass(node, 'aux-base');
@@ -700,9 +700,9 @@ export const Scale = defineClass({
     }
 
     if (vert(O)) {
-      node.style.bottom = (position / O.basis * 100) + '%';
+      node.style.bottom = (position / O.basis) * 100 + '%';
     } else {
-      node.style.left = (position / O.basis * 100) + '%';
+      node.style.left = (position / O.basis) * 100 + '%';
     }
 
     setContent(node, label);
@@ -763,7 +763,7 @@ defineChildElement(Scale, 'pointer', {
   ]),
   draw: function (O) {
     if (this._pointer) {
-      var tmp = (this.valueToCoef(this.snap(O.pointer)) * 100) + '%';
+      var tmp = this.valueToCoef(this.snap(O.pointer)) * 100 + '%';
       if (vert(O)) {
         this._pointer.style.bottom = tmp;
       } else {

@@ -24,70 +24,63 @@ import { Toggle } from './toggle.js';
 import { Timer } from './../utils/timers.js';
 import { addClass } from '../utils/dom.js';
 
-function set_class (cls) {
+function set_class(cls) {
   const classes = [
-    "aux-expanding",
-    "aux-expanded",
-    "aux-collapsing",
-    "aux-collapsed",
-  ]
+    'aux-expanding',
+    'aux-expanded',
+    'aux-collapsing',
+    'aux-collapsed',
+  ];
   for (let i = 0, m = classes.length; i < m; ++i) {
-    if (classes[i] != cls)
-      this.removeClass(classes[i]);
+    if (classes[i] != cls) this.removeClass(classes[i]);
   }
   this.addClass(cls);
   this.triggerResize();
 }
 
-function expand_cb () {
-  set_class.call(this, "aux-expanded");
-  this.emit("expanded");
+function expand_cb() {
+  set_class.call(this, 'aux-expanded');
+  this.emit('expanded');
 }
 
-function collapse_cb () {
-  set_class.call(this, "aux-collapsed");
-  this.emit("collapsed");
+function collapse_cb() {
+  set_class.call(this, 'aux-collapsed');
+  this.emit('collapsed');
 }
 
-function expand () {
+function expand() {
   const O = this.options;
   if (O.expanded) {
-    if (this.timer_collapse.active)
-      this.timer_collapse.stop();
+    if (this.timer_collapse.active) this.timer_collapse.stop();
     if (O.showing_duration && !this.timer_expand.active) {
-      set_class.call(this, "aux-expanding");
+      set_class.call(this, 'aux-expanding');
       this.timer_expand.start(O.showing_duration);
-    }
-    else if (O.showing_duration && this.timer_expand.active) {
+    } else if (O.showing_duration && this.timer_expand.active) {
       return;
-    }
-    else {
-      set_class.call(this, "aux-expanded");
+    } else {
+      set_class.call(this, 'aux-expanded');
       /**
        * Is fired after the expand was expanded
        *
        * @event Expand#expanded
        */
-      this.emit("expanded");
+      this.emit('expanded');
     }
   } else {
-    if (this.timer_expand.active)
-      this.timer_expand.stop();
+    if (this.timer_expand.active) this.timer_expand.stop();
     if (O.hiding_duration && !this.timer_collapse.active) {
-      set_class.call(this, "aux-collapsing");
+      set_class.call(this, 'aux-collapsing');
       this.timer_collapse.start(O.hiding_duration);
-    }
-    else if (O.showing_duration) {
+    } else if (O.showing_duration) {
       return;
-    }
-    else {
-      set_class.call(this, "aux-collapsed");
+    } else {
+      set_class.call(this, 'aux-collapsed');
       /**
        * Is fired after the expand was collapsed
        *
        * @event Expand#collapsed
        */
-      this.emit("collapsed");
+      this.emit('collapsed');
     }
   }
 }
@@ -283,10 +276,10 @@ export const Expand = defineClass({
   },
   initialize: function (options) {
     Container.prototype.initialize.call(this, options);
-    
+
     this.timer_expand = new Timer(expand_cb.bind(this));
     this.timer_collapse = new Timer(collapse_cb.bind(this));
-    
+
     this._update_visibility = updateVisibility.bind(this);
 
     if (this.options.group) addToGroup.call(this, this.options.group);

@@ -4,7 +4,7 @@ import { Range } from '../src/index.js';
 describe('Range', () => {
   it('basics', () => {
     const range = new Range({
-      min: 0, 
+      min: 0,
       max: 1,
       type: 'linear',
       basis: 1,
@@ -21,7 +21,7 @@ describe('Range', () => {
   });
   it('clip', () => {
     const range = new Range({
-      min: 0, 
+      min: 0,
       max: 1,
       type: 'linear',
       basis: 1,

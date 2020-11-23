@@ -95,7 +95,8 @@ function showList(show) {
   var dur = getDuration(this._list);
   this.__timeout = window.setTimeout(hideList.bind(this), dur);
   if (this.current())
-    this._list.scrollTop = this.current().element.offsetTop - this._list.offsetHeight / 2;
+    this._list.scrollTop =
+      this.current().element.offsetTop - this._list.offsetHeight / 2;
 }
 
 function lowRemoveEntry(entry) {

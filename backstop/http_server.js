@@ -83,7 +83,7 @@ function start(port) {
       })
     )
     .use('/', function (req, res, next) {
-      res.writeHead(301, {Location: '/tests/'});
+      res.writeHead(301, { Location: '/tests/' });
       res.end();
     })
     .listen(port);

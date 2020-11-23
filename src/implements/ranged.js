@@ -258,7 +258,9 @@ function TRAFO_PIECEWISE(stdlib, foreign, heap) {
   var basis = +foreign.basis;
 
   if (!(l >= 2))
-    throw new TypeError('piece-wise linear transformations need at least 2 entries.');
+    throw new TypeError(
+      'piece-wise linear transformations need at least 2 entries.'
+    );
 
   function valueToBased(coef, size) {
     var a = 0,
