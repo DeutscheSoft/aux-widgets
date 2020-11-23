@@ -17,10 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  componentFromWidget,
-  defineComponent,
-} from './../component_helpers.js';
+import { componentFromWidget } from './../component_helpers.js';
 import { ScrollArea } from './../widgets/scrollarea.js';
 
 /**
@@ -31,5 +28,3 @@ import { ScrollArea } from './../widgets/scrollarea.js';
  * @implements Component
  */
 export const ScrollAreaComponent = componentFromWidget(ScrollArea);
-
-defineComponent('scrollarea', ScrollAreaComponent);

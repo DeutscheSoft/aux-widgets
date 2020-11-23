@@ -17,10 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  componentFromWidget,
-  defineComponent,
-} from './../component_helpers.js';
+import { componentFromWidget } from './../component_helpers.js';
 import { Pager } from './../widgets/pager.js';
 import { Page } from './../widgets/pages.js';
 
@@ -41,6 +38,3 @@ export const PagerComponent = componentFromWidget(Pager);
  * @implements Component
  */
 export const PageComponent = componentFromWidget(Page);
-
-defineComponent('pager', PagerComponent);
-defineComponent('page', PageComponent);

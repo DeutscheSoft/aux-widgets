@@ -19,7 +19,6 @@
 
 import {
   componentFromWidget,
-  defineComponent,
   subcomponentFromWidget,
 } from './../component_helpers.js';
 import { Equalizer } from './../widgets/equalizer.js';
@@ -41,6 +40,3 @@ export const EqualizerComponent = componentFromWidget(Equalizer);
  * @implements Component
  */
 export const EqBandComponent = subcomponentFromWidget(EqBand, Equalizer);
-
-defineComponent('equalizer', EqualizerComponent);
-defineComponent('equalizer-band', EqBandComponent);

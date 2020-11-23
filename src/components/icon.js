@@ -17,10 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  componentFromWidget,
-  defineComponent,
-} from './../component_helpers.js';
+import { componentFromWidget } from './../component_helpers.js';
 import { Icon } from './../widgets/icon.js';
 
 /**
@@ -30,5 +27,3 @@ import { Icon } from './../widgets/icon.js';
  * @implements Component
  */
 export const IconComponent = componentFromWidget(Icon);
-
-defineComponent('icon', IconComponent);

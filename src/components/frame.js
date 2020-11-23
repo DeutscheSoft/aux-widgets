@@ -17,10 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  componentFromWidget,
-  defineComponent,
-} from './../component_helpers.js';
+import { componentFromWidget } from './../component_helpers.js';
 import { Frame } from './../widgets/frame.js';
 
 /**
@@ -30,5 +27,3 @@ import { Frame } from './../widgets/frame.js';
  * @implements Component
  */
 export const FrameComponent = componentFromWidget(Frame);
-
-defineComponent('frame', FrameComponent);

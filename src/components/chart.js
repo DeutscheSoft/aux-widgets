@@ -19,7 +19,6 @@
 
 import {
   componentFromWidget,
-  defineComponent,
   subcomponentFromWidget,
 } from './../component_helpers.js';
 import { Chart } from './../widgets/chart.js';
@@ -50,7 +49,3 @@ export const ChartHandleComponent = subcomponentFromWidget(ChartHandle, Chart);
  * @implements Component
  */
 export const GraphComponent = subcomponentFromWidget(Graph, Chart);
-
-defineComponent('chart', ChartComponent);
-defineComponent('chart-handle', ChartHandleComponent);
-defineComponent('chart-graph', GraphComponent);

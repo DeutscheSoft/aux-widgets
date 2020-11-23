@@ -124,7 +124,3 @@ export class OptionsComponent extends HTMLElement {
     this.connectedCallback();
   }
 }
-
-/* globals customElements */
-
-customElements.define('aux-options', OptionsComponent);

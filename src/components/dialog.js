@@ -17,10 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  componentFromWidget,
-  defineComponent,
-} from './../component_helpers.js';
+import { componentFromWidget } from './../component_helpers.js';
 import { Dialog } from './../widgets/dialog.js';
 
 /**
@@ -31,5 +28,3 @@ import { Dialog } from './../widgets/dialog.js';
  * @implements Component
  */
 export const DialogComponent = componentFromWidget(Dialog);
-
-defineComponent('dialog', DialogComponent);

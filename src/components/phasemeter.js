@@ -17,10 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  componentFromWidget,
-  defineComponent,
-} from './../component_helpers.js';
+import { componentFromWidget } from './../component_helpers.js';
 import { PhaseMeter } from './../widgets/phasemeter.js';
 
 /**
@@ -31,5 +28,3 @@ import { PhaseMeter } from './../widgets/phasemeter.js';
  * @implements Component
  */
 export const PhaseMeterComponent = componentFromWidget(PhaseMeter);
-
-defineComponent('phasemeter', PhaseMeterComponent);

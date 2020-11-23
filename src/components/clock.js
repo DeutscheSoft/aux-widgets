@@ -17,10 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  componentFromWidget,
-  defineComponent,
-} from './../component_helpers.js';
+import { componentFromWidget } from './../component_helpers.js';
 import { Clock } from './../widgets/clock.js';
 
 /**
@@ -30,5 +27,3 @@ import { Clock } from './../widgets/clock.js';
  * @implements Component
  */
 export const ClockComponent = componentFromWidget(Clock);
-
-defineComponent('clock', ClockComponent);

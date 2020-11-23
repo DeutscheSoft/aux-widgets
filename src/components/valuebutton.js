@@ -17,10 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  componentFromWidget,
-  defineComponent,
-} from './../component_helpers.js';
+import { componentFromWidget } from './../component_helpers.js';
 import { ValueButton } from './../widgets/valuebutton.js';
 
 /**
@@ -31,5 +28,3 @@ import { ValueButton } from './../widgets/valuebutton.js';
  * @implements Component
  */
 export const ValueButtonComponent = componentFromWidget(ValueButton);
-
-defineComponent('valuebutton', ValueButtonComponent);

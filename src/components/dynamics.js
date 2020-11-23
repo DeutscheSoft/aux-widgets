@@ -17,10 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  componentFromWidget,
-  defineComponent,
-} from './../component_helpers.js';
+import { componentFromWidget } from './../component_helpers.js';
 import {
   Dynamics,
   Compressor,
@@ -69,9 +66,3 @@ export const GateComponent = componentFromWidget(Gate);
  * @implements Component
  */
 export const LimiterComponent = componentFromWidget(Limiter);
-
-defineComponent('dynamics', DynamicsComponent);
-defineComponent('compressor', CompressorComponent);
-defineComponent('expander', ExpanderComponent);
-defineComponent('gate', GateComponent);
-defineComponent('limiter', LimiterComponent);

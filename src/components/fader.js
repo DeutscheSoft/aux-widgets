@@ -17,11 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  componentFromWidget,
-  defineComponent,
-} from './../component_helpers.js';
-import { Fader } from './../widgets/fader.js';
+import { componentFromWidget } from './../component_helpers.js';
+import { Fader } from '../widgets/fader.js';
 
 /**
  * WebComponent for the Fader widget. Available in the DOM as `aux-fader`.
@@ -30,5 +27,3 @@ import { Fader } from './../widgets/fader.js';
  * @implements Component
  */
 export const FaderComponent = componentFromWidget(Fader);
-
-defineComponent('fader', FaderComponent);

@@ -17,10 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  componentFromWidget,
-  defineComponent,
-} from './../component_helpers.js';
+import { componentFromWidget } from './../component_helpers.js';
 import { Slider } from './../widgets/slider.js';
 
 /**
@@ -30,5 +27,3 @@ import { Slider } from './../widgets/slider.js';
  * @implements Component
  */
 export const SliderComponent = componentFromWidget(Slider);
-
-defineComponent('slider', SliderComponent);

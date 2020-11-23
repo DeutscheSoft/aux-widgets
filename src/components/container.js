@@ -17,10 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  componentFromWidget,
-  defineComponent,
-} from './../component_helpers.js';
+import { componentFromWidget } from './../component_helpers.js';
 import { Container } from './../widgets/container.js';
 
 /**
@@ -30,5 +27,3 @@ import { Container } from './../widgets/container.js';
  * @implements Component
  */
 export const ContainerComponent = componentFromWidget(Container);
-
-defineComponent('container', ContainerComponent);

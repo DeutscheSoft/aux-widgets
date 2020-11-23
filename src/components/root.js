@@ -17,10 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  componentFromWidget,
-  defineComponent,
-} from './../component_helpers.js';
+import { componentFromWidget } from './../component_helpers.js';
 import { Root } from './../widgets/root.js';
 
 /**
@@ -31,5 +28,3 @@ import { Root } from './../widgets/root.js';
  * @implements Component
  */
 export const RootComponent = componentFromWidget(Root);
-
-defineComponent('root', RootComponent);

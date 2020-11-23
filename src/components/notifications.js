@@ -19,7 +19,6 @@
 
 import {
   componentFromWidget,
-  defineComponent,
   subcomponentFromWidget,
 } from './../component_helpers.js';
 import { Notifications, Notification } from './../widgets/notifications.js';
@@ -54,6 +53,3 @@ export const NotificationComponent = subcomponentFromWidget(
   addNotification,
   removeNotification
 );
-
-defineComponent('notifications', NotificationsComponent);
-defineComponent('notification', NotificationComponent);

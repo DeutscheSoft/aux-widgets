@@ -17,10 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  componentFromWidget,
-  defineComponent,
-} from './../component_helpers.js';
+import { componentFromWidget } from './../component_helpers.js';
 import { Toggle } from './../widgets/toggle.js';
 
 /**
@@ -30,5 +27,3 @@ import { Toggle } from './../widgets/toggle.js';
  * @implements Component
  */
 export const ToggleComponent = componentFromWidget(Toggle);
-
-defineComponent('toggle', ToggleComponent);

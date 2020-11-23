@@ -17,10 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  componentFromWidget,
-  defineComponent,
-} from './../component_helpers.js';
+import { componentFromWidget } from './../component_helpers.js';
 import { ProgressBar } from './../widgets/progressbar.js';
 
 /**
@@ -31,5 +28,3 @@ import { ProgressBar } from './../widgets/progressbar.js';
  * @implements Component
  */
 export const ProgressBarComponent = componentFromWidget(ProgressBar);
-
-defineComponent('progressbar', ProgressBarComponent);

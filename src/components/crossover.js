@@ -20,7 +20,6 @@
 import {
   componentFromWidget,
   subcomponentFromWidget,
-  defineComponent,
 } from './../component_helpers.js';
 import { Crossover } from './../widgets/crossover.js';
 import { CrossoverBand } from './../widgets/crossover.js';
@@ -44,6 +43,3 @@ export const CrossoverBandComponent = subcomponentFromWidget(
   CrossoverBand,
   Crossover
 );
-
-defineComponent('crossover', CrossoverComponent);
-defineComponent('crossover-band', CrossoverBandComponent);

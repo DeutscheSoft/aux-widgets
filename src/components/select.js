@@ -19,7 +19,6 @@
 
 import {
   componentFromWidget,
-  defineComponent,
   subcomponentFromWidget,
 } from './../component_helpers.js';
 import { Select, SelectEntry } from './../widgets/select.js';
@@ -92,6 +91,3 @@ export const SelectEntryComponent = subcomponentFromWidget(
   addEntry,
   removeEntry
 );
-
-defineComponent('select', SelectComponent);
-defineComponent('select-entry', SelectEntryComponent);

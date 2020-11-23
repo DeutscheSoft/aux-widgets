@@ -17,10 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  componentFromWidget,
-  defineComponent,
-} from './../component_helpers.js';
+import { componentFromWidget } from './../component_helpers.js';
 import { ColorPickerDialog } from './../widgets/colorpickerdialog.js';
 
 /**
@@ -33,5 +30,3 @@ import { ColorPickerDialog } from './../widgets/colorpickerdialog.js';
 export const ColorPickerDialogComponent = componentFromWidget(
   ColorPickerDialog
 );
-
-defineComponent('colorpickerdialog', ColorPickerDialogComponent);

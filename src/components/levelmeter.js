@@ -17,10 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  componentFromWidget,
-  defineComponent,
-} from './../component_helpers.js';
+import { componentFromWidget } from './../component_helpers.js';
 import { LevelMeter } from './../widgets/levelmeter.js';
 
 /**
@@ -31,5 +28,3 @@ import { LevelMeter } from './../widgets/levelmeter.js';
  * @implements Component
  */
 export const LevelMeterComponent = componentFromWidget(LevelMeter);
-
-defineComponent('levelmeter', LevelMeterComponent);

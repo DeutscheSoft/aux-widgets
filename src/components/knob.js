@@ -17,10 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  componentFromWidget,
-  defineComponent,
-} from './../component_helpers.js';
+import { componentFromWidget } from './../component_helpers.js';
 import { Knob } from './../widgets/knob.js';
 
 /**
@@ -30,5 +27,3 @@ import { Knob } from './../widgets/knob.js';
  * @implements Component
  */
 export const KnobComponent = componentFromWidget(Knob);
-
-defineComponent('knob', KnobComponent);

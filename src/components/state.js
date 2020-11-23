@@ -17,10 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  componentFromWidget,
-  defineComponent,
-} from './../component_helpers.js';
+import { componentFromWidget } from './../component_helpers.js';
 import { State } from './../widgets/state.js';
 
 /**
@@ -30,5 +27,3 @@ import { State } from './../widgets/state.js';
  * @implements Component
  */
 export const StateComponent = componentFromWidget(State);
-
-defineComponent('state', StateComponent);

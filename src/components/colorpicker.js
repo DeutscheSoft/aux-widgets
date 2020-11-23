@@ -17,10 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  componentFromWidget,
-  defineComponent,
-} from './../component_helpers.js';
+import { componentFromWidget } from './../component_helpers.js';
 import { ColorPicker } from './../widgets/colorpicker.js';
 
 /**
@@ -31,5 +28,3 @@ import { ColorPicker } from './../widgets/colorpicker.js';
  * @implements Component
  */
 export const ColorPickerComponent = componentFromWidget(ColorPicker);
-
-defineComponent('colorpicker', ColorPickerComponent);
