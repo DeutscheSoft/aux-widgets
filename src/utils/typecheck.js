@@ -41,3 +41,7 @@ export function typecheckInstance(v, cl) {
   if (typeof v !== 'object' || !(v instanceof cl))
     throw new TypeError('expected instance of ' + cl.name);
 }
+
+export function typecheckInteger(v) {
+  if (!Number.isInteger(v)) throw new TypeError('expected Integer.');
+}

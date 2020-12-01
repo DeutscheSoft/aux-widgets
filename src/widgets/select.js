@@ -40,6 +40,7 @@ import {
   removeClass,
 } from '../utils/dom.js';
 import { S } from '../dom_scheduler.js';
+import { typecheckInteger } from '../utils/typecheck.js';
 
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -99,41 +100,6 @@ function showList(show) {
       this.current().element.offsetTop - this._list.offsetHeight / 2;
 }
 
-function lowRemoveEntry(entry) {
-  var li = entry.element;
-  var entries = this.entries;
-  var id = entries.indexOf(entry);
-
-  if (id === -1) {
-    throw new Error('Entry removed twice.');
-  }
-
-  // remove from DOM
-  if (li.parentElement == this._list) li.remove();
-  // remove from list
-  entries.splice(id, 1);
-  // selection
-  var sel = this.options.selected;
-  if (sel !== false) {
-    if (sel > id) {
-      this.options.selected--;
-    } else if (sel === id) {
-      this.options.selected = false;
-      this.set('label', '');
-    }
-  }
-  this.invalid.entries = true;
-  this.select(this.options.selected);
-  /**
-   * Is fired when a new entry is added to the list.
-   *
-   * @event Select.entryremoved
-   *
-   * @param {Object} entry - An object containing the members <code>label</code> and <code>value</code>.
-   */
-  this.emit('entryremoved', entry);
-}
-
 export const Select = defineClass({
   /**
    * Select provides a {@link Button} with a select list to choose from
@@ -146,8 +112,10 @@ export const Select = defineClass({
    * @param {Object} [options={ }] - An object containing initial options.
    *
    * @property {Integer|Boolean} [options.selected=false] - The index of the selected {@link SelectEntry}.
-   *   Set to `false` to unselect any already selected entries.
+   *   Set to `-1` to unselect any already selected entries.
    * @property {mixed} [options.value] - The value of the selected entry.
+   * @property {SelectEntry} [options.selected_entry] - The currently selected
+   *    entry.
    * @property {Boolean} [options.auto_size=true] - If `true`, the Select is
    *   auto-sized to be as wide as the widest {@link SelectEntry}.
    * @property {Array<Object>} [options.entries=[]] - The list of {@link SelectEntry}. Each member is an
@@ -164,6 +132,7 @@ export const Select = defineClass({
   _options: Object.assign(Object.create(Button.prototype._options), {
     entries: 'array',
     selected: 'int',
+    selected_entry: 'object',
     value: 'mixed',
     auto_size: 'boolean',
     show_list: 'boolean',
@@ -174,8 +143,9 @@ export const Select = defineClass({
   }),
   options: {
     entries: [], // A list of strings or objects {label: "Title", value: 1} or SelectEntry instance
-    selected: false,
-    value: false,
+    selected: -1,
+    value: void(0),
+    selected_entry: null,
     auto_size: true,
     show_list: false,
     icon: 'arrowdown',
@@ -188,6 +158,50 @@ export const Select = defineClass({
     },
     set_show_list: function (v) {
       this.set('icon', v ? 'arrowup' : 'arrowdown');
+    },
+    set_selected_entry: function(entry) {
+      if (entry) {
+        const entries = this.entries;
+        this.update('selected', entries.indexOf(entry));
+        this.update('value', entry.get('value'));
+        this.update('label', entry.get('label'));
+      } else {
+        this.update('selected', -1);
+        this.update('value', void(0));
+        this.update('label', this.get('placeholder'));
+      }
+    },
+    set_selected: function(index) {
+      if (index === -1) {
+        this.update('selected_entry', null);
+        this.update('value', void(0));
+      } else {
+        const entries = this.entries;
+
+        if (index >= entries.length)
+          return;
+
+        // this will set value
+        this.update('selected_entry', entries[index]);
+      }
+    },
+    set_value: function(value) {
+      const entries = this.entries;
+
+      for (let i = 0; i < entries.length; i++) {
+        const entry = entries[i];
+
+        if (value === entry.get('value')) {
+          this.update('selected_entry', entry);
+          return;
+        }
+      }
+    },
+    set_placeholder: function(label) {
+      const selected_entry = this.get('selected_entry');
+
+      if (!selected_entry)
+        this.update('label', label);
     },
   },
   initialize: function (options) {
@@ -222,13 +236,15 @@ export const Select = defineClass({
         this.showList(false);
       }
     }.bind(this);
-    var sel = this.options.selected;
-    var val = this.options.value;
+
+    const sel = this.options.selected;
+    const val = this.options.value;
     this.set('entries', this.options.entries);
-    if (sel === false && val !== false) {
-      this.set('value', val);
-    } else {
+
+    if (sel !== -1) {
       this.set('selected', sel);
+    } else if (val !== void(0)) {
+      this.set('value', val);
     }
   },
   destroy: function () {
@@ -257,6 +273,8 @@ export const Select = defineClass({
    * @param {Integer} index - The index of the {@link SelectEntry} to select.
    */
   select: function (id) {
+    if (!Number.isInteger(id) && !id)
+      id = -1;
     this.set('selected', id);
   },
   /**
@@ -267,7 +285,7 @@ export const Select = defineClass({
    * @param {mixed} value - The value of the {@link SelectEntry} to select.
    */
   selectValue: function (value) {
-    var id = this.indexByValue.call(this, value);
+    var id = this.indexByValue(value);
     this.set('selected', id);
   },
   /**
@@ -278,7 +296,7 @@ export const Select = defineClass({
    * @param {mixed} label - The label of the {@link SelectEntry} to select.
    */
   selectLabel: function (label) {
-    var id = this.indexByLabel.call(this, label);
+    var id = this.indexByLabel(label);
     this.set('selected', id);
   },
   /**
@@ -293,7 +311,7 @@ export const Select = defineClass({
     // Replace all entries with a new options list
     this.clear();
     this.addEntries(entries);
-    this.select(this.indexByValue.call(this, this.options.value));
+    this.select(this.indexByValue(this.options.value));
   },
   /**
    * Adds new {@link SelectEntry} to the end of the list to select from.
@@ -321,7 +339,14 @@ export const Select = defineClass({
    * @emits Select.entryadded
    */
   addEntry: function (ent, position) {
-    var entry;
+    let entry;
+
+    if (position !== void 0) {
+      typecheckInteger(position);
+
+      if (position < 0 || position > this.entries.length)
+        throw new TypeError('Index out of bounds.');
+    }
 
     if (typeof ent === 'object' && ent instanceof SelectEntry) {
       entry = ent;
@@ -338,16 +363,12 @@ export const Select = defineClass({
     }
 
     if (position !== void 0) {
-      if (typeof position !== 'number')
-        throw new TypeError('Expected integer.');
-
-      if (position < 0 || position > this.entries.length)
-        throw new TypeError('Index out of bounds.');
-
       this.entries.splice(position, 0, entry);
     }
 
     this.addChild(entry);
+
+    return entry;
   },
   addChild: function (child) {
     Button.prototype.addChild.call(this, child);
@@ -370,7 +391,7 @@ export const Select = defineClass({
     const selected = this.options.selected;
 
     // adjust selected
-    if (selected !== false && selected >= index) {
+    if (selected !== -1 && selected >= index) {
       this.set('selected', selected + 1);
     }
     this.triggerDraw();
@@ -393,7 +414,12 @@ export const Select = defineClass({
    * @emits Select#entryremoved
    */
   removeIndex: function (index) {
-    var entry = this.entries[index];
+    const entry = this.entries[index];
+
+    if (!entry) {
+      throw new Error('Index does not exist.');
+    }
+
     this.removeChild(entry);
   },
   /**
@@ -406,7 +432,7 @@ export const Select = defineClass({
    * @emits Select#entryremoved
    */
   removeValue: function (val) {
-    this.removeIndex(this.indexByValue.call(this, val));
+    this.removeIndex(this.indexByValue(val));
   },
   /**
    * Remove an entry from the list by its label.
@@ -418,7 +444,7 @@ export const Select = defineClass({
    * @emits Select#entryremoved
    */
   removeLabel: function (label) {
-    this.removeIndex(this.indexByLabel.call(this, label));
+    this.removeIndex(this.indexByLabel(label));
   },
   /**
    * Remove an entry from the list.
@@ -433,12 +459,47 @@ export const Select = defineClass({
     this.removeChild(entry);
   },
   removeEntries: function (a) {
-    for (var i = 0; i < a.length; i++) this.removeEntry(a[i]);
+    a.forEach((entry) => {
+      this.removeEntry(entry);
+    });
+  },
+  _removeEntry(entry) {
+    const entries = this.entries;
+    const index = entries.indexOf(entry);
+
+    if (index === -1)
+      throw new Error('Unknown entry.');
+
+    const selected = this.get('selected');
+
+    this.entries = entries.filter((_entry) => _entry !== entry);
+
+    if (selected === index) {
+      // unselect current entry
+      this.set('selected_entry', null);
+    } else if (selected > index) {
+      this.set('selected', selected - 1);
+    }
+
+    const li = entry.element;
+
+    // remove from DOM
+    if (li.parentElement == this._list) li.remove();
+    this.invalid.entries = true;
+    this.triggerDraw();
+    /**
+     * Is fired when an entry was removed from the list.
+     *
+     * @event Select.entryremoved
+     *
+     * @param {SelectEntry} entry - The removed select entry.
+     */
+    this.emit('entryremoved', entry);
   },
   removeChild: function (child) {
     Button.prototype.removeChild.call(this, child);
-    if (SelectEntry.prototype.isPrototypeOf(child)) {
-      lowRemoveEntry.call(this, child);
+    if (child instanceof SelectEntry) {
+      this._removeEntry(child);
     }
   },
   /**
@@ -448,14 +509,14 @@ export const Select = defineClass({
    *
    * @param {Mixed} value - The value of the {@link SelectEntry}.
    *
-   * @returns {Integer|Boolean} The index of the entry or `false`.
+   * @returns {Integer|Boolean} The index of the entry or `-1`.
    */
   indexByValue: function (val) {
-    var entries = this.entries;
-    for (var i = 0; i < entries.length; i++) {
+    const entries = this.entries;
+    for (let i = 0; i < entries.length; i++) {
       if (entries[i].options.value === val) return i;
     }
-    return false;
+    return -1;
   },
   /**
    * Get the index of a {@link SelectEntry} by its label/label.
@@ -464,14 +525,14 @@ export const Select = defineClass({
    *
    * @param {String} label - The label/label of the {@link SelectEntry}.
    *
-   * @returns {Integer|Boolean} The index of the entry or `false`.
+   * @returns {Integer} The index of the entry or `-1`.
    */
   indexByLabel: function (label) {
-    var entries = this.entries;
-    for (var i = 0; i < entries.length; i++) {
+    const entries = this.entries;
+    for (let i = 0; i < entries.length; i++) {
       if (entries[i].options.label === label) return i;
     }
-    return false;
+    return -1;
   },
   /**
    * Get the index of a {@link SelectEntry} by the {@link SelectEntry} itself.
@@ -480,11 +541,10 @@ export const Select = defineClass({
    *
    * @param {SelectEntry} entry - The {@link SelectEntry}.
    *
-   * @returns {Integer|Boolean} The index of the entry or `false`.
+   * @returns {Integer|Boolean} The index of the entry or `-1`.
    */
   indexByEntry: function (entry) {
-    var pos = this.entries.indexOf(entry);
-    return pos === -1 ? false : pos;
+    return this.entries.indexOf(entry);
   },
   /**
    * Get a {@link SelectEntry} by its value.
@@ -493,14 +553,14 @@ export const Select = defineClass({
    *
    * @param {Mixed} value - The value of the {@link SelectEntry}.
    *
-   * @returns {SelectEntry|False} The {@link SelectEntry} or `false`.
+   * @returns {SelectEntry|False} The {@link SelectEntry} or `null`.
    */
   entryByValue: function (val) {
-    var entries = this.entries;
-    for (var i = 0; i < entries.length; i++) {
+    const entries = this.entries;
+    for (let i = 0; i < entries.length; i++) {
       if (entries[i].options.value === val) return entries[i];
     }
-    return false;
+    return null;
   },
   /**
    * Get a {@link SelectEntry} by its label/label.
@@ -509,14 +569,14 @@ export const Select = defineClass({
    *
    * @param {String} label - The label of the {@link SelectEntry}.
    *
-   * @returns {SelectEntry|Boolean} The {@link SelectEntry} or `false`.
+   * @returns {SelectEntry|Boolean} The {@link SelectEntry} or `null`.
    */
   entryByLabel: function (label) {
-    var entries = this.entries;
-    for (var i = 0; i < entries.length; i++) {
+    const entries = this.entries;
+    for (let i = 0; i < entries.length; i++) {
       if (entries[i].options.label === label) return entries[i];
     }
-    return false;
+    return null;
   },
   /**
    * Get a {@link SelectEntry} by its index.
@@ -525,13 +585,13 @@ export const Select = defineClass({
    *
    * @param {Integer} index - The index of the {@link SelectEntry}.
    *
-   * @returns {SelectEntry|Boolean} The {@link SelectEntry} or `false`.
+   * @returns {SelectEntry|Boolean} The {@link SelectEntry} or `null`.
    */
   entryByIndex: function (index) {
-    var entries = this.entries;
+    const entries = this.entries;
     if (index >= 0 && index < entries.length && entries[index])
       return entries[index];
-    return false;
+    return null;
   },
   /**
    * Get a value by its {@link SelectEntry} index.
@@ -540,14 +600,14 @@ export const Select = defineClass({
    *
    * @param {Integer} index - The index of the {@link SelectEntry}.
    *
-   * @returns {Mixed|Boolean} The value of the {@link SelectEntry} or `false`.
+   * @returns {Mixed|Boolean} The value of the {@link SelectEntry} or `undefined`.
    */
   valueByIndex: function (index) {
-    var entries = this.entries;
+    const entries = this.entries;
     if (index >= 0 && index < entries.length && entries[index]) {
       return entries[index].options.value;
     }
-    return false;
+    return void(0);
   },
   /**
    * Get the value of a {@link SelectEntry}.
@@ -568,14 +628,14 @@ export const Select = defineClass({
    *
    * @param {String} label - The label of the {@link SelectEntry}.
    *
-   * @returns {Mixed|Boolean} The value of the {@link SelectEntry} or `false`.
+   * @returns {Mixed|Boolean} The value of the {@link SelectEntry} or `undefined`.
    */
   valueByLabel: function (label) {
-    var entries = this.entries;
-    for (var i = 0; i < entries.length; i++) {
+    const entries = this.entries;
+    for (let i = 0; i < entries.length; i++) {
       if (entries[i].options.label === label) return entries[i].options.value;
     }
-    return false;
+    return void(0);
   },
   /**
    * Remove all {@link SelectEntry} from the list.
@@ -672,13 +732,10 @@ export const Select = defineClass({
    *
    * @method Select#current
    *
-   * @returns {SelectEntry|Boolean} The currently selected {@link SelectEntry} or `false`.
+   * @returns {SelectEntry|Boolean} The currently selected {@link SelectEntry} or `null`.
    */
   current: function () {
-    let entry = false;
-    if (this.options.selected !== false && this.entries[this.options.selected])
-      entry = this.entries[this.options.selected];
-    return entry;
+    return this.get('selected_entry');
   },
   /**
    * Get the currently selected {@link SelectEntry}'s index. Just for the sake of completeness, this
@@ -686,47 +743,35 @@ export const Select = defineClass({
    *
    * @method Select#currentIndex
    *
-   * @returns {Integer|Boolean} The index of the currently selected {@link SelectEntry} or `false`.
+   * @returns {Integer|Boolean} The index of the currently selected {@link SelectEntry} or `-1`.
    */
   currentIndex: function () {
-    return this.options.selected;
+    return this.get('selected');
   },
   /**
    * Get the currently selected {@link SelectEntry}'s value.
    *
    * @method Select#currentValue
    *
-   * @returns {Mixed|Boolean} The value of the currently selected {@link SelectEntry} or `false`.
+   * @returns {Mixed|Boolean} The value of the currently selected {@link SelectEntry} or `undefined`.
    */
   currentValue: function () {
-    var w = this.current();
-    if (w) return w.get('value');
-    return false;
+    const entry = this.current();
+    return entry ? entry.get('value') : void(0);
   },
   set: function (key, value) {
-    if (key === 'value') {
-      this.update('selected', this.indexByValue.call(this, value));
-      return this.currentValue();
+    if (key === 'selected') {
+      typecheckInteger(value);
+      if (value < -1)
+        throw new TypeError('expected Integer >= -1.');
     }
 
     value = Button.prototype.set.call(this, key, value);
 
     switch (key) {
-      case 'selected':
-        var entry = this.current();
-        if (entry !== false) {
-          Button.prototype.set.call(this, 'value', entry.options.value);
-          this.set('label', entry.options.label);
-        } else {
-          Button.prototype.set.call(this, 'value', void 0);
-          this.set('label', this.get('placeholder'));
-        }
-        break;
       case 'entries':
         this.setEntries(value);
         break;
-      case 'placeholder':
-        this.set('selected', this.options.selected);
     }
     return value;
   },

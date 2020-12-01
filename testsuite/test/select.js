@@ -22,31 +22,47 @@ import { SelectComponent, SelectEntryComponent, Select } from '../src/index.js';
 import { assert, waitForEvent } from './helpers.js';
 
 describe('Select', () => {
-  function checkSelect(widget) {
-    assert(widget.currentValue() === false);
+  const checkSelected = function(widget, entry) {
+    if (!entry) {
+      assert(widget.currentValue() === undefined);
+      assert(widget.currentIndex() === -1);
+      assert(widget.current() === null);
+    } else {
+      assert(widget.currentValue() === entry.get('value'));
+      assert(widget.currentIndex() === widget.indexByEntry(entry));
+      assert(widget.current() === entry);
+    }
+  }
+
+  const makeSelect = function(...values) {
+    return new Select({
+      entries: values.map((v) => {
+        return {
+          value: v,
+          label: v.toString(),
+        };
+      }),
+    });
+  };
+
+  const checkSelect = function(widget) {
+    assert(widget.currentValue() === undefined);
     widget.set('selected', 0);
-    assert(widget.currentValue() == 42);
+    checkSelected(widget, widget.entryByIndex(0));
     widget.set('selected', 1);
-    assert(widget.currentValue() == 23);
-    widget.addEntry({ value: 'foo', label: 'bar' });
-    assert(widget.get('selected') === 1);
-    assert(widget.currentValue() === 23);
+    checkSelected(widget, widget.entryByIndex(1));
+    const entry = widget.addEntry({ value: 'foo', label: 'bar' });
+    checkSelected(widget, widget.entryByIndex(1));
+    widget.removeEntry(entry);
   }
 
   it('appending entries', () => {
-    const widget = new Select({
-      entries: [
-        {
-          value: 42,
-          label: 'the answer',
-        },
-      ],
-    });
+    const widget = makeSelect(42);
 
     // nothing selected
-    assert(widget.currentValue() === false);
+    checkSelected(widget, null);
 
-    widget.addEntry({ value: 23, label: 'the other answer' });
+    widget.addEntry({ value: 23, label: '23' });
 
     checkSelect(widget);
   });
@@ -54,7 +70,7 @@ describe('Select', () => {
   function makeEntryComponent(value, label) {
     const entry_component = document.createElement('aux-select-entry');
     entry_component.value = value;
-    entry_component.label = label;
+    entry_component.label = label ? label : value.toString();
     return entry_component;
   }
 
@@ -62,9 +78,9 @@ describe('Select', () => {
     const select = document.createElement('aux-select');
     const widget = select.auxWidget;
 
-    const entry42 = makeEntryComponent(42, 'the answer');
-    const entry23 = makeEntryComponent(23, 'the other answer');
-    const entry0 = makeEntryComponent(0, 'hello');
+    const entry42 = makeEntryComponent(42);
+    const entry23 = makeEntryComponent(23);
+    const entry0 = makeEntryComponent(0);
 
     select.appendChild(entry42);
 
@@ -72,7 +88,7 @@ describe('Select', () => {
 
     await waitForEvent(widget, 'redraw');
 
-    assert(widget.currentValue() === false);
+    checkSelected(widget, null);
 
     select.appendChild(entry23);
 
@@ -89,5 +105,39 @@ describe('Select', () => {
 
     select.remove();
     widget.destroy();
+  });
+
+  it('remove selected entry', async () => {
+    const widget = makeSelect(42, 23);
+    checkSelected(widget, null);
+    widget.select(0);
+    checkSelected(widget, widget.entries[0]);
+    widget.removeIndex(0);
+    checkSelected(widget, null);
+  });
+
+  it('remove entry before', async () => {
+    const widget = makeSelect(42, 23);
+    checkSelected(widget, null);
+    widget.select(1);
+    checkSelected(widget, widget.entryByIndex(1));
+    widget.removeIndex(0);
+    checkSelected(widget, widget.entryByIndex(0));
+  });
+
+  it('remove entry after', async () => {
+    const widget = makeSelect(42, 23);
+    checkSelected(widget, null);
+    widget.select(0);
+    checkSelected(widget, widget.entryByIndex(0));
+    widget.removeIndex(1);
+    checkSelected(widget, widget.entryByIndex(0));
+  });
+
+  it('remove selected while unselected', async () => {
+    const widget = makeSelect(42, 23);
+    checkSelected(widget, null);
+    widget.removeIndex(0);
+    checkSelected(widget, null);
   });
 });

@@ -50,6 +50,8 @@ API Changes
   class
 * ChartHandle: 'label' has been renamed to 'format_label'
 * ChartHandle: 'title' has been renamed to 'label'
+* Select: 'selected' is -1 (instead of false) when no entry is selected
+* Select: 'value' is undefined (instead of false) when no entry is selected
 
 DOM Changes
 ===========
