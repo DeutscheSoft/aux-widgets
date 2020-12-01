@@ -308,10 +308,17 @@ export const Select = defineClass({
    *   Please refer to {@link Select#addEntry} for more details.
    */
   setEntries: function (entries) {
-    // Replace all entries with a new options list
+    const value = this.get('value');
+
     this.clear();
     this.addEntries(entries);
-    this.select(this.indexByValue(this.options.value));
+
+    if (value !== void(0)) {
+      const index = this.indexByValue(value);
+
+      if (index !== -1)
+        this.select(index);
+    }
   },
   /**
    * Adds new {@link SelectEntry} to the end of the list to select from.
@@ -646,11 +653,9 @@ export const Select = defineClass({
    */
   clear: function () {
     empty(this._list);
-    this.select(false);
-    var entries = this.entries.slice(0);
-    for (var i = 0; i < entries.length; i++) {
-      this.removeChild(entries[i]);
-    }
+    this.entries.forEach((entry) => {
+      this.removeChild(entry);
+    });
     /**
      * Is fired when the list is cleared.
      *

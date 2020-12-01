@@ -34,14 +34,18 @@ describe('Select', () => {
     }
   }
 
+  const makeEntries = function(...values) {
+    return values.map((v) => {
+      return {
+        value: v,
+        label: v.toString(),
+      };
+    });
+  }
+
   const makeSelect = function(...values) {
     return new Select({
-      entries: values.map((v) => {
-        return {
-          value: v,
-          label: v.toString(),
-        };
-      }),
+      entries: makeEntries(...values),
     });
   };
 
@@ -139,5 +143,32 @@ describe('Select', () => {
     checkSelected(widget, null);
     widget.removeIndex(0);
     checkSelected(widget, null);
+  });
+
+  it('replace entries list', async () => {
+    {
+      const widget = makeSelect(42, 23);
+      widget.select(1);
+      checkSelected(widget, widget.entryByValue(23));
+      widget.setEntries(makeEntries(23, 42));
+      checkSelected(widget, widget.entryByValue(23));
+    }
+
+    {
+      const widget = makeSelect(42, 23);
+      widget.select(1);
+      checkSelected(widget, widget.entryByValue(23));
+      widget.setEntries(makeEntries());
+      checkSelected(widget, null);
+      widget.setEntries(makeEntries(23, 42));
+      checkSelected(widget, null);
+    }
+
+    {
+      const widget = makeSelect();
+      widget.set('value', 23);
+      widget.setEntries(makeEntries(23, 42));
+      checkSelected(widget, widget.entryByValue(23));
+    }
   });
 });
