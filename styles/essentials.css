@@ -848,7 +848,7 @@ body.aux-cursor-row-resize * {
 }
 .aux-virtualtreeentry > .aux-indent {
   flex: 0 0 0;
-  font-family: Shapes;
+  font-family: AUXShapes;
 }
 .aux-virtualtreeentry > .aux-collapse {
   display: none;
