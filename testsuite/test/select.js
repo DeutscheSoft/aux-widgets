@@ -22,7 +22,7 @@ import { SelectComponent, SelectEntryComponent, Select } from '../src/index.js';
 import { assert, waitForEvent } from './helpers.js';
 
 describe('Select', () => {
-  const checkSelected = function(widget, entry) {
+  const checkSelected = function (widget, entry) {
     if (!entry) {
       assert(widget.currentValue() === undefined);
       assert(widget.currentIndex() === -1);
@@ -32,24 +32,24 @@ describe('Select', () => {
       assert(widget.currentIndex() === widget.indexByEntry(entry));
       assert(widget.current() === entry);
     }
-  }
+  };
 
-  const makeEntries = function(...values) {
+  const makeEntries = function (...values) {
     return values.map((v) => {
       return {
         value: v,
         label: v.toString(),
       };
     });
-  }
+  };
 
-  const makeSelect = function(...values) {
+  const makeSelect = function (...values) {
     return new Select({
       entries: makeEntries(...values),
     });
   };
 
-  const checkSelect = function(widget) {
+  const checkSelect = function (widget) {
     assert(widget.currentValue() === undefined);
     widget.set('selected', 0);
     checkSelected(widget, widget.entryByIndex(0));
@@ -58,7 +58,7 @@ describe('Select', () => {
     const entry = widget.addEntry({ value: 'foo', label: 'bar' });
     checkSelected(widget, widget.entryByIndex(1));
     widget.removeEntry(entry);
-  }
+  };
 
   it('appending entries', () => {
     const widget = makeSelect(42);

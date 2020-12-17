@@ -144,7 +144,7 @@ export const Select = defineClass({
   options: {
     entries: [], // A list of strings or objects {label: "Title", value: 1} or SelectEntry instance
     selected: -1,
-    value: void(0),
+    value: void 0,
     selected_entry: null,
     auto_size: true,
     show_list: false,
@@ -159,7 +159,7 @@ export const Select = defineClass({
     set_show_list: function (v) {
       this.set('icon', v ? 'arrowup' : 'arrowdown');
     },
-    set_selected_entry: function(entry) {
+    set_selected_entry: function (entry) {
       if (entry) {
         const entries = this.entries;
         this.update('selected', entries.indexOf(entry));
@@ -167,25 +167,24 @@ export const Select = defineClass({
         this.update('label', entry.get('label'));
       } else {
         this.update('selected', -1);
-        this.update('value', void(0));
+        this.update('value', void 0);
         this.update('label', this.get('placeholder'));
       }
     },
-    set_selected: function(index) {
+    set_selected: function (index) {
       if (index === -1) {
         this.update('selected_entry', null);
-        this.update('value', void(0));
+        this.update('value', void 0);
       } else {
         const entries = this.entries;
 
-        if (index >= entries.length)
-          return;
+        if (index >= entries.length) return;
 
         // this will set value
         this.update('selected_entry', entries[index]);
       }
     },
-    set_value: function(value) {
+    set_value: function (value) {
       const entries = this.entries;
 
       for (let i = 0; i < entries.length; i++) {
@@ -197,11 +196,10 @@ export const Select = defineClass({
         }
       }
     },
-    set_placeholder: function(label) {
+    set_placeholder: function (label) {
       const selected_entry = this.get('selected_entry');
 
-      if (!selected_entry)
-        this.update('label', label);
+      if (!selected_entry) this.update('label', label);
     },
   },
   initialize: function (options) {
@@ -243,7 +241,7 @@ export const Select = defineClass({
 
     if (sel !== -1) {
       this.set('selected', sel);
-    } else if (val !== void(0)) {
+    } else if (val !== void 0) {
       this.set('value', val);
     }
   },
@@ -273,8 +271,7 @@ export const Select = defineClass({
    * @param {Integer} index - The index of the {@link SelectEntry} to select.
    */
   select: function (id) {
-    if (!Number.isInteger(id) && !id)
-      id = -1;
+    if (!Number.isInteger(id) && !id) id = -1;
     this.set('selected', id);
   },
   /**
@@ -313,11 +310,10 @@ export const Select = defineClass({
     this.clear();
     this.addEntries(entries);
 
-    if (value !== void(0)) {
+    if (value !== void 0) {
       const index = this.indexByValue(value);
 
-      if (index !== -1)
-        this.select(index);
+      if (index !== -1) this.select(index);
     }
   },
   /**
@@ -474,8 +470,7 @@ export const Select = defineClass({
     const entries = this.entries;
     const index = entries.indexOf(entry);
 
-    if (index === -1)
-      throw new Error('Unknown entry.');
+    if (index === -1) throw new Error('Unknown entry.');
 
     const selected = this.get('selected');
 
@@ -614,7 +609,7 @@ export const Select = defineClass({
     if (index >= 0 && index < entries.length && entries[index]) {
       return entries[index].options.value;
     }
-    return void(0);
+    return void 0;
   },
   /**
    * Get the value of a {@link SelectEntry}.
@@ -642,7 +637,7 @@ export const Select = defineClass({
     for (let i = 0; i < entries.length; i++) {
       if (entries[i].options.label === label) return entries[i].options.value;
     }
-    return void(0);
+    return void 0;
   },
   /**
    * Remove all {@link SelectEntry} from the list.
@@ -762,13 +757,12 @@ export const Select = defineClass({
    */
   currentValue: function () {
     const entry = this.current();
-    return entry ? entry.get('value') : void(0);
+    return entry ? entry.get('value') : void 0;
   },
   set: function (key, value) {
     if (key === 'selected') {
       typecheckInteger(value);
-      if (value < -1)
-        throw new TypeError('expected Integer >= -1.');
+      if (value < -1) throw new TypeError('expected Integer >= -1.');
     }
 
     value = Button.prototype.set.call(this, key, value);
