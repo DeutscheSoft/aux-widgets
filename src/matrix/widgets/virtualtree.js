@@ -181,7 +181,7 @@ export const VirtualTree = defineClass({
     set_virtualtreeview: function (virtualtreeview) {
       this.virtualtreeview_subs.unsubscribe();
     },
-    scrolltopchanged: function (position) {
+    scrollTopChanged: function (position) {
       const O = this.options;
       const startIndex = Math.floor(position / O.size);
 
