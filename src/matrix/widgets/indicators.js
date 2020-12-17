@@ -19,7 +19,7 @@
 
 import { defineClass, defineChildElement } from './../../widget_helpers.js';
 import { scrollbarSize, addClass } from './../../utils/dom.js';
-import { sprintf } from '../../index.js';
+import { sprintf } from '../../utils/sprintf.js';
 import { Subscriptions } from '../../utils/subscriptions.js';
 import { Timer } from '../../utils/timers.js';
 import { subscribeDOMEvent } from '../../utils/events.js';
