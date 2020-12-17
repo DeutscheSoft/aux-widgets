@@ -17,14 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { componentFromWidget } from './../../component_helpers.js';
-import { VirtualTreeEntry } from './../widgets/virtualtreeentry.js';
-
-/**
- * WebComponent for the VirtualTreeEntry widget. Available in the DOM as
- * `aux-virtualtreeentry`.
- *
- * @class VirtualTreeEntryComponent
- * @implements Component
- */
-export const VirtualTreeEntryComponent = componentFromWidget(VirtualTreeEntry);
+import './components/virtualtree.registration.js';
+import './components/virtualtreeentry.registration.js';
+import './components/matrix.registration.js';

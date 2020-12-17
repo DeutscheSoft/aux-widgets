@@ -36,4 +36,4 @@ export * from './modules.js';
 export * from './widgets.js';
 export * from './components.js';
 
-export * from './matrix.js';
+export * from './matrix.pure.js';

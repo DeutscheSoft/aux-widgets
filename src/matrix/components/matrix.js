@@ -17,10 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  componentFromWidget,
-  defineComponent,
-} from './../../component_helpers.js';
+import { componentFromWidget } from './../../component_helpers.js';
 import { Matrix } from './../widgets/matrix.js';
 
 /**
@@ -31,5 +28,3 @@ import { Matrix } from './../widgets/matrix.js';
  * @implements Component
  */
 export const MatrixComponent = componentFromWidget(Matrix);
-
-defineComponent('matrix', MatrixComponent);
