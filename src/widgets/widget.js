@@ -318,6 +318,8 @@ export const Widget = defineClass({
     this.parent = void 0;
     this.children = null;
     this.draw_queue = null;
+    this._recalculate_queue = null;
+    this._recalculate = null;
     this.__lastclick = 0;
     this._creation_time = performance.now();
     this.__dblclick_cb = dblClick.bind(this);
@@ -424,6 +426,41 @@ export const Widget = defineClass({
     if (this.hasEventListeners('resized')) {
       S.afterFrame(this.emit.bind(this, 'resized'));
     }
+  },
+
+  recalculate: function() {
+    const q = this._recalculate_queue;
+    const O = this.options;
+
+    for (let i = 0; i < q.length; i++) {
+      q[i].call(this, O);
+    }
+
+    q.length = 0;
+  },
+
+  triggerRecalculate: function (cb) {
+    let q = this._recalculate_queue;
+
+    if (q === null)
+      this._recalculate_queue = q = [];
+
+    if (q.length === 0)
+    {
+      let cb = this._recalculate;
+
+      if (cb === null) {
+        this._recalculate = cb = () => {
+          if (this.isDestructed()) return;
+          this.recalculate();
+        };
+      }
+
+      S.add(cb, 0);
+    }
+
+    if (!q.includes(cb))
+      q.push(cb);
   },
 
   triggerDraw: function () {
