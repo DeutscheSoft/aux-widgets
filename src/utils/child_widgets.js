@@ -75,6 +75,9 @@ export class ChildWidgets extends Events {
     if (!list.length) return;
 
     const parentNode = list[0].element.parentNode;
+
+    if (!parentNode) return;
+
     const nodes = Array.from(parentNode.children);
 
     list.sort(function (child1, child2) {
