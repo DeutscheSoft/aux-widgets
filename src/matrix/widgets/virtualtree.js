@@ -43,10 +43,8 @@ function subscribeAll() {
   const virtualtreeview = O.virtualtreeview;
 
   const setEntryPosition = (entry, index) => {
-    entry.element.style.transform = sprintf(
-      'translateY(%.2fpx)',
-      index * O.size
-    );
+    const pos = this.calculateEntryPosition(index);
+    entry.element.style.transform = 'translateY(' + pos.toFixed(1) + 'px)';
   };
 
   const subs = this.virtualtreeview_subs;
@@ -119,17 +117,7 @@ function subscribeAll() {
       // jshint +W123
       const entry = this.entries[index % this.entries.length];
 
-      entry.updateData(virtualtreeview, index, element, treePosition);
-
-      if (element) {
-        if (entry.hidden()) {
-          entry.update('visible', true);
-          this.showChild(entry);
-        }
-      } else if (!entry.hidden()) {
-        entry.update('visible', false);
-        this.hideChild(entry);
-      }
+      this.updateEntry(entry, virtualtreeview, index, element, treePosition);
     })
   );
 }
@@ -217,6 +205,61 @@ export const VirtualTree = defineClass({
   createEntry: function () {
     return new this.options.entry_class();
   },
+  /**
+   * Calculates the pixel position of the entry at the given
+   * index.
+   */
+  calculateEntryPosition: function (index) {
+    return index * this.options.size;
+  },
+  /**
+   * Update the given entry with the new data.
+   *
+   * @param {VirtualTreeEntry} entry
+   *    The entry widget.
+   * @param {VirtualTreeView} virtualtreeview
+   *    The tree data.
+   * @param {number} index
+   *    The index of the element in the list.
+   * @param {Datum} element
+   *    The data model of the entry.
+   * @param {Array} treePosition
+   *    The tree position of the entry.
+   */
+  updateEntry: function (entry, virtualtreeview, index, element, treePosition) {
+    entry.updateData(virtualtreeview, index, element, treePosition);
+
+    if (element) {
+      if (entry.hidden()) {
+        entry.update('visible', true);
+        this.showChild(entry);
+      }
+    } else if (!entry.hidden()) {
+      entry.update('visible', false);
+      this.hideChild(entry);
+    }
+  },
+  /**
+   * Return the entry for the given index. Returns null if there is currently
+   * no entry assigned to that index.
+   */
+  getEntry: function (index) {
+    const { virtualtreeview } = this.options;
+
+    if (!virtualtreeview) return null;
+
+    if (index < virtualtreeview.startIndex) return null;
+
+    if (index >= virtualtreeview.startIndex + virtualtreeview.amount)
+      return null;
+
+    const entries = this.entries;
+
+    return entries[index % entries.length];
+  },
+  triggerReposition: function () {
+    this.set('size', this.get('size'));
+  },
   draw: function (options, element) {
     Container.prototype.draw.call(this, options, element);
     element.classList.add('aux-virtualtree');
@@ -287,9 +330,30 @@ export const VirtualTree = defineClass({
       }
     }
 
-    if (I._scroller_size) {
+    if (I._scroller_size || I.size) {
       I._scroller_size = false;
-      this._scroller.style.height = O._scroller_size * O.size + 'px';
+      this._scroller.style.height =
+        this.calculateEntryPosition(O._scroller_size) + 'px';
+    }
+
+    if (I.size) {
+      I.size = false;
+
+      const virtualtreeview = O.virtualtreeview;
+
+      if (virtualtreeview) {
+        const entries = this.entries;
+
+        for (
+          let index = virtualtreeview.startIndex, i = 0;
+          i < entries.length;
+          i++, index++
+        ) {
+          const entry = entries[index % entries.length];
+          entry.element.style.transform =
+            'translateY(' + this.calculateEntryPosition(index) + 'px)';
+        }
+      }
     }
 
     if (I._scroll) {

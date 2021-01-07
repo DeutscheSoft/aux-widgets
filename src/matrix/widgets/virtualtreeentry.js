@@ -87,24 +87,29 @@ function composeDepth(tree_position) {
  * @property {Boolean} [options.group=false] - Define if this entry is a
  *   group header.
  *
- * @extends Container
+ * @extends VirtualTreeEntryBase
  *
  * @class VirtualTreeEntry
  */
 
+import { VirtualTreeEntryBase } from './virtualtreeentrybase.js';
+
 export const VirtualTreeEntry = defineClass({
-  Extends: Container,
-  _options: Object.assign(Object.create(Container.prototype._options), {
-    label: 'string|boolean',
-    depth: 'array|boolean',
-    collapsable: 'boolean',
-    collapsed: 'boolean',
-    icon_collapsed: 'string',
-    icon_uncollaped: 'string',
-    icon: 'string|boolean',
-    odd: 'boolean',
-    group: 'boolean',
-  }),
+  Extends: VirtualTreeEntryBase,
+  _options: Object.assign(
+    Object.create(VirtualTreeEntryBase.prototype._options),
+    {
+      label: 'string|boolean',
+      depth: 'array|boolean',
+      collapsable: 'boolean',
+      collapsed: 'boolean',
+      icon_collapsed: 'string',
+      icon_uncollaped: 'string',
+      icon: 'string|boolean',
+      odd: 'boolean',
+      group: 'boolean',
+    }
+  ),
   options: {
     label: false,
     depth: false,
@@ -117,15 +122,14 @@ export const VirtualTreeEntry = defineClass({
     group: false,
   },
   initialize: function (options) {
-    Container.prototype.initialize.call(this, options);
+    VirtualTreeEntryBase.prototype.initialize.call(this, options);
     this.data_subscriptions = new Subscriptions();
-    this.data = null;
     this.data_subscription_timer = new Timer(() => {
       this.subscribeData();
     });
   },
   draw: function (options, element) {
-    Container.prototype.draw.call(this, options, element);
+    VirtualTreeEntryBase.prototype.draw.call(this, options, element);
     element.classList.add('aux-virtualtreeentry');
   },
   /**
@@ -188,7 +192,7 @@ export const VirtualTreeEntry = defineClass({
     this.data = element;
   },
   redraw: function () {
-    Container.prototype.redraw.call(this);
+    VirtualTreeEntryBase.prototype.redraw.call(this);
 
     const O = this.options;
     const E = this.element;
