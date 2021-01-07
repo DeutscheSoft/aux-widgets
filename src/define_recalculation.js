@@ -15,7 +15,7 @@ import { addStaticEvent } from './widget_helpers.js';
  *      of the widget.
  */
 export function defineRecalculation(widget, dependencies, cb) {
-  const trigger = function() {
+  const trigger = function () {
     this.triggerRecalculate(cb);
   };
 

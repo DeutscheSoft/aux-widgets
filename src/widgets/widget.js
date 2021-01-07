@@ -428,7 +428,7 @@ export const Widget = defineClass({
     }
   },
 
-  recalculate: function() {
+  recalculate: function () {
     const q = this._recalculate_queue;
     const O = this.options;
 
@@ -442,11 +442,9 @@ export const Widget = defineClass({
   triggerRecalculate: function (cb) {
     let q = this._recalculate_queue;
 
-    if (q === null)
-      this._recalculate_queue = q = [];
+    if (q === null) this._recalculate_queue = q = [];
 
-    if (q.length === 0)
-    {
+    if (q.length === 0) {
       let cb = this._recalculate;
 
       if (cb === null) {
@@ -459,8 +457,7 @@ export const Widget = defineClass({
       S.add(cb, 0);
     }
 
-    if (!q.includes(cb))
-      q.push(cb);
+    if (!q.includes(cb)) q.push(cb);
   },
 
   triggerDraw: function () {
