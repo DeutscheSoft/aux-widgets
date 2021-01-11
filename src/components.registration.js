@@ -29,6 +29,7 @@ import './components/panorama.registration.js';
 import './components/phasemeter.registration.js';
 import './components/progressbar.registration.js';
 import './components/root.registration.js';
+import './components/reverb.registration.js';
 import './components/scale.registration.js';
 import './components/scrollarea.registration.js';
 import './components/select.registration.js';

@@ -55,6 +55,7 @@ export * from './widgets/phasemeter.js';
 export * from './widgets/progressbar.js';
 export * from './widgets/charthandle.js';
 export * from './widgets/root.js';
+export * from './widgets/reverb.js';
 export * from './widgets/scale.js';
 export * from './widgets/scrollarea.js';
 export * from './widgets/select.js';
