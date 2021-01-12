@@ -230,12 +230,10 @@ export const VirtualTree = defineClass({
     entry.updateData(virtualtreeview, index, element, treePosition);
 
     if (element) {
-      if (entry.hidden()) {
-        entry.update('visible', true);
+      if (this.isChildHidden(entry)) {
         this.showChild(entry);
       }
-    } else if (!entry.hidden()) {
-      entry.update('visible', false);
+    } else if (!this.isChildHidden(entry)) {
       this.hideChild(entry);
     }
   },
