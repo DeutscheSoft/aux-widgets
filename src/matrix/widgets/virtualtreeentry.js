@@ -141,7 +141,7 @@ export const VirtualTreeEntry = defineClass({
    */
   subscribeData: function () {
     const subs = this.data_subscriptions;
-    const element = this.data;
+    const element = this.get('data');
 
     if (!element) return;
 
@@ -189,7 +189,6 @@ export const VirtualTreeEntry = defineClass({
       // start listening to changes after 500ms
       this.data_subscription_timer.restart(500);
     }
-    this.data = element;
   },
   redraw: function () {
     VirtualTreeEntryBase.prototype.redraw.call(this);

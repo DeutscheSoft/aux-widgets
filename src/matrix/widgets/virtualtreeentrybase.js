@@ -3,11 +3,14 @@ import { Container } from '../../widgets/container.js';
 
 export const VirtualTreeEntryBase = defineClass({
   Extends: Container,
-  _options: Object.assign(Object.create(Container.prototype._options), {}),
-  options: {},
+  _options: Object.assign(Object.create(Container.prototype._options), {
+    data: 'any',
+  }),
+  options: {
+    data: null,
+  },
   initialize: function (options) {
     Container.prototype.initialize.call(this, options);
-    this.data = null;
   },
   /**
    * This function is called internally on scroll to update the entries'
@@ -23,6 +26,6 @@ export const VirtualTreeEntryBase = defineClass({
    *   about the entries indentation inside the tree.
    */
   updateData: function (virtualtreeview, index, element, treePosition) {
-    this.data = element;
+    this.update('data', element);
   },
 });
