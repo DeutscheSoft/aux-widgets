@@ -262,8 +262,7 @@ export const Container = defineClass({
     const C = this.children;
     const index = typeof child === 'number' ? child : C.indexOf(child);
 
-    if (index < 0 || index >= C.length)
-      throw new Error('Cannot find child.');
+    if (index < 0 || index >= C.length) throw new Error('Cannot find child.');
 
     return this.hidden_children[index];
   },

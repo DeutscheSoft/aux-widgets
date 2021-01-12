@@ -128,7 +128,7 @@ export const VirtualTreeEntry = defineClass({
       this.subscribeData();
     });
   },
-  destroy: function() {
+  destroy: function () {
     VirtualTreeEntryBase.prototype.destroy.call(this);
     this.data_subscription_timer.stop();
   },
