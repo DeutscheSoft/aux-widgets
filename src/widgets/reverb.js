@@ -93,7 +93,7 @@ function drawReverb () {
   const x1 = rstart;
   const y1 = O.rlevel + O.gain;
   
-  const rate = -60 / O.rtime;
+  const rate = O.reference / O.rtime;
   
   const x2 = (this.range_y.get('min') - O.gain - O.rlevel) / rate + O.delay + O.predelay;
   const y2 = this.range_y.get("min");
@@ -199,8 +199,37 @@ function drawReflections() {
  *
  * @param {Object} [options={ }] - An object containing initial options.
  * 
- * @property {options.timeframe=5000}
- * 
+ * @property {Number} {options.timeframe=10000} - An alias for `range_x.max`, defining the maximum time of the chart.
+ * @property {Number} {options.delay=0} - The initial delay of the input signal, not to be confused with predelay.
+ * @property {Number} {options.delay_min=0} - The minimum delay.
+ * @property {Number} {options.delay_max=2000} - The maximum delay.
+ * @property {Number} {options.gain=0} - The gain for the input signal.
+ * @property {Number} {options.gain_min=-60} - The minimum gain.
+ * @property {Number} {options.gain_max=0} - The maximum gain.
+ * @property {Number} {options.predelay=0} - The predelay of the diffuse reverb.
+ * @property {Number} {options.predelay_min=0} - The minimum predelay.
+ * @property {Number} {options.predelay_max=2000} - The maximum predelay.
+ * @property {Number} {options.rlevel=0} - The level of the diffuse reverb.
+ * @property {Number} {options.rlevel_min=-60} - The minimum reverb level.
+ * @property {Number} {options.rlevel_max=0} - The maximum reverb level.
+ * @property {Number} {options.rtime=0} - The duration of the diffuse reverb. This acts in conjunction with the `reference` option.
+ * @property {Number} {options.rtime_min=0} - The minimum reverb time.
+ * @property {Number} {options.rtime_max=5000} - The maximum reverb time.
+ * @property {Number} {options.erlevel=0} - The level of the early reflections.
+ * @property {Number} {options.erlevel_min=-60} - The minimum level of early reflections.
+ * @property {Number} {options.erlevel_max=0} - The maximum level of early reflections.
+ * @property {Number} {options.attack=0} - The attack time for the diffuse reverb.
+ * @property {Number} {options.noisefloor=-96} - The noisefloor at which attack starts from.
+ * @property {Number} {options.reference=-60} - The reference level for calculating the reverb time.
+ * @property {Boolean} {options.show_input=true} - Draw the line showing the input signal.
+ * @property {Boolean} {options.show_input_handle=true} - Show the handle defining input level and initial delay.
+ * @property {Boolean} {options.show_rlevel_handle=true} - Show the handle defining reverb level and predelay.
+ * @property {Boolean} {options.show_rtime_handle=true} - Show the handle defining the reverb time.
+ * @property {Array|Object|Boolean} {options.reflections={amount: 0, spread: 0, randomness: 4}} - Defines reflections
+ *   to be displayed. Either an array of objects `{time: n, level:n}` where time is in milliseconds,
+ *   level in decibel or an object `{amount: n, spread: n, randomness: n}` where spread is a time
+ *   in milliseconds to spread the reflections, randomness in decibels to randomize the levels and
+ *   amount the number of reflections to be created. `false` disables drawing of the reflections.
  * @extends Chart
  *
  * @class Reverb
@@ -236,11 +265,12 @@ export const Reverb = defineClass({
     
     attack: "number",
     noisefloor: "number",
+    reference: "number",
     
     show_input_handle: "boolean",
     show_input: "boolean",
-    rlevel_handle: "boolean",
-    rtime_handle: "boolean",
+    show_rlevel_handle: "boolean",
+    show_rtime_handle: "boolean",
     
     reflections: "boolean|array|object",
     _reflections: "array",
@@ -313,13 +343,14 @@ export const Reverb = defineClass({
     erlevel_max: 0,
     
     attack: 0,
-    noisefloor: -96, 
+    noisefloor: -96,
+    reference: -60,
     
     show_input_handle: true,
     show_predelay_handle: true,
     show_input: true,
-    rtime_handle: true,
-    rlevel_handle: true,
+    show_rtime_handle: true,
+    show_rlevel_handle: true,
     
     reflections: { amount: 0, spread: 0, randomness: 0 },
     _reflections: [],
@@ -479,14 +510,14 @@ export const Reverb = defineClass({
       this.input_handle.set("visible", O.show_input_handle);
     }
     
-    if (I.rlevel_handle) {
-      I.rlevel_handle = false;
-      this.rlevel_handle.set("visible", O.rlevel_handle);
+    if (I.show_rlevel_handle) {
+      I.show_rlevel_handle = false;
+      this.rlevel_handle.set("visible", O.show_rlevel_handle);
     }
     
-    if (I.rtime_handle) {
-      I.rtime_handle = false;
-      this.rtime_handle.set("visible", O.rtime_handle);
+    if (I.show_rtime_handle) {
+      I.show_rtime_handle = false;
+      this.rtime_handle.set("visible", O.show_rtime_handle);
     }
     
     if (I.show_input) {
