@@ -40,35 +40,32 @@ function dragInput (key, value) {
   const O = this.options;
   if (key == 'x') {
     this.userset('delay', Math.min(O.delay_max, Math.max(O.delay_min, value)));
-    return O.sync;
+    return false;
   }
   if (key == 'y') {
     this.userset('gain', Math.min(O.gain_max, Math.max(O.gain_min, value)));
-    return O.sync;
+    return false;
   }
-  return true;
 }
 
 function dragRLevel (key, value) {
   const O = this.options;
   if (key == 'x') {
     this.userset('predelay', Math.min(O.predelay_max + O.delay, Math.max(O.predelay_min + O.delay, value)) - O.delay);
-    return O.sync;
+    return false;
   }
   if (key == 'y') {
     this.userset('rlevel', Math.min(O.rlevel_max - O.gain, Math.max(O.rlevel_min - O.gain, value)));
-    return O.sync;
+    return false;
   }
-  return true;
 }
 
 function dragRTime (key, value) {
   const O = this.options;
   if (key == 'x') {
     this.userset('rtime', Math.min(O.rtime_max + O.predelay + O.delay, Math.max(O.rtime_min + O.delay + O.predelay, value)) - O.delay - O.predelay);
-    return O.sync;
+    return false;
   }
-  return true;
 }
 
 function drawInput () {
@@ -247,8 +244,6 @@ export const Reverb = defineClass({
     
     reflections: "boolean|array|object",
     _reflections: "array",
-    
-    sync: "boolean",
   }),
   options: {
     range_x: { min: 0, max: 5000 },
@@ -328,8 +323,6 @@ export const Reverb = defineClass({
     
     reflections: { amount: 0, spread: 0, randomness: 0 },
     _reflections: [],
-    
-    sync: false,
   },
   static_events: {
     set_timeframe: v=>this.range_x.set("max", v),
