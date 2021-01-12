@@ -358,7 +358,7 @@ function subscribeWhenDefined(tagName, callback) {
   return whenDefinedSubscribers.subscribe(tagName, callback);
 }
 
-function findParentNode(node) {
+export function findParentNode(node) {
   do {
     if (node.isAuxWidget) return node;
 
