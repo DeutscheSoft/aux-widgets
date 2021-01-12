@@ -128,6 +128,10 @@ export const VirtualTreeEntry = defineClass({
       this.subscribeData();
     });
   },
+  destroy: function() {
+    VirtualTreeEntryBase.prototype.destroy.call(this);
+    this.data_subscription_timer.stop();
+  },
   draw: function (options, element) {
     VirtualTreeEntryBase.prototype.draw.call(this, options, element);
     element.classList.add('aux-virtualtreeentry');
