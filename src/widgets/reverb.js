@@ -39,11 +39,11 @@ function setInputMode () {
 function dragInput (key, value) {
   const O = this.options;
   if (key == 'x') {
-    this.userset('delay', Math.min(O.delay_max, Math.max(O.delay_min, value)));
+    this.userset('delay', value);
     return false;
   }
   if (key == 'y') {
-    this.userset('gain', Math.min(O.gain_max, Math.max(O.gain_min, value)));
+    this.userset('gain', value);
     return false;
   }
 }
@@ -51,11 +51,11 @@ function dragInput (key, value) {
 function dragRLevel (key, value) {
   const O = this.options;
   if (key == 'x') {
-    this.userset('predelay', Math.min(O.predelay_max + O.delay, Math.max(O.predelay_min + O.delay, value)) - O.delay);
+    this.userset('predelay', value - O.delay);
     return false;
   }
   if (key == 'y') {
-    this.userset('rlevel', Math.min(O.rlevel_max - O.gain, Math.max(O.rlevel_min - O.gain, value)));
+    this.userset('rlevel', value - O.gain);
     return false;
   }
 }
@@ -63,7 +63,7 @@ function dragRLevel (key, value) {
 function dragRTime (key, value) {
   const O = this.options;
   if (key == 'x') {
-    this.userset('rtime', Math.min(O.rtime_max + O.predelay + O.delay, Math.max(O.rtime_min + O.delay + O.predelay, value)) - O.delay - O.predelay);
+    this.userset('rtime', value - O.delay - O.predelay);
     return false;
   }
 }
@@ -327,72 +327,20 @@ export const Reverb = defineClass({
   static_events: {
     set_timeframe: v=>this.range_x.set("max", v),
     set_reflections: setReflections,
-    
     set_delay: function (v) {
-      const O = this.options;
       setInputMode.call(this);
-      this.rlevel_handle.update("x_min", v + O.predelay_min);
-      this.rlevel_handle.update("x_max", v + O.predelay_max);
-      this.rtime_handle.update("x_min", v + O.predelay + O.rtime_min);
-      this.rtime_handle.update("x_max", v + O.predelay + O.rtime_max);
     },
-    set_delay_min: function (v) {
-      this.input_handle.update('x_min', v);
-    },
-    set_delay_max: function (v) {
-      this.input_handle.update('x_max', v);
-    },
-    
     set_gain: function (v) {
-      const O = this.options;
       setInputMode.call(this);
-      this.rlevel_handle.update('y_min', v + O.rlevel_min);
-      this.rlevel_handle.update('y_max', v + O.rlevel_max);
     },
-    set_gain_min: function (v) {
-      this.input_handle.update('y_min', v);
-    },
-    set_gain_max: function (v) {
-      this.input_handle.update('y_max', v);
-    },
-    
     set_predelay: function (v) {
-      const O = this.options;
       setInputMode.call(this);
-      this.rtime_handle.update("x_min", v + O.delay + O.rtime_min);
-      this.rtime_handle.update("x_max", v + O.delay + O.rtime_max);
     },
-    set_predelay_min: function (v) {
-      const O = this.options;
-      this.rlevel_handle.update('x_min', v + O.delay);
-    },
-    set_predelay_max: function (v) {
-      const O = this.options;
-      this.rlevel_handle.update('x_max', v + O.delay);
-    },
-    
     set_rlevel: function (v) {
       setInputMode.call(this);
     },
-    set_rlevel_min: function (v) {
-      const O = this.options;
-      this.rlevel_handle.update('y_min', v + O.gain);
-    },
-    set_rlevel_max: function (v) {
-      const O = this.options;
-      this.rlevel_handle.update('y_max', v + O.gain);
-    },
-    
     set_rtime: function (v) {
       setInputMode.call(this);
-    },
-    set_rtime_min: function (v) {
-      const O = this.options;
-      this.rtime_handle.update('x_min', v + O.delay + O.predelay);
-    },
-    set_rtime_max: function (v) {
-      const O = this.options;
-      this.rtime_handle.update('x_max', v + O.delay + O.predelay);
     },
   },
   initialize: function (options) {
@@ -571,13 +519,16 @@ export const Reverb = defineClass({
 });
 
 defineRecalculation(Reverb, [ 'delay', 'predelay', 'rtime' ], function (O) {
-  const { delay, predelay, rtime } = O;
-  this.input_handle.update('x', delay);
-  this.rlevel_handle.update('x', delay + predelay);
-  this.rtime_handle.update('x', delay + predelay + rtime);
+  O.delay = Math.min(O.delay_max, Math.max(O.delay_min, O.delay));
+  O.predelay = Math.min(O.predelay_max, Math.max(O.predelay_min, O.predelay));
+  O.rtime = Math.min(O.rtime_max, Math.max(O.rtime_min, O.rtime));
+  this.input_handle.update('x', O.delay);
+  this.rlevel_handle.update('x', O.delay + O.predelay);
+  this.rtime_handle.update('x', O.delay + O.predelay + O.rtime);
 });
 defineRecalculation(Reverb, [ 'gain', 'rlevel' ], function (O) {
-  const { gain, rlevel } = O;
-  this.input_handle.update('y', gain);
-  this.rlevel_handle.update('y', gain + rlevel);
+  O.gain = Math.min(O.gain_max, Math.max(O.gain_min, O.gain));
+  O.rlevel = Math.min(O.rlevel_max, Math.max(O.rlevel_min, O.rlevel));
+  this.input_handle.update('y', O.gain);
+  this.rlevel_handle.update('y', O.gain + O.rlevel);
 });
