@@ -251,6 +251,22 @@ export const Container = defineClass({
       child.showNoDraw();
     }
   },
+  /**
+   * Returns true if the given child is currently marked as hidden in this
+   * container.
+   *
+   * @param {number|Widget} child
+   * @returns {boolean}
+   */
+  isChildHidden: function (child) {
+    const C = this.children;
+    const index = typeof child === 'number' ? child : C.indexOf(child);
+
+    if (index < 0 || index >= C.length)
+      throw new Error('Cannot find child.');
+
+    return this.hidden_children[index];
+  },
 
   /**
    * Toggles the hidden state of a child.
