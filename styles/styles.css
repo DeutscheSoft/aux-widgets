@@ -38,6 +38,8 @@
 
   --aux-active-base: #2577a1;
   --aux-active-text: #ffffff;
+  
+  --aux-graph-fill: rgba(37, 119, 161, 0.33);
 
   --aux-fader-handle1: #5d6666;
   --aux-fader-handle2: #363a3a;
@@ -268,6 +270,9 @@
 .aux-graph.aux-steady {
   stroke: var(--aux-contrast-text);
 }
+.aux-graph.aux-filled {
+  fill: var(--aux-graph-fill);
+}
 
 /* GRID */
 
@@ -359,6 +364,15 @@
 .aux-panorama .aux-center {
   stroke: var(--aux-warn-base);
   opacity: 1;
+}
+
+/* REVERB */
+
+.aux-reverb > svg > .aux-graphs > .aux-input {
+}
+.aux-reverb > svg > .aux-graphs > .aux-reflection {
+  stroke: var(--aux-contrast-text);
+  opacity: 0.5;
 }
 
 /* ROOT */
