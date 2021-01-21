@@ -244,29 +244,29 @@ export const Reverb = defineClass({
   _options: Object.assign(Object.create(Chart.prototype._options), {
     timeframe: 'number',
 
-    delay: 'integer',
-    delay_min: 'integer',
-    delay_max: 'integer',
+    delay: 'number',
+    delay_min: 'number',
+    delay_max: 'number',
 
-    gain: 'integer',
-    gain_min: 'integer',
-    gain_max: 'integer',
+    gain: 'number',
+    gain_min: 'number',
+    gain_max: 'number',
 
-    predelay: 'integer',
-    predelay_min: 'integer',
-    predelay_max: 'integer',
+    predelay: 'number',
+    predelay_min: 'number',
+    predelay_max: 'number',
 
-    rlevel: 'integer',
-    rlevel_min: 'integer',
-    rlevel_max: 'integer',
+    rlevel: 'number',
+    rlevel_min: 'number',
+    rlevel_max: 'number',
 
-    rtime: 'integer',
-    rtime_min: 'integer',
-    rtime_max: 'integer',
+    rtime: 'number',
+    rtime_min: 'number',
+    rtime_max: 'number',
 
-    erlevel: 'integer',
-    erlevel_min: 'integer',
-    erlevel_max: 'integer',
+    erlevel: 'number',
+    erlevel_min: 'number',
+    erlevel_max: 'number',
 
     attack: 'number',
     noisefloor: 'number',
@@ -499,6 +499,7 @@ export const Reverb = defineClass({
     initValues.call(this, 'erlevel', O);
 
     this.set('reflections', O.reflections);
+    this.set('show_input', O.show_input);
   },
   redraw: function () {
     const O = this.options;
@@ -524,6 +525,7 @@ export const Reverb = defineClass({
     if (I.show_input) {
       I.show_input = false;
       this.input.set('visible', O.show_input);
+      console.log(O.show_input)
     }
 
     if (I.input || I.delay) {
