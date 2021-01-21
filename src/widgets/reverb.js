@@ -119,7 +119,6 @@ function initValues(type, O) {
 }
 
 function setReflections(reflections) {
-  console.log(arguments);
   const O = this.options;
   let R = [];
 
