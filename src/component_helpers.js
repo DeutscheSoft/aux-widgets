@@ -161,6 +161,7 @@ function createComponent(base) {
       if (parentAttributes) {
         parentAttributes.forEach((value, key) => {
           if (result.has(key)) return;
+          if (!attribute_names.includes(key)) return;
           result.set(key, value);
         });
       }
