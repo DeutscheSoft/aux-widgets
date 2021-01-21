@@ -176,6 +176,12 @@ function createComponent(base) {
       try {
         const widget = this.auxWidget;
         const type = widget._options[name];
+
+        if (typeof type !== 'string') {
+          console.log(this.constructor.observedAttributes);
+          throw new TypeError('Option does not exist.');
+        }
+
         if (newValue !== null) {
           const value = parseAttribute.call(this, type, newValue);
           widget.set(name, value);
@@ -183,7 +189,7 @@ function createComponent(base) {
           widget.reset(name);
         }
       } catch (e) {
-        warn('Setting attribute generated an error:', e);
+        warn('%o: Setting attribute %o on generated an error: %o', this, name, e);
       }
     }
 
