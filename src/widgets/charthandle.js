@@ -860,7 +860,7 @@ function stopDrag() {
  * @property {String} [options.mode="circular"] - Type of the handle. Can be one of
  *   <code>circular</code>, <code>line-vertical</code>, <code>line-horizontal</code>,
  *   <code>block-left</code>, <code>block-right</code>, <code>block-top</code> or
- *   <code>block-right</code>.
+ *   <code>block-bottom</code>.
  * @property {Number} [options.x] - Value of the x-coordinate.
  * @property {Number} [options.y] - Value of the y-coordinate.
  * @property {Number} [options.z] - Value of the z-coordinate.
