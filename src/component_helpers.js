@@ -50,6 +50,7 @@ const FORMAT_TYPES = new Set([
   'html',
   'string',
   'number',
+  'integer',
   'int',
   'sprintf',
   'regexp',
@@ -75,6 +76,7 @@ function lowParseAttribute(type, x) {
 
       throw new Error(sprintf('Invalid number: "%s"', x));
     }
+    case 'integer':
     case 'int': {
       const i = parseInt(x);
       if (i === i) return i;
