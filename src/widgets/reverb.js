@@ -33,7 +33,7 @@ function setInputMode() {
   if (O.delay === false) mode = 'line-horizontal';
   if (O.input === false) mode = 'line-vertical';
   this.input_handle.set('mode', mode);
-  this.input.set('visible', O.delay !== false && O.input !== false);
+  this.input.set('visible', O.show_input && O.delay !== false && O.input !== false);
 }
 
 function dragInput(key, value) {
@@ -525,7 +525,6 @@ export const Reverb = defineClass({
     if (I.show_input) {
       I.show_input = false;
       this.input.set('visible', O.show_input);
-      console.log(O.show_input)
     }
 
     if (I.input || I.delay) {
@@ -534,11 +533,11 @@ export const Reverb = defineClass({
       drawReverb.call(this);
     }
 
-    if (I.validate('predelay', 'rlevel', 'rtime', 'attack')) {
+    if (I.validate('predelay', 'rlevel', 'rtime', 'attack') || I.gain) {
       drawReverb.call(this);
     }
 
-    if (I.validate('reflections', 'erlevel', 'delay')) {
+    if (I.validate('reflections', 'erlevel', 'delay', 'gain')) {
       drawReflections.call(this);
     }
   },
