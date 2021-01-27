@@ -24,6 +24,8 @@ import { Range } from '../modules/range.js';
 function rangeChanged(value, name) {
   const range = this[name];
 
+  if (value === range) return;
+
   // FIXME: issue #248
   if (value instanceof Range)
     throw new TypeError(
