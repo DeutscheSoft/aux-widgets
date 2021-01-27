@@ -42,7 +42,8 @@ body {
   display: none !important;
 }
 
-.aux-notransition {
+.aux-notransitions,
+.aux-notransitions * {
   transition: none !important;
 }
 
