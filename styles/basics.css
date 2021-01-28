@@ -510,10 +510,10 @@
 
 /* MULTIMETER */
 
-.aux-multimeter {
+.aux-multimeter.aux-has-label {
   padding-top: var(--aux-multimeter-labelheight);
 }
-.aux-multimeter.aux-bottom {
+.aux-multimeter.aux-bottom.aux-has-label {
   padding-top: 0;
   padding-bottom: var(--aux-multimeter-labelheight);
 }
