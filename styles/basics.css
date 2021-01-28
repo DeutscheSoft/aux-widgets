@@ -220,28 +220,52 @@
 .aux-fader.aux-vertical > .aux-track {
   width: var(--aux-fader-handlewidth);
 }
+.aux-fader.aux-horizontal > .aux-track {
+  height: var(--aux-fader-handlewidth);
+}
+.aux-fader.aux-left > .aux-track {
+  justify-self: end;
+}
+.aux-fader.aux-right > .aux-track {
+  justify-self: start;
+}
+.aux-fader.aux-top > .aux-track {
+  align-self: end;
+}
+.aux-fader.aux-bottom > .aux-track {
+  align-self: start;
+}
 .aux-fader.aux-vertical .aux-handle {
   width: var(--aux-fader-handlewidth);
   height: var(--aux-fader-handleheight);
-}
-.aux-fader.aux-vertical > .aux-scale {
-  margin: calc(var(--aux-fader-handleheight) / 2) 0;
-}
-.aux-fader.aux-horizontal > .aux-track {
-  height: var(--aux-fader-handlewidth);
 }
 .aux-fader.aux-horizontal .aux-handle {
   width: var(--aux-fader-handleheight);
   height: var(--aux-fader-handlewidth);
 }
+.aux-fader.aux-vertical > .aux-scale {
+  margin: calc(var(--aux-fader-handleheight) / 2) 0;
+}
 .aux-fader.aux-horizontal > .aux-scale {
   margin: 0 calc(var(--aux-fader-handleheight) / 2);
 }
-.aux-fader.aux-left > .aux-value {
+.aux-fader.aux-left > .aux-scale {
   justify-self: start;
 }
-.aux-fader.aux-right > .aux-value {
+.aux-fader.aux-right > .aux-scale {
   justify-self: end;
+}
+.aux-fader.aux-top > .aux-scale {
+  align-self: start;
+}
+.aux-fader.aux-bottom > .aux-scale {
+  align-self: end;
+}
+.aux-fader.aux-left > .aux-value {
+  justify-self: center;
+}
+.aux-fader.aux-right > .aux-value {
+  justify-self: center;
 }
 .aux-fader.aux-top > .aux-value {
   align-self: center;
