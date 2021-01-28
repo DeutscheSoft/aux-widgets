@@ -149,6 +149,9 @@ export const VirtualTreeEntry = defineClass({
 
     if (!element) return;
 
+    this.update('label', element.label);
+    this.update('icon', element.icon);
+
     subs.add(
       element.subscribe('propertyChanged', (key, value) => {
         switch (key) {
@@ -176,6 +179,8 @@ export const VirtualTreeEntry = defineClass({
    *   about the entries indentation inside the tree.
    */
   updateData: function (virtualtreeview, index, element, treePosition) {
+    VirtualTreeEntryBase.prototype.updateData.call(this, virtualtreeview, index, element, treePosition);
+
     this.data_subscriptions.unsubscribe();
 
     if (element) {
