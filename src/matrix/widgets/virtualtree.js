@@ -272,22 +272,31 @@ export const VirtualTree = defineClass({
     );
     if (options.virtualtreeview)
       this.set('virtualtreeview', options.virtualtreeview);
+
+    const scrollTarget = document.createElement('div');
+
+    scrollTarget
+
+    this._scrollTarget = scrollTarget;
+
     this.triggerResize();
   },
   /**
    * Scroll the VirtualTree to this position.
    *
-   * @param {Integer} position - The position to scroll to.
+   * @param {Integer|object} options
+   *    The position to scroll to or a scrollTo() options with
+   *    `top` entry.
    *
    * @method VirtualTree#scrollTo
    */
-  scrollTo: function (position) {
-    this._scroll_timer.restart(100);
-    this.update('_scroll', position);
-    const O = this.options;
-    const startIndex = Math.floor(position / O.size);
-
-    this.update('_startIndex', startIndex);
+  scrollTo: function (options) {
+    if (typeof options !== 'object') {
+      options = {
+        top: options,
+      };
+    }
+    this._scrollbar.scrollTo(options);
   },
   redraw: function () {
     const O = this.options;
@@ -364,9 +373,38 @@ export const VirtualTree = defineClass({
   resize: function () {
     const E = this.element;
     const O = this.options;
-    this.set('_amount', 1 + Math.ceil(E.offsetHeight / O.size));
+    this.update('_view_height', E.offsetHeight);
+    this.update('_amount', 1 + Math.ceil(E.offsetHeight / O.size));
 
     Container.prototype.resize.call(this);
+  },
+  /**
+   * Uses the native Element.scrollTo() function to scroll the entry with
+   * the given index into view.
+   *
+   * @param {number} index
+   *    The index of the entry in the list.
+   * @param {object|boolean} [options]
+   *    Similar to the options of Element.scrollIntoView(). Currently
+   *    interpreted are `options.block` and `options.behavior`.
+   * @param {string} [options.block='top']
+   * @param {string} [options.behavior='auto']
+   */
+  scrollEntryIntoView: function(index, options) {
+    if (!options) options = { };
+
+    let position = this.calculateEntryPosition(index);
+
+    if (options.block === 'bottom') {
+      const O = this.options;
+      position -= O._view_height - O.size;
+      if (position < 0) position = 0;
+    }
+
+    this.scrollTo({
+      top: position,
+      behavior: options.behavior || 'auto',
+    });
   },
 });
 /**
