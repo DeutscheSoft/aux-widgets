@@ -406,6 +406,19 @@ export const VirtualTree = defineClass({
       behavior: options.behavior || 'auto',
     });
   },
+  /**
+   * Returns the indices of those entries which are currently in view.
+   */
+  getVisibleRange: function() {
+    const virtualtreeview = this.get('virtualtreeview');
+
+    if (!virtualtreeview)
+      return [-1, -1];
+
+    const startIndex = virtualtreeview.startIndex;
+
+    return [ startIndex, startIndex + virtualtreeview.amount ];
+  },
 });
 /**
  * @member {HTMLDiv} VirtualTree#_scrollbar - A container for hiding
