@@ -214,7 +214,7 @@ export const Meter = defineClass({
     levels: [1, 5, 10], // array of steps where to draw labels
     background: false,
     gradient: false,
-    foreground: false,
+    foreground: "black",
   },
   static_events: {
     set_base: function (value) {
