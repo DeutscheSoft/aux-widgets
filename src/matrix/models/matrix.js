@@ -145,7 +145,7 @@ export class MatrixData extends Datum {
    * Add a port to this matrix. Will be added at the top level of the tree.
    */
   addPort(port) {
-    this.root.addPort(port);
+    return this.root.addPort(port);
   }
 
   /**
