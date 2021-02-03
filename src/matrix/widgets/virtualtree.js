@@ -240,6 +240,11 @@ export const VirtualTree = defineClass({
   /**
    * Return the entry for the given index. Returns null if there is currently
    * no entry assigned to that index.
+   *
+   * @param {number index
+   *    The element index.
+   * @returns {VirtualTreeEntryBase}
+   *    The element with the given id or null.
    */
   getEntry: function (index) {
     const { virtualtreeview } = this.options;
@@ -254,6 +259,39 @@ export const VirtualTree = defineClass({
     const entries = this.entries;
 
     return entries[index % entries.length];
+  },
+  /**
+   * Returns the index of the element with the given id. If no element with the
+   * given id can be found or is currently not in the list, -1 is returned.
+   *
+   * @param {*} id
+   *    The element id.
+   * @returns {number}
+   *    The index of the element with the given id.
+   */
+  getIndexById: function (id) {
+    const { virtualtreeview } = this.options;
+
+    if (!virtualtreeview) return -1;
+
+    const port = virtualtreeview.matrix.getPortById(id);
+
+    if (!port || !virtualtreeview.includes(port))
+      return -1;
+
+    return virtualtreeview.indexOf(port);
+  },
+  /**
+   * Returns the entry for a given id. If no element with the given id can be
+   * found or if it is not in view, null will be returned.
+   *
+   * @param {*} id
+   *    The element id.
+   * @returns {VirtualTreeEntryBase}
+   *    The element with the given id or null.
+   */
+  getEntryById: function (id) {
+    return this.getEntry(this.getIndexById(id));
   },
   triggerReposition: function () {
     this.set('size', this.get('size'));
