@@ -156,6 +156,18 @@
 .aux-buttons > .aux-button {
   flex: 0 0 auto;
 }
+.aux-buttons.aux-horizontal > .aux-button:first-of-type {
+  margin-left: 0;
+}
+.aux-buttons.aux-horizontal > .aux-button:last-of-type {
+  margin-right: 0;
+}
+.aux-buttons.aux-vertical > .aux-button:first-of-type {
+  margin-top: 0;
+}
+.aux-buttons.aux-vertical > .aux-button:last-of-type {
+  margin-bottom: 0;
+}
 
 /* CHART */
 
@@ -684,6 +696,18 @@
 }
 .aux-navigation.aux-vertical > .aux-buttons > .aux-button {
   margin: var(--aux-main-margin) 0;
+}
+.aux-navigation.aux-horizontal > .aux-buttons.aux-horizontal > .aux-button:first-of-type {
+  margin-left: 0;
+}
+.aux-navigation.aux-horizontal > .aux-buttons.aux-horizontal > .aux-button:last-of-type {
+  margin-right: 0;
+}
+.aux-navigation.aux-vertical > .aux-buttons.aux-vertical > .aux-button:first-of-type {
+  margin-top: 0;
+}
+.aux-navigation.aux-vertical > .aux-buttons.aux-vertical > .aux-button:last-of-type {
+  margin-bottom: 0;
 }
 
 .aux-navigation > .aux-button {
