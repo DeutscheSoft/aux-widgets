@@ -31,7 +31,7 @@ import { resizeArrayMod } from '../models.js';
 scrollbarSize();
 
 function collapse(state) {
-  const element = this.data;
+  const element = this.get('data');
   const parent = this.parent;
   const virtualtreeview = parent.options.virtualtreeview;
   if (!element.isGroup) return;
