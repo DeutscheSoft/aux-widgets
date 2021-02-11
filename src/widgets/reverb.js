@@ -386,6 +386,13 @@ export const Reverb = defineClass({
   initialize: function (options) {
     Chart.prototype.initialize.call(this, options);
 
+    const onInteractingChanged = (value) => {
+      if (value) {
+        this.startInteracting();
+      } else {
+        this.stopInteracting();
+      }
+    };
     /**
      * @member {ChartHandle} Reverb#input_handle - The {@link ChartHandle}
      *   displaying/setting the initial delay and gain.
@@ -409,6 +416,7 @@ export const Reverb = defineClass({
       active: true,
     });
     this.input_handle.addEventListener('userset', dragInput.bind(this));
+    this.input_handle.on('set_interacting', onInteractingChanged);
     this.addHandle(this.input_handle);
 
     /**
@@ -434,6 +442,7 @@ export const Reverb = defineClass({
       active: true,
     });
     this.rlevel_handle.addEventListener('userset', dragRLevel.bind(this));
+    this.rlevel_handle.on('set_interacting', onInteractingChanged);
     this.addHandle(this.rlevel_handle);
 
     /**
@@ -457,6 +466,7 @@ export const Reverb = defineClass({
       active: true,
     });
     this.rtime_handle.addEventListener('userset', dragRTime.bind(this));
+    this.rtime_handle.on('set_interacting', onInteractingChanged);
     this.addHandle(this.rtime_handle);
 
     /**
