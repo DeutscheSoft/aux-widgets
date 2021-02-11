@@ -560,7 +560,7 @@ export const Reverb = defineClass({
         value = { ...this.options.reflections, ...value };
       }
     }
-    Chart.prototype.set.call(this, key, value);
+    return Chart.prototype.set.call(this, key, value);
   },
 });
 
