@@ -198,6 +198,14 @@ function drawReflections() {
   }
 }
 
+function onInteractingChanged (value) {
+  if (value) {
+    this.startInteracting();
+  } else {
+    this.stopInteracting();
+  }
+};
+
 /**
  * Reverb is a {@link Chart} with various handles to set and display
  * parameters of a typical classic reverb.
@@ -239,6 +247,7 @@ function drawReflections() {
  *
  * @class Reverb
  */
+
 export const Reverb = defineClass({
   Extends: Chart,
   _options: Object.assign(Object.create(Chart.prototype._options), {
@@ -272,10 +281,7 @@ export const Reverb = defineClass({
     noisefloor: 'number',
     reference: 'number',
 
-    show_input_handle: 'boolean',
     show_input: 'boolean',
-    show_rlevel_handle: 'boolean',
-    show_rtime_handle: 'boolean',
 
     reflections: 'boolean|array|object',
     _reflections: 'array',
@@ -355,9 +361,9 @@ export const Reverb = defineClass({
     noisefloor: -96,
     reference: -60,
 
-    show_input_handle: true,
     show_predelay_handle: true,
     show_input: true,
+    show_input_handle: true,
     show_rtime_handle: true,
     show_rlevel_handle: true,
 
@@ -385,90 +391,7 @@ export const Reverb = defineClass({
   },
   initialize: function (options) {
     Chart.prototype.initialize.call(this, options);
-
-    const onInteractingChanged = (value) => {
-      if (value) {
-        this.startInteracting();
-      } else {
-        this.stopInteracting();
-      }
-    };
-    /**
-     * @member {ChartHandle} Reverb#input_handle - The {@link ChartHandle}
-     *   displaying/setting the initial delay and gain.
-     */
-    this.input_handle = new ChartHandle({
-      format_label: function (label, x, y, z) {
-        const O = this.options;
-        let output = [];
-        if (label) output.push(label);
-        if (O.delay !== false) {
-          if (x >= 1000) output.push(sprintf('%.2fs', x / 1000));
-          else output.push(sprintf('%dms', x));
-        }
-        if (O.input !== false) {
-          output.push(sprintf('%.2fdB', y));
-        }
-        return output.join('\n');
-      }.bind(this),
-      label: 'Input',
-      mode: 'circular',
-      active: true,
-    });
-    this.input_handle.addEventListener('userset', dragInput.bind(this));
-    this.input_handle.on('set_interacting', onInteractingChanged);
-    this.addHandle(this.input_handle);
-
-    /**
-     * @member {ChartHandle} Reverb#rlevel_handle - The {@link ChartHandle}
-     *   displaying/setting the pre delay and reverb level.
-     */
-    this.rlevel_handle = new ChartHandle({
-      format_label: function (label, x, y, z) {
-        const O = this.options;
-        let output = [];
-        if (label) output.push(label);
-        if (O.delay !== false) {
-          if (x >= 1000) output.push(sprintf('%.2fs', (x - O.delay) / 1000));
-          else output.push(sprintf('%dms', x - O.delay));
-        }
-        if (O.rlevel !== false) {
-          output.push(sprintf('%.2fdB', y - O.gain));
-        }
-        return output.join('\n');
-      }.bind(this),
-      label: 'Reverb',
-      mode: 'circular',
-      active: true,
-    });
-    this.rlevel_handle.addEventListener('userset', dragRLevel.bind(this));
-    this.rlevel_handle.on('set_interacting', onInteractingChanged);
-    this.addHandle(this.rlevel_handle);
-
-    /**
-     * @member {ChartHandle} Reverb#rtime_handle - The {@link ChartHandle}
-     *   displaying/setting the reverb time.
-     */
-    this.rtime_handle = new ChartHandle({
-      format_label: function (label, x, y, z) {
-        const O = this.options;
-        let output = [];
-        if (label) output.push(label);
-        if (O.delay !== false) {
-          if (x >= 1000)
-            output.push(sprintf('%.2fs', (x - O.delay - O.predelay) / 1000));
-          else output.push(sprintf('%dms', x - O.delay - O.predelay));
-        }
-        return output.join('\n');
-      }.bind(this),
-      label: 'Time',
-      mode: 'line-vertical',
-      active: true,
-    });
-    this.rtime_handle.addEventListener('userset', dragRTime.bind(this));
-    this.rtime_handle.on('set_interacting', onInteractingChanged);
-    this.addHandle(this.rtime_handle);
-
+    
     /**
      * @member {Graph} Reverb#input - The {@link Graph} displaying the
      * input signal as a vertical bar.
@@ -498,7 +421,18 @@ export const Reverb = defineClass({
   },
   draw: function (O, element) {
     addClass(element, 'aux-reverb');
-
+    
+    const interacting = onInteractingChanged.bind(this);
+    
+    this.input_handle.addEventListener('userset', dragInput.bind(this));
+    this.input_handle.on('set_interacting', interacting);
+    
+    this.rlevel_handle.addEventListener('userset', dragRLevel.bind(this));
+    this.rlevel_handle.on('set_interacting', interacting);
+    
+    this.rtime_handle.addEventListener('userset', dragRTime.bind(this));
+    this.rtime_handle.on('set_interacting', interacting);
+    
     Chart.prototype.draw.call(this, O, element);
 
     initValues.call(this, 'delay', O);
@@ -516,21 +450,6 @@ export const Reverb = defineClass({
     const I = this.invalid;
 
     Chart.prototype.redraw.call(this);
-
-    if (I.show_input_handle) {
-      I.show_input_handle = false;
-      this.input_handle.set('visible', O.show_input_handle);
-    }
-
-    if (I.show_rlevel_handle) {
-      I.show_rlevel_handle = false;
-      this.rlevel_handle.set('visible', O.show_rlevel_handle);
-    }
-
-    if (I.show_rtime_handle) {
-      I.show_rtime_handle = false;
-      this.rtime_handle.set('visible', O.show_rtime_handle);
-    }
 
     if (I.show_input) {
       I.show_input = false;
@@ -563,6 +482,86 @@ export const Reverb = defineClass({
     return Chart.prototype.set.call(this, key, value);
   },
 });
+
+/**
+* @member {ChartHandle} Reverb#input_handle - The {@link ChartHandle}
+*   displaying/setting the initial delay and gain.
+*/
+defineChildWidget(Reverb, "input_handle", {
+  create: ChartHandle,
+  show: true,
+  default_options: {
+    format_label: function (label, x, y, z) {
+      const O = this.options;
+      let output = [];
+      if (label) output.push(label);
+      if (O.delay !== false) {
+        if (x >= 1000) output.push(sprintf('%.2fs', x / 1000));
+        else output.push(sprintf('%dms', x));
+      }
+      if (O.input !== false) {
+        output.push(sprintf('%.2fdB', y));
+      }
+      return output.join('\n');
+    },
+    label: 'Input',
+    mode: 'circular',
+    active: true,
+  },
+});
+
+/**
+* @member {ChartHandle} Reverb#rlevel_handle - The {@link ChartHandle}
+*   displaying/setting the pre delay and reverb level.
+*/
+defineChildWidget(Reverb, "rlevel_handle", {
+  create: ChartHandle,
+  show: true,
+  default_options: {
+    format_label: function (label, x, y, z) {
+      const O = this.options;
+      let output = [];
+      if (label) output.push(label);
+      if (O.delay !== false) {
+        if (x >= 1000) output.push(sprintf('%.2fs', (x - O.delay) / 1000));
+        else output.push(sprintf('%dms', x - O.delay));
+      }
+      if (O.rlevel !== false) {
+        output.push(sprintf('%.2fdB', y - O.gain));
+      }
+      return output.join('\n');
+    },
+    label: 'Reverb',
+    mode: 'circular',
+    active: true,
+  },
+});
+
+/**
+* @member {ChartHandle} Reverb#rtime_handle - The {@link ChartHandle}
+*   displaying/setting the reverb time.
+*/
+defineChildWidget(Reverb, "rtime_handle", {
+  create: ChartHandle,
+  show: true,
+  default_options: {
+    format_label: function (label, x, y, z) {
+      const O = this.options;
+      let output = [];
+      if (label) output.push(label);
+      if (O.delay !== false) {
+        if (x >= 1000)
+          output.push(sprintf('%.2fs', (x - O.delay - O.predelay) / 1000));
+        else output.push(sprintf('%dms', x - O.delay - O.predelay));
+      }
+      return output.join('\n');
+    },
+    label: 'Time',
+    mode: 'line-vertical',
+    active: true,
+  },
+});
+
 
 defineRecalculation(Reverb, ['delay', 'predelay', 'rtime'], function (O) {
   O.delay = Math.min(O.delay_max, Math.max(O.delay_min, O.delay));
