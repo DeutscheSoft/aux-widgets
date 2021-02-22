@@ -178,7 +178,8 @@ function touchstart(e) {
   this.__touch_id = e.targetTouches[0].identifier;
   if (e.cancelable) {
     e.preventDefault();
-    e.stopPropagation();
+    // Why is this necessary?
+    //e.stopPropagation();
   }
 
   this.on('touchend', touchend);
