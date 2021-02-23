@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -14,7 +12,7 @@
    viewBox="0 0 1024 1024"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
    sodipodi:docname="AUXIcons.svg">
   <defs
      id="defs">
@@ -487,25 +485,25 @@
          unicode="􀂉"
          d="M 32,992 V 800 H 96 V 224 H 32 V 32 h 192 v 64 h 64 V 32 h 192 v 64 h 64 V 32 h 192 v 64 h 64 V 32 h 192 v 192 h -64 v 576 h 64 V 992 H 800 V 928 H 608 v 64 H 416 V 928 H 224 v 64 z M 224,864 h 192 v -64 h 192 v 64 h 192 v -64 h 64 V 224 h -64 v -64 h -64 v 64 H 544 v -64 h -64 v 64 H 288 v -64 h -64 v 64 h -64 v 576 h 64 z M 416,608 V 416 h 192 v 192 z" />
       <glyph
-         glyph-name=""
+         glyph-name="Matrix Diagonal"
          id="glyph90"
          unicode="􀂐"
-         d="" />
+         d="M 0,1024 V 800 h 224 v 224 z m 256,0 V 800 h 224 v 224 z m 256,0 V 800 h 224 v 224 z m 256,0 V 800 h 224 v 224 z M 288,992 H 448 V 832 H 288 Z m 256,0 H 704 V 832 H 544 Z m 256,0 H 960 V 832 H 800 Z M 0,768 V 544 h 224 v 224 z m 256,0 V 544 h 224 v 224 z m 256,0 V 544 h 224 v 224 z m 256,0 V 544 H 992 V 768 Z M 32,736 H 192 V 576 H 32 Z m 512,0 H 704 V 576 H 544 Z m 256,0 H 960 V 576 H 800 Z M 0,512 V 288 h 224 v 224 z m 256,0 V 288 h 224 v 224 z m 256,0 V 288 h 224 v 224 z m 256,0 V 288 H 992 V 512 Z M 32,480 H 192 V 320 H 32 Z m 256,0 H 448 V 320 H 288 Z m 512,0 H 960 V 320 H 800 Z M 0,256 V 32 h 224 v 224 z m 256,0 V 32 h 224 v 224 z m 256,0 V 32 h 224 v 224 z m 256,0 V 32 H 992 V 256 Z M 32,224 H 192 V 64 H 32 Z m 256,0 H 448 V 64 H 288 Z m 256,0 H 704 V 64 H 544 Z" />
       <glyph
-         glyph-name=""
+         glyph-name="Matrix Remove"
          id="glyph91"
          unicode="􀂑"
-         d="" />
+         d="M 0,1024 V 800 h 224 v 224 z m 256,0 V 800 h 224 v 224 z m 256,0 V 800 h 224 v 224 z m 256,0 V 800 h 224 v 224 z M 32,992 H 192 V 832 H 32 Z m 256,0 H 448 V 832 H 288 Z m 256,0 H 704 V 832 H 544 Z m 256,0 H 960 V 832 H 800 Z M 0,768 V 544 h 224 v 224 z m 256,0 V 544 h 224 v 224 z m 256,0 V 544 h 224 v 224 z m 256,0 V 544 H 992 V 768 Z M 32,736 H 192 V 576 H 32 Z m 256,0 H 448 V 576 H 288 Z m 256,0 H 704 V 576 H 544 Z m 256,0 H 960 V 576 H 800 Z M 0,512 V 288 h 224 v 224 z m 256,0 V 288 h 224 v 224 z m 256,0 V 288 h 224 v 224 z m 256,0 V 288 H 992 V 512 Z M 32,480 H 192 V 320 H 32 Z m 256,0 H 448 V 320 H 288 Z m 256,0 H 704 V 320 H 544 Z m 256,0 H 960 V 320 H 800 Z M 0,256 V 32 h 224 v 224 z m 256,0 V 32 h 224 v 224 z m 256,0 V 32 h 224 v 224 z m 256,0 V 32 H 992 V 256 Z M 32,224 H 192 V 64 H 32 Z m 256,0 H 448 V 64 H 288 Z m 256,0 H 704 V 64 H 544 Z m 256,0 H 960 V 64 H 800 Z" />
       <glyph
-         glyph-name=""
+         glyph-name="Matrix Toggle"
          id="glyph92"
          unicode="􀂒"
-         d="" />
+         d="M 0,1024 V 800 h 224 v 224 z m 256,0 V 800 h 224 v 224 z m 256,0 V 800 h 224 v 224 z m 256,0 V 800 h 224 v 224 z M 32,992 H 192 V 832 H 32 Z m 512,0 H 704 V 832 H 544 Z M 0,768 V 544 h 224 v 224 z m 256,0 V 544 h 224 v 224 z m 256,0 V 544 h 224 v 224 z m 256,0 V 544 H 992 V 768 Z M 32,736 H 192 V 576 H 32 Z m 768,0 H 960 V 576 H 800 Z M 0,512 V 288 h 224 v 224 z m 256,0 V 288 h 224 v 224 z m 256,0 V 288 h 224 v 224 z m 256,0 V 288 H 992 V 512 Z M 288,480 H 448 V 320 H 288 Z m 256,0 H 704 V 320 H 544 Z M 0,256 V 32 h 224 v 224 z m 256,0 V 32 h 224 v 224 z m 256,0 V 32 h 224 v 224 z m 256,0 V 32 H 992 V 256 Z M 32,224 H 192 V 64 H 32 Z m 256,0 H 448 V 64 H 288 Z m 512,0 H 960 V 64 H 800 Z" />
       <glyph
-         glyph-name=""
+         glyph-name="Matrix All"
          id="glyph93"
          unicode="􀂓"
-         d="" />
+         d="M 0,1024 V 800 h 224 v 224 z m 256,0 V 800 h 224 v 224 z m 256,0 V 800 h 224 v 224 z m 256,0 V 800 h 224 v 224 z M 0,768 V 544 h 224 v 224 z m 256,0 V 544 h 224 v 224 z m 256,0 V 544 h 224 v 224 z m 256,0 V 544 H 992 V 768 Z M 0,512 V 288 h 224 v 224 z m 256,0 V 288 h 224 v 224 z m 256,0 V 288 h 224 v 224 z m 256,0 V 288 H 992 V 512 Z M 0,256 V 32 h 224 v 224 z m 256,0 V 32 h 224 v 224 z m 256,0 V 32 h 224 v 224 z m 256,0 V 32 h 224 v 224 z" />
       <glyph
          glyph-name=""
          id="glyph94"
@@ -1660,15 +1658,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.24964488"
-     inkscape:cx="-4692.6637"
-     inkscape:cy="490.15373"
+     inkscape:zoom="0.044131397"
+     inkscape:cx="5960.9238"
+     inkscape:cy="-439.55733"
      inkscape:document-units="px"
      inkscape:current-layer="svg2"
      showgrid="true"
      units="px"
      inkscape:window-width="3840"
-     inkscape:window-height="2063"
+     inkscape:window-height="2303"
      inkscape:window-x="0"
      inkscape:window-y="57"
      inkscape:window-maximized="1"
@@ -1686,7 +1684,8 @@
      inkscape:snap-global="true"
      showborder="true"
      inkscape:snap-bbox-midpoints="false"
-     inkscape:lockguides="false">
+     inkscape:lockguides="false"
+     inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
        id="grid1"
@@ -2173,11 +2172,7 @@
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:100%;font-family:sans-serif;-inkscape-font-specification:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:-40px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
      x="-10496"
      y="-4160"
-     id="text1813"><tspan
-       sodipodi:role="line"
-       id="tspan1811"
-       x="-10496"
-       y="-4150.123" /></text>
+     id="text1813" />
   <text
      xml:space="preserve"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:144px;line-height:100%;font-family:monoMMM_5;-inkscape-font-specification:monoMMM_5;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
@@ -2357,4 +2352,23 @@
      d="m -5952,2624 v 192 h 64 v 576 h -64 v 192 h 192 v -64 h 64 v 64 h 192 v -64 h 64 v 64 h 192 v -64 h 64 v 64 h 192 v -192 h -64 v -576 h 64 v -192 h -192 v 64 h -192 v -64 h -192 v 64 h -192 v -64 z m 192,128 h 192 v 64 h 192 v -64 h 192 v 64 h 64 v 576 h -64 v 64 h -64 v -64 h -192 v 64 h -64 v -64 h -192 v 64 h -64 v -64 h -64 v -576 h 64 z m 192,256 v 192 h 192 v -192 z"
      id="path2078"
      inkscape:connector-curvature="0" />
+  <path
+     id="rect1289"
+     style="color:#000000;overflow:visible;opacity:1;fill:#000000;fill-opacity:1;stroke-width:2.00001;stroke-linecap:round;stroke-linejoin:bevel;stroke-dashoffset:240;paint-order:markers fill stroke;stop-color:#000000"
+     d="m -1824,672 v 224 h 224 V 672 Z m 256,0 v 224 h 224 V 672 Z m 256,0 v 224 h 224 V 672 Z m 256,0 v 224 h 224 V 672 Z m -480,32 h 160 v 160 h -160 z m 256,0 h 160 v 160 h -160 z m 256,0 h 160 v 160 h -160 z m -800,224 v 224 h 224 V 928 Z m 256,0 v 224 h 224 V 928 Z m 256,0 v 224 h 224 V 928 Z m 256,0 v 224 h 224 V 928 Z m -736,32 h 160 v 160 h -160 z m 512,0 h 160 v 160 h -160 z m 256,0 h 160 v 160 h -160 z m -800,224 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m -736,32 h 160 v 160 h -160 z m 256,0 h 160 v 160 h -160 z m 512,0 h 160 v 160 h -160 z m -800,224 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m -736,32 h 160 v 160 h -160 z m 256,0 h 160 v 160 h -160 z m 256,0 h 160 v 160 h -160 z"
+     sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+  <path
+     id="path1366"
+     style="color:#000000;overflow:visible;opacity:1;fill:#000000;fill-opacity:1;stroke-width:2.00001;stroke-linecap:round;stroke-linejoin:bevel;stroke-dashoffset:240;paint-order:markers fill stroke;stop-color:#000000"
+     d="m -1824,1728 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m -768,256 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m -768,256 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m -768,256 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z"
+     sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+  <path
+     id="path1368"
+     style="color:#000000;overflow:visible;opacity:1;fill:#000000;fill-opacity:1;stroke-width:2.00001;stroke-linecap:round;stroke-linejoin:bevel;stroke-dashoffset:240;paint-order:markers fill stroke;stop-color:#000000"
+     d="m -1824,2848 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m -736,32 h 160 v 160 h -160 z m 256,0 h 160 v 160 h -160 z m 256,0 h 160 v 160 h -160 z m 256,0 h 160 v 160 h -160 z m -800,224 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m -736,32 h 160 v 160 h -160 z m 256,0 h 160 v 160 h -160 z m 256,0 h 160 v 160 h -160 z m 256,0 h 160 v 160 h -160 z m -800,224 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m -736,32 h 160 v 160 h -160 z m 256,0 h 160 v 160 h -160 z m 256,0 h 160 v 160 h -160 z m 256,0 h 160 v 160 h -160 z m -800,224 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m -736,32 h 160 v 160 h -160 z m 256,0 h 160 v 160 h -160 z m 256,0 h 160 v 160 h -160 z m 256,0 h 160 v 160 h -160 z" />
+  <path
+     id="path1370"
+     style="color:#000000;overflow:visible;opacity:1;fill:#000000;fill-opacity:1;stroke-width:2.00001;stroke-linecap:round;stroke-linejoin:bevel;stroke-dashoffset:240;paint-order:markers fill stroke;stop-color:#000000"
+     d="m -1824,3968 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m -736,32 h 160 v 160 h -160 z m 512,0 h 160 v 160 h -160 z m -544,224 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m -736,32 h 160 v 160 h -160 z m 768,0 h 160 v 160 h -160 z m -800,224 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m -480,32 h 160 v 160 h -160 z m 256,0 h 160 v 160 h -160 z m -544,224 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m 256,0 v 224 h 224 v -224 z m -736,32 h 160 v 160 h -160 z m 256,0 h 160 v 160 h -160 z m 512,0 h 160 v 160 h -160 z"
+     sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
 </svg>
