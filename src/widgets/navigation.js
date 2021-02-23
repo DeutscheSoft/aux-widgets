@@ -199,6 +199,11 @@ export const Navigation = defineClass({
         this._scroll_animation.start();
       }
     },
+    set_select: function (val) {
+      console.log(val)
+      this.prev.set("disabled", val <= 0);
+      this.next.set("disabled", val == this.buttons.getButtons().length - 1);
+    },
   },
   _getButtonScrollPosition: function () {
     const O = this.options;
