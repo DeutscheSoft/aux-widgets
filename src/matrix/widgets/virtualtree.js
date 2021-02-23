@@ -51,7 +51,7 @@ function subscribeAll() {
 
   subs.add(
     virtualtreeview.subscribeScrollView((offset) => {
-      if (offset >= virtualtreeview.amount) {
+      if (Math.abs(offset) >= virtualtreeview.amount) {
         offset = -virtualtreeview.amount;
       }
 
