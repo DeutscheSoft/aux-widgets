@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
  * This file is part of AUX.
@@ -60,7 +60,7 @@ def parseGlyphs (font):
 
 def prepareTemplate (fname, ftype, family, title, name, path, prefix, css, html, ttf):
   if not os.path.isfile(fname):
-    print "%s template %s is missing." % (ftype, fname)
+    print("%s template %s is missing." % (ftype, fname))
     sys.exit(1)
   
   with open(fname) as file:
@@ -87,7 +87,7 @@ def generateCSS (fname, font, glyphs, family, title, name, path, prefix, css, ht
     for i in range(0, len(g["icons"])):
       css += ".%sicon.%s::before %s{ font-family: '%s'; content: '%s'; }\n" % (prefix, g["icons"][i], g["fills"][i], family, g["char"])
   
-  with open(os.path.join(path, name + ".css"), "w") as f:
+  with open(os.path.join(path, name + ".css"), "wb") as f:
     f.write(css.encode('utf-8')) 
 
 
@@ -112,7 +112,7 @@ def generateHTML (fname, font, glyphs, family, title, name, path, prefix, css, h
   
   html = html.replace("[glyphs]", table);
   
-  with open(os.path.join(path, name + ".html"), "w") as f: 
+  with open(os.path.join(path, name + ".html"), "wb") as f: 
     f.write(html.encode('utf-8')) 
 
 
@@ -132,7 +132,7 @@ def main (args):
   try:
     source = minidom.parse(svg)
   except:
-    print "Unable to parse file %s" % svg
+    print("Unable to parse file %s" % svg)
     
   css = os.path.join(path, name + ".css")
   html = os.path.join(path, name + ".html")
@@ -141,7 +141,7 @@ def main (args):
   try:
     fonts = source.getElementsByTagName("font")
   except:
-    print "No fonts found in %s" % svg
+    print("No fonts found in %s" % svg)
     sys.exit(1)
   
   if args.prefix:
@@ -163,15 +163,15 @@ def main (args):
     if args.ttf:
       exe = subprocess.call("type fontforge", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) == 0
       if not exe:
-        print "FontForge not installed"
+        print("FontForge not installed")
         sys.exit(1)
       
       #cmd = "fontforge -c 'Open(\"%s\");Generate(\"%s\");Quit(0);'" % (svg, ttf)
       cmd = "fontforge  -lang=ff -c 'Open(\"%s\");Generate(\"%s\");Quit(0);'" % (svg, ttf)
-      print cmd
+      print("%s" % cmd)
       s = os.system(cmd)
       if s:
-        print "Converting %s to %s failed" % (svg, ttf)
+        print("Converting %s to %s failed" % (svg, ttf))
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(add_help=False)
