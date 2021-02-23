@@ -200,7 +200,6 @@ export const Navigation = defineClass({
       }
     },
     set_select: function (val) {
-      console.log(val)
       this.prev.set("disabled", val <= 0);
       this.next.set("disabled", val == this.buttons.getButtons().length - 1);
     },
