@@ -45,6 +45,17 @@ function valueClicked() {
    */
   this.emit('valueclicked', O.value);
 }
+function valueKeydown (e) {
+  var O = this.options;
+  switch (e.keyCode) {
+    case 9:
+      // TAB
+      if (!O.tab_to_set) return;
+      this.userset('value', O.set ? O.set(this._input.value) : this._input.value);
+      valueDone.call(this, true);
+      this.emit('valueset', O.value);
+  }
+}
 function valueTyping(e) {
   var O = this.options;
   if (O.set === false) return;
@@ -98,11 +109,12 @@ function valueInput() {
   if (O.editmode == 'immediate')
     this.userset('value', O.set ? O.set(this._input.value) : this._input.value);
 }
-function valueDone() {
+function valueDone(noblur) {
   if (!this.__editing) return;
   this.__editing = false;
   removeClass(this.element, 'aux-active');
-  this._input.blur();
+  if (!noblur)
+    this._input.blur();
   /**
    * Is fired when editing of the value ends.
    *
@@ -150,6 +162,7 @@ function submitCallback(e) {
  * @property {String} [options.type="text"] - Sets the type attribute. Type can be either `text` or `password`.
  * @property {String} [options.editmode="onenter"] - Sets the event to trigger the userset event. Can be one out of `onenter` or `immediate`.
  * @property {String|Boolean} [options.autocomplete=false} - Set a unique identifier to enable browsers internal auto completion.
+ * @property {Boolean} [options.tab_to_set=false} - Set the value if user hits TAB.
  */
 export const Value = defineClass({
   Extends: Widget,
@@ -165,6 +178,7 @@ export const Value = defineClass({
     type: 'string',
     editmode: 'string',
     autocomplete: 'string|boolean',
+    tab_to_set: 'boolean',
   }),
   options: {
     value: 0,
@@ -193,6 +207,7 @@ export const Value = defineClass({
         value: '',
       },
     },
+    tab_to_set: false,
   },
   initialize: function (options) {
     if (!options.element) options.element = element('div');
@@ -210,6 +225,7 @@ export const Value = defineClass({
     this.element.appendChild(this._input);
 
     this._value_typing = valueTyping.bind(this);
+    this._value_keydown = valueKeydown.bind(this);
     this._value_done = valueDone.bind(this);
     this._value_input = valueInput.bind(this);
     this._value_clicked = valueClicked.bind(this);
@@ -227,6 +243,7 @@ export const Value = defineClass({
     addClass(this._input, 'aux-input');
 
     this._input.addEventListener('keyup', this._value_typing);
+    this._input.addEventListener('keydown', this._value_keydown);
     this._input.addEventListener('input', this._value_input);
     this._input.addEventListener('blur', this._value_done);
     this._input.addEventListener('focus', this._value_focus);
@@ -289,6 +306,7 @@ export const Value = defineClass({
   },
   destroy: function () {
     this._input.removeEventListener('keyup', this._value_typing);
+    this._input.removeEventListener('keydown', this._value_keydown);
     this._input.removeEventListener('blur', this._value_done);
     this._input.removeEventListener('input', this._value_input);
     this._input.removeEventListener('focus', this._value_focus);
