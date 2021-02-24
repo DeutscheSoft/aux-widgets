@@ -183,3 +183,5 @@
 .aux-icon.matrixremove::before                                        { font-family: 'AUXIcons'; content: '􀂑'; }
 .aux-icon.matrixtoggle::before                                        { font-family: 'AUXIcons'; content: '􀂒'; }
 .aux-icon.matrixall::before                                           { font-family: 'AUXIcons'; content: '􀂓'; }
+.aux-icon.edit::before                                                { font-family: 'AUXIcons'; content: '􀂔'; }
+.aux-icon.pencil::before                                              { font-family: 'AUXIcons'; content: '􀂔'; }
