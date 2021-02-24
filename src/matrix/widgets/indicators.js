@@ -19,7 +19,7 @@
 
 import { defineClass, defineChildElement } from './../../widget_helpers.js';
 import { scrollbarSize, addClass } from './../../utils/dom.js';
-import { sprintf } from '../../utils/sprintf.js';
+import { FORMAT } from '../../utils/sprintf.js';
 import { Subscriptions } from '../../utils/subscriptions.js';
 import { Timer } from '../../utils/timers.js';
 import { subscribeDOMEvent } from '../../utils/events.js';
@@ -35,6 +35,8 @@ function onIndicatorClicked() {
 
   indicators.emit('indicatorClicked', this.source, this.sink);
 }
+
+const formatIndicatorTransform = FORMAT('translateY(%.2fpx) translateX(%.2fpx)');
 
 /**
  * Indicators is an area inside {@link Matrix} containing a matrix of
@@ -141,8 +143,7 @@ export const Indicators = defineClass({
         );
 
         const setIndicatorPosition = (indicator, index1, index2) => {
-          indicator.element.style.transform = sprintf(
-            'translateY(%.2fpx) translateX(%.2fpx)',
+          indicator.element.style.transform = formatIndicatorTransform(
             index1 * O.size,
             index2 * O.size
           );
