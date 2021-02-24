@@ -25,7 +25,6 @@ import {
   removeClass,
   toggleClass,
 } from '../../utils/dom.js';
-import { Timer } from '../../utils/timers.js';
 import { Subscriptions } from '../../utils/subscriptions.js';
 
 import { Container } from '../../widgets/container.js';
@@ -124,13 +123,6 @@ export const VirtualTreeEntry = defineClass({
   initialize: function (options) {
     VirtualTreeEntryBase.prototype.initialize.call(this, options);
     this.data_subscriptions = new Subscriptions();
-    this.data_subscription_timer = new Timer(() => {
-      this.subscribeData();
-    });
-  },
-  destroy: function () {
-    VirtualTreeEntryBase.prototype.destroy.call(this);
-    this.data_subscription_timer.stop();
   },
   draw: function (options, element) {
     VirtualTreeEntryBase.prototype.draw.call(this, options, element);
@@ -195,8 +187,7 @@ export const VirtualTreeEntry = defineClass({
       this.update('label', element.label);
       this.update('icon', element.icon);
 
-      // start listening to changes after 500ms
-      this.data_subscription_timer.restart(500);
+      this.subscribeData();
     }
   },
   redraw: function () {
