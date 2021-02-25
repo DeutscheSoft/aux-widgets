@@ -429,14 +429,15 @@ export const Widget = defineClass({
   },
 
   recalculate: function () {
-    const q = this._recalculate_queue;
+    const recalculate_queue = this._recalculate_queue;
+    const q = recalculate_queue.slice(0);
     const O = this.options;
+
+    recalculate_queue.length = 0;
 
     for (let i = 0; i < q.length; i++) {
       q[i].call(this, O);
     }
-
-    q.length = 0;
   },
 
   triggerRecalculate: function (cb) {
