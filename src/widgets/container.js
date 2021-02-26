@@ -214,7 +214,7 @@ export const Container = defineClass({
 
     H[i] = true;
 
-    if (this.isDrawn()) {
+    if (this.isDrawn() && child.isDrawn()) {
       child.hide();
     } else {
       child.forceHide();
