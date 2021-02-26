@@ -25,8 +25,11 @@ import { Indicators } from './indicators.js';
 import { Indicator } from './indicator.js';
 import { Patchbay } from './patchbay.js';
 import { VirtualTree } from './virtualtree.js';
+import { ScrollDetector } from './scroll_detector.js';
 
 import { ConnectionDataView } from '../models.js';
+
+const scrollDetectorTimeout = 200;
 
 function setVirtualtreeviews() {
   var O = this.options;
@@ -90,6 +93,9 @@ export const Matrix = defineClass({
   initialize: function (options) {
     Patchbay.prototype.initialize.call(this, options);
     this.connectionview = null;
+    this._scroll_left = new ScrollDetector(scrollDetectorTimeout);
+    this._scroll_top = new ScrollDetector(scrollDetectorTimeout);
+    this._scroll_matrix = new ScrollDetector(scrollDetectorTimeout);
   },
   draw: function (options, element) {
     const O = this.options;
@@ -97,14 +103,42 @@ export const Matrix = defineClass({
     Patchbay.prototype.draw.call(this, options, element);
 
     this.virtualtree_left.on('scrollTopChanged', (position) => {
-      this.indicators.scrollTopTo(position);
+      let called = false;
+      this._scroll_left.maybeScrollEvent(() => {
+        this._scroll_matrix.maybeScrollTo(() => {
+          called = true;
+          this.indicators.scrollTopTo(position);
+        });
+      });
+      if (!called)
+        return false;
     });
     this.virtualtree_top.on('scrollTopChanged', (position) => {
-      this.indicators.scrollLeftTo(position);
+      let called = false;
+      this._scroll_top.maybeScrollEvent(() => {
+        this._scroll_matrix.maybeScrollTo(() => {
+          called = true;
+          this.indicators.scrollLeftTo(position);
+        });
+      });
+      if (!called)
+        return false;
     });
     this.indicators.on('scrollChanged', (yposition, xposition) => {
-      this.virtualtree_left.scrollTo(yposition);
-      this.virtualtree_top.scrollTo(xposition);
+      this._scroll_matrix.maybeScrollEvent(() => {
+        this._scroll_left.maybeScrollTo(() => {
+          this.virtualtree_left.scrollTo(yposition);
+          Promise.resolve().then(() => {
+            this.virtualtree_left._scrollDataTo(yposition);
+          });
+        });
+        this._scroll_top.maybeScrollTo(() => {
+          this.virtualtree_top.scrollTo(xposition);
+          Promise.resolve().then(() => {
+            this.virtualtree_top._scrollDataTo(xposition);
+          });
+        });
+      });
     });
     this.indicators.on('indicatorClicked', (source, sink) => {
       this.emit('toggleConnection', source, sink);
@@ -132,6 +166,12 @@ export const Matrix = defineClass({
       innerWidth(this.element) - outerWidth(this.virtualtree_left.element)
     );
     Patchbay.prototype.resize.call(this);
+  },
+  destroy: function () {
+    this._scroll_left.destroy();
+    this._scroll_top.destroy();
+    this._scroll_matrix.destroy();
+    Patchbay.prototype.destroy.call(this);
   },
 });
 /**

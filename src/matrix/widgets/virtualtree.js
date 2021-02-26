@@ -24,7 +24,7 @@ import { subscribeDOMEvent } from '../../utils/events.js';
 
 import { Container } from './../../widgets/container.js';
 import { VirtualTreeEntry } from './virtualtreeentry.js';
-import { Timer } from '../../utils/timers.js';
+import { ScrollDetector } from './scroll_detector.js';
 import { resizeArrayMod } from '../models.js';
 
 scrollbarSize();
@@ -47,35 +47,6 @@ function subscribeAll() {
   };
 
   const subs = this.virtualtreeview_subs;
-
-  subs.add(
-    virtualtreeview.subscribeScrollView((offset) => {
-      if (Math.abs(offset) >= virtualtreeview.amount) {
-        offset = -virtualtreeview.amount;
-      }
-
-      const entries = this.entries;
-
-      if (offset > 0) {
-        // scrolling down
-        const tmp =
-          virtualtreeview.startIndex - offset + virtualtreeview.amount;
-        for (let i = 0; i < offset; i++) {
-          const index = tmp + i;
-          const entry = entries[index % entries.length];
-          setEntryPosition(entry, index);
-        }
-      } else {
-        // scrolling up
-        offset = -offset;
-        for (let i = 0; i < offset; i++) {
-          const index = virtualtreeview.startIndex + i;
-          const entry = entries[index % entries.length];
-          setEntryPosition(entry, index);
-        }
-      }
-    })
-  );
 
   subs.add(
     virtualtreeview.subscribeSize((size) => {
@@ -117,6 +88,7 @@ function subscribeAll() {
       const entry = this.entries[index % this.entries.length];
 
       this.updateEntry(entry, virtualtreeview, index, element, treePosition);
+      setEntryPosition(entry, index);
     })
   );
 }
@@ -169,30 +141,23 @@ export const VirtualTree = defineClass({
       this.virtualtreeview_subs.unsubscribe();
     },
     scrollTopChanged: function (position) {
-      const O = this.options;
-      const startIndex = Math.floor(position / O.size);
-
-      this.update('_startIndex', startIndex);
+      this._scrollDataTo(position);
     },
   },
   initialize: function (options) {
     Container.prototype.initialize.call(this, options);
     this.virtualtreeview_subs = new Subscriptions();
     this.entries = [];
-    this._scroll_event_suppressed = false;
-    this._scroll_timer = new Timer(() => {
-      if (!this._scroll_event_suppressed) return;
+  },
+  _scrollDataTo: function(position) {
+    const O = this.options;
+    const startIndex = Math.floor(position / O.size);
+    const dataview = O.virtualtreeview;
 
-      this._scroll_event_suppressed = false;
-      /**
-       * Is fired on scrolling the list.
-       *
-       * @event VirtualTree#scrollTopChanged
-       *
-       * @param {Integer} scroll - The amount of pixels scrolled from top.
-       */
-      this.emit('scrollTopChanged', this._scrollbar.scrollTop);
-    });
+    if (startIndex !== O._startIndex) {
+      dataview.scrollStartIndexTo(startIndex);
+      this.update('_startIndex', startIndex);
+    }
   },
   /**
    * Create and return a new entry based on `options.entry_class`.
@@ -300,21 +265,18 @@ export const VirtualTree = defineClass({
     element.classList.add('aux-virtualtree');
     this.addSubscriptions(
       subscribeDOMEvent(this._scrollbar, 'scroll', (ev) => {
-        if (this._scroll_timer.active) {
-          this._scroll_event_suppressed = true;
-        } else {
-          this.emit('scrollTopChanged', this._scrollbar.scrollTop);
-        }
+        /**
+         * Is fired on scrolling the list.
+         *
+         * @event VirtualTree#scrollTopChanged
+         *
+         * @param {Integer} scroll - The amount of pixels scrolled from top.
+         */
+        this.emit('scrollTopChanged', this._scrollbar.scrollTop);
       })
     );
     if (options.virtualtreeview)
       this.set('virtualtreeview', options.virtualtreeview);
-
-    const scrollTarget = document.createElement('div');
-
-    scrollTarget
-
-    this._scrollTarget = scrollTarget;
 
     this.triggerResize();
   },
@@ -348,9 +310,7 @@ export const VirtualTree = defineClass({
       if (virtualtreeview) {
         subscribeAll.call(this);
         virtualtreeview.setAmount(O._amount);
-        virtualtreeview.scrollStartIndex(
-          O._startIndex - virtualtreeview.startIndex
-        );
+        virtualtreeview.scrollStartIndexTo(O._startIndex);
       }
     }
 
@@ -359,18 +319,6 @@ export const VirtualTree = defineClass({
 
       if (O.virtualtreeview) {
         O.virtualtreeview.setAmount(O._amount);
-      }
-    }
-
-    if (I._startIndex) {
-      I._startIndex = false;
-
-      const virtualtreeview = O.virtualtreeview;
-
-      if (virtualtreeview) {
-        virtualtreeview.scrollStartIndex(
-          O._startIndex - virtualtreeview.startIndex
-        );
       }
     }
 

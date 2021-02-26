@@ -21,7 +21,6 @@ import { defineClass, defineChildElement } from './../../widget_helpers.js';
 import { scrollbarSize, addClass } from './../../utils/dom.js';
 import { FORMAT } from '../../utils/sprintf.js';
 import { Subscriptions } from '../../utils/subscriptions.js';
-import { Timer } from '../../utils/timers.js';
 import { subscribeDOMEvent } from '../../utils/events.js';
 
 import { Container } from './../../widgets/container.js';
@@ -42,15 +41,11 @@ const formatIndicatorTransform = FORMAT('translateY(%.2fpx) translateX(%.2fpx)')
  * Indicators is an area inside {@link Matrix} containing a matrix of
  *   {@link Indicator}s displaying and managing connections.
  *
- * @param {Object}[options={ }] - An object containing initioal options.
+ * @param {Object}[options={ }] - An object containing initial options.
  *
  * @property {Object} [options.indicator_class=Indicator] - the class to
  *   derive new {@link Indicator}s from. Has to be a subclass of
  *   {@link Indicator}.
- * @property {Integer} [options.scroll_top=0] - The scroll position from
- *   top.
- * @property {Integer} [options.scroll_left=0] - The scroll position
- *   from the left.
  * @property {ConnectionView} options.connectionview - The
  *   {@link ConnectionView} data model.
  *
@@ -63,14 +58,10 @@ export const Indicators = defineClass({
   Extends: Container,
   _options: Object.assign(Object.create(Container.prototype._options), {
     indicator_class: 'object',
-    scroll_top: 'number',
-    scroll_left: 'number',
     connectionview: 'object',
   }),
   options: {
     indicator_class: Indicator,
-    scroll_top: 0,
-    scroll_left: 0,
   },
   static_events: {
     set_connectionview: function (connectionview) {
@@ -80,27 +71,10 @@ export const Indicators = defineClass({
   initialize: function (options) {
     Container.prototype.initialize.call(this, options);
     this.connectionview_subs = new Subscriptions();
-    this._scroll_event_suppressed = false;
-    this._scroll_timer = new Timer(() => {
-      if (!this._scroll_event_suppressed) return;
-
-      this._scroll_event_suppressed = false;
-      const element = this.element;
-      /**
-       * Is fired on scrolling the area.
-       *
-       * @event Indicators#scrollChanged
-       *
-       * @param {Integer} scroll_top - The scroll position from top.
-       * @param {Integer} scroll_left - The scroll position from left.
-       */
-      this.emit('scrollChanged', element.scrollTop, element.scrollLeft);
-    });
     this.entries = [];
   },
   destroy: function () {
     Container.prototype.destroy.call(this);
-    this._scroll_timer.stop();
     this.connectionview_subs.unsubscribe();
   },
   createIndicator: function () {
@@ -111,14 +85,18 @@ export const Indicators = defineClass({
     addClass(element, 'aux-indicators');
     this.addSubscriptions(
       subscribeDOMEvent(this.element, 'scroll', (ev) => {
-        if (this._scroll_timer.active) {
-          this._scroll_event_suppressed = true;
-        } else {
-          // jshint -W123
-          const element = this.element;
-          // jshint +W123
-          this.emit('scrollChanged', element.scrollTop, element.scrollLeft);
-        }
+        /**
+         * Is fired on scrolling the area.
+         *
+         * @event Indicators#scrollChanged
+         *
+         * @param {Integer} scroll_top - The scroll position from top.
+         * @param {Integer} scroll_left - The scroll position from left.
+         */
+        // jshint -W123
+        const element = this.element;
+        // jshint +W123
+        this.emit('scrollChanged', element.scrollTop, element.scrollLeft);
       })
     );
   },
@@ -207,24 +185,6 @@ export const Indicators = defineClass({
         );
 
         sub.add(
-          connectionview.subscribeScrollView((offset_rows, offset_columns) => {
-            const rows = connectionview.amount1;
-            const columns = connectionview.amount2;
-            const startIndex1 = connectionview.startIndex1;
-            const startIndex2 = connectionview.startIndex2;
-
-            // TODO: optimize this
-            for (let i = 0; i < rows; i++) {
-              for (let j = 0; j < columns; j++) {
-                const index1 = startIndex1 + i;
-                const index2 = startIndex2 + j;
-                const indicator = this.entries[index1 % rows][index2 % columns];
-                setIndicatorPosition(indicator, index1, index2);
-              }
-            }
-          })
-        );
-        sub.add(
           connectionview.subscribeElements(
             (index1, index2, connection, source, sink) => {
               const entries = this.entries;
@@ -232,19 +192,11 @@ export const Indicators = defineClass({
               const indicator = row[index2 % row.length];
 
               indicator.updateData(index1, index2, connection, source, sink);
+              setIndicatorPosition(indicator, index1, index2);
             }
           )
         );
       }
-    }
-
-    if (I.scroll_left) {
-      I.scroll_left = false;
-      this.element.scrollLeft = O.scroll_left;
-    }
-    if (I.scroll_top) {
-      I.scroll_top = false;
-      this.element.scrollTop = O.scroll_top;
     }
   },
   /**
@@ -255,8 +207,7 @@ export const Indicators = defineClass({
    * @method Indicators#scrollTopTo
    */
   scrollTopTo: function (position) {
-    this.update('scroll_top', position);
-    this._scroll_timer.restart(100);
+    this.scrollTo({ top: position });
   },
   /**
    * Scroll the indicators area to this horizontal (left) position.
@@ -266,8 +217,10 @@ export const Indicators = defineClass({
    * @method Indicators#scrollLeftTo
    */
   scrollLeftTo: function (position) {
-    this.update('scroll_left', position);
-    this._scroll_timer.restart(100);
+    this.scrollTo({ left: position });
+  },
+  scrollTo: function (options) {
+    this.element.scrollTo(options);
   },
 });
 

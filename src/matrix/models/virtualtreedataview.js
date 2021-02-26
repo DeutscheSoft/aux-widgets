@@ -554,6 +554,10 @@ export class VirtualTreeDataView extends Events {
     }
   }
 
+  scrollStartIndexTo(index) {
+    this.scrollStartIndex(index - this.startIndex);
+  }
+
   collapseGroup(group, is_collapsed) {
     if (typeof is_collapsed !== 'boolean')
       throw new TypeError('Expected boolean.');
