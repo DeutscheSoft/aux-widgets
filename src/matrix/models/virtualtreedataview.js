@@ -146,6 +146,10 @@ class SuperGroup {
       }
     });
   }
+
+  sort(sorter) {
+    this.children.sort(sorter);
+  }
 }
 
 function getChild(node) {
@@ -299,19 +303,25 @@ export class VirtualTreeDataView extends Events {
 
     const sub = group.forEachAsync((node) => {
       // jshint -W123
-      return this._filter(node, (node) => {
+      return this._filter(node, (child) => {
         let sub = initSubscriptions();
         // jshint +W123
 
-        node = super_group.createChildNode(node);
+        const node = super_group.createChildNode(child);
 
         list.push(node);
-        // TODO: needs to be dynamic
         list.sort(this._sorter);
 
         sub = addSubscription(
           sub,
           this._childAdded(super_group, node, list.indexOf(node))
+        );
+
+        sub = addSubscription(
+          sub,
+          this._subscribeSortDependencies(child, () => {
+            this.triggerSort();
+          })
         );
 
         sub = addSubscription(sub, () => {
@@ -360,6 +370,7 @@ export class VirtualTreeDataView extends Events {
     const startIndex = this.startIndex;
     const endIndex = startIndex + this.amount;
 
+    if (start === void 0) start = startIndex;
     if (end === void 0) end = endIndex;
 
     if (end <= startIndex) return;
@@ -397,7 +408,50 @@ export class VirtualTreeDataView extends Events {
     });
   }
 
+  _resort() {
+    this.groups.forEach((super_group, group) => {
+      super_group.sort(this._sorter);
+    });
+    this.root.updateTreePosition();
+
+    const list = this.list;
+
+    let index = 0;
+    const fillList = (super_group) => {
+      super_group.forEach((child) => {
+        list[index++] = child;
+
+        if (!(child instanceof GroupData))
+          return;
+
+        child.index = index - 1;
+
+        if (this.isCollapsed(child))
+          return;
+
+        fillList(this.getSuperGroup(child));
+      });
+    };
+    fillList(this.root);
+
+    this._notifyRegion();
+    this.emit('sorted');
+  }
+
   // PUBLIC APIs
+
+  /**
+   * Will sort the list again according to the sort function.
+   */
+  triggerSort() {
+    if (this._resortTriggered)
+      return;
+    this._resortTriggered = true;
+    Promise.resolve().then(() => {
+      this._resortTriggered = false;
+      this._resort();
+    });
+  }
 
   /**
    * Return the corresponding matrix object.
@@ -416,25 +470,38 @@ export class VirtualTreeDataView extends Events {
   /**
    * Constructor.
    *
-   * @param {GroupData} group - The group this view represents. Note that only
-   *    the children of this group but not this group itself will be part of
-   *    the view.
-   * @param {number} amount - The amount of elements to view.
-   * @param {Function} filterFunction - The function used to filter the tree.
-   * @param {Function} sortFunction - The function used to sort nodes within
-   *    each level of the tree.
+   * @param {GroupData} group
+   *    The group this view represents. Note that only the children of this
+   *    group but not this group itself will be part of the view.
+   * @param {number} amount
+   *    The amount of elements to view.
+   * @param {Function} filterFunction
+   *    The function used to filter the tree.
+   * @param {Function} sortFunction
+   *    The function used to sort nodes within each level of the tree.
+   * @param {Function} subscribeSortDependencies
+   *    This function, if specified will be called to subscribe to changes
+   *    which influence the sort order of a node.
    */
-  constructor(group, amount, filterFunction, sortFunction) {
+  constructor(group, amount, filterFunction, sortFunction, subscribeSortDependencies) {
     super();
+
+    typecheckFunction(sortFunction);
+
+    if (subscribeSortDependencies)
+      typecheckFunction(subscribeSortDependencies);
+
     this.root = new SuperGroup(group, null);
     this.startIndex = 0;
     this.amount = amount;
     this.filterFunction = filterFunction || allowAll;
-    this.sortFunction = sortFunction;
+    this._sortFunction = sortFunction;
+    this._subscribeSortDependencies = subscribeSortDependencies || function (node, cb) { return null; };
     this.subscribers = initSubscribers();
+    this._resortTriggered = false;
 
     this._sorter = (node1, node2) => {
-      return this.sortFunction(getChild(node1), getChild(node2));
+      return this._sortFunction(getChild(node1), getChild(node2));
     };
 
     // global flat list
@@ -446,11 +513,21 @@ export class VirtualTreeDataView extends Events {
     // list of subscribers for an element being collapsed
     this.collapsedSubscribers = new SubscriberMap();
 
-    // index in the flat list where each group
+    // supergroup for each group
     this.groups = new Map([[group, this.root]]);
 
     // subscribers
     this.subscriptions = this._subscribe(this.root);
+  }
+
+  set sortFunction(fun) {
+    typecheckFunction(fun);
+    this._sortFunction = fun;
+    this.triggerSort();
+  }
+
+  get sortFunction() {
+    return this._sortFunction;
   }
 
   get size() {
@@ -485,7 +562,7 @@ export class VirtualTreeDataView extends Events {
 
   setStartIndex(index) {
     this.startIndex = index;
-    this._notifyRegion(index, index + this.amount);
+    this._notifyRegion();
   }
 
   indexOf(child) {
@@ -698,6 +775,10 @@ export class VirtualTreeDataView extends Events {
     cb(this.collapsed.has(group));
 
     return this.collapsedSubscribers.subscribe(group, cb);
+  }
+
+  subscribeSorted(cb) {
+    return this.subscribe('sorted', cb);
   }
 
   at(index) {
