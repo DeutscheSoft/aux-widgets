@@ -37,61 +37,6 @@ function collapse(state) {
   virtualtreeview.collapseGroup(element, !virtualtreeview.isCollapsed(element));
 }
 
-function subscribeAll() {
-  const O = this.options;
-  const virtualtreeview = O.virtualtreeview;
-
-  const setEntryPosition = (entry, index) => {
-    const pos = this.calculateEntryPosition(index);
-    entry.element.style.transform = 'translateY(' + pos.toFixed(1) + 'px)';
-  };
-
-  const subs = this.virtualtreeview_subs;
-
-  subs.add(
-    virtualtreeview.subscribeSize((size) => {
-      this.update('_scroller_size', size);
-    })
-  );
-  subs.add(
-    virtualtreeview.subscribeAmount((amount) => {
-      const create = (index) => {
-        const entry = this.createEntry();
-        this._scroller.appendChild(entry.element);
-        setEntryPosition(entry, index);
-        entry.on('collapse', collapse);
-        this.addChild(entry);
-        return entry;
-      };
-
-      const remove = (entry) => {
-        entry.element.remove();
-        entry.off('collapse', collapse);
-        this.removeChild(entry);
-        entry.destroy();
-      };
-
-      resizeArrayMod(
-        this.entries,
-        amount,
-        virtualtreeview.startIndex,
-        create,
-        remove
-      );
-    })
-  );
-  subs.add(
-    virtualtreeview.subscribeElements((index, element, treePosition) => {
-      // jshint -W123
-      const virtualtreeview = this.options.virtualtreeview;
-      // jshint +W123
-      const entry = this.entries[index % this.entries.length];
-
-      this.updateEntry(entry, virtualtreeview, index, element, treePosition);
-      setEntryPosition(entry, index);
-    })
-  );
-}
 
 /**
  * VirtualTree is a scrollable list of {@link VirtualTreeEntry}s. It
@@ -297,6 +242,55 @@ export const VirtualTree = defineClass({
     }
     this._scrollbar.scrollTo(options);
   },
+  _subscribeToTreeView: function(subs, treeView) {
+    const O = this.options;
+
+    const setEntryPosition = (entry, index) => {
+      const pos = this.calculateEntryPosition(index);
+      entry.element.style.transform = 'translateY(' + pos.toFixed(1) + 'px)';
+    };
+
+    subs.add(
+      treeView.subscribeSize((size) => {
+        this.update('_scroller_size', size);
+      })
+    );
+    subs.add(
+      treeView.subscribeAmount((amount) => {
+        const create = (index) => {
+          const entry = this.createEntry();
+          this._scroller.appendChild(entry.element);
+          setEntryPosition(entry, index);
+          entry.on('collapse', collapse);
+          this.addChild(entry);
+          return entry;
+        };
+
+        const remove = (entry) => {
+          entry.element.remove();
+          entry.off('collapse', collapse);
+          this.removeChild(entry);
+          entry.destroy();
+        };
+
+        resizeArrayMod(
+          this.entries,
+          amount,
+          treeView.startIndex,
+          create,
+          remove
+        );
+      })
+    );
+    subs.add(
+      treeView.subscribeElements((index, element, treePosition) => {
+        const entry = this.entries[index % this.entries.length];
+
+        this.updateEntry(entry, treeView, index, element, treePosition);
+        setEntryPosition(entry, index);
+      })
+    );
+  },
   redraw: function () {
     const O = this.options;
     const I = this.invalid;
@@ -308,7 +302,8 @@ export const VirtualTree = defineClass({
       const virtualtreeview = O.virtualtreeview;
 
       if (virtualtreeview) {
-        subscribeAll.call(this);
+        const subs = this.virtualtreeview_subs;
+        this._subscribeToTreeView(subs, virtualtreeview);
         virtualtreeview.setAmount(O._amount);
         virtualtreeview.scrollStartIndexTo(O._startIndex);
       }
