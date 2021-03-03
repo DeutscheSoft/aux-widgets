@@ -307,7 +307,7 @@ export class VirtualTreeDataView extends Events {
         let sub = initSubscriptions();
         // jshint +W123
 
-        const node = super_group.createChildNode(child);
+        let node = super_group.createChildNode(child);
 
         list.push(node);
         list.sort(this._sorter);
