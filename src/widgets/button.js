@@ -143,21 +143,23 @@ function mousedown(e) {
 }
 
 /* TOUCH handling */
-function isCurrentTouch(ev) {
-  var id = this.__touch_id;
-  var i;
-  for (i = 0; i < ev.changedTouches.length; i++) {
-    if (ev.changedTouches[i].identifier === id) {
-      return true;
+function getCurrentTouch(id, event) {
+  for (let i = 0; i < event.changedTouches.length; i++) {
+    if (event.changedTouches[i].identifier === id) {
+      return event.changedTouches[i];
     }
   }
-
-  return false;
+}
+function isCurrentTouch(event) {
+  const current = getCurrentTouch(this.__touch_id, event);
+  return !!current;
 }
 
 function touchend(e) {
-  if (!isCurrentTouch.call(this, e)) return;
+  const current = getCurrentTouch(this.__touch_id, e);
+  if (!current) return;
   this.__touch_id = false;
+  
   if (e.cancelable) e.preventDefault();
 
   this.off('touchend', touchend);
@@ -169,12 +171,18 @@ function touchend(e) {
     e.changedTouches[0].clientY
   );
   if (this.element !== E) return;
-
+  
+  const rect = current.target.getBoundingClientRect();
+  if (rect.x != this.__init_target.x || rect.y != this.__init_target.y) {
+    return;
+  }
+  
   pressEnd.call(this, e);
 }
 function touchstart(e) {
   if (this.__touch_id !== false) return;
   this.__touch_id = e.targetTouches[0].identifier;
+  this.__init_target = e.targetTouches[0].target.getBoundingClientRect();
   if (e.cancelable) {
     // Why is this necessary?
     //e.preventDefault();
