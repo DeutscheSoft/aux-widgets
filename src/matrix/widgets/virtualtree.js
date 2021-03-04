@@ -21,6 +21,7 @@ import { defineClass, defineChildElement } from './../../widget_helpers.js';
 import { scrollbarSize } from './../../utils/dom.js';
 import { Subscriptions } from '../../utils/subscriptions.js';
 import { subscribeDOMEvent } from '../../utils/events.js';
+import { defineRecalculation } from '../../define_recalculation.js';
 
 import { Container } from './../../widgets/container.js';
 import { VirtualTreeEntry } from './virtualtreeentry.js';
@@ -44,8 +45,8 @@ function collapse(state) {
  * to reduce the amount of elements in DOM by only holding the entries
  * which fit inside the area. On scrolling the entries are re-sorted,
  * re-subscribed and micro-scrolled to give the impression of seamless
- * scrolling. It is used to display collapsable lists of hundrets or
- * even thousands of entries in a CPU-friendly way.
+ * scrolling. It is used to display collapsable lists of hundreds or
+ * even thousands of entries in an efficient way.
  *
  * @param {Object} [options={ }] - An object containing initial options.
  *
@@ -54,6 +55,10 @@ function collapse(state) {
  * @property {Object} [options.entry_class=VirtualTreeEntry] - The class
  *   to derive new entries from.
  * @property {Object} options.virtualtreeview - The {@link VirtualTreeDataView}.
+ * @property {number} [options.prerender_top=3]
+ *      The number of elements to prerender at the top.
+ * @property {number} [options.prerender_bottom=3]
+ *      The number of elements to prerender at the bottom.
  *
  * @extends Container
  *
@@ -66,9 +71,12 @@ export const VirtualTree = defineClass({
     _scroller_size: 'number',
     _scroll: 'number',
     _startIndex: 'number',
+    _view_height: 'number',
     size: 'number',
     entry_class: 'VirtualTreeEntry',
     virtualtreeview: 'object',
+    prerender_top: 'number',
+    prerender_bottom: 'number',
   }),
   options: {
     _amount: 0,
@@ -77,6 +85,8 @@ export const VirtualTree = defineClass({
     _startIndex: 0,
     size: 32,
     entry_class: VirtualTreeEntry,
+    prerender_top: 3,
+    prerender_bottom: 3,
   },
   static_events: {
     set_size: function (v) {
@@ -96,8 +106,13 @@ export const VirtualTree = defineClass({
   },
   _scrollDataTo: function(position) {
     const O = this.options;
-    const startIndex = Math.floor(position / O.size);
+    let startIndex = Math.floor(position / O.size);
     const dataview = O.virtualtreeview;
+
+    startIndex -= O.prerender_top;
+
+    if (startIndex < 0)
+      startIndex = 0;
 
     if (startIndex !== O._startIndex) {
       dataview.scrollStartIndexTo(startIndex);
@@ -354,7 +369,6 @@ export const VirtualTree = defineClass({
     const E = this.element;
     const O = this.options;
     this.update('_view_height', E.offsetHeight);
-    this.update('_amount', 1 + Math.ceil(E.offsetHeight / O.size));
 
     Container.prototype.resize.call(this);
   },
@@ -391,13 +405,23 @@ export const VirtualTree = defineClass({
    */
   getVisibleRange: function() {
     const virtualtreeview = this.get('virtualtreeview');
+    const prerender_top = this.get('prerender_top');
+    const prerender_bottom = this.get('prerender_bottom');
 
     if (!virtualtreeview)
       return [-1, -1];
 
     const startIndex = virtualtreeview.startIndex;
 
-    return [ startIndex, startIndex + virtualtreeview.amount ];
+    return [ startIndex + prerender_top, startIndex + virtualtreeview.amount - prerender_bottom ];
+  },
+  set: function (key, value) {
+    if (key === 'prerender_top' || key === 'prerender_bottom') {
+      if (typeof value !== 'number' || !Number.isInteger(value) || value < 0)
+        throw new TypeError('Expected non-negative integer.');
+    }
+
+    return Container.prototype.set.call(this, key, value);
   },
 });
 /**
@@ -416,4 +440,12 @@ defineChildElement(VirtualTree, 'scroller', {
   append: function () {
     this._scrollbar.appendChild(this._scroller);
   },
+});
+defineRecalculation(VirtualTree, [ '_view_height', 'prerender_top', 'prerender_bottom', 'size' ], function (O) {
+  const { _view_height, prerender_top, prerender_bottom, size } = O;
+
+  const _amount = Math.ceil(_view_height / size) + prerender_top + prerender_bottom;
+
+  if (!isNaN(_amount))
+    this.update('_amount', _amount);
 });
