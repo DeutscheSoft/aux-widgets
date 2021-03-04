@@ -280,6 +280,7 @@ export const Button = defineClass({
     if (!options.element) options.element = element('div');
     this.__time_stamp = 0;
     this.__touch_id = false;
+    this.__init_target = null;
     this.__delayed_to = -1;
     Widget.prototype.initialize.call(this, options);
   },
