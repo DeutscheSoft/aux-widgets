@@ -109,13 +109,8 @@ export const VirtualTree = defineClass({
     let startIndex = Math.floor(position / O.size);
     const dataview = O.virtualtreeview;
 
-    startIndex -= O.prerender_top;
-
-    if (startIndex < 0)
-      startIndex = 0;
-
     if (startIndex !== O._startIndex) {
-      dataview.scrollStartIndexTo(startIndex);
+      dataview.scrollStartIndexTo(Math.max(0, startIndex - O.prerender_top));
       this.update('_startIndex', startIndex);
     }
   },
@@ -320,8 +315,17 @@ export const VirtualTree = defineClass({
         const subs = this.virtualtreeview_subs;
         this._subscribeToTreeView(subs, virtualtreeview);
         virtualtreeview.setAmount(O._amount);
-        virtualtreeview.scrollStartIndexTo(O._startIndex);
+        virtualtreeview.scrollStartIndexTo(Math.max(0, O._startIndex - O.prerender_top));
       }
+    }
+
+    if (I._startIndex || I.prerender_top) {
+      I._startIndex = I.prerender_top = false;
+
+      const virtualtreeview = O.virtualtreeview;
+
+      if (virtualtreeview)
+        virtualtreeview.scrollStartIndexTo(Math.max(0, O._startIndex - O.prerender_top));
     }
 
     if (I._amount) {
@@ -405,15 +409,14 @@ export const VirtualTree = defineClass({
    */
   getVisibleRange: function() {
     const virtualtreeview = this.get('virtualtreeview');
-    const prerender_top = this.get('prerender_top');
     const prerender_bottom = this.get('prerender_bottom');
 
     if (!virtualtreeview)
       return [-1, -1];
 
-    const startIndex = virtualtreeview.startIndex;
+    const startIndex = this.get('_startIndex');
 
-    return [ startIndex + prerender_top, startIndex + virtualtreeview.amount - prerender_bottom ];
+    return [ startIndex, startIndex + virtualtreeview.amount - prerender_bottom ];
   },
   set: function (key, value) {
     if (key === 'prerender_top' || key === 'prerender_bottom') {
