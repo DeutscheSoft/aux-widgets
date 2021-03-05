@@ -465,9 +465,10 @@ export function componentFromWidget(Widget, base) {
     }
 
     disconnectedCallback() {
-      super.disconnectedCallback();
       this.auxWidget.setParent(void 0);
       this.auxWidget.disableDraw();
+
+      super.disconnectedCallback();
 
       const sub = this._findParentSubscription;
 
