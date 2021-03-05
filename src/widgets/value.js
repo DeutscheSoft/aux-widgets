@@ -51,7 +51,7 @@ function valueKeydown (e) {
     case 9:
       // TAB
       if (!O.tab_to_set) return;
-      this.userset('value', O.set ? O.set(this._input.value) : this._input.value);
+      this.userset('value', O.set ? O.set.call(this, this._input.value) : this._input.value);
       valueDone.call(this, true);
       this.emit('valueset', O.value);
   }
@@ -77,7 +77,7 @@ function valueTyping(e) {
       // ENTER
       this.userset(
         'value',
-        O.set ? O.set(this._input.value) : this._input.value
+        O.set ? O.set.call(this, this._input.value) : this._input.value
       );
       valueDone.call(this);
       /**
@@ -107,7 +107,7 @@ function valueInput() {
   if (O.set === false) return;
   if (!this.__editing) return;
   if (O.editmode == 'immediate')
-    this.userset('value', O.set ? O.set(this._input.value) : this._input.value);
+    this.userset('value', O.set ? O.set.call(this, this._input.value) : this._input.value);
 }
 function valueDone(noblur) {
   if (!this.__editing) return;
@@ -192,6 +192,9 @@ export const Value = defineClass({
     // false to disable editing. A function has to return
     // the value treated by the parent widget.
     set: function (val) {
+      val = parseFloat(val);
+      if (isNaN(val))
+        return this.get('value');
       return parseFloat(val || 0);
     },
     auto_select: true,
