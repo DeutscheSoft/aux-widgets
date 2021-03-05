@@ -32,40 +32,8 @@ function setInputMode() {
   let mode = 'circular';
   if (O.delay === false) mode = 'line-horizontal';
   if (O.input === false) mode = 'line-vertical';
-  this.input_handle.set('mode', mode);
+  this.set('input_handle.mode', mode);
   this.input.set('visible', O.show_input && O.delay !== false && O.input !== false);
-}
-
-function dragInput(key, value) {
-  const O = this.options;
-  if (key == 'x') {
-    this.userset('delay', value);
-    return false;
-  }
-  if (key == 'y') {
-    this.userset('gain', value);
-    return false;
-  }
-}
-
-function dragRLevel(key, value) {
-  const O = this.options;
-  if (key == 'x') {
-    this.userset('predelay', value - O.delay);
-    return false;
-  }
-  if (key == 'y') {
-    this.userset('rlevel', value - O.gain);
-    return false;
-  }
-}
-
-function dragRTime(key, value) {
-  const O = this.options;
-  if (key == 'x') {
-    this.userset('rtime', value - O.delay - O.predelay);
-    return false;
-  }
 }
 
 function drawInput() {
@@ -197,14 +165,6 @@ function drawReflections() {
     ]);
   }
 }
-
-function onInteractingChanged (value) {
-  if (value) {
-    this.startInteracting();
-  } else {
-    this.stopInteracting();
-  }
-};
 
 /**
  * Reverb is a {@link Chart} with various handles to set and display
@@ -422,17 +382,6 @@ export const Reverb = defineClass({
   draw: function (O, element) {
     addClass(element, 'aux-reverb');
     
-    const interacting = onInteractingChanged.bind(this);
-    
-    this.input_handle.addEventListener('userset', dragInput.bind(this));
-    this.input_handle.on('set_interacting', interacting);
-    
-    this.rlevel_handle.addEventListener('userset', dragRLevel.bind(this));
-    this.rlevel_handle.on('set_interacting', interacting);
-    
-    this.rtime_handle.addEventListener('userset', dragRTime.bind(this));
-    this.rtime_handle.on('set_interacting', interacting);
-    
     Chart.prototype.draw.call(this, O, element);
 
     initValues.call(this, 'delay', O);
@@ -483,6 +432,14 @@ export const Reverb = defineClass({
   },
 });
 
+function onInteractingChanged (value) {
+  if (value) {
+    this.parent.startInteracting();
+  } else {
+    this.parent.stopInteracting();
+  }
+};
+
 /**
 * @member {ChartHandle} Reverb#input_handle - The {@link ChartHandle}
 *   displaying/setting the initial delay and gain.
@@ -508,6 +465,20 @@ defineChildWidget(Reverb, "input_handle", {
     mode: 'circular',
     active: true,
   },
+  static_events: {
+    set_interacting: onInteractingChanged,
+    userset: function (key, value) {
+      const O = this.parent.options;
+      if (key == 'x') {
+        this.parent.userset('delay', value);
+        return false;
+      }
+      if (key == 'y') {
+        this.parent.userset('gain', value);
+        return false;
+      }
+    },
+  },
 });
 
 /**
@@ -519,7 +490,7 @@ defineChildWidget(Reverb, "rlevel_handle", {
   show: true,
   default_options: {
     format_label: function (label, x, y, z) {
-      const O = this.options;
+      const O = this.parent.options;
       let output = [];
       if (label) output.push(label);
       if (O.delay !== false) {
@@ -535,6 +506,20 @@ defineChildWidget(Reverb, "rlevel_handle", {
     mode: 'circular',
     active: true,
   },
+  static_events: {
+    set_interacting: onInteractingChanged,
+    userset: function (key, value) {
+      const O = this.parent.options;
+      if (key == 'x') {
+        this.parent.userset('predelay', value - O.delay);
+        return false;
+      }
+      if (key == 'y') {
+        this.parent.userset('rlevel', value - O.gain);
+        return false;
+      }
+    },
+  },
 });
 
 /**
@@ -546,7 +531,7 @@ defineChildWidget(Reverb, "rtime_handle", {
   show: true,
   default_options: {
     format_label: function (label, x, y, z) {
-      const O = this.options;
+      const O = this.parent.options;
       let output = [];
       if (label) output.push(label);
       if (O.delay !== false) {
@@ -560,20 +545,49 @@ defineChildWidget(Reverb, "rtime_handle", {
     mode: 'line-vertical',
     active: true,
   },
+  static_events: {
+    set_interacting: onInteractingChanged,
+    userset: function (key, value) {
+      const O = this.parent.options;
+      if (key == 'x') {
+        this.parent.userset('rtime', value - O.delay - O.predelay);
+        return false;
+      }
+    },
+  },
 });
 
+function clip(min, max, value) {
+  if (!(value >= min))
+    return min;
 
-defineRecalculation(Reverb, ['delay', 'predelay', 'rtime'], function (O) {
-  O.delay = Math.min(O.delay_max, Math.max(O.delay_min, O.delay));
-  O.predelay = Math.min(O.predelay_max, Math.max(O.predelay_min, O.predelay));
-  O.rtime = Math.min(O.rtime_max, Math.max(O.rtime_min, O.rtime));
-  this.input_handle.update('x', O.delay);
-  this.rlevel_handle.update('x', O.delay + O.predelay);
-  this.rtime_handle.update('x', O.delay + O.predelay + O.rtime);
+  if (!(value <= max))
+    return max;
+
+  return value;
+}
+
+function defineClipCalculation(name) {
+  defineRecalculation(Reverb, [ name + '_min', name + '_max', name ], function (O) {
+    this.update(name, clip(O[name + '_min'], O[name + '_max'], O[name]));
+  });
+}
+
+defineClipCalculation('delay');
+defineClipCalculation('predelay');
+defineClipCalculation('rtime');
+defineClipCalculation('gain');
+defineClipCalculation('rlevel');
+
+defineRecalculation(Reverb, [ 'delay', 'predelay', 'rtime' ], function (O) {
+  const { delay, predelay, rtime } = O;
+  this.update('input_handle.x', delay);
+  this.update('rlevel_handle.x', delay + predelay);
+  this.update('rtime_handle.x', delay + predelay + rtime);
 });
-defineRecalculation(Reverb, ['gain', 'rlevel'], function (O) {
-  O.gain = Math.min(O.gain_max, Math.max(O.gain_min, O.gain));
-  O.rlevel = Math.min(O.rlevel_max, Math.max(O.rlevel_min, O.rlevel));
-  this.input_handle.update('y', O.gain);
-  this.rlevel_handle.update('y', O.gain + O.rlevel);
+defineRecalculation(Reverb, ['gain', 'rlevel' ], function (O) {
+  const { gain, rlevel } = O;
+
+  this.update('input_handle.y', gain);
+  this.update('rlevel_handle.y', gain + rlevel);
 });
