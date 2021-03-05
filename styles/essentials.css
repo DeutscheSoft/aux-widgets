@@ -820,23 +820,6 @@ body.aux-cursor-row-resize * {
   contain: strict;
 }
 
-.aux-virtualtree > .aux-scrollbar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: calc(-1 * var(--aux-scrollbar-size));
-  bottom: 0;
-  overflow-y: scroll;
-  contain: strict;
-}
-.aux-virtualtree > .aux-scrollbar > .aux-scroller {
-  display: block;
-  width: 100%;
-  overflow: hidden;
-  box-sizing: border-box;
-  position: relative;
-}
-
 /* VIRTUALTREEENTRY */
 
 .aux-virtualtreeentry {
@@ -1201,6 +1184,25 @@ body.aux-cursor-row-resize * {
 }
 .aux-scale.aux-bottom > .aux-bar {
   bottom: 0px;
+}
+
+/* SCROLLBAR */
+
+.aux-scrollbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: calc(-1 * var(--aux-scrollbar-size));
+  bottom: 0;
+  overflow-y: scroll;
+  contain: strict;
+}
+.aux-scrollbar > .aux-scroller {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  position: relative;
 }
 
 /* SELECT */
