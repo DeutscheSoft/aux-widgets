@@ -25,6 +25,7 @@ import { subscribeDOMEvent } from '../../utils/events.js';
 
 import { Container } from './../../widgets/container.js';
 import { Indicator } from './indicator.js';
+import { DragCapture } from '../../modules/dragcapture.js';
 import { resizeArrayMod } from '../models.js';
 
 scrollbarSize();
@@ -36,6 +37,44 @@ function onIndicatorClicked() {
 }
 
 const formatIndicatorTransform = FORMAT('translateY(%.2fpx) translateX(%.2fpx)');
+
+
+function getStartEvent (state) {
+  if (state.findTouch) {
+    return state.findTouch(state.start);
+  } else {
+    return state.start;
+  }
+}
+function onDragStart (e) {
+  return true;
+}
+
+function onDragging (e) {
+  const O = this.options;
+  const state = this.drag.state();
+  const px = state.vDistance();
+  const x = px[0];
+  const y = px[1];
+  if (!O._batch) {
+    const dist = Math.sqrt( x*x + y*y );
+    if (dist > O.min_distance) {
+      const start = getStartEvent(state);
+      this.set('_batch', true);
+      this.set('_x0', start.clientX);
+      this.set('_y0', start.clientY);
+      this.set('_xd', 0);
+      this.set('_yd', 0);
+    }
+  } else {
+    this.set('_xd', x);
+    this.set('_yd', y);
+  }
+}
+
+function onDragStop (e) {
+  this.set('_batch', false);
+}
 
 /**
  * Indicators is an area inside {@link Matrix} containing a matrix of
@@ -59,19 +98,44 @@ export const Indicators = defineClass({
   _options: Object.assign(Object.create(Container.prototype._options), {
     indicator_class: 'object',
     connectionview: 'object',
+    batch: 'boolean',
+    min_distance: 'number',
+    _batch: 'boolean',
+    _x0: 'number',
+    _y0: 'number',
+    _xd: 'number',
+    _yd: 'number',
   }),
   options: {
     indicator_class: Indicator,
+    min_distance: 5,
+    batch: true,
+    _batch: false,
+    _x0: 0,
+    _y0: 0,
+    _xd: 0,
+    _yd: 0,
   },
   static_events: {
     set_connectionview: function (connectionview) {
       this.connectionview_subs.unsubscribe();
     },
+    set_batch: function (v) { this.drag.set('active', v); },
   },
   initialize: function (options) {
     Container.prototype.initialize.call(this, options);
     this.connectionview_subs = new Subscriptions();
     this.entries = [];
+    
+    this.drag = new DragCapture(this, {
+      node: this.element,
+      active: options.batch,
+      onstartcapture: onDragStart.bind(this),
+      onmovecapture: onDragging.bind(this),
+      onstopcapture: onDragStop.bind(this),
+    });
+    
+    this._dragging = false;
   },
   destroy: function () {
     Container.prototype.destroy.call(this);
@@ -198,6 +262,30 @@ export const Indicators = defineClass({
         );
       }
     }
+    if (I.validate('_x0', '_y0', '_xd', '_yd') && this._batch) {
+      const bbox = this.element.getBoundingClientRect();
+      let width, height, x, y;
+      if (O._xd < 0) {
+        x = O._x0 + O._xd;
+        width = -O._xd;
+      } else {
+        x = O._x0;
+        width = O._xd;
+      }
+      if (O._yd < 0) {
+        y = O._y0 + O._yd;
+        height = -O._yd;
+      } else {
+        y = O._y0;
+        height = O._yd;
+      }
+      x -= bbox.x;
+      y -= bbox.y;
+      this._batch.style.left = x + 'px';
+      this._batch.style.top = y + 'px';
+      this._batch.style.width = width + 'px';
+      this._batch.style.height = height + 'px';
+    }
   },
   /**
    * Scroll the indicators area to this vertical (top) position.
@@ -231,4 +319,15 @@ export const Indicators = defineClass({
  */
 defineChildElement(Indicators, 'scroller', {
   show: true,
+});
+
+
+/**
+ * @member {HTMLDiv} Indicators#_batch - The rectangle to indicate
+ *   batch selection/deselection.
+ *   Has class `.aux-batch`.
+ */
+defineChildElement(Indicators, 'batch', {
+  show: false,
+  option: '_batch',
 });
