@@ -290,7 +290,15 @@ export const Widget = defineClass({
       }
     },
     set_visible: function (val) {
-      if (val === true) this.enableDraw();
+      if (val === true) {
+        // If we are currently drawn, it is still possible that
+        // we disabled rendering for our children already.
+        if (this.isDrawn()) {
+          this.enableDrawChildren();
+        } else {
+          this.enableDraw();
+        }
+      }
       if (val === false) this.disableDrawChildren();
     },
   },
@@ -746,7 +754,6 @@ export const Widget = defineClass({
     if (!this.value_time) this.value_time = {};
     this.value_time[key] = Date.now();
   },
-  enableDrawSelf: function () {},
   /**
    * Enables rendering for all children of this widget.
    *
