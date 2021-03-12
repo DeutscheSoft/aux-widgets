@@ -18,11 +18,14 @@
  */
 
 import { defineClass, defineChildElement } from './../../widget_helpers.js';
-import { scrollbarSize, addClass } from './../../utils/dom.js';
+import { defineChildWidget } from './../../child_widget.js';
+import { scrollbarSize, addClass, removeClass } from './../../utils/dom.js';
 import { FORMAT } from '../../utils/sprintf.js';
 import { Subscriptions } from '../../utils/subscriptions.js';
 import { subscribeDOMEvent } from '../../utils/events.js';
 
+import { Button } from './../../widgets/button.js';
+import { ConfirmButton } from './../../widgets/confirmbutton.js';
 import { Container } from './../../widgets/container.js';
 import { Indicator } from './indicator.js';
 import { DragCapture } from '../../modules/dragcapture.js';
@@ -46,11 +49,12 @@ function getStartEvent (state) {
     return state.start;
   }
 }
-function onDragStart (e) {
+function onDragStart (state, start, e) {
+  onBatchEnd.call(this);
   return true;
 }
 
-function onDragging (e) {
+function onDragging (s, e) {
   const O = this.options;
   const state = this.drag.state();
   const px = state.vDistance();
@@ -72,8 +76,52 @@ function onDragging (e) {
   }
 }
 
-function onDragStop (e) {
+function onDragStop (state, e) {
+  if (this.get('_batch'))
+    onBatchStart.call(this, e);
+}
+
+function onBatchStart () {
+  const O = this.options;
+  this.set('show_buttons', true);
+  this.set('show_cancel', true);
+  this.set('show_select_diagonal', true);
+  this.set('show_deselect_diagonal', true);
+  this.set('show_deselect_all', true);
+}
+
+function onBatchEnd () {
+  this.set('show_cancel', false);
+  this.set('show_select_diagonal', false);
+  this.set('show_deselect_diagonal', false);
+  this.set('show_deselect_all', false);
+  this.set('show_buttons', false);
   this.set('_batch', false);
+}
+
+function cancel () {
+  //this.emit("cancel");
+  onBatchEnd.call(this);
+}
+
+function selectDiagonal () {
+  //this.emit("select_diagonal", this._calculateRectangle());
+  onBatchEnd.call(this);
+}
+
+function selectAll () {
+  //this.emit("select_all", this._calculateRectangle());
+  onBatchEnd.call(this);
+}
+
+function deselectDiagonal () {
+  //this.emit("deselect_diagonal", this._calculateRectangle());
+  onBatchEnd.call(this);
+}
+
+function deselectAll () {
+  //this.emit("deselect_all", this._calculateRectangle());
+  onBatchEnd.call(this);
 }
 
 /**
@@ -105,16 +153,20 @@ export const Indicators = defineClass({
     _y0: 'number',
     _xd: 'number',
     _yd: 'number',
+    _xinit: 'number',
+    _yinit: 'number',
   }),
   options: {
     indicator_class: Indicator,
-    min_distance: 5,
+    min_distance: 40,
     batch: true,
     _batch: false,
     _x0: 0,
     _y0: 0,
     _xd: 0,
     _yd: 0,
+    _xinit: 0,
+    _yinit: 0,
   },
   static_events: {
     set_connectionview: function (connectionview) {
@@ -163,6 +215,12 @@ export const Indicators = defineClass({
         this.emit('scrollChanged', element.scrollTop, element.scrollLeft);
       })
     );
+  },
+  resize: function () {
+    Container.prototype.resize.call(this);
+    const bbox = this.element.getBoundingClientRect();
+    this.update('_xinit', bbox.x);
+    this.update('_yinit', bbox.y);
   },
   redraw: function () {
     const O = this.options;
@@ -262,29 +320,53 @@ export const Indicators = defineClass({
         );
       }
     }
-    if (I.validate('_x0', '_y0', '_xd', '_yd') && this._batch) {
-      const bbox = this.element.getBoundingClientRect();
-      let width, height, x, y;
-      if (O._xd < 0) {
-        x = O._x0 + O._xd;
-        width = -O._xd;
-      } else {
-        x = O._x0;
-        width = O._xd;
-      }
-      if (O._yd < 0) {
-        y = O._y0 + O._yd;
-        height = -O._yd;
-      } else {
-        y = O._y0;
-        height = O._yd;
-      }
-      x -= bbox.x;
-      y -= bbox.y;
-      this._batch.style.left = x + 'px';
-      this._batch.style.top = y + 'px';
-      this._batch.style.width = width + 'px';
-      this._batch.style.height = height + 'px';
+    let rect;
+    if (I.validate('_x0', '_y0', '_xd', '_yd', '_xinit', '_yinit') && this._batch) {
+      rect = this._calculateRectangle(O._x0, O._y0, O._xd, O._yd, O._xinit, O._yinit);
+      this._batch.style.left = rect.x + 'px';
+      this._batch.style.top = rect.y + 'px';
+      this._batch.style.width = rect.width + 'px';
+      this._batch.style.height = rect.height + 'px';
+    }
+    if (I.validate('show_buttons') && this._batch) {
+      if (!rect)
+        rect = this._calculateRectangle(O._x0, O._y0, O._xd, O._yd, O._xinit, O._yinit);
+      const x = rect.flip_x ? 'left' : 'right';
+      const y = rect.flip_y ? 'top' : 'bottom';
+      removeClass(this._batch, 'aux-top-left');
+      removeClass(this._batch, 'aux-bottom-left');
+      removeClass(this._batch, 'aux-top-right');
+      removeClass(this._batch, 'aux-bottom-right');
+      addClass(this._batch, 'aux-' + y + '-' + x);
+    }
+  },
+  _calculateRectangle: function (_x0, _y0, _xd, _yd, _xinit, _yinit) {
+    const stop = this.element.scrollTop;
+    const sleft = this.element.scrollLeft;
+    let width, height, x, y;
+    if (_xd < 0) {
+      x = _x0 + _xd + sleft;
+      width = -_xd;
+    } else {
+      x = _x0 + sleft;
+      width = _xd;
+    }
+    if (_yd < 0) {
+      y = _y0 + _yd + stop;
+      height = -_yd;
+    } else {
+      y = _y0 + stop;
+      height = _yd;
+    }
+    x -= _xinit;
+    y -= _yinit;
+    return {
+      x: x,
+      y: y,
+      width: width,
+      height: height,
+      flip_x: _xd < 0,
+      flip_y: _yd < 0,
     }
   },
   /**
@@ -330,4 +412,60 @@ defineChildElement(Indicators, 'scroller', {
 defineChildElement(Indicators, 'batch', {
   show: false,
   option: '_batch',
+});
+
+
+defineChildWidget(Indicators, 'buttons', {
+  create: Container,
+  default_options: {
+    class: 'aux-batchbuttons',
+  },
+  append: function () { this._batch.appendChild(this.buttons.element); },
+});
+defineChildWidget(Indicators, 'deselect_diagonal', {
+  create: ConfirmButton,
+  default_options: {
+    icon: 'matrixdeselectdiagonal',
+    icon_confirm: 'questionmark',
+    class: 'aux-deselectdiagonal',
+  },
+  static_events: {
+    confirmed: deselectDiagonal,
+  },
+  append: function () { this.buttons.element.appendChild(this.deselect_diagonal.element); },
+});
+defineChildWidget(Indicators, 'deselect_all', {
+  create: ConfirmButton,
+  default_options: {
+    icon: 'matrixdeselectall',
+    icon_confirm: 'questionmark',
+    class: 'aux-deselectall',
+  },
+  static_events: {
+    confirmed: deselectAll,
+  },
+  append: function () { this.buttons.element.appendChild(this.deselect_all.element); },
+});
+defineChildWidget(Indicators, 'select_diagonal', {
+  create: ConfirmButton,
+  default_options: {
+    icon: 'matrixselectdiagonal',
+    icon_confirm: 'questionmark',
+    class: 'aux-selectdiagonal',
+  },
+  static_events: {
+    confirmed: selectDiagonal,
+  },
+  append: function () { this.buttons.element.appendChild(this.select_diagonal.element); },
+});
+defineChildWidget(Indicators, 'cancel', {
+  create: Button,
+  default_options: {
+    icon: 'cancel',
+    class: 'aux-cancel',
+  },
+  static_events: {
+    click: cancel,
+  },
+  append: function () { this.buttons.element.appendChild(this.cancel.element); },
 });

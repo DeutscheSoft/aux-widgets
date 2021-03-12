@@ -871,6 +871,11 @@ body.aux-cursor-row-resize * {
   margin: 0;
   padding: 0;
 }
+.aux-matrix > .aux-indicators > .aux-batch {
+  display: block;
+  position: absolute;
+  z-index: 100;
+}
 
 /* MULTIMETER */
 

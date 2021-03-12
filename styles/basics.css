@@ -523,6 +523,44 @@
   height: var(--aux-virtualtreeentry-size);
   margin: 0;
 }
+.aux-matrix > .aux-indicators > .aux-batch {
+  display: block;
+}
+.aux-matrix > .aux-indicators > .aux-batch > .aux-batchbuttons {
+  display: grid;
+  grid-template-columns: var(--aux-clickable-size) var(--aux-clickable-size);
+  grid-template-rows: var(--aux-clickable-size) var(--aux-clickable-size);
+  grid-gap: var(--aux-main-margin);
+  position: absolute;
+  margin: 0;
+}
+.aux-matrix > .aux-indicators > .aux-batch.aux-top-left > .aux-batchbuttons {
+  left: var(--aux-main-margin);
+  top: var(--aux-main-margin);
+}
+.aux-matrix > .aux-indicators > .aux-batch.aux-top-right > .aux-batchbuttons {
+  right: var(--aux-main-margin);
+  top: var(--aux-main-margin);
+}
+.aux-matrix > .aux-indicators > .aux-batch.aux-bottom-left > .aux-batchbuttons {
+  left: var(--aux-main-margin);
+  bottom: var(--aux-main-margin);
+}
+.aux-matrix > .aux-indicators > .aux-batch.aux-bottom-right > .aux-batchbuttons {
+  right: var(--aux-main-margin);
+  bottom: var(--aux-main-margin);
+}
+.aux-matrix > .aux-indicators > .aux-batch > .aux-batchbuttons > .aux-button {
+  
+}
+.aux-matrix > .aux-indicators > .aux-batch > .aux-cancel {
+}
+.aux-matrix > .aux-indicators > .aux-batch > .aux-selectdiagonal {
+}
+.aux-matrix > .aux-indicators > .aux-batch > .aux-deselectdiagonal {
+}
+.aux-matrix > .aux-indicators > .aux-batch > .aux-deselectall {
+}
 
 /* METER */
 

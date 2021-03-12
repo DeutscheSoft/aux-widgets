@@ -50,11 +50,11 @@ CaptureState.prototype = {
   },
 };
 /* general api */
-function startCapture(state) {
+function startCapture(state, ev) {
   /* do nothing, let other handlers be called */
   if (this.drag_state) return;
 
-  var v = this.emit('startcapture', state, state.start);
+  var v = this.emit('startcapture', state, state.start, ev);
 
   if (v === true) {
     /* we capture this event */
@@ -67,7 +67,7 @@ function startCapture(state) {
 function moveCapture(ev) {
   var d = this.drag_state;
 
-  if (!d.setCurrent(ev) || this.emit('movecapture', d) === false) {
+  if (!d.setCurrent(ev) || this.emit('movecapture', d, ev) === false) {
     stopCapture.call(this, ev);
     return false;
   }
@@ -118,7 +118,7 @@ MouseCaptureState.prototype = Object.assign(
 );
 function mouseDown(ev) {
   var s = new MouseCaptureState(ev);
-  var v = startCapture.call(this, s);
+  var v = startCapture.call(this, s, ev);
 
   /* ignore this event */
   if (v === void 0) return;
@@ -205,7 +205,8 @@ function touchStart(ev) {
 
   /* the startcapture event handler has return false. we do not handle this
    * pointer */
-  var v = startCapture.call(this, new TouchCaptureState(ev));
+  const state = new TouchCaptureState(ev);
+  var v = startCapture.call(this, state, ev);
 
   if (v === void 0) return;
 

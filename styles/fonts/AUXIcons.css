@@ -179,9 +179,9 @@
 .aux-icon.ddex::before                                                { font-family: 'AUXIcons'; content: '􀂈'; }
 .aux-icon.mc7_1::before                                               { font-family: 'AUXIcons'; content: '􀂉'; }
 .aux-icon.dolbyprologic2x::before                                     { font-family: 'AUXIcons'; content: '􀂉'; }
-.aux-icon.matrixdiagonal::before                                      { font-family: 'AUXIcons'; content: '􀂐'; }
-.aux-icon.matrixremove::before                                        { font-family: 'AUXIcons'; content: '􀂑'; }
-.aux-icon.matrixtoggle::before                                        { font-family: 'AUXIcons'; content: '􀂒'; }
-.aux-icon.matrixall::before                                           { font-family: 'AUXIcons'; content: '􀂓'; }
+.aux-icon.matrixselectdiagonal::before                                { font-family: 'AUXIcons'; content: '􀂐'; }
+.aux-icon.matrixdeselectdiagonal::before                              { font-family: 'AUXIcons'; content: '􀂑'; }
+.aux-icon.matrixselectall::before                                     { font-family: 'AUXIcons'; content: '􀂒'; }
+.aux-icon.matrixdeselectall::before                                   { font-family: 'AUXIcons'; content: '􀂓'; }
 .aux-icon.edit::before                                                { font-family: 'AUXIcons'; content: '􀂔'; }
 .aux-icon.pencil::before                                              { font-family: 'AUXIcons'; content: '􀂔'; }
