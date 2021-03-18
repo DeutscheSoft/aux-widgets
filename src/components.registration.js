@@ -8,6 +8,7 @@ import './components/confirmbutton.registration.js';
 import './components/container.registration.js';
 import './components/crossover.registration.js';
 import './components/dialog.registration.js';
+import './components/drag3d.registration.js';
 import './components/dynamics.registration.js';
 import './components/equalizer.registration.js';
 import './components/expand.registration.js';

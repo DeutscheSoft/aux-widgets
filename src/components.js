@@ -28,6 +28,7 @@ export * from './components/confirmbutton.js';
 export * from './components/container.js';
 export * from './components/crossover.js';
 export * from './components/dialog.js';
+export * from './components/drag3d.js';
 export * from './components/dynamics.js';
 export * from './components/equalizer.js';
 export * from './components/expand.js';

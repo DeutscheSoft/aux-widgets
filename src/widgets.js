@@ -28,6 +28,7 @@ export * from './widgets/confirmbutton.js';
 export * from './widgets/container.js';
 export * from './widgets/crossover.js';
 export * from './widgets/dialog.js';
+export * from './widgets/drag3d.js';
 export * from './widgets/dynamics.js';
 export * from './widgets/eqband.js';
 export * from './widgets/equalizer.js';
