@@ -21,6 +21,13 @@ import { addClass } from './../utils/dom.js';
 import { defineClass } from './../widget_helpers.js';
 import { Button } from './button.js';
 
+/**
+ * Is fired when the user didn't confirm in time or clicked anywhere
+ * else.
+ *
+ * @event ConfirmButton#canceled
+ */
+ 
 function reset(e) {
   if (!this.options.state) return;
   if (e) {
@@ -30,6 +37,7 @@ function reset(e) {
       t = t.parentElement;
     }
   }
+  this.emit('canceled');
   stateReset.call(this);
 }
 
