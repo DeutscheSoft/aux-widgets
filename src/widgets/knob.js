@@ -151,7 +151,7 @@ export const Knob = defineClass({
       large: {
         margin: 13,
         thickness: 6,
-        hand: { width: 1.5, length: 12, margin: 26 }
+        hand: { width: 1.5, length: 12, margin: 26 },
         dots_defaults: { length: 6, margin: 13.5, width: 1 },
         markers_defaults: { thickness: 2, margin: 11 },
         show_labels: true,
@@ -159,7 +159,7 @@ export const Knob = defineClass({
       huge: {
         margin: 13,
         thickness: 6,
-        hand: { width: 2, length: 12, margin: 28 }
+        hand: { width: 2, length: 12, margin: 28 },
         dots_defaults: { length: 6, margin: 13.5, width: 1 },
         markers_defaults: { thickness: 2, margin: 11 },
         show_labels: true,
