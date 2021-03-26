@@ -545,7 +545,9 @@ export const Circular = defineClass({
       I.size ||
       I._stroke_width ||
       I.base ||
-      I.angle
+      I.angle ||
+      I.thickness ||
+      I.margin
     ) {
       I.show_value = I.value_ring = false;
       if (O.show_value) {
@@ -563,7 +565,14 @@ export const Circular = defineClass({
       }
     }
 
-    if (I.show_base || I.size || I._stroke_width || I.base || I.angle) {
+    if (
+      I.show_base ||
+      I.size ||
+      I._stroke_width ||
+      I.base ||
+      I.angle ||
+      I.thickness ||
+      I.margin) {
       I.show_base = false;
       if (O.show_base) {
         drawSlice.call(this, 0, O.angle, inner_p, outer_p, outer, this._base);
