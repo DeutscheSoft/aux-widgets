@@ -90,6 +90,18 @@ export const Matrix = defineClass({
     set_sources: setVirtualtreeviews,
     set_sinks: setVirtualtreeviews,
   },
+  /**
+   * Returns the virtual tree view instance of the left tree.
+   */
+  getVirtualTreeViewLeft: function() {
+    return this.virtualtree_left.get('virtualtreeview');
+  },
+  /**
+   * Returns the virtual tree view instance of the top tree.
+   */
+  getVirtualTreeViewTop: function() {
+    return this.virtualtree_top.get('virtualtreeview');
+  },
   initialize: function (options) {
     Patchbay.prototype.initialize.call(this, options);
     this.connectionview = null;
@@ -212,5 +224,16 @@ defineChildWidget(Matrix, 'indicators', {
   map_options: {
     size: 'size',
     indicator_class: 'indicator_class',
+  },
+  static_events: {
+    connectDiagonal: function(...args) {
+      this.parent.emit('connectDiagonal', ...args);
+    },
+    disconnectDiagonal: function(...args) {
+      this.parent.emit('disconnectDiagonal', ...args);
+    },
+    disconnectAll: function(...args) {
+      this.parent.emit('disconnectAll', ...args);
+    },
   },
 });

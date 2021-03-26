@@ -104,26 +104,6 @@ function cancel () {
   onBatchEnd.call(this);
 }
 
-function selectDiagonal () {
-  //this.emit("select_diagonal", this._calculateRectangle());
-  onBatchEnd.call(this);
-}
-
-function selectAll () {
-  //this.emit("select_all", this._calculateRectangle());
-  onBatchEnd.call(this);
-}
-
-function deselectDiagonal () {
-  //this.emit("deselect_diagonal", this._calculateRectangle());
-  onBatchEnd.call(this);
-}
-
-function deselectAll () {
-  //this.emit("deselect_all", this._calculateRectangle());
-  onBatchEnd.call(this);
-}
-
 /**
  * Indicators is an area inside {@link Matrix} containing a matrix of
  *   {@link Indicator}s displaying and managing connections.
@@ -322,7 +302,7 @@ export const Indicators = defineClass({
     }
     let rect;
     if (I.validate('_x0', '_y0', '_xd', '_yd', '_xinit', '_yinit') && this._batch) {
-      rect = this._calculateRectangle(O._x0, O._y0, O._xd, O._yd, O._xinit, O._yinit);
+      rect = this._calculateRectangle();
       this._batch.style.left = rect.x + 'px';
       this._batch.style.top = rect.y + 'px';
       this._batch.style.width = rect.width + 'px';
@@ -330,7 +310,7 @@ export const Indicators = defineClass({
     }
     if (I.validate('show_buttons') && this._batch) {
       if (!rect)
-        rect = this._calculateRectangle(O._x0, O._y0, O._xd, O._yd, O._xinit, O._yinit);
+        rect = this._calculateRectangle();
       const x = rect.flip_x ? 'left' : 'right';
       const y = rect.flip_y ? 'top' : 'bottom';
       removeClass(this._batch, 'aux-top-left');
@@ -340,7 +320,8 @@ export const Indicators = defineClass({
       addClass(this._batch, 'aux-' + y + '-' + x);
     }
   },
-  _calculateRectangle: function (_x0, _y0, _xd, _yd, _xinit, _yinit) {
+  _calculateRectangle: function () {
+    const { _x0, _y0, _xd, _yd, _xinit, _yinit } = this.options;
     const stop = this.element.scrollTop;
     const sleft = this.element.scrollLeft;
     let width, height, x, y;
@@ -369,6 +350,16 @@ export const Indicators = defineClass({
       flip_y: _yd < 0,
     }
   },
+  _calculateIndexRectangle: function (rectangle) {
+    const { x, y, width, height } = rectangle;
+    const size = this.options.size;
+    return {
+      startColumn: x / size,
+      endColumn: (x + width ) / size,
+      startRow: y / size,
+      endRow: (y + height) / size,
+    };
+  },
   /**
    * Scroll the indicators area to this vertical (top) position.
    *
@@ -391,6 +382,25 @@ export const Indicators = defineClass({
   },
   scrollTo: function (options) {
     this.element.scrollTo(options);
+  },
+  // Event handler for batch operation dialog.
+  _onConnectDiagonalConfirmed () {
+    const rectangle = this._calculateRectangle();
+    const indexRectangle = this._calculateIndexRectangle(rectangle);
+    this.emit('connectDiagonal', indexRectangle, rectangle);
+    onBatchEnd.call(this);
+  },
+  _onDisconnectDiagonalConfirmed () {
+    const rectangle = this._calculateRectangle();
+    const indexRectangle = this._calculateIndexRectangle(rectangle);
+    this.emit('disconnectDiagonal', indexRectangle, rectangle);
+    onBatchEnd.call(this);
+  },
+  _onDisconnectAllConfirmed () {
+    const rectangle = this._calculateRectangle();
+    const indexRectangle = this._calculateIndexRectangle(rectangle);
+    this.emit('disconnectAll', indexRectangle, rectangle);
+    onBatchEnd.call(this);
   },
 });
 
@@ -430,7 +440,14 @@ defineChildWidget(Indicators, 'deselect_diagonal', {
     class: 'aux-deselectdiagonal',
   },
   static_events: {
-    confirmed: deselectDiagonal,
+    mousedown: function(ev) {
+      ev.stopPropagation();
+      return false;
+    },
+    confirmed: function() {
+      this.parent._onDisconnectDiagonalConfirmed();
+      return false;
+    },
   },
   append: function () { this.buttons.element.appendChild(this.deselect_diagonal.element); },
 });
@@ -442,7 +459,14 @@ defineChildWidget(Indicators, 'deselect_all', {
     class: 'aux-deselectall',
   },
   static_events: {
-    confirmed: deselectAll,
+    mousedown: function(ev) {
+      ev.stopPropagation();
+      return false;
+    },
+    confirmed: function() {
+      this.parent._onDisconnectAllConfirmed();
+      return false;
+    },
   },
   append: function () { this.buttons.element.appendChild(this.deselect_all.element); },
 });
@@ -454,7 +478,14 @@ defineChildWidget(Indicators, 'select_diagonal', {
     class: 'aux-selectdiagonal',
   },
   static_events: {
-    confirmed: selectDiagonal,
+    mousedown: function(ev) {
+      ev.stopPropagation();
+      return false;
+    },
+    confirmed: function() {
+      this.parent._onConnectDiagonalConfirmed();
+      return false;
+    },
   },
   append: function () { this.buttons.element.appendChild(this.select_diagonal.element); },
 });
@@ -465,6 +496,10 @@ defineChildWidget(Indicators, 'cancel', {
     class: 'aux-cancel',
   },
   static_events: {
+    mousedown: function(ev) {
+      ev.stopPropagation();
+      return false;
+    },
     click: cancel,
   },
   append: function () { this.buttons.element.appendChild(this.cancel.element); },
