@@ -65,6 +65,7 @@ function stateSet() {
 }
 
 function stateReset() {
+  if (this.isDestructed()) return;
   var T = this.__temp;
   if (T.label) this.set('label', T.label);
 
@@ -164,5 +165,9 @@ export const ConfirmButton = defineClass({
       this.set('state', false);
     }
     Button.prototype.set.call(this, key, value);
+  },
+  destroy: function() {
+    stateReset.call(this);
+    Button.prototype.destroy.call(this);
   },
 });
