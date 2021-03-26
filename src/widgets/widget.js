@@ -284,6 +284,9 @@ export const Widget = defineClass({
     set_preset: function (v) {
       setPreset.call(this, v);
     },
+    set_presets: function (v) {
+      setPreset.call(this, this.options.preset);
+    },
     set: function (key, val) {
       if (!this._presetting && this._preset_origins.hasOwnProperty(key)) {
         this._preset_origins[key] = val;
