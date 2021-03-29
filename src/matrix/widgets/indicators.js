@@ -181,6 +181,7 @@ export const Indicators = defineClass({
     addClass(element, 'aux-indicators');
     this.addSubscriptions(
       subscribeDOMEvent(this.element, 'scroll', (ev) => {
+        onBatchEnd.call(this);
         /**
          * Is fired on scrolling the area.
          *
