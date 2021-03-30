@@ -17,32 +17,38 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { element, addClass, removeClass, innerWidth, outerWidth } from './../utils/dom.js';
+import {
+  element,
+  addClass,
+  removeClass,
+  innerWidth,
+  outerWidth,
+} from './../utils/dom.js';
 import { defineClass } from './../widget_helpers.js';
 import { Container } from './container.js';
 import { Label } from './label.js';
 import { defineChildWidget } from '../child_widget.js';
 
-function setAnimation () {
+function setAnimation() {
   const O = this.options;
   const speed = O.speed;
   const pause = O.pause;
   const inner = O._inner;
   const outer = O._outer;
   const range = inner - outer;
-  const msecs = range / speed * 1000;
+  const msecs = (range / speed) * 1000;
   const full = msecs + pause * 2;
-  const perc = Math.round(pause / full * 100);
+  const perc = Math.round((pause / full) * 100);
   const secs = Math.round(msecs / 1000);
   const to = 100 - perc;
   const id = this._id;
-  
+
   if (range <= 0) {
     this._style.textContent = '';
     addClass(this.element, 'aux-static');
     return;
   }
-  
+
   this._style.textContent = `
   #${id} {
     animation: ${id} ${secs}s linear infinite alternate;
@@ -83,7 +89,9 @@ export const Wanderer = defineClass({
     _outer: 0,
   },
   static_events: {
-    set_label: function () { this.triggerResize(); }
+    set_label: function () {
+      this.triggerResize();
+    },
   },
   initialize: function (options) {
     if (!options.element) options.element = element('div');
@@ -92,7 +100,7 @@ export const Wanderer = defineClass({
      * Has class <code>.aux-wanderer</code>.
      */
     this._id = 'aux-animation_' + Math.random().toString(16).substr(2, 8);
-    this._style = element('style', {'type': 'text/css'});
+    this._style = element('style', { type: 'text/css' });
     document.head.appendChild(this._style);
   },
   draw: function (O, element) {
@@ -112,12 +120,12 @@ export const Wanderer = defineClass({
       setAnimation.call(this);
     }
   },
-  
+
   resize: function () {
     Container.prototype.resize.call(this);
     this.set('_outer', innerWidth(this.element));
     this.set('_inner', outerWidth(this.label.element));
-  }
+  },
 });
 
 /**
