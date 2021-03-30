@@ -40,4 +40,5 @@ import './components/toggle.registration.js';
 import './components/value.registration.js';
 import './components/valuebutton.registration.js';
 import './components/valueknob.registration.js';
+import './components/wanderer.registration.js';
 import './components/widget.registration.js';

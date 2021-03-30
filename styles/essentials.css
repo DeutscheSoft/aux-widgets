@@ -1391,6 +1391,18 @@ body.aux-cursor-row-resize * {
   text-align: right;
 }
 
+/* WANDERER */ 
+
+.aux-wanderer {
+  overflow: hidden;
+}
+.aux-wanderer > .aux-label {
+  position: relative;
+  left: 0;
+  white-space: nowrap;
+  margin: 0;
+}
+
 /* WINDOW */
 
 .aux-window {

@@ -59,6 +59,7 @@ export * from './components/toggle.js';
 export * from './components/value.js';
 export * from './components/valuebutton.js';
 export * from './components/valueknob.js';
+export * from './components/wanderer.js';
 export * from './components/widget.js';
 
 // other

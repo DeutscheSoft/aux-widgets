@@ -76,5 +76,6 @@ export * from './widgets/treeitem.js';
 export * from './widgets/value.js';
 export * from './widgets/valuebutton.js';
 export * from './widgets/valueknob.js';
+export * from './widgets/wanderer.js';
 export * from './widgets/widget.js';
 export * from './widgets/window.js';
