@@ -1229,6 +1229,18 @@ body.aux-cursor-row-resize * {
   width: 16px;
   margin: 0 0 0 4px !important;
 }
+.aux-button.aux-select > .aux-label.aux-sizer {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  margin: 0 !important;
+  height: 0px !important;
+  overflow: hidden !important;
+  visibility: hidden !important;
+}
+.aux-button.aux-select > .aux-label.aux-sizer > .aux-sizerentry {
+  display: block;
+}
 .aux-selectlist {
   position: absolute;
   z-index: 10000;

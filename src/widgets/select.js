@@ -20,6 +20,7 @@
 /* jshint -W014 */
 
 import { defineClass } from './../widget_helpers.js';
+import { defineChildWidget } from './../child_widget.js';
 import { Button } from './button.js';
 import { Label } from './label.js';
 import {
@@ -151,6 +152,7 @@ export const Select = defineClass({
     icon: 'arrowdown',
     placeholder: false,
     list_class: '',
+    label: '',
   },
   static_events: {
     click: function () {
@@ -671,6 +673,28 @@ export const Select = defineClass({
     var O = this.options;
     var E = this.element;
 
+    if (I.entries || I.auto_size) {
+      I.show_list = true;
+      I.auto_size = false;
+
+      let S = this.sizer.element;
+      let v = O.entries;
+      empty(S);
+      const frag = document.createDocumentFragment();
+      for (let i = 0, m = v.length; i < m; ++i) {
+        const s = element('span', { class: 'aux-sizerentry' });
+        s.textContent = typeof v[i] == 'string' ? v[i] : v[i].label;
+        frag.appendChild(s);
+      }
+      S.appendChild(frag);
+
+      outerWidth(
+        this.label.element,
+        true,
+        outerWidth(this.sizer.element, true)
+      );
+    }
+
     if (I.entries) {
       I.entries = false;
 
@@ -694,32 +718,6 @@ export const Select = defineClass({
         addClass(entry.element, 'aux-active');
       } else {
         this._active = null;
-      }
-    }
-
-    if (I.validate('entries', 'auto_size')) {
-      I.show_list = true;
-
-      var L;
-
-      if (O.auto_size && (L = this._label)) {
-        var w = 0;
-        E.style.width = 'auto';
-        var orig_content = document.createDocumentFragment();
-        while (L.firstChild) orig_content.appendChild(L.firstChild);
-        var entries = this.entries;
-        for (var i = 0; i < entries.length; i++) {
-          L.appendChild(document.createTextNode(entries[i].options.label));
-          L.appendChild(document.createElement('BR'));
-        }
-        S.add(function () {
-          w = outerWidth(E, true);
-          S.add(function () {
-            while (L.firstChild) L.removeChild(L.firstChild);
-            L.appendChild(orig_content);
-            outerWidth(E, true, w);
-          }, 1);
-        });
       }
     }
 
@@ -830,5 +828,17 @@ export const SelectEntry = defineClass({
   },
   static_events: {
     click: onSelect,
+  },
+});
+
+/**
+ * @member {Select} Select#sizer - A blind element for `auto_size`.
+ */
+defineChildWidget(Select, 'sizer', {
+  create: Label,
+  option: 'auto_size',
+  toggleClass: true,
+  default_options: {
+    class: 'aux-sizer',
   },
 });
