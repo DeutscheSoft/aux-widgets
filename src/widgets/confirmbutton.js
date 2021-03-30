@@ -27,7 +27,7 @@ import { Button } from './button.js';
  *
  * @event ConfirmButton#canceled
  */
- 
+
 function reset(e) {
   if (!this.options.state) return;
   if (e) {
@@ -166,7 +166,7 @@ export const ConfirmButton = defineClass({
     }
     Button.prototype.set.call(this, key, value);
   },
-  destroy: function() {
+  destroy: function () {
     stateReset.call(this);
     Button.prototype.destroy.call(this);
   },

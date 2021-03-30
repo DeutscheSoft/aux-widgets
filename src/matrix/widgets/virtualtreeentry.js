@@ -171,7 +171,13 @@ export const VirtualTreeEntry = defineClass({
    *   about the entries indentation inside the tree.
    */
   updateData: function (virtualtreeview, index, element, treePosition) {
-    VirtualTreeEntryBase.prototype.updateData.call(this, virtualtreeview, index, element, treePosition);
+    VirtualTreeEntryBase.prototype.updateData.call(
+      this,
+      virtualtreeview,
+      index,
+      element,
+      treePosition
+    );
 
     this.data_subscriptions.unsubscribe();
 

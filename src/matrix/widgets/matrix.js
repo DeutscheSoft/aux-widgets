@@ -93,13 +93,13 @@ export const Matrix = defineClass({
   /**
    * Returns the virtual tree view instance of the left tree.
    */
-  getVirtualTreeViewLeft: function() {
+  getVirtualTreeViewLeft: function () {
     return this.virtualtree_left.get('virtualtreeview');
   },
   /**
    * Returns the virtual tree view instance of the top tree.
    */
-  getVirtualTreeViewTop: function() {
+  getVirtualTreeViewTop: function () {
     return this.virtualtree_top.get('virtualtreeview');
   },
   initialize: function (options) {
@@ -122,8 +122,7 @@ export const Matrix = defineClass({
           this.indicators.scrollTopTo(position);
         });
       });
-      if (!called)
-        return false;
+      if (!called) return false;
     });
     this.virtualtree_top.on('scrollTopChanged', (position) => {
       let called = false;
@@ -133,8 +132,7 @@ export const Matrix = defineClass({
           this.indicators.scrollLeftTo(position);
         });
       });
-      if (!called)
-        return false;
+      if (!called) return false;
     });
     this.indicators.on('scrollChanged', (yposition, xposition) => {
       this._scroll_matrix.maybeScrollEvent(() => {
@@ -226,13 +224,13 @@ defineChildWidget(Matrix, 'indicators', {
     indicator_class: 'indicator_class',
   },
   static_events: {
-    connectDiagonal: function(...args) {
+    connectDiagonal: function (...args) {
       this.parent.emit('connectDiagonal', ...args);
     },
-    disconnectDiagonal: function(...args) {
+    disconnectDiagonal: function (...args) {
       this.parent.emit('disconnectDiagonal', ...args);
     },
-    disconnectAll: function(...args) {
+    disconnectAll: function (...args) {
       this.parent.emit('disconnectAll', ...args);
     },
   },

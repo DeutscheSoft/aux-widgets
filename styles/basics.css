@@ -546,12 +546,14 @@
   left: var(--aux-main-margin);
   bottom: var(--aux-main-margin);
 }
-.aux-matrix > .aux-indicators > .aux-batch.aux-bottom-right > .aux-batchbuttons {
+.aux-matrix
+  > .aux-indicators
+  > .aux-batch.aux-bottom-right
+  > .aux-batchbuttons {
   right: var(--aux-main-margin);
   bottom: var(--aux-main-margin);
 }
 .aux-matrix > .aux-indicators > .aux-batch > .aux-batchbuttons > .aux-button {
-  
 }
 .aux-matrix > .aux-indicators > .aux-batch > .aux-cancel {
 }
@@ -736,16 +738,24 @@
 .aux-navigation.aux-vertical > .aux-buttons > .aux-button {
   margin: var(--aux-main-margin) 0;
 }
-.aux-navigation.aux-horizontal > .aux-buttons.aux-horizontal > .aux-button:first-of-type {
+.aux-navigation.aux-horizontal
+  > .aux-buttons.aux-horizontal
+  > .aux-button:first-of-type {
   margin-left: 0;
 }
-.aux-navigation.aux-horizontal > .aux-buttons.aux-horizontal > .aux-button:last-of-type {
+.aux-navigation.aux-horizontal
+  > .aux-buttons.aux-horizontal
+  > .aux-button:last-of-type {
   margin-right: 0;
 }
-.aux-navigation.aux-vertical > .aux-buttons.aux-vertical > .aux-button:first-of-type {
+.aux-navigation.aux-vertical
+  > .aux-buttons.aux-vertical
+  > .aux-button:first-of-type {
   margin-top: 0;
 }
-.aux-navigation.aux-vertical > .aux-buttons.aux-vertical > .aux-button:last-of-type {
+.aux-navigation.aux-vertical
+  > .aux-buttons.aux-vertical
+  > .aux-button:last-of-type {
   margin-bottom: 0;
 }
 

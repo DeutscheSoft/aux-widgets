@@ -52,8 +52,8 @@
 
   --aux-warn-base: #ee6b11;
   --aux-warn-text: #ffffff;
-  
-  --aux-ok-base: #00D793;
+
+  --aux-ok-base: #00d793;
   --aux-ok-text: #ffffff;
 
   --aux-contrast-base: var(--aux-main-text);
@@ -365,16 +365,33 @@
 .aux-matrix > .aux-indicators > .aux-batch > .aux-batchbuttons {
   z-index: 2;
 }
-.aux-matrix > .aux-indicators > .aux-batch > .aux-batchbuttons > .aux-button > .aux-icon {
+.aux-matrix
+  > .aux-indicators
+  > .aux-batch
+  > .aux-batchbuttons
+  > .aux-button
+  > .aux-icon {
   font-size: var(--font-size-icon-large);
 }
-.aux-matrix > .aux-indicators > .aux-batch > .aux-batchbuttons > .aux-selectdiagonal {
+.aux-matrix
+  > .aux-indicators
+  > .aux-batch
+  > .aux-batchbuttons
+  > .aux-selectdiagonal {
   color: var(--aux-ok-base);
 }
-.aux-matrix > .aux-indicators > .aux-batch > .aux-batchbuttons > .aux-deselectdiagonal {
+.aux-matrix
+  > .aux-indicators
+  > .aux-batch
+  > .aux-batchbuttons
+  > .aux-deselectdiagonal {
   color: var(--aux-warn-base);
 }
-.aux-matrix > .aux-indicators > .aux-batch > .aux-batchbuttons > .aux-deselectall {
+.aux-matrix
+  > .aux-indicators
+  > .aux-batch
+  > .aux-batchbuttons
+  > .aux-deselectall {
   color: var(--aux-warn-base);
 }
 

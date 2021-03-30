@@ -572,7 +572,8 @@ export const Circular = defineClass({
       I.base ||
       I.angle ||
       I.thickness ||
-      I.margin) {
+      I.margin
+    ) {
       I.show_base = false;
       if (O.show_base) {
         drawSlice.call(this, 0, O.angle, inner_p, outer_p, outer, this._base);

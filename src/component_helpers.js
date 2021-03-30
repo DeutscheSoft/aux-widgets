@@ -192,7 +192,12 @@ function createComponent(base) {
           widget.reset(name);
         }
       } catch (e) {
-        warn('%o: Setting attribute %o on generated an error: %o', this, name, e);
+        warn(
+          '%o: Setting attribute %o on generated an error: %o',
+          this,
+          name,
+          e
+        );
       }
     }
 

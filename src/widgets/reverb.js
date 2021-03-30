@@ -33,7 +33,10 @@ function setInputMode() {
   if (O.delay === false) mode = 'line-horizontal';
   if (O.input === false) mode = 'line-vertical';
   this.set('input_handle.mode', mode);
-  this.input.set('visible', O.show_input && O.delay !== false && O.input !== false);
+  this.input.set(
+    'visible',
+    O.show_input && O.delay !== false && O.input !== false
+  );
 }
 
 function drawInput() {
@@ -351,7 +354,7 @@ export const Reverb = defineClass({
   },
   initialize: function (options) {
     Chart.prototype.initialize.call(this, options);
-    
+
     /**
      * @member {Graph} Reverb#input - The {@link Graph} displaying the
      * input signal as a vertical bar.
@@ -381,7 +384,7 @@ export const Reverb = defineClass({
   },
   draw: function (O, element) {
     addClass(element, 'aux-reverb');
-    
+
     Chart.prototype.draw.call(this, O, element);
 
     initValues.call(this, 'delay', O);
@@ -432,19 +435,19 @@ export const Reverb = defineClass({
   },
 });
 
-function onInteractingChanged (value) {
+function onInteractingChanged(value) {
   if (value) {
     this.parent.startInteracting();
   } else {
     this.parent.stopInteracting();
   }
-};
+}
 
 /**
-* @member {ChartHandle} Reverb#input_handle - The {@link ChartHandle}
-*   displaying/setting the initial delay and gain.
-*/
-defineChildWidget(Reverb, "input_handle", {
+ * @member {ChartHandle} Reverb#input_handle - The {@link ChartHandle}
+ *   displaying/setting the initial delay and gain.
+ */
+defineChildWidget(Reverb, 'input_handle', {
   create: ChartHandle,
   show: true,
   default_options: {
@@ -482,10 +485,10 @@ defineChildWidget(Reverb, "input_handle", {
 });
 
 /**
-* @member {ChartHandle} Reverb#rlevel_handle - The {@link ChartHandle}
-*   displaying/setting the pre delay and reverb level.
-*/
-defineChildWidget(Reverb, "rlevel_handle", {
+ * @member {ChartHandle} Reverb#rlevel_handle - The {@link ChartHandle}
+ *   displaying/setting the pre delay and reverb level.
+ */
+defineChildWidget(Reverb, 'rlevel_handle', {
   create: ChartHandle,
   show: true,
   default_options: {
@@ -523,10 +526,10 @@ defineChildWidget(Reverb, "rlevel_handle", {
 });
 
 /**
-* @member {ChartHandle} Reverb#rtime_handle - The {@link ChartHandle}
-*   displaying/setting the reverb time.
-*/
-defineChildWidget(Reverb, "rtime_handle", {
+ * @member {ChartHandle} Reverb#rtime_handle - The {@link ChartHandle}
+ *   displaying/setting the reverb time.
+ */
+defineChildWidget(Reverb, 'rtime_handle', {
   create: ChartHandle,
   show: true,
   default_options: {
@@ -558,17 +561,17 @@ defineChildWidget(Reverb, "rtime_handle", {
 });
 
 function clip(min, max, value) {
-  if (!(value >= min))
-    return min;
+  if (!(value >= min)) return min;
 
-  if (!(value <= max))
-    return max;
+  if (!(value <= max)) return max;
 
   return value;
 }
 
 function defineClipCalculation(name) {
-  defineRecalculation(Reverb, [ name + '_min', name + '_max', name ], function (O) {
+  defineRecalculation(Reverb, [name + '_min', name + '_max', name], function (
+    O
+  ) {
     this.update(name, clip(O[name + '_min'], O[name + '_max'], O[name]));
   });
 }
@@ -579,13 +582,13 @@ defineClipCalculation('rtime');
 defineClipCalculation('gain');
 defineClipCalculation('rlevel');
 
-defineRecalculation(Reverb, [ 'delay', 'predelay', 'rtime' ], function (O) {
+defineRecalculation(Reverb, ['delay', 'predelay', 'rtime'], function (O) {
   const { delay, predelay, rtime } = O;
   this.update('input_handle.x', delay);
   this.update('rlevel_handle.x', delay + predelay);
   this.update('rtime_handle.x', delay + predelay + rtime);
 });
-defineRecalculation(Reverb, ['gain', 'rlevel' ], function (O) {
+defineRecalculation(Reverb, ['gain', 'rlevel'], function (O) {
   const { gain, rlevel } = O;
 
   this.update('input_handle.y', gain);

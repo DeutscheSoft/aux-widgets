@@ -2,11 +2,11 @@ import { Timer } from '../../utils/timers.js';
 
 export class ScrollDetector {
   _recentScrollTo() {
-    return (performance.now() - this._lastScrollTo) < this._interval;
+    return performance.now() - this._lastScrollTo < this._interval;
   }
 
   _recentScrollEvent() {
-    return (performance.now() - this._lastScrollEvent) < this._interval;
+    return performance.now() - this._lastScrollEvent < this._interval;
   }
 
   _reset() {
@@ -23,8 +23,7 @@ export class ScrollDetector {
       this._reset();
       const callback = this._callback;
       this._callback = null;
-      if (callback)
-        callback();
+      if (callback) callback();
     });
   }
 

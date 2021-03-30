@@ -45,13 +45,16 @@ function valueClicked() {
    */
   this.emit('valueclicked', O.value);
 }
-function valueKeydown (e) {
+function valueKeydown(e) {
   var O = this.options;
   switch (e.keyCode) {
     case 9:
       // TAB
       if (!O.tab_to_set) return;
-      this.userset('value', O.set ? O.set.call(this, this._input.value) : this._input.value);
+      this.userset(
+        'value',
+        O.set ? O.set.call(this, this._input.value) : this._input.value
+      );
       valueDone.call(this, true);
       this.emit('valueset', O.value);
   }
@@ -107,14 +110,16 @@ function valueInput() {
   if (O.set === false) return;
   if (!this.__editing) return;
   if (O.editmode == 'immediate')
-    this.userset('value', O.set ? O.set.call(this, this._input.value) : this._input.value);
+    this.userset(
+      'value',
+      O.set ? O.set.call(this, this._input.value) : this._input.value
+    );
 }
 function valueDone(noblur) {
   if (!this.__editing) return;
   this.__editing = false;
   removeClass(this.element, 'aux-active');
-  if (!noblur)
-    this._input.blur();
+  if (!noblur) this._input.blur();
   /**
    * Is fired when editing of the value ends.
    *
@@ -193,8 +198,7 @@ export const Value = defineClass({
     // the value treated by the parent widget.
     set: function (val) {
       val = parseFloat(val);
-      if (isNaN(val))
-        return this.get('value');
+      if (isNaN(val)) return this.get('value');
       return parseFloat(val || 0);
     },
     auto_select: true,

@@ -159,7 +159,7 @@ function touchend(e) {
   const current = getCurrentTouch(this.__touch_id, e);
   if (!current) return;
   this.__touch_id = false;
-  
+
   if (e.cancelable) e.preventDefault();
 
   this.off('touchend', touchend);
@@ -171,12 +171,12 @@ function touchend(e) {
     e.changedTouches[0].clientY
   );
   if (this.element !== E) return;
-  
+
   const rect = current.target.getBoundingClientRect();
   if (rect.x != this.__init_target.x || rect.y != this.__init_target.y) {
     return;
   }
-  
+
   pressEnd.call(this, e);
 }
 function touchstart(e) {

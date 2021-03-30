@@ -38,7 +38,6 @@ function collapse(state) {
   virtualtreeview.collapseGroup(element, !virtualtreeview.isCollapsed(element));
 }
 
-
 /**
  * VirtualTree is a scrollable list of {@link VirtualTreeEntry}s. It
  * relies on a data model {@link VirtualTreeDataView}. Its purpose is
@@ -104,7 +103,7 @@ export const VirtualTree = defineClass({
     this.virtualtreeview_subs = new Subscriptions();
     this.entries = [];
   },
-  _scrollDataTo: function(position) {
+  _scrollDataTo: function (position) {
     const O = this.options;
     let startIndex = Math.floor(position / O.size);
     const dataview = O.virtualtreeview;
@@ -195,8 +194,7 @@ export const VirtualTree = defineClass({
 
     const port = virtualtreeview.matrix.getPortById(id);
 
-    if (!port || !virtualtreeview.includes(port))
-      return -1;
+    if (!port || !virtualtreeview.includes(port)) return -1;
 
     return virtualtreeview.indexOf(port);
   },
@@ -252,7 +250,7 @@ export const VirtualTree = defineClass({
     }
     this._scrollbar.scrollTo(options);
   },
-  _subscribeToTreeView: function(subs, treeView) {
+  _subscribeToTreeView: function (subs, treeView) {
     const O = this.options;
 
     const setEntryPosition = (entry, index) => {
@@ -315,7 +313,9 @@ export const VirtualTree = defineClass({
         const subs = this.virtualtreeview_subs;
         this._subscribeToTreeView(subs, virtualtreeview);
         virtualtreeview.setAmount(O._amount);
-        virtualtreeview.scrollStartIndexTo(Math.max(0, O._startIndex - O.prerender_top));
+        virtualtreeview.scrollStartIndexTo(
+          Math.max(0, O._startIndex - O.prerender_top)
+        );
       }
     }
 
@@ -325,7 +325,9 @@ export const VirtualTree = defineClass({
       const virtualtreeview = O.virtualtreeview;
 
       if (virtualtreeview)
-        virtualtreeview.scrollStartIndexTo(Math.max(0, O._startIndex - O.prerender_top));
+        virtualtreeview.scrollStartIndexTo(
+          Math.max(0, O._startIndex - O.prerender_top)
+        );
     }
 
     if (I._amount) {
@@ -388,8 +390,8 @@ export const VirtualTree = defineClass({
    * @param {string} [options.block='top']
    * @param {string} [options.behavior='auto']
    */
-  scrollEntryIntoView: function(index, options) {
-    if (!options) options = { };
+  scrollEntryIntoView: function (index, options) {
+    if (!options) options = {};
 
     let position = this.calculateEntryPosition(index);
 
@@ -407,16 +409,15 @@ export const VirtualTree = defineClass({
   /**
    * Returns the indices of those entries which are currently in view.
    */
-  getVisibleRange: function() {
+  getVisibleRange: function () {
     const virtualtreeview = this.get('virtualtreeview');
     const prerender_bottom = this.get('prerender_bottom');
 
-    if (!virtualtreeview)
-      return [-1, -1];
+    if (!virtualtreeview) return [-1, -1];
 
     const startIndex = this.get('_startIndex');
 
-    return [ startIndex, startIndex + virtualtreeview.amount - prerender_bottom ];
+    return [startIndex, startIndex + virtualtreeview.amount - prerender_bottom];
   },
   set: function (key, value) {
     if (key === 'prerender_top' || key === 'prerender_bottom') {
@@ -444,11 +445,15 @@ defineChildElement(VirtualTree, 'scroller', {
     this._scrollbar.appendChild(this._scroller);
   },
 });
-defineRecalculation(VirtualTree, [ '_view_height', 'prerender_top', 'prerender_bottom', 'size' ], function (O) {
-  const { _view_height, prerender_top, prerender_bottom, size } = O;
+defineRecalculation(
+  VirtualTree,
+  ['_view_height', 'prerender_top', 'prerender_bottom', 'size'],
+  function (O) {
+    const { _view_height, prerender_top, prerender_bottom, size } = O;
 
-  const _amount = Math.ceil(_view_height / size) + prerender_top + prerender_bottom;
+    const _amount =
+      Math.ceil(_view_height / size) + prerender_top + prerender_bottom;
 
-  if (!isNaN(_amount))
-    this.update('_amount', _amount);
-});
+    if (!isNaN(_amount)) this.update('_amount', _amount);
+  }
+);

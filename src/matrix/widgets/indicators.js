@@ -39,29 +39,30 @@ function onIndicatorClicked() {
   indicators.emit('indicatorClicked', this.source, this.sink);
 }
 
-const formatIndicatorTransform = FORMAT('translateY(%.2fpx) translateX(%.2fpx)');
+const formatIndicatorTransform = FORMAT(
+  'translateY(%.2fpx) translateX(%.2fpx)'
+);
 
-
-function getStartEvent (state) {
+function getStartEvent(state) {
   if (state.findTouch) {
     return state.findTouch(state.start);
   } else {
     return state.start;
   }
 }
-function onDragStart (state, start, e) {
+function onDragStart(state, start, e) {
   onBatchEnd.call(this);
   return true;
 }
 
-function onDragging (s, e) {
+function onDragging(s, e) {
   const O = this.options;
   const state = this.drag.state();
   const px = state.vDistance();
   const x = px[0];
   const y = px[1];
   if (!O._batch) {
-    const dist = Math.sqrt( x*x + y*y );
+    const dist = Math.sqrt(x * x + y * y);
     if (dist > O.min_distance) {
       const start = getStartEvent(state);
       this.set('_batch', true);
@@ -76,12 +77,11 @@ function onDragging (s, e) {
   }
 }
 
-function onDragStop (state, e) {
-  if (this.get('_batch'))
-    onBatchStart.call(this, e);
+function onDragStop(state, e) {
+  if (this.get('_batch')) onBatchStart.call(this, e);
 }
 
-function onBatchStart () {
+function onBatchStart() {
   const O = this.options;
   this.set('show_buttons', true);
   this.set('show_cancel', true);
@@ -90,7 +90,7 @@ function onBatchStart () {
   this.set('show_deselect_all', true);
 }
 
-function onBatchEnd () {
+function onBatchEnd() {
   this.set('show_cancel', false);
   this.set('show_select_diagonal', false);
   this.set('show_deselect_diagonal', false);
@@ -99,7 +99,7 @@ function onBatchEnd () {
   this.set('_batch', false);
 }
 
-function cancel () {
+function cancel() {
   //this.emit("cancel");
   onBatchEnd.call(this);
 }
@@ -152,13 +152,15 @@ export const Indicators = defineClass({
     set_connectionview: function (connectionview) {
       this.connectionview_subs.unsubscribe();
     },
-    set_batch: function (v) { this.drag.set('active', v); },
+    set_batch: function (v) {
+      this.drag.set('active', v);
+    },
   },
   initialize: function (options) {
     Container.prototype.initialize.call(this, options);
     this.connectionview_subs = new Subscriptions();
     this.entries = [];
-    
+
     this.drag = new DragCapture(this, {
       node: this.element,
       active: options.batch,
@@ -166,7 +168,7 @@ export const Indicators = defineClass({
       onmovecapture: onDragging.bind(this),
       onstopcapture: onDragStop.bind(this),
     });
-    
+
     this._dragging = false;
   },
   destroy: function () {
@@ -302,7 +304,10 @@ export const Indicators = defineClass({
       }
     }
     let rect;
-    if (I.validate('_x0', '_y0', '_xd', '_yd', '_xinit', '_yinit') && this._batch) {
+    if (
+      I.validate('_x0', '_y0', '_xd', '_yd', '_xinit', '_yinit') &&
+      this._batch
+    ) {
       rect = this._calculateRectangle();
       this._batch.style.left = rect.x + 'px';
       this._batch.style.top = rect.y + 'px';
@@ -310,8 +315,7 @@ export const Indicators = defineClass({
       this._batch.style.height = rect.height + 'px';
     }
     if (I.validate('show_buttons') && this._batch) {
-      if (!rect)
-        rect = this._calculateRectangle();
+      if (!rect) rect = this._calculateRectangle();
       const x = rect.flip_x ? 'left' : 'right';
       const y = rect.flip_y ? 'top' : 'bottom';
       removeClass(this._batch, 'aux-top-left');
@@ -349,14 +353,14 @@ export const Indicators = defineClass({
       height: height,
       flip_x: _xd < 0,
       flip_y: _yd < 0,
-    }
+    };
   },
   _calculateIndexRectangle: function (rectangle) {
     const { x, y, width, height } = rectangle;
     const size = this.options.size;
     return {
       startColumn: x / size,
-      endColumn: (x + width ) / size,
+      endColumn: (x + width) / size,
       startRow: y / size,
       endRow: (y + height) / size,
     };
@@ -385,19 +389,19 @@ export const Indicators = defineClass({
     this.element.scrollTo(options);
   },
   // Event handler for batch operation dialog.
-  _onConnectDiagonalConfirmed () {
+  _onConnectDiagonalConfirmed() {
     const rectangle = this._calculateRectangle();
     const indexRectangle = this._calculateIndexRectangle(rectangle);
     this.emit('connectDiagonal', indexRectangle, rectangle);
     onBatchEnd.call(this);
   },
-  _onDisconnectDiagonalConfirmed () {
+  _onDisconnectDiagonalConfirmed() {
     const rectangle = this._calculateRectangle();
     const indexRectangle = this._calculateIndexRectangle(rectangle);
     this.emit('disconnectDiagonal', indexRectangle, rectangle);
     onBatchEnd.call(this);
   },
-  _onDisconnectAllConfirmed () {
+  _onDisconnectAllConfirmed() {
     const rectangle = this._calculateRectangle();
     const indexRectangle = this._calculateIndexRectangle(rectangle);
     this.emit('disconnectAll', indexRectangle, rectangle);
@@ -414,7 +418,6 @@ defineChildElement(Indicators, 'scroller', {
   show: true,
 });
 
-
 /**
  * @member {HTMLDiv} Indicators#_batch - The rectangle to indicate
  *   batch selection/deselection.
@@ -425,13 +428,14 @@ defineChildElement(Indicators, 'batch', {
   option: '_batch',
 });
 
-
 defineChildWidget(Indicators, 'buttons', {
   create: Container,
   default_options: {
     class: 'aux-batchbuttons',
   },
-  append: function () { this._batch.appendChild(this.buttons.element); },
+  append: function () {
+    this._batch.appendChild(this.buttons.element);
+  },
 });
 defineChildWidget(Indicators, 'deselect_diagonal', {
   create: ConfirmButton,
@@ -441,16 +445,18 @@ defineChildWidget(Indicators, 'deselect_diagonal', {
     class: 'aux-deselectdiagonal',
   },
   static_events: {
-    mousedown: function(ev) {
+    mousedown: function (ev) {
       ev.stopPropagation();
       return false;
     },
-    confirmed: function() {
+    confirmed: function () {
       this.parent._onDisconnectDiagonalConfirmed();
       return false;
     },
   },
-  append: function () { this.buttons.element.appendChild(this.deselect_diagonal.element); },
+  append: function () {
+    this.buttons.element.appendChild(this.deselect_diagonal.element);
+  },
 });
 defineChildWidget(Indicators, 'deselect_all', {
   create: ConfirmButton,
@@ -460,16 +466,18 @@ defineChildWidget(Indicators, 'deselect_all', {
     class: 'aux-deselectall',
   },
   static_events: {
-    mousedown: function(ev) {
+    mousedown: function (ev) {
       ev.stopPropagation();
       return false;
     },
-    confirmed: function() {
+    confirmed: function () {
       this.parent._onDisconnectAllConfirmed();
       return false;
     },
   },
-  append: function () { this.buttons.element.appendChild(this.deselect_all.element); },
+  append: function () {
+    this.buttons.element.appendChild(this.deselect_all.element);
+  },
 });
 defineChildWidget(Indicators, 'select_diagonal', {
   create: ConfirmButton,
@@ -479,16 +487,18 @@ defineChildWidget(Indicators, 'select_diagonal', {
     class: 'aux-selectdiagonal',
   },
   static_events: {
-    mousedown: function(ev) {
+    mousedown: function (ev) {
       ev.stopPropagation();
       return false;
     },
-    confirmed: function() {
+    confirmed: function () {
       this.parent._onConnectDiagonalConfirmed();
       return false;
     },
   },
-  append: function () { this.buttons.element.appendChild(this.select_diagonal.element); },
+  append: function () {
+    this.buttons.element.appendChild(this.select_diagonal.element);
+  },
 });
 defineChildWidget(Indicators, 'cancel', {
   create: Button,
@@ -497,11 +507,13 @@ defineChildWidget(Indicators, 'cancel', {
     class: 'aux-cancel',
   },
   static_events: {
-    mousedown: function(ev) {
+    mousedown: function (ev) {
       ev.stopPropagation();
       return false;
     },
     click: cancel,
   },
-  append: function () { this.buttons.element.appendChild(this.cancel.element); },
+  append: function () {
+    this.buttons.element.appendChild(this.cancel.element);
+  },
 });

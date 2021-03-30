@@ -1352,7 +1352,19 @@ export const ChartHandle = defineClass({
       toggleClass(this.element, 'aux-dragging', O.dragging);
     }
 
-    var moved = I.validate('x', 'y', 'z', 'mode', 'show_handle', 'x_min', 'x_max', 'y_min', 'y_max', 'z_min', 'z_max');
+    var moved = I.validate(
+      'x',
+      'y',
+      'z',
+      'mode',
+      'show_handle',
+      'x_min',
+      'x_max',
+      'y_min',
+      'y_max',
+      'z_min',
+      'z_max'
+    );
 
     if (moved) redrawHandle.call(this, O, X);
 

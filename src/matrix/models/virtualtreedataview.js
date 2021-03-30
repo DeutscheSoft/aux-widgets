@@ -421,13 +421,11 @@ export class VirtualTreeDataView extends Events {
       super_group.forEach((child) => {
         list[index++] = child;
 
-        if (!(child instanceof GroupData))
-          return;
+        if (!(child instanceof GroupData)) return;
 
         child.index = index - 1;
 
-        if (this.isCollapsed(child))
-          return;
+        if (this.isCollapsed(child)) return;
 
         fillList(this.getSuperGroup(child));
       });
@@ -444,8 +442,7 @@ export class VirtualTreeDataView extends Events {
    * Will sort the list again according to the sort function.
    */
   triggerSort() {
-    if (this._resortTriggered)
-      return;
+    if (this._resortTriggered) return;
     this._resortTriggered = true;
     Promise.resolve().then(() => {
       this._resortTriggered = false;
@@ -483,20 +480,29 @@ export class VirtualTreeDataView extends Events {
    *    This function, if specified will be called to subscribe to changes
    *    which influence the sort order of a node.
    */
-  constructor(group, amount, filterFunction, sortFunction, subscribeSortDependencies) {
+  constructor(
+    group,
+    amount,
+    filterFunction,
+    sortFunction,
+    subscribeSortDependencies
+  ) {
     super();
 
     typecheckFunction(sortFunction);
 
-    if (subscribeSortDependencies)
-      typecheckFunction(subscribeSortDependencies);
+    if (subscribeSortDependencies) typecheckFunction(subscribeSortDependencies);
 
     this.root = new SuperGroup(group, null);
     this.startIndex = 0;
     this.amount = amount;
     this.filterFunction = filterFunction || allowAll;
     this._sortFunction = sortFunction;
-    this._subscribeSortDependencies = subscribeSortDependencies || function (node, cb) { return null; };
+    this._subscribeSortDependencies =
+      subscribeSortDependencies ||
+      function (node, cb) {
+        return null;
+      };
     this.subscribers = initSubscribers();
     this._resortTriggered = false;
 
