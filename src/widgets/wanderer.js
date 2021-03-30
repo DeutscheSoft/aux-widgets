@@ -37,8 +37,8 @@ function setAnimation() {
   const outer = O._outer;
   const range = inner - outer;
   const msecs = (range / speed) * 1000;
-  const full = msecs + pause * 2;
-  const perc = Math.round((pause / full) * 100);
+  const full = msecs + pause;
+  const perc = Math.round(((pause / 2) / full) * 100);
   const secs = Math.round(msecs / 1000);
   const to = 100 - perc;
   const id = this._id;
