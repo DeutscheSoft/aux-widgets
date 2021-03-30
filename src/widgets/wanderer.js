@@ -31,6 +31,7 @@ import { defineChildWidget } from '../child_widget.js';
 
 function setAnimation() {
   const O = this.options;
+  const easing = O.easing;
   const speed = O.speed;
   const pause = O.pause;
   const inner = O._inner;
@@ -51,7 +52,7 @@ function setAnimation() {
 
   this._style.textContent = `
   #${id} {
-    animation: ${id} ${secs}s linear infinite alternate;
+    animation: ${id} ${secs}s ${easing} infinite alternate;
   }
   @keyframes ${id} {
     0% { left: 0; transform: translateX(0); }
@@ -74,17 +75,22 @@ export const Wanderer = defineClass({
    *
    * @property {Number} [options.speed=50] - Speed of the movement in CSS pixels per second.
    * @property {Number} [options.pause=1000] - Pause the animation on start and end for this amount of milliseconds.
+   * @property {String} [options.easing='linear'] - Function of the animation,
+   *   one out of `ease`, `linear`, `ease-in`, `ease-out`, `ease-in-out`,
+   *   `cubic-bezier(n, n, n, n)
    */
   Extends: Container,
   _options: Object.assign(Object.create(Container.prototype._options), {
     speed: 'number',
     pause: 'number',
+    easing: 'string',
     _inner: 'number',
     _outer: 'number',
   }),
   options: {
     speed: 50,
     pause: 1000,
+    easing: 'linear',
     _inner: 0,
     _outer: 0,
   },
