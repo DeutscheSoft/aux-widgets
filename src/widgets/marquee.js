@@ -64,12 +64,12 @@ function setAnimation() {
   removeClass(this.element, 'aux-static');
 }
 
-export const Wanderer = defineClass({
+export const Marquee = defineClass({
   /**
-   * Wanderer is a {@link Label} inside a {@link Container}. Wanderer
+   * Marquee is a {@link Label} inside a {@link Container}. Marquee
    * inherits all options of {@link Label}.
    *
-   * @class Wanderer
+   * @class Marquee
    *
    * @extends Container
    *
@@ -102,15 +102,15 @@ export const Wanderer = defineClass({
   initialize: function (options) {
     if (!options.element) options.element = element('div');
     Container.prototype.initialize.call(this, options);
-    /** @member {HTMLDivElement} Wanderer#element - The main DIV container.
-     * Has class <code>.aux-wanderer</code>.
+    /** @member {HTMLDivElement} Marquee#element - The main DIV container.
+     * Has class <code>.aux-marquee</code>.
      */
     this._id = 'aux-animation_' + Math.random().toString(16).substr(2, 8);
     this._style = element('style', { type: 'text/css' });
     document.head.appendChild(this._style);
   },
   draw: function (O, element) {
-    addClass(element, 'aux-wanderer');
+    addClass(element, 'aux-marquee');
     this.label.element.id = this._id;
     Container.prototype.draw.call(this, O, element);
   },
@@ -135,10 +135,10 @@ export const Wanderer = defineClass({
 });
 
 /**
- * @member {Label} Wanderer#label - Instance of {@link Label} displaying
+ * @member {Label} Marquee#label - Instance of {@link Label} displaying
  *   the text to be scrolled.
  */
-defineChildWidget(Wanderer, 'label', {
+defineChildWidget(Marquee, 'label', {
   create: Label,
   show: true,
   inherit_options: true,

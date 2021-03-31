@@ -39,6 +39,7 @@ export * from './components/icon.js';
 export * from './components/knob.js';
 export * from './components/label.js';
 export * from './components/levelmeter.js';
+export * from './components/marquee.js';
 export * from './components/meter.js';
 export * from './components/multimeter.js';
 export * from './components/navigation.js';
@@ -59,7 +60,6 @@ export * from './components/toggle.js';
 export * from './components/value.js';
 export * from './components/valuebutton.js';
 export * from './components/valueknob.js';
-export * from './components/wanderer.js';
 export * from './components/widget.js';
 
 // other

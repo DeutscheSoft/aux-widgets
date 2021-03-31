@@ -840,6 +840,18 @@ body.aux-cursor-row-resize * {
   display: flex;
 }
 
+/* MARQUEE */
+
+.aux-marquee {
+  overflow: hidden;
+}
+.aux-marquee > .aux-label {
+  position: relative;
+  left: 0;
+  white-space: nowrap;
+  margin: 0;
+}
+
 /* MATRIX */
 
 .aux-matrix {
@@ -1389,18 +1401,6 @@ body.aux-cursor-row-resize * {
 }
 .aux-valueknob.aux-right > .aux-value > .aux-input {
   text-align: right;
-}
-
-/* WANDERER */
-
-.aux-wanderer {
-  overflow: hidden;
-}
-.aux-wanderer > .aux-label {
-  position: relative;
-  left: 0;
-  white-space: nowrap;
-  margin: 0;
 }
 
 /* WINDOW */

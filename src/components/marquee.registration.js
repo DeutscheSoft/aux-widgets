@@ -17,13 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { componentFromWidget } from './../component_helpers.js';
-import { Wanderer } from './../widgets/wanderer.js';
+import { defineComponent } from './../component_helpers.js';
+import { MarqueeComponent } from './marquee.js';
 
-/**
- * WebComponent for the Wanderer widget. Available in the DOM as `aux-wanderer`.
- *
- * @class WandererComponent
- * @implements Component
- */
-export const WandererComponent = componentFromWidget(Wanderer);
+defineComponent('marquee', MarqueeComponent);
