@@ -25,10 +25,10 @@
 
 @charset "UTF-8";
 
-@import 'styles.css';
+@import './styles.css';
 
-@import 'fonts/Oswald-Regular.css';
-@import 'fonts/PragatiNarrow-Regular.css';
+@import './fonts/Oswald-Regular.css';
+@import './fonts/PragatiNarrow-Regular.css';
 
-@import 'fonts/AUXIcons.css';
-@import 'fonts/AUXShapes.css';
+@import './fonts/AUXIcons.css';
+@import './fonts/AUXShapes.css';

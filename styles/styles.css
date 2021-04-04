@@ -27,7 +27,7 @@
 
 @charset "UTF-8";
 
-@import 'basics.css'; /* Some general defaults */
+@import './basics.css'; /* Some general defaults */
 
 :root {
   --aux-main-base: #e0e0e0;
