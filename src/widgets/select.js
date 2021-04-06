@@ -147,7 +147,7 @@ export const Select = defineClass({
     selected: -1,
     value: void 0,
     selected_entry: null,
-    auto_size: true,
+    auto_size: false,
     show_list: false,
     icon: 'arrowdown',
     placeholder: false,
