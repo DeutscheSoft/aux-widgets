@@ -674,25 +674,30 @@ export const Select = defineClass({
     var E = this.element;
 
     if (I.entries || I.auto_size) {
-      I.show_list = true;
-      I.auto_size = false;
-
-      let S = this.sizer.element;
-      let v = O.entries;
-      empty(S);
-      const frag = document.createDocumentFragment();
-      for (let i = 0, m = v.length; i < m; ++i) {
-        const s = element('span', { class: 'aux-sizerentry' });
-        s.textContent = typeof v[i] == 'string' ? v[i] : v[i].label;
-        frag.appendChild(s);
+      
+      if (O.auto_size) {
+        I.show_list = true;
+        I.auto_size = false;
+  
+        let S = this.sizer.element;
+        let v = O.entries;
+        empty(S);
+        const frag = document.createDocumentFragment();
+        for (let i = 0, m = v.length; i < m; ++i) {
+          const s = element('span', { class: 'aux-sizerentry' });
+          s.textContent = typeof v[i] == 'string' ? v[i] : v[i].label;
+          frag.appendChild(s);
+        }
+        S.appendChild(frag);
+  
+        outerWidth(
+          this.label.element,
+          true,
+          outerWidth(this.sizer.element, true)
+        );
+      } else {
+        this.label.element.style.width = null;
       }
-      S.appendChild(frag);
-
-      outerWidth(
-        this.label.element,
-        true,
-        outerWidth(this.sizer.element, true)
-      );
     }
 
     if (I.entries) {
