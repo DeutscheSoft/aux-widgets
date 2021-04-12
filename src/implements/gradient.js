@@ -121,6 +121,7 @@ export const Gradient = defineClass({
         );
         for (let i = 0; i < keys.length; i++) {
           let pos = range.valueToCoef(range.snap(keys[i]));
+          pos = Math.min(1, Math.max(0, pos));
           if (vert) pos = 1 - pos;
           grd.addColorStop(pos, gradient[keys[i] + '']);
         }
