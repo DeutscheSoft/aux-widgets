@@ -45,15 +45,12 @@ function getBase(O) {
 function vert(O) {
   return O.layout === 'left' || O.layout === 'right';
 }
-function fillInterval(range, levels, i, from, to, min_gap, result) {
-  var level = levels[i];
-  var x, j, pos, last_pos, last;
-  var diff;
+function fillInterval(range, steps, i, from, to, min_gap, result) {
 
-  var to_pos = range.valueToPixel(to);
-  last_pos = range.valueToPixel(from);
+  const to_pos = range.valueToPixel(to);
+  const from_pos = range.valueToPixel(from);
 
-  if (Math.abs(to_pos - last_pos) < min_gap) return;
+  if (Math.abs(to_pos - from_pos) < min_gap) return;
 
   if (!result)
     result = {
@@ -61,34 +58,38 @@ function fillInterval(range, levels, i, from, to, min_gap, result) {
       positions: [],
     };
 
-  var values = result.values;
-  var positions = result.positions;
+  const values = result.values;
+  const positions = result.positions;
+  const displayStep = Math.sign(to_pos - from_pos) * Math.max(1, min_gap);
 
-  if (from > to) level = -level;
-  last = from;
+  const step = (from > to) ? -steps[i] : steps[i];
 
-  for (
-    j = ((to - from) / level) | 0, x = from + level;
-    j > 0;
-    x += level, j--
-  ) {
-    pos = range.valueToPixel(x);
-    diff = Math.abs(last_pos - pos);
+  let lastPos = from_pos;
+  let lastValue = from;
+
+  for (let x = from + step; Math.sign(to - x) === Math.sign(step);) {
+    const pos = range.valueToPixel(x);
+    const diff = Math.abs(lastPos - pos);
     if (Math.abs(to_pos - pos) < min_gap) break;
     if (diff >= min_gap) {
       if (i > 0 && diff >= min_gap * 2) {
         // we have a chance to fit some more labels in
-        fillInterval(range, levels, i - 1, last, x, min_gap, result);
+        fillInterval(range, steps, i - 1, lastValue, x, min_gap, result);
       }
       values.push(x);
       positions.push(pos);
-      last_pos = pos;
-      last = x;
+      lastPos = pos;
+      lastValue = x;
+      x += step;
+    } else {
+      const nextValue = range.pixelToValue(lastPos + displayStep);
+
+      x += Math.ceil((nextValue - x) / step) * step;
     }
   }
 
-  if (i > 0 && Math.abs(last_pos - to_pos) >= min_gap * 2) {
-    fillInterval(range, levels, i - 1, last, to, min_gap, result);
+  if (i > 0 && Math.abs(lastPos - to_pos) >= min_gap * 2) {
+    fillInterval(range, steps, i - 1, lastValue, to, min_gap, result);
   }
 
   return result;
