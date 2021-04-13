@@ -695,7 +695,7 @@ export const Select = defineClass({
           true,
           outerWidth(this.sizer.element, true)
         );
-      } else {
+      } else if (this.label) {
         this.label.element.style.width = null;
       }
     }
