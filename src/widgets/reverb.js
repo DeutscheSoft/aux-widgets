@@ -258,7 +258,7 @@ export const Reverb = defineClass({
       { pos: 0, label: '0ms' },
       { pos: 500, label: '500ms' },
       { pos: 1000, label: '1s' },
-      { pos: 1500, label: '1.5ms' },
+      { pos: 1500, label: '1.5s' },
       { pos: 2000, label: '2s' },
       { pos: 2500, label: '2.5s' },
       { pos: 3000, label: '3s' },
