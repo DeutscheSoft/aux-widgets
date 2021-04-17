@@ -17,6 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
+export * from './widgets/bitstring.js';
 export * from './widgets/button.js';
 export * from './widgets/buttons.js';
 export * from './widgets/circular.js';

@@ -1,3 +1,4 @@
+import './components/bitstring.registration.js';
 import './components/button.registration.js';
 import './components/buttons.registration.js';
 import './components/chart.registration.js';

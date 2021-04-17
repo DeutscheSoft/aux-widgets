@@ -18,6 +18,7 @@
  */
 
 // widgets
+export * from './components/bitstring.js';
 export * from './components/button.js';
 export * from './components/buttons.js';
 export * from './components/chart.js';
