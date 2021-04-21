@@ -67,6 +67,7 @@ export const Bitstring = defineClass({
     icons: i => null,
     length: false,
     bitstring: 0,
+    deselect: true,
   },
   static_events: {
     set_buttons: function (buttons) {
