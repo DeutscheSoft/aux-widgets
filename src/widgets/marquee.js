@@ -88,8 +88,8 @@ export const Marquee = defineClass({
     _outer: 'number',
   }),
   options: {
-    speed: 50,
-    pause: 1000,
+    speed: 25,
+    pause: 2000,
     easing: 'linear',
     _inner: 0,
     _outer: 0,
