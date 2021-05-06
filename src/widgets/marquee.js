@@ -38,10 +38,9 @@ function setAnimation() {
   const outer = O._outer;
   const range = inner - outer;
   const msecs = (range / speed) * 1000;
-  const full = msecs + pause;
-  const perc = Math.round(((pause / 2) / full) * 100);
-  const secs = Math.round(msecs / 1000);
-  const to = 100 - perc;
+  const duration = Math.round(msecs + pause);
+  const perc = (((pause / 2) / duration) * 100).toFixed(2);
+  const to = (100 - perc).toFixed(2);
   const id = this._id;
 
   if (range <= 0) {
@@ -52,7 +51,7 @@ function setAnimation() {
 
   this._style.textContent = `
   #${id} {
-    animation: ${id} ${secs}s ${easing} infinite alternate;
+    animation: ${id} ${duration}ms ${easing} infinite alternate;
   }
   @keyframes ${id} {
     0% { left: 0; transform: translateX(0); }
@@ -88,8 +87,8 @@ export const Marquee = defineClass({
     _outer: 'number',
   }),
   options: {
-    speed: 25,
-    pause: 2000,
+    speed: 50,
+    pause: 1000,
     easing: 'linear',
     _inner: 0,
     _outer: 0,
