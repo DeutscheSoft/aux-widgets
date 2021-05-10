@@ -131,6 +131,10 @@ export const Marquee = defineClass({
     this.set('_outer', innerWidth(this.element));
     this.set('_inner', outerWidth(this.label.element));
   },
+  destroy: function () {
+    if (this._style)
+      this._style.remove();
+  },
 });
 
 /**
