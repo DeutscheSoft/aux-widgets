@@ -665,7 +665,10 @@ export const Select = defineClass({
 
     Button.prototype.draw.call(this, O, element);
   },
-
+  resize: function () {
+    Button.prototype.resize.call(this);
+    this.invalidate('auto_size');
+  },
   redraw: function () {
     Button.prototype.redraw.call(this);
 
