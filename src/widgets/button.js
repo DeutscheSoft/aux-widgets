@@ -314,7 +314,7 @@ defineChildWidget(Button, 'icon', {
   create: Icon,
   option: 'icon',
   inherit_options: true,
-  toggleClass: true,
+  toggle_class: true,
 });
 
 /**
@@ -324,5 +324,5 @@ defineChildWidget(Button, 'label', {
   create: Label,
   option: 'label',
   inherit_options: true,
-  toggleClass: true,
+  toggle_class: true,
 });

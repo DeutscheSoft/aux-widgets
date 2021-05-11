@@ -845,7 +845,7 @@ export const SelectEntry = defineClass({
 defineChildWidget(Select, 'sizer', {
   create: Label,
   option: 'auto_size',
-  toggleClass: true,
+  toggle_class: true,
   default_options: {
     class: 'aux-sizer',
   },

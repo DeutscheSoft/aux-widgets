@@ -63,4 +63,5 @@ defineChildWidget(Frame, 'label', {
   default_options: {
     class: 'aux-framelabel',
   },
+  toggle_class: true,
 });
