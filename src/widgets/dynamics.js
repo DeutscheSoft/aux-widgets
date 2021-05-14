@@ -217,7 +217,8 @@ export const Dynamics = defineClass({
         'makeup',
         'gain',
         'reference',
-        'type'
+        'type',
+        'knee'
       )
     ) {
       this.drawGraph();
