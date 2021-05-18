@@ -617,7 +617,6 @@ body.aux-cursor-row-resize * {
 
 .aux-meter {
   display: inline-grid;
-  overflow: hidden;
 }
 .aux-meter.aux-vertical {
   min-height: 128px;
