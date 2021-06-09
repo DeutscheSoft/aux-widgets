@@ -28,15 +28,12 @@ import {
 } from '../utils/audiomath.js';
 import { error, warn } from './../utils/log.js';
 
-function LinearSnapModule(stdlib, foreign) {
-  var min = +foreign.min;
-  var max = +foreign.max;
-  var step = +foreign.step;
-  var base = +foreign.base;
-  const clip = !!foreign.clip;
-
-  var floor = stdlib.Math.floor;
-  var ceil = stdlib.Math.ceil;
+function LinearSnapModule(options) {
+  var min = +options.min;
+  var max = +options.max;
+  var step = +options.step;
+  var base = +options.base;
+  const clip = !!options.clip;
 
   function lowSnap(v, direction) {
     v = +v;
@@ -56,13 +53,13 @@ function LinearSnapModule(stdlib, foreign) {
 
     t = (v - base) / step;
 
-    if (direction > 0.0) n = ceil(t);
-    else if (direction < 0.0) n = floor(t);
+    if (direction > 0.0) n = Math.ceil(t);
+    else if (direction < 0.0) n = Math.floor(t);
     else {
-      if (t - floor(t) < 0.5) {
-        n = floor(t);
+      if (t - Math.floor(t) < 0.5) {
+        n = Math.floor(t);
       } else {
-        n = ceil(t);
+        n = Math.ceil(t);
       }
     }
 
@@ -119,12 +116,12 @@ function LinearSnapModule(stdlib, foreign) {
   };
 }
 
-function ArraySnapModule(stdlib, foreign, heap) {
-  var values = new stdlib.Float64Array(heap);
+function ArraySnapModule(options, heap) {
+  var values = new Float64Array(heap);
   var len = (heap.byteLength >> 3) | 0;
-  var min = +(foreign.min !== void 0 ? foreign.min : values[0]);
-  var max = +(foreign.max !== void 0 ? foreign.max : values[len - 1]);
-  const clip = !!foreign.clip;
+  var min = +(options.min !== void 0 ? options.min : values[0]);
+  var max = +(options.max !== void 0 ? options.max : values[len - 1]);
+  const clip = !!options.clip;
 
   function lowSnap(v, direction) {
     v = +v;
@@ -181,10 +178,10 @@ function ArraySnapModule(stdlib, foreign, heap) {
     snap: snap,
   };
 }
-function NullSnapModule(stdlib, foreign) {
-  var min = +foreign.min;
-  var max = +foreign.max;
-  const clip = !!foreign.clip;
+function NullSnapModule(options) {
+  var min = +options.min;
+  var max = +options.max;
+  const clip = !!options.clip;
 
   function snap(v) {
     v = +v;
@@ -214,12 +211,12 @@ function updateSnap() {
   if (Array.isArray(O.snap)) {
     Object.assign(
       this,
-      ArraySnapModule(window, O, new Float64Array(numSort(O.snap)).buffer)
+      ArraySnapModule(O, new Float64Array(numSort(O.snap)).buffer)
     );
   } else if (typeof O.snap === 'number' && O.snap > 0.0) {
     Object.assign(
       this,
-      LinearSnapModule(window, {
+      LinearSnapModule({
         min: Math.min(O.min, O.max),
         max: Math.max(O.min, O.max),
         step: O.snap,
@@ -230,7 +227,7 @@ function updateSnap() {
   } else if (O.min < Infinity && O.max > -Infinity) {
     Object.assign(
       this,
-      NullSnapModule(window, {
+      NullSnapModule({
         min: Math.min(O.min, O.max),
         max: Math.max(O.min, O.max),
         clip: O.clip,
@@ -250,12 +247,14 @@ function updateSnap() {
     });
   }
 }
-function TRAFO_PIECEWISE(stdlib, foreign, heap) {
-  var reverse = foreign.reverse | 0;
+
+// Creates a piecewise linear transformation.
+function makePiecewiseLinearTransformation(options, heap) {
+  var reverse = options.reverse | 0;
   var l = heap.byteLength >> 4;
   var X = new Float64Array(heap, 0, l);
   var Y = new Float64Array(heap, l * 8, l);
-  var basis = +foreign.basis;
+  var basis = +options.basis;
 
   if (!(l >= 2))
     throw new TypeError(
@@ -347,14 +346,16 @@ function TRAFO_PIECEWISE(stdlib, foreign, heap) {
     coefToValue: coefToValue,
   };
 }
-function TRAFO_FUNCTION(stdlib, foreign) {
-  var reverse = foreign.reverse | 0;
-  var scale = foreign.scale;
-  var basis = +foreign.basis;
+
+// Creates a transformation from generic function.
+function makeFunctionTransformation(options) {
+  var reverse = options.reverse | 0;
+  var scale = options.scale;
+  var basis = +options.basis;
   function valueToBased(value, size) {
     value = +value;
     size = +size;
-    value = scale(value, foreign, false) * size;
+    value = scale(value, options, false) * size;
     if (reverse) value = size - value;
     return value;
   }
@@ -362,7 +363,7 @@ function TRAFO_FUNCTION(stdlib, foreign) {
     coef = +coef;
     size = +size;
     if (reverse) coef = size - coef;
-    coef = scale(coef / size, foreign, true);
+    coef = scale(coef / size, options, true);
     return coef;
   }
   function valueToPixel(n) {
@@ -386,11 +387,13 @@ function TRAFO_FUNCTION(stdlib, foreign) {
     coefToValue: coefToValue,
   };
 }
-function TRAFO_LINEAR(stdlib, foreign) {
-  var reverse = foreign.reverse | 0;
-  var min = +foreign.min;
-  var max = +foreign.max;
-  var basis = +foreign.basis;
+
+// Creates a linear transformation.
+function makeLinearTransformation(options) {
+  var reverse = options.reverse | 0;
+  var min = +options.min;
+  var max = +options.max;
+  var basis = +options.basis;
   function valueToBased(value, size) {
     value = +value;
     size = +size;
@@ -494,13 +497,15 @@ function TRAFO_LINEAR(stdlib, foreign) {
     coefToValue: coefToValue,
   };
 }
-function TRAFO_LOG(stdlib, foreign) {
-  var reverse = foreign.reverse | 0;
-  var min = +foreign.min;
-  var max = +foreign.max;
-  var log_factor = +foreign.log_factor;
-  var trafo_reverse = foreign.trafo_reverse | 0;
-  var basis = +foreign.basis;
+
+// Creates a logarithmic transformation.
+function makeLogarithmicTransformation(options) {
+  var reverse = options.reverse | 0;
+  var min = +options.min;
+  var max = +options.max;
+  var log_factor = +options.log_factor;
+  var trafo_reverse = options.trafo_reverse | 0;
+  var basis = +options.basis;
   function valueToBased(value, size) {
     value = +value;
     size = +size;
@@ -536,12 +541,14 @@ function TRAFO_LOG(stdlib, foreign) {
     coefToValue: coefToValue,
   };
 }
-function TRAFO_FREQ(stdlib, foreign) {
-  var reverse = foreign.reverse | 0;
-  var min = +foreign.min;
-  var max = +foreign.max;
-  var trafo_reverse = foreign.trafo_reverse | 0;
-  var basis = +foreign.basis;
+
+// A transformation for frequency scales.
+function makeFrequencyTransformation(options) {
+  var reverse = options.reverse | 0;
+  var min = +options.min;
+  var max = +options.max;
+  var trafo_reverse = options.trafo_reverse | 0;
+  var basis = +options.basis;
   function valueToBased(value, size) {
     value = +value;
     size = +size;
@@ -584,7 +591,7 @@ function updateTransformation() {
   var module;
 
   if (typeof scale === 'function') {
-    module = TRAFO_FUNCTION(window, O);
+    module = makeFunctionTransformation(O);
   } else if (Array.isArray(scale)) {
     var i = 0;
     if (scale.length % 2) {
@@ -602,27 +609,27 @@ function updateTransformation() {
         error('piecewise-linear array not sorted.');
     }
 
-    module = TRAFO_PIECEWISE(window, O, new Float64Array(scale).buffer);
+    module = makePiecewiseLinearTransformation(O, new Float64Array(scale).buffer);
   } else
     switch (scale) {
       case 'linear':
-        module = TRAFO_LINEAR(window, O);
+        module = makeLinearTransformation(O);
         break;
       case 'decibel':
         O.trafo_reverse = 1;
-        module = TRAFO_LOG(window, O);
+        module = makeLogarithmicTransformation(O);
         break;
       case 'log2':
         O.trafo_reverse = 0;
-        module = TRAFO_LOG(window, O);
+        module = makeLogarithmicTransformation(O);
         break;
       case 'frequency':
         O.trafo_reverse = 0;
-        module = TRAFO_FREQ(window, O);
+        module = makeFrequencyTransformation(O);
         break;
       case 'frequency-reverse':
         O.trafo_reverse = 1;
-        module = TRAFO_FREQ(window, O);
+        module = makeFrequencyTransformation(O);
         break;
       default:
         warn('Unsupported scale', scale);
