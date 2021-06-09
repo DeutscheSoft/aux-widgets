@@ -178,6 +178,7 @@ function ArraySnapModule(options, heap) {
     snap: snap,
   };
 }
+
 function NullSnapModule(options) {
   var min = +options.min;
   var max = +options.max;
@@ -198,6 +199,19 @@ function NullSnapModule(options) {
     snapDown: snap,
   };
 }
+
+const TrivialSnapModule = {
+  snap: function (v) {
+    return +v;
+  },
+  snapUp: function (v) {
+    return +v;
+  },
+  snapDown: function (v) {
+    return +v;
+  },
+};
+
 function numSort(arr) {
   arr = arr.slice(0);
   arr.sort(function (a, b) {
@@ -207,45 +221,29 @@ function numSort(arr) {
 }
 function updateSnap() {
   var O = this.options;
+  let snap_module;
   // Notify that the ranged options have been modified
   if (Array.isArray(O.snap)) {
-    Object.assign(
-      this,
-      ArraySnapModule(O, new Float64Array(numSort(O.snap)).buffer)
-    );
+    snap_module = ArraySnapModule(O, new Float64Array(numSort(O.snap)).buffer);
   } else if (typeof O.snap === 'number' && O.snap > 0.0) {
-    Object.assign(
-      this,
-      LinearSnapModule({
-        min: Math.min(O.min, O.max),
-        max: Math.max(O.min, O.max),
-        step: O.snap,
-        base: O.base || 0,
-        clip: O.clip,
-      })
-    );
-  } else if (O.min < Infinity && O.max > -Infinity) {
-    Object.assign(
-      this,
-      NullSnapModule({
-        min: Math.min(O.min, O.max),
-        max: Math.max(O.min, O.max),
-        clip: O.clip,
-      })
-    );
-  } else {
-    Object.assign(this, {
-      snap: function (v) {
-        return +v;
-      },
-      snapUp: function (v) {
-        return +v;
-      },
-      snapDown: function (v) {
-        return +v;
-      },
+    snap_module = LinearSnapModule({
+      min: Math.min(O.min, O.max),
+      max: Math.max(O.min, O.max),
+      step: O.snap,
+      base: O.base || 0,
+      clip: O.clip,
     });
+  } else if (O.clip && O.min < Infinity && O.max > -Infinity) {
+    snap_module = NullSnapModule({
+      min: Math.min(O.min, O.max),
+      max: Math.max(O.min, O.max),
+      clip: O.clip,
+    });
+  } else {
+    snap_module = TrivialSnapModule;
   }
+
+  this.update('snap_module', snap_module);
 }
 
 // Creates a piecewise linear transformation.
@@ -748,6 +746,7 @@ export const Ranged = defineClass({
     log_factor: 1,
     trafo_reverse: false, /* used internally, no documentation */
     transformation: null,
+    snap_module: TrivialSnapModule,
   },
   _options: {
     scale: 'string|array|function',
@@ -765,6 +764,7 @@ export const Ranged = defineClass({
     log_factor: 'number',
     trafo_reverse: 'boolean',
     transformation: 'object',
+    snap_module: 'object',
   },
   static_events: {
     set: setCallback,
@@ -800,5 +800,14 @@ export const Ranged = defineClass({
   },
   coefToValue: function(coef) {
     return this.get('transformation').coefToValue(coef);
+  },
+  snapUp: function(value) {
+    return this.get('snap_module').snapUp(value);
+  },
+  snapDown: function(value) {
+    return this.get('snap_module').snapDown(value);
+  },
+  snap: function(value) {
+    return this.get('snap_module').snap(value);
   },
 });
