@@ -610,7 +610,7 @@ function updateTransformation() {
     }
 
     module = makePiecewiseLinearTransformation(O, new Float64Array(scale).buffer);
-  } else
+  } else {
     switch (scale) {
       case 'linear':
         module = makeLinearTransformation(O);
@@ -634,8 +634,9 @@ function updateTransformation() {
       default:
         warn('Unsupported scale', scale);
     }
+  }
 
-  Object.assign(this, module);
+  this.update('transformation', module);
 }
 function setCallback(key) {
   switch (key) {
@@ -743,9 +744,10 @@ export const Ranged = defineClass({
     shift_up: 4,
     shift_down: 0.25,
     snap: 0,
-    round: true /* default for Range, no dedicated option */,
+    round: true, /* default for Range, no dedicated option */
     log_factor: 1,
-    trafo_reverse: false /* used internally, no documentation */,
+    trafo_reverse: false, /* used internally, no documentation */
+    transformation: null,
   },
   _options: {
     scale: 'string|array|function',
@@ -762,6 +764,7 @@ export const Ranged = defineClass({
     round: 'boolean',
     log_factor: 'number',
     trafo_reverse: 'boolean',
+    transformation: 'object',
   },
   static_events: {
     set: setCallback,
@@ -779,5 +782,23 @@ export const Ranged = defineClass({
       updateSnap.call(this);
       updateTransformation.call(this);
     },
+  },
+  valueToBased: function(coef, size) {
+    return this.get('transformation').valueToBased(coef, size);
+  },
+  basedToValue: function(coef, size) {
+    return this.get('transformation').basedToValue(coef, size);
+  },
+  valueToPixel: function(value) {
+    return this.get('transformation').valueToPixel(value);
+  },
+  pixelToValue: function(pos) {
+    return this.get('transformation').pixelToValue(pos);
+  },
+  valueToCoef: function(value) {
+    return this.get('transformation').valueToCoef(value);
+  },
+  coefToValue: function(coef) {
+    return this.get('transformation').coefToValue(coef);
   },
 });

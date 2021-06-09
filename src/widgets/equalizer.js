@@ -71,8 +71,8 @@ function drawGraph(bands) {
   var step = O.accuracy;
   var over = O.oversampling;
   var thres = O.threshold;
-  var x_px_to_val = this.range_x.pixelToValue;
-  var y_val_to_px = this.range_y.valueToPixel;
+  var x_px_to_val = this.range_x.pixelToValue.bind(this.range_x);
+  var y_val_to_px = this.range_y.valueToPixel.bind(this.range_y);
   var i, j, k;
   var x, y;
   var pursue;
