@@ -35,7 +35,6 @@ function fastDrawPLinear(X, Y) {
     tmp;
 
   var accuracy = 20;
-  var c = 0;
 
   if (len < 2) return '';
 
@@ -54,7 +53,6 @@ function fastDrawPLinear(X, Y) {
     if (tmp !== dy) {
       ret.push('L', x.toFixed(2), ',', y.toFixed(2));
       dy = tmp;
-      c++;
     }
     x = +X[i];
     y = +Y[i];
@@ -96,7 +94,7 @@ function drawGraph(bands) {
     y = 0.0;
     for (j = 0; j < bands.length; j++) y += bands[j](x);
     Y[i] = y_val_to_px(y);
-    let diff = Math.abs(Y[i] - Y[i - 1]) >= thres;
+    const diff = Math.abs(Y[i] - Y[i - 1]) >= thres;
     if (i && over > 1 && (diff || pursue)) {
       if (diff) pursue = true;
       else if (!diff && pursue) pursue = false;

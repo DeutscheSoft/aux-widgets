@@ -241,7 +241,6 @@ export const Navigation = defineClass({
   },
   initialize: function (options) {
     Container.prototype.initialize.call(this, options);
-    var O = this.options;
     /**
      * @member {HTMLDivElement} Navigation#element - The main DIV container.
      *   Has class <code>.aux-navigation</code>.

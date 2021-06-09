@@ -110,7 +110,7 @@ export const Pager = defineClass({
     // with the page label/icon
     let subs = pages.pages.forEachAsync((page, position) => {
       let _subs = initSubscriptions();
-      let id = page.element.id || false;
+      const id = page.element.id || false;
       const button = navigation.addButton(
         {
           label: page.get('label') || false,
@@ -377,7 +377,7 @@ export const Pager = defineClass({
       if (label) p.set('label', label);
 
       for (var key in buttonOptions) {
-        if (buttonOptions.hasOwnProperty(key))
+        if (Object.prototype.hasOwnProperty.call(buttonOptions, key))
           button.set(key, buttonOptions[key]);
       }
     } else {

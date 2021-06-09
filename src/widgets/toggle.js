@@ -26,11 +26,11 @@ function toggle(O) {
   this.emit('toggled', O.state);
 }
 function pressStart(e) {
-  let O = this.options;
+  const O = this.options;
   if (O.press || O.delay) toggle.call(this, O);
 }
 function pressEnd(e) {
-  let O = this.options;
+  const O = this.options;
   if (
     (O.press && e.timeStamp > this.__time_stamp + O.press) ||
     (!O.press && !O.delay)
@@ -38,7 +38,7 @@ function pressEnd(e) {
     toggle.call(this, O);
 }
 function pressCancel(e) {
-  let O = this.options;
+  const O = this.options;
   if (O.press) toggle.call(this, O);
 }
 

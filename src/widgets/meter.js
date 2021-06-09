@@ -26,7 +26,6 @@ import { Scale } from './scale.js';
 import {
   element,
   addClass,
-  getStyle,
   toggleClass,
   removeClass,
   insertAfter,
@@ -35,7 +34,6 @@ import {
 } from '../utils/dom.js';
 
 import { FORMAT } from '../utils/sprintf.js';
-import { S } from '../dom_scheduler.js';
 
 function vert(O) {
   return O.layout === 'left' || O.layout === 'right';
@@ -421,7 +419,7 @@ export const Meter = defineClass({
     var O = this.options;
     var w = Math.round(O._width);
     var h = Math.round(O._height);
-    var i, j;
+    var i;
 
     if (!(w > 0 && h > 0)) return;
 

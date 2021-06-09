@@ -193,7 +193,6 @@ export const MultiMeter = defineClass({
      *   Has class <code>.aux-multimeter</code>.
      */
     this.meters = [];
-    var O = this.options;
   },
   draw: function (O, element) {
     addClass(element, 'aux-multimeter');
@@ -319,13 +318,13 @@ function mapChildOption(value, key) {
   }
 }
 
-let obj = objectSub(
+const obj = objectSub(
   LevelMeter.prototype._options,
   Container.prototype._options
 );
 
 for (var key in obj) {
-  if (!obj.hasOwnProperty(key)) continue;
+  if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
   if (MultiMeter.prototype._options[key]) continue;
   var type = LevelMeter.prototype._options[key];
   if (type.search('array') !== -1) {
@@ -347,7 +346,7 @@ function extractChildOptions(O, i) {
     _type;
 
   for (var _key in mapped_options) {
-    if (!O.hasOwnProperty(_key)) continue;
+    if (!Object.prototype.hasOwnProperty.call(O, _key)) continue;
     var ckey = mapped_options[_key];
     value = O[_key];
     _type = LevelMeter.prototype._options[_key] || '';

@@ -98,7 +98,7 @@ export function registerOptions(parent, name, options) {
 export function unregisterOptions(parent, name, options) {
   parent = normalizeParent(parent);
 
-  let tmp = optionsChildren.get(parent);
+  const tmp = optionsChildren.get(parent);
 
   if (!tmp) {
     throw new Error('Unknown AUX-OPTIONS');

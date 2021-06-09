@@ -46,7 +46,7 @@ export function removeEvent(from, event, fun) {
 export function addStaticEvent(w, event, fun) {
   var p = w.prototype,
     e;
-  if (!p.hasOwnProperty('static_events')) {
+  if (!Object.prototype.hasOwnProperty.call(p, 'static_events')) {
     if (p.static_events) {
       p.static_events = e = Object.assign({}, p.static_events);
     } else {
@@ -188,7 +188,7 @@ function mergeStaticEvents(a, b) {
   if (!b) return Object.assign({}, a);
   for (event in a) {
     var tmp = a[event];
-    if (b.hasOwnProperty(event)) {
+    if (Object.prototype.hasOwnProperty.call(b, event)) {
       b[event] = arrayify(tmp).concat(arrayify(b[event]));
     } else {
       b[event] = Array.isArray(tmp) ? tmp.slice(0) : tmp;
@@ -208,7 +208,7 @@ function mixin(dst, src) {
         key === 'options'
       )
         continue;
-      if (!src.hasOwnProperty(key)) continue;
+      if (!Object.prototype.hasOwnProperty.call(src, key)) continue;
 
       fun = src[key];
 
@@ -246,7 +246,7 @@ export function defineClass(o) {
       } else c = tmp[i];
 
       if (typeof c.options === 'object') {
-        for (let key in c.options) {
+        for (const key in c.options) {
           if (!(key in methods.options)) methods.options[key] = c.options[key];
         }
       }
@@ -265,7 +265,7 @@ export function defineClass(o) {
     }
   }
 
-  const constructor = o.hasOwnProperty('constructor')
+  const constructor = Object.prototype.hasOwnProperty.call(o, 'constructor')
     ? methods.constructor
     : Extends
     ? function (...args) {

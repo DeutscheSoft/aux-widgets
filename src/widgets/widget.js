@@ -52,7 +52,7 @@ Invalid.prototype = {
     var ret = false;
     for (i = 0; i < arguments.length; i++) {
       key = arguments[i];
-      if (this.hasOwnProperty(key) && this[key]) {
+      if (Object.prototype.hasOwnProperty.call(this, key) && this[key]) {
         this[key] = false;
         ret = true;
       }
@@ -65,7 +65,7 @@ Invalid.prototype = {
       key;
     for (i = 0; i < arguments.length; i++) {
       key = arguments[i];
-      if (this.hasOwnProperty(key) && this[key]) {
+      if (Object.prototype.hasOwnProperty.call(this, key) && this[key]) {
         return true;
       }
     }
@@ -128,7 +128,7 @@ function dblClick(e) {
 }
 
 function setPreset(preset) {
-  let O = this.options;
+  const O = this.options;
   let key, val;
   if (this._last_preset) {
     this.removeClass('aux-preset-' + this._last_preset);
@@ -136,12 +136,12 @@ function setPreset(preset) {
   this.addClass('aux-preset-' + preset);
   this._last_preset = preset;
 
-  let preset_options = O.presets[preset] || {};
+  const preset_options = O.presets[preset] || {};
   this._presetting = true;
   for (key in preset_options) {
-    if (!this._preset_origins.hasOwnProperty(key))
+    if (!Object.prototype.hasOwnProperty.call(this._preset_origins, key))
       this._preset_origins[key] = O[key];
-    if (preset_options.hasOwnProperty(key)) val = preset_options[key];
+    if (Object.prototype.hasOwnProperty.call(preset_options, key)) val = preset_options[key];
     else val = this._preset_origins[key];
     this.set(key, val);
   }
@@ -274,7 +274,7 @@ export const Widget = defineClass({
     set_dblclick: function (val) {
       const event_target = this.getEventTarget();
       if (!event_target) return;
-      if (!!val) event_target.addEventListener('click', this.__dblclick_cb);
+      if (val) event_target.addEventListener('click', this.__dblclick_cb);
       else event_target.removeEventListener('click', this.__dblclick_cb);
     },
     initialized: function () {
@@ -288,7 +288,7 @@ export const Widget = defineClass({
       setPreset.call(this, this.options.preset);
     },
     set: function (key, val) {
-      if (!this._presetting && this._preset_origins.hasOwnProperty(key)) {
+      if (!this._presetting && Object.prototype.hasOwnProperty.call(this._preset_origins, key)) {
         this._preset_origins[key] = val;
       }
     },
@@ -516,7 +516,7 @@ export const Widget = defineClass({
   draw: function (O, element) {
     let E;
 
-    let notransitions = O.notransitions;
+    const notransitions = O.notransitions;
 
     if (notransitions === void 0) {
       O.notransitions = true;

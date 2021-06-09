@@ -283,7 +283,6 @@ export const Knob = defineClass({
   },
 
   set: function (key, value) {
-    var O = this.options;
     if (key === 'base') {
       if (value === false) value = this.options.min;
     }

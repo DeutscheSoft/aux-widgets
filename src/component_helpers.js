@@ -99,7 +99,7 @@ function lowParseAttribute(type, x) {
     case 'array':
       try {
         return lowParseAttribute.call(this, 'json', x);
-      } catch (err) {}
+      } catch (err) { /* empty */ }
       return lowParseAttribute.call(this, 'js', x);
     default:
       throw new Error(sprintf('Unsupported attribute type "%s"', type));
@@ -405,7 +405,7 @@ function defineOptionsAsProperties(component, options) {
   if (!a_div) a_div = document.createElement('div');
 
   options.forEach((name) => {
-    let property_name = name in a_div ? 'aux' + name : name;
+    const property_name = name in a_div ? 'aux' + name : name;
     Object.defineProperty(component.prototype, property_name, {
       get: function () {
         return this.auxWidget.get(name);
@@ -420,7 +420,7 @@ function defineOptionsAsProperties(component, options) {
 }
 
 export function componentFromWidget(Widget, base) {
-  let compbase = createComponent(base);
+  const compbase = createComponent(base);
   const attributes = attributeForWidget(Widget);
 
   const component = class extends compbase {
@@ -496,7 +496,7 @@ export function subcomponentFromWidget(
   removeCallback,
   base
 ) {
-  let compbase = createComponent(base);
+  const compbase = createComponent(base);
   const attributes = attributeForWidget(Widget);
 
   if (!appendCallback)

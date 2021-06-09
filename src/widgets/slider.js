@@ -169,7 +169,6 @@ export const Slider = defineClass({
   redraw: function () {
     var I = this.invalid;
     var O = this.options;
-    var E = this.element;
 
     if (I.image) {
       I.image = false;

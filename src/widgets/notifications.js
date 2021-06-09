@@ -176,7 +176,6 @@ export const Notification = defineClass({
   },
   redraw: function () {
     var I = this.invalid;
-    var O = this.options;
     var i = I.content;
     Container.prototype.redraw.call(this);
     if (i && this.icon)

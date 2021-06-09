@@ -39,7 +39,7 @@ export const Tags = defineClass({
   tagToString: function (tag) {
     if (typeof tag == 'string') {
       return tag;
-    } else if (Tag.prototype.isPrototypeOf(tag)) {
+    } else if (Object.prototype.isPrototypeOf.call(Tag.prototype, tag)) {
       if (!tag.isDestructed()) {
         return tag.options.tag;
       } else {
@@ -64,8 +64,8 @@ export const Tags = defineClass({
     if (typeof tag == 'string') {
       var o = Object.assign(options || {}, { tag: tag });
       tag = new C(o);
-    } else if (C.prototype.isPrototypeOf(tag)) {
-      tag = tag;
+    } else if (Object.prototype.isPrototypeOf.call(C.prototype, tag)) {
+      /* empty */
     } else {
       tag = new C(tag);
     }

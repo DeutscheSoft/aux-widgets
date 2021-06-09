@@ -157,7 +157,6 @@ export const FrequencyResponse = defineClass({
 
   redraw: function () {
     var I = this.invalid;
-    var O = this.options;
 
     if (I.scale) {
       I.scale = false;

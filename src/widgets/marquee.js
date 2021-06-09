@@ -116,7 +116,6 @@ export const Marquee = defineClass({
 
   redraw: function () {
     var I = this.invalid;
-    var O = this.options;
 
     Container.prototype.redraw.call(this);
 

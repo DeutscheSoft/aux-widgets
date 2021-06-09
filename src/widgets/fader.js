@@ -66,12 +66,11 @@ function getValue(ev) {
   return this.pixelToValue(real);
 }
 function clicked(ev) {
-  var value;
   if (this._handle.contains(ev.target)) return;
   if (this.value && this.value.element.contains(ev.target)) return;
   if (this.label && this.label.element.contains(ev.target)) return;
   if (this.scale && this.scale.element.contains(ev.target)) return;
-  value = this.userset('value', getValue.call(this, ev));
+  this.userset('value', getValue.call(this, ev));
 }
 function dblClick() {
   this.userset('value', this.options.reset);
@@ -173,8 +172,7 @@ export const Fader = defineClass({
     if (!options.element) options.element = element('div');
     Widget.prototype.initialize.call(this, options);
 
-    var E,
-      O = this.options;
+    const O = this.options;
 
     /**
      * @member {HTMLDivElement} Fader#element - The main DIV container.

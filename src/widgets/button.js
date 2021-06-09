@@ -33,7 +33,7 @@ function resetDelayTo() {
 let _touchmoveHandler;
 
 function pressStart(e) {
-  let O = this.options;
+  const O = this.options;
   this.__time_stamp = e.timeStamp;
   if (O.delay && this.__delayed_to < 0) {
     this.__delayed_to = window.setTimeout(
@@ -78,7 +78,7 @@ function pressStart(e) {
   this.emit('press_start', e);
 }
 function pressEnd(e) {
-  let O = this.options;
+  const O = this.options;
   if (O.delay && this.__delayed_to >= 0) {
     resetDelayTo.call(this);
     /**
@@ -107,7 +107,7 @@ function pressEnd(e) {
   }
 }
 function pressCancel(e) {
-  let O = this.options;
+  const O = this.options;
   if (O.delay && this.__delayed_to >= 0) {
     resetDelayTo.call(this);
   }
@@ -166,7 +166,7 @@ function touchend(e) {
   this.off('touchcancel', touchcancel);
   document.removeEventListener('touchmove', _touchmoveHandler);
 
-  let E = document.elementFromPoint(
+  const E = document.elementFromPoint(
     e.changedTouches[0].clientX,
     e.changedTouches[0].clientY
   );
@@ -208,7 +208,7 @@ function touchcancel(e) {
   pressCancel.call(this, e);
 }
 function touchmove(e) {
-  let E = document.elementFromPoint(
+  const E = document.elementFromPoint(
     e.changedTouches[0].clientX,
     e.changedTouches[0].clientY
   );

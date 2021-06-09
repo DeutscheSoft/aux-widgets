@@ -251,7 +251,7 @@ function drawSlice(a_from, a_to, r_inner, r_outer, pos, slice) {
   if (a_to > 360) a_to %= 360;
 
   if (a_from > a_to) {
-    let tmp = a_from;
+    const tmp = a_from;
     a_from = a_to;
     a_to = tmp;
   }
@@ -397,7 +397,7 @@ export const Circular = defineClass({
       this.set('value', this.options.value);
     },
     rangedchanged: function () {
-      let I = this.invalid;
+      const I = this.invalid;
       I.size = I.markers = I.dots = I.labels = true;
       this.triggerDraw();
     },
@@ -627,7 +627,7 @@ export const Circular = defineClass({
     Widget.prototype.destroy.call(this);
   },
   getStroke: function () {
-    if (this.hasOwnProperty('_stroke')) return this._stroke;
+    if (Object.prototype.hasOwnProperty.call(this, '_stroke')) return this._stroke;
     var strokeb = parseInt(getStyle(this._base, 'stroke-width')) || 0;
     var strokev = parseInt(getStyle(this._value, 'stroke-width')) || 0;
     this._stroke = Math.max(strokeb, strokev);

@@ -66,7 +66,7 @@ function moveCaptureInt(O, range, state) {
   }
 
   dist *= multi;
-  let start_pos = this.start_pos + dist;
+  const start_pos = this.start_pos + dist;
 
   var nval = range.pixelToValue(start_pos);
   if (O.limit) O.set.call(this, Math.min(RO.max, Math.max(RO.min, nval)));
@@ -86,6 +86,7 @@ function moveCaptureAbs(O, range, state) {
       break;
     default:
       warn('Unsupported direction:', O.direction);
+      break;
     case 'horizontal':
       dist = state.vDistance()[0];
       break;

@@ -99,7 +99,7 @@ function removeNativeEvents(element) {
     if (isNativeEvent(type)) removeActiveEventListener(element, type, handler);
 
   for (type in d)
-    if (isNativeEvent(type) && (!s || !s.hasOwnProperty(type)))
+    if (isNativeEvent(type) && (!s || !Object.prototype.hasOwnProperty.call(s, type)))
       removeActiveEventListener(element, type, handler);
 }
 function addNativeEvents(element) {
@@ -112,7 +112,7 @@ function addNativeEvents(element) {
     if (isNativeEvent(type)) addActiveEventListener(element, type, handler);
 
   for (type in d)
-    if (isNativeEvent(type) && (!s || !s.hasOwnProperty(type)))
+    if (isNativeEvent(type) && (!s || !Object.prototype.hasOwnProperty.call(s, type)))
       addActiveEventListener(element, type, handler);
 }
 function nativeHandler(ev) {
@@ -125,11 +125,11 @@ function nativeHandler(ev) {
 function hasEventListeners(event) {
   var ev = this.__events;
 
-  if (ev.hasOwnProperty(event)) return true;
+  if (Object.prototype.hasOwnProperty.call(ev, event)) return true;
 
   ev = this.static_events;
 
-  return ev && ev.hasOwnProperty(event);
+  return ev && Object.prototype.hasOwnProperty.call(ev, event);
 }
 /**
  * This is the base class for all AUX widgets.
@@ -221,7 +221,7 @@ export const Base = defineClass({
       o = {};
     } else if (typeof opt === 'object')
       for (key in o)
-        if (o.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(o, key)) {
           a = o[key];
           b = opt[key];
           if (
@@ -235,7 +235,7 @@ export const Base = defineClass({
             o[key] = Object.assign({}, b, a);
           }
         }
-    if (this.hasOwnProperty('options')) {
+    if (Object.prototype.hasOwnProperty.call(this, 'options')) {
       this.options = Object.assign(opt, o);
     } else if (opt) {
       this.options = Object.assign(Object.create(opt), o);

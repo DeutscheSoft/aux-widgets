@@ -40,7 +40,6 @@ import {
   empty,
   removeClass,
 } from '../utils/dom.js';
-import { S } from '../dom_scheduler.js';
 import { typecheckInteger } from '../utils/typecheck.js';
 
 /**
@@ -674,7 +673,6 @@ export const Select = defineClass({
 
     var I = this.invalid;
     var O = this.options;
-    var E = this.element;
 
     if (I.entries || I.auto_size) {
       
@@ -682,8 +680,8 @@ export const Select = defineClass({
         I.show_list = true;
         I.auto_size = false;
   
-        let S = this.sizer.element;
-        let v = O.entries;
+        const S = this.sizer.element;
+        const v = O.entries;
         empty(S);
         const frag = document.createDocumentFragment();
         for (let i = 0, m = v.length; i < m; ++i) {

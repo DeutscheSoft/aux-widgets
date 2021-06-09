@@ -589,7 +589,6 @@ export const Window = defineClass({
       height: 0,
     };
     Container.prototype.initialize.call(this, options);
-    var O = this.options;
     this.__status_to = false;
     initPosition.call(this, this.options.open);
     this.set('maximize', this.options.maximize);
@@ -665,7 +664,6 @@ export const Window = defineClass({
   redraw: function () {
     var I = this.invalid;
     var O = this.options;
-    var E = this.element;
 
     var setP = false;
     var setD = false;
@@ -735,7 +733,7 @@ export const Window = defineClass({
     if (I.content) {
       I.content = false;
       if (O.content) {
-        if (Container.prototype.isPrototypeOf(O.content)) {
+        if (Object.prototype.isPrototypeOf.call(Container.prototype, O.content)) {
           setContent(this.content.element, '');
           this.appendChild(O.content);
         } else {

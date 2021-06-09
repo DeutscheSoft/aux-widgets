@@ -82,7 +82,7 @@ function dragging(e) {
     var mx = extractMatrix(t);
     mx[4] = x;
     mx[5] = y;
-    var nt = t.replace(/matrix\([0-9 \,]*\)/, 'matrix(' + mx.join(',') + ')');
+    var nt = t.replace(/matrix\([0-9 ,]*\)/, 'matrix(' + mx.join(',') + ')');
     O.node.style.transform = nt;
   } else {
     O.node.style.top = y + 'px';

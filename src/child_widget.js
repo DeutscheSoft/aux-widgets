@@ -38,11 +38,11 @@ function getChildOptions(parent, name, options, config) {
     ret = Object.assign(ret, default_options);
   }
 
-  for (let key in options) {
+  for (const key in options) {
     if (key.startsWith(pref)) {
       ret[key.substr(pref.length)] = options[key];
     } else if (inherit_options && blacklist_options.indexOf(key) < 0) {
-      if (options.hasOwnProperty(pref + key)) continue;
+      if (Object.prototype.hasOwnProperty.call(options, pref + key)) continue;
       if (
         key in config.create.prototype._options &&
         !(key in Widget.prototype._options)
@@ -55,7 +55,7 @@ function getChildOptions(parent, name, options, config) {
   const map_options = config.map_options;
 
   if (map_options) {
-    for (let key in map_options) {
+    for (const key in map_options) {
       if (key in options) {
         if (key in ret && options[key] === parent.getDefault(key)) {
           continue;
@@ -78,7 +78,7 @@ export function inheritChildOptions(dst, child_name, src, blacklist) {
     if (C) C.set(key, value);
   };
 
-  for (let tmp in src.prototype._options) {
+  for (const tmp in src.prototype._options) {
     if (tmp in dst.prototype._options) continue;
     if (blacklist.indexOf(tmp) > -1) continue;
     addStaticEvent(dst, 'set_' + tmp, setCallback);
@@ -234,7 +234,7 @@ export function defineChildWidget(widget, name, config) {
   });
   addStaticEvent(widget, 'redraw', function () {
     const show = fixed || this.options[key];
-    let C = this[name];
+    const C = this[name];
 
     if (show && C && !C.element.parentNode) {
       const E = this.element;
@@ -281,7 +281,7 @@ export function defineChildWidget(widget, name, config) {
   const map_options = config.map_options;
 
   if (map_options) {
-    for (let parent_key in map_options) {
+    for (const parent_key in map_options) {
       const child_key = map_options[parent_key];
 
       if (!(parent_key in p._options)) {

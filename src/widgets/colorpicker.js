@@ -283,7 +283,6 @@ export const ColorPicker = defineClass({
     Container.prototype.redraw.call(this);
     var I = this.invalid;
     var O = this.options;
-    var E = this.element;
     if (
       I.validate(
         'rgb',
@@ -687,7 +686,7 @@ addStaticEvent(ColorPicker, 'initialized', function () {
       options[name] = this.options[name];
     }
   });
-  for (let key in options) {
-    if (options.hasOwnProperty(key)) this.set(key, options[key]);
+  for (const key in options) {
+    if (Object.prototype.hasOwnProperty.call(options, key)) this.set(key, options[key]);
   }
 });

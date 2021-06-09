@@ -90,7 +90,6 @@ export const Tag = defineClass({
     Widget.prototype.redraw.call(this);
   },
   removeNode: function (node) {
-    var O = this.options;
     for (var i = 0; i < this.nodes.length; i++) {
       if (this.nodes[i] == node) {
         node.element.remove();

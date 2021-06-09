@@ -18,11 +18,11 @@
  */
 
 export function checkVisibility(widget) {
-  let drawn = widget.isDrawn();
+  const drawn = widget.isDrawn();
 
   if (drawn)
     while (widget) {
-      let element = widget.element;
+      const element = widget.element;
 
       if (element.classList.contains('aux-hide')) {
         throw new Error('found aux-hide on element while drawn.');
@@ -30,7 +30,7 @@ export function checkVisibility(widget) {
       widget = widget.parent;
     }
   else {
-    let element = widget.element;
+    const element = widget.element;
 
     if (element.classList.contains('aux-show')) {
       throw new Error('found aux-show on element while !drawn.');

@@ -31,7 +31,7 @@ function drawTime(force) {
   var tmp, drawn;
   var O = this.options;
   var t = O.time;
-  if (!t instanceof Date || isNaN(t)) t = new Date();
+  if (!(t instanceof Date) || isNaN(t)) t = new Date();
 
   if ((tmp = t.getSeconds()) !== this.__sec || force) {
     this.circulars.seconds.set('value', tmp);
@@ -100,12 +100,10 @@ function setLabels() {
     function () {
       var bb = E.getBoundingClientRect();
       var eb = this.svg.getBoundingClientRect();
-      let size = Math.min(eb.width, eb.height);
+      const size = Math.min(eb.width, eb.height);
       if (bb.width === 0) return; // we are hidden
       var mleft = parseInt(getStyle(E, 'margin-left')) || 0;
       var mright = parseInt(getStyle(E, 'margin-right')) || 0;
-      var mtop = parseInt(getStyle(E, 'margin-top')) || 0;
-      var mbottom = parseInt(getStyle(E, 'margin-bottom')) || 0;
       var mlabel = (O.label_margin / 100) * size;
       var space = size - mleft - mright - this._margin * 2 - mlabel * 2;
       var scale = space / bb.width;
@@ -316,7 +314,7 @@ export const Clock = defineClass({
     timeout: timeout,
   },
   initialize: function (options) {
-    var E, SVG;
+    var SVG;
     /**
      * @member {Object} Clock#circulars - An object holding all three Circular as members <code>seconds</code>, <code>minutes</code> and <code>hours</code>.
      */
@@ -420,7 +418,7 @@ export const Clock = defineClass({
     ) {
       var margin = 0;
       for (var i in this.circulars) {
-        if (!this.circulars.hasOwnProperty(i)) continue;
+        if (!Object.prototype.hasOwnProperty.call(this.circulars, i)) continue;
         var circ = this.circulars[i];
         if (O['show_' + i]) {
           circ.set('thickness', O.thickness);

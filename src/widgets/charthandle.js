@@ -86,6 +86,7 @@ function Z_HANDLE_SIZE(pos) {
   switch (pos) {
     default:
       warn('Unsupported z_handle position:', pos);
+      break;
     case 'top-right':
     case 'bottom-right':
     case 'bottom-left':
@@ -790,6 +791,7 @@ function setMainClass(O) {
     case 'line-vertical':
     case 'line-horizontal':
       addClass(E, 'aux-line');
+      break;
     case 'circular':
       break;
     case 'block-left':
@@ -1126,11 +1128,6 @@ export const ChartHandle = defineClass({
     this.set('range_y', O.range_y);
     this.set('range_z', O.range_z);
 
-    var setCallback = function () {
-      this.invalid.x = true;
-      this.triggerDraw();
-    }.bind(this);
-
     /**
      * @member {SVGGroup} ChartHandle#element - The main SVG group containing all handle elements. Has class <code>.aux-charthandle</code>.
      */
@@ -1157,7 +1154,6 @@ export const ChartHandle = defineClass({
 
         var pstate = self.pos_drag.state();
         if (pstate) {
-          var d;
           var v = [
             state.current.clientX - pstate.prev.clientX,
             state.current.clientY - pstate.prev.clientY,
@@ -1215,10 +1211,6 @@ export const ChartHandle = defineClass({
       onstartcapture: function (state) {
         var self = this.parent;
         var _O = self.options;
-
-        var button = state.current.button;
-        var E = self.element;
-        var p = E.parentNode;
         var ev = state.current;
 
         self.z_drag.set('node', document);
@@ -1333,10 +1325,6 @@ export const ChartHandle = defineClass({
     Widget.prototype.redraw.call(this);
     var O = this.options;
     var I = this.invalid;
-
-    var range_x = O.range_x;
-    var range_y = O.range_y;
-    var range_z = O.range_z;
 
     /* These are the coordinates of the corners (x1, y1, x2, y2)
      * NOTE: x,y are not necessarily in the midde. */

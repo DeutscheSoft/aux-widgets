@@ -74,11 +74,11 @@ export const Gauge = defineClass({
     Widget.prototype.initialize.call(this, options);
 
     var O = this.options;
-    var E, S;
+    var S;
 
     if (typeof O.label === 'string') this.set('label', O.label);
 
-    if (!(E = this.element)) this.element = E = element('div');
+    if (!this.element) this.element = element('div');
 
     /**
      * @member {SVGImage} Gauge#svg - The main SVG image.

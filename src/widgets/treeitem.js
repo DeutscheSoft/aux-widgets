@@ -65,7 +65,7 @@ export const TreeItem = defineClass({
   appendChild: function (child) {
     this.invalid._list = true;
     this.triggerResize();
-    if (ListItem.prototype.isPrototypeOf(child)) {
+    if (Object.prototype.isPrototypeOf.call(ListItem.prototype, child)) {
       return this.list.appendChild(child);
     } else {
       return this.flex.appendChild(child);
@@ -73,14 +73,14 @@ export const TreeItem = defineClass({
   },
   addChild: function (child) {
     this.triggerResize();
-    if (ListItem.prototype.isPrototypeOf(child)) {
+    if (Object.prototype.isPrototypeOf.call(ListItem.prototype, child)) {
       return this.list.addChild(child);
     } else {
       return this.flex.addChild(child);
     }
   },
   removeChild: function (child) {
-    if (ListItem.prototype.isPrototypeOf(child)) {
+    if (Object.prototype.isPrototypeOf.call(ListItem.prototype, child)) {
       var r = this.list.removeChild(child);
       return r;
     } else {
@@ -161,7 +161,6 @@ export const TreeItem = defineClass({
     I._list = I.collapsable = I.force_collapsable = false;
   },
   set: function (key, value) {
-    var O = this.options;
     switch (key) {
       case 'collapsed':
         if (!this.list) break;

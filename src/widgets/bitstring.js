@@ -18,7 +18,7 @@
  */
 
 import { defineClass } from './../widget_helpers.js';
-import { addClass, removeClass } from './../utils/dom.js';
+import { addClass } from './../utils/dom.js';
 import { Buttons } from './buttons.js';
 import { error } from '../utils/log.js';
 
@@ -76,7 +76,7 @@ export const Bitstring = defineClass({
     set_length: function (length) {
       if (length !== false) {
         const O = this.options;
-        let B = [];
+        const B = [];
         for (let i = 0, m = length; i < m; ++i) {
           B.push({
             label: O.labels(i),
@@ -113,7 +113,7 @@ export const Bitstring = defineClass({
         }
         this.userset('bitstring', bitstring);
       } else if (Array.isArray(O.bitstring)) {
-        let bitstring = new Array(this.buttons.list.length).fill(false);
+        const bitstring = new Array(this.buttons.list.length).fill(false);
         value.map((v, i) => v === null ? null : bitstring[v] = true);
         this.userset('bitstring', bitstring);
       } else {
@@ -133,11 +133,5 @@ export const Bitstring = defineClass({
   draw: function (O, element) {
     addClass(element, 'aux-bitstring');
     Buttons.prototype.draw.call(this, O, element);
-  },
-
-  redraw: function () {
-    Buttons.prototype.redraw.call(this);
-    var I = this.invalid;
-    var O = this.options;
   },
 });

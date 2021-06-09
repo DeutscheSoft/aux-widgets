@@ -232,8 +232,6 @@ export const Graph = defineClass({
       const type = O.type;
       const RX = this.range_x;
       const RY = this.range_y;
-      const w = RX.options.basis;
-      const h = RY.options.basis;
 
       if (typeof dots === 'string') {
         E.setAttribute('d', dots);
@@ -252,9 +250,7 @@ export const Graph = defineClass({
           i++;
           const dot = dots[i];
           const X = getPixels(dot.x, RX);
-          const X1 = getPixels(dot.x1, RX);
           const Y = getPixels(dot.y, RY);
-          const Y1 = getPixels(dot.y1, RY);
 
           s.push(' S' + X + ',' + Y + ' ' + X + ',' + Y);
         }

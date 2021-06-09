@@ -233,14 +233,14 @@ function decodeColor(args) {
    */
   if (typeof args[0] === 'string' && args[0][0] === '#') {
     // HEX string
-    let res = hexToRGB(args[0]);
+    const res = hexToRGB(args[0]);
     res.type = 'hex';
     res.hex = args[0];
     return res;
   }
   if (typeof args[0] === 'string' && color_names[args[0]]) {
     // color string
-    let res = hexToRGB('#' + color_names[args[0]]);
+    const res = hexToRGB('#' + color_names[args[0]]);
     res.type = 'string';
     res.string = args[0];
     res.hex = color_names[args[0]];

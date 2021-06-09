@@ -154,13 +154,13 @@ const setCallback = function (val, key) {
   if (this[name]) this[name].set(key.substr(name.length + 1), val);
 };
 
-for (let i in { x: 0, y: 0, z: 0 }) {
-  for (let opt in DragValue.prototype._options) {
+for (const i in { x: 0, y: 0, z: 0 }) {
+  for (const opt in DragValue.prototype._options) {
     addStaticEvent(Drag3D, 'set_drag_' + i + '.' + opt, setCallback);
     Drag3D.prototype._options['drag_' + i + '.' + opt] =
       DragValue.prototype._options[opt];
   }
-  for (let opt in Range.prototype._options) {
+  for (const opt in Range.prototype._options) {
     addStaticEvent(Drag3D, 'set_range_' + i + '.' + opt, setCallback);
     Drag3D.prototype._options['range_' + i + '.' + opt] =
       Range.prototype._options[opt];

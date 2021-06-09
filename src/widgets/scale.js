@@ -33,7 +33,6 @@ import {
   empty,
   innerHeight,
   innerWidth,
-  supports_transform,
 } from '../utils/dom.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { warn } from '../utils/log.js';
@@ -360,23 +359,6 @@ function generateScale(from, to, include_from, show_to) {
       2
     );
   else render_cb.call(this);
-}
-function markMarkers(labels, dots) {
-  var i, j;
-
-  var a = labels.values;
-  var b = dots.values;
-  var nodes = dots.nodes;
-
-  for (i = j = 0; i < a.length && j < b.length; ) {
-    if (a[i] < b[j]) i++;
-    else if (a[i] > b[j]) j++;
-    else {
-      addClass(nodes[j], 'aux-marker');
-      i++;
-      j++;
-    }
-  }
 }
 /**
  * Interface for dots passed to the `fixed_dots` option of `Scale`.

@@ -122,7 +122,7 @@ export function seatAllSVG(parent) {
 export function makeSVG(tag, args) {
   var el = document.createElementNS('http://www.w3.org/2000/svg', 'svg:' + tag);
   for (var k in args) {
-    if (args.hasOwnProperty(k)) el.setAttribute(k, args[k]);
+    if (Object.prototype.hasOwnProperty.call(args, k)) el.setAttribute(k, args[k]);
   }
   return el;
 }

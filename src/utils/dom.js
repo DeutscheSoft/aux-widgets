@@ -199,7 +199,7 @@ export function element(tag) {
     v = arguments[i];
     if (typeof v === 'object') {
       for (var key in v) {
-        if (v.hasOwnProperty(key)) n.setAttribute(key, v[key]);
+        if (Object.prototype.hasOwnProperty.call(v, key)) n.setAttribute(key, v[key]);
       }
     } else if (typeof v === 'string') {
       addClass(n, v);
@@ -552,7 +552,7 @@ export function CSSSpace(element) {
   for (var i = 1; i < arguments.length; i++) {
     a = arguments[i];
     for (var p in o) {
-      if (o.hasOwnProperty(p)) {
+      if (Object.prototype.hasOwnProperty.call(o, p)) {
         s = a + '-' + p;
         if (a === 'border') s += '-width';
         o[p] += parseFloat(cs.getPropertyValue(s));
@@ -574,7 +574,7 @@ export function setStyles(elem, styles) {
   var key, v;
   var s = elem.style;
   for (key in styles)
-    if (styles.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(styles, key)) {
       v = styles[key];
       if (typeof v !== 'number' && !v) {
         delete s[key];

@@ -218,7 +218,6 @@ export const LevelMeter = defineClass({
    * @emits LevelMeter#resetvalue
    */
   resetValue: function () {
-    let O = this.options;
     clearTimeout(this.__lto);
     this.set('value_label', this.effectiveValue());
     /**
@@ -327,15 +326,14 @@ export const LevelMeter = defineClass({
     var segment = O.segment | 0;
     var hold_size = O.hold_size * segment;
     var pos;
-    const transformation = O.transformation;
 
     if (!(hold_size > 0)) return i;
 
-    var pos_base = +transformation.valueToPixel(base);
+    var pos_base = +this.valueToPixel(base);
 
     if (hold > base) {
       /* TODO: lets snap in set() */
-      pos = transformation.valueToPixel(hold) | 0;
+      pos = this.valueToPixel(hold) | 0;
       if (segment !== 1) pos = segment * (Math.round(pos / segment) | 0);
 
       if (pos > pos_base) {
@@ -350,7 +348,7 @@ export const LevelMeter = defineClass({
     hold = +O.bottom;
 
     if (hold < base) {
-      pos = transformation.valueToPixel(hold) | 0;
+      pos = this.valueToPixel(hold) | 0;
       if (segment !== 1) pos = segment * (Math.round(pos / segment) | 0);
 
       if (pos > pos_base) {

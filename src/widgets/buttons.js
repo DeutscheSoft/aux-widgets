@@ -88,7 +88,7 @@ function onButtonUserset(key, value) {
 
   const O = parent.options;
   const position = parent.buttons.indexOf(this);
-  let select = enforceMultiSelect(
+  const select = enforceMultiSelect(
     updateSelect(O.select, position, value),
     O.multi_select
   );
@@ -109,7 +109,7 @@ function onButtonSetState(value) {
 
   const O = parent.options;
   const position = parent.buttons.indexOf(this);
-  let select = enforceMultiSelect(
+  const select = enforceMultiSelect(
     updateSelect(O.select, position, value),
     O.multi_select
   );
@@ -127,7 +127,7 @@ function onButtonAdded(button, position) {
   button.on('set_state', onButtonSetState);
 
   let select = buttons.get('select');
-  let length = buttons.getButtons().length;
+  const length = buttons.getButtons().length;
 
   const correctIndex = (index) => {
     if (index >= position && position < length - 1) {
@@ -160,7 +160,7 @@ function onButtonRemoved(button, position) {
   button.off('set_state', onButtonSetState);
 
   let select = buttons.get('select');
-  let length = buttons.getButtons().length;
+  const length = buttons.getButtons().length;
 
   const correctIndex = (index) => {
     if (index > position && position < length + 1) {
@@ -281,7 +281,7 @@ export const Buttons = defineClass({
     set_multi_select: function (multi_select) {
       const O = this.options;
 
-      let select = enforceMultiSelect(O.select, multi_select);
+      const select = enforceMultiSelect(O.select, multi_select);
 
       this.update('select', select);
     },
