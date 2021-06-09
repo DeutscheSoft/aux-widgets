@@ -139,7 +139,10 @@ const test_dir = path.join(__dirname, 'tests');
 const test_files = readdir_recursive(test_dir)
   .filter((fname) => fname.endsWith('.html'))
   .filter((fname) => !fname.includes('Navigation')) // ignore navigation for now
-  .filter((fname) => !fname.includes('Clock')); // ignore clock for now
+  .filter((fname) => !fname.includes('Clock')) // ignore clock for now
+  .filter((fname) => !fname.includes('Reverb')) // ignore reverb, it contains randomness
+  .filter((fname) => !fname.includes('Marquee')) // ignore Marquee, it animates
+  ;
 
 test_files
   .map((fname) => {
