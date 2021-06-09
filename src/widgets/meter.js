@@ -346,6 +346,8 @@ export const Meter = defineClass({
     if (O.foreground === false) return;
 
     if (I.basis && O._height > 0 && O._width > 0) {
+      I.basis = false;
+
       this._canvas.setAttribute('height', Math.round(O._height));
       this._canvas.setAttribute('width', Math.round(O._width));
       /* FIXME: I am not sure why this is even necessary */
@@ -365,8 +367,8 @@ export const Meter = defineClass({
       this.drawGradient(this._backdrop, O.gradient, O.background);
     }
 
-    if (I.value || I.basis || I.min || I.max || I.segment || I.foreground) {
-      I.basis = I.value = I.min = I.max = I.segment = I.foreground = false;
+    if (I.value || I.transformation || I.segment || I.foreground) {
+      I.transformation = I.value = I.segment = I.foreground = false;
       this.drawMeter();
     }
   },
@@ -390,14 +392,15 @@ export const Meter = defineClass({
     // the meter bar
     const base = O.base;
     const segment = O.segment | 0;
+    const transformation = O.transformation;
 
     /* At this point the whole meter bar is filled. We now want
      * to clear the area between base and value.
      */
 
     /* canvas coordinates are reversed */
-    const v1 = this.valueToPixel(base) | 0;
-    let v2 = this.valueToPixel(value) | 0;
+    const v1 = transformation.valueToPixel(base) | 0;
+    let v2 = transformation.valueToPixel(value) | 0;
 
     if (segment !== 1) {
       v2 = (v1 + segment * Math.round((v2 - v1) / segment)) | 0;

@@ -262,14 +262,11 @@ export const Fader = defineClass({
       I.value = false;
     }
 
-    if (
-      I.validate.apply(I, Object.keys(Ranged.prototype._options)) ||
-      I.value
-    ) {
-      I.value = false;
+    if (I.validate('value', 'transformation')) {
+      const transformation = O.transformation;
       // TODO: value is snapped already in set(). This is not enough for values which are set during
       // initialization.
-      tmp = this.valueToPixel(this.snap(O.value)) + 'px';
+      tmp = transformation.valueToPixel(this.snap(O.value)) + 'px';
 
       if (vert(O)) {
         if (supports_transform)

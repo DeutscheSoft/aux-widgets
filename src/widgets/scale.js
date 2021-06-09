@@ -271,8 +271,10 @@ function generateScale(from, to, include_from, show_to) {
   var is_vert = vert(O);
   var tmp;
 
+  const transformation = O.transformation;
+
   if (include_from) {
-    tmp = this.valueToPixel(from);
+    tmp = transformation.valueToPixel(from);
 
     if (labels) {
       labels.values.push(from);
@@ -300,9 +302,9 @@ function generateScale(from, to, include_from, show_to) {
       labels
     );
 
-    tmp = this.valueToPixel(to);
+    tmp = transformation.valueToPixel(to);
 
-    if (show_to || Math.abs(tmp - this.valueToPixel(from)) >= O.gap_labels) {
+    if (show_to || Math.abs(tmp - transformation.valueToPixel(from)) >= O.gap_labels) {
       labels.values.push(to);
       labels.positions.push(tmp);
 
@@ -311,7 +313,7 @@ function generateScale(from, to, include_from, show_to) {
     }
   } else {
     dots.values.push(to);
-    dots.positions.push(this.valueToPixel(to));
+    dots.positions.push(transformation.valueToPixel(to));
   }
 
   if (O.show_labels) {
@@ -543,8 +545,9 @@ export const Scale = defineClass({
 
     if (this._bar && (I.bar || I.basis || I.base || I.reverse)) {
       /* NOTE: options will be validated below */
-      const tmpval = this.valueToPixel(this.snap(O.bar));
-      const tmpbase = this.valueToPixel(O.base);
+      const transformation = O.transformation;
+      const tmpval = transformation.valueToPixel(this.snap(O.bar));
+      const tmpbase = transformation.valueToPixel(O.base);
       const min = Math.min(tmpval, tmpbase);
       const max = Math.max(tmpval, tmpbase);
 
@@ -647,7 +650,9 @@ export const Scale = defineClass({
       }
     }
 
-    const position = this.valueToPixel(value);
+    const transformation = O.transformation;
+
+    const position = transformation.valueToPixel(value);
 
     if (O.layout === 'left' || O.layout === 'right') {
       node.style.bottom = (position / O.basis) * 100 + '%';
@@ -666,6 +671,7 @@ export const Scale = defineClass({
   },
   _createLabel(args) {
     const O = this.options;
+    const transformation = O.transformation;
 
     let position, label;
 
@@ -677,13 +683,13 @@ export const Scale = defineClass({
 
     if (typeof args === 'number') {
       value = args;
-      position = this.valueToPixel(value);
+      position = transformation.valueToPixel(value);
 
       label = O.labels(value);
     } else {
       value = args.value;
 
-      position = this.valueToPixel(value);
+      position = transformation.valueToPixel(value);
 
       const cl = args.class;
 
