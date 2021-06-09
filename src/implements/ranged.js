@@ -29,17 +29,17 @@ import {
 import { error, warn } from './../utils/log.js';
 
 function LinearSnapModule(options) {
-  var min = +options.min;
-  var max = +options.max;
-  var step = +options.step;
-  var base = +options.base;
+  const min = +options.min;
+  const max = +options.max;
+  const step = +options.step;
+  const base = +options.base;
   const clip = !!options.clip;
 
   function lowSnap(v, direction) {
     v = +v;
     direction = +direction;
-    var n = 0.0;
-    var t = 0.0;
+    let n = 0.0;
+    let t = 0.0;
 
     if (clip) {
       if (!(v > min)) {
@@ -117,19 +117,19 @@ function LinearSnapModule(options) {
 }
 
 function ArraySnapModule(options, heap) {
-  var values = new Float64Array(heap);
-  var len = (heap.byteLength >> 3) | 0;
-  var min = +(options.min !== void 0 ? options.min : values[0]);
-  var max = +(options.max !== void 0 ? options.max : values[len - 1]);
+  const values = new Float64Array(heap);
+  const len = (heap.byteLength >> 3) | 0;
+  const min = +(options.min !== void 0 ? options.min : values[0]);
+  const max = +(options.max !== void 0 ? options.max : values[len - 1]);
   const clip = !!options.clip;
 
   function lowSnap(v, direction) {
     v = +v;
     direction = +direction;
-    var a = 0;
-    var mid = 0;
-    var b = 0;
-    var t = 0.0;
+    let a = 0;
+    let mid = 0;
+    let b = 0;
+    let t = 0.0;
 
     b = len - 1;
 
@@ -180,8 +180,8 @@ function ArraySnapModule(options, heap) {
 }
 
 function NullSnapModule(options) {
-  var min = +options.min;
-  var max = +options.max;
+  const min = +options.min;
+  const max = +options.max;
   const clip = !!options.clip;
 
   function snap(v) {
@@ -220,7 +220,7 @@ function numSort(arr) {
   return arr;
 }
 function updateSnap() {
-  var O = this.options;
+  const O = this.options;
   let snap_module;
   // Notify that the ranged options have been modified
   if (Array.isArray(O.snap)) {
@@ -248,11 +248,11 @@ function updateSnap() {
 
 // Creates a piecewise linear transformation.
 function makePiecewiseLinearTransformation(options, heap) {
-  var reverse = options.reverse | 0;
-  var l = heap.byteLength >> 4;
-  var X = new Float64Array(heap, 0, l);
-  var Y = new Float64Array(heap, l * 8, l);
-  var basis = +options.basis;
+  const reverse = options.reverse | 0;
+  const l = heap.byteLength >> 4;
+  const X = new Float64Array(heap, 0, l);
+  const Y = new Float64Array(heap, l * 8, l);
+  const basis = +options.basis;
 
   if (!(l >= 2))
     throw new TypeError(
@@ -260,7 +260,7 @@ function makePiecewiseLinearTransformation(options, heap) {
     );
 
   function valueToBased(coef, size) {
-    var a = 0,
+    let a = 0,
       b = (l - 1) | 0,
       mid = 0,
       t = 0.0;
@@ -294,7 +294,7 @@ function makePiecewiseLinearTransformation(options, heap) {
     return t;
   }
   function basedToValue(coef, size) {
-    var a = 0,
+    let a = 0,
       b = (l - 1) | 0,
       mid = 0,
       t = 0.0;
@@ -347,9 +347,9 @@ function makePiecewiseLinearTransformation(options, heap) {
 
 // Creates a transformation from generic function.
 function makeFunctionTransformation(options) {
-  var reverse = options.reverse | 0;
-  var scale = options.scale;
-  var basis = +options.basis;
+  const reverse = options.reverse | 0;
+  const scale = options.scale;
+  const basis = +options.basis;
   function valueToBased(value, size) {
     value = +value;
     size = +size;
@@ -388,10 +388,10 @@ function makeFunctionTransformation(options) {
 
 // Creates a linear transformation.
 function makeLinearTransformation(options) {
-  var reverse = options.reverse | 0;
-  var min = +options.min;
-  var max = +options.max;
-  var basis = +options.basis;
+  const reverse = options.reverse | 0;
+  const min = +options.min;
+  const max = +options.max;
+  let basis = +options.basis;
   function valueToBased(value, size) {
     value = +value;
     size = +size;
@@ -498,12 +498,12 @@ function makeLinearTransformation(options) {
 
 // Creates a logarithmic transformation.
 function makeLogarithmicTransformation(options) {
-  var reverse = options.reverse | 0;
-  var min = +options.min;
-  var max = +options.max;
-  var log_factor = +options.log_factor;
-  var trafo_reverse = options.trafo_reverse | 0;
-  var basis = +options.basis;
+  const reverse = options.reverse | 0;
+  const min = +options.min;
+  const max = +options.max;
+  const log_factor = +options.log_factor;
+  const trafo_reverse = options.trafo_reverse | 0;
+  const basis = +options.basis;
   function valueToBased(value, size) {
     value = +value;
     size = +size;
@@ -542,11 +542,11 @@ function makeLogarithmicTransformation(options) {
 
 // A transformation for frequency scales.
 function makeFrequencyTransformation(options) {
-  var reverse = options.reverse | 0;
-  var min = +options.min;
-  var max = +options.max;
-  var trafo_reverse = options.trafo_reverse | 0;
-  var basis = +options.basis;
+  const reverse = options.reverse | 0;
+  const min = +options.min;
+  const max = +options.max;
+  const trafo_reverse = options.trafo_reverse | 0;
+  const basis = +options.basis;
   function valueToBased(value, size) {
     value = +value;
     size = +size;
@@ -583,15 +583,15 @@ function makeFrequencyTransformation(options) {
   };
 }
 function updateTransformation() {
-  var O = this.options;
-  var scale = O.scale;
+  const O = this.options;
+  const scale = O.scale;
 
-  var module;
+  let module;
 
   if (typeof scale === 'function') {
     module = makeFunctionTransformation(O);
   } else if (Array.isArray(scale)) {
-    var i = 0;
+    let i = 0;
     if (scale.length % 2) {
       error('Malformed piecewise-linear scale.');
     }
@@ -769,7 +769,7 @@ export const Ranged = defineClass({
   static_events: {
     set: setCallback,
     initialized: function () {
-      var O = this.options;
+      const O = this.options;
       if (!(O.min <= O.max))
         warn(
           'Ranged needs min <= max. min: ',

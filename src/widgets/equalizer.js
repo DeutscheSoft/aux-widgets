@@ -26,15 +26,15 @@ import { Graph } from './graph.js';
 import { inheritChildOptions } from '../child_widget.js';
 
 function fastDrawPLinear(X, Y) {
-  var ret = [];
-  var i,
+  const ret = [];
+  let i,
     len = X.length;
-  var dy = 0,
+  let dy = 0,
     x,
     y,
     tmp;
 
-  var accuracy = 20;
+  const accuracy = 20;
 
   if (len < 2) return '';
 
@@ -63,19 +63,19 @@ function fastDrawPLinear(X, Y) {
   return ret.join('');
 }
 function drawGraph(bands) {
-  var O = this.options;
-  var c = 0;
-  var end = this.range_x.get('basis') | 0;
-  var step = O.accuracy;
-  var over = O.oversampling;
-  var thres = O.threshold;
-  var x_px_to_val = this.range_x.pixelToValue.bind(this.range_x);
-  var y_val_to_px = this.range_y.valueToPixel.bind(this.range_y);
-  var i, j, k;
-  var x, y;
-  var pursue;
+  const O = this.options;
+  let c = 0;
+  const end = this.range_x.get('basis') | 0;
+  const step = O.accuracy;
+  const over = O.oversampling;
+  const thres = O.threshold;
+  const x_px_to_val = this.range_x.pixelToValue.bind(this.range_x);
+  const y_val_to_px = this.range_y.valueToPixel.bind(this.range_y);
+  let i, j, k;
+  let x, y;
+  let pursue;
 
-  var X = new Array(end / step + 4);
+  const X = new Array(end / step + 4);
   X[0] = -10;
   X[1] = -10;
   for (i = 2; i < X.length - 2; i++) {
@@ -85,7 +85,7 @@ function drawGraph(bands) {
   X[X.length - 2] = end + 10;
   X[X.length - 1] = end + 10;
 
-  var Y = new Array(end / step + 4);
+  const Y = new Array(end / step + 4);
   Y[0] = y_val_to_px(0);
   Y[Y.length - 1] = y_val_to_px(0);
 
@@ -168,7 +168,7 @@ export const EqualizerGraph = defineClass({
     this._invalidate_bands = invalidateBands.bind(this);
   },
   redraw: function () {
-    var I = this.invalid;
+    const I = this.invalid;
     if (
       I.validate(
         'bands',
@@ -187,7 +187,7 @@ export const EqualizerGraph = defineClass({
    * active filters.
    */
   getFilterFunctions: function () {
-    var bands = this.options.bands.filter(this.options.rendering_filter);
+    const bands = this.options.bands.filter(this.options.rendering_filter);
     return bands.map((b) => b.filter.getFrequencyToGain());
   },
   /**
@@ -204,7 +204,7 @@ export const EqualizerGraph = defineClass({
     this.set('bands', this.options.bands.concat([band]));
   },
   removeBand: function (band) {
-    var O = this.options;
+    const O = this.options;
     this.set(
       'bands',
       O.bands.filter(function (b) {
@@ -353,7 +353,7 @@ export const Equalizer = defineClass({
    * @param {Object} [type=EqBand] - A widget class to be used for the new band.
    */
   addBands: function (bands, type) {
-    for (var i = 0; i < bands.length; i++) this.addBand(bands[i], type);
+    for (let i = 0; i < bands.length; i++) this.addBand(bands[i], type);
   },
   /**
    * Remove a band from the widget.

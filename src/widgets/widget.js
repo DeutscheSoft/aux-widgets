@@ -41,15 +41,15 @@ import { GlobalVisibilityChange } from '../utils/global_visibility_change.js';
 
 /* jshint -W089 */
 function Invalid(options) {
-  for (var key in options) this[key] = true;
+  for (const key in options) this[key] = true;
 }
 /* jshint +W089 */
 
 Invalid.prototype = {
   validate: function () {
-    var i = 0,
+    let i = 0,
       key;
-    var ret = false;
+    let ret = false;
     for (i = 0; i < arguments.length; i++) {
       key = arguments[i];
       if (Object.prototype.hasOwnProperty.call(this, key) && this[key]) {
@@ -61,7 +61,7 @@ Invalid.prototype = {
     return ret;
   },
   test: function () {
-    var i = 0,
+    let i = 0,
       key;
     for (i = 0; i < arguments.length; i++) {
       key = arguments[i];
@@ -114,10 +114,10 @@ function dblClick(e) {
    * @param {string} event - The browsers `MouseEvent`.
    *
    */
-  var O = this.options;
-  var dbc = O.dblclick;
+  const O = this.options;
+  const dbc = O.dblclick;
   if (!dbc) return;
-  var d = +new Date();
+  const d = +new Date();
   if (this.__lastclick + dbc > d) {
     e.lastclick = this.__lastclick;
     this.emit('doubleclick', e);
@@ -278,7 +278,7 @@ export const Widget = defineClass({
       else event_target.removeEventListener('click', this.__dblclick_cb);
     },
     initialized: function () {
-      var v = this.options.dblclick;
+      const v = this.options.dblclick;
       if (v > 0) this.set('dblclick', v);
     },
     set_preset: function (v) {
@@ -312,7 +312,7 @@ export const Widget = defineClass({
   initialize: function (options) {
     Base.prototype.initialize.call(this, options);
     // Main actions every widget needs to take
-    var E = options.element || null;
+    const E = options.element || null;
     if (E !== null && !E.isAuxWidget) {
       E.auxWidget = this;
       E.isAuxWidget = true;
@@ -373,7 +373,7 @@ export const Widget = defineClass({
   },
 
   invalidateAll: function () {
-    for (var key in this.options) {
+    for (const key in this.options) {
       if (!this._options[key]) {
         if (key.charCodeAt(0) !== 95)
           warn('%O %s: unknown option %s', this, this._class, key);
@@ -382,8 +382,8 @@ export const Widget = defineClass({
   },
 
   assertNoneInvalid: function () {
-    var _warn = [];
-    for (var key in this.invalid) {
+    const _warn = [];
+    for (const key in this.invalid) {
       if (this.invalid[key] === true) {
         _warn.push(key);
       }
@@ -404,22 +404,22 @@ export const Widget = defineClass({
 
       this.set('needs_resize', true);
 
-      var C = this.children;
+      const C = this.children;
 
       if (!C) return;
 
-      for (var i = 0; i < C.length; i++) {
+      for (let i = 0; i < C.length; i++) {
         C[i].triggerResize();
       }
     }
   },
 
   triggerResizeChildren: function () {
-    var C = this.children;
+    const C = this.children;
 
     if (!C) return;
 
-    for (var i = 0; i < C.length; i++) {
+    for (let i = 0; i < C.length; i++) {
       C[i].triggerResize();
     }
   },
@@ -503,7 +503,7 @@ export const Widget = defineClass({
     }
   },
   drawOnce: function (fun) {
-    var q = this.draw_queue;
+    const q = this.draw_queue;
 
     if (q === null) {
       this.draw_queue = [fun];
@@ -555,9 +555,9 @@ export const Widget = defineClass({
     this.scheduleResize();
   },
   redraw: function () {
-    var I = this.invalid;
-    var O = this.options;
-    var E = this.element;
+    const I = this.invalid;
+    const O = this.options;
+    let E = this.element;
 
     if (I.notransitions) {
       I.notransitions = false;
@@ -609,12 +609,12 @@ export const Widget = defineClass({
       E.setAttribute('title', O.title);
     }
 
-    var q = this.draw_queue;
+    const q = this.draw_queue;
 
     this.draw_queue = null;
 
     if (q)
-      for (var i = 0; i < q.length; i++) {
+      for (let i = 0; i < q.length; i++) {
         q[i].call(this, O);
       }
   },
@@ -763,8 +763,8 @@ export const Widget = defineClass({
    * @method Widget#enableDrawChildren
    */
   enableDrawChildren: function () {
-    var C = this.children;
-    if (C) for (var i = 0; i < C.length; i++) C[i].enableDraw();
+    const C = this.children;
+    if (C) for (let i = 0; i < C.length; i++) C[i].enableDraw();
   },
   /**
    * Schedules this widget for drawing.
@@ -783,8 +783,8 @@ export const Widget = defineClass({
     this.enableDrawChildren();
   },
   disableDrawChildren: function () {
-    var C = this.children;
-    if (C) for (var i = 0; i < C.length; i++) C[i].disableDraw();
+    const C = this.children;
+    if (C) for (let i = 0; i < C.length; i++) C[i].disableDraw();
   },
   /**
    * Stop drawing this widget.
@@ -930,7 +930,7 @@ export const Widget = defineClass({
    * @see Container#appendChild
    */
   addChild: function (child) {
-    var C = this.children;
+    let C = this.children;
     if (!C) this.children = C = [];
 
     if (C.indexOf(child) !== -1) throw new Error('Adding child twice.');
@@ -959,8 +959,8 @@ export const Widget = defineClass({
     if (this.isDestructed()) return;
     if (child.parent === this) child.setParent(void 0, true);
     child.disableDraw();
-    var C = this.children;
-    var i;
+    const C = this.children;
+    let i;
     if (C !== null && (i = C.indexOf(child)) !== -1) {
       C.splice(i, 1);
       this.emit('child_removed', child);
@@ -1019,9 +1019,9 @@ export const Widget = defineClass({
    */
   visibleChildren: function (a) {
     if (!a) a = [];
-    var C = this.children;
+    const C = this.children;
     if (C)
-      for (var i = 0; i < C.length; i++) {
+      for (let i = 0; i < C.length; i++) {
         a.push(C[i]);
         C[i].visibleChildren(a);
       }
@@ -1035,9 +1035,9 @@ export const Widget = defineClass({
    */
   allChildren: function (a) {
     if (!a) a = [];
-    var C = this.children;
+    const C = this.children;
     if (C)
-      for (var i = 0; i < C.length; i++) {
+      for (let i = 0; i < C.length; i++) {
         a.push(C[i]);
         C[i].allChildren(a);
       }
@@ -1045,7 +1045,7 @@ export const Widget = defineClass({
   },
 
   getChildren: function () {
-    var C = this.children;
+    const C = this.children;
     return C !== null ? C : [];
   },
   /**

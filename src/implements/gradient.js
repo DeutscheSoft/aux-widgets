@@ -135,7 +135,7 @@ export const Gradient = defineClass({
       const s_regular = 'linear-gradient(%s, %s)';
       const c_regular = '%s %s%%, ';
 
-      var d_w3c = {};
+      const d_w3c = {};
       d_w3c.sleft = 'to top';
       d_w3c.sright = 'to top';
       d_w3c.stop = 'to right';

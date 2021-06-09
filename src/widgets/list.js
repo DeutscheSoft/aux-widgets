@@ -50,9 +50,9 @@ export const List = defineClass({
   static_events: {
     set_sort: function (f) {
       if (typeof f === 'function') {
-        var C = this.children.slice(0);
+        const C = this.children.slice(0);
         C.sort(f);
-        for (var i = 0; i < C.length; i++) {
+        for (let i = 0; i < C.length; i++) {
           this.element.appendChild(C[i].element);
         }
       }
@@ -65,11 +65,11 @@ export const List = defineClass({
   },
   appendChild: function (w) {
     Container.prototype.appendChild.call(this, w);
-    var O = this.options;
-    var C = this.children;
+    const O = this.options;
+    const C = this.children;
     if (O.sort) {
       C.sort(O.sort);
-      var pos = C.indexOf(w);
+      const pos = C.indexOf(w);
       if (pos !== C.length - 1)
         this.element.insertBefore(w.element, C[pos + 1].element);
     }

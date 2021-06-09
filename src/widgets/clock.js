@@ -25,12 +25,12 @@ import { makeSVG } from '../utils/svg.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { S } from '../dom_scheduler.js';
 
-var formatViewbox = FORMAT('0 0 %d %d');
+const formatViewbox = FORMAT('0 0 %d %d');
 
 function drawTime(force) {
-  var tmp, drawn;
-  var O = this.options;
-  var t = O.time;
+  let tmp, drawn;
+  const O = this.options;
+  let t = O.time;
   if (!(t instanceof Date) || isNaN(t)) t = new Date();
 
   if ((tmp = t.getSeconds()) !== this.__sec || force) {
@@ -46,7 +46,7 @@ function drawTime(force) {
     this.__hour = tmp;
   }
 
-  var args = [t, O.fps, O.months, O.days];
+  const args = [t, O.fps, O.months, O.days];
   if ((tmp = O.label.apply(this, args)) !== this.__label || force) {
     setText(this._label, tmp);
     this.__label = tmp;
@@ -74,9 +74,9 @@ function drawTime(force) {
     this.emit('timedrawn', O.time);
 }
 function setLabels() {
-  var O = this.options;
-  var E = this._label;
-  var s = O.label(
+  const O = this.options;
+  const E = this._label;
+  const s = O.label(
     new Date(2000, 8, 30, 24, 59, 59, 999),
     2000,
     8,
@@ -98,16 +98,16 @@ function setLabels() {
 
   S.add(
     function () {
-      var bb = E.getBoundingClientRect();
-      var eb = this.svg.getBoundingClientRect();
+      let bb = E.getBoundingClientRect();
+      const eb = this.svg.getBoundingClientRect();
       const size = Math.min(eb.width, eb.height);
       if (bb.width === 0) return; // we are hidden
-      var mleft = parseInt(getStyle(E, 'margin-left')) || 0;
-      var mright = parseInt(getStyle(E, 'margin-right')) || 0;
-      var mlabel = (O.label_margin / 100) * size;
-      var space = size - mleft - mright - this._margin * 2 - mlabel * 2;
-      var scale = space / bb.width;
-      var pos = O.size / 2;
+      const mleft = parseInt(getStyle(E, 'margin-left')) || 0;
+      const mright = parseInt(getStyle(E, 'margin-right')) || 0;
+      const mlabel = (O.label_margin / 100) * size;
+      const space = size - mleft - mright - this._margin * 2 - mlabel * 2;
+      const scale = space / bb.width;
+      const pos = O.size / 2;
 
       S.add(
         function () {
@@ -160,11 +160,11 @@ function setLabels() {
 }
 function timeout() {
   if (this.__to) window.clearTimeout(this.__to);
-  var O = this.options;
+  const O = this.options;
   if (!O) return;
   if (O.timeout) {
-    var d = O.time;
-    var ts = +Date.now();
+    const d = O.time;
+    let ts = +Date.now();
 
     if (O.offset) {
       ts += O.offset | 0;
@@ -173,7 +173,7 @@ function timeout() {
     d.setTime(ts);
     this.set('time', d);
 
-    var targ = O.timeout | 0;
+    let targ = O.timeout | 0;
     if (O.timeadd) {
       targ += (O.timeadd | 0) - (ts % 1000 | 0);
     }
@@ -282,7 +282,7 @@ export const Clock = defineClass({
       'Saturday',
     ],
     label: function (date /*, fps, months, days*/) {
-      var h = date.getHours(),
+      const h = date.getHours(),
         m = date.getMinutes(),
         s = date.getSeconds();
       return (
@@ -297,7 +297,7 @@ export const Clock = defineClass({
       return days[date.getDay()];
     },
     label_lower: function (date, fps, months /*, days*/) {
-      var d = date.getDate(),
+      const d = date.getDate(),
         m = date.getMonth(),
         y = date.getFullYear();
       return (d < 10 ? '0' + d : d) + '. ' + months[m] + ' ' + y;
@@ -314,7 +314,7 @@ export const Clock = defineClass({
     timeout: timeout,
   },
   initialize: function (options) {
-    var SVG;
+    let SVG;
     /**
      * @member {Object} Clock#circulars - An object holding all three Circular as members <code>seconds</code>, <code>minutes</code> and <code>hours</code>.
      */
@@ -359,7 +359,7 @@ export const Clock = defineClass({
     SVG.appendChild(this._label_upper);
     SVG.appendChild(this._label_lower);
 
-    var circ_options = {
+    const circ_options = {
       container: SVG,
       show_hand: false,
       start: 270,
@@ -397,7 +397,7 @@ export const Clock = defineClass({
   },
 
   redraw: function () {
-    var I = this.invalid,
+    const I = this.invalid,
       O = this.options;
 
     Widget.prototype.redraw.call(this);
@@ -416,10 +416,10 @@ export const Clock = defineClass({
       ) ||
       I.size
     ) {
-      var margin = 0;
-      for (var i in this.circulars) {
+      let margin = 0;
+      for (const i in this.circulars) {
         if (!Object.prototype.hasOwnProperty.call(this.circulars, i)) continue;
-        var circ = this.circulars[i];
+        const circ = this.circulars[i];
         if (O['show_' + i]) {
           circ.set('thickness', O.thickness);
           circ.set('show_base', true);

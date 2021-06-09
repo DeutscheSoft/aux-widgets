@@ -57,8 +57,8 @@ export const Label = defineClass({
   },
 
   redraw: function () {
-    var I = this.invalid;
-    var O = this.options;
+    const I = this.invalid;
+    const O = this.options;
 
     Widget.prototype.redraw.call(this);
 

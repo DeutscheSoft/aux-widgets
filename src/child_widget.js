@@ -23,11 +23,11 @@ import { warn } from './utils/log.js';
 import { Widget } from './widgets/widget.js';
 
 function getChildOptions(parent, name, options, config) {
-  var ret = {};
-  var pref = name + '.';
+  let ret = {};
+  const pref = name + '.';
 
-  var inherit_options = !!config.inherit_options;
-  var blacklist_options = config.blacklist_options || [];
+  const inherit_options = !!config.inherit_options;
+  const blacklist_options = config.blacklist_options || [];
 
   let default_options = config.default_options;
 
@@ -147,11 +147,11 @@ export function defineChildWidget(widget, name, config) {
    *     as soon as a child is added or removed.
    */
 
-  var p = widget.prototype;
-  var key = config.option || 'show_' + name;
-  var tmp, m;
-  var static_events = {};
-  var map_interacting = config.map_interacting !== false;
+  const p = widget.prototype;
+  const key = config.option || 'show_' + name;
+  let tmp, m;
+  const static_events = {};
+  const map_interacting = config.map_interacting !== false;
 
   if (!config.userset_ignore)
     static_events.userset =
@@ -174,7 +174,7 @@ export function defineChildWidget(widget, name, config) {
 
   if (map_interacting) {
     static_events.set_interacting = function (value) {
-      var self = this.parent;
+      const self = this.parent;
 
       if (value) self.startInteracting();
       else self.stopInteracting();
@@ -208,18 +208,18 @@ export function defineChildWidget(widget, name, config) {
     }
   });
 
-  var fixed = config.fixed;
-  var append = config.append;
+  const fixed = config.fixed;
+  let append = config.append;
 
   if (append === void 0) append = true;
 
   /* child widget creation */
   addStaticEvent(widget, 'set_' + key, function (val) {
-    var C = this[name];
-    var show = fixed || val !== false;
+    const C = this[name];
+    const show = fixed || val !== false;
     if (show && !C) {
-      var O = getChildOptions(this, name, this.options, config);
-      var w = new ChildWidget(O);
+      const O = getChildOptions(this, name, this.options, config);
+      const w = new ChildWidget(O);
       this.addChild(w);
       this[name] = w;
     } else if (!show && C) {
@@ -249,7 +249,7 @@ export function defineChildWidget(widget, name, config) {
       if (!config.no_resize) this.triggerResize();
     }
   });
-  var setCallback = function (val, key) {
+  let setCallback = function (val, key) {
     if (this[name]) this[name].set(key.substr(name.length + 1), val);
   };
 
@@ -259,7 +259,7 @@ export function defineChildWidget(widget, name, config) {
   }
 
   /* direct option inherit */
-  var blacklist_options = config.blacklist_options || [];
+  const blacklist_options = config.blacklist_options || [];
   if (config.inherit_options) {
     setCallback = function (val, key) {
       if (this[name]) this[name].set(key, val);

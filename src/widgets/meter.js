@@ -39,7 +39,7 @@ function vert(O) {
   return O.layout === 'left' || O.layout === 'right';
 }
 function fillInterval(ctx, w, h, a, is_vertical) {
-  var i;
+  let i;
   if (is_vertical) {
     for (i = 0; i < a.length; i += 2) {
       ctx.fillRect(0, h - a[i + 1], w, a[i + 1] - a[i]);
@@ -51,7 +51,7 @@ function fillInterval(ctx, w, h, a, is_vertical) {
   }
 }
 function clearInterval(ctx, w, h, a, is_vertical) {
-  var i;
+  let i;
   if (is_vertical) {
     for (i = 0; i < a.length; i += 2) {
       ctx.clearRect(0, h - a[i + 1], w, a[i + 1] - a[i]);
@@ -67,7 +67,7 @@ function drawFull(ctx, w, h, a, is_vertical) {
   clearInterval(ctx, w, h, a, is_vertical);
 }
 function makeInterval(a) {
-  var i, tmp, again;
+  let i, tmp, again;
 
   do {
     again = false;
@@ -97,8 +97,8 @@ function makeInterval(a) {
   }
 }
 function cmpIntervals(a, b) {
-  var ret = 0;
-  var i;
+  let ret = 0;
+  let i;
 
   for (i = 0; i < a.length; i += 2) {
     if (a[i] === b[i]) {
@@ -111,8 +111,8 @@ function cmpIntervals(a, b) {
   return ret;
 }
 function subtractIntervals(a, b) {
-  var i;
-  var ret = [];
+  let i;
+  const ret = [];
 
   for (i = 0; i < a.length; i += 2) {
     if (a[i] === b[i]) {
@@ -217,14 +217,14 @@ export const Meter = defineClass({
   static_events: {
     set_base: function (value) {
       if (value === false) {
-        var O = this.options;
+        const O = this.options;
         O.base = value = O.min;
       }
     },
     rangedchanged: function () {
       /* redraw the gradient, if we have any */
 
-      var gradient = this.options.gradient;
+      const gradient = this.options.gradient;
 
       if (gradient) {
         this.set('gradient', gradient);
@@ -237,7 +237,7 @@ export const Meter = defineClass({
       if (this.value) this.value.set('label', this.options.format_value(val));
     },
     set_layout: function () {
-      var O = this.options;
+      const O = this.options;
       this.set('value', O.value);
       this.set('min', O.min);
       this.triggerResize();
@@ -251,7 +251,7 @@ export const Meter = defineClass({
   initialize: function (options) {
     if (!options.element) options.element = element('div');
     Widget.prototype.initialize.call(this, options);
-    var O = this.options;
+    const O = this.options;
     /**
      * @member {HTMLDivElement} Meter#element - The main DIV container.
      *   Has class <code>.aux-meter</code>.
@@ -295,9 +295,9 @@ export const Meter = defineClass({
     Widget.prototype.draw.call(this, O, element);
   },
   redraw: function () {
-    var I = this.invalid;
-    var O = this.options;
-    var E = this.element;
+    const I = this.invalid;
+    const O = this.options;
+    const E = this.element;
 
     if (I.reverse) {
       I.reverse = false;
@@ -317,8 +317,8 @@ export const Meter = defineClass({
         'aux-top',
         'aux-bottom'
       );
-      var scale = this.scale ? this.scale.element : null;
-      var bar = this._bar;
+      const scale = this.scale ? this.scale.element : null;
+      const bar = this._bar;
       switch (O.layout) {
         case 'left':
           addClass(E, 'aux-vertical', 'aux-left');
@@ -372,13 +372,13 @@ export const Meter = defineClass({
   },
 
   resize: function () {
-    var O = this.options;
+    const O = this.options;
     Widget.prototype.resize.call(this);
-    var w = innerWidth(this._bar);
-    var h = innerHeight(this._bar);
+    const w = innerWidth(this._bar);
+    const h = innerHeight(this._bar);
     this.set('_width', w);
     this.set('_height', h);
-    var i = vert(O) ? h : w;
+    const i = vert(O) ? h : w;
     this.set('basis', i);
     this._last_meters.length = 0;
     this.set('gradient', O.gradient);
@@ -416,15 +416,15 @@ export const Meter = defineClass({
   },
 
   drawMeter: function () {
-    var O = this.options;
-    var w = Math.round(O._width);
-    var h = Math.round(O._height);
-    var i;
+    const O = this.options;
+    const w = Math.round(O._width);
+    const h = Math.round(O._height);
+    let i;
 
     if (!(w > 0 && h > 0)) return;
 
-    var a = this._current_meters;
-    var tmp = this._last_meters;
+    const a = this._current_meters;
+    const tmp = this._last_meters;
 
     i = this.calculateMeter(a, O.value, 0);
     if (i < a.length) a.length = i;
@@ -433,7 +433,7 @@ export const Meter = defineClass({
     this._last_meters = a;
     this._current_meters = tmp;
 
-    var diff;
+    let diff;
 
     if (tmp.length === a.length) {
       diff = cmpIntervals(tmp, a) | 0;
@@ -444,9 +444,9 @@ export const Meter = defineClass({
     // FIXME: this is currently broken for some reason
     if (diff == 1) diff = 4;
 
-    var ctx = this._canvas.getContext('2d');
+    const ctx = this._canvas.getContext('2d');
     ctx.fillStyle = O.foreground;
-    var is_vertical = vert(O);
+    const is_vertical = vert(O);
 
     if (diff === 1) {
       /* a - tmp is non-empty */
@@ -463,7 +463,7 @@ export const Meter = defineClass({
   },
 
   hasBase: function () {
-    var O = this.options;
+    const O = this.options;
     return O.base > O.min;
   },
 });
@@ -480,7 +480,7 @@ defineChildWidget(Meter, 'scale', {
   toggle_class: true,
   static_events: {
     set: function (key, value) {
-      var p = this.parent;
+      const p = this.parent;
       if (p) p.emit('scalechanged', key, value);
     },
   },

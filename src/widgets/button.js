@@ -290,9 +290,9 @@ export const Button = defineClass({
   },
   redraw: function () {
     Widget.prototype.redraw.call(this);
-    var I = this.invalid;
-    var O = this.options;
-    var E = this.element;
+    const I = this.invalid;
+    const O = this.options;
+    const E = this.element;
 
     if (I.layout) {
       I.layout = false;

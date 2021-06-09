@@ -212,9 +212,9 @@ export const Pages = defineClass({
 
   redraw: function () {
     Container.prototype.redraw.call(this);
-    var O = this.options;
-    var I = this.invalid;
-    var E = this.element;
+    const O = this.options;
+    const I = this.invalid;
+    const E = this.element;
 
     if (I.direction) {
       I.direction = false;
@@ -265,7 +265,7 @@ export const Pages = defineClass({
    *
    */
   addPages: function (pages) {
-    for (var i = 0; i < pages.length; i++) this.addPage(pages[i]);
+    for (let i = 0; i < pages.length; i++) this.addPage(pages[i]);
   },
 
   createPage: function (content, options) {

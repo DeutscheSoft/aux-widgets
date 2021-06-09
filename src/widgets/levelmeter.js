@@ -31,25 +31,25 @@ function clearTimeout(to) {
 }
 
 function clipTimeout() {
-  var O = this.options;
+  const O = this.options;
   if (!O.auto_clip || O.auto_clip < 0) return false;
   clearTimeout(this.__cto);
   this.__cto = window.setTimeout(this._reset_clip, O.auto_clip);
 }
 function valueTimeout() {
-  var peak_value = 0 | this.options.peak_value;
+  const peak_value = 0 | this.options.peak_value;
   if (peak_value <= 0) return false;
   clearTimeout(this.__lto);
   this.__lto = window.setTimeout(this._reset_value, peak_value);
 }
 function topTimeout() {
-  var O = this.options;
+  const O = this.options;
   if (!O.auto_hold || O.auto_hold < 0) return false;
   clearTimeout(this.__tto);
   this.__tto = window.setTimeout(this._reset_top, O.auto_hold);
 }
 function bottomTimeout() {
-  var O = this.options;
+  const O = this.options;
   if (!O.auto_hold || O.auto_hold < 0) return false;
   clearTimeout(this.__bto);
   this.__bto = window.setTimeout(this._reset_bottom, O.auto_hold);
@@ -156,7 +156,7 @@ export const LevelMeter = defineClass({
      * @member {HTMLDivElement} LevelMeter#element - The main DIV container.
      *   Has class <code>.aux-levelmeter</code>.
      */
-    var O = this.options;
+    const O = this.options;
 
     if (O.top === false) O.top = O.value;
     if (O.bottom === false) O.bottom = O.value;
@@ -170,9 +170,9 @@ export const LevelMeter = defineClass({
   },
 
   redraw: function () {
-    var O = this.options;
-    var I = this.invalid;
-    var E = this.element;
+    const O = this.options;
+    const I = this.invalid;
+    const E = this.element;
 
     if (I.show_hold) {
       I.show_hold = false;
@@ -301,9 +301,9 @@ export const LevelMeter = defineClass({
    * the meter has a relatively small pixel size.
    */
   calculateMeter: function (to, value, i) {
-    var O = this.options;
-    var falling = +O.falling;
-    var base = +O.base;
+    const O = this.options;
+    const falling = +O.falling;
+    const base = +O.base;
     value = +value;
 
     // this is a bit unelegant...
@@ -322,14 +322,14 @@ export const LevelMeter = defineClass({
     if (!O.show_hold) return i;
 
     // shorten things
-    var hold = +O.top;
-    var segment = O.segment | 0;
-    var hold_size = O.hold_size * segment;
-    var pos;
+    let hold = +O.top;
+    const segment = O.segment | 0;
+    const hold_size = O.hold_size * segment;
+    let pos;
 
     if (!(hold_size > 0)) return i;
 
-    var pos_base = +this.valueToPixel(base);
+    const pos_base = +this.valueToPixel(base);
 
     if (hold > base) {
       /* TODO: lets snap in set() */
@@ -366,14 +366,14 @@ export const LevelMeter = defineClass({
   // GETTER & SETTER
   set: function (key, value) {
     if (key === 'value') {
-      var O = this.options;
-      var base = O.base;
+      const O = this.options;
+      const base = O.base;
 
       // snap will enforce clipping
       value = this.snap(value);
 
       if (O.falling) {
-        var v = this.effectiveValue();
+        const v = this.effectiveValue();
         if (
           (v >= base && value >= base && value < v) ||
           (v <= base && value <= base && value > v)

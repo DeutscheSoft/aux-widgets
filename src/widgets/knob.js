@@ -36,7 +36,7 @@ import { makeSVG } from '../utils/svg.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { objectAnd, objectSub } from '../utils/object.js';
 
-var formatViewbox = FORMAT('0 0 %d %d');
+const formatViewbox = FORMAT('0 0 %d %d');
 function dblClick() {
   if (!this.get('bind_dblclick')) return;
   this.userset('value', this.options.reset);
@@ -174,7 +174,7 @@ export const Knob = defineClass({
     if (!options.element) options.element = element('div');
     Widget.prototype.initialize.call(this, options);
     options = this.options;
-    var S;
+    let S;
     /**
      * @member {HTMLDivElement} Knob#element - The main DIV container.
      *   Has class <code>.aux-knob</code>.
@@ -185,7 +185,7 @@ export const Knob = defineClass({
      */
     this.svg = S = makeSVG('svg');
 
-    var co = objectAnd(options, Circular.prototype._options);
+    let co = objectAnd(options, Circular.prototype._options);
     co = objectSub(co, Widget.prototype._options);
     co.container = S;
 
@@ -246,14 +246,14 @@ export const Knob = defineClass({
   },
 
   resize: function () {
-    var rect = this.element.getBoundingClientRect();
-    var size = Math.min(rect.width, rect.height);
+    const rect = this.element.getBoundingClientRect();
+    const size = Math.min(rect.width, rect.height);
     this.set('size', size);
   },
 
   redraw: function () {
-    var I = this.invalid;
-    var O = this.options;
+    const I = this.invalid;
+    const O = this.options;
 
     if (I.size) {
       I.size = false;

@@ -31,7 +31,7 @@ import { element, addClass, removeClass } from './../utils/dom.js';
  * @param {mixed} value - The new value of the option
  */
 function valueClicked() {
-  var O = this.options;
+  const O = this.options;
   if (O.set === false) return;
   if (this.__editing) return false;
   this._input.setAttribute('value', O.value);
@@ -46,7 +46,7 @@ function valueClicked() {
   this.emit('valueclicked', O.value);
 }
 function valueKeydown(e) {
-  var O = this.options;
+  const O = this.options;
   switch (e.keyCode) {
     case 9:
       // TAB
@@ -60,7 +60,7 @@ function valueKeydown(e) {
   }
 }
 function valueTyping(e) {
-  var O = this.options;
+  const O = this.options;
   if (O.set === false) return;
   if (!this.__editing) return;
   switch (e.keyCode) {
@@ -106,7 +106,7 @@ function valueTyping(e) {
   this.emit('valuetyping', e, O.value);
 }
 function valueInput() {
-  var O = this.options;
+  const O = this.options;
   if (O.set === false) return;
   if (!this.__editing) return;
   if (O.editmode == 'immediate')
@@ -133,7 +133,7 @@ function valueDone(noblur) {
   this.triggerDraw();
 }
 function valueFocus() {
-  var O = this.options;
+  const O = this.options;
   this.__editing = true;
   addClass(this.element, 'aux-active');
   if (O.auto_select) this._input.setSelectionRange(0, this._input.value.length);
@@ -261,9 +261,9 @@ export const Value = defineClass({
   },
 
   redraw: function () {
-    var I = this.invalid;
-    var O = this.options;
-    var E = this._input;
+    const I = this.invalid;
+    const O = this.options;
+    const E = this._input;
 
     Widget.prototype.redraw.call(this);
 

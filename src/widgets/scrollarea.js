@@ -70,7 +70,7 @@ export const ScrollArea = defineClass({
     Widget.prototype.draw.call(this, O, element);
   },
   enableDrawChildren: function () {
-    var C = this.children;
+    const C = this.children;
     if (!C) return;
 
     for (let i = 0; i < C.length; i++) {

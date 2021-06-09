@@ -31,7 +31,7 @@ import { Button } from './button.js';
 function reset(e) {
   if (!this.options.state) return;
   if (e) {
-    var t = e.target;
+    let t = e.target;
     while (t) {
       if (t == this.element) return;
       t = t.parentElement;
@@ -42,8 +42,8 @@ function reset(e) {
 }
 
 function stateSet() {
-  var T = this.__temp;
-  var O = this.options;
+  const T = this.__temp;
+  const O = this.options;
   if (O.label_confirm) {
     T.label = O.label;
     this.set('label', O.label_confirm);
@@ -66,7 +66,7 @@ function stateSet() {
 
 function stateReset() {
   if (this.isDestructed()) return;
-  var T = this.__temp;
+  const T = this.__temp;
   if (T.label) this.set('label', T.label);
 
   if (T.icon) this.set('icon', T.icon);
@@ -92,8 +92,8 @@ function stateReset() {
  */
 
 function clicked() {
-  var T = this.__temp;
-  var O = this.options;
+  const T = this.__temp;
+  const O = this.options;
   if (!O.confirm) {
     this.emit('confirmed');
   } else if (O.state && Date.now() > T.click + O.interrupt) {

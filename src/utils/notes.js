@@ -54,7 +54,7 @@ export function MIDIToFreq(num, base) {
  */
 export function FreqToMIDI(freq, base) {
   base |= 440;
-  var f2 = Math.log2(freq / base);
+  const f2 = Math.log2(freq / base);
   return Math.max(0, Math.round(12 * f2 + 69));
 }
 /**
@@ -67,7 +67,7 @@ export function FreqToMIDI(freq, base) {
  */
 export function FreqToCents(freq, base) {
   base |= 440;
-  var f2 = Math.log2(freq / base);
+  let f2 = Math.log2(freq / base);
   f2 *= 1200;
   f2 %= 100;
   return f2 < -50 ? 100 + f2 : f2 > 50 ? -(100 - f2) : f2;

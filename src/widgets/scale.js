@@ -117,10 +117,10 @@ function binaryContains(list, value) {
 
 // remove collisions from a with b given a minimum gap
 function removeCollisions(a, b, min_gap, vert) {
-  var pa = a.positions,
+  const pa = a.positions,
     pb = b.positions;
-  var va = a.values;
-  var dim;
+  const va = a.values;
+  let dim;
 
   min_gap = +min_gap;
 
@@ -130,19 +130,19 @@ function removeCollisions(a, b, min_gap, vert) {
 
   if (!pb.length) return a;
 
-  var i, j;
-  var values = [];
-  var positions = [];
-  var pos_a, pos_b;
-  var size;
+  let i, j;
+  const values = [];
+  const positions = [];
+  let pos_a, pos_b;
+  let size;
 
-  var last_pos = +pb[0],
+  let last_pos = +pb[0],
     last_size = min_gap;
 
   if (dim) last_size += +dim[0] / 2;
 
   // If pb is just length 1, it does not matter
-  var direction = pb.length > 1 && pb[1] < last_pos ? -1 : 1;
+  const direction = pb.length > 1 && pb[1] < last_pos ? -1 : 1;
 
   for (i = 0, j = 0; i < pa.length && j < pb.length; ) {
     pos_a = +pa[i];
@@ -180,11 +180,11 @@ function removeCollisions(a, b, min_gap, vert) {
   };
 }
 function createDOMNodes(data, create) {
-  var nodes = [];
-  var values, positions;
-  var i;
-  var E = this.element;
-  var node;
+  const nodes = [];
+  let values, positions;
+  let i;
+  const E = this.element;
+  let node;
 
   data.nodes = nodes;
   values = data.values;
@@ -196,8 +196,8 @@ function createDOMNodes(data, create) {
   }
 }
 function createLabel(value, position) {
-  var O = this.options;
-  var elem = document.createElement('SPAN');
+  const O = this.options;
+  const elem = document.createElement('SPAN');
   elem.className = 'aux-label';
   if (vert(O)) {
     elem.style.bottom = (position / O.basis) * 100 + '%';
@@ -214,8 +214,8 @@ function createLabel(value, position) {
   return elem;
 }
 function createDot(value, position) {
-  var O = this.options;
-  var elem = document.createElement('DIV');
+  const O = this.options;
+  const elem = document.createElement('DIV');
   elem.className = 'aux-dot';
 
   if (O.layout === 'left' || O.layout === 'right') {
@@ -231,11 +231,11 @@ function createDot(value, position) {
   return elem;
 }
 function measureDimensions(data) {
-  var nodes = data.nodes;
-  var width = [];
-  var height = [];
+  const nodes = data.nodes;
+  const width = [];
+  const height = [];
 
-  for (var i = 0; i < nodes.length; i++) {
+  for (let i = 0; i < nodes.length; i++) {
     width.push(outerWidth(nodes[i]));
     height.push(outerHeight(nodes[i]));
   }
@@ -244,8 +244,8 @@ function measureDimensions(data) {
   data.height = height;
 }
 function handleEnd(O, labels, i) {
-  var node = labels.nodes[i];
-  var v = labels.values[i];
+  const node = labels.nodes[i];
+  const v = labels.values[i];
 
   if (v === O.min) {
     addClass(node, 'aux-min');
@@ -254,8 +254,8 @@ function handleEnd(O, labels, i) {
   } else return;
 }
 function generateScale(from, to, include_from, show_to) {
-  var O = this.options;
-  var labels;
+  const O = this.options;
+  let labels;
 
   if (O.show_labels || O.show_markers)
     labels = {
@@ -263,12 +263,12 @@ function generateScale(from, to, include_from, show_to) {
       positions: [],
     };
 
-  var dots = {
+  let dots = {
     values: [],
     positions: [],
   };
-  var is_vert = vert(O);
-  var tmp;
+  const is_vert = vert(O);
+  let tmp;
 
   const transformation = O.transformation;
 
@@ -284,7 +284,7 @@ function generateScale(from, to, include_from, show_to) {
     dots.positions.push(tmp);
   }
 
-  var levels = O.levels;
+  let levels = O.levels;
 
   fillInterval(this, levels, levels.length - 1, from, to, O.gap_dots, dots);
 
@@ -323,8 +323,8 @@ function generateScale(from, to, include_from, show_to) {
     }
   }
 
-  var render_cb = function () {
-    var markers;
+  const render_cb = function () {
+    let markers;
 
     if (O.show_markers) {
       markers = {
@@ -332,7 +332,7 @@ function generateScale(from, to, include_from, show_to) {
         positions: labels.positions,
       };
       createDOMNodes.call(this, markers, createDot.bind(this));
-      for (var i = 0; i < markers.nodes.length; i++)
+      for (let i = 0; i < markers.nodes.length; i++)
         addClass(markers.nodes[i], 'aux-marker');
     }
 
@@ -480,9 +480,9 @@ export const Scale = defineClass({
   redraw: function () {
     Widget.prototype.redraw.call(this);
 
-    var I = this.invalid;
-    var O = this.options;
-    var E = this.element;
+    const I = this.invalid;
+    const O = this.options;
+    const E = this.element;
 
     if (I.layout) {
       I.layout = false;
@@ -707,7 +707,7 @@ export const Scale = defineClass({
   },
   resize: function () {
     Widget.prototype.resize.call(this);
-    var O = this.options;
+    const O = this.options;
 
     const basis = vert(O)
       ? innerHeight(this.element)
@@ -752,7 +752,7 @@ defineChildElement(Scale, 'pointer', {
   ]),
   draw: function (O) {
     if (this._pointer) {
-      var tmp = this.valueToCoef(this.snap(O.pointer)) * 100 + '%';
+      const tmp = this.valueToCoef(this.snap(O.pointer)) * 100 + '%';
       if (vert(O)) {
         this._pointer.style.bottom = tmp;
       } else {

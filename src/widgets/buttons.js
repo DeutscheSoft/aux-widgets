@@ -431,12 +431,12 @@ export const Buttons = defineClass({
 
   redraw: function () {
     Container.prototype.redraw.call(this);
-    var I = this.invalid;
-    var O = this.options;
+    const I = this.invalid;
+    const O = this.options;
 
     if (I.direction) {
       I.direction = false;
-      var E = this.element;
+      const E = this.element;
       removeClass(E, 'aux-vertical', 'aux-horizontal');
       addClass(E, 'aux-' + O.direction);
     }

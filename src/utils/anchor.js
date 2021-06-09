@@ -38,13 +38,13 @@
  * @returns {object} Object with members x and y as numbers
  */
 export function translateAnchor(anchor, x, y, width, height) {
-  var amnt = anchor.split('%').length - 1;
+  const amnt = anchor.split('%').length - 1;
   if (amnt) {
     if (amnt == 1) {
       x += (parseInt(anchor) / 100) * width;
       y += (parseInt(anchor) / 100) * height;
     } else {
-      var split = anchor.split(' ');
+      const split = anchor.split(' ');
       x += (parseInt(split[0]) / 100) * width;
       y += (parseInt(split[1]) / 100) * height;
     }

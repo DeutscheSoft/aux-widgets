@@ -33,22 +33,22 @@
 /* generic code, supports node arrays */
 export function addEventListener(e, type, cb, options) {
   if (Array.isArray(e)) {
-    for (var i = 0; i < e.length; i++) e[i].addEventListener(type, cb, options);
+    for (let i = 0; i < e.length; i++) e[i].addEventListener(type, cb, options);
   } else e.addEventListener(type, cb, options);
 }
 export function removeEventListener(e, type, cb, options) {
   if (Array.isArray(e)) {
-    for (var i = 0; i < e.length; i++)
+    for (let i = 0; i < e.length; i++)
       e[i].removeEventListener(type, cb, options);
   } else e.removeEventListener(type, cb, options);
 }
 
 /* Detect if the 'passive' option is supported.
  * This code has been borrowed from mdn */
-var passiveSupported = false;
+let passiveSupported = false;
 
 try {
-  var options = Object.defineProperty({}, 'passive', {
+  const options = Object.defineProperty({}, 'passive', {
     get: function () {
       passiveSupported = true;
       return true;
@@ -59,7 +59,7 @@ try {
   window.removeEventListener('test', null);
 } catch (err) { /* empty */ }
 
-var active_options, passive_options;
+let active_options, passive_options;
 
 if (passiveSupported) {
   active_options = { passive: false };

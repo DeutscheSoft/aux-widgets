@@ -124,7 +124,7 @@ export const Dynamics = defineClass({
   },
   initialize: function (options) {
     Chart.prototype.initialize.call(this, options, true);
-    var O = this.options;
+    const O = this.options;
     /**
      * @member {HTMLDivElement} Dynamics#element - The main DIV container.
      *   Has class <code>.aux-dynamics</code>.
@@ -167,19 +167,19 @@ export const Dynamics = defineClass({
   },
 
   redraw: function () {
-    var O = this.options;
-    var I = this.invalid;
+    const O = this.options;
+    const I = this.invalid;
 
     Chart.prototype.redraw.call(this);
 
     if (I.validate('size', 'min', 'max', 'scale')) {
-      var grid_x = [];
-      var grid_y = [];
-      var min = this.range_x.get('min');
-      var max = this.range_x.get('max');
-      var step = O.db_grid;
-      var cls;
-      for (var i = min; i <= max; i += step) {
+      const grid_x = [];
+      const grid_y = [];
+      const min = this.range_x.get('min');
+      const max = this.range_x.get('max');
+      const step = O.db_grid;
+      let cls;
+      for (let i = min; i <= max; i += step) {
         cls = i ? '' : 'aux-highlight';
         grid_x.push({
           pos: i,
@@ -226,7 +226,7 @@ export const Dynamics = defineClass({
   },
 
   drawGraph: function () {
-    var O = this.options;
+    const O = this.options;
     if (O.type === false) return;
     if (!this.graph) {
       this.graph = this.addGraph({
@@ -236,16 +236,16 @@ export const Dynamics = defineClass({
         ],
       });
     }
-    var curve = [];
-    var range = O.range;
-    var ratio = O.ratio;
-    var thres = O.threshold;
-    var gain = O.gain;
-    var ref = O.reference;
-    var makeup = O.makeup;
-    var min = O.min;
-    var max = O.max;
-    var s;
+    const curve = [];
+    const range = O.range;
+    const ratio = O.ratio;
+    const thres = O.threshold;
+    const gain = O.gain;
+    const ref = O.reference;
+    const makeup = O.makeup;
+    const min = O.min;
+    const max = O.max;
+    let s;
     if (ref == 0) {
       s = 0;
     } else if (!isFinite(ratio)) {
@@ -253,7 +253,7 @@ export const Dynamics = defineClass({
     } else {
       s = (1 / (Math.max(ratio, 1.001) - 1)) * ratio * ref;
     }
-    var l = 5; // estimated width of line. dirty workaround for
+    const l = 5; // estimated width of line. dirty workaround for
     // keeping the line end out of sight in case
     // salient point is outside the visible area
     switch (O.type) {
@@ -316,7 +316,7 @@ export const Dynamics = defineClass({
         if (O.ratio !== 1) {
           curve.push({ x: min, y: min + makeup + range });
 
-          var y = (ratio * range + (ratio - 1) * thres) / (ratio - 1);
+          const y = (ratio * range + (ratio - 1) * thres) / (ratio - 1);
           curve.push({ x: y - range, y: y + makeup });
           curve.push({ x: thres, y: thres + makeup });
         } else curve.push({ x: min, y: min + makeup });

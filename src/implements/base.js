@@ -32,15 +32,15 @@ function callHandler(self, fun, args) {
   }
 }
 function dispatchEvents(self, handlers, args) {
-  var v;
+  let v;
   if (Array.isArray(handlers)) {
-    for (var i = 0; i < handlers.length; i++) {
+    for (let i = 0; i < handlers.length; i++) {
       v = callHandler(self, handlers[i], args);
       if (v !== void 0) return v;
     }
   } else return callHandler(self, handlers, args);
 }
-var __native_events = {
+const __native_events = {
   // mouse
   mouseenter: true,
   mouseleave: true,
@@ -90,10 +90,10 @@ export function isNativeEvent(type) {
 }
 
 function removeNativeEvents(element) {
-  var type;
-  var s = this.static_events;
-  var d = this.__events;
-  var handler = this.__native_handler;
+  let type;
+  const s = this.static_events;
+  const d = this.__events;
+  const handler = this.__native_handler;
 
   for (type in s)
     if (isNativeEvent(type)) removeActiveEventListener(element, type, handler);
@@ -103,10 +103,10 @@ function removeNativeEvents(element) {
       removeActiveEventListener(element, type, handler);
 }
 function addNativeEvents(element) {
-  var type;
-  var s = this.static_events;
-  var d = this.__events;
-  var handler = this.__native_handler;
+  let type;
+  const s = this.static_events;
+  const d = this.__events;
+  const handler = this.__native_handler;
 
   for (type in s)
     if (isNativeEvent(type)) addActiveEventListener(element, type, handler);
@@ -123,7 +123,7 @@ function nativeHandler(ev) {
   if (this.emit(ev.type, ev) === false) return false;
 }
 function hasEventListeners(event) {
-  var ev = this.__events;
+  let ev = this.__events;
 
   if (Object.prototype.hasOwnProperty.call(ev, event)) return true;
 
@@ -214,8 +214,8 @@ export const Base = defineClass({
    * @param {Object} [options={ }] - An object containing initial options.
    */
   setOptions: function (o) {
-    var opt = this.options;
-    var key, a, b;
+    const opt = this.options;
+    let key, a, b;
     if (typeof o !== 'object') {
       delete this.options;
       o = {};
@@ -272,7 +272,7 @@ export const Base = defineClass({
    * @emits Base#set_[option]
    */
   set: function (key, value) {
-    var e;
+    let e;
 
     this.options[key] = value;
     /**
@@ -358,7 +358,7 @@ export const Base = defineClass({
    * @emits Base#delegated
    */
   delegateEvents: function (element) {
-    var old_target = this.__event_target;
+    const old_target = this.__event_target;
 
     if (old_target !== this.getEventTarget()) {
       throw new Error(
@@ -393,7 +393,7 @@ export const Base = defineClass({
    * @param {Function} func - The function to call when the event happens.
    */
   on: function (event, func) {
-    var ev;
+    let ev;
 
     if (typeof event !== 'string') throw new TypeError('Expected string.');
 
@@ -465,7 +465,7 @@ export const Base = defineClass({
 
     // remove native DOM event listener from getEventTarget()
     if (isNativeEvent(event) && !this.hasEventListeners(event)) {
-      var ev = this.getEventTarget();
+      const ev = this.getEventTarget();
       if (ev) removeActiveEventListener(ev, event, this.__native_handler);
     }
   },
@@ -481,9 +481,9 @@ export const Base = defineClass({
    * @param {...*} args - Event arguments.
    */
   emit: function (event) {
-    var ev;
-    var args;
-    var v;
+    let ev;
+    let args;
+    let v;
 
     ev = this.__events;
 

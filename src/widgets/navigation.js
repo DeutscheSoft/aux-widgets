@@ -105,17 +105,17 @@ class ScrollAnimation {
  */
 
 function autoArrows() {
-  var O = this.options;
+  const O = this.options;
   if (!O.auto_arrows) return;
-  var B = this.buttons.getButtons();
-  var vert = O.direction === 'vertical';
-  var cons = vert
+  const B = this.buttons.getButtons();
+  const vert = O.direction === 'vertical';
+  const cons = vert
     ? innerHeight(this.buttons.element)
     : innerWidth(this.buttons.element);
-  var list;
+  let list;
   if (B.length) {
-    var lastb = B[B.length - 1].element;
-    var rect = lastb.getBoundingClientRect();
+    const lastb = B[B.length - 1].element;
+    const rect = lastb.getBoundingClientRect();
     list =
       lastb[vert ? 'offsetTop' : 'offsetLeft'] +
       rect[vert ? 'height' : 'width'];
@@ -350,9 +350,9 @@ export const Navigation = defineClass({
     Container.prototype.draw.call(this, O, element);
   },
   redraw: function () {
-    var O = this.options;
-    var I = this.invalid;
-    var E = this.element;
+    const O = this.options;
+    const I = this.invalid;
+    const E = this.element;
 
     if (I.direction) {
       removeClass(E, 'aux-vertical', 'aux-horizontal');

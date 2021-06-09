@@ -22,8 +22,8 @@ import { sprintf } from './utils/sprintf.js';
 
 function lowAdd(Q, o, prio) {
   prio = prio << 1;
-  var q = Q[prio];
-  var len = Q[prio + 1];
+  let q = Q[prio];
+  let len = Q[prio + 1];
   if (!q) {
     Q[prio] = q = [];
     len = 0;
@@ -33,10 +33,10 @@ function lowAdd(Q, o, prio) {
 }
 function lowRemove(Q, o, prio) {
   prio = prio << 1;
-  var q = Q[prio];
-  var len = Q[prio + 1];
+  const q = Q[prio];
+  let len = Q[prio + 1];
   if (!q) return;
-  for (var i = 0; i < len; i++) {
+  for (let i = 0; i < len; i++) {
     if (o !== q[i]) continue;
     /* NOTE: this looks odd, but it's correct */
     q[i] = null;
@@ -46,10 +46,10 @@ function lowRemove(Q, o, prio) {
 }
 function lowHas(Q, o, prio) {
   prio = prio << 1;
-  var q = Q[prio];
-  var len = Q[prio + 1];
+  const q = Q[prio];
+  const len = Q[prio + 1];
   if (!q) return false;
-  for (var i = 0; i < len; i++) {
+  for (let i = 0; i < len; i++) {
     if (o === q[i]) return true;
   }
   return false;
@@ -66,14 +66,14 @@ function Scheduler() {
 }
 Scheduler.prototype = {
   run: function () {
-    var Q = this.Q;
+    const Q = this.Q;
     this.Q_next = this.Q_tmp;
-    var empty;
-    var runs = 0;
-    var debug = this.debug;
-    var calls = 0;
-    var t;
-    var i;
+    let empty;
+    let runs = 0;
+    const debug = this.debug;
+    let calls = 0;
+    let t;
+    let i;
 
     if (debug) t = performance.now();
 
@@ -87,8 +87,8 @@ Scheduler.prototype = {
       empty = true;
 
       for (i = 0; i < Q.length; i += 2) {
-        var q = Q[i];
-        var len = Q[i + 1];
+        const q = Q[i];
+        const len = Q[i + 1];
 
         if (!q || !len) continue;
 
@@ -99,7 +99,7 @@ Scheduler.prototype = {
         Q[i + 1] = 0;
         this.tmp = q;
 
-        for (var j = 0; j < len; j++) {
+        for (let j = 0; j < len; j++) {
           try {
             q[j]();
           } catch (e) {
@@ -109,7 +109,7 @@ Scheduler.prototype = {
           calls++;
         }
       }
-      var after_frame_cbs = this.after_frame_cbs;
+      const after_frame_cbs = this.after_frame_cbs;
 
       if (after_frame_cbs.length) {
         this.after_frame_cbs = [];

@@ -32,8 +32,8 @@ function getCoordsSingle(deg, inner, pos) {
     y: Math.sin(deg) * inner + pos,
   };
 }
-var formatTranslate = FORMAT('translate(%f, %f)');
-var formatViewbox = FORMAT('0 0 %d %d');
+const formatTranslate = FORMAT('translate(%f, %f)');
+const formatViewbox = FORMAT('0 0 %d %d');
 /**
  * Gauge draws a single {@link Circular} into a SVG image. It inherits
  * all options of {@link Circular}.
@@ -73,8 +73,8 @@ export const Gauge = defineClass({
   initialize: function (options) {
     Widget.prototype.initialize.call(this, options);
 
-    var O = this.options;
-    var S;
+    const O = this.options;
+    let S;
 
     if (typeof O.label === 'string') this.set('label', O.label);
 
@@ -97,7 +97,7 @@ export const Gauge = defineClass({
     this._label = makeSVG('text', { class: 'aux-label' });
     S.appendChild(this._label);
 
-    var co = objectAnd(O, Circular.prototype._options);
+    let co = objectAnd(O, Circular.prototype._options);
     co = objectSub(co, Widget.prototype._options);
     co.container = S;
 
@@ -119,9 +119,9 @@ export const Gauge = defineClass({
     Widget.prototype.draw.call(this, O, element);
   },
   redraw: function () {
-    var I = this.invalid,
+    const I = this.invalid,
       O = this.options;
-    var S = this.svg;
+    const S = this.svg;
 
     Widget.prototype.redraw.call(this);
 
@@ -130,25 +130,25 @@ export const Gauge = defineClass({
     }
 
     if (I.validate('label', 'size', 'x', 'y')) {
-      var _label = this._label;
+      const _label = this._label;
       _label.textContent = O.label.label;
 
       if (O.label.label) {
         S.add(
           function () {
-            var t = O.label;
-            var outer = O.size / 2;
-            var margin = t.margin;
-            var align = t.align === 'inner';
-            var bb = _label.getBoundingClientRect();
-            var angle = t.pos % 360;
-            var outer_p = outer - margin;
-            var coords = getCoordsSingle(angle, outer_p, outer);
+            const t = O.label;
+            const outer = O.size / 2;
+            const margin = t.margin;
+            const align = t.align === 'inner';
+            const bb = _label.getBoundingClientRect();
+            const angle = t.pos % 360;
+            const outer_p = outer - margin;
+            const coords = getCoordsSingle(angle, outer_p, outer);
 
-            var mx =
+            let mx =
               (((coords.x - outer) / outer_p) * (bb.width + bb.height / 2.5)) /
               (align ? -2 : 2);
-            var my =
+            let my =
               (((coords.y - outer) / outer_p) * bb.height) / (align ? -2 : 2);
 
             mx += O.x;

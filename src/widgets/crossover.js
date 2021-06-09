@@ -178,13 +178,13 @@ function limitBands() {
   sortBands.call(this);
 
   const distance = Math.abs(this.get('distance'));
-  for (var i = 0; i < this.bands.length; i++)
+  for (let i = 0; i < this.bands.length; i++)
     limitBand(this.bands, i, distance);
 }
 
 function setFreq(band) {
   if (this.options.leap) return;
-  var i = this.bands.indexOf(band);
+  const i = this.bands.indexOf(band);
   if (i < 0) {
     error('Band no member of crossover');
     return;
@@ -238,7 +238,7 @@ export const Crossover = defineClass({
      *   Has class <code>.aux-crossover</code>.
      */
 
-    var self = this;
+    const self = this;
     this.set_freq_cb = function () {
       setFreq.call(self, this);
     };

@@ -25,9 +25,9 @@ import { Widget } from './widget.js';
 import { Ranges } from '../implements/ranges.js';
 
 function drawLines(a, mode, last) {
-  var labels = new Array(a.length);
-  var coords = new Array(a.length);
-  var i, label, obj;
+  const labels = new Array(a.length);
+  const coords = new Array(a.length);
+  let i, label, obj;
 
   for (i = 0; i < a.length; i++) {
     obj = a[i];
@@ -45,8 +45,8 @@ function drawLines(a, mode, last) {
     }
   }
 
-  var w = this.range_x.options.basis;
-  var h = this.range_y.options.basis;
+  const w = this.range_x.options.basis;
+  const h = this.range_y.options.basis;
 
   S.add(
     function () {
@@ -66,19 +66,19 @@ function drawLines(a, mode, last) {
           // by an option.
           continue;
         }
-        var tw = bb.width;
-        var th = bb.height;
-        var p = getStyle(label, 'padding').split(' ');
+        const tw = bb.width;
+        const th = bb.height;
+        const p = getStyle(label, 'padding').split(' ');
         if (p.length < 2) p[1] = p[2] = p[3] = p[0];
         if (p.length < 3) {
           p[2] = p[0];
           p[3] = p[1];
         }
         if (p.length < 4) p[3] = p[1];
-        var pt = parseInt(p[0]) || 0;
-        var pr = parseInt(p[1]) || 0;
-        var pb = parseInt(p[2]) || 0;
-        var pl = parseInt(p[3]) || 0;
+        const pt = parseInt(p[0]) || 0;
+        const pr = parseInt(p[1]) || 0;
+        const pb = parseInt(p[2]) || 0;
+        const pl = parseInt(p[3]) || 0;
         var x, y;
         if (mode) {
           y = Math.max(
@@ -116,7 +116,7 @@ function drawLines(a, mode, last) {
       S.add(
         function () {
           const O = this.options;
-          var elements = this.element.querySelectorAll(
+          const elements = this.element.querySelectorAll(
             '.aux-gridline.aux-' + (mode ? 'horizontal' : 'vertical')
           );
           for (var j = 0; j < elements.length; j++) {
@@ -150,7 +150,7 @@ function drawLines(a, mode, last) {
               (!mode && obj.pos === this.range_x.options.max)
             )
               continue;
-            var line = makeSVG('path');
+            const line = makeSVG('path');
             addClass(line, 'aux-gridline');
             addClass(line, mode ? 'aux-horizontal' : 'aux-vertical');
             if (obj['class']) addClass(line, obj['class']);
@@ -317,7 +317,7 @@ export const Grid = defineClass({
   },
 
   redraw: function () {
-    var I = this.invalid,
+    const I = this.invalid,
       O = this.options;
     if (I.validate('grid_x', 'grid_y', 'range_x', 'range_y')) {
       empty(this.element);

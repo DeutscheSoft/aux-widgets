@@ -26,23 +26,23 @@ import { addClass, removeClass, toggleClass } from '../utils/dom.js';
 import { objectSub } from '../utils/object.js';
 
 function addMeter(options) {
-  var l = this.meters.length;
-  var O = options;
-  var opt = extractChildOptions(O, l);
-  var m = new LevelMeter(opt);
+  const l = this.meters.length;
+  const O = options;
+  const opt = extractChildOptions(O, l);
+  const m = new LevelMeter(opt);
 
   this.meters.push(m);
   this.appendChild(m);
 }
 function removeMeter(meter) {
   /* meter can be int or meter instance */
-  var M = this.meters;
+  let M = this.meters;
 
-  var m = -1;
+  let m = -1;
   if (typeof meter == 'number') {
     m = meter;
   } else {
-    for (var i = 0; i < M.length; i++) {
+    for (let i = 0; i < M.length; i++) {
       if (M[i] == meter) {
         m = i;
         break;
@@ -200,10 +200,10 @@ export const MultiMeter = defineClass({
     Container.prototype.draw.call(this, O, element);
   },
   redraw: function () {
-    var O = this.options;
-    var I = this.invalid;
-    var E = this.element;
-    var M = this.meters;
+    const O = this.options;
+    const I = this.invalid;
+    const E = this.element;
+    const M = this.meters;
 
     if (I.count) {
       while (M.length > O.count) removeMeter.call(this, M[M.length - 1]);
@@ -291,7 +291,7 @@ defineChildWidget(MultiMeter, 'label', {
  *
  */
 
-var mapped_options = {
+const mapped_options = {
   labels: 'label',
   layout: 'layout',
 };
@@ -302,7 +302,7 @@ addStaticEvent(MultiMeter, 'set_layout', mapChildOption);
 MultiMeter.prototype._options.labels = 'array|string';
 
 function mapChildOptionSimple(value, key) {
-  var M = this.meters,
+  let M = this.meters,
     i;
   for (i = 0; i < M.length; i++) M[i].set(mapped_options[key], value);
 }
@@ -323,10 +323,10 @@ const obj = objectSub(
   Container.prototype._options
 );
 
-for (var key in obj) {
+for (const key in obj) {
   if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
   if (MultiMeter.prototype._options[key]) continue;
-  var type = LevelMeter.prototype._options[key];
+  const type = LevelMeter.prototype._options[key];
   if (type.search('array') !== -1) {
     MultiMeter.prototype._options[key] = type;
     mapped_options[key] = key;
@@ -341,13 +341,13 @@ for (var key in obj) {
 }
 
 function extractChildOptions(O, i) {
-  var o = {},
+  let o = {},
     value,
     _type;
 
-  for (var _key in mapped_options) {
+  for (const _key in mapped_options) {
     if (!Object.prototype.hasOwnProperty.call(O, _key)) continue;
-    var ckey = mapped_options[_key];
+    const ckey = mapped_options[_key];
     value = O[_key];
     _type = LevelMeter.prototype._options[_key] || '';
     if (Array.isArray(value) && _type.search('array') === -1) {

@@ -84,8 +84,8 @@ export const State = defineClass({
 
   redraw: function () {
     Widget.prototype.redraw.call(this);
-    var I = this.invalid;
-    var O = this.options;
+    const I = this.invalid;
+    const O = this.options;
 
     if (I.color) {
       I.color = false;
@@ -95,7 +95,7 @@ export const State = defineClass({
 
     if (I.state) {
       I.state = false;
-      var v = +O.state;
+      let v = +O.state;
       if (!(v >= 0)) v = 0;
       if (!(v <= 1)) v = 1;
 

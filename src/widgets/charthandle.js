@@ -45,7 +45,7 @@ const MODES = [
   'block',
 ];
 function normalize(v) {
-  var n = Math.sqrt(v[0] * v[0] + v[1] * v[1]);
+  const n = Math.sqrt(v[0] * v[0] + v[1] * v[1]);
   v[0] /= n;
   v[1] /= n;
 }
@@ -70,10 +70,10 @@ const ZHANDLE_POSITION_circular = {
 };
 
 function getZHandlePositionMovable(O, X) {
-  var vec = ZHANDLE_POSITION_circular[O.z_handle];
-  var x = (X[0] + X[2]) / 2;
-  var y = (X[1] + X[3]) / 2;
-  var R = (X[2] - X[0] - O.z_handle_size) / 2;
+  const vec = ZHANDLE_POSITION_circular[O.z_handle];
+  const x = (X[0] + X[2]) / 2;
+  const y = (X[1] + X[3]) / 2;
+  const R = (X[2] - X[0] - O.z_handle_size) / 2;
 
   return [x + R * vec[0], y + R * vec[1]];
 }
@@ -103,11 +103,11 @@ function Z_HANDLE_SIZE(pos) {
 }
 
 function getZHandleSize(O, X) {
-  var vec = Z_HANDLE_SIZE(O.z_handle);
-  var z_handle_size = O.z_handle_size;
-  var z_handle_centered = O.z_handle_centered;
-  var width = X[2] - X[0];
-  var height = X[3] - X[1];
+  const vec = Z_HANDLE_SIZE(O.z_handle);
+  const z_handle_size = O.z_handle_size;
+  const z_handle_centered = O.z_handle_centered;
+  let width = X[2] - X[0];
+  let height = X[3] - X[1];
 
   if (z_handle_centered < 1) {
     width *= z_handle_centered;
@@ -139,11 +139,11 @@ const Z_HANDLE_POS = {
 };
 
 function getZHandlePosition(O, X, zhandle_size) {
-  var x = +(+X[0] + X[2] - +zhandle_size[0]) / 2;
-  var y = +(+X[1] + X[3] - +zhandle_size[1]) / 2;
-  var width = +X[2] - +X[0];
-  var height = +X[3] - +X[1];
-  var vec = Z_HANDLE_POS[O.z_handle] || Z_HANDLE_POS['top-right'];
+  let x = +(+X[0] + X[2] - +zhandle_size[0]) / 2;
+  let y = +(+X[1] + X[3] - +zhandle_size[1]) / 2;
+  const width = +X[2] - +X[0];
+  const height = +X[3] - +X[1];
+  const vec = Z_HANDLE_POS[O.z_handle] || Z_HANDLE_POS['top-right'];
 
   x += (+vec[0] * +(width - +zhandle_size[0])) / 2;
   y += (+vec[1] * +(height - +zhandle_size[1])) / 2;
@@ -271,18 +271,18 @@ function getLabelPosition(O, X, pos, label_size) {
    * pos: string describing the position of the label ("top", "bottom-right", ...)
    * label_size: array containing width and height of the label
    */
-  var m = O.margin;
+  const m = O.margin;
 
   // Pivot (x, y) is the center of the handle.
-  var x = (X[0] + X[2]) / 2;
-  var y = (X[1] + X[3]) / 2;
+  let x = (X[0] + X[2]) / 2;
+  let y = (X[1] + X[3]) / 2;
 
   // Size of handle
-  var width = +X[2] - +X[0];
-  var height = +X[3] - +X[1];
+  const width = +X[2] - +X[0];
+  const height = +X[3] - +X[1];
 
   // multipliers
-  var vec = LABEL_POSITION[modeToHandle(O.mode)][pos];
+  const vec = LABEL_POSITION[modeToHandle(O.mode)][pos];
 
   x += (vec[0] * width) / 2 + vec[2] * label_size[0] + vec[4] * m;
   y += (vec[1] * height) / 2 + vec[3] * label_size[1] + vec[5] * m;
@@ -294,7 +294,7 @@ function getLabelPosition(O, X, pos, label_size) {
 }
 
 function removeZHandle() {
-  var E = this._zhandle;
+  const E = this._zhandle;
   if (!E) return;
   this._zhandle = null;
   if (this.z_drag.get('node') === E) this.z_drag.set('node', null);
@@ -303,8 +303,8 @@ function removeZHandle() {
 }
 
 function createZHandle() {
-  var E;
-  var O = this.options;
+  let E;
+  const O = this.options;
 
   if (this._zhandle) removeZHandle.call(this);
 
@@ -362,24 +362,24 @@ function getLabelDimensions(align, X, label_size) {
 }
 
 function redrawHandle(O, X) {
-  var _handle = this._handle;
+  const _handle = this._handle;
 
   if (!O.show_handle) {
     if (_handle) removeHandle.call(this);
     return;
   }
 
-  var range_x = O.range_x;
-  var range_y = O.range_y;
-  var range_z = O.range_z;
+  const range_x = O.range_x;
+  const range_y = O.range_y;
+  const range_z = O.range_z;
 
   if (!range_x.options.basis || !range_y.options.basis) return;
 
-  var x = range_x.valueToPixel(O.x);
-  var y = range_y.valueToPixel(O.y);
-  var z = range_z.valueToCoef(O.z) || 0;
+  const x = range_x.valueToPixel(O.x);
+  const y = range_y.valueToPixel(O.y);
+  const z = range_z.valueToCoef(O.z) || 0;
 
-  var tmp;
+  let tmp;
 
   if (O.mode === 'circular') {
     tmp = (O.min_size + z * (O.max_size - O.min_size)) / 2;
@@ -403,9 +403,9 @@ function redrawHandle(O, X) {
     _handle.setAttribute('width', Math.round(+X[2] - X[0]).toFixed(0));
     _handle.setAttribute('height', Math.round(+X[3] - X[1]).toFixed(0));
   } else {
-    var x_min =
+    let x_min =
       O.x_min !== false ? range_x.valueToPixel(range_x.snap(O.x_min)) : 0;
-    var x_max =
+    let x_max =
       O.x_max !== false
         ? range_x.valueToPixel(range_x.snap(O.x_max))
         : range_x.options.basis;
@@ -416,9 +416,9 @@ function redrawHandle(O, X) {
       x_max = tmp;
     }
 
-    var y_min =
+    let y_min =
       O.y_min !== false ? range_y.valueToPixel(range_y.snap(O.y_min)) : 0;
-    var y_max =
+    let y_max =
       O.y_max !== false
         ? range_y.valueToPixel(range_y.snap(O.y_max))
         : range_y.options.basis;
@@ -491,9 +491,9 @@ function redrawHandle(O, X) {
 }
 
 function redrawZHandle(O, X) {
-  var vec;
-  var size;
-  var zhandle = this._zhandle;
+  let vec;
+  let size;
+  const zhandle = this._zhandle;
 
   if (!O.show_handle || O.z_handle === false) {
     if (zhandle) removeZHandle.call(this);
@@ -558,7 +558,7 @@ function preventDefault(e) {
 }
 
 function createLabel() {
-  var E;
+  let E;
   this._label = E = makeSVG('text', {
     class: 'aux-label',
   });
@@ -567,7 +567,7 @@ function createLabel() {
 }
 
 function removeLabel() {
-  var E = this._label;
+  const E = this._label;
   if (!E) return;
   this._label = null;
   E.remove();
@@ -578,8 +578,8 @@ function removeLabel() {
 }
 
 function createHandle() {
-  var O = this.options;
-  var E;
+  const O = this.options;
+  let E;
 
   if (this._handle) removeHandle.call(this);
 
@@ -594,7 +594,7 @@ function createHandle() {
 }
 
 function removeHandle() {
-  var E = this._handle;
+  const E = this._handle;
   if (!E) return;
   this._handle = null;
   E.remove();
@@ -609,9 +609,9 @@ function redrawLabel(O, X) {
     return false;
   }
 
-  var a = O.format_label.call(this, O.label, O.x, O.y, O.z).split('\n');
-  var c = this._label.childNodes;
-  var i;
+  const a = O.format_label.call(this, O.label, O.x, O.y, O.z).split('\n');
+  const c = this._label.childNodes;
+  let i;
 
   while (c.length < a.length) {
     this._label.appendChild(makeSVG('tspan', { dy: '1.0em' }));
@@ -627,12 +627,12 @@ function redrawLabel(O, X) {
 
   S.add(
     function () {
-      var w = 0;
+      let w = 0;
       for (i = 0; i < a.length; i++) {
         w = Math.max(w, c[i].getComputedTextLength());
       }
 
-      var bbox;
+      let bbox;
 
       try {
         bbox = this._label.getBBox();
@@ -643,15 +643,15 @@ function redrawLabel(O, X) {
 
       S.add(
         function () {
-          var label_size = [w, bbox.height];
+          const label_size = [w, bbox.height];
 
-          var pref = O.preferences;
-          var area = 0;
-          var label_position;
-          var text_position;
-          var text_anchor;
-          var tmp;
-          var j;
+          const pref = O.preferences;
+          let area = 0;
+          let label_position;
+          let text_position;
+          let text_anchor;
+          let tmp;
+          let j;
 
           /*
            * Calculate possible positions of the labels and calculate their intersections. Choose
@@ -659,13 +659,13 @@ function redrawLabel(O, X) {
            */
           for (j = 0; j < pref.length; j++) {
             /* get alignment */
-            var align = getLabelAlign(O, pref[j]);
+            const align = getLabelAlign(O, pref[j]);
 
             /* get label position */
-            var LX = getLabelPosition(O, X, pref[j], label_size);
+            const LX = getLabelPosition(O, X, pref[j], label_size);
 
             /* calculate the label bounding box using anchor and dimensions */
-            var pos = getLabelDimensions(align, LX, label_size);
+            const pos = getLabelDimensions(align, LX, label_size);
 
             tmp = O.intersect(pos, this);
 
@@ -687,7 +687,7 @@ function redrawLabel(O, X) {
           this._label.setAttribute('x', tmp);
           this._label.setAttribute('y', Math.round(text_position[1]) + 'px');
           this._label.setAttribute('text-anchor', text_anchor);
-          var cn = this._label.childNodes;
+          const cn = this._label.childNodes;
           for (j = 0; j < cn.length; j++) cn[j].setAttribute('x', tmp);
 
           redrawLines.call(this, O, X);
@@ -707,12 +707,12 @@ function redrawLines(O, X) {
     return;
   }
 
-  var pos = this.label;
-  var range_x = O.range_x;
-  var range_y = O.range_y;
+  const pos = this.label;
+  const range_x = O.range_x;
+  const range_y = O.range_y;
 
-  var x = range_x.valueToPixel(O.x);
-  var y = range_y.valueToPixel(O.y);
+  const x = range_x.valueToPixel(O.x);
+  const y = range_y.valueToPixel(O.y);
   switch (O.mode) {
     case 'circular':
     case 'block':
@@ -779,8 +779,8 @@ function redrawLines(O, X) {
 }
 
 function setMainClass(O) {
-  var E = this.element;
-  var i;
+  const E = this.element;
+  let i;
 
   for (i = 0; i < MODES.length; i++) removeClass(E, 'aux-' + MODES[i]);
 
@@ -811,8 +811,8 @@ function setMainClass(O) {
 
 function startDrag() {
   this.drawOnce(function () {
-    var e = this.element;
-    var p = e.parentNode;
+    const e = this.element;
+    const p = e.parentNode;
     addClass(e, 'aux-active');
     this.set('dragging', true);
     this.startInteracting();
@@ -828,7 +828,7 @@ function startDrag() {
 
 function stopDrag() {
   this.drawOnce(function () {
-    var e = this.element;
+    const e = this.element;
     removeClass(e, 'aux-active');
     this.set('dragging', false);
     this.stopInteracting();
@@ -905,19 +905,19 @@ function stopDrag() {
  */
 
 function setMin(value, key) {
-  var name = key.substr(0, 1);
-  var O = this.options;
+  const name = key.substr(0, 1);
+  const O = this.options;
   if (value !== false && O[name] < value) this.set(name, value);
 }
 
 function setMax(value, key) {
-  var name = key.substr(0, 1);
-  var O = this.options;
+  const name = key.substr(0, 1);
+  const O = this.options;
   if (value !== false && O[name] > value) this.set(name, value);
 }
 
 function setRange(range, key) {
-  var name = key.substr(6);
+  const name = key.substr(6);
   this.set(name, range.snap(this.get(name)));
 }
 
@@ -1009,7 +1009,7 @@ export const ChartHandle = defineClass({
   },
   static_events: {
     set_show_axis: function () {
-      var O = this.options;
+      const O = this.options;
       if (O.mode === 'circular') createLine1.call(this);
       createLine2.call(this);
     },
@@ -1022,7 +1022,7 @@ export const ChartHandle = defineClass({
       this.set('format_label', this.options.format_label);
     },
     set_mode: function (value) {
-      var O = this.options;
+      const O = this.options;
       if (!O.show_handle) return;
       createHandle.call(this);
       if (O.z_handle !== false) createZHandle.call(this);
@@ -1113,7 +1113,7 @@ export const ChartHandle = defineClass({
     this._wheel_timer = null;
     if (!options.element) options.element = makeSVG('g');
     Widget.prototype.initialize.call(this, options);
-    var O = this.options;
+    const O = this.options;
 
     /**
      * @member {Range} ChartHandle#range_x - The {@link Range} for the x axis.
@@ -1148,13 +1148,13 @@ export const ChartHandle = defineClass({
     this.z_drag = new DragCapture(this, {
       node: null,
       onstartcapture: function (state) {
-        var self = this.parent;
-        var _O = self.options;
+        const self = this.parent;
+        const _O = self.options;
         state.z = _O.range_z.valueToPixel(O.z);
 
-        var pstate = self.pos_drag.state();
+        const pstate = self.pos_drag.state();
         if (pstate) {
-          var v = [
+          const v = [
             state.current.clientX - pstate.prev.clientX,
             state.current.clientY - pstate.prev.clientY,
           ];
@@ -1176,24 +1176,24 @@ export const ChartHandle = defineClass({
         return true;
       },
       onmovecapture: function (state) {
-        var self = this.parent;
-        var _O = self.options;
+        const self = this.parent;
+        const _O = self.options;
 
-        var zv = state.vector;
-        var v = state.vDistance();
+        const zv = state.vector;
+        const v = state.vDistance();
 
-        var d = zv[0] * v[0] + zv[1] * v[1];
+        const d = zv[0] * v[0] + zv[1] * v[1];
 
         /* ignore small movements */
         if (_O.min_drag > 0 && _O.min_drag > d) return;
 
-        var range_z = _O.range_z;
-        var z = range_z.pixelToValue(state.z + d);
+        const range_z = _O.range_z;
+        const z = range_z.pixelToValue(state.z + d);
 
         self.userset('z', z);
       },
       onstopcapture: function () {
-        var self = this.parent;
+        const self = this.parent;
         /**
          * Is fired when the user releases the z-handle. The argument is the
          * actual z value.
@@ -1209,9 +1209,9 @@ export const ChartHandle = defineClass({
     this.pos_drag = new DragCapture(this, {
       node: this.element,
       onstartcapture: function (state) {
-        var self = this.parent;
-        var _O = self.options;
-        var ev = state.current;
+        const self = this.parent;
+        const _O = self.options;
+        const ev = state.current;
 
         self.z_drag.set('node', document);
 
@@ -1250,8 +1250,8 @@ export const ChartHandle = defineClass({
         return true;
       },
       onmovecapture: function (state) {
-        var self = this.parent;
-        var _O = self.options;
+        const self = this.parent;
+        const _O = self.options;
 
         /* ignore small movements */
         if (_O.min_drag > 0 && O.min_drag > state.distance()) return;
@@ -1259,17 +1259,17 @@ export const ChartHandle = defineClass({
         /* we are changing z right now using a gesture, irgnore this movement */
         if (self.z_drag.dragging()) return;
 
-        var v = state.vDistance();
-        var range_x = _O.range_x;
-        var range_y = _O.range_y;
-        var ox = range_x.options;
-        var oy = range_y.options;
+        const v = state.vDistance();
+        const range_x = _O.range_x;
+        const range_y = _O.range_y;
+        const ox = range_x.options;
+        const oy = range_y.options;
 
-        var x = Math.min(
+        const x = Math.min(
           ox.max,
           Math.max(ox.min, range_x.pixelToValue(state.x + v[0]))
         );
-        var y = Math.min(
+        const y = Math.min(
           oy.max,
           Math.max(oy.min, range_y.pixelToValue(state.y + v[1]))
         );
@@ -1292,8 +1292,8 @@ export const ChartHandle = defineClass({
          *
          * @param {Object} positions - An object containing all relevant positions of the pointer.
          */
-        var self = this.parent;
-        var _O = self.options;
+        const self = this.parent;
+        const _O = self.options;
         self.emit('handlereleased', {
           x: _O.x,
           y: _O.y,
@@ -1323,12 +1323,12 @@ export const ChartHandle = defineClass({
 
   redraw: function () {
     Widget.prototype.redraw.call(this);
-    var O = this.options;
-    var I = this.invalid;
+    const O = this.options;
+    const I = this.invalid;
 
     /* These are the coordinates of the corners (x1, y1, x2, y2)
      * NOTE: x,y are not necessarily in the midde. */
-    var X = this.handle;
+    const X = this.handle;
     if (I.mode) setMainClass.call(this, O);
 
     if (I.hover) {
@@ -1340,7 +1340,7 @@ export const ChartHandle = defineClass({
       toggleClass(this.element, 'aux-dragging', O.dragging);
     }
 
-    var moved = I.validate(
+    const moved = I.validate(
       'x',
       'y',
       'z',
@@ -1362,7 +1362,7 @@ export const ChartHandle = defineClass({
       redrawZHandle.call(this, O, X);
     }
 
-    var delay_lines;
+    let delay_lines;
 
     // LABEL
     if (I.validate('format_label', 'label', 'preference') || moved) {
@@ -1386,8 +1386,8 @@ export const ChartHandle = defineClass({
     const P = E.parentElement;
     if (P && E !== P.lastChild)
       this.drawOnce(function () {
-        var e = this.element;
-        var _p = e.parentNode;
+        const e = this.element;
+        const _p = e.parentNode;
         if (_p && e !== _p.lastChild) _p.appendChild(e);
       });
   },
@@ -1403,15 +1403,15 @@ export const ChartHandle = defineClass({
     const P = E.parentElement;
     if (P && E !== P.firstChild) {
       this.drawOnce(function () {
-        var e = this.element;
-        var _p = e.parentNode;
+        const e = this.element;
+        const _p = e.parentNode;
         if (_p && e !== _p.firstChild) _p.insertBefore(e, _p.firstChild);
       });
     }
   },
 
   set: function (key, value) {
-    var O = this.options;
+    const O = this.options;
 
     switch (key) {
       case 'format_label':

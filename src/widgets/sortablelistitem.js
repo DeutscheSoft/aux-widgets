@@ -45,8 +45,8 @@ export const SortableListItem = defineClass({
   },
   redraw: function () {
     ListItem.prototype.redraw.call(this);
-    var I = this.invalid;
-    var O = this.options;
+    const I = this.invalid;
+    const O = this.options;
     if (I.sortable) {
       if (O.sortable) {
         if (!this.sorter) {

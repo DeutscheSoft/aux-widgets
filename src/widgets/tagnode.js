@@ -53,8 +53,8 @@ export const TagNode = defineClass({
 
   redraw: function () {
     Container.prototype.redraw.call(this);
-    var I = this.invalid;
-    var O = this.options;
+    const I = this.invalid;
+    const O = this.options;
     if (I.color) {
       I.color = false;
       this.element.style.backgroundColor = O.color;

@@ -48,7 +48,7 @@ function dblClick() {
 }
 
 function setBackground(horiz, vert, size) {
-  var E = this.element;
+  const E = this.element;
   E.style['background-position'] = '-' + horiz + 'px -' + vert + 'px';
 
   E.style['-webkit-background-size'] = size;
@@ -167,8 +167,8 @@ export const Slider = defineClass({
   },
 
   redraw: function () {
-    var I = this.invalid;
-    var O = this.options;
+    const I = this.invalid;
+    const O = this.options;
 
     if (I.image) {
       I.image = false;
@@ -182,8 +182,8 @@ export const Slider = defineClass({
       I.value = false;
       I.alignment = false;
       I.frames = false;
-      var coef = this.valueToCoef(O.value);
-      var frame = Math.round(Math.max(0, O.frames - 1) * coef);
+      const coef = this.valueToCoef(O.value);
+      const frame = Math.round(Math.max(0, O.frames - 1) * coef);
       switch (O.alignment) {
         default:
           warn(

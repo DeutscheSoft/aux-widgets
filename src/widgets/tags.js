@@ -53,8 +53,8 @@ export const Tags = defineClass({
     return this.tags.get(this.tagToString(tag));
   },
   requestTag: function (tag, options) {
-    var C = this.options.tag_class;
-    var t = this.tagToString(tag);
+    const C = this.options.tag_class;
+    const t = this.tagToString(tag);
 
     if (this.tags.has(t)) {
       tag = this.tags.get(t);
@@ -62,7 +62,7 @@ export const Tags = defineClass({
     }
 
     if (typeof tag == 'string') {
-      var o = Object.assign(options || {}, { tag: tag });
+      const o = Object.assign(options || {}, { tag: tag });
       tag = new C(o);
     } else if (Object.prototype.isPrototypeOf.call(C.prototype, tag)) {
       /* empty */

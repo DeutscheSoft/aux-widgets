@@ -103,7 +103,7 @@ export function dBToCoef(value, min, max, reverse, factor) {
   max = +max;
   reverse = reverse | 0;
   factor = +factor;
-  var logfac = 1.0;
+  let logfac = 1.0;
   if (factor == 0.0) factor = 1.0;
   else logfac = +MAX(1.0, +pow(2.0, factor) - 1.0);
   if (reverse) value = max - (value - min);
@@ -132,7 +132,7 @@ export function coefToDB(coef, min, max, reverse, factor) {
   max = +max;
   reverse = reverse | 0;
   factor = +factor;
-  var logfac = 1.0;
+  let logfac = 1.0;
   if (factor == 0.0) factor = 1.0;
   else logfac = +MAX(1.0, +pow(2.0, factor) - 1.0);
   if (reverse) coef = -coef + 1.0;
@@ -162,7 +162,7 @@ export function dBToScale(value, min, max, scale, reverse, factor) {
   scale = +scale;
   reverse = reverse | 0;
   factor = +factor;
-  var logfac = 1.0;
+  let logfac = 1.0;
   if (factor == 0.0) factor = 1.0;
   else logfac = +MAX(1.0, +pow(2.0, factor) - 1.0);
   if (reverse) value = max - (value - min);
@@ -192,7 +192,7 @@ export function scaleToDB(value, min, max, scale, reverse, factor) {
   scale = +scale;
   reverse = reverse | 0;
   factor = +factor;
-  var logfac = 1.0;
+  let logfac = 1.0;
   if (factor == 0.0) factor = 1.0;
   else logfac = +MAX(1.0, +pow(2.0, factor) - 1.0);
   value = value / scale;

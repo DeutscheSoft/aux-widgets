@@ -56,7 +56,7 @@ export const SortableList = defineClass({
     List.prototype.draw.call(this, O, element);
   },
   addItem: function (item, pos) {
-    var O = this.options;
+    const O = this.options;
     item = List.prototype.addItem.call(this, item, pos);
     item.set('sortable', O.sortable);
   },
@@ -64,7 +64,7 @@ export const SortableList = defineClass({
     switch (key) {
       case 'sortable':
         var I = this.options.items;
-        for (var i = 0; i < I.length; i++) I[i].set('sortable', value);
+        for (let i = 0; i < I.length; i++) I[i].set('sortable', value);
         if (value && !this.dragcapture) buildDragCapture.call(this);
         break;
     }

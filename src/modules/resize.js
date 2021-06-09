@@ -23,9 +23,9 @@ import { DragValue } from './dragvalue.js';
 import { Base } from '../implements/base.js';
 
 function dragstart(e) {
-  var O = this.options;
+  const O = this.options;
   if (!O.active) return;
-  var E = O.node;
+  const E = O.node;
   this._xstart = e.pageX;
   this._ystart = e.pageY;
   this._xsize = E.offsetWidth;
@@ -53,10 +53,10 @@ function dragend(e) {
   this.emit('resizestop', e);
 }
 function dragging(e) {
-  var O = this.options;
+  const O = this.options;
   if (!O.active) return;
-  var w = this._xsize + e.pageX - this._xstart;
-  var h = this._ysize + e.pageY - this._ystart;
+  let w = this._xsize + e.pageX - this._xstart;
+  let h = this._ysize + e.pageY - this._ystart;
   if (O.min.x >= -1) w = Math.max(O.min.x, w);
   if (O.max.x >= -1) w = Math.min(O.max.x, w);
   if (O.min.y >= -1) h = Math.max(O.min.y, h);
@@ -76,9 +76,9 @@ function dragging(e) {
   this.emit('resizing', e, w, h);
 }
 function setHandle() {
-  var h = this.options.handle;
+  const h = this.options.handle;
   if (this.drag) this.drag.destroy();
-  var range = new Range({});
+  const range = new Range({});
   this.drag = new DragValue(this, {
     node: h,
     range: function () {

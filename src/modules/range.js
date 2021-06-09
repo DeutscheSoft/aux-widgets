@@ -112,7 +112,7 @@ export function effectiveValue(value, base, falling, duration, init, age) {
   if (falling <= 0) return value;
   if (age <= 0) age = Date.now();
   else age = +(Date.now() - age);
-  var diff = age * (falling / duration);
+  const diff = age * (falling / duration);
 
   if (age > init) {
     if (value > base) {

@@ -29,8 +29,8 @@ function remove(e, node) {
 }
 
 function colorize(e) {
-  var that = this;
-  var c = new ColorPickerDialog({
+  const that = this;
+  const c = new ColorPickerDialog({
     autoclose: true,
     hex: this.options.color,
     onapply: function (rgb, hsl, hex) {
@@ -64,14 +64,14 @@ export const Tag = defineClass({
     this.nodes = [];
   },
   destroy: function () {
-    var l = this.nodes.length;
-    for (var i = 0; i < l; i++) this.removeNode(this.nodes[i]);
+    const l = this.nodes.length;
+    for (let i = 0; i < l; i++) this.removeNode(this.nodes[i]);
     Widget.prototype.destroy.call(this);
   },
 
   redraw: function () {
-    var I = this.invalid;
-    var O = this.options;
+    const I = this.invalid;
+    const O = this.options;
     if (I.color) {
       I.color = false;
       for (let i = 0; i < this.nodes.length; i++) {
@@ -90,7 +90,7 @@ export const Tag = defineClass({
     Widget.prototype.redraw.call(this);
   },
   removeNode: function (node) {
-    for (var i = 0; i < this.nodes.length; i++) {
+    for (let i = 0; i < this.nodes.length; i++) {
       if (this.nodes[i] == node) {
         node.element.remove();
         this.emit('noderemoved', node);
@@ -101,11 +101,11 @@ export const Tag = defineClass({
     }
   },
   createNode: function (options) {
-    var O = this.options;
+    const O = this.options;
     options = options || {};
     options.color = O.color;
     options.tag = O.tag;
-    var node = new O.node_class(options, this);
+    const node = new O.node_class(options, this);
     node.on('colorize', colorize.bind(this));
     node.on('remove', remove.bind(this));
     this.nodes.push(node);

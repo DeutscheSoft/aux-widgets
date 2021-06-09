@@ -35,8 +35,8 @@ import { addClass, removeClass, element } from '../utils/dom.js';
  * @param {mixed} value - The new value of the option
  */
 function valueClicked() {
-  var self = this.parent;
-  var knob = self.knob;
+  const self = this.parent;
+  const knob = self.knob;
   knob.scroll.set('active', false);
   knob.drag.set('active', false);
   /**
@@ -49,8 +49,8 @@ function valueClicked() {
   self.emit('valueedit', this.options.value);
 }
 function valueDone() {
-  var self = this.parent;
-  var knob = self.knob;
+  const self = this.parent;
+  const knob = self.knob;
   knob.scroll.set('active', true);
   knob.drag.set('active', true);
   /**
@@ -103,12 +103,12 @@ export const ValueKnob = defineClass({
   },
   redraw: function () {
     Widget.prototype.redraw.call(this);
-    var I = this.invalid;
-    var O = this.options;
-    var E = this.element;
+    const I = this.invalid;
+    const O = this.options;
+    const E = this.element;
     if (I.layout) {
       I.layout = false;
-      var value = O.layout;
+      const value = O.layout;
       removeClass(E, 'aux-vertical', 'aux-horizontal', 'aux-left', 'aux-right');
       addClass(E, 'aux-' + value);
     }

@@ -52,7 +52,7 @@ export function NULL(O) {
  * @implements {@link BiquadTransform}
  */
 export function lowShelf(O) {
-  var cos = Math.cos,
+  const cos = Math.cos,
     sqrt = Math.sqrt,
     A = Math.pow(10, O.gain / 40),
     w0 = (2 * Math.PI * O.freq) / O.sample_rate,
@@ -74,11 +74,11 @@ export function lowShelf(O) {
  * @implements {@link BiquadTransform}
  */
 export function highShelf(O) {
-  var cos = Math.cos;
-  var sqrt = Math.sqrt;
-  var A = Math.pow(10, O.gain / 40);
-  var w0 = (2 * Math.PI * O.freq) / O.sample_rate;
-  var alpha = Math.sin(w0) / (2 * O.q);
+  const cos = Math.cos;
+  const sqrt = Math.sqrt;
+  const A = Math.pow(10, O.gain / 40);
+  const w0 = (2 * Math.PI * O.freq) / O.sample_rate;
+  const alpha = Math.sin(w0) / (2 * O.q);
   return {
     b0: A * (A + 1 + (A - 1) * cos(w0) + 2 * sqrt(A) * alpha),
     b1: -2 * A * (A - 1 + (A + 1) * cos(w0)),
@@ -96,10 +96,10 @@ export function highShelf(O) {
  * @implements {@link BiquadTransform}
  */
 export function peaking(O) {
-  var cos = Math.cos;
-  var A = Math.pow(10, O.gain / 40);
-  var w0 = (2 * Math.PI * O.freq) / O.sample_rate;
-  var alpha = Math.sin(w0) / (2 * O.q);
+  const cos = Math.cos;
+  const A = Math.pow(10, O.gain / 40);
+  const w0 = (2 * Math.PI * O.freq) / O.sample_rate;
+  const alpha = Math.sin(w0) / (2 * O.q);
   return {
     b0: 1 + alpha * A,
     b1: -2 * cos(w0),
@@ -117,9 +117,9 @@ export function peaking(O) {
  * @implements {@link BiquadTransform}
  */
 export function notch(O) {
-  var cos = Math.cos;
-  var w0 = (2 * Math.PI * O.freq) / O.sample_rate;
-  var alpha = Math.sin(w0) / (2 * O.q);
+  const cos = Math.cos;
+  const w0 = (2 * Math.PI * O.freq) / O.sample_rate;
+  const alpha = Math.sin(w0) / (2 * O.q);
   return {
     b0: 1,
     b1: -2 * cos(w0),
@@ -138,7 +138,7 @@ export function notch(O) {
  * @implements {@link BiquadTransform}
  */
 export function lowPass1(O) {
-  var w0 = (2 * Math.PI * O.freq) / O.sample_rate,
+  const w0 = (2 * Math.PI * O.freq) / O.sample_rate,
     s0 = Math.sin(w0),
     c0 = Math.cos(w0);
   return {
@@ -156,9 +156,9 @@ export function lowPass1(O) {
  * @implements {@link BiquadTransform}
  */
 export function lowPass2(O) {
-  var cos = Math.cos;
-  var w0 = (2 * Math.PI * O.freq) / O.sample_rate;
-  var alpha = Math.sin(w0) / (2 * O.q);
+  const cos = Math.cos;
+  const w0 = (2 * Math.PI * O.freq) / O.sample_rate;
+  const alpha = Math.sin(w0) / (2 * O.q);
   return {
     b0: (1 - cos(w0)) / 2,
     b1: 1 - cos(w0),
@@ -186,7 +186,7 @@ export function lowPass4(O) {
  * @implements {@link BiquadTransform}
  */
 export function highPass1(O) {
-  var w0 = (2 * Math.PI * O.freq) / O.sample_rate,
+  const w0 = (2 * Math.PI * O.freq) / O.sample_rate,
     s0 = Math.sin(w0),
     c0 = Math.cos(w0);
   return {
@@ -204,9 +204,9 @@ export function highPass1(O) {
  * @implements {@link BiquadTransform}
  */
 export function highPass2(O) {
-  var cos = Math.cos;
-  var w0 = (2 * Math.PI * O.freq) / O.sample_rate;
-  var alpha = Math.sin(w0) / (2 * O.q);
+  const cos = Math.cos;
+  const w0 = (2 * Math.PI * O.freq) / O.sample_rate;
+  const alpha = Math.sin(w0) / (2 * O.q);
   return {
     b0: (1 + cos(w0)) / 2,
     b1: -(1 + cos(w0)),
@@ -289,23 +289,23 @@ function nullFilter() {
 //}
 
 function biquadModule(O) {
-  var log = Math.log;
-  var sin = Math.sin;
+  const log = Math.log;
+  const sin = Math.sin;
 
-  var LN10_10 = ((O.factor || 1.0) * 10) / Math.LN10;
-  var PI = +(Math.PI / O.sample_rate);
-  var Ra = +(((O.a0 + O.a1 + O.a2) * (O.a0 + O.a1 + O.a2)) / 4);
-  var Rb = +(((O.b0 + O.b1 + O.b2) * (O.b0 + O.b1 + O.b2)) / 4);
-  var Xa = +(4 * O.a0 * O.a2);
-  var Ya = +(O.a1 * (O.a0 + O.a2));
-  var Xb = +(4 * O.b0 * O.b2);
-  var Yb = +(O.b1 * (O.b0 + O.b2));
+  const LN10_10 = ((O.factor || 1.0) * 10) / Math.LN10;
+  const PI = +(Math.PI / O.sample_rate);
+  const Ra = +(((O.a0 + O.a1 + O.a2) * (O.a0 + O.a1 + O.a2)) / 4);
+  const Rb = +(((O.b0 + O.b1 + O.b2) * (O.b0 + O.b1 + O.b2)) / 4);
+  const Xa = +(4 * O.a0 * O.a2);
+  const Ya = +(O.a1 * (O.a0 + O.a2));
+  const Xb = +(4 * O.b0 * O.b2);
+  const Yb = +(O.b1 * (O.b0 + O.b2));
 
   if (Ra === Rb && Ya === Yb && Xa === Xb) return nullFilter;
 
   return function (f) {
     f = +f;
-    var S = +sin(PI * f);
+    let S = +sin(PI * f);
     S *= S;
     return (
       LN10_10 *
@@ -324,16 +324,16 @@ function biquadFilter1(trafo) {
 
 function biquadFilterN(trafos) {
   function factory(O) {
-    var A = new Array(trafos.length);
-    var i;
+    const A = new Array(trafos.length);
+    let i;
 
     for (i = 0; i < trafos.length; i++) {
       A[i] = biquadModule(trafos[i](O));
     }
 
     return function (f) {
-      var ret = 0.0;
-      var j;
+      let ret = 0.0;
+      let j;
 
       for (j = 0; j < A.length; j++) {
         ret += A[j](f);

@@ -39,7 +39,7 @@ import {
   hexToRGB,
 } from '../utils/colors.js';
 
-var color_options = [
+const color_options = [
   'rgb',
   'hsl',
   'hex',
@@ -52,7 +52,7 @@ var color_options = [
 ];
 
 function checkInput(e) {
-  var I = this.hex.element;
+  const I = this.hex.element;
   if (e.keyCode && e.keyCode == 13) {
     apply.call(this);
     return;
@@ -94,7 +94,7 @@ function apply() {
 }
 
 function fEvent(e, useraction) {
-  var O = this.options;
+  const O = this.options;
   if (useraction) {
     this.emit('userset', 'rgb', O.rgb);
     this.emit('userset', 'hsl', O.hsl);
@@ -119,7 +119,7 @@ function fEvent(e, useraction) {
   });
 }
 
-var color_atoms = {
+const color_atoms = {
   hue: 'hsl',
   saturation: 'hsl',
   lightness: 'hsl',
@@ -129,10 +129,10 @@ var color_atoms = {
 };
 
 function setAtoms(key) {
-  var O = this.options;
-  var atoms = Object.keys(color_atoms);
-  for (var i = 0; i < atoms.length; i++) {
-    var atom = atoms[i];
+  const O = this.options;
+  const atoms = Object.keys(color_atoms);
+  for (let i = 0; i < atoms.length; i++) {
+    const atom = atoms[i];
     if (key !== atom) {
       O[atom] = O[color_atoms[atom]][atom.substr(0, 1)];
       this[atom].set('value', O[atom]);
@@ -241,8 +241,8 @@ export const ColorPicker = defineClass({
       cursor: false,
       onstartcapture: function (e) {
         if (e.start.target.classList.contains('aux-indicator')) return;
-        var ev = e.stouch ? e.stouch : e.start;
-        var x = ev.clientX - this.parent._canvas.getBoundingClientRect().left;
+        const ev = e.stouch ? e.stouch : e.start;
+        const x = ev.clientX - this.parent._canvas.getBoundingClientRect().left;
         this.parent.set('hue', this.options.range().pixelToValue(x));
       },
     });
@@ -263,14 +263,14 @@ export const ColorPicker = defineClass({
       cursor: false,
       onstartcapture: function (e) {
         if (e.start.target.classList.contains('aux-indicator')) return;
-        var ev = e.stouch ? e.stouch : e.start;
-        var y = ev.clientY - this.parent._canvas.getBoundingClientRect().top;
+        const ev = e.stouch ? e.stouch : e.start;
+        const y = ev.clientY - this.parent._canvas.getBoundingClientRect().top;
         this.parent.set('lightness', 1 - this.options.range().pixelToValue(y));
       },
     });
   },
   resize: function () {
-    var rect = this._canvas.getBoundingClientRect();
+    const rect = this._canvas.getBoundingClientRect();
     this.range_x.set('basis', rect.width);
     this.range_y.set('basis', rect.height);
   },
@@ -281,8 +281,8 @@ export const ColorPicker = defineClass({
   },
   redraw: function () {
     Container.prototype.redraw.call(this);
-    var I = this.invalid;
-    var O = this.options;
+    const I = this.invalid;
+    const O = this.options;
     if (
       I.validate(
         'rgb',
@@ -296,8 +296,8 @@ export const ColorPicker = defineClass({
         'blue'
       )
     ) {
-      var bw = RGBToBW(O.rgb);
-      var bg =
+      const bw = RGBToBW(O.rgb);
+      const bg =
         'rgb(' +
         parseInt(O.red) +
         ',' +
@@ -318,7 +318,7 @@ export const ColorPicker = defineClass({
     }
   },
   set: function (key, value) {
-    var O = this.options;
+    const O = this.options;
     if (color_options.indexOf(key) > -1) {
       switch (key) {
         case 'rgb':
@@ -437,7 +437,7 @@ defineChildWidget(ColorPicker, 'hex', {
     format: FORMAT('%s'),
     class: 'aux-hex',
     set: function (v) {
-      var p = 0,
+      let p = 0,
         tmp;
       if (v[0] == '#') v = v.substring(1);
       while (v.length < 6) {

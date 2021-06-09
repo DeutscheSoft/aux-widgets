@@ -29,7 +29,7 @@ function attributeForWidget(Widget) {
   const skip = ['class', 'id', 'container', 'element', 'styles'];
   const rename = ['title'];
 
-  for (var i in Widget.prototype._options) {
+  for (let i in Widget.prototype._options) {
     if (skip.indexOf(i) !== -1) continue;
 
     if (rename.indexOf(i) !== -1) i = 'aux' + i;

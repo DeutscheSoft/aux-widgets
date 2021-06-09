@@ -161,7 +161,7 @@ export const Notification = defineClass({
 
   initialize: function (options) {
     Container.prototype.initialize.call(this, options);
-    var O = this.options;
+    const O = this.options;
     /**
      * @member {HTMLDivElement} Notification#element - The main DIV container.
      *   Has class <code>.aux-notification</code>.
@@ -175,8 +175,8 @@ export const Notification = defineClass({
     Container.prototype.draw.call(this, O, element);
   },
   redraw: function () {
-    var I = this.invalid;
-    var i = I.content;
+    const I = this.invalid;
+    const i = I.content;
     Container.prototype.redraw.call(this);
     if (i && this.icon)
       this.element.insertBefore(this.icon.element, this.element.firstChild);

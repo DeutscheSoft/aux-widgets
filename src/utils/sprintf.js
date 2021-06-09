@@ -35,14 +35,14 @@
  * @see sprintf
  */
 export function FORMAT(fmt) {
-  var args = [];
-  var s = 'return ';
-  var res;
-  var last = 0;
-  var argnum = 0;
-  var precision;
-  var regexp = /%(\.\d+)?([bcdefgosO%])/g;
-  var argname;
+  const args = [];
+  let s = 'return ';
+  let res;
+  let last = 0;
+  let argnum = 0;
+  let precision;
+  const regexp = /%(\.\d+)?([bcdefgosO%])/g;
+  let argname;
 
   while ((res = regexp.exec(fmt))) {
     if (argnum) s += '+';
@@ -104,12 +104,12 @@ export function FORMAT(fmt) {
  * @see FORMAT
  */
 export function sprintf(fmt) {
-  var i, last_fmt;
-  var c,
+  let i, last_fmt;
+  let c,
     arg_num = 1;
-  var ret = [];
-  var precision, s;
-  var has_precision = false;
+  const ret = [];
+  let precision, s;
+  let has_precision = false;
 
   for (
     last_fmt = 0;

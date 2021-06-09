@@ -20,7 +20,7 @@
 import { toggleClass, element } from './utils/dom.js';
 
 export function addEvent(to, event, fun) {
-  var tmp = to[event];
+  const tmp = to[event];
 
   if (!tmp) {
     to[event] = fun;
@@ -32,7 +32,7 @@ export function addEvent(to, event, fun) {
 }
 
 export function removeEvent(from, event, fun) {
-  var tmp = from[event];
+  const tmp = from[event];
   if (!tmp) return;
   if (Array.isArray(tmp)) {
     from[event] = tmp.filter((f) => f !== fun);
@@ -44,7 +44,7 @@ export function removeEvent(from, event, fun) {
 }
 
 export function addStaticEvent(w, event, fun) {
-  var p = w.prototype,
+  let p = w.prototype,
     e;
   if (!Object.prototype.hasOwnProperty.call(p, 'static_events')) {
     if (p.static_events) {
@@ -100,11 +100,11 @@ export function defineChildElement(widget, name, config) {
    * @param {function} [config.draw] - A function to be called on redraw.
    *
    */
-  var p = widget.prototype;
-  var show_option = config.option || 'show_' + name;
-  var index = '_' + name;
+  const p = widget.prototype;
+  const show_option = config.option || 'show_' + name;
+  const index = '_' + name;
 
-  var display_check = config.display_check;
+  const display_check = config.display_check;
 
   /* This is done to make sure that the object property is created
    * inside of the constructor. Otherwise, if we add the widget later
@@ -127,8 +127,8 @@ export function defineChildElement(widget, name, config) {
     }
   });
 
-  var append = config.append;
-  var create = config.create;
+  let append = config.append;
+  let create = config.create;
 
   if (create === void 0)
     create = function () {
@@ -140,8 +140,8 @@ export function defineChildElement(widget, name, config) {
     };
 
   addStaticEvent(widget, 'set_' + show_option, function (value) {
-    var C = this[index];
-    var show = display_check ? display_check(value) : value !== false;
+    let C = this[index];
+    const show = display_check ? display_check(value) : value !== false;
     if (show === !!C) return;
     if (show && !C) {
       C = create.call(this);
@@ -156,15 +156,15 @@ export function defineChildElement(widget, name, config) {
   });
 
   if (config.draw) {
-    var m = config.draw_options;
+    let m = config.draw_options;
 
     if (!m) m = [show_option];
     else m.push(show_option);
 
-    for (var i = 0; i < m.length; i++) {
+    for (let i = 0; i < m.length; i++) {
       addStaticEvent(widget, 'set_' + m[i], function () {
-        var value = this.options[show_option];
-        var show = display_check ? display_check(value) : value !== false;
+        const value = this.options[show_option];
+        const show = display_check ? display_check(value) : value !== false;
 
         if (show) this.drawOnce(config.draw);
       });
@@ -183,11 +183,11 @@ function arrayify(x) {
 }
 
 function mergeStaticEvents(a, b) {
-  var event;
+  let event;
   if (!a) return b;
   if (!b) return Object.assign({}, a);
   for (event in a) {
-    var tmp = a[event];
+    const tmp = a[event];
     if (Object.prototype.hasOwnProperty.call(b, event)) {
       b[event] = arrayify(tmp).concat(arrayify(b[event]));
     } else {
@@ -198,7 +198,7 @@ function mergeStaticEvents(a, b) {
 }
 
 function mixin(dst, src) {
-  var fun, key;
+  let fun, key;
   for (key in src)
     if (!dst[key]) {
       if (
@@ -219,8 +219,8 @@ function mixin(dst, src) {
 }
 
 export function defineClass(o) {
-  var methods;
-  var tmp, i, c;
+  let methods;
+  let tmp, i, c;
 
   if (!o.options) o.options = {};
 

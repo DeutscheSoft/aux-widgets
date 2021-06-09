@@ -34,7 +34,7 @@
 /* jshint -W089 */
 export function merge(dst) {
   //console.log("merging", src, "into", dst);
-  var key, i, src;
+  let key, i, src;
   for (i = 1; i < arguments.length; i++) {
     src = arguments[i];
     for (key in src) {
@@ -53,8 +53,8 @@ export function merge(dst) {
  * @function objectAnd
  */
 export function objectAnd(orig, filter) {
-  var ret = {};
-  for (var key in orig) {
+  const ret = {};
+  for (const key in orig) {
     if (filter[key]) ret[key] = orig[key];
   }
   return ret;
@@ -70,8 +70,8 @@ export function objectAnd(orig, filter) {
 
 /* jshint -W089 */
 export function objectSub(orig, filter) {
-  var ret = {};
-  for (var key in orig) {
+  const ret = {};
+  for (const key in orig) {
     if (!filter[key]) ret[key] = orig[key];
   }
   return ret;
@@ -85,8 +85,8 @@ export function objectSub(orig, filter) {
  * @function toArray
  */
 export function toArray(collection) {
-  var ret = new Array(collection.length);
-  var i;
+  const ret = new Array(collection.length);
+  let i;
 
   for (i = 0; i < ret.length; i++) {
     ret[i] = collection[i];

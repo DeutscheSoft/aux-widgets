@@ -115,7 +115,7 @@ export const Panorama = defineClass({
   },
   initialized: function () {
     Chart.prototype.initialized.call(this);
-    var O = this.options;
+    const O = this.options;
     this.set('range', O.range);
     this.set('digits', O.digits);
     this.set('mode', O.mode);
@@ -127,13 +127,13 @@ export const Panorama = defineClass({
   },
 });
 function handleLabel(label, x, y, z) {
-  var O = this.options;
-  var s = '';
+  const O = this.options;
+  let s = '';
   if (O._mode == 'balance') s += label + '\n';
-  var lr = x ? (x < 0 ? 'L' : 'R') : '';
+  const lr = x ? (x < 0 ? 'L' : 'R') : '';
   s += lr + ' ' + Math.abs(x).toFixed(+O._digits);
   if (O._mode == 'surround') {
-    var fb = y ? (y < 0 ? 'F' : 'B') : '';
+    const fb = y ? (y < 0 ? 'F' : 'B') : '';
     s += '\n' + fb + ' ' + Math.abs(y).toFixed(+O._digits);
   }
   return s;

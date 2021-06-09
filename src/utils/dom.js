@@ -44,11 +44,11 @@ export function hasClass(e, cls) {
  * @function addClass
  */
 export function addClass(e) {
-  var i;
+  let i;
   e = e.classList;
   for (i = 1; i < arguments.length; i++) {
-    var a = arguments[i].split(' ');
-    for (var j = 0; j < a.length; j++) e.add(a[j]);
+    const a = arguments[i].split(' ');
+    for (let j = 0; j < a.length; j++) e.add(a[j]);
   }
 }
 /**
@@ -58,7 +58,7 @@ export function addClass(e) {
  * @function removeClass
  */
 export function removeClass(e) {
-  var i;
+  let i;
   e = e.classList;
   for (i = 1; i < arguments.length; i++) e.remove(arguments[i]);
 }
@@ -115,7 +115,7 @@ export function isClassName(str) {
  * getMaxTime(getStyle(DOMNode, "animation-duration"));
  */
 export function getMaxTime(string) {
-  var ret = 0,
+  let ret = 0,
     i,
     tmp,
     s = string;
@@ -193,12 +193,12 @@ export function getTag(tag, element) {
  * @function element
  */
 export function element(tag) {
-  var n = document.createElement(tag);
-  var i, v;
+  const n = document.createElement(tag);
+  let i, v;
   for (i = 1; i < arguments.length; i++) {
     v = arguments[i];
     if (typeof v === 'object') {
-      for (var key in v) {
+      for (const key in v) {
         if (Object.prototype.hasOwnProperty.call(v, key)) n.setAttribute(key, v[key]);
       }
     } else if (typeof v === 'string') {
@@ -240,8 +240,8 @@ export function setText(element, text) {
  */
 export function HTML(string) {
   /* NOTE: setting innerHTML on a document fragment is not supported */
-  var e = document.createElement('div');
-  var f = document.createDocumentFragment();
+  const e = document.createElement('div');
+  const f = document.createDocumentFragment();
   e.innerHTML = string;
   while (e.firstChild) f.appendChild(e.firstChild);
   return f;
@@ -350,7 +350,7 @@ export function scrollLeft(element) {
  * @function scrollAllTop
  */
 export function scrollAllTop(element) {
-  var v = 0;
+  let v = 0;
   while ((element = element.parentNode)) v += element.scrollTop || 0;
   return v;
 }
@@ -362,7 +362,7 @@ export function scrollAllTop(element) {
  * @function scrollAllLeft
  */
 export function scrollAllLeft(element) {
-  var v = 0;
+  let v = 0;
   while ((element = element.parentNode)) v += element.scrollLeft || 0;
   return v;
 }
@@ -376,8 +376,8 @@ export function scrollAllLeft(element) {
  * @function positionTop
  */
 export function positionTop(e, rel) {
-  var top = parseInt(e.getBoundingClientRect().top);
-  var f = fixed(e) ? 0 : scrollTop();
+  const top = parseInt(e.getBoundingClientRect().top);
+  const f = fixed(e) ? 0 : scrollTop();
   return top + f - (rel ? positionTop(rel) : 0);
 }
 
@@ -390,8 +390,8 @@ export function positionTop(e, rel) {
  * @function positionLeft
  */
 export function positionLeft(e, rel) {
-  var left = parseInt(e.getBoundingClientRect().left);
-  var f = fixed(e) ? 0 : scrollLeft();
+  const left = parseInt(e.getBoundingClientRect().left);
+  const f = fixed(e) ? 0 : scrollLeft();
   return left + f - (rel ? positionLeft(rel) : 0);
 }
 
@@ -415,15 +415,15 @@ export function fixed(e) {
  * @function outerWidth
  */
 export function outerWidth(element, margin, width) {
-  var m = 0;
+  let m = 0;
   if (margin) {
-    var cs = getComputedStyle(element);
+    const cs = getComputedStyle(element);
     m += parseFloat(cs.getPropertyValue('margin-left'));
     m += parseFloat(cs.getPropertyValue('margin-right'));
   }
   if (width !== void 0) {
     if (boxSizing(element) === 'content-box') {
-      var css = CSSSpace(element, 'padding', 'border');
+      const css = CSSSpace(element, 'padding', 'border');
       width -= css.left + css.right;
     }
     width -= m;
@@ -432,7 +432,7 @@ export function outerWidth(element, margin, width) {
     element.style.width = width + 'px';
     return width;
   } else {
-    var w = element.getBoundingClientRect().width;
+    const w = element.getBoundingClientRect().width;
     return w + m;
   }
 }
@@ -447,15 +447,15 @@ export function outerWidth(element, margin, width) {
  * @function outerHeight
  */
 export function outerHeight(element, margin, height) {
-  var m = 0;
+  let m = 0;
   if (margin) {
-    var cs = getComputedStyle(element, null);
+    const cs = getComputedStyle(element, null);
     m += parseFloat(cs.getPropertyValue('margin-top'));
     m += parseFloat(cs.getPropertyValue('margin-bottom'));
   }
   if (height !== void 0) {
     if (boxSizing(element) === 'content-box') {
-      var css = CSSSpace(element, 'padding', 'border');
+      const css = CSSSpace(element, 'padding', 'border');
       height -= css.top + css.bottom;
     }
     height -= m;
@@ -464,7 +464,7 @@ export function outerHeight(element, margin, height) {
     element.style.height = height + 'px';
     return height;
   } else {
-    var h = element.getBoundingClientRect().height;
+    const h = element.getBoundingClientRect().height;
     return h + m;
   }
 }
@@ -478,8 +478,8 @@ export function outerHeight(element, margin, height) {
  * @function innerWidth
  */
 export function innerWidth(element, width) {
-  var css = CSSSpace(element, 'padding', 'border');
-  var x = css.left + css.right;
+  const css = CSSSpace(element, 'padding', 'border');
+  const x = css.left + css.right;
   if (width !== void 0) {
     if (boxSizing(element) === 'border-box') width += x;
     // TODO: fixme
@@ -487,7 +487,7 @@ export function innerWidth(element, width) {
     element.style.width = width + 'px';
     return width;
   } else {
-    var w = element.getBoundingClientRect().width;
+    const w = element.getBoundingClientRect().width;
     return w - x;
   }
 }
@@ -501,8 +501,8 @@ export function innerWidth(element, width) {
  * @function innerHeight
  */
 export function innerHeight(element, height) {
-  var css = CSSSpace(element, 'padding', 'border');
-  var y = css.top + css.bottom;
+  const css = CSSSpace(element, 'padding', 'border');
+  const y = css.top + css.bottom;
   if (height !== void 0) {
     if (boxSizing(element) === 'border-box') height += y;
     // TODO: fixme
@@ -510,7 +510,7 @@ export function innerHeight(element, height) {
     element.style.height = height + 'px';
     return height;
   } else {
-    var h = element.getBoundingClientRect().height;
+    const h = element.getBoundingClientRect().height;
     return h - y;
   }
 }
@@ -522,7 +522,7 @@ export function innerHeight(element, height) {
  * @function boxSizing
  */
 export function boxSizing(element) {
-  var cs = getComputedStyle(element, null);
+  const cs = getComputedStyle(element, null);
   if (cs.getPropertyValue('box-sizing'))
     return cs.getPropertyValue('box-sizing');
   if (cs.getPropertyValue('-moz-box-sizing'))
@@ -545,13 +545,13 @@ export function boxSizing(element) {
  * CSSSpace(element, "padding", "border");
  */
 export function CSSSpace(element) {
-  var cs = getComputedStyle(element, null);
-  var o = { top: 0, right: 0, bottom: 0, left: 0 };
-  var a;
-  var s;
-  for (var i = 1; i < arguments.length; i++) {
+  const cs = getComputedStyle(element, null);
+  const o = { top: 0, right: 0, bottom: 0, left: 0 };
+  let a;
+  let s;
+  for (let i = 1; i < arguments.length; i++) {
     a = arguments[i];
-    for (var p in o) {
+    for (const p in o) {
       if (Object.prototype.hasOwnProperty.call(o, p)) {
         s = a + '-' + p;
         if (a === 'border') s += '-width';
@@ -571,8 +571,8 @@ export function CSSSpace(element) {
  * setStyles(element, {"width":"100px", "height":"100px"});
  */
 export function setStyles(elem, styles) {
-  var key, v;
-  var s = elem.style;
+  let key, v;
+  const s = elem.style;
   for (key in styles)
     if (Object.prototype.hasOwnProperty.call(styles, key)) {
       v = styles[key];
@@ -605,7 +605,7 @@ export function setStyle(e, style, value) {
   e.style[style] = value;
 }
 
-var _id_cnt = 0;
+let _id_cnt = 0;
 
 /**
  * Generate a unique ID string.
@@ -613,7 +613,7 @@ var _id_cnt = 0;
  * @function uniqueId
  */
 export function uniqueId() {
-  var id;
+  let id;
   do {
     id = 'tk-' + _id_cnt++;
   } while (document.getElementById(id));
@@ -653,11 +653,11 @@ export function isTouch() {
  * @returns {integer} Size in pixel.
  * @function scrollbarSize
  */
-var _scrollbar_size;
+let _scrollbar_size;
 
 export function scrollbarSize() {
   if (typeof _scrollbar_size === 'undefined') {
-    var div = element('div');
+    const div = element('div');
     div.style.overflow = 'scroll';
     div.style.position = 'fixed';
     div.style.visibility = 'hidden';

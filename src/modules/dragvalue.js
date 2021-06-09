@@ -29,7 +29,7 @@ import { S } from '../dom_scheduler.js';
 
 function startDrag(value) {
   if (!value) return;
-  var O = this.options;
+  const O = this.options;
   this.start_pos = O.range.call(this).valueToPixel(O.get.call(this));
   this.emit('startdrag', this.drag_state.start);
   if (O.events) O.events.call(this).emit('startdrag', this.drag_state.start);
@@ -41,23 +41,23 @@ function moveCaptureInt(O, range, state) {
   /* O.direction is always 'polar' here */
 
   /* movement since last event */
-  var v = state.prevDistance();
-  var RO = range.options;
+  const v = state.prevDistance();
+  const RO = range.options;
 
   if (!v[0] && !v[1]) return;
 
-  var V = O._direction;
+  const V = O._direction;
 
-  var dist = Math.sqrt(v[0] * v[0] + v[1] * v[1]);
+  let dist = Math.sqrt(v[0] * v[0] + v[1] * v[1]);
 
-  var c = (V[0] * v[0] - V[1] * v[1]) / dist;
+  const c = (V[0] * v[0] - V[1] * v[1]) / dist;
 
   if (Math.abs(c) > O._cutoff) return;
 
   if (v[0] * V[1] + v[1] * V[0] < 0) dist = -dist;
 
-  var multi = RO.step || 1;
-  var e = state.current;
+  let multi = RO.step || 1;
+  const e = state.current;
 
   if (e.ctrlKey || e.altKey) {
     multi *= RO.shift_down;
@@ -68,7 +68,7 @@ function moveCaptureInt(O, range, state) {
   dist *= multi;
   const start_pos = this.start_pos + dist;
 
-  var nval = range.pixelToValue(start_pos);
+  const nval = range.pixelToValue(start_pos);
   if (O.limit) O.set.call(this, Math.min(RO.max, Math.max(RO.min, nval)));
   else O.set.call(this, nval);
 
@@ -78,8 +78,8 @@ function moveCaptureInt(O, range, state) {
 }
 
 function moveCaptureAbs(O, range, state) {
-  var dist;
-  var RO = range.options;
+  let dist;
+  const RO = range.options;
   switch (O.direction) {
     case 'vertical':
       dist = -state.vDistance()[1];
@@ -93,8 +93,8 @@ function moveCaptureAbs(O, range, state) {
   }
   if (O.reverse) dist *= -1;
 
-  var multi = RO.step || 1;
-  var e = state.current;
+  let multi = RO.step || 1;
+  const e = state.current;
 
   if (e.ctrlKey && e.shiftKey) {
     multi *= RO.shift_down;
@@ -104,19 +104,19 @@ function moveCaptureAbs(O, range, state) {
 
   dist *= multi;
 
-  var nval = range.pixelToValue(this.start_pos + dist);
+  const nval = range.pixelToValue(this.start_pos + dist);
 
   if (O.limit) O.set.call(this, Math.min(RO.max, Math.max(RO.min, nval)));
   else O.set.call(this, nval);
 }
 
 function moveCapture(state) {
-  var O = this.options;
+  const O = this.options;
 
   if (O.active === false) return false;
 
   state = this.drag_state;
-  var range = O.range.call(this);
+  const range = O.range.call(this);
 
   if (O.direction === 'polar') {
     moveCaptureInt.call(this, O, range, state);
@@ -130,7 +130,7 @@ function moveCapture(state) {
 
 function stopDrag(state, ev) {
   this.emit('stopdrag', ev);
-  var O = this.options;
+  const O = this.options;
   if (O.events) O.events.call(this).emit('stopdrag', ev);
 }
 
@@ -272,7 +272,7 @@ export const DragValue = defineClass({
     startdrag: function () {
       S.add(
         function () {
-          var O = this.options;
+          const O = this.options;
           addClass(O.classes || O.node, 'aux-dragging');
           if (O.cursor) {
             setCursor.call(this);
@@ -284,7 +284,7 @@ export const DragValue = defineClass({
     stopdrag: function () {
       S.add(
         function () {
-          var O = this.options;
+          const O = this.options;
           removeClass(O.classes || O.node, 'aux-dragging');
           if (O.cursor) {
             removeCursor.call(this);
@@ -297,7 +297,7 @@ export const DragValue = defineClass({
   initialize: function (widget, options) {
     DragCapture.prototype.initialize.call(this, widget, options);
     this.start_pos = 0;
-    var O = this.options;
+    const O = this.options;
     this.set('rotation', O.rotation);
     this.set('blind_angle', O.blind_angle);
   },

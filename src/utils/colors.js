@@ -209,7 +209,7 @@ function decodeArgs() {
    * Multiple values: values are mapped to member names
    * ([50,100,150],"r","g","b") => {"r":50,"g":100,"b":150}
    */
-  var out = {};
+  let out = {};
   if (arguments[0][0] instanceof Array) {
     for (let i = 0; i < arguments.length - 1; i++)
       out[arguments[i + 1]] = arguments[0][0][i];
@@ -246,7 +246,7 @@ function decodeColor(args) {
     res.hex = color_names[args[0]];
     return res;
   }
-  var S = decodeArgs(arguments, 'a', 'b', 'c');
+  const S = decodeArgs(arguments, 'a', 'b', 'c');
   if ((S.a > 0 && S.a < 1) || (S.b > 0 && S.b < 1) || (S.c > 0 && S.c < 1)) {
     // HSL
     return { h: S.a, s: S.b, l: S.c, type: 'hsl' };
@@ -270,7 +270,7 @@ function decodeColor(args) {
  * @returns {string} Hex color string.
  */
 export function RGBToHex() {
-  var col = decodeArgs(arguments, 'r', 'g', 'b');
+  const col = decodeArgs(arguments, 'r', 'g', 'b');
   return (
     pad(parseInt(col.r).toString(16), 2) +
     pad(parseInt(col.g).toString(16), 2) +
@@ -291,8 +291,8 @@ export function RGBToHex() {
  * @returns {object} Object with members h, s and l as numbers (0..1)
  */
 export function RGBToHSL() {
-  var col = decodeArgs(arguments, 'r', 'g', 'b');
-  var r = col.r,
+  const col = decodeArgs(arguments, 'r', 'g', 'b');
+  let r = col.r,
     g = col.g,
     b = col.b;
 
@@ -300,16 +300,16 @@ export function RGBToHSL() {
   g /= 255;
   b /= 255;
 
-  var max = Math.max(r, g, b),
+  const max = Math.max(r, g, b),
     min = Math.min(r, g, b);
-  var h,
+  let h,
     s,
     l = (max + min) / 2;
 
   if (max == min) {
     h = s = 0; // achromatic
   } else {
-    var d = max - min;
+    const d = max - min;
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
 
     switch (max) {
@@ -378,7 +378,7 @@ export function RGBToWB() {
  * @returns {string} Hex color string.
  */
 export function RGBToGray() {
-  var col = decodeArgs(arguments, 'r', 'g', 'b');
+  const col = decodeArgs(arguments, 'r', 'g', 'b');
   return (col.r * 0.2126 + col.g * 0.7152 + col.b * 0.0722) / 255;
 }
 
@@ -406,18 +406,18 @@ export function hueToRGB(p, q, t) {
  * @returns {object} Object with members r, g and b as numbers (0..255)
  */
 export function HSLToRGB() {
-  var col = decodeArgs(arguments, 'h', 's', 'l');
-  var h = col.h,
+  const col = decodeArgs(arguments, 'h', 's', 'l');
+  const h = col.h,
     s = col.s,
     l = col.l;
 
-  var r, g, b;
+  let r, g, b;
 
   if (s == 0) {
     r = g = b = l; // achromatic
   } else {
-    var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-    var p = 2 * l - q;
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
 
     r = hueToRGB(p, q, h + 1 / 3);
     g = hueToRGB(p, q, h);
@@ -675,7 +675,7 @@ export function nameToGray(name) {
  * @returns {object} Object with members r, g and b as numbers (0..255)
  */
 export function colorToRGB() {
-  var C = decodeColor(arguments);
+  const C = decodeColor(arguments);
   switch (C.type) {
     case 'rgb':
       return C;
@@ -701,7 +701,7 @@ export function colorToRGB() {
  * @returns {object} Object with members h, s and l as numbers (0..1)
  */
 export function colorToHSL() {
-  var C = decodeColor(arguments);
+  const C = decodeColor(arguments);
   switch (C.type) {
     case 'rgb':
       return RGBToHSL(C);
@@ -727,7 +727,7 @@ export function colorToHSL() {
  * @returns {string} Hex color string.
  */
 export function colorToHex() {
-  var C = decodeColor(arguments);
+  const C = decodeColor(arguments);
   switch (C.type) {
     case 'rgb':
       return RGBToHex(C);
@@ -753,7 +753,7 @@ export function colorToHex() {
  * @returns {string} Hex color string.
  */
 export function colorToBW() {
-  var C = decodeColor(arguments);
+  const C = decodeColor(arguments);
   switch (C.type) {
     case 'rgb':
       return RGBToBW(C);
@@ -779,7 +779,7 @@ export function colorToBW() {
  * @returns {string} Hex color string.
  */
 export function colorToWB() {
-  var C = decodeColor(arguments);
+  const C = decodeColor(arguments);
   switch (C.type) {
     case 'rgb':
       return RGBToWB(C);
@@ -805,7 +805,7 @@ export function colorToWB() {
  * @returns {string} Hex color string.
  */
 export function colorToGray() {
-  var C = decodeColor(arguments);
+  const C = decodeColor(arguments);
   switch (C.type) {
     case 'rgb':
       return RGBToBW(C);

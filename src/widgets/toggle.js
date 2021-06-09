@@ -93,10 +93,10 @@ export const Toggle = defineClass({
   },
 
   redraw: function () {
-    var O = this.options;
-    var I = this.invalid;
+    const O = this.options;
+    const I = this.invalid;
     if (I.state) {
-      var tmp = (O.state && O.label_active) || O.label;
+      let tmp = (O.state && O.label_active) || O.label;
       if (tmp) this.label.set('label', tmp || '');
       tmp = (O.state && O.icon_active) || O.icon;
       if (tmp) this.icon.set('icon', tmp || '');

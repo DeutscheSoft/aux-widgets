@@ -66,21 +66,21 @@ function showList(show) {
   const E = this.element;
   const O = this.options;
   if (show) {
-    var ew = outerWidth(E, true);
+    const ew = outerWidth(E, true);
     if (O.list_class) this._list.classList.add(O.list_class);
     document.body.appendChild(this._list);
-    var cw = width();
-    var ch = height();
-    var sx = scrollLeft();
-    var sy = scrollTop();
+    const cw = width();
+    const ch = height();
+    const sx = scrollLeft();
+    const sy = scrollTop();
     setStyles(this._list, {
       opacity: '0',
       maxHeight: ch + 'px',
       maxWidth: cw + 'px',
       minWidth: ew + 'px',
     });
-    var lw = outerWidth(this._list, true);
-    var lh = outerHeight(this._list, true);
+    const lw = outerWidth(this._list, true);
+    const lh = outerHeight(this._list, true);
     setStyles(this._list, {
       top: Math.min(positionTop(E) + outerHeight(E, true), ch + sy - lh) + 'px',
       left: Math.min(positionLeft(E), cw + sx - lw) + 'px',
@@ -93,7 +93,7 @@ function showList(show) {
   this.__transition = true;
   this.__open = show;
   if (this.__timeout !== false) window.clearTimeout(this.__timeout);
-  var dur = getDuration(this._list);
+  const dur = getDuration(this._list);
   this.__timeout = window.setTimeout(hideList.bind(this), dur);
   if (this.current())
     this._list.scrollTop =
@@ -283,7 +283,7 @@ export const Select = defineClass({
    * @param {mixed} value - The value of the {@link SelectEntry} to select.
    */
   selectValue: function (value) {
-    var id = this.indexByValue(value);
+    const id = this.indexByValue(value);
     this.set('selected', id);
   },
   /**
@@ -294,7 +294,7 @@ export const Select = defineClass({
    * @param {mixed} label - The label of the {@link SelectEntry} to select.
    */
   selectLabel: function (label) {
-    var id = this.indexByLabel(label);
+    const id = this.indexByLabel(label);
     this.set('selected', id);
   },
   /**
@@ -327,7 +327,7 @@ export const Select = defineClass({
    *   for more details.
    */
   addEntries: function (entries) {
-    for (var i = 0; i < entries.length; i++) this.addEntry(entries[i]);
+    for (let i = 0; i < entries.length; i++) this.addEntry(entries[i]);
   },
   /**
    * Adds a single {@link SelectEntry} to the end of the list.
@@ -671,8 +671,8 @@ export const Select = defineClass({
   redraw: function () {
     Button.prototype.redraw.call(this);
 
-    var I = this.invalid;
-    var O = this.options;
+    const I = this.invalid;
+    const O = this.options;
 
     if (I.entries || I.auto_size) {
       
@@ -717,7 +717,7 @@ export const Select = defineClass({
       if (this._active) {
         removeClass(this._active, 'aux-active');
       }
-      var entry = this.entries[O.selected];
+      const entry = this.entries[O.selected];
 
       if (entry) {
         this._active = entry.element;
@@ -781,9 +781,9 @@ export const Select = defineClass({
 });
 
 function onSelect(e) {
-  var w = this.parent;
-  var id = w.indexByEntry(this);
-  var entry = this;
+  const w = this.parent;
+  const id = w.indexByEntry(this);
+  const entry = this;
   e.stopPropagation();
   e.preventDefault();
 

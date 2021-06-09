@@ -56,16 +56,16 @@ export const Icon = defineClass({
     Widget.prototype.draw.call(this, O, element);
   },
   redraw: function () {
-    var O = this.options;
-    var I = this.invalid;
-    var E = this.element;
+    const O = this.options;
+    const I = this.invalid;
+    const E = this.element;
 
     Widget.prototype.redraw.call(this);
 
     if (I.icon) {
       I.icon = false;
-      var old = this._icon_old;
-      for (var i = 0; i < old.length; i++) {
+      const old = this._icon_old;
+      for (let i = 0; i < old.length; i++) {
         if (old[i] && isClassName(old[i])) {
           removeClass(E, old[i]);
         }

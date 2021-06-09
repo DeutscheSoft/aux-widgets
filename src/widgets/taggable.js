@@ -58,7 +58,7 @@ export const Taggable = defineClass({
     },
   },
   initialize: function () {
-    var O = this.options;
+    const O = this.options;
     this.taglist = [];
     if (!O.backend) O.backend = new Tags({});
 
@@ -86,35 +86,35 @@ export const Taggable = defineClass({
     );
   },
   addTags: function (tags) {
-    for (var i = 0; i < tags.length; i++) this.addTag(tags[i]);
+    for (let i = 0; i < tags.length; i++) this.addTag(tags[i]);
   },
   addTag: function (tag, options) {
-    var B = this.options.backend;
+    const B = this.options.backend;
     tag = B.requestTag(tag, options);
     if (this.hasTag(tag)) return;
 
-    var node = tag.createNode(options);
+    const node = tag.createNode(options);
     this.tags.appendChild(node);
 
     node.on('remove', remove.bind(this));
 
-    var t = { tag: tag, node: node };
+    const t = { tag: tag, node: node };
     this.taglist.push(t);
     this.emit('tagadded', tag, node);
     return t;
   },
   hasTag: function (tag) {
     tag = this.requestTag(tag);
-    for (var i = 0; i < this.taglist.length; i++) {
+    for (let i = 0; i < this.taglist.length; i++) {
       if (this.taglist[i].tag === tag) return true;
     }
     return false;
   },
   removeTag: function (tag, node, purge) {
-    var B = this.options.backend;
+    const B = this.options.backend;
     tag = B.requestTag(tag);
     if (!this.hasTag(tag)) return;
-    for (var i = 0; i < this.taglist.length; i++) {
+    for (let i = 0; i < this.taglist.length; i++) {
       if (this.taglist[i].tag === tag) {
         this.taglist.splice(i, 1);
         break;
@@ -122,10 +122,10 @@ export const Taggable = defineClass({
     }
 
     if (!node) {
-      var c = this.tags.children;
+      const c = this.tags.children;
       if (c) {
         for (let j = 0; j < c.length; j++) {
-          var tagnode = c[j];
+          const tagnode = c[j];
           if (tagnode.tag === tag) {
             tag.removeNode(tagnode);
             this.removeChild(tagnode);
@@ -140,7 +140,7 @@ export const Taggable = defineClass({
     this.emit('tagremoved', tag);
   },
   empty: function () {
-    var T = this.taglist;
+    const T = this.taglist;
     while (T.length) this.removeTag(T[0].tag, T[0].node);
   },
   tagToString: function (tag) {

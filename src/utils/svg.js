@@ -73,9 +73,9 @@ export function seatSVG(e) {
   } else {
     e.style.marginLeft = retrieve(e, 'margin-left') || 0;
   }
-  var l = parseFloat(retrieve(e, 'margin-left')) || 0;
-  var b = e.getBoundingClientRect();
-  var x = b.left % 1;
+  let l = parseFloat(retrieve(e, 'margin-left')) || 0;
+  let b = e.getBoundingClientRect();
+  const x = b.left % 1;
   if (x) {
     if (x < 0.5) l -= x;
     else l += 1 - x;
@@ -89,9 +89,9 @@ export function seatSVG(e) {
   } else {
     e.style.marginTop = retrieve(e, 'margin-top') || 0;
   }
-  var t = parseFloat(retrieve(e, 'margin-top') || 0);
+  let t = parseFloat(retrieve(e, 'margin-top') || 0);
   b = e.getBoundingClientRect();
-  var y = b.top % 1;
+  const y = b.top % 1;
   if (y) {
     if (x < 0.5) t -= y;
     else t += 1 - y;
@@ -107,8 +107,8 @@ export function seatSVG(e) {
  * @function seatAllSVG
  */
 export function seatAllSVG(parent) {
-  var a = getTag('svg', parent);
-  for (var i = 0; i < a.length; i++) {
+  const a = getTag('svg', parent);
+  for (let i = 0; i < a.length; i++) {
     if (!hasClass(a[i], 'svg-fixed')) seatSVG(a[i]);
   }
 }
@@ -120,8 +120,8 @@ export function seatAllSVG(parent) {
  * @returns {SVGElement}
  */
 export function makeSVG(tag, args) {
-  var el = document.createElementNS('http://www.w3.org/2000/svg', 'svg:' + tag);
-  for (var k in args) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', 'svg:' + tag);
+  for (const k in args) {
     if (Object.prototype.hasOwnProperty.call(args, k)) el.setAttribute(k, args[k]);
   }
   return el;

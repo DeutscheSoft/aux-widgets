@@ -22,10 +22,10 @@ import { Chart } from './chart.js';
 import { addClass } from '../utils/dom.js';
 
 function calculateGrid(range, step) {
-  var min = range.get('min');
-  var max = range.get('max');
-  var grid = [];
-  var i, cls;
+  const min = range.get('min');
+  const max = range.get('max');
+  const grid = [];
+  let i, cls;
 
   for (i = min; i <= max; i += step) {
     if (i == 0) {
@@ -156,7 +156,7 @@ export const FrequencyResponse = defineClass({
   },
 
   redraw: function () {
-    var I = this.invalid;
+    const I = this.invalid;
 
     if (I.scale) {
       I.scale = false;

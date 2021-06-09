@@ -128,14 +128,14 @@ export const Container = defineClass({
     Widget.prototype.setParent.call(this, parent, no_remove_child);
   },
   addChild: function (child) {
-    var H = this.hidden_children;
+    let H = this.hidden_children;
     if (!H) this.hidden_children = H = [];
     H.push(false);
     Widget.prototype.addChild.call(this, child);
   },
   removeChild: function (child) {
-    var C = this.children;
-    var i;
+    const C = this.children;
+    let i;
 
     // if this child is not found, Widget.removeChild will generate an
     // error for us
@@ -146,14 +146,14 @@ export const Container = defineClass({
     Widget.prototype.removeChild.call(this, child);
   },
   enableDrawChildren: function () {
-    var C = this.children;
-    var H = this.hidden_children;
-    if (C) for (var i = 0; i < C.length; i++) if (!H[i]) C[i].enableDraw();
+    const C = this.children;
+    const H = this.hidden_children;
+    if (C) for (let i = 0; i < C.length; i++) if (!H[i]) C[i].enableDraw();
   },
   disableDrawChildren: function () {
-    var C = this.children;
-    var H = this.hidden_children;
-    if (C) for (var i = 0; i < C.length; i++) if (!H[i]) C[i].disableDraw();
+    const C = this.children;
+    const H = this.hidden_children;
+    if (C) for (let i = 0; i < C.length; i++) if (!H[i]) C[i].disableDraw();
   },
   /**
    * Starts the transition of the <code>visible</code> to <code>false</code>.
@@ -199,8 +199,8 @@ export const Container = defineClass({
    *
    */
   hideChild: function (i) {
-    var C = this.children;
-    var H = this.hidden_children;
+    const C = this.children;
+    const H = this.hidden_children;
 
     if (typeof i !== 'number') {
       i = C.indexOf(i);
@@ -230,8 +230,8 @@ export const Container = defineClass({
    *
    */
   showChild: function (i) {
-    var C = this.children;
-    var H = this.hidden_children;
+    const C = this.children;
+    const H = this.hidden_children;
 
     if (typeof i !== 'number') {
       i = C.indexOf(i);
@@ -276,8 +276,8 @@ export const Container = defineClass({
    *
    */
   toggleChild: function (i) {
-    var C = this.children;
-    var H = this.hidden_children;
+    const C = this.children;
+    const H = this.hidden_children;
 
     if (typeof i !== 'number') {
       i = C.indexOf(i);
@@ -289,10 +289,10 @@ export const Container = defineClass({
 
   visibleChildren: function (a) {
     if (!a) a = [];
-    var C = this.children;
-    var H = this.hidden_children;
+    const C = this.children;
+    const H = this.hidden_children;
     if (C)
-      for (var i = 0; i < C.length; i++) {
+      for (let i = 0; i < C.length; i++) {
         if (H[i]) continue;
         a.push(C[i]);
         C[i].visibleChildren(a);
@@ -301,7 +301,7 @@ export const Container = defineClass({
   },
 
   hidden: function () {
-    var state = this.options.visible;
+    const state = this.options.visible;
     return Widget.prototype.hidden.call(this) || state === 'hiding';
   },
 
@@ -313,9 +313,9 @@ export const Container = defineClass({
   },
 
   redraw: function () {
-    var O = this.options;
-    var I = this.invalid;
-    var E = this.element;
+    const O = this.options;
+    const I = this.invalid;
+    const E = this.element;
 
     if (I.visible) {
       let time;

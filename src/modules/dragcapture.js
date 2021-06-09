@@ -30,7 +30,7 @@ function CaptureState(start) {
 CaptureState.prototype = {
   /* distance from start */
   distance: function () {
-    var v = this.vDistance();
+    const v = this.vDistance();
     return Math.sqrt(v[0] * v[0] + v[1] * v[1]);
   },
   setCurrent: function (ev) {
@@ -39,13 +39,13 @@ CaptureState.prototype = {
     return true;
   },
   vDistance: function () {
-    var start = this.start;
-    var current = this.current;
+    const start = this.start;
+    const current = this.current;
     return [current.clientX - start.clientX, current.clientY - start.clientY];
   },
   prevDistance: function () {
-    var prev = this.prev;
-    var current = this.current;
+    const prev = this.prev;
+    const current = this.current;
     return [current.clientX - prev.clientX, current.clientY - prev.clientY];
   },
 };
@@ -54,7 +54,7 @@ function startCapture(state, ev) {
   /* do nothing, let other handlers be called */
   if (this.drag_state) return;
 
-  var v = this.emit('startcapture', state, state.start, ev);
+  const v = this.emit('startcapture', state, state.start, ev);
 
   if (v === true) {
     /* we capture this event */
@@ -65,7 +65,7 @@ function startCapture(state, ev) {
   return v;
 }
 function moveCapture(ev) {
-  var d = this.drag_state;
+  const d = this.drag_state;
 
   if (!d.setCurrent(ev) || this.emit('movecapture', d, ev) === false) {
     stopCapture.call(this, ev);
@@ -73,7 +73,7 @@ function moveCapture(ev) {
   }
 }
 function stopCapture(ev) {
-  var s = this.drag_state;
+  const s = this.drag_state;
   if (s === null) return;
 
   this.emit('stopcapture', s, ev);
@@ -109,7 +109,7 @@ MouseCaptureState.prototype = Object.assign(
       this.__mousemove = null;
     },
     isDraggedBy: function (ev) {
-      var start = this.start;
+      const start = this.start;
       if (start.buttons !== ev.buttons || start.which !== ev.which)
         return false;
       return true;
@@ -117,8 +117,8 @@ MouseCaptureState.prototype = Object.assign(
   }
 );
 function mouseDown(ev) {
-  var s = new MouseCaptureState(ev);
-  var v = startCapture.call(this, s, ev);
+  const s = new MouseCaptureState(ev);
+  const v = startCapture.call(this, s, ev);
 
   /* ignore this event */
   if (v === void 0) return;
@@ -155,7 +155,7 @@ function cloneTouch(t) {
 
 function TouchCaptureState(start) {
   CaptureState.call(this, start);
-  var touch = start.changedTouches.item(0);
+  let touch = start.changedTouches.item(0);
   touch = cloneTouch(touch);
   this.stouch = touch;
   this.ptouch = touch;
@@ -165,11 +165,11 @@ TouchCaptureState.prototype = Object.assign(
   Object.create(CaptureState.prototype),
   {
     findTouch: function (ev) {
-      var id = this.stouch.identifier;
-      var touches = ev.changedTouches;
-      var touch;
+      const id = this.stouch.identifier;
+      const touches = ev.changedTouches;
+      let touch;
 
-      for (var i = 0; i < touches.length; i++) {
+      for (let i = 0; i < touches.length; i++) {
         touch = touches.item(i);
         if (touch.identifier === id) return touch;
       }
@@ -177,19 +177,19 @@ TouchCaptureState.prototype = Object.assign(
       return null;
     },
     setCurrent: function (ev) {
-      var touch = cloneTouch(this.findTouch(ev));
+      const touch = cloneTouch(this.findTouch(ev));
       this.ptouch = this.ctouch;
       this.ctouch = touch;
       return CaptureState.prototype.setCurrent.call(this, ev);
     },
     vDistance: function () {
-      var start = this.stouch;
-      var current = this.ctouch;
+      const start = this.stouch;
+      const current = this.ctouch;
       return [current.clientX - start.clientX, current.clientY - start.clientY];
     },
     prevDistance: function () {
-      var prev = this.ptouch;
-      var current = this.ctouch;
+      const prev = this.ptouch;
+      const current = this.ctouch;
       return [current.clientX - prev.clientX, current.clientY - prev.clientY];
     },
     destroy: function () {},
@@ -206,7 +206,7 @@ function touchStart(ev) {
   /* the startcapture event handler has return false. we do not handle this
    * pointer */
   const state = new TouchCaptureState(ev);
-  var v = startCapture.call(this, state, ev);
+  const v = startCapture.call(this, state, ev);
 
   if (v === void 0) return;
 
@@ -229,7 +229,7 @@ function touchMove(ev) {
   }
 }
 function touchEnd(ev) {
-  var s;
+  let s;
   if (!ev.cancelable) return;
   s = this.drag_state;
   /* either we are not dragging or it is another touch point */
@@ -242,10 +242,10 @@ function touchEnd(ev) {
 function touchCancel(ev) {
   return touchEnd.call(this, ev);
 }
-var dummy = function () {};
+const dummy = function () {};
 
 function getParents(element) {
-  var ret = [];
+  const ret = [];
   if (Array.isArray(element))
     element.map(function (e) {
       e = e.parentNode;
@@ -255,7 +255,7 @@ function getParents(element) {
   return ret;
 }
 
-var static_events = {
+const static_events = {
   set_node: function (value) {
     this.delegateEvents(value);
   },

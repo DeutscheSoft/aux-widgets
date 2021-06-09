@@ -81,7 +81,7 @@ export const TreeItem = defineClass({
   },
   removeChild: function (child) {
     if (Object.prototype.isPrototypeOf.call(ListItem.prototype, child)) {
-      var r = this.list.removeChild(child);
+      const r = this.list.removeChild(child);
       return r;
     } else {
       this.flex.removeChild(child);
@@ -97,10 +97,10 @@ export const TreeItem = defineClass({
   },
   redraw: function () {
     ListItem.prototype.redraw.call(this);
-    var I = this.invalid;
-    var O = this.options;
-    var E = this.element;
-    var F = this.flex.element;
+    const I = this.invalid;
+    const O = this.options;
+    const E = this.element;
+    const F = this.flex.element;
     if (I._list) {
       I.collapsed = true;
       if (this.list.children && this.list.children.length) {
@@ -125,23 +125,23 @@ export const TreeItem = defineClass({
     }
     if (I.collapsed) {
       I.collapsed = false;
-      var s = this.list.element.style;
+      const s = this.list.element.style;
       if (O.collapsed) {
-        var h = this.list.element.offsetHeight;
+        const h = this.list.element.offsetHeight;
         s.height = h + 'px';
         window.requestAnimationFrame(function () {
           s.height = '0px';
         });
       } else {
-        var list = this.list.element;
+        const list = this.list.element;
         /* This is a train */
         S.add(function () {
-          var h0 = list.offsetHeight;
-          var duration = getDuration(list);
+          const h0 = list.offsetHeight;
+          const duration = getDuration(list);
           S.add(function () {
             s.height = 'auto';
             S.add(function () {
-              var _h = list.offsetHeight;
+              const _h = list.offsetHeight;
               S.add(function () {
                 s.height = h0 + 'px';
                 S.addNext(function () {

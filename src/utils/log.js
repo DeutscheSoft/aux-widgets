@@ -75,25 +75,25 @@ export function log() {
 export function printWidgetTree(w, depth) {
   if (!depth) depth = 0;
 
-  var print = function (fmt) {
-    var extra = Array.prototype.slice.call(arguments, 1);
+  const print = function (fmt) {
+    const extra = Array.prototype.slice.call(arguments, 1);
     if (depth) fmt = nchars(depth, ' ') + fmt;
-    var args = [fmt];
+    const args = [fmt];
     log.apply(this, args.concat(extra));
   };
 
   var nchars = function (n, c) {
-    var ret = new Array(n);
+    const ret = new Array(n);
 
-    for (var i = 0; i < n; i++) ret[i] = c;
+    for (let i = 0; i < n; i++) ret[i] = c;
 
     return ret.join('');
   };
 
-  var C = w.children;
-  var nchildren = C ? C.length : 0;
+  const C = w.children;
+  const nchildren = C ? C.length : 0;
 
-  var state = [];
+  const state = [];
 
   state.push(w._drawn ? 'show' : 'hide');
 
@@ -103,6 +103,6 @@ export function printWidgetTree(w, depth) {
   print('%s (%s, children: %o)', w._class, state.join(' '), nchildren);
 
   if (C) {
-    for (var i = 0; i < C.length; i++) printWidgetTree(C[i], depth + 1);
+    for (let i = 0; i < C.length; i++) printWidgetTree(C[i], depth + 1);
   }
 }

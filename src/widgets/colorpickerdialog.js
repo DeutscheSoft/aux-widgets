@@ -24,13 +24,13 @@ import { ColorPicker } from './colorpicker.js';
 import { addClass } from '../utils/dom.js';
 
 function cancel() {
-  var self = this.parent;
+  const self = this.parent;
   self.emit.call(self, 'cancel');
   self.close();
 }
 
 function apply(color) {
-  var self = this.parent;
+  const self = this.parent;
   self.emit.call(self, 'apply', color);
   self.close();
 }

@@ -73,7 +73,7 @@ function scrollWheel(e) {
     step *= RO.shift_up;
   }
 
-  var pos = range.valueToPixel(v);
+  let pos = range.valueToPixel(v);
 
   pos += step;
 
@@ -97,11 +97,11 @@ function scrollWheel(e) {
   return false;
 }
 function fireEvent(title, event) {
-  var O = this.options;
+  const O = this.options;
   // fire an event on this drag object and one with more
   // information on the draggified element
   this.emit(title, this, event);
-  var e = O.events.call(this);
+  const e = O.events.call(this);
   if (e)
     e.emit(title, event, O.get.call(this), O.node, this, O.range.call(this));
 }

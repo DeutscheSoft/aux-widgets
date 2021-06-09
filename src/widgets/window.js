@@ -46,7 +46,7 @@ import {
 } from '../utils/dom.js';
 
 function headerAction() {
-  var that = this.parent;
+  const that = this.parent;
   switch (that.options.header_action) {
     case 'shrink':
       that.toggleShrink();
@@ -183,17 +183,17 @@ function resizing(el, ev) {
   this.emit('resizing', ev);
 }
 function calculateDimensions() {
-  var x = outerWidth(this.element, true);
-  var y = outerHeight(this.element, true);
+  const x = outerWidth(this.element, true);
+  const y = outerHeight(this.element, true);
   this.dimensions.width = this.options.width = x;
   this.dimensions.height = this.options.height = y;
   this.dimensions.x2 = x + this.dimensions.x1;
   this.dimensions.y2 = y + this.dimensions.y1;
 }
 function calculatePosition() {
-  var posx = positionLeft(this.element);
-  var posy = positionTop(this.element);
-  var pos1 = translateAnchor(
+  const posx = positionLeft(this.element);
+  const posy = positionTop(this.element);
+  const pos1 = translateAnchor(
     this.options.anchor,
     posx,
     posy,
@@ -229,7 +229,7 @@ function startDrag(ev) {
     x = ev.clientX - (ev.clientX / width()) * this.options.width;
     x += !this.options.fixed ? window.scrollX : 0;
   }
-  var pos = translateAnchor(
+  const pos = translateAnchor(
     this.options.anchor,
     x,
     y,
@@ -281,18 +281,18 @@ function dragging(ev) {
   this.emit('dragging', ev);
 }
 function initPosition(pos) {
-  var O = this.options;
+  const O = this.options;
   if (pos) {
-    var x0 = O.fixed ? 0 : window.scrollX;
-    var y0 = O.fixed ? 0 : window.scrollY;
-    var pos1 = translateAnchor(
+    const x0 = O.fixed ? 0 : window.scrollX;
+    const y0 = O.fixed ? 0 : window.scrollY;
+    const pos1 = translateAnchor(
       O.open,
       x0,
       y0,
       window.innerWidth - O.width,
       window.innerHeight - O.height
     );
-    var pos2 = translateAnchor(O.anchor, pos1.x, pos1.y, O.width, O.height);
+    const pos2 = translateAnchor(O.anchor, pos1.x, pos1.y, O.width, O.height);
     O.x = pos2.x;
     O.y = pos2.y;
   }
@@ -300,11 +300,11 @@ function initPosition(pos) {
   setPosition.call(this);
 }
 function setPosition() {
-  var O = this.options;
-  var D = this.dimensions;
-  var _width = innerWidth(this.element);
-  var _height = innerHeight(this.element);
-  var pos = translateAnchor(O.anchor, O.x, O.y, -_width, -_height);
+  const O = this.options;
+  const D = this.dimensions;
+  const _width = innerWidth(this.element);
+  const _height = innerHeight(this.element);
+  const pos = translateAnchor(O.anchor, O.x, O.y, -_width, -_height);
   if (horizMax.call(this)) {
     this.element.style.left = (O.fixed ? 0 : window.scrollX) + 'px';
   } else {
@@ -329,8 +329,8 @@ function setPosition() {
   this.emit('positionchanged', D);
 }
 function setDimensions() {
-  var O = this.options;
-  var D = this.dimensions;
+  const O = this.options;
+  const D = this.dimensions;
   if (O.width >= 0) {
     O.width = Math.min(maxWidth.call(this), Math.max(O.width, O.min_width));
     if (horizMax.call(this)) {
@@ -393,12 +393,12 @@ function buildFooter() {
   this.emit('footerchanged');
 }
 function buildFromConst(element) {
-  var E = this[element].element;
-  var L = this.options[element];
-  var O = this.options;
+  const E = this[element].element;
+  const L = this.options[element];
+  const O = this.options;
   while (E.firstChild) E.firstChild.remove();
   if (!L) return;
-  for (var i = 0; i < L.length; i++) {
+  for (let i = 0; i < L.length; i++) {
     if (L[i] !== 'spacer') {
       this.set('show_' + L[i], true);
       E.appendChild(this[L[i]].element);
@@ -421,7 +421,7 @@ function buildFromConst(element) {
 }
 
 function statusTimeout() {
-  var O = this.options;
+  const O = this.options;
   if (this.__status_to !== false) window.clearTimeout(this.__status_to);
   if (!O.hide_status) return;
   if (O.status)
@@ -662,11 +662,11 @@ export const Window = defineClass({
   },
 
   redraw: function () {
-    var I = this.invalid;
-    var O = this.options;
+    const I = this.invalid;
+    const O = this.options;
 
-    var setP = false;
-    var setD = false;
+    let setP = false;
+    let setD = false;
 
     if (I.maximize) {
       I.maximize = false;
@@ -750,8 +750,8 @@ export const Window = defineClass({
   },
 
   set: function (key, value) {
-    var O = this.options;
-    var E = this.element;
+    const O = this.options;
+    const E = this.element;
 
     if (key == 'maximize') {
       if (value === false)

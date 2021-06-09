@@ -213,8 +213,8 @@ export const EqBand = defineClass({
     ChartHandle.prototype.draw.call(this, O, element);
   },
   redraw: function () {
-    var I = this.invalid;
-    var O = this.options;
+    const I = this.invalid;
+    const O = this.options;
     if (I.active) {
       I.active = false;
       toggleClass(this.element, 'aux-inactive', !O.active);
@@ -240,8 +240,8 @@ export const EqBand = defineClass({
     switch (key) {
       case 'type':
         if (typeof value === 'string') {
-          var mode = type_to_mode[value];
-          var pref = type_to_pref[value];
+          const mode = type_to_mode[value];
+          const pref = type_to_pref[value];
           if (!mode) {
             warn('Unsupported type:', value);
             return;

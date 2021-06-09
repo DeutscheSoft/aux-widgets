@@ -86,7 +86,7 @@ function expand() {
 }
 
 function toggle(e) {
-  var self = this.parent;
+  const self = this.parent;
   e.preventDefault();
   e.stopPropagation();
   return collapse.call(self, !self.options.expanded);
@@ -96,15 +96,15 @@ function collapse(state) {
   return false;
 }
 function visibleWhenExpanded(widget) {
-  var v = widget.options._expanded;
+  const v = widget.options._expanded;
   return v !== false;
 }
 function visibleWhenCollapsed(widget) {
-  var v = widget.options._collapsed;
+  const v = widget.options._collapsed;
   return v === true;
 }
 function isVisible(widget) {
-  var value = this.options.always_expanded || this.options.expanded;
+  const value = this.options.always_expanded || this.options.expanded;
 
   if (value) {
     return visibleWhenExpanded(widget);
@@ -113,9 +113,9 @@ function isVisible(widget) {
   }
 }
 function changedExpanded(value) {
-  var group = this.options.group;
-  var other_expand;
-  var grp;
+  const group = this.options.group;
+  let other_expand;
+  let grp;
 
   if (group) {
     grp = expand_groups[group];
@@ -132,8 +132,8 @@ function changedExpanded(value) {
   updateVisibility.call(this);
 }
 function addToGroup(group) {
-  var grp;
-  var O = this.options;
+  let grp;
+  const O = this.options;
   if (!(grp = expand_groups[group]))
     expand_groups[group] = grp = { active: false, default: false };
 
@@ -149,7 +149,7 @@ function addToGroup(group) {
 }
 
 function removeFromGroup(group) {
-  var grp = expand_groups[group];
+  const grp = expand_groups[group];
 
   if (grp.default === this) grp.default = false;
   if (grp.active === this) {
@@ -159,16 +159,16 @@ function removeFromGroup(group) {
 }
 function removeGroupDefault(group) {
   if (!group) return;
-  var grp = expand_groups[group];
+  const grp = expand_groups[group];
   grp.default = false;
 }
 function updateVisibility() {
-  var C = this.children;
-  var value = this.options.always_expanded || this.options.expanded;
+  const C = this.children;
+  const value = this.options.always_expanded || this.options.expanded;
 
   if (C) {
-    var test = value ? visibleWhenExpanded : visibleWhenCollapsed;
-    for (var i = 0; i < C.length; i++) {
+    const test = value ? visibleWhenExpanded : visibleWhenCollapsed;
+    for (let i = 0; i < C.length; i++) {
       if (test(C[i])) this.showChild(i);
       else this.hideChild(i);
     }
@@ -258,8 +258,8 @@ export const Expand = defineClass({
     toggle.call(this);
   },
   redraw: function () {
-    var I = this.invalid;
-    var O = this.options;
+    const I = this.invalid;
+    const O = this.options;
 
     Container.prototype.redraw.call(this);
 
@@ -308,7 +308,7 @@ export const Expand = defineClass({
     child.off('set__collapsed', this._update_visibility);
   },
   set: function (key, value) {
-    var group;
+    let group;
     if (key === 'group') {
       group = this.options.group;
       // this is reached from init, where this element was never added

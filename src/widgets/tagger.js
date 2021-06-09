@@ -27,10 +27,10 @@ function keyUp(e) {
   newTagFromInput.call(this);
 }
 function newTagFromInput() {
-  var val = this.element.value;
+  const val = this.element.value;
   if (!val) return;
   this.element.value = '';
-  var t = false;
+  let t = false;
   if (!this.options.async) t = this.addTag(val);
   this.emit('newtag', val, t);
   if (this.options.closenew) this.close();
@@ -67,8 +67,8 @@ export const Tagger = defineClass({
   },
   redraw: function () {
     Dialog.prototype.redraw.call(this);
-    var I = this.invalid;
-    var O = this.options;
+    const I = this.invalid;
+    const O = this.options;
     if (I.add) {
       I.add = false;
       if (O.add) {
@@ -92,7 +92,7 @@ export const Tagger = defineClass({
     }
   },
   addTag: function (tag, options) {
-    var t = Taggable.prototype.addTag.call(this, tag, options);
+    const t = Taggable.prototype.addTag.call(this, tag, options);
     if (!t) return;
     t.node.label.on(
       'click',

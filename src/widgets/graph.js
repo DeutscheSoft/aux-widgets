@@ -43,11 +43,11 @@ function getPixels(value, range) {
 }
 
 function _start(d, s) {
-  var h = this.range_y.options.basis;
-  var t = d[0].type || this.options.type;
-  var m = this.options.mode;
-  var x = this.range_x.valueToPixel(d[0].x);
-  var y = this.range_y.valueToPixel(d[0].y);
+  const h = this.range_y.options.basis;
+  const t = d[0].type || this.options.type;
+  const m = this.options.mode;
+  const x = this.range_x.valueToPixel(d[0].x);
+  const y = this.range_y.valueToPixel(d[0].y);
   switch (m) {
     case 'bottom':
       // fill the lower part of the graph
@@ -87,11 +87,11 @@ function _start(d, s) {
   }
 }
 function _end(d, s) {
-  var dot = d[d.length - 1];
-  var h = this.range_y.options.basis;
-  var t = dot.type || this.options.type;
-  var m = this.options.mode;
-  var x = this.range_x.valueToPixel(dot.x);
+  const dot = d[d.length - 1];
+  const h = this.range_y.options.basis;
+  const t = dot.type || this.options.type;
+  const m = this.options.mode;
+  const x = this.range_x.valueToPixel(dot.x);
   switch (m) {
     case 'bottom':
       // fill the graph below
@@ -212,9 +212,9 @@ export const Graph = defineClass({
   },
 
   redraw: function () {
-    var I = this.invalid;
-    var O = this.options;
-    var E = this.element;
+    const I = this.invalid;
+    const O = this.options;
+    const E = this.element;
 
     if (I.color) {
       I.color = false;
@@ -345,8 +345,8 @@ export const Graph = defineClass({
     const P = E.parentElement;
     if (P && E !== P.lastChild)
       this.drawOnce(function () {
-        var e = this.element;
-        var _p = e.parentNode;
+        const e = this.element;
+        const _p = e.parentNode;
         if (_p && e !== _p.lastChild) _p.appendChild(e);
       });
   },
@@ -361,8 +361,8 @@ export const Graph = defineClass({
     const P = E.parentElement;
     if (P && E !== P.firstChild)
       this.drawOnce(function () {
-        var e = this.element;
-        var _p = e.parentNode;
+        const e = this.element;
+        const _p = e.parentNode;
         if (_p && e !== _p.firstChild) _p.insertBefore(e, _p.firstChild);
       });
   },

@@ -21,7 +21,7 @@ import { defineClass } from './../widget_helpers.js';
 import { addClass, removeClass } from '../utils/dom.js';
 
 function reset(element) {
-  var i = this.elements.indexOf(element);
+  const i = this.elements.indexOf(element);
   if (i < 0) return;
   removeClass(this.elements[i], 'aux-warn');
   this.elements.splice(i, 1);
@@ -60,7 +60,7 @@ export const Warning = defineClass({
    */
   warning: function (element, timeout) {
     if (!timeout) timeout = 250;
-    var i;
+    let i;
     if ((i = this.elements.indexOf(element)) >= 0) {
       window.clearTimeout(this.timeouts[i]);
     } else {

@@ -53,8 +53,8 @@ function vert(O) {
   return O.layout === 'left' || O.layout === 'right';
 }
 function getValue(ev) {
-  var is_vertical = vert(this.options);
-  var real, hsize, pad;
+  const is_vertical = vert(this.options);
+  let real, hsize, pad;
   hsize = this._handle_size / 2;
   pad = this._padding;
 
@@ -231,11 +231,11 @@ export const Fader = defineClass({
 
   redraw: function () {
     Widget.prototype.redraw.call(this);
-    var I = this.invalid;
-    var O = this.options;
-    var E = this.element;
-    var value;
-    var tmp;
+    const I = this.invalid;
+    const O = this.options;
+    const E = this.element;
+    let value;
+    let tmp;
 
     if (I.layout) {
       I.layout = false;
@@ -278,10 +278,10 @@ export const Fader = defineClass({
     }
   },
   resize: function () {
-    var O = this.options;
-    var T = this._track,
+    const O = this.options;
+    const T = this._track,
       H = this._handle;
-    var basis;
+    let basis;
 
     Widget.prototype.resize.call(this);
 
@@ -313,7 +313,7 @@ export const Fader = defineClass({
 
   // GETTER & SETTER
   set: function (key, value) {
-    var O = this.options;
+    const O = this.options;
     if (key === 'value') {
       if (value > O.max || value < O.min) this.warning(this.element);
       value = this.snap(Math.min(O.max, Math.max(O.min, value)));

@@ -33,7 +33,7 @@ function interpretLabel(x) {
   if (typeof x === 'number') return { pos: x };
   error('Unsupported label type ', x);
 }
-var __rad = Math.PI / 180;
+const __rad = Math.PI / 180;
 function _getCoords(deg, inner, outer, pos) {
   deg = +deg;
   inner = +inner;
@@ -57,31 +57,31 @@ function _getCoordsSingle(deg, inner, pos) {
     y: Math.sin(deg) * inner + pos,
   };
 }
-var formatPath = FORMAT(
+const formatPath = FORMAT(
   'M %f,%f ' + 'A %f,%f 0 %d,%d %f,%f ' + 'L %f,%f ' + 'A %f,%f 0 %d,%d %f,%f z'
 );
-var formatTranslate = FORMAT('translate(%f, %f)');
-var formatTranslateRotate = FORMAT('translate(%f %f) rotate(%f %f %f)');
-var formatRotate = FORMAT('rotate(%f %f %f)');
+const formatTranslate = FORMAT('translate(%f, %f)');
+const formatTranslateRotate = FORMAT('translate(%f %f) rotate(%f %f %f)');
+const formatRotate = FORMAT('rotate(%f %f %f)');
 
 function drawDots() {
   // depends on dots, dot, min, max, size
-  var _dots = this._dots;
-  var O = this.options;
-  var dots = O.dots;
-  var dot = O.dots_defaults;
-  var angle = O.angle;
+  const _dots = this._dots;
+  const O = this.options;
+  const dots = O.dots;
+  const dot = O.dots_defaults;
+  const angle = O.angle;
   empty(_dots);
-  for (var i = 0; i < dots.length; i++) {
-    var m = dots[i];
+  for (let i = 0; i < dots.length; i++) {
+    let m = dots[i];
     if (typeof m == 'number') m = { pos: m };
 
-    var r = makeSVG('rect', { class: 'aux-dot' });
+    const r = makeSVG('rect', { class: 'aux-dot' });
 
-    var length = m.length === void 0 ? dot.length : m.length;
-    var width = m.width === void 0 ? dot.width : m.width;
-    var margin = m.margin === void 0 ? dot.margin : m.margin;
-    var pos = Math.min(O.max, Math.max(O.min, m.pos));
+    const length = m.length === void 0 ? dot.length : m.length;
+    const width = m.width === void 0 ? dot.width : m.width;
+    const margin = m.margin === void 0 ? dot.margin : m.margin;
+    const pos = Math.min(O.max, Math.max(O.min, m.pos));
     // TODO: consider adding them all at once
     _dots.appendChild(r);
     if (m['class']) addClass(r, m['class']);
@@ -112,22 +112,22 @@ function drawDots() {
 }
 function drawMarkers() {
   // depends on size, markers, marker, min, max
-  var O = this.options;
-  var markers = O.markers;
-  var marker = O.markers_defaults;
+  const O = this.options;
+  const markers = O.markers;
+  const marker = O.markers_defaults;
   empty(this._markers);
 
-  var stroke = O._stroke_width;
-  var outer = O.size / 2;
-  var angle = O.angle;
+  const stroke = O._stroke_width;
+  const outer = O.size / 2;
+  const angle = O.angle;
 
-  for (var i = 0; i < markers.length; i++) {
-    var m = markers[i];
-    var thick = m.thickness === void 0 ? marker.thickness : m.thickness;
-    var margin = m.margin === void 0 ? marker.margin : m.margin;
-    var inner = outer - thick;
-    var outer_p = outer - margin - stroke / 2;
-    var inner_p = inner - margin - stroke / 2;
+  for (let i = 0; i < markers.length; i++) {
+    const m = markers[i];
+    const thick = m.thickness === void 0 ? marker.thickness : m.thickness;
+    const margin = m.margin === void 0 ? marker.margin : m.margin;
+    const inner = outer - thick;
+    const outer_p = outer - margin - stroke / 2;
+    const inner_p = inner - margin - stroke / 2;
     var from, to;
 
     if (m.from === void 0) from = O.min;
@@ -136,7 +136,7 @@ function drawMarkers() {
     if (m.to === void 0) to = O.max;
     else to = Math.min(O.max, Math.max(O.min, m.to));
 
-    var s = makeSVG('path', { class: 'aux-marker' });
+    const s = makeSVG('path', { class: 'aux-marker' });
     this._markers.appendChild(s);
 
     if (m['class']) addClass(s, m['class']);
@@ -158,19 +158,19 @@ function drawMarkers() {
 }
 function drawLabels() {
   // depends on size, labels, label, min, max, start
-  var _labels = this._labels;
-  var O = this.options;
-  var labels = O.labels;
-  var label = O.labels_defaults;
+  const _labels = this._labels;
+  const O = this.options;
+  const labels = O.labels;
+  const label = O.labels_defaults;
   empty(this._labels);
 
   if (!labels.length) return;
 
-  var outer = O.size / 2;
-  var a = new Array(labels.length);
-  var i;
+  const outer = O.size / 2;
+  const a = new Array(labels.length);
+  let i;
 
-  var l,
+  let l,
     p,
     positions = new Array(labels.length);
 
@@ -196,24 +196,24 @@ function drawLabels() {
 
   S.add(
     function () {
-      var j, q;
+      let j, q;
       for (j = 0; j < labels.length; j++) {
         l = labels[j];
         q = a[j];
 
-        var margin = l.margin !== void 0 ? l.margin : label.margin;
-        var align = (l.align !== void 0 ? l.align : label.align) === 'inner';
-        var pos = Math.min(O.max, Math.max(O.min, l.pos));
-        var bb = q.getBBox();
-        var angle =
+        const margin = l.margin !== void 0 ? l.margin : label.margin;
+        const align = (l.align !== void 0 ? l.align : label.align) === 'inner';
+        const pos = Math.min(O.max, Math.max(O.min, l.pos));
+        const bb = q.getBBox();
+        const angle =
           (this.valueToCoef(this.snap(pos)) * O.angle + O.start) % 360;
-        var outer_p = outer - margin;
-        var coords = _getCoordsSingle(angle, outer_p, outer);
+        const outer_p = outer - margin;
+        const coords = _getCoordsSingle(angle, outer_p, outer);
 
-        var mx =
+        const mx =
           (((coords.x - outer) / outer_p) * (bb.width + bb.height / 2.5)) /
           (align ? -2 : 2);
-        var my =
+        const my =
           (((coords.y - outer) / outer_p) * bb.height) / (align ? -2 : 2);
 
         positions[j] = formatTranslate(coords.x + mx, coords.y + my);
@@ -261,10 +261,10 @@ function drawSlice(a_from, a_to, r_inner, r_outer, pos, slice) {
   if (Math.abs(a_from - a_to) >= 180) large = 1;
   else large = 0;
   // draw this slice
-  var from = _getCoords(a_from, r_inner, r_outer, pos);
-  var to = _getCoords(a_to, r_inner, r_outer, pos);
+  const from = _getCoords(a_from, r_inner, r_outer, pos);
+  const to = _getCoords(a_to, r_inner, r_outer, pos);
 
-  var path = formatPath(
+  const path = formatPath(
     from.x1,
     from.y1,
     r_outer,
@@ -480,11 +480,11 @@ export const Circular = defineClass({
 
   redraw: function () {
     Widget.prototype.redraw.call(this);
-    var I = this.invalid;
-    var O = this.options;
-    var E = this.element;
-    var outer = O.size / 2;
-    var tmp;
+    const I = this.invalid;
+    const O = this.options;
+    const E = this.element;
+    const outer = O.size / 2;
+    let tmp;
 
     if (I.validate('x', 'y') || I.start || I.size) {
       E.setAttribute(
@@ -534,10 +534,10 @@ export const Circular = defineClass({
       drawMarkers.call(this);
     }
 
-    var stroke = O._stroke_width;
-    var inner = outer - O.thickness;
-    var outer_p = outer - stroke / 2 - O.margin;
-    var inner_p = inner - stroke / 2 - O.margin;
+    const stroke = O._stroke_width;
+    const inner = outer - O.thickness;
+    const outer_p = outer - stroke / 2 - O.margin;
+    const inner_p = inner - stroke / 2 - O.margin;
 
     if (
       I.show_value ||
@@ -628,8 +628,8 @@ export const Circular = defineClass({
   },
   getStroke: function () {
     if (Object.prototype.hasOwnProperty.call(this, '_stroke')) return this._stroke;
-    var strokeb = parseInt(getStyle(this._base, 'stroke-width')) || 0;
-    var strokev = parseInt(getStyle(this._value, 'stroke-width')) || 0;
+    const strokeb = parseInt(getStyle(this._base, 'stroke-width')) || 0;
+    const strokev = parseInt(getStyle(this._value, 'stroke-width')) || 0;
     this._stroke = Math.max(strokeb, strokev);
     return this._stroke;
   },
@@ -643,7 +643,7 @@ export const Circular = defineClass({
    * @returns {Object} label - The interpreted object to build the label from.
    */
   addLabel: function (label) {
-    var O = this.options;
+    const O = this.options;
 
     if (!O.labels) {
       O.labels = [];
@@ -667,11 +667,11 @@ export const Circular = defineClass({
    * @returns {Object} label - The removed label object.
    */
   removeLabel: function (label) {
-    var O = this.options;
+    const O = this.options;
 
     if (!O.labels) return;
 
-    var i = O.labels.indexOf(label);
+    const i = O.labels.indexOf(label);
 
     if (i === -1) return;
 
@@ -682,7 +682,7 @@ export const Circular = defineClass({
 
   // GETTERS & SETTERS
   set: function (key, value) {
-    var O = this.options;
+    const O = this.options;
     switch (key) {
       case 'dots_defaults':
       case 'markers_defaults':
@@ -698,7 +698,7 @@ export const Circular = defineClass({
         break;
       case 'labels':
         if (value)
-          for (var i = 0; i < value.length; i++) {
+          for (let i = 0; i < value.length; i++) {
             value[i] = interpretLabel(value[i]);
           }
         break;

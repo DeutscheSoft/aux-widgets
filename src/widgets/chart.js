@@ -54,7 +54,7 @@ function showHandles() {
   if (handles.length === 0) return;
   if (handles[0].parent === this) return;
 
-  for (var i = 0; i < handles.length; i++) {
+  for (let i = 0; i < handles.length; i++) {
     this.addChild(handles[i]);
   }
 }
@@ -65,7 +65,7 @@ function hideHandles() {
   if (handles.length === 0) return;
   if (handles[0].parent !== this) return;
 
-  for (var i = 0; i < handles.length; i++) {
+  for (let i = 0; i < handles.length; i++) {
     this.removeChild(handles[i]);
   }
 }
@@ -76,10 +76,10 @@ function STOP(e) {
   return false;
 }
 function drawKey() {
-  var __key, bb;
+  let __key, bb;
 
-  var _key = this._key;
-  var _key_bg = this._key_background;
+  const _key = this._key;
+  const _key_bg = this._key_background;
 
   if (!_key || !_key_bg) return;
 
@@ -87,18 +87,18 @@ function drawKey() {
 
   empty(_key.firstChild);
 
-  var O = this.options;
+  const O = this.options;
 
-  var disp = 'none';
-  var gpad = CSSSpace(_key, 'padding');
-  var gmarg = CSSSpace(_key, 'margin');
-  var c = 0;
-  var w = 0;
-  var top = 0;
-  var lines = [];
+  let disp = 'none';
+  const gpad = CSSSpace(_key, 'padding');
+  const gmarg = CSSSpace(_key, 'margin');
+  let c = 0;
+  let w = 0;
+  let top = 0;
+  const lines = [];
   for (let i = 0; i < this.graphs.length; i++) {
     if (this.graphs[i].get('key') !== false) {
-      var t = makeSVG('tspan', {
+      const t = makeSVG('tspan', {
         class: 'aux-label',
         style: 'dominant-baseline: central;',
       });
@@ -125,7 +125,7 @@ function drawKey() {
     }
   }
   for (let i = 0; i < lines.length; i++) {
-    var b = makeSVG('rect', {
+    const b = makeSVG('rect', {
       class: lines[i]['class'] + '.aux-rect',
       color: lines[i].color,
       style: lines[i].style,
@@ -140,8 +140,8 @@ function drawKey() {
   _key.style.display = disp;
 
   bb = _key.getBoundingClientRect();
-  var width = this.range_x.options.basis;
-  var height = this.range_y.options.basis;
+  const width = this.range_x.options.basis;
+  const height = this.range_y.options.basis;
 
   switch (O.key) {
     case 'top-left':
@@ -191,7 +191,7 @@ function drawKey() {
   _key_bg.setAttribute('height', __key.y2 - __key.y1);
 }
 function drawLabel() {
-  var _label = this._label;
+  const _label = this._label;
   if (!_label) return;
 
   _label.textContent = this.options.label;
@@ -199,12 +199,12 @@ function drawLabel() {
   /* FORCE_RELAYOUT */
   S.add(
     function () {
-      var mtop = parseInt(getStyle(_label, 'margin-top') || 0);
-      var mleft = parseInt(getStyle(_label, 'margin-left') || 0);
-      var mbottom = parseInt(getStyle(_label, 'margin-bottom') || 0);
-      var mright = parseInt(getStyle(_label, 'margin-right') || 0);
-      var bb = _label.getBoundingClientRect();
-      var x,
+      const mtop = parseInt(getStyle(_label, 'margin-top') || 0);
+      const mleft = parseInt(getStyle(_label, 'margin-left') || 0);
+      const mbottom = parseInt(getStyle(_label, 'margin-bottom') || 0);
+      const mright = parseInt(getStyle(_label, 'margin-right') || 0);
+      const bb = _label.getBoundingClientRect();
+      let x,
         y,
         anchor,
         range_x = this.range_x,
@@ -398,7 +398,7 @@ export const Chart = defineClass({
     },
   },
   initialize: function (options) {
-    var SVG;
+    let SVG;
     /**
      * @member {Array} Chart#graphs - An array containing all SVG paths acting as graphs.
      */
@@ -459,9 +459,9 @@ export const Chart = defineClass({
     Widget.prototype.draw.call(this, O, element);
   },
   resize: function () {
-    var E = this.element;
-    var O = this.options;
-    var SVG = this.svg;
+    const E = this.element;
+    const O = this.options;
+    const SVG = this.svg;
 
     Widget.prototype.resize.call(this);
 
@@ -487,9 +487,9 @@ export const Chart = defineClass({
     }
   },
   redraw: function () {
-    var I = this.invalid;
-    var E = this.svg;
-    var O = this.options;
+    const I = this.invalid;
+    const E = this.svg;
+    const O = this.options;
 
     Widget.prototype.redraw.call(this);
 
@@ -498,8 +498,8 @@ export const Chart = defineClass({
        * they do depend on the size */
       I.label = true;
       I.key = true;
-      var w = O._width;
-      var h = O._height;
+      const w = O._width;
+      const h = O._height;
       if (w && h) {
         E.setAttribute('width', w + 'px');
         E.setAttribute('height', h + 'px');
@@ -507,7 +507,7 @@ export const Chart = defineClass({
     }
 
     if (I.graphs) {
-      for (var i = 0; i < this.graphs.length; i++) {
+      for (let i = 0; i < this.graphs.length; i++) {
         this.graphs[i].redraw();
       }
     }
@@ -527,7 +527,7 @@ export const Chart = defineClass({
     }
   },
   destroy: function () {
-    for (var i = 0; i < this.graphs.length; i++) {
+    for (let i = 0; i < this.graphs.length; i++) {
       this.graphs[i].destroy();
     }
     this._graphs.remove();
@@ -638,7 +638,7 @@ export const Chart = defineClass({
    * @emits Chart#graphadded
    */
   addGraph: function (options) {
-    var g;
+    let g;
 
     if (options instanceof Graph) {
       g = options;
@@ -714,7 +714,7 @@ export const Chart = defineClass({
    * @param {Object} [type=ChartHandle] - A widget class to be used for the new handles.
    */
   addHandles: function (handles, type) {
-    for (var i = 0; i < handles.length; i++) this.addHandle(handles[i], type);
+    for (let i = 0; i < handles.length; i++) this.addHandle(handles[i], type);
   },
   /**
    * Remove a handle from the widget.
@@ -738,8 +738,8 @@ export const Chart = defineClass({
    *   `false`, all handles are removed from the widget.
    */
   removeHandles: function (handles) {
-    var H = handles || this.handles.slice();
-    for (var i = 0; i < H.length; i++) {
+    const H = handles || this.handles.slice();
+    for (let i = 0; i < H.length; i++) {
       this.removeHandle(H[i]);
     }
     if (!handles) {
@@ -759,15 +759,15 @@ export const Chart = defineClass({
     // according to the importance set in options. Returns an object
     // containing intersect (the amount of intersecting square pixels) and
     // count (the amount of overlapping elements)
-    var c = 0;
-    var a = 0,
+    let c = 0;
+    let a = 0,
       _a;
-    var O = this.options;
-    var importance_handle = O.importance_handle;
-    var importance_label = O.importance_label;
+    const O = this.options;
+    const importance_handle = O.importance_handle;
+    const importance_label = O.importance_label;
 
     for (let i = 0; i < this.handles.length; i++) {
-      var h = this.handles[i];
+      const h = this.handles[i];
       if (h === handle || !h.get('active') || !h.get('show_handle')) continue;
       _a = calculateOverlap(X, h.handle);
 
@@ -785,7 +785,7 @@ export const Chart = defineClass({
     }
     if (this.bands && this.bands.length) {
       for (let i = 0; i < this.bands.length; i++) {
-        var b = this.bands[i];
+        const b = this.bands[i];
         if (b === handle || !b.get('active') || !b.get('show_handle')) continue;
         _a = calculateOverlap(X, b.handle);
 
@@ -835,7 +835,7 @@ defineChildWidget(Chart, 'grid', {
   },
 });
 function keyHoverCallback(ev) {
-  var b = ev.type === 'mouseenter';
+  const b = ev.type === 'mouseenter';
   toggleClass(this, 'aux-hover', b);
   /* this.nextSibling is the key */
   toggleClass(this.nextSibling, 'aux-hover', b);
@@ -850,7 +850,7 @@ defineChildElement(Chart, 'key_background', {
     return !!v;
   },
   create: function () {
-    var k = makeSVG('rect', { class: 'aux-background' });
+    const k = makeSVG('rect', { class: 'aux-background' });
     k.addEventListener('mouseenter', keyHoverCallback);
     k.addEventListener('mouseleave', keyHoverCallback);
     return k;
@@ -869,7 +869,7 @@ defineChildElement(Chart, 'key', {
     return !!v;
   },
   create: function () {
-    var key = makeSVG('g', { class: 'aux-key' });
+    const key = makeSVG('g', { class: 'aux-key' });
     key.appendChild(makeSVG('text', { class: 'aux-keytext' }));
     return key;
   },
@@ -893,7 +893,7 @@ defineChildElement(Chart, 'label', {
     });
   },
   append: function () {
-    var svg = this.svg;
+    const svg = this.svg;
     svg.insertBefore(this._label, svg.firstChild);
   },
 });

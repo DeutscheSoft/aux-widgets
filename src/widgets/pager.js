@@ -85,7 +85,7 @@ export const Pager = defineClass({
   },
   static_events: {
     set_position: function (value) {
-      var badir;
+      let badir;
       if (value === 'top' || value === 'bottom') {
         badir = 'horizontal';
       } else {
@@ -270,9 +270,9 @@ export const Pager = defineClass({
 
   redraw: function () {
     Container.prototype.redraw.call(this);
-    var O = this.options;
-    var I = this.invalid;
-    var E = this.element;
+    const O = this.options;
+    const I = this.invalid;
+    const E = this.element;
 
     if (I.position) {
       I.position = false;
@@ -331,7 +331,7 @@ export const Pager = defineClass({
     if (!Array.isArray(pages))
       throw new TypeError('Expected array of objects.');
 
-    for (var i = 0; i < pages.length; i++) {
+    for (let i = 0; i < pages.length; i++) {
       if (typeof pages[i] !== 'object') {
         throw new TypeError('Expected array of objects.');
       }
@@ -376,7 +376,7 @@ export const Pager = defineClass({
 
       if (label) p.set('label', label);
 
-      for (var key in buttonOptions) {
+      for (const key in buttonOptions) {
         if (Object.prototype.hasOwnProperty.call(buttonOptions, key))
           button.set(key, buttonOptions[key]);
       }
@@ -443,7 +443,7 @@ export const Pager = defineClass({
    * @method Pager#next
    */
   next: function () {
-    var c = this.options.show;
+    const c = this.options.show;
     return this.set('show', c + 1) !== c;
   },
   /**
@@ -453,7 +453,7 @@ export const Pager = defineClass({
    * @method Pager#prev
    */
   prev: function () {
-    var c = this.options.show;
+    const c = this.options.show;
     return this.set('show', c - 1) !== c;
   },
 

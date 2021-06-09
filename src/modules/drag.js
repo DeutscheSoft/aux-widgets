@@ -24,7 +24,7 @@ import { Base } from '../implements/base.js';
 import { addClass, removeClass } from '../utils/dom.js';
 
 function extractMatrix(t) {
-  var a = t.indexOf('matrix(');
+  const a = t.indexOf('matrix(');
   if (a < 0) return;
   t = t.substr(a + 7);
   return t
@@ -36,19 +36,19 @@ function extractMatrix(t) {
 }
 
 function xyFromTransform(t) {
-  var mx = extractMatrix(t);
+  const mx = extractMatrix(t);
   return !mx || !mx.length ? [0, 0] : [mx[4], mx[5]];
 }
 
 function startDrag(e) {
   this._dragged = 0;
-  var O = this.options;
+  const O = this.options;
   if (!O.active) return;
   if (e.button !== void 0 && e.button > 0) return;
   this._xstart = this._xlast = e.pageX;
   this._ystart = this._ylast = e.pageY;
   if (O.transform) {
-    var xy = xyFromTransform(this._style.transform);
+    const xy = xyFromTransform(this._style.transform);
     this._xpos = xy[0];
     this._ypos = xy[1];
   } else {
@@ -63,7 +63,7 @@ function stopDrag(e) {
   removeClass(this.options.node, 'aux-dragging');
 }
 function dragging(e) {
-  var O = this.options;
+  const O = this.options;
   if (!O.active) return;
   if (e.button !== void 0 && e.button > 0) return;
   this._dragged +=
@@ -71,18 +71,18 @@ function dragging(e) {
   if (this._dragged < O.initial) return;
   this._xlast = e.pageX;
   this._ylast = e.pageY;
-  var x = this._xpos + e.pageX - this._xstart;
-  var y = this._ypos + e.pageY - this._ystart;
+  let x = this._xpos + e.pageX - this._xstart;
+  let y = this._ypos + e.pageY - this._ystart;
   if (O.min.x !== false) x = Math.max(O.min.x, x);
   if (O.max.x !== false) x = Math.min(O.max.x, x);
   if (O.min.y !== false) y = Math.max(O.min.y, y);
   if (O.max.y !== false) y = Math.min(O.max.y, y);
   if (O.transform) {
-    var t = this._style.transform;
-    var mx = extractMatrix(t);
+    const t = this._style.transform;
+    const mx = extractMatrix(t);
     mx[4] = x;
     mx[5] = y;
-    var nt = t.replace(/matrix\([0-9 ,]*\)/, 'matrix(' + mx.join(',') + ')');
+    const nt = t.replace(/matrix\([0-9 ,]*\)/, 'matrix(' + mx.join(',') + ')');
     O.node.style.transform = nt;
   } else {
     O.node.style.top = y + 'px';
@@ -90,9 +90,9 @@ function dragging(e) {
   }
 }
 function setHandle() {
-  var h = this.options.handle;
+  const h = this.options.handle;
   if (this.drag) this.drag.destroy();
-  var range = new Range({});
+  const range = new Range({});
   this.drag = new DragValue(this, {
     node: h,
     range: function () {

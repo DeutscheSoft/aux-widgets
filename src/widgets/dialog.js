@@ -23,7 +23,7 @@ import { translateAnchor } from '../utils/anchor.js';
 import { addClass } from '../utils/dom.js';
 
 function autocloseCallback(e) {
-  var curr = e.target;
+  let curr = e.target;
   while (curr) {
     // TODO: if a dialog is opened out of a dialog both should avoid
     // closing any of those on click. former version:
@@ -96,7 +96,7 @@ export const Dialog = defineClass({
       this.emit('close');
     },
     set_visible: function (val) {
-      var O = this.options;
+      const O = this.options;
 
       if (val === true) {
         if (O.auto_close) activateAutoclose.call(this);
@@ -106,7 +106,7 @@ export const Dialog = defineClass({
       }
 
       if (val === 'showing') {
-        var C = O.container;
+        const C = O.container;
         if (C) C.appendChild(this.element);
         this.reposition();
       }
@@ -117,7 +117,7 @@ export const Dialog = defineClass({
           O.container.tagName !== 'AWML-ROOT' &&
           O.container.tagName !== 'BODY'
         ) {
-          var p = this.element;
+          let p = this.element;
           while (
             (p = p.parentElement) &&
             p.tagName !== 'AWML-ROOT' &&
@@ -139,7 +139,7 @@ export const Dialog = defineClass({
   },
   initialize: function (options) {
     Container.prototype.initialize.call(this, options);
-    var O = this.options;
+    const O = this.options;
     /* This cannot be a default option because document.body
      * is not defined there */
     if (!O.container) O.container = window.document.body;
@@ -156,11 +156,11 @@ export const Dialog = defineClass({
   },
   redraw: function () {
     Container.prototype.redraw.call(this);
-    var I = this.invalid;
-    var O = this.options;
-    var E = this.element;
+    const I = this.invalid;
+    const O = this.options;
+    const E = this.element;
     if (I.anchor) {
-      var pos = translateAnchor(O.anchor, 0, 0, -100, -100);
+      const pos = translateAnchor(O.anchor, 0, 0, -100, -100);
       this.element.style.transform =
         'translate(' + pos.x + '%, ' + pos.y + '%)';
     }
@@ -201,7 +201,7 @@ export const Dialog = defineClass({
    * @method Dialog#reposition
    */
   reposition: function () {
-    var O = this.options;
+    const O = this.options;
     this.set('anchor', O.anchor);
     this.set('x', O.x);
     this.set('y', O.y);

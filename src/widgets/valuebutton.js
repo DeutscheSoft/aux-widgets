@@ -170,7 +170,7 @@ export const ValueButton = defineClass({
   },
 });
 function valueClicked() {
-  var self = this.parent;
+  const self = this.parent;
   self.scroll.set('active', false);
   self.drag.set('active', false);
   /**
@@ -183,7 +183,7 @@ function valueClicked() {
   self.emit('valueedit', self.options.value);
 }
 function valueDone() {
-  var self = this.parent;
+  const self = this.parent;
   self.scroll.set('active', true);
   self.drag.set('active', true);
   /**

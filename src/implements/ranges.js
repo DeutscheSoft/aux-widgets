@@ -63,7 +63,7 @@ export const Ranges = defineClass({
    * @returns {Range} The new {@link Range}.
    */
   addRange: function (from, name) {
-    var r;
+    let r;
     if (typeof from === 'function') {
       r = from();
     } else if (from instanceof Ranged) {
