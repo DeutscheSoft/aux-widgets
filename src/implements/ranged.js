@@ -783,13 +783,4 @@ export const Ranged = defineClass({
       updateTransformation.call(this);
     },
   },
-  snapUp: function(value) {
-    return this.get('snap_module').snapUp(value);
-  },
-  snapDown: function(value) {
-    return this.get('snap_module').snapDown(value);
-  },
-  snap: function(value) {
-    return this.get('snap_module').snap(value);
-  },
 });

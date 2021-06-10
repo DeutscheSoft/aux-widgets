@@ -121,6 +121,15 @@ export const Range = defineClass({
   coefToValue: function(coef) {
     return this.get('transformation').coefToValue(coef);
   },
+  snapUp: function(value) {
+    return this.get('snap_module').snapUp(value);
+  },
+  snapDown: function(value) {
+    return this.get('snap_module').snapDown(value);
+  },
+  snap: function(value) {
+    return this.get('snap_module').snap(value);
+  },
 });
 
 /* jshint +W079 */
