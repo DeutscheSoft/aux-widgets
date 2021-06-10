@@ -419,14 +419,13 @@ export const Meter = defineClass({
     const O = this.options;
     const w = Math.round(O._width);
     const h = Math.round(O._height);
-    let i;
 
     if (!(w > 0 && h > 0)) return;
 
     const a = this._current_meters;
     const tmp = this._last_meters;
 
-    i = this.calculateMeter(a, O.value, 0);
+    const i = this.calculateMeter(a, O.value, 0);
     if (i < a.length) a.length = i;
     makeInterval(a);
 

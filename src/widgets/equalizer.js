@@ -27,12 +27,8 @@ import { inheritChildOptions } from '../child_widget.js';
 
 function fastDrawPLinear(X, Y) {
   const ret = [];
-  let i,
-    len = X.length;
-  let dy = 0,
-    x,
-    y,
-    tmp;
+  const len = X.length;
+  let dy, x, y, tmp;
 
   const accuracy = 20;
 
@@ -48,7 +44,7 @@ function fastDrawPLinear(X, Y) {
 
   dy = ((y - Y[0]) * accuracy) | 0;
 
-  for (i = 2; i < len; i++) {
+  for (let i = 2; i < len; i++) {
     tmp = ((Y[i] - y) * accuracy) | 0;
     if (tmp !== dy) {
       ret.push('L', x.toFixed(2), ',', y.toFixed(2));

@@ -412,8 +412,11 @@ function defineOptionsAsProperties(component, options) {
       },
       set: function (value) {
         const widget = this.auxWidget;
-        if (value === void 0) return widget.reset(name);
-        else return widget.set(name, value);
+        if (value === void 0) {
+          widget.reset(name);
+        } else {
+          widget.set(name, value);
+        }
       },
     });
   });

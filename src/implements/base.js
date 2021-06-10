@@ -272,8 +272,6 @@ export const Base = defineClass({
    * @emits Base#set_[option]
    */
   set: function (key, value) {
-    let e;
-
     this.options[key] = value;
     /**
      * Is fired when an option is set.
@@ -291,7 +289,7 @@ export const Base = defineClass({
      *
      * @param {mixed} value - The value of the option.
      */
-    e = 'set_' + key;
+    const e = 'set_' + key;
     if (this.hasEventListeners(e)) this.emit(e, value, key);
 
     return value;

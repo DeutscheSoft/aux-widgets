@@ -21,9 +21,8 @@ import { defineClass } from '../widget_helpers.js';
 import { Chart } from './chart.js';
 import { Graph } from './graph.js';
 import { ChartHandle } from './charthandle.js';
-import { addClass, removeClass } from '../utils/dom.js';
+import { addClass } from '../utils/dom.js';
 import { defineChildWidget } from '../child_widget.js';
-import { warn } from '../utils/log.js';
 import { sprintf } from '../utils/sprintf.js';
 import { defineRecalculation } from '../define_recalculation.js';
 
@@ -90,7 +89,6 @@ function initValues(type, O) {
 }
 
 function setReflections(reflections) {
-  const O = this.options;
   let R = [];
 
   if (Array.isArray(reflections)) {
@@ -157,7 +155,7 @@ function adjustReflections(reflections) {
 
 function drawReflections() {
   const O = this.options;
-  let R = O._reflections;
+  const R = O._reflections;
 
   for (let i = 0, m = R.length; i < m; ++i) {
     const y = this.range_y.get('min');
@@ -378,10 +376,6 @@ export const Reverb = defineClass({
     });
     this.addGraph(this.reverb);
   },
-  initialized: function () {
-    Chart.prototype.initialized.call(this);
-    var O = this.options;
-  },
   draw: function (O, element) {
     addClass(element, 'aux-reverb');
 
@@ -428,7 +422,7 @@ export const Reverb = defineClass({
         typeof value == 'object' &&
         typeof this.options.reflections == 'object'
       ) {
-        value = { ...this.options.reflections, ...value };
+        value = this.options.reflections.concat(value);
       }
     }
     return Chart.prototype.set.call(this, key, value);
@@ -453,7 +447,7 @@ defineChildWidget(Reverb, 'input_handle', {
   default_options: {
     format_label: function (label, x, y, z) {
       const O = this.options;
-      let output = [];
+      const output = [];
       if (label) output.push(label);
       if (O.delay !== false) {
         if (x >= 1000) output.push(sprintf('%.2fs', x / 1000));
@@ -471,7 +465,6 @@ defineChildWidget(Reverb, 'input_handle', {
   static_events: {
     set_interacting: onInteractingChanged,
     userset: function (key, value) {
-      const O = this.parent.options;
       if (key == 'x') {
         this.parent.userset('delay', value);
         return false;
@@ -494,7 +487,7 @@ defineChildWidget(Reverb, 'rlevel_handle', {
   default_options: {
     format_label: function (label, x, y, z) {
       const O = this.parent.options;
-      let output = [];
+      const output = [];
       if (label) output.push(label);
       if (O.delay !== false) {
         if (x >= 1000) output.push(sprintf('%.2fs', (x - O.delay) / 1000));
@@ -535,7 +528,7 @@ defineChildWidget(Reverb, 'rtime_handle', {
   default_options: {
     format_label: function (label, x, y, z) {
       const O = this.parent.options;
-      let output = [];
+      const output = [];
       if (label) output.push(label);
       if (O.delay !== false) {
         if (x >= 1000)

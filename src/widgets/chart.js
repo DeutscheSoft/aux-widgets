@@ -204,11 +204,11 @@ function drawLabel() {
       const mbottom = parseInt(getStyle(_label, 'margin-bottom') || 0);
       const mright = parseInt(getStyle(_label, 'margin-right') || 0);
       const bb = _label.getBoundingClientRect();
-      let x,
-        y,
-        anchor,
-        range_x = this.range_x,
-        range_y = this.range_y;
+      const range_x = this.range_x;
+      const range_y = this.range_y;
+
+      let x, y, anchor;
+
       switch (this.options.label_position) {
         case 'top-left':
           anchor = 'start';

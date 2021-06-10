@@ -229,9 +229,8 @@ function touchMove(ev) {
   }
 }
 function touchEnd(ev) {
-  let s;
   if (!ev.cancelable) return;
-  s = this.drag_state;
+  const s = this.drag_state;
   /* either we are not dragging or it is another touch point */
   if (!s || !s.findTouch(ev)) return;
   stopCapture.call(this, ev);

@@ -132,7 +132,7 @@ function drawMarkers() {
     const inner = outer - thick;
     const outer_p = outer - margin - stroke / 2;
     const inner_p = inner - margin - stroke / 2;
-    var from, to;
+    let from, to;
 
     if (m.from === void 0) from = O.min;
     else from = Math.min(O.max, Math.max(O.min, m.from));
@@ -172,11 +172,10 @@ function drawLabels() {
 
   const outer = O.size / 2;
   const a = new Array(labels.length);
+  const positions = new Array(labels.length);
   let i;
 
-  let l,
-    p,
-    positions = new Array(labels.length);
+  let l, p;
 
   for (i = 0; i < labels.length; i++) {
     l = labels[i];

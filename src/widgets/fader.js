@@ -56,9 +56,10 @@ function getValue(ev) {
   const O = this.options;
   const transformation = O.transformation;
   const is_vertical = vert(O);
-  let real, hsize, pad;
-  hsize = this._handle_size / 2;
-  pad = this._padding;
+  const hsize = this._handle_size / 2;
+  const pad = this._padding;
+
+  let real;
 
   if (is_vertical) {
     real = this.options.basis - (ev.offsetY - hsize) + pad.bottom;

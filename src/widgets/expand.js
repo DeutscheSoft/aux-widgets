@@ -190,7 +190,7 @@ function updateVisibility() {
     this.emit('collapse');
   }
 }
-var expand_groups = {};
+const expand_groups = {};
 export const Expand = defineClass({
   /**
    * Expand is a container which can be toggled between two different states,

@@ -302,9 +302,8 @@ addStaticEvent(MultiMeter, 'set_layout', mapChildOption);
 MultiMeter.prototype._options.labels = 'array|string';
 
 function mapChildOptionSimple(value, key) {
-  let M = this.meters,
-    i;
-  for (i = 0; i < M.length; i++) M[i].set(mapped_options[key], value);
+  const M = this.meters;
+  for (let i = 0; i < M.length; i++) M[i].set(mapped_options[key], value);
 }
 
 function mapChildOption(value, key) {
@@ -341,15 +340,13 @@ for (const key in obj) {
 }
 
 function extractChildOptions(O, i) {
-  let o = {},
-    value,
-    _type;
+  const o = {};
 
   for (const _key in mapped_options) {
     if (!Object.prototype.hasOwnProperty.call(O, _key)) continue;
     const ckey = mapped_options[_key];
-    value = O[_key];
-    _type = LevelMeter.prototype._options[_key] || '';
+    const value = O[_key];
+    const _type = LevelMeter.prototype._options[_key] || '';
     if (Array.isArray(value) && _type.search('array') === -1) {
       if (i < value.length) o[ckey] = value[i];
     } else {

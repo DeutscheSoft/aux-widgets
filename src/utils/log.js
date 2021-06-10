@@ -82,7 +82,7 @@ export function printWidgetTree(w, depth) {
     log.apply(this, args.concat(extra));
   };
 
-  var nchars = function (n, c) {
+  const nchars = function (n, c) {
     const ret = new Array(n);
 
     for (let i = 0; i < n; i++) ret[i] = c;

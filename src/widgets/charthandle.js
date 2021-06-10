@@ -303,12 +303,11 @@ function removeZHandle() {
 }
 
 function createZHandle() {
-  let E;
   const O = this.options;
 
   if (this._zhandle) removeZHandle.call(this);
 
-  E = makeSVG(O.mode === 'circular' ? 'circle' : 'rect', {
+  const E = makeSVG(O.mode === 'circular' ? 'circle' : 'rect', {
     class: 'aux-zhandle',
   });
 
@@ -579,11 +578,10 @@ function removeLabel() {
 
 function createHandle() {
   const O = this.options;
-  let E;
 
   if (this._handle) removeHandle.call(this);
 
-  E = makeSVG(O.mode === 'circular' ? 'circle' : 'rect', {
+  const E = makeSVG(O.mode === 'circular' ? 'circle' : 'rect', {
     class: 'aux-handle',
   });
   addEventListener(E, 'wheel', this._onWheel);

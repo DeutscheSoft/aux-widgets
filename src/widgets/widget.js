@@ -508,8 +508,8 @@ export const Widget = defineClass({
     if (q === null) {
       this.draw_queue = [fun];
     } else {
-      for (var i = 0; i < q.length; i++) if (q[i] === fun) return;
-      q[i] = fun;
+      if (q.includes(fun)) return;
+      q.push(fun);
     }
     this.triggerDraw();
   },

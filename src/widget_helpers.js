@@ -44,8 +44,8 @@ export function removeEvent(from, event, fun) {
 }
 
 export function addStaticEvent(w, event, fun) {
-  let p = w.prototype,
-    e;
+  const p = w.prototype;
+  let e;
   if (!Object.prototype.hasOwnProperty.call(p, 'static_events')) {
     if (p.static_events) {
       p.static_events = e = Object.assign({}, p.static_events);

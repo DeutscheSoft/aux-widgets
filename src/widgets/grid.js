@@ -27,13 +27,12 @@ import { Ranges } from '../implements/ranges.js';
 function drawLines(a, mode, last) {
   const labels = new Array(a.length);
   const coords = new Array(a.length);
-  let i, label, obj;
 
-  for (i = 0; i < a.length; i++) {
-    obj = a[i];
+  for (let i = 0; i < a.length; i++) {
+    let obj = a[i];
     if (typeof obj === 'number') obj = { pos: obj };
     if (obj.label) {
-      label = makeSVG('text');
+      const label = makeSVG('text');
       label.textContent = obj.label;
       label.style['dominant-baseline'] = 'central';
       addClass(label, 'aux-gridlabel');
@@ -52,11 +51,11 @@ function drawLines(a, mode, last) {
     function () {
       /* FORCE_RELAYOUT */
 
-      for (i = 0; i < a.length; i++) {
-        obj = a[i];
-        label = labels[i];
+      for (let i = 0; i < a.length; i++) {
+        const obj = a[i];
+        const label = labels[i];
         if (!label) continue;
-        var bb;
+        let bb;
         try {
           bb = label.getBBox();
         } catch (e) {
@@ -79,7 +78,7 @@ function drawLines(a, mode, last) {
         const pr = parseInt(p[1]) || 0;
         const pb = parseInt(p[2]) || 0;
         const pl = parseInt(p[3]) || 0;
-        var x, y;
+        let x, y;
         if (mode) {
           y = Math.max(
             th / 2,
@@ -119,13 +118,13 @@ function drawLines(a, mode, last) {
           const elements = this.element.querySelectorAll(
             '.aux-gridline.aux-' + (mode ? 'horizontal' : 'vertical')
           );
-          for (var j = 0; j < elements.length; j++) {
+          for (let j = 0; j < elements.length; j++) {
             elements[j].parentElement.removeChild(elements[j]);
           }
-          for (j = 0; j < a.length; j++) {
-            label = labels[j];
+          for (let j = 0; j < a.length; j++) {
+            const label = labels[j];
             if (label) {
-              obj = coords[j];
+              const obj = coords[j];
               if (obj) {
                 label.setAttribute('x', obj.x);
                 label.setAttribute('y', obj.y);
@@ -136,9 +135,9 @@ function drawLines(a, mode, last) {
             }
           }
 
-          for (j = 0; j < a.length; j++) {
-            obj = a[j];
-            label = coords[j];
+          for (let j = 0; j < a.length; j++) {
+            const obj = a[j];
+            const label = coords[j];
             let m, x_min, x_max, y_min, y_max, x, y;
             if (label) m = label.m;
             else m = 0;

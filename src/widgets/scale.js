@@ -181,17 +181,15 @@ function removeCollisions(a, b, min_gap, vert) {
 }
 function createDOMNodes(data, create) {
   const nodes = [];
-  let values, positions;
-  let i;
   const E = this.element;
-  let node;
 
   data.nodes = nodes;
-  values = data.values;
-  positions = data.positions;
+  const values = data.values;
+  const positions = data.positions;
 
-  for (i = 0; i < values.length; i++) {
-    nodes.push((node = create(values[i], positions[i])));
+  for (let i = 0; i < values.length; i++) {
+    const node = create(values[i], positions[i]);
+    nodes.push(node);
     E.appendChild(node);
   }
 }
