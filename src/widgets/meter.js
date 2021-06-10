@@ -21,7 +21,7 @@ import { defineClass } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
 import { Widget } from './widget.js';
 import { Label } from './label.js';
-import { Gradient } from '../implements/gradient.js';
+import { Ranged } from '../implements/ranged.js';
 import { Scale } from './scale.js';
 import {
   element,
@@ -126,6 +126,84 @@ function subtractIntervals(a, b) {
 
   return ret;
 }
+
+function drawGradient (element, gradient, fallback, range) {
+  const O = this.options;
+  let bg = '';
+  range = range || this;
+
+  if (!gradient && !O.gradient) {
+    bg = fallback || O.background;
+    if (element.tagName === 'CANVAS') {
+      const ctx = element.getContext('2d');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, O._width, O._height);
+      return;
+    }
+  } else {
+    gradient = gradient || this.options.gradient;
+
+    let keys = Object.keys(gradient);
+    for (let i = 0; i < keys.length; i++) {
+      keys[i] = parseFloat(keys[i]);
+    }
+    keys = keys.sort(
+      O.reverse
+        ? function (a, b) {
+            return b - a;
+          }
+        : function (a, b) {
+            return a - b;
+          }
+    );
+
+    const transformation = O.transformation;
+    const snap_module = O.snap_module;
+
+    if (element.tagName === 'CANVAS') {
+      const vert = O.layout == 'left' || O.layout == 'right';
+      const ctx = element.getContext('2d');
+      const grd = ctx.createLinearGradient(
+        0,
+        0,
+        vert ? 0 : O._width || 0,
+        vert ? O._height || 0 : 0
+      );
+      for (let i = 0; i < keys.length; i++) {
+        let pos = transformation.valueToCoef(snap_module.snap(keys[i]));
+        pos = Math.min(1, Math.max(0, pos));
+        if (vert) pos = 1 - pos;
+        grd.addColorStop(pos, gradient[keys[i] + '']);
+      }
+      ctx.fillStyle = grd;
+      ctx.fillRect(0, 0, O._width, O._height);
+      return;
+    }
+
+    let m_regular = '';
+    const s_regular = 'linear-gradient(%s, %s)';
+    const c_regular = '%s %s%%, ';
+
+    const d_w3c = {};
+    d_w3c.sleft = 'to top';
+    d_w3c.sright = 'to top';
+    d_w3c.stop = 'to right';
+    d_w3c.sbottom = 'to right';
+
+    for (let i = 0; i < keys.length; i++) {
+      const ps = (100 * transformation.valueToCoef(snap_module.snap(keys[i]))).toFixed(2);
+      m_regular += sprintf(c_regular, gradient[keys[i] + ''], ps);
+    }
+    m_regular = m_regular.substr(0, m_regular.length - 2);
+    bg = sprintf(s_regular, d_w3c['s' + this.options.layout], m_regular);
+  }
+
+  if (element) {
+    element.style.background = bg ? bg : void 0;
+  }
+  return bg;
+}
+  
 export const Meter = defineClass({
   /**
    * Meter is a base class to build different meters from, such as {@link LevelMeter}.
@@ -181,10 +259,9 @@ export const Meter = defineClass({
    */
 
   Extends: Widget,
-  Implements: [Gradient],
+  Implements: Ranged,
   _options: Object.assign(
     Object.create(Widget.prototype._options),
-    Gradient.prototype._options,
     Scale.prototype._options,
     {
       layout: 'string',
@@ -362,7 +439,7 @@ export const Meter = defineClass({
 
     if (I.gradient || I.background) {
       I.gradient = I.background = false;
-      this.drawGradient(this._backdrop, O.gradient, O.background);
+      drawGradient.call(this, this._backdrop, O.gradient, O.background);
     }
 
     if (I.value || I.transformation || I.segment || I.foreground) {
