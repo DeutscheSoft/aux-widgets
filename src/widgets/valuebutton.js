@@ -163,7 +163,7 @@ export const ValueButton = defineClass({
       case 'value':
         if (value > this.options.max || value < this.options.min)
           this.warning(this.element);
-        value = this.snap(value);
+        value = this.options.snap_module.snap(value);
         break;
     }
     return Button.prototype.set.call(this, key, value);

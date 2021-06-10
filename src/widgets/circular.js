@@ -72,6 +72,7 @@ function drawDots() {
   const dot = O.dots_defaults;
   const angle = O.angle;
   const transformation = O.transformation;
+  const snap_module = O.snap_module;
   empty(_dots);
   for (let i = 0; i < dots.length; i++) {
     let m = dots[i];
@@ -97,7 +98,7 @@ function drawDots() {
     r.setAttribute(
       'transform',
       'rotate(' +
-        transformation.valueToCoef(this.snap(pos)) * angle +
+        transformation.valueToCoef(snap_module.snap(pos)) * angle +
         ' ' +
         O.size / 2 +
         ' ' +
@@ -122,6 +123,7 @@ function drawMarkers() {
   const outer = O.size / 2;
   const angle = O.angle;
   const transformation = O.transformation;
+  const snap_module = O.snap_module;
 
   for (let i = 0; i < markers.length; i++) {
     const m = markers[i];
@@ -144,8 +146,8 @@ function drawMarkers() {
     if (m['class']) addClass(s, m['class']);
     if (m.color) s.style.fill = m.color;
     if (!m.nosnap) {
-      from = this.snap(from);
-      to = this.snap(to);
+      from = snap_module.snap(from);
+      to = snap_module.snap(to);
     }
     from = transformation.valueToCoef(from) * angle;
     to = transformation.valueToCoef(to) * angle;
@@ -200,6 +202,7 @@ function drawLabels() {
     function () {
       let j, q;
       const transformation = O.transformation;
+      const snap_module = O.snap_module;
       for (j = 0; j < labels.length; j++) {
         l = labels[j];
         q = a[j];
@@ -209,7 +212,7 @@ function drawLabels() {
         const pos = Math.min(O.max, Math.max(O.min, l.pos));
         const bb = q.getBBox();
         const angle =
-          (transformation.valueToCoef(this.snap(pos)) * O.angle + O.start) % 360;
+          (transformation.valueToCoef(snap_module.snap(pos)) * O.angle + O.start) % 360;
         const outer_p = outer - margin;
         const coords = _getCoordsSingle(angle, outer_p, outer);
 
@@ -542,6 +545,7 @@ export const Circular = defineClass({
     const outer_p = outer - stroke / 2 - O.margin;
     const inner_p = inner - stroke / 2 - O.margin;
     const transformation = O.transformation;
+    const snap_module = O.snap_module;
 
     if (
       I.show_value ||
@@ -557,8 +561,8 @@ export const Circular = defineClass({
       if (O.show_value) {
         drawSlice.call(
           this,
-          transformation.valueToCoef(this.snap(O.base)) * O.angle,
-          transformation.valueToCoef(this.snap(O.value_ring)) * O.angle,
+          transformation.valueToCoef(snap_module.snap(O.base)) * O.angle,
+          transformation.valueToCoef(snap_module.snap(O.value_ring)) * O.angle,
           inner_p,
           outer_p,
           outer,
@@ -614,7 +618,7 @@ export const Circular = defineClass({
       tmp.setAttribute(
         'transform',
         formatRotate(
-          transformation.valueToCoef(this.snap(O.value_hand)) * O.angle,
+          transformation.valueToCoef(snap_module.snap(O.value_hand)) * O.angle,
           O.size / 2,
           O.size / 2
         )
@@ -698,7 +702,7 @@ export const Circular = defineClass({
         break;
       case 'value':
         if (value > O.max || value < O.min) this.warning(this.element);
-        value = this.snap(Math.max(O.min, Math.min(O.max, value)));
+        value = O.snap_module.snap(Math.max(O.min, Math.min(O.max, value)));
         break;
       case 'labels':
         if (value)

@@ -213,7 +213,7 @@ export const Slider = defineClass({
       case 'value':
         if (value > this.options.max || value < this.options.min)
           this.warning(this.element);
-        value = this.snap(value);
+        value = this.snap_module.snap(value);
         break;
     }
     if (DragValue.prototype._options[key]) this.drag.set(key, value);

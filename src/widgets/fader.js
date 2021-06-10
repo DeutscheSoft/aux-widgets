@@ -264,9 +264,8 @@ export const Fader = defineClass({
 
     if (I.validate('value', 'transformation')) {
       const transformation = O.transformation;
-      // TODO: value is snapped already in set(). This is not enough for values which are set during
-      // initialization.
-      tmp = transformation.valueToPixel(this.snap(O.value)) + 'px';
+      const snap_module = O.snap_module;
+      tmp = transformation.valueToPixel(snap_module.snap(O.value)) + 'px';
 
       if (vert(O)) {
         if (supports_transform)
@@ -318,7 +317,6 @@ export const Fader = defineClass({
     const O = this.options;
     if (key === 'value') {
       if (value > O.max || value < O.min) this.warning(this.element);
-      value = this.snap(Math.min(O.max, Math.max(O.min, value)));
     }
     return Widget.prototype.set.call(this, key, value);
   },

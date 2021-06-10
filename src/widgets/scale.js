@@ -528,7 +528,7 @@ export const Scale = defineClass({
     if (this._bar && (I.bar || I.basis || I.base || I.reverse)) {
       /* NOTE: options will be validated below */
       const transformation = O.transformation;
-      const tmpval = transformation.valueToPixel(this.snap(O.bar));
+      const tmpval = transformation.valueToPixel(O.snap_module.snap(O.bar));
       const tmpbase = transformation.valueToPixel(O.base);
       const min = Math.min(tmpval, tmpbase);
       const max = Math.max(tmpval, tmpbase);
@@ -753,7 +753,8 @@ defineChildElement(Scale, 'pointer', {
   draw: function (O) {
     if (this._pointer) {
       const transformation = O.transformation;
-      const tmp = transformation.valueToCoef(this.snap(O.pointer)) * 100 + '%';
+      const snap_module = O.snap_module;
+      const tmp = transformation.valueToCoef(snap_module.snap(O.pointer)) * 100 + '%';
       if (vert(O)) {
         this._pointer.style.bottom = tmp;
       } else {

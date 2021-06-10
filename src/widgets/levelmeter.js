@@ -371,7 +371,7 @@ export const LevelMeter = defineClass({
       const base = O.base;
 
       // snap will enforce clipping
-      value = this.snap(value);
+      value = O.snap_module.snap(value);
 
       if (O.falling) {
         const v = this.effectiveValue();
@@ -433,7 +433,7 @@ export const LevelMeter = defineClass({
         bottomTimeout.call(this);
       }
     } else if (key === 'top' || key === 'bottom') {
-      value = this.snap(value);
+      value = this.options.snap_module.snap(value);
     }
     return Meter.prototype.set.call(this, key, value);
   },

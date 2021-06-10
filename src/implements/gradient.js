@@ -111,6 +111,7 @@ export const Gradient = defineClass({
       );
 
       const transformation = O.transformation;
+      const snap_module = O.snap_module;
 
       if (element.tagName === 'CANVAS') {
         const vert = O.layout == 'left' || O.layout == 'right';
@@ -122,7 +123,7 @@ export const Gradient = defineClass({
           vert ? O._height || 0 : 0
         );
         for (let i = 0; i < keys.length; i++) {
-          let pos = transformation.valueToCoef(range.snap(keys[i]));
+          let pos = transformation.valueToCoef(snap_module.snap(keys[i]));
           pos = Math.min(1, Math.max(0, pos));
           if (vert) pos = 1 - pos;
           grd.addColorStop(pos, gradient[keys[i] + '']);
@@ -144,7 +145,7 @@ export const Gradient = defineClass({
       d_w3c.sbottom = 'to right';
 
       for (let i = 0; i < keys.length; i++) {
-        const ps = (100 * transformation.valueToCoef(range.snap(keys[i]))).toFixed(2);
+        const ps = (100 * transformation.valueToCoef(snap_module.snap(keys[i]))).toFixed(2);
         m_regular += sprintf(c_regular, gradient[keys[i] + ''], ps);
       }
       m_regular = m_regular.substr(0, m_regular.length - 2);
