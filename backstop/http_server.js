@@ -68,8 +68,8 @@ function start(port) {
           .replace('NAME', test_name)
           .replace('CONTENT', test)
           .replace('HEAD', head);
-
-        res.end(data, 'text/html');
+        res.setHeader('Content-Type', 'text/html');
+        res.end(data, 'utf-8');
       } else {
         next();
       }
