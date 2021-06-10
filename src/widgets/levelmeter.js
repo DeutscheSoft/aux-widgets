@@ -304,6 +304,7 @@ export const LevelMeter = defineClass({
     const O = this.options;
     const falling = +O.falling;
     const base = +O.base;
+    const transformation = O.transformation;
     value = +value;
 
     // this is a bit unelegant...
@@ -329,11 +330,11 @@ export const LevelMeter = defineClass({
 
     if (!(hold_size > 0)) return i;
 
-    const pos_base = +this.valueToPixel(base);
+    const pos_base = +transformation.valueToPixel(base);
 
     if (hold > base) {
       /* TODO: lets snap in set() */
-      pos = this.valueToPixel(hold) | 0;
+      pos = transformation.valueToPixel(hold) | 0;
       if (segment !== 1) pos = segment * (Math.round(pos / segment) | 0);
 
       if (pos > pos_base) {
@@ -348,7 +349,7 @@ export const LevelMeter = defineClass({
     hold = +O.bottom;
 
     if (hold < base) {
-      pos = this.valueToPixel(hold) | 0;
+      pos = transformation.valueToPixel(hold) | 0;
       if (segment !== 1) pos = segment * (Math.round(pos / segment) | 0);
 
       if (pos > pos_base) {

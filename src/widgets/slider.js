@@ -182,7 +182,8 @@ export const Slider = defineClass({
       I.value = false;
       I.alignment = false;
       I.frames = false;
-      const coef = this.valueToCoef(O.value);
+      const transformation = O.transformation;
+      const coef = transformation.valueToCoef(O.value);
       const frame = Math.round(Math.max(0, O.frames - 1) * coef);
       switch (O.alignment) {
         default:

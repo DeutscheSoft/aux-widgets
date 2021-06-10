@@ -44,10 +44,10 @@ function getBase(O) {
 function vert(O) {
   return O.layout === 'left' || O.layout === 'right';
 }
-function fillInterval(range, steps, i, from, to, min_gap, result) {
+function fillInterval(transformation, steps, i, from, to, min_gap, result) {
 
-  const to_pos = range.valueToPixel(to);
-  const from_pos = range.valueToPixel(from);
+  const to_pos = transformation.valueToPixel(to);
+  const from_pos = transformation.valueToPixel(from);
 
   if (Math.abs(to_pos - from_pos) < min_gap) return;
 
@@ -67,13 +67,13 @@ function fillInterval(range, steps, i, from, to, min_gap, result) {
   let lastValue = from;
 
   for (let x = from + step; Math.sign(to - x) === Math.sign(step);) {
-    const pos = range.valueToPixel(x);
+    const pos = transformation.valueToPixel(x);
     const diff = Math.abs(lastPos - pos);
     if (Math.abs(to_pos - pos) < min_gap) break;
     if (diff >= min_gap) {
       if (i > 0 && diff >= min_gap * 2) {
         // we have a chance to fit some more labels in
-        fillInterval(range, steps, i - 1, lastValue, x, min_gap, result);
+        fillInterval(transformation, steps, i - 1, lastValue, x, min_gap, result);
       }
       values.push(x);
       positions.push(pos);
@@ -81,14 +81,14 @@ function fillInterval(range, steps, i, from, to, min_gap, result) {
       lastValue = x;
       x += step;
     } else {
-      const nextValue = range.pixelToValue(lastPos + displayStep);
+      const nextValue = transformation.pixelToValue(lastPos + displayStep);
 
       x += Math.ceil((nextValue - x) / step) * step;
     }
   }
 
   if (i > 0 && Math.abs(lastPos - to_pos) >= min_gap * 2) {
-    fillInterval(range, steps, i - 1, lastValue, to, min_gap, result);
+    fillInterval(transformation, steps, i - 1, lastValue, to, min_gap, result);
   }
 
   return result;
@@ -286,13 +286,13 @@ function generateScale(from, to, include_from, show_to) {
 
   let levels = O.levels;
 
-  fillInterval(this, levels, levels.length - 1, from, to, O.gap_dots, dots);
+  fillInterval(transformation, levels, levels.length - 1, from, to, O.gap_dots, dots);
 
   if (labels) {
     if (O.levels_labels) levels = O.levels_labels;
 
     fillInterval(
-      this,
+      transformation,
       levels,
       levels.length - 1,
       from,
@@ -752,7 +752,8 @@ defineChildElement(Scale, 'pointer', {
   ]),
   draw: function (O) {
     if (this._pointer) {
-      const tmp = this.valueToCoef(this.snap(O.pointer)) * 100 + '%';
+      const transformation = O.transformation;
+      const tmp = transformation.valueToCoef(this.snap(O.pointer)) * 100 + '%';
       if (vert(O)) {
         this._pointer.style.bottom = tmp;
       } else {

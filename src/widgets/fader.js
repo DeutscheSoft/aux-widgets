@@ -53,7 +53,9 @@ function vert(O) {
   return O.layout === 'left' || O.layout === 'right';
 }
 function getValue(ev) {
-  const is_vertical = vert(this.options);
+  const O = this.options;
+  const transformation = O.transformation;
+  const is_vertical = vert(O);
   let real, hsize, pad;
   hsize = this._handle_size / 2;
   pad = this._padding;
@@ -63,7 +65,7 @@ function getValue(ev) {
   } else {
     real = ev.offsetX - hsize + pad.left;
   }
-  return this.pixelToValue(real);
+  return transformation.pixelToValue(real);
 }
 function clicked(ev) {
   if (this._handle.contains(ev.target)) return;
