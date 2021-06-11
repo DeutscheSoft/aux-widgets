@@ -23,6 +23,7 @@ import { Widget } from './widget.js';
 import { Label } from './label.js';
 import { Ranged } from '../implements/ranged.js';
 import { Scale } from './scale.js';
+import { sprintf } from '../utils/sprintf.js';
 import {
   element,
   addClass,
