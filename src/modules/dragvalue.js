@@ -137,20 +137,20 @@ function stopDrag(state, ev) {
 function setCursor() {
   switch (this.options.direction) {
     case 'vertical':
-      this.setGlobalCursor('row-resize');
+      setGlobalCursor('row-resize');
       break;
     case 'horizontal':
-      this.setGlobalCursor('col-resize');
+      setGlobalCursor('col-resize');
       break;
     case 'polar':
-      this.setGlobalCursor('move');
+      setGlobalCursor('move');
       break;
   }
 }
 function removeCursor() {
-  this.unsetGloablCursor('row-resize');
-  this.unsetGloablCursor('col-resize');
-  this.unsetGloablCursor('move');
+  unsetGlobalCursor('row-resize');
+  unsetGlobalCursor('col-resize');
+  unsetGlobalCursor('move');
 }
 
 export const DragValue = defineClass({
@@ -272,7 +272,7 @@ export const DragValue = defineClass({
           const O = this.options;
           addClass(O.classes || O.node, 'aux-dragging');
           if (O.cursor) {
-            setGlobalCursor.call(this);
+            setCursor.call(this);
           }
         }.bind(this),
         1
@@ -284,7 +284,7 @@ export const DragValue = defineClass({
           const O = this.options;
           removeClass(O.classes || O.node, 'aux-dragging');
           if (O.cursor) {
-            unsetGlobalCursor.call(this);
+            removeCursor.call(this);
           }
         }.bind(this),
         1
