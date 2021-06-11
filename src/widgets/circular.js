@@ -211,7 +211,9 @@ function drawLabels() {
         const pos = Math.min(O.max, Math.max(O.min, l.pos));
         const bb = q.getBBox();
         const angle =
-          (transformation.valueToCoef(snap_module.snap(pos)) * O.angle + O.start) % 360;
+          (transformation.valueToCoef(snap_module.snap(pos)) * O.angle +
+            O.start) %
+          360;
         const outer_p = outer - margin;
         const coords = _getCoordsSingle(angle, outer_p, outer);
 
@@ -633,7 +635,8 @@ export const Circular = defineClass({
     Widget.prototype.destroy.call(this);
   },
   getStroke: function () {
-    if (Object.prototype.hasOwnProperty.call(this, '_stroke')) return this._stroke;
+    if (Object.prototype.hasOwnProperty.call(this, '_stroke'))
+      return this._stroke;
     const strokeb = parseInt(getStyle(this._base, 'stroke-width')) || 0;
     const strokev = parseInt(getStyle(this._value, 'stroke-width')) || 0;
     this._stroke = Math.max(strokeb, strokev);

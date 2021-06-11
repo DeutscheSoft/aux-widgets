@@ -199,7 +199,8 @@ export function element(tag) {
     v = arguments[i];
     if (typeof v === 'object') {
       for (const key in v) {
-        if (Object.prototype.hasOwnProperty.call(v, key)) n.setAttribute(key, v[key]);
+        if (Object.prototype.hasOwnProperty.call(v, key))
+          n.setAttribute(key, v[key]);
       }
     } else if (typeof v === 'string') {
       addClass(n, v);

@@ -63,8 +63,8 @@ export const Bitstring = defineClass({
   }),
   options: {
     multi_select: 1,
-    labels: i => i + 1,
-    icons: i => null,
+    labels: (i) => i + 1,
+    icons: (i) => null,
     length: false,
     bitstring: 0,
     deselect: true,
@@ -90,31 +90,32 @@ export const Bitstring = defineClass({
       if (typeof bitstring === 'undefined') return;
       let select;
       if (typeof bitstring === 'number') {
-        select = this.buttons.list.map((b, i) => (bitstring & (1 << i)) ? i : null);
+        select = this.buttons.list.map((b, i) =>
+          bitstring & (1 << i) ? i : null
+        );
       } else if (Array.isArray(bitstring)) {
-        select = this.buttons.list.map((b, i) => bitstring[i] ? i : null);
+        select = this.buttons.list.map((b, i) => (bitstring[i] ? i : null));
       } else {
         error('Bitstring %O is not of type number or array.', bitstring);
       }
       if (select) {
-        select = select.filter(v=>v !== null);
+        select = select.filter((v) => v !== null);
         this.set('select', select);
       }
     },
     useraction: function (key, value) {
-      if (key != 'select')
-        return;
+      if (key != 'select') return;
       const O = this.options;
       if (typeof O.bitstring == 'number') {
         let bitstring = 0;
         for (let i = 0, m = value.length; i < m; ++i) {
           if (value[i] === null) continue;
-          bitstring |= (1 << (value[i]));
+          bitstring |= 1 << value[i];
         }
         this.userset('bitstring', bitstring);
       } else if (Array.isArray(O.bitstring)) {
         const bitstring = new Array(this.buttons.list.length).fill(false);
-        value.map((v, i) => v === null ? null : bitstring[v] = true);
+        value.map((v, i) => (v === null ? null : (bitstring[v] = true)));
         this.userset('bitstring', bitstring);
       } else {
         error('Bitstring %O is not of type number or array.', O.bitstring);

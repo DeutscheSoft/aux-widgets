@@ -39,7 +39,7 @@ function setAnimation() {
   const range = inner - outer;
   const msecs = (range / speed) * 1000;
   const duration = Math.round(msecs + pause);
-  const perc = (((pause / 2) / duration) * 100).toFixed(2);
+  const perc = ((pause / 2 / duration) * 100).toFixed(2);
   const to = (100 - perc).toFixed(2);
   const id = this._id;
 
@@ -131,8 +131,7 @@ export const Marquee = defineClass({
     this.set('_inner', outerWidth(this.label.element));
   },
   destroy: function () {
-    if (this._style)
-      this._style.remove();
+    if (this._style) this._style.remove();
   },
 });
 

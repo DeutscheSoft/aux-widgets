@@ -99,7 +99,9 @@ function lowParseAttribute(type, x) {
     case 'array':
       try {
         return lowParseAttribute.call(this, 'json', x);
-      } catch (err) { /* empty */ }
+      } catch (err) {
+        /* empty */
+      }
       return lowParseAttribute.call(this, 'js', x);
     default:
       throw new Error(sprintf('Unsupported attribute type "%s"', type));

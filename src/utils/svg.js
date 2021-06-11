@@ -120,9 +120,13 @@ export function seatAllSVG(parent) {
  * @returns {SVGElement}
  */
 export function makeSVG(tag, args) {
-  const el = document.createElementNS('http://www.w3.org/2000/svg', 'svg:' + tag);
+  const el = document.createElementNS(
+    'http://www.w3.org/2000/svg',
+    'svg:' + tag
+  );
   for (const k in args) {
-    if (Object.prototype.hasOwnProperty.call(args, k)) el.setAttribute(k, args[k]);
+    if (Object.prototype.hasOwnProperty.call(args, k))
+      el.setAttribute(k, args[k]);
   }
   return el;
 }

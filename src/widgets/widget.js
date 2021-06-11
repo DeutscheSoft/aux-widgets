@@ -141,7 +141,8 @@ function setPreset(preset) {
   for (key in preset_options) {
     if (!Object.prototype.hasOwnProperty.call(this._preset_origins, key))
       this._preset_origins[key] = O[key];
-    if (Object.prototype.hasOwnProperty.call(preset_options, key)) val = preset_options[key];
+    if (Object.prototype.hasOwnProperty.call(preset_options, key))
+      val = preset_options[key];
     else val = this._preset_origins[key];
     this.set(key, val);
   }
@@ -288,7 +289,10 @@ export const Widget = defineClass({
       setPreset.call(this, this.options.preset);
     },
     set: function (key, val) {
-      if (!this._presetting && Object.prototype.hasOwnProperty.call(this._preset_origins, key)) {
+      if (
+        !this._presetting &&
+        Object.prototype.hasOwnProperty.call(this._preset_origins, key)
+      ) {
         this._preset_origins[key] = val;
       }
     },

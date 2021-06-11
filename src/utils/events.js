@@ -57,7 +57,9 @@ try {
 
   window.addEventListener('test', null, options);
   window.removeEventListener('test', null);
-} catch (err) { /* empty */ }
+} catch (err) {
+  /* empty */
+}
 
 let active_options, passive_options;
 

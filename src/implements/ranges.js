@@ -33,7 +33,8 @@ function rangeChanged(value, name) {
     );
 
   for (const key in value) {
-    if (Object.prototype.hasOwnProperty.call(value, key)) range.set(key, value[key]);
+    if (Object.prototype.hasOwnProperty.call(value, key))
+      range.set(key, value[key]);
   }
 }
 

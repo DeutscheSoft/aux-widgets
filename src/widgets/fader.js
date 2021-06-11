@@ -173,12 +173,9 @@ export const Fader = defineClass({
     },
     set_interacting: function (v) {
       const cursor = this.options.cursor;
-      if (!cursor)
-        return;
-      if (v)
-        setGlobalCursor(cursor);
-      else
-        unsetGlobalCursor(cursor);
+      if (!cursor) return;
+      if (v) setGlobalCursor(cursor);
+      else unsetGlobalCursor(cursor);
     },
   },
   initialize: function (options) {

@@ -675,11 +675,10 @@ export const Select = defineClass({
     const O = this.options;
 
     if (I.entries || I.auto_size) {
-      
       if (O.auto_size) {
         I.show_list = true;
         I.auto_size = false;
-  
+
         const S = this.sizer.element;
         const v = O.entries;
         empty(S);
@@ -690,7 +689,7 @@ export const Select = defineClass({
           frag.appendChild(s);
         }
         S.appendChild(frag);
-  
+
         outerWidth(
           this.label.element,
           true,

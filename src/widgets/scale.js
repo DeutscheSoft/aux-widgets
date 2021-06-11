@@ -45,7 +45,6 @@ function vert(O) {
   return O.layout === 'left' || O.layout === 'right';
 }
 function fillInterval(transformation, steps, i, from, to, min_gap, result) {
-
   const to_pos = transformation.valueToPixel(to);
   const from_pos = transformation.valueToPixel(from);
 
@@ -61,19 +60,27 @@ function fillInterval(transformation, steps, i, from, to, min_gap, result) {
   const positions = result.positions;
   const displayStep = Math.sign(to_pos - from_pos) * Math.max(1, min_gap);
 
-  const step = (from > to) ? -steps[i] : steps[i];
+  const step = from > to ? -steps[i] : steps[i];
 
   let lastPos = from_pos;
   let lastValue = from;
 
-  for (let x = from + step; Math.sign(to - x) === Math.sign(step);) {
+  for (let x = from + step; Math.sign(to - x) === Math.sign(step); ) {
     const pos = transformation.valueToPixel(x);
     const diff = Math.abs(lastPos - pos);
     if (Math.abs(to_pos - pos) < min_gap) break;
     if (diff >= min_gap) {
       if (i > 0 && diff >= min_gap * 2) {
         // we have a chance to fit some more labels in
-        fillInterval(transformation, steps, i - 1, lastValue, x, min_gap, result);
+        fillInterval(
+          transformation,
+          steps,
+          i - 1,
+          lastValue,
+          x,
+          min_gap,
+          result
+        );
       }
       values.push(x);
       positions.push(pos);
@@ -284,7 +291,15 @@ function generateScale(from, to, include_from, show_to) {
 
   let levels = O.levels;
 
-  fillInterval(transformation, levels, levels.length - 1, from, to, O.gap_dots, dots);
+  fillInterval(
+    transformation,
+    levels,
+    levels.length - 1,
+    from,
+    to,
+    O.gap_dots,
+    dots
+  );
 
   if (labels) {
     if (O.levels_labels) levels = O.levels_labels;
@@ -301,7 +316,10 @@ function generateScale(from, to, include_from, show_to) {
 
     tmp = transformation.valueToPixel(to);
 
-    if (show_to || Math.abs(tmp - transformation.valueToPixel(from)) >= O.gap_labels) {
+    if (
+      show_to ||
+      Math.abs(tmp - transformation.valueToPixel(from)) >= O.gap_labels
+    ) {
       labels.values.push(to);
       labels.positions.push(tmp);
 
@@ -752,7 +770,8 @@ defineChildElement(Scale, 'pointer', {
     if (this._pointer) {
       const transformation = O.transformation;
       const snap_module = O.snap_module;
-      const tmp = transformation.valueToCoef(snap_module.snap(O.pointer)) * 100 + '%';
+      const tmp =
+        transformation.valueToCoef(snap_module.snap(O.pointer)) * 100 + '%';
       if (vert(O)) {
         this._pointer.style.bottom = tmp;
       } else {

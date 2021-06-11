@@ -687,6 +687,7 @@ addStaticEvent(ColorPicker, 'initialized', function () {
     }
   });
   for (const key in options) {
-    if (Object.prototype.hasOwnProperty.call(options, key)) this.set(key, options[key]);
+    if (Object.prototype.hasOwnProperty.call(options, key))
+      this.set(key, options[key]);
   }
 });

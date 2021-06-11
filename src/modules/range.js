@@ -103,31 +103,31 @@ export const Range = defineClass({
     snap: 0,
     round: false,
   },
-  valueToBased: function(coef, size) {
+  valueToBased: function (coef, size) {
     return this.get('transformation').valueToBased(coef, size);
   },
-  basedToValue: function(coef, size) {
+  basedToValue: function (coef, size) {
     return this.get('transformation').basedToValue(coef, size);
   },
-  valueToPixel: function(value) {
+  valueToPixel: function (value) {
     return this.get('transformation').valueToPixel(value);
   },
-  pixelToValue: function(pos) {
+  pixelToValue: function (pos) {
     return this.get('transformation').pixelToValue(pos);
   },
-  valueToCoef: function(value) {
+  valueToCoef: function (value) {
     return this.get('transformation').valueToCoef(value);
   },
-  coefToValue: function(coef) {
+  coefToValue: function (coef) {
     return this.get('transformation').coefToValue(coef);
   },
-  snapUp: function(value) {
+  snapUp: function (value) {
     return this.get('snap_module').snapUp(value);
   },
-  snapDown: function(value) {
+  snapDown: function (value) {
     return this.get('snap_module').snapDown(value);
   },
-  snap: function(value) {
+  snap: function (value) {
     return this.get('snap_module').snap(value);
   },
 });

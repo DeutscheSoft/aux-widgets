@@ -41,7 +41,9 @@
 export function error() {
   try {
     console.error.apply(console, arguments);
-  } catch (e) { /* empty */ }
+  } catch (e) {
+    /* empty */
+  }
 }
 
 /**
@@ -54,7 +56,9 @@ export function error() {
 export function warn() {
   try {
     console.warn.apply(console, arguments);
-  } catch (e) { /* empty */ }
+  } catch (e) {
+    /* empty */
+  }
 }
 /**
  * Generates a log message to the JavaScript console. This is virtually identical to console.log, however
@@ -67,7 +71,9 @@ export function log() {
   if (!console) return;
   try {
     console.log.apply(console, arguments);
-  } catch (e) { /* empty */ }
+  } catch (e) {
+    /* empty */
+  }
 }
 
 /* jshint +W117 */

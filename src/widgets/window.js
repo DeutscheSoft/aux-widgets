@@ -730,7 +730,9 @@ export const Window = defineClass({
     if (I.content) {
       I.content = false;
       if (O.content) {
-        if (Object.prototype.isPrototypeOf.call(Container.prototype, O.content)) {
+        if (
+          Object.prototype.isPrototypeOf.call(Container.prototype, O.content)
+        ) {
           setContent(this.content.element, '');
           this.appendChild(O.content);
         } else {

@@ -99,7 +99,10 @@ function removeNativeEvents(element) {
     if (isNativeEvent(type)) removeActiveEventListener(element, type, handler);
 
   for (type in d)
-    if (isNativeEvent(type) && (!s || !Object.prototype.hasOwnProperty.call(s, type)))
+    if (
+      isNativeEvent(type) &&
+      (!s || !Object.prototype.hasOwnProperty.call(s, type))
+    )
       removeActiveEventListener(element, type, handler);
 }
 function addNativeEvents(element) {
@@ -112,7 +115,10 @@ function addNativeEvents(element) {
     if (isNativeEvent(type)) addActiveEventListener(element, type, handler);
 
   for (type in d)
-    if (isNativeEvent(type) && (!s || !Object.prototype.hasOwnProperty.call(s, type)))
+    if (
+      isNativeEvent(type) &&
+      (!s || !Object.prototype.hasOwnProperty.call(s, type))
+    )
       addActiveEventListener(element, type, handler);
 }
 function nativeHandler(ev) {

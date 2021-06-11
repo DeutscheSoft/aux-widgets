@@ -24,19 +24,18 @@ function removeClass() {
   timeouts.delete(this);
 }
 
-export function warning (element, timeout) {
-  
-/**
- * Adds the class "aux-warn" on <code>this.element</code> for a certain
- * period of time. It is used e.g. in {@link ChartHandle} or {@link Knob} when the value
- * exceeds the range.
- * 
- * @function warning
- * @param {HTMLElement} element - The element to apply the class 'aux-warn' to.
- * @param {Integer} timeout - The timer in milliseconds the warning should be active.
- */
+export function warning(element, timeout) {
+  /**
+   * Adds the class "aux-warn" on <code>this.element</code> for a certain
+   * period of time. It is used e.g. in {@link ChartHandle} or {@link Knob} when the value
+   * exceeds the range.
+   *
+   * @function warning
+   * @param {HTMLElement} element - The element to apply the class 'aux-warn' to.
+   * @param {Integer} timeout - The timer in milliseconds the warning should be active.
+   */
   if (!timeout) timeout = 250;
-  
+
   if (timeouts.has(element)) {
     window.clearTimeout(timeouts.get(element));
     timeouts.delete(element);

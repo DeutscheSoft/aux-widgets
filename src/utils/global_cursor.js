@@ -19,26 +19,26 @@
 
 import { addClass, removeClass } from './dom.js';
 
-export function setGlobalCursor (cursor) {
-/**
- * setGlobalCursor adds global cursor classes to ensure
- * one of the <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">standard cursors</a>
- * is shown in the overall application.
- *
- * @param {string} cursor - one of the standard cursor strings.
- * @function setGlobalCursor
- */
+export function setGlobalCursor(cursor) {
+  /**
+   * setGlobalCursor adds global cursor classes to ensure
+   * one of the <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">standard cursors</a>
+   * is shown in the overall application.
+   *
+   * @param {string} cursor - one of the standard cursor strings.
+   * @function setGlobalCursor
+   */
   addClass(document.body, 'aux-cursor-' + cursor);
 }
 
-export function unsetGlobalCursor (cursor) {
-/**
- * unsetGlobalCursor removes a cursor from the body.
- * See <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">standard cursors</a>
- * for a list of cursors.
- *
- * @param {string} cursor - one of the standard cursor strings.
- * @function unsetGlobalCursor
- */
+export function unsetGlobalCursor(cursor) {
+  /**
+   * unsetGlobalCursor removes a cursor from the body.
+   * See <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">standard cursors</a>
+   * for a list of cursors.
+   *
+   * @param {string} cursor - one of the standard cursor strings.
+   * @function unsetGlobalCursor
+   */
   removeClass(document.body, 'aux-cursor-' + cursor);
 }

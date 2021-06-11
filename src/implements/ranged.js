@@ -607,7 +607,10 @@ function updateTransformation() {
         error('piecewise-linear array not sorted.');
     }
 
-    module = makePiecewiseLinearTransformation(O, new Float64Array(scale).buffer);
+    module = makePiecewiseLinearTransformation(
+      O,
+      new Float64Array(scale).buffer
+    );
   } else {
     switch (scale) {
       case 'linear':
@@ -742,9 +745,9 @@ export const Ranged = defineClass({
     shift_up: 4,
     shift_down: 0.25,
     snap: 0,
-    round: true, /* default for Range, no dedicated option */
+    round: true /* default for Range, no dedicated option */,
     log_factor: 1,
-    trafo_reverse: false, /* used internally, no documentation */
+    trafo_reverse: false /* used internally, no documentation */,
     transformation: null,
     snap_module: TrivialSnapModule,
   },

@@ -128,7 +128,7 @@ function subtractIntervals(a, b) {
   return ret;
 }
 
-function drawGradient (element, gradient, fallback, range) {
+function drawGradient(element, gradient, fallback, range) {
   const O = this.options;
   let bg = '';
   range = range || this;
@@ -192,7 +192,9 @@ function drawGradient (element, gradient, fallback, range) {
     d_w3c.sbottom = 'to right';
 
     for (let i = 0; i < keys.length; i++) {
-      const ps = (100 * transformation.valueToCoef(snap_module.snap(keys[i]))).toFixed(2);
+      const ps = (
+        100 * transformation.valueToCoef(snap_module.snap(keys[i]))
+      ).toFixed(2);
       m_regular += sprintf(c_regular, gradient[keys[i] + ''], ps);
     }
     m_regular = m_regular.substr(0, m_regular.length - 2);
@@ -204,7 +206,7 @@ function drawGradient (element, gradient, fallback, range) {
   }
   return bg;
 }
-  
+
 export const Meter = defineClass({
   /**
    * Meter is a base class to build different meters from, such as {@link LevelMeter}.
