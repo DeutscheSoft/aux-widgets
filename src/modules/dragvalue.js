@@ -272,7 +272,7 @@ export const DragValue = defineClass({
           const O = this.options;
           addClass(O.classes || O.node, 'aux-dragging');
           if (O.cursor) {
-            setCursor.call(this);
+            setGlobalCursor.call(this);
           }
         }.bind(this),
         1
@@ -284,7 +284,7 @@ export const DragValue = defineClass({
           const O = this.options;
           removeClass(O.classes || O.node, 'aux-dragging');
           if (O.cursor) {
-            removeCursor.call(this);
+            unsetGlobalCursor.call(this);
           }
         }.bind(this),
         1

@@ -834,7 +834,7 @@ function stopDrag() {
     /* TODO: move this into the parent */
     removeClass(this.parent.element, 'aux-dragging');
 
-    this.unsetGlobalCursor('move');
+    unsetGlobalCursor('move');
   });
 }
 
