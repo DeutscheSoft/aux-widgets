@@ -227,8 +227,6 @@ export const Meter = defineClass({
    *
    * @extends Widget
    *
-   * @mixes Gradient
-   *
    * @param {Object} [options={ }] - An object containing initial options.
    *
    * @property {String} [options.layout="left"] - A string describing the layout of the meter.
