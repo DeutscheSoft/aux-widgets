@@ -29,7 +29,7 @@
 import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 import { Ranged } from '../implements/ranged.js';
-import { Warning } from '../implements/warning.js';
+import { warning } from '../utils/warning.js';
 import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
 import { Scale } from './scale.js';
 import { DragValue } from '../modules/dragvalue.js';
@@ -90,7 +90,7 @@ function dblClick() {
 /**
  * Fader is a slidable control with a {@link Scale} next to it which
  * can be both dragged and scrolled. Fader implements {@link Ranged}
- * and {@link Warning} and inherits their options.
+ * and inherits its options.
  * A {@link Label} and a {@link Value} are available optionally.
  *
  * @class Fader
@@ -98,7 +98,6 @@ function dblClick() {
  * @extends Widget
  *
  * @mixes Ranged
- * @mixes Warning
  *
  * @param {Object} [options={ }] - An object containing initial options.
  *
@@ -121,7 +120,7 @@ function dblClick() {
  */
 export const Fader = defineClass({
   Extends: Widget,
-  Implements: [Ranged, Warning],
+  Implements: Ranged,
   _options: Object.assign(
     Object.create(Widget.prototype._options),
     Ranged.prototype._options,
@@ -329,7 +328,7 @@ export const Fader = defineClass({
   set: function (key, value) {
     const O = this.options;
     if (key === 'value') {
-      if (value > O.max || value < O.min) this.warning(this.element);
+      if (value > O.max || value < O.min) warning(this.element);
     }
     return Widget.prototype.set.call(this, key, value);
   },

@@ -31,7 +31,7 @@ import { Widget } from './widget.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
 import { Ranged } from '../implements/ranged.js';
-import { Warning } from '../implements/warning.js';
+import { warning } from '../utils/warning.js';
 import { element, addClass, outerWidth, outerHeight } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 
@@ -70,14 +70,13 @@ function setBackground(horiz, vert, size) {
  * times the number of frames.
  * Slider uses {@link DragValue} and {@link ScrollValue}
  * for setting its value.
- * It inherits all options of {@link DragValue}, {@link Ranged} and {@link Warning}.
+ * It inherits all options of {@link DragValue} and {@link Ranged}.
  *
  * @class Slider
  *
  * @extends Widget
  *
  * @mixes Ranged
- * @mixes Warning
  *
  * @param {Object} [options={ }] - An object containing initial options.
  *
@@ -92,7 +91,7 @@ function setBackground(horiz, vert, size) {
  */
 export const Slider = defineClass({
   Extends: Widget,
-  Implements: [Ranged, Warning],
+  Implements: Ranged,
   _options: Object.assign(
     Object.create(Widget.prototype._options),
     Ranged.prototype._options,
@@ -212,7 +211,7 @@ export const Slider = defineClass({
     switch (key) {
       case 'value':
         if (value > this.options.max || value < this.options.min)
-          this.warning(this.element);
+          warning(this.element);
         value = this.snap_module.snap(value);
         break;
     }

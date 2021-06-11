@@ -23,7 +23,7 @@ import { error } from '../utils/log.js';
 import { empty, addClass, getStyle } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
 import { S } from '../dom_scheduler.js';
-import { Warning } from '../implements/warning.js';
+import { warning } from '../utils/warning.js';
 import { Ranged } from '../implements/ranged.js';
 import { defineChildElement } from '../widget_helpers.js';
 import { Widget } from './widget.js';
@@ -358,11 +358,10 @@ export const Circular = defineClass({
    *
    * @extends Widget
    *
-   * @mixes Warning
    * @mixes Ranged
    */
   Extends: Widget,
-  Implements: [Warning, Ranged],
+  Implements: Ranged,
   _options: Object.assign(
     Object.create(Widget.prototype._options),
     Ranged.prototype._options,
@@ -700,7 +699,7 @@ export const Circular = defineClass({
         if (value === false) value = O.min;
         break;
       case 'value':
-        if (value > O.max || value < O.min) this.warning(this.element);
+        if (value > O.max || value < O.min) warning(this.element);
         value = O.snap_module.snap(Math.max(O.min, Math.min(O.max, value)));
         break;
       case 'labels':

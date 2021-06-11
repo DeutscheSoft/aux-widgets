@@ -22,7 +22,7 @@
 import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
-import { Warning } from '../implements/warning.js';
+import { warning } from '../utils/warning.js';
 import { S } from '../dom_scheduler.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { warn } from '../utils/log.js';
@@ -888,7 +888,6 @@ function stopDrag() {
  * @property {Number} [options.z_max] - Maximum value of the z-coordinate.
  * @property {Boolean} [options.show_axis=false] - If set to true,  additional lines are drawn at the coordinate values.
  *
- * @mixes Warning
  */
 
 /**
@@ -927,11 +926,9 @@ function setRange(range, key) {
  * @param {string} name - The name of the option which was changed due to the users action.
  * @param {mixed} value - The new value of the option.
  *
- * @mixes Warning
  */
 export const ChartHandle = defineClass({
   Extends: Widget,
-  Implements: Warning,
   _options: Object.assign(Object.create(Widget.prototype._options), {
     range_x: 'mixed',
     range_y: 'mixed',
@@ -1434,13 +1431,13 @@ export const ChartHandle = defineClass({
       case 'z':
         if (O.z_min !== false && value < O.z_min) {
           value = O.z_min;
-          this.warning(this.element);
+          warning(this.element);
         } else if (O.z_max !== false && value > O.z_max) {
           value = O.z_max;
-          this.warning(this.element);
+          warning(this.element);
         }
         if (value < O.range_z.options.min || value > O.range_z.options.max) {
-          this.warning(this.element);
+          warning(this.element);
         }
         value = O.range_z.snap(value);
         break;

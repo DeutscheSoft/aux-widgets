@@ -21,7 +21,7 @@ import { defineClass } from './../widget_helpers.js';
 import { addClass, removeClass } from './../utils/dom.js';
 import { Container } from './container.js';
 import { Button } from './button.js';
-import { Warning } from '../implements/warning.js';
+import { warning } from '../utils/warning.js';
 import { ChildWidgets } from '../utils/child_widgets.js';
 
 /**
@@ -94,7 +94,7 @@ function onButtonUserset(key, value) {
   );
 
   if (select === O.select || (O.multi_select && compare(select, O.select))) {
-    parent.warning(this.element, 500);
+    warning(this.element, 500);
     return;
   }
 
@@ -191,7 +191,7 @@ export const Buttons = defineClass({
    * Buttons is a list of ({@link Button})s, arranged
    * either vertically or horizontally. Single buttons can be selected by clicking.
    * If `multi_select` is enabled, buttons can be added and removed from
-   * the selection by clicking on them. Buttons implements {@link Warning}
+   * the selection by clicking on them. Buttons uses {@link warning}
    * to highlight buttons which can't be selected due to `options.multi_select=n`.
    *
    * @param {Object} [options={ }] - An object containing initial options.
@@ -223,8 +223,6 @@ export const Buttons = defineClass({
    *
    * @extends Container
    *
-   * @mixes Warning
-   *
    */
   /**
    * A {@link Button} was added to Buttons.
@@ -241,7 +239,6 @@ export const Buttons = defineClass({
    * @param {Button} button - The {@link Button} instance which was removed.
    */
   Extends: Container,
-  Implements: Warning,
   _options: Object.assign(Object.create(Container.prototype._options), {
     buttons: 'array',
     direction: 'string',

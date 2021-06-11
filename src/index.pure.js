@@ -24,6 +24,7 @@ export * from './utils/log.js';
 export * from './utils/sprintf.js';
 export * from './utils/colors.js';
 export * from './utils/global_cursor.js';
+export * from './utils/warning.js';
 
 // maybe we should not export these
 export * from './utils/svg.js';

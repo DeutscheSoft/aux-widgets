@@ -21,7 +21,7 @@ import { defineClass } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
 import { Button } from './button.js';
 import { Value } from './value.js';
-import { Warning } from '../implements/warning.js';
+import { warning } from '../utils/warning.js';
 import { Ranged } from '../implements/ranged.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { Scale } from './scale.js';
@@ -49,7 +49,6 @@ export const ValueButton = defineClass({
    *
    * @extends Button
    *
-   * @mixes Warning
    * @mixes Ranged
    *
    * @param {Object} [options={ }] - An object containing initial options.
@@ -66,7 +65,7 @@ export const ValueButton = defineClass({
    * @property {Number} [options.basis=300] - Distance to drag between <code>min</code> and <code>max</code> in pixels.
    */
   Extends: Button,
-  Implements: [Warning, Ranged],
+  Implements: Ranged,
   _options: Object.assign(
     Object.create(Button.prototype._options),
     Ranged.prototype._options,
@@ -162,7 +161,7 @@ export const ValueButton = defineClass({
     switch (key) {
       case 'value':
         if (value > this.options.max || value < this.options.min)
-          this.warning(this.element);
+          warning(this.element);
         value = this.options.snap_module.snap(value);
         break;
     }
