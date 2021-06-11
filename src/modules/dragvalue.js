@@ -22,7 +22,7 @@
 
 import { defineClass } from '../widget_helpers.js';
 import { DragCapture } from './dragcapture.js';
-import { GlobalCursor } from '../implements/globalcursor.js';
+import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
 import { warn } from '../utils/log.js';
 import { addClass, removeClass } from '../utils/dom.js';
 import { S } from '../dom_scheduler.js';
@@ -137,20 +137,20 @@ function stopDrag(state, ev) {
 function setCursor() {
   switch (this.options.direction) {
     case 'vertical':
-      this.globalCursor('row-resize');
+      this.setGlobalCursor('row-resize');
       break;
     case 'horizontal':
-      this.globalCursor('col-resize');
+      this.setGlobalCursor('col-resize');
       break;
     case 'polar':
-      this.globalCursor('move');
+      this.setGlobalCursor('move');
       break;
   }
 }
 function removeCursor() {
-  this.removeCursor('row-resize');
-  this.removeCursor('col-resize');
-  this.removeCursor('move');
+  this.unsetGloablCursor('row-resize');
+  this.unsetGloablCursor('col-resize');
+  this.unsetGloablCursor('move');
 }
 
 export const DragValue = defineClass({
@@ -182,7 +182,7 @@ export const DragValue = defineClass({
    * @property {String} [options.direction="polar"] - Direction for changing the value.
    *   Can be <code>polar</code>, <code>vertical</code> or <code>horizontal</code>.
    * @property {Boolean} [options.active=true] - If false, dragging is deactivated.
-   * @property {Boolean} [options.cursor=false] - If true, a {@link GlobalCursor} is set while dragging.
+   * @property {Boolean} [options.cursor=false] - If true, a global cursor is set while dragging.
    * @property {Number} [options.blind_angle=20] - If options.direction is <code>polar</code>,
    *   this is the angle of separation between positive and negative value changes
    * @property {Number} [options.rotation=45] - Defines the angle of the center of the positive value
@@ -192,11 +192,8 @@ export const DragValue = defineClass({
    * @property {Boolean} [options.limit=false] - Limit the returned value to min and max of the range.
    *
    * @extends DragCapture
-   *
-   * @mixes GlobalCursor
    */
   Extends: DragCapture,
-  Implements: GlobalCursor,
   _options: {
     get: 'function',
     set: 'function',

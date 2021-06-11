@@ -28,7 +28,7 @@ import { Label } from './label.js';
 import { Button } from './button.js';
 import { Drag } from '../modules/drag.js';
 import { Resize } from '../modules/resize.js';
-import { GlobalCursor } from '../implements/globalcursor.js';
+import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
 import { translateAnchor } from '../utils/anchor.js';
 import {
   addClass,
@@ -147,7 +147,7 @@ function shrink() {
   this.emit('shrinkclicked', this.options.shrink);
 }
 function startResize(el, ev) {
-  this.globalCursor('se-resize');
+  setGlobalCursor('se-resize');
   this.resizing = true;
   addClass(this.element, 'aux-resizing');
   /**
@@ -158,7 +158,7 @@ function startResize(el, ev) {
   this.emit('startresize', ev);
 }
 function stopResize(el, ev) {
-  this.removeCursor('se-resize');
+  unsetGlobalCursor('se-resize');
   this.resizing = false;
   removeClass(this.element, 'aux-resizing');
   this.triggerResizeChildren();
@@ -216,7 +216,7 @@ function vertMax() {
   return this.options.maximize.y;
 }
 function startDrag(ev) {
-  this.globalCursor('move');
+  setGlobalCursor('move');
   addClass(this.element, 'aux-dragging');
   // if window is maximized, we have to replace the window according
   // to the position of the mouse
@@ -253,7 +253,7 @@ function startDrag(ev) {
 function stopDrag(ev) {
   this.dragging = false;
   calculatePosition.call(this);
-  this.removeCursor('move');
+  unsetGlobalCursor('move');
   /**
    * The user stops dragging the window.
    * @event Window.stopdrag
@@ -442,8 +442,6 @@ export const Window = defineClass({
    *
    * @extends Container
    *
-   * @mixes GlobalCursor
-   *
    * @param {Object} [options={ }] - An object containing initial options.
    *
    * @property {Number} [options.width=500] - Initial width, can be a CSS length or an integer (pixels).
@@ -500,7 +498,6 @@ export const Window = defineClass({
    */
 
   Extends: Container,
-  Implements: [GlobalCursor],
   _options: Object.assign(Object.create(Container.prototype._options), {
     width: 'number',
     height: 'number',

@@ -21,7 +21,7 @@
 
 import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
-import { GlobalCursor } from '../implements/globalcursor.js';
+import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
 import { Warning } from '../implements/warning.js';
 import { S } from '../dom_scheduler.js';
 import { FORMAT } from '../utils/sprintf.js';
@@ -818,7 +818,7 @@ function startDrag() {
     /* TODO: move this into the parent */
     addClass(this.parent.element, 'aux-dragging');
 
-    this.globalCursor('move');
+    setGlobalCursor('move');
 
     if (p.lastChild !== e) p.appendChild(e);
   });
@@ -834,7 +834,7 @@ function stopDrag() {
     /* TODO: move this into the parent */
     removeClass(this.parent.element, 'aux-dragging');
 
-    this.removeCursor('move');
+    this.unsetGlobalCursor('move');
   });
 }
 
@@ -889,7 +889,6 @@ function stopDrag() {
  * @property {Boolean} [options.show_axis=false] - If set to true,  additional lines are drawn at the coordinate values.
  *
  * @mixes Warning
- * @mixes GlobalCursor
  */
 
 /**
@@ -928,12 +927,11 @@ function setRange(range, key) {
  * @param {string} name - The name of the option which was changed due to the users action.
  * @param {mixed} value - The new value of the option.
  *
- * @mixes GlobalCursor
  * @mixes Warning
  */
 export const ChartHandle = defineClass({
   Extends: Widget,
-  Implements: [GlobalCursor, Warning],
+  Implements: Warning,
   _options: Object.assign(Object.create(Widget.prototype._options), {
     range_x: 'mixed',
     range_y: 'mixed',

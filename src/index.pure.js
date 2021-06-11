@@ -23,6 +23,7 @@ export * from './utils/object.js';
 export * from './utils/log.js';
 export * from './utils/sprintf.js';
 export * from './utils/colors.js';
+export * from './utils/global_cursor.js';
 
 // maybe we should not export these
 export * from './utils/svg.js';

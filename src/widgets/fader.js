@@ -30,7 +30,7 @@ import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 import { Ranged } from '../implements/ranged.js';
 import { Warning } from '../implements/warning.js';
-import { GlobalCursor } from '../implements/globalcursor.js';
+import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
 import { Scale } from './scale.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
@@ -89,8 +89,8 @@ function dblClick() {
 
 /**
  * Fader is a slidable control with a {@link Scale} next to it which
- * can be both dragged and scrolled. Fader implements {@link Ranged},
- * {@link Warning} and {@link GlobalCursor} and inherits their options.
+ * can be both dragged and scrolled. Fader implements {@link Ranged}
+ * and {@link Warning} and inherits their options.
  * A {@link Label} and a {@link Value} are available optionally.
  *
  * @class Fader
@@ -99,7 +99,6 @@ function dblClick() {
  *
  * @mixes Ranged
  * @mixes Warning
- * @mixes GlobalCursor
  *
  * @param {Object} [options={ }] - An object containing initial options.
  *
@@ -117,10 +116,12 @@ function dblClick() {
  * @property {Boolean} [options.show_scale=true] - If true, a {@link Scale} is added to the fader.
  * @property {Boolean} [options.show_value=false] - If true, a {@link Value} widget is added to the fader.
  * @property {String|Boolean} [options.label=false] - Add a label to the fader. Set to `false` to remove the label from the DOM.
+ * @property {String|Boolean} {options.cursor=false} - set a cursor from <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">standard cursors</a>
+ *   on drag or scroll. Set to `false` to disable.
  */
 export const Fader = defineClass({
   Extends: Widget,
-  Implements: [Ranged, Warning, GlobalCursor],
+  Implements: [Ranged, Warning],
   _options: Object.assign(
     Object.create(Widget.prototype._options),
     Ranged.prototype._options,
@@ -138,6 +139,7 @@ export const Fader = defineClass({
       reset: 'number',
       bind_click: 'boolean',
       bind_dblclick: 'boolean',
+      cursor: 'boolean|string',
     }
   ),
   options: {
@@ -154,6 +156,7 @@ export const Fader = defineClass({
     bind_click: false,
     bind_dblclick: true,
     label: false,
+    cursor: false,
   },
   static_events: {
     set_bind_click: function (value) {
@@ -168,6 +171,15 @@ export const Fader = defineClass({
       this.options.direction = vert(this.options) ? 'vertical' : 'horizontal';
       this.drag.set('direction', this.options.direction);
       this.scroll.set('direction', this.options.direction);
+    },
+    set_interacting: function (v) {
+      const cursor = this.options.cursor;
+      if (!cursor)
+        return;
+      if (v)
+        setGlobalCursor(cursor);
+      else
+        unsetGlobalCursor(cursor);
     },
   },
   initialize: function (options) {
