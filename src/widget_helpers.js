@@ -197,30 +197,8 @@ function mergeStaticEvents(a, b) {
   return Object.assign({}, a, b);
 }
 
-function mixin(dst, src) {
-  let fun, key;
-  for (key in src)
-    if (!dst[key]) {
-      if (
-        key === 'constructor' ||
-        key === 'Extends' ||
-        key === 'Implements' ||
-        key === 'options'
-      )
-        continue;
-      if (!Object.prototype.hasOwnProperty.call(src, key)) continue;
-
-      fun = src[key];
-
-      dst[key] = fun;
-    }
-
-  return dst;
-}
-
 export function defineClass(o) {
   let methods;
-  let tmp, i, c;
 
   if (!o.options) o.options = {};
 
@@ -234,35 +212,6 @@ export function defineClass(o) {
     methods = Object.assign(Object.create(tmp), o);
   } else {
     methods = o;
-  }
-
-  tmp = o.Implements;
-  // mixins
-  if (tmp !== void 0) {
-    tmp = arrayify(tmp);
-    for (i = 0; i < tmp.length; i++) {
-      if (typeof tmp[i] === 'function') {
-        c = tmp[i].prototype;
-      } else c = tmp[i];
-
-      if (typeof c.options === 'object') {
-        for (const key in c.options) {
-          if (!(key in methods.options)) methods.options[key] = c.options[key];
-        }
-      }
-      if (c.static_events) {
-        if (methods.static_events) {
-          methods.static_events = mergeStaticEvents(
-            c.static_events,
-            Object.assign({}, methods.static_events)
-          );
-        } else {
-          methods.static_events = c.static_events;
-        }
-      }
-
-      methods = mixin(methods, c, true);
-    }
   }
 
   const constructor = Object.prototype.hasOwnProperty.call(o, 'constructor')
