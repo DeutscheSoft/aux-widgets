@@ -30,7 +30,8 @@ import { S } from '../dom_scheduler.js';
 function startDrag(value) {
   if (!value) return;
   const O = this.options;
-  this.start_pos = O.range.call(this).valueToPixel(O.get.call(this));
+  const ranged = O.range.call(this);
+  this.start_pos = ranged.get('transformation').valueToPixel(O.get.call(this));
   this.emit('startdrag', this.drag_state.start);
   if (O.events) O.events.call(this).emit('startdrag', this.drag_state.start);
 }
@@ -67,8 +68,9 @@ function moveCaptureInt(O, range, state) {
 
   dist *= multi;
   const start_pos = this.start_pos + dist;
+  const transformation = range.get('transformation');
 
-  const nval = range.pixelToValue(start_pos);
+  const nval = transformation.pixelToValue(start_pos);
   if (O.limit) O.set.call(this, Math.min(RO.max, Math.max(RO.min, nval)));
   else O.set.call(this, nval);
 
@@ -104,7 +106,9 @@ function moveCaptureAbs(O, range, state) {
 
   dist *= multi;
 
-  const nval = range.pixelToValue(this.start_pos + dist);
+  const transformation = range.get('transformation');
+
+  const nval = transformation.pixelToValue(this.start_pos + dist);
 
   if (O.limit) O.set.call(this, Math.min(RO.max, Math.max(RO.min, nval)));
   else O.set.call(this, nval);
@@ -166,7 +170,7 @@ export const DragValue = defineClass({
    * @property {Element} options.node - The DOM node used for dragging.
    *   All DOM events are registered with this Element.
    * @property {Function} [options.range] - A function returning a
-   *  {@link Range} object for
+   *  {@link Ranged} object for
    *  calculating the value. Returns its parent (usually having
    *  {@link Ranged}-features) by default.
    * @property {Function} [options.events] - Returns an element firing the

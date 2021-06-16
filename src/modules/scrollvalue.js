@@ -73,11 +73,13 @@ function scrollWheel(e) {
     step *= RO.shift_up;
   }
 
-  let pos = range.valueToPixel(v);
+  const transformation = range.get('transformation');
+
+  let pos = transformation.valueToPixel(v);
 
   pos += step;
 
-  v = range.pixelToValue(pos);
+  v = transformation.pixelToValue(pos);
 
   if (O.limit) O.set.call(this, Math.min(RO.max, Math.max(RO.min, v)));
   else O.set.call(this, v);
