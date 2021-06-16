@@ -21,7 +21,11 @@
 
 import { defineClass, defineChildElement } from '../widget_helpers.js';
 import { Widget } from './widget.js';
-import { Ranged } from '../implements/ranged.js';
+import {
+  rangedOptionsDefaults,
+  rangedOptionsTypes,
+  makeRanged,
+} from '../utils/make_ranged.js';
 import {
   setContent,
   addClass,
@@ -400,8 +404,6 @@ function generateScale(from, to, include_from, show_to) {
  *
  * @extends Widget
  *
- * @mixes Ranged
- *
  * @class Scale
  *
  * @param {Object} [options={ }] - An object containing initial options.
@@ -435,10 +437,9 @@ function generateScale(from, to, include_from, show_to) {
  */
 export const Scale = defineClass({
   Extends: Widget,
-  Implements: [Ranged],
   _options: Object.assign(
     Object.create(Widget.prototype._options),
-    Ranged.prototype._options,
+    rangedOptionsTypes,
     {
       layout: 'string',
       division: 'number',
@@ -460,7 +461,7 @@ export const Scale = defineClass({
       pointer: 'boolean|number',
     }
   ),
-  options: {
+  options: Object.assign({}, rangedOptionsDefaults, {
     layout: 'right',
     division: 1,
     levels: [1],
@@ -478,8 +479,7 @@ export const Scale = defineClass({
     fixed_labels: false,
     bar: false,
     pointer: false,
-  },
-
+  }),
   initialize: function (options) {
     if (!options.element) options.element = element('div');
     Widget.prototype.initialize.call(this, options);
@@ -754,6 +754,7 @@ export const Scale = defineClass({
     }
   },
 });
+makeRanged(Scale);
 
 /**
  * @member {HTMLDivElement} Fader#_pointer - The DIV element of the pointer. It can be used to e.g. visualize the value set in the backend.
@@ -762,10 +763,7 @@ defineChildElement(Scale, 'pointer', {
   show: false,
   toggle_class: true,
   option: 'pointer',
-  draw_options: Object.keys(Ranged.prototype._options).concat([
-    'pointer',
-    'basis',
-  ]),
+  draw_options: Object.keys(rangedOptionsTypes).concat(['pointer', 'basis']),
   draw: function (O) {
     if (this._pointer) {
       const transformation = O.transformation;

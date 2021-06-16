@@ -1,4 +1,3 @@
-import { Ranged } from '../implements/ranged.js';
 import { Range } from '../modules/range.js';
 
 /**
@@ -45,8 +44,6 @@ export function defineRange(widget, args, name) {
   let range;
   if (typeof args === 'function') {
     range = args();
-  } else if (args instanceof Ranged) {
-    range = new Range(args.options);
   } else if (args instanceof Range) {
     range = args;
   } else {

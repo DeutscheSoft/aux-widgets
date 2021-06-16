@@ -22,7 +22,11 @@ import { defineChildWidget } from '../child_widget.js';
 import { Button } from './button.js';
 import { Value } from './value.js';
 import { warning } from '../utils/warning.js';
-import { Ranged } from '../implements/ranged.js';
+import {
+  rangedOptionsDefaults,
+  rangedOptionsTypes,
+  makeRanged,
+} from '../utils/make_ranged.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { Scale } from './scale.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
@@ -49,8 +53,6 @@ export const ValueButton = defineClass({
    *
    * @extends Button
    *
-   * @mixes Ranged
-   *
    * @param {Object} [options={ }] - An object containing initial options.
    *
    * @property {Number} [options.value=0] - The value of the widget.
@@ -65,10 +67,9 @@ export const ValueButton = defineClass({
    * @property {Number} [options.basis=300] - Distance to drag between <code>min</code> and <code>max</code> in pixels.
    */
   Extends: Button,
-  Implements: Ranged,
   _options: Object.assign(
     Object.create(Button.prototype._options),
-    Ranged.prototype._options,
+    rangedOptionsTypes,
     {
       value: 'number',
       direction: 'string',
@@ -78,7 +79,7 @@ export const ValueButton = defineClass({
       reset: 'number',
     }
   ),
-  options: {
+  options: Object.assign({}, rangedOptionsDefaults, {
     value: 0,
     direction: 'polar',
     rotation: 45,
@@ -87,7 +88,7 @@ export const ValueButton = defineClass({
     basis: 300,
     labels: FORMAT('%d'),
     layout: 'top',
-  },
+  }),
   static_events: {
     set_direction: function (value) {
       this.drag.set('direction', value);
@@ -168,6 +169,7 @@ export const ValueButton = defineClass({
     return Button.prototype.set.call(this, key, value);
   },
 });
+makeRanged(ValueButton);
 function valueClicked() {
   const self = this.parent;
   self.scroll.set('active', false);

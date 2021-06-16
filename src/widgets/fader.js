@@ -28,7 +28,6 @@
  */
 import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
-import { Ranged } from '../implements/ranged.js';
 import { warning } from '../utils/warning.js';
 import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
 import { Scale } from './scale.js';
@@ -36,6 +35,11 @@ import { DragValue } from '../modules/dragvalue.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
 import { Value } from './value.js';
 import { Label } from './label.js';
+import {
+  rangedOptionsDefaults,
+  rangedOptionsTypes,
+  makeRanged,
+} from '../utils/make_ranged.js';
 import {
   element,
   addClass,
@@ -97,8 +101,6 @@ function dblClick() {
  *
  * @extends Widget
  *
- * @mixes Ranged
- *
  * @param {Object} [options={ }] - An object containing initial options.
  *
  * @property {Number} [options.value] - The fader's position. This options is
@@ -120,10 +122,9 @@ function dblClick() {
  */
 export const Fader = defineClass({
   Extends: Widget,
-  Implements: Ranged,
   _options: Object.assign(
     Object.create(Widget.prototype._options),
-    Ranged.prototype._options,
+    rangedOptionsTypes,
     Scale.prototype._options,
     {
       value: 'number',
@@ -141,7 +142,7 @@ export const Fader = defineClass({
       cursor: 'boolean|string',
     }
   ),
-  options: {
+  options: Object.assign({}, rangedOptionsDefaults, {
     value: 0,
     division: 1,
     levels: [1, 6, 12, 24],
@@ -156,7 +157,7 @@ export const Fader = defineClass({
     bind_dblclick: true,
     label: false,
     cursor: false,
-  },
+  }),
   static_events: {
     set_bind_click: function (value) {
       if (value) this.on('click', clicked);
@@ -330,6 +331,9 @@ export const Fader = defineClass({
     return Widget.prototype.set.call(this, key, value);
   },
 });
+
+makeRanged(Fader);
+
 /**
  * @member {Scale} Fader#scale - A {@link Scale} to display a scale next to the fader.
  */

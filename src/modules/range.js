@@ -19,7 +19,11 @@
 
 import { defineClass } from './../widget_helpers.js';
 import { Base } from '../implements/base.js';
-import { Ranged } from '../implements/ranged.js';
+import {
+  rangedOptionsDefaults,
+  rangedOptionsTypes,
+  makeRanged,
+} from '../utils/make_ranged.js';
 
 /* jshint -W079 */
 
@@ -35,8 +39,6 @@ export const Range = defineClass({
    * @class Range
    *
    * @extends Base
-   *
-   * @mixes Ranged
    *
    * @param {Object} [options={ }] - An object containing initial options.
    *
@@ -78,20 +80,8 @@ export const Range = defineClass({
    *   again.
    */
   Extends: Base,
-  Implements: [Ranged],
-  _options: {
-    scale: 'string|function',
-    reverse: 'boolean',
-    basis: 'number',
-    min: 'number',
-    max: 'number',
-    step: 'number',
-    shift_up: 'number',
-    shift_down: 'number',
-    snap: 'number|array',
-    round: 'boolean',
-  },
-  options: {
+  _options: rangedOptionsTypes,
+  options: Object.assign({}, rangedOptionsDefaults, {
     scale: 'linear',
     reverse: false,
     basis: 0,
@@ -102,7 +92,7 @@ export const Range = defineClass({
     shift_down: 0.25,
     snap: 0,
     round: false,
-  },
+  }),
   valueToBased: function (coef, size) {
     return this.get('transformation').valueToBased(coef, size);
   },
@@ -131,6 +121,7 @@ export const Range = defineClass({
     return this.get('snap_module').snap(value);
   },
 });
+makeRanged(Range);
 
 /* jshint +W079 */
 

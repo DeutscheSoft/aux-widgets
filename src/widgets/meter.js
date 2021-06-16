@@ -21,7 +21,11 @@ import { defineClass } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
 import { Widget } from './widget.js';
 import { Label } from './label.js';
-import { Ranged } from '../implements/ranged.js';
+import {
+  rangedOptionsDefaults,
+  rangedOptionsTypes,
+  makeRanged,
+} from '../utils/make_ranged.js';
 import { Scale } from './scale.js';
 import { sprintf } from '../utils/sprintf.js';
 import {
@@ -260,7 +264,6 @@ export const Meter = defineClass({
    */
 
   Extends: Widget,
-  Implements: Ranged,
   _options: Object.assign(
     Object.create(Widget.prototype._options),
     Scale.prototype._options,
@@ -278,7 +281,7 @@ export const Meter = defineClass({
       foreground: 'string|boolean',
     }
   ),
-  options: {
+  options: Object.assign({}, rangedOptionsDefaults, {
     layout: 'left',
     segment: 1,
     value: 0,
@@ -291,7 +294,7 @@ export const Meter = defineClass({
     background: false,
     gradient: false,
     foreground: 'black',
-  },
+  }),
   static_events: {
     set_base: function (value) {
       if (value === false) {
@@ -544,6 +547,7 @@ export const Meter = defineClass({
     return O.base > O.min;
   },
 });
+makeRanged(Meter);
 /**
  * @member {Scale} Meter#scale - The {@link Scale} of the meter.
  */

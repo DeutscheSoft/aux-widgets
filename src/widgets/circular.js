@@ -24,7 +24,11 @@ import { empty, addClass, getStyle } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
 import { S } from '../dom_scheduler.js';
 import { warning } from '../utils/warning.js';
-import { Ranged } from '../implements/ranged.js';
+import {
+  rangedOptionsDefaults,
+  rangedOptionsTypes,
+  makeRanged,
+} from '../utils/make_ranged.js';
 import { defineChildElement } from '../widget_helpers.js';
 import { Widget } from './widget.js';
 
@@ -359,14 +363,11 @@ export const Circular = defineClass({
    *   properties of <code>options.labels_defaults</code>.
    *
    * @extends Widget
-   *
-   * @mixes Ranged
    */
   Extends: Widget,
-  Implements: Ranged,
   _options: Object.assign(
     Object.create(Widget.prototype._options),
-    Ranged.prototype._options,
+    rangedOptionsTypes,
     {
       _stroke_width: 'number',
       value: 'number',
@@ -408,7 +409,7 @@ export const Circular = defineClass({
       this.triggerDraw();
     },
   },
-  options: {
+  options: Object.assign({}, rangedOptionsDefaults, {
     _stroke_width: 0,
     value: 0,
     value_hand: 0,
@@ -437,7 +438,7 @@ export const Circular = defineClass({
       },
     },
     labels: [],
-  },
+  }),
 
   initialize: function (options) {
     if (!options.element) options.element = makeSVG('g');
@@ -716,6 +717,7 @@ export const Circular = defineClass({
     return Widget.prototype.set.call(this, key, value);
   },
 });
+makeRanged(Circular);
 /**
  * @member {SVGGroup} Circular#_markers - A group containing all markers.
  *      Has class <code>.aux-markers</code>

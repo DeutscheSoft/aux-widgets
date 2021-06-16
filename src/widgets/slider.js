@@ -30,9 +30,13 @@ import { defineClass } from '../widget_helpers.js';
 import { Widget } from './widget.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
-import { Ranged } from '../implements/ranged.js';
 import { warning } from '../utils/warning.js';
 import { element, addClass, outerWidth, outerHeight } from '../utils/dom.js';
+import {
+  rangedOptionsDefaults,
+  rangedOptionsTypes,
+  makeRanged,
+} from '../utils/make_ranged.js';
 import { warn } from '../utils/log.js';
 
 function dblClick() {
@@ -76,8 +80,6 @@ function setBackground(horiz, vert, size) {
  *
  * @extends Widget
  *
- * @mixes Ranged
- *
  * @param {Object} [options={ }] - An object containing initial options.
  *
  * @property {Number} [options.value=0] - The current value.
@@ -91,10 +93,9 @@ function setBackground(horiz, vert, size) {
  */
 export const Slider = defineClass({
   Extends: Widget,
-  Implements: Ranged,
   _options: Object.assign(
     Object.create(Widget.prototype._options),
-    Ranged.prototype._options,
+    rangedOptionsTypes,
     DragValue.prototype._options,
     {
       value: 'number',
@@ -105,7 +106,7 @@ export const Slider = defineClass({
       _height: 'number',
     }
   ),
-  options: {
+  options: Object.assign({}, rangedOptionsDefaults, {
     value: 0,
     frames: 1,
     alignment: 'horizontal',
@@ -115,7 +116,7 @@ export const Slider = defineClass({
     rotation: 45,
     blind_angle: 20,
     basis: 300,
-  },
+  }),
   static_events: {
     dblclick: dblClick,
   },
@@ -219,3 +220,4 @@ export const Slider = defineClass({
     return Widget.prototype.set.call(this, key, value);
   },
 });
+makeRanged(Slider);
