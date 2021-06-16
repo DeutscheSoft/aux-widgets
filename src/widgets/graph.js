@@ -21,16 +21,12 @@
 /* jshint -W086 */
 
 import { defineClass } from './../widget_helpers.js';
+import { defineRange } from '../utils/define_range.js';
 import { Widget } from './widget.js';
-import { Ranges } from '../implements/ranges.js';
 import { addClass, removeClass } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
 import { error } from '../utils/log.js';
 
-function rangeChangeCallback() {
-  this.invalidateAll();
-  this.triggerDraw();
-}
 // this is not really a rounding operation but simply adds 0.5. we do this to make sure
 // that integer pixel positions result in actual pixels, instead of being spread across
 // two pixels with half opacity
@@ -167,11 +163,8 @@ export const Graph = defineClass({
    *   for this graph in the charts key, <code>false</code> to turn it off.
    *
    * @extends Widget
-   *
-   * @mixes Ranges
    */
   Extends: Widget,
-  Implements: Ranges,
   _options: Object.assign(Object.create(Widget.prototype._options), {
     dots: 'array',
     type: 'string',
@@ -200,8 +193,9 @@ export const Graph = defineClass({
      */
     /** @member {Range} Graph#range_y - The range for the y axis.
      */
-    if (this.options.range_x) this.set('range_x', this.options.range_x);
-    if (this.options.range_y) this.set('range_y', this.options.range_y);
+    defineRange(this, this.options.range_x, 'range_x');
+    defineRange(this, this.options.range_y, 'range_y');
+
     this.set('color', this.options.color);
     this.set('mode', this.options.mode);
   },
@@ -227,11 +221,9 @@ export const Graph = defineClass({
       addClass(E, O.mode === 'line' ? 'aux-outline' : 'aux-filled');
     }
 
-    if (I.validate('dots', 'type', 'mode')) {
+    if (I.validate('dots', 'type', 'mode', 'range_x', 'range_y')) {
       const dots = O.dots;
       const type = O.type;
-      const RX = this.range_x;
-      const RY = this.range_y;
 
       if (typeof dots === 'string') {
         E.setAttribute('d', dots);
@@ -241,6 +233,8 @@ export const Graph = defineClass({
         // if we are drawing a line, _start will do the first point
         let i = O.mode === 'line' ? 1 : 0;
         const s = [];
+        const RX = this.range_x;
+        const RY = this.range_y;
 
         if (dots.length > 0) {
           _start.call(this, dots, s);
@@ -365,17 +359,5 @@ export const Graph = defineClass({
         const _p = e.parentNode;
         if (_p && e !== _p.firstChild) _p.insertBefore(e, _p.firstChild);
       });
-  },
-
-  // GETTER & SETTER
-  set: function (key, value) {
-    Widget.prototype.set.call(this, key, value);
-    switch (key) {
-      case 'range_x':
-      case 'range_y':
-        this.addRange(value, key);
-        value.on('set', rangeChangeCallback.bind(this));
-        break;
-    }
   },
 });

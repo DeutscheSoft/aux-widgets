@@ -29,10 +29,10 @@ import {
   toggleClass,
   innerHeight,
 } from '../utils/dom.js';
+import { defineRange } from '../utils/define_range.js';
 import { makeSVG } from '../utils/svg.js';
 import { error, warn } from '../utils/log.js';
 import { Widget } from './widget.js';
-import { Ranges } from '../implements/ranges.js';
 import { Graph } from './graph.js';
 import { ChartHandle } from './charthandle.js';
 import { defineChildWidget } from '../child_widget.js';
@@ -274,7 +274,6 @@ function drawLabel() {
  *
  * @class Chart
  * @extends Widget
- * @mixes Ranges
  *
  * @param {Object} [options={ }] - An object containing initial options.
  *
@@ -336,7 +335,6 @@ function geomSet(value, key) {
 }
 export const Chart = defineClass({
   Extends: Widget,
-  Implements: Ranges,
   _options: Object.assign(Object.create(Widget.prototype._options), {
     width: 'int',
     height: 'int',
@@ -416,9 +414,9 @@ export const Chart = defineClass({
     /**
      * @member {Range} Chart#range_y - The {@link Range} for the y axis.
      */
-    this.addRange(this.options.range_x, 'range_x');
-    this.addRange(this.options.range_y, 'range_y');
-    this.addRange(this.options.range_z, 'range_z');
+    defineRange(this, this.options.range_x, 'range_x');
+    defineRange(this, this.options.range_y, 'range_y');
+    defineRange(this, this.options.range_z, 'range_z');
     this.range_y.set('reverse', true, true, true);
 
     /**

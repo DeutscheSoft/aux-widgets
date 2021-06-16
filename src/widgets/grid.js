@@ -18,11 +18,11 @@
  */
 
 import { S } from '../dom_scheduler.js';
-import { defineClass } from './../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
+import { defineRange } from '../utils/define_range.js';
 import { addClass, getStyle, empty } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
 import { Widget } from './widget.js';
-import { Ranges } from '../implements/ranges.js';
 
 function drawLines(a, mode, last) {
   const labels = new Array(a.length);
@@ -256,11 +256,8 @@ export const Grid = defineClass({
    *
    *
    * @extends Widget
-   *
-   * @mixes Ranges
    */
   Extends: Widget,
-  Implements: Ranges,
   _options: Object.assign(Object.create(Widget.prototype._options), {
     grid_x: 'array',
     grid_y: 'array',
@@ -297,17 +294,10 @@ export const Grid = defineClass({
     /**
      * @member {Range} Grid#range_y - The range for the y axis.
      */
-    this.addRange(this.options.range_x, 'range_x');
-    this.addRange(this.options.range_y, 'range_y');
+    defineRange(this, this.options.range_x, 'range_x');
+    defineRange(this, this.options.range_y, 'range_y');
     if (this.options.width) this.set('width', this.options.width);
     if (this.options.height) this.set('height', this.options.width);
-    this.invalidate_ranges = function () {
-      this.invalid.range_x = true;
-      this.invalid.range_y = true;
-      this.triggerDraw();
-    }.bind(this);
-    this.range_x.on('set', this.invalidate_ranges);
-    this.range_y.on('set', this.invalidate_ranges);
   },
   draw: function (O, element) {
     addClass(element, 'aux-grid');
@@ -325,11 +315,6 @@ export const Grid = defineClass({
       drawLines.call(this, O.grid_y, true, this.range_y.options.basis);
     }
     Widget.prototype.redraw.call(this);
-  },
-  destroy: function () {
-    this.range_x.off('set', this.invalidate_ranges);
-    this.range_y.off('set', this.invalidate_ranges);
-    Widget.prototype.destroy.call(this);
   },
   // GETTER & SETTER
   set: function (key, value) {
