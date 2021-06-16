@@ -1,3 +1,11 @@
+AUX 1.1: Changes since AUX 1.0
+
+Removed Features
+================
+
+* The Widgets List, ListItem, SortableList, SortableListItem, TaggableListItem,
+  TaggableTreeItem, Tagger, TagNode, Tags and TreeItem have been removed.
+
 AUX 1.0: Changes since Toolkit 1.3
 --------------------------------------
 
