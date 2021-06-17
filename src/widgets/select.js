@@ -129,7 +129,7 @@ export const Select = defineClass({
    *
    */
   Extends: Button,
-  _options: Object.assign(Object.create(Button.prototype._options), {
+  _options: Object.assign({}, Button.prototype._options, {
     entries: 'array',
     selected: 'int',
     selected_entry: 'object',

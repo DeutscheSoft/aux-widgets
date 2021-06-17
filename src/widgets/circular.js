@@ -366,7 +366,8 @@ export const Circular = defineClass({
    */
   Extends: Widget,
   _options: Object.assign(
-    Object.create(Widget.prototype._options),
+    {},
+    Widget.prototype._options,
     rangedOptionsTypes,
     {
       _stroke_width: 'number',

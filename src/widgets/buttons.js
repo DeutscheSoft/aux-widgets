@@ -239,7 +239,7 @@ export const Buttons = defineClass({
    * @param {Button} button - The {@link Button} instance which was removed.
    */
   Extends: Container,
-  _options: Object.assign(Object.create(Container.prototype._options), {
+  _options: Object.assign({}, Container.prototype._options, {
     buttons: 'array',
     direction: 'string',
     select: 'int|array',

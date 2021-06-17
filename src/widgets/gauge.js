@@ -59,7 +59,7 @@ const formatViewbox = FORMAT('0 0 %d %d');
  */
 export const Gauge = defineClass({
   Extends: Widget,
-  _options: Object.assign(Object.create(Circular.prototype._options), {
+  _options: Object.assign({}, Circular.prototype._options, {
     width: 'number',
     height: 'number',
     label: 'object',

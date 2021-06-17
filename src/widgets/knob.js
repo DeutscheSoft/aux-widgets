@@ -93,7 +93,8 @@ function moduleRange() {
 export const Knob = defineClass({
   Extends: Widget,
   _options: Object.assign(
-    Object.create(Widget.prototype._options),
+    {},
+    Widget.prototype._options,
     Circular.prototype._options,
     DragValue.prototype._options,
     {

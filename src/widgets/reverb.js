@@ -211,7 +211,7 @@ function drawReflections() {
 
 export const Reverb = defineClass({
   Extends: Chart,
-  _options: Object.assign(Object.create(Chart.prototype._options), {
+  _options: Object.assign({}, Chart.prototype._options, {
     timeframe: 'number',
 
     delay: 'number',

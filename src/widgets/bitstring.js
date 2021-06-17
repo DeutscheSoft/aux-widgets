@@ -55,7 +55,7 @@ export const Bitstring = defineClass({
    *
    */
   Extends: Buttons,
-  _options: Object.assign(Object.create(Buttons.prototype._options), {
+  _options: Object.assign({}, Buttons.prototype._options, {
     labels: 'function',
     icons: 'function',
     length: 'number|boolean',

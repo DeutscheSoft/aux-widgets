@@ -265,7 +265,8 @@ export const Meter = defineClass({
 
   Extends: Widget,
   _options: Object.assign(
-    Object.create(Widget.prototype._options),
+    {},
+    Widget.prototype._options,
     Scale.prototype._options,
     {
       layout: 'string',

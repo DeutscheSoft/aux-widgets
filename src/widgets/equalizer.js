@@ -142,7 +142,7 @@ export const EqualizerGraph = defineClass({
    * @extends Graph
    */
   Extends: Graph,
-  _options: Object.assign(Object.create(Graph.prototype._options), {
+  _options: Object.assign({}, Graph.prototype._options, {
     accuracy: 'number',
     oversampling: 'number',
     threshold: 'number',

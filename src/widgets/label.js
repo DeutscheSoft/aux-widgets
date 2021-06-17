@@ -33,7 +33,7 @@ export const Label = defineClass({
    * @property {Function|Boolean} [options.format=false] - Optional format function.
    */
   Extends: Widget,
-  _options: Object.assign(Object.create(Widget.prototype._options), {
+  _options: Object.assign({}, Widget.prototype._options, {
     label: 'string',
     format: 'function|boolean',
   }),

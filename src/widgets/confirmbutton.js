@@ -127,7 +127,7 @@ export const ConfirmButton = defineClass({
    */
   Extends: Button,
 
-  _options: Object.assign(Object.create(Button.prototype._options), {
+  _options: Object.assign({}, Button.prototype._options, {
     confirm: 'boolean',
     timeout: 'number',
     interrupt: 'number',

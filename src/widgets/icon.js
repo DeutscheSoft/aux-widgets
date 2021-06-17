@@ -36,7 +36,7 @@ export const Icon = defineClass({
    *   a string which is interpreted as class name (if <code>[A-Za-z0-9_\-]</code>) or as URI.
    */
   Extends: Widget,
-  _options: Object.assign(Object.create(Widget.prototype._options), {
+  _options: Object.assign({}, Widget.prototype._options, {
     icon: 'string',
   }),
   options: {

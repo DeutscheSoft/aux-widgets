@@ -33,7 +33,7 @@ import { addClass } from '../utils/dom.js';
  */
 export const Root = defineClass({
   Extends: Container,
-  _options: Object.create(Container.prototype._options),
+  _options: Object.assign({}, Container.prototype._options),
   initialize: function (options) {
     Container.prototype.initialize.call(this, options);
     /**

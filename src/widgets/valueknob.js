@@ -79,7 +79,7 @@ export const ValueKnob = defineClass({
    * @property {String} [options.layout="vertical"] - Layout of the knob. Select from `horizontal`, `vertical` (default), `left` and `right`.
    */
   Extends: Widget,
-  _options: Object.assign(Object.create(Widget.prototype._options), {
+  _options: Object.assign({}, Widget.prototype._options, {
     layout: 'string',
   }),
   options: {

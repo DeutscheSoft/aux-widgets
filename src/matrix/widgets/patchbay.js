@@ -42,7 +42,7 @@ import { Container } from './../../widgets/container.js';
  */
 export const Patchbay = defineClass({
   Extends: Container,
-  _options: Object.assign(Object.create(Container.prototype._options), {
+  _options: Object.assign({}, Container.prototype._options, {
     sources: 'object',
     sinks: 'object',
     size: 'number',

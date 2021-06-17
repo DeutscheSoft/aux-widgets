@@ -164,7 +164,7 @@ function nextDblClicked() {
 export const Navigation = defineClass({
   Extends: Container,
   _class: 'Navigation',
-  _options: Object.assign(Object.create(Container.prototype._options), {
+  _options: Object.assign({}, Container.prototype._options, {
     _clip_width: 'number',
     _clip_height: 'number',
     _list_width: 'number',

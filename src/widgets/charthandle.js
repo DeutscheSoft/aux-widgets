@@ -929,7 +929,7 @@ function setRange(range, key) {
  */
 export const ChartHandle = defineClass({
   Extends: Widget,
-  _options: Object.assign(Object.create(Widget.prototype._options), {
+  _options: Object.assign({}, Widget.prototype._options, {
     range_x: 'mixed',
     range_y: 'mixed',
     range_z: 'mixed',

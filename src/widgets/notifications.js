@@ -44,7 +44,7 @@ import { S } from '../dom_scheduler.js';
 export const Notifications = defineClass({
   Extends: Container,
 
-  _options: Object.assign(Object.create(Container.prototype._options), {
+  _options: Object.assign({}, Container.prototype._options, {
     stack: 'string',
   }),
   options: {

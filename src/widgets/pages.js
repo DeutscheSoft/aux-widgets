@@ -162,7 +162,7 @@ export const Pages = defineClass({
    * });
    */
   Extends: Container,
-  _options: Object.assign(Object.create(Container.prototype._options), {
+  _options: Object.assign({}, Container.prototype._options, {
     direction: 'string',
     pages: 'array',
     show: 'int',

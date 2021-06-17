@@ -93,8 +93,8 @@ function setBackground(horiz, vert, size) {
  */
 export const Slider = defineClass({
   Extends: Widget,
-  _options: Object.assign(
-    Object.create(Widget.prototype._options),
+  _options: Object.assign({},
+    Widget.prototype._options,
     rangedOptionsTypes,
     DragValue.prototype._options,
     {

@@ -123,7 +123,7 @@ function cancel() {
 
 export const Indicators = defineClass({
   Extends: Container,
-  _options: Object.assign(Object.create(Container.prototype._options), {
+  _options: Object.assign({}, Container.prototype._options, {
     indicator_class: 'object',
     connectionview: 'object',
     batch: 'boolean',

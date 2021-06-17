@@ -498,7 +498,7 @@ export const Window = defineClass({
    */
 
   Extends: Container,
-  _options: Object.assign(Object.create(Container.prototype._options), {
+  _options: Object.assign({}, Container.prototype._options, {
     width: 'number',
     height: 'number',
     x: 'number',

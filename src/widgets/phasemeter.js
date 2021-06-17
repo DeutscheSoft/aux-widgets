@@ -31,7 +31,7 @@ export const PhaseMeter = defineClass({
    *
    */
   Extends: LevelMeter,
-  _options: Object.create(LevelMeter.prototype._options),
+  _options: Object.assign({}, LevelMeter.prototype._options),
   options: {
     show_clip: false,
     layout: 'top',

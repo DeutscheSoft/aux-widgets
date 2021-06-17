@@ -335,7 +335,7 @@ function geomSet(value, key) {
 }
 export const Chart = defineClass({
   Extends: Widget,
-  _options: Object.assign(Object.create(Widget.prototype._options), {
+  _options: Object.assign({}, Widget.prototype._options, {
     width: 'int',
     height: 'int',
     _width: 'int',

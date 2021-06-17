@@ -258,7 +258,7 @@ export const Grid = defineClass({
    * @extends Widget
    */
   Extends: Widget,
-  _options: Object.assign(Object.create(Widget.prototype._options), {
+  _options: Object.assign({}, Widget.prototype._options, {
     grid_x: 'array',
     grid_y: 'array',
     range_x: 'object',

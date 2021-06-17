@@ -177,7 +177,7 @@ function setAtoms(key) {
 export const ColorPicker = defineClass({
   Extends: Container,
 
-  _options: Object.assign(Object.create(Container.prototype._options), {
+  _options: Object.assign({}, Container.prototype._options, {
     hsl: 'object',
     rgb: 'object',
     hex: 'string',

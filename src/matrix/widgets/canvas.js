@@ -32,7 +32,7 @@ import { Widget } from './../../widgets/widget.js';
  */
 export const Canvas = defineClass({
   Extends: Widget,
-  _options: Object.assign(Object.create(Widget.prototype._options), {}),
+  _options: Object.assign({}, Widget.prototype._options, {}),
   options: {},
   initialize: function (options) {
     Widget.prototype.initialize.call(this, options);

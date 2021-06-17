@@ -123,7 +123,8 @@ function dblClick() {
 export const Fader = defineClass({
   Extends: Widget,
   _options: Object.assign(
-    Object.create(Widget.prototype._options),
+    {},
+    Widget.prototype._options,
     rangedOptionsTypes,
     Scale.prototype._options,
     {

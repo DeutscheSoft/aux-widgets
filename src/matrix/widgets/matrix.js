@@ -75,7 +75,7 @@ function setVirtualtreeviews() {
  */
 export const Matrix = defineClass({
   Extends: Patchbay,
-  _options: Object.assign(Object.create(Patchbay.prototype._options), {
+  _options: Object.assign({}, Patchbay.prototype._options, {
     _virtualtree_size: 'number',
     indicator_class: 'object',
     signal_flow: 'string',

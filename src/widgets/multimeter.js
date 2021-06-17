@@ -116,7 +116,7 @@ export const MultiMeter = defineClass({
 
   /* TODO: The following is not ideal cause we need to maintain it according to
     LevelMeters and Meter options. */
-  _options: Object.assign(Object.create(Container.prototype._options), {
+  _options: Object.assign({}, Container.prototype._options, {
     count: 'int',
     label: 'boolean|string',
     labels: 'array',
