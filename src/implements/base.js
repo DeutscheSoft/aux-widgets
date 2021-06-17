@@ -155,25 +155,29 @@ export const Base = defineClass({
     this.__native_handler = nativeHandler.bind(this);
     this.options = Object.assign({}, this.getDefaultOptions());
 
-    for (const key in options) if (options.hasOwnProperty(key))
-    {
-      const value = options[key];
+    for (const key in options)
+      if (options.hasOwnProperty(key)) {
+        const value = options[key];
 
-      if (key.startsWith('on')) {
-        this.on(key.substr(2).toLowerCase(), options[key]);
-      } else {
-        const defaultValue = this.options[key];
-
-        if (typeof value === 'object' && typeof defaultValue === 'object' &&
-            value && defaultValue &&
-            Object.getPrototypeOf(Object.getPrototypeOf(value)) === null &&
-            Object.getPrototypeOf(Object.getPrototypeOf(defaultValue)) === null) {
-          this.options[key] = Object.assign({}, defaultValue, value);
+        if (key.startsWith('on')) {
+          this.on(key.substr(2).toLowerCase(), options[key]);
         } else {
-          this.options[key] = value;
+          const defaultValue = this.options[key];
+
+          if (
+            typeof value === 'object' &&
+            typeof defaultValue === 'object' &&
+            value &&
+            defaultValue &&
+            Object.getPrototypeOf(Object.getPrototypeOf(value)) === null &&
+            Object.getPrototypeOf(Object.getPrototypeOf(defaultValue)) === null
+          ) {
+            this.options[key] = Object.assign({}, defaultValue, value);
+          } else {
+            this.options[key] = value;
+          }
         }
       }
-    }
 
     this.emit('initialize');
   },
@@ -202,7 +206,7 @@ export const Base = defineClass({
 
     return this.constructor.prototype.options[name];
   },
-  getDefaultOptions: function() {
+  getDefaultOptions: function () {
     return this.constructor.prototype.options;
   },
   initialized: function () {

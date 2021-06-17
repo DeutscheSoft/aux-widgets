@@ -67,18 +67,14 @@ export const ValueButton = defineClass({
    * @property {Number} [options.basis=300] - Distance to drag between <code>min</code> and <code>max</code> in pixels.
    */
   Extends: Button,
-  _options: Object.assign({},
-    Button.prototype._options,
-    rangedOptionsTypes,
-    {
-      value: 'number',
-      direction: 'string',
-      rotation: 'number',
-      blind_angle: 'number',
-      snap: 'number',
-      reset: 'number',
-    }
-  ),
+  _options: Object.assign({}, Button.prototype._options, rangedOptionsTypes, {
+    value: 'number',
+    direction: 'string',
+    rotation: 'number',
+    blind_angle: 'number',
+    snap: 'number',
+    reset: 'number',
+  }),
   options: Object.assign({}, rangedOptionsDefaults, {
     value: 0,
     direction: 'polar',

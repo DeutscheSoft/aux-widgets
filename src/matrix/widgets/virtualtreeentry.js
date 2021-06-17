@@ -95,20 +95,17 @@ import { VirtualTreeEntryBase } from './virtualtreeentrybase.js';
 
 export const VirtualTreeEntry = defineClass({
   Extends: VirtualTreeEntryBase,
-  _options: Object.assign({},
-    VirtualTreeEntryBase.prototype._options,
-    {
-      label: 'string|boolean',
-      depth: 'array|boolean',
-      collapsable: 'boolean',
-      collapsed: 'boolean',
-      icon_collapsed: 'string',
-      icon_uncollaped: 'string',
-      icon: 'string|boolean',
-      odd: 'boolean',
-      group: 'boolean',
-    }
-  ),
+  _options: Object.assign({}, VirtualTreeEntryBase.prototype._options, {
+    label: 'string|boolean',
+    depth: 'array|boolean',
+    collapsable: 'boolean',
+    collapsed: 'boolean',
+    icon_collapsed: 'string',
+    icon_uncollaped: 'string',
+    icon: 'string|boolean',
+    odd: 'boolean',
+    group: 'boolean',
+  }),
   options: {
     label: false,
     depth: false,
