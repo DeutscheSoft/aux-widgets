@@ -206,7 +206,7 @@ export function defineClass(o) {
 
   if (Extends) {
     const tmp = Extends.prototype;
-    o.options = Object.assign(Object.create(tmp.options), o.options);
+    o.options = Object.assign({}, tmp.options, o.options);
     if (o.static_events)
       o.static_events = mergeStaticEvents(tmp.static_events, o.static_events);
     methods = Object.assign(Object.create(tmp), o);

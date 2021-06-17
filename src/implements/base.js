@@ -153,7 +153,28 @@ export const Base = defineClass({
     this.__events = {};
     this.__event_target = null;
     this.__native_handler = nativeHandler.bind(this);
-    this.setOptions(options);
+    this.options = Object.assign({}, this.getDefaultOptions());
+
+    for (const key in options) if (options.hasOwnProperty(key))
+    {
+      const value = options[key];
+
+      if (key.startsWith('on')) {
+        this.on(key.substr(2).toLowerCase(), options[key]);
+      } else {
+        const defaultValue = this.options[key];
+
+        if (typeof value === 'object' && typeof defaultValue === 'object' &&
+            value && defaultValue &&
+            Object.getPrototypeOf(Object.getPrototypeOf(value)) === null &&
+            Object.getPrototypeOf(Object.getPrototypeOf(defaultValue)) === null) {
+          this.options[key] = Object.assign({}, defaultValue, value);
+        } else {
+          this.options[key] = value;
+        }
+      }
+    }
+
     this.emit('initialize');
   },
   initializeChildren: function () {
@@ -181,6 +202,9 @@ export const Base = defineClass({
 
     return this.constructor.prototype.options[name];
   },
+  getDefaultOptions: function() {
+    return this.constructor.prototype.options;
+  },
   initialized: function () {
     /**
      * Is fired when an instance is initialized.
@@ -207,52 +231,6 @@ export const Base = defineClass({
     this.__event_target = null;
     this.__native_handler = null;
     this.options = null;
-  },
-  /**
-   * Merges a new options object into the existing one,
-   * including deep copies of objects. If an option key begins with
-   * the string "on" it is considered an event handler. In this case
-   * the value should be the handler function for the event with
-   * the corresponding name without the first "on" characters.
-   *
-   * @method Base#setOptions(options)
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   */
-  setOptions: function (o) {
-    const opt = this.options;
-    let key, a, b;
-    if (typeof o !== 'object') {
-      delete this.options;
-      o = {};
-    } else if (typeof opt === 'object')
-      for (key in o)
-        if (Object.prototype.hasOwnProperty.call(o, key)) {
-          a = o[key];
-          b = opt[key];
-          if (
-            typeof a === 'object' &&
-            a &&
-            Object.getPrototypeOf(Object.getPrototypeOf(a)) === null &&
-            typeof b === 'object' &&
-            b &&
-            Object.getPrototypeOf(Object.getPrototypeOf(b)) === null
-          ) {
-            o[key] = Object.assign({}, b, a);
-          }
-        }
-    if (Object.prototype.hasOwnProperty.call(this, 'options')) {
-      this.options = Object.assign(opt, o);
-    } else if (opt) {
-      this.options = Object.assign(Object.create(opt), o);
-    } else {
-      this.options = Object.assign({}, o);
-    }
-    for (key in this.options)
-      if (key.startsWith('on')) {
-        this.on(key.substr(2).toLowerCase(), this.options[key]);
-        delete this.options[key];
-      }
   },
   /**
    * Get the value of an option.

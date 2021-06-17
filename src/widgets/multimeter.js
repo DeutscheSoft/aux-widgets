@@ -126,7 +126,7 @@ export const MultiMeter = defineClass({
   options: {
     count: 2,
     label: false,
-    labels: ['L', 'R'],
+    labels: null,
     layout: 'left',
     show_scale: true,
     presets: {
