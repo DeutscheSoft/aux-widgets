@@ -25,6 +25,29 @@ import { Container } from './container.js';
 import { addClass, removeClass, toggleClass } from '../utils/dom.js';
 import { objectSub } from '../utils/object.js';
 
+const mapped_options = {
+  labels: 'label',
+  layout: 'layout',
+};
+
+function extractChildOptions(O, i) {
+  const o = {};
+
+  for (const _key in mapped_options) {
+    if (!Object.prototype.hasOwnProperty.call(O, _key)) continue;
+    const ckey = mapped_options[_key];
+    const value = O[_key];
+    const _type = LevelMeter.getOptionType(_key) || '';
+    if (Array.isArray(value) && _type.search('array') === -1) {
+      if (i < value.length) o[ckey] = value[i];
+    } else {
+      o[ckey] = value;
+    }
+  }
+
+  return o;
+}
+
 function addMeter(options) {
   const l = this.meters.length;
   const O = options;
@@ -56,6 +79,122 @@ function removeMeter(meter) {
   //this.meters[m].destroy();
   M = M.splice(m, 1);
 }
+
+function mapChildOptionSimple(value, key) {
+  const M = this.meters;
+  for (let i = 0; i < M.length; i++) M[i].set(mapped_options[key], value);
+}
+
+function mapChildOption(value, key) {
+  const M = this.meters;
+
+  if (Array.isArray(value)) {
+    for (let i = 0; i < M.length && i < value.length; i++)
+      M[i].set(mapped_options[key], value[i]);
+  } else {
+    for (let i = 0; i < M.length; i++) M[i].set(key, value);
+  }
+}
+
+const multimeterOptionTypes = {
+  count: 'int',
+  label: 'boolean|string',
+  labels: 'array|string',
+  layout: 'string',
+  show_scale: 'boolean',
+};
+
+const multimeterOptionDefaults = {
+  count: 2,
+  label: false,
+  labels: null,
+  layout: 'left',
+  show_scale: true,
+  presets: {
+    mono: { count: 1, labels: ['C'] },
+    stereo: { count: 2, labels: ['L', 'R'] },
+    '2.1': { count: 3, labels: ['L', 'R', 'LF'] },
+    '3': { count: 3, labels: ['L', 'C', 'R'] },
+    '3.1': { count: 4, labels: ['L', 'C', 'R', 'LF'] },
+    '4': { count: 4, labels: ['L', 'R', "L'", "R'"] },
+    '4.1': { count: 5, labels: ['L', 'R', "L'", "R'", 'LF'] },
+    '5': { count: 5, labels: ['L', 'C', 'R', "L'", 'R'] },
+    '5.1': { count: 6, labels: ['L', 'C', 'R', "L'", "R'", 'LF'] },
+    '7.1': {
+      count: 6,
+      labels: ['L', 'C', 'R', "L'", "L''", "R''", "R'", 'LF'],
+    },
+    dolby_digital_1_0: { count: 1, labels: ['C'] },
+    dolby_digital_2_0: { count: 2, labels: ['L', 'R'] },
+    dolby_digital_3_0: { count: 3, labels: ['L', 'R', 'C'] },
+    dolby_digital_2_1: { count: 3, labels: ['L', 'R', "C'"] },
+    'dolby_digital_2_1.1': { count: 4, labels: ['L', 'R', "C'", 'LF'] },
+    dolby_digital_3_1: { count: 4, labels: ['L', 'R', 'C', "C'"] },
+    'dolby_digital_3_1.1': { count: 5, labels: ['L', 'R', 'C', "C'", 'LF'] },
+    dolby_digital_2_2: { count: 4, labels: ['L', 'R', "L'", "R'"] },
+    'dolby_digital_2_2.1': { count: 5, labels: ['L', 'R', "L'", "R'", 'LF'] },
+    dolby_digital_3_2: { count: 5, labels: ['L', 'R', 'C', "L'", "R'"] },
+    'dolby_digital_3_2.1': {
+      count: 6,
+      labels: ['L', 'R', 'C', "L'", "R'", 'LF'],
+    },
+    dolby_digital_ex: {
+      count: 7,
+      labels: ['L', 'R', 'C', "L'", "R'", "C'", 'LF'],
+    },
+    dolby_stereo: { count: 4, labels: ['L', 'R', 'C', "C'"] },
+    dolby_digital: { count: 4, labels: ['L', 'R', 'C', "C'"] },
+    dolby_pro_logic: { count: 4, labels: ['L', 'R', 'C', "C'"] },
+    dolby_pro_logic_2: {
+      count: 6,
+      labels: ['L', 'R', 'C', "L'", "R'", 'LF'],
+    },
+    dolby_pro_logic_2x: {
+      count: 8,
+      labels: ['L', 'R', 'C', "L'", "L''", "R''", "R'", 'LF'],
+    },
+    dolby_e_mono: {
+      count: 8,
+      labels: ['1', '2', '3', '4', '5', '6', '7', '8'],
+    },
+    dolby_e_stereo: {
+      count: 8,
+      labels: ['1L', '1R', '2L', '2R', '3L', '3R', '4L', '4R'],
+    },
+    'dolby_e_5.1_stereo': {
+      count: 8,
+      labels: ['1L', '1R', '1C', "1L'", "1R'", '1LF', '2L', '2R'],
+    },
+  },
+};
+
+const multimeterStaticEvents = {
+  set_labels: mapChildOption,
+  set_layout: mapChildOption,
+};
+
+const levelmeterOwnOptions = objectSub(
+  LevelMeter.getOptionTypes(),
+  Container.getOptionTypes()
+);
+
+for (const key in levelmeterOwnOptions) {
+  if (!Object.prototype.hasOwnProperty.call(levelmeterOwnOptions, key)) continue;
+  if (multimeterOptionTypes.hasOwnProperty(key)) continue;
+
+  const type = levelmeterOwnOptions[key];
+
+  if (type.search('array') !== -1) {
+    multimeterOptionTypes[key] = type;
+    mapped_options[key] = key;
+    multimeterStaticEvents['set_' + key] = mapChildOptionSimple;
+  } else {
+    multimeterOptionTypes[key] = 'array|' + type;
+    mapped_options[key] = key;
+    multimeterStaticEvents['set_' + key] = mapChildOption;
+  }
+}
+
 
 export const MultiMeter = defineClass({
   /**
@@ -116,76 +255,9 @@ export const MultiMeter = defineClass({
 
   /* TODO: The following is not ideal cause we need to maintain it according to
     LevelMeters and Meter options. */
-  _options: Object.assign({}, Container.prototype._options, {
-    count: 'int',
-    label: 'boolean|string',
-    labels: 'array',
-    layout: 'string',
-    show_scale: 'boolean',
-  }),
-  options: {
-    count: 2,
-    label: false,
-    labels: null,
-    layout: 'left',
-    show_scale: true,
-    presets: {
-      mono: { count: 1, labels: ['C'] },
-      stereo: { count: 2, labels: ['L', 'R'] },
-      '2.1': { count: 3, labels: ['L', 'R', 'LF'] },
-      '3': { count: 3, labels: ['L', 'C', 'R'] },
-      '3.1': { count: 4, labels: ['L', 'C', 'R', 'LF'] },
-      '4': { count: 4, labels: ['L', 'R', "L'", "R'"] },
-      '4.1': { count: 5, labels: ['L', 'R', "L'", "R'", 'LF'] },
-      '5': { count: 5, labels: ['L', 'C', 'R', "L'", 'R'] },
-      '5.1': { count: 6, labels: ['L', 'C', 'R', "L'", "R'", 'LF'] },
-      '7.1': {
-        count: 6,
-        labels: ['L', 'C', 'R', "L'", "L''", "R''", "R'", 'LF'],
-      },
-      dolby_digital_1_0: { count: 1, labels: ['C'] },
-      dolby_digital_2_0: { count: 2, labels: ['L', 'R'] },
-      dolby_digital_3_0: { count: 3, labels: ['L', 'R', 'C'] },
-      dolby_digital_2_1: { count: 3, labels: ['L', 'R', "C'"] },
-      'dolby_digital_2_1.1': { count: 4, labels: ['L', 'R', "C'", 'LF'] },
-      dolby_digital_3_1: { count: 4, labels: ['L', 'R', 'C', "C'"] },
-      'dolby_digital_3_1.1': { count: 5, labels: ['L', 'R', 'C', "C'", 'LF'] },
-      dolby_digital_2_2: { count: 4, labels: ['L', 'R', "L'", "R'"] },
-      'dolby_digital_2_2.1': { count: 5, labels: ['L', 'R', "L'", "R'", 'LF'] },
-      dolby_digital_3_2: { count: 5, labels: ['L', 'R', 'C', "L'", "R'"] },
-      'dolby_digital_3_2.1': {
-        count: 6,
-        labels: ['L', 'R', 'C', "L'", "R'", 'LF'],
-      },
-      dolby_digital_ex: {
-        count: 7,
-        labels: ['L', 'R', 'C', "L'", "R'", "C'", 'LF'],
-      },
-      dolby_stereo: { count: 4, labels: ['L', 'R', 'C', "C'"] },
-      dolby_digital: { count: 4, labels: ['L', 'R', 'C', "C'"] },
-      dolby_pro_logic: { count: 4, labels: ['L', 'R', 'C', "C'"] },
-      dolby_pro_logic_2: {
-        count: 6,
-        labels: ['L', 'R', 'C', "L'", "R'", 'LF'],
-      },
-      dolby_pro_logic_2x: {
-        count: 8,
-        labels: ['L', 'R', 'C', "L'", "L''", "R''", "R'", 'LF'],
-      },
-      dolby_e_mono: {
-        count: 8,
-        labels: ['1', '2', '3', '4', '5', '6', '7', '8'],
-      },
-      dolby_e_stereo: {
-        count: 8,
-        labels: ['1L', '1R', '2L', '2R', '3L', '3R', '4L', '4R'],
-      },
-      'dolby_e_5.1_stereo': {
-        count: 8,
-        labels: ['1L', '1R', '1C', "1L'", "1R'", '1LF', '2L', '2R'],
-      },
-    },
-  },
+  _options: Object.assign({}, Container.prototype._options, multimeterOptionTypes),
+  options: Object.assign({}, multimeterOptionDefaults, LevelMeter.getDefaultOptions()),
+  static_events: multimeterStaticEvents,
   initialize: function (options) {
     Container.prototype.initialize.call(this, options, true);
     /**
@@ -284,75 +356,3 @@ defineChildWidget(MultiMeter, 'label', {
   toggle_class: true,
 });
 
-/*
- * This could be moved into defineChildWidgets(),
- * which could in similar ways be used in the navigation,
- * pager, etc.
- *
- */
-
-const mapped_options = {
-  labels: 'label',
-  layout: 'layout',
-};
-
-addStaticEvent(MultiMeter, 'set_labels', mapChildOption);
-addStaticEvent(MultiMeter, 'set_layout', mapChildOption);
-
-MultiMeter.prototype._options.labels = 'array|string';
-
-function mapChildOptionSimple(value, key) {
-  const M = this.meters;
-  for (let i = 0; i < M.length; i++) M[i].set(mapped_options[key], value);
-}
-
-function mapChildOption(value, key) {
-  const M = this.meters;
-
-  if (Array.isArray(value)) {
-    for (let i = 0; i < M.length && i < value.length; i++)
-      M[i].set(mapped_options[key], value[i]);
-  } else {
-    for (let i = 0; i < M.length; i++) M[i].set(key, value);
-  }
-}
-
-const obj = objectSub(
-  LevelMeter.prototype._options,
-  Container.prototype._options
-);
-
-for (const key in obj) {
-  if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
-  if (MultiMeter.prototype._options[key]) continue;
-  const type = LevelMeter.prototype._options[key];
-  if (type.search('array') !== -1) {
-    MultiMeter.prototype._options[key] = type;
-    mapped_options[key] = key;
-    addStaticEvent(MultiMeter, 'set_' + key, mapChildOptionSimple);
-  } else {
-    MultiMeter.prototype._options[key] = 'array|' + type;
-    mapped_options[key] = key;
-    addStaticEvent(MultiMeter, 'set_' + key, mapChildOption);
-  }
-  if (key in LevelMeter.prototype.options)
-    MultiMeter.prototype.options[key] = LevelMeter.prototype.options[key];
-}
-
-function extractChildOptions(O, i) {
-  const o = {};
-
-  for (const _key in mapped_options) {
-    if (!Object.prototype.hasOwnProperty.call(O, _key)) continue;
-    const ckey = mapped_options[_key];
-    const value = O[_key];
-    const _type = LevelMeter.prototype._options[_key] || '';
-    if (Array.isArray(value) && _type.search('array') === -1) {
-      if (i < value.length) o[ckey] = value[i];
-    } else {
-      o[ckey] = value;
-    }
-  }
-
-  return o;
-}

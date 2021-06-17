@@ -224,5 +224,18 @@ export function defineClass(o) {
 
   constructor.prototype = methods;
   methods.constructor = constructor;
+
+  constructor.getOptionTypes = function() {
+    return methods._options;
+  };
+  constructor.getOptionType = function(name) {
+    return this.getOptionTypes()[name];
+  };
+  constructor.getDefaultOptions = function() {
+    return this.options;
+  };
+  constructor.getDefault = function(name) {
+    return this.getDefaultOptions()[name];
+  };
   return constructor;
 }
