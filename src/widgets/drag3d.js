@@ -21,7 +21,6 @@ import { Container } from './container.js';
 import { defineClass } from '../widget_helpers.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { Range } from '../modules/range.js';
-import { addStaticEvent } from '../widget_helpers.js';
 import { addClass } from '../utils/dom.js';
 
 export const Drag3D = defineClass({
@@ -156,12 +155,12 @@ const setCallback = function (val, key) {
 
 for (const i in { x: 0, y: 0, z: 0 }) {
   for (const opt in DragValue.prototype._options) {
-    addStaticEvent(Drag3D, 'set_drag_' + i + '.' + opt, setCallback);
+    Drag3D.addStaticEvent('set_drag_' + i + '.' + opt, setCallback);
     Drag3D.prototype._options['drag_' + i + '.' + opt] =
       DragValue.prototype._options[opt];
   }
   for (const opt in Range.prototype._options) {
-    addStaticEvent(Drag3D, 'set_range_' + i + '.' + opt, setCallback);
+    Drag3D.addStaticEvent('set_range_' + i + '.' + opt, setCallback);
     Drag3D.prototype._options['range_' + i + '.' + opt] =
       Range.prototype._options[opt];
   }

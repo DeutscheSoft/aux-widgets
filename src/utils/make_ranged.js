@@ -10,7 +10,6 @@ import {
   makeFrequencyTransformation,
 } from './transformations.js';
 
-import { addStaticEvent } from '../widget_helpers.js';
 import { error, warn } from './log.js';
 
 export const rangedOptionsDefaults = {
@@ -236,6 +235,6 @@ function initializedCallback() {
  * @function makeRanged
  */
 export function makeRanged(widget) {
-  addStaticEvent(widget, 'set', setCallback);
-  addStaticEvent(widget, 'initialized', initializedCallback);
+  widget.addStaticEvent('set', setCallback);
+  widget.addStaticEvent('initialized', initializedCallback);
 }

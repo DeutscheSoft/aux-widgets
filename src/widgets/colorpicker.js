@@ -20,7 +20,6 @@
 import {
   defineClass,
   defineChildElement,
-  addStaticEvent,
 } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
 import { Container } from './container.js';
@@ -679,7 +678,7 @@ defineChildWidget(ColorPicker, 'cancel', {
 });
 
 // This has to happen after all children are initialized
-addStaticEvent(ColorPicker, 'initialized', function () {
+ColorPicker.addStaticEvent('initialized', function () {
   const options = {};
   color_options.forEach((name) => {
     if (this.options[name] !== this.getDefault(name)) {

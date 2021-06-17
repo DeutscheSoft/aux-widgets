@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass, addStaticEvent } from '../widget_helpers.js';
+import { defineClass } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
 import { LevelMeter } from './levelmeter.js';
 import { Label } from './label.js';

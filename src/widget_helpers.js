@@ -44,16 +44,7 @@ export function removeEvent(from, event, fun) {
 }
 
 export function addStaticEvent(w, event, fun) {
-  const p = w.prototype;
-  let e;
-  if (!Object.prototype.hasOwnProperty.call(p, 'static_events')) {
-    if (p.static_events) {
-      p.static_events = e = Object.assign({}, p.static_events);
-    } else {
-      p.static_events = e = {};
-    }
-  } else e = p.static_events;
-  addEvent(e, event, fun);
+  w.addStaticEvent(event, fun);
 }
 
 export function defineChildElement(widget, name, config) {
@@ -110,17 +101,17 @@ export function defineChildElement(widget, name, config) {
    * inside of the constructor. Otherwise, if we add the widget later
    * might be turned into a generic mapping.
    */
-  addStaticEvent(widget, 'initialize', function () {
+  widget.addStaticEvent('initialize', function () {
     this[index] = null;
   });
 
   /* trigger child element creation after initialization */
-  addStaticEvent(widget, 'initialize_children', function () {
+  widget.addStaticEvent('initialize_children', function () {
     this.set(show_option, this.options[show_option]);
   });
 
   /* clean up on destroy */
-  addStaticEvent(widget, 'destroy', function () {
+  widget.addStaticEvent('destroy', function () {
     if (this[index]) {
       this[index].remove();
       this[index] = null;
@@ -139,7 +130,7 @@ export function defineChildElement(widget, name, config) {
       this.element.appendChild(this[index]);
     };
 
-  addStaticEvent(widget, 'set_' + show_option, function (value) {
+  widget.addStaticEvent('set_' + show_option, function (value) {
     let C = this[index];
     const show = display_check ? display_check(value) : value !== false;
     if (show === !!C) return;
@@ -162,7 +153,7 @@ export function defineChildElement(widget, name, config) {
     else m.push(show_option);
 
     for (let i = 0; i < m.length; i++) {
-      addStaticEvent(widget, 'set_' + m[i], function () {
+      widget.addStaticEvent('set_' + m[i], function () {
         const value = this.options[show_option];
         const show = display_check ? display_check(value) : value !== false;
 
@@ -204,11 +195,13 @@ export function defineClass(o) {
 
   const Extends = o.Extends;
 
+  if (!o.static_events)
+    o.static_events = {};
+
   if (Extends) {
     const tmp = Extends.prototype;
     o.options = Object.assign({}, tmp.options, o.options);
-    if (o.static_events)
-      o.static_events = mergeStaticEvents(tmp.static_events, o.static_events);
+    o.static_events = mergeStaticEvents(tmp.static_events, o.static_events);
     methods = Object.assign(Object.create(tmp), o);
   } else {
     methods = o;
@@ -225,17 +218,35 @@ export function defineClass(o) {
   constructor.prototype = methods;
   methods.constructor = constructor;
 
-  constructor.getOptionTypes = function() {
-    return methods._options;
+  const staticMethods = {
+    getOptionTypes: function() {
+      return methods._options;
+    },
+    getOptionType: function(name) {
+      return this.getOptionTypes()[name];
+    },
+    getDefaultOptions: function() {
+      return this.options;
+    },
+    getDefault: function(name) {
+      return this.getDefaultOptions()[name];
+    },
+    getStaticEvents: function() {
+      return methods.static_events;
+    },
+    addStaticEvent: function(name, callback) {
+      addEvent(methods.static_events, name, callback);
+    },
+    defineOption: function(name, type, defaultValue) {
+      methods._options[name] = type;
+      methods.options[name] = defaultValue;
+    },
+    hasOption: function(name) {
+      return Object.prototype.hasOwnProperty.call(methods._options, name);
+    },
   };
-  constructor.getOptionType = function(name) {
-    return this.getOptionTypes()[name];
-  };
-  constructor.getDefaultOptions = function() {
-    return this.options;
-  };
-  constructor.getDefault = function(name) {
-    return this.getDefaultOptions()[name];
-  };
+
+  Object.assign(constructor, staticMethods);
+
   return constructor;
 }

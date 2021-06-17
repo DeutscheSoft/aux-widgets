@@ -1,5 +1,3 @@
-import { addStaticEvent } from './widget_helpers.js';
-
 /**
  * Register a reclaculation function. If one of the dependencies
  * changes it will be called before the next call to redraw().
@@ -19,8 +17,8 @@ export function defineRecalculation(widget, dependencies, cb) {
     this.triggerRecalculate(cb);
   };
 
-  addStaticEvent(widget, 'initialized', trigger);
+  widget.addStaticEvent('initialized', trigger);
   dependencies.forEach((name) => {
-    addStaticEvent(widget, 'set_' + name, trigger);
+    widget.addStaticEvent('set_' + name, trigger);
   });
 }
