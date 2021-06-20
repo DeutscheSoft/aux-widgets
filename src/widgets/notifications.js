@@ -44,7 +44,7 @@ import { S } from '../dom_scheduler.js';
 export const Notifications = defineClass({
   Extends: Container,
 
-  _options: Object.assign({}, Container.prototype._options, {
+  _options: Object.assign({}, Container.getOptionTypes(), {
     stack: 'string',
   }),
   options: {
@@ -148,7 +148,7 @@ function timeout() {
 export const Notification = defineClass({
   Extends: Container,
 
-  _options: Object.assign(Object.create(Container.prototype._options), {
+  _options: Object.assign({}, Container.getOptionTypes(), {
     timeout: 'number',
     icon: 'string',
     show_close: 'boolean',

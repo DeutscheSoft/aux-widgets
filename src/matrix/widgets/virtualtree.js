@@ -65,7 +65,7 @@ function collapse(state) {
  */
 export const VirtualTree = defineClass({
   Extends: Container,
-  _options: Object.assign({}, Container.prototype._options, {
+  _options: Object.assign({}, Container.getOptionTypes(), {
     _amount: 'number',
     _scroller_size: 'number',
     _scroll: 'number',

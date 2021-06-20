@@ -47,7 +47,7 @@ import { element, addClass } from '../utils/dom.js';
  */
 export const State = defineClass({
   Extends: Widget,
-  _options: Object.assign({}, Widget.prototype._options, {
+  _options: Object.assign({}, Widget.getOptionTypes(), {
     state: 'number|boolean',
     color: 'string|boolean',
   }),

@@ -95,7 +95,7 @@ import { VirtualTreeEntryBase } from './virtualtreeentrybase.js';
 
 export const VirtualTreeEntry = defineClass({
   Extends: VirtualTreeEntryBase,
-  _options: Object.assign({}, VirtualTreeEntryBase.prototype._options, {
+  _options: Object.assign({}, VirtualTreeEntryBase.getOptionTypes(), {
     label: 'string|boolean',
     depth: 'array|boolean',
     collapsable: 'boolean',

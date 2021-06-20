@@ -31,7 +31,7 @@ import { addClass } from '../utils/dom.js';
  */
 export const ProgressBar = defineClass({
   Extends: Meter,
-  _options: Object.assign({}, Meter.prototype._options),
+  _options: Object.assign({}, Meter.getOptionTypes()),
   options: {
     min: 0,
     max: 100,

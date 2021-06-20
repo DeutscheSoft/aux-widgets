@@ -124,9 +124,9 @@ export const Fader = defineClass({
   Extends: Widget,
   _options: Object.assign(
     {},
-    Widget.prototype._options,
+    Widget.getOptionTypes(),
     rangedOptionsTypes,
-    Scale.prototype._options,
+    Scale.getOptionTypes(),
     {
       value: 'number',
       division: 'number',

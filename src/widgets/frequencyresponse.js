@@ -69,7 +69,7 @@ export const FrequencyResponse = defineClass({
    * @property {Number} [options.depth=0] - The depth of the z axis (<code>basis</code> of options.range_z)
    */
   Extends: Chart,
-  _options: Object.assign({}, Chart.prototype._options, {
+  _options: Object.assign({}, Chart.getOptionTypes(), {
     db_grid: 'number',
     grid_x: 'array',
     scale: 'boolean',

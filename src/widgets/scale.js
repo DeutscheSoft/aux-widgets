@@ -437,7 +437,7 @@ function generateScale(from, to, include_from, show_to) {
  */
 export const Scale = defineClass({
   Extends: Widget,
-  _options: Object.assign({}, Widget.prototype._options, rangedOptionsTypes, {
+  _options: Object.assign({}, Widget.getOptionTypes(), rangedOptionsTypes, {
     layout: 'string',
     division: 'number',
     levels: 'array',

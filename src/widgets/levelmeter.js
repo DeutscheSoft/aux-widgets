@@ -98,7 +98,7 @@ export const LevelMeter = defineClass({
    *   and external falling are combined.
    */
   Extends: Meter,
-  _options: Object.assign({}, Meter.prototype._options, {
+  _options: Object.assign({}, Meter.getOptionTypes(), {
     falling: 'number',
     falling_duration: 'int',
     falling_init: 'number',

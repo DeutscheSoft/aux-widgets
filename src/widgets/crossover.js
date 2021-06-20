@@ -40,7 +40,7 @@ export const CrossoverBand = defineClass({
    * @extends EqBand
    */
   Extends: EqBand,
-  _options: Object.assign({}, EqBand.prototype._options, {
+  _options: Object.assign({}, EqBand.getOptionTypes(), {
     lower: 'string|function',
     upper: 'string|function',
   }),
@@ -109,7 +109,7 @@ export const CrossoverBand = defineClass({
 
 export const CrossoverGraph = defineClass({
   Extends: EqualizerGraph,
-  _options: Object.assign(Object.create(EqualizerGraph.prototype._options), {
+  _options: Object.assign({}, EqualizerGraph.getOptionTypes(), {
     index: 'number',
   }),
   option: {
@@ -212,7 +212,7 @@ export const Crossover = defineClass({
    *   band cannot be moved beyond `800Hz`.
    */
   Extends: Equalizer,
-  _options: Object.assign(Object.create(Equalizer.prototype._options), {
+  _options: Object.assign({}, Equalizer.getOptionTypes(), {
     leap: 'boolean',
     distance: 'number',
   }),

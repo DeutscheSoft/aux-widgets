@@ -44,7 +44,7 @@ import { Button } from './../../widgets/button.js';
 
 export const Indicator = defineClass({
   Extends: Button,
-  _options: Object.assign({}, Button.prototype._options, {
+  _options: Object.assign({}, Button.getOptionTypes(), {
     connected: 'boolean',
     connectable: 'boolean',
     sourceisgroup: 'boolean',

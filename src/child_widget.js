@@ -43,10 +43,7 @@ function getChildOptions(parent, name, options, config) {
       ret[key.substr(pref.length)] = options[key];
     } else if (inherit_options && blacklist_options.indexOf(key) < 0) {
       if (Object.prototype.hasOwnProperty.call(options, pref + key)) continue;
-      if (
-        key in config.create.prototype._options &&
-        !(key in Widget.prototype._options)
-      ) {
+      if (config.create.hasOption(key) && !Widget.hasOption(key)) {
         ret[key] = options[key];
       }
     }
@@ -78,14 +75,12 @@ export function inheritChildOptions(dst, child_name, src, blacklist) {
     if (C) C.set(key, value);
   };
 
-  for (const tmp in src.prototype._options) {
-    if (tmp in dst.prototype._options) continue;
+  for (const tmp in src.getOptionTypes()) {
+    if (dst.hasOption(tmp)) continue;
     if (blacklist.indexOf(tmp) > -1) continue;
     dst.addStaticEvent('set_' + tmp, setCallback);
-    if (!dst.prototype._options[tmp])
-      dst.prototype._options[tmp] = src.prototype._options[tmp];
-    if (!dst.prototype.options[tmp])
-      dst.prototype.options[tmp] = src.prototype.options[tmp];
+    if (!dst.hasOption(tmp))
+      dst.defineOption(tmp, src.getOptionType(tmp), src.getDefault(tmp));
   }
 }
 
@@ -147,7 +142,6 @@ export function defineChildWidget(widget, name, config) {
    *     as soon as a child is added or removed.
    */
 
-  const p = widget.prototype;
   const key = config.option || 'show_' + name;
   let tmp, m;
   const static_events = {};
@@ -253,9 +247,9 @@ export function defineChildWidget(widget, name, config) {
     if (this[name]) this[name].set(key.substr(name.length + 1), val);
   };
 
-  for (tmp in ChildWidget.prototype._options) {
+  for (tmp in ChildWidget.getOptionTypes()) {
     widget.addStaticEvent('set_' + name + '.' + tmp, setCallback);
-    p._options[name + '.' + tmp] = ChildWidget.prototype._options[tmp];
+    widget.defineOption(name + '.' + tmp, ChildWidget.getOptionType(tmp));
   }
 
   /* direct option inherit */
@@ -264,12 +258,12 @@ export function defineChildWidget(widget, name, config) {
     setCallback = function (val, key) {
       if (this[name]) this[name].set(key, val);
     };
-    for (tmp in ChildWidget.prototype._options) {
-      if (tmp in Widget.prototype._options) continue;
+    for (tmp in ChildWidget.getOptionTypes()) {
+      if (Widget.hasOption(tmp)) continue;
       if (blacklist_options.indexOf(tmp) > -1) continue;
       widget.addStaticEvent('set_' + tmp, setCallback);
-      if (!p._options[tmp])
-        p._options[tmp] = ChildWidget.prototype._options[tmp];
+      if (!widget.hasOption(tmp))
+        widget.defineOption(tmp, ChildWidget.getOptionType(tmp));
     }
   }
   setCallback = function (key) {
@@ -284,17 +278,13 @@ export function defineChildWidget(widget, name, config) {
     for (const parent_key in map_options) {
       const child_key = map_options[parent_key];
 
-      if (!(parent_key in p._options)) {
-        p._options[parent_key] = ChildWidget.prototype._options[child_key];
-        p.options[parent_key] = ChildWidget.prototype.options[child_key];
+      if (!widget.hasOption(parent_key)) {
+        widget.defineOption(parent_key, ChildWidget.getOptionType(child_key), ChildWidget.getDefault(child_key));
       }
       widget.addStaticEvent('set_' + parent_key, setCallback(child_key));
     }
   }
-  if (!config.options) {
-    if (!p._options[key]) {
-      p._options[key] = 'boolean';
-      p.options[key] = fixed || !!config.show;
-    }
+  if (!config.options && !widget.hasOption(key)) {
+    widget.defineOption(key, 'boolean', fixed || !!config.show);
   }
 }

@@ -165,7 +165,7 @@ export const Graph = defineClass({
    * @extends Widget
    */
   Extends: Widget,
-  _options: Object.assign({}, Widget.prototype._options, {
+  _options: Object.assign({}, Widget.getOptionTypes(), {
     dots: 'array',
     type: 'string',
     mode: 'string',

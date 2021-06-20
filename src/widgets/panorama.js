@@ -46,7 +46,7 @@ import { warn } from '../utils/log.js';
  */
 export const Panorama = defineClass({
   Extends: Chart,
-  _options: Object.assign({}, Chart.prototype._options, {
+  _options: Object.assign({}, Chart.getOptionTypes(), {
     mode: 'string',
     range: 'number',
     digits: 'int',

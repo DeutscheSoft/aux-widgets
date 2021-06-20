@@ -94,9 +94,9 @@ export const Knob = defineClass({
   Extends: Widget,
   _options: Object.assign(
     {},
-    Widget.prototype._options,
-    Circular.prototype._options,
-    DragValue.prototype._options,
+    Widget.getOptionTypes(),
+    Circular.getOptionTypes(),
+    DragValue.getOptionTypes(),
     {
       reset: 'number',
       bind_dblclick: 'boolean',
@@ -186,8 +186,8 @@ export const Knob = defineClass({
      */
     this.svg = S = makeSVG('svg');
 
-    let co = objectAnd(options, Circular.prototype._options);
-    co = objectSub(co, Widget.prototype._options);
+    let co = objectAnd(options, Circular.getOptionTypes());
+    co = objectSub(co, Widget.getOptionTypes());
     co.container = S;
 
     /**
@@ -288,10 +288,10 @@ export const Knob = defineClass({
       if (value === false) value = this.options.min;
     }
     // Circular does the snapping
-    if (!Widget.prototype._options[key]) {
-      if (Circular.prototype._options[key])
+    if (!Widget.getOptionTypes()[key]) {
+      if (Circular.getOptionTypes()[key])
         value = this.circular.set(key, value);
-      if (DragValue.prototype._options[key]) this.drag.set(key, value);
+      if (DragValue.getOptionTypes()[key]) this.drag.set(key, value);
     }
     return Widget.prototype.set.call(this, key, value);
   },

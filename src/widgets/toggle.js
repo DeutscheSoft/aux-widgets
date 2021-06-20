@@ -69,7 +69,7 @@ export const Toggle = defineClass({
    *   when the button toggle state is <code>true</code>. Please note that this option only works if `label` is also set.
    */
   Extends: Button,
-  _options: Object.assign({}, Button.prototype._options, {
+  _options: Object.assign({}, Button.getOptionTypes(), {
     label_active: 'string',
     icon_active: 'string',
     press: 'int',

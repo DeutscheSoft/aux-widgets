@@ -81,7 +81,7 @@ export const Container = defineClass({
    *   running.
    */
   Extends: Widget,
-  _options: Object.assign({}, Widget.prototype._options, {
+  _options: Object.assign({}, Widget.getOptionTypes(), {
     content: 'string|DOMNode',
     visible: 'string|boolean',
     hiding_duration: 'number',

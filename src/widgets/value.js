@@ -171,7 +171,7 @@ function submitCallback(e) {
  */
 export const Value = defineClass({
   Extends: Widget,
-  _options: Object.assign({}, Widget.prototype._options, {
+  _options: Object.assign({}, Widget.getOptionTypes(), {
     value: 'number|string',
     format: 'function',
     size: 'number',

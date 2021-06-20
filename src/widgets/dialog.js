@@ -73,7 +73,7 @@ export const Dialog = defineClass({
    *
    */
   Extends: Container,
-  _options: Object.assign({}, Container.prototype._options, {
+  _options: Object.assign({}, Container.getOptionTypes(), {
     anchor: 'string',
     x: 'number',
     y: 'number',

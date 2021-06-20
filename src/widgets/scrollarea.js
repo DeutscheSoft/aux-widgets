@@ -33,7 +33,7 @@ import { element, addClass } from '../utils/dom.js';
  */
 export const ScrollArea = defineClass({
   Extends: Widget,
-  _options: Object.assign({}, Widget.prototype._options, {}),
+  _options: Object.assign({}, Widget.getOptionTypes(), {}),
   options: {},
   initialize(options) {
     if (!options.element) options.element = element('div');

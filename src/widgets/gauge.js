@@ -59,7 +59,7 @@ const formatViewbox = FORMAT('0 0 %d %d');
  */
 export const Gauge = defineClass({
   Extends: Widget,
-  _options: Object.assign({}, Circular.prototype._options, {
+  _options: Object.assign({}, Circular.getOptionTypes(), {
     width: 'number',
     height: 'number',
     label: 'object',
@@ -97,8 +97,8 @@ export const Gauge = defineClass({
     this._label = makeSVG('text', { class: 'aux-label' });
     S.appendChild(this._label);
 
-    let co = objectAnd(O, Circular.prototype._options);
-    co = objectSub(co, Widget.prototype._options);
+    let co = objectAnd(O, Circular.getOptionTypes());
+    co = objectSub(co, Widget.getOptionTypes());
     co.container = S;
 
     /**
@@ -183,7 +183,7 @@ export const Gauge = defineClass({
       value = Object.assign(this.options.label, value);
     }
     // Circular does the snapping
-    if (!Widget.prototype._options[key] && Circular.prototype._options[key])
+    if (!Widget.getOptionTypes()[key] && Circular.getOptionTypes()[key])
       value = this.circular.set(key, value);
     return Widget.prototype.set.call(this, key, value);
   },

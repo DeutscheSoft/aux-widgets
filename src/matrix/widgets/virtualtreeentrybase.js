@@ -3,7 +3,7 @@ import { Container } from '../../widgets/container.js';
 
 export const VirtualTreeEntryBase = defineClass({
   Extends: Container,
-  _options: Object.assign({}, Container.prototype._options, {
+  _options: Object.assign({}, Container.getOptionTypes(), {
     data: 'any',
   }),
   options: {

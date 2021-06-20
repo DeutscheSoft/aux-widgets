@@ -221,7 +221,7 @@ export const Clock = defineClass({
    *   For more information about the value, please refer to <a href="https://www.w3schools.com/jsref/jsref_obj_date.asp">W3Schools</a>.
    */
   Extends: Widget,
-  _options: Object.assign({}, Widget.prototype._options, {
+  _options: Object.assign({}, Widget.getOptionTypes(), {
     thickness: 'number',
     margin: 'number',
     size: 'number',

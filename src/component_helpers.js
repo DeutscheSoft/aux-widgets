@@ -29,7 +29,7 @@ function attributeForWidget(Widget) {
   const skip = ['class', 'id', 'container', 'element', 'styles'];
   const rename = ['title'];
 
-  for (let i in Widget.prototype._options) {
+  for (let i in Widget.getOptionTypes()) {
     if (skip.indexOf(i) !== -1) continue;
 
     if (rename.indexOf(i) !== -1) i = 'aux' + i;
@@ -180,7 +180,7 @@ function createComponent(base) {
 
       try {
         const widget = this.auxWidget;
-        const type = widget._options[name];
+        const type = widget.getOptionType(name);
 
         if (typeof type !== 'string') {
           console.log(this.constructor.observedAttributes);
@@ -234,7 +234,7 @@ function createComponent(base) {
 
     auxOptions(WidgetType) {
       const ret = {};
-      const _options = WidgetType.prototype._options;
+      const _options = WidgetType.getOptionTypes();
       const attribute_names = this.constructor.observedAttributes;
       const attributes = this.auxAttributes();
 

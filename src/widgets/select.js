@@ -129,7 +129,7 @@ export const Select = defineClass({
    *
    */
   Extends: Button,
-  _options: Object.assign({}, Button.prototype._options, {
+  _options: Object.assign({}, Button.getOptionTypes(), {
     entries: 'array',
     selected: 'int',
     selected_entry: 'object',
@@ -820,7 +820,7 @@ export const SelectEntry = defineClass({
    */
   Extends: Label,
 
-  _options: Object.assign(Object.create(Label.prototype._options), {
+  _options: Object.assign({}, Label.getOptionTypes(), {
     value: 'mixed',
   }),
   options: {

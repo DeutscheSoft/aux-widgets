@@ -378,7 +378,7 @@ export const Widget = defineClass({
 
   invalidateAll: function () {
     for (const key in this.options) {
-      if (!this._options[key]) {
+      if (!this.constructor.hasOption(key)) {
         if (key.charCodeAt(0) !== 95)
           warn('%O %s: unknown option %s', this, this._class, key);
       } else this.invalid[key] = true;
@@ -436,7 +436,7 @@ export const Widget = defineClass({
   resize: function () {
     this.emit('resize');
 
-    if (this._options.resized) this.set('resized', true);
+    if (this.constructor.hasOption('resized')) this.set('resized', true);
 
     if (this.hasEventListeners('resized')) {
       S.afterFrame(this.emit.bind(this, 'resized'));
@@ -740,7 +740,7 @@ export const Widget = defineClass({
   set: function (key, value) {
     /* These options are special and need to be handled immediately, in order
      * to preserve correct ordering */
-    if (this._options[key]) {
+    if (this.constructor.hasOption(key)) {
       this.invalid[key] = true;
       if (this.value_time && this.value_time[key])
         this.value_time[key] = Date.now();

@@ -255,7 +255,7 @@ export const MultiMeter = defineClass({
 
   /* TODO: The following is not ideal cause we need to maintain it according to
     LevelMeters and Meter options. */
-  _options: Object.assign({}, Container.prototype._options, multimeterOptionTypes),
+  _options: Object.assign({}, Container.getOptionTypes(), multimeterOptionTypes),
   options: Object.assign({}, multimeterOptionDefaults, LevelMeter.getDefaultOptions()),
   static_events: multimeterStaticEvents,
   initialize: function (options) {

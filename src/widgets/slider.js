@@ -95,9 +95,9 @@ export const Slider = defineClass({
   Extends: Widget,
   _options: Object.assign(
     {},
-    Widget.prototype._options,
+    Widget.getOptionTypes(),
     rangedOptionsTypes,
-    DragValue.prototype._options,
+    DragValue.getOptionTypes(),
     {
       value: 'number',
       frames: 'int',
@@ -217,7 +217,7 @@ export const Slider = defineClass({
         value = this.get('snap_module').snap(value);
         break;
     }
-    if (DragValue.prototype._options[key]) this.drag.set(key, value);
+    if (DragValue.hasOption(key)) this.drag.set(key, value);
     return Widget.prototype.set.call(this, key, value);
   },
 });

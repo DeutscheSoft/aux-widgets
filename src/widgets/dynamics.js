@@ -67,7 +67,7 @@ export const Dynamics = defineClass({
    * @property {Boolean|Function} [options.format_label=false] - Function to format the handle label.
    */
   Extends: Chart,
-  _options: Object.assign({}, Chart.prototype._options, {
+  _options: Object.assign({}, Chart.getOptionTypes(), {
     min: 'number',
     max: 'number',
     scale: 'string',

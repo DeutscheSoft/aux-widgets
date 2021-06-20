@@ -257,7 +257,7 @@ export const Button = defineClass({
    *   Has class <code>.aux-button</code>.
    */
   Extends: Widget,
-  _options: Object.assign({}, Widget.prototype._options, {
+  _options: Object.assign({}, Widget.getOptionTypes(), {
     label: 'string|boolean',
     icon: 'string|boolean',
     state: 'boolean',

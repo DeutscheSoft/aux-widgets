@@ -91,7 +91,6 @@ export function defineChildElement(widget, name, config) {
    * @param {function} [config.draw] - A function to be called on redraw.
    *
    */
-  const p = widget.prototype;
   const show_option = config.option || 'show_' + name;
   const index = '_' + name;
 
@@ -162,9 +161,8 @@ export function defineChildElement(widget, name, config) {
     }
   }
 
-  if (p._options[show_option] === void 0) {
-    p._options[show_option] = 'boolean';
-    p.options[show_option] = !!config.show;
+  if (!widget.hasOption(show_option)) {
+    widget.defineOption(show_option, 'boolean', !!config.show);
   }
 }
 
@@ -226,7 +224,7 @@ export function defineClass(o) {
       return this.getOptionTypes()[name];
     },
     getDefaultOptions: function() {
-      return this.options;
+      return methods.options || {};
     },
     getDefault: function(name) {
       return this.getDefaultOptions()[name];
@@ -239,7 +237,8 @@ export function defineClass(o) {
     },
     defineOption: function(name, type, defaultValue) {
       methods._options[name] = type;
-      methods.options[name] = defaultValue;
+      if (defaultValue !== void 0)
+        methods.options[name] = defaultValue;
     },
     hasOption: function(name) {
       return Object.prototype.hasOwnProperty.call(methods._options, name);

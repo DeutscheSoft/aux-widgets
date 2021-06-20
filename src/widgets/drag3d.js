@@ -45,7 +45,7 @@ export const Drag3D = defineClass({
    */
   Extends: Container,
 
-  _options: Object.assign({}, Container.prototype._options, {
+  _options: Object.assign({}, Container.getOptionTypes(), {
     x: 'number',
     y: 'number',
     z: 'number',
@@ -154,14 +154,12 @@ const setCallback = function (val, key) {
 };
 
 for (const i in { x: 0, y: 0, z: 0 }) {
-  for (const opt in DragValue.prototype._options) {
-    Drag3D.addStaticEvent('set_drag_' + i + '.' + opt, setCallback);
-    Drag3D.prototype._options['drag_' + i + '.' + opt] =
-      DragValue.prototype._options[opt];
+  for (const name in DragValue.getOptionTypes()) {
+    Drag3D.addStaticEvent('set_drag_' + i + '.' + name, setCallback);
+    Drag3D.defineOption('drag_' + i + '.' + name, DragValue.getOptionType(name));
   }
-  for (const opt in Range.prototype._options) {
-    Drag3D.addStaticEvent('set_range_' + i + '.' + opt, setCallback);
-    Drag3D.prototype._options['range_' + i + '.' + opt] =
-      Range.prototype._options[opt];
+  for (const name in Range.getOptionTypes()) {
+    Drag3D.addStaticEvent('set_range_' + i + '.' + name, setCallback);
+    Drag3D.defineOption('range_' + i + '.' + name, Range.getOptionType(name));
   }
 }

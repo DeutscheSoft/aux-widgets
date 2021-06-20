@@ -151,7 +151,7 @@ export const EqBand = defineClass({
    * @extends ChartHandle
    */
   Extends: ChartHandle,
-  _options: Object.assign({}, ChartHandle.prototype._options, {
+  _options: Object.assign({}, ChartHandle.getOptionTypes(), {
     type: 'string|function',
     gain: 'number',
     freq: 'number',
