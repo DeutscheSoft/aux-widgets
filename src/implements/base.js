@@ -91,7 +91,7 @@ export function isNativeEvent(type) {
 
 function removeNativeEvents(element) {
   let type;
-  const s = this.static_events;
+  const s = this.getStaticEvents();
   const d = this.__events;
   const handler = this.__native_handler;
 
@@ -107,7 +107,7 @@ function removeNativeEvents(element) {
 }
 function addNativeEvents(element) {
   let type;
-  const s = this.static_events;
+  const s = this.getStaticEvents();
   const d = this.__events;
   const handler = this.__native_handler;
 
@@ -133,7 +133,7 @@ function hasEventListeners(event) {
 
   if (Object.prototype.hasOwnProperty.call(ev, event)) return true;
 
-  ev = this.static_events;
+  ev = this.getStaticEvents();
 
   return ev && Object.prototype.hasOwnProperty.call(ev, event);
 }
@@ -208,6 +208,9 @@ export const Base = defineClass({
   },
   getDefaultOptions: function () {
     return this.constructor.getDefaultOptions();
+  },
+  getStaticEvents: function () {
+    return this.constructor.getStaticEvents();
   },
   initialized: function () {
     /**
@@ -482,7 +485,7 @@ export const Base = defineClass({
       if (v !== void 0) return v;
     }
 
-    ev = this.static_events;
+    ev = this.getStaticEvents();
 
     if (ev !== void 0 && event in ev) {
       ev = ev[event];

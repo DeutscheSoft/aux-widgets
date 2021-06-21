@@ -193,12 +193,8 @@ export function defineClass(o) {
 
   const Extends = o.Extends;
 
-  if (!o.static_events)
-    o.static_events = {};
-
   if (Extends) {
     const tmp = Extends.prototype;
-    o.static_events = mergeStaticEvents(tmp.static_events, o.static_events);
     methods = Object.assign(Object.create(tmp), o);
   } else {
     methods = o;
@@ -246,10 +242,25 @@ export function defineClass(o) {
       return this.getDefaultOptions()[name];
     },
     getStaticEvents: function() {
-      return methods.static_events;
+      if (!this.auxStaticEvents)
+      {
+        const base = Object.getPrototypeOf(this.prototype).constructor;
+        const ownEvents = Object.prototype.hasOwnProperty.call(this.prototype, 'static_events')
+            ? this.prototype.static_events : {};
+        let events;
+
+        if (base.getStaticEvents) {
+          events = mergeStaticEvents(base.getStaticEvents(), ownEvents);
+        } else {
+          events = Object.assign({}, ownEvents);
+        }
+
+        this.auxStaticEvents = events;
+      }
+      return this.auxStaticEvents;
     },
     addStaticEvent: function(name, callback) {
-      addEvent(methods.static_events, name, callback);
+      addEvent(this.getStaticEvents(), name, callback);
     },
     defineOption: function(name, type, defaultValue) {
       methods._options[name] = type;
