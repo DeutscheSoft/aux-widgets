@@ -289,8 +289,7 @@ export const Knob = defineClass({
     }
     // Circular does the snapping
     if (!Widget.getOptionTypes()[key]) {
-      if (Circular.getOptionTypes()[key])
-        value = this.circular.set(key, value);
+      if (Circular.getOptionTypes()[key]) value = this.circular.set(key, value);
       if (DragValue.getOptionTypes()[key]) this.drag.set(key, value);
     }
     return Widget.prototype.set.call(this, key, value);

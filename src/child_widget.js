@@ -279,7 +279,11 @@ export function defineChildWidget(widget, name, config) {
       const child_key = map_options[parent_key];
 
       if (!widget.hasOption(parent_key)) {
-        widget.defineOption(parent_key, ChildWidget.getOptionType(child_key), ChildWidget.getDefault(child_key));
+        widget.defineOption(
+          parent_key,
+          ChildWidget.getOptionType(child_key),
+          ChildWidget.getDefault(child_key)
+        );
       }
       widget.addStaticEvent('set_' + parent_key, setCallback(child_key));
     }

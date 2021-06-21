@@ -179,7 +179,8 @@ const levelmeterOwnOptions = objectSub(
 );
 
 for (const key in levelmeterOwnOptions) {
-  if (!Object.prototype.hasOwnProperty.call(levelmeterOwnOptions, key)) continue;
+  if (!Object.prototype.hasOwnProperty.call(levelmeterOwnOptions, key))
+    continue;
   if (multimeterOptionTypes.hasOwnProperty(key)) continue;
 
   const type = levelmeterOwnOptions[key];
@@ -194,7 +195,6 @@ for (const key in levelmeterOwnOptions) {
     multimeterStaticEvents['set_' + key] = mapChildOption;
   }
 }
-
 
 export const MultiMeter = defineClass({
   /**
@@ -255,8 +255,16 @@ export const MultiMeter = defineClass({
 
   /* TODO: The following is not ideal cause we need to maintain it according to
     LevelMeters and Meter options. */
-  _options: Object.assign({}, Container.getOptionTypes(), multimeterOptionTypes),
-  options: Object.assign({}, multimeterOptionDefaults, LevelMeter.getDefaultOptions()),
+  _options: Object.assign(
+    {},
+    Container.getOptionTypes(),
+    multimeterOptionTypes
+  ),
+  options: Object.assign(
+    {},
+    multimeterOptionDefaults,
+    LevelMeter.getDefaultOptions()
+  ),
   static_events: multimeterStaticEvents,
   initialize: function (options) {
     Container.prototype.initialize.call(this, options, true);
@@ -355,4 +363,3 @@ defineChildWidget(MultiMeter, 'label', {
   map_options: { label: 'label' },
   toggle_class: true,
 });
-

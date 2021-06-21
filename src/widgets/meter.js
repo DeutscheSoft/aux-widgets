@@ -264,24 +264,19 @@ export const Meter = defineClass({
    */
 
   Extends: Widget,
-  _options: Object.assign(
-    {},
-    Widget.getOptionTypes(),
-    Scale.getOptionTypes(),
-    {
-      layout: 'string',
-      segment: 'number',
-      value: 'number',
-      value_label: 'number',
-      base: 'number|boolean',
-      label: 'string|boolean',
-      sync_value: 'boolean',
-      format_value: 'function',
-      background: 'string|boolean',
-      gradient: 'object|boolean',
-      foreground: 'string|boolean',
-    }
-  ),
+  _options: Object.assign({}, Widget.getOptionTypes(), Scale.getOptionTypes(), {
+    layout: 'string',
+    segment: 'number',
+    value: 'number',
+    value_label: 'number',
+    base: 'number|boolean',
+    label: 'string|boolean',
+    sync_value: 'boolean',
+    format_value: 'function',
+    background: 'string|boolean',
+    gradient: 'object|boolean',
+    foreground: 'string|boolean',
+  }),
   options: Object.assign({}, rangedOptionsDefaults, {
     layout: 'left',
     segment: 1,

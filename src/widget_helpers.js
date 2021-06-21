@@ -214,17 +214,21 @@ export function defineClass(o) {
   constructor.auxOptions = null;
 
   const staticMethods = {
-    getOptionTypes: function() {
+    getOptionTypes: function () {
       return methods._options;
     },
-    getOptionType: function(name) {
+    getOptionType: function (name) {
       return this.getOptionTypes()[name];
     },
-    getDefaultOptions: function() {
+    getDefaultOptions: function () {
       if (this.auxOptions === null) {
         const base = Object.getPrototypeOf(this.prototype).constructor;
-        const ownOptions = Object.prototype.hasOwnProperty.call(this.prototype, 'options')
-            ? this.prototype.options : {};
+        const ownOptions = Object.prototype.hasOwnProperty.call(
+          this.prototype,
+          'options'
+        )
+          ? this.prototype.options
+          : {};
         let o;
 
         if (base.getDefaultOptions) {
@@ -238,15 +242,18 @@ export function defineClass(o) {
 
       return this.auxOptions;
     },
-    getDefault: function(name) {
+    getDefault: function (name) {
       return this.getDefaultOptions()[name];
     },
-    getStaticEvents: function() {
-      if (!this.auxStaticEvents)
-      {
+    getStaticEvents: function () {
+      if (!this.auxStaticEvents) {
         const base = Object.getPrototypeOf(this.prototype).constructor;
-        const ownEvents = Object.prototype.hasOwnProperty.call(this.prototype, 'static_events')
-            ? this.prototype.static_events : {};
+        const ownEvents = Object.prototype.hasOwnProperty.call(
+          this.prototype,
+          'static_events'
+        )
+          ? this.prototype.static_events
+          : {};
         let events;
 
         if (base.getStaticEvents) {
@@ -259,15 +266,15 @@ export function defineClass(o) {
       }
       return this.auxStaticEvents;
     },
-    addStaticEvent: function(name, callback) {
+    addStaticEvent: function (name, callback) {
       addEvent(this.getStaticEvents(), name, callback);
     },
-    defineOption: function(name, type, defaultValue) {
+    defineOption: function (name, type, defaultValue) {
       methods._options[name] = type;
       if (defaultValue !== void 0)
         this.getDefaultOptions()[name] = defaultValue;
     },
-    hasOption: function(name) {
+    hasOption: function (name) {
       return Object.prototype.hasOwnProperty.call(methods._options, name);
     },
   };

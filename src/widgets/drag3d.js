@@ -156,7 +156,10 @@ const setCallback = function (val, key) {
 for (const i in { x: 0, y: 0, z: 0 }) {
   for (const name in DragValue.getOptionTypes()) {
     Drag3D.addStaticEvent('set_drag_' + i + '.' + name, setCallback);
-    Drag3D.defineOption('drag_' + i + '.' + name, DragValue.getOptionType(name));
+    Drag3D.defineOption(
+      'drag_' + i + '.' + name,
+      DragValue.getOptionType(name)
+    );
   }
   for (const name in Range.getOptionTypes()) {
     Drag3D.addStaticEvent('set_range_' + i + '.' + name, setCallback);
