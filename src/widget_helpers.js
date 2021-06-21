@@ -198,7 +198,6 @@ export function defineClass(o) {
 
   if (Extends) {
     const tmp = Extends.prototype;
-    o.options = Object.assign({}, tmp.options, o.options);
     o.static_events = mergeStaticEvents(tmp.static_events, o.static_events);
     methods = Object.assign(Object.create(tmp), o);
   } else {
@@ -216,6 +215,8 @@ export function defineClass(o) {
   constructor.prototype = methods;
   methods.constructor = constructor;
 
+  constructor.auxOptions = null;
+
   const staticMethods = {
     getOptionTypes: function() {
       return methods._options;
@@ -224,7 +225,22 @@ export function defineClass(o) {
       return this.getOptionTypes()[name];
     },
     getDefaultOptions: function() {
-      return methods.options || {};
+      if (this.auxOptions === null) {
+        const base = Object.getPrototypeOf(this.prototype).constructor;
+        const ownOptions = Object.prototype.hasOwnProperty.call(this.prototype, 'options')
+            ? this.prototype.options : {};
+        let o;
+
+        if (base.getDefaultOptions) {
+          o = Object.assign({}, base.getDefaultOptions(), ownOptions);
+        } else {
+          o = Object.assign({}, ownOptions);
+        }
+
+        this.auxOptions = o;
+      }
+
+      return this.auxOptions;
     },
     getDefault: function(name) {
       return this.getDefaultOptions()[name];
@@ -238,7 +254,7 @@ export function defineClass(o) {
     defineOption: function(name, type, defaultValue) {
       methods._options[name] = type;
       if (defaultValue !== void 0)
-        methods.options[name] = defaultValue;
+        this.getDefaultOptions()[name] = defaultValue;
     },
     hasOption: function(name) {
       return Object.prototype.hasOwnProperty.call(methods._options, name);

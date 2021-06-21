@@ -64,7 +64,7 @@ export const Gauge = defineClass({
     height: 'number',
     label: 'object',
   }),
-  options: Object.assign({}, Circular.prototype.options, {
+  options: Object.assign({}, Circular.getDefaultOptions(), {
     width: 100, // width of the element
     height: 100, // height of the svg
     size: 100,

@@ -191,7 +191,7 @@ export const Base = defineClass({
    * @method Base#getOptionType
    */
   getOptionType: function (name) {
-    return this._options[name];
+    return this.constructor.getOptionType(name);
   },
   /**
    * Returns the default value of a given option. If the option does not
@@ -204,10 +204,10 @@ export const Base = defineClass({
       throw new Error('Option does not exist.');
     }
 
-    return this.constructor.prototype.options[name];
+    return this.constructor.getDefault(name);
   },
   getDefaultOptions: function () {
-    return this.constructor.prototype.options;
+    return this.constructor.getDefaultOptions();
   },
   initialized: function () {
     /**

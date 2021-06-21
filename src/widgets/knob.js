@@ -102,7 +102,7 @@ export const Knob = defineClass({
       bind_dblclick: 'boolean',
     }
   ),
-  options: Object.assign({}, Circular.prototype.options, {
+  options: Object.assign({}, Circular.getDefaultOptions(), {
     hand: { width: 1, length: 10, margin: 25 },
     margin: 13,
     thickness: 6,
