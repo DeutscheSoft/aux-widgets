@@ -112,7 +112,7 @@ export const CrossoverGraph = defineClass({
   _options: Object.assign({}, EqualizerGraph.getOptionTypes(), {
     index: 'number',
   }),
-  option: {
+  options: {
     index: -1,
   },
   getFilterFunctions: function () {
