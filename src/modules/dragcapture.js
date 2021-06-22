@@ -68,18 +68,9 @@ function moveCapture(ev) {
   const d = this.drag_state;
 
   if (!d.setCurrent(ev) || this.emit('movecapture', d, ev) === false) {
-    stopCapture.call(this, ev);
+    this.stopCapture(ev);
     return false;
   }
-}
-function stopCapture(ev) {
-  const s = this.drag_state;
-  if (s === null) return;
-
-  this.emit('stopcapture', s, ev);
-  this.set('state', false);
-  s.destroy();
-  this.drag_state = null;
 }
 
 /* mouse handling */
@@ -135,7 +126,7 @@ function mouseMove(ev) {
   moveCapture.call(this, ev);
 }
 function mouseUp(ev) {
-  stopCapture.call(this, ev);
+  this.stopCapture(ev);
 }
 
 /* touch handling */
@@ -233,7 +224,7 @@ function touchEnd(ev) {
   const s = this.drag_state;
   /* either we are not dragging or it is another touch point */
   if (!s || !s.findTouch(ev)) return;
-  stopCapture.call(this, ev);
+  this.stopCapture(ev);
   ev.stopPropagation();
   ev.preventDefault();
   return false;
@@ -264,7 +255,7 @@ const static_events = {
   delegated: [
     function (element, old_element) {
       /* cancel the current capture */
-      if (old_element) stopCapture.call(this);
+      if (old_element) this.stopCapture();
     },
     function (elem, old) {
       /* NOTE: this works around a bug in chrome (#673102) */
@@ -351,9 +342,20 @@ export const DragCapture = defineClass({
   },
   destroy: function () {
     Module.prototype.destroy.call(this);
-    stopCapture.call(this);
+    this.cancelDrag();
   },
-  cancelDrag: stopCapture,
+  stopCapture: function (ev) {
+    const s = this.drag_state;
+    if (s === null) return;
+
+    this.emit('stopcapture', s, ev);
+    this.set('state', false);
+    s.destroy();
+    this.drag_state = null;
+  },
+  cancelDrag: function (ev) {
+    this.stopCapture();
+  },
   dragging: function () {
     return this.options.state;
   },
