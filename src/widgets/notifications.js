@@ -100,7 +100,7 @@ function closeClicked() {
    * @event Notification#closeclicked
    */
   this.emit('closeclicked');
-  close.call(this.parent);
+  this.parent.remove();
 }
 
 function afterHide() {
@@ -112,20 +112,9 @@ function afterHide() {
   );
 }
 
-function close() {
-  this.on('hide', afterHide);
-  this.hide();
-  /**
-   * Is fired when the notification was removed from the DOM after the hiding animation.
-   *
-   * @event Notification#closed
-   */
-  this.emit('closed');
-}
-
 function timeout() {
   this._timeout = void 0;
-  close.call(this);
+  this.remove();
 }
 
 /**
@@ -184,7 +173,17 @@ export const Notification = defineClass({
       this.element.insertBefore(this.close.element, this.element.firstChild);
   },
 
-  remove: close,
+  remove: function () {
+    this.on('hide', afterHide);
+    this.hide();
+    /**
+     * Is fired when the notification was removed from the DOM after the hiding animation.
+     *
+     * @event Notification#closed
+     */
+    this.emit('closed');
+  },
+
   destroy: function () {
     if (this._timeout !== void 0) window.clearTimeout(this._timeout);
     Container.prototype.destroy.call(this);
