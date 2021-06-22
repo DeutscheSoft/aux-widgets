@@ -128,15 +128,6 @@ function nativeHandler(ev) {
    */
   if (this.emit(ev.type, ev) === false) return false;
 }
-function hasEventListeners(event) {
-  let ev = this.__events;
-
-  if (Object.prototype.hasOwnProperty.call(ev, event)) return true;
-
-  ev = this.getStaticEvents();
-
-  return ev && Object.prototype.hasOwnProperty.call(ev, event);
-}
 /**
  * This is the base class for all AUX widgets.
  * It provides an API for event handling and options.
@@ -508,5 +499,13 @@ export const Base = defineClass({
    *
    * @returns {boolean} True if the event has some handler functions in the queue, false if not.
    */
-  hasEventListeners: hasEventListeners,
+  hasEventListeners: function(event) {
+    let ev = this.__events;
+
+    if (Object.prototype.hasOwnProperty.call(ev, event)) return true;
+
+    ev = this.getStaticEvents();
+
+    return ev && Object.prototype.hasOwnProperty.call(ev, event);
+  },
 });
