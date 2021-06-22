@@ -163,7 +163,6 @@ function nextDblClicked() {
  */
 export const Navigation = defineClass({
   Extends: Container,
-  _class: 'Navigation',
   _options: Object.assign({}, Container.getOptionTypes(), {
     _clip_width: 'number',
     _clip_height: 'number',
