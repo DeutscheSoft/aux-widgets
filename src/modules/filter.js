@@ -22,14 +22,8 @@ import { Base } from '../implements/base.js';
 import { error } from '../utils/log.js';
 import { standardBiquadFilters } from '../utils/biquad.js';
 
-function reset() {
-  this.frequencyToGain = null;
-  /**
-   * Is fired when a filters drawing function is reset.
-   *
-   * @event Filter#reset
-   */
-  this.emit('reset');
+function triggerReset() {
+  this.reset();
 }
 
 /**
@@ -47,7 +41,6 @@ function reset() {
  * @param {number} frequency - The frequency in Hz.
  * @returns {number} gain - The change in gain in dB.
  */
-
 /**
  * @callback Filter~filter_factory
  *
@@ -66,7 +59,6 @@ function reset() {
  *
  * @return {EqFilter}
  */
-
 export const Filter = defineClass({
   /**
    * Filter provides the math for calculating a gain from
@@ -115,11 +107,11 @@ export const Filter = defineClass({
     sample_rate: 44100,
   },
   static_events: {
-    set_freq: reset,
-    set_type: reset,
-    set_q: reset,
-    set_gain: reset,
-    initialized: reset,
+    set_freq: triggerReset,
+    set_type: triggerReset,
+    set_q: triggerReset,
+    set_gain: triggerReset,
+    initialized: triggerReset,
   },
   createFrequencyToGain: function () {
     const O = this.options;
@@ -151,5 +143,13 @@ export const Filter = defineClass({
     if (this.frequencyToGain === null) this.createFrequencyToGain();
     return this.frequencyToGain;
   },
-  reset: reset,
+  reset: function() {
+    this.frequencyToGain = null;
+    /**
+     * Is fired when a filters drawing function is reset.
+     *
+     * @event Filter#reset
+     */
+    this.emit('reset');
+  },
 });
