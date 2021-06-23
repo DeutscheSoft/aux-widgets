@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from './../widget_helpers.js';
 import { Range } from './range.js';
 import { DragValue } from './dragvalue.js';
 import { Base } from '../implements/base.js';
@@ -123,65 +122,74 @@ function setHandle() {
  *
  * @class Drag
  */
-export const Drag = defineClass({
-  Extends: Base,
-  _options: {
-    node: 'object',
-    handle: 'object',
-    active: 'boolean',
-    min: 'object',
-    max: 'object',
-    initial: 'number',
-    transform: 'boolean',
-  },
-  options: {
-    node: null,
-    handle: null,
-    active: true,
-    min: { x: false, y: false },
-    max: { x: false, y: false },
-    initial: 2,
-    transform: false,
-  },
-  /**
-   * The user is dragging this item.
-   *
-   * @event Drag#dragging
-   *
-   * @param {DOMEvent} event - The native DOM event.
-   */
-  /**
-   * The user started dragging this item.
-   *
-   * @event Drag#startdrag
-   *
-   * @param {DOMEvent} event - The native DOM event.
-   */
-  /**
-   * The user stopped dragging this item.
-   *
-   * @event Drag#stopdrag
-   *
-   * @param {DOMEvent} event - The native DOM event.
-   */
-  static_events: {
-    startdrag: startDrag,
-    dragging: dragging,
-    stopdrag: stopDrag,
-  },
-  initialize: function (options) {
-    Base.prototype.initialize.call(this, options);
+/**
+ * The user is dragging this item.
+ *
+ * @event Drag#dragging
+ *
+ * @param {DOMEvent} event - The native DOM event.
+ */
+/**
+ * The user started dragging this item.
+ *
+ * @event Drag#startdrag
+ *
+ * @param {DOMEvent} event - The native DOM event.
+ */
+/**
+ * The user stopped dragging this item.
+ *
+ * @event Drag#stopdrag
+ *
+ * @param {DOMEvent} event - The native DOM event.
+ */
+export class Drag extends Base {
+  static get _options() {
+    return {
+      node: 'object',
+      handle: 'object',
+      active: 'boolean',
+      min: 'object',
+      max: 'object',
+      initial: 'number',
+      transform: 'boolean',
+    };
+  }
+
+  static get options() {
+    return {
+      node: null,
+      handle: null,
+      active: true,
+      min: { x: false, y: false },
+      max: { x: false, y: false },
+      initial: 2,
+      transform: false,
+    };
+  }
+
+  static get static_events() {
+    return {
+      startdrag: startDrag,
+      dragging: dragging,
+      stopdrag: stopDrag,
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
     this.set('handle', this.options.handle);
     this.set('node', this.options.node);
-  },
+  }
+
   // GETTERS & SETTERS
-  set: function (key, value) {
+  set(key, value) {
     if (key === 'node') this._style = window.getComputedStyle(value);
     if (key === 'handle' && !value) value = this.options.node;
 
-    Base.prototype.set.call(this, key, value);
+    super.set(key, value);
 
     if (key === 'handle') setHandle.call(this);
     if (key === 'initial' && this.drag) this.drag.set('initial', value);
-  },
-});
+  }
+}

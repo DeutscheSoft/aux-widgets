@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
 import { Button } from './button.js';
 import { Value } from './value.js';
@@ -42,62 +41,70 @@ import { FORMAT } from '../utils/sprintf.js';
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-export const ValueButton = defineClass({
-  /**
-   * This widget combines a {@link Button}, a {@link Scale} and a {@link Value}.
-   * ValueButton uses {@link DragValue} and {@link ScrollValue}
-   * for setting its value.
-   * It inherits all options of {@link DragValue} and {@link Scale}.
-   *
-   * @class ValueButton
-   *
-   * @extends Button
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {Number} [options.value=0] - The value of the widget.
-   * @property {String} [options.direction="polar"] - Direction for changing the value.
-   *   Can be "polar", "vertical" or "horizontal". See {@link DragValue} for more details.
-   * @property {Number} [options.blind_angle=20] - If `options.direction` is "polar",
-   *   this is the angle of separation between positive and negative value changes.  See {@link DragValue} for more details.
-   * @property {Number} [options.rotation=45] - Defines the angle of the center of the positive value
-   *   changes. 0 means straight upward. For instance, a value of 45 leads to increasing value when
-   *   moving towards top and right. See {@link DragValue} for more details.
-   * @property {Number} [options.snap=0.01] - Snap value while dragging.
-   * @property {Number} [options.basis=300] - Distance to drag between <code>min</code> and <code>max</code> in pixels.
-   */
-  Extends: Button,
-  _options: Object.assign({}, Button.getOptionTypes(), rangedOptionsTypes, {
-    value: 'number',
-    direction: 'string',
-    rotation: 'number',
-    blind_angle: 'number',
-    snap: 'number',
-    reset: 'number',
-  }),
-  options: Object.assign({}, rangedOptionsDefaults, {
-    value: 0,
-    direction: 'polar',
-    rotation: 45,
-    blind_angle: 20,
-    snap: 0.01,
-    basis: 300,
-    labels: FORMAT('%d'),
-    layout: 'top',
-  }),
-  static_events: {
-    set_direction: function (value) {
-      this.drag.set('direction', value);
-    },
-    set_drag_rotation: function (value) {
-      this.drag.set('rotation', value);
-    },
-    set_blind_angle: function (value) {
-      this.drag.set('blind_angle', value);
-    },
-  },
-  initialize: function (options) {
-    Button.prototype.initialize.call(this, options);
+/**
+ * This widget combines a {@link Button}, a {@link Scale} and a {@link Value}.
+ * ValueButton uses {@link DragValue} and {@link ScrollValue}
+ * for setting its value.
+ * It inherits all options of {@link DragValue} and {@link Scale}.
+ *
+ * @class ValueButton
+ *
+ * @extends Button
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {Number} [options.value=0] - The value of the widget.
+ * @property {String} [options.direction="polar"] - Direction for changing the value.
+ *   Can be "polar", "vertical" or "horizontal". See {@link DragValue} for more details.
+ * @property {Number} [options.blind_angle=20] - If `options.direction` is "polar",
+ *   this is the angle of separation between positive and negative value changes.  See {@link DragValue} for more details.
+ * @property {Number} [options.rotation=45] - Defines the angle of the center of the positive value
+ *   changes. 0 means straight upward. For instance, a value of 45 leads to increasing value when
+ *   moving towards top and right. See {@link DragValue} for more details.
+ * @property {Number} [options.snap=0.01] - Snap value while dragging.
+ * @property {Number} [options.basis=300] - Distance to drag between <code>min</code> and <code>max</code> in pixels.
+ */
+export class ValueButton extends Button {
+  static get _options() {
+    return Object.assign({}, Button.getOptionTypes(), rangedOptionsTypes, {
+      value: 'number',
+      direction: 'string',
+      rotation: 'number',
+      blind_angle: 'number',
+      snap: 'number',
+      reset: 'number',
+    });
+  }
+
+  static get options() {
+    return Object.assign({}, rangedOptionsDefaults, {
+      value: 0,
+      direction: 'polar',
+      rotation: 45,
+      blind_angle: 20,
+      snap: 0.01,
+      basis: 300,
+      labels: FORMAT('%d'),
+      layout: 'top',
+    });
+  }
+
+  static get static_events() {
+    return {
+      set_direction: function (value) {
+        this.drag.set('direction', value);
+      },
+      set_drag_rotation: function (value) {
+        this.drag.set('rotation', value);
+      },
+      set_blind_angle: function (value) {
+        this.drag.set('blind_angle', value);
+      },
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
 
     /**
      * @member {HTMLDivElement} ValueButton#element - The main DIV container.
@@ -142,19 +149,22 @@ export const ValueButton = defineClass({
         this.emit('doubleclick', this.options.value);
       }.bind(this)
     );
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-valuebutton');
 
-    Button.prototype.draw.call(this, O, element);
-  },
-  destroy: function () {
+    super.draw(O, element);
+  }
+
+  destroy() {
     this.drag.destroy();
     this.scroll.destroy();
-    Button.prototype.destroy.call(this);
-  },
+    super.destroy();
+  }
+
   // GETTERS & SETTERS
-  set: function (key, value) {
+  set(key, value) {
     switch (key) {
       case 'value':
         if (value > this.options.max || value < this.options.min)
@@ -162,9 +172,9 @@ export const ValueButton = defineClass({
         value = this.options.snap_module.snap(value);
         break;
     }
-    return Button.prototype.set.call(this, key, value);
-  },
-});
+    return super.set(key, value);
+  }
+}
 makeRanged(ValueButton);
 function valueClicked() {
   const self = this.parent;

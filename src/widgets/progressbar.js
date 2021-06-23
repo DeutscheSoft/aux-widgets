@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from '../widget_helpers.js';
 import { Meter } from './meter.js';
 import { addClass } from '../utils/dom.js';
 
@@ -29,30 +28,36 @@ import { addClass } from '../utils/dom.js';
  *
  * @class ProgressBar
  */
-export const ProgressBar = defineClass({
-  Extends: Meter,
-  _options: Object.assign({}, Meter.getOptionTypes()),
-  options: {
-    min: 0,
-    max: 100,
-    show_scale: false,
-    show_value: true,
-    format_value: function (v) {
-      return v.toFixed(2) + '%';
-    },
-    layout: 'top',
-  },
-  initialize: function (options) {
-    Meter.prototype.initialize.call(this, options);
+export class ProgressBar extends Meter {
+  static get _options() {
+    return Object.assign({}, Meter.getOptionTypes());
+  }
+
+  static get options() {
+    return {
+      min: 0,
+      max: 100,
+      show_scale: false,
+      show_value: true,
+      format_value: function (v) {
+        return v.toFixed(2) + '%';
+      },
+      layout: 'top',
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
     /**
      * @member {HTMLDivElement} ProgressBar#element - The main DIV container.
      *   Has class <code>.aux-progressbar</code>.
      */
     this.setParent(null);
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-progressbar');
 
-    Meter.prototype.draw.call(this, O, element);
-  },
-});
+    super.draw(O, element);
+  }
+}

@@ -26,7 +26,6 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { defineClass } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
 import { addClass, removeClass } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
@@ -39,64 +38,71 @@ import { Pages } from './pages.js';
 import { Container } from './container.js';
 import { Navigation } from './navigation.js';
 
-export const Pager = defineClass({
-  /**
-   * Pager, also known as Notebook in other UI toolkits, provides
-   * multiple containers for displaying contents via {@link Pages}
-   * which are switchable via a {@link Navigation}.
-   *
-   * @class Pager
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {String} [options.position="top"] - The position of the
-   *   {@link Navigation}. Can either be `top`, `right`, `left` or `bottom`.
-   * @property {Integer} [options.show] - The page to show. Set to -1
-   *   to hide all pages.
-   * @property {Array<Container|DOMNode|String>} [options.pages=[]] -
-   *   An array of either an instance of {@link Container} (or derivate),
-   *   a DOMNode or a string of HTML which gets wrapped in a new {@link Container}.
-   * @extends Container
-   *
-   * @example
-   * var pager = new Pager({
-   *  pages: [
-   *   {
-   *     label: "Empty Page 1",
-   *     content: document.createElement("span")
-   *   },
-   *   {
-   *     label: { label:"Foobar", class:"foobar" },
-   *     content: "<h1>Foobar</h1><p>Lorem ipsum dolor sit amet</p>"
-   *   }
-   *  ]
-   * });
-   */
-  Extends: Container,
-  _options: Object.assign({}, Container.getOptionTypes(), {
-    pages: 'array',
-    position: 'string',
-    show: 'int',
-  }),
-  options: {
-    pages: [],
-    position: 'top',
-    show: null,
-  },
-  static_events: {
-    set_position: function (value) {
-      let badir;
-      if (value === 'top' || value === 'bottom') {
-        badir = 'horizontal';
-      } else {
-        badir = 'vertical';
-      }
-      if (this.navigation) this.navigation.set('direction', badir);
-      if (this.pages) this.pages.set('animation', badir);
-    },
-  },
+/**
+ * Pager, also known as Notebook in other UI toolkits, provides
+ * multiple containers for displaying contents via {@link Pages}
+ * which are switchable via a {@link Navigation}.
+ *
+ * @class Pager
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {String} [options.position="top"] - The position of the
+ *   {@link Navigation}. Can either be `top`, `right`, `left` or `bottom`.
+ * @property {Integer} [options.show] - The page to show. Set to -1
+ *   to hide all pages.
+ * @property {Array<Container|DOMNode|String>} [options.pages=[]] -
+ *   An array of either an instance of {@link Container} (or derivate),
+ *   a DOMNode or a string of HTML which gets wrapped in a new {@link Container}.
+ * @extends Container
+ *
+ * @example
+ * var pager = new Pager({
+ *  pages: [
+ *   {
+ *     label: "Empty Page 1",
+ *     content: document.createElement("span")
+ *   },
+ *   {
+ *     label: { label:"Foobar", class:"foobar" },
+ *     content: "<h1>Foobar</h1><p>Lorem ipsum dolor sit amet</p>"
+ *   }
+ *  ]
+ * });
+ */
+export class Pager extends Container {
+  static get _options() {
+    return Object.assign({}, Container.getOptionTypes(), {
+      pages: 'array',
+      position: 'string',
+      show: 'int',
+    });
+  }
 
-  initializePages: function () {
+  static get options() {
+    return {
+      pages: [],
+      position: 'top',
+      show: null,
+    };
+  }
+
+  static get static_events() {
+    return {
+      set_position: function (value) {
+        let badir;
+        if (value === 'top' || value === 'bottom') {
+          badir = 'horizontal';
+        } else {
+          badir = 'vertical';
+        }
+        if (this.navigation) this.navigation.set('direction', badir);
+        if (this.pages) this.pages.set('animation', badir);
+      },
+    };
+  }
+
+  initializePages() {
     this.pages_subscriptions = unsubscribeSubscriptions(
       this.pages_subscriptions
     );
@@ -207,14 +213,14 @@ export const Pager = defineClass({
     this.set('position', this.get('position'));
 
     this.pages_subscriptions = subs;
-  },
+  }
 
-  getButtonForPage: function (page) {
+  getButtonForPage(page) {
     return this.page_to_button.get(page);
-  },
+  }
 
-  initialize: function (options) {
-    Container.prototype.initialize.call(this, options);
+  initialize(options) {
+    super.initialize(options);
     /**
      * The main DIV element. Has the class <code>.aux-pager</code>.
      *
@@ -222,21 +228,22 @@ export const Pager = defineClass({
      */
     this.pages_subscriptions = initSubscriptions();
     this.page_to_button = new Map();
-  },
+  }
 
-  initialized: function () {
-    Container.prototype.initialized.call(this);
+  initialized() {
+    super.initialized();
     this.addPages(this.options.pages);
     this.set('position', this.options.position);
     this.set('show', this.options.show);
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-pager');
 
-    Container.prototype.draw.call(this, O, element);
-  },
+    super.draw(O, element);
+  }
 
-  removeChild: function (child) {
+  removeChild(child) {
     if (child instanceof Pages) {
       if (this.pages === child) {
         this.pages.element.remove();
@@ -251,11 +258,11 @@ export const Pager = defineClass({
       }
     }
 
-    Container.prototype.removeChild.call(this, child);
-  },
+    super.removeChild(child);
+  }
 
-  addChild: function (child) {
-    Container.prototype.addChild.call(this, child);
+  addChild(child) {
+    super.addChild(child);
 
     if (child instanceof Pages) {
       if (this.pages && this.pages !== child) {
@@ -266,10 +273,10 @@ export const Pager = defineClass({
       this.pages = child;
       this.initializePages();
     }
-  },
+  }
 
-  redraw: function () {
-    Container.prototype.redraw.call(this);
+  redraw() {
+    super.redraw();
     const O = this.options;
     const I = this.invalid;
     const E = this.element;
@@ -302,7 +309,7 @@ export const Pager = defineClass({
           warn('Unsupported position', O.position);
       }
     }
-  },
+  }
 
   /**
    * Adds an array of pages.
@@ -327,7 +334,7 @@ export const Pager = defineClass({
    * ]);
    *
    */
-  addPages: function (pages) {
+  addPages(pages) {
     if (!Array.isArray(pages))
       throw new TypeError('Expected array of objects.');
 
@@ -342,7 +349,7 @@ export const Pager = defineClass({
 
       this.addPage(options, content);
     }
-  },
+  }
 
   /**
    * Adds a {@link Container} to the pager and a corresponding {@link Button}
@@ -364,7 +371,7 @@ export const Pager = defineClass({
    *
    * @emits Pager#added
    */
-  addPage: function (buttonOptions, content, options, position) {
+  addPage(buttonOptions, content, options, position) {
     const p = this.pages.addPage(content, position, options);
 
     const button = this.getButtonForPage(p);
@@ -385,7 +392,7 @@ export const Pager = defineClass({
     }
 
     return p;
-  },
+  }
 
   /**
    * Removes a page from the Pager.
@@ -397,17 +404,18 @@ export const Pager = defineClass({
    *
    * @emits Pager#removed
    */
-  removePage: function (page) {
+  removePage(page) {
     this.pages.removePage(page);
-  },
+  }
+
   /**
    * Returns the currently displayed page or null.
    *
    * @method Pager#current
    */
-  current: function () {
+  current() {
     return this.pager.current();
-  },
+  }
 
   /**
    * Opens the first page of the pager. Returns <code>true</code> if a
@@ -415,26 +423,27 @@ export const Pager = defineClass({
    *
    * @method Pager#first
    */
-  first: function () {
+  first() {
     if (this.pages.getPages().length) {
       this.set('show', 0);
       return true;
     }
     return false;
-  },
+  }
+
   /**
    * Opens the last page of the pager. Returns <code>true</code> if a
    * last page exists, <code>false</code> otherwise.
    *
    * @method Pager#last
    */
-  last: function () {
+  last() {
     if (this.pages.getPages().length) {
       this.set('show', this.pages.getPages().length - 1);
       return true;
     }
     return false;
-  },
+  }
 
   /**
    * Opens the next page of the pager. Returns <code>true</code> if a
@@ -442,25 +451,26 @@ export const Pager = defineClass({
    *
    * @method Pager#next
    */
-  next: function () {
+  next() {
     const c = this.options.show;
     return this.set('show', c + 1) !== c;
-  },
+  }
+
   /**
    * Opens the previous page of the pager. Returns <code>true</code> if a
    * previous page exists, <code>false</code> otherwise.
    *
    * @method Pager#prev
    */
-  prev: function () {
+  prev() {
     const c = this.options.show;
     return this.set('show', c - 1) !== c;
-  },
+  }
 
-  getPages: function () {
+  getPages() {
     return this.pages.getPages();
-  },
-});
+  }
+}
 
 /**
  * The {@link Navigation} instance acting as the menu.

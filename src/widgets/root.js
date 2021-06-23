@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from '../widget_helpers.js';
 import { Container } from './container.js';
 import { addClass } from '../utils/dom.js';
 
@@ -31,20 +30,23 @@ import { addClass } from '../utils/dom.js';
  *
  * @class Root
  */
-export const Root = defineClass({
-  Extends: Container,
-  _options: Object.assign({}, Container.getOptionTypes()),
-  initialize: function (options) {
-    Container.prototype.initialize.call(this, options);
+export class Root extends Container {
+  static get _options() {
+    return Object.assign({}, Container.getOptionTypes());
+  }
+
+  initialize(options) {
+    super.initialize(options);
     /**
      * @member {HTMLDivElement} Root#element - The main DIV container.
      *   Has class <code>.aux-root</code>.
      */
     this.setParent(null);
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-root');
 
-    Container.prototype.draw.call(this, O, element);
-  },
-});
+    super.draw(O, element);
+  }
+}

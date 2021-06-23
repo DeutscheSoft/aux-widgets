@@ -17,38 +17,43 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from '../widget_helpers.js';
 import { LevelMeter } from './levelmeter.js';
 import { addClass, element } from '../utils/dom.js';
 
-export const PhaseMeter = defineClass({
-  /**
-   * PhaseMeter is a {@link LevelMeter} configured to display phase
-   * correlation.
-   *
-   * @extends LevelMeter
-   * @class PhaseMeter
-   *
-   */
-  Extends: LevelMeter,
-  _options: Object.assign({}, LevelMeter.getOptionTypes()),
-  options: {
-    show_clip: false,
-    layout: 'top',
-    min: -1,
-    max: 1,
-    base: 0,
-    levels: [0.05, 0.1, 0.5, 1],
-  },
-  initialize: function (options) {
+/**
+ * PhaseMeter is a {@link LevelMeter} configured to display phase
+ * correlation.
+ *
+ * @extends LevelMeter
+ * @class PhaseMeter
+ *
+ */
+export class PhaseMeter extends LevelMeter {
+  static get _options() {
+    return Object.assign({}, LevelMeter.getOptionTypes());
+  }
+
+  static get options() {
+    return {
+      show_clip: false,
+      layout: 'top',
+      min: -1,
+      max: 1,
+      base: 0,
+      levels: [0.05, 0.1, 0.5, 1],
+    };
+  }
+
+  initialize(options) {
     if (!options.element) options.element = element('div');
-    LevelMeter.prototype.initialize.call(this, options);
+    super.initialize(options);
     /**
      * @member {HTMLDivElement} PhaseMeter#element - The main DIV container.
      *   Has class <code>.aux-phasemeter</code>.
      */
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-phasemeter');
     if (!Object.prototype.hasOwnProperty.call(O, 'scale.labels')) {
       this.scale.set('labels', function (v) {
@@ -58,6 +63,6 @@ export const PhaseMeter = defineClass({
     if (!Object.prototype.hasOwnProperty.call(O, 'scale.base')) {
       this.scale.set('base', 0);
     }
-    LevelMeter.prototype.draw.call(this, O, element);
-  },
-});
+    super.draw(O, element);
+  }
+}

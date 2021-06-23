@@ -18,7 +18,6 @@
  */
 
 import { S } from '../dom_scheduler.js';
-import { defineClass } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
 import {
   addClass,
@@ -161,49 +160,60 @@ function nextDblClicked() {
  *
  * @class Navigation
  */
-export const Navigation = defineClass({
-  Extends: Container,
-  _options: Object.assign({}, Container.getOptionTypes(), {
-    _clip_width: 'number',
-    _clip_height: 'number',
-    _list_width: 'number',
-    _list_height: 'number',
-    _button_positions: 'object',
+export class Navigation extends Container {
+  static get _options() {
+    return Object.assign({}, Container.getOptionTypes(), {
+      _clip_width: 'number',
+      _clip_height: 'number',
+      _list_width: 'number',
+      _list_height: 'number',
+      _button_positions: 'object',
 
-    direction: 'string',
-    arrows: 'boolean',
-    auto_arrows: 'boolean',
-    resized: 'boolean',
-    scroll: 'int',
-  }),
-  options: {
-    direction: 'horizontal',
-    arrows: false,
-    auto_arrows: true,
-    resized: false,
-    scroll: 500,
-  },
-  static_events: {
-    set_direction: function (value) {
-      this.prev.set('icon', value === 'vertical' ? 'arrowup' : 'arrowleft'); //"\u25B2" : "\u25C0");
-      this.next.set('icon', value === 'vertical' ? 'arrowdown' : 'arrowright'); //"\u25BC" : "\u25B6");
-    },
-    hide: function () {
-      if (this._scroll_animation) {
-        this._scroll_animation.pause();
-      }
-    },
-    show: function () {
-      if (this._scroll_animation) {
-        this._scroll_animation.start();
-      }
-    },
-    set_select: function (val) {
-      this.prev.set('disabled', val <= 0);
-      this.next.set('disabled', val == this.buttons.getButtons().length - 1);
-    },
-  },
-  _getButtonScrollPosition: function () {
+      direction: 'string',
+      arrows: 'boolean',
+      auto_arrows: 'boolean',
+      resized: 'boolean',
+      scroll: 'int',
+    });
+  }
+
+  static get options() {
+    return {
+      direction: 'horizontal',
+      arrows: false,
+      auto_arrows: true,
+      resized: false,
+      scroll: 500,
+    };
+  }
+
+  static get static_events() {
+    return {
+      set_direction: function (value) {
+        this.prev.set('icon', value === 'vertical' ? 'arrowup' : 'arrowleft'); //"\u25B2" : "\u25C0");
+        this.next.set(
+          'icon',
+          value === 'vertical' ? 'arrowdown' : 'arrowright'
+        ); //"\u25BC" : "\u25B6");
+      },
+      hide: function () {
+        if (this._scroll_animation) {
+          this._scroll_animation.pause();
+        }
+      },
+      show: function () {
+        if (this._scroll_animation) {
+          this._scroll_animation.start();
+        }
+      },
+      set_select: function (val) {
+        this.prev.set('disabled', val <= 0);
+        this.next.set('disabled', val == this.buttons.getButtons().length - 1);
+      },
+    };
+  }
+
+  _getButtonScrollPosition() {
     const O = this.options;
     const show = O.select;
     const button_list = this.buttons.getButtons();
@@ -237,9 +247,10 @@ export const Navigation = defineClass({
     if (pos < 0) pos = 0;
 
     return pos;
-  },
-  initialize: function (options) {
-    Container.prototype.initialize.call(this, options);
+  }
+
+  initialize(options) {
+    super.initialize(options);
     /**
      * @member {HTMLDivElement} Navigation#element - The main DIV container.
      *   Has class <code>.aux-navigation</code>.
@@ -267,9 +278,10 @@ export const Navigation = defineClass({
 
     this.set('auto_arrows', this.options.auto_arrows);
     this.set('direction', this.options.direction);
-  },
-  initialized: function () {
-    Container.prototype.initialized.call(this);
+  }
+
+  initialized() {
+    super.initialized();
 
     const measure_clip = () => {
       const buttons = this.buttons;
@@ -339,16 +351,19 @@ export const Navigation = defineClass({
         this._scroll_left = this.buttons.element.scrollLeft;
       })
     );
-  },
-  resize: function () {
+  }
+
+  resize() {
     autoArrows.call(this);
-    Container.prototype.resize.call(this);
-  },
-  draw: function (O, element) {
+    super.resize();
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-navigation');
-    Container.prototype.draw.call(this, O, element);
-  },
-  redraw: function () {
+    super.draw(O, element);
+  }
+
+  redraw() {
     const O = this.options;
     const I = this.invalid;
     const E = this.element;
@@ -408,29 +423,34 @@ export const Navigation = defineClass({
       }
     }
 
-    Container.prototype.redraw.call(this);
-  },
-  addButton: function (...arg) {
+    super.redraw();
+  }
+
+  addButton(...arg) {
     return this.buttons.addButton(...arg);
-  },
-  addButtons: function (...arg) {
+  }
+
+  addButtons(...arg) {
     return this.buttons.addButtons(...arg);
-  },
-  removeButton: function (...arg) {
+  }
+
+  removeButton(...arg) {
     return this.buttons.removeButton(...arg);
-  },
-  empty: function (...arg) {
+  }
+
+  empty(...arg) {
     return this.buttons.empty(...arg);
-  },
-  destroy: function () {
-    Container.prototype.destroy.call(this);
+  }
+
+  destroy() {
+    super.destroy();
 
     if (this._scroll_animation) {
       this._scroll_animation.stop();
       this._scroll_animation = null;
     }
-  },
-});
+  }
+}
 /**
  * @member {Buttons} Navigation#buttons - The {@link Buttons} of the Navigation.
  */

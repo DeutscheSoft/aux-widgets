@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from './../widget_helpers.js';
 import { addClass } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 import { FrequencyResponse } from './frequencyresponse.js';
@@ -121,49 +120,55 @@ function invalidateBands() {
   this.triggerDraw();
 }
 
-export const EqualizerGraph = defineClass({
-  /**
-   * EqualizerGraph is a special {@link Graph}, which contains a list of {@link EqBand}s and draws the
-   * resulting frequency response curve.
-   *
-   * @property {Number} [options.accuracy=1] - The distance between points on
-   *   the x axis. Reduces CPU load in favour of accuracy and smoothness.
-   * @property {Array} [options.bands=[]] - The list of {@link EqBand}s.
-   * @property {Number} [options.oversampling=5] - If slope of the curve is too
-   *   steep, oversample n times in order to not miss e.g. notch filters.
-   * @property {Number} [options.threshold=5] - Steepness of slope to oversample,
-   *   i.e. y pixels difference per x pixel
-   * @property {Function} [options.rendering_filter=(b) => b.get('active')] - A
-   *   callback function which can be used to customize which equalizer bands
-   *   are included when rendering the frequency response curve. This defaults
-   *   to those bands which have their `active` option set to `true`.
-   * @class EqualizerGraph
-   *
-   * @extends Graph
-   */
-  Extends: Graph,
-  _options: Object.assign({}, Graph.getOptionTypes(), {
-    accuracy: 'number',
-    oversampling: 'number',
-    threshold: 'number',
-    bands: 'array',
-    rendering_filter: 'function',
-  }),
-  options: {
-    accuracy: 1, // the distance between points of curves on the x axis
-    oversampling: 4, // if slope of the curve is too steep, oversample
-    // n times in order to not miss a notch filter
-    threshold: 10, // steepness of slope, i.e. amount of y pixels difference
-    bands: [], // list of bands to create on init
-    rendering_filter: function (band) {
-      return band.get('active');
-    },
-  },
-  initialize: function (options) {
-    Graph.prototype.initialize.call(this, options);
+/**
+ * EqualizerGraph is a special {@link Graph}, which contains a list of {@link EqBand}s and draws the
+ * resulting frequency response curve.
+ *
+ * @property {Number} [options.accuracy=1] - The distance between points on
+ *   the x axis. Reduces CPU load in favour of accuracy and smoothness.
+ * @property {Array} [options.bands=[]] - The list of {@link EqBand}s.
+ * @property {Number} [options.oversampling=5] - If slope of the curve is too
+ *   steep, oversample n times in order to not miss e.g. notch filters.
+ * @property {Number} [options.threshold=5] - Steepness of slope to oversample,
+ *   i.e. y pixels difference per x pixel
+ * @property {Function} [options.rendering_filter=(b) => b.get('active')] - A
+ *   callback function which can be used to customize which equalizer bands
+ *   are included when rendering the frequency response curve. This defaults
+ *   to those bands which have their `active` option set to `true`.
+ * @class EqualizerGraph
+ *
+ * @extends Graph
+ */
+export class EqualizerGraph extends Graph {
+  static get _options() {
+    return Object.assign({}, Graph.getOptionTypes(), {
+      accuracy: 'number',
+      oversampling: 'number',
+      threshold: 'number',
+      bands: 'array',
+      rendering_filter: 'function',
+    });
+  }
+
+  static get options() {
+    return {
+      accuracy: 1, // the distance between points of curves on the x axis
+      oversampling: 4, // if slope of the curve is too steep, oversample
+      // n times in order to not miss a notch filter
+      threshold: 10, // steepness of slope, i.e. amount of y pixels difference
+      bands: [], // list of bands to create on init
+      rendering_filter: function (band) {
+        return band.get('active');
+      },
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
     this._invalidate_bands = invalidateBands.bind(this);
-  },
-  redraw: function () {
+  }
+
+  redraw() {
     const I = this.invalid;
     if (
       I.validate(
@@ -176,30 +181,35 @@ export const EqualizerGraph = defineClass({
     ) {
       this.set('dots', this.drawPath());
     }
-    Graph.prototype.redraw.call(this);
-  },
+    super.redraw();
+  }
+
   /**
    * Returns the functions representing the frequency response of all
    * active filters.
    */
-  getFilterFunctions: function () {
+  getFilterFunctions() {
     const bands = this.options.bands.filter(this.options.rendering_filter);
     return bands.map((b) => b.filter.getFrequencyToGain());
-  },
+  }
+
   /**
    * Draws an SVG path for the current frequency response curve.
    */
-  drawPath: function () {
+  drawPath() {
     return drawGraph.call(this, this.getFilterFunctions());
-  },
-  resize: function () {
+  }
+
+  resize() {
     invalidateBands.call(this);
-  },
-  addBand: function (band) {
+  }
+
+  addBand(band) {
     band.on('set', this._invalidate_bands);
     this.set('bands', this.options.bands.concat([band]));
-  },
-  removeBand: function (band) {
+  }
+
+  removeBand(band) {
     const O = this.options;
     this.set(
       'bands',
@@ -208,42 +218,49 @@ export const EqualizerGraph = defineClass({
       })
     );
     band.off('set', this._invalidate_bands);
-  },
-});
+  }
+}
 
-export const Equalizer = defineClass({
-  /**
-   * Equalizer is a {@link FrequencyResponse}, utilizing {@link EqBand}s instead of
-   * simple {@link ChartHandle}s. An Equalizer - by default - has one
-   * {@link EqualizerGraph} which contains all bands. Additional {@link
-   * EqualizerGraph}s can be added. The Equalizer inherits all options of
-   * {@link EqualizerGraph}.
-   *
-   * @property {Boolean} [options.show_bands=true] - Show or hide all bands.
-   *
-   * @class Equalizer
-   *
-   * @extends FrequencyResponse
-   */
-  Extends: FrequencyResponse,
-  _options: Object.assign({}, FrequencyResponse.getOptionTypes(), {
-    show_bands: 'boolean',
-  }),
-  options: {
-    show_bands: true,
-  },
-  static_events: {
-    set_bands: function (value) {
-      if (this.bands.length) this.removeBands();
-      this.addBands(value);
-    },
-    set_show_bands: function (value) {
-      this.set('show_handles', value);
-    },
-  },
+/**
+ * Equalizer is a {@link FrequencyResponse}, utilizing {@link EqBand}s instead of
+ * simple {@link ChartHandle}s. An Equalizer - by default - has one
+ * {@link EqualizerGraph} which contains all bands. Additional {@link
+ * EqualizerGraph}s can be added. The Equalizer inherits all options of
+ * {@link EqualizerGraph}.
+ *
+ * @property {Boolean} [options.show_bands=true] - Show or hide all bands.
+ *
+ * @class Equalizer
+ *
+ * @extends FrequencyResponse
+ */
+export class Equalizer extends FrequencyResponse {
+  static get _options() {
+    return Object.assign({}, FrequencyResponse.getOptionTypes(), {
+      show_bands: 'boolean',
+    });
+  }
 
-  initialize: function (options) {
-    FrequencyResponse.prototype.initialize.call(this, options);
+  static get options() {
+    return {
+      show_bands: true,
+    };
+  }
+
+  static get static_events() {
+    return {
+      set_bands: function (value) {
+        if (this.bands.length) this.removeBands();
+        this.addBands(value);
+      },
+      set_show_bands: function (value) {
+        this.set('show_handles', value);
+      },
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
     /**
      * @member {Array} Equalizer#bands - Array of {@link EqBand} instances.
      */
@@ -272,18 +289,20 @@ export const Equalizer = defineClass({
     });
     this.addGraph(this.baseline);
     this.addBands(this.options.bands);
-  },
+  }
 
-  destroy: function () {
+  destroy() {
     this.empty();
     this._bands.remove();
-    FrequencyResponse.prototype.destroy.call(this);
-  },
-  draw: function (O, element) {
+    super.destroy();
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-equalizer');
 
-    FrequencyResponse.prototype.draw.call(this, O, element);
-  },
+    super.draw(O, element);
+  }
+
   /**
    * Add a new band to the equalizer. Options is an object containing
    * options for the {@link EqBand}
@@ -295,8 +314,8 @@ export const Equalizer = defineClass({
    *
    * @emits Equalizer#bandadded
    */
-  addChild: function (child) {
-    FrequencyResponse.prototype.addChild.call(this, child);
+  addChild(child) {
+    super.addChild(child);
 
     if (child instanceof EqBand) {
       /**
@@ -309,8 +328,9 @@ export const Equalizer = defineClass({
       this.emit('bandadded', child);
       this.baseline.addBand(child);
     }
-  },
-  removeChild: function (child) {
+  }
+
+  removeChild(child) {
     if (child instanceof EqBand) {
       /**
        * Is fired when a band was removed.
@@ -323,9 +343,10 @@ export const Equalizer = defineClass({
       this.baseline.removeBand(child);
     }
 
-    FrequencyResponse.prototype.removeChild.call(this, child);
-  },
-  addBand: function (options, type) {
+    super.removeChild(child);
+  }
+
+  addBand(options, type) {
     let b;
 
     if (options instanceof EqBand) {
@@ -338,7 +359,8 @@ export const Equalizer = defineClass({
     this.addChild(b);
 
     return b;
-  },
+  }
+
   /**
    * Add multiple new {@link EqBand}s to the equalizer. Options is an array
    * of objects containing options for the new instances of {@link EqBand}
@@ -348,9 +370,10 @@ export const Equalizer = defineClass({
    * @param {Array<Object>} options - An array of options objects for the {@link EqBand}.
    * @param {Object} [type=EqBand] - A widget class to be used for the new band.
    */
-  addBands: function (bands, type) {
+  addBands(bands, type) {
     for (let i = 0; i < bands.length; i++) this.addBand(bands[i], type);
-  },
+  }
+
   /**
    * Remove a band from the widget.
    *
@@ -360,9 +383,10 @@ export const Equalizer = defineClass({
    *
    * @emits Equalizer#bandremoved
    */
-  removeBand: function (h) {
+  removeBand(h) {
     this.removeChild(h);
-  },
+  }
+
   /**
    * Remove multiple {@link EqBand} from the equalizer. Options is an array
    * of {@link EqBand} instances.
@@ -371,7 +395,7 @@ export const Equalizer = defineClass({
    *
    * @param {Array<EqBand>} bands - An array of {@link EqBand} instances.
    */
-  removeBands: function (bands) {
+  removeBands(bands) {
     if (!bands) bands = this.bands.slice(0);
 
     for (let i = 0; i < bands.length; i++) this.removeBand(bands[i]);
@@ -381,7 +405,7 @@ export const Equalizer = defineClass({
      * @event Equalizer#emptied
      */
     if (!bands) this.emit('emptied');
-  },
-});
+  }
+}
 
 inheritChildOptions(Equalizer, 'baseline', EqualizerGraph);

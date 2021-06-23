@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from './../../widget_helpers.js';
 import { addClass } from './../../utils/dom.js';
 
 import { Container } from './../../widgets/container.js';
@@ -40,21 +39,27 @@ import { Container } from './../../widgets/container.js';
  *
  * @class Patchbay
  */
-export const Patchbay = defineClass({
-  Extends: Container,
-  _options: Object.assign({}, Container.getOptionTypes(), {
-    sources: 'object',
-    sinks: 'object',
-    size: 'number',
-  }),
-  options: {
-    size: 32,
-  },
-  initialize: function (options) {
-    Container.prototype.initialize.call(this, options);
-  },
-  draw: function (options, element) {
+export class Patchbay extends Container {
+  static get _options() {
+    return Object.assign({}, Container.getOptionTypes(), {
+      sources: 'object',
+      sinks: 'object',
+      size: 'number',
+    });
+  }
+
+  static get options() {
+    return {
+      size: 32,
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
+  }
+
+  draw(options, element) {
     addClass(this.element, 'aux-patchbay');
-    Container.prototype.draw.call(this, options, element);
-  },
-});
+    super.draw(options, element);
+  }
+}

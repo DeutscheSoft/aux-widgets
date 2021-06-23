@@ -18,60 +18,65 @@
  */
 
 import { Container } from './container.js';
-import { defineClass } from '../widget_helpers.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { Range } from '../modules/range.js';
 import { addClass } from '../utils/dom.js';
 
-export const Drag3D = defineClass({
-  /**
-   * Drag3D is a {@link Container} with a collection of three
-   * {@link DragValue}s applied. Use the dot notation to get access to
-   * the options of the members, e.g. to set the drag angle in x direction
-   * use `drag_x.rotation`.
-   *
-   * @class Drag3D
-   *
-   * @extends Container
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {Number} [options.x] - Value for x direction.
-   * @property {Number} [options.y] - Value for y direction.
-   * @property {Number} [options.z] - Value for z direction.
-   * @property {Number} [options.range_x] - {@link Range} for x direction.
-   * @property {Number} [options.range_y] - {@link Range} for y direction.
-   * @property {Number} [options.range_z] - {@link Range} for z direction.
-   */
-  Extends: Container,
+/**
+ * Drag3D is a {@link Container} with a collection of three
+ * {@link DragValue}s applied. Use the dot notation to get access to
+ * the options of the members, e.g. to set the drag angle in x direction
+ * use `drag_x.rotation`.
+ *
+ * @class Drag3D
+ *
+ * @extends Container
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {Number} [options.x] - Value for x direction.
+ * @property {Number} [options.y] - Value for y direction.
+ * @property {Number} [options.z] - Value for z direction.
+ * @property {Number} [options.range_x] - {@link Range} for x direction.
+ * @property {Number} [options.range_y] - {@link Range} for y direction.
+ * @property {Number} [options.range_z] - {@link Range} for z direction.
+ */
+export class Drag3D extends Container {
+  static get _options() {
+    return Object.assign({}, Container.getOptionTypes(), {
+      x: 'number',
+      y: 'number',
+      z: 'number',
+      range_x: 'object',
+      range_y: 'object',
+      range_z: 'object',
+    });
+  }
 
-  _options: Object.assign({}, Container.getOptionTypes(), {
-    x: 'number',
-    y: 'number',
-    z: 'number',
-    range_x: 'object',
-    range_y: 'object',
-    range_z: 'object',
-  }),
+  static get options() {
+    return {
+      x: 0,
+      y: 0,
+      z: 0,
+      range_x: { min: 0, max: 1, basis: 200 },
+      range_y: { min: 0, max: 1, basis: 200 },
+      range_z: { min: 0, max: 1, basis: 200 },
+      'drag_x.rotation': 330,
+      'drag_y.rotation': 30,
+      'drag_z.rotation': 90,
+    };
+  }
 
-  options: {
-    x: 0,
-    y: 0,
-    z: 0,
-    range_x: { min: 0, max: 1, basis: 200 },
-    range_y: { min: 0, max: 1, basis: 200 },
-    range_z: { min: 0, max: 1, basis: 200 },
-    'drag_x.rotation': 330,
-    'drag_y.rotation': 30,
-    'drag_z.rotation': 90,
-  },
-  static_events: {
-    set_range_x: (v) => (this.range_x = new Range(v)),
-    set_range_y: (v) => (this.range_y = new Range(v)),
-    set_range_z: (v) => (this.range_z = new Range(v)),
-  },
-  initialize: function (options) {
-    Container.prototype.initialize.call(this, options);
+  static get static_events() {
+    return {
+      set_range_x: (v) => (this.range_x = new Range(v)),
+      set_range_y: (v) => (this.range_y = new Range(v)),
+      set_range_z: (v) => (this.range_z = new Range(v)),
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
     const O = this.options;
 
     /**
@@ -142,12 +147,13 @@ export const Drag3D = defineClass({
       rotation: O['drag_z.rotation'],
       blind_angle: 160,
     });
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-drag3d');
-    Container.prototype.draw.call(this, O, element);
-  },
-});
+    super.draw(O, element);
+  }
+}
 
 const setCallback = function (val, key) {
   if (this[name]) this[name].set(key.substr(name.length + 1), val);

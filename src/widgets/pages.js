@@ -26,7 +26,6 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { defineClass } from '../widget_helpers.js';
 import { addClass, removeClass, isDomNode } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 import { Container } from './container.js';
@@ -131,62 +130,69 @@ function onPageRemoved(page, position) {
   pages.emit('removed', page, position);
 }
 
-export const Pages = defineClass({
-  /**
-   * Pages contains different pages ({@link Page}s) which can
-   * be swiched via option.
-   *
-   * @class Pages
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {Array<Page|DOMNode|String>} [options.pages=[]] -
-   *   An array of either an instance of {@link Page} (or derivate),
-   *   a DOMNode or a string of HTML which gets wrapped in a new {@link Container}.
-   * @property {Integer} [options.show=-1] - The page to show. Set to -1 to hide all pages.
-   * @property {String} [options.animation="horizontal"] - The direction of the
-   *   flip animation, either `horizontal` or `vertical`.
-   *
-   * @extends Container
-   *
-   * @example
-   * var pages = new Pages({
-   *  pages: [
-   *   {
-   *    content: document.createElement("span"),
-   *   },
-   *   {
-   *    content: "<h1>Foobar</h1><p>Lorem ipsum dolor sit amet</p>",
-   *   }
-   *  ]
-   * });
-   */
-  Extends: Container,
-  _options: Object.assign({}, Container.getOptionTypes(), {
-    direction: 'string',
-    pages: 'array',
-    show: 'int',
-    animation: 'string',
-  }),
-  options: {
-    direction: 'forward',
-    pages: [],
-    show: -1,
-    animation: 'horizontal',
-  },
-  static_events: {
-    set_show: function (value) {
-      const list = this.pages.getList();
+/**
+ * Pages contains different pages ({@link Page}s) which can
+ * be swiched via option.
+ *
+ * @class Pages
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {Array<Page|DOMNode|String>} [options.pages=[]] -
+ *   An array of either an instance of {@link Page} (or derivate),
+ *   a DOMNode or a string of HTML which gets wrapped in a new {@link Container}.
+ * @property {Integer} [options.show=-1] - The page to show. Set to -1 to hide all pages.
+ * @property {String} [options.animation="horizontal"] - The direction of the
+ *   flip animation, either `horizontal` or `vertical`.
+ *
+ * @extends Container
+ *
+ * @example
+ * var pages = new Pages({
+ *  pages: [
+ *   {
+ *    content: document.createElement("span"),
+ *   },
+ *   {
+ *    content: "<h1>Foobar</h1><p>Lorem ipsum dolor sit amet</p>",
+ *   }
+ *  ]
+ * });
+ */
+export class Pages extends Container {
+  static get _options() {
+    return Object.assign({}, Container.getOptionTypes(), {
+      direction: 'string',
+      pages: 'array',
+      show: 'int',
+      animation: 'string',
+    });
+  }
 
-      for (let i = 0; i < list.length; i++) {
-        const page = list[i];
-        page.update('active', i === value);
-      }
-    },
-  },
+  static get options() {
+    return {
+      direction: 'forward',
+      pages: [],
+      show: -1,
+      animation: 'horizontal',
+    };
+  }
 
-  initialize: function (options) {
-    Container.prototype.initialize.call(this, options);
+  static get static_events() {
+    return {
+      set_show: function (value) {
+        const list = this.pages.getList();
+
+        for (let i = 0; i < list.length; i++) {
+          const page = list[i];
+          page.update('active', i === value);
+        }
+      },
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
     /**
      * The main DIV element. Has the class <code>.aux-pages</code>.
      *
@@ -197,21 +203,22 @@ export const Pages = defineClass({
     });
     this.pages.on('child_added', onPageAdded);
     this.pages.on('child_removed', onPageRemoved);
-  },
+  }
 
-  initialized: function () {
-    Container.prototype.initialized.call(this);
+  initialized() {
+    super.initialized();
     this.addPages(this.options.pages);
     this.set('show', this.options.show);
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-pages');
 
-    Container.prototype.draw.call(this, O, element);
-  },
+    super.draw(O, element);
+  }
 
-  redraw: function () {
-    Container.prototype.redraw.call(this);
+  redraw() {
+    super.redraw();
     const O = this.options;
     const I = this.invalid;
     const E = this.element;
@@ -248,7 +255,7 @@ export const Pages = defineClass({
         else page.removeClass('aux-active');
       }
     }
-  },
+  }
 
   /**
    * Adds an array of pages.
@@ -264,11 +271,11 @@ export const Pages = defineClass({
    * p.addPages(['foobar']);
    *
    */
-  addPages: function (pages) {
+  addPages(pages) {
     for (let i = 0; i < pages.length; i++) this.addPage(pages[i]);
-  },
+  }
 
-  createPage: function (content, options) {
+  createPage(content, options) {
     if (typeof content === 'string' || content === void 0) {
       if (!options) options = {};
       const page = new Page(options);
@@ -292,7 +299,7 @@ export const Pages = defineClass({
     } else {
       throw new TypeError('Unexpected argument type.');
     }
-  },
+  }
 
   /**
    * Adds a {@link Page} to the pages and a corresponding {@link Button}
@@ -311,7 +318,7 @@ export const Pages = defineClass({
    *   either a string or a DOMNode.
    * @emits Pages#added
    */
-  addPage: function (content, position, options) {
+  addPage(content, position, options) {
     const page = this.createPage(content, options);
     const pages = this.getPages();
     const element = this.element;
@@ -333,7 +340,8 @@ export const Pages = defineClass({
     }
 
     return page;
-  },
+  }
+
   /**
    * Removes a page from the Pages.
    *
@@ -345,7 +353,7 @@ export const Pages = defineClass({
    *
    * @emits Pages#removed
    */
-  removePage: function (page, destroy) {
+  removePage(page, destroy) {
     let position = -1;
 
     if (page instanceof Page) {
@@ -366,25 +374,25 @@ export const Pages = defineClass({
     }
 
     if (destroy) page.destroy();
-  },
+  }
 
   /**
    * Removes all pages.
    *
    * @method Pages#empty
    */
-  empty: function () {
+  empty() {
     while (this.getPages().length) this.removePage(0);
-  },
+  }
 
-  current: function () {
+  current() {
     /**
      * Returns the currently displayed page or null.
      *
      * @method Pages#current
      */
     return this.pages.at(this.options.show) || null;
-  },
+  }
 
   /**
    * Opens the first page of the pages. Returns <code>true</code> if a
@@ -394,13 +402,14 @@ export const Pages = defineClass({
    *
    * @returns {Boolean} True if successful, false otherwise.
    */
-  first: function () {
+  first() {
     if (this.getPages().length) {
       this.set('show', 0);
       return true;
     }
     return false;
-  },
+  }
+
   /**
    * Opens the last page of the pages. Returns <code>true</code> if a
    * last page exists, <code>false</code> otherwise.
@@ -409,14 +418,14 @@ export const Pages = defineClass({
    *
    * @returns {Boolean} True if successful, false otherwise.
    */
-  last: function () {
+  last() {
     const length = this.getPages().length;
     if (length) {
       this.set('show', length - 1);
       return true;
     }
     return false;
-  },
+  }
 
   /**
    * Opens the next page of the pages. Returns <code>true</code> if a
@@ -426,7 +435,7 @@ export const Pages = defineClass({
    *
    * @returns {Boolean} True if successful, false otherwise.
    */
-  next: function () {
+  next() {
     const show = this.options.show;
     const length = this.getPages().length;
 
@@ -436,7 +445,8 @@ export const Pages = defineClass({
     }
 
     return false;
-  },
+  }
+
   /**
    * Opens the previous page of the pages. Returns <code>true</code> if a
    * previous page exists, <code>false</code> otherwise.
@@ -445,7 +455,7 @@ export const Pages = defineClass({
    *
    * @returns {Boolean} True if successful, false otherwise.
    */
-  prev: function () {
+  prev() {
     const show = this.options.show;
     const length = this.getPages().length;
 
@@ -454,9 +464,9 @@ export const Pages = defineClass({
     this.set('show', show - 1);
 
     return show - 1 < length;
-  },
+  }
 
-  set: function (key, value) {
+  set(key, value) {
     if (key === 'show') {
       if (value !== this.options.show) {
         if (value > this.options.show) {
@@ -469,36 +479,41 @@ export const Pages = defineClass({
       this.options.pages.forEach((page) => this.removePage(page, true));
       value = this.addPages(value || []);
     }
-    return Container.prototype.set.call(this, key, value);
-  },
-  getPages: function () {
-    return this.pages.getList();
-  },
-});
+    return super.set(key, value);
+  }
 
-export const Page = defineClass({
-  /**
-   * Page is the child widget to be used in {@link Pages}.
-   *
-   * @class Page
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {String} [options.label=""] - The label of the pages corresponding button
-   * @property {Number} [options.hiding_duration=-1] - Default to auto-determine hiding duration from style.
-   * @property {Number} [options.showing_duration=-1] - Default to auto-determine showing duration from style.
-   *
-   * @extends Container
-   */
-  Extends: Container,
-  _options: Object.assign({}, Container.getOptionTypes(), {
-    label: 'string',
-    icon: 'string',
-  }),
-  options: {
-    label: '',
-    icon: '',
-    hiding_duration: -1,
-    showing_duration: -1,
-  },
-});
+  getPages() {
+    return this.pages.getList();
+  }
+}
+
+/**
+ * Page is the child widget to be used in {@link Pages}.
+ *
+ * @class Page
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {String} [options.label=""] - The label of the pages corresponding button
+ * @property {Number} [options.hiding_duration=-1] - Default to auto-determine hiding duration from style.
+ * @property {Number} [options.showing_duration=-1] - Default to auto-determine showing duration from style.
+ *
+ * @extends Container
+ */
+export class Page extends Container {
+  static get _options() {
+    return Object.assign({}, Container.getOptionTypes(), {
+      label: 'string',
+      icon: 'string',
+    });
+  }
+
+  static get options() {
+    return {
+      label: '',
+      icon: '',
+      hiding_duration: -1,
+      showing_duration: -1,
+    };
+  }
+}

@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
 import { Label } from './label.js';
 import { Container } from './container.js';
@@ -34,25 +33,31 @@ import { addClass } from '../utils/dom.js';
  *
  * @class Frame
  */
-export const Frame = defineClass({
-  Extends: Container,
-  _options: Object.assign({}, Container.getOptionTypes()),
-  options: {
-    label: false,
-  },
-  initialize: function (options) {
-    Container.prototype.initialize.call(this, options);
+export class Frame extends Container {
+  static get _options() {
+    return Object.assign({}, Container.getOptionTypes());
+  }
+
+  static get options() {
+    return {
+      label: false,
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
     /**
      * @member {HTMLDivElement} Frame#element - The main DIV container.
      *   Has class <code>.aux-frame</code>.
      */
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-frame');
 
-    Container.prototype.draw.call(this, O, element);
-  },
-});
+    super.draw(O, element);
+  }
+}
 /**
  * @member {Label} Frame#label - The {@link Label} of the frame.
  */

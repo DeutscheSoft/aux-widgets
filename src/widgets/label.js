@@ -18,53 +18,58 @@
  */
 
 import { element, addClass } from './../utils/dom.js';
-import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 
-export const Label = defineClass({
-  /**
-   * Label is a simple text field displaying strings.
-   *
-   * @class Label
-   *
-   * @extends Widget
-   *
-   * @property {Mixed} [options.label=""] - The content of the label. Can be formatted via `options.format`.
-   * @property {Function|Boolean} [options.format=false] - Optional format function.
-   */
-  Extends: Widget,
-  _options: Object.assign({}, Widget.getOptionTypes(), {
-    label: 'string',
-    format: 'function|boolean',
-  }),
-  options: {
-    label: '',
-    format: false,
-  },
-  initialize: function (options) {
+/**
+ * Label is a simple text field displaying strings.
+ *
+ * @class Label
+ *
+ * @extends Widget
+ *
+ * @property {Mixed} [options.label=""] - The content of the label. Can be formatted via `options.format`.
+ * @property {Function|Boolean} [options.format=false] - Optional format function.
+ */
+export class Label extends Widget {
+  static get _options() {
+    return Object.assign({}, Widget.getOptionTypes(), {
+      label: 'string',
+      format: 'function|boolean',
+    });
+  }
+
+  static get options() {
+    return {
+      label: '',
+      format: false,
+    };
+  }
+
+  initialize(options) {
     if (!options.element) options.element = element('div');
-    Widget.prototype.initialize.call(this, options);
+    super.initialize(options);
     /** @member {HTMLDivElement} Label#element - The main DIV container.
      * Has class <code>.aux-label</code>.
      */
     this._text = document.createTextNode('');
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-label');
     element.appendChild(this._text);
 
-    Widget.prototype.draw.call(this, O, element);
-  },
+    super.draw(O, element);
+  }
 
-  redraw: function () {
+  redraw() {
     const I = this.invalid;
     const O = this.options;
 
-    Widget.prototype.redraw.call(this);
+    super.redraw();
 
     if (I.label || I.format) {
       I.label = I.format = false;
       this._text.data = O.format ? O.format.call(this, O.label) : O.label;
     }
-  },
-});
+  }
+}

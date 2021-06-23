@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from './../widget_helpers.js';
 import { Chart } from './chart.js';
 import { addClass, removeClass } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
@@ -38,92 +37,100 @@ function dragHandle(key, value) {
   return false;
 }
 
-export const Dynamics = defineClass({
-  /**
-   * Dynamics are based on {@link Chart} and display the characteristics of dynamic
-   * processors. They are square widgets drawing a {@link Grid} automatically based on
-   * the range.
-   *
-   * @class Dynamics
-   *
-   * @extends Chart
-   *
-   * @property {Number} [options.min=-96] - Minimum decibels to display.
-   * @property {Number} [options.max=24] - Maximum decibels to display.
-   * @property {String} [options.scale="linear"] - Scale of the display, see {@link Range} for details.
-   * @property {String} [options.type=false] - Type of the dynamics: <code>compressor</code>, <code>expander</code>, <code>gate</code>, <code>limiter</code> or <code>false</code> to draw your own graph.
-   * @property {Number} [options.threshold=0] - Threshold of the dynamics.
-   * @property {Number} [options.ratio=1] - Ratio of the dynamics.
-   * @property {Number} [options.makeup=0] - Makeup of the dynamics. This raises the whole graph after all other property are applied.
-   * @property {Number} [options.range=0] - Range of the dynamics. Only used in type <code>expander</code>. The maximum gain reduction.
-   * @property {Number} [options.gain=0] - Input gain of the dynamics.
-   * @property {Number} [options.reference=0] - Input reference of the dynamics.
-   * @property {Number} [options.knee=0] - Soft knee width of the compressor in dB.
-   *   Replaces the hard knee of the compressor at the salient point by a
-   *   quadratic curve.
-   * @property {Function} [options.grid_labels=function (val) { return val + (!val ? "dB":""); }] - Callback to format the labels of the {@link Grid}.
-   * @property {Number} [options.db_grid=12] - Draw a grid line every [n] decibels.
-   * @property {Boolean} [options.show_handle=true] - Draw a handle to manipulate threshold and ratio.
-   * @property {Boolean|Function} [options.format_label=false] - Function to format the handle label.
-   */
-  Extends: Chart,
-  _options: Object.assign({}, Chart.getOptionTypes(), {
-    min: 'number',
-    max: 'number',
-    scale: 'string',
-    type: 'string',
-    threshold: 'number',
-    ratio: 'number',
-    makeup: 'number',
-    range: 'number',
-    gain: 'number',
-    reference: 'number',
-    knee: 'number',
-    grid_labels: 'function',
-    db_grid: 'number',
-    show_handle: 'boolean',
-    handle_label: 'boolean|function',
-  }),
-  options: {
-    db_grid: 12,
-    min: -96,
-    max: 24,
-    scale: 'linear',
-    type: false,
-    threshold: 0,
-    ratio: 1,
-    makeup: 0,
-    range: -200,
-    gain: 0,
-    reference: 0,
-    knee: 0,
-    grid_labels: function (val) {
-      return val + (!val ? 'dB' : '');
-    },
-    show_handle: true,
-    handle_label: false,
-    square: true,
-  },
-  static_events: {
-    set_min: rangeSet,
-    set_max: rangeSet,
-    set_scale: rangeSet,
-    set_threshold: function (v) {
-      this.handle.set('x', v);
-      this.handle.set('y', v);
-    },
-    set_ratio: function (v) {
-      this.handle.set('z', v);
-    },
-    set_handle_label: function (v) {
-      this.handle.set('format_label', v);
-    },
-    set_show_handle: function (v) {
-      this.handle.set('visible', v);
-    },
-  },
-  initialize: function (options) {
-    Chart.prototype.initialize.call(this, options, true);
+/**
+ * Dynamics are based on {@link Chart} and display the characteristics of dynamic
+ * processors. They are square widgets drawing a {@link Grid} automatically based on
+ * the range.
+ *
+ * @class Dynamics
+ *
+ * @extends Chart
+ *
+ * @property {Number} [options.min=-96] - Minimum decibels to display.
+ * @property {Number} [options.max=24] - Maximum decibels to display.
+ * @property {String} [options.scale="linear"] - Scale of the display, see {@link Range} for details.
+ * @property {String} [options.type=false] - Type of the dynamics: <code>compressor</code>, <code>expander</code>, <code>gate</code>, <code>limiter</code> or <code>false</code> to draw your own graph.
+ * @property {Number} [options.threshold=0] - Threshold of the dynamics.
+ * @property {Number} [options.ratio=1] - Ratio of the dynamics.
+ * @property {Number} [options.makeup=0] - Makeup of the dynamics. This raises the whole graph after all other property are applied.
+ * @property {Number} [options.range=0] - Range of the dynamics. Only used in type <code>expander</code>. The maximum gain reduction.
+ * @property {Number} [options.gain=0] - Input gain of the dynamics.
+ * @property {Number} [options.reference=0] - Input reference of the dynamics.
+ * @property {Number} [options.knee=0] - Soft knee width of the compressor in dB.
+ *   Replaces the hard knee of the compressor at the salient point by a
+ *   quadratic curve.
+ * @property {Function} [options.grid_labels=function (val) { return val + (!val ? "dB":""); }] - Callback to format the labels of the {@link Grid}.
+ * @property {Number} [options.db_grid=12] - Draw a grid line every [n] decibels.
+ * @property {Boolean} [options.show_handle=true] - Draw a handle to manipulate threshold and ratio.
+ * @property {Boolean|Function} [options.format_label=false] - Function to format the handle label.
+ */
+export class Dynamics extends Chart {
+  static get _options() {
+    return Object.assign({}, Chart.getOptionTypes(), {
+      min: 'number',
+      max: 'number',
+      scale: 'string',
+      type: 'string',
+      threshold: 'number',
+      ratio: 'number',
+      makeup: 'number',
+      range: 'number',
+      gain: 'number',
+      reference: 'number',
+      knee: 'number',
+      grid_labels: 'function',
+      db_grid: 'number',
+      show_handle: 'boolean',
+      handle_label: 'boolean|function',
+    });
+  }
+
+  static get options() {
+    return {
+      db_grid: 12,
+      min: -96,
+      max: 24,
+      scale: 'linear',
+      type: false,
+      threshold: 0,
+      ratio: 1,
+      makeup: 0,
+      range: -200,
+      gain: 0,
+      reference: 0,
+      knee: 0,
+      grid_labels: function (val) {
+        return val + (!val ? 'dB' : '');
+      },
+      show_handle: true,
+      handle_label: false,
+      square: true,
+    };
+  }
+
+  static get static_events() {
+    return {
+      set_min: rangeSet,
+      set_max: rangeSet,
+      set_scale: rangeSet,
+      set_threshold: function (v) {
+        this.handle.set('x', v);
+        this.handle.set('y', v);
+      },
+      set_ratio: function (v) {
+        this.handle.set('z', v);
+      },
+      set_handle_label: function (v) {
+        this.handle.set('format_label', v);
+      },
+      set_show_handle: function (v) {
+        this.handle.set('visible', v);
+      },
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options, true);
     const O = this.options;
     /**
      * @member {HTMLDivElement} Dynamics#element - The main DIV container.
@@ -158,19 +165,19 @@ export const Dynamics = defineClass({
     this.set('show_handle', this.options.show_handle);
     this.set('ratio', this.options.ratio);
     this.set('threshold', this.options.threshold);
-  },
+  }
 
-  draw: function (O, element) {
+  draw(O, element) {
     addClass(element, 'aux-dynamics');
 
-    Chart.prototype.draw.call(this, O, element);
-  },
+    super.draw(O, element);
+  }
 
-  redraw: function () {
+  redraw() {
     const O = this.options;
     const I = this.invalid;
 
-    Chart.prototype.redraw.call(this);
+    super.redraw();
 
     if (I.validate('size', 'min', 'max', 'scale')) {
       const grid_x = [];
@@ -223,9 +230,9 @@ export const Dynamics = defineClass({
     ) {
       this.drawGraph();
     }
-  },
+  }
 
-  drawGraph: function () {
+  drawGraph() {
     const O = this.options;
     if (O.type === false) return;
     if (!this.graph) {
@@ -326,79 +333,88 @@ export const Dynamics = defineClass({
         warn('Unsupported type', O.type);
     }
     this.graph.set('dots', curve);
-  },
-  set: function (key, val) {
+  }
+
+  set(key, val) {
     if (key == 'type') this.options._last_type = this.options.type;
     if (key == 'ratio') val = this.range_z.snap(val);
-    return Chart.prototype.set.call(this, key, val);
-  },
-});
+    return super.set(key, val);
+  }
+}
 
 /**
  * Compressor is a pre-configured {@link Dynamics} widget.
  * @extends Dynamics
  * @class Compressor
  */
-export const Compressor = defineClass({
-  Extends: Dynamics,
-  options: { type: 'compressor' },
-  draw: function (O, element) {
+export class Compressor extends Dynamics {
+  static get options() {
+    return { type: 'compressor' };
+  }
+
+  draw(O, element) {
     /**
      * @member {HTMLDivElement} Compressor#element - The main DIV container.
      *   Has class <code>.aux-compressor</code>.
      */
     addClass(element, 'aux-compressor');
-    Dynamics.prototype.draw.call(this, O, element);
-  },
-});
+    super.draw(O, element);
+  }
+}
 /**
  * Expander is a pre-configured {@link Dynamics} widget.
  * @extends Dynamics
  * @class Expander
  */
-export const Expander = defineClass({
-  Extends: Dynamics,
-  options: { type: 'expander' },
-  draw: function (O, element) {
+export class Expander extends Dynamics {
+  static get options() {
+    return { type: 'expander' };
+  }
+
+  draw(O, element) {
     /**
      * @member {HTMLDivElement} Expander#element - The main DIV container.
      *   Has class <code>.aux-expander</code>.
      */
     addClass(element, 'aux-expander');
-    Dynamics.prototype.draw.call(this, O, element);
-  },
-});
+    super.draw(O, element);
+  }
+}
 /**
  * Gate is a pre-configured {@link Dynamics} widget.
  * @extends Dynamics
  * @class Gate
  */
-export const Gate = defineClass({
-  Extends: Dynamics,
-  options: { type: 'gate', range_z: { min: 1, max: 1 } },
-  draw: function (O, element) {
+export class Gate extends Dynamics {
+  static get options() {
+    return { type: 'gate', range_z: { min: 1, max: 1 } };
+  }
+
+  draw(O, element) {
     /**
      * @member {HTMLDivElement} Gate#element - The main DIV container.
      *   Has class <code>.aux-gate</code>.
      */
     addClass(element, 'aux-gate');
-    Dynamics.prototype.draw.call(this, O, element);
-  },
-});
+    super.draw(O, element);
+  }
+}
 /**
  * Limiter is a pre-configured {@link Dynamics} widget.
  * @extends Dynamics
  * @class Limiter
  */
-export const Limiter = defineClass({
-  Extends: Dynamics,
-  options: { type: 'limiter', range_z: { min: 1, max: 1 } },
-  draw: function (O, element) {
+export class Limiter extends Dynamics {
+  static get options() {
+    return { type: 'limiter', range_z: { min: 1, max: 1 } };
+  }
+
+  draw(O, element) {
     /**
      * @member {HTMLDivElement} Limiter#element - The main DIV container.
      *   Has class <code>.aux-limiter</code>.
      */
     addClass(element, 'aux-limiter');
-    Dynamics.prototype.draw.call(this, O, element);
-  },
-});
+    super.draw(O, element);
+  }
+}

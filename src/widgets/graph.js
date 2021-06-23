@@ -20,7 +20,6 @@
 /* jshint -W014 */
 /* jshint -W086 */
 
-import { defineClass } from './../widget_helpers.js';
 import { defineRange } from '../utils/define_range.js';
 import { Widget } from './widget.js';
 import { addClass, removeClass } from '../utils/dom.js';
@@ -116,77 +115,81 @@ function _end(d, s) {
   }
 }
 
-export const Graph = defineClass({
-  /**
-   * Graph is a single SVG path element. It provides
-   * some functions to easily draw paths inside Charts and other
-   * derivates.
-   *
-   * @class Graph
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {Function|Object} options.range_x - Callback function
-   *   returning a {@link Range} module for x axis or an object with options
-   *   for a new {@link Range}.
-   * @property {Function|Object} options.range_y - Callback function
-   *   returning a {@link Range} module for y axis or an object with options
-   *   for a new {@link Range}.
-   * @property {Array<Object>|String} options.dots=[] - The dots of the path.
-   *   Can be a ready-to-use SVG-path-string or an array of objects like
-   *   <code>{x: x, y: y [, x1: x1, y1: y1, x2: x2, y2: y2, type: type]}</code> (depending on the type,
-   *   see `options.type` for more information). `type` is optional and defines a different type
-   *   as explained under `options.type` for a specific dot. If omitted, the
-   *   general `options.type` is used.
-   * @property {String} [options.type="L"] - Type of the graph (needed values in dots object):
-   *   <ul>
-   *     <li><code>L</code>: normal (needs x,y)</li>
-   *     <li><code>T</code>: smooth quadratic Bézier (needs x, y)</li>
-   *     <li><code>H[n]</code>: smooth horizontal, [n] = smoothing factor between 1 (square) and 5 (nearly no smoothing)</li>
-   *     <li><code>Q</code>: quadratic Bézier (needs: x1, y1, x, y)</li>
-   *     <li><code>C</code>: CurveTo (needs: x1, y1, x2, y2, x, y)</li>
-   *     <li><code>S</code>: SmoothCurve (needs: x1, y1, x, y)</li>
-   *   </ul>
-   * @property {String} [options.mode="line"] - Drawing mode of the graph, possible values are:
-   *   <ul>
-   *     <li><code>line</code>: line only</li>
-   *     <li><code>bottom</code>: fill below the line</li>
-   *     <li><code>top</code>: fill above the line</li>
-   *     <li><code>center</code>: fill from the vertical center of the canvas</li>
-   *     <li><code>base</code>: fill from a percentual position on the canvas (set with base)</li>
-   *   </ul>
-   * @property {Number} [options.base=0] - If mode is <code>base</code> set the position
-   *   of the base line to fill from between 0 (bottom) and 1 (top).
-   * @property {String} [options.color=""] - Set the color of the path.
-   *   Better use <code>stroke</code> and <code>fill</code> via CSS.
-   * @property {String|Boolean} [options.key=false] - Show a description
-   *   for this graph in the charts key, <code>false</code> to turn it off.
-   *
-   * @extends Widget
-   */
-  Extends: Widget,
-  _options: Object.assign({}, Widget.getOptionTypes(), {
-    dots: 'array',
-    type: 'string',
-    mode: 'string',
-    base: 'number',
-    color: 'string',
-    range_x: 'object',
-    range_y: 'object',
-    key: 'string|boolean',
-  }),
-  options: {
-    dots: null,
-    type: 'L',
-    mode: 'line',
-    base: 0,
-    color: '',
-    key: false,
-  },
+/**
+ * Graph is a single SVG path element. It provides
+ * some functions to easily draw paths inside Charts and other
+ * derivates.
+ *
+ * @class Graph
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {Function|Object} options.range_x - Callback function
+ *   returning a {@link Range} module for x axis or an object with options
+ *   for a new {@link Range}.
+ * @property {Function|Object} options.range_y - Callback function
+ *   returning a {@link Range} module for y axis or an object with options
+ *   for a new {@link Range}.
+ * @property {Array<Object>|String} options.dots=[] - The dots of the path.
+ *   Can be a ready-to-use SVG-path-string or an array of objects like
+ *   <code>{x: x, y: y [, x1: x1, y1: y1, x2: x2, y2: y2, type: type]}</code> (depending on the type,
+ *   see `options.type` for more information). `type` is optional and defines a different type
+ *   as explained under `options.type` for a specific dot. If omitted, the
+ *   general `options.type` is used.
+ * @property {String} [options.type="L"] - Type of the graph (needed values in dots object):
+ *   <ul>
+ *     <li><code>L</code>: normal (needs x,y)</li>
+ *     <li><code>T</code>: smooth quadratic Bézier (needs x, y)</li>
+ *     <li><code>H[n]</code>: smooth horizontal, [n] = smoothing factor between 1 (square) and 5 (nearly no smoothing)</li>
+ *     <li><code>Q</code>: quadratic Bézier (needs: x1, y1, x, y)</li>
+ *     <li><code>C</code>: CurveTo (needs: x1, y1, x2, y2, x, y)</li>
+ *     <li><code>S</code>: SmoothCurve (needs: x1, y1, x, y)</li>
+ *   </ul>
+ * @property {String} [options.mode="line"] - Drawing mode of the graph, possible values are:
+ *   <ul>
+ *     <li><code>line</code>: line only</li>
+ *     <li><code>bottom</code>: fill below the line</li>
+ *     <li><code>top</code>: fill above the line</li>
+ *     <li><code>center</code>: fill from the vertical center of the canvas</li>
+ *     <li><code>base</code>: fill from a percentual position on the canvas (set with base)</li>
+ *   </ul>
+ * @property {Number} [options.base=0] - If mode is <code>base</code> set the position
+ *   of the base line to fill from between 0 (bottom) and 1 (top).
+ * @property {String} [options.color=""] - Set the color of the path.
+ *   Better use <code>stroke</code> and <code>fill</code> via CSS.
+ * @property {String|Boolean} [options.key=false] - Show a description
+ *   for this graph in the charts key, <code>false</code> to turn it off.
+ *
+ * @extends Widget
+ */
+export class Graph extends Widget {
+  static get _options() {
+    return Object.assign({}, Widget.getOptionTypes(), {
+      dots: 'array',
+      type: 'string',
+      mode: 'string',
+      base: 'number',
+      color: 'string',
+      range_x: 'object',
+      range_y: 'object',
+      key: 'string|boolean',
+    });
+  }
 
-  initialize: function (options) {
+  static get options() {
+    return {
+      dots: null,
+      type: 'L',
+      mode: 'line',
+      base: 0,
+      color: '',
+      key: false,
+    };
+  }
+
+  initialize(options) {
     if (!options.element) options.element = makeSVG('path');
-    Widget.prototype.initialize.call(this, options);
+    super.initialize(options);
     /** @member {SVGPath} Graph#element - The SVG path. Has class <code>.aux-graph</code>
      */
     /** @member {Range} Graph#range_x - The range for the x axis.
@@ -198,14 +201,15 @@ export const Graph = defineClass({
 
     this.set('color', this.options.color);
     this.set('mode', this.options.mode);
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-graph');
 
-    Widget.prototype.draw.call(this, O, element);
-  },
+    super.draw(O, element);
+  }
 
-  redraw: function () {
+  redraw() {
     const I = this.invalid;
     const O = this.options;
     const E = this.element;
@@ -325,8 +329,8 @@ export const Graph = defineClass({
         error('Unsupported "dots" type', dots);
       }
     }
-    Widget.prototype.redraw.call(this);
-  },
+    super.redraw();
+  }
 
   /**
    * Moves the graph to the front, i.e. add as last element to the containing
@@ -334,7 +338,7 @@ export const Graph = defineClass({
    *
    * @method Graph#toFront
    */
-  toFront: function () {
+  toFront() {
     const E = this.element;
     const P = E.parentElement;
     if (P && E !== P.lastChild)
@@ -343,14 +347,15 @@ export const Graph = defineClass({
         const _p = e.parentNode;
         if (_p && e !== _p.lastChild) _p.appendChild(e);
       });
-  },
+  }
+
   /**
    * Moves the graph to the back, i.e. add as first element to the containing
    * SVG group element.
    *
    * @method Graph#toBack
    */
-  toBack: function () {
+  toBack() {
     const E = this.element;
     const P = E.parentElement;
     if (P && E !== P.firstChild)
@@ -359,5 +364,5 @@ export const Graph = defineClass({
         const _p = e.parentNode;
         if (_p && e !== _p.firstChild) _p.insertBefore(e, _p.firstChild);
       });
-  },
-});
+  }
+}

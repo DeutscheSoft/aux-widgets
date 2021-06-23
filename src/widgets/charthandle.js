@@ -19,7 +19,6 @@
 
 /* jshint -W086 */
 
-import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
 import { warning } from '../utils/warning.js';
@@ -927,129 +926,137 @@ function setRange(range, key) {
  * @param {mixed} value - The new value of the option.
  *
  */
-export const ChartHandle = defineClass({
-  Extends: Widget,
-  _options: Object.assign({}, Widget.getOptionTypes(), {
-    range_x: 'mixed',
-    range_y: 'mixed',
-    range_z: 'mixed',
-    intersect: 'function',
-    mode: 'string',
-    preferences: 'array',
-    format_label: 'function|boolean',
-    x: 'number',
-    y: 'number',
-    z: 'number',
-    min_size: 'number',
-    max_size: 'number',
-    margin: 'number',
-    z_handle: 'boolean|string',
-    z_handle_size: 'number',
-    z_handle_centered: 'number',
-    z_handle_below: 'boolean',
-    min_drag: 'number',
-    x_min: 'number',
-    x_max: 'number',
-    y_min: 'number',
-    y_max: 'number',
-    z_min: 'number',
-    z_max: 'number',
-    show_axis: 'boolean',
-    label: 'string',
-    hover: 'boolean',
-    dragging: 'boolean',
-    show_handle: 'boolean',
-  }),
-  options: {
-    range_x: {},
-    range_y: {},
-    range_z: {},
-    intersect: function () {
-      return { intersect: 0, count: 0 };
-    },
-    // NOTE: this is currently not a public API
-    // callback function for checking intersections: function (x1, y1, x2, y2, id) {}
-    // returns a value describing the amount of intersection with other handle elements.
-    // intersections are weighted depending on the intersecting object. E.g. SVG borders have
-    // a very high impact while intersecting in comparison with overlapping handle objects
-    // that have a low impact on intersection
-    mode: 'circular',
-    preferences: ['left', 'top', 'right', 'bottom'],
-    format_label: FORMAT('%s\n%d Hz\n%.2f dB\nQ: %.2f'),
-    x: 0,
-    y: 0,
-    z: 0,
-    min_size: 24,
-    max_size: 100,
-    margin: 3,
-    z_handle: false,
-    z_handle_size: 6,
-    z_handle_centered: 0.1,
-    z_handle_below: false,
-    min_drag: 0,
-    // NOTE: not yet a public API
-    // amount of pixels the handle has to be dragged before it starts to move
-    x_min: false,
-    x_max: false,
-    y_min: false,
-    y_max: false,
-    z_min: false,
-    z_max: false,
-    show_axis: false,
-    hover: false,
-    dragging: false,
-    show_handle: true,
-  },
-  static_events: {
-    set_show_axis: function () {
-      const O = this.options;
-      if (O.mode === 'circular') createLine1.call(this);
-      createLine2.call(this);
-    },
-    set_format_label: function (value) {
-      if (value !== false && !this._label) createLabel.call(this);
-    },
-    set_show_handle: function () {
-      this.set('mode', this.options.mode);
-      this.set('show_axis', this.options.show_axis);
-      this.set('format_label', this.options.format_label);
-    },
-    set_mode: function (value) {
-      const O = this.options;
-      if (!O.show_handle) return;
-      createHandle.call(this);
-      if (O.z_handle !== false) createZHandle.call(this);
-      if (value !== 'circular') createLine1.call(this);
-    },
-    set_x_min: setMin,
-    set_y_min: setMin,
-    set_z_min: setMin,
-    set_x_max: setMax,
-    set_y_max: setMax,
-    set_z_max: setMax,
-    set_range_x: setRange,
-    set_range_y: setRange,
-    set_range_z: setRange,
-    mouseenter: function () {
-      this.set('hover', true);
-    },
-    mouseleave: function () {
-      this.set('hover', false);
-    },
-    zchangestarted: function () {
-      this.startInteracting();
-    },
-    zchangeended: function () {
-      this.stopInteracting();
-    },
-    handlegrabbed: function () {
-      this.startInteracting();
-    },
-    handlereleased: function () {
-      this.stopInteracting();
-    },
-  },
-  onWheel: function (e) {
+export class ChartHandle extends Widget {
+  static get _options() {
+    return Object.assign({}, Widget.getOptionTypes(), {
+      range_x: 'mixed',
+      range_y: 'mixed',
+      range_z: 'mixed',
+      intersect: 'function',
+      mode: 'string',
+      preferences: 'array',
+      format_label: 'function|boolean',
+      x: 'number',
+      y: 'number',
+      z: 'number',
+      min_size: 'number',
+      max_size: 'number',
+      margin: 'number',
+      z_handle: 'boolean|string',
+      z_handle_size: 'number',
+      z_handle_centered: 'number',
+      z_handle_below: 'boolean',
+      min_drag: 'number',
+      x_min: 'number',
+      x_max: 'number',
+      y_min: 'number',
+      y_max: 'number',
+      z_min: 'number',
+      z_max: 'number',
+      show_axis: 'boolean',
+      label: 'string',
+      hover: 'boolean',
+      dragging: 'boolean',
+      show_handle: 'boolean',
+    });
+  }
+
+  static get options() {
+    return {
+      range_x: {},
+      range_y: {},
+      range_z: {},
+      intersect: function () {
+        return { intersect: 0, count: 0 };
+      },
+      // NOTE: this is currently not a public API
+      // callback function for checking intersections: function (x1, y1, x2, y2, id) {}
+      // returns a value describing the amount of intersection with other handle elements.
+      // intersections are weighted depending on the intersecting object. E.g. SVG borders have
+      // a very high impact while intersecting in comparison with overlapping handle objects
+      // that have a low impact on intersection
+      mode: 'circular',
+      preferences: ['left', 'top', 'right', 'bottom'],
+      format_label: FORMAT('%s\n%d Hz\n%.2f dB\nQ: %.2f'),
+      x: 0,
+      y: 0,
+      z: 0,
+      min_size: 24,
+      max_size: 100,
+      margin: 3,
+      z_handle: false,
+      z_handle_size: 6,
+      z_handle_centered: 0.1,
+      z_handle_below: false,
+      min_drag: 0,
+      // NOTE: not yet a public API
+      // amount of pixels the handle has to be dragged before it starts to move
+      x_min: false,
+      x_max: false,
+      y_min: false,
+      y_max: false,
+      z_min: false,
+      z_max: false,
+      show_axis: false,
+      hover: false,
+      dragging: false,
+      show_handle: true,
+    };
+  }
+
+  static get static_events() {
+    return {
+      set_show_axis: function () {
+        const O = this.options;
+        if (O.mode === 'circular') createLine1.call(this);
+        createLine2.call(this);
+      },
+      set_format_label: function (value) {
+        if (value !== false && !this._label) createLabel.call(this);
+      },
+      set_show_handle: function () {
+        this.set('mode', this.options.mode);
+        this.set('show_axis', this.options.show_axis);
+        this.set('format_label', this.options.format_label);
+      },
+      set_mode: function (value) {
+        const O = this.options;
+        if (!O.show_handle) return;
+        createHandle.call(this);
+        if (O.z_handle !== false) createZHandle.call(this);
+        if (value !== 'circular') createLine1.call(this);
+      },
+      set_x_min: setMin,
+      set_y_min: setMin,
+      set_z_min: setMin,
+      set_x_max: setMax,
+      set_y_max: setMax,
+      set_z_max: setMax,
+      set_range_x: setRange,
+      set_range_y: setRange,
+      set_range_z: setRange,
+      mouseenter: function () {
+        this.set('hover', true);
+      },
+      mouseleave: function () {
+        this.set('hover', false);
+      },
+      zchangestarted: function () {
+        this.startInteracting();
+      },
+      zchangeended: function () {
+        this.stopInteracting();
+      },
+      handlegrabbed: function () {
+        this.startInteracting();
+      },
+      handlereleased: function () {
+        this.stopInteracting();
+      },
+    };
+  }
+
+  onWheel(e) {
     {
       const result = this.emit('wheel', e);
 
@@ -1099,13 +1106,14 @@ export const ChartHandle = defineClass({
     }
 
     timer.restart(250);
-  },
-  initialize: function (options) {
+  }
+
+  initialize(options) {
     this.label = [0, 0, 0, 0];
     this.handle = [0, 0, 0, 0];
     this._wheel_timer = null;
     if (!options.element) options.element = makeSVG('g');
-    Widget.prototype.initialize.call(this, options);
+    super.initialize(options);
     const O = this.options;
 
     /**
@@ -1306,16 +1314,16 @@ export const ChartHandle = defineClass({
     this.set('z', O.z);
     this.set('z_handle', O.z_handle);
     this.set('format_label', O.format_label);
-  },
+  }
 
-  draw: function (O, element) {
+  draw(O, element) {
     addClass(element, 'aux-charthandle');
 
-    Widget.prototype.draw.call(this, O, element);
-  },
+    super.draw(O, element);
+  }
 
-  redraw: function () {
-    Widget.prototype.redraw.call(this);
+  redraw() {
+    super.redraw();
     const O = this.options;
     const I = this.invalid;
 
@@ -1366,7 +1374,7 @@ export const ChartHandle = defineClass({
     if (I.validate('show_axis') || moved) {
       if (!delay_lines) redrawLines.call(this, O, X);
     }
-  },
+  }
 
   /**
    * Moves the handle to the front, i.e. add as last element to the containing
@@ -1374,7 +1382,7 @@ export const ChartHandle = defineClass({
    *
    * @method ChartHandle#toFront
    */
-  toFront: function () {
+  toFront() {
     const E = this.element;
     const P = E.parentElement;
     if (P && E !== P.lastChild)
@@ -1383,7 +1391,7 @@ export const ChartHandle = defineClass({
         const _p = e.parentNode;
         if (_p && e !== _p.lastChild) _p.appendChild(e);
       });
-  },
+  }
 
   /**
    * Moves the handle to the back, i.e. add as first element to the containing
@@ -1391,7 +1399,7 @@ export const ChartHandle = defineClass({
    *
    * @method ChartHandle#toFront
    */
-  toBack: function () {
+  toBack() {
     const E = this.element;
     const P = E.parentElement;
     if (P && E !== P.firstChild) {
@@ -1401,9 +1409,9 @@ export const ChartHandle = defineClass({
         if (_p && e !== _p.firstChild) _p.insertBefore(e, _p.firstChild);
       });
     }
-  },
+  }
 
-  set: function (key, value) {
+  set(key, value) {
     const O = this.options;
 
     switch (key) {
@@ -1470,14 +1478,15 @@ export const ChartHandle = defineClass({
         break;
     }
 
-    return Widget.prototype.set.call(this, key, value);
-  },
-  destroy: function () {
+    return super.set(key, value);
+  }
+
+  destroy() {
     removeZHandle.call(this);
     removeLine1.call(this);
     removeLine2.call(this);
     removeLabel.call(this);
     removeHandle.call(this);
-    Widget.prototype.destroy.call(this);
-  },
-});
+    super.destroy();
+  }
+}

@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
 import { Container } from './container.js';
 import { Toggle } from './toggle.js';
@@ -191,77 +190,86 @@ function updateVisibility() {
   }
 }
 const expand_groups = {};
-export const Expand = defineClass({
-  /**
-   * Expand is a container which can be toggled between two different states,
-   * expanded and collapsed. It can be used to implement overlay popups, but it is
-   * not limited to that application.
-   * In expanded mode the container has the class <code>.aux-expanded</code>.
-   * Child widgets are shown or hidden depending on the state of the two pseudo
-   * options <code>_expanded</code> and <code>_collapsed</code>. If a child widget
-   * of the expand has <code>_expanded</code> set to true it will be shown in
-   * expanded state. If a child widget has <code>_collapsed</code> set to false, it
-   * will be shown in collapsed state. This feature can be used to make interfaces
-   * more reactive.
-   *
-   * @class Expand
-   *
-   * @extends Container
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {Boolean} [options.expanded=false] - The state of the widget.
-   * @property {Boolean} [options.always_expanded=false] - This essentially overwrites
-   *   the <code>expanded</code> option. This can be used to switch this widget to be
-   *   always expanded, e.g. when the screen size is big enough.
-   * @property {String} [options.group=""] - If set, this expand is grouped together with
-   *   all other expands of the same group name. At most one expand of the same group
-   *   can be open at one time.
-   * @property {Boolean} [options.group_default=false] - If set, this expand is expanded
-   *   if all other group members are collapsed.
-   * @property {String} [options.icon=""] - Icon of the {@link Button} which toggles expanded state.
-   * @property {String} [options.icon_active=""] - Icon of the active {@link Button} which toggles expanded state.
-   * @property {String} [options.label=""] - Label of the {@link Button} which toggles expanded state.
-   * @property {Boolean} [options.show_button=true] - Set to `false` to hide the {@link Button} toggling expanded state.
-   */
-  _options: Object.assign({}, Container.getOptionTypes(), {
-    expanded: 'boolean',
-    always_expanded: 'boolean',
-    group: 'string',
-    group_default: 'boolean',
-    label: 'string',
-    icon: 'string',
-    icon_active: 'string',
-  }),
-  options: {
-    expanded: false,
-    always_expanded: false,
-    group_default: false,
-    label: '',
-    icon: '',
-    icon_active: '',
-  },
-  static_events: {
-    set_expanded: changedExpanded,
-    set_always_expanded: updateVisibility,
-    set_group: function (value) {
-      if (value) addToGroup.call(this, value);
-    },
-  },
-  Extends: Container,
+/**
+ * Expand is a container which can be toggled between two different states,
+ * expanded and collapsed. It can be used to implement overlay popups, but it is
+ * not limited to that application.
+ * In expanded mode the container has the class <code>.aux-expanded</code>.
+ * Child widgets are shown or hidden depending on the state of the two pseudo
+ * options <code>_expanded</code> and <code>_collapsed</code>. If a child widget
+ * of the expand has <code>_expanded</code> set to true it will be shown in
+ * expanded state. If a child widget has <code>_collapsed</code> set to false, it
+ * will be shown in collapsed state. This feature can be used to make interfaces
+ * more reactive.
+ *
+ * @class Expand
+ *
+ * @extends Container
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {Boolean} [options.expanded=false] - The state of the widget.
+ * @property {Boolean} [options.always_expanded=false] - This essentially overwrites
+ *   the <code>expanded</code> option. This can be used to switch this widget to be
+ *   always expanded, e.g. when the screen size is big enough.
+ * @property {String} [options.group=""] - If set, this expand is grouped together with
+ *   all other expands of the same group name. At most one expand of the same group
+ *   can be open at one time.
+ * @property {Boolean} [options.group_default=false] - If set, this expand is expanded
+ *   if all other group members are collapsed.
+ * @property {String} [options.icon=""] - Icon of the {@link Button} which toggles expanded state.
+ * @property {String} [options.icon_active=""] - Icon of the active {@link Button} which toggles expanded state.
+ * @property {String} [options.label=""] - Label of the {@link Button} which toggles expanded state.
+ * @property {Boolean} [options.show_button=true] - Set to `false` to hide the {@link Button} toggling expanded state.
+ */
+export class Expand extends Container {
+  static get _options() {
+    return Object.assign({}, Container.getOptionTypes(), {
+      expanded: 'boolean',
+      always_expanded: 'boolean',
+      group: 'string',
+      group_default: 'boolean',
+      label: 'string',
+      icon: 'string',
+      icon_active: 'string',
+    });
+  }
+
+  static get options() {
+    return {
+      expanded: false,
+      always_expanded: false,
+      group_default: false,
+      label: '',
+      icon: '',
+      icon_active: '',
+    };
+  }
+
+  static get static_events() {
+    return {
+      set_expanded: changedExpanded,
+      set_always_expanded: updateVisibility,
+      set_group: function (value) {
+        if (value) addToGroup.call(this, value);
+      },
+    };
+  }
+
   /**
    * Toggles the collapsed state of the widget.
    *
    * @method Expand#toggle
    */
-  toggle: function () {
+  toggle() {
     toggle.call(this);
-  },
-  redraw: function () {
+  }
+
+  redraw() {
     const I = this.invalid;
     const O = this.options;
 
-    Container.prototype.redraw.call(this);
+    super.redraw();
 
     if (I.always_expanded) {
       this[O.always_expanded ? 'addClass' : 'removeClass'](
@@ -273,9 +281,10 @@ export const Expand = defineClass({
       I.always_expanded = I.expanded = false;
       expand.call(this);
     }
-  },
-  initialize: function (options) {
-    Container.prototype.initialize.call(this, options);
+  }
+
+  initialize(options) {
+    super.initialize(options);
 
     this.timer_expand = new Timer(expand_cb.bind(this));
     this.timer_collapse = new Timer(collapse_cb.bind(this));
@@ -286,28 +295,32 @@ export const Expand = defineClass({
 
     this.set('expanded', this.options.expanded);
     this.set('always_expanded', this.options.always_expanded);
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     /**
      * @member {HTMLDivElement} Expand#element - The main DIV container.
      *   Has class <code>.aux-expand</code>.
      */
     addClass(element, 'aux-expand');
 
-    Container.prototype.draw.call(this, O, element);
-  },
-  addChild: function (child) {
-    Container.prototype.addChild.call(this, child);
+    super.draw(O, element);
+  }
+
+  addChild(child) {
+    super.addChild(child);
     if (!isVisible.call(this, child)) this.hideChild(child);
     child.on('set__expanded', this._update_visibility);
     child.on('set__collapsed', this._update_visibility);
-  },
-  removeChild: function (child) {
-    Container.prototype.removeChild.call(this, child);
+  }
+
+  removeChild(child) {
+    super.removeChild(child);
     child.off('set__expanded', this._update_visibility);
     child.off('set__collapsed', this._update_visibility);
-  },
-  set: function (key, value) {
+  }
+
+  set(key, value) {
     let group;
     if (key === 'group') {
       group = this.options.group;
@@ -318,9 +331,9 @@ export const Expand = defineClass({
       if (!value && this.options.group_default)
         removeGroupDefault.call(this, this.options.group);
     }
-    return Container.prototype.set.call(this, key, value);
-  },
-});
+    return super.set(key, value);
+  }
+}
 /**
  * @member {Toggle} Expand#button - The button for toggling the state of the expand.
  */

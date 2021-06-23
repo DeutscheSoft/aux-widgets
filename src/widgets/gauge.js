@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 import { Circular } from './circular.js';
 import { element, addClass } from '../utils/dom.js';
@@ -57,21 +56,26 @@ const formatViewbox = FORMAT('0 0 %d %d');
  * @property {String} [options.label.align] - Alignment of the label, either
  *   <code>inner</code> or <code>outer</code>.
  */
-export const Gauge = defineClass({
-  Extends: Widget,
-  _options: Object.assign({}, Circular.getOptionTypes(), {
-    width: 'number',
-    height: 'number',
-    label: 'object',
-  }),
-  options: Object.assign({}, Circular.getDefaultOptions(), {
-    width: 100, // width of the element
-    height: 100, // height of the svg
-    size: 100,
-    label: { pos: 90, margin: 0, align: 'inner', label: '' },
-  }),
-  initialize: function (options) {
-    Widget.prototype.initialize.call(this, options);
+export class Gauge extends Widget {
+  static get _options() {
+    return Object.assign({}, Circular.getOptionTypes(), {
+      width: 'number',
+      height: 'number',
+      label: 'object',
+    });
+  }
+
+  static get options() {
+    return Object.assign({}, Circular.getDefaultOptions(), {
+      width: 100, // width of the element
+      height: 100, // height of the svg
+      size: 100,
+      label: { pos: 90, margin: 0, align: 'inner', label: '' },
+    });
+  }
+
+  initialize(options) {
+    super.initialize(options);
 
     const O = this.options;
     let S;
@@ -106,24 +110,27 @@ export const Gauge = defineClass({
      */
     this.circular = new Circular(co);
     this.addChild(this.circular);
-  },
-  resize: function () {
-    Widget.prototype.resize.call(this);
+  }
+
+  resize() {
+    super.resize();
     this.invalid.label = true;
     this.triggerDraw();
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-gauge');
     element.appendChild(this.svg);
 
-    Widget.prototype.draw.call(this, O, element);
-  },
-  redraw: function () {
+    super.draw(O, element);
+  }
+
+  redraw() {
     const I = this.invalid,
       O = this.options;
     const S = this.svg;
 
-    Widget.prototype.redraw.call(this);
+    super.redraw();
 
     if (I.validate('width', 'height')) {
       S.setAttribute('viewBox', formatViewbox(O.width, O.height));
@@ -174,10 +181,10 @@ export const Gauge = defineClass({
         );
       }
     }
-  },
+  }
 
   // GETTERS & SETTERS
-  set: function (key, value) {
+  set(key, value) {
     if (key === 'label') {
       if (typeof value === 'string') value = { label: value };
       value = Object.assign(this.options.label, value);
@@ -185,6 +192,6 @@ export const Gauge = defineClass({
     // Circular does the snapping
     if (!Widget.getOptionTypes()[key] && Circular.getOptionTypes()[key])
       value = this.circular.set(key, value);
-    return Widget.prototype.set.call(this, key, value);
-  },
-});
+    return super.set(key, value);
+  }
+}

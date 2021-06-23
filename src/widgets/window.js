@@ -20,7 +20,6 @@
 /* jshint -W014 */
 /* jshint -W079 */
 
-import { defineClass } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
 import { Container } from './container.js';
 import { Icon } from './icon.js';
@@ -434,146 +433,154 @@ function statusTimeout() {
     );
 }
 
-export const Window = defineClass({
-  /**
-   * This widget is a flexible overlay window.
-   *
-   * @class Window
-   *
-   * @extends Container
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {Number} [options.width=500] - Initial width, can be a CSS length or an integer (pixels).
-   * @property {Number} [options.height=200] - Initial height, can be a CSS length or an integer (pixels).
-   * @property {Number} [options.x=0] - X position of the window.
-   * @property {Number} [options.y=0] - Y position of the window.
-   * @property {Number} [options.min_width=64] - Minimum width of the window.
-   * @property {Number} [options.max_width=-1] - Maximum width of the window, -1 ~ infinite.
-   * @property {Number} [options.min_height=64] - Minimum height of the window.
-   * @property {Number} [options.max_height=-1] - Maximum height of the window, -1 ~ infinite.
-   * @property {String} [options.anchor="top-left"] - Anchor of the window, can be one out of
-   *   `top-left`, `top`, `top-right`, `left`, `center`, `right`, `bottom-left`, `bottom`, `bottom-right`
-   * @property {Boolean} [options.modal=false] - If modal window blocks all other elements
-   * @property {String} [options.dock=false] - Docking of the window, can be one out of
-   *   `top-left`, `top`, `top-right`, `left`, `center`, `right`, `bottom-left`, `bottom`, `bottom-right`
-   * @property {Object|Boolean} [options.maximize=false] - Boolean or object with members <code>x</code> and <code>y</code> as boolean to determine the maximized state.
-   * @property {Boolean} [options.minimize=false] - Minimize window (does only make sense with a
-   *   window manager application to keep track of it)
-   * @property {Boolean} [options.shrink=false] - Shrink rolls the window up into the title bar.
-   * @property {String|HTMLElement|Container} [options.content=""] - The content of the window.
-   *   Can be either a string, a HTMLElement or a {@link Container} to append to the content area.
-   * @property {String} [options.open="center"] - initial position of the window, can be one out of
-   *   `top-left`, `top`, `top-right`, `left`, `center`, `right`, `bottom-left`, `bottom`, `bottom-right`
-   * @property {Integer} [options.z_index=10000] - Z index for piling windows. does make more sense
-   *   when used together with a window manager
-   * @property {String|Array<String>} [options.header=["title", "maximize", "close"]] - Single element or array of
-   *   `title`, `icon`, `close`, `minimize`, `shrink`, `maximize`, `maximizevertical`, `maximizehorizontal`, `status`, `resize`, `spacer`.
-   * @property {String|Array<String>} [options.footer=false] - Single element or array of
-   *   `title`, `icon`, `close`, `minimize`, `shrink`, `maximize`, `maximizevertical`, `maximizehorizontal`, `status`, `resize`, `spacer`.
-   * @property {String} [options.title=false] - Window title.
-   * @property {String} [options.status=false] Window status.
-   * @property {String} [options.icon=false] URL to window icon.
-   * @property {Boolean} [options.fixed=true] - Whether the window sticks to the viewport rather than the document
-   * @property {Boolean} [options.auto_active=false] - Auto-toggle the active-class when mouseovered
-   * @property {Boolean} [options.auto_close=true] - Set whether close destroys the window or not
-   * @property {Boolean} [options.auto_maximize=true] - Set whether maximize toggles the window or not
-   * @property {Boolean} [options.auto_minimize=true] - Set whether minimize toggles the window or not
-   * @property {Boolean} [options.auto_shrink=true] - Set whether shrink toggles the window or not
-   * @property {Boolean} [options.draggable=true] - Set whether the window is draggable
-   * @property {Boolean} [options.resizable=true] - Set whether the window is resizable
-   * @property {String} [options.resizing="continuous"] - Resizing policy, `continuous` or `stop`.
-   *   The first one resizes all children continuously while resizing.
-   * @property {String} [options.header_action="maximize"] - Action for double clicking the window header, one out of
-   *   `close`, `minimize`, `shrink`, `maximize`, `maximizevertical`, `maximizehorizontal`
-   * @property {Boolean} [options.active=true] - Active state of the window.
-   * @property {Integer} [options.hide_status=0] - If set to !0 status message hides after [n] milliseconds.
-   */
+/**
+ * This widget is a flexible overlay window.
+ *
+ * @class Window
+ *
+ * @extends Container
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {Number} [options.width=500] - Initial width, can be a CSS length or an integer (pixels).
+ * @property {Number} [options.height=200] - Initial height, can be a CSS length or an integer (pixels).
+ * @property {Number} [options.x=0] - X position of the window.
+ * @property {Number} [options.y=0] - Y position of the window.
+ * @property {Number} [options.min_width=64] - Minimum width of the window.
+ * @property {Number} [options.max_width=-1] - Maximum width of the window, -1 ~ infinite.
+ * @property {Number} [options.min_height=64] - Minimum height of the window.
+ * @property {Number} [options.max_height=-1] - Maximum height of the window, -1 ~ infinite.
+ * @property {String} [options.anchor="top-left"] - Anchor of the window, can be one out of
+ *   `top-left`, `top`, `top-right`, `left`, `center`, `right`, `bottom-left`, `bottom`, `bottom-right`
+ * @property {Boolean} [options.modal=false] - If modal window blocks all other elements
+ * @property {String} [options.dock=false] - Docking of the window, can be one out of
+ *   `top-left`, `top`, `top-right`, `left`, `center`, `right`, `bottom-left`, `bottom`, `bottom-right`
+ * @property {Object|Boolean} [options.maximize=false] - Boolean or object with members <code>x</code> and <code>y</code> as boolean to determine the maximized state.
+ * @property {Boolean} [options.minimize=false] - Minimize window (does only make sense with a
+ *   window manager application to keep track of it)
+ * @property {Boolean} [options.shrink=false] - Shrink rolls the window up into the title bar.
+ * @property {String|HTMLElement|Container} [options.content=""] - The content of the window.
+ *   Can be either a string, a HTMLElement or a {@link Container} to append to the content area.
+ * @property {String} [options.open="center"] - initial position of the window, can be one out of
+ *   `top-left`, `top`, `top-right`, `left`, `center`, `right`, `bottom-left`, `bottom`, `bottom-right`
+ * @property {Integer} [options.z_index=10000] - Z index for piling windows. does make more sense
+ *   when used together with a window manager
+ * @property {String|Array<String>} [options.header=["title", "maximize", "close"]] - Single element or array of
+ *   `title`, `icon`, `close`, `minimize`, `shrink`, `maximize`, `maximizevertical`, `maximizehorizontal`, `status`, `resize`, `spacer`.
+ * @property {String|Array<String>} [options.footer=false] - Single element or array of
+ *   `title`, `icon`, `close`, `minimize`, `shrink`, `maximize`, `maximizevertical`, `maximizehorizontal`, `status`, `resize`, `spacer`.
+ * @property {String} [options.title=false] - Window title.
+ * @property {String} [options.status=false] Window status.
+ * @property {String} [options.icon=false] URL to window icon.
+ * @property {Boolean} [options.fixed=true] - Whether the window sticks to the viewport rather than the document
+ * @property {Boolean} [options.auto_active=false] - Auto-toggle the active-class when mouseovered
+ * @property {Boolean} [options.auto_close=true] - Set whether close destroys the window or not
+ * @property {Boolean} [options.auto_maximize=true] - Set whether maximize toggles the window or not
+ * @property {Boolean} [options.auto_minimize=true] - Set whether minimize toggles the window or not
+ * @property {Boolean} [options.auto_shrink=true] - Set whether shrink toggles the window or not
+ * @property {Boolean} [options.draggable=true] - Set whether the window is draggable
+ * @property {Boolean} [options.resizable=true] - Set whether the window is resizable
+ * @property {String} [options.resizing="continuous"] - Resizing policy, `continuous` or `stop`.
+ *   The first one resizes all children continuously while resizing.
+ * @property {String} [options.header_action="maximize"] - Action for double clicking the window header, one out of
+ *   `close`, `minimize`, `shrink`, `maximize`, `maximizevertical`, `maximizehorizontal`
+ * @property {Boolean} [options.active=true] - Active state of the window.
+ * @property {Integer} [options.hide_status=0] - If set to !0 status message hides after [n] milliseconds.
+ */
 
-  /**
-   * @member {Drag} Window#drag - The {@link Drag} module.
-   */
-  /**
-   * @member {Resize} Window#resize - The {@link Resize} module.
-   */
+/**
+ * @member {Drag} Window#drag - The {@link Drag} module.
+ */
+/**
+ * @member {Resize} Window#resize - The {@link Resize} module.
+ */
 
-  Extends: Container,
-  _options: Object.assign({}, Container.getOptionTypes(), {
-    width: 'number',
-    height: 'number',
-    x: 'number',
-    y: 'number',
-    min_width: 'number',
-    max_width: 'number',
-    min_height: 'number',
-    max_height: 'number',
-    anchor: 'string',
-    modal: 'boolean',
-    dock: 'boolean',
-    maximize: 'boolean',
-    minimize: 'boolean',
-    shrink: 'boolean',
-    open: 'int',
-    z_index: 'int',
-    header: 'array',
-    footer: 'array',
-    title: 'string',
-    status: 'string',
-    icon: 'string',
-    fixed: 'boolean',
-    auto_active: 'boolean',
-    auto_close: 'boolean',
-    auto_maximize: 'boolean',
-    auto_minimize: 'boolean',
-    auto_shrink: 'boolean',
-    draggable: 'boolean',
-    resizable: 'boolean',
-    resizing: 'int',
-    header_action: 'string',
-    active: 'boolean',
-    hide_status: 'int',
-  }),
-  options: {
-    width: 500,
-    height: 200,
-    x: 0,
-    y: 0,
-    min_width: 64,
-    max_width: -1,
-    min_height: 64,
-    max_height: -1,
-    anchor: 'top-left',
-    modal: false,
-    dock: false,
-    maximize: false,
-    minimize: false,
-    shrink: false,
-    content: '',
-    open: 'center',
-    z_index: 10000,
-    header: ['title', 'maximize', 'close'],
-    footer: false,
-    title: false,
-    status: false,
-    icon: false,
-    fixed: true,
-    auto_active: false,
-    auto_close: true,
-    auto_maximize: true,
-    auto_minimize: true,
-    auto_shrink: true,
-    draggable: true,
-    resizable: true,
-    resizing: 'continuous',
-    header_action: 'maximize',
-    active: true,
-    hide_status: 0,
-  },
-  static_events: {
-    mouseenter: mover,
-    mouseleave: mout,
-  },
-  initialize: function (options) {
+export class Window extends Container {
+  static get _options() {
+    return Object.assign({}, Container.getOptionTypes(), {
+      width: 'number',
+      height: 'number',
+      x: 'number',
+      y: 'number',
+      min_width: 'number',
+      max_width: 'number',
+      min_height: 'number',
+      max_height: 'number',
+      anchor: 'string',
+      modal: 'boolean',
+      dock: 'boolean',
+      maximize: 'boolean',
+      minimize: 'boolean',
+      shrink: 'boolean',
+      open: 'int',
+      z_index: 'int',
+      header: 'array',
+      footer: 'array',
+      title: 'string',
+      status: 'string',
+      icon: 'string',
+      fixed: 'boolean',
+      auto_active: 'boolean',
+      auto_close: 'boolean',
+      auto_maximize: 'boolean',
+      auto_minimize: 'boolean',
+      auto_shrink: 'boolean',
+      draggable: 'boolean',
+      resizable: 'boolean',
+      resizing: 'int',
+      header_action: 'string',
+      active: 'boolean',
+      hide_status: 'int',
+    });
+  }
+
+  static get options() {
+    return {
+      width: 500,
+      height: 200,
+      x: 0,
+      y: 0,
+      min_width: 64,
+      max_width: -1,
+      min_height: 64,
+      max_height: -1,
+      anchor: 'top-left',
+      modal: false,
+      dock: false,
+      maximize: false,
+      minimize: false,
+      shrink: false,
+      content: '',
+      open: 'center',
+      z_index: 10000,
+      header: ['title', 'maximize', 'close'],
+      footer: false,
+      title: false,
+      status: false,
+      icon: false,
+      fixed: true,
+      auto_active: false,
+      auto_close: true,
+      auto_maximize: true,
+      auto_minimize: true,
+      auto_shrink: true,
+      draggable: true,
+      resizable: true,
+      resizing: 'continuous',
+      header_action: 'maximize',
+      active: true,
+      hide_status: 0,
+    };
+  }
+
+  static get static_events() {
+    return {
+      mouseenter: mover,
+      mouseleave: mout,
+    };
+  }
+
+  initialize(options) {
     this.dimensions = {
       anchor: 'top-left',
       x: 0,
@@ -585,22 +592,22 @@ export const Window = defineClass({
       width: 0,
       height: 0,
     };
-    Container.prototype.initialize.call(this, options);
+    super.initialize(options);
     this.__status_to = false;
     initPosition.call(this, this.options.open);
     this.set('maximize', this.options.maximize);
     this.set('minimize', this.options.minimize);
-  },
+  }
 
   /**
    * Appends a new child to the window content area.
    * @method Window#appendChild
    * @param {Widget} child - The child widget to add to the windows content area.
    */
-  appendChild: function (child) {
+  appendChild(child) {
     this.content.appendChild(child.element);
     this.addChild(child);
-  },
+  }
 
   /**
    * Toggles the overall maximize state of the window.
@@ -608,57 +615,61 @@ export const Window = defineClass({
    * @param {Boolean} maximize - State of maximization. If window is already
    *   maximized in one or both directions it is un-maximized, otherwise maximized.
    */
-  toggleMaximize: function () {
+  toggleMaximize() {
     if (!vertMax.call(this) || !horizMax.call(this))
       this.set('maximize', { x: true, y: true });
     else this.set('maximize', { x: false, y: false });
-  },
+  }
+
   /**
    * Toggles the vertical maximize state of the window.
    * @method Window#toggleMaximizeVertical
    * @param {Boolean} maximize - The new vertical maximization.
    */
-  toggleMaximizeVertical: function () {
+  toggleMaximizeVertical() {
     this.set('maximize', { y: !this.options.maximize.y });
-  },
+  }
+
   /**
    * Toggles the horizontal maximize state of the window.
    * @method Window#toggleMaximizeHorizontal
    * @param {Boolean} maximize - The new horizontal maximization.
    */
-  toggleMaximizeHorizontal: function () {
+  toggleMaximizeHorizontal() {
     this.set('maximize', { x: !this.options.maximize.x });
-  },
+  }
+
   /**
    * Toggles the minimize state of the window.
    * @method Window#toggleMinimize
    * @param {Boolean} minimize - The new minimization.
    */
-  toggleMinimize: function () {
+  toggleMinimize() {
     this.set('minimize', !this.options.minimize);
-  },
+  }
+
   /**
    * Toggles the shrink state of the window.
    * @method Window#toggleShrink
    * @param {Boolean} shrink - The new shrink state.
    */
-  toggleShrink: function () {
+  toggleShrink() {
     this.set('shrink', !this.options.shrink);
-  },
+  }
 
-  resize: function () {
+  resize() {
     this.drag.set('min', { x: 0 - this.options.width + 20, y: 0 });
     this.drag.set('max', { x: width() - 20, y: height() - 20 });
-    Container.prototype.resize.call(this);
-  },
+    super.resize();
+  }
 
-  draw: function (O, element) {
+  draw(O, element) {
     addClass(element, 'aux-window');
 
-    Container.prototype.draw.call(this, O, element);
-  },
+    super.draw(O, element);
+  }
 
-  redraw: function () {
+  redraw() {
     const I = this.invalid;
     const O = this.options;
 
@@ -745,10 +756,10 @@ export const Window = defineClass({
 
     if (setD) setDimensions.call(this);
     if (setP) setPosition.call(this);
-    Container.prototype.redraw.call(this);
-  },
+    super.redraw();
+  }
 
-  set: function (key, value) {
+  set(key, value) {
     const O = this.options;
     const E = this.element;
 
@@ -778,9 +789,9 @@ export const Window = defineClass({
         this.resize.set('active', value);
         break;
     }
-    return Container.prototype.set.call(this, key, value);
-  },
-});
+    return super.set(key, value);
+  }
+}
 
 /**
  * @member {Icon} Window#icon - A {@link Icon} widget to display the window icon.

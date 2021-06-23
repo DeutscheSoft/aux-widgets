@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from './../../widget_helpers.js';
 import { addClass, toggleClass } from './../../utils/dom.js';
 
 import { Button } from './../../widgets/button.js';
@@ -42,20 +41,23 @@ import { Button } from './../../widgets/button.js';
  * @class Indicator
  */
 
-export const Indicator = defineClass({
-  Extends: Button,
-  _options: Object.assign({}, Button.getOptionTypes(), {
-    connected: 'boolean',
-    connectable: 'boolean',
-    sourceisgroup: 'boolean',
-    sinkisgroup: 'boolean',
-    isgroup: 'boolean',
-  }),
-  initialize: function (options) {
-    Button.prototype.initialize.call(this, options);
+export class Indicator extends Button {
+  static get _options() {
+    return Object.assign({}, Button.getOptionTypes(), {
+      connected: 'boolean',
+      connectable: 'boolean',
+      sourceisgroup: 'boolean',
+      sinkisgroup: 'boolean',
+      isgroup: 'boolean',
+    });
+  }
+
+  initialize(options) {
+    super.initialize(options);
     this.source = null;
     this.sink = null;
-  },
+  }
+
   /**
    * Updates the Indicator with the relevant data.
    *
@@ -68,7 +70,7 @@ export const Indicator = defineClass({
    * @param {PortData} sink - The sink data.
    *
    */
-  updateData: function (index1, index2, connection, source, sink) {
+  updateData(index1, index2, connection, source, sink) {
     this.update('connected', !!connection);
     this.update('sourceisgroup', source && source.isGroup);
     this.update('sinkisgroup', sink && sink.isGroup);
@@ -82,13 +84,15 @@ export const Indicator = defineClass({
 
     this.source = source;
     this.sink = sink;
-  },
-  draw: function (options, element) {
+  }
+
+  draw(options, element) {
     addClass(this.element, 'aux-indicator');
-    Button.prototype.draw.call(this, options, element);
-  },
-  redraw: function () {
-    Button.prototype.redraw.call(this);
+    super.draw(options, element);
+  }
+
+  redraw() {
+    super.redraw();
 
     const E = this.element;
     const I = this.invalid;
@@ -118,5 +122,5 @@ export const Indicator = defineClass({
       I.isgroup = false;
       toggleClass(E, 'aux-isgroup', O.isgroup);
     }
-  },
-});
+  }
+}

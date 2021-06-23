@@ -17,17 +17,16 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from './../widget_helpers.js';
 import { Base } from './../implements/base.js';
 
-export const Module = defineClass({
-  Extends: Base,
-  initialize: function (widget, options) {
+export class Module extends Base {
+  initialize(widget, options) {
     this.parent = widget;
-    Base.prototype.initialize.call(this, options);
-  },
-  destroy: function () {
+    super.initialize(options);
+  }
+
+  destroy() {
     this.parent = null;
-    Base.prototype.destroy.call(this);
-  },
-});
+    super.destroy();
+  }
+}

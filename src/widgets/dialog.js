@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from '../widget_helpers.js';
 import { Container } from './container.js';
 import { translateAnchor } from '../utils/anchor.js';
 import { addClass } from '../utils/dom.js';
@@ -50,95 +49,103 @@ function deactivateAutoclose() {
   this._autoclose_active = false;
 }
 
-export const Dialog = defineClass({
-  /**
-   * Dialog provides a hovering area which can be closed by clicking/tapping
-   * anywhere on the screen. It can be automatically pushed to the topmost
-   * DOM position as a child of an AWML-ROOT or the BODY element. On close
-   * it can be removed from the DOM. The {@link Anchor}-functionality
-   * makes positioning the dialog window straight forward.
-   *
-   * @class Dialog
-   *
-   * @extends Container
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {String} [options.anchor="top-left"] - Origin of `x` and `y` coordinates. See {@link Anchor} for more information.
-   * @property {Number} [options.x=0] - X-position of the dialog.
-   * @property {Number} [options.y=0] - Y-position of the dialog.
-   * @property {boolean} [options.auto_close=false] - Set dialog to `visible=false` if clicked outside in the document.
-   * @property {boolean} [options.auto_remove=false] - Remove the dialogs DOM node after setting `visible=false`.
-   * @property {boolean} [options.toplevel=false] - Add the dialog DOM node to the topmost position in DOM on `visible=true`. Topmost means either a parenting `AWML-ROOT` or the `BODY` node.
-   *
-   */
-  Extends: Container,
-  _options: Object.assign({}, Container.getOptionTypes(), {
-    anchor: 'string',
-    x: 'number',
-    y: 'number',
-    auto_close: 'boolean',
-    auto_remove: 'boolean',
-    toplevel: 'boolean',
-  }),
-  options: {
-    anchor: 'top-left',
-    x: 0,
-    y: 0,
-    auto_close: false,
-    auto_remove: false,
-    toplevel: false,
-  },
-  static_events: {
-    hide: function () {
-      deactivateAutoclose.call(this);
-      if (this.options.auto_remove) this.element.remove();
-      this.emit('close');
-    },
-    set_visible: function (val) {
-      const O = this.options;
+/**
+ * Dialog provides a hovering area which can be closed by clicking/tapping
+ * anywhere on the screen. It can be automatically pushed to the topmost
+ * DOM position as a child of an AWML-ROOT or the BODY element. On close
+ * it can be removed from the DOM. The {@link Anchor}-functionality
+ * makes positioning the dialog window straight forward.
+ *
+ * @class Dialog
+ *
+ * @extends Container
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {String} [options.anchor="top-left"] - Origin of `x` and `y` coordinates. See {@link Anchor} for more information.
+ * @property {Number} [options.x=0] - X-position of the dialog.
+ * @property {Number} [options.y=0] - Y-position of the dialog.
+ * @property {boolean} [options.auto_close=false] - Set dialog to `visible=false` if clicked outside in the document.
+ * @property {boolean} [options.auto_remove=false] - Remove the dialogs DOM node after setting `visible=false`.
+ * @property {boolean} [options.toplevel=false] - Add the dialog DOM node to the topmost position in DOM on `visible=true`. Topmost means either a parenting `AWML-ROOT` or the `BODY` node.
+ *
+ */
+export class Dialog extends Container {
+  static get _options() {
+    return Object.assign({}, Container.getOptionTypes(), {
+      anchor: 'string',
+      x: 'number',
+      y: 'number',
+      auto_close: 'boolean',
+      auto_remove: 'boolean',
+      toplevel: 'boolean',
+    });
+  }
 
-      if (val === true) {
-        if (O.auto_close) activateAutoclose.call(this);
-        this.triggerResize();
-      } else {
+  static get options() {
+    return {
+      anchor: 'top-left',
+      x: 0,
+      y: 0,
+      auto_close: false,
+      auto_remove: false,
+      toplevel: false,
+    };
+  }
+
+  static get static_events() {
+    return {
+      hide: function () {
         deactivateAutoclose.call(this);
-      }
+        if (this.options.auto_remove) this.element.remove();
+        this.emit('close');
+      },
+      set_visible: function (val) {
+        const O = this.options;
 
-      if (val === 'showing') {
-        const C = O.container;
-        if (C) C.appendChild(this.element);
-        this.reposition();
-      }
-
-      if (val) {
-        if (
-          O.toplevel &&
-          O.container.tagName !== 'AWML-ROOT' &&
-          O.container.tagName !== 'BODY'
-        ) {
-          let p = this.element;
-          while (
-            (p = p.parentElement) &&
-            p.tagName !== 'AWML-ROOT' &&
-            p.tagName !== 'BODY'
-          );
-          this.element.appendChild(p.element);
+        if (val === true) {
+          if (O.auto_close) activateAutoclose.call(this);
+          this.triggerResize();
+        } else {
+          deactivateAutoclose.call(this);
         }
-      } else {
-        O.container = this.element.parentElement;
-      }
-    },
-    set_auto_close: function (val) {
-      if (val) {
-        if (!this.hidden()) activateAutoclose.call(this);
-      } else {
-        deactivateAutoclose.call(this);
-      }
-    },
-  },
-  initialize: function (options) {
-    Container.prototype.initialize.call(this, options);
+
+        if (val === 'showing') {
+          const C = O.container;
+          if (C) C.appendChild(this.element);
+          this.reposition();
+        }
+
+        if (val) {
+          if (
+            O.toplevel &&
+            O.container.tagName !== 'AWML-ROOT' &&
+            O.container.tagName !== 'BODY'
+          ) {
+            let p = this.element;
+            while (
+              (p = p.parentElement) &&
+              p.tagName !== 'AWML-ROOT' &&
+              p.tagName !== 'BODY'
+            );
+            this.element.appendChild(p.element);
+          }
+        } else {
+          O.container = this.element.parentElement;
+        }
+      },
+      set_auto_close: function (val) {
+        if (val) {
+          if (!this.hidden()) activateAutoclose.call(this);
+        } else {
+          deactivateAutoclose.call(this);
+        }
+      },
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
     const O = this.options;
     /* This cannot be a default option because document.body
      * is not defined there */
@@ -146,16 +153,19 @@ export const Dialog = defineClass({
     this._autoclose_active = false;
     this._autoclose_cb = autocloseCallback.bind(this);
     this.set('visible', O.visible);
-  },
-  resize: function () {
+  }
+
+  resize() {
     if (this.options.visible) this.reposition();
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-dialog');
-    Container.prototype.draw.call(this, O, element);
-  },
-  redraw: function () {
-    Container.prototype.redraw.call(this);
+    super.draw(O, element);
+  }
+
+  redraw() {
+    super.redraw();
     const I = this.invalid;
     const O = this.options;
     const E = this.element;
@@ -172,7 +182,8 @@ export const Dialog = defineClass({
       I.y = false;
       E.style.top = O.y + 'px';
     }
-  },
+  }
+
   /**
    * Open the dialog. Optionally set x and y position regarding `anchor`.
    *
@@ -181,29 +192,31 @@ export const Dialog = defineClass({
    * @param {Number} [x] - New X-position of the dialog.
    * @param {Number} [y] - New Y-position of the dialog.
    */
-  open: function (x, y) {
+  open(x, y) {
     if (typeof x !== 'undefined') this.set('x', x);
     if (typeof y !== 'undefined') this.set('y', y);
     this.userset('visible', true);
     this.emit('open');
-  },
+  }
+
   /**
    * Close the dialog. The node is removed from DOM if `auto_remove` is set to `true`.
    *
    * @method Dialog#close
    */
-  close: function () {
+  close() {
     this.userset('visible', false);
-  },
+  }
+
   /**
    * Reposition the dialog to the current `x` and `y` position.
    *
    * @method Dialog#reposition
    */
-  reposition: function () {
+  reposition() {
     const O = this.options;
     this.set('anchor', O.anchor);
     this.set('x', O.x);
     this.set('y', O.y);
-  },
-});
+  }
+}

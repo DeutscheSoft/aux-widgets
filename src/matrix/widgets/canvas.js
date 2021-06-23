@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from './../../widget_helpers.js';
 import { Widget } from './../../widgets/widget.js';
 
 /**
@@ -30,11 +29,16 @@ import { Widget } from './../../widgets/widget.js';
  *
  * @class Canvas
  */
-export const Canvas = defineClass({
-  Extends: Widget,
-  _options: Object.assign({}, Widget.getOptionTypes(), {}),
-  options: {},
-  initialize: function (options) {
-    Widget.prototype.initialize.call(this, options);
-  },
-});
+export class Canvas extends Widget {
+  static get _options() {
+    return Object.assign({}, Widget.getOptionTypes(), {});
+  }
+
+  static get options() {
+    return {};
+  }
+
+  initialize(options) {
+    super.initialize(options);
+  }
+}

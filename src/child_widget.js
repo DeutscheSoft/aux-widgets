@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from './widget_helpers.js';
 import { addClass, removeClass } from './utils/dom.js';
 import { warn } from './utils/log.js';
 import { Widget } from './widgets/widget.js';
@@ -175,10 +174,15 @@ export function defineChildWidget(widget, name, config) {
     };
   }
 
-  const ChildWidget = defineClass({
-    Extends: config.create,
-    static_events: static_events,
-  });
+  class ChildWidget extends config.create {
+    static get _options() {
+      return config.create.getOptionTypes();
+    }
+
+    static get static_events() {
+      return static_events;
+    }
+  }
 
   /* trigger child widget creation after initialization */
   widget.addStaticEvent('initialize', function () {

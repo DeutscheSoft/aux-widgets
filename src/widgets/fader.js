@@ -26,7 +26,6 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 import { warning } from '../utils/warning.js';
 import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
@@ -120,70 +119,78 @@ function dblClick() {
  * @property {String|Boolean} {options.cursor=false} - set a cursor from <a href="https://developer.mozilla.org/de/docs/Web/CSS/cursor">standard cursors</a>
  *   on drag or scroll. Set to `false` to disable.
  */
-export const Fader = defineClass({
-  Extends: Widget,
-  _options: Object.assign(
-    {},
-    Widget.getOptionTypes(),
-    rangedOptionsTypes,
-    Scale.getOptionTypes(),
-    {
-      value: 'number',
-      division: 'number',
-      levels: 'array',
-      gap_dots: 'number',
-      gap_labels: 'number',
-      show_labels: 'boolean',
-      labels: 'function',
-      layout: 'string',
-      direction: 'int',
-      reset: 'number',
-      bind_click: 'boolean',
-      bind_dblclick: 'boolean',
-      cursor: 'boolean|string',
-    }
-  ),
-  options: Object.assign({}, rangedOptionsDefaults, {
-    value: 0,
-    division: 1,
-    levels: [1, 6, 12, 24],
-    gap_dots: 3,
-    gap_labels: 40,
-    show_labels: true,
-    labels: function (val) {
-      return val.toFixed(2);
-    },
-    layout: 'left',
-    bind_click: false,
-    bind_dblclick: true,
-    label: false,
-    cursor: false,
-  }),
-  static_events: {
-    set_bind_click: function (value) {
-      if (value) this.on('click', clicked);
-      else this.off('click', clicked);
-    },
-    set_bind_dblclick: function (value) {
-      if (value) this.on('dblclick', dblClick);
-      else this.off('dblclick', dblClick);
-    },
-    set_layout: function () {
-      this.options.direction = vert(this.options) ? 'vertical' : 'horizontal';
-      this.drag.set('direction', this.options.direction);
-      this.scroll.set('direction', this.options.direction);
-    },
-    set_interacting: function (v) {
-      const cursor = this.options.cursor;
-      if (!cursor) return;
-      if (v) setGlobalCursor(cursor);
-      else unsetGlobalCursor(cursor);
-    },
-  },
-  initialize: function (options) {
+export class Fader extends Widget {
+  static get _options() {
+    return Object.assign(
+      {},
+      Widget.getOptionTypes(),
+      rangedOptionsTypes,
+      Scale.getOptionTypes(),
+      {
+        value: 'number',
+        division: 'number',
+        levels: 'array',
+        gap_dots: 'number',
+        gap_labels: 'number',
+        show_labels: 'boolean',
+        labels: 'function',
+        layout: 'string',
+        direction: 'int',
+        reset: 'number',
+        bind_click: 'boolean',
+        bind_dblclick: 'boolean',
+        cursor: 'boolean|string',
+      }
+    );
+  }
+
+  static get options() {
+    return Object.assign({}, rangedOptionsDefaults, {
+      value: 0,
+      division: 1,
+      levels: [1, 6, 12, 24],
+      gap_dots: 3,
+      gap_labels: 40,
+      show_labels: true,
+      labels: function (val) {
+        return val.toFixed(2);
+      },
+      layout: 'left',
+      bind_click: false,
+      bind_dblclick: true,
+      label: false,
+      cursor: false,
+    });
+  }
+
+  static get static_events() {
+    return {
+      set_bind_click: function (value) {
+        if (value) this.on('click', clicked);
+        else this.off('click', clicked);
+      },
+      set_bind_dblclick: function (value) {
+        if (value) this.on('dblclick', dblClick);
+        else this.off('dblclick', dblClick);
+      },
+      set_layout: function () {
+        this.options.direction = vert(this.options) ? 'vertical' : 'horizontal';
+        this.drag.set('direction', this.options.direction);
+        this.scroll.set('direction', this.options.direction);
+      },
+      set_interacting: function (v) {
+        const cursor = this.options.cursor;
+        if (!cursor) return;
+        if (v) setGlobalCursor(cursor);
+        else unsetGlobalCursor(cursor);
+      },
+    };
+  }
+
+  initialize(options) {
     this.__tt = false;
     if (!options.element) options.element = element('div');
-    Widget.prototype.initialize.call(this, options);
+    super.initialize(options);
 
     const O = this.options;
 
@@ -234,16 +241,17 @@ export const Fader = defineClass({
 
     this.set('bind_click', O.bind_click);
     this.set('bind_dblclick', O.bind_dblclick);
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-fader');
     element.appendChild(this._track);
 
-    Widget.prototype.draw.call(this, O, element);
-  },
+    super.draw(O, element);
+  }
 
-  redraw: function () {
-    Widget.prototype.redraw.call(this);
+  redraw() {
+    super.redraw();
     const I = this.invalid;
     const O = this.options;
     const E = this.element;
@@ -288,14 +296,15 @@ export const Fader = defineClass({
         else this._handle.style.left = tmp;
       }
     }
-  },
-  resize: function () {
+  }
+
+  resize() {
     const O = this.options;
     const T = this._track,
       H = this._handle;
     let basis;
 
-    Widget.prototype.resize.call(this);
+    super.resize();
 
     this._padding = CSSSpace(T, 'padding', 'border');
 
@@ -308,30 +317,31 @@ export const Fader = defineClass({
     }
 
     this.set('basis', basis);
-  },
-  destroy: function () {
+  }
+
+  destroy() {
     this._handle.remove();
-    Widget.prototype.destroy.call(this);
-  },
+    super.destroy();
+  }
 
   /**
    * Resets the fader value to <code>options.reset</code>.
    *
    * @method Fader#reset
    */
-  reset: function () {
+  reset() {
     this.set('value', this.options.reset);
-  },
+  }
 
   // GETTER & SETTER
-  set: function (key, value) {
+  set(key, value) {
     const O = this.options;
     if (key === 'value') {
       if (value > O.max || value < O.min) warning(this.element);
     }
-    return Widget.prototype.set.call(this, key, value);
-  },
-});
+    return super.set(key, value);
+  }
+}
 
 makeRanged(Fader);
 

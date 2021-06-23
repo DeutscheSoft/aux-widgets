@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass, defineChildElement } from '../widget_helpers.js';
+import { defineChildElement } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
 import { Container } from './container.js';
 import { Value } from './value.js';
@@ -170,33 +170,37 @@ function setAtoms(key) {
  * @property {boolean} [show_indicator=true] - Set to `false` to hide the color indicator.
  */
 
-export const ColorPicker = defineClass({
-  Extends: Container,
+export class ColorPicker extends Container {
+  static get _options() {
+    return Object.assign({}, Container.getOptionTypes(), {
+      hsl: 'object',
+      rgb: 'object',
+      hex: 'string',
+      hue: 'number',
+      saturation: 'number',
+      lightness: 'number',
+      red: 'number',
+      green: 'number',
+      blue: 'number',
+    });
+  }
 
-  _options: Object.assign({}, Container.getOptionTypes(), {
-    hsl: 'object',
-    rgb: 'object',
-    hex: 'string',
-    hue: 'number',
-    saturation: 'number',
-    lightness: 'number',
-    red: 'number',
-    green: 'number',
-    blue: 'number',
-  }),
-  options: {
-    hsl: { h: 0, s: 0.5, l: 0 },
-    rgb: { r: 0, g: 0, b: 0 },
-    hex: '000000',
-    hue: 0,
-    saturation: 0.5,
-    lightness: 0,
-    red: 0,
-    green: 0,
-    blue: 0,
-  },
-  initialize: function (options) {
-    Container.prototype.initialize.call(this, options);
+  static get options() {
+    return {
+      hsl: { h: 0, s: 0.5, l: 0 },
+      rgb: { r: 0, g: 0, b: 0 },
+      hex: '000000',
+      hue: 0,
+      saturation: 0.5,
+      lightness: 0,
+      red: 0,
+      green: 0,
+      blue: 0,
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
     options = this.options;
 
     /** @member {HTMLDivElement} ColorPicker#element - The main DIV container.
@@ -264,19 +268,22 @@ export const ColorPicker = defineClass({
         this.parent.set('lightness', 1 - this.options.range().pixelToValue(y));
       },
     });
-  },
-  resize: function () {
+  }
+
+  resize() {
     const rect = this._canvas.getBoundingClientRect();
     this.range_x.set('basis', rect.width);
     this.range_y.set('basis', rect.height);
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-colorpicker');
 
-    Container.prototype.draw.call(this, O, element);
-  },
-  redraw: function () {
-    Container.prototype.redraw.call(this);
+    super.draw(O, element);
+  }
+
+  redraw() {
+    super.redraw();
     const I = this.invalid;
     const O = this.options;
     if (
@@ -312,8 +319,9 @@ export const ColorPicker = defineClass({
 
       this._grayscale.style.opacity = 1 - O.saturation;
     }
-  },
-  set: function (key, value) {
+  }
+
+  set(key, value) {
     const O = this.options;
     if (color_options.indexOf(key) > -1) {
       switch (key) {
@@ -374,9 +382,9 @@ export const ColorPicker = defineClass({
       }
       setAtoms.call(this, key, value);
     }
-    return Container.prototype.set.call(this, key, value);
-  },
-});
+    return super.set(key, value);
+  }
+}
 
 /**
  * @member {HTMLDivElement} ColorPicker#canvas - The color background.

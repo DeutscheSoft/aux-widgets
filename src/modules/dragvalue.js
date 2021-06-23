@@ -20,7 +20,6 @@
 /* jshint -W018 */
 /* jshint -W086 */
 
-import { defineClass } from '../widget_helpers.js';
 import { DragCapture } from './dragcapture.js';
 import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
 import { warn } from '../utils/log.js';
@@ -157,149 +156,157 @@ function removeCursor() {
   unsetGlobalCursor('move');
 }
 
-export const DragValue = defineClass({
-  /**
-   * DragValue enables dragging an element and setting a
-   * value according to the dragged distance. DragValue is for example
-   * used in {@link Knob} and {@link ValueButton}.
-   *
-   * @class DragValue
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {Element} options.node - The DOM node used for dragging.
-   *   All DOM events are registered with this Element.
-   * @property {Function} [options.range] - A function returning a
-   *  {@link Ranged} object for
-   *  calculating the value. Returns its parent (usually having
-   *  {@link Ranged}-features) by default.
-   * @property {Function} [options.events] - Returns an element firing the
-   *   events <code>startdrag</code>, <code>dragging</code> and <code>stopdrag</code>.
-   *   By default it returns <code>this.parent</code>.
-   * @property {Element|boolean} [options.classes=false] - While dragging, the class
-   *   <code>.aux-dragging</code> will be added to this element. If set to <code>false</code>
-   *   the class will be set on <code>options.node</code>.
-   * @property {Function} [options.get] - Callback function returning the value to drag.
-   *   By default it returns <code>this.parent.options.value</code>.
-   * @property {Function} [options.set] - Callback function for setting the value.
-   *   By default it calls <code>this.parent.userset("value", [value]);</code>.
-   * @property {String} [options.direction="polar"] - Direction for changing the value.
-   *   Can be <code>polar</code>, <code>vertical</code> or <code>horizontal</code>.
-   * @property {Boolean} [options.active=true] - If false, dragging is deactivated.
-   * @property {Boolean} [options.cursor=false] - If true, a global cursor is set while dragging.
-   * @property {Number} [options.blind_angle=20] - If options.direction is <code>polar</code>,
-   *   this is the angle of separation between positive and negative value changes
-   * @property {Number} [options.rotation=45] - Defines the angle of the center of the positive value
-   *   changes. 0 means straight upward. For instance, a value of 45 leads to increasing value when
-   *   moving towards top and right.
-   * @property {Boolean} [options.reverse=false] - If true, the difference of pointer travel is inverted.
-   * @property {Boolean} [options.limit=false] - Limit the returned value to min and max of the range.
-   *
-   * @extends DragCapture
-   */
-  Extends: DragCapture,
-  _options: {
-    get: 'function',
-    set: 'function',
-    range: 'function',
-    events: 'function',
-    classes: 'object|boolean',
-    direction: 'string',
-    active: 'boolean',
-    cursor: 'boolean',
-    blind_angle: 'number',
-    rotation: 'number',
-    reverse: 'boolean',
-    limit: 'boolean',
-  },
-  options: {
-    range: function () {
-      return this.parent;
-    },
-    classes: false,
-    get: function () {
-      return this.parent.options.value;
-    },
-    set: function (v) {
-      this.parent.userset('value', v);
-    },
-    events: function () {
-      return this.parent;
-    },
-    direction: 'polar',
-    active: true,
-    cursor: false,
-    blind_angle: 20,
-    rotation: 45,
-    reverse: false,
-    limit: false,
-  },
-  /**
-   * Is fired while a user is dragging.
-   *
-   * @event DragValue#dragging
-   *
-   * @param {DOMEvent} event - The native DOM event.
-   */
-  /**
-   * Is fired when a user starts dragging.
-   *
-   * @event DragValue#startdrag
-   *
-   * @param {DOMEvent} event - The native DOM event.
-   */
-  /**
-   * Is fired when a user stops dragging.
-   *
-   * @event DragValue#stopdrag
-   *
-   * @param {DOMEvent} event - The native DOM event.
-   */
-  static_events: {
-    set_state: startDrag,
-    stopcapture: stopDrag,
-    startcapture: function () {
-      if (this.options.active) return true;
-    },
-    set_rotation: function (v) {
-      v *= Math.PI / 180;
-      this.set('_direction', [-Math.sin(v), Math.cos(v)]);
-    },
-    set_blind_angle: function (v) {
-      v *= Math.PI / 360;
-      this.set('_cutoff', Math.cos(v));
-    },
-    movecapture: moveCapture,
-    startdrag: function () {
-      S.add(
-        function () {
-          const O = this.options;
-          addClass(O.classes || O.node, 'aux-dragging');
-          if (O.cursor) {
-            setCursor.call(this);
-          }
-        }.bind(this),
-        1
-      );
-    },
-    stopdrag: function () {
-      S.add(
-        function () {
-          const O = this.options;
-          removeClass(O.classes || O.node, 'aux-dragging');
-          if (O.cursor) {
-            removeCursor.call(this);
-          }
-        }.bind(this),
-        1
-      );
-    },
-  },
-  initialize: function (widget, options) {
-    DragCapture.prototype.initialize.call(this, widget, options);
+/**
+ * DragValue enables dragging an element and setting a
+ * value according to the dragged distance. DragValue is for example
+ * used in {@link Knob} and {@link ValueButton}.
+ *
+ * @class DragValue
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {Element} options.node - The DOM node used for dragging.
+ *   All DOM events are registered with this Element.
+ * @property {Function} [options.range] - A function returning a
+ *  {@link Ranged} object for
+ *  calculating the value. Returns its parent (usually having
+ *  {@link Ranged}-features) by default.
+ * @property {Function} [options.events] - Returns an element firing the
+ *   events <code>startdrag</code>, <code>dragging</code> and <code>stopdrag</code>.
+ *   By default it returns <code>this.parent</code>.
+ * @property {Element|boolean} [options.classes=false] - While dragging, the class
+ *   <code>.aux-dragging</code> will be added to this element. If set to <code>false</code>
+ *   the class will be set on <code>options.node</code>.
+ * @property {Function} [options.get] - Callback function returning the value to drag.
+ *   By default it returns <code>this.parent.options.value</code>.
+ * @property {Function} [options.set] - Callback function for setting the value.
+ *   By default it calls <code>this.parent.userset("value", [value]);</code>.
+ * @property {String} [options.direction="polar"] - Direction for changing the value.
+ *   Can be <code>polar</code>, <code>vertical</code> or <code>horizontal</code>.
+ * @property {Boolean} [options.active=true] - If false, dragging is deactivated.
+ * @property {Boolean} [options.cursor=false] - If true, a global cursor is set while dragging.
+ * @property {Number} [options.blind_angle=20] - If options.direction is <code>polar</code>,
+ *   this is the angle of separation between positive and negative value changes
+ * @property {Number} [options.rotation=45] - Defines the angle of the center of the positive value
+ *   changes. 0 means straight upward. For instance, a value of 45 leads to increasing value when
+ *   moving towards top and right.
+ * @property {Boolean} [options.reverse=false] - If true, the difference of pointer travel is inverted.
+ * @property {Boolean} [options.limit=false] - Limit the returned value to min and max of the range.
+ *
+ * @extends DragCapture
+ */
+/**
+ * Is fired while a user is dragging.
+ *
+ * @event DragValue#dragging
+ *
+ * @param {DOMEvent} event - The native DOM event.
+ */
+/**
+ * Is fired when a user starts dragging.
+ *
+ * @event DragValue#startdrag
+ *
+ * @param {DOMEvent} event - The native DOM event.
+ */
+/**
+ * Is fired when a user stops dragging.
+ *
+ * @event DragValue#stopdrag
+ *
+ * @param {DOMEvent} event - The native DOM event.
+ */
+export class DragValue extends DragCapture {
+  static get _options() {
+    return {
+      get: 'function',
+      set: 'function',
+      range: 'function',
+      events: 'function',
+      classes: 'object|boolean',
+      direction: 'string',
+      active: 'boolean',
+      cursor: 'boolean',
+      blind_angle: 'number',
+      rotation: 'number',
+      reverse: 'boolean',
+      limit: 'boolean',
+    };
+  }
+
+  static get options() {
+    return {
+      range: function () {
+        return this.parent;
+      },
+      classes: false,
+      get: function () {
+        return this.parent.options.value;
+      },
+      set: function (v) {
+        this.parent.userset('value', v);
+      },
+      events: function () {
+        return this.parent;
+      },
+      direction: 'polar',
+      active: true,
+      cursor: false,
+      blind_angle: 20,
+      rotation: 45,
+      reverse: false,
+      limit: false,
+    };
+  }
+
+  static get static_events() {
+    return {
+      set_state: startDrag,
+      stopcapture: stopDrag,
+      startcapture: function () {
+        if (this.options.active) return true;
+      },
+      set_rotation: function (v) {
+        v *= Math.PI / 180;
+        this.set('_direction', [-Math.sin(v), Math.cos(v)]);
+      },
+      set_blind_angle: function (v) {
+        v *= Math.PI / 360;
+        this.set('_cutoff', Math.cos(v));
+      },
+      movecapture: moveCapture,
+      startdrag: function () {
+        S.add(
+          function () {
+            const O = this.options;
+            addClass(O.classes || O.node, 'aux-dragging');
+            if (O.cursor) {
+              setCursor.call(this);
+            }
+          }.bind(this),
+          1
+        );
+      },
+      stopdrag: function () {
+        S.add(
+          function () {
+            const O = this.options;
+            removeClass(O.classes || O.node, 'aux-dragging');
+            if (O.cursor) {
+              removeCursor.call(this);
+            }
+          }.bind(this),
+          1
+        );
+      },
+    };
+  }
+
+  initialize(widget, options) {
+    super.initialize(widget, options);
     this.start_pos = 0;
     const O = this.options;
     this.set('rotation', O.rotation);
     this.set('blind_angle', O.blind_angle);
-  },
-});
+  }
+}

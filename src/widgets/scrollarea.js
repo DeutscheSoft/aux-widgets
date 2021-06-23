@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 import { element, addClass } from '../utils/dom.js';
 
@@ -31,13 +30,18 @@ import { element, addClass } from '../utils/dom.js';
  * @param {Object} [options={ }] - An object containing initial options.
  *
  */
-export const ScrollArea = defineClass({
-  Extends: Widget,
-  _options: Object.assign({}, Widget.getOptionTypes(), {}),
-  options: {},
+export class ScrollArea extends Widget {
+  static get _options() {
+    return Object.assign({}, Widget.getOptionTypes(), {});
+  }
+
+  static get options() {
+    return {};
+  }
+
   initialize(options) {
     if (!options.element) options.element = element('div');
-    Widget.prototype.initialize.call(this, options);
+    super.initialize(options);
     this._visible = new Set();
     this._elementToWidget = new Map();
 
@@ -64,12 +68,14 @@ export const ScrollArea = defineClass({
     this._observer = new IntersectionObserver(visibilityChanged, {
       root: this.element,
     });
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-scroller');
-    Widget.prototype.draw.call(this, O, element);
-  },
-  enableDrawChildren: function () {
+    super.draw(O, element);
+  }
+
+  enableDrawChildren() {
     const C = this.children;
     if (!C) return;
 
@@ -77,19 +83,22 @@ export const ScrollArea = defineClass({
       const child = C[i];
       if (this._visible.has(child)) child.enableDraw();
     }
-  },
-  addChild: function (child) {
-    Widget.prototype.addChild.call(this, child);
+  }
+
+  addChild(child) {
+    super.addChild(child);
     this._elementToWidget.set(child.element, child);
     this._observer.observe(child.element);
-  },
-  removeChild: function (child) {
-    Widget.prototype.removeChild.call(this, child);
+  }
+
+  removeChild(child) {
+    super.removeChild(child);
     this._elementToWidget.delete(child.element);
     this._observer.unobserve(child.element);
-  },
-  destroy: function () {
-    Widget.prototype.destroy.call(this);
+  }
+
+  destroy() {
+    super.destroy();
     this._observer.disconnect();
-  },
-});
+  }
+}

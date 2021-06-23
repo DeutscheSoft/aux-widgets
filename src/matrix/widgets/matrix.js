@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from './../../widget_helpers.js';
 import { defineChildWidget } from './../../child_widget.js';
 import { innerWidth, outerWidth, addClass } from './../../utils/dom.js';
 
@@ -73,46 +72,57 @@ function setVirtualtreeviews() {
  *
  * @class Matrix
  */
-export const Matrix = defineClass({
-  Extends: Patchbay,
-  _options: Object.assign({}, Patchbay.getOptionTypes(), {
-    _virtualtree_size: 'number',
-    indicator_class: 'object',
-    signal_flow: 'string',
-  }),
-  options: {
-    _virtualtree_size: 0,
-    indicator_class: Indicator,
-    signal_flow: 'left-top',
-  },
-  static_events: {
-    set_signal_flow: setVirtualtreeviews,
-    set_sources: setVirtualtreeviews,
-    set_sinks: setVirtualtreeviews,
-  },
+export class Matrix extends Patchbay {
+  static get _options() {
+    return Object.assign({}, Patchbay.getOptionTypes(), {
+      _virtualtree_size: 'number',
+      indicator_class: 'object',
+      signal_flow: 'string',
+    });
+  }
+
+  static get options() {
+    return {
+      _virtualtree_size: 0,
+      indicator_class: Indicator,
+      signal_flow: 'left-top',
+    };
+  }
+
+  static get static_events() {
+    return {
+      set_signal_flow: setVirtualtreeviews,
+      set_sources: setVirtualtreeviews,
+      set_sinks: setVirtualtreeviews,
+    };
+  }
+
   /**
    * Returns the virtual tree view instance of the left tree.
    */
-  getVirtualTreeViewLeft: function () {
+  getVirtualTreeViewLeft() {
     return this.virtualtree_left.get('virtualtreeview');
-  },
+  }
+
   /**
    * Returns the virtual tree view instance of the top tree.
    */
-  getVirtualTreeViewTop: function () {
+  getVirtualTreeViewTop() {
     return this.virtualtree_top.get('virtualtreeview');
-  },
-  initialize: function (options) {
-    Patchbay.prototype.initialize.call(this, options);
+  }
+
+  initialize(options) {
+    super.initialize(options);
     this.connectionview = null;
     this._scroll_left = new ScrollDetector(scrollDetectorTimeout);
     this._scroll_top = new ScrollDetector(scrollDetectorTimeout);
     this._scroll_matrix = new ScrollDetector(scrollDetectorTimeout);
-  },
-  draw: function (options, element) {
+  }
+
+  draw(options, element) {
     const O = this.options;
     addClass(this.element, 'aux-matrix');
-    Patchbay.prototype.draw.call(this, options, element);
+    super.draw(options, element);
 
     this.virtualtree_left.on('scrollTopChanged', (position) => {
       let called = false;
@@ -155,8 +165,9 @@ export const Matrix = defineClass({
     });
 
     setVirtualtreeviews.call(this);
-  },
-  redraw: function () {
+  }
+
+  redraw() {
     const O = this.options;
     const I = this.invalid;
     const E = this.element;
@@ -168,22 +179,24 @@ export const Matrix = defineClass({
       virtualtree.triggerResize();
     }
 
-    Patchbay.prototype.redraw.call(this);
-  },
-  resize: function () {
+    super.redraw();
+  }
+
+  resize() {
     this.set(
       '_virtualtree_size',
       innerWidth(this.element) - outerWidth(this.virtualtree_left.element)
     );
-    Patchbay.prototype.resize.call(this);
-  },
-  destroy: function () {
+    super.resize();
+  }
+
+  destroy() {
     this._scroll_left.destroy();
     this._scroll_top.destroy();
     this._scroll_matrix.destroy();
-    Patchbay.prototype.destroy.call(this);
-  },
-});
+    super.destroy();
+  }
+}
 /**
  * @member {VirtualTree} Matrix#virtualtree_left - The {@link VirtualTree}
  *   on the left hand side. Has class <code>.aux-virtualtreeleft</code>.

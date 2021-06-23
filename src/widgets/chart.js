@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass, defineChildElement } from './../widget_helpers.js';
+import { defineChildElement } from './../widget_helpers.js';
 import { S } from '../dom_scheduler.js';
 import {
   empty,
@@ -333,69 +333,77 @@ function geomSet(value, key) {
   this.setStyle(key, value + 'px');
   error("using deprecated '" + key + "' options");
 }
-export const Chart = defineClass({
-  Extends: Widget,
-  _options: Object.assign({}, Widget.getOptionTypes(), {
-    width: 'int',
-    height: 'int',
-    _width: 'int',
-    _height: 'int',
-    range_x: 'object',
-    range_y: 'object',
-    range_z: 'object',
-    key: 'string',
-    key_size: 'object',
-    label: 'string',
-    label_position: 'string',
-    resized: 'boolean',
+export class Chart extends Widget {
+  static get _options() {
+    return Object.assign({}, Widget.getOptionTypes(), {
+      width: 'int',
+      height: 'int',
+      _width: 'int',
+      _height: 'int',
+      range_x: 'object',
+      range_y: 'object',
+      range_z: 'object',
+      key: 'string',
+      key_size: 'object',
+      label: 'string',
+      label_position: 'string',
+      resized: 'boolean',
 
-    importance_label: 'number',
-    importance_handle: 'number',
-    importance_border: 'number',
-    handles: 'array',
-    show_handles: 'boolean',
-    depth: 'number',
-    square: 'boolean',
-  }),
-  options: {
-    grid_x: [],
-    grid_y: [],
-    range_x: {}, // an object with options for a range for the x axis
-    // or a function returning a Range instance (only on init)
-    range_y: {}, // an object with options for a range for the y axis
-    // or a function returning a Range instance (only on init)
-    range_z: { scale: 'linear', min: 0, max: 1 }, // Range z options
-    key: false, // key draws a description for the graphs at the given
-    // position, use false for no key
-    key_size: { x: 20, y: 10 }, // size of the key rects
-    label: '', // a label for the chart
-    label_position: 'top-left', // the position of the label
-    resized: false,
+      importance_label: 'number',
+      importance_handle: 'number',
+      importance_border: 'number',
+      handles: 'array',
+      show_handles: 'boolean',
+      depth: 'number',
+      square: 'boolean',
+    });
+  }
 
-    importance_label: 4, // multiplicator of square pixels on hit testing
-    // labels to gain importance
-    importance_handle: 1, // multiplicator of square pixels on hit testing
-    // handles to gain importance
-    importance_border: 50, // multiplicator of square pixels on hit testing
-    // borders to gain importance
-    handles: [], // list of bands to create on init
-    show_handles: true,
-    square: false,
-  },
-  static_events: {
-    set_width: geomSet,
-    set_height: geomSet,
+  static get options() {
+    return {
+      grid_x: [],
+      grid_y: [],
+      range_x: {}, // an object with options for a range for the x axis
+      // or a function returning a Range instance (only on init)
+      range_y: {}, // an object with options for a range for the y axis
+      // or a function returning a Range instance (only on init)
+      range_z: { scale: 'linear', min: 0, max: 1 }, // Range z options
+      key: false, // key draws a description for the graphs at the given
+      // position, use false for no key
+      key_size: { x: 20, y: 10 }, // size of the key rects
+      label: '', // a label for the chart
+      label_position: 'top-left', // the position of the label
+      resized: false,
 
-    mousewheel: STOP,
-    DOMMouseScroll: STOP,
-    set_depth: function (value) {
-      this.range_z.set('basis', value);
-    },
-    set_show_handles: function (value) {
-      (value ? showHandles : hideHandles).call(this);
-    },
-  },
-  initialize: function (options) {
+      importance_label: 4, // multiplicator of square pixels on hit testing
+      // labels to gain importance
+      importance_handle: 1, // multiplicator of square pixels on hit testing
+      // handles to gain importance
+      importance_border: 50, // multiplicator of square pixels on hit testing
+      // borders to gain importance
+      handles: [], // list of bands to create on init
+      show_handles: true,
+      square: false,
+    };
+  }
+
+  static get static_events() {
+    return {
+      set_width: geomSet,
+      set_height: geomSet,
+
+      mousewheel: STOP,
+      DOMMouseScroll: STOP,
+      set_depth: function (value) {
+        this.range_z.set('basis', value);
+      },
+      set_show_handles: function (value) {
+        (value ? showHandles : hideHandles).call(this);
+      },
+    };
+  }
+
+  initialize(options) {
     let SVG;
     /**
      * @member {Array} Chart#graphs - An array containing all SVG paths acting as graphs.
@@ -406,7 +414,7 @@ export const Chart = defineClass({
      */
     this.handles = [];
     if (!options.element) options.element = element('div');
-    Widget.prototype.initialize.call(this, options);
+    super.initialize(options);
 
     /**
      * @member {Range} Chart#range_x - The {@link Range} for the x axis.
@@ -449,19 +457,21 @@ export const Chart = defineClass({
       return false;
     };
     this.addHandles(this.options.handles);
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-chart');
     element.appendChild(this.svg);
 
-    Widget.prototype.draw.call(this, O, element);
-  },
-  resize: function () {
+    super.draw(O, element);
+  }
+
+  resize() {
     const E = this.element;
     const O = this.options;
     const SVG = this.svg;
 
-    Widget.prototype.resize.call(this);
+    super.resize();
 
     const tmp = CSSSpace(SVG, 'border', 'padding');
     let w = innerWidth(E) - tmp.left - tmp.right;
@@ -483,13 +493,14 @@ export const Chart = defineClass({
       this.invalid._height = true;
       this.triggerDraw();
     }
-  },
-  redraw: function () {
+  }
+
+  redraw() {
     const I = this.invalid;
     const E = this.svg;
     const O = this.options;
 
-    Widget.prototype.redraw.call(this);
+    super.redraw();
 
     if (I.validate('ranges', '_width', '_height', 'range_x', 'range_y')) {
       /* we need to redraw both key and label, because
@@ -523,18 +534,20 @@ export const Chart = defineClass({
         this._handles.style.display = 'none';
       }
     }
-  },
-  destroy: function () {
+  }
+
+  destroy() {
     for (let i = 0; i < this.graphs.length; i++) {
       this.graphs[i].destroy();
     }
     this._graphs.remove();
     this._handles.remove();
-    Widget.prototype.destroy.call(this);
-  },
-  addChild: function (child) {
+    super.destroy();
+  }
+
+  addChild(child) {
     if (!(child instanceof ChartHandle) || this.options.show_handles)
-      Widget.prototype.addChild.call(this, child);
+      super.addChild(child);
 
     if (child instanceof Graph) {
       const g = child;
@@ -581,8 +594,9 @@ export const Chart = defineClass({
        */
       this.emit('handleadded', child);
     }
-  },
-  removeChild: function (child) {
+  }
+
+  removeChild(child) {
     if (child instanceof Graph) {
       const G = this.graphs;
       const i = G.indexOf(child);
@@ -620,8 +634,9 @@ export const Chart = defineClass({
       }
     }
 
-    Widget.prototype.removeChild.call(this, child);
-  },
+    super.removeChild(child);
+  }
+
   /**
    * Add a graph to the chart.
    *
@@ -635,7 +650,7 @@ export const Chart = defineClass({
    *
    * @emits Chart#graphadded
    */
-  addGraph: function (options) {
+  addGraph(options) {
     let g;
 
     if (options instanceof Graph) {
@@ -647,7 +662,8 @@ export const Chart = defineClass({
     this.addChild(g);
 
     return g;
-  },
+  }
+
   /**
    * Remove a graph from the chart.
    *
@@ -657,9 +673,10 @@ export const Chart = defineClass({
    *
    * @emits Chart#graphremoved
    */
-  removeGraph: function (g) {
+  removeGraph(g) {
     this.removeChild(g);
-  },
+  }
+
   /**
    * Remove all graphs from the chart.
    *
@@ -667,7 +684,7 @@ export const Chart = defineClass({
    *
    * @emits Chart#emptied
    */
-  empty: function () {
+  empty() {
     this.graphs.map(this.removeGraph, this);
     /**
      * Is fired when all graphs are removed from the chart.
@@ -675,7 +692,7 @@ export const Chart = defineClass({
      * @event Chart#emptied
      */
     this.emit('emptied');
-  },
+  }
 
   /**
    * Add a new handle to the widget. Options is an object containing
@@ -688,7 +705,7 @@ export const Chart = defineClass({
    *
    * @emits Chart#handleadded
    */
-  addHandle: function (options, type) {
+  addHandle(options, type) {
     let handle;
 
     if (options instanceof ChartHandle) {
@@ -701,7 +718,8 @@ export const Chart = defineClass({
     this.addChild(handle);
 
     return handle;
-  },
+  }
+
   /**
    * Add multiple new {@link ChartHandle} to the widget. Options is an array
    * of objects containing options for the new instances of {@link ChartHandle}.
@@ -711,9 +729,10 @@ export const Chart = defineClass({
    * @param {Array<Object>} options - An array of options objects for the {@link ChartHandle}.
    * @param {Object} [type=ChartHandle] - A widget class to be used for the new handles.
    */
-  addHandles: function (handles, type) {
+  addHandles(handles, type) {
     for (let i = 0; i < handles.length; i++) this.addHandle(handles[i], type);
-  },
+  }
+
   /**
    * Remove a handle from the widget.
    *
@@ -723,9 +742,10 @@ export const Chart = defineClass({
    *
    * @emits Chart#handleremoved
    */
-  removeHandle: function (handle) {
+  removeHandle(handle) {
     this.removeChild(handle);
-  },
+  }
+
   /**
    * Remove multiple or all {@link ChartHandle} from the widget.
    *
@@ -735,7 +755,7 @@ export const Chart = defineClass({
    *   {@link ChartHandle} instances. If the argument reveals to
    *   `false`, all handles are removed from the widget.
    */
-  removeHandles: function (handles) {
+  removeHandles(handles) {
     const H = handles || this.handles.slice();
     for (let i = 0; i < H.length; i++) {
       this.removeHandle(H[i]);
@@ -749,9 +769,9 @@ export const Chart = defineClass({
        */
       this.emit('emptied');
     }
-  },
+  }
 
-  intersect: function (X, handle) {
+  intersect(X, handle) {
     // this function walks over all known handles and asks for the coords
     // of the label and the handle. Calculates intersecting square pixels
     // according to the importance set in options. Returns an object
@@ -808,8 +828,8 @@ export const Chart = defineClass({
     ]);
     a += ((X[2] - X[0]) * (X[3] - X[1]) - _a) * O.importance_border;
     return { intersect: a, count: c };
-  },
-});
+  }
+}
 /**
  * @member {Grid} Chart#grid - The grid element of the chart.
  *   Has class <code>.aux-grid</code>.

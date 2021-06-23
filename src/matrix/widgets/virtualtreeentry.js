@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from '../../widget_helpers.js';
 import { defineChildWidget } from '../../child_widget.js';
 import {
   setText,
@@ -93,38 +92,45 @@ function composeDepth(tree_position) {
 
 import { VirtualTreeEntryBase } from './virtualtreeentrybase.js';
 
-export const VirtualTreeEntry = defineClass({
-  Extends: VirtualTreeEntryBase,
-  _options: Object.assign({}, VirtualTreeEntryBase.getOptionTypes(), {
-    label: 'string|boolean',
-    depth: 'array|boolean',
-    collapsable: 'boolean',
-    collapsed: 'boolean',
-    icon_collapsed: 'string',
-    icon_uncollaped: 'string',
-    icon: 'string|boolean',
-    odd: 'boolean',
-    group: 'boolean',
-  }),
-  options: {
-    label: false,
-    depth: false,
-    collapsable: false,
-    collapsed: false,
-    icon_collapsed: 'arrowdown',
-    icon_uncollapsed: 'arrowup',
-    icon: false,
-    odd: false,
-    group: false,
-  },
-  initialize: function (options) {
-    VirtualTreeEntryBase.prototype.initialize.call(this, options);
+export class VirtualTreeEntry extends VirtualTreeEntryBase {
+  static get _options() {
+    return Object.assign({}, VirtualTreeEntryBase.getOptionTypes(), {
+      label: 'string|boolean',
+      depth: 'array|boolean',
+      collapsable: 'boolean',
+      collapsed: 'boolean',
+      icon_collapsed: 'string',
+      icon_uncollaped: 'string',
+      icon: 'string|boolean',
+      odd: 'boolean',
+      group: 'boolean',
+    });
+  }
+
+  static get options() {
+    return {
+      label: false,
+      depth: false,
+      collapsable: false,
+      collapsed: false,
+      icon_collapsed: 'arrowdown',
+      icon_uncollapsed: 'arrowup',
+      icon: false,
+      odd: false,
+      group: false,
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
     this.data_subscriptions = new Subscriptions();
-  },
-  draw: function (options, element) {
-    VirtualTreeEntryBase.prototype.draw.call(this, options, element);
+  }
+
+  draw(options, element) {
+    super.draw(options, element);
     element.classList.add('aux-virtualtreeentry');
-  },
+  }
+
   /**
    * This function is called internally to subscribe to properties
    * Overload in order to handle additional data being displayed
@@ -132,7 +138,7 @@ export const VirtualTreeEntry = defineClass({
    *
    * @method VirtualTree#subscribeData
    */
-  subscribeData: function () {
+  subscribeData() {
     const subs = this.data_subscriptions;
     const element = this.get('data');
 
@@ -153,7 +159,8 @@ export const VirtualTreeEntry = defineClass({
         }
       })
     );
-  },
+  }
+
   /**
    * This function is called internally on scroll to update the entries'
    * content. Overload in order to handle additional data being displayed
@@ -167,14 +174,8 @@ export const VirtualTreeEntry = defineClass({
    * @param {Integer} treeposition - An array containing information
    *   about the entries indentation inside the tree.
    */
-  updateData: function (virtualtreeview, index, element, treePosition) {
-    VirtualTreeEntryBase.prototype.updateData.call(
-      this,
-      virtualtreeview,
-      index,
-      element,
-      treePosition
-    );
+  updateData(virtualtreeview, index, element, treePosition) {
+    super.updateData(virtualtreeview, index, element, treePosition);
 
     this.data_subscriptions.unsubscribe();
 
@@ -192,9 +193,10 @@ export const VirtualTreeEntry = defineClass({
 
       this.subscribeData();
     }
-  },
-  redraw: function () {
-    VirtualTreeEntryBase.prototype.redraw.call(this);
+  }
+
+  redraw() {
+    super.redraw();
 
     const O = this.options;
     const E = this.element;
@@ -243,8 +245,8 @@ export const VirtualTreeEntry = defineClass({
         O[O.collapsed ? 'icon_collapsed' : 'icon_uncollapsed']
       );
     }
-  },
-});
+  }
+}
 
 defineChildWidget(VirtualTreeEntry, 'label', {
   create: Label,

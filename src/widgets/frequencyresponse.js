@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from './../widget_helpers.js';
 import { Chart } from './chart.js';
 import { addClass } from '../utils/dom.js';
 
@@ -43,87 +42,95 @@ function calculateGrid(range, step) {
   return grid;
 }
 
-export const FrequencyResponse = defineClass({
-  /**
-   * FrequencyResponse is a {@link Chart} drawing frequencies on the x axis and dB
-   * values on the y axis. This widget automatically draws a {@link Grid} depending
-   * on the ranges.
-   *
-   * @class FrequencyResponse
-   *
-   * @extends Chart
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {Number} [options.db_grid=12] - Distance in decibels between y axis grid lines.
-   * @property {Object} [options.range_x={min:20, max:20000, scale:"frequency"}] - Either a function returning a {@link Range}
-   *   or an object containing options for a new {@link Range}
-   * @property {Object} [options.range_y={min:-36, max: 36, scale: "linear"}] - Either a function returning a {@link Range}
-   *   or an object containing options for a new {@link Range}
-   * @property {Array<Object>} [options.grid_x=[{pos:    20, label: "20 Hz"}, {pos:    30}, {pos:    40}, {pos:    50}, {pos:    60}, {pos:    70}, {pos:    80}, {pos:    90}, {pos:   100, label: "100 Hz"}, {pos:   200}, {pos:   300}, {pos:   400}, {pos:   500}, {pos:   600}, {pos:   700}, {pos:   800}, {pos:   900}, {pos:  1000, label: "1000 Hz"}, {pos:  2000}, {pos:  3000}, {pos:  4000}, {pos:  5000}, {pos:  6000}, {pos:  7000}, {pos:  8000}, {pos:  9000}, {pos: 10000, label: "10000 Hz"}, {pos: 20000, label: "20000 Hz"}]] - An array containing objects with the following optional members:
-   * @property {Number} [options.grid_x.pos] - The value where to draw grid line and corresponding label.
-   * @property {String} [options.grid_x.color] - A valid CSS color string to colorize the elements.
-   * @property {String} [options.grid_x.class] - A class name for the elements.
-   * @property {String} [options.grid_x.label] - A label string.
-   * @property {String} [options.scale="linear"] - The type of the decibels scale. See {@link Range} for more details.
-   * @property {Number} [options.depth=0] - The depth of the z axis (<code>basis</code> of options.range_z)
-   */
-  Extends: Chart,
-  _options: Object.assign({}, Chart.getOptionTypes(), {
-    db_grid: 'number',
-    grid_x: 'array',
-    scale: 'boolean',
-    depth: 'number',
-  }),
-  options: {
-    db_grid: 12, // dB grid distance
-    range_x: { min: 20, max: 20000, scale: 'frequency' }, // Range x options
-    range_y: { min: -36, max: 36, scale: 'linear' }, // Range y options
-    range_z: { min: 0.1, max: 10, scale: 'linear' },
-    grid_x: [
-      { pos: 20, label: '20Hz' },
-      { pos: 30 },
-      { pos: 40 },
-      { pos: 50 },
-      { pos: 60 },
-      { pos: 70 },
-      { pos: 80 },
-      { pos: 90 },
-      { pos: 100, label: '100Hz' },
-      { pos: 200 },
-      { pos: 300 },
-      { pos: 400 },
-      { pos: 500 },
-      { pos: 600 },
-      { pos: 700 },
-      { pos: 800 },
-      { pos: 900 },
-      { pos: 1000, label: '1kHz' },
-      { pos: 2000 },
-      { pos: 3000 },
-      { pos: 4000 },
-      { pos: 5000 },
-      { pos: 6000 },
-      { pos: 7000 },
-      { pos: 8000 },
-      { pos: 9000 },
-      { pos: 10000, label: '10kHz' },
-      { pos: 20000, label: '20kHz' },
-    ], // Frequency grid
-    scale: false, // the mode of the
-    // dB scale
-    depth: 0, // the depth of the z axis (basis of range_z)
-  },
-  static_events: {
-    set_scale: function (value) {
-      this.range_y.set('scale', value);
-    },
-    set_db_grid: function (value) {
-      this.set('grid_y', calculateGrid(this.range_y, value));
-    },
-  },
-  initialize: function (options) {
-    Chart.prototype.initialize.call(this, options);
+/**
+ * FrequencyResponse is a {@link Chart} drawing frequencies on the x axis and dB
+ * values on the y axis. This widget automatically draws a {@link Grid} depending
+ * on the ranges.
+ *
+ * @class FrequencyResponse
+ *
+ * @extends Chart
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {Number} [options.db_grid=12] - Distance in decibels between y axis grid lines.
+ * @property {Object} [options.range_x={min:20, max:20000, scale:"frequency"}] - Either a function returning a {@link Range}
+ *   or an object containing options for a new {@link Range}
+ * @property {Object} [options.range_y={min:-36, max: 36, scale: "linear"}] - Either a function returning a {@link Range}
+ *   or an object containing options for a new {@link Range}
+ * @property {Array<Object>} [options.grid_x=[{pos:    20, label: "20 Hz"}, {pos:    30}, {pos:    40}, {pos:    50}, {pos:    60}, {pos:    70}, {pos:    80}, {pos:    90}, {pos:   100, label: "100 Hz"}, {pos:   200}, {pos:   300}, {pos:   400}, {pos:   500}, {pos:   600}, {pos:   700}, {pos:   800}, {pos:   900}, {pos:  1000, label: "1000 Hz"}, {pos:  2000}, {pos:  3000}, {pos:  4000}, {pos:  5000}, {pos:  6000}, {pos:  7000}, {pos:  8000}, {pos:  9000}, {pos: 10000, label: "10000 Hz"}, {pos: 20000, label: "20000 Hz"}]] - An array containing objects with the following optional members:
+ * @property {Number} [options.grid_x.pos] - The value where to draw grid line and corresponding label.
+ * @property {String} [options.grid_x.color] - A valid CSS color string to colorize the elements.
+ * @property {String} [options.grid_x.class] - A class name for the elements.
+ * @property {String} [options.grid_x.label] - A label string.
+ * @property {String} [options.scale="linear"] - The type of the decibels scale. See {@link Range} for more details.
+ * @property {Number} [options.depth=0] - The depth of the z axis (<code>basis</code> of options.range_z)
+ */
+export class FrequencyResponse extends Chart {
+  static get _options() {
+    return Object.assign({}, Chart.getOptionTypes(), {
+      db_grid: 'number',
+      grid_x: 'array',
+      scale: 'boolean',
+      depth: 'number',
+    });
+  }
+
+  static get options() {
+    return {
+      db_grid: 12, // dB grid distance
+      range_x: { min: 20, max: 20000, scale: 'frequency' }, // Range x options
+      range_y: { min: -36, max: 36, scale: 'linear' }, // Range y options
+      range_z: { min: 0.1, max: 10, scale: 'linear' },
+      grid_x: [
+        { pos: 20, label: '20Hz' },
+        { pos: 30 },
+        { pos: 40 },
+        { pos: 50 },
+        { pos: 60 },
+        { pos: 70 },
+        { pos: 80 },
+        { pos: 90 },
+        { pos: 100, label: '100Hz' },
+        { pos: 200 },
+        { pos: 300 },
+        { pos: 400 },
+        { pos: 500 },
+        { pos: 600 },
+        { pos: 700 },
+        { pos: 800 },
+        { pos: 900 },
+        { pos: 1000, label: '1kHz' },
+        { pos: 2000 },
+        { pos: 3000 },
+        { pos: 4000 },
+        { pos: 5000 },
+        { pos: 6000 },
+        { pos: 7000 },
+        { pos: 8000 },
+        { pos: 9000 },
+        { pos: 10000, label: '10kHz' },
+        { pos: 20000, label: '20kHz' },
+      ], // Frequency grid
+      scale: false, // the mode of the
+      // dB scale
+      depth: 0, // the depth of the z axis (basis of range_z)
+    };
+  }
+
+  static get static_events() {
+    return {
+      set_scale: function (value) {
+        this.range_y.set('scale', value);
+      },
+      set_db_grid: function (value) {
+        this.set('grid_y', calculateGrid(this.range_y, value));
+      },
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
 
     options = this.options;
 
@@ -148,14 +155,15 @@ export const FrequencyResponse = defineClass({
       }.bind(this)
     );
     if (this.options.depth) this.set('depth', this.options.depth);
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-frequencyresponse');
 
-    Chart.prototype.draw.call(this, O, element);
-  },
+    super.draw(O, element);
+  }
 
-  redraw: function () {
+  redraw() {
     const I = this.invalid;
 
     if (I.scale) {
@@ -164,6 +172,6 @@ export const FrequencyResponse = defineClass({
       I.ranges = true;
     }
 
-    Chart.prototype.redraw.call(this);
-  },
-});
+    super.redraw();
+  }
+}

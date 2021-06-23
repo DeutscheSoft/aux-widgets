@@ -18,7 +18,6 @@
  */
 
 import { addClass } from './../utils/dom.js';
-import { defineClass } from './../widget_helpers.js';
 import { Button } from './button.js';
 
 function toggle(O) {
@@ -42,57 +41,65 @@ function pressCancel(e) {
   if (O.press) toggle.call(this, O);
 }
 
-export const Toggle = defineClass({
-  /**
-   * A toggle button. The toggle button can either be pressed (which means that it will
-   * switch its state as long as it is pressed) or toggled permanently. Its behavior is
-   * controlled by the two options <code>press</code> and <code>toggle</code>.
-   *
-   * @class Toggle
-   *
-   * @extends Button
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {Boolean} [options.toggle=true] - If true, the button is toggled on click.
-   * @property {Integer} [options.press=0] - Controls press behavior. If <code>options.toggle</code>
-   *   is <code>false</code> and this option is <code>0</code>, the toggle button will toggle until
-   *   released. If <code>options.toggle</code> is true and this option is a positive integer, it is
-   *   interpreted as a milliseconds timeout. When pressing a button longer than this timeout, it will
-   *   be toggled until released, otherwise it will be toggled permanently.
-   * @property {Integer} [options.delay=0] - Delay all actions for n milliseconds. While actions are
-   *   delayed, the widget has class <code>.aux-delayed</code>. Use to force users to press the button
-   *   for a certain amount of time before it actually gets toggled.
-   * @property {String|Boolean} [options.icon_active=false] - An optional icon which is only displayed
-   *   when the button toggle state is <code>true</code>. Please note that this option only works if `icon` is also set.
-   * @property {String|Boolean} [options.label_active=false] - An optional label which is only displayed
-   *   when the button toggle state is <code>true</code>. Please note that this option only works if `label` is also set.
-   */
-  Extends: Button,
-  _options: Object.assign({}, Button.getOptionTypes(), {
-    label_active: 'string',
-    icon_active: 'string',
-    press: 'int',
-    toggle: 'boolean',
-  }),
-  options: {
-    label_active: false,
-    icon_active: false,
-    icon_inactive: false,
-    press: 0,
-    toggle: true,
-  },
-  static_events: {
-    press_start: pressStart,
-    press_end: pressEnd,
-    press_cancel: pressCancel,
-  },
-  draw: function (O, element) {
-    addClass(element, 'aux-toggle');
-    Button.prototype.draw.call(this, O, element);
-  },
+/**
+ * A toggle button. The toggle button can either be pressed (which means that it will
+ * switch its state as long as it is pressed) or toggled permanently. Its behavior is
+ * controlled by the two options <code>press</code> and <code>toggle</code>.
+ *
+ * @class Toggle
+ *
+ * @extends Button
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {Boolean} [options.toggle=true] - If true, the button is toggled on click.
+ * @property {Integer} [options.press=0] - Controls press behavior. If <code>options.toggle</code>
+ *   is <code>false</code> and this option is <code>0</code>, the toggle button will toggle until
+ *   released. If <code>options.toggle</code> is true and this option is a positive integer, it is
+ *   interpreted as a milliseconds timeout. When pressing a button longer than this timeout, it will
+ *   be toggled until released, otherwise it will be toggled permanently.
+ * @property {Integer} [options.delay=0] - Delay all actions for n milliseconds. While actions are
+ *   delayed, the widget has class <code>.aux-delayed</code>. Use to force users to press the button
+ *   for a certain amount of time before it actually gets toggled.
+ * @property {String|Boolean} [options.icon_active=false] - An optional icon which is only displayed
+ *   when the button toggle state is <code>true</code>. Please note that this option only works if `icon` is also set.
+ * @property {String|Boolean} [options.label_active=false] - An optional label which is only displayed
+ *   when the button toggle state is <code>true</code>. Please note that this option only works if `label` is also set.
+ */
+export class Toggle extends Button {
+  static get _options() {
+    return Object.assign({}, Button.getOptionTypes(), {
+      label_active: 'string',
+      icon_active: 'string',
+      press: 'int',
+      toggle: 'boolean',
+    });
+  }
 
-  redraw: function () {
+  static get options() {
+    return {
+      label_active: false,
+      icon_active: false,
+      icon_inactive: false,
+      press: 0,
+      toggle: true,
+    };
+  }
+
+  static get static_events() {
+    return {
+      press_start: pressStart,
+      press_end: pressEnd,
+      press_cancel: pressCancel,
+    };
+  }
+
+  draw(O, element) {
+    addClass(element, 'aux-toggle');
+    super.draw(O, element);
+  }
+
+  redraw() {
     const O = this.options;
     const I = this.invalid;
     if (I.state) {
@@ -101,8 +108,9 @@ export const Toggle = defineClass({
       tmp = (O.state && O.icon_active) || O.icon;
       if (tmp) this.icon.set('icon', tmp || '');
     }
-    Button.prototype.redraw.call(this);
-  },
+    super.redraw();
+  }
+
   /**
    * Toggle the button state.
    *
@@ -110,7 +118,7 @@ export const Toggle = defineClass({
    *
    * @emits Toggle#toggled
    */
-  toggle: function () {
+  toggle() {
     toggle.call(this, this.options);
     /**
      * Is fired when the button was toggled.
@@ -119,5 +127,5 @@ export const Toggle = defineClass({
      *
      * @param {boolean} state - The state of the {@link Toggle}.
      */
-  },
-});
+  }
+}

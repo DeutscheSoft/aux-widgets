@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from '../widget_helpers.js';
 import { Chart } from './chart.js';
 import { Graph } from './graph.js';
 import { ChartHandle } from './charthandle.js';
@@ -209,149 +208,157 @@ function drawReflections() {
  * @class Reverb
  */
 
-export const Reverb = defineClass({
-  Extends: Chart,
-  _options: Object.assign({}, Chart.getOptionTypes(), {
-    timeframe: 'number',
+export class Reverb extends Chart {
+  static get _options() {
+    return Object.assign({}, Chart.getOptionTypes(), {
+      timeframe: 'number',
 
-    delay: 'number',
-    delay_min: 'number',
-    delay_max: 'number',
+      delay: 'number',
+      delay_min: 'number',
+      delay_max: 'number',
 
-    gain: 'number',
-    gain_min: 'number',
-    gain_max: 'number',
+      gain: 'number',
+      gain_min: 'number',
+      gain_max: 'number',
 
-    predelay: 'number',
-    predelay_min: 'number',
-    predelay_max: 'number',
+      predelay: 'number',
+      predelay_min: 'number',
+      predelay_max: 'number',
 
-    rlevel: 'number',
-    rlevel_min: 'number',
-    rlevel_max: 'number',
+      rlevel: 'number',
+      rlevel_min: 'number',
+      rlevel_max: 'number',
 
-    rtime: 'number',
-    rtime_min: 'number',
-    rtime_max: 'number',
+      rtime: 'number',
+      rtime_min: 'number',
+      rtime_max: 'number',
 
-    erlevel: 'number',
-    erlevel_min: 'number',
-    erlevel_max: 'number',
+      erlevel: 'number',
+      erlevel_min: 'number',
+      erlevel_max: 'number',
 
-    attack: 'number',
-    noisefloor: 'number',
-    reference: 'number',
+      attack: 'number',
+      noisefloor: 'number',
+      reference: 'number',
 
-    show_input: 'boolean',
+      show_input: 'boolean',
 
-    reflections: 'boolean|array|object',
-    _reflections: 'array',
-  }),
-  options: {
-    range_x: { min: 0, max: 5000 },
-    range_y: { min: -90, max: 10 },
-    range_z: { min: 1, max: 1 },
+      reflections: 'boolean|array|object',
+      _reflections: 'array',
+    });
+  }
 
-    grid_x: [
-      { pos: 0, label: '0ms' },
-      { pos: 500, label: '500ms' },
-      { pos: 1000, label: '1s' },
-      { pos: 1500, label: '1.5s' },
-      { pos: 2000, label: '2s' },
-      { pos: 2500, label: '2.5s' },
-      { pos: 3000, label: '3s' },
-      { pos: 3500, label: '3.5s' },
-      { pos: 4000, label: '4s' },
-      { pos: 4500, label: '4.5s' },
-      { pos: 5000, label: '5s' },
-      { pos: 5500, label: '5.5s' },
-      { pos: 6000, label: '6s' },
-      { pos: 6500, label: '6.5s' },
-      { pos: 7000, label: '7s' },
-      { pos: 7500, label: '7.5s' },
-      { pos: 8000, label: '8s' },
-      { pos: 8500, label: '8.5s' },
-      { pos: 9000, label: '9s' },
-      { pos: 9500, label: '9.5s' },
-      { pos: 10000, label: '10s' },
-    ],
+  static get options() {
+    return {
+      range_x: { min: 0, max: 5000 },
+      range_y: { min: -90, max: 10 },
+      range_z: { min: 1, max: 1 },
 
-    grid_y: [
-      { pos: -120, label: '-120dB' },
-      { pos: -110, label: '-110dB' },
-      { pos: -100, label: '-100dB' },
-      { pos: -90, label: '-90dB' },
-      { pos: -80, label: '-80dB' },
-      { pos: -70, label: '-70dB' },
-      { pos: -60, label: '-60dB' },
-      { pos: -50, label: '-50dB' },
-      { pos: -40, label: '-40dB' },
-      { pos: -30, label: '-30dB' },
-      { pos: -20, label: '-20dB' },
-      { pos: -10, label: '-10dB' },
-      { pos: 0, label: '0dB' },
-    ],
+      grid_x: [
+        { pos: 0, label: '0ms' },
+        { pos: 500, label: '500ms' },
+        { pos: 1000, label: '1s' },
+        { pos: 1500, label: '1.5s' },
+        { pos: 2000, label: '2s' },
+        { pos: 2500, label: '2.5s' },
+        { pos: 3000, label: '3s' },
+        { pos: 3500, label: '3.5s' },
+        { pos: 4000, label: '4s' },
+        { pos: 4500, label: '4.5s' },
+        { pos: 5000, label: '5s' },
+        { pos: 5500, label: '5.5s' },
+        { pos: 6000, label: '6s' },
+        { pos: 6500, label: '6.5s' },
+        { pos: 7000, label: '7s' },
+        { pos: 7500, label: '7.5s' },
+        { pos: 8000, label: '8s' },
+        { pos: 8500, label: '8.5s' },
+        { pos: 9000, label: '9s' },
+        { pos: 9500, label: '9.5s' },
+        { pos: 10000, label: '10s' },
+      ],
 
-    timeframe: 10000,
+      grid_y: [
+        { pos: -120, label: '-120dB' },
+        { pos: -110, label: '-110dB' },
+        { pos: -100, label: '-100dB' },
+        { pos: -90, label: '-90dB' },
+        { pos: -80, label: '-80dB' },
+        { pos: -70, label: '-70dB' },
+        { pos: -60, label: '-60dB' },
+        { pos: -50, label: '-50dB' },
+        { pos: -40, label: '-40dB' },
+        { pos: -30, label: '-30dB' },
+        { pos: -20, label: '-20dB' },
+        { pos: -10, label: '-10dB' },
+        { pos: 0, label: '0dB' },
+      ],
 
-    delay: 0,
-    delay_min: 0,
-    delay_max: 2000,
+      timeframe: 10000,
 
-    gain: 0,
-    gain_min: -60,
-    gain_max: 0,
+      delay: 0,
+      delay_min: 0,
+      delay_max: 2000,
 
-    predelay: 0,
-    predelay_min: 0,
-    predelay_max: 2000,
+      gain: 0,
+      gain_min: -60,
+      gain_max: 0,
 
-    rlevel: 0,
-    rlevel_min: -60,
-    rlevel_max: 0,
+      predelay: 0,
+      predelay_min: 0,
+      predelay_max: 2000,
 
-    rtime: 0,
-    rtime_min: 0,
-    rtime_max: 5000,
+      rlevel: 0,
+      rlevel_min: -60,
+      rlevel_max: 0,
 
-    erlevel: 0,
-    erlevel_min: -60,
-    erlevel_max: 0,
+      rtime: 0,
+      rtime_min: 0,
+      rtime_max: 5000,
 
-    attack: 0,
-    noisefloor: -96,
-    reference: -60,
+      erlevel: 0,
+      erlevel_min: -60,
+      erlevel_max: 0,
 
-    show_predelay_handle: true,
-    show_input: true,
-    show_input_handle: true,
-    show_rtime_handle: true,
-    show_rlevel_handle: true,
+      attack: 0,
+      noisefloor: -96,
+      reference: -60,
 
-    reflections: { amount: 0, spread: 0, randomness: 0 },
-    _reflections: [],
-  },
-  static_events: {
-    set_timeframe: (v) => this.range_x.set('max', v),
-    set_reflections: setReflections,
-    set_delay: function (v) {
-      setInputMode.call(this);
-    },
-    set_gain: function (v) {
-      setInputMode.call(this);
-    },
-    set_predelay: function (v) {
-      setInputMode.call(this);
-    },
-    set_rlevel: function (v) {
-      setInputMode.call(this);
-    },
-    set_rtime: function (v) {
-      setInputMode.call(this);
-    },
-  },
-  initialize: function (options) {
-    Chart.prototype.initialize.call(this, options);
+      show_predelay_handle: true,
+      show_input: true,
+      show_input_handle: true,
+      show_rtime_handle: true,
+      show_rlevel_handle: true,
+
+      reflections: { amount: 0, spread: 0, randomness: 0 },
+      _reflections: [],
+    };
+  }
+
+  static get static_events() {
+    return {
+      set_timeframe: (v) => this.range_x.set('max', v),
+      set_reflections: setReflections,
+      set_delay: function (v) {
+        setInputMode.call(this);
+      },
+      set_gain: function (v) {
+        setInputMode.call(this);
+      },
+      set_predelay: function (v) {
+        setInputMode.call(this);
+      },
+      set_rlevel: function (v) {
+        setInputMode.call(this);
+      },
+      set_rtime: function (v) {
+        setInputMode.call(this);
+      },
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
 
     /**
      * @member {Graph} Reverb#input - The {@link Graph} displaying the
@@ -375,11 +382,12 @@ export const Reverb = defineClass({
       mode: 'bottom',
     });
     this.addGraph(this.reverb);
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-reverb');
 
-    Chart.prototype.draw.call(this, O, element);
+    super.draw(O, element);
 
     initValues.call(this, 'delay', O);
     initValues.call(this, 'gain', O);
@@ -390,12 +398,13 @@ export const Reverb = defineClass({
 
     this.set('reflections', O.reflections);
     this.set('show_input', O.show_input);
-  },
-  redraw: function () {
+  }
+
+  redraw() {
     const O = this.options;
     const I = this.invalid;
 
-    Chart.prototype.redraw.call(this);
+    super.redraw();
 
     if (I.show_input) {
       I.show_input = false;
@@ -415,8 +424,9 @@ export const Reverb = defineClass({
     if (I.validate('reflections', 'erlevel', 'delay', 'gain')) {
       drawReflections.call(this);
     }
-  },
-  set: function (key, value) {
+  }
+
+  set(key, value) {
     if (key == 'reflections') {
       if (
         typeof value == 'object' &&
@@ -425,9 +435,9 @@ export const Reverb = defineClass({
         value = this.options.reflections.concat(value);
       }
     }
-    return Chart.prototype.set.call(this, key, value);
-  },
-});
+    return super.set(key, value);
+  }
+}
 
 function onInteractingChanged(value) {
   if (value) {

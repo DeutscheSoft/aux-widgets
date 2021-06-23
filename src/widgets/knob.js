@@ -26,7 +26,6 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { defineClass } from '../widget_helpers.js';
 import { Widget } from './widget.js';
 import { Circular } from './circular.js';
 import { DragValue } from '../modules/dragvalue.js';
@@ -90,90 +89,98 @@ function moduleRange() {
         }] - A set of available presets. Presets
  *   are a functionality of {@link Widget}.
  */
-export const Knob = defineClass({
-  Extends: Widget,
-  _options: Object.assign(
-    {},
-    Widget.getOptionTypes(),
-    Circular.getOptionTypes(),
-    DragValue.getOptionTypes(),
-    {
-      reset: 'number',
-      bind_dblclick: 'boolean',
-    }
-  ),
-  options: Object.assign({}, Circular.getDefaultOptions(), {
-    hand: { width: 1, length: 10, margin: 25 },
-    margin: 13,
-    thickness: 6,
-    step: 1,
-    shift_up: 4,
-    shift_down: 0.25,
-    dots_defaults: { length: 6, margin: 13.5, width: 1 },
-    markers_defaults: { thickness: 2, margin: 11 },
-    labels_defaults: {
-      margin: 12,
-      align: 'outer',
-      format: function (val) {
-        return val;
+export class Knob extends Widget {
+  static get _options() {
+    return Object.assign(
+      {},
+      Widget.getOptionTypes(),
+      Circular.getOptionTypes(),
+      DragValue.getOptionTypes(),
+      {
+        reset: 'number',
+        bind_dblclick: 'boolean',
+      }
+    );
+  }
+
+  static get options() {
+    return Object.assign({}, Circular.getDefaultOptions(), {
+      hand: { width: 1, length: 10, margin: 25 },
+      margin: 13,
+      thickness: 6,
+      step: 1,
+      shift_up: 4,
+      shift_down: 0.25,
+      dots_defaults: { length: 6, margin: 13.5, width: 1 },
+      markers_defaults: { thickness: 2, margin: 11 },
+      labels_defaults: {
+        margin: 12,
+        align: 'outer',
+        format: function (val) {
+          return val;
+        },
       },
-    },
-    direction: 'polar',
-    rotation: 45,
-    blind_angle: 20,
-    basis: 300,
-    preset: 'medium',
-    presets: {
-      tiny: {
-        margin: 0,
-        thickness: 4,
-        hand: { width: 1, length: 6, margin: 8 },
-        dots_defaults: { length: 4, margin: 0.5, width: 1 },
-        markers_defaults: { thickness: 2, margin: 0 },
-        show_labels: false,
+      direction: 'polar',
+      rotation: 45,
+      blind_angle: 20,
+      basis: 300,
+      preset: 'medium',
+      presets: {
+        tiny: {
+          margin: 0,
+          thickness: 4,
+          hand: { width: 1, length: 6, margin: 8 },
+          dots_defaults: { length: 4, margin: 0.5, width: 1 },
+          markers_defaults: { thickness: 2, margin: 0 },
+          show_labels: false,
+        },
+        small: {
+          margin: 8,
+          thickness: 4.5,
+          hand: { width: 1, length: 8, margin: 17 },
+          dots_defaults: { length: 4.5, margin: 8.5, width: 1 },
+          markers_defaults: { thickness: 2, margin: 8 },
+          labels_defaults: { margin: 9 },
+          show_labels: true,
+        },
+        medium: {
+          margin: 13,
+          thickness: 6,
+          hand: { width: 1, length: 10, margin: 25 },
+          dots_defaults: { length: 6, margin: 13.5, width: 1 },
+          markers_defaults: { thickness: 2, margin: 11 },
+          show_labels: true,
+        },
+        large: {
+          margin: 13,
+          thickness: 6,
+          hand: { width: 1.5, length: 12, margin: 26 },
+          dots_defaults: { length: 6, margin: 13.5, width: 1 },
+          markers_defaults: { thickness: 2, margin: 11 },
+          show_labels: true,
+        },
+        huge: {
+          margin: 13,
+          thickness: 6,
+          hand: { width: 2, length: 12, margin: 28 },
+          dots_defaults: { length: 6, margin: 13.5, width: 1 },
+          markers_defaults: { thickness: 2, margin: 11 },
+          show_labels: true,
+        },
       },
-      small: {
-        margin: 8,
-        thickness: 4.5,
-        hand: { width: 1, length: 8, margin: 17 },
-        dots_defaults: { length: 4.5, margin: 8.5, width: 1 },
-        markers_defaults: { thickness: 2, margin: 8 },
-        labels_defaults: { margin: 9 },
-        show_labels: true,
-      },
-      medium: {
-        margin: 13,
-        thickness: 6,
-        hand: { width: 1, length: 10, margin: 25 },
-        dots_defaults: { length: 6, margin: 13.5, width: 1 },
-        markers_defaults: { thickness: 2, margin: 11 },
-        show_labels: true,
-      },
-      large: {
-        margin: 13,
-        thickness: 6,
-        hand: { width: 1.5, length: 12, margin: 26 },
-        dots_defaults: { length: 6, margin: 13.5, width: 1 },
-        markers_defaults: { thickness: 2, margin: 11 },
-        show_labels: true,
-      },
-      huge: {
-        margin: 13,
-        thickness: 6,
-        hand: { width: 2, length: 12, margin: 28 },
-        dots_defaults: { length: 6, margin: 13.5, width: 1 },
-        markers_defaults: { thickness: 2, margin: 11 },
-        show_labels: true,
-      },
-    },
-    bind_dblclick: true,
-  }),
-  static_events: {
-    dblclick: dblClick,
-  },
-  initialize: function (options) {
+      bind_dblclick: true,
+    });
+  }
+
+  static get static_events() {
+    return {
+      dblclick: dblClick,
+    };
+  }
+
+  initialize(options) {
     if (!options.element) options.element = element('div');
-    Widget.prototype.initialize.call(this, options);
+    super.initialize(options);
     options = this.options;
     let S;
     /**
@@ -226,33 +233,33 @@ export const Knob = defineClass({
     this.set('base', options.base);
     if (options.reset === void 0) options.reset = options.value;
     this.addChild(this.circular);
-  },
+  }
 
-  getRange: function () {
+  getRange() {
     return this.circular;
-  },
+  }
 
-  draw: function (O, element) {
+  draw(O, element) {
     addClass(element, 'aux-knob');
     element.appendChild(this.svg);
 
-    Widget.prototype.draw.call(this, O, element);
-  },
+    super.draw(O, element);
+  }
 
-  destroy: function () {
+  destroy() {
     this.drag.destroy();
     this.scroll.destroy();
     this.circular.destroy();
-    Widget.prototype.destroy.call(this);
-  },
+    super.destroy();
+  }
 
-  resize: function () {
+  resize() {
     const rect = this.element.getBoundingClientRect();
     const size = Math.min(rect.width, rect.height);
     this.set('size', size);
-  },
+  }
 
-  redraw: function () {
+  redraw() {
     const I = this.invalid;
     const O = this.options;
 
@@ -261,17 +268,18 @@ export const Knob = defineClass({
       this.svg.setAttribute('viewBox', formatViewbox(O.size, O.size));
     }
 
-    Widget.prototype.redraw.call(this);
-  },
+    super.redraw();
+  }
+
   /**
    * This is an alias for {@link Circular#addLabel} of the internal
    * circular instance.
    *
    * @method Knob#addLabel
    */
-  addLabel: function (x) {
+  addLabel(x) {
     return this.circular.addLabel(x);
-  },
+  }
 
   /**
    * This is an alias for {@link Circular#removeLabel} of the internal
@@ -279,11 +287,11 @@ export const Knob = defineClass({
    *
    * @method Knob#removeLabel
    */
-  removeLabel: function (x) {
+  removeLabel(x) {
     this.circular.removeLabel(x);
-  },
+  }
 
-  set: function (key, value) {
+  set(key, value) {
     if (key === 'base') {
       if (value === false) value = this.options.min;
     }
@@ -292,6 +300,6 @@ export const Knob = defineClass({
       if (Circular.getOptionTypes()[key]) value = this.circular.set(key, value);
       if (DragValue.getOptionTypes()[key]) this.drag.set(key, value);
     }
-    return Widget.prototype.set.call(this, key, value);
-  },
-});
+    return super.set(key, value);
+  }
+}

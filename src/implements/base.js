@@ -22,7 +22,7 @@ import {
   removeActiveEventListener,
   addActiveEventListener,
 } from './../utils/events.js';
-import { defineClass, addEvent, removeEvent } from './../widget_helpers.js';
+import { addEvent, removeEvent } from './../widget_helpers.js';
 
 function callHandler(self, fun, args) {
   try {
@@ -128,19 +128,112 @@ function nativeHandler(ev) {
    */
   if (this.emit(ev.type, ev) === false) return false;
 }
+function arrayify(x) {
+  if (!Array.isArray(x)) x = [x];
+  return x;
+}
+
+function mergeStaticEvents(a, b) {
+  let event;
+  if (!a) return b;
+  if (!b) return Object.assign({}, a);
+  for (event in a) {
+    const tmp = a[event];
+    if (Object.prototype.hasOwnProperty.call(b, event)) {
+      b[event] = arrayify(tmp).concat(arrayify(b[event]));
+    } else {
+      b[event] = Array.isArray(tmp) ? tmp.slice(0) : tmp;
+    }
+  }
+  return Object.assign({}, a, b);
+}
+
 /**
  * This is the base class for all AUX widgets.
  * It provides an API for event handling and options.
  *
  * @class Base
  */
-export const Base = defineClass({
-  constructor: function (...args) {
+export class Base {
+  static getOptionTypes() {
+    if (!Object.prototype.hasOwnProperty.call(this, 'auxOptionTypes')) {
+      this.auxOptionTypes = this._options;
+    }
+
+    return this.auxOptionTypes;
+  }
+
+  static getOptionType(name) {
+    return this.getOptionTypes()[name];
+  }
+
+  static getDefaultOptions() {
+    if (!Object.prototype.hasOwnProperty.call(this, 'auxOptions')) {
+      const base = Object.getPrototypeOf(this.prototype).constructor;
+      const ownOptions = Object.prototype.hasOwnProperty.call(this, 'options')
+        ? this.options
+        : {};
+      let o;
+
+      if (base.getDefaultOptions) {
+        o = Object.assign({}, base.getDefaultOptions(), ownOptions);
+      } else {
+        o = Object.assign({}, ownOptions);
+      }
+
+      this.auxOptions = o;
+    }
+
+    return this.auxOptions;
+  }
+
+  static getDefault(name) {
+    return this.getDefaultOptions()[name];
+  }
+
+  static getStaticEvents() {
+    if (!Object.prototype.hasOwnProperty.call(this, 'auxStaticEvents')) {
+      const base = Object.getPrototypeOf(this.prototype).constructor;
+      const ownEvents = Object.prototype.hasOwnProperty.call(
+        this,
+        'static_events'
+      )
+        ? this.static_events
+        : {};
+      let events;
+
+      if (base.getStaticEvents) {
+        events = mergeStaticEvents(base.getStaticEvents(), ownEvents);
+      } else {
+        events = Object.assign({}, ownEvents);
+      }
+
+      this.auxStaticEvents = events;
+    }
+    return this.auxStaticEvents;
+  }
+
+  static addStaticEvent(name, callback) {
+    addEvent(this.getStaticEvents(), name, callback);
+  }
+
+  static defineOption(name, type, defaultValue) {
+    const _options = this.getOptionTypes();
+    _options[name] = type;
+    if (defaultValue !== void 0) this.getDefaultOptions()[name] = defaultValue;
+  }
+
+  static hasOption(name) {
+    return Object.prototype.hasOwnProperty.call(this.getOptionTypes(), name);
+  }
+
+  constructor(...args) {
     this.initialize(...args);
     this.initializeChildren();
     this.initialized();
-  },
-  initialize: function (options) {
+  }
+
+  initialize(options) {
     this.__events = {};
     this.__event_target = null;
     this.__native_handler = nativeHandler.bind(this);
@@ -171,39 +264,45 @@ export const Base = defineClass({
       }
 
     this.emit('initialize');
-  },
-  initializeChildren: function () {
+  }
+
+  initializeChildren() {
     this.emit('initialize_children');
-  },
+  }
+
   /**
    * Returns the type of an option. If the given option does not exist,
    * 'undefined' is returned.
    *
    * @method Base#getOptionType
    */
-  getOptionType: function (name) {
+  getOptionType(name) {
     return this.constructor.getOptionType(name);
-  },
+  }
+
   /**
    * Returns the default value of a given option. If the option does not
    * exist, an exception is thrown.
    *
    * @method Base#getDefault
    */
-  getDefault: function (name) {
+  getDefault(name) {
     if (this.getOptionType(name) === void 0) {
       throw new Error('Option does not exist.');
     }
 
     return this.constructor.getDefault(name);
-  },
-  getDefaultOptions: function () {
+  }
+
+  getDefaultOptions() {
     return this.constructor.getDefaultOptions();
-  },
-  getStaticEvents: function () {
+  }
+
+  getStaticEvents() {
     return this.constructor.getStaticEvents();
-  },
-  initialized: function () {
+  }
+
+  initialized() {
     /**
      * Is fired when an instance is initialized.
      *
@@ -214,13 +313,14 @@ export const Base = defineClass({
     const element = this.getEventTarget();
 
     if (element !== this.__event_target) addNativeEvents.call(this, element);
-  },
+  }
+
   /**
    * Destroys all event handlers and the options object.
    *
    * @method Base#destroy
    */
-  destroy: function () {
+  destroy() {
     if (this.__event_target) {
       removeNativeEvents.call(this, this.__event_target, this.__events);
     }
@@ -229,7 +329,8 @@ export const Base = defineClass({
     this.__event_target = null;
     this.__native_handler = null;
     this.options = null;
-  },
+  }
+
   /**
    * Get the value of an option.
    *
@@ -237,9 +338,10 @@ export const Base = defineClass({
    *
    * @param {string} key - The option name.
    */
-  get: function (key) {
+  get(key) {
     return this.options[key];
-  },
+  }
+
   /**
    * Sets an option. Fires both the events <code>set</code> with arguments <code>key</code>
    * and <code>value</code>; and the event <code>'set_'+key</code> with arguments <code>value</code>
@@ -253,7 +355,7 @@ export const Base = defineClass({
    * @emits Base#set
    * @emits Base#set_[option]
    */
-  set: function (key, value) {
+  set(key, value) {
     this.options[key] = value;
     /**
      * Is fired when an option is set.
@@ -275,7 +377,8 @@ export const Base = defineClass({
     if (this.hasEventListeners(e)) this.emit(e, value, key);
 
     return value;
-  },
+  }
+
   /**
    * Conditionally sets an option unless it already has the requested value.
    *
@@ -287,19 +390,21 @@ export const Base = defineClass({
    * @emits Base#set
    * @emits Base#set_[option]
    */
-  update: function (key, value) {
+  update(key, value) {
     if (this.options[key] === value) return;
     this.set(key, value);
-  },
+  }
+
   /**
    * Resets an option to its default value.
    *
    * @method Base#reset
    * @param {string} key - The option name.
    */
-  reset: function (key) {
+  reset(key) {
     return this.set(key, this.getDefault(key));
-  },
+  }
+
   /**
    * Sets an option by user interaction. Emits the <code>userset</code>
    * event. The <code>userset</code> event can be cancelled (if an event handler
@@ -315,15 +420,17 @@ export const Base = defineClass({
    * @emits Base#userset
    * @emits Base#useraction
    */
-  userset: function (key, value) {
+  userset(key, value) {
     if (false === this.emit('userset', key, value)) return false;
     value = this.set(key, value);
     this.emit('useraction', key, value);
     return true;
-  },
-  getEventTarget: function () {
+  }
+
+  getEventTarget() {
     return this.__event_target;
-  },
+  }
+
   /**
    * Delegates all occuring DOM events of a specific DOM node to the widget.
    * This way the widget fires e.g. a click event if someone clicks on the
@@ -337,7 +444,7 @@ export const Base = defineClass({
    *
    * @emits Base#delegated
    */
-  delegateEvents: function (element) {
+  delegateEvents(element) {
     const old_target = this.__event_target;
 
     if (old_target !== this.getEventTarget()) {
@@ -363,7 +470,8 @@ export const Base = defineClass({
     this.__event_target = element;
 
     return element;
-  },
+  }
+
   /**
    * Register an event handler.
    *
@@ -372,7 +480,7 @@ export const Base = defineClass({
    * @param {string} event - The event descriptor.
    * @param {Function} func - The function to call when the event happens.
    */
-  on: function (event, func) {
+  on(event, func) {
     let ev;
 
     if (typeof event !== 'string') throw new TypeError('Expected string.');
@@ -389,11 +497,13 @@ export const Base = defineClass({
       addActiveEventListener(ev, event, this.__native_handler);
     ev = this.__events;
     addEvent(ev, event, func);
-  },
-  addEventListener: function (event, func) {
+  }
+
+  addEventListener(event, func) {
     return this.on(event, func);
-  },
-  hasEventListener: function (event, func) {
+  }
+
+  hasEventListener(event, func) {
     const ev = this.__events;
 
     const handlers = ev[event];
@@ -407,8 +517,9 @@ export const Base = defineClass({
     }
 
     return handlers === func;
-  },
-  subscribe: function (event, func) {
+  }
+
+  subscribe(event, func) {
     if (this.hasEventListener(event, func)) {
       throw new Error('Event handler already registered.');
     }
@@ -421,15 +532,17 @@ export const Base = defineClass({
       active = false;
       this.removeEventListener(event, func);
     };
-  },
-  once: function (event, func) {
+  }
+
+  once(event, func) {
     const sub = this.subscribe(event, (...args) => {
       sub();
       return func(...args);
     });
 
     return sub;
-  },
+  }
+
   /**
    * Removes the given function from the event queue.
    * If it is a native DOM event, it removes the DOM event listener
@@ -440,7 +553,7 @@ export const Base = defineClass({
    * @param {string} event - The event descriptor.
    * @param {Function} fun - The function to remove.
    */
-  off: function (event, fun) {
+  off(event, fun) {
     removeEvent(this.__events, event, fun);
 
     // remove native DOM event listener from getEventTarget()
@@ -448,10 +561,12 @@ export const Base = defineClass({
       const ev = this.getEventTarget();
       if (ev) removeActiveEventListener(ev, event, this.__native_handler);
     }
-  },
-  removeEventListener: function (event, func) {
+  }
+
+  removeEventListener(event, func) {
     return this.off(event, func);
-  },
+  }
+
   /**
    * Fires an event.
    *
@@ -460,7 +575,7 @@ export const Base = defineClass({
    * @param {string} event - The event descriptor.
    * @param {...*} args - Event arguments.
    */
-  emit: function (event) {
+  emit(event) {
     let ev;
     let args;
     let v;
@@ -486,10 +601,12 @@ export const Base = defineClass({
       v = dispatchEvents(this, ev, args);
       if (v !== void 0) return v;
     }
-  },
-  dispatchEvent: function (event, ...args) {
+  }
+
+  dispatchEvent(event, ...args) {
     return this.emit(event, ...args);
-  },
+  }
+
   /**
    * Test if the event descriptor has some handler functions in the queue.
    *
@@ -499,7 +616,7 @@ export const Base = defineClass({
    *
    * @returns {boolean} True if the event has some handler functions in the queue, false if not.
    */
-  hasEventListeners: function(event) {
+  hasEventListeners(event) {
     let ev = this.__events;
 
     if (Object.prototype.hasOwnProperty.call(ev, event)) return true;
@@ -507,5 +624,5 @@ export const Base = defineClass({
     ev = this.getStaticEvents();
 
     return ev && Object.prototype.hasOwnProperty.call(ev, event);
-  },
-});
+  }
+}

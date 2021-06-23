@@ -1,17 +1,22 @@
-import { defineClass } from '../../widget_helpers.js';
 import { Container } from '../../widgets/container.js';
 
-export const VirtualTreeEntryBase = defineClass({
-  Extends: Container,
-  _options: Object.assign({}, Container.getOptionTypes(), {
-    data: 'any',
-  }),
-  options: {
-    data: null,
-  },
-  initialize: function (options) {
-    Container.prototype.initialize.call(this, options);
-  },
+export class VirtualTreeEntryBase extends Container {
+  static get _options() {
+    return Object.assign({}, Container.getOptionTypes(), {
+      data: 'any',
+    });
+  }
+
+  static get options() {
+    return {
+      data: null,
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
+  }
+
   /**
    * This function is called internally on scroll to update the entries'
    * content. Overload in order to handle additional data being displayed
@@ -25,7 +30,7 @@ export const VirtualTreeEntryBase = defineClass({
    * @param {Integer} treeposition - An array containing information
    *   about the entries indentation inside the tree.
    */
-  updateData: function (virtualtreeview, index, element, treePosition) {
+  updateData(virtualtreeview, index, element, treePosition) {
     this.update('data', element);
-  },
-});
+  }
+}

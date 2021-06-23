@@ -18,7 +18,6 @@
  */
 
 import { S } from '../dom_scheduler.js';
-import { defineClass } from '../widget_helpers.js';
 import { defineRange } from '../utils/define_range.js';
 import { addClass, getStyle, empty } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
@@ -209,82 +208,87 @@ function drawLines(a, mode, last) {
     }.bind(this)
   );
 }
-export const Grid = defineClass({
-  /**
-   * Grid creates a couple of lines and labels in a SVG
-   * image on the x and y axis. It is used in e.g. {@link Graph} and
-   * {@link FrequencyResponse} to draw markers and values. Grid needs a
-   * parent SVG image do draw into. The base element of a Grid is a
-   * SVG group containing all the labels and lines.
-   *
-   * @class Grid
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {Array<Object|Number>} [options.grid_x=[]] - Array for vertical grid lines
-   *   containing either numbers or objects with the members:
-   * @property {Number} [options.grid_x.pos] - The value where to draw grid line and correspon ding label.
-   * @property {String} [options.grid_x.color] - A valid CSS color string to colorize the elements.
-   * @property {String} [options.grid_x.class] - A class name for the elements.
-   * @property {String} [options.grid_x.label] - A label string.
-   * @property {String} [options.grid_x.y_min] - Start this line at this values position instead of 0.
-   * @property {String} [options.grid_x.y_max] - End this line at this values position instead of maximum height.
-   * @property {Array<Object|Number>} [options.grid_y=[]] - Array for horizontal grid lines
-   *   containing either positions or objects with the members:
-   * @property {Number} [options.grid_y.pos] - The value where to draw grid line and corresponding label.
-   * @property {String} [options.grid_y.color] - A valid CSS color string to colorize the elements.
-   * @property {String} [options.grid_y.class] - A class name for the elements.
-   * @property {String} [options.grid_y.label] - A label string.
-   * @property {String} [options.grid_y.x_min] - Start this line at this values position instead of 0.
-   * @property {String} [options.grid_y.x_max] - End this line at this values position instead of maximum width.
-   * @property {Function|Object} [options.range_x={}] - A function returning
-   *   a {@link Range} instance for vertical grid lines or an object
-   *   containing options. for a new {@link Range}.
-   * @property {Function|Object} [options.range_y={}] - A function returning
-   *   a {@link Range} instance for horizontal grid lines or an object
-   *   containing options. for a new {@link Range}.
-   * @property {Number} [options.width=0] - Width of the grid.
-   * @property {Number} [options.height=0] - Height of the grid.
-   * @property {Number} [options.x_min=false] - Value to start horizontal
-   *   lines at this position instead of 0.
-   * @property {Number} [options.x_max=false] - Value to end horizontal
-   *   lines at this position instead of maximum width.
-   * @property {Number} [options.y_min=false] - Value to start vertical
-   *   lines at this position instead of 0.
-   * @property {Number} [options.y_max=false] - Value to end vertical
-   *   lines at this position instead of maximum height.
-   *
-   *
-   * @extends Widget
-   */
-  Extends: Widget,
-  _options: Object.assign({}, Widget.getOptionTypes(), {
-    grid_x: 'array',
-    grid_y: 'array',
-    range_x: 'object',
-    range_y: 'object',
-    width: 'number',
-    height: 'number',
-    x_min: 'boolean|number',
-    x_max: 'boolean|number',
-    y_min: 'boolean|number',
-    y_max: 'boolean|number',
-  }),
-  options: {
-    grid_x: [],
-    grid_y: [],
-    range_x: {},
-    range_y: {},
-    width: 0,
-    height: 0,
-    x_min: false,
-    x_max: false,
-    y_min: false,
-    y_max: false,
-  },
-  initialize: function (options) {
+/**
+ * Grid creates a couple of lines and labels in a SVG
+ * image on the x and y axis. It is used in e.g. {@link Graph} and
+ * {@link FrequencyResponse} to draw markers and values. Grid needs a
+ * parent SVG image do draw into. The base element of a Grid is a
+ * SVG group containing all the labels and lines.
+ *
+ * @class Grid
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {Array<Object|Number>} [options.grid_x=[]] - Array for vertical grid lines
+ *   containing either numbers or objects with the members:
+ * @property {Number} [options.grid_x.pos] - The value where to draw grid line and correspon ding label.
+ * @property {String} [options.grid_x.color] - A valid CSS color string to colorize the elements.
+ * @property {String} [options.grid_x.class] - A class name for the elements.
+ * @property {String} [options.grid_x.label] - A label string.
+ * @property {String} [options.grid_x.y_min] - Start this line at this values position instead of 0.
+ * @property {String} [options.grid_x.y_max] - End this line at this values position instead of maximum height.
+ * @property {Array<Object|Number>} [options.grid_y=[]] - Array for horizontal grid lines
+ *   containing either positions or objects with the members:
+ * @property {Number} [options.grid_y.pos] - The value where to draw grid line and corresponding label.
+ * @property {String} [options.grid_y.color] - A valid CSS color string to colorize the elements.
+ * @property {String} [options.grid_y.class] - A class name for the elements.
+ * @property {String} [options.grid_y.label] - A label string.
+ * @property {String} [options.grid_y.x_min] - Start this line at this values position instead of 0.
+ * @property {String} [options.grid_y.x_max] - End this line at this values position instead of maximum width.
+ * @property {Function|Object} [options.range_x={}] - A function returning
+ *   a {@link Range} instance for vertical grid lines or an object
+ *   containing options. for a new {@link Range}.
+ * @property {Function|Object} [options.range_y={}] - A function returning
+ *   a {@link Range} instance for horizontal grid lines or an object
+ *   containing options. for a new {@link Range}.
+ * @property {Number} [options.width=0] - Width of the grid.
+ * @property {Number} [options.height=0] - Height of the grid.
+ * @property {Number} [options.x_min=false] - Value to start horizontal
+ *   lines at this position instead of 0.
+ * @property {Number} [options.x_max=false] - Value to end horizontal
+ *   lines at this position instead of maximum width.
+ * @property {Number} [options.y_min=false] - Value to start vertical
+ *   lines at this position instead of 0.
+ * @property {Number} [options.y_max=false] - Value to end vertical
+ *   lines at this position instead of maximum height.
+ *
+ *
+ * @extends Widget
+ */
+export class Grid extends Widget {
+  static get _options() {
+    return Object.assign({}, Widget.getOptionTypes(), {
+      grid_x: 'array',
+      grid_y: 'array',
+      range_x: 'object',
+      range_y: 'object',
+      width: 'number',
+      height: 'number',
+      x_min: 'boolean|number',
+      x_max: 'boolean|number',
+      y_min: 'boolean|number',
+      y_max: 'boolean|number',
+    });
+  }
+
+  static get options() {
+    return {
+      grid_x: [],
+      grid_y: [],
+      range_x: {},
+      range_y: {},
+      width: 0,
+      height: 0,
+      x_min: false,
+      x_max: false,
+      y_min: false,
+      y_max: false,
+    };
+  }
+
+  initialize(options) {
     if (!options.element) options.element = makeSVG('g');
-    Widget.prototype.initialize.call(this, options);
+    super.initialize(options);
     /**
      * @member {SVGGroup} Grid#element - The main SVG group containing all grid elements. Has class <code>.aux-grid</code>.
      */
@@ -298,14 +302,15 @@ export const Grid = defineClass({
     defineRange(this, this.options.range_y, 'range_y');
     if (this.options.width) this.set('width', this.options.width);
     if (this.options.height) this.set('height', this.options.width);
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-grid');
 
-    Widget.prototype.draw.call(this, O, element);
-  },
+    super.draw(O, element);
+  }
 
-  redraw: function () {
+  redraw() {
     const I = this.invalid,
       O = this.options;
     if (I.validate('grid_x', 'grid_y', 'range_x', 'range_y')) {
@@ -314,10 +319,11 @@ export const Grid = defineClass({
       drawLines.call(this, O.grid_x, false, 0);
       drawLines.call(this, O.grid_y, true, this.range_y.options.basis);
     }
-    Widget.prototype.redraw.call(this);
-  },
+    super.redraw();
+  }
+
   // GETTER & SETTER
-  set: function (key, value) {
+  set(key, value) {
     this.options[key] = value;
     switch (key) {
       case 'width':
@@ -327,6 +333,6 @@ export const Grid = defineClass({
         this.range_y.set('basis', value);
         break;
     }
-    Widget.prototype.set.call(this, key, value);
-  },
-});
+    super.set(key, value);
+  }
+}

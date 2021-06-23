@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from '../widget_helpers.js';
 import { Widget } from './widget.js';
 import { Circular } from './circular.js';
 import { setText, element, addClass, getStyle } from '../utils/dom.js';
@@ -187,133 +186,141 @@ function onhide() {
   }
 }
 
-export const Clock = defineClass({
-  /**
-   * Clock shows a customized clock with circulars displaying hours, minutes
-   * and seconds. It additionally offers three freely formattable labels.
-   *
-   * @class Clock
-   *
-   * @extends Widget
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {Integer} [options.thickness=10] - Thickness of the rings in percent of the maximum dimension.
-   * @property {Integer} [options.margin=0] - Margin between the {@link Circular} in percent of the maximum dimension.
-   * @property {Integer} [options.size=200] - Width and height of the widget.
-   * @property {Boolean} [options.show_seconds=true] - Show seconds ring.
-   * @property {Boolean} [options.show_minutes=true] - Show minutes ring.
-   * @property {Boolean} [options.show_hours=true] - Show hours ring.
-   * @property {Integer} [options.timeout=1000] - The timeout of the redraw trigger.
-   * @property {Integer} [options.timeadd=10] - Set additional milliseconds to add to the timeout target system clock regulary.
-   * @property {Integer} [options.offset=0] - If a timeout is set offset the system time in milliseconds.
-   * @property {Integer} [options.fps=25] - Framerate for calculating SMTP frames
-   * @property {Array<String>} [options.months=["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]] - Array containing all months names.
-   * @property {Array<String>} [options.days=["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]] - Array containing all days names.
-   * @property {Function} [options.label=function (date, fps, months, days) { var h = date.getHours(); var m = date.getMinutes(); var s = date.getSeconds(); return ((h < 10) ? ("0" + h) : h) + ":" + ((m < 10) ? ("0" + m) : m) + ":" + ((s < 10) ? ("0" + s) : s);] - Callback to format the main label.
-   * @property {Function} [options.label_upper=function (date, fps, months, days) { return days[date.getDay()]; }] - Callback to format the upper label.
-   * @property {Function} [options.label_lower=function (date, fps, months, days) { var d = date.getDate(); var m = date.getMonth(); var y = date.getFullYear()return ((d < 10) ? ("0" + d) : d) + ". " + months[m] + " " + y; }] - Callback to format the lower label.
-   * @property {Number} [options.label_scale=0.33] - The scale of `label_upper` and `label_lower` compared to the main label.
-   * @property {Number} [options.label_margin=10] - Margin between the rings and the main label in percent of the overall size.
-   * @property {Number} [options.label_upper_pos=0.33] - Position of the upper label as fraction of the overall height.
-   * @property {Number} [options.label_lower_pos=0.66] - Position of the lower label as fraction of the overall height.
-   * @property {Number|String|Date} [options.time] - Set a specific time and date. To avoid auto-udates, set `timeout` to 0.
-   *   For more information about the value, please refer to <a href="https://www.w3schools.com/jsref/jsref_obj_date.asp">W3Schools</a>.
-   */
-  Extends: Widget,
-  _options: Object.assign({}, Widget.getOptionTypes(), {
-    thickness: 'number',
-    margin: 'number',
-    size: 'number',
-    show_seconds: 'boolean',
-    show_minutes: 'boolean',
-    show_hours: 'boolean',
-    timeout: 'int',
-    timeadd: 'int',
-    offset: 'int',
-    fps: 'number',
-    months: 'array',
-    days: 'array',
-    label: 'function',
-    label_upper: 'function',
-    label_lower: 'function',
-    label_scale: 'number',
-    label_margin: 'number',
-    label_upper_pos: 'number',
-    label_lower_pos: 'number',
-    time: 'object|string|number',
-  }),
-  options: {
-    thickness: 10, // thickness of the rings
-    margin: 1, // margin between the circulars
-    size: 200, // diameter of the whole clock
-    show_seconds: true, // show the seconds ring
-    show_minutes: true, // show the minutes ring
-    show_hours: true, // show the hours ring
-    timeout: 1000, // set a timeout to update the clock with the
-    // system clock regulary
-    timeadd: 10, // set additional milliseconds for the
-    // timeout target
-    // system clock regulary
-    offset: 0, // if a timeout is set offset the system time
-    // in milliseconds
-    fps: 25, // framerate for calculatind SMTP frames
-    months: [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ],
-    days: [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-    ],
-    label: function (date /*, fps, months, days*/) {
-      const h = date.getHours(),
-        m = date.getMinutes(),
-        s = date.getSeconds();
-      return (
-        (h < 10 ? '0' + h : h) +
-        ':' +
-        (m < 10 ? '0' + m : m) +
-        ':' +
-        (s < 10 ? '0' + s : s)
-      );
-    },
-    label_upper: function (date, fps, months, days) {
-      return days[date.getDay()];
-    },
-    label_lower: function (date, fps, months /*, days*/) {
-      const d = date.getDate(),
-        m = date.getMonth(),
-        y = date.getFullYear();
-      return (d < 10 ? '0' + d : d) + '. ' + months[m] + ' ' + y;
-    },
-    label_scale: 0.33, // the scale of the upper and lower labels
-    // compared to the main label
-    label_margin: 10,
-    label_upper_pos: 0.33,
-    label_lower_pos: 0.66,
-  },
-  static_events: {
-    hide: onhide,
-    show: timeout,
-    timeout: timeout,
-  },
-  initialize: function (options) {
+/**
+ * Clock shows a customized clock with circulars displaying hours, minutes
+ * and seconds. It additionally offers three freely formattable labels.
+ *
+ * @class Clock
+ *
+ * @extends Widget
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {Integer} [options.thickness=10] - Thickness of the rings in percent of the maximum dimension.
+ * @property {Integer} [options.margin=0] - Margin between the {@link Circular} in percent of the maximum dimension.
+ * @property {Integer} [options.size=200] - Width and height of the widget.
+ * @property {Boolean} [options.show_seconds=true] - Show seconds ring.
+ * @property {Boolean} [options.show_minutes=true] - Show minutes ring.
+ * @property {Boolean} [options.show_hours=true] - Show hours ring.
+ * @property {Integer} [options.timeout=1000] - The timeout of the redraw trigger.
+ * @property {Integer} [options.timeadd=10] - Set additional milliseconds to add to the timeout target system clock regulary.
+ * @property {Integer} [options.offset=0] - If a timeout is set offset the system time in milliseconds.
+ * @property {Integer} [options.fps=25] - Framerate for calculating SMTP frames
+ * @property {Array<String>} [options.months=["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]] - Array containing all months names.
+ * @property {Array<String>} [options.days=["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]] - Array containing all days names.
+ * @property {Function} [options.label=function (date, fps, months, days) { var h = date.getHours(); var m = date.getMinutes(); var s = date.getSeconds(); return ((h < 10) ? ("0" + h) : h) + ":" + ((m < 10) ? ("0" + m) : m) + ":" + ((s < 10) ? ("0" + s) : s);] - Callback to format the main label.
+ * @property {Function} [options.label_upper=function (date, fps, months, days) { return days[date.getDay()]; }] - Callback to format the upper label.
+ * @property {Function} [options.label_lower=function (date, fps, months, days) { var d = date.getDate(); var m = date.getMonth(); var y = date.getFullYear()return ((d < 10) ? ("0" + d) : d) + ". " + months[m] + " " + y; }] - Callback to format the lower label.
+ * @property {Number} [options.label_scale=0.33] - The scale of `label_upper` and `label_lower` compared to the main label.
+ * @property {Number} [options.label_margin=10] - Margin between the rings and the main label in percent of the overall size.
+ * @property {Number} [options.label_upper_pos=0.33] - Position of the upper label as fraction of the overall height.
+ * @property {Number} [options.label_lower_pos=0.66] - Position of the lower label as fraction of the overall height.
+ * @property {Number|String|Date} [options.time] - Set a specific time and date. To avoid auto-udates, set `timeout` to 0.
+ *   For more information about the value, please refer to <a href="https://www.w3schools.com/jsref/jsref_obj_date.asp">W3Schools</a>.
+ */
+export class Clock extends Widget {
+  static get _options() {
+    return Object.assign({}, Widget.getOptionTypes(), {
+      thickness: 'number',
+      margin: 'number',
+      size: 'number',
+      show_seconds: 'boolean',
+      show_minutes: 'boolean',
+      show_hours: 'boolean',
+      timeout: 'int',
+      timeadd: 'int',
+      offset: 'int',
+      fps: 'number',
+      months: 'array',
+      days: 'array',
+      label: 'function',
+      label_upper: 'function',
+      label_lower: 'function',
+      label_scale: 'number',
+      label_margin: 'number',
+      label_upper_pos: 'number',
+      label_lower_pos: 'number',
+      time: 'object|string|number',
+    });
+  }
+
+  static get options() {
+    return {
+      thickness: 10, // thickness of the rings
+      margin: 1, // margin between the circulars
+      size: 200, // diameter of the whole clock
+      show_seconds: true, // show the seconds ring
+      show_minutes: true, // show the minutes ring
+      show_hours: true, // show the hours ring
+      timeout: 1000, // set a timeout to update the clock with the
+      // system clock regulary
+      timeadd: 10, // set additional milliseconds for the
+      // timeout target
+      // system clock regulary
+      offset: 0, // if a timeout is set offset the system time
+      // in milliseconds
+      fps: 25, // framerate for calculatind SMTP frames
+      months: [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ],
+      days: [
+        'Sunday',
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+      ],
+      label: function (date /*, fps, months, days*/) {
+        const h = date.getHours(),
+          m = date.getMinutes(),
+          s = date.getSeconds();
+        return (
+          (h < 10 ? '0' + h : h) +
+          ':' +
+          (m < 10 ? '0' + m : m) +
+          ':' +
+          (s < 10 ? '0' + s : s)
+        );
+      },
+      label_upper: function (date, fps, months, days) {
+        return days[date.getDay()];
+      },
+      label_lower: function (date, fps, months /*, days*/) {
+        const d = date.getDate(),
+          m = date.getMonth(),
+          y = date.getFullYear();
+        return (d < 10 ? '0' + d : d) + '. ' + months[m] + ' ' + y;
+      },
+      label_scale: 0.33, // the scale of the upper and lower labels
+      // compared to the main label
+      label_margin: 10,
+      label_upper_pos: 0.33,
+      label_lower_pos: 0.66,
+    };
+  }
+
+  static get static_events() {
+    return {
+      hide: onhide,
+      show: timeout,
+      timeout: timeout,
+    };
+  }
+
+  initialize(options) {
     let SVG;
     /**
      * @member {Object} Clock#circulars - An object holding all three Circular as members <code>seconds</code>, <code>minutes</code> and <code>hours</code>.
@@ -321,7 +328,7 @@ export const Clock = defineClass({
     this.circulars = {};
     this._margin = -1;
     if (!options.element) options.element = element('div');
-    Widget.prototype.initialize.call(this, options);
+    super.initialize(options);
     this.set('time', this.options.time);
 
     /**
@@ -387,20 +394,20 @@ export const Clock = defineClass({
 
     // start the clock
     this.__timeout = timeout.bind(this);
-  },
+  }
 
-  draw: function (O, element) {
+  draw(O, element) {
     addClass(element, 'aux-clock');
     element.appendChild(this.svg);
 
-    Widget.prototype.draw.call(this, O, element);
-  },
+    super.draw(O, element);
+  }
 
-  redraw: function () {
+  redraw() {
     const I = this.invalid,
       O = this.options;
 
-    Widget.prototype.redraw.call(this);
+    super.redraw();
 
     if (I.size) {
       this.svg.setAttribute('viewBox', formatViewbox(O.size, O.size));
@@ -452,9 +459,9 @@ export const Clock = defineClass({
     ) {
       drawTime.call(this, false);
     }
-  },
+  }
 
-  destroy: function () {
+  destroy() {
     this._label.remove();
     this._label_upper.remove();
     this._label_lower.remove();
@@ -462,16 +469,16 @@ export const Clock = defineClass({
     this.circulars.minutes.destroy();
     this.circulars.hours.destroy();
     if (this.__to) window.clearTimeout(this.__to);
-    Widget.prototype.destroy.call(this);
-  },
+    super.destroy();
+  }
 
-  set: function (key, value) {
+  set(key, value) {
     switch (key) {
       case 'time':
         if (Object.prototype.toString.call(value) === '[object Date]') break;
         value = new Date(value);
         break;
     }
-    return Widget.prototype.set.call(this, key, value);
-  },
-});
+    return super.set(key, value);
+  }
+}

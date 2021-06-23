@@ -18,9 +18,6 @@
  */
 
 import { Container, Widget } from '../src/index.js';
-
-import { defineClass } from '../src/widget_helpers.js';
-
 import { checkVisibility } from '../src/utils/debug.js';
 
 import {
@@ -41,28 +38,30 @@ function checkErrors() {
 }
 
 function makeDebugWidget(Base) {
-  const DebugWidget = defineClass({
-    Extends: Base,
-    initialize: function (options) {
+  class DebugWidget extends Base {
+    initialize(options) {
       options.element = document.createElement('DIV');
-      Base.prototype.initialize.call(this, options);
-    },
-    resize: function () {
-      Base.prototype.resize.call(this);
+      super.initialize(options);
+    }
+
+    resize() {
+      super.resize();
       this.checkVisibility();
-    },
-    checkVisibility: function () {
+    }
+
+    checkVisibility() {
       try {
         checkVisibility(this);
       } catch (err) {
         errors.push(err);
       }
-    },
-    redraw: function () {
-      Base.prototype.redraw.call(this);
+    }
+
+    redraw() {
+      super.redraw();
       this.checkVisibility();
-    },
-  });
+    }
+  }
 
   return DebugWidget;
 }

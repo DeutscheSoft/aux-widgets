@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
 import { Widget } from './widget.js';
 import { Label } from './label.js';
@@ -211,123 +210,130 @@ function drawGradient(element, gradient, fallback, range) {
   return bg;
 }
 
-export const Meter = defineClass({
-  /**
-   * Meter is a base class to build different meters from, such as {@link LevelMeter}.
-   * Meter uses {@link Gradient} and contains a {@link Scale} widget.
-   * Meter inherits all options from {@link Scale}.
-   *
-   * Note that level meters with high update frequencies can be very demanding when it comes
-   * to rendering performance. These performance requirements can be reduced by increasing the
-   * segment size using the <code>segment</code> option. Using a segment, the different level
-   * meter positions are reduced. This widget will take advantage of that by avoiding rendering those
-   * changes to the meter level, which fall into the same segment.
-   *
-   * The meter is drawn as a mask above a background. The mask represents the
-   * inactive part of the meter. This mask is drawn into a canvas. The
-   * fillstyle of this mask is initialized from the `background-color` style
-   * of the canvas element with class `aux-mask`. Note that using a `background-color`
-   * value with opacity will lead to rendering artifacts in the meter. Instead, set
-   * the `opacity` of the mask to the desired value.
-   *
-   * @class Meter
-   *
-   * @extends Widget
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {String} [options.layout="left"] - A string describing the layout of the meter.
-   *   Possible values are <code>"left"</code>, <code>"right"</code>, <code>"top"</code> and
-   *   <code>"bottom"</code>. <code>"left"</code> and <code>"right"</code> are vertical
-   *   layouts, where the meter is on the left or right of the scale, respectively. Similarly,
-   *   <code>"top"</code> and <code>"bottom"</code> are horizontal layouts in which the meter
-   *   is at the top or the bottom, respectively.
-   * @property {Integer} [options.segment=1] - Segment size. Pixel positions of the meter level are
-   *   rounded to multiples of this size. This can be used to give the level meter a LED effect and to
-   *   reduce processor load.
-   * @property {Number} [options.value=0] - Level value.
-   * @property {Number} [options.base=false] - The base value of the meter. If set to <code>false</code>,
-   *   the base will coincide with the minimum value <code>options.min</code>. The meter level is drawn
-   *   starting from the base to the value.
-   * @property {Number} [options.value_label=0] - Value to be displayed on the label.
-   * @property {Function} [options.format_value=FORMAT("%.2f")] - Function for formatting the
-   *   label.
-   * @property {Boolean} [options.show_label=false] - If set to <code>true</code> a label is displayed.
-   * @property {Number} [options.label=false] - The title of the Meter. Set to `false` to hide it.
-   * @property {Boolean} [options.show_scale=true] - Set to <code>false</code> to hide the scale.
-   * @property {Number} [options.value_label=0] - The value to be drawn in the value label.
-   * @property {Boolean} [options.sync_value=true] - Synchronize the value on the bar with
-   *   the value label using `options.format_value` function.
-   * @property {String|Boolean} [options.foreground] - Color to draw the overlay. Has to be set
-   *   via option for performance reasons. Use pure opaque color. If opacity is needed, set via CSS
-   *   on `.aux-meter > .aux-bar > .aux-mask`.
-   */
+/**
+ * Meter is a base class to build different meters from, such as {@link LevelMeter}.
+ * Meter uses {@link Gradient} and contains a {@link Scale} widget.
+ * Meter inherits all options from {@link Scale}.
+ *
+ * Note that level meters with high update frequencies can be very demanding when it comes
+ * to rendering performance. These performance requirements can be reduced by increasing the
+ * segment size using the <code>segment</code> option. Using a segment, the different level
+ * meter positions are reduced. This widget will take advantage of that by avoiding rendering those
+ * changes to the meter level, which fall into the same segment.
+ *
+ * The meter is drawn as a mask above a background. The mask represents the
+ * inactive part of the meter. This mask is drawn into a canvas. The
+ * fillstyle of this mask is initialized from the `background-color` style
+ * of the canvas element with class `aux-mask`. Note that using a `background-color`
+ * value with opacity will lead to rendering artifacts in the meter. Instead, set
+ * the `opacity` of the mask to the desired value.
+ *
+ * @class Meter
+ *
+ * @extends Widget
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {String} [options.layout="left"] - A string describing the layout of the meter.
+ *   Possible values are <code>"left"</code>, <code>"right"</code>, <code>"top"</code> and
+ *   <code>"bottom"</code>. <code>"left"</code> and <code>"right"</code> are vertical
+ *   layouts, where the meter is on the left or right of the scale, respectively. Similarly,
+ *   <code>"top"</code> and <code>"bottom"</code> are horizontal layouts in which the meter
+ *   is at the top or the bottom, respectively.
+ * @property {Integer} [options.segment=1] - Segment size. Pixel positions of the meter level are
+ *   rounded to multiples of this size. This can be used to give the level meter a LED effect and to
+ *   reduce processor load.
+ * @property {Number} [options.value=0] - Level value.
+ * @property {Number} [options.base=false] - The base value of the meter. If set to <code>false</code>,
+ *   the base will coincide with the minimum value <code>options.min</code>. The meter level is drawn
+ *   starting from the base to the value.
+ * @property {Number} [options.value_label=0] - Value to be displayed on the label.
+ * @property {Function} [options.format_value=FORMAT("%.2f")] - Function for formatting the
+ *   label.
+ * @property {Boolean} [options.show_label=false] - If set to <code>true</code> a label is displayed.
+ * @property {Number} [options.label=false] - The title of the Meter. Set to `false` to hide it.
+ * @property {Boolean} [options.show_scale=true] - Set to <code>false</code> to hide the scale.
+ * @property {Number} [options.value_label=0] - The value to be drawn in the value label.
+ * @property {Boolean} [options.sync_value=true] - Synchronize the value on the bar with
+ *   the value label using `options.format_value` function.
+ * @property {String|Boolean} [options.foreground] - Color to draw the overlay. Has to be set
+ *   via option for performance reasons. Use pure opaque color. If opacity is needed, set via CSS
+ *   on `.aux-meter > .aux-bar > .aux-mask`.
+ */
 
-  Extends: Widget,
-  _options: Object.assign({}, Widget.getOptionTypes(), Scale.getOptionTypes(), {
-    layout: 'string',
-    segment: 'number',
-    value: 'number',
-    value_label: 'number',
-    base: 'number|boolean',
-    label: 'string|boolean',
-    sync_value: 'boolean',
-    format_value: 'function',
-    background: 'string|boolean',
-    gradient: 'object|boolean',
-    foreground: 'string|boolean',
-  }),
-  options: Object.assign({}, rangedOptionsDefaults, {
-    layout: 'left',
-    segment: 1,
-    value: 0,
-    value_label: 0,
-    base: false,
-    label: false,
-    sync_value: true,
-    format_value: FORMAT('%.2f'),
-    levels: [1, 5, 10], // array of steps where to draw labels
-    background: false,
-    gradient: false,
-    foreground: 'black',
-  }),
-  static_events: {
-    set_base: function (value) {
-      if (value === false) {
+export class Meter extends Widget {
+  static get _options() {
+    return Object.assign({}, Widget.getOptionTypes(), Scale.getOptionTypes(), {
+      layout: 'string',
+      segment: 'number',
+      value: 'number',
+      value_label: 'number',
+      base: 'number|boolean',
+      label: 'string|boolean',
+      sync_value: 'boolean',
+      format_value: 'function',
+      background: 'string|boolean',
+      gradient: 'object|boolean',
+      foreground: 'string|boolean',
+    });
+  }
+
+  static get options() {
+    return Object.assign({}, rangedOptionsDefaults, {
+      layout: 'left',
+      segment: 1,
+      value: 0,
+      value_label: 0,
+      base: false,
+      label: false,
+      sync_value: true,
+      format_value: FORMAT('%.2f'),
+      levels: [1, 5, 10], // array of steps where to draw labels
+      background: false,
+      gradient: false,
+      foreground: 'black',
+    });
+  }
+
+  static get static_events() {
+    return {
+      set_base: function (value) {
+        if (value === false) {
+          const O = this.options;
+          O.base = value = O.min;
+        }
+      },
+      rangedchanged: function () {
+        /* redraw the gradient, if we have any */
+
+        const gradient = this.options.gradient;
+
+        if (gradient) {
+          this.set('gradient', gradient);
+        }
+      },
+      set_value: function (val) {
+        if (this.options.sync_value) this.set('value_label', val);
+      },
+      set_value_label: function (val) {
+        if (this.value) this.value.set('label', this.options.format_value(val));
+      },
+      set_layout: function () {
         const O = this.options;
-        O.base = value = O.min;
-      }
-    },
-    rangedchanged: function () {
-      /* redraw the gradient, if we have any */
+        this.set('value', O.value);
+        this.set('min', O.min);
+        this.triggerResize();
+      },
+      initialized: function () {
+        this.set('value', this.get('value'));
+        this.set('base', this.get('base'));
+      },
+    };
+  }
 
-      const gradient = this.options.gradient;
-
-      if (gradient) {
-        this.set('gradient', gradient);
-      }
-    },
-    set_value: function (val) {
-      if (this.options.sync_value) this.set('value_label', val);
-    },
-    set_value_label: function (val) {
-      if (this.value) this.value.set('label', this.options.format_value(val));
-    },
-    set_layout: function () {
-      const O = this.options;
-      this.set('value', O.value);
-      this.set('min', O.min);
-      this.triggerResize();
-    },
-    initialized: function () {
-      this.set('value', this.get('value'));
-      this.set('base', this.get('base'));
-    },
-  },
-
-  initialize: function (options) {
+  initialize(options) {
     if (!options.element) options.element = element('div');
-    Widget.prototype.initialize.call(this, options);
+    super.initialize(options);
     const O = this.options;
     /**
      * @member {HTMLDivElement} Meter#element - The main DIV container.
@@ -359,19 +365,21 @@ export const Meter = defineClass({
 
     this.set('label', O.label);
     this.set('base', O.base);
-  },
+  }
 
-  destroy: function () {
+  destroy() {
     this._bar.remove();
-    Widget.prototype.destroy.call(this);
-  },
-  draw: function (O, element) {
+    super.destroy();
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-meter');
     element.appendChild(this._bar);
 
-    Widget.prototype.draw.call(this, O, element);
-  },
-  redraw: function () {
+    super.draw(O, element);
+  }
+
+  redraw() {
     const I = this.invalid;
     const O = this.options;
     const E = this.element;
@@ -381,7 +389,7 @@ export const Meter = defineClass({
       toggleClass(E, 'aux-reverse', O.reverse);
     }
 
-    Widget.prototype.redraw.call(this);
+    super.redraw();
 
     if (I.layout) {
       I.layout = false;
@@ -446,11 +454,11 @@ export const Meter = defineClass({
       I.transformation = I.value = I.segment = I.foreground = false;
       this.drawMeter();
     }
-  },
+  }
 
-  resize: function () {
+  resize() {
     const O = this.options;
-    Widget.prototype.resize.call(this);
+    super.resize();
     const w = innerWidth(this._bar);
     const h = innerHeight(this._bar);
     this.set('_width', w);
@@ -459,9 +467,9 @@ export const Meter = defineClass({
     this.set('basis', i);
     this._last_meters.length = 0;
     this.set('gradient', O.gradient);
-  },
+  }
 
-  calculateMeter: function (to, value, i) {
+  calculateMeter(to, value, i) {
     const O = this.options;
     // Set the mask elements according to options.value to show a value in
     // the meter bar
@@ -490,9 +498,9 @@ export const Meter = defineClass({
     }
 
     return i;
-  },
+  }
 
-  drawMeter: function () {
+  drawMeter() {
     const O = this.options;
     const w = Math.round(O._width);
     const h = Math.round(O._height);
@@ -536,13 +544,13 @@ export const Meter = defineClass({
     }
 
     drawFull(ctx, w, h, a, is_vertical);
-  },
+  }
 
-  hasBase: function () {
+  hasBase() {
     const O = this.options;
     return O.base > O.min;
-  },
-});
+  }
+}
 makeRanged(Meter);
 /**
  * @member {Scale} Meter#scale - The {@link Scale} of the meter.

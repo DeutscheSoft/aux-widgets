@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from '../widget_helpers.js';
 import { addClass, removeClass } from '../utils/dom.js';
 import { Module } from './module.js';
 
@@ -131,54 +130,63 @@ function fireEvent(title, event) {
  *   containing values for x, y and z defining the direction of scrolling.
  * @property {Boolean} [options.limit=false] - Limit the returned value to min and max of the range.
  */
-export const ScrollValue = defineClass({
-  Extends: Module,
-  _options: {
-    get: 'function',
-    set: 'function',
-    range: 'function',
-    events: 'function',
-    classes: 'object|boolean',
-    node: 'object|boolean',
-    active: 'boolean',
-    scroll_direction: 'array',
-    limit: 'boolean',
-  },
-  options: {
-    range: function () {
-      return this.parent;
-    },
-    events: function () {
-      return this.parent;
-    },
-    classes: false,
-    get: function () {
-      return this.parent.options.value;
-    },
-    set: function (v) {
-      return this.parent.userset('value', v);
-    },
-    active: true,
-    scroll_direction: [0, -1, 0],
-    limit: false,
-  },
-  initialize: function (widget, options) {
-    Module.prototype.initialize.call(this, widget, options);
+export class ScrollValue extends Module {
+  static get _options() {
+    return {
+      get: 'function',
+      set: 'function',
+      range: 'function',
+      events: 'function',
+      classes: 'object|boolean',
+      node: 'object|boolean',
+      active: 'boolean',
+      scroll_direction: 'array',
+      limit: 'boolean',
+    };
+  }
+
+  static get options() {
+    return {
+      range: function () {
+        return this.parent;
+      },
+      events: function () {
+        return this.parent;
+      },
+      classes: false,
+      get: function () {
+        return this.parent.options.value;
+      },
+      set: function (v) {
+        return this.parent.userset('value', v);
+      },
+      active: true,
+      scroll_direction: [0, -1, 0],
+      limit: false,
+    };
+  }
+
+  initialize(widget, options) {
+    super.initialize(widget, options);
     this._wheel = false;
     this._raw_value = 0.0;
     this.set('node', this.options.node);
     this.set('events', this.options.events);
     this.set('classes', this.options.classes);
-  },
-  static_events: {
-    set_node: function (value) {
-      this.delegateEvents(value);
-      if (value && !this.options.classes) this.set('classes', value);
-    },
-    wheel: scrollWheel,
-  },
-  set: function (key, value) {
+  }
+
+  static get static_events() {
+    return {
+      set_node: function (value) {
+        this.delegateEvents(value);
+        if (value && !this.options.classes) this.set('classes', value);
+      },
+      wheel: scrollWheel,
+    };
+  }
+
+  set(key, value) {
     if (key === 'classes' && !value) value = this.options.node;
-    return Module.prototype.set.call(this, key, value);
-  },
-});
+    return super.set(key, value);
+  }
+}

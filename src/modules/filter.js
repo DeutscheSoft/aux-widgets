@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from '../widget_helpers.js';
 import { Base } from '../implements/base.js';
 import { error } from '../utils/log.js';
 import { standardBiquadFilters } from '../utils/biquad.js';
@@ -59,61 +58,69 @@ function triggerReset() {
  *
  * @return {EqFilter}
  */
-export const Filter = defineClass({
-  /**
-   * Filter provides the math for calculating a gain from
-   * a given frequency for different types of biquad filters.
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {String|Function} [options.type="parametric"] - The type of
-   *  filter. This can either be a function which implements the
-   *  {@link Filter~filter_factory} interface or a string naming one of the
-   *  standard filters in
-   *  {@link module:utils/biquad.StandardBiquadFilters|StandardBiquadFilters}.
-   * @property {Number} [options.freq=1000] - The initial frequency.
-   * @property {Number} [options.gain=0] - The initial gain.
-   * @property {Number} [options.q=1] - The initial Q of the filter.
-   * @property {Number} [options.sample_rate=44100] - The sample rate.
-   *
-   * @class Filter
-   *
-   * @extends Base
-   */
+/**
+ * Filter provides the math for calculating a gain from
+ * a given frequency for different types of biquad filters.
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {String|Function} [options.type="parametric"] - The type of
+ *  filter. This can either be a function which implements the
+ *  {@link Filter~filter_factory} interface or a string naming one of the
+ *  standard filters in
+ *  {@link module:utils/biquad.StandardBiquadFilters|StandardBiquadFilters}.
+ * @property {Number} [options.freq=1000] - The initial frequency.
+ * @property {Number} [options.gain=0] - The initial gain.
+ * @property {Number} [options.q=1] - The initial Q of the filter.
+ * @property {Number} [options.sample_rate=44100] - The sample rate.
+ *
+ * @class Filter
+ *
+ * @extends Base
+ */
 
-  /**
-   * Returns the gain for a given frequency
-   *
-   * @method Filter#frequencyToGain
-   *
-   * @param {number} frequency - The frequency to calculate the gain for.
-   *
-   * @returns {number} gain - The gain at the given frequency.
-   */
+/**
+ * Returns the gain for a given frequency
+ *
+ * @method Filter#frequencyToGain
+ *
+ * @param {number} frequency - The frequency to calculate the gain for.
+ *
+ * @returns {number} gain - The gain at the given frequency.
+ */
 
-  Extends: Base,
-  _options: {
-    type: 'string|function',
-    freq: 'number',
-    gain: 'number',
-    q: 'number',
-    sample_rate: 'number',
-  },
-  options: {
-    type: 'parametric',
-    freq: 1000,
-    gain: 0,
-    q: 1,
-    sample_rate: 44100,
-  },
-  static_events: {
-    set_freq: triggerReset,
-    set_type: triggerReset,
-    set_q: triggerReset,
-    set_gain: triggerReset,
-    initialized: triggerReset,
-  },
-  createFrequencyToGain: function () {
+export class Filter extends Base {
+  static get _options() {
+    return {
+      type: 'string|function',
+      freq: 'number',
+      gain: 'number',
+      q: 'number',
+      sample_rate: 'number',
+    };
+  }
+
+  static get options() {
+    return {
+      type: 'parametric',
+      freq: 1000,
+      gain: 0,
+      q: 1,
+      sample_rate: 44100,
+    };
+  }
+
+  static get static_events() {
+    return {
+      set_freq: triggerReset,
+      set_type: triggerReset,
+      set_q: triggerReset,
+      set_gain: triggerReset,
+      initialized: triggerReset,
+    };
+  }
+
+  createFrequencyToGain() {
     const O = this.options;
     let factory;
 
@@ -138,12 +145,14 @@ export const Filter = defineClass({
     }
 
     this.frequencyToGain = filter;
-  },
-  getFrequencyToGain: function () {
+  }
+
+  getFrequencyToGain() {
     if (this.frequencyToGain === null) this.createFrequencyToGain();
     return this.frequencyToGain;
-  },
-  reset: function() {
+  }
+
+  reset() {
     this.frequencyToGain = null;
     /**
      * Is fired when a filters drawing function is reset.
@@ -151,5 +160,5 @@ export const Filter = defineClass({
      * @event Filter#reset
      */
     this.emit('reset');
-  },
-});
+  }
+}

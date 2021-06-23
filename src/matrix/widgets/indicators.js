@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass, defineChildElement } from './../../widget_helpers.js';
+import { defineChildElement } from './../../widget_helpers.js';
 import { defineChildWidget } from './../../child_widget.js';
 import { scrollbarSize, addClass, removeClass } from './../../utils/dom.js';
 import { FORMAT } from '../../utils/sprintf.js';
@@ -121,43 +121,51 @@ function cancel() {
  * @class Indicators
  */
 
-export const Indicators = defineClass({
-  Extends: Container,
-  _options: Object.assign({}, Container.getOptionTypes(), {
-    indicator_class: 'object',
-    connectionview: 'object',
-    batch: 'boolean',
-    min_distance: 'number',
-    _batch: 'boolean',
-    _x0: 'number',
-    _y0: 'number',
-    _xd: 'number',
-    _yd: 'number',
-    _xinit: 'number',
-    _yinit: 'number',
-  }),
-  options: {
-    indicator_class: Indicator,
-    min_distance: 40,
-    batch: true,
-    _batch: false,
-    _x0: 0,
-    _y0: 0,
-    _xd: 0,
-    _yd: 0,
-    _xinit: 0,
-    _yinit: 0,
-  },
-  static_events: {
-    set_connectionview: function (connectionview) {
-      this.connectionview_subs.unsubscribe();
-    },
-    set_batch: function (v) {
-      this.drag.set('active', v);
-    },
-  },
-  initialize: function (options) {
-    Container.prototype.initialize.call(this, options);
+export class Indicators extends Container {
+  static get _options() {
+    return Object.assign({}, Container.getOptionTypes(), {
+      indicator_class: 'object',
+      connectionview: 'object',
+      batch: 'boolean',
+      min_distance: 'number',
+      _batch: 'boolean',
+      _x0: 'number',
+      _y0: 'number',
+      _xd: 'number',
+      _yd: 'number',
+      _xinit: 'number',
+      _yinit: 'number',
+    });
+  }
+
+  static get options() {
+    return {
+      indicator_class: Indicator,
+      min_distance: 40,
+      batch: true,
+      _batch: false,
+      _x0: 0,
+      _y0: 0,
+      _xd: 0,
+      _yd: 0,
+      _xinit: 0,
+      _yinit: 0,
+    };
+  }
+
+  static get static_events() {
+    return {
+      set_connectionview: function (connectionview) {
+        this.connectionview_subs.unsubscribe();
+      },
+      set_batch: function (v) {
+        this.drag.set('active', v);
+      },
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
     this.connectionview_subs = new Subscriptions();
     this.entries = [];
 
@@ -170,16 +178,19 @@ export const Indicators = defineClass({
     });
 
     this._dragging = false;
-  },
-  destroy: function () {
-    Container.prototype.destroy.call(this);
+  }
+
+  destroy() {
+    super.destroy();
     this.connectionview_subs.unsubscribe();
-  },
-  createIndicator: function () {
+  }
+
+  createIndicator() {
     return new this.options.indicator_class();
-  },
-  draw: function (options, element) {
-    Container.prototype.draw.call(this, options, element);
+  }
+
+  draw(options, element) {
+    super.draw(options, element);
     addClass(element, 'aux-indicators');
     this.addSubscriptions(
       subscribeDOMEvent(this.element, 'scroll', (ev) => {
@@ -198,14 +209,16 @@ export const Indicators = defineClass({
         this.emit('scrollChanged', element.scrollTop, element.scrollLeft);
       })
     );
-  },
-  resize: function () {
-    Container.prototype.resize.call(this);
+  }
+
+  resize() {
+    super.resize();
     const bbox = this.element.getBoundingClientRect();
     this.update('_xinit', bbox.x);
     this.update('_yinit', bbox.y);
-  },
-  redraw: function () {
+  }
+
+  redraw() {
     const O = this.options;
     const I = this.invalid;
     const E = this.element;
@@ -324,8 +337,9 @@ export const Indicators = defineClass({
       removeClass(this._batch, 'aux-bottom-right');
       addClass(this._batch, 'aux-' + y + '-' + x);
     }
-  },
-  _calculateRectangle: function () {
+  }
+
+  _calculateRectangle() {
     const { _x0, _y0, _xd, _yd, _xinit, _yinit } = this.options;
     const stop = this.element.scrollTop;
     const sleft = this.element.scrollLeft;
@@ -354,8 +368,9 @@ export const Indicators = defineClass({
       flip_x: _xd < 0,
       flip_y: _yd < 0,
     };
-  },
-  _calculateIndexRectangle: function (rectangle) {
+  }
+
+  _calculateIndexRectangle(rectangle) {
     const { x, y, width, height } = rectangle;
     const size = this.options.size;
     return {
@@ -364,7 +379,8 @@ export const Indicators = defineClass({
       startRow: y / size,
       endRow: (y + height) / size,
     };
-  },
+  }
+
   /**
    * Scroll the indicators area to this vertical (top) position.
    *
@@ -372,9 +388,10 @@ export const Indicators = defineClass({
    *
    * @method Indicators#scrollTopTo
    */
-  scrollTopTo: function (position) {
+  scrollTopTo(position) {
     this.scrollTo({ top: position });
-  },
+  }
+
   /**
    * Scroll the indicators area to this horizontal (left) position.
    *
@@ -382,32 +399,36 @@ export const Indicators = defineClass({
    *
    * @method Indicators#scrollLeftTo
    */
-  scrollLeftTo: function (position) {
+  scrollLeftTo(position) {
     this.scrollTo({ left: position });
-  },
-  scrollTo: function (options) {
+  }
+
+  scrollTo(options) {
     this.element.scrollTo(options);
-  },
+  }
+
   // Event handler for batch operation dialog.
   _onConnectDiagonalConfirmed() {
     const rectangle = this._calculateRectangle();
     const indexRectangle = this._calculateIndexRectangle(rectangle);
     this.emit('connectDiagonal', indexRectangle, rectangle);
     onBatchEnd.call(this);
-  },
+  }
+
   _onDisconnectDiagonalConfirmed() {
     const rectangle = this._calculateRectangle();
     const indexRectangle = this._calculateIndexRectangle(rectangle);
     this.emit('disconnectDiagonal', indexRectangle, rectangle);
     onBatchEnd.call(this);
-  },
+  }
+
   _onDisconnectAllConfirmed() {
     const rectangle = this._calculateRectangle();
     const indexRectangle = this._calculateIndexRectangle(rectangle);
     this.emit('disconnectAll', indexRectangle, rectangle);
     onBatchEnd.call(this);
-  },
-});
+  }
+}
 
 /**
  * @member {HTMLDiv} Indicators#_scroller - The container for hiding

@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
 import { Dialog } from './dialog.js';
 import { ColorPicker } from './colorpicker.js';
@@ -35,33 +34,32 @@ function apply(color) {
   self.close();
 }
 
-export const ColorPickerDialog = defineClass({
-  /**
-   * A {@link Dialog} window containing a {@link ColorPicker}. It can be opened
-   * programatically and closes automatically on the appropriate user
-   * interactions like hitting ESC or clicking `apply`. ColorPickerDialog
-   * inherits all options of ColorPicker.
-   *
-   * @class ColorPickerDialog
-   *
-   * @extends Dialog
-   *
-   */
+/**
+ * A {@link Dialog} window containing a {@link ColorPicker}. It can be opened
+ * programatically and closes automatically on the appropriate user
+ * interactions like hitting ESC or clicking `apply`. ColorPickerDialog
+ * inherits all options of ColorPicker.
+ *
+ * @class ColorPickerDialog
+ *
+ * @extends Dialog
+ *
+ */
 
-  Extends: Dialog,
-
-  initialize: function (options) {
-    Dialog.prototype.initialize.call(this, options);
+export class ColorPickerDialog extends Dialog {
+  initialize(options) {
+    super.initialize(options);
     /** @member {HTMLDivElement} ColorPickerDialog#element - The main DIV container.
      * Has class <code>.aux-colorpickerdialog</code>.
      */
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-colorpickerdialog');
 
-    Dialog.prototype.draw.call(this, O, element);
-  },
-});
+    super.draw(O, element);
+  }
+}
 
 /**
  * @member {ColorPicker} ColorPickerDialog#colorpicker - The {@link ColorPicker} widget.

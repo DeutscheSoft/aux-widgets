@@ -19,7 +19,7 @@
 
 /* jshint -W018 */
 
-import { defineClass, defineChildElement } from '../widget_helpers.js';
+import { defineChildElement } from '../widget_helpers.js';
 import { Widget } from './widget.js';
 import {
   rangedOptionsDefaults,
@@ -435,62 +435,68 @@ function generateScale(from, to, include_from, show_to) {
  * @property {Number|Boolean} [options.pointer=false] - The value to set the pointers position to. Set to `false` to hide the pointer.
  * @property {Number|Boolean} [options.bar=false] - The value to set the bars height to. Set to `false` to hide the bar.
  */
-export const Scale = defineClass({
-  Extends: Widget,
-  _options: Object.assign({}, Widget.getOptionTypes(), rangedOptionsTypes, {
-    layout: 'string',
-    division: 'number',
-    levels: 'array',
-    levels_labels: 'array',
-    base: 'number',
-    labels: 'function',
-    gap_dots: 'number',
-    gap_labels: 'number',
-    show_labels: 'boolean',
-    show_min: 'boolean',
-    show_max: 'boolean',
-    show_base: 'boolean',
-    fixed_dots: 'boolean|array',
-    fixed_labels: 'boolean|array',
-    avoid_collisions: 'boolean',
-    show_markers: 'boolean',
-    bar: 'boolean|number',
-    pointer: 'boolean|number',
-  }),
-  options: Object.assign({}, rangedOptionsDefaults, {
-    layout: 'right',
-    division: 1,
-    levels: [1],
-    base: false,
-    labels: FORMAT('%.2f'),
-    avoid_collisions: false,
-    gap_dots: 4,
-    gap_labels: 40,
-    show_labels: true,
-    show_min: true,
-    show_max: true,
-    show_base: true,
-    show_markers: true,
-    fixed_dots: false,
-    fixed_labels: false,
-    bar: false,
-    pointer: false,
-  }),
-  initialize: function (options) {
+export class Scale extends Widget {
+  static get _options() {
+    return Object.assign({}, Widget.getOptionTypes(), rangedOptionsTypes, {
+      layout: 'string',
+      division: 'number',
+      levels: 'array',
+      levels_labels: 'array',
+      base: 'number',
+      labels: 'function',
+      gap_dots: 'number',
+      gap_labels: 'number',
+      show_labels: 'boolean',
+      show_min: 'boolean',
+      show_max: 'boolean',
+      show_base: 'boolean',
+      fixed_dots: 'boolean|array',
+      fixed_labels: 'boolean|array',
+      avoid_collisions: 'boolean',
+      show_markers: 'boolean',
+      bar: 'boolean|number',
+      pointer: 'boolean|number',
+    });
+  }
+
+  static get options() {
+    return Object.assign({}, rangedOptionsDefaults, {
+      layout: 'right',
+      division: 1,
+      levels: [1],
+      base: false,
+      labels: FORMAT('%.2f'),
+      avoid_collisions: false,
+      gap_dots: 4,
+      gap_labels: 40,
+      show_labels: true,
+      show_min: true,
+      show_max: true,
+      show_base: true,
+      show_markers: true,
+      fixed_dots: false,
+      fixed_labels: false,
+      bar: false,
+      pointer: false,
+    });
+  }
+
+  initialize(options) {
     if (!options.element) options.element = element('div');
-    Widget.prototype.initialize.call(this, options);
+    super.initialize(options);
     /**
      * @member {HTMLDivElement} Scale#element - The main DIV element. Has class <code>.aux-scale</code>
      */
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-scale');
 
-    Widget.prototype.draw.call(this, O, element);
-  },
+    super.draw(O, element);
+  }
 
-  redraw: function () {
-    Widget.prototype.redraw.call(this);
+  redraw() {
+    super.redraw();
 
     const I = this.invalid;
     const O = this.options;
@@ -608,7 +614,8 @@ export const Scale = defineClass({
         if (_pointer) E.appendChild(_pointer);
       }
     }
-  },
+  }
+
   _highlightMarkers(labels, dots, dotNodes) {
     labels = labels
       .map((args) => (typeof args === 'number' ? args : args.value))
@@ -621,7 +628,8 @@ export const Scale = defineClass({
 
       addClass(dotNodes[i], 'aux-marker');
     }
-  },
+  }
+
   _createDot(args) {
     const O = this.options;
     const node = document.createElement('DIV');
@@ -659,10 +667,12 @@ export const Scale = defineClass({
     if (O.min === value) addClass(node, 'aux-min');
 
     return node;
-  },
+  }
+
   _createDots(values) {
     return values.map((value) => this._createDot(value));
-  },
+  }
+
   _createLabel(args) {
     const O = this.options;
     const transformation = O.transformation;
@@ -713,23 +723,25 @@ export const Scale = defineClass({
     if (O.min === value) addClass(node, 'aux-min');
 
     return node;
-  },
+  }
+
   _createLabels(values) {
     return values.map((value) => this._createLabel(value));
-  },
-  resize: function () {
-    Widget.prototype.resize.call(this);
+  }
+
+  resize() {
+    super.resize();
     const O = this.options;
 
     const basis = vert(O)
       ? innerHeight(this.element)
       : innerWidth(this.element);
     this.update('basis', basis);
-  },
+  }
 
   // GETTER & SETTER
-  set: function (key, value) {
-    Widget.prototype.set.call(this, key, value);
+  set(key, value) {
+    super.set(key, value);
     switch (key) {
       case 'division':
       case 'levels':
@@ -748,8 +760,8 @@ export const Scale = defineClass({
         this.emit('scalechanged', key, value);
         break;
     }
-  },
-});
+  }
+}
 makeRanged(Scale);
 
 /**

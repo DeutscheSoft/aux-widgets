@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass, defineChildElement } from './../../widget_helpers.js';
+import { defineChildElement } from './../../widget_helpers.js';
 import { scrollbarSize } from './../../utils/dom.js';
 import { Subscriptions } from '../../utils/subscriptions.js';
 import { subscribeDOMEvent } from '../../utils/events.js';
@@ -63,47 +63,56 @@ function collapse(state) {
  *
  * @class VirtualTree
  */
-export const VirtualTree = defineClass({
-  Extends: Container,
-  _options: Object.assign({}, Container.getOptionTypes(), {
-    _amount: 'number',
-    _scroller_size: 'number',
-    _scroll: 'number',
-    _startIndex: 'number',
-    _view_height: 'number',
-    size: 'number',
-    entry_class: 'VirtualTreeEntry',
-    virtualtreeview: 'object',
-    prerender_top: 'number',
-    prerender_bottom: 'number',
-  }),
-  options: {
-    _amount: 0,
-    _scroller_size: 0,
-    _scroll: 0,
-    _startIndex: 0,
-    size: 32,
-    entry_class: VirtualTreeEntry,
-    prerender_top: 3,
-    prerender_bottom: 3,
-  },
-  static_events: {
-    set_size: function (v) {
-      this.triggerResize();
-    },
-    set_virtualtreeview: function (virtualtreeview) {
-      this.virtualtreeview_subs.unsubscribe();
-    },
-    scrollTopChanged: function (position) {
-      this._scrollDataTo(position);
-    },
-  },
-  initialize: function (options) {
-    Container.prototype.initialize.call(this, options);
+export class VirtualTree extends Container {
+  static get _options() {
+    return Object.assign({}, Container.getOptionTypes(), {
+      _amount: 'number',
+      _scroller_size: 'number',
+      _scroll: 'number',
+      _startIndex: 'number',
+      _view_height: 'number',
+      size: 'number',
+      entry_class: 'VirtualTreeEntry',
+      virtualtreeview: 'object',
+      prerender_top: 'number',
+      prerender_bottom: 'number',
+    });
+  }
+
+  static get options() {
+    return {
+      _amount: 0,
+      _scroller_size: 0,
+      _scroll: 0,
+      _startIndex: 0,
+      size: 32,
+      entry_class: VirtualTreeEntry,
+      prerender_top: 3,
+      prerender_bottom: 3,
+    };
+  }
+
+  static get static_events() {
+    return {
+      set_size: function (v) {
+        this.triggerResize();
+      },
+      set_virtualtreeview: function (virtualtreeview) {
+        this.virtualtreeview_subs.unsubscribe();
+      },
+      scrollTopChanged: function (position) {
+        this._scrollDataTo(position);
+      },
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
     this.virtualtreeview_subs = new Subscriptions();
     this.entries = [];
-  },
-  _scrollDataTo: function (position) {
+  }
+
+  _scrollDataTo(position) {
     const O = this.options;
     let startIndex = Math.floor(position / O.size);
     const dataview = O.virtualtreeview;
@@ -112,7 +121,8 @@ export const VirtualTree = defineClass({
       dataview.scrollStartIndexTo(Math.max(0, startIndex - O.prerender_top));
       this.update('_startIndex', startIndex);
     }
-  },
+  }
+
   /**
    * Create and return a new entry based on `options.entry_class`.
    *
@@ -120,16 +130,18 @@ export const VirtualTree = defineClass({
    *
    * @returns {Object} entry - The newly created entry instance.
    */
-  createEntry: function () {
+  createEntry() {
     return new this.options.entry_class();
-  },
+  }
+
   /**
    * Calculates the pixel position of the entry at the given
    * index.
    */
-  calculateEntryPosition: function (index) {
+  calculateEntryPosition(index) {
     return index * this.options.size;
-  },
+  }
+
   /**
    * Update the given entry with the new data.
    *
@@ -144,7 +156,7 @@ export const VirtualTree = defineClass({
    * @param {Array} treePosition
    *    The tree position of the entry.
    */
-  updateEntry: function (entry, virtualtreeview, index, element, treePosition) {
+  updateEntry(entry, virtualtreeview, index, element, treePosition) {
     entry.updateData(virtualtreeview, index, element, treePosition);
 
     if (element) {
@@ -154,7 +166,8 @@ export const VirtualTree = defineClass({
     } else if (!this.isChildHidden(entry)) {
       this.hideChild(entry);
     }
-  },
+  }
+
   /**
    * Return the entry for the given index. Returns null if there is currently
    * no entry assigned to that index.
@@ -164,7 +177,7 @@ export const VirtualTree = defineClass({
    * @returns {VirtualTreeEntryBase}
    *    The element with the given id or null.
    */
-  getEntry: function (index) {
+  getEntry(index) {
     const { virtualtreeview } = this.options;
 
     if (!virtualtreeview) return null;
@@ -177,7 +190,8 @@ export const VirtualTree = defineClass({
     const entries = this.entries;
 
     return entries[index % entries.length];
-  },
+  }
+
   /**
    * Returns the index of the element with the given id. If no element with the
    * given id can be found or is currently not in the list, -1 is returned.
@@ -187,7 +201,7 @@ export const VirtualTree = defineClass({
    * @returns {number}
    *    The index of the element with the given id.
    */
-  getIndexById: function (id) {
+  getIndexById(id) {
     const { virtualtreeview } = this.options;
 
     if (!virtualtreeview) return -1;
@@ -197,7 +211,8 @@ export const VirtualTree = defineClass({
     if (!port || !virtualtreeview.includes(port)) return -1;
 
     return virtualtreeview.indexOf(port);
-  },
+  }
+
   /**
    * Returns the entry for a given id. If no element with the given id can be
    * found or if it is not in view, null will be returned.
@@ -207,14 +222,16 @@ export const VirtualTree = defineClass({
    * @returns {VirtualTreeEntryBase}
    *    The element with the given id or null.
    */
-  getEntryById: function (id) {
+  getEntryById(id) {
     return this.getEntry(this.getIndexById(id));
-  },
-  triggerReposition: function () {
+  }
+
+  triggerReposition() {
     this.set('size', this.get('size'));
-  },
-  draw: function (options, element) {
-    Container.prototype.draw.call(this, options, element);
+  }
+
+  draw(options, element) {
+    super.draw(options, element);
     element.classList.add('aux-virtualtree');
     this.addSubscriptions(
       subscribeDOMEvent(this._scrollbar, 'scroll', (ev) => {
@@ -232,7 +249,8 @@ export const VirtualTree = defineClass({
       this.set('virtualtreeview', options.virtualtreeview);
 
     this.triggerResize();
-  },
+  }
+
   /**
    * Scroll the VirtualTree to this position.
    *
@@ -242,15 +260,16 @@ export const VirtualTree = defineClass({
    *
    * @method VirtualTree#scrollTo
    */
-  scrollTo: function (options) {
+  scrollTo(options) {
     if (typeof options !== 'object') {
       options = {
         top: options,
       };
     }
     this._scrollbar.scrollTo(options);
-  },
-  _subscribeToTreeView: function (subs, treeView) {
+  }
+
+  _subscribeToTreeView(subs, treeView) {
     const O = this.options;
 
     const setEntryPosition = (entry, index) => {
@@ -298,8 +317,9 @@ export const VirtualTree = defineClass({
         setEntryPosition(entry, index);
       })
     );
-  },
-  redraw: function () {
+  }
+
+  redraw() {
     const O = this.options;
     const I = this.invalid;
     const E = this.element;
@@ -369,15 +389,17 @@ export const VirtualTree = defineClass({
       this._scrollbar.scrollTop = O._scroll;
     }
 
-    Container.prototype.redraw.call(this);
-  },
-  resize: function () {
+    super.redraw();
+  }
+
+  resize() {
     const E = this.element;
     const O = this.options;
     this.update('_view_height', E.offsetHeight);
 
-    Container.prototype.resize.call(this);
-  },
+    super.resize();
+  }
+
   /**
    * Uses the native Element.scrollTo() function to scroll the entry with
    * the given index into view.
@@ -390,7 +412,7 @@ export const VirtualTree = defineClass({
    * @param {string} [options.block='top']
    * @param {string} [options.behavior='auto']
    */
-  scrollEntryIntoView: function (index, options) {
+  scrollEntryIntoView(index, options) {
     if (!options) options = {};
 
     let position = this.calculateEntryPosition(index);
@@ -405,11 +427,12 @@ export const VirtualTree = defineClass({
       top: position,
       behavior: options.behavior || 'auto',
     });
-  },
+  }
+
   /**
    * Returns the indices of those entries which are currently in view.
    */
-  getVisibleRange: function () {
+  getVisibleRange() {
     const virtualtreeview = this.get('virtualtreeview');
     const prerender_bottom = this.get('prerender_bottom');
 
@@ -418,16 +441,17 @@ export const VirtualTree = defineClass({
     const startIndex = this.get('_startIndex');
 
     return [startIndex, startIndex + virtualtreeview.amount - prerender_bottom];
-  },
-  set: function (key, value) {
+  }
+
+  set(key, value) {
     if (key === 'prerender_top' || key === 'prerender_bottom') {
       if (typeof value !== 'number' || !Number.isInteger(value) || value < 0)
         throw new TypeError('Expected non-negative integer.');
     }
 
-    return Container.prototype.set.call(this, key, value);
-  },
-});
+    return super.set(key, value);
+  }
+}
 /**
  * @member {HTMLDiv} VirtualTree#_scrollbar - A container for hiding
  *   scrollbars. Has class <code>.aux-scrollbar</code>.

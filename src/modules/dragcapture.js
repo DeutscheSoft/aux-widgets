@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from './../widget_helpers.js';
 import { Module } from './module.js';
 import { addEventListener, removeEventListener } from '../utils/events.js';
 
@@ -270,81 +269,91 @@ const static_events = {
   mousedown: mouseDown,
 };
 
-export const DragCapture = defineClass({
-  /**
-   * DragCapture is a low-level class for tracking drag interaction using both
-   *   touch and mouse events. It can be used for implementing drag'n'drop
-   *   functionality as well as value dragging e.g. {@link Fader} or
-   *   {@link Knob}. {@link DragValue} derives from DragCapture.
-   *
-   *   Each drag interaction started by the user begins with the
-   *   `startcapture` event. If an event handler returns `true`, the dragging
-   *   is started. Otherwise mouse or touch events which belong to the same
-   *   drag interaction are ignored.
-   *
-   *   While the drag interaction is running, the `movecapture` is fired for
-   *   each underlying move event. Once the drag interaction completes, the
-   *   `stopcapture` event is fired.
-   *
-   *   While the drag interaction is running, the `state()` method returns a
-   *   CaptureState object. This object has methods for calculating current
-   *   position, distance from the start position etc.
-   *
-   *
-   * @extends Module
-   *
-   * @param {Object} widget - The parent widget making use of DragValue.
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {HTMLElement} [options.node] - The DOM element receiving the drag events. If not set the widgets element is used.
-   *
-   * @class DragCapture
-   */
-  /**
-   * Capturing started.
-   *
-   * @event DragCapture#startcapture
-   *
-   * @param {object} state - An internal state object.
-   * @param {DOMEvent} start - The event object of the initial event.
-   */
+/**
+ * DragCapture is a low-level class for tracking drag interaction using both
+ *   touch and mouse events. It can be used for implementing drag'n'drop
+ *   functionality as well as value dragging e.g. {@link Fader} or
+ *   {@link Knob}. {@link DragValue} derives from DragCapture.
+ *
+ *   Each drag interaction started by the user begins with the
+ *   `startcapture` event. If an event handler returns `true`, the dragging
+ *   is started. Otherwise mouse or touch events which belong to the same
+ *   drag interaction are ignored.
+ *
+ *   While the drag interaction is running, the `movecapture` is fired for
+ *   each underlying move event. Once the drag interaction completes, the
+ *   `stopcapture` event is fired.
+ *
+ *   While the drag interaction is running, the `state()` method returns a
+ *   CaptureState object. This object has methods for calculating current
+ *   position, distance from the start position etc.
+ *
+ *
+ * @extends Module
+ *
+ * @param {Object} widget - The parent widget making use of DragValue.
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {HTMLElement} [options.node] - The DOM element receiving the drag events. If not set the widgets element is used.
+ *
+ * @class DragCapture
+ */
+/**
+ * Capturing started.
+ *
+ * @event DragCapture#startcapture
+ *
+ * @param {object} state - An internal state object.
+ * @param {DOMEvent} start - The event object of the initial event.
+ */
 
-  /**
-   * A movement was captured.
-   *
-   * @event DragCapture#movecapture
-   *
-   * @param {DOMEvent} event - The event object of the current move event.
-   */
+/**
+ * A movement was captured.
+ *
+ * @event DragCapture#movecapture
+ *
+ * @param {DOMEvent} event - The event object of the current move event.
+ */
 
-  /**
-   * Capturing stopped.
-   *
-   * @event DragCapture#stopcapture
-   *
-   * @param {object} state - An internal state object.
-   * @param {DOMEvent} event - The event object of the current event.
-   */
-  Extends: Module,
-  _options: {
-    node: 'object',
-    state: 'boolean' /* internal, undocumented */,
-  },
-  options: {
-    state: false,
-  },
-  static_events: static_events,
-  initialize: function (widget, O) {
-    Module.prototype.initialize.call(this, widget, O);
+/**
+ * Capturing stopped.
+ *
+ * @event DragCapture#stopcapture
+ *
+ * @param {object} state - An internal state object.
+ * @param {DOMEvent} event - The event object of the current event.
+ */
+export class DragCapture extends Module {
+  static get _options() {
+    return {
+      node: 'object',
+      state: 'boolean' /* internal, undocumented */,
+    };
+  }
+
+  static get options() {
+    return {
+      state: false,
+    };
+  }
+
+  static get static_events() {
+    return static_events;
+  }
+
+  initialize(widget, O) {
+    super.initialize(widget, O);
     this.drag_state = null;
     if (O.node === void 0) O.node = widget.element;
     this.set('node', O.node);
-  },
-  destroy: function () {
-    Module.prototype.destroy.call(this);
+  }
+
+  destroy() {
+    super.destroy();
     this.cancelDrag();
-  },
-  stopCapture: function (ev) {
+  }
+
+  stopCapture(ev) {
     const s = this.drag_state;
     if (s === null) return;
 
@@ -352,17 +361,21 @@ export const DragCapture = defineClass({
     this.set('state', false);
     s.destroy();
     this.drag_state = null;
-  },
-  cancelDrag: function (ev) {
+  }
+
+  cancelDrag(ev) {
     this.stopCapture();
-  },
-  dragging: function () {
+  }
+
+  dragging() {
     return this.options.state;
-  },
-  state: function () {
+  }
+
+  state() {
     return this.drag_state;
-  },
-  isDraggedBy: function (ev) {
+  }
+
+  isDraggedBy(ev) {
     return this.drag_state !== null && this.drag_state.isDraggedBy(ev);
-  },
-});
+  }
+}

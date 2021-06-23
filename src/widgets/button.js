@@ -18,7 +18,6 @@
  */
 
 import { element, addClass, toggleClass } from './../utils/dom.js';
-import { defineClass } from './../widget_helpers.js';
 import { defineChildWidget } from './../child_widget.js';
 import { Widget } from './widget.js';
 import { Icon } from './icon.js';
@@ -221,75 +220,85 @@ function dismiss(e) {
   return false;
 }
 
-export const Button = defineClass({
-  /**
-   * Button is a simple, clickable widget containing an
-   * {@link Icon} and a {@link Label} to trigger functions.
-   * Button serves as base for other widgets, too, e.g.
-   * {@link Toggle}, {@link ConfirmButton} and {@link Select}.
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {String|Boolean} [options.label=false] - Text for the
-   *   button label. Set to <code>false</code> to remove the label
-   *   from DOM.
-   * @property {String|Boolean} [options.icon=false] - URL to an image
-   *   file or an icon class (see styles/fonts/AUX.html). If set
-   *   to <code>false</code>, the icon is removed from DOM.
-   * @property {Boolean} [options.state=false] - State of the button,
-   *   reflected as class <code>.aux-active</code>.
-   * @property {String} [options.layout="horizontal"] - Define the
-   *   arrangement of label and icon. <code>vertical</code> means icon
-   *   above the label, <code>horizontal</code> places the icon left
-   *   to the label.
-   * @property {Integer} [options.delay=0] - Enable delayed events. The
-   *   value is set in milliseconds. If
-   *   this is set to >0, Button fires some additional events, most importantly
-   *   `press_start` after the delay has finished without the user leaving
-   *   the button or lifting the pointer.
-   *
-   * @extends Widget
-   *
-   * @class Button
-   */
-  /**
-   * @member {HTMLDivElement} Button#element - The main DIV element.
-   *   Has class <code>.aux-button</code>.
-   */
-  Extends: Widget,
-  _options: Object.assign({}, Widget.getOptionTypes(), {
-    label: 'string|boolean',
-    icon: 'string|boolean',
-    state: 'boolean',
-    layout: 'string',
-    delay: 'int',
-  }),
-  options: {
-    label: false,
-    icon: false,
-    state: false,
-    layout: 'horizontal',
-    delay: 0,
-  },
-  static_events: {
-    mousedown: mousedown,
-    touchstart: touchstart,
-    contextmenu: dismiss,
-  },
-  initialize: function (options) {
+/**
+ * Button is a simple, clickable widget containing an
+ * {@link Icon} and a {@link Label} to trigger functions.
+ * Button serves as base for other widgets, too, e.g.
+ * {@link Toggle}, {@link ConfirmButton} and {@link Select}.
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {String|Boolean} [options.label=false] - Text for the
+ *   button label. Set to <code>false</code> to remove the label
+ *   from DOM.
+ * @property {String|Boolean} [options.icon=false] - URL to an image
+ *   file or an icon class (see styles/fonts/AUX.html). If set
+ *   to <code>false</code>, the icon is removed from DOM.
+ * @property {Boolean} [options.state=false] - State of the button,
+ *   reflected as class <code>.aux-active</code>.
+ * @property {String} [options.layout="horizontal"] - Define the
+ *   arrangement of label and icon. <code>vertical</code> means icon
+ *   above the label, <code>horizontal</code> places the icon left
+ *   to the label.
+ * @property {Integer} [options.delay=0] - Enable delayed events. The
+ *   value is set in milliseconds. If
+ *   this is set to >0, Button fires some additional events, most importantly
+ *   `press_start` after the delay has finished without the user leaving
+ *   the button or lifting the pointer.
+ *
+ * @extends Widget
+ *
+ * @class Button
+ */
+/**
+ * @member {HTMLDivElement} Button#element - The main DIV element.
+ *   Has class <code>.aux-button</code>.
+ */
+export class Button extends Widget {
+  static get _options() {
+    return Object.assign({}, Widget.getOptionTypes(), {
+      label: 'string|boolean',
+      icon: 'string|boolean',
+      state: 'boolean',
+      layout: 'string',
+      delay: 'int',
+    });
+  }
+
+  static get options() {
+    return {
+      label: false,
+      icon: false,
+      state: false,
+      layout: 'horizontal',
+      delay: 0,
+    };
+  }
+
+  static get static_events() {
+    return {
+      mousedown: mousedown,
+      touchstart: touchstart,
+      contextmenu: dismiss,
+    };
+  }
+
+  initialize(options) {
     if (!options.element) options.element = element('div');
     this.__time_stamp = 0;
     this.__touch_id = false;
     this.__init_target = null;
     this.__delayed_to = -1;
-    Widget.prototype.initialize.call(this, options);
-  },
-  draw: function (O, element) {
+    super.initialize(options);
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-button');
-    Widget.prototype.draw.call(this, O, element);
-  },
-  redraw: function () {
-    Widget.prototype.redraw.call(this);
+    super.draw(O, element);
+  }
+
+  redraw() {
+    super.redraw();
     const I = this.invalid;
     const O = this.options;
     const E = this.element;
@@ -304,8 +313,8 @@ export const Button = defineClass({
       I.state = false;
       toggleClass(E, 'aux-active', O.state);
     }
-  },
-});
+  }
+}
 
 /**
  * @member {Icon} Button#icon - The {@link Icon} widget.

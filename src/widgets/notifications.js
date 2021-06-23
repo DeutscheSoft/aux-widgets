@@ -19,7 +19,6 @@
 
 /* jshint -W079 */
 
-import { defineClass } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
 import { addClass } from '../utils/dom.js';
 import { Container } from './container.js';
@@ -41,26 +40,30 @@ import { S } from '../dom_scheduler.js';
  *   is appended to the container, either `end` or `start`.
  */
 
-export const Notifications = defineClass({
-  Extends: Container,
+export class Notifications extends Container {
+  static get _options() {
+    return Object.assign({}, Container.getOptionTypes(), {
+      stack: 'string',
+    });
+  }
 
-  _options: Object.assign({}, Container.getOptionTypes(), {
-    stack: 'string',
-  }),
-  options: {
-    stack: 'start',
-  },
+  static get options() {
+    return {
+      stack: 'start',
+    };
+  }
 
-  initialize: function (options) {
-    Container.prototype.initialize.call(this, options);
-  },
-  draw: function (O, element) {
+  initialize(options) {
+    super.initialize(options);
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-notifications');
 
-    Container.prototype.draw.call(this, O, element);
-  },
+    super.draw(O, element);
+  }
 
-  notify: function (options) {
+  notify(options) {
     /**
      * Create and show a new notification.
      *
@@ -78,7 +81,7 @@ export const Notifications = defineClass({
     else this.element.appendChild(n.element);
     n.show();
     return n;
-  },
+  }
 
   /**
    * Remove a notification instantly.
@@ -87,11 +90,11 @@ export const Notifications = defineClass({
    *
    * @param {Notification} [notification] - The Notification to remove.
    */
-  removeNotification: function (n) {
+  removeNotification(n) {
     this.removeChild(n);
     return n;
-  },
-});
+  }
+}
 
 function closeClicked() {
   /**
@@ -134,22 +137,25 @@ function timeout() {
  * @property {Boolean} [options.show_close=false] - Show a close button.
  */
 
-export const Notification = defineClass({
-  Extends: Container,
+export class Notification extends Container {
+  static get _options() {
+    return Object.assign({}, Container.getOptionTypes(), {
+      timeout: 'number',
+      icon: 'string',
+      show_close: 'boolean',
+    });
+  }
 
-  _options: Object.assign({}, Container.getOptionTypes(), {
-    timeout: 'number',
-    icon: 'string',
-    show_close: 'boolean',
-  }),
-  options: {
-    timeout: 5000,
-    icon: false,
-    show_close: false,
-  },
+  static get options() {
+    return {
+      timeout: 5000,
+      icon: false,
+      show_close: false,
+    };
+  }
 
-  initialize: function (options) {
-    Container.prototype.initialize.call(this, options);
+  initialize(options) {
+    super.initialize(options);
     const O = this.options;
     /**
      * @member {HTMLDivElement} Notification#element - The main DIV container.
@@ -157,23 +163,25 @@ export const Notification = defineClass({
      */
     this._timeout = void 0;
     this.set('timeout', O.timeout);
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-notification');
 
-    Container.prototype.draw.call(this, O, element);
-  },
-  redraw: function () {
+    super.draw(O, element);
+  }
+
+  redraw() {
     const I = this.invalid;
     const i = I.content;
-    Container.prototype.redraw.call(this);
+    super.redraw();
     if (i && this.icon)
       this.element.insertBefore(this.icon.element, this.element.firstChild);
     if (i && this.close)
       this.element.insertBefore(this.close.element, this.element.firstChild);
-  },
+  }
 
-  remove: function () {
+  remove() {
     this.on('hide', afterHide);
     this.hide();
     /**
@@ -182,20 +190,21 @@ export const Notification = defineClass({
      * @event Notification#closed
      */
     this.emit('closed');
-  },
+  }
 
-  destroy: function () {
+  destroy() {
     if (this._timeout !== void 0) window.clearTimeout(this._timeout);
-    Container.prototype.destroy.call(this);
-  },
-  set: function (key, val) {
-    Container.prototype.set.call(this, key, val);
+    super.destroy();
+  }
+
+  set(key, val) {
+    super.set(key, val);
     if (key === 'timeout') {
       if (this._timeout !== void 0) window.clearTimeout(this._timeout);
       if (val > 0) this._timeout = window.setTimeout(timeout.bind(this), val);
     }
-  },
-});
+  }
+}
 
 /**
  * @member {Button} Notification#close - The Button for closing the notification.

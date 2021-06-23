@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from '../widget_helpers.js';
 import { addClass } from '../utils/dom.js';
 import { error } from '../utils/log.js';
 import { sprintf } from '../utils/sprintf.js';
@@ -25,53 +24,61 @@ import { EqualizerGraph, Equalizer } from './equalizer.js';
 import { EqBand } from './eqband.js';
 import { Filter } from '../modules/filter.js';
 
-export const CrossoverBand = defineClass({
-  /**
-   * CrossoverBand is a {@link EqBand} with an additional filter.
-   *
-   * @param {Object} [options={ }] - An object containing additional options.
-   *
-   * @property {String|Function} [lower="lowpass3"] - The type of filter for the range below cutoff frequency. See {@link EqBand} for more information.
-   * @property {String|Function} [upper="highpass3"] - The type of filter for the range above cutoff frequency. See {@link EqBand} for more information.
-   * @property {Function} [format_label=function (t, x, y, z) { return sprintf("%.2f Hz", x); }] - The function formatting the handles label.
-   *
-   * @class CrossoverBand
-   *
-   * @extends EqBand
-   */
-  Extends: EqBand,
-  _options: Object.assign({}, EqBand.getOptionTypes(), {
-    lower: 'string|function',
-    upper: 'string|function',
-  }),
-  options: {
-    lower: 'lowpass3',
-    upper: 'highpass3',
-    format_label: function (t, x /*, y, z*/) {
-      return sprintf('%.2f Hz', x);
-    },
-    mode: 'line-vertical', // undocumented, just a default differing from ChartHandle
-    preferences: [
-      'top-right',
-      'right',
-      'bottom-right',
-      'top-left',
-      'left',
-      'bottom-left',
-    ], // undocumented, just a default differing from ChartHandle
-  },
-  static_events: {
-    set_lower: function (val) {
-      this.lower.set('type', val);
-      this.set('mode', 'line-vertical');
-    },
-    set_upper: function (val) {
-      this.upper.set('type', val);
-      this.set('mode', 'line-vertical');
-    },
-  },
-  initialize: function (options) {
-    EqBand.prototype.initialize.call(this, options);
+/**
+ * CrossoverBand is a {@link EqBand} with an additional filter.
+ *
+ * @param {Object} [options={ }] - An object containing additional options.
+ *
+ * @property {String|Function} [lower="lowpass3"] - The type of filter for the range below cutoff frequency. See {@link EqBand} for more information.
+ * @property {String|Function} [upper="highpass3"] - The type of filter for the range above cutoff frequency. See {@link EqBand} for more information.
+ * @property {Function} [format_label=function (t, x, y, z) { return sprintf("%.2f Hz", x); }] - The function formatting the handles label.
+ *
+ * @class CrossoverBand
+ *
+ * @extends EqBand
+ */
+export class CrossoverBand extends EqBand {
+  static get _options() {
+    return Object.assign({}, EqBand.getOptionTypes(), {
+      lower: 'string|function',
+      upper: 'string|function',
+    });
+  }
+
+  static get options() {
+    return {
+      lower: 'lowpass3',
+      upper: 'highpass3',
+      format_label: function (t, x /*, y, z*/) {
+        return sprintf('%.2f Hz', x);
+      },
+      mode: 'line-vertical', // undocumented, just a default differing from ChartHandle
+      preferences: [
+        'top-right',
+        'right',
+        'bottom-right',
+        'top-left',
+        'left',
+        'bottom-left',
+      ], // undocumented, just a default differing from ChartHandle
+    };
+  }
+
+  static get static_events() {
+    return {
+      set_lower: function (val) {
+        this.lower.set('type', val);
+        this.set('mode', 'line-vertical');
+      },
+      set_upper: function (val) {
+        this.upper.set('type', val);
+        this.set('mode', 'line-vertical');
+      },
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
     /**
      * @member {Filter} CrossoverBand#upper - The filter providing the graphical calculations for the upper graph.
      */
@@ -99,23 +106,29 @@ export const CrossoverBand = defineClass({
 
     this.set('lower', this.options.lower);
     this.set('upper', this.options.upper);
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-crossoverband');
 
-    EqBand.prototype.draw.call(this, O, element);
-  },
-});
+    super.draw(O, element);
+  }
+}
 
-export const CrossoverGraph = defineClass({
-  Extends: EqualizerGraph,
-  _options: Object.assign({}, EqualizerGraph.getOptionTypes(), {
-    index: 'number',
-  }),
-  options: {
-    index: -1,
-  },
-  getFilterFunctions: function () {
+export class CrossoverGraph extends EqualizerGraph {
+  static get _options() {
+    return Object.assign({}, EqualizerGraph.getOptionTypes(), {
+      index: 'number',
+    });
+  }
+
+  static get options() {
+    return {
+      index: -1,
+    };
+  }
+
+  getFilterFunctions() {
     const bands = this.options.bands;
     const index = this.options.index;
 
@@ -135,8 +148,8 @@ export const CrossoverGraph = defineClass({
     }
 
     return filters;
-  },
-});
+  }
+}
 
 function sortBands() {
   this.bands.sort(function (a, b) {
@@ -193,46 +206,54 @@ function setFreq(band) {
   limitBand(this.bands, i, distance);
 }
 
-export const Crossover = defineClass({
-  /**
-   * Crossover is a {@link Equalizer} displaying the response
-   * of a multi-band crossover filter. Crossover  uses {@link CrossoverBand}
-   * as response handles.
-   *
-   * @class Crossover
-   *
-   * @extends Equalizer
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {Boolean} [options.leap=true] - Define if bands are allowed to leap over each other.
-   * @property {Number} [options.distance=0] - Set a minimal distance between bands. This has no effect
-   *   is `leap=true`. The value is interpreted as a factor of the frequency
-   *   of the next band, e.g. if distance is `0.2` and a band is at `1kHz`, then a second lower
-   *   band cannot be moved beyond `800Hz`.
-   */
-  Extends: Equalizer,
-  _options: Object.assign({}, Equalizer.getOptionTypes(), {
-    leap: 'boolean',
-    distance: 'number',
-  }),
-  options: {
-    range_y: { min: -60, max: 12, scale: 'linear' },
-    leap: true,
-    distance: 0,
-  },
-  static_events: {
-    set_leap: function (v) {
-      (v ? unlimitBands : limitBands).call(this);
-    },
-    set_distance: limitBands,
-    initialized: function () {
-      this.set('leap', this.options.leap);
-      this.set('distance', this.options.distance);
-    },
-  },
-  initialize: function (options) {
-    Equalizer.prototype.initialize.call(this, options);
+/**
+ * Crossover is a {@link Equalizer} displaying the response
+ * of a multi-band crossover filter. Crossover  uses {@link CrossoverBand}
+ * as response handles.
+ *
+ * @class Crossover
+ *
+ * @extends Equalizer
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {Boolean} [options.leap=true] - Define if bands are allowed to leap over each other.
+ * @property {Number} [options.distance=0] - Set a minimal distance between bands. This has no effect
+ *   is `leap=true`. The value is interpreted as a factor of the frequency
+ *   of the next band, e.g. if distance is `0.2` and a band is at `1kHz`, then a second lower
+ *   band cannot be moved beyond `800Hz`.
+ */
+export class Crossover extends Equalizer {
+  static get _options() {
+    return Object.assign({}, Equalizer.getOptionTypes(), {
+      leap: 'boolean',
+      distance: 'number',
+    });
+  }
+
+  static get options() {
+    return {
+      range_y: { min: -60, max: 12, scale: 'linear' },
+      leap: true,
+      distance: 0,
+    };
+  }
+
+  static get static_events() {
+    return {
+      set_leap: function (v) {
+        (v ? unlimitBands : limitBands).call(this);
+      },
+      set_distance: limitBands,
+      initialized: function () {
+        this.set('leap', this.options.leap);
+        this.set('distance', this.options.distance);
+      },
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
     /**
      * @member {HTMLDivElement} Equalizer#element - The main DIV container.
      *   Has class <code>.aux-crossover</code>.
@@ -245,14 +266,16 @@ export const Crossover = defineClass({
     this.removeChild(this.baseline);
     const graph = this.addGraph(new CrossoverGraph({ index: 0 }));
     this.crossover_graphs = [graph];
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-crossover');
 
-    Equalizer.prototype.draw.call(this, O, element);
-  },
-  addChild: function (child) {
-    Equalizer.prototype.addChild.call(this, child);
+    super.draw(O, element);
+  }
+
+  addChild(child) {
+    super.addChild(child);
     if (child instanceof CrossoverBand) {
       // add this band to all crossover graphs
       this.crossover_graphs.forEach((g) => g.addBand(child));
@@ -269,9 +292,10 @@ export const Crossover = defineClass({
         .filter((_child) => _child instanceof CrossoverBand)
         .forEach((band) => child.addBand(band));
     }
-  },
-  removeChild: function (child) {
-    Equalizer.prototype.removeChild.call(this, child);
+  }
+
+  removeChild(child) {
+    super.removeChild(child);
     if (child instanceof CrossoverBand) {
       const graph = this.crossover_graphs.pop();
       this.removeGraph(graph);
@@ -283,8 +307,9 @@ export const Crossover = defineClass({
         .filter((_child) => _child instanceof CrossoverBand)
         .forEach((band) => child.removeBand(band));
     }
-  },
-  addBand: function (options, type) {
+  }
+
+  addBand(options, type) {
     let band;
 
     if (options instanceof CrossoverBand) {
@@ -295,5 +320,5 @@ export const Crossover = defineClass({
     }
     this.addChild(band);
     return band;
-  },
-});
+  }
+}

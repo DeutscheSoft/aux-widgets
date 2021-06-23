@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from './../widget_helpers.js';
 import { addClass, removeClass } from './../utils/dom.js';
 import { Container } from './container.js';
 import { Button } from './button.js';
@@ -186,105 +185,113 @@ function onButtonRemoved(button, position) {
   buttons.triggerResize();
 }
 
-export const Buttons = defineClass({
-  /**
-   * Buttons is a list of ({@link Button})s, arranged
-   * either vertically or horizontally. Single buttons can be selected by clicking.
-   * If `multi_select` is enabled, buttons can be added and removed from
-   * the selection by clicking on them. Buttons uses {@link warning}
-   * to highlight buttons which can't be selected due to `options.multi_select=n`.
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {Array<Object|String>} [options.buttons=[]] - A list of
-   *   {@link Button} instances, button options objects or label strings
-   *   which is converted to button instances on init. If `get` is called,
-   *   a converted list of button instances is returned. Example:
-   *  `[new Button({label:'Button#1'}), 'Button#2', {label:'Button#3'}]`
-   * @property {String} [options.direction="horizontal"] - The layout
-   *   of the button list, either "horizontal" or "vertical".
-   * @property {Integer|Button|Array<Integer>|Array<Button>} [options.select=-1]
-   *   The {@link Button} or a list of {@link Button}s, depending on
-   *   `options.multi_select`, to highlight. Expects
-   *   either the buttons index starting from zero or the {@link Button}
-   *   instance(s) itself. Set to `-1` or `[]` to
-   *   de-select any selected button.
-   * @property {Object} [options.button_class=Button] - A class to
-   *   be used for instantiating new buttons.
-   * @property {Integer} [options.multi_select=0] - Set to `0` to disable
-   *   multiple selection, `1` for unlimited and any other number for
-   *   a defined maximum amount of selectable buttons. If an array is given
-   *   for `options.select` while this option is `0`, the first entry
-   *   will be used.
-   * @property {Boolean} [options.deselect=false] - Define if single-selection
-   *   (`options.multi_select=false`) can be de-selected.
-   *
-   * @class Buttons
-   *
-   * @extends Container
-   *
-   */
-  /**
-   * A {@link Button} was added to Buttons.
-   *
-   * @event Buttons#added
-   *
-   * @param {Button} button - The {@link Button} which was added to Buttons.
-   */
-  /**
-   * A {@link Button} was removed from the Buttons.
-   *
-   * @event Buttons#removed
-   *
-   * @param {Button} button - The {@link Button} instance which was removed.
-   */
-  Extends: Container,
-  _options: Object.assign({}, Container.getOptionTypes(), {
-    buttons: 'array',
-    direction: 'string',
-    select: 'int|array',
-    button_class: 'Button',
-    multi_select: 'int',
-    deselect: 'boolean',
-  }),
-  options: {
-    buttons: [],
-    direction: 'horizontal',
-    select: -1,
-    button_class: Button,
-    multi_select: 0,
-    deselect: false,
-  },
-  static_events: {
-    userset: function (key, value) {
-      if (key !== 'select' || this.options.deselect) return;
+/**
+ * Buttons is a list of ({@link Button})s, arranged
+ * either vertically or horizontally. Single buttons can be selected by clicking.
+ * If `multi_select` is enabled, buttons can be added and removed from
+ * the selection by clicking on them. Buttons uses {@link warning}
+ * to highlight buttons which can't be selected due to `options.multi_select=n`.
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {Array<Object|String>} [options.buttons=[]] - A list of
+ *   {@link Button} instances, button options objects or label strings
+ *   which is converted to button instances on init. If `get` is called,
+ *   a converted list of button instances is returned. Example:
+ *  `[new Button({label:'Button#1'}), 'Button#2', {label:'Button#3'}]`
+ * @property {String} [options.direction="horizontal"] - The layout
+ *   of the button list, either "horizontal" or "vertical".
+ * @property {Integer|Button|Array<Integer>|Array<Button>} [options.select=-1]
+ *   The {@link Button} or a list of {@link Button}s, depending on
+ *   `options.multi_select`, to highlight. Expects
+ *   either the buttons index starting from zero or the {@link Button}
+ *   instance(s) itself. Set to `-1` or `[]` to
+ *   de-select any selected button.
+ * @property {Object} [options.button_class=Button] - A class to
+ *   be used for instantiating new buttons.
+ * @property {Integer} [options.multi_select=0] - Set to `0` to disable
+ *   multiple selection, `1` for unlimited and any other number for
+ *   a defined maximum amount of selectable buttons. If an array is given
+ *   for `options.select` while this option is `0`, the first entry
+ *   will be used.
+ * @property {Boolean} [options.deselect=false] - Define if single-selection
+ *   (`options.multi_select=false`) can be de-selected.
+ *
+ * @class Buttons
+ *
+ * @extends Container
+ *
+ */
+/**
+ * A {@link Button} was added to Buttons.
+ *
+ * @event Buttons#added
+ *
+ * @param {Button} button - The {@link Button} which was added to Buttons.
+ */
+/**
+ * A {@link Button} was removed from the Buttons.
+ *
+ * @event Buttons#removed
+ *
+ * @param {Button} button - The {@link Button} instance which was removed.
+ */
+export class Buttons extends Container {
+  static get _options() {
+    return Object.assign({}, Container.getOptionTypes(), {
+      buttons: 'array',
+      direction: 'string',
+      select: 'int|array',
+      button_class: 'Button',
+      multi_select: 'int',
+      deselect: 'boolean',
+    });
+  }
 
-      if (value === -1 || (Array.isArray(value) && value.length === 0))
-        return false;
-    },
-    set_select: function (value) {
-      const list = this.buttons.getList();
-      const selected = Array.isArray(value)
-        ? value
-        : value === -1
-        ? []
-        : [value];
-      for (let i = 0; i < list.length; i++) {
-        // we use update, it avoids changing the state if it is already
-        // correct.
-        list[i].update('state', selected.includes(i));
-      }
-    },
-    set_multi_select: function (multi_select) {
-      const O = this.options;
+  static get options() {
+    return {
+      buttons: [],
+      direction: 'horizontal',
+      select: -1,
+      button_class: Button,
+      multi_select: 0,
+      deselect: false,
+    };
+  }
 
-      const select = enforceMultiSelect(O.select, multi_select);
+  static get static_events() {
+    return {
+      userset: function (key, value) {
+        if (key !== 'select' || this.options.deselect) return;
 
-      this.update('select', select);
-    },
-  },
-  initialize: function (options) {
-    Container.prototype.initialize.call(this, options);
+        if (value === -1 || (Array.isArray(value) && value.length === 0))
+          return false;
+      },
+      set_select: function (value) {
+        const list = this.buttons.getList();
+        const selected = Array.isArray(value)
+          ? value
+          : value === -1
+          ? []
+          : [value];
+        for (let i = 0; i < list.length; i++) {
+          // we use update, it avoids changing the state if it is already
+          // correct.
+          list[i].update('state', selected.includes(i));
+        }
+      },
+      set_multi_select: function (multi_select) {
+        const O = this.options;
+
+        const select = enforceMultiSelect(O.select, multi_select);
+
+        this.update('select', select);
+      },
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
     /**
      * @member {HTMLDivElement} Buttons#element - The main DIV container.
      *   Has class <code>.aux-buttons</code>.
@@ -306,12 +313,14 @@ export const Buttons = defineClass({
     const buttons = options.buttons;
     this.options.buttons = [];
     this.set('buttons', buttons);
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-buttons');
 
-    Container.prototype.draw.call(this, O, element);
-  },
+    super.draw(O, element);
+  }
+
   /**
    * Adds an array of buttons to the end of the list.
    *
@@ -322,11 +331,11 @@ export const Buttons = defineClass({
    *   with options for the buttons (see {@link Button} for more
    *   information) or strings for the buttons labels.
    */
-  addButtons: function (list) {
+  addButtons(list) {
     return list.map((options) => this.addButton(options));
-  },
+  }
 
-  createButton: function (options) {
+  createButton(options) {
     if (options instanceof Button) {
       return options;
     } else {
@@ -340,7 +349,8 @@ export const Buttons = defineClass({
 
       return new this.options.button_class(options);
     }
-  },
+  }
+
   /**
    * Adds a {@link Button} to Buttons.
    *
@@ -354,7 +364,7 @@ export const Buttons = defineClass({
    *
    * @returns {Button} The {@link Button} instance.
    */
-  addButton: function (options, position) {
+  addButton(options, position) {
     const button = this.createButton(options);
     const buttons = this.getButtons();
     const element = this.element;
@@ -372,7 +382,8 @@ export const Buttons = defineClass({
     }
 
     return button;
-  },
+  }
+
   /**
    * Removes a {@link Button} from Buttons.
    *
@@ -382,7 +393,7 @@ export const Buttons = defineClass({
    *   instance to be removed.
    * @param {Boolean} destroy - destroy the {@link Button} after removal.
    */
-  removeButton: function (button, destroy) {
+  removeButton(button, destroy) {
     const buttons = this.buttons;
     let position = -1;
 
@@ -404,30 +415,33 @@ export const Buttons = defineClass({
     }
 
     if (destroy) button.destroy();
-  },
+  }
+
   /**
    * @returns {Button[]} The list of {@link Button}s.
    * @method Buttons#getButtons
    */
-  getButtons: function () {
+  getButtons() {
     return this.buttons.getList();
-  },
+  }
+
   /**
    * Removes all buttons.
    *
    * @method Buttons#empty
    */
-  empty: function () {
+  empty() {
     this.buttons.forEach((button) => this.removeButton(button, true));
-  },
-  destroy: function () {
+  }
+
+  destroy() {
     this.buttons.destroy();
     this.set('buttons', []);
-    Container.prototype.destroy.call(this);
-  },
+    super.destroy();
+  }
 
-  redraw: function () {
-    Container.prototype.redraw.call(this);
+  redraw() {
+    super.redraw();
     const I = this.invalid;
     const O = this.options;
 
@@ -437,7 +451,8 @@ export const Buttons = defineClass({
       removeClass(E, 'aux-vertical', 'aux-horizontal');
       addClass(E, 'aux-' + O.direction);
     }
-  },
+  }
+
   /**
    * Checks if an index or {@link Button} is selected.
    *
@@ -447,14 +462,15 @@ export const Buttons = defineClass({
    *
    * @returns {Boolean}
    */
-  isSelected: function (probe) {
+  isSelected(probe) {
     const button = typeof probe === 'number' ? this.buttons.at(probe) : probe;
 
     if (!button) throw new Error('Unknown button.');
 
     return button.get('state');
-  },
-  set: function (key, value) {
+  }
+
+  set(key, value) {
     if (key === 'buttons') {
       // remove all buttons which were added using this option
       this.options.buttons.forEach((b) => this.removeButton(b, true));
@@ -463,6 +479,6 @@ export const Buttons = defineClass({
       value = enforceMultiSelect(value, this.options.multi_select);
     }
 
-    return Container.prototype.set.call(this, key, value);
-  },
-});
+    return super.set(key, value);
+  }
+}

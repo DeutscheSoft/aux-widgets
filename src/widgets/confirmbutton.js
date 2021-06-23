@@ -18,7 +18,6 @@
  */
 
 import { addClass } from './../utils/dom.js';
-import { defineClass } from './../widget_helpers.js';
 import { Button } from './button.js';
 
 /**
@@ -104,46 +103,49 @@ function clicked() {
   }
 }
 
-export const ConfirmButton = defineClass({
-  /**
-   * ConfirmButton is a {@link Button} firing the `confirmed` event
-   * after it was hit a second time. While waiting for the confirmation, a
-   * dedicated label and icon can be displayed. The button is reset to
-   * default if no second click appears. A click outside of the button
-   * resets it, too. It receives class .aux-active` while waiting for
-   * the confirmation.
-   *
-   * @class ConfirmButton
-   *
-   * @extends Button
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {Boolean} [options.confirm=true] - Defines if the button acts as <code>ConfirmButton</code> or normal <code>Button</code>.
-   * @property {Number} [options.timeout=2000] - Defines a time in milliseconds after the button resets to defaults if no second click happens.
-   * @property {Number} [options.interrupt=0] - Defines a duration in milliseconds within further clicks are ignored. Set to avoid double-clicks being recognized as confirmation.
-   * @property {String} [options.label_confirm] - The label to be used while in active state.
-   * @property {String} [options.icon_confirm] - The icon to be used while in active state.
-   */
-  Extends: Button,
+/**
+ * ConfirmButton is a {@link Button} firing the `confirmed` event
+ * after it was hit a second time. While waiting for the confirmation, a
+ * dedicated label and icon can be displayed. The button is reset to
+ * default if no second click appears. A click outside of the button
+ * resets it, too. It receives class .aux-active` while waiting for
+ * the confirmation.
+ *
+ * @class ConfirmButton
+ *
+ * @extends Button
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {Boolean} [options.confirm=true] - Defines if the button acts as <code>ConfirmButton</code> or normal <code>Button</code>.
+ * @property {Number} [options.timeout=2000] - Defines a time in milliseconds after the button resets to defaults if no second click happens.
+ * @property {Number} [options.interrupt=0] - Defines a duration in milliseconds within further clicks are ignored. Set to avoid double-clicks being recognized as confirmation.
+ * @property {String} [options.label_confirm] - The label to be used while in active state.
+ * @property {String} [options.icon_confirm] - The icon to be used while in active state.
+ */
+export class ConfirmButton extends Button {
+  static get _options() {
+    return Object.assign({}, Button.getOptionTypes(), {
+      confirm: 'boolean',
+      timeout: 'number',
+      interrupt: 'number',
+      label_confirm: 'string',
+      icon_confirm: 'string',
+    });
+  }
 
-  _options: Object.assign({}, Button.getOptionTypes(), {
-    confirm: 'boolean',
-    timeout: 'number',
-    interrupt: 'number',
-    label_confirm: 'string',
-    icon_confirm: 'string',
-  }),
-  options: {
-    confirm: true,
-    timeout: 2000,
-    interrupt: 0,
-    label_confirm: '',
-    icon_confirm: '',
-  },
+  static get options() {
+    return {
+      confirm: true,
+      timeout: 2000,
+      interrupt: 0,
+      label_confirm: '',
+      icon_confirm: '',
+    };
+  }
 
-  initialize: function (options) {
-    Button.prototype.initialize.call(this, options);
+  initialize(options) {
+    super.initialize(options);
     this.on('click', clicked.bind(this));
     this.__temp = {
       label: '',
@@ -152,22 +154,23 @@ export const ConfirmButton = defineClass({
       reset: null,
       click: 0,
     };
-  },
+  }
 
-  draw: function (O, element) {
+  draw(O, element) {
     addClass(element, 'aux-confirmbutton');
 
-    Button.prototype.draw.call(this, O, element);
-  },
+    super.draw(O, element);
+  }
 
-  set: function (key, value) {
+  set(key, value) {
     if (key == 'confirm' && value == false) {
       this.set('state', false);
     }
-    Button.prototype.set.call(this, key, value);
-  },
-  destroy: function () {
+    super.set(key, value);
+  }
+
+  destroy() {
     stateReset.call(this);
-    Button.prototype.destroy.call(this);
-  },
-});
+    super.destroy();
+  }
+}

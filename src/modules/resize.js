@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from './../widget_helpers.js';
 import { Range } from './range.js';
 import { DragValue } from './dragvalue.js';
 import { Base } from '../implements/base.js';
@@ -108,33 +107,39 @@ function setHandle() {
  * @property {Object} [options.max={x: -1, y: -1}] - Object containing x
  *   and y determining maximum size. A value of -1 means no maximum.
  */
-export const Resize = defineClass({
-  // Resize enables resizing of elements on the screen.
-  Extends: Base,
-  _options: {
-    handle: 'object',
-    active: 'boolean',
-    min: 'object',
-    max: 'object',
-    node: 'object',
-  },
-  options: {
-    node: null,
-    handle: null,
-    active: true,
-    min: { x: -1, y: -1 },
-    max: { x: -1, y: -1 },
-  },
-  initialize: function (options) {
-    Base.prototype.initialize.call(this, options);
+// Resize enables resizing of elements on the screen.
+export class Resize extends Base {
+  static get _options() {
+    return {
+      handle: 'object',
+      active: 'boolean',
+      min: 'object',
+      max: 'object',
+      node: 'object',
+    };
+  }
+
+  static get options() {
+    return {
+      node: null,
+      handle: null,
+      active: true,
+      min: { x: -1, y: -1 },
+      max: { x: -1, y: -1 },
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
     this.set('handle', this.options.handle);
-  },
+  }
+
   // GETTERS & SETTERS
-  set: function (key, value) {
+  set(key, value) {
     if (key === 'handle') {
       if (!value) value = this.options.node;
       setHandle.call(this);
     }
-    Base.prototype.set.call(this, key, value);
-  },
-});
+    super.set(key, value);
+  }
+}

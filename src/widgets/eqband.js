@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from '../widget_helpers.js';
 import { Filter } from '../modules/filter.js';
 import { ChartHandle } from './charthandle.js';
 import { addClass, toggleClass } from '../utils/dom.js';
@@ -125,68 +124,75 @@ const type_to_pref = {
   'high-shelf': ['left', 'right', 'top', 'bottom'],
 };
 
-export const EqBand = defineClass({
-  /**
-   * An EqBand extends a {@link ChartHandle} and holds a
-   * dependent {@link Filter}. It is used as a fully functional representation
-   * of a single equalizer band in {@link Equalizer} EqBand needs a {@link Chart}
-   * or any other derivate to be drawn in.
-   *
-   * @class EqBand
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {String|Function} [options.type="parametric"] - The type of the filter.
-   *   Possible values are <code>parametric</code>, <code>notch</code>,
-   *   <code>low-shelf</code>, <code>high-shelf</code>, <code>lowpass[n]</code> or
-   *   <code>highpass[n]</code>.
-   * @property {Number} options.freq - Frequency setting. This is an alias for the option <code>x</code>
-   *   defined by {@link ChartHandle}.
-   * @property {Number} options.gain - Gain setting. This is an alias for the option <code>y</code>
-   *   defined by {@link ChartHandle}.
-   * @property {Number} options.q - Quality setting. This is an alias for the option <code>z</code>
-   *   defined by {@link ChartHandle}.
-   * @property {Boolean} [options.active=true] - Set to `false` to not take this filter into account when drawing the response graph.
-   *
-   * @extends ChartHandle
-   */
-  Extends: ChartHandle,
-  _options: Object.assign({}, ChartHandle.getOptionTypes(), {
-    type: 'string|function',
-    gain: 'number',
-    freq: 'number',
-    x: 'number',
-    y: 'number',
-    z: 'number',
-    q: 'number',
-    active: 'boolean',
-  }),
-  options: {
-    type: 'parametric',
-    active: true,
-  },
-  static_events: {
-    set_freq: function (v) {
-      this.set('x', v);
-    },
-    set_gain: function (v) {
-      this.set('y', v);
-    },
-    set_q: function (v) {
-      this.set('z', v);
-    },
-    useraction: function (k, v) {
-      if (k === 'x') this.set('freq', v);
-      if (k === 'y') this.set('gain', v);
-      if (k === 'z') this.set('q', v);
-    },
-  },
+/**
+ * An EqBand extends a {@link ChartHandle} and holds a
+ * dependent {@link Filter}. It is used as a fully functional representation
+ * of a single equalizer band in {@link Equalizer} EqBand needs a {@link Chart}
+ * or any other derivate to be drawn in.
+ *
+ * @class EqBand
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {String|Function} [options.type="parametric"] - The type of the filter.
+ *   Possible values are <code>parametric</code>, <code>notch</code>,
+ *   <code>low-shelf</code>, <code>high-shelf</code>, <code>lowpass[n]</code> or
+ *   <code>highpass[n]</code>.
+ * @property {Number} options.freq - Frequency setting. This is an alias for the option <code>x</code>
+ *   defined by {@link ChartHandle}.
+ * @property {Number} options.gain - Gain setting. This is an alias for the option <code>y</code>
+ *   defined by {@link ChartHandle}.
+ * @property {Number} options.q - Quality setting. This is an alias for the option <code>z</code>
+ *   defined by {@link ChartHandle}.
+ * @property {Boolean} [options.active=true] - Set to `false` to not take this filter into account when drawing the response graph.
+ *
+ * @extends ChartHandle
+ */
+export class EqBand extends ChartHandle {
+  static get _options() {
+    return Object.assign({}, ChartHandle.getOptionTypes(), {
+      type: 'string|function',
+      gain: 'number',
+      freq: 'number',
+      x: 'number',
+      y: 'number',
+      z: 'number',
+      q: 'number',
+      active: 'boolean',
+    });
+  }
 
-  initialize: function (options) {
+  static get options() {
+    return {
+      type: 'parametric',
+      active: true,
+    };
+  }
+
+  static get static_events() {
+    return {
+      set_freq: function (v) {
+        this.set('x', v);
+      },
+      set_gain: function (v) {
+        this.set('y', v);
+      },
+      set_q: function (v) {
+        this.set('z', v);
+      },
+      useraction: function (k, v) {
+        if (k === 'x') this.set('freq', v);
+        if (k === 'y') this.set('gain', v);
+        if (k === 'z') this.set('q', v);
+      },
+    };
+  }
+
+  initialize(options) {
     /**
      * @member {Filter} EqBand#filter - The filter providing the graphical calculations.
      */
-    ChartHandle.prototype.initialize.call(this, options);
+    super.initialize(options);
 
     this.filter = new Filter({
       type: this.get('type'),
@@ -206,21 +212,23 @@ export const EqBand = defineClass({
       }
     });
     this.filter.reset();
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-eqband');
 
-    ChartHandle.prototype.draw.call(this, O, element);
-  },
-  redraw: function () {
+    super.draw(O, element);
+  }
+
+  redraw() {
     const I = this.invalid;
     const O = this.options;
     if (I.active) {
       I.active = false;
       toggleClass(this.element, 'aux-inactive', !O.active);
     }
-    ChartHandle.prototype.redraw.call(this);
-  },
+    super.redraw();
+  }
 
   /**
    * Calculate the gain for a given frequency in Hz.
@@ -231,12 +239,12 @@ export const EqBand = defineClass({
    *
    * @returns {number} The gain at the given frequency.
    */
-  frequencyToGain: function (freq) {
+  frequencyToGain(freq) {
     return this.filter.getFrequencyToGain()(freq);
-  },
+  }
 
   // GETTER & SETTER
-  set: function (key, value) {
+  set(key, value) {
     switch (key) {
       case 'type':
         if (typeof value === 'string') {
@@ -267,6 +275,6 @@ export const EqBand = defineClass({
       //value = this.options.range_z.snap(value);
       //break;
     }
-    return ChartHandle.prototype.set.call(this, key, value);
-  },
-});
+    return super.set(key, value);
+  }
+}

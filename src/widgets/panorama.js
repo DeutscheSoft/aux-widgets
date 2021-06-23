@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from '../widget_helpers.js';
 import { Chart } from './chart.js';
 import { ChartHandle } from './charthandle.js';
 import { addClass, removeClass } from '../utils/dom.js';
@@ -44,88 +43,98 @@ import { warn } from '../utils/log.js';
  *
  * @class Panorama
  */
-export const Panorama = defineClass({
-  Extends: Chart,
-  _options: Object.assign({}, Chart.getOptionTypes(), {
-    mode: 'string',
-    range: 'number',
-    digits: 'int',
-  }),
-  options: {
-    mode: 'panorama',
-    range: 100,
-    digits: 1,
+export class Panorama extends Chart {
+  static get _options() {
+    return Object.assign({}, Chart.getOptionTypes(), {
+      mode: 'string',
+      range: 'number',
+      digits: 'int',
+    });
+  }
 
-    square: true,
-    range_z: { min: 1, max: 1 },
-    grid_x: [
-      { pos: -50, label: 'L' },
-      { pos: 0, label: 'C', class: 'aux-center' },
-      { pos: 50, label: 'R' },
-    ],
-    grid_y: [
-      { pos: -50, label: 'B' },
-      { pos: 0, label: 'M', class: 'aux-center' },
-      { pos: 50, label: 'F' },
-    ],
-  },
-  static_events: {
-    set_mode: function (v) {
-      removeClass(this.element, 'aux-balance', 'aux-surround');
-      switch (v) {
-        default:
-          warn('Unsupported mode', v);
-          break;
-        case 'panorama':
-          this.handle1.set('mode', 'line-vertical');
-          this.handle2.hide();
-          break;
-        case 'balance':
-          this.handle1.set('mode', 'line-vertical');
-          this.handle2.show();
-          addClass(this.element, 'aux-balance');
-          break;
-        case 'surround':
-          this.handle1.set('mode', 'circular');
-          this.handle2.hide();
-          addClass(this.element, 'aux-surround');
-          break;
-      }
-      this.handle1.set('_mode', v);
-      this.handle2.set('_mode', v);
-    },
-    set_range: function (v) {
-      this.range_x.set('min', -v);
-      this.range_x.set('max', +v);
-      this.range_y.set('min', -v);
-      this.range_y.set('max', +v);
-    },
-    set_digits: function (v) {
-      this.handle1.set('_digits', v);
-      this.handle2.set('_digits', v);
-    },
-  },
-  initialize: function (options) {
-    Chart.prototype.initialize.call(this, options);
+  static get options() {
+    return {
+      mode: 'panorama',
+      range: 100,
+      digits: 1,
+
+      square: true,
+      range_z: { min: 1, max: 1 },
+      grid_x: [
+        { pos: -50, label: 'L' },
+        { pos: 0, label: 'C', class: 'aux-center' },
+        { pos: 50, label: 'R' },
+      ],
+      grid_y: [
+        { pos: -50, label: 'B' },
+        { pos: 0, label: 'M', class: 'aux-center' },
+        { pos: 50, label: 'F' },
+      ],
+    };
+  }
+
+  static get static_events() {
+    return {
+      set_mode: function (v) {
+        removeClass(this.element, 'aux-balance', 'aux-surround');
+        switch (v) {
+          default:
+            warn('Unsupported mode', v);
+            break;
+          case 'panorama':
+            this.handle1.set('mode', 'line-vertical');
+            this.handle2.hide();
+            break;
+          case 'balance':
+            this.handle1.set('mode', 'line-vertical');
+            this.handle2.show();
+            addClass(this.element, 'aux-balance');
+            break;
+          case 'surround':
+            this.handle1.set('mode', 'circular');
+            this.handle2.hide();
+            addClass(this.element, 'aux-surround');
+            break;
+        }
+        this.handle1.set('_mode', v);
+        this.handle2.set('_mode', v);
+      },
+      set_range: function (v) {
+        this.range_x.set('min', -v);
+        this.range_x.set('max', +v);
+        this.range_y.set('min', -v);
+        this.range_y.set('max', +v);
+      },
+      set_digits: function (v) {
+        this.handle1.set('_digits', v);
+        this.handle2.set('_digits', v);
+      },
+    };
+  }
+
+  initialize(options) {
+    super.initialize(options);
     /**
      * @member {SVGElement} Panorama#element - The main SVG image.
      *   Has class <code>.aux-panorama</code>.
      */
     this.setParent(null);
-  },
-  initialized: function () {
-    Chart.prototype.initialized.call(this);
+  }
+
+  initialized() {
+    super.initialized();
     const O = this.options;
     this.set('range', O.range);
     this.set('digits', O.digits);
     this.set('mode', O.mode);
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-panorama');
 
-    Chart.prototype.draw.call(this, O, element);
-  },
-});
+    super.draw(O, element);
+  }
+}
 function handleLabel(label, x, y, z) {
   const O = this.options;
   let s = '';

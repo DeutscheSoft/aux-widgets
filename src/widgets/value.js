@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 import { element, addClass, removeClass } from './../utils/dom.js';
 
@@ -169,60 +168,65 @@ function submitCallback(e) {
  * @property {String|Boolean} [options.autocomplete=false} - Set a unique identifier to enable browsers internal auto completion.
  * @property {Boolean} [options.tab_to_set=false} - Set the value if user hits TAB.
  */
-export const Value = defineClass({
-  Extends: Widget,
-  _options: Object.assign({}, Widget.getOptionTypes(), {
-    value: 'number|string',
-    format: 'function',
-    size: 'number',
-    maxlength: 'int',
-    set: 'object|function|boolean',
-    auto_select: 'boolean',
-    readonly: 'boolean',
-    placeholder: 'string',
-    type: 'string',
-    editmode: 'string',
-    autocomplete: 'string|boolean',
-    tab_to_set: 'boolean',
-  }),
-  options: {
-    value: 0,
-    format: function (v) {
-      return v;
-    },
-    size: 3,
-    maxlength: null,
-    container: false,
-    // set a callback function if value is editable or
-    // false to disable editing. A function has to return
-    // the value treated by the parent widget.
-    set: function (val) {
-      val = parseFloat(val);
-      if (isNaN(val)) return this.get('value');
-      return parseFloat(val || 0);
-    },
-    auto_select: true,
-    readonly: false,
-    placeholder: '',
-    type: 'text',
-    editmode: 'onenter',
-    autocomplete: false,
-    presets: {
-      string: {
-        format: (v) => v + '',
-        set: (v) => v + '',
-        value: '',
+export class Value extends Widget {
+  static get _options() {
+    return Object.assign({}, Widget.getOptionTypes(), {
+      value: 'number|string',
+      format: 'function',
+      size: 'number',
+      maxlength: 'int',
+      set: 'object|function|boolean',
+      auto_select: 'boolean',
+      readonly: 'boolean',
+      placeholder: 'string',
+      type: 'string',
+      editmode: 'string',
+      autocomplete: 'string|boolean',
+      tab_to_set: 'boolean',
+    });
+  }
+
+  static get options() {
+    return {
+      value: 0,
+      format: function (v) {
+        return v;
       },
-    },
-    tab_to_set: false,
-  },
-  initialize: function (options) {
+      size: 3,
+      maxlength: null,
+      container: false,
+      // set a callback function if value is editable or
+      // false to disable editing. A function has to return
+      // the value treated by the parent widget.
+      set: function (val) {
+        val = parseFloat(val);
+        if (isNaN(val)) return this.get('value');
+        return parseFloat(val || 0);
+      },
+      auto_select: true,
+      readonly: false,
+      placeholder: '',
+      type: 'text',
+      editmode: 'onenter',
+      autocomplete: false,
+      presets: {
+        string: {
+          format: (v) => v + '',
+          set: (v) => v + '',
+          value: '',
+        },
+      },
+      tab_to_set: false,
+    };
+  }
+
+  initialize(options) {
     if (!options.element) options.element = element('div');
     /**
      * @member {HTMLDivElement} Value#element - The main DIV container.
      *   Has class <code>aux-value</code>.
      */
-    Widget.prototype.initialize.call(this, options);
+    super.initialize(options);
 
     /**
      * @member {HTMLInputElement} Value#_input - The input element.
@@ -239,13 +243,13 @@ export const Value = defineClass({
     this._value_focus = valueFocus.bind(this);
 
     this.__editing = false;
-  },
+  }
 
-  getEventTarget: function () {
+  getEventTarget() {
     return this._input;
-  },
+  }
 
-  draw: function (O, elmnt) {
+  draw(O, elmnt) {
     addClass(elmnt, 'aux-value');
     addClass(this._input, 'aux-input');
 
@@ -257,15 +261,15 @@ export const Value = defineClass({
     this._input.addEventListener('click', this._value_clicked);
     this._input.addEventListener('submit', submitCallback);
 
-    Widget.prototype.draw.call(this, O, elmnt);
-  },
+    super.draw(O, elmnt);
+  }
 
-  redraw: function () {
+  redraw() {
     const I = this.invalid;
     const O = this.options;
     const E = this._input;
 
-    Widget.prototype.redraw.call(this);
+    super.redraw();
 
     if (I.size) {
       I.size = false;
@@ -310,8 +314,9 @@ export const Value = defineClass({
         E.removeAttribute('autocomplete');
       }
     }
-  },
-  destroy: function () {
+  }
+
+  destroy() {
     this._input.removeEventListener('keyup', this._value_typing);
     this._input.removeEventListener('keydown', this._value_keydown);
     this._input.removeEventListener('blur', this._value_done);
@@ -319,6 +324,6 @@ export const Value = defineClass({
     this._input.removeEventListener('focus', this._value_focus);
     this._input.removeEventListener('click', this._value_clicked);
     this._input.removeEventListener('submit', submitCallback);
-    Widget.prototype.destroy.call(this);
-  },
-});
+    super.destroy();
+  }
+}

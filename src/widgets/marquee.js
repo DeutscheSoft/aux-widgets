@@ -24,7 +24,6 @@ import {
   innerWidth,
   outerWidth,
 } from './../utils/dom.js';
-import { defineClass } from './../widget_helpers.js';
 import { Container } from './container.js';
 import { Label } from './label.js';
 import { defineChildWidget } from '../child_widget.js';
@@ -63,77 +62,87 @@ function setAnimation() {
   removeClass(this.element, 'aux-static');
 }
 
-export const Marquee = defineClass({
-  /**
-   * Marquee is a {@link Label} inside a {@link Container}. Marquee
-   * inherits all options of {@link Label}.
-   *
-   * @class Marquee
-   *
-   * @extends Container
-   *
-   * @property {Number} [options.speed=50] - Speed of the movement in CSS pixels per second.
-   * @property {Number} [options.pause=1000] - Pause the animation on start and end for this amount of milliseconds.
-   * @property {String} [options.easing='linear'] - Function of the animation,
-   *   one out of `ease`, `linear`, `ease-in`, `ease-out`, `ease-in-out`,
-   *   `cubic-bezier(n, n, n, n)
-   */
-  Extends: Container,
-  _options: Object.assign({}, Container.getOptionTypes(), {
-    speed: 'number',
-    pause: 'number',
-    easing: 'string',
-    _inner: 'number',
-    _outer: 'number',
-  }),
-  options: {
-    speed: 50,
-    pause: 1000,
-    easing: 'linear',
-    _inner: 0,
-    _outer: 0,
-  },
-  static_events: {
-    set_label: function () {
-      this.triggerResize();
-    },
-  },
-  initialize: function (options) {
+/**
+ * Marquee is a {@link Label} inside a {@link Container}. Marquee
+ * inherits all options of {@link Label}.
+ *
+ * @class Marquee
+ *
+ * @extends Container
+ *
+ * @property {Number} [options.speed=50] - Speed of the movement in CSS pixels per second.
+ * @property {Number} [options.pause=1000] - Pause the animation on start and end for this amount of milliseconds.
+ * @property {String} [options.easing='linear'] - Function of the animation,
+ *   one out of `ease`, `linear`, `ease-in`, `ease-out`, `ease-in-out`,
+ *   `cubic-bezier(n, n, n, n)
+ */
+export class Marquee extends Container {
+  static get _options() {
+    return Object.assign({}, Container.getOptionTypes(), {
+      speed: 'number',
+      pause: 'number',
+      easing: 'string',
+      _inner: 'number',
+      _outer: 'number',
+    });
+  }
+
+  static get options() {
+    return {
+      speed: 50,
+      pause: 1000,
+      easing: 'linear',
+      _inner: 0,
+      _outer: 0,
+    };
+  }
+
+  static get static_events() {
+    return {
+      set_label: function () {
+        this.triggerResize();
+      },
+    };
+  }
+
+  initialize(options) {
     if (!options.element) options.element = element('div');
-    Container.prototype.initialize.call(this, options);
+    super.initialize(options);
     /** @member {HTMLDivElement} Marquee#element - The main DIV container.
      * Has class <code>.aux-marquee</code>.
      */
     this._id = 'aux-animation_' + Math.random().toString(16).substr(2, 8);
     this._style = element('style', { type: 'text/css' });
     document.head.appendChild(this._style);
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-marquee');
     this.label.element.id = this._id;
-    Container.prototype.draw.call(this, O, element);
-  },
+    super.draw(O, element);
+  }
 
-  redraw: function () {
+  redraw() {
     const I = this.invalid;
 
-    Container.prototype.redraw.call(this);
+    super.redraw();
 
     if (I.speed || I.pause || I._inner || I._outer || I.label) {
       I.speed = I.pause = I._inner = I._outer = false;
       setAnimation.call(this);
     }
-  },
+  }
 
-  resize: function () {
-    Container.prototype.resize.call(this);
+  resize() {
+    super.resize();
     this.set('_outer', innerWidth(this.element));
     this.set('_inner', outerWidth(this.label.element));
-  },
-  destroy: function () {
+  }
+
+  destroy() {
     if (this._style) this._style.remove();
-  },
-});
+  }
+}
 
 /**
  * @member {Label} Marquee#label - Instance of {@link Label} displaying

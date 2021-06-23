@@ -26,7 +26,6 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { defineClass } from '../widget_helpers.js';
 import { Widget } from './widget.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
@@ -91,39 +90,47 @@ function setBackground(horiz, vert, size) {
  *     Set to `false` to set the background image via external CSS.
  *
  */
-export const Slider = defineClass({
-  Extends: Widget,
-  _options: Object.assign(
-    {},
-    Widget.getOptionTypes(),
-    rangedOptionsTypes,
-    DragValue.getOptionTypes(),
-    {
-      value: 'number',
-      frames: 'int',
-      alignment: 'string',
-      image: 'string|boolean',
-      _width: 'number',
-      _height: 'number',
-    }
-  ),
-  options: Object.assign({}, rangedOptionsDefaults, {
-    value: 0,
-    frames: 1,
-    alignment: 'horizontal',
-    image: false,
+export class Slider extends Widget {
+  static get _options() {
+    return Object.assign(
+      {},
+      Widget.getOptionTypes(),
+      rangedOptionsTypes,
+      DragValue.getOptionTypes(),
+      {
+        value: 'number',
+        frames: 'int',
+        alignment: 'string',
+        image: 'string|boolean',
+        _width: 'number',
+        _height: 'number',
+      }
+    );
+  }
 
-    direction: 'polar',
-    rotation: 45,
-    blind_angle: 20,
-    basis: 300,
-  }),
-  static_events: {
-    dblclick: dblClick,
-  },
-  initialize: function (options) {
+  static get options() {
+    return Object.assign({}, rangedOptionsDefaults, {
+      value: 0,
+      frames: 1,
+      alignment: 'horizontal',
+      image: false,
+
+      direction: 'polar',
+      rotation: 45,
+      blind_angle: 20,
+      basis: 300,
+    });
+  }
+
+  static get static_events() {
+    return {
+      dblclick: dblClick,
+    };
+  }
+
+  initialize(options) {
     if (!options.element) options.element = element('div');
-    Widget.prototype.initialize.call(this, options);
+    super.initialize(options);
     options = this.options;
 
     const E = this.element;
@@ -153,21 +160,21 @@ export const Slider = defineClass({
     });
 
     if (options.reset === void 0) options.reset = options.value;
-  },
+  }
 
-  destroy: function () {
+  destroy() {
     this.drag.destroy();
     this.scroll.destroy();
-    Widget.prototype.destroy.call(this);
-  },
+    super.destroy();
+  }
 
-  draw: function (O, element) {
+  draw(O, element) {
     addClass(element, 'aux-slider');
 
-    Widget.prototype.draw.call(this, O, element);
-  },
+    super.draw(O, element);
+  }
 
-  redraw: function () {
+  redraw() {
     const I = this.invalid;
     const O = this.options;
 
@@ -201,15 +208,15 @@ export const Slider = defineClass({
       }
     }
 
-    Widget.prototype.redraw.call(this);
-  },
+    super.redraw();
+  }
 
-  resize: function () {
+  resize() {
     this.set('_width', outerWidth(this.element));
     this.set('_height', outerHeight(this.element));
-  },
+  }
 
-  set: function (key, value) {
+  set(key, value) {
     switch (key) {
       case 'value':
         if (value > this.options.max || value < this.options.min)
@@ -218,7 +225,7 @@ export const Slider = defineClass({
         break;
     }
     if (DragValue.hasOption(key)) this.drag.set(key, value);
-    return Widget.prototype.set.call(this, key, value);
-  },
-});
+    return super.set(key, value);
+  }
+}
 makeRanged(Slider);

@@ -18,49 +18,55 @@
  */
 
 import { element, addClass, isClassName, removeClass } from './../utils/dom.js';
-import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 
-export const Icon = defineClass({
-  /**
-   * Icon represents a <code>&lt;DIV></code> element showing either
-   * icons from the AUX font or dedicated image files as CSS background.
-   *
-   * @class Icon
-   *
-   * @extends Widget
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {String} [options.icon] - The icon to show. It can either be
-   *   a string which is interpreted as class name (if <code>[A-Za-z0-9_\-]</code>) or as URI.
-   */
-  Extends: Widget,
-  _options: Object.assign({}, Widget.getOptionTypes(), {
-    icon: 'string',
-  }),
-  options: {
-    icon: false,
-  },
-  initialize: function (options) {
+/**
+ * Icon represents a <code>&lt;DIV></code> element showing either
+ * icons from the AUX font or dedicated image files as CSS background.
+ *
+ * @class Icon
+ *
+ * @extends Widget
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {String} [options.icon] - The icon to show. It can either be
+ *   a string which is interpreted as class name (if <code>[A-Za-z0-9_\-]</code>) or as URI.
+ */
+export class Icon extends Widget {
+  static get _options() {
+    return Object.assign({}, Widget.getOptionTypes(), {
+      icon: 'string',
+    });
+  }
+
+  static get options() {
+    return {
+      icon: false,
+    };
+  }
+
+  initialize(options) {
     if (!options.element) options.element = element('div');
-    Widget.prototype.initialize.call(this, options);
+    super.initialize(options);
     /**
      * @member {HTMLDivElement} Icon#element - The main DIV element. Has class <code>.aux-icon</code>
      */
     this._icon_old = [];
-  },
-  draw: function (O, element) {
+  }
+
+  draw(O, element) {
     addClass(element, 'aux-icon');
 
-    Widget.prototype.draw.call(this, O, element);
-  },
-  redraw: function () {
+    super.draw(O, element);
+  }
+
+  redraw() {
     const O = this.options;
     const I = this.invalid;
     const E = this.element;
 
-    Widget.prototype.redraw.call(this);
+    super.redraw();
 
     if (I.icon) {
       I.icon = false;
@@ -78,11 +84,12 @@ export const Icon = defineClass({
         E.style['background-image'] = 'url("' + O.icon + '")';
       }
     }
-  },
-  set: function (key, val) {
+  }
+
+  set(key, val) {
     if (key === 'icon') {
       this._icon_old.push(this.options.icon);
     }
-    return Widget.prototype.set.call(this, key, val);
-  },
-});
+    return super.set(key, val);
+  }
+}

@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineClass } from '../widget_helpers.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { error } from '../utils/log.js';
 import { empty, addClass, getStyle } from '../utils/dom.js';
@@ -295,150 +294,157 @@ function drawSlice(a_from, a_to, r_inner, r_outer, pos, slice) {
   );
   slice.setAttribute('d', path);
 }
-export const Circular = defineClass({
-  /**
-   * Circular is a SVG group element containing two paths for displaying
-   * numerical values in a circular manner. Circular is able to draw labels,
-   * dots and markers and can show a hand. Circular e.g. is implemented by
-   * {@link Clock} to draw hours, minutes and seconds.
-   *
-   * @class Circular
-   *
-   * @param {Object} [options={ }] - An object containing initial options.
-   *
-   * @property {Number} [options.value=0] - Sets the value on the hand and on the
-   *   ring at the same time.
-   * @property {Number} [options.value_hand=0] - Sets the value on the hand.
-   * @property {Number} [options.value_ring=0] - Sets the value on the ring.
-   * @property {Number} [options.size=100] - The diameter of the circle. This
-   *   is the base value for all following layout-related parameters. Keeping
-   *   it set to 100 offers percentual lenghts. Set the final size of the widget
-   *   via CSS.
-   * @property {Number} [options.thickness=3] - The thickness of the circle.
-   * @property {Number} [options.margin=0] - The margin between base and value circles.
-   * @property {Boolean} [options.show_hand=true] - Draw the hand.
-   * @property {Object} [options.hand] - Dimensions of the hand.
-   * @property {Number} [options.hand.width=2] - Width of the hand.
-   * @property {Number} [options.hand.length=30] - Length of the hand.
-   * @property {Number} [options.hand.margin=10] - Margin of the hand.
-   * @property {Number} [options.start=135] - The starting point in degrees.
-   * @property {Number} [options.angle=270] - The maximum degree of the rotation when
-   *   <code>options.value === options.max</code>.
-   * @property {Number|Boolean} [options.base=false] - If a base value is set in degrees,
-   *   circular starts drawing elements from this position.
-   * @property {Boolean} [options.show_base=true] - Draw the base ring.
-   * @property {Boolean} [options.show_value=true] - Draw the value ring.
-   * @property {Number} [options.x=0] - Horizontal displacement of the circle.
-   * @property {Number} [options.y=0] - Vertical displacement of the circle.
-   * @property {Boolean} [options.show_dots=true] - Show/hide all dots.
-   * @property {Object} [options.dots_defaults] - This option acts as default values for the individual dots
-   *   specified in <code>options.dots</code>.
-   * @property {Number} [options.dots_defaults.width=2] - Width of the dots.
-   * @property {Number} [options.dots_defaults.length=2] - Length of the dots.
-   * @property {Number} [options.dots_defaults.margin=5] - Margin of the dots.
-   * @property {Array<Object|Number>} [options.dots=[]] - An array of objects describing where dots should be placed
-   *   along the circle. Members are position <code>pos</code> in the value range and optionally
-   *   <code>color</code> and <code>class</code> and any of the properties of <code>options.dot</code>.
-   *   Optionally a number defining the position can be set.
-   * @property {Boolean} [options.show_markers=true] - Show/hide all markers.
-   * @property {Object} [options.markers_defaults] - This option acts as default values of the individual markers
-   *   specified in <code>options.markers</code>.
-   * @property {Number} [options.markers_defaults.thickness=3] - Thickness of the marker.
-   * @property {Number} [options.markers_defaults.margin=3] - Margin of the marker.
-   * @property {Array<Object>} [options.markers=[]] - An array containing objects which describe where markers
-   *   are to be places. Members are the position as <code>from</code> and <code>to</code> and optionally
-   *   <code>color</code>, <code>class</code> and any of the properties of <code>options.marker</code>.
-   * @property {Boolean} [options.show_labels=true] - Show/hide all labels.
-   * @property {Object} [options.labels_defaults] - This option acts as default values for the individual labels
-   *   specified in <code>options.labels</code>.
-   * @property {Integer} [options.labels_defaults.margin=8] - Distance of the label from the circle of diameter
-   *   <code>options.size</code>.
-   * @property {String} [options.labels_defaults.align="outer"] - This option controls if labels are positioned
-   *   inside or outside of the circle with radius <code>options.size/2 - margin</code>.
-   * @property {Function} [options.labels_defaults.format] - Optional formatting function for the label.
-   *   Receives the label value as first argument.
-   * @property {Array<Object>} [options.labels=[]] - An array containing objects which describe labels
-   *   to be displayed. Either a value or an object whose members are the position <code>pos</code>
-   *   inside the value range and optionally <code>label</code>, <code>color</code>, <code>class</code> and any of the
-   *   properties of <code>options.labels_defaults</code>.
-   *
-   * @extends Widget
-   */
-  Extends: Widget,
-  _options: Object.assign({}, Widget.getOptionTypes(), rangedOptionsTypes, {
-    _stroke_width: 'number',
-    value: 'number',
-    value_hand: 'number',
-    value_ring: 'number',
-    size: 'number',
-    thickness: 'number',
-    margin: 'number',
-    hand: 'object',
-    start: 'number',
-    angle: 'number',
-    base: 'number|boolean',
-    show_base: 'boolean',
-    show_value: 'boolean',
-    show_hand: 'boolean',
-    x: 'number',
-    y: 'number',
-    dots_defaults: 'object',
-    dots: 'array',
-    markers_defaults: 'object',
-    markers: 'array',
-    labels_defaults: 'object',
-    labels: 'array',
-  }),
-  static_events: {
-    set_value: function (value) {
-      this.set('value_hand', value);
-      this.set('value_ring', value);
-    },
-    initialized: function () {
-      // calculate the stroke here once. this happens before
-      // the initial redraw
-      this.set('value', this.options.value);
-    },
-    rangedchanged: function () {
-      const I = this.invalid;
-      I.size = I.markers = I.dots = I.labels = true;
-      this.triggerDraw();
-    },
-  },
-  options: Object.assign({}, rangedOptionsDefaults, {
-    _stroke_width: 0,
-    value: 0,
-    value_hand: 0,
-    value_ring: 0,
-    size: 100,
-    thickness: 3,
-    margin: 0,
-    hand: { width: 2, length: 30, margin: 10 },
-    start: 135,
-    angle: 270,
-    base: false,
-    show_base: true,
-    show_value: true,
-    show_hand: true,
-    x: 0,
-    y: 0,
-    dots_defaults: { width: 1, length: 3, margin: 0.5 },
-    dots: [],
-    markers_defaults: { thickness: 3, margin: 0 },
-    markers: [],
-    labels_defaults: {
-      margin: 8,
-      align: 'inner',
-      format: function (val) {
-        return val;
-      },
-    },
-    labels: [],
-  }),
+/**
+ * Circular is a SVG group element containing two paths for displaying
+ * numerical values in a circular manner. Circular is able to draw labels,
+ * dots and markers and can show a hand. Circular e.g. is implemented by
+ * {@link Clock} to draw hours, minutes and seconds.
+ *
+ * @class Circular
+ *
+ * @param {Object} [options={ }] - An object containing initial options.
+ *
+ * @property {Number} [options.value=0] - Sets the value on the hand and on the
+ *   ring at the same time.
+ * @property {Number} [options.value_hand=0] - Sets the value on the hand.
+ * @property {Number} [options.value_ring=0] - Sets the value on the ring.
+ * @property {Number} [options.size=100] - The diameter of the circle. This
+ *   is the base value for all following layout-related parameters. Keeping
+ *   it set to 100 offers percentual lenghts. Set the final size of the widget
+ *   via CSS.
+ * @property {Number} [options.thickness=3] - The thickness of the circle.
+ * @property {Number} [options.margin=0] - The margin between base and value circles.
+ * @property {Boolean} [options.show_hand=true] - Draw the hand.
+ * @property {Object} [options.hand] - Dimensions of the hand.
+ * @property {Number} [options.hand.width=2] - Width of the hand.
+ * @property {Number} [options.hand.length=30] - Length of the hand.
+ * @property {Number} [options.hand.margin=10] - Margin of the hand.
+ * @property {Number} [options.start=135] - The starting point in degrees.
+ * @property {Number} [options.angle=270] - The maximum degree of the rotation when
+ *   <code>options.value === options.max</code>.
+ * @property {Number|Boolean} [options.base=false] - If a base value is set in degrees,
+ *   circular starts drawing elements from this position.
+ * @property {Boolean} [options.show_base=true] - Draw the base ring.
+ * @property {Boolean} [options.show_value=true] - Draw the value ring.
+ * @property {Number} [options.x=0] - Horizontal displacement of the circle.
+ * @property {Number} [options.y=0] - Vertical displacement of the circle.
+ * @property {Boolean} [options.show_dots=true] - Show/hide all dots.
+ * @property {Object} [options.dots_defaults] - This option acts as default values for the individual dots
+ *   specified in <code>options.dots</code>.
+ * @property {Number} [options.dots_defaults.width=2] - Width of the dots.
+ * @property {Number} [options.dots_defaults.length=2] - Length of the dots.
+ * @property {Number} [options.dots_defaults.margin=5] - Margin of the dots.
+ * @property {Array<Object|Number>} [options.dots=[]] - An array of objects describing where dots should be placed
+ *   along the circle. Members are position <code>pos</code> in the value range and optionally
+ *   <code>color</code> and <code>class</code> and any of the properties of <code>options.dot</code>.
+ *   Optionally a number defining the position can be set.
+ * @property {Boolean} [options.show_markers=true] - Show/hide all markers.
+ * @property {Object} [options.markers_defaults] - This option acts as default values of the individual markers
+ *   specified in <code>options.markers</code>.
+ * @property {Number} [options.markers_defaults.thickness=3] - Thickness of the marker.
+ * @property {Number} [options.markers_defaults.margin=3] - Margin of the marker.
+ * @property {Array<Object>} [options.markers=[]] - An array containing objects which describe where markers
+ *   are to be places. Members are the position as <code>from</code> and <code>to</code> and optionally
+ *   <code>color</code>, <code>class</code> and any of the properties of <code>options.marker</code>.
+ * @property {Boolean} [options.show_labels=true] - Show/hide all labels.
+ * @property {Object} [options.labels_defaults] - This option acts as default values for the individual labels
+ *   specified in <code>options.labels</code>.
+ * @property {Integer} [options.labels_defaults.margin=8] - Distance of the label from the circle of diameter
+ *   <code>options.size</code>.
+ * @property {String} [options.labels_defaults.align="outer"] - This option controls if labels are positioned
+ *   inside or outside of the circle with radius <code>options.size/2 - margin</code>.
+ * @property {Function} [options.labels_defaults.format] - Optional formatting function for the label.
+ *   Receives the label value as first argument.
+ * @property {Array<Object>} [options.labels=[]] - An array containing objects which describe labels
+ *   to be displayed. Either a value or an object whose members are the position <code>pos</code>
+ *   inside the value range and optionally <code>label</code>, <code>color</code>, <code>class</code> and any of the
+ *   properties of <code>options.labels_defaults</code>.
+ *
+ * @extends Widget
+ */
+export class Circular extends Widget {
+  static get _options() {
+    return Object.assign({}, Widget.getOptionTypes(), rangedOptionsTypes, {
+      _stroke_width: 'number',
+      value: 'number',
+      value_hand: 'number',
+      value_ring: 'number',
+      size: 'number',
+      thickness: 'number',
+      margin: 'number',
+      hand: 'object',
+      start: 'number',
+      angle: 'number',
+      base: 'number|boolean',
+      show_base: 'boolean',
+      show_value: 'boolean',
+      show_hand: 'boolean',
+      x: 'number',
+      y: 'number',
+      dots_defaults: 'object',
+      dots: 'array',
+      markers_defaults: 'object',
+      markers: 'array',
+      labels_defaults: 'object',
+      labels: 'array',
+    });
+  }
 
-  initialize: function (options) {
+  static get static_events() {
+    return {
+      set_value: function (value) {
+        this.set('value_hand', value);
+        this.set('value_ring', value);
+      },
+      initialized: function () {
+        // calculate the stroke here once. this happens before
+        // the initial redraw
+        this.set('value', this.options.value);
+      },
+      rangedchanged: function () {
+        const I = this.invalid;
+        I.size = I.markers = I.dots = I.labels = true;
+        this.triggerDraw();
+      },
+    };
+  }
+
+  static get options() {
+    return Object.assign({}, rangedOptionsDefaults, {
+      _stroke_width: 0,
+      value: 0,
+      value_hand: 0,
+      value_ring: 0,
+      size: 100,
+      thickness: 3,
+      margin: 0,
+      hand: { width: 2, length: 30, margin: 10 },
+      start: 135,
+      angle: 270,
+      base: false,
+      show_base: true,
+      show_value: true,
+      show_hand: true,
+      x: 0,
+      y: 0,
+      dots_defaults: { width: 1, length: 3, margin: 0.5 },
+      dots: [],
+      markers_defaults: { thickness: 3, margin: 0 },
+      markers: [],
+      labels_defaults: {
+        margin: 8,
+        align: 'inner',
+        format: function (val) {
+          return val;
+        },
+      },
+      labels: [],
+    });
+  }
+
+  initialize(options) {
     if (!options.element) options.element = makeSVG('g');
-    Widget.prototype.initialize.call(this, options);
+    super.initialize(options);
 
     /**
      * @member {SVGImage} Circular#element - The main SVG element.
@@ -463,26 +469,26 @@ export const Circular = defineClass({
     this._hand = makeSVG('rect', { class: 'aux-hand' });
 
     if (this.options.labels) this.set('labels', this.options.labels);
-  },
+  }
 
-  resize: function () {
+  resize() {
     this.update('_stroke_width', this.getStroke());
     this.invalid.labels = true;
     this.triggerDraw();
-    Widget.prototype.resize.call(this);
-  },
+    super.resize();
+  }
 
-  draw: function (O, element) {
+  draw(O, element) {
     addClass(element, 'aux-circular');
     element.insertBefore(this._value, this._markers);
     element.insertBefore(this._base, this._value);
     element.appendChild(this._hand);
 
-    Widget.prototype.draw.call(this, O, element);
-  },
+    super.draw(O, element);
+  }
 
-  redraw: function () {
-    Widget.prototype.redraw.call(this);
+  redraw() {
+    super.redraw();
     const I = this.invalid;
     const O = this.options;
     const E = this.element;
@@ -622,23 +628,24 @@ export const Circular = defineClass({
       );
     }
     I._stroke_width = false;
-  },
+  }
 
-  destroy: function () {
+  destroy() {
     this._dots.remove();
     this._markers.remove();
     this._base.remove();
     this._value.remove();
-    Widget.prototype.destroy.call(this);
-  },
-  getStroke: function () {
+    super.destroy();
+  }
+
+  getStroke() {
     if (Object.prototype.hasOwnProperty.call(this, '_stroke'))
       return this._stroke;
     const strokeb = parseInt(getStyle(this._base, 'stroke-width')) || 0;
     const strokev = parseInt(getStyle(this._value, 'stroke-width')) || 0;
     this._stroke = Math.max(strokeb, strokev);
     return this._stroke;
-  },
+  }
 
   /**
    * Adds a label.
@@ -648,7 +655,7 @@ export const Circular = defineClass({
    *   to learn more about possible values.
    * @returns {Object} label - The interpreted object to build the label from.
    */
-  addLabel: function (label) {
+  addLabel(label) {
     const O = this.options;
 
     if (!O.labels) {
@@ -663,7 +670,7 @@ export const Circular = defineClass({
       this.triggerDraw();
       return label;
     }
-  },
+  }
 
   /**
    * Removes a label.
@@ -672,7 +679,7 @@ export const Circular = defineClass({
    * @param {Object} label - The label object as returned from `addLabel`.
    * @returns {Object} label - The removed label object.
    */
-  removeLabel: function (label) {
+  removeLabel(label) {
     const O = this.options;
 
     if (!O.labels) return;
@@ -684,10 +691,10 @@ export const Circular = defineClass({
     O.labels.splice(i);
     this.invalid.labels = true;
     this.triggerDraw();
-  },
+  }
 
   // GETTERS & SETTERS
-  set: function (key, value) {
+  set(key, value) {
     const O = this.options;
     switch (key) {
       case 'dots_defaults':
@@ -710,9 +717,9 @@ export const Circular = defineClass({
         break;
     }
 
-    return Widget.prototype.set.call(this, key, value);
-  },
-});
+    return super.set(key, value);
+  }
+}
 makeRanged(Circular);
 /**
  * @member {SVGGroup} Circular#_markers - A group containing all markers.
