@@ -19,7 +19,8 @@
 
 import { defineChildElement } from './../../widget_helpers.js';
 import { defineChildWidget } from './../../child_widget.js';
-import { scrollbarSize, addClass, removeClass } from './../../utils/dom.js';
+import { addClass, removeClass } from './../../utils/dom.js';
+import { scrollbarSize } from './../../utils/scrollbar_size.js';
 import { FORMAT } from '../../utils/sprintf.js';
 import { Subscriptions } from '../../utils/subscriptions.js';
 import { subscribeDOMEvent } from '../../utils/events.js';

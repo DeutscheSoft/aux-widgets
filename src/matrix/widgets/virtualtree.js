@@ -18,7 +18,7 @@
  */
 
 import { defineChildElement } from './../../widget_helpers.js';
-import { scrollbarSize } from './../../utils/dom.js';
+import { scrollbarSize } from './../../utils/scrollbar_size.js';
 import { Subscriptions } from '../../utils/subscriptions.js';
 import { subscribeDOMEvent } from '../../utils/events.js';
 import { defineRecalculation } from '../../define_recalculation.js';
