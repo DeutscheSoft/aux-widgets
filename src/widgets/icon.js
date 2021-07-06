@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { element, addClass, isClassName, removeClass } from './../utils/dom.js';
+import { element, addClass, isCSSVariableName, isClassName, removeClass } from './../utils/dom.js';
 import { defineClass } from './../widget_helpers.js';
 import { Widget } from './widget.js';
 
@@ -33,7 +33,10 @@ export const Icon = defineClass({
    * @param {Object} [options={ }] - An object containing initial options.
    *
    * @property {String} [options.icon] - The icon to show. It can either be
-   *   a string which is interpreted as class name (if <code>[A-Za-z0-9_\-]</code>) or as URI.
+   *   a string which is interpreted as class name (if <code>[A-Za-z0-9_\-]</code>),
+   *   a CSS custom property name (if it start with `--`) or else
+   *   as a file location. If it is a custom property name or a file location,
+   *   it is used to set the `background-image` property.
    */
   Extends: Widget,
   _options: Object.assign(Object.create(Widget.prototype._options), {
@@ -48,7 +51,7 @@ export const Icon = defineClass({
     /**
      * @member {HTMLDivElement} Icon#element - The main DIV element. Has class <code>.aux-icon</code>
      */
-    this._icon_old = [];
+    this._icon_old = null;
   },
   draw: function (O, element) {
     addClass(element, 'aux-icon');
@@ -65,24 +68,27 @@ export const Icon = defineClass({
     if (I.icon) {
       I.icon = false;
       var old = this._icon_old;
-      for (var i = 0; i < old.length; i++) {
-        if (old[i] && isClassName(old[i])) {
-          removeClass(E, old[i]);
+      const icon = O.icon;
+
+      if (old !== null) {
+        if (isCSSVariableName(old) || !isClassName(old)) {
+          E.style['background-image'] = null;
+        } else {
+          removeClass(E, old);
         }
+        this._icon_old = null;
       }
-      this._icon_old = [];
-      if (isClassName(O.icon)) {
-        E.style['background-image'] = null;
-        if (O.icon) addClass(E, O.icon);
-      } else if (O.icon) {
-        E.style['background-image'] = 'url("' + O.icon + '")';
+
+      if (icon) {
+        if (isCSSVariableName(icon)) {
+          E.style['background-image'] = 'var(' + icon + ')';
+        } else if (isClassName(icon)) {
+          addClass(E, icon);
+        } else {
+          E.style['background-image'] = 'url(' + JSON.stringify(icon) + ')';
+        }
+        this._icon_old = icon;
       }
     }
-  },
-  set: function (key, val) {
-    if (key === 'icon') {
-      this._icon_old.push(this.options.icon);
-    }
-    return Widget.prototype.set.call(this, key, val);
   },
 });

@@ -96,13 +96,24 @@ export function getStyle(e, style) {
 const class_regex = /[^A-Za-z0-9_-]/;
 
 /**
- * Returns true ii a string could be a class name.
- * @param {string} string - The string to test
+ * Returns true if a string could be a class name.
+ * @param {string} str - The string to test
  * @function isClassName
  * @returns {boolean}
  */
 export function isClassName(str) {
   return !class_regex.test(str);
+}
+
+/**
+ * Returns true if the given string could be a CSS custom property
+ * name (i.e. if it starts with `--` and does not contain any illegal
+ * characters).
+ * @param {string} str
+ * @returns {boolean}
+ */
+export function isCSSVariableName(str) {
+  return str.startsWith('--') && isClassName(str);
 }
 
 /**
