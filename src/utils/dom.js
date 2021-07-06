@@ -96,8 +96,8 @@ export function getStyle(e, style) {
 const class_regex = /[^A-Za-z0-9_-]/;
 
 /**
- * Returns true ii a string could be a class name.
- * @param {string} string - The string to test
+ * Returns true if a string could be a class name.
+ * @param {string} str - The string to test
  * @function isClassName
  * @returns {boolean}
  */
