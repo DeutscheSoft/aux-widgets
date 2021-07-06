@@ -106,6 +106,17 @@ export function isClassName(str) {
 }
 
 /**
+ * Returns true if the given string could be a CSS custom property
+ * name (i.e. if it starts with `--` and does not contain any illegal
+ * characters).
+ * @param {string} str
+ * @returns {boolean}
+ */
+export function isCSSVariableName(str) {
+  return str.startsWith('--') && isClassName(str);
+}
+
+/**
  * Returns the maximum value (float)  of a comma separated string. It is used
  * to find the longest CSS animation in a set of multiple animations.
  * @param {string} string - The comma separated string.
