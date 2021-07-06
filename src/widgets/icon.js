@@ -33,7 +33,8 @@ export const Icon = defineClass({
    * @param {Object} [options={ }] - An object containing initial options.
    *
    * @property {String} [options.icon] - The icon to show. It can either be
-   *   a string which is interpreted as class name (if <code>[A-Za-z0-9_\-]</code>) or as URI.
+   *   a string which is interpreted as class name (if <code>[A-Za-z0-9_\-]</code>) or else
+   *   as a file location.
    */
   Extends: Widget,
   _options: Object.assign(Object.create(Widget.prototype._options), {
@@ -48,7 +49,7 @@ export const Icon = defineClass({
     /**
      * @member {HTMLDivElement} Icon#element - The main DIV element. Has class <code>.aux-icon</code>
      */
-    this._icon_old = [];
+    this._icon_old = null;
   },
   draw: function (O, element) {
     addClass(element, 'aux-icon');
@@ -65,24 +66,25 @@ export const Icon = defineClass({
     if (I.icon) {
       I.icon = false;
       var old = this._icon_old;
-      for (var i = 0; i < old.length; i++) {
-        if (old[i] && isClassName(old[i])) {
-          removeClass(E, old[i]);
+      const icon = O.icon;
+
+      if (old !== null) {
+        if (isClassName(old)) {
+          removeClass(E, old);
+        } else {
+          E.style['background-image'] = null;
         }
+        this._icon_old = null;
       }
-      this._icon_old = [];
-      if (isClassName(O.icon)) {
-        E.style['background-image'] = null;
-        if (O.icon) addClass(E, O.icon);
-      } else if (O.icon) {
-        E.style['background-image'] = 'url("' + O.icon + '")';
+
+      if (icon) {
+        if (isClassName(icon)) {
+          addClass(E, icon);
+        } else {
+          E.style['background-image'] = 'url("' + icon + '")';
+        }
+        this._icon_old = icon;
       }
     }
-  },
-  set: function (key, val) {
-    if (key === 'icon') {
-      this._icon_old.push(this.options.icon);
-    }
-    return Widget.prototype.set.call(this, key, val);
   },
 });
