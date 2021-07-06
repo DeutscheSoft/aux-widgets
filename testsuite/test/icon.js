@@ -45,4 +45,13 @@ describe('Icon', () => {
     assert(E.style['background-image'] === '');
     assert(E.classList.contains('class-name'));
   });
+
+  it('URL escaping', async () => {
+    const icon = new Icon();
+    const E = icon.element;
+    icon.set('icon', '/foo".gif');
+    await waitForDrawn(icon);
+    assert(!E.classList.contains('class-name'));
+    assert(E.style['background-image'] === 'url("/foo\\".gif")');
+  });
 });

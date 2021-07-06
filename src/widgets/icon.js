@@ -85,7 +85,7 @@ export const Icon = defineClass({
         } else if (isClassName(icon)) {
           addClass(E, icon);
         } else {
-          E.style['background-image'] = 'url("' + icon + '")';
+          E.style['background-image'] = 'url(' + JSON.stringify(icon) + ')';
         }
         this._icon_old = icon;
       }
