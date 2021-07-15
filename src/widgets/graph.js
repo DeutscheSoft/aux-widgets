@@ -39,38 +39,24 @@ function getPixels(value, range) {
 
 function _start(d, s) {
   const h = this.range_y.options.basis;
-  const t = d[0].type || this.options.type;
   const m = this.options.mode;
   const x = this.range_x.valueToPixel(d[0].x);
   const y = this.range_y.valueToPixel(d[0].y);
+
+  let fillY;
+
   switch (m) {
     case 'bottom':
-      // fill the lower part of the graph
-      s.push(
-        'M ' + SVGRound(x - 1) + ' ',
-        SVGRound(h + 1) + ' ' + t + ' ',
-        SVGRound(x - 1) + ' ',
-        SVGRound(y)
-      );
+      fillY = h + 1;
       break;
     case 'top':
-      // fill the upper part of the graph
-      s.push(
-        'M ' + SVGRound(x - 1) + ' ' + SVGRound(-1),
-        ' ' + t + ' ' + SVGRound(x - 1) + ' ',
-        SVGRound(y)
-      );
+      fillY = -1;
       break;
     case 'center':
-      // fill from the mid
-      s.push('M ' + SVGRound(x - 1) + ' ', SVGRound(0.5 * h));
+      fillY = h / 2;
       break;
     case 'base':
-      // fill from variable point
-      s.push(
-        'M ' + SVGRound(x - 1) + ' ',
-        SVGRound((1 - this.options.base) * h)
-      );
+      fillY = (1 - this.options.base) * h;
       break;
     default:
       error('Unsupported mode:', m);
@@ -78,41 +64,49 @@ function _start(d, s) {
     case 'line':
       // fill nothing
       s.push('M ' + SVGRound(x) + ' ' + SVGRound(y));
-      break;
+      return;
   }
+
+  s.push(
+    'M ' + SVGRound(x - 1) + ' ' + SVGRound(fillY) + ' ',
+    'L ' + SVGRound(x - 1) + ' ' + SVGRound(y) + ' '
+  );
 }
+
 function _end(d, s) {
   const dot = d[d.length - 1];
   const h = this.range_y.options.basis;
-  const t = dot.type || this.options.type;
   const m = this.options.mode;
-  const x = this.range_x.valueToPixel(dot.x);
+
+  let fillY;
+
   switch (m) {
     case 'bottom':
-      // fill the graph below
-      s.push(' ' + t + ' ' + SVGRound(x) + ' ' + SVGRound(h + 1) + ' Z');
+      fillY = h + 1;
       break;
     case 'top':
-      // fill the upper part of the graph
-      s.push(' ' + t + ' ' + SVGRound(x + 1) + ' ' + SVGRound(-1) + ' Z');
+      fillY = -1;
       break;
     case 'center':
-      // fill from mid
-      s.push(' ' + t + ' ' + SVGRound(x + 1) + ' ' + SVGRound(0.5 * h) + ' Z');
+      fillY = h / 2;
       break;
     case 'base':
-      // fill from variable point
-      s.push(
-        ' ' + t + ' ' + SVGRound(x + 1) + ' ' + SVGRound((-m + 1) * h) + ' Z'
-      );
+      fillY = (1 - this.options.base) * h;
       break;
     default:
       error('Unsupported mode:', m);
-    /* FALL THROUGH */
+      /* FALL THROUGH */
     case 'line':
-      // fill nothing
-      break;
+      return;
   }
+
+  const x = this.range_x.valueToPixel(dot.x);
+  const y = this.range_x.valueToPixel(dot.y);
+
+  s.push(
+    ' L ' + SVGRound(x + 1) + ' ' + SVGRound(y),
+    ' L ' + SVGRound(x + 1) + ' ' + SVGRound(fillY),
+    ' Z');
 }
 
 /**
@@ -151,7 +145,7 @@ function _end(d, s) {
  *     <li><code>bottom</code>: fill below the line</li>
  *     <li><code>top</code>: fill above the line</li>
  *     <li><code>center</code>: fill from the vertical center of the canvas</li>
- *     <li><code>base</code>: fill from a percentual position on the canvas (set with base)</li>
+ *     <li><code>base</code>: fill from a arbitray position on the canvas (set with base)</li>
  *   </ul>
  * @property {Number} [options.base=0] - If mode is <code>base</code> set the position
  *   of the base line to fill from between 0 (bottom) and 1 (top).
