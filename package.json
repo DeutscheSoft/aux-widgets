@@ -1,6 +1,6 @@
 {
   "name": "@deutschesoft/aux-widgets",
-  "version": "1.0.35",
+  "version": "1.0.36",
   "description": "AUX Audio Widget Library",
   "main": "src/index.js",
   "module": "src/index.js",
