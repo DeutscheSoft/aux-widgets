@@ -66,6 +66,8 @@ function _start(d, s) {
     default:
       error('Unsupported mode:', m);
     /* FALL THROUGH */
+    case 'fill':
+    /* FALL THROUGH */
     case 'line':
       // fill nothing
       s.push('M ' + SVGRound(x) + ' ' + SVGRound(y));
@@ -98,6 +100,9 @@ function _end(d, s) {
     case 'base':
       fillY = (1 - this.options.base) * h;
       break;
+    case 'fill':
+      s.push(' Z');
+      return;
     default:
       error('Unsupported mode:', m);
       /* FALL THROUGH */
@@ -152,6 +157,7 @@ export const Graph = defineClass({
    *     <li><code>top</code>: fill above the line</li>
    *     <li><code>center</code>: fill from the vertical center of the canvas</li>
    *     <li><code>base</code>: fill from a arbitray position on the canvas (set with base)</li>
+   *     <li><code>fill</code>: close the curve using a Z directive and fill on the canvas</li>
    *   </ul>
    * @property {Number} [options.base=0] - If mode is <code>base</code> set the position
    *   of the base line to fill from between 0 (bottom) and 1 (top).
