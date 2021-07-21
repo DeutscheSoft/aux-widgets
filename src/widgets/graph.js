@@ -135,6 +135,9 @@ function _end(d, s) {
  *   see `options.type` for more information). `type` is optional and defines a different type
  *   as explained under `options.type` for a specific dot. If omitted, the
  *   general `options.type` is used.
+ *   It may also be a function, in which case it is called with this graph
+ *   widget as first and only argument. The return value can be one of the
+ *   other possible types.
  * @property {String} [options.type="L"] - Type of the graph (needed values in dots object):
  *   <ul>
  *     <li><code>L</code>: normal (needs x,y)</li>
@@ -226,8 +229,12 @@ export class Graph extends Widget {
     }
 
     if (I.validate('dots', 'type', 'mode', 'range_x', 'range_y')) {
-      const dots = O.dots;
+      let dots = O.dots;
       const type = O.type;
+
+      if (typeof dots === 'function') {
+        dots = dots(this);
+      }
 
       if (typeof dots === 'string') {
         E.setAttribute('d', dots);
