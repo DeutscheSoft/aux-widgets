@@ -26,8 +26,8 @@
 @charset "UTF-8";
 
 @import './essentials.css';
-@import './basics.css';
-@import './styles.css';
+@import './basic_definitions.css';
+@import './style_definitions.css';
 
 @import 'fonts/AUXIcons.css';
 @import 'fonts/AUXShapes.css';

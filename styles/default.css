@@ -25,6 +25,8 @@
 
 @charset "UTF-8";
 
+@import './essentials.css';
+@import './basics.css';
 @import './styles.css';
 
 @import './fonts/Oswald-Regular.css';

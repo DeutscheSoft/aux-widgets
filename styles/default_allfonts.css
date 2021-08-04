@@ -25,7 +25,9 @@
 
 @charset "UTF-8";
 
-@import 'styles.css';
+@import './essentials.css';
+@import './basics.css';
+@import './styles.css';
 
 @import 'fonts/Oswald-ExtraLight.css';
 @import 'fonts/Oswald-Light.css';

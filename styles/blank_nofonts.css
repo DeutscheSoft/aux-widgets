@@ -27,7 +27,7 @@
 
 @import './essentials.css';
 @import './basics.css';
-@import './styles.css';
+@import './style_definitions.css';
 
 @import 'fonts/AUXIcons.css';
 @import 'fonts/AUXShapes.css';
