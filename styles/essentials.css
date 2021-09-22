@@ -580,6 +580,15 @@ body.aux-cursor-row-resize * {
   cursor: row-resize !important;
 }
 
+/* FILESELECT */
+
+.aux-fileselect > .aux-fileinput {
+  visibility: hidden;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
 /* GRAPH */
 
 .aux-graph {

@@ -35,6 +35,7 @@ export * from './widgets/eqband.js';
 export * from './widgets/equalizer.js';
 export * from './widgets/expand.js';
 export * from './widgets/fader.js';
+export * from './widgets/fileselect.js';
 export * from './widgets/frame.js';
 export * from './widgets/frequencyresponse.js';
 export * from './widgets/gauge.js';

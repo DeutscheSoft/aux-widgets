@@ -58,6 +58,9 @@
   --aux-fader-handlewidth: var(--aux-clickable-size);
   --aux-fader-handleheight: calc(1.5 * var(--aux-clickable-size));
   --aux-fader-gridgap: 2px;
+  
+  --aux-fileselect-size-before: "(";
+  --aux-fileselect-size-after: ")";
 
   --aux-frame-padding: 8px;
   --aux-frame-labelheight: 28px;
