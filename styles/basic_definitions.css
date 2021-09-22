@@ -314,6 +314,13 @@
   height: var(--aux-knob-huge);
 }
 
+/* LABEL */
+
+.aux-label {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 /* LEVELMETER */
 
 .aux-levelmeter.aux-vertical > .aux-clip {
