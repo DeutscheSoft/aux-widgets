@@ -163,7 +163,7 @@ export class FileSelect extends Container {
      * @param {string} key - The key of the option.
      * @param {mixed} value - The value to which it was set.
      */
-    this.emit('select', files);
+    this.emit('select', this.options.files);
   }
 }
 
