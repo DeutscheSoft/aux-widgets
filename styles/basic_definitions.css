@@ -184,10 +184,10 @@
 
 /* FILESELECT */
 
-.aux-fileselect > .aux-filelabel > .aux-size::before {
+.aux-fileselect > .aux-size::before {
   content: var(--aux-fileselect-size-before);
 }
-.aux-fileselect > .aux-filelabel > .aux-size::after {
+.aux-fileselect > .aux-size::after {
   content: var(--aux-fileselect-size-after);
 }
 
