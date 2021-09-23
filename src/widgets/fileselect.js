@@ -136,10 +136,10 @@ export class FileSelect extends Container {
     if (I.validate('filename')) {
       this.name.set('label', O.filename);
     }
-    if(I.validate('format_size') {
+    if(I.validate('format_size')) {
       this.set('filesize', getFileSize.call(this));
     }
-    if(I.validate('format_multiple') {
+    if(I.validate('format_multiple')) {
       this.set('filename', getFileSize.call(this));
     }
     
