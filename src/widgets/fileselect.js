@@ -122,7 +122,8 @@ export class FileSelect extends Container {
     this._input.addEventListener("input", this._onInput.bind(this));
     this._input.setAttribute('id', this._id);
     this._label.setAttribute('for', this._id);
-    this._onInput();
+    this.set('filename', getFileName.call(this));
+    this.set('filesize', getFileSize.call(this));
   }
 
   redraw() {
@@ -134,6 +135,12 @@ export class FileSelect extends Container {
     }
     if (I.validate('filename')) {
       this.name.set('label', O.filename);
+    }
+    if(I.validate('format_size') {
+      this.set('filesize', getFileSize.call(this));
+    }
+    if(I.validate('format_multiple') {
+      this.set('filename', getFileSize.call(this));
     }
     
     if (I.validate('multiple')) {
@@ -148,6 +155,15 @@ export class FileSelect extends Container {
   
   _onInput(e) {
     this.userset('files', this._input.files);
+    /**
+     * Is fired when one or more or no files were selected by the user.
+     *
+     * @event Fader#scalechanged
+     *
+     * @param {string} key - The key of the option.
+     * @param {mixed} value - The value to which it was set.
+     */
+    this.emit('select', files);
   }
 }
 
@@ -200,9 +216,6 @@ defineChildWidget(FileSelect, 'name', {
   create: Label,
   show: true,
   toggle_class: true,
-  append: function () {
-    this._label.appendChild(this.name.element);
-  },
   default_options: {
     class: 'aux-name',
   },
@@ -215,9 +228,6 @@ defineChildWidget(FileSelect, 'size', {
   create: Label,
   show: true,
   toggle_class: true,
-  append: function () {
-    this._label.appendChild(this.size.element);
-  },
   default_options: {
     class: 'aux-size',
   },
