@@ -140,7 +140,7 @@ export class FileSelect extends Container {
       this.set('filesize', getFileSize.call(this));
     }
     if(I.validate('format_multiple')) {
-      this.set('filename', getFileSize.call(this));
+      this.set('filename', getFileName.call(this));
     }
     
     if (I.validate('multiple')) {
