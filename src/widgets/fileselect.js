@@ -140,6 +140,9 @@ export const FileSelect = defineClass({
     if(I.validate('format_multiple')) {
       this.set('filename', getFileName.call(this));
     }
+    if(I.validate('accept')) {
+      this._input.setAttribute(O.accept);
+    }
     
     if (I.validate('multiple')) {
       if (O.multiple)
