@@ -59,6 +59,9 @@
   --aux-fader-handleheight: calc(1.5 * var(--aux-clickable-size));
   --aux-fader-gridgap: 2px;
 
+  --aux-fileselect-size-before: "(";
+  --aux-fileselect-size-after: ")";
+
   --aux-frame-padding: 8px;
   --aux-frame-labelheight: 28px;
   --aux-frame-labelpadding: 2px 4px;
@@ -284,6 +287,15 @@
 }
 .aux-fader.aux-bottom > .aux-value {
   align-self: center;
+}
+
+/* FILESELECT */
+
+.aux-fileselect > .aux-size::before {
+  content: var(--aux-fileselect-size-before);
+}
+.aux-fileselect > .aux-size::after {
+  content: var(--aux-fileselect-size-after);
 }
 
 /* FRAME */
