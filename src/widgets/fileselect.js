@@ -142,6 +142,9 @@ export class FileSelect extends Container {
     if(I.validate('format_multiple')) {
       this.set('filename', getFileName.call(this));
     }
+    if(I.validate('accept')) {
+      this._input.setAttribute('accept', O.accept);
+    }
     
     if (I.validate('multiple')) {
       if (O.multiple)
