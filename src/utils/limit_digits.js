@@ -39,7 +39,7 @@ export function limitDigits(limit, add = '', base) {
       I = Math.floor(Math.log(Math.abs(value)) / Math.log(base));
       si = ['', 'k','M','G','T','P'][I];
       if (I)
-        value /= I * base;
+        value /= Math.pow(base, I);
       digits -= I * 3;
     }
     return value.toFixed(Math.max(0, L - digits)) + si + add;
