@@ -39,7 +39,7 @@ import { defineChildElement, defineClass } from '../widget_helpers.js';
  *   and the label displaying the file size shows the sum of all selected files sizes.
  * @property {String} [options.placeholder='No file(s) selected'] - The label to show as file name
  *   if no file is selected.
- * @property {Function} [options.format_size=limitDigits(3, 'B', 1024)] - the formatting
+ * @property {Function} [options.format_size=limitDigits(4, 'B', 1024)] - the formatting
  *   function for the file size label.
  * @property {Function} [options.format_multiple=FORMAT('%d files selected') - the formatting
  *   function for the file size label.
@@ -97,7 +97,7 @@ export const FileSelect = defineClass({
     files: [],
     filename: false,
     filesize: 0,
-    format_size: limitDigits(3, 'B', 1024),
+    format_size: limitDigits(4, 'B', 1024),
     format_multiple: FORMAT('%d files selected'),
     icon: 'open',
   },
