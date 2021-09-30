@@ -16,6 +16,7 @@ import './components/expand.registration.js';
 import './components/fader.registration.js';
 import './components/fileselect.registration.js';
 import './components/frame.registration.js';
+import './components/frequencyresponse.registration.js';
 import './components/gauge.registration.js';
 import './components/icon.registration.js';
 import './components/knob.registration.js';

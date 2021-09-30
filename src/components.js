@@ -36,6 +36,7 @@ export * from './components/expand.js';
 export * from './components/fader.js';
 export * from './components/frame.js';
 export * from './components/fileselect.js';
+export * from './components/frequencyresponse.js';
 export * from './components/gauge.js';
 export * from './components/icon.js';
 export * from './components/knob.js';
