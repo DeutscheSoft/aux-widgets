@@ -18,6 +18,6 @@
  */
 
 import { defineComponent } from './../component_helpers.js';
-import { DialogComponent } from './frequencyresponse.js';
+import { FrequencyResponseComponent } from './frequencyresponse.js';
 
 defineComponent('frequencyresponse', FrequencyResponseComponent);
