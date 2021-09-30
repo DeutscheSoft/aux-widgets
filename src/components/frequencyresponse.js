@@ -18,7 +18,7 @@
  */
 
 import { componentFromWidget } from './../component_helpers.js';
-import { Gauge } from './../widgets/frequencyresponse.js';
+import { FrequencyResponse } from './../widgets/frequencyresponse.js';
 
 /**
  * WebComponent for the FrequencyResponse widget. Available in the DOM as `aux-frequencyresponse`.
