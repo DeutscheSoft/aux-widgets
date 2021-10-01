@@ -1,0 +1,9 @@
+Install:
+
+npm ci
+
+First Run:
+
+npx cypress open
+
+# Cypress creates itself a dir and places screenshots in the default location for now.
