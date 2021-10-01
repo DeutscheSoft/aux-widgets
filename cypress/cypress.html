@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <title>AUX Examples</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type=module src="src/index.js"></script>
+    <script type=module src="../src/index.js"></script>
     <script type=module>
       const examples = [
         "Bitstring",
@@ -21,8 +21,7 @@
         "Dynamics",
         "Equalizer",
         "Expander",
-        "FaderHeightTest",
-        "FaderWidthTest",
+        "Fader",
         "Gate",
         "Gauge",
         "Knob",
@@ -48,7 +47,7 @@
         "ValueKnob",
       ];
 
-      import { HTML } from './src/utils/dom.js';
+      import { HTML } from '../src/utils/dom.js';
 
       function isint(v) {
         return typeof v !== "undefined" && parseInt(v).toString() === v.toString();
@@ -59,7 +58,7 @@
 
         const cont = document.querySelector('aux-root');
 
-        const res = await window.fetch('examples/cypress-tests/' + file);
+        const res = await window.fetch('../examples/' + file);
         cont.appendChild(HTML(await res.text()));
         const scripts = cont.querySelectorAll('script');
 
@@ -210,8 +209,8 @@
 
     </script>
 
-    <link rel="stylesheet" id=stylesheet href="styles/default.css" />
-    <link rel="stylesheet" id=stylesheet href="examples/styles.css" />
+    <link rel="stylesheet" id=stylesheet href="../styles/default.css" />
+    <link rel="stylesheet" id=stylesheet href="../examples/styles.css" />
 
     <style>
     </style>
