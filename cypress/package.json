@@ -14,8 +14,10 @@
     "http-server": "^13.0.1"
   },
   "scripts": {
-    "start": "http-server ../",
-    "cy:run": "cypress run",
-    "test": "start-server-and-test start http://localhost:8080 cy:run"
+    "start": "http-server ../ -p 8080",
+    "cy:cmd": "cypress run",
+    "cy:head": "cypress run --headed",
+    "test-cmd": "start-server-and-test start http://localhost:8080 cy:cmd",
+    "test-head": "start-server-and-test start http://localhost:8080 cy:head"
   }
 }
