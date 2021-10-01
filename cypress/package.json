@@ -1,0 +1,21 @@
+{
+  "name": "cypress",
+  "version": "1.0.0",
+  "description": "test for widgets",
+  "author": "Anonymous Coward",
+  "license": "SEE LICENSE IN LICENSE",
+  "private": true,
+  "devDependencies": {
+    "@4tw/cypress-drag-drop": "^1.8.1",
+    "cypress": "^8.3.1",
+    "start-server-and-test": "^1.13.1"
+  },
+  "dependencies": {
+    "http-server": "^13.0.1"
+  },
+  "scripts": {
+    "start": "http-server -p 8080",
+    "cy:run": "cypress run",
+    "test": "start-server-and-test start http://localhost:8080 cy:run"
+  }
+}
