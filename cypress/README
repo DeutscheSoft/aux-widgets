@@ -1,9 +1,17 @@
-Install:
+# Install
 
-npm ci
+`npm ci`
 
-First Run:
+# First Run
 
-npx cypress open
+`npx cypress open`
 
-# Cypress creates itself a dir and places screenshots in the default location for now.
+# Cypress creates itself a dir and places screenshots in the default location for now. Cypress in this way opens the application in a browser UI.
+
+# Testing via CMD line
+
+`npm run test`
+
+
+
+
