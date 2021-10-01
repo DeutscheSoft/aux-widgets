@@ -1,5 +1,5 @@
 {
-  "name": "cypress",
+  "name": "cypress-testing",
   "version": "1.0.0",
   "description": "test for widgets",
   "author": "Anonymous Coward",
@@ -7,7 +7,7 @@
   "private": true,
   "devDependencies": {
     "@4tw/cypress-drag-drop": "^1.8.1",
-    "cypress": "^8.3.1",
+    "cypress": "^8.5.0",
     "start-server-and-test": "^1.13.1"
   },
   "dependencies": {
