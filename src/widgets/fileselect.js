@@ -20,7 +20,9 @@
 import { element, addClass } from './../utils/dom.js';
 import { limitDigits } from './../utils/limit_digits.js';
 import { FORMAT } from './../utils/sprintf.js';
-import { Container, Button, Label } from './../index.pure.js';
+import { Container } from './container.js';
+import { Button } from './button.js';
+import { Label } from './label.js';
 import { defineChildWidget } from '../child_widget.js';
 import { defineChildElement } from '../widget_helpers.js';
 
