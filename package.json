@@ -24,6 +24,15 @@
       "email": "arne@deuso.de"
     }
   ],
+  "sideEffects": [
+    "./src/index.js",
+    "./src/index.sideeffects.js",
+    "./src/components.registration.js",
+    "./src/components/*.registration.js",
+    "./src/matrix.sideeffects.js",
+    "./src/matrix/components.registration.js",
+    "./src/matrix/components/*.registration.js"
+  ],
   "private": true,
   "devDependencies": {}
 }
