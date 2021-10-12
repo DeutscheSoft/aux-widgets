@@ -1,0 +1,23 @@
+{
+  "name": "cypress-testing",
+  "version": "1.0.0",
+  "description": "test for widgets",
+  "author": "Anonymous Coward",
+  "license": "SEE LICENSE IN LICENSE",
+  "private": true,
+  "devDependencies": {
+    "@4tw/cypress-drag-drop": "^1.8.1",
+    "cypress": "^8.5.0",
+    "start-server-and-test": "^1.13.1"
+  },
+  "dependencies": {
+    "http-server": "^13.0.1"
+  },
+  "scripts": {
+    "start": "http-server ../ -p 8080",
+    "cy:cmd": "cypress run",
+    "cy:head": "cypress run --headed",
+    "test-cmd": "start-server-and-test start http://localhost:8080 cy:cmd",
+    "test-head": "start-server-and-test start http://localhost:8080 cy:head"
+  }
+}

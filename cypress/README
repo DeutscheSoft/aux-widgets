@@ -1,0 +1,26 @@
+# Install
+
+`npm ci`
+
+# First Run
+
+`npx cypress open`
+
+## Note: cypress application needs a constant http-server, e.g. pike -x httpserver in the aux-widgets directory.
+
+# Cypress creates itself a dir and places screenshots in the default location for now. Cypress in this way opens the application in a browser UI.
+
+# Testing via CMD line
+
+## Headless
+
+`npm run test-cmd`
+
+## Headed
+
+`npm run test-head`
+
+
+
+
+
