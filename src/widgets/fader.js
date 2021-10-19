@@ -193,12 +193,16 @@ export class Fader extends Widget {
         const O = this.options;
         const direction = (o.direction == 'left' || o.direction == 'down') ? -1 : 1;
         let step = (O.step || 1) * direction;
+        let newval;
         if (o.speed == 'slow') {
-          step *= O.shift_down;
+          newval = Math.min(O.max, Math.max(O.min, this.get('value') + step * O.shift_down));
         } else if (o.speed == 'fast') {
-          step *= O.shift_up;
+          newval = Math.min(O.max, Math.max(O.min, this.get('value') + step * O.shift_up));
+        } else if (o.speed == 'full') {
+          newval = direction < 0 ? O.min : O.max;
+        } else {
+          newval = Math.min(O.max, Math.max(O.min, this.get('value') + step));
         }
-        const newval = Math.min(O.max, Math.max(O.min, this.get('value') + step));
         this.userset('value', newval);
       },
     };
