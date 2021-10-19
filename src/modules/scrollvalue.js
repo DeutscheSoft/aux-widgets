@@ -36,6 +36,7 @@ function scrollWheel(e) {
   const O = this.options;
   if (!O.active) return;
   e.preventDefault();
+  O.node.focus();
   const range = O.range.call(this);
   const DIR = O.scroll_direction;
   const RO = range.options;
