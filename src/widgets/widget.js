@@ -148,7 +148,7 @@ function setPreset(preset) {
   this._presetting = false;
 }
 
-function onFocusKeyUp(e) {
+function onFocusKeyDown(e) {
   if (e.preventDefault)
     e.preventDefault();
   const o = { speed: 'normal' };
@@ -177,9 +177,9 @@ function onFocusKeyUp(e) {
 function onSetTabindex(tabindex) {
   if (tabindex === this._lasttabindex) return;
   if (tabindex === false)
-    this.getFocusTarget().removeEventListener('keyup', this._onfocuskeyup);
+    this.getFocusTarget().removeEventListener('keydown', this._onfocuskeydown);
   if (this._lasttabindex === false)
-    this.getFocusTarget().addEventListener('keyup', this._onfocuskeyup);
+    this.getFocusTarget().addEventListener('keydown', this._onfocuskeydown);
   this._lasttabindex = tabindex;
 }
 
@@ -394,7 +394,7 @@ export class Widget extends Base {
     this._last_preset = null;
     this._presetting = false;
     this._subscriptions = initSubscriptions();
-    this._onfocuskeyup = onFocusKeyUp.bind(this);
+    this._onfocuskeydown = onFocusKeyDown.bind(this);
     this._lasttabindex = this.options.tabindex;
   }
 
@@ -613,7 +613,7 @@ export class Widget extends Base {
     }
 
     if (this._lasttabindex !== false) {
-      this.getFocusTarget().addEventListener('keydown', this._onfocuskeyup);
+      this.getFocusTarget().addEventListener('keydown', this._onfocuskeydown);
     }
     
     if (O.container) O.container.appendChild(element);
