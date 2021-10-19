@@ -149,6 +149,8 @@ function setPreset(preset) {
 }
 
 function onFocusKeyUp(e) {
+  if (e.preventDefault)
+    e.preventDefault();
   const o = { speed: 'normal' };
   if (e.code.startsWith('Arrow')) {
     if (e.ctrlKey)
