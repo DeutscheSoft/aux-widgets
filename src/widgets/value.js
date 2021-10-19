@@ -249,6 +249,10 @@ export class Value extends Widget {
     return this._input;
   }
 
+  getFocusTarget() {
+    return this._input;
+  }
+
   draw(O, elmnt) {
     addClass(elmnt, 'aux-value');
     addClass(this._input, 'aux-input');
