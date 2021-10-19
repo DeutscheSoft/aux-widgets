@@ -185,7 +185,7 @@ body > #navigation {
   right: 0;
   background: var(--aux-contrast-base);
   color: var(--aux-contrast-text);
-  width: 128px;
+  width: 192px;
   height: 100%;
   overflow: auto;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
