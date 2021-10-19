@@ -38,6 +38,8 @@ import { typecheckFunction } from '../utils/typecheck.js';
 import { GlobalResize } from '../utils/global_resize.js';
 import { GlobalVisibilityChange } from '../utils/global_visibility_change.js';
 
+const KEYS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'PageUp', 'PageDown', 'Home', 'End' ];
+
 /* jshint -W089 */
 function Invalid(options) {
   for (const key in options) this[key] = true;
@@ -149,6 +151,7 @@ function setPreset(preset) {
 }
 
 function onFocusKeyDown(e) {
+  if (KEYS.indexOf(e.code) < 0) return;
   if (e.preventDefault)
     e.preventDefault();
   const o = { speed: 'normal' };
