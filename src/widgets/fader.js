@@ -160,6 +160,7 @@ export class Fader extends Widget {
       bind_dblclick: true,
       label: false,
       cursor: false,
+      tabindex: 0,
     });
   }
 
@@ -183,6 +184,22 @@ export class Fader extends Widget {
         if (!cursor) return;
         if (v) setGlobalCursor(cursor);
         else unsetGlobalCursor(cursor);
+      },
+      click: function (e) {
+        if (this.value && this.value.element.contains(e.target)) return;
+        this.setFocus(true);
+      },
+      focus_move: function (o) {
+        const O = this.options;
+        const direction = (o.direction == 'left' || o.direction == 'down') ? -1 : 1;
+        let step = (O.step || 1) * direction;
+        if (o.speed == 'slow') {
+          step *= O.shift_down;
+        } else if (o.speed == 'fast') {
+          step *= O.shift_up;
+        }
+        const newval = Math.min(O.max, Math.max(O.min, this.get('value') + step));
+        this.userset('value', newval);
       },
     };
   }
@@ -331,6 +348,10 @@ export class Fader extends Widget {
    */
   reset() {
     this.set('value', this.options.reset);
+  }
+
+  getFocusTarget() {
+    return this._handle;
   }
 
   // GETTER & SETTER

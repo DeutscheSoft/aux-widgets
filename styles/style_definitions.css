@@ -136,6 +136,12 @@
   box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.5), 1px 3px 3px rgba(0, 0, 0, 0.2),
     2px 6px 3px rgba(0, 0, 0, 0.18), 3px 9px 3px rgba(0, 0, 0, 0.16);
 }
+
+.aux-fader .aux-handle:focus {
+  outline: 2px solid var(--aux-active-base);
+  outline-offset: 4px;
+}
+
 .aux-fader.aux-vertical .aux-handle {
   background: linear-gradient(
     to bottom,
