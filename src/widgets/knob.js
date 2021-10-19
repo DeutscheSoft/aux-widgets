@@ -169,12 +169,25 @@ export class Knob extends Widget {
         },
       },
       bind_dblclick: true,
+      tabindex: 0,
     });
   }
 
   static get static_events() {
     return {
       dblclick: dblClick,
+      focus_move: function (o) {
+        const O = this.options;
+        const direction = (o.direction == 'left' || o.direction == 'down') ? -1 : 1;
+        let step = (O.step || 1) * direction;
+        if (o.speed == 'slow') {
+          step *= O.shift_down;
+        } else if (o.speed == 'fast') {
+          step *= O.shift_up;
+        }
+        const newval = Math.min(O.max, Math.max(O.min, this.get('value') + step));
+        this.userset('value', newval);
+      },
     };
   }
 
@@ -233,6 +246,10 @@ export class Knob extends Widget {
     this.set('base', options.base);
     if (options.reset === void 0) options.reset = options.value;
     this.addChild(this.circular);
+  }
+
+  getFocusTarget() {
+    return this.svg;
   }
 
   getRange() {
