@@ -119,7 +119,8 @@ function mouseDown(ev) {
   /* we did capture */
   if (v === true) s.init(this);
 
-  this.__event_target.focus();
+  if (this.options.focus)
+    this.options.focus.focus();
 
   return false;
 }
@@ -202,7 +203,8 @@ function touchStart(ev) {
    * pointer */
   if (v === void 0) return;
 
-  this.__event_target.focus();
+  if (this.options.focus)
+    this.options.focus.focus();
 
   ev.preventDefault();
   ev.stopPropagation();
@@ -299,6 +301,8 @@ const static_events = {
  * @param {Object} [options={ }] - An object containing initial options.
  *
  * @property {HTMLElement} [options.node] - The DOM element receiving the drag events. If not set the widgets element is used.
+ * @property {HTMLElement|Boolean} [options.focus=false] - Focus this element on scroll. Set to `false`
+ *   if no focus should be set.
  *
  * @class DragCapture
  */
@@ -332,12 +336,14 @@ export class DragCapture extends Module {
     return {
       node: 'object',
       state: 'boolean' /* internal, undocumented */,
+      focus: 'object|boolean',
     };
   }
 
   static get options() {
     return {
       state: false,
+      focus: false,
     };
   }
 

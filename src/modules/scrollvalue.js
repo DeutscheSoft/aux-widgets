@@ -36,7 +36,8 @@ function scrollWheel(e) {
   const O = this.options;
   if (!O.active) return;
   e.preventDefault();
-  O.node.focus();
+  if (O.focus)
+    O.focus.focus();
   const range = O.range.call(this);
   const DIR = O.scroll_direction;
   const RO = range.options;
@@ -130,6 +131,8 @@ function fireEvent(title, event) {
  * @property {Array<Number>} [options.scroll_direction=[0, -1, 0]] - An array
  *   containing values for x, y and z defining the direction of scrolling.
  * @property {Boolean} [options.limit=false] - Limit the returned value to min and max of the range.
+ * @property {HTMLElement|Boolean} [options.focus=false] - Focus this element on scroll. Set to `false`
+ *   if no focus should be set.
  */
 export class ScrollValue extends Module {
   static get _options() {
@@ -143,6 +146,7 @@ export class ScrollValue extends Module {
       active: 'boolean',
       scroll_direction: 'array',
       limit: 'boolean',
+      focus: 'object|boolean',
     };
   }
 
@@ -164,6 +168,7 @@ export class ScrollValue extends Module {
       active: true,
       scroll_direction: [0, -1, 0],
       limit: false,
+      focus: false,
     };
   }
 

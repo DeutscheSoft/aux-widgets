@@ -245,6 +245,7 @@ export class Fader extends Widget {
       classes: this.element,
       direction: O.direction,
       limit: true,
+      focus: this._handle,
     });
     this.drag.on('startdrag', () => this.startInteracting());
     this.drag.on('stopdrag', () => this.stopInteracting());
@@ -256,6 +257,7 @@ export class Fader extends Widget {
       node: this.element,
       classes: this.element,
       limit: true,
+      focus: this._handle,
     });
     this.scroll.on('scrollstarted', () => this.startInteracting());
     this.scroll.on('scrollended', () => this.stopInteracting());

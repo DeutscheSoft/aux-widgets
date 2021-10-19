@@ -231,6 +231,7 @@ export class Knob extends Widget {
       rotation: options.rotation,
       blind_angle: options.blind_angle,
       limit: true,
+      focus: S,
     });
     this.drag.on('startdrag', () => this.startInteracting());
     this.drag.on('stopdrag', () => this.stopInteracting());
@@ -243,6 +244,7 @@ export class Knob extends Widget {
       classes: this.element,
       range: moduleRange,
       limit: true,
+      focus: S,
     });
     this.scroll.on('scrollstarted', () => this.startInteracting());
     this.scroll.on('scrollended', () => this.stopInteracting());
