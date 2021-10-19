@@ -148,6 +148,40 @@ function setPreset(preset) {
   this._presetting = false;
 }
 
+function onFocusKeyUp(e) {
+  const o = { speed: 'normal' };
+  if (e.code.startsWith('Arrow')) {
+    if (e.ctrlKey)
+      o.speed = 'slow';
+    else if (e.shiftKey)
+      o.speed = 'fast';
+    o.direction = e.code.substr(5).toLowerCase();
+  }
+  if (e.code.startsWith('Page')) {
+    o.direction = e.code.substr(4).toLowerCase();
+    o.speed = 'full';
+  }
+  if (e.code == 'Home') {
+    o.direction = 'left'
+    o.speed = 'full';
+  }
+  if (e.code == 'End') {
+    o.direction = 'right'
+    o.speed = 'full';
+  }
+  this.emit('focus_move', o);
+}
+
+function onSetTabindex(tabindex) {
+  if (tabindex === this._lasttabindex) return;
+  if (tabindex === false)
+    this.getFocusTarget().removeEventListener('keyup', this._onfocuskeyup);
+  if (this._lasttabindex === false)
+    this.getFocusTarget().addEventListener('keyup', this._onfocuskeyup);
+  this._lasttabindex = tabindex;
+}
+
+
 /**
  * Widget is the base class for all widgets drawing DOM elements. It
  * provides basic functionality like delegating events, setting options and
@@ -181,6 +215,9 @@ function setPreset(preset) {
  *   specific options. Refer to `options.preset` for more information.
  * @property {number} [options.notransitions_duration=500] - A time in
  *    milliseconds until transitions are activated.
+ * @property {number|boolean} [options.tabindex]=false] - Set tabindex to activate focus on widgets. Tabindex
+ *   is set on the element returned by `getFocusElement`. Try to only use `false` or `0`, avoiding positive integers.
+ *   To set a hierarchy for the tabindex, better create an appropriate DOM structure.
  */
 /**
  * The <code>set</code> event is emitted when an option was set using the {@link Widget#set}
@@ -248,6 +285,7 @@ export class Widget extends Base {
       presets: 'object',
       preset: 'string',
       title: 'string',
+      tabindex: 'number|boolean',
     };
   }
 
@@ -263,6 +301,7 @@ export class Widget extends Base {
       interacting: false,
       notransitions_duration: 500,
       presets: {},
+      tabindex: false,
     };
   }
 
@@ -313,7 +352,8 @@ export class Widget extends Base {
         }
         if (val === false) this.disableDrawChildren();
       },
-    };
+      set_tabindex: onSetTabindex.bind(this),
+    }
   }
 
   constructor(options) {
@@ -352,6 +392,8 @@ export class Widget extends Base {
     this._last_preset = null;
     this._presetting = false;
     this._subscriptions = initSubscriptions();
+    this._onfocuskeyup = onFocusKeyUp.bind(this);
+    this._lasttabindex = this.options.tabindex;
   }
 
   getStyleTarget() {
@@ -363,6 +405,10 @@ export class Widget extends Base {
   }
 
   getEventTarget() {
+    return this.element;
+  }
+
+  getFocusTarget() {
     return this.element;
   }
 
@@ -564,6 +610,10 @@ export class Widget extends Base {
       setStyles(E, O.styles);
     }
 
+    if (this._lasttabindex !== false) {
+      this.getFocusTarget().addEventListener('keydown', this._onfocuskeyup);
+    }
+    
     if (O.container) O.container.appendChild(element);
 
     this.scheduleResize();
@@ -622,6 +672,15 @@ export class Widget extends Base {
     if (I.title) {
       I.title = false;
       E.setAttribute('title', O.title);
+    }
+
+    if (I.tabindex) {
+      const F = this.getFocusTarget();
+      if (O.tabindex !== false) {
+        F.setAttribute('tabindex', O.tabindex);
+      } else {
+        F.removeAttribute('tabindex');
+      }
     }
 
     const q = this.draw_queue;
@@ -1125,6 +1184,18 @@ export class Widget extends Base {
       triggered = true;
       S.addNext(callback);
     });
+  }
+
+  /**
+   * Sets or removes focus on the element returned by `getFocusTarget`.
+   *
+   * @param {Boolean} focus
+   */
+  setFocus(focus) {
+    if (focus)
+      this.getFocusTarget().focus();
+    else
+      this.getFocusTarget().blur();
   }
 }
 /**
