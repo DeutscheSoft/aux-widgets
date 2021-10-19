@@ -681,6 +681,7 @@ export class Widget extends Base {
       } else {
         F.removeAttribute('tabindex');
       }
+      I.tabindex = false;
     }
 
     const q = this.draw_queue;
