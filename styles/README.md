@@ -15,7 +15,6 @@ This is the default AUX theme. Use it to get your development started,
 concentrating on the design later. This file includes no fonts for
 text being displayed inside user interfaces.
 
-
 ##Blank
 This is a very basic AUX theme, only containing basic lengths and sizes.
 Use it as a basis to build your custom interface design. This file
@@ -32,7 +31,6 @@ like bold or italic.
 This is a very basic AUX theme, only containing basic lengths and sizes.
 Use it as a basis to build your custom interface design. This file
 includes no fonts for text being displayed inside user interfaces.
-
 
 ##Pure
 This is the default AUX theme without any variables set but including

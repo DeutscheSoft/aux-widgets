@@ -38,7 +38,16 @@ import { typecheckFunction } from '../utils/typecheck.js';
 import { GlobalResize } from '../utils/global_resize.js';
 import { GlobalVisibilityChange } from '../utils/global_visibility_change.js';
 
-const KEYS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'PageUp', 'PageDown', 'Home', 'End' ];
+const KEYS = [
+  'ArrowUp',
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight',
+  'PageUp',
+  'PageDown',
+  'Home',
+  'End',
+];
 
 /* jshint -W089 */
 function Invalid(options) {
@@ -152,14 +161,11 @@ function setPreset(preset) {
 
 function onFocusKeyDown(e) {
   if (KEYS.indexOf(e.code) < 0) return;
-  if (e.preventDefault)
-    e.preventDefault();
+  if (e.preventDefault) e.preventDefault();
   const o = { speed: 'normal' };
   if (e.code.startsWith('Arrow')) {
-    if (e.ctrlKey)
-      o.speed = 'slow';
-    else if (e.shiftKey)
-      o.speed = 'fast';
+    if (e.ctrlKey) o.speed = 'slow';
+    else if (e.shiftKey) o.speed = 'fast';
     o.direction = e.code.substr(5).toLowerCase();
   }
   if (e.code.startsWith('Page')) {
@@ -167,11 +173,11 @@ function onFocusKeyDown(e) {
     o.speed = 'full';
   }
   if (e.code == 'Home') {
-    o.direction = 'left'
+    o.direction = 'left';
     o.speed = 'full';
   }
   if (e.code == 'End') {
-    o.direction = 'right'
+    o.direction = 'right';
     o.speed = 'full';
   }
   this.emit('focus_move', o);
@@ -185,7 +191,6 @@ function onSetTabindex(tabindex) {
     this.getFocusTarget().addEventListener('keydown', this._onfocuskeydown);
   this._lasttabindex = tabindex;
 }
-
 
 /**
  * Widget is the base class for all widgets drawing DOM elements. It
@@ -358,11 +363,11 @@ export class Widget extends Base {
         if (val === false) this.disableDrawChildren();
       },
       set_tabindex: onSetTabindex.bind(this),
-    }
+    };
   }
 
   constructor(options) {
-    super(options||{});
+    super(options || {});
   }
 
   initialize(options) {
@@ -618,7 +623,7 @@ export class Widget extends Base {
     if (this._lasttabindex !== false) {
       this.getFocusTarget().addEventListener('keydown', this._onfocuskeydown);
     }
-    
+
     if (O.container) O.container.appendChild(element);
 
     this.scheduleResize();
@@ -1198,10 +1203,8 @@ export class Widget extends Base {
    * @param {Boolean} focus
    */
   setFocus(focus) {
-    if (focus)
-      this.getFocusTarget().focus();
-    else
-      this.getFocusTarget().blur();
+    if (focus) this.getFocusTarget().focus();
+    else this.getFocusTarget().blur();
   }
 }
 /**

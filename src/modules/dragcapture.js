@@ -119,8 +119,7 @@ function mouseDown(ev) {
   /* we did capture */
   if (v === true) s.init(this);
 
-  if (this.options.focus)
-    this.options.focus.focus();
+  if (this.options.focus) this.options.focus.focus();
 
   return false;
 }
@@ -203,8 +202,7 @@ function touchStart(ev) {
    * pointer */
   if (v === void 0) return;
 
-  if (this.options.focus)
-    this.options.focus.focus();
+  if (this.options.focus) this.options.focus.focus();
 
   ev.preventDefault();
   ev.stopPropagation();

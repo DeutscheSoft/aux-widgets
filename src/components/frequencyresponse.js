@@ -26,4 +26,6 @@ import { FrequencyResponse } from './../widgets/frequencyresponse.js';
  * @class FrequencyResponseComponent
  * @implements Component
  */
-export const FrequencyResponseComponent = componentFromWidget(FrequencyResponse);
+export const FrequencyResponseComponent = componentFromWidget(
+  FrequencyResponse
+);

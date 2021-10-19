@@ -45,30 +45,26 @@ import { defineChildElement } from '../widget_helpers.js';
  *   function for the file size label.
  * @property {Function} [options.format_multiple=FORMAT('%d files selected') - the formatting
  *   function for the file size label.
- * @property {FileList} [options.files=[]] - 
+ * @property {FileList} [options.files=[]] -
  * @property {String} [options.filename=false] - The name of the selected file or `false`
  *   if no file is selected. Read-only property!
  * @property {Integer} [options.filesize=0] - The size of the selected filein bytes.
  *   Read-only property!
  */
- 
+
 function getFileName() {
   const O = this.options;
   const files = O.files;
-  if (!files.length)
-    return O.placeholder;
-  if (files.length == 1)
-    return files[0].name;
+  if (!files.length) return O.placeholder;
+  if (files.length == 1) return files[0].name;
   return O.format_multiple(files.length);
 }
 
 function getFileSize() {
   const O = this.options;
   const files = O.files;
-  if (!files.length)
-    return 0;
-  if (files.length == 1)
-    return files[0].size;
+  if (!files.length) return 0;
+  if (files.length == 1) return files[0].size;
   let sum = 0;
   for (let i = 0, m = files.length; i < m; ++i) {
     sum += files[i].size;
@@ -103,14 +99,14 @@ export class FileSelect extends Container {
       icon: 'open',
     };
   }
-  
+
   static get static_events() {
     return {
       set_files: function (files) {
         this.set('filename', getFileName.call(this));
         this.set('filesize', getFileSize.call(this));
-      }
-    }
+      },
+    };
   }
 
   initialize(options) {
@@ -121,7 +117,7 @@ export class FileSelect extends Container {
   draw(O, element) {
     super.draw(O, element);
     addClass(element, 'aux-fileselect');
-    this._input.addEventListener("input", this._onInput.bind(this));
+    this._input.addEventListener('input', this._onInput.bind(this));
     this._input.setAttribute('id', this._id);
     this._label.setAttribute('for', this._id);
     this.set('filename', getFileName.call(this));
@@ -131,33 +127,31 @@ export class FileSelect extends Container {
   redraw() {
     const I = this.invalid;
     const O = this.options;
-    
+
     if (I.validate('filesize')) {
       this.size.set('label', O.format_size(O.filesize));
     }
     if (I.validate('filename')) {
       this.name.set('label', O.filename);
     }
-    if(I.validate('format_size')) {
+    if (I.validate('format_size')) {
       this.set('filesize', getFileSize.call(this));
     }
-    if(I.validate('format_multiple')) {
+    if (I.validate('format_multiple')) {
       this.set('filename', getFileName.call(this));
     }
-    if(I.validate('accept')) {
+    if (I.validate('accept')) {
       this._input.setAttribute('accept', O.accept);
     }
-    
+
     if (I.validate('multiple')) {
-      if (O.multiple)
-        this._input.setAttribute('multiple', true);
-      else
-        this._input.removeAttribute('multiple');
+      if (O.multiple) this._input.setAttribute('multiple', true);
+      else this._input.removeAttribute('multiple');
     }
-    
+
     super.redraw();
   }
-  
+
   _onInput(e) {
     this.userset('files', this._input.files);
     /**

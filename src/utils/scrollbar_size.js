@@ -14,18 +14,13 @@ function measureScrollbarSize() {
   document.body.appendChild(div);
   const size = div.offsetWidth - div.clientWidth;
   document.body.removeChild(div);
-  document.body.style.setProperty(
-    '--aux-scrollbar-size',
-    size + 'px'
-  );
+  document.body.style.setProperty('--aux-scrollbar-size', size + 'px');
 }
 
 export function scrollbarSize() {
   if (scrollbarMeasured) return;
   scrollbarMeasured = true;
 
-  if (document.body)
-    measureScrollbarSize();
-  else
-    document.addEventListener('DOMContentLoaded', measureScrollbarSize);
+  if (document.body) measureScrollbarSize();
+  else document.addEventListener('DOMContentLoaded', measureScrollbarSize);
 }

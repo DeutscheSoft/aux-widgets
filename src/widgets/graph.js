@@ -100,7 +100,7 @@ function _end(d, s) {
       return;
     default:
       error('Unsupported mode:', m);
-      /* FALL THROUGH */
+    /* FALL THROUGH */
     case 'line':
       return;
   }
@@ -111,7 +111,8 @@ function _end(d, s) {
   s.push(
     ' L ' + SVGRound(x + 1) + ' ' + SVGRound(y),
     ' L ' + SVGRound(x + 1) + ' ' + SVGRound(fillY),
-    ' Z');
+    ' Z'
+  );
 }
 
 /**

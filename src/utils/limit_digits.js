@@ -32,16 +32,14 @@ export function limitDigits(limit, add = '', base) {
     let si = '';
     let I = 0;
     let L = limit;
-    if (value < 0)
-      L -= 1;
+    if (value < 0) L -= 1;
     if (digits > L) {
       L -= 1;
       I = Math.floor(Math.log(Math.abs(value)) / Math.log(base));
-      si = ['', 'k','M','G','T','P'][I];
-      if (I)
-        value /= Math.pow(base, I);
+      si = ['', 'k', 'M', 'G', 'T', 'P'][I];
+      if (I) value /= Math.pow(base, I);
       digits -= I * 3;
     }
     return value.toFixed(Math.max(0, L - digits)) + si + add;
-  }
+  };
 }

@@ -17,7 +17,13 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { element, addClass, isCSSVariableName, isClassName, removeClass } from './../utils/dom.js';
+import {
+  element,
+  addClass,
+  isCSSVariableName,
+  isClassName,
+  removeClass,
+} from './../utils/dom.js';
 import { Widget } from './widget.js';
 
 /**

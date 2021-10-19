@@ -1,14 +1,12 @@
 describe('fader widget test', () => {
-
   it('successfully loads', () => {
-    
     cy.visit('http://localhost:8080/examples.html#Fader');
 
-    cy.get('.aux-handle').move({x: 100, y: 100, force: true});
+    cy.get('.aux-handle').move({ x: 100, y: 100, force: true });
 
-// check fader moves, x pixel/ Knob, tricky, svg testing? try: Did the internal value update?
+    // check fader moves, x pixel/ Knob, tricky, svg testing? try: Did the internal value update?
     //
-    
+
     /*
     cy.get('#tips aux-button').click();
 
@@ -38,4 +36,3 @@ describe('fader widget test', () => {
 */
   });
 });
-
