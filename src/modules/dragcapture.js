@@ -110,7 +110,7 @@ function mouseDown(ev) {
   const s = new MouseCaptureState(ev);
   const v = startCapture.call(this, s, ev);
 
-  /* ignore this event */
+  /* ignore this event if startCapture didn't return */
   if (v === void 0) return;
 
   ev.stopPropagation();
@@ -118,6 +118,8 @@ function mouseDown(ev) {
 
   /* we did capture */
   if (v === true) s.init(this);
+
+  this.__event_target.focus();
 
   return false;
 }
@@ -193,12 +195,14 @@ function touchStart(ev) {
    * during scrolling */
   if (!ev.cancelable) return;
 
-  /* the startcapture event handler has return false. we do not handle this
-   * pointer */
   const state = new TouchCaptureState(ev);
   const v = startCapture.call(this, state, ev);
 
+  /* the startcapture event handler returned nothing. we do not handle this
+   * pointer */
   if (v === void 0) return;
+
+  this.__event_target.focus();
 
   ev.preventDefault();
   ev.stopPropagation();
