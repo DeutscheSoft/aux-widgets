@@ -33,6 +33,7 @@ import { ScrollValue } from '../modules/scrollvalue.js';
 import { element, addClass } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
 import { FORMAT } from '../utils/sprintf.js';
+import { focusMoveDefault } from '../utils/keyboard.js';
 import { objectAnd, objectSub } from '../utils/object.js';
 
 const formatViewbox = FORMAT('0 0 %d %d');
@@ -177,29 +178,7 @@ export class Knob extends Widget {
   static get static_events() {
     return {
       dblclick: dblClick,
-      focus_move: function (o) {
-        const O = this.options;
-        const direction =
-          o.direction == 'left' || o.direction == 'down' ? -1 : 1;
-        let step = (O.step || 1) * direction;
-        let newval;
-        if (o.speed == 'slow') {
-          newval = Math.min(
-            O.max,
-            Math.max(O.min, this.get('value') + step * O.shift_down)
-          );
-        } else if (o.speed == 'fast') {
-          newval = Math.min(
-            O.max,
-            Math.max(O.min, this.get('value') + step * O.shift_up)
-          );
-        } else if (o.speed == 'full') {
-          newval = direction < 0 ? O.min : O.max;
-        } else {
-          newval = Math.min(O.max, Math.max(O.min, this.get('value') + step));
-        }
-        this.userset('value', newval);
-      },
+      focus_move: focusMoveDefault,
     };
   }
 
