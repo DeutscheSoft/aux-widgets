@@ -208,6 +208,8 @@ function createLabel(value, position) {
   const O = this.options;
   const elem = document.createElement('SPAN');
   elem.className = 'aux-label';
+  elem.setAttribute('role', 'presentation');
+  
   if (vert(O)) {
     elem.style.bottom = (position / O.basis) * 100 + '%';
   } else {
@@ -226,6 +228,7 @@ function createDot(value, position) {
   const O = this.options;
   const elem = document.createElement('DIV');
   elem.className = 'aux-dot';
+  elem.setAttribute('role', 'presentation');
 
   if (O.layout === 'left' || O.layout === 'right') {
     elem.style.bottom = (position / O.basis) * 100 + '%';

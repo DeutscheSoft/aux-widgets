@@ -118,6 +118,7 @@ export class VirtualTreeEntry extends VirtualTreeEntryBase {
       icon: false,
       odd: false,
       group: false,
+      role: 'treeitem',
     };
   }
 

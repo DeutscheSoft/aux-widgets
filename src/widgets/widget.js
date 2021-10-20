@@ -296,6 +296,7 @@ export class Widget extends Base {
       preset: 'string',
       title: 'string',
       tabindex: 'number|boolean',
+      role: 'string',
     };
   }
 
@@ -312,6 +313,7 @@ export class Widget extends Base {
       notransitions_duration: 500,
       presets: {},
       tabindex: false,
+      role: 'none',
     };
   }
 
@@ -422,6 +424,10 @@ export class Widget extends Base {
     return this.element;
   }
 
+  getRoleTarget() {
+    return this.element;
+  }
+  
   isDestructed() {
     return this.options === null;
   }
@@ -692,6 +698,11 @@ export class Widget extends Base {
         F.removeAttribute('tabindex');
       }
       I.tabindex = false;
+    }
+
+    if (I.role) {
+      this.getRoleTarget().setAttribute('role', O.role);
+      I.role = false;
     }
 
     const q = this.draw_queue;

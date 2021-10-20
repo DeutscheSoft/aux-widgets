@@ -41,6 +41,7 @@ export class Frame extends Container {
   static get options() {
     return {
       label: false,
+      role: 'region',
     };
   }
 
@@ -67,6 +68,7 @@ defineChildWidget(Frame, 'label', {
   inherit_options: true,
   default_options: {
     class: 'aux-framelabel',
+    role: 'heading',
   },
   toggle_class: true,
 });

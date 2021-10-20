@@ -384,6 +384,7 @@ export class Chart extends Widget {
       handles: [], // list of bands to create on init
       show_handles: true,
       square: false,
+      role: 'group',
     };
   }
 

@@ -514,6 +514,7 @@ export class Page extends Container {
       icon: '',
       hiding_duration: -1,
       showing_duration: -1,
+      role: 'tabpanel',
     };
   }
 }

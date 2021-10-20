@@ -170,6 +170,7 @@ export class Knob extends Widget {
       },
       bind_dblclick: true,
       tabindex: 0,
+      role: 'slider',
     });
   }
 
@@ -262,6 +263,10 @@ export class Knob extends Widget {
   }
 
   getFocusTarget() {
+    return this.svg;
+  }
+
+  getRoleTarget() {
     return this.svg;
   }
 

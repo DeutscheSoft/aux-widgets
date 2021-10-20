@@ -151,6 +151,7 @@ export class Notification extends Container {
       timeout: 5000,
       icon: false,
       show_close: false,
+      role: 'alert',
     };
   }
 

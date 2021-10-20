@@ -272,6 +272,7 @@ export class Button extends Widget {
       state: false,
       layout: 'horizontal',
       delay: 0,
+      role: 'button',
     };
   }
 
@@ -324,6 +325,9 @@ defineChildWidget(Button, 'icon', {
   option: 'icon',
   inherit_options: true,
   toggle_class: true,
+  default_options: {
+    role: 'presentation',
+  },
 });
 
 /**

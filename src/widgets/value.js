@@ -217,6 +217,7 @@ export class Value extends Widget {
         },
       },
       tab_to_set: false,
+      role: 'textbox',
     };
   }
 
@@ -250,6 +251,10 @@ export class Value extends Widget {
   }
 
   getFocusTarget() {
+    return this._input;
+  }
+
+  getRoleTarget() {
     return this._input;
   }
 

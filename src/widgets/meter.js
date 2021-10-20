@@ -590,5 +590,6 @@ defineChildWidget(Meter, 'value', {
   toggle_class: true,
   default_options: {
     class: 'aux-value',
+    role: 'status',
   },
 });

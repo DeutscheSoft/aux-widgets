@@ -70,6 +70,7 @@ export class Panorama extends Chart {
         { pos: 0, label: 'M', class: 'aux-center' },
         { pos: 50, label: 'F' },
       ],
+      role: 'application',
     };
   }
 

@@ -52,6 +52,7 @@ export class Icon extends Widget {
   static get options() {
     return {
       icon: false,
+      role: 'img',
     };
   }
 

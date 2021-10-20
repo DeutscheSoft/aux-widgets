@@ -161,6 +161,7 @@ export class Fader extends Widget {
       label: false,
       cursor: false,
       tabindex: 0,
+      role: 'slider',
     });
   }
 

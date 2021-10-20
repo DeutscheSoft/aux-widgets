@@ -89,6 +89,7 @@ export class VirtualTree extends Container {
       entry_class: VirtualTreeEntry,
       prerender_top: 3,
       prerender_bottom: 3,
+      role: 'tree',
     };
   }
 

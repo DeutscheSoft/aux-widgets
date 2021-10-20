@@ -154,6 +154,7 @@ export class Select extends Button {
       placeholder: false,
       list_class: '',
       label: '',
+      role: 'select',
     };
   }
 
@@ -231,6 +232,7 @@ export class Select extends Button {
      *   Has class <code>.aux-selectlist</code>.
      */
     this._list = element('div', 'aux-selectlist');
+    this._list.setAttribute('role', 'listbox');
 
     this._globalTouchStart = function (e) {
       if (
@@ -865,6 +867,7 @@ export class SelectEntry extends Label {
   static get options() {
     return {
       value: null,
+      role: 'option',
     };
   }
 

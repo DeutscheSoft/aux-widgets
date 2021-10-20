@@ -256,6 +256,7 @@ export class Buttons extends Container {
       button_class: Button,
       multi_select: 0,
       deselect: false,
+      role: 'group',
     };
   }
 

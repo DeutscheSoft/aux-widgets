@@ -332,6 +332,8 @@ export class Reverb extends Chart {
 
       reflections: { amount: 0, spread: 0, randomness: 0 },
       _reflections: [],
+
+      role: 'application',
     };
   }
 

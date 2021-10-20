@@ -43,6 +43,7 @@ export class ProgressBar extends Meter {
         return v.toFixed(2) + '%';
       },
       layout: 'top',
+      role: 'progressbar',
     };
   }
 

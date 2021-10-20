@@ -243,6 +243,7 @@ export class Expand extends Container {
       label: '',
       icon: '',
       icon_active: '',
+      role: 'region',
     };
   }
 

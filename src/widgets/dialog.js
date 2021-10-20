@@ -90,6 +90,7 @@ export class Dialog extends Container {
       auto_close: false,
       auto_remove: false,
       toplevel: false,
+      role: 'dialog',
     };
   }
 

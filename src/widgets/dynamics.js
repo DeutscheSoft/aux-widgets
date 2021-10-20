@@ -105,6 +105,7 @@ export class Dynamics extends Chart {
       show_handle: true,
       handle_label: false,
       square: true,
+      role: 'application',
     };
   }
 

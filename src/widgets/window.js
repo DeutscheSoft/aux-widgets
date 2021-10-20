@@ -570,6 +570,7 @@ export class Window extends Container {
       header_action: 'maximize',
       active: true,
       hide_status: 0,
+      role: 'dialog',
     };
   }
 

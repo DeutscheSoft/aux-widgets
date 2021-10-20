@@ -119,6 +119,7 @@ export class Slider extends Widget {
       rotation: 45,
       blind_angle: 20,
       basis: 300,
+      role: 'slider',
     });
   }
 

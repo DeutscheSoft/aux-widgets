@@ -160,6 +160,7 @@ export class EqualizerGraph extends Graph {
       rendering_filter: function (band) {
         return band.get('active');
       },
+      role: 'application',
     };
   }
 

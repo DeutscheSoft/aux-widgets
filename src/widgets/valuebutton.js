@@ -86,6 +86,7 @@ export class ValueButton extends Button {
       basis: 300,
       labels: FORMAT('%d'),
       layout: 'top',
+      role: 'slider',
     });
   }
 
