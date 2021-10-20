@@ -36,6 +36,7 @@ import {
   rangedOptionsTypes,
   makeRanged,
 } from '../utils/make_ranged.js';
+import { focusMoveDefault } from '../utils/keyboard.js';
 import { warn } from '../utils/log.js';
 
 function dblClick() {
@@ -120,12 +121,14 @@ export class Slider extends Widget {
       blind_angle: 20,
       basis: 300,
       role: 'slider',
+      tabindex: 0,
     });
   }
 
   static get static_events() {
     return {
       dblclick: dblClick,
+      focus_move: focusMoveDefault,
     };
   }
 

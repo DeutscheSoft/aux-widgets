@@ -138,7 +138,7 @@
 }
 
 .aux-fader .aux-handle:focus {
-  outline: 2px solid var(--aux-active-base);
+  outline: var(--aux-outline);
   outline-offset: 4px;
 }
 
@@ -275,7 +275,7 @@
   border-radius: 50%;
 }
 .aux-knob > svg:focus {
-  outline: 2px solid var(--aux-active-base);
+  outline: var(--aux-outline);
   outline-offset: 2px;
 }
 
@@ -450,6 +450,14 @@
 }
 .aux-selectlist > .aux-selectentry.aux-active {
   background: var(--aux-active-base);
+}
+
+/* slider */
+
+.aux-slider:focus {
+  outline: var(--aux-outline);
+  outline-offset: 4px;
+  border-radius: var(--aux-border-radius);
 }
 
 /* STATE */

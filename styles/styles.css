@@ -62,4 +62,6 @@
   --aux-transition-duration: 0.33s;
 
   --aux-border-radius: 4px;
+
+  --aux-outline: 2px solid var(--aux-active-base);
 }
