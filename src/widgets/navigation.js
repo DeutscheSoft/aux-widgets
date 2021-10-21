@@ -258,11 +258,11 @@ export class Navigation extends Container {
     /**
      * @member {Button} Navigation#prev - The previous arrow {@link Button} instance.
      */
-    this.prev = new Button({ class: 'aux-previous', dblclick: 400 });
+    this.prev = new Button({ class: 'aux-previous', dblclick: 400, tabindex: false });
     /**
      * @member {Button} Navigation#next - The next arrow {@link Button} instance.
      */
-    this.next = new Button({ class: 'aux-next', dblclick: 400 });
+    this.next = new Button({ class: 'aux-next', dblclick: 400, tabindex: false });
 
     this.prev.on('click', prevClicked.bind(this));
     this.prev.on('doubleclick', prevDblClicked.bind(this));
