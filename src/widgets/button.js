@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { element, addClass, toggleClass } from './../utils/dom.js';
+import { element, addClass, toggleClass, isCSSVariableName } from './../utils/dom.js';
 import { defineChildWidget } from './../child_widget.js';
 import { Widget } from './widget.js';
 import { Icon } from './icon.js';
@@ -335,6 +335,20 @@ export class Button extends Widget {
     if (I.state) {
       I.state = false;
       toggleClass(E, 'aux-active', O.state);
+    }
+
+    if (I.label || I.icon) {
+      if (O.label !== false) {
+        this.element.setAttribute('aria-labelledby', this.label.get('id'));
+        this.element.removeAttribute('aria-label');
+      } else if (O.icon && isCSSVariableName(O.icon)) {
+        this.element.setAttribute('aria-label', this.icon);
+        this.element.removeAttribute('aria-labelledby');
+      } else {
+        this.element.setAttribute('aria-label', 'Button');
+        this.element.removeAttribute('aria-labelledby');
+      }
+      I.label = I.icon = false;
     }
   }
 }
