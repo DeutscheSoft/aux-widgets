@@ -101,9 +101,12 @@ function pressEnd(e) {
    * @param {Event} event - Either the MouseEvent or the TouchEvent.
    */
   this.emit('press_end', e);
-  if (e.type.startsWith('touch')) {
-    this.element.dispatchEvent(new UIEvent('click'));
-  }
+  //if (e.type.startsWith('touch')) {
+    //this.element.dispatchEvent(new UIEvent('click'));
+  //}
+  this.element.dispatchEvent(new UIEvent('click'));
+  if (e.preventDefault)
+    e.preventDefault();
 }
 function pressCancel(e) {
   const O = this.options;
@@ -226,14 +229,14 @@ const KEYS = ['Space', 'Enter'];
 function keyDown(e) {
   if (KEYS.indexOf(e.code) < 0) return;
   if (this.__keydown) return;
-  pressStart.call(this, e);
   this.__keydown = true;
+  pressStart.call(this, e);
 }
 function keyUp(e) {
   if (!this.__keydown) return;
   if (KEYS.indexOf(e.code) < 0) return;
-  pressEnd.call(this, e);
   this.__keydown = false;
+  pressEnd.call(this, e);
 }
 
 /**
