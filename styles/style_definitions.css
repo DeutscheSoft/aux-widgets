@@ -58,7 +58,8 @@
 }
 .aux-button:focus {
   outline: var(--aux-outline);
-  outline-offset: 4px;
+  outline-offset: 2px;
+  border-color: var(--aux-active-base);
 }
 .aux-button.aux-active {
   background: var(--aux-active-base);
@@ -66,6 +67,9 @@
   border-color: var(--aux-active-base);
 }
 .aux-button.aux-active:hover {
+  border-color: var(--aux-active-text);
+}
+.aux-button.aux-active:focus {
   border-color: var(--aux-active-text);
 }
 .aux-button.aux-warn {
