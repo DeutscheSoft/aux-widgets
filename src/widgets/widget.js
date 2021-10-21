@@ -192,6 +192,10 @@ function onSetTabindex(tabindex) {
   this._lasttabindex = tabindex;
 }
 
+function getID() {
+  return 'aux-widget-' + Math.random().toString(16).substr(2, 8);
+}
+
 /**
  * Widget is the base class for all widgets drawing DOM elements. It
  * provides basic functionality like delegating events, setting options and
@@ -373,6 +377,10 @@ export class Widget extends Base {
   }
 
   initialize(options) {
+    if (!options.id) {
+      while (!options.id || document.getElementById(options.id))
+        options.id = getID();
+    }
     super.initialize(options);
     // Main actions every widget needs to take
     const E = options.element || null;
@@ -659,6 +667,7 @@ export class Widget extends Base {
         this.disableDraw();
         return;
       }
+      this.getFocusTarget().setAttribute('aria-hidden', !visible);
     }
 
     E = this.getStyleTarget();
@@ -672,6 +681,8 @@ export class Widget extends Base {
       if (I.disabled) {
         I.disabled = false;
         toggleClass(E, 'aux-disabled', O.disabled);
+        this.getFocusTarget().setAttribute('aria-disabled', O.disabled);
+        this.getFocusTarget().setAttribute('aria-readonly', O.disabled);
       }
     }
 
