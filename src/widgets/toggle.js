@@ -107,6 +107,7 @@ export class Toggle extends Button {
       if (tmp) this.label.set('label', tmp || '');
       tmp = (O.state && O.icon_active) || O.icon;
       if (tmp) this.icon.set('icon', tmp || '');
+      this.getFocusTarget().setAttribute('aria-pressed', O.state);
     }
     super.redraw();
   }
