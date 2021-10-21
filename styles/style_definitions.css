@@ -56,6 +56,10 @@
   border-color: var(--aux-active-base);
   cursor: pointer;
 }
+.aux-button:focus {
+  outline: var(--aux-outline);
+  outline-offset: 4px;
+}
 .aux-button.aux-active {
   background: var(--aux-active-base);
   color: var(--aux-active-text);
@@ -457,7 +461,6 @@
 .aux-slider:focus {
   outline: var(--aux-outline);
   outline-offset: 4px;
-  border-radius: var(--aux-border-radius);
 }
 
 /* STATE */

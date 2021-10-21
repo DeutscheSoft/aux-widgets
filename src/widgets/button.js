@@ -220,6 +220,22 @@ function dismiss(e) {
   return false;
 }
 
+/* Keyboard handling */
+
+const KEYS = ['Space', 'Enter'];
+function keyDown(e) {
+  if (KEYS.indexOf(e.code) < 0) return;
+  if (this.__keydown) return;
+  pressStart.call(this, e);
+  this.__keydown = true;
+}
+function keyUp(e) {
+  if (!this.__keydown) return;
+  if (KEYS.indexOf(e.code) < 0) return;
+  pressEnd.call(this, e);
+  this.__keydown = false;
+}
+
 /**
  * Button is a simple, clickable widget containing an
  * {@link Icon} and a {@link Label} to trigger functions.
@@ -273,6 +289,7 @@ export class Button extends Widget {
       layout: 'horizontal',
       delay: 0,
       role: 'button',
+      tabindex: 0,
     };
   }
 
@@ -281,6 +298,8 @@ export class Button extends Widget {
       mousedown: mousedown,
       touchstart: touchstart,
       contextmenu: dismiss,
+      keydown: keyDown,
+      keyup: keyUp,
     };
   }
 
