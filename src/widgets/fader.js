@@ -191,7 +191,7 @@ export class Fader extends Widget {
         if (this.value && this.value.element.contains(e.target)) return;
         this.setFocus(true);
       },
-      focus_move: focusMoveDefault,
+      focus_move: focusMoveDefault(),
     };
   }
 

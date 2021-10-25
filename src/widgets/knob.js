@@ -178,7 +178,7 @@ export class Knob extends Widget {
   static get static_events() {
     return {
       dblclick: dblClick,
-      focus_move: focusMoveDefault,
+      focus_move: focusMoveDefault(),
     };
   }
 
