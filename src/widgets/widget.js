@@ -377,10 +377,6 @@ export class Widget extends Base {
   }
 
   initialize(options) {
-    if (!options.id) {
-      while (!options.id || document.getElementById(options.id))
-        options.id = getID();
-    }
     super.initialize(options);
     // Main actions every widget needs to take
     const E = options.element || null;
@@ -623,7 +619,9 @@ export class Widget extends Base {
     toggleClass(element, 'aux-notransitions', O.notransitions);
     addClass(element, 'aux-widget');
 
-    if (O.id) element.setAttribute('id', O.id);
+    while (!O.id || document.getElementById(O.id))
+      O.id = getID();
+    element.setAttribute('id', O.id);
 
     if (O.class && (E = this.getClassTarget())) {
       const tmp = O.class.split(' ');
