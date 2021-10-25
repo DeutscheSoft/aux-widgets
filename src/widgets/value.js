@@ -250,8 +250,8 @@ export class Value extends Widget {
     return this._input;
   }
 
-  getFocusTarget() {
-    return this._input;
+  getFocusTargets() {
+    return [this._input];
   }
 
   getRoleTarget() {

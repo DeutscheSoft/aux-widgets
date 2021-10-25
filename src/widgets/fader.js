@@ -189,7 +189,7 @@ export class Fader extends Widget {
       },
       click: function (e) {
         if (this.value && this.value.element.contains(e.target)) return;
-        this.setFocus(true);
+        this._handle.focus();
       },
       focus_move: focusMoveDefault(),
     };
@@ -343,8 +343,8 @@ export class Fader extends Widget {
     this.set('value', this.options.reset);
   }
 
-  getFocusTarget() {
-    return this._handle;
+  getFocusTargets() {
+    return [this._handle];
   }
 
   // GETTER & SETTER

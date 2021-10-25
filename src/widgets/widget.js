@@ -186,9 +186,9 @@ function onFocusKeyDown(e) {
 function onSetTabindex(tabindex) {
   if (tabindex === this._lasttabindex) return;
   if (tabindex === false)
-    this.getFocusTarget().removeEventListener('keydown', this._onfocuskeydown);
+    this.getFocusTargets().forEach(v => v.removeEventListener('keydown', this._onfocuskeydown));
   if (this._lasttabindex === false)
-    this.getFocusTarget().addEventListener('keydown', this._onfocuskeydown);
+    this.getFocusTarget().forEach(v => v.addEventListener('keydown', this._onfocuskeydown));
   this._lasttabindex = tabindex;
 }
 
@@ -424,8 +424,8 @@ export class Widget extends Base {
     return this.element;
   }
 
-  getFocusTarget() {
-    return this.element;
+  getFocusTargets() {
+    return [this.element];
   }
 
   getRoleTarget() {
@@ -633,7 +633,7 @@ export class Widget extends Base {
     }
 
     if (this._lasttabindex !== false) {
-      this.getFocusTarget().addEventListener('keydown', this._onfocuskeydown);
+      this.getFocusTargets().forEach(v => v.addEventListener('keydown', this._onfocuskeydown));
     }
 
     if (O.container) O.container.appendChild(element);
@@ -665,7 +665,7 @@ export class Widget extends Base {
         this.disableDraw();
         return;
       }
-      this.getFocusTarget().setAttribute('aria-hidden', !visible);
+      this.getFocusTargets().forEach(v => v.setAttribute('aria-hidden', !visible));
     }
 
     E = this.getStyleTarget();
@@ -679,8 +679,8 @@ export class Widget extends Base {
       if (I.disabled) {
         I.disabled = false;
         toggleClass(E, 'aux-disabled', O.disabled);
-        this.getFocusTarget().setAttribute('aria-disabled', O.disabled);
-        this.getFocusTarget().setAttribute('aria-readonly', O.disabled);
+        this.getFocusTargets().forEach(v => v.setAttribute('aria-disabled', O.disabled));
+        this.getFocusTargets().forEach(v => v.setAttribute('aria-readonly', O.disabled));
       }
     }
 
@@ -700,11 +700,11 @@ export class Widget extends Base {
     }
 
     if (I.tabindex) {
-      const F = this.getFocusTarget();
+      const F = this.getFocusTargets();
       if (O.tabindex !== false) {
-        F.setAttribute('tabindex', O.tabindex);
+        F.forEach(v => v.setAttribute('tabindex', O.tabindex));
       } else {
-        F.removeAttribute('tabindex');
+        F.forEach(v => v.removeAttribute('tabindex'));
       }
       I.tabindex = false;
     }
@@ -1215,16 +1215,6 @@ export class Widget extends Base {
       triggered = true;
       S.addNext(callback);
     });
-  }
-
-  /**
-   * Sets or removes focus on the element returned by `getFocusTarget`.
-   *
-   * @param {Boolean} focus
-   */
-  setFocus(focus) {
-    if (focus) this.getFocusTarget().focus();
-    else this.getFocusTarget().blur();
   }
 }
 /**

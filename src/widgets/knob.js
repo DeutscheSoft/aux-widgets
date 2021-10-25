@@ -241,8 +241,8 @@ export class Knob extends Widget {
     this.addChild(this.circular);
   }
 
-  getFocusTarget() {
-    return this.svg;
+  getFocusTargets() {
+    return [this.svg];
   }
 
   getRoleTarget() {
