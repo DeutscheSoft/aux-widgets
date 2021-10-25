@@ -162,7 +162,7 @@ function setPreset(preset) {
 function onFocusKeyDown(e) {
   if (KEYS.indexOf(e.code) < 0) return;
   if (e.preventDefault) e.preventDefault();
-  const o = { speed: 'normal' };
+  const o = { speed: 'normal', event: e };
   if (e.code.startsWith('Arrow')) {
     if (e.ctrlKey) o.speed = 'slow';
     else if (e.shiftKey) o.speed = 'fast';
