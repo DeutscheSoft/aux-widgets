@@ -17,6 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
+import { defineChildElement } from './../widget_helpers.js';
 import { Container } from './container.js';
 import { translateAnchor } from '../utils/anchor.js';
 import { addClass } from '../utils/dom.js';
@@ -79,6 +80,7 @@ export class Dialog extends Container {
       auto_close: 'boolean',
       auto_remove: 'boolean',
       toplevel: 'boolean',
+      modal: 'boolean',
     });
   }
 
@@ -91,6 +93,7 @@ export class Dialog extends Container {
       auto_remove: false,
       toplevel: false,
       role: 'dialog',
+      modal: false,
     };
   }
 
@@ -98,7 +101,10 @@ export class Dialog extends Container {
     return {
       hide: function () {
         deactivateAutoclose.call(this);
-        if (this.options.auto_remove) this.element.remove();
+        if (this.options.auto_remove) {
+          this.element.remove();
+          this._modal.remove();
+        }
         this.emit('close');
       },
       set_visible: function (val) {
@@ -106,6 +112,8 @@ export class Dialog extends Container {
 
         if (val === true) {
           if (O.auto_close) activateAutoclose.call(this);
+          if (O.modal)
+            O.container.appendChild(this._modal);
           this.triggerResize();
         } else {
           deactivateAutoclose.call(this);
@@ -113,7 +121,11 @@ export class Dialog extends Container {
 
         if (val === 'showing') {
           const C = O.container;
-          if (C) C.appendChild(this.element);
+          if (C) {
+            C.appendChild(this.element);
+            if (O.modal)
+              C.appendChild(this._modal);
+          }
           this.reposition();
         }
 
@@ -129,7 +141,9 @@ export class Dialog extends Container {
               p.tagName !== 'AWML-ROOT' &&
               p.tagName !== 'BODY'
             );
-            this.element.appendChild(p.element);
+            p.appendChild(this.element);
+            if (O.modal)
+              p.appendChild(this._modal);
           }
         } else {
           O.container = this.element.parentElement;
@@ -221,3 +235,11 @@ export class Dialog extends Container {
     this.set('y', O.y);
   }
 }
+
+/**
+ * @member {HTMLDiv} Dialog#_modal - The container blocking user interaction
+ *   Has class <code>.aux-modal</code>.
+ */
+defineChildElement(Dialog, 'modal', {
+  show: false,
+});
