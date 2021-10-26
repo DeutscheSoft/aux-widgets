@@ -381,6 +381,20 @@ export class Buttons extends Container {
       // already triggered a call to addChild
       this.addChild(button);
     }
+    button.addEventListener('keydown', function (e) {
+      let sibling;
+      if (e.code === 'ArrowLeft') {
+        sibling = this.element.previousElementSibling;
+      } else if (e.code === 'ArrowRight') {
+        sibling = this.element.nextElementSibling;
+      } else if (e.code === 'Home') {
+        sibling = this.element.parentNode.firstChild;
+      } else if (e.code === 'End') {
+        sibling = this.element.parentNode.lastChild;
+      }
+      if (sibling)
+        sibling.focus();
+    });
 
     return button;
   }
