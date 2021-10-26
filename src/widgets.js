@@ -62,6 +62,7 @@ export * from './widgets/scale.js';
 export * from './widgets/scrollarea.js';
 export * from './widgets/select.js';
 export * from './widgets/slider.js';
+export * from './widgets/spread.js';
 export * from './widgets/state.js';
 export * from './widgets/toggle.js';
 export * from './widgets/value.js';

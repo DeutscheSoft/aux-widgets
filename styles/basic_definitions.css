@@ -955,6 +955,84 @@
   display: block;
 }
 
+/* SPREAD */
+
+.aux-spread {
+  grid-gap: var(--aux-spread-gridgap);
+}
+.aux-spread > .aux-label {
+  margin: 0;
+}
+.aux-spread > .aux-value {
+  margin: 0;
+}
+.aux-spread.aux-vertical > .aux-track {
+  width: var(--aux-spread-handlewidth);
+}
+.aux-spread.aux-horizontal > .aux-track {
+  height: var(--aux-spread-handlewidth);
+}
+.aux-spread.aux-left > .aux-track {
+  justify-self: end;
+}
+.aux-spread.aux-right > .aux-track {
+  justify-self: start;
+}
+.aux-spread.aux-top > .aux-track {
+  align-self: end;
+}
+.aux-spread.aux-bottom > .aux-track {
+  align-self: start;
+}
+.aux-spread.aux-vertical .aux-lower {
+  width: var(--aux-spread-handlewidth);
+  height: var(--aux-spread-handleheight);
+}
+.aux-spread.aux-horizontal .aux-lower {
+  width: var(--aux-spread-handleheight);
+  height: var(--aux-spread-handlewidth);
+}
+.aux-spread.aux-vertical .aux-upper {
+  width: var(--aux-spread-handlewidth);
+  height: var(--aux-spread-handleheight);
+  margin-bottom: var(--aux-spread-handleheight);
+}
+.aux-spread.aux-horizontal .aux-upper {
+  width: var(--aux-spread-handleheight);
+  height: var(--aux-spread-handlewidth);
+  margin-left: var(--aux-spread-handleheight);
+}
+.aux-spread.aux-vertical > .aux-scale {
+  margin: var(--aux-spread-handleheight) 0 var(--aux-spread-handleheight) 0;
+}
+.aux-spread.aux-horizontal > .aux-scale {
+  margin: 0 var(--aux-spread-handleheight) 0 var(--aux-spread-handleheight);
+}
+.aux-spread.aux-left > .aux-scale {
+  justify-self: start;
+}
+.aux-spread.aux-right > .aux-scale {
+  justify-self: end;
+}
+.aux-spread.aux-top > .aux-scale {
+  align-self: start;
+}
+.aux-spread.aux-bottom > .aux-scale {
+  align-self: end;
+}
+.aux-spread.aux-left > .aux-value {
+  justify-self: center;
+}
+.aux-spread.aux-right > .aux-value {
+  justify-self: center;
+}
+.aux-spread.aux-top > .aux-value {
+  align-self: center;
+}
+.aux-spread.aux-bottom > .aux-value {
+  align-self: center;
+}
+
 /* STATE */
 
 .aux-state {

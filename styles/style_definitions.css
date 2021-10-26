@@ -467,6 +467,99 @@
   outline-offset: 4px;
 }
 
+/* SPREAD */
+
+.aux-spread .aux-lower {
+  
+  box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.5), 1px 3px 3px rgba(0, 0, 0, 0.2),
+    2px 6px 3px rgba(0, 0, 0, 0.18), 3px 9px 3px rgba(0, 0, 0, 0.16);
+}
+.aux-spread .aux-upper {
+  box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.5), 1px 3px 3px rgba(0, 0, 0, 0.2),
+    2px 6px 3px rgba(0, 0, 0, 0.18), 3px 9px 3px rgba(0, 0, 0, 0.16);
+}
+
+.aux-spread .aux-lower:focus {
+  outline: var(--aux-outline);
+  outline-offset: 4px;
+}
+.aux-spread .aux-upper:focus {
+  outline: var(--aux-outline);
+  outline-offset: 4px;
+}
+
+.aux-spread.aux-vertical .aux-lower {
+  border-bottom-right-radius: var(--aux-border-radius);
+  border-bottom-left-radius: var(--aux-border-radius);
+  z-index: 2;
+  background: linear-gradient(
+    to bottom,
+    var(--aux-active-base) 0%,
+    var(--aux-active-base) 3%,
+    var(--aux-spread-handle5) 4%,
+    var(--aux-spread-handle6) 58%,
+    var(--aux-spread-handle7) 60%,
+    var(--aux-spread-handle8) 100%
+  )
+}
+.aux-spread.aux-vertical .aux-upper {
+  border-top-right-radius: var(--aux-border-radius);
+  border-top-left-radius: var(--aux-border-radius);
+  z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    var(--aux-spread-handle1) 0%,
+    var(--aux-spread-handle2) 40%,
+    var(--aux-spread-handle3) 42%,
+    var(--aux-spread-handle4) 96%,
+    var(--aux-warn-base) 97%,
+    var(--aux-warn-base) 100%
+  );
+}
+.aux-spread.aux-horizontal .aux-lower {
+  border-top-left-radius: var(--aux-border-radius);
+  border-bottom-left-radius: var(--aux-border-radius);
+  background: linear-gradient(
+    to right,
+    var(--aux-spread-handle1) 0%,
+    var(--aux-spread-handle2) 40%,
+    var(--aux-spread-handle3) 42%,
+    var(--aux-spread-handle4) 96%,
+    var(--aux-active-base) 97%,
+    var(--aux-active-base) 100%
+  )
+}
+.aux-spread.aux-horizontal .aux-upper {
+  border-top-right-radius: var(--aux-border-radius);
+  border-bottom-right-radius: var(--aux-border-radius);
+  background: linear-gradient(
+    to right,
+    var(--aux-warn-base) 0%,
+    var(--aux-warn-base) 3%,
+    var(--aux-spread-handle5) 4%,
+    var(--aux-spread-handle6) 58%,
+    var(--aux-spread-handle7) 60%,
+    var(--aux-spread-handle8) 100%
+  );
+}
+.aux-spread > .aux-track::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  background: black;
+  transform: translate(-50%, -50%);
+}
+.aux-spread.aux-vertical > .aux-track::before {
+  width: 2px;
+  height: calc(100% - var(--aux-spread-handleheight));
+}
+.aux-spread.aux-horizontal > .aux-track::before {
+  width: calc(100% - var(--aux-spread-handleheight));
+  height: 2px;
+}
+
 /* STATE */
 
 .aux-state {

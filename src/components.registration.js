@@ -39,6 +39,7 @@ import './components/scale.registration.js';
 import './components/scrollarea.registration.js';
 import './components/select.registration.js';
 import './components/slider.registration.js';
+import './components/spread.registration.js';
 import './components/state.registration.js';
 import './components/toggle.registration.js';
 import './components/value.registration.js';

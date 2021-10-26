@@ -58,6 +58,7 @@ export * from './components/scale.js';
 export * from './components/scrollarea.js';
 export * from './components/select.js';
 export * from './components/slider.js';
+export * from './components/spread.js';
 export * from './components/state.js';
 export * from './components/toggle.js';
 export * from './components/value.js';

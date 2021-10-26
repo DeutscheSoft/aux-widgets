@@ -116,6 +116,10 @@
 
   --aux-selectentry-lineheight: 2em;
 
+  --aux-spread-handlewidth: var(--aux-clickable-size);
+  --aux-spread-handleheight: var(--aux-clickable-size);
+  --aux-spread-gridgap: 2px;
+
   --aux-state-width: 12px;
   --aux-state-height: 6px;
 

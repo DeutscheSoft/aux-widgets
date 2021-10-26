@@ -1282,6 +1282,94 @@ body.aux-cursor-row-resize * {
   cursor: pointer;
 }
 
+/* SPREAD */
+
+.aux-spread {
+  user-select: none;
+  box-sizing: border-box;
+  display: inline-grid;
+}
+
+.aux-spread.aux-horizontal {
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto auto auto;
+}
+
+.aux-spread.aux-vertical {
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto 1fr auto;
+}
+
+.aux-spread.aux-top {
+  grid-template-areas:
+    'lower track upper'
+    '. scale label';
+}
+.aux-spread.aux-left {
+  grid-template-areas:
+    'label label'
+    'upper upper'
+    'track scale'
+    'lower lower';
+}
+.aux-spread.aux-right {
+  grid-template-areas:
+    'label label'
+    'upper upper'
+    'scale track'
+    'lower lower';
+}
+.aux-spread.aux-bottom {
+  grid-template-areas:
+    '. scale label'
+    'lower track upper';
+}
+
+.aux-spread > .aux-track {
+  grid-area: track;
+  position: relative;
+}
+.aux-spread > .aux-scale {
+  grid-area: scale;
+}
+.aux-spread > .aux-label {
+  grid-area: label;
+}
+.aux-spread.aux-vertical > .aux-label {
+  text-align: center;
+}
+.aux-spread.aux-horizontal > .aux-label {
+  text-align: left;
+}
+.aux-spread > .aux-value.aux-lower {
+  grid-area: lower;
+}
+.aux-spread > .aux-value.aux-upper {
+  grid-area: upper;
+}
+
+.aux-spread .aux-lower,
+.aux-spread .aux-upper {
+  position: absolute;
+  z-index: 10;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+.aux-spread .aux-lower:hover,
+.aux-spread .aux-upper:hover {
+  cursor: pointer;
+}
+
+.aux-spread.aux-horizontal > .aux-track > .aux-lower,
+.aux-spread.aux-horizontal > .aux-track > .aux-upper {
+  left: 0;
+}
+
+.aux-spread.aux-vertical > .aux-track > .aux-lower,
+.aux-spread.aux-vertical > .aux-track > .aux-upper {
+  bottom: 0;
+}
+
 /* STATE */
 
 .aux-state > .aux-mask {
