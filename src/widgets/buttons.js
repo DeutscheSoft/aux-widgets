@@ -382,15 +382,22 @@ export class Buttons extends Container {
       this.addChild(button);
     }
     button.addEventListener('keydown', function (e) {
-      let sibling;
-      if (e.code === 'ArrowLeft') {
-        sibling = this.element.previousElementSibling;
-      } else if (e.code === 'ArrowRight') {
-        sibling = this.element.nextElementSibling;
-      } else if (e.code === 'Home') {
-        sibling = this.element.parentNode.firstChild;
-      } else if (e.code === 'End') {
-        sibling = this.element.parentNode.lastChild;
+      let sibling, self;
+      const siblings = this.element.parentNode.querySelectorAll('.aux-button');
+      for (let i = 0; i < siblings.length; i++) {
+        if (siblings[i] === this.element) {
+          self = i;
+          break;
+        }
+      }
+      if (e.code === 'ArrowLeft' || e.code === 'ArrowUp') {
+        sibling = siblings[Math.max(0, self - 1)];
+      } else if (e.code === 'ArrowRight' || e.code === 'ArrowDown') {
+        sibling = siblings[Math.min(siblings.length - 1, self + 1)];
+      } else if (e.code === 'Home' || e.code === 'PageUp') {
+        sibling = siblings[0];
+      } else if (e.code === 'End' || e.code === 'PageDown') {
+        sibling = siblings[siblings.length - 1];
       }
       if (sibling)
         sibling.focus();
