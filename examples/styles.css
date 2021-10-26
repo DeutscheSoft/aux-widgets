@@ -146,10 +146,10 @@ code {
 }
 .aux-root {
   clear: both;
-  padding: 16px 144px 16px 16px;
+  padding: 16px 208px 16px 16px;
   height: 100%;
   margin: 0;
-  margin-right: 128px;
+  margin-right: 192px;
   overflow: auto;
 }
 .aux-root > .aux-container {
