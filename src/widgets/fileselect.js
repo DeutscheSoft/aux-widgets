@@ -206,6 +206,13 @@ defineChildWidget(FileSelect, 'button', {
     this._label.appendChild(this.button.element);
   },
   option: 'foobar',
+  static_events: {
+    keydown: function (e) {
+      if (e.code === 'Enter' || e.code === 'Space') {
+        this.parent._input.click();
+      }
+    },
+  },
 });
 /**
  * @member {Label} FileSelect#name - The {@link Label} for displaying the file name.
