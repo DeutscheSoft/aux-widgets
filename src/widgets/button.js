@@ -313,11 +313,11 @@ export class Button extends Widget {
     this.__init_target = null;
     this.__delayed_to = -1;
     super.initialize(options);
+    this._labelID = createID('aux-label-');
   }
 
   draw(O, element) {
     addClass(element, 'aux-button');
-    this.label.set('id', createID('aux-label-'));
     super.draw(O, element);
   }
 
@@ -340,7 +340,8 @@ export class Button extends Widget {
 
     if (I.label || I.icon) {
       if (O.label !== false) {
-        this.element.setAttribute('aria-labelledby', this.label.get('id'));
+        this.label.set('id', this._labelID);
+        this.element.setAttribute('aria-labelledby', this._labelID);
         this.element.removeAttribute('aria-label');
       } else if (O.icon && isCSSVariableName(O.icon)) {
         this.element.setAttribute('aria-label', this.icon);
