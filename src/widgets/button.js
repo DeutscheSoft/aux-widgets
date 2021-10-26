@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { element, addClass, toggleClass, isCSSVariableName } from './../utils/dom.js';
+import { element, addClass, toggleClass, isCSSVariableName, createID } from './../utils/dom.js';
 import { defineChildWidget } from './../child_widget.js';
 import { Widget } from './widget.js';
 import { Icon } from './icon.js';
@@ -317,6 +317,7 @@ export class Button extends Widget {
 
   draw(O, element) {
     addClass(element, 'aux-button');
+    this.label.set('id', createID('aux-label-'));
     super.draw(O, element);
   }
 

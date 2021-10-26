@@ -658,3 +658,15 @@ export function isTouch() {
     'ontouchstart' in window || 'onmsgesturechange' in window // works on most browsers
   ); // works on ie10
 }
+
+/**
+ * Create a unique ID string
+ * @returns {string}
+ * @function createID
+ */
+export function createID(prefix) {
+  let id;
+  while (!id || document.getElementById(id))
+    id = prefix + Math.random().toString(16).substr(2, 8);
+  return id;
+}

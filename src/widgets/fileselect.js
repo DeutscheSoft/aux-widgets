@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { element, addClass } from './../utils/dom.js';
+import { element, addClass, createID } from './../utils/dom.js';
 import { limitDigits } from './../utils/limit_digits.js';
 import { FORMAT } from './../utils/sprintf.js';
 import { Container } from './container.js';
@@ -110,16 +110,16 @@ export class FileSelect extends Container {
   }
 
   initialize(options) {
-    this._id = 'aux-fileinput_' + Math.random().toString(16).substr(2, 8);
     super.initialize(options);
   }
 
   draw(O, element) {
+    const id = createID('aux-fileinput-');
     super.draw(O, element);
     addClass(element, 'aux-fileselect');
     this._input.addEventListener('input', this._onInput.bind(this));
-    this._input.setAttribute('id', this._id);
-    this._label.setAttribute('for', this._id);
+    this._input.setAttribute('id', id);
+    this._label.setAttribute('for', id);
     this.set('filename', getFileName.call(this));
     this.set('filesize', getFileSize.call(this));
   }

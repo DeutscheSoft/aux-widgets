@@ -192,9 +192,6 @@ function onSetTabindex(tabindex) {
   this._lasttabindex = tabindex;
 }
 
-function getID() {
-  return 'aux-widget-' + Math.random().toString(16).substr(2, 8);
-}
 
 /**
  * Widget is the base class for all widgets drawing DOM elements. It
@@ -619,10 +616,6 @@ export class Widget extends Base {
     toggleClass(element, 'aux-notransitions', O.notransitions);
     addClass(element, 'aux-widget');
 
-    while (!O.id || document.getElementById(O.id))
-      O.id = getID();
-    element.setAttribute('id', O.id);
-
     if (O.class && (E = this.getClassTarget())) {
       const tmp = O.class.split(' ');
       for (let i = 0; i < tmp.length; i++) addClass(E, tmp[i]);
@@ -712,6 +705,11 @@ export class Widget extends Base {
     if (I.role) {
       this.getRoleTarget().setAttribute('role', O.role);
       I.role = false;
+    }
+
+    if (I.id && this.element) {
+      this.element.setAttribute('id', O.id);
+      I.id = false;
     }
 
     const q = this.draw_queue;

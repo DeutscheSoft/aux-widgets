@@ -23,6 +23,7 @@ import {
   removeClass,
   innerWidth,
   outerWidth,
+  createID,
 } from './../utils/dom.js';
 import { Container } from './container.js';
 import { Label } from './label.js';
@@ -40,7 +41,7 @@ function setAnimation() {
   const duration = Math.round(msecs + pause);
   const perc = ((pause / 2 / duration) * 100).toFixed(2);
   const to = (100 - perc).toFixed(2);
-  const id = this._id;
+  const id = this.label.get('id');
 
   if (range <= 0) {
     this._style.textContent = '';
@@ -108,17 +109,16 @@ export class Marquee extends Container {
   initialize(options) {
     if (!options.element) options.element = element('div');
     super.initialize(options);
-    /** @member {HTMLDivElement} Marquee#element - The main DIV container.
-     * Has class <code>.aux-marquee</code>.
-     */
-    this._id = 'aux-animation_' + Math.random().toString(16).substr(2, 8);
     this._style = element('style', { type: 'text/css' });
     document.head.appendChild(this._style);
   }
 
   draw(O, element) {
+    /** @member {HTMLDivElement} Marquee#element - The main DIV container.
+     * Has class <code>.aux-marquee</code>.
+     */
     addClass(element, 'aux-marquee');
-    this.label.element.id = this._id;
+    this.label.set('id', createID('aux-label-'));
     super.draw(O, element);
   }
 
