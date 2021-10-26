@@ -69,6 +69,7 @@ function deactivateAutoclose() {
  * @property {boolean} [options.auto_close=false] - Set dialog to `visible=false` if clicked outside in the document.
  * @property {boolean} [options.auto_remove=false] - Remove the dialogs DOM node after setting `visible=false`.
  * @property {boolean} [options.toplevel=false] - Add the dialog DOM node to the topmost position in DOM on `visible=true`. Topmost means either a parenting `AWML-ROOT` or the `BODY` node.
+ * @property {boolean} [options.reset_focus=true] - Reset the focus to the element which had the focus before opening the dialog on closing the dialog.
  *
  */
 export class Dialog extends Container {
@@ -81,6 +82,7 @@ export class Dialog extends Container {
       auto_remove: 'boolean',
       toplevel: 'boolean',
       modal: 'boolean',
+      reset_focus: 'boolean',
     });
   }
 
@@ -94,6 +96,7 @@ export class Dialog extends Container {
       toplevel: false,
       role: 'dialog',
       modal: false,
+      reset_focus: true,
     };
   }
 
@@ -109,18 +112,18 @@ export class Dialog extends Container {
       },
       set_visible: function (val) {
         const O = this.options;
-
+        const C = O.container;
+        console.log(val)
         if (val === true) {
           if (O.auto_close) activateAutoclose.call(this);
           if (O.modal)
-            O.container.appendChild(this._modal);
+            C.appendChild(this._modal);
           this.triggerResize();
         } else {
           deactivateAutoclose.call(this);
         }
 
         if (val === 'showing') {
-          const C = O.container;
           if (C) {
             C.appendChild(this.element);
             if (O.modal)
@@ -132,8 +135,8 @@ export class Dialog extends Container {
         if (val) {
           if (
             O.toplevel &&
-            O.container.tagName !== 'AWML-ROOT' &&
-            O.container.tagName !== 'BODY'
+            C.tagName !== 'AWML-ROOT' &&
+            C.tagName !== 'BODY'
           ) {
             let p = this.element;
             while (
@@ -208,9 +211,15 @@ export class Dialog extends Container {
    * @param {Number} [y] - New Y-position of the dialog.
    */
   open(x, y) {
+    this._previousFocus = document.activeElement;
     if (typeof x !== 'undefined') this.set('x', x);
     if (typeof y !== 'undefined') this.set('y', y);
     this.userset('visible', true);
+    /**
+     * Is fired when the dialog is opened.
+     *
+     * @event Dialog#open
+     */
     this.emit('open');
   }
 
@@ -221,6 +230,14 @@ export class Dialog extends Container {
    */
   close() {
     this.userset('visible', false);
+    /**
+     * Is fired when the dialog is closed.
+     *
+     * @event Dialog#close
+     */
+    this.emit('close');
+    if (this._previousFocus && this.options.reset_focus)
+      this._previousFocus.focus();
   }
 
   /**
