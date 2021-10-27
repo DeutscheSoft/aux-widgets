@@ -660,7 +660,7 @@ export function isTouch() {
 }
 
 /**
- * Create a unique ID string
+ * Create a unique ID string.
  * @returns {string}
  * @function createID
  */
@@ -669,4 +669,45 @@ export function createID(prefix) {
   while (!id || document.getElementById(id))
     id = prefix + Math.random().toString(16).substr(2, 8);
   return id;
+}
+
+/**
+ * Get all child elements which can be focused.
+ * @returns {array}
+ * @param {HTMLElement} element - The parent element. If omitted, document.body is used.
+ * @function getFocusableELements
+ */
+export function getFocusableElements(element) {
+  element = element || document.body;
+  var E = element.querySelectorAll(
+    '[tabindex]:not([tabindex="-1"]), ' + 
+    'a[href]:not([disabled]), ' + 
+    'button:not([disabled]), ' + 
+    'textarea:not([disabled]), ' + 
+    'input[type="text"]:not([disabled]), ' + 
+    'input[type="radio"]:not([disabled]), ' + 
+    'input[type="checkbox"]:not([disabled]), ' + 
+    'select:not([disabled])');
+  return E;
+}
+
+/**
+ * Observe part of the DOM for changes. The callback is called if nodes
+ * are added or removed from the DOM structire (including subtrees).
+ *
+ * @returns {MutationObserver}
+ * @param {HTMLNode} element - The parent element. If omitted, document.body is used.
+ * @param {function} callback - The callback function.
+ * @param {object} options - An object containing options. See
+ *   https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver/observe
+ *   Default is `{childList: true, subtree: true}`.
+ * @function observeDOM
+ */
+export function observeDOM(element, callback, options) {
+  element = element || document.body;
+  options = options || {childList: true, subtree: true};
+  if(element.nodeType !== 1) return; 
+  const mo = new MutationObserver(callback);
+  mo.observe(element, options);
+  return mo;
 }

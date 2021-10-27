@@ -20,7 +20,7 @@
 import { defineChildElement } from './../widget_helpers.js';
 import { Container } from './container.js';
 import { translateAnchor } from '../utils/anchor.js';
-import { addClass } from '../utils/dom.js';
+import { addClass, getFocusableElements, observeDOM } from '../utils/dom.js';
 
 function autocloseCallback(e) {
   let curr = e.target;
@@ -50,6 +50,43 @@ function deactivateAutoclose() {
   this._autoclose_active = false;
 }
 
+function keepInside(e) {
+  if (e.key === 'Tab' || e.keyCode === 9) {
+    const E = getFocusableElements(this.element);
+    const first = E[0];
+    const last = E[E.length - 1];
+    if ( e.shiftKey ) {
+      if (document.activeElement === first) {
+        last.focus();
+        e.preventDefault();
+      }
+    } else {
+      if (document.activeElement === last) {
+        first.focus();
+        e.preventDefault();
+      }
+    }
+  }
+}
+
+function handleTabbing() {
+  if (this._tabeventtargets.length) {
+    for (let i = 0, m = this._tabeventtargets.length; i < m; ++i) {
+      this._tabeventtargets[i].removeEventListener('keydown', this._tabbing_cb);
+    }
+    this._tabeventtargets = [];
+  }
+  if (!this.options.contain_focus)
+    return;
+  const F = getFocusableElements(this.element);
+  if (F[0]) {
+    F[0].addEventListener('keydown', this._tabbing_cb);
+  }
+  if (F[F.length - 1]) {
+    F[F.length - 1].addEventListener('keydown', this._tabbing_cb);
+  }
+}
+
 /**
  * Dialog provides a hovering area which can be closed by clicking/tapping
  * anywhere on the screen. It can be automatically pushed to the topmost
@@ -66,10 +103,11 @@ function deactivateAutoclose() {
  * @property {String} [options.anchor="top-left"] - Origin of `x` and `y` coordinates. See {@link Anchor} for more information.
  * @property {Number} [options.x=0] - X-position of the dialog.
  * @property {Number} [options.y=0] - Y-position of the dialog.
- * @property {boolean} [options.auto_close=false] - Set dialog to `visible=false` if clicked outside in the document.
- * @property {boolean} [options.auto_remove=false] - Remove the dialogs DOM node after setting `visible=false`.
- * @property {boolean} [options.toplevel=false] - Add the dialog DOM node to the topmost position in DOM on `visible=true`. Topmost means either a parenting `AWML-ROOT` or the `BODY` node.
- * @property {boolean} [options.reset_focus=true] - Reset the focus to the element which had the focus before opening the dialog on closing the dialog.
+ * @property {Boolean} [options.auto_close=false] - Set dialog to `visible=false` if clicked outside in the document.
+ * @property {Boolean} [options.auto_remove=false] - Remove the dialogs DOM node after setting `visible=false`.
+ * @property {Boolean} [options.toplevel=false] - Add the dialog DOM node to the topmost position in DOM on `visible=true`. Topmost means either a parenting `AWML-ROOT` or the `BODY` node.
+ * @property {Boolean} [options.reset_focus=true] - Reset the focus to the element which had the focus before opening the dialog on closing the dialog.
+ * @property {Boolean} [options.contain_focus=true] - Keep focus inside the dialog.
  *
  */
 export class Dialog extends Container {
@@ -83,6 +121,7 @@ export class Dialog extends Container {
       toplevel: 'boolean',
       modal: 'boolean',
       reset_focus: 'boolean',
+      contain_focus: 'boolean',
     });
   }
 
@@ -97,6 +136,7 @@ export class Dialog extends Container {
       role: 'dialog',
       modal: false,
       reset_focus: true,
+      contain_focus: true,
     };
   }
 
@@ -113,7 +153,7 @@ export class Dialog extends Container {
       set_visible: function (val) {
         const O = this.options;
         const C = O.container;
-        console.log(val)
+
         if (val === true) {
           if (O.auto_close) activateAutoclose.call(this);
           if (O.modal)
@@ -159,6 +199,7 @@ export class Dialog extends Container {
           deactivateAutoclose.call(this);
         }
       },
+      set_contain_focus: handleTabbing,
     };
   }
 
@@ -170,7 +211,12 @@ export class Dialog extends Container {
     if (!O.container) O.container = window.document.body;
     this._autoclose_active = false;
     this._autoclose_cb = autocloseCallback.bind(this);
+    this._tabbing_cb = keepInside.bind(this);
+    this._tabeventtargets = [];
+    this.set('contain_focus', O.contain_focus);
     this.set('visible', O.visible);
+    observeDOM(this.element, handleTabbing.bind(this));
+    handleTabbing.call(this);
   }
 
   resize() {
@@ -209,8 +255,9 @@ export class Dialog extends Container {
    *
    * @param {Number} [x] - New X-position of the dialog.
    * @param {Number} [y] - New Y-position of the dialog.
+   * @param {HTMLElement} [focus] - Element to receive focus after opening the dialog.
    */
-  open(x, y) {
+  open(x, y, focus) {
     this._previousFocus = document.activeElement;
     if (typeof x !== 'undefined') this.set('x', x);
     if (typeof y !== 'undefined') this.set('y', y);
@@ -221,6 +268,9 @@ export class Dialog extends Container {
      * @event Dialog#open
      */
     this.emit('open');
+
+    if (focus)
+      focus.focus();
   }
 
   /**
