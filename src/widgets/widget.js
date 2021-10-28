@@ -649,6 +649,8 @@ export class Widget extends Base {
 
       const visible = O.visible;
 
+      this.getFocusTargets().forEach(v => v.setAttribute('aria-hidden', !visible));
+
       if (visible === true) {
         removeClass(E, 'aux-hide');
         addClass(E, 'aux-show');
@@ -658,7 +660,6 @@ export class Widget extends Base {
         this.disableDraw();
         return;
       }
-      this.getFocusTargets().forEach(v => v.setAttribute('aria-hidden', !visible));
     }
 
     E = this.getStyleTarget();
