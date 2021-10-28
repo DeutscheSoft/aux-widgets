@@ -259,11 +259,11 @@ export class Dialog extends Container {
     }
     if (I.x) {
       I.x = false;
-      E.style.left = O.x;
+      E.style.left = typeof O.x === 'string' ? O.x : O.x + 'px';
     }
     if (I.y) {
       I.y = false;
-      E.style.top = O.y;
+      E.style.top = typeof O.y === 'string' ? O.y : O.y + 'px';
     }
     if (I.modal) {
       I.modal = false;
