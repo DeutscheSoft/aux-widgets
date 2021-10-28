@@ -1,20 +1,37 @@
+<span>Dialog with <code>auto_close=true</code></span>
 <aux-button
-  onclick='document.getElementById("dialog").auxWidget.open(0, 0);'
+  onclick='document.getElementById("dialog1").auxWidget.open();'
   id="open_dialog"
   label="Open Dialog"
 ></aux-button>
+<span>Modal Dialog</span>
+<aux-button
+  onclick='document.getElementById("dialog2").auxWidget.open();'
+  id="open_dialog"
+  label="Open Dialog"
+></aux-button>
+
 <aux-dialog
-  id="dialog"
+  id="dialog1"
   visible="false"
   toplevel="true"
   auto_close="true"
   auto_remove="false"
-  modal="true"
-  style="width: 200px; height: 160px; padding: 16px; position: fixed;"
+  anchor="center"
+  style="width: 200px; padding: 16px; position: fixed; top: 50%; left: 50%;"
 >
   This is a Dialog widget. Click anywhere outside to close.
-  <button>Foobar</button>
-  <input type=text></input>
-  <aux-button label="Barfoo"></aux-button>
 </aux-dialog>
-<input></input>
+<aux-dialog
+  id="dialog2"
+  visible="false"
+  toplevel="true"
+  auto_remove="false"
+  modal="true"
+  anchor="center"
+  style="width: 200px; padding: 16px; position: fixed; top: 50%; left: 50%;"
+>
+  This is a modal Dialog widget.
+  <br><br>
+  <aux-button label="Close" onclick='document.getElementById("dialog2").auxWidget.close()'></aux-button>
+</aux-dialog>
