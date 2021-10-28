@@ -39,13 +39,17 @@ function autocloseCallback(e) {
 
 function activateAutoclose() {
   if (this._autoclose_active) return;
-  document.body.addEventListener('click', this._autoclose_cb, true);
+  setTimeout((function () {
+    document.body.addEventListener('click', this._autoclose_cb, { capture: false });
+  }).bind(this), 50);
   this._autoclose_active = true;
 }
 
 function deactivateAutoclose() {
   if (!this._autoclose_active) return;
-  document.body.removeEventListener('click', this._autoclose_cb);
+  setTimeout((function () {
+    document.body.removeEventListener('click', this._autoclose_cb, { capture: false });
+  }).bind(this), 50);
   this._autoclose_active = false;
 }
 
@@ -86,6 +90,11 @@ function handleTabbing() {
   }
 }
 
+function off (e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+}
+
 /**
  * Dialog provides a hovering area which can be closed by clicking/tapping
  * anywhere on the screen. It can be automatically pushed to the topmost
@@ -113,8 +122,8 @@ export class Dialog extends Container {
   static get _options() {
     return Object.assign({}, Container.getOptionTypes(), {
       anchor: 'string',
-      x: 'number',
-      y: 'number',
+      x: 'string',
+      y: 'string',
       auto_close: 'boolean',
       auto_remove: 'boolean',
       toplevel: 'boolean',
@@ -127,8 +136,8 @@ export class Dialog extends Container {
   static get options() {
     return {
       anchor: 'top-left',
-      x: 0,
-      y: 0,
+      x: undefined,
+      y: undefined,
       auto_close: false,
       auto_remove: false,
       toplevel: false,
@@ -215,13 +224,16 @@ export class Dialog extends Container {
      *   Has class <code>.aux-dialog-modal</code>.
      */
     this._modal = element('div', { class: 'aux-dialog-modal' });
+    this._modal.addEventListener('click', off, { capture: true });
+    this._modal.addEventListener('mousedown', off, { capture: true });
+    this._modal.addEventListener('touchstart', off, { capture: true });
     
     this._autoclose_active = false;
     this._autoclose_cb = autocloseCallback.bind(this);
     this._tabbing_cb = keepInside.bind(this);
     this._tabeventtargets = [];
     this.set('contain_focus', O.contain_focus);
-    this.set('visible', O.visible);
+      
     observeDOM(this.element, handleTabbing.bind(this));
     handleTabbing.call(this);
   }
@@ -247,11 +259,18 @@ export class Dialog extends Container {
     }
     if (I.x) {
       I.x = false;
-      E.style.left = O.x + 'px';
+      E.style.left = O.x;
     }
     if (I.y) {
       I.y = false;
-      E.style.top = O.y + 'px';
+      E.style.top = O.y;
+    }
+    if (I.modal && O.visible) {
+      I.modal = false;
+      if (O.modal && O.visble)
+        O.container.appendChild(this._modal);
+      else
+        this._modal.remove();
     }
   }
 
@@ -260,8 +279,8 @@ export class Dialog extends Container {
    *
    * @method Dialog#open
    *
-   * @param {Number} [x] - New X-position of the dialog.
-   * @param {Number} [y] - New Y-position of the dialog.
+   * @param {String} [x] - New X-position of the dialog.
+   * @param {String} [y] - New Y-position of the dialog.
    * @param {HTMLElement} [focus] - Element to receive focus after opening the dialog.
    */
   open(x, y, focus) {
@@ -278,10 +297,15 @@ export class Dialog extends Container {
 
     if (!focus) {
       const E = getFocusableElements(this.element);
-      if (E[0])
-        E[0].focus();
+      if (E[0]) {
+        setTimeout(function() {
+          E[0].focus();
+        }, 50);
+      }
     } else {
-      focus.focus();
+      setTimeout(function() {
+        focus.focus();
+      }, 50);
     }
   }
 
@@ -298,8 +322,11 @@ export class Dialog extends Container {
      * @event Dialog#close
      */
     this.emit('close');
-    if (this._previousFocus && this.options.reset_focus)
-      this._previousFocus.focus();
+    if (this._previousFocus && this.options.reset_focus) {
+      setTimeout((function() {
+        this._previousFocus.focus();
+      }).bind(this), 50);
+    }
   }
 
   /**
