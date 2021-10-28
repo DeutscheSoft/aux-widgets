@@ -17,10 +17,9 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineChildElement } from './../widget_helpers.js';
 import { Container } from './container.js';
 import { translateAnchor } from '../utils/anchor.js';
-import { addClass, getFocusableElements, observeDOM } from '../utils/dom.js';
+import { element, addClass, getFocusableElements, observeDOM } from '../utils/dom.js';
 
 function autocloseCallback(e) {
   let curr = e.target;
@@ -190,6 +189,7 @@ export class Dialog extends Container {
           }
         } else {
           O.container = this.element.parentElement;
+          this._modal.remove();
         }
       },
       set_auto_close: function (val) {
@@ -209,6 +209,13 @@ export class Dialog extends Container {
     /* This cannot be a default option because document.body
      * is not defined there */
     if (!O.container) O.container = window.document.body;
+
+    /**
+     * @member {HTMLDiv} Dialog#_modal - The container blocking user interaction
+     *   Has class <code>.aux-dialog-modal</code>.
+     */
+    this._modal = element('div', { class: 'aux-dialog-modal' });
+    
     this._autoclose_active = false;
     this._autoclose_cb = autocloseCallback.bind(this);
     this._tabbing_cb = keepInside.bind(this);
@@ -307,11 +314,3 @@ export class Dialog extends Container {
     this.set('y', O.y);
   }
 }
-
-/**
- * @member {HTMLDiv} Dialog#_modal - The container blocking user interaction
- *   Has class <code>.aux-modal</code>.
- */
-defineChildElement(Dialog, 'modal', {
-  show: false,
-});
