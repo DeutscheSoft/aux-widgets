@@ -440,8 +440,12 @@ export const Meter = defineClass({
 
     if (!diff) return;
 
-    // FIXME: this is currently broken for some reason
-    if (diff == 1) diff = 4;
+    // FIXME:
+    //  - diff == 1 is currently broken for some reason
+    // Note: Safari has a rendering bug, it leads to rendering artifacts
+    // in certain situations. It is unclear what triggers this issue, simply
+    // drawing the full meter is a valid workaround for the issue.
+    if (diff == 1 || 'safari' in window) diff = 4;
 
     var ctx = this._canvas.getContext('2d');
     ctx.fillStyle = O.foreground;
