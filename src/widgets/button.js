@@ -101,12 +101,13 @@ function pressEnd(e) {
    * @param {Event} event - Either the MouseEvent or the TouchEvent.
    */
   this.emit('press_end', e);
-  //if (e.type.startsWith('touch')) {
-    //this.element.dispatchEvent(new UIEvent('click'));
-  //}
-  this.element.dispatchEvent(new UIEvent('click'));
-  if (e.preventDefault)
-    e.preventDefault();
+  if (e.type.startsWith('touch') || e.type.startsWith('key')) {
+    this.element.dispatchEvent(new PointerEvent('click'), {
+      pointerType: e.pointerType,
+      bubbles: true,
+      cancelable: true,
+    });
+  }
 }
 function pressCancel(e) {
   const O = this.options;
@@ -185,11 +186,6 @@ function touchstart(e) {
   if (this.__touch_id !== false) return;
   this.__touch_id = e.targetTouches[0].identifier;
   this.__init_target = e.targetTouches[0].target.getBoundingClientRect();
-  if (e.cancelable) {
-    // Why is this necessary?
-    //e.preventDefault();
-    //e.stopPropagation();
-  }
 
   this.on('touchend', touchend);
   this.on('touchcancel', touchcancel);
