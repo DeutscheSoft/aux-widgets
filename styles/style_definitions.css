@@ -137,12 +137,19 @@
   opacity: 0.5;
 }
 
+/* DIALOG */
+
+.aux-dialog {
+  background: var(--aux-dialog-background);
+  color: var(--aux-dialog-color);
+  box-shadow: var(--aux-dialog-shadow);
+}
+
 /* FADER */
 
 .aux-fader .aux-handle {
   border-radius: var(--aux-border-radius);
-  box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.5), 1px 3px 3px rgba(0, 0, 0, 0.2),
-    2px 6px 3px rgba(0, 0, 0, 0.18), 3px 9px 3px rgba(0, 0, 0, 0.16);
+  box-shadow: var(--aux-fader-handle-shadow);
 }
 
 .aux-fader .aux-handle:focus {
@@ -275,9 +282,7 @@
   );
 }
 .aux-knob::after {
-  box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.5), 1px 3px 3px rgba(0, 0, 0, 0.2),
-    2px 6px 3px rgba(0, 0, 0, 0.18), 3px 9px 3px rgba(0, 0, 0, 0.16),
-    4px 12px 3px rgba(0, 0, 0, 0.14), 5px 15px 3px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--aux-knob-shadow);
 }
 .aux-knob > svg {
   border-radius: 50%;
@@ -470,13 +475,10 @@
 /* SPREAD */
 
 .aux-spread .aux-lower {
-  
-  box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.5), 1px 3px 3px rgba(0, 0, 0, 0.2),
-    2px 6px 3px rgba(0, 0, 0, 0.18), 3px 9px 3px rgba(0, 0, 0, 0.16);
+  box-shadow: var(--aux-spread-shadow);
 }
 .aux-spread .aux-upper {
-  box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.5), 1px 3px 3px rgba(0, 0, 0, 0.2),
-    2px 6px 3px rgba(0, 0, 0, 0.18), 3px 9px 3px rgba(0, 0, 0, 0.16);
+  box-shadow: var(--aux-spread-shadow);
 }
 
 .aux-spread .aux-lower:focus {
