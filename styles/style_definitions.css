@@ -144,6 +144,11 @@
   color: var(--aux-dialog-color);
   box-shadow: var(--aux-dialog-shadow);
 }
+.aux-dialog-modal {
+  background: var(--aux-dialog-modal-background);
+  color: var(--aux-dialog-modal-color);
+  opacity: var(--aux-dialog-modal-opacity);
+}
 
 /* FADER */
 

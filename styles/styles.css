@@ -44,6 +44,10 @@
   --aux-dialog-background: var(--aux-contrast-base);
   --aux-dialog-color: var(--aux-contrast-text);
   --aux-dialog-shadow: 1px 3px 12px rgba(0, 0, 0, 0.5);
+  
+  --aux-dialog-modal-background: var(--aux-main-base);
+  --aux-dialog-modal-color: var(--aux-main-text);
+  --aux-dialog-modal-opacity: 0.5;
 
   --aux-fader-handle-shadow:
     1px 1px 12px rgba(0, 0, 0, 0.5),
