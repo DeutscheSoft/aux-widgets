@@ -265,12 +265,16 @@ export class Dialog extends Container {
       I.y = false;
       E.style.top = O.y;
     }
-    if (I.modal && O.visible) {
+    if (I.modal) {
       I.modal = false;
-      if (O.modal && O.visble)
+      if (O.modal && O.visible)
         O.container.appendChild(this._modal);
       else
         this._modal.remove();
+      if (O.modal)
+        E.setAttribute('aria-modal', 'true');
+      else
+        E.removeAttribute('aria-modal');
     }
   }
 
