@@ -108,6 +108,7 @@ function pressEnd(e) {
       cancelable: true,
     });
   }
+  if (e.preventDefault) e.preventDefault();
 }
 function pressCancel(e) {
   const O = this.options;
