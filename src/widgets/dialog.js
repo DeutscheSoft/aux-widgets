@@ -269,7 +269,11 @@ export class Dialog extends Container {
      */
     this.emit('open');
 
-    if (focus)
+    if (focus === true) {
+      const E = getFocusableElements(this.element);
+      if (E[0])
+        E[0].focus();
+    } else if (focus)
       focus.focus();
   }
 
