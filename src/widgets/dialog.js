@@ -40,7 +40,7 @@ function autocloseCallback(e) {
 
 function activateAutoclose() {
   if (this._autoclose_active) return;
-  document.body.addEventListener('click', this._autoclose_cb);
+  document.body.addEventListener('click', this._autoclose_cb, true);
   this._autoclose_active = true;
 }
 
@@ -269,12 +269,13 @@ export class Dialog extends Container {
      */
     this.emit('open');
 
-    if (focus === true) {
+    if (!focus) {
       const E = getFocusableElements(this.element);
       if (E[0])
         E[0].focus();
-    } else if (focus)
+    } else {
       focus.focus();
+    }
   }
 
   /**
