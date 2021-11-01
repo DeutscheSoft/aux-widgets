@@ -36,7 +36,7 @@ import {
   rangedOptionsTypes,
   makeRanged,
 } from '../utils/make_ranged.js';
-import { focusMoveDefault } from '../utils/keyboard.js';
+import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
 import { warn } from '../utils/log.js';
 
 function dblClick() {
@@ -174,6 +174,7 @@ export class Slider extends Widget {
 
   draw(O, element) {
     addClass(element, 'aux-slider');
+    announceFocusMoveKeys.call(this);
 
     super.draw(O, element);
   }

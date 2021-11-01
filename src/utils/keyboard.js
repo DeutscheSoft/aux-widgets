@@ -64,3 +64,17 @@ export function focusMoveDefault(v) {
     this.userset(valName, newval);
   }
 }
+
+/**
+ * Adds all possible keyboard commands used in `focus_move` to aria-keyshortcuts
+ * on all `getFocusTargets()` elements. Call this function in the
+ * context of an actual widget.
+ *
+ * @function announceFocusMoveKeys
+ */
+export function announceFocusMoveKeys() {
+  this.getFocusTargets().forEach(v => v.setAttribute('aria-keyshortcuts',
+    'ArrowLeft ArrowRight ArrowUp ArrowDown Home End PageUp PageDown ' +
+    'Control+ArrowLeft Control+ArrowRight Control+ArrowUp Control+ArrowDown ' +
+    'Shift+ArrowLeft Shift+ArrowRight Shift+ArrowUp Shift+ArrowDown'));
+}

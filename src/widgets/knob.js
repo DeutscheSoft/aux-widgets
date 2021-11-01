@@ -33,7 +33,7 @@ import { ScrollValue } from '../modules/scrollvalue.js';
 import { element, addClass } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
 import { FORMAT } from '../utils/sprintf.js';
-import { focusMoveDefault } from '../utils/keyboard.js';
+import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
 import { objectAnd, objectSub } from '../utils/object.js';
 
 const formatViewbox = FORMAT('0 0 %d %d');
@@ -256,6 +256,7 @@ export class Knob extends Widget {
   draw(O, element) {
     addClass(element, 'aux-knob');
     element.appendChild(this.svg);
+    announceFocusMoveKeys.call(this);
 
     super.draw(O, element);
   }

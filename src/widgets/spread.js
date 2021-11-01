@@ -29,7 +29,7 @@
 import { Widget } from './widget.js';
 import { warning } from '../utils/warning.js';
 import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
-import { focusMoveDefault } from '../utils/keyboard.js';
+import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
 import { Scale } from './scale.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
@@ -203,6 +203,7 @@ export class Spread extends Widget {
 
     this._lowercb = focusMoveDefault('lower');
     this._uppercb = focusMoveDefault('upper');
+    announceFocusMoveKeys.call(this);
 
     /**
      * @member {HTMLDivElement} Spread#element - The main DIV container.
