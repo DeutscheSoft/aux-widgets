@@ -63,7 +63,7 @@ function addEntry(select, entry, entry_component) {
     position = select.indexByEntry(next);
   }
 
-  select.addEntry(entry, position === false ? undefined : position);
+  select.addEntry(entry, position === false || position === -1 ? undefined : position);
 }
 
 function removeEntry(select, entry) {
