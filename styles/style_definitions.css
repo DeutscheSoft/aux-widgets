@@ -469,6 +469,13 @@
 .aux-selectlist > .aux-selectentry.aux-active {
   background: var(--aux-active-base);
 }
+.aux-selectlist > .aux-selectentry:focus {
+  outline: 2px solid var(--aux-active-base);
+  outline-offset: -2px;
+}
+.aux-selectlist > .aux-selectentry.aux-active:focus {
+  outline-color: var(--aux-widget-base);
+}
 
 /* slider */
 
