@@ -19,7 +19,7 @@
 
 import { Container } from './container.js';
 import { translateAnchor } from '../utils/anchor.js';
-import { element, addClass, getFocusableElements, observeDOM } from '../utils/dom.js';
+import { element, addClass, getFocusableElements, observeDOM, setDelayedFocus } from '../utils/dom.js';
 
 function autocloseCallback(e) {
   let curr = e.target;
@@ -302,14 +302,10 @@ export class Dialog extends Container {
     if (!focus) {
       const E = getFocusableElements(this.element);
       if (E[0]) {
-        setTimeout(function() {
-          E[0].focus();
-        }, 50);
+        setDelayedFocus(E[0]);
       }
     } else {
-      setTimeout(function() {
-        focus.focus();
-      }, 50);
+      setDelayedFocus(focus);
     }
   }
 
@@ -327,9 +323,7 @@ export class Dialog extends Container {
      */
     this.emit('close');
     if (this._previousFocus && this.options.reset_focus) {
-      setTimeout((function() {
-        this._previousFocus.focus();
-      }).bind(this), 50);
+      setDelayedFocus(this._previousFocus);
     }
   }
 
