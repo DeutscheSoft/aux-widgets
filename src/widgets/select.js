@@ -22,6 +22,9 @@
 import { defineChildWidget } from './../child_widget.js';
 import { Button } from './button.js';
 import { Label } from './label.js';
+import { setDelayedFocus, createID } from '../utils/dom.js';
+import { Timer } from '../utils/timers.js';
+
 import {
   element,
   addClass,
@@ -56,6 +59,8 @@ function hideList() {
   this.__timeout = false;
   if (!this.__open) {
     this._list.remove();
+    setDelayedFocus(this.element);
+    this.element.removeAttribute('aria-expanded');
   } else {
     document.addEventListener('touchstart', this._globalTouchStart);
     document.addEventListener('mousedown', this._globalTouchStart);
@@ -84,9 +89,12 @@ function showList(show) {
       top: Math.min(positionTop(E) + outerHeight(E, true), ch + sy - lh) + 'px',
       left: Math.min(positionLeft(E), cw + sx - lw) + 'px',
     });
+    E.setAttribute('aria-expanded', 'true');
   } else {
     document.removeEventListener('touchstart', this._globalTouchStart);
     document.removeEventListener('mousedown', this._globalTouchStart);
+    setDelayedFocus(E);
+    E.removeAttribute('aria-expanded');
   }
   setStyle(this._list, 'opacity', show ? '1' : '0');
   this.__transition = true;
@@ -139,6 +147,7 @@ export class Select extends Button {
       resized: 'boolean',
       placeholder: 'string|boolean',
       list_class: 'string',
+      typing_delay: 'number',
     });
   }
 
@@ -155,6 +164,7 @@ export class Select extends Button {
       list_class: '',
       label: '',
       role: 'select',
+      typing_delay: 250,
     };
   }
 
@@ -165,17 +175,25 @@ export class Select extends Button {
       },
       set_show_list: function (v) {
         this.set('icon', v ? 'arrowup' : 'arrowdown');
+        if (v) {
+          const entry = this.get('selected_entry');
+          setDelayedFocus((entry || this.entries[0]).element);
+        }
       },
       set_selected_entry: function (entry) {
+        const entries = this.entries;
+        entries.forEach(v => v.element.removeAttribute('aria-selected'));
         if (entry) {
-          const entries = this.entries;
           this.update('selected', entries.indexOf(entry));
           this.update('value', entry.get('value'));
           this.update('label', entry.get('label'));
+          this._list.setAttribute('aria-activedescendant', entry.get('id'));
+          entry.element.setAttribute('aria-selected', 'true')
         } else {
           this.update('selected', -1);
           this.update('value', void 0);
           this.update('label', this.get('placeholder'));
+          this._list.removeAttribute('aria-activedescendant');
         }
       },
       set_selected: function (index) {
@@ -256,6 +274,11 @@ export class Select extends Button {
     } else {
       this.set('selected_entry');
     }
+
+    this.__typing = '';
+    this._timer = new Timer(() => {
+      this.__typing = '';
+    });
   }
 
   destroy() {
@@ -579,6 +602,23 @@ export class Select extends Button {
   }
 
   /**
+   * Get the index of a {@link SelectEntry} by its HTMLElement.
+   *
+   * @method Select#indexByElement
+   *
+   * @param {HTMLElement} element - The element of the {@link SelectEntry}.
+   *
+   * @returns {Integer} The index of the entry or `-1`.
+   */
+  indexByElement(element) {
+    const entries = this.entries;
+    for (let i = 0; i < entries.length; i++) {
+      if (entries[i].element === element) return i;
+    }
+    return -1;
+  }
+
+  /**
    * Get a {@link SelectEntry} by its value.
    *
    * @method Select#entryByValue
@@ -608,6 +648,27 @@ export class Select extends Button {
     const entries = this.entries;
     for (let i = 0; i < entries.length; i++) {
       if (entries[i].options.label === label) return entries[i];
+    }
+    return null;
+  }
+
+  /**
+   * Get the next {@link SelectEntry} whose label starts with the given string.
+   *
+   * @method Select#nextEntryByPartialLabel
+   *
+   * @param {String} label - The label of the {@link SelectEntry}.
+   * @param {Number} current - the current index to start searching.
+   *
+   * @returns {SelectEntry|Boolean} The {@link SelectEntry} or `null`.
+   */
+  nextEntryByPartialLabel(label, current) {
+    const entries = this.entries;
+    current = current || -1;
+    current = Math.max(0, Math.min(this.entries.length - 1, current + 1));
+    for (let i = current; i < entries.length; i++) {
+      if (entries[i].options.label.toLowerCase().startsWith(label))
+        return entries[i];
     }
     return null;
   }
@@ -697,6 +758,7 @@ export class Select extends Button {
 
   draw(O, element) {
     addClass(element, 'aux-select');
+    this.element.setAttribute('aria-haspopup', 'listbox');
 
     super.draw(O, element);
   }
@@ -804,6 +866,21 @@ export class Select extends Button {
     return entry ? entry.get('value') : void 0;
   }
 
+  focusWhileTyping(key) {
+    this._timer.restart(this.options.typing_delay);
+    this.__typing += key;
+    let entry;
+    if (this.__typing.length > 1)
+      entry = this.nextEntryByPartialLabel(this.__typing.toLowerCase());
+    else
+      entry = this.nextEntryByPartialLabel(
+        this.__typing.toLowerCase(),
+        this.indexByElement(document.activeElement),
+      );
+    if (entry)
+      entry.element.focus();
+  }
+
   set(key, value) {
     if (key === 'selected') {
       typecheckInteger(value);
@@ -846,6 +923,38 @@ function onSelect(e) {
   return false;
 }
 
+function onFocusMove(O) {
+  const {direction, speed} = O;
+  const parent = this.parent;
+  const last = parent.entries.length - 1;
+  let i;
+  if (speed === 'full') {
+    if (direction === 'up' || direction === 'right')
+      i = last;
+    else
+      i = 0;
+  } else {
+    i = parent.indexByEntry(this);
+    if (direction === 'up' || direction === 'right')
+      i -= 1;
+    else
+      i += 1;
+    i = Math.max(0, Math.min(i, last));
+  }
+  setDelayedFocus(parent.entries[i].element);
+}
+
+function onKeyDown(e) {
+  if (e.code === 'Tab')
+    this.parent.set('show_list', false);
+  if (e.code === 'Escape')
+    this.parent.set('show_list', false);
+  if (e.key.length === 1)
+    this.parent.focusWhileTyping(e.key);
+  if (e.code === 'Enter' || e.code === 'Space')
+    this.element.click();
+}
+
 /**
  * SelectEntry provides a {@link Label} as an entry for {@link Select}.
  *
@@ -870,6 +979,7 @@ export class SelectEntry extends Label {
     return {
       value: null,
       role: 'option',
+      tabindex: 0,
     };
   }
 
@@ -877,11 +987,14 @@ export class SelectEntry extends Label {
     if (!options.element) options.element = element('div');
     super.initialize(options);
     addClass(this.element, 'aux-selectentry');
+    this.set('id', createID('aux-select-entry-'));
   }
 
   static get static_events() {
     return {
       click: onSelect,
+      focus_move: onFocusMove,
+      keydown: onKeyDown,
     };
   }
 }
