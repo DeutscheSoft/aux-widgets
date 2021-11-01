@@ -253,6 +253,8 @@ export class Select extends Button {
       this.set('selected', sel);
     } else if (val !== void 0) {
       this.set('value', val);
+    } else {
+      this.set('selected_entry');
     }
   }
 
