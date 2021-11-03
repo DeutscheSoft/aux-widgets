@@ -176,8 +176,9 @@ export class Select extends Button {
       set_show_list: function (v) {
         this.set('icon', v ? 'arrowup' : 'arrowdown');
         if (v) {
-          const entry = this.get('selected_entry');
-          setDelayedFocus((entry || this.entries[0]).element);
+          const entry = this.get('selected_entry') || this.entries[0];
+          if (entry)
+            setDelayedFocus(entry.element);
         }
       },
       set_selected_entry: function (entry) {
