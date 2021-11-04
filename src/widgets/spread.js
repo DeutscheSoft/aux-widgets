@@ -203,7 +203,6 @@ export class Spread extends Widget {
 
     this._lowercb = focusMoveDefault('lower');
     this._uppercb = focusMoveDefault('upper');
-    announceFocusMoveKeys.call(this);
 
     /**
      * @member {HTMLDivElement} Spread#element - The main DIV container.
@@ -264,6 +263,8 @@ export class Spread extends Widget {
     });
     this.dragupper.on('startdrag', () => this.startInteracting());
     this.dragupper.on('stopdrag', () => this.stopInteracting());
+
+    announceFocusMoveKeys.call(this);
     
     this.set('bind_dblclick', O.bind_dblclick);
   }
