@@ -11,6 +11,8 @@
     "start-server-and-test": "^1.13.1"
   },
   "dependencies": {
+    "axe-core": "^4.3.5",
+    "cypress-axe": "^0.13.0",
     "http-server": "^13.0.1"
   },
   "scripts": {
