@@ -1,6 +1,6 @@
-describe('fader dragging class set', () => {
+describe('fader handle is dragged', () => {
 
-  it('successfully loads', () => {
+  it('should have moved', () => {
 
     cy.visit('http://localhost:8080/examples.html#Fader');
 
@@ -12,9 +12,9 @@ describe('fader dragging class set', () => {
         .wait(1500)
         .move({ x: 0, y: -100, force: true })
         .then(function(){
-          $newoff = Cypress.$($el).offset().top;
-          expect($newoff).to.be.lessThan($off);
-        });
+        $newoff = Cypress.$($el).offset().top;
+        expect($newoff).to.be.lessThan($off);
       });
     });
   });
+});
