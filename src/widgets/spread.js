@@ -219,13 +219,13 @@ export class Spread extends Widget {
     /**
      * @member {HTMLDivElement} Spread#_lower - The lower handle of the spread. Has class <code>.aux-lower</code>.
      */
-    this._lower = element('div', 'aux-lower');
+    this._lower = element('div', 'aux-lower', 'aux-handle');
     this._track.appendChild(this._lower);
 
     /**
      * @member {HTMLDivElement} Spread#_lower - The lower handle of the spread. Has class <code>.aux-lower</code>.
      */
-    this._upper = element('div', 'aux-upper');
+    this._upper = element('div', 'aux-upper', 'aux-handle');
     this._track.appendChild(this._upper);
 
     if (O.reset_lower === void 0) O.reset_lower = O.lower;
