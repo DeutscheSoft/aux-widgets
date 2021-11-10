@@ -1,25 +1,23 @@
 {
   "name": "cypress-testing",
   "version": "1.0.0",
-  "description": "test for widgets",
-  "author": "Anonymous Coward",
-  "license": "SEE LICENSE IN LICENSE",
+  "description": "cypress tests for aux-widgets",
   "private": true,
   "devDependencies": {
     "@4tw/cypress-drag-drop": "^1.8.1",
     "cypress": "^8.5.0",
-    "start-server-and-test": "^1.13.1"
-  },
-  "dependencies": {
+    "start-server-and-test": "^1.13.1",
     "axe-core": "^4.3.5",
+    "connect": "^3.7.0",
     "cypress-axe": "^0.13.0",
-    "http-server": "^13.0.1"
+    "serve-index": "^1.9.1",
+    "serve-static": "^1.14.1"
   },
   "scripts": {
-    "start": "http-server ../ -p 8080",
+    "start": "node serve.js",
     "cy:cmd": "cypress run",
     "cy:head": "cypress run --headed",
-    "test-cmd": "start-server-and-test start http://localhost:8080 cy:cmd",
-    "test-head": "start-server-and-test start http://localhost:8080 cy:head"
+    "test-cmd": "start-server-and-test start http://localhost:1234 cy:cmd",
+    "test-head": "start-server-and-test start http://localhost:1234 cy:head"
   }
 }

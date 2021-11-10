@@ -2,7 +2,7 @@ describe('fader handle is dragged', () => {
 
   it('should have moved', () => {
 
-    cy.visit('http://localhost:8080/examples.html#Fader');
+    cy.visit('http://localhost:1234/tests/examples/Fader.html');
 
     cy.get('div.aux-handle').eq(0).then(($el, index, $list) => {
 

@@ -1,6 +1,6 @@
 describe('fader widget test', () => {
   it('successfully loads', () => {
-    cy.visit('http://localhost:8080/examples.html#Fader');
+    cy.visit('http://localhost:1234/tests/examples/Fader.html');
 
     cy.get('.aux-handle').move({ x: 100, y: 100, force: true });
 
