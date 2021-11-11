@@ -30,6 +30,7 @@ import { setText, removeClass, addClass, toggleClass } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
 import { Range } from '../modules/range.js';
 import { Timer } from '../utils/timers.js';
+import { defineRecalculation } from '../define_recalculation.js';
 
 import { DragCapture } from '../modules/dragcapture.js';
 
@@ -1490,3 +1491,22 @@ export class ChartHandle extends Widget {
     super.destroy();
   }
 }
+
+defineRecalculation(ChartHandle, ['x_min'], function (O) {
+  this.set('x', Math.max(O.x, O.x_min));
+});
+defineRecalculation(ChartHandle, ['x_max'], function (O) {
+  this.set('x', Math.min(O.x, O.x_max));
+});
+defineRecalculation(ChartHandle, ['y_min'], function (O) {
+  this.set('y', Math.max(O.y, O.y_min));
+});
+defineRecalculation(ChartHandle, ['y_max'], function (O) {
+  this.set('y', Math.min(O.y, O.y_max));
+});
+defineRecalculation(ChartHandle, ['z_min'], function (O) {
+  this.set('z', Math.max(O.z, O.z_min));
+});
+defineRecalculation(ChartHandle, ['z_max'], function (O) {
+  this.set('z', Math.min(O.z, O.z_max));
+});

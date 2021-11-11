@@ -30,6 +30,7 @@ import {
 } from '../utils/make_ranged.js';
 import { defineChildElement } from '../widget_helpers.js';
 import { Widget } from './widget.js';
+import { defineRecalculation } from '../define_recalculation.js';
 
 function interpretLabel(x) {
   if (typeof x === 'object') return x;
@@ -756,4 +757,11 @@ defineChildElement(Circular, 'labels', {
   create: function () {
     return makeSVG('g', { class: 'aux-labels' });
   },
+});
+
+defineRecalculation(Circular, ['min'], function (O) {
+  this.set('value', Math.max(O.value, O.min));
+});
+defineRecalculation(Circular, ['max'], function (O) {
+  this.set('value', Math.min(O.value, O.max));
 });

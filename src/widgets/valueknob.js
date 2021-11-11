@@ -23,6 +23,7 @@ import { Knob } from './knob.js';
 import { Value } from './value.js';
 import { Label } from './label.js';
 import { addClass, removeClass, element } from '../utils/dom.js';
+import { defineRecalculation } from '../define_recalculation.js';
 
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -167,4 +168,11 @@ defineChildWidget(ValueKnob, 'value', {
     valuedone: valueDone,
   },
   toggle_class: true,
+});
+
+defineRecalculation(ValueKnob, ['min'], function (O) {
+  this.set('value', Math.max(O.value, O.min));
+});
+defineRecalculation(ValueKnob, ['max'], function (O) {
+  this.set('value', Math.min(O.value, O.max));
 });

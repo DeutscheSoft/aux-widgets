@@ -441,3 +441,12 @@ defineRecalculation(Spread, ['upper'], function (O) {
 defineRecalculation(Spread, ['lower'], function (O) {
   this.update('lower', Math.min(O.lower, O.upper));
 });
+
+defineRecalculation(Spread, ['min'], function (O) {
+  this.set('upper', Math.max(O.upper, O.min));
+  this.set('lower', Math.max(O.lower, O.min));
+});
+defineRecalculation(Spread, ['max'], function (O) {
+  this.set('upper', Math.min(O.upper, O.max));
+  this.set('lower', Math.min(O.lower, O.max));
+});

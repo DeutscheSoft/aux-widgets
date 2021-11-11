@@ -52,6 +52,7 @@ import {
   innerWidth,
 } from '../utils/dom.js';
 import { defineChildWidget } from '../child_widget.js';
+import { defineRecalculation } from '../define_recalculation.js';
 
 function vert(O) {
   return O.layout === 'left' || O.layout === 'right';
@@ -405,4 +406,11 @@ defineChildWidget(Fader, 'value', {
     value: 'value',
   },
   toggle_class: true,
+});
+
+defineRecalculation(Fader, ['min'], function (O) {
+  this.set('value', Math.max(O.value, O.min));
+});
+defineRecalculation(Fader, ['max'], function (O) {
+  this.set('value', Math.min(O.value, O.max));
 });

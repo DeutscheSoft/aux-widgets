@@ -31,6 +31,7 @@ import { Scale } from './scale.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
 import { addClass } from '../utils/dom.js';
 import { FORMAT } from '../utils/sprintf.js';
+import { defineRecalculation } from '../define_recalculation.js';
 
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -243,4 +244,11 @@ defineChildWidget(ValueButton, 'scale', {
   default_options: {
     layout: 'top',
   },
+});
+
+defineRecalculation(ValueButton, ['min'], function (O) {
+  this.set('value', Math.max(O.value, O.min));
+});
+defineRecalculation(ValueButton, ['max'], function (O) {
+  this.set('value', Math.min(O.value, O.max));
 });
