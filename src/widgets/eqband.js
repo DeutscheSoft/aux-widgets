@@ -35,6 +35,7 @@ const type_to_mode = {
   highpass4: 'block-left',
   'low-shelf': 'line-vertical',
   'high-shelf': 'line-vertical',
+  'null': 'circular',
 };
 
 const type_to_pref = {
@@ -122,6 +123,7 @@ const type_to_pref = {
   ],
   'low-shelf': ['left', 'right', 'top', 'bottom'],
   'high-shelf': ['left', 'right', 'top', 'bottom'],
+  'null': ['left'],
 };
 
 /**
