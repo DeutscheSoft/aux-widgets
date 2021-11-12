@@ -35,7 +35,6 @@ import { makeSVG } from '../utils/svg.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
 import { objectAnd, objectSub } from '../utils/object.js';
-import { defineRecalculation } from '../define_recalculation.js';
 
 const formatViewbox = FORMAT('0 0 %d %d');
 function dblClick() {
@@ -319,9 +318,3 @@ export class Knob extends Widget {
     return super.set(key, value);
   }
 }
-defineRecalculation(Knob, ['min'], function (O) {
-  this.set('value', Math.max(O.value, O.min));
-});
-defineRecalculation(Knob, ['max'], function (O) {
-  this.set('value', Math.min(O.value, O.max));
-});

@@ -36,7 +36,6 @@ import {
   innerWidth,
   innerHeight,
 } from '../utils/dom.js';
-import { defineRecalculation } from '../define_recalculation.js';
 
 import { FORMAT } from '../utils/sprintf.js';
 
@@ -597,11 +596,4 @@ defineChildWidget(Meter, 'value', {
     class: 'aux-value',
     role: 'status',
   },
-});
-
-defineRecalculation(Meter, ['min'], function (O) {
-  this.set('value', Math.max(O.value, O.min));
-});
-defineRecalculation(Meter, ['max'], function (O) {
-  this.set('value', Math.min(O.value, O.max));
 });
