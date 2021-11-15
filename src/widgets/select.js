@@ -107,6 +107,15 @@ function showList(show) {
       this.current().element.offsetTop - this._list.offsetHeight / 2;
 }
 
+function setLabelSize() {
+  if (!this.label || !this.sizer) return;
+  outerWidth(
+    this.label.element,
+    true,
+    outerWidth(this.sizer.element, true)
+  );
+}
+
 /**
  * Select provides a {@link Button} with a select list to choose from
  * a list of {@link SelectEntry}.
@@ -226,6 +235,10 @@ export class Select extends Button {
         const selected_entry = this.get('selected_entry');
 
         if (!selected_entry) this.update('label', label);
+      },
+      set_label: function () {
+        if (this.options.auto_size)
+          setLabelSize.call(this);
       },
     };
   }
@@ -791,11 +804,8 @@ export class Select extends Button {
         }
         S.appendChild(frag);
 
-        outerWidth(
-          this.label.element,
-          true,
-          outerWidth(this.sizer.element, true)
-        );
+        setLabelSize.call(this);
+          
       } else if (this.label) {
         this.label.element.style.width = null;
       }
