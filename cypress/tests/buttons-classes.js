@@ -2,7 +2,7 @@ describe('buttons classa and dom test', () => {
   it('successfully loads', () => {
     cy.visit('http://localhost:1234/tests/examples/Buttons.html');
 
-    cy.get('aux-buttons .aux-button').eq(0).then(($el, index, $list) => {
+    cy.get('aux-buttons .aux-button').eq(0).then(($el) => {
 
       cy.get($el).click().should('have.class', 'aux-active');
 
@@ -10,7 +10,7 @@ describe('buttons classa and dom test', () => {
     
     });
 
-    cy.get('aux-buttons .aux-button').eq(1).then(($el, index, $list) => {
+    cy.get('aux-buttons .aux-button').eq(1).then(($el) => {
 
       cy.get($el).click().should('have.class', 'aux-active');
 
@@ -18,7 +18,7 @@ describe('buttons classa and dom test', () => {
     
     });
 
-    cy.get('aux-buttons .aux-button').eq(2).then(($el, index, $list) => {
+    cy.get('aux-buttons .aux-button').eq(2).then(($el) => {
 
       cy.get($el).click().should('have.class', 'aux-active');
 
@@ -26,7 +26,7 @@ describe('buttons classa and dom test', () => {
     
     });
 
-    cy.get('aux-buttons').eq(3).then(($el, index, $list) => {
+    cy.get('aux-buttons').eq(3).then(($el) => {
 
       cy.get($el).within(() => {
 
