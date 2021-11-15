@@ -421,6 +421,9 @@ defineChildWidget(Spread, 'valuelower', {
     lower: 'value',
   },
   toggle_class: true,
+  default_options: {
+    class: 'aux-valuelower aux-value',
+  },
 });
 /**
  * @member {Value} Spread#valueupper - A {@link Value} to display the current upper value, offering a way to enter a value via keyboard.
@@ -433,6 +436,9 @@ defineChildWidget(Spread, 'valueupper', {
     upper: 'value',
   },
   toggle_class: true,
+  default_options: {
+    class: 'aux-valueupper aux-value',
+  },
 });
 
 defineRecalculation(Spread, ['upper'], function (O) {
