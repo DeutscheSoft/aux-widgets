@@ -369,6 +369,7 @@ export class Spread extends Widget {
     const O = this.options;
     if (key === 'lower' || key === 'upper') {
       if (value > O.max || value < O.min) warning(this.element);
+      value = O.snap_module.snap(Math.max(O.min, Math.min(O.max, value)));
     }
     return super.set(key, value);
   }
