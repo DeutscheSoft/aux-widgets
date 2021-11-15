@@ -1,4 +1,4 @@
-describe('button test', () => {
+describe('button click test', () => {
   it('successfully loads', () => {
     cy.visit('http://localhost:1234/tests/examples/Button.html');
 
