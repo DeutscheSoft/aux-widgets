@@ -31,7 +31,10 @@
     "./src/components/*.registration.js",
     "./src/matrix.sideeffects.js",
     "./src/matrix/components.registration.js",
-    "./src/matrix/components/*.registration.js"
+    "./src/matrix/components/*.registration.js",
+    "index.js",
+    "*.sideeffects.js",
+    "*.registration.js"
   ],
   "private": true,
   "devDependencies": {}
