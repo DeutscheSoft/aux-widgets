@@ -13,6 +13,60 @@ describe('spread handles are dragged', () => {
 
         cy.get($btn)
           .wait(1500)
+          .move({ x: 100, y: 0, force: true })
+          .then(function(){
+          $newoff = Cypress.$($btn).offset().left;
+          expect($newoff).to.be.greaterThan($off);
+        });
+
+        cy.get($btn)
+          .move({ x: -100, y: 0, force: true });
+
+      });    
+
+      cy.get('.aux-lower').then(($btn) => {
+
+        var $off = Cypress.$($btn).offset().left;
+        var $newoff = $off;
+
+        cy.get($btn)
+          .wait(1500)
+          .move({ x: -10, y: 0, force: true })
+          .then(function(){
+          $newoff = Cypress.$($btn).offset().left;
+          expect($newoff).to.be.lessThan($off);
+        });
+
+        cy.get($btn)
+          .move({ x: 10, y: 0, force: true });
+
+      });    
+
+      cy.get('.aux-upper').then(($btn) => {
+
+        var $off = Cypress.$($btn).offset().left;
+        var $newoff = $off;
+
+        cy.get($btn)
+          .wait(1500)
+          .move({ x: 10, y: 0, force: true })
+          .then(function(){
+          $newoff = Cypress.$($btn).offset().left;
+          expect($newoff).to.be.greaterThan($off);
+        });
+
+        cy.get($btn)
+          .move({ x: -10, y: 0, force: true });
+
+      });    
+
+      cy.get('.aux-upper').then(($btn) => {
+
+        var $off = Cypress.$($btn).offset().left;
+        var $newoff = $off;
+
+        cy.get($btn)
+          .wait(1500)
           .move({ x: -100, y: 0, force: true })
           .then(function(){
           $newoff = Cypress.$($btn).offset().left;
@@ -24,24 +78,27 @@ describe('spread handles are dragged', () => {
 
       });    
 
-      cy.get('.aux-upper').then(($btn) => {
+    });
 
-        var $off = Cypress.$($btn).offset().left;
+    cy.get('aux-spread').eq(1).within(($el) => {
+
+      cy.get('.aux-lower').then(($btn) => {
+
+        var $off = Cypress.$($btn).offset().top;
         var $newoff = $off;
 
         cy.get($btn)
           .wait(1500)
-          .move({ x: 100, y: 0, force: true })
+          .move({ x: 0, y: -10, force: true })
           .then(function(){
-          $newoff = Cypress.$($btn).offset().left;
-          expect($newoff).to.be.greaterThan($off);
+          $newoff = Cypress.$($btn).offset().top;
+          expect($newoff).to.be.lessThan($off);
         });
 
+        cy.get($btn)
+          .move({ x: 0, y: 10, force: true });
+
       });    
-
-    });
-
-    cy.get('aux-spread').eq(1).within(($el) => {
 
       cy.get('.aux-lower').then(($btn) => {
 
@@ -73,6 +130,27 @@ describe('spread handles are dragged', () => {
           $newoff = Cypress.$($btn).offset().top;
           expect($newoff).to.be.greaterThan($off);
         });
+
+        cy.get($btn)
+          .move({ x: 0, y: -100, force: true });
+
+      });    
+
+      cy.get('.aux-upper').then(($btn) => {
+
+        var $off = Cypress.$($btn).offset().top;
+        var $newoff = $off;
+
+        cy.get($btn)
+          .wait(1500)
+          .move({ x: 0, y: -10, force: true })
+          .then(function(){
+          $newoff = Cypress.$($btn).offset().top;
+          expect($newoff).to.be.lessThan($off);
+        });
+
+        cy.get($btn)
+          .move({ x: 0, y: 10, force: true });
 
       });    
 
