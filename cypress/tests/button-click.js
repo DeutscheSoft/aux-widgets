@@ -1,5 +1,5 @@
 describe('button click test', () => {
-  it.only('successfully loads', () => {
+  it('successfully loads', () => {
     cy.visit('http://localhost:1234/tests/examples/Button.html');
 
     cy.get('aux-button').each(($el, index, $list) => {
