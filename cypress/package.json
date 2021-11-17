@@ -15,9 +15,11 @@
   },
   "scripts": {
     "start": "node serve.js",
+    "open": "cypress open",
     "cy:cmd": "cypress run",
     "cy:head": "cypress run --headed",
     "test-cmd": "start-server-and-test start http://localhost:1234 cy:cmd",
-    "test-head": "start-server-and-test start http://localhost:1234 cy:head"
+    "test-head": "start-server-and-test start http://localhost:1234 cy:head",
+    "test-open": "start-server-and-test start http://localhost:1234 open"
   }
 }
