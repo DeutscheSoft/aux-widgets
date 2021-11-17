@@ -31,8 +31,8 @@ describe('Dialog', () => {
     });
     buttons.each(($el,i) => {
       cy.get($el)
-      .click()
-      .then(() => {
+        .click()
+        .then(() => {
         
         if(i === 0) {
           cy.get('#dialog1')
