@@ -1,18 +1,16 @@
 describe('button click test', () => {
-  it('successfully loads', () => {
+  it.only('successfully loads', () => {
     cy.visit('http://localhost:1234/tests/examples/Button.html');
 
-    cy.get('aux-button').eq(0).then(($el, index, $list) => {
+    cy.get('aux-button').each(($el, index, $list) => {
+      const cb = cy.spy();
 
-      cy.get($el).click();
-
+      cy.wrap($el)
+        .onAuxEvent('click', cb)
+        .click()
+        .then(() => {
+          expect(cb).to.be.called;
+        });
     });
-
-    cy.get('aux-button').eq(1).then(($el, index, $list) => {
-
-      cy.get($el).click();
-
-    });
-
   });
 });
