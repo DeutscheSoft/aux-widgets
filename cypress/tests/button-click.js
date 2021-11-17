@@ -1,8 +1,8 @@
-describe('button click test', () => {
-  it('successfully loads', () => {
+describe('Button', () => {
+  it('click event', () => {
     cy.visit('http://localhost:1234/tests/examples/Button.html');
 
-    cy.get('aux-button').each(($el, index, $list) => {
+    cy.get('aux-button').each(($el) => {
       const cb = cy.spy();
 
       cy.wrap($el)
