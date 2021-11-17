@@ -62,7 +62,7 @@ function start(port) {
         let head = '';
 
         head += maybeAddStyle(fname.replace('html', 'css'));
-        head += maybeAddStyle(path.join(path.dirname(fname), 'styles.css'));
+//        head += maybeAddStyle(path.join(path.dirname(fname), 'styles.css'));
 
         let data = frame
           .replace('NAME', test_name)
