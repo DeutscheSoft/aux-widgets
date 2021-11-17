@@ -29,11 +29,11 @@ describe('Dialog', () => {
           expect(cb).to.be.called;
         });  
     });
-    let pi = 0;
     buttons.each(($el,i) => {
       cy.get($el)
       .click()
       .then(() => {
+        
         if(i === 0) {
           cy.get('#dialog1')
             .should(beVisible);
@@ -51,8 +51,8 @@ describe('Dialog', () => {
           cy.get('#dialog2')
             .should(beHidden);
         }
+
       });
     });
-
   });
 });
