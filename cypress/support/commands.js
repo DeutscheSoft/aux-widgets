@@ -22,3 +22,11 @@ Cypress.Commands.add('auxOption', { prevSubject: 'element' }, (subject, name) =>
 
   return widget.get(name);
 });
+
+Cypress.Commands.add('setAuxOption', { prevSubject: 'element' }, (subject, name, value) => {
+  const widget = getAuxWidget(subject);
+
+  widget.set(name, value);
+
+  return subject;
+});
