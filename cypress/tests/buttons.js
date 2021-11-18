@@ -47,19 +47,31 @@ describe('Buttons', () => {
 
       const buttons = cy.get('.aux-button');
 
+      const cb = cy.spy();
+
       buttons.each(($el, i) => {
         
         let button = cy.wrap($el);
         
         if(i < 2) {
-          button.click()
-                .should(beActive);
+          button
+            .onAuxEvent('click', cb)
+            .click()
+            .should(beActive)
+            .then(() => {
+              expect(cb).to.be.called;
+            });
         }
         if(i > 1) {
-          button.click()
-                .should(beWarning)
-                .wait(500)
-                .should(beInactive);
+          button
+            .onAuxEvent('click', cb)
+            .click()
+            .should(beWarning)
+            .then(() => {
+              expect(cb).to.be.called;
+            })
+            .wait(500)
+            .should(beInactive);
         }
       });
 
