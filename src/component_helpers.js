@@ -285,7 +285,6 @@ function createComponent(base) {
       if (subscriptions) {
         this._auxAttributesSubscription = null;
         subscriptions();
-        this._auxUpdateAttributes(null);
       }
     }
 
