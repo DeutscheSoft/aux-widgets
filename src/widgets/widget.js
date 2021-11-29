@@ -335,7 +335,7 @@ export const Widget = defineClass({
     this._recalculate_queue = null;
     this._recalculate = null;
     this.__lastclick = 0;
-    this._creation_time = performance.now();
+    this._creation_time = S.now();
     this.__dblclick_cb = dblClick.bind(this);
     this._onresize = onResize.bind(this);
     this._onvisibilitychange = onVisibilityChange.bind(this);
@@ -525,7 +525,7 @@ export const Widget = defineClass({
       O.notransitions = true;
 
       const targetTime = this._creation_time + O.notransitions_duration;
-      const time = targetTime - performance.now();
+      const time = targetTime - S.now();
 
       const do_enable = () => {
         if (this.isDestructed()) return;

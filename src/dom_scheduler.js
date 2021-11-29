@@ -183,6 +183,7 @@ function DOMScheduler() {
   this.will_render = false;
   this.running = false;
   this.bound_run = this.run.bind(this);
+  this.startTime = performance.now();
 }
 DOMScheduler.prototype = Object.create(Scheduler.prototype);
 DOMScheduler.prototype.addNext = function (o, prio) {
@@ -216,6 +217,13 @@ DOMScheduler.prototype.afterFrame = function (fun) {
   if (this.running) return;
   this.will_render = true;
   window.requestAnimationFrame(this.bound_run);
+};
+DOMScheduler.prototype.now = function() {
+  if (this.running) {
+    return this.startTime;
+  } else {
+    return performance.now();
+  }
 };
 
 export { Scheduler, DOMScheduler };
