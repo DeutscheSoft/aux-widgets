@@ -21,6 +21,8 @@
  * @module utils/timer
  */
 
+import { error } from './log.js';
+
 /**
  * This class represents a single timer. It is faster than manual setTimeout
  * in situations in which the timer is regularly delayed while it is running.
@@ -91,5 +93,44 @@ export class Timer {
     this.id = void 0;
 
     clearTimeout(id);
+  }
+}
+
+export class ProximityTimers {
+  constructor(accuracy) {
+    this._target = 0;
+    this._calls = null;
+    this._accuracy = accuracy === void 0 ? 20 : accuracy;
+  }
+
+  /**
+   * Schedule a method to be run at the given point
+   * in the future.
+   */
+  scheduleAt(callback, target) {
+    if (this._calls !== null && Math.abs(this._target - target) < this._accuracy) {
+      this._calls.push(callback);
+    } else {
+      const calls = [ callback ];
+
+      this._calls = calls;
+      this._target = target;
+      setTimeout(() => {
+        calls.forEach((cb) => {
+          try {
+            cb();
+          } catch(err) {
+            error(err);
+          }
+        });
+      }, performance.now() - target);
+    }
+  }
+
+  /**
+   * Schedule a method to be run in the given number of seconds.
+   */
+  scheduleIn(callback, offset) {
+    this.scheduleAt(callback, offset + performance.now());
   }
 }

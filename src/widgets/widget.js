@@ -37,6 +37,9 @@ import {
 import { typecheckFunction } from '../utils/typecheck.js';
 import { GlobalResize } from '../utils/global_resize.js';
 import { GlobalVisibilityChange } from '../utils/global_visibility_change.js';
+import { ProximityTimers } from '../utils/timers.js';
+
+const enableTimers = new ProximityTimers();
 
 const KEYS = [
   'ArrowUp',
@@ -396,7 +399,7 @@ export class Widget extends Base {
     this._recalculate_queue = null;
     this._recalculate = null;
     this.__lastclick = 0;
-    this._creation_time = performance.now();
+    this._creation_time = S.now();
     this.__dblclick_cb = dblClick.bind(this);
     this._onresize = onResize.bind(this);
     this._onvisibilitychange = onVisibilityChange.bind(this);
@@ -598,16 +601,16 @@ export class Widget extends Base {
     if (notransitions === void 0) {
       O.notransitions = true;
 
-      const time =
-        O.notransitions_duration - (performance.now() - this._creation_time);
+      const targetTime = this._creation_time + O.notransitions_duration;
+      const time = targetTime - S.now();
 
       const do_enable = () => {
         if (this.isDestructed()) return;
         this.enableTransitions();
       };
 
-      if (time > 0) {
-        setTimeout(do_enable, time);
+      if (time > 20) {
+        enableTimers.scheduleAt(do_enable, targetTime);
       } else {
         S.addNext(do_enable);
       }
