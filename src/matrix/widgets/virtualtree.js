@@ -24,6 +24,7 @@ import { subscribeDOMEvent } from '../../utils/events.js';
 import { defineRecalculation } from '../../define_recalculation.js';
 
 import { Container } from './../../widgets/container.js';
+import { Scroller } from './../../widgets/scroller.js';
 import { VirtualTreeEntry } from './virtualtreeentry.js';
 import { ScrollDetector } from './scroll_detector.js';
 import { resizeArrayMod } from '../models.js';
@@ -59,15 +60,15 @@ function collapse(state) {
  * @property {number} [options.prerender_bottom=3]
  *      The number of elements to prerender at the bottom.
  *
- * @extends Container
+ * @extends Scroller
  *
  * @class VirtualTree
  */
-export class VirtualTree extends Container {
+export class VirtualTree extends Scroller {
   static get _options() {
-    return Object.assign({}, Container.getOptionTypes(), {
+    return Object.assign({}, Scroller.getOptionTypes(), {
       _amount: 'number',
-      _scroller_size: 'number',
+      _sizer_size: 'number',
       _scroll: 'number',
       _startIndex: 'number',
       _view_height: 'number',
@@ -78,21 +79,18 @@ export class VirtualTree extends Container {
       prerender_bottom: 'number',
     });
   }
-
   static get options() {
     return {
       _amount: 0,
-      _scroller_size: 0,
+      _sizer_size: 0,
       _scroll: 0,
       _startIndex: 0,
       size: 32,
       entry_class: VirtualTreeEntry,
       prerender_top: 3,
       prerender_bottom: 3,
-      role: 'tree',
-    };
+    }
   }
-
   static get static_events() {
     return {
       set_size: function (v) {
@@ -104,9 +102,8 @@ export class VirtualTree extends Container {
       scrollTopChanged: function (position) {
         this._scrollDataTo(position);
       },
-    };
+    }
   }
-
   initialize(options) {
     super.initialize(options);
     this.virtualtreeview_subs = new Subscriptions();
@@ -235,7 +232,7 @@ export class VirtualTree extends Container {
     super.draw(options, element);
     element.classList.add('aux-virtualtree');
     this.addSubscriptions(
-      subscribeDOMEvent(this._scrollbar, 'scroll', (ev) => {
+      subscribeDOMEvent(this.scrollhide.element, 'scroll', (ev) => {
         /**
          * Is fired on scrolling the list.
          *
@@ -243,7 +240,7 @@ export class VirtualTree extends Container {
          *
          * @param {Integer} scroll - The amount of pixels scrolled from top.
          */
-        this.emit('scrollTopChanged', this._scrollbar.scrollTop);
+        this.emit('scrollTopChanged', this.scrollhide.element.scrollTop);
       })
     );
     if (options.virtualtreeview)
@@ -267,7 +264,7 @@ export class VirtualTree extends Container {
         top: options,
       };
     }
-    this._scrollbar.scrollTo(options);
+    this.scrollhide.element.scrollTo(options);
   }
 
   _subscribeToTreeView(subs, treeView) {
@@ -280,14 +277,14 @@ export class VirtualTree extends Container {
 
     subs.add(
       treeView.subscribeSize((size) => {
-        this.update('_scroller_size', size);
+        this.update('_sizer_size', size);
       })
     );
     subs.add(
       treeView.subscribeAmount((amount) => {
         const create = (index) => {
           const entry = this.createEntry();
-          this._scroller.appendChild(entry.element);
+          this._sizer.appendChild(entry.element);
           setEntryPosition(entry, index);
           entry.on('collapse', collapse);
           this.addChild(entry);
@@ -359,10 +356,10 @@ export class VirtualTree extends Container {
       }
     }
 
-    if (I._scroller_size || I.size) {
-      I._scroller_size = false;
-      this._scroller.style.height =
-        this.calculateEntryPosition(O._scroller_size) + 'px';
+    if (I._sizer_size || I.size) {
+      I._sizer_size = false;
+      this._sizer.style.height =
+        this.calculateEntryPosition(O._sizer_size) + 'px';
     }
 
     if (I.size) {
@@ -387,7 +384,7 @@ export class VirtualTree extends Container {
 
     if (I._scroll) {
       I._scroll = false;
-      this._scrollbar.scrollTop = O._scroll;
+      this.scrollhide.element.scrollTop = O._scroll;
     }
 
     super.redraw();
@@ -454,20 +451,13 @@ export class VirtualTree extends Container {
   }
 }
 /**
- * @member {HTMLDiv} VirtualTree#_scrollbar - A container for hiding
- *   scrollbars. Has class <code>.aux-scrollbar</code>.
+ * @member {HTMLDiv} VirtualTree#_sizer - A container holding the
+ *   {@link VirtualTreeEntry}s. Has class <code>.aux-sizer</code>.
  */
-defineChildElement(VirtualTree, 'scrollbar', {
-  show: true,
-});
-/**
- * @member {HTMLDiv} VirtualTree#_scroller - A container holding the
- *   {@link VirtualTreeEntry}s. Has class <code>.aux-scroller</code>.
- */
-defineChildElement(VirtualTree, 'scroller', {
+defineChildElement(VirtualTree, 'sizer', {
   show: true,
   append: function () {
-    this._scrollbar.appendChild(this._scroller);
+    this.scrollhide.element.appendChild(this._sizer);
   },
 });
 defineRecalculation(

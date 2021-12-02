@@ -114,6 +114,10 @@
   --aux-scale-barsize: 5px;
   --aux-scale-pointersize: 5px;
 
+  --aux-scroller-bar-size: 12px;
+  --aux-scroller-bar-size-hover: 24px;
+  --aux-scroller-bar-min-size: 40px;
+
   --aux-selectentry-lineheight: 2em;
 
   --aux-spread-handlewidth: var(--aux-clickable-size);

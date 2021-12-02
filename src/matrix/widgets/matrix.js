@@ -164,6 +164,8 @@ export class Matrix extends Patchbay {
       this.emit('toggleConnection', source, sink);
     });
 
+    this.virtualtree_top.scroll_y.drag.set('direction', 'horizontal');
+    this.virtualtree_top.scroll_y.drag.set('reverse', true);
     setVirtualtreeviews.call(this);
   }
 
@@ -176,7 +178,7 @@ export class Matrix extends Patchbay {
       I._virtualtree_size = false;
       const virtualtree = this.virtualtree_top;
       virtualtree.element.style.height = O._virtualtree_size + 'px';
-      virtualtree.triggerResize();
+      virtualtree.resize();
     }
 
     super.redraw();

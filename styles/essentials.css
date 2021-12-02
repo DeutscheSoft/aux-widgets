@@ -1228,23 +1228,39 @@ body.aux-cursor-row-resize * {
   bottom: 0px;
 }
 
-/* SCROLLBAR */
+/* SCROLLER */
 
-.aux-scrollbar {
+.aux-scroller {
+
+}
+.aux-scroller > .aux-scrollhide {
   position: absolute;
   top: 0;
   left: 0;
   right: calc(-1 * var(--aux-scrollbar-size));
-  bottom: 0;
-  overflow-y: scroll;
+  bottom: calc(-1 * var(--aux-scrollbar-size));
+  overflow: scroll;
   contain: strict;
 }
-.aux-scrollbar > .aux-scroller {
+.aux-scroller > .aux-scrollbar {
+  position: absolute;
   display: block;
-  width: 100%;
-  overflow: hidden;
-  box-sizing: border-box;
-  position: relative;
+}
+.aux-scroller > .aux-scrollbar.aux-top {
+  top: 0;
+  bottom: auto !important;
+}
+.aux-scroller > .aux-scrollbar.aux-left {
+  left: 0;
+  right: auto !important;
+}
+.aux-scroller > .aux-scrollbar.aux-right {
+  right: 0;
+  left: auto !important;
+}
+.aux-scroller > .aux-scrollbar.aux-bottom {
+  bottom: 0;
+  top: auto !important;
 }
 
 /* SELECT */
@@ -1514,6 +1530,16 @@ body.aux-cursor-row-resize * {
 }
 .aux-valueknob.aux-right > .aux-value > .aux-input {
   text-align: right;
+}
+
+/* VIRTUALTREE */
+
+.aux-virtualtree > .aux-scrollhide > .aux-sizer {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  position: relative;
 }
 
 /* WINDOW */

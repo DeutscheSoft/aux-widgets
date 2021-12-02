@@ -454,6 +454,20 @@
   border-top-color: var(--aux-warn-base);
 }
 
+/* SCROLLER */
+
+.aux-scroller > .aux-scrollbar::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background: var(--aux-active-base);
+  border-radius: 2px;
+}
+
 /* SELECT */
 
 .aux-selectlist {
@@ -477,7 +491,7 @@
   outline-color: var(--aux-widget-base);
 }
 
-/* slider */
+/* SLIDER */
 
 .aux-slider:focus {
   outline: var(--aux-outline);

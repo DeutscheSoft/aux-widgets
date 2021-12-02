@@ -73,7 +73,7 @@ function moveCaptureInt(O, range, state) {
   if (O.limit) O.set.call(this, Math.min(RO.max, Math.max(RO.min, nval)));
   else O.set.call(this, nval);
 
-  if (!(nval > RO.min) || !(nval < RO.max)) return;
+  if (!O.absolute && (!(nval > RO.min) || !(nval < RO.max))) return;
 
   this.start_pos = start_pos;
 }
@@ -231,6 +231,7 @@ export class DragValue extends DragCapture {
       rotation: 'number',
       reverse: 'boolean',
       limit: 'boolean',
+      absolute: 'boolean',
     };
   }
 
@@ -256,6 +257,7 @@ export class DragValue extends DragCapture {
       rotation: 45,
       reverse: false,
       limit: false,
+      absolute: false,
     };
   }
 

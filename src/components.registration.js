@@ -37,6 +37,7 @@ import './components/root.registration.js';
 import './components/reverb.registration.js';
 import './components/scale.registration.js';
 import './components/scrollarea.registration.js';
+import './components/scroller.registration.js';
 import './components/select.registration.js';
 import './components/slider.registration.js';
 import './components/spread.registration.js';

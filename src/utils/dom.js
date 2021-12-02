@@ -423,10 +423,11 @@ export function fixed(e) {
  * @param {HTMLElement} element - the element to evaluate / manipulate
  * @param {boolean} margin - Determine if margin is included
  * @param {number} width - If defined the elements outer width is set to this value
+ * @param {boolean} notransform - Don't take transformations into account.
  * @returns {number}
  * @function outerWidth
  */
-export function outerWidth(element, margin, width) {
+export function outerWidth(element, margin, width, notransform) {
   let m = 0;
   if (margin) {
     const cs = getComputedStyle(element);
@@ -444,7 +445,11 @@ export function outerWidth(element, margin, width) {
     element.style.width = width + 'px';
     return width;
   } else {
-    const w = element.getBoundingClientRect().width;
+    let w;
+    if (notransform)
+      w = element.offsetWidth;
+    else
+      w = element.getBoundingClientRect().width;
     return w + m;
   }
 }
@@ -455,10 +460,11 @@ export function outerWidth(element, margin, width) {
  * @param {HTMLElement} element - the element to evaluate / manipulate
  * @param {boolean} margin - Determine if margin is included
  * @param {number} height - If defined the elements outer height is set to this value
+ * @param {boolean} notransform - Don't take transformations into account.
  * @returns {number}
  * @function outerHeight
  */
-export function outerHeight(element, margin, height) {
+export function outerHeight(element, margin, height, notransform) {
   let m = 0;
   if (margin) {
     const cs = getComputedStyle(element, null);
@@ -476,7 +482,11 @@ export function outerHeight(element, margin, height) {
     element.style.height = height + 'px';
     return height;
   } else {
-    const h = element.getBoundingClientRect().height;
+    let h;
+    if (notransform)
+      h = element.offsetHeight;
+    else
+      h = element.getBoundingClientRect().height;
     return h + m;
   }
 }
@@ -486,10 +496,11 @@ export function outerHeight(element, margin, height) {
  * method is taken into account.
  * @param {HTMLElement} element - the element to evaluate / manipulate
  * @param {number} width - If defined the elements inner width is set to this value
+ * @param {boolean} notransform - Don't take transformations into account.
  * @returns {number}
  * @function innerWidth
  */
-export function innerWidth(element, width) {
+export function innerWidth(element, width, notransform) {
   const css = CSSSpace(element, 'padding', 'border');
   const x = css.left + css.right;
   if (width !== void 0) {
@@ -499,7 +510,11 @@ export function innerWidth(element, width) {
     element.style.width = width + 'px';
     return width;
   } else {
-    const w = element.getBoundingClientRect().width;
+    let w;
+    if (notransform)
+      w = element.offsetWidth;
+    else
+      w = element.getBoundingClientRect().width;
     return w - x;
   }
 }
@@ -509,10 +524,11 @@ export function innerWidth(element, width) {
  * method is taken into account.
  * @param {HTMLElement} element - the element to evaluate / manipulate
  * @param {number} height - If defined the elements outer height is set to this value
+ * @param {boolean} notransform - Don't take transformations into account.
  * @returns {number}
  * @function innerHeight
  */
-export function innerHeight(element, height) {
+export function innerHeight(element, height, notransform) {
   const css = CSSSpace(element, 'padding', 'border');
   const y = css.top + css.bottom;
   if (height !== void 0) {
@@ -522,7 +538,11 @@ export function innerHeight(element, height) {
     element.style.height = height + 'px';
     return height;
   } else {
-    const h = element.getBoundingClientRect().height;
+    let h;
+    if (notransform)
+      h = element.offsetHeight;
+    else
+      h = element.getBoundingClientRect().height;
     return h - y;
   }
 }
