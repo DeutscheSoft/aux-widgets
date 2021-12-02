@@ -111,6 +111,10 @@
   --aux-scale-barsize: 5px;
   --aux-scale-pointersize: 5px;
 
+  --aux-scroller-bar-size: 12px;
+  --aux-scroller-bar-size-hover: 24px;
+  --aux-scroller-bar-min-size: 40px;
+
   --aux-selectentry-lineheight: 2em;
 
   --aux-state-width: 12px;
@@ -1026,6 +1030,31 @@
 }
 .aux-scale.aux-bottom > .aux-pointer {
   bottom: calc(var(--aux-scale-pointersize) * -1);
+}
+
+/* SCROLLER */
+
+.aux-scroller > .aux-scrollbar {
+  margin: var(--aux-scroller-bar-margin);
+}
+.aux-scroller > .aux-scrollbar.aux-vertical {
+  
+}
+.aux-scroller > .aux-scrollbar.aux-vertical {
+  width: var(--aux-scroller-bar-size);
+  min-height: var(--aux-scroller-bar-min-size);
+}
+.aux-scroller > .aux-scrollbar.aux-horizontal {
+  height: var(--aux-scroller-bar-size);
+  min-width: var(--aux-scroller-bar-min-size);
+}
+.aux-scroller > .aux-scrollbar.aux-vertical:hover,
+.aux-scroller > .aux-scrollbar.aux-vertical.aux-dragging {
+  width: var(--aux-scroller-bar-size-hover);
+}
+.aux-scroller > .aux-scrollbar.aux-horizontal:hover,
+.aux-scroller > .aux-scrollbar.aux-horizontal.aux-dragging {
+  height: var(--aux-scroller-bar-size-hover);
 }
 
 /* SELECT */

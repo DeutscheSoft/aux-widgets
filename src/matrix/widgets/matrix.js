@@ -154,6 +154,8 @@ export const Matrix = defineClass({
       this.emit('toggleConnection', source, sink);
     });
 
+    this.virtualtree_top.scroll_y.drag.set('direction', 'horizontal');
+    this.virtualtree_top.scroll_y.drag.set('reverse', true);
     setVirtualtreeviews.call(this);
   },
   redraw: function () {
@@ -165,7 +167,7 @@ export const Matrix = defineClass({
       I._virtualtree_size = false;
       const virtualtree = this.virtualtree_top;
       virtualtree.element.style.height = O._virtualtree_size + 'px';
-      virtualtree.triggerResize();
+      virtualtree.resize();
     }
 
     Patchbay.prototype.redraw.call(this);
