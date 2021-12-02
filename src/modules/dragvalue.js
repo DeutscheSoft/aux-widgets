@@ -72,7 +72,7 @@ function moveCaptureInt(O, range, state) {
   if (O.limit) O.set.call(this, Math.min(RO.max, Math.max(RO.min, nval)));
   else O.set.call(this, nval);
 
-  if (!(nval > RO.min) || !(nval < RO.max)) return;
+  if (!O.absolute && (!(nval > RO.min) || !(nval < RO.max))) return;
 
   this.start_pos = start_pos;
 }
@@ -189,6 +189,8 @@ export const DragValue = defineClass({
    *   moving towards top and right.
    * @property {Boolean} [options.reverse=false] - If true, the difference of pointer travel is inverted.
    * @property {Boolean} [options.limit=false] - Limit the returned value to min and max of the range.
+   * @property {Boolean} [options.absolute=false] - If `options.limit` is `true`, keep movement
+   *   used for value changes inside the basis.
    *
    * @extends DragCapture
    *
@@ -209,6 +211,7 @@ export const DragValue = defineClass({
     rotation: 'number',
     reverse: 'boolean',
     limit: 'boolean',
+    absolute: 'boolean',
   },
   options: {
     range: function () {
@@ -231,6 +234,7 @@ export const DragValue = defineClass({
     rotation: 45,
     reverse: false,
     limit: false,
+    absolute: false,
   },
   /**
    * Is fired while a user is dragging.

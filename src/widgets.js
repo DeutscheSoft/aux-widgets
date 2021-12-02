@@ -62,6 +62,7 @@ export * from './widgets/root.js';
 export * from './widgets/reverb.js';
 export * from './widgets/scale.js';
 export * from './widgets/scrollarea.js';
+export * from './widgets/scroller.js';
 export * from './widgets/select.js';
 export * from './widgets/slider.js';
 export * from './widgets/sortablelist.js';
