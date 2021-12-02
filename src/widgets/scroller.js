@@ -235,11 +235,13 @@ export const Scroller = defineClass({
     if (I.validate('scroll_y')) {
       this[O.scroll_y ? 'addClass' : 'removeClass']('aux-scrolly');
     }
+    Container.prototype.redraw.call(this);
   },
   resize: function () {
     this._changed();
     this.scroll_x.update('clip', innerWidth(this.element, undefined, true));
     this.scroll_y.update('clip', innerHeight(this.element, undefined, true));
+    Container.prototype.resize.call(this);
   },
   appendChild: function (child) {
     Container.prototype.appendChild.call(this, child);
