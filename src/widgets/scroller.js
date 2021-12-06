@@ -275,9 +275,10 @@ export const Scroller = defineClass({
     Container.prototype.removeChild.call(this, child);
   },
   set: function (key, value) {
-    if (key === 'scroll' && value == this.options.scroll)
-      return;
-    Container.prototype.set.call(this, key, value);
+    if (key === 'scroll' && value === this.options.scroll) {
+      return value;
+    }
+    return Container.prototype.set.call(this, key, value);
   },
 });
 
