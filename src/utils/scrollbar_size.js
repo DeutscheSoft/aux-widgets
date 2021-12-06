@@ -24,3 +24,5 @@ export function scrollbarSize() {
   if (document.body) measureScrollbarSize();
   else document.addEventListener('DOMContentLoaded', measureScrollbarSize);
 }
+
+window.addEventListener('resize', measureScrollbarSize);
