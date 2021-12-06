@@ -92,7 +92,6 @@ export class ScrollBar extends Widget {
       content: 0,
       clip: 0,
       scroll: 0,
-      reverse: true,
     });
   }
   static get static_events() {
@@ -101,6 +100,7 @@ export class ScrollBar extends Widget {
       set_clip: setScrollRange,
       set_position: function (pos) {
         this.drag.set('direction', vert.call(this) ? 'vertical' : 'horizontal');
+        this.drag.set('reverse', vert.call(this) ? true : false);
       },
     }
   }
@@ -218,7 +218,9 @@ export class Scroller extends Container {
     }
   }
   initialize(options) {
+    this.__elementChildren = [];
     if (!options.element) options.element = element('div');
+    else this.__elementChildren = [...options.element.children];
     super.initialize(options);
     this._changed = changed.bind(this);
     this.observer = new MutationObserver(this._changed);
@@ -230,8 +232,14 @@ export class Scroller extends Container {
      */
     addClass(element, 'aux-scroller');
 
+    for (let i = 0, m = this.__elementChildren.length; i < m; ++i) {
+      this.scrollhide.element.appendChild(this.__elementChildren[i]);
+    }
+
     this.scroll_x.addEventListener('userset', usersetScrollX);
     this.scroll_y.addEventListener('userset', usersetScrollY);
+
+    this.scrollhide.element.addEventListener('scroll', this._changed);
     
     super.draw(O, element);
   }
@@ -256,33 +264,6 @@ export class Scroller extends Container {
   appendChild(child) {
     super.appendChild(child);
     this.scrollhide.appendChild(child.element);
-  }
-  addChild(child) {
-    super.addChild(child);
-
-    if (child instanceof ScrollHide) {
-      if (this.scrollhide && this.scrollhide !== child) {
-        this.removeChild(this.scrollhide);
-      }
-      this.scrollhide = child;
-      this.observer.observe(this.scrollhide.element, {
-        attributes: false,
-        childList: true,
-        subtree: true
-      });
-      this.scrollhide.element.addEventListener('scroll', this._changed);
-    }
-  }
-  removeChild(child) {
-    if (child instanceof ScrollHide) {
-      if (this.scrollhide === child) {
-        this.observer.disconnect();
-        this.scrollhide.element.removeEventListener('scroll', this._changed);
-        this.scrollhide.element.remove();
-        this.scrollhide = null;
-      }
-    }
-    super.removeChild(child);
   }
   set(key, value) {
     if (key === 'scroll' && value == this.options.scroll)

@@ -36,4 +36,4 @@ export const ScrollerComponent = componentFromWidget(Scroller);
  * @class ScrollHideComponent
  * @implements Component
  */
-export const ScrollHideComponent = subcomponentFromWidget(ScrollHide);
+export const ScrollHideComponent = subcomponentFromWidget(ScrollHide, Scroller);

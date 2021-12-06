@@ -1231,7 +1231,7 @@ body.aux-cursor-row-resize * {
 /* SCROLLER */
 
 .aux-scroller {
-
+  overflow: hidden;
 }
 .aux-scroller > .aux-scrollhide {
   position: absolute;
@@ -1241,6 +1241,7 @@ body.aux-cursor-row-resize * {
   bottom: calc(-1 * var(--aux-scrollbar-size));
   overflow: scroll;
   contain: strict;
+  margin: 0;
 }
 .aux-scroller > .aux-scrollbar {
   position: absolute;
