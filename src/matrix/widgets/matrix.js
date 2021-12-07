@@ -195,6 +195,7 @@ defineChildWidget(Matrix, 'virtualtree_left', {
   show: true,
   map_options: {
     size: 'size',
+    entry_class: 'entry_class',
   },
   default_options: {
     class: 'aux-virtualtreeleft',
@@ -209,6 +210,7 @@ defineChildWidget(Matrix, 'virtualtree_top', {
   show: true,
   map_options: {
     size: 'size',
+    entry_class: 'entry_class',
   },
   default_options: {
     class: 'aux-virtualtreetop',
