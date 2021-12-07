@@ -132,6 +132,16 @@ export class VirtualTreeEntry extends VirtualTreeEntryBase {
     element.classList.add('aux-virtualtreeentry');
   }
 
+  _onDataChanged(key, value) {
+    switch (key) {
+      case 'label':
+        this.update('label', value);
+        break;
+      case 'icon':
+        this.update('icon', value);
+        break;
+    }
+  }
   /**
    * This function is called internally to subscribe to properties
    * Overload in order to handle additional data being displayed
@@ -148,18 +158,7 @@ export class VirtualTreeEntry extends VirtualTreeEntryBase {
     this.update('label', element.label);
     this.update('icon', element.icon);
 
-    subs.add(
-      element.subscribe('propertyChanged', (key, value) => {
-        switch (key) {
-          case 'label':
-            this.update('label', value);
-            break;
-          case 'icon':
-            this.update('icon', value);
-            break;
-        }
-      })
-    );
+    subs.add(element.subscribe('propertyChanged', (key, value) => this._onDataChanged(key, value)));
   }
 
   /**
