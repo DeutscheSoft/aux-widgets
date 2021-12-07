@@ -106,7 +106,7 @@ function _end(d, s) {
   }
 
   const x = this.range_x.valueToPixel(dot.x);
-  const y = this.range_x.valueToPixel(dot.y);
+  const y = this.range_y.valueToPixel(dot.y);
 
   s.push(
     ' L ' + SVGRound(x + 1) + ' ' + SVGRound(y),
