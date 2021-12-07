@@ -111,7 +111,7 @@ function _end(d, s) {
   }
 
   var x = this.range_x.valueToPixel(dot.x);
-  var y = this.range_x.valueToPixel(dot.y);
+  var y = this.range_y.valueToPixel(dot.y);
 
   s.push(
     ' L ' + SVGRound(x + 1) + ' ' + SVGRound(y),
