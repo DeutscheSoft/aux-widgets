@@ -24,6 +24,7 @@ import { addClass, element, innerWidth, innerHeight, outerWidth, outerHeight } f
 import { defineChildWidget } from '../child_widget.js';
 import { Ranged } from '../implements/ranged.js';
 import { DragValue } from '../modules/dragvalue.js';
+import { makeTask } from '../dom_scheduler.js';
 
 function vert () {
   return this.options.position === ('right' || 'left');
@@ -183,12 +184,6 @@ export const ScrollBar = defineClass({
  * @property {Boolean} [scroll_y=true] Scroll in y direction.
  */
 
-function changed (e) {
-  this.scroll_x.update('content', this.scrollhide.element.scrollWidth);
-  this.scroll_x.update('scroll', this.scrollhide.element.scrollLeft);
-  this.scroll_y.update('content', this.scrollhide.element.scrollHeight);
-  this.scroll_y.update('scroll', this.scrollhide.element.scrollTop);
-}
 function usersetScrollX(key, value) {
   this.parent.scrollhide.element.scrollLeft = value;
 }
@@ -210,8 +205,8 @@ export const Scroller = defineClass({
   initialize: function(options) {
     if (!options.element) options.element = element('div');
     Container.prototype.initialize.call(this, options);
-    this._changed = changed.bind(this);
-    this.observer = new MutationObserver(this._changed);
+    this._triggerUpdateScroll = makeTask(this._updateScroll.bind(this), 0);
+    this.observer = new MutationObserver(this._triggerUpdateScroll);
   },
   draw: function (O, element) {
     /**
@@ -237,8 +232,19 @@ export const Scroller = defineClass({
     }
     Container.prototype.redraw.call(this);
   },
+  _triggerUpdateScroll: function () {
+  },
+  _updateScroll: function () {
+    const { scrollWidth, scrollLeft, scrollHeight, scrollTop } = this.scrollhide.element;
+    const { scroll_x, scroll_y } = this;
+
+    scroll_x.update('content', scrollWidth);
+    scroll_x.update('scroll', scrollLeft);
+    scroll_y.update('content', scrollHeight);
+    scroll_y.update('scroll', scrollTop);
+  },
   resize: function () {
-    this._changed();
+    this._updateScroll();
     this.scroll_x.update('clip', innerWidth(this.element, undefined, true));
     this.scroll_y.update('clip', innerHeight(this.element, undefined, true));
     Container.prototype.resize.call(this);
@@ -260,14 +266,14 @@ export const Scroller = defineClass({
         childList: true,
         subtree: true
       });
-      this.scrollhide.element.addEventListener('scroll', this._changed);
+      this.scrollhide.element.addEventListener('scroll', this._triggerUpdateScroll);
     }
   },
   removeChild: function (child) {
     if (child instanceof ScrollHide) {
       if (this.scrollhide === child) {
         this.observer.disconnect();
-        this.scrollhide.element.removeEventListener('scroll', this._changed);
+        this.scrollhide.element.removeEventListener('scroll', this._triggerUpdateScroll);
         this.scrollhide.element.remove();
         this.scrollhide = null;
       }

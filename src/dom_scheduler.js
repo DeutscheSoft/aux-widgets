@@ -224,3 +224,15 @@ export { Scheduler, DOMScheduler };
  * Global DOM Scheduler.
  */
 export const S = new DOMScheduler();
+
+export function makeTask(callback, prio) {
+  let triggered = false;
+  return () => {
+    if (triggered) return;
+    triggered = true;
+    S.add(() => {
+      triggered = false;
+      callback();
+    }, prio);
+  };
+}
