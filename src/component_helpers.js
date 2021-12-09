@@ -164,9 +164,15 @@ export function findParentNode(node) {
   return null;
 }
 
+
+const baseCache = new WeakMap();
+
 function createComponent(base) {
   if (!base) base = HTMLElement;
-  return class extends base {
+  if (baseCache.has(base))
+    return baseCache.get(base);
+
+  class BaseComponent extends base {
     _auxCalculateAttributes(parentAttributes) {
       const attribute_names = this.constructor.observedAttributes;
       const result = new Map();
@@ -419,6 +425,10 @@ function createComponent(base) {
       this.auxWidget.triggerResize();
     }
   };
+
+  baseCache.set(base, BaseComponent);
+
+  return BaseComponent;
 }
 
 const whenDefinedSubscribers = new SubscriberMap();
