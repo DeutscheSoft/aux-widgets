@@ -23,6 +23,7 @@ import { HTML } from './utils/dom.js';
 import { isNativeEvent } from './implements/base.js';
 import { subscribeOptionsAttributes } from './options.js';
 import { SubscriberMap } from './utils/subscriber_map.js';
+import { initSubscriptions, unsubscribeSubscriptions } from './utils/subscriptions.js';
 
 function attributeForWidget(Widget) {
   const attributes = [];
@@ -144,9 +145,36 @@ function parseAttribute(option_type, value) {
   throw last_error;
 }
 
+export function findParentNode(node) {
+  while (node) {
+    if (node.isAuxWidget) return node;
+
+    // if the parent looks like a WebComponent which has not been upgraded, we
+    // speculatively return it.
+    const tagName = node.tagName;
+
+    if (typeof tagName !== 'string') return null;
+
+    // If it is a component but it has not been initialized, yet, we need to
+    // assume it will become an aux widget in the future.
+    if (tagName.includes('-') && !customElements.get(tagName.toLowerCase()))
+      return node;
+
+    node = node.parentNode;
+  }
+
+  return null;
+}
+
+
+const baseCache = new WeakMap();
+
 function createComponent(base) {
   if (!base) base = HTMLElement;
-  return class extends base {
+  if (baseCache.has(base))
+    return baseCache.get(base);
+
+  class BaseComponent extends base {
     _auxCalculateAttributes(parentAttributes) {
       const attribute_names = this.constructor.observedAttributes;
       const result = new Map();
@@ -183,7 +211,6 @@ function createComponent(base) {
         const type = widget.getOptionType(name);
 
         if (typeof type !== 'string') {
-          console.log(this.constructor.observedAttributes);
           throw new TypeError('Option does not exist.');
         }
 
@@ -259,33 +286,77 @@ function createComponent(base) {
       this._auxEventHandlers = null;
       this._auxAttributesSubscription = null;
       this._auxAttributes = this._auxCalculateAttributes(null);
+      this._auxParentNode = void 0;
+      this._detachFromParent = initSubscriptions();
+    }
+
+    _auxParentChanged() {
+      const parentNode = findParentNode(this.parentNode);
+
+      // The parent node has not changed, no need to do anything.
+      if (parentNode === this._auxParentNode) {
+        return;
+      }
+
+      this._detachFromParent = unsubscribeSubscriptions(this._detachFromParent);
+
+      if (!this.isConnected && parentNode === null)
+      {
+        this._auxParentNode = void 0;
+        return null;
+      }
+
+      this._auxParentNode = parentNode;
+
+      let unsubscribe;
+
+      if (parentNode && !parentNode.isAuxWidget) {
+        // We have a parent node but it has not been initialized, yet.
+        unsubscribe = subscribeWhenDefined(parentNode.tagName, () => {
+          // retry
+          this._auxParentNode = void 0;
+          this._auxParentChanged();
+        });
+      } else {
+        const parentWidget = parentNode ? parentNode.auxWidget : null;
+        unsubscribe = this._attachToParent(parentWidget);
+      }
+
+      this._detachFromParent = unsubscribe;
+    }
+
+    /*
+     * Called with the given parentNode and parentWidget. This
+     * method is only called when this node is part of a subtree.
+     */
+    _attachToParent(parentWidget) {
+      return null;
     }
 
     connectedCallback() {
       if (!this.isConnected) return;
+
       const options = this.getAttribute('options');
 
       if (options) {
         // this will initially happen in the attributeChangedCallback after the
         // constructor and before the connectedCallback
-        if (this._auxAttributesSubscription) return;
-
-        this._auxAttributesSubscription = subscribeOptionsAttributes(
-          this.parentNode,
-          options,
-          (attr) => {
-            this._auxUpdateAttributes(attr);
-          }
-        );
+        if (!this._auxAttributesSubscription)
+          this._auxAttributesSubscription = subscribeOptionsAttributes(
+            this.parentNode,
+            options,
+            (attr) => {
+              this._auxUpdateAttributes(attr);
+            }
+          );
       }
+
+      this._auxParentChanged();
     }
 
     disconnectedCallback() {
-      const subscriptions = this._auxAttributesSubscription;
-      if (subscriptions) {
-        this._auxAttributesSubscription = null;
-        subscriptions();
-      }
+      this._auxAttributesSubscription = unsubscribeSubscriptions(this._auxAttributesSubscription);
+      this._auxParentChanged();
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -356,6 +427,10 @@ function createComponent(base) {
       this.auxWidget.triggerResize();
     }
   };
+
+  baseCache.set(base, BaseComponent);
+
+  return BaseComponent;
 }
 
 const whenDefinedSubscribers = new SubscriberMap();
@@ -371,33 +446,6 @@ function subscribeWhenDefined(tagName, callback) {
   }
 
   return whenDefinedSubscribers.subscribe(tagName, callback);
-}
-
-export function findParentNode(node) {
-  do {
-    if (node.isAuxWidget) return node;
-
-    // if the parent looks like a WebComponent which has not been upgraded, we
-    // speculatively return it.
-    const tagName = node.tagName;
-
-    if (typeof tagName !== 'string') return null;
-
-    if (tagName.includes('-') && !customElements.get(tagName.toLowerCase()))
-      return node;
-
-    node = node.parentNode;
-  } while (node);
-
-  return null;
-}
-
-function findParentWidget(node) {
-  const parentNode = findParentNode(node);
-
-  if (parentNode) return parentNode.auxWidget;
-
-  return null;
 }
 
 let a_div;
@@ -440,50 +488,29 @@ export function componentFromWidget(Widget, base) {
       options.element = this;
 
       this.auxWidget = new Widget(options);
-      this._findParentSubscription = null;
     }
 
-    _attachToParent() {
-      const parentNode = findParentNode(this.parentNode);
+    _attachToParent(parentWidget) {
+      const widget = this.auxWidget;
 
-      if (parentNode === null) {
-        this.auxWidget.setParent(null);
+      if (parentWidget === null) {
+        widget.setParent(null);
+        return () => {
+          widget.setParent(void 0);
+          widget.disableDraw();
+        };
       } else {
-        if (parentNode.isAuxWidget) {
-          const parent = parentNode.auxWidget;
+        parentWidget.addChild(widget);
 
-          if (parent) {
-            parent.addChild(this.auxWidget);
+        return () => {
+          // There are situations where we are removed from the
+          // parent programmatically.
+          if (widget.parent == parentWidget)
+          {
+            parentWidget.removeChild(widget);
           }
-        } else {
-          this._findParentSubscription = subscribeWhenDefined(
-            parentNode.tagName,
-            () => {
-              this._findParentSubscription = null;
-              this._attachToParent();
-            }
-          );
-        }
-      }
-    }
-
-    connectedCallback() {
-      if (!this.isConnected) return;
-      super.connectedCallback();
-      this._attachToParent();
-    }
-
-    disconnectedCallback() {
-      this.auxWidget.setParent(void 0);
-      this.auxWidget.disableDraw();
-
-      super.disconnectedCallback();
-
-      const sub = this._findParentSubscription;
-
-      if (sub !== null) {
-        sub();
-        this._findParentSubscription = null;
+          widget.disableDraw();
+        };
       }
     }
   };
@@ -525,31 +552,23 @@ export function subcomponentFromWidget(
       options.class = this.getAttribute('class');
 
       this.auxWidget = new Widget(options);
-      this.auxParent = null;
     }
 
     connectedCallback() {
       super.connectedCallback();
       this.style.display = 'none';
-
-      const parent = findParentWidget(this.parentNode);
-
-      if (parent instanceof ParentWidget) {
-        this.auxParent = parent;
-        appendCallback(parent, this.auxWidget, this);
-      } else {
-        error('Missing parent widget.', this);
-      }
     }
 
-    disconnectedCallback() {
-      super.disconnectedCallback();
-
-      const parent = this.auxParent;
-
-      if (parent) {
-        removeCallback(parent, this.auxWidget, this);
-        this.auxParent = null;
+    _attachToParent(parentWidget) {
+      if (parentWidget instanceof ParentWidget) {
+        const widget = this.auxWidget;
+        appendCallback(parentWidget, widget, this);
+        return () => {
+          removeCallback(parentWidget, widget, this);
+          widget.disableDraw();
+        };
+      } else {
+        error('Missing parent widget: ', this);
       }
     }
   };
