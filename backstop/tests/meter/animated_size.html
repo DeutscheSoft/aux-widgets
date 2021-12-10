@@ -1,0 +1,30 @@
+<aux-meter id="animated_size" min="0" max="100" value="50"
+  background="#2577a1"
+  foreground="#e0e0e0"
+></aux-meter>
+<style>
+  .aux-frame.scale {
+    transform-origin: top;
+    transform: scaleY(4);
+    transition-duration: 0.5s;
+  }
+</style>
+<script>
+  const run = async () => {
+    const delay = (n) => new Promise((resolve) => setTimeout(resolve, n));
+    const meter = document.querySelector('#animated_size');
+
+    await delay(50);
+    meter.value = 60;
+    document.querySelector('.aux-frame').classList.add('scale');
+    await delay(50);
+    meter.auxWidget.triggerResize();
+    meter.value = 40;
+    await delay(50);
+    meter.value = 20;
+    await delay(50);
+    meter.auxWidget.triggerResize();
+  };
+
+  document.addEventListener('DOMContentLoaded', run);
+</script>
