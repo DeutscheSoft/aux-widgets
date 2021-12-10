@@ -237,8 +237,8 @@ function measureDimensions(data) {
   var height = [];
 
   for (var i = 0; i < nodes.length; i++) {
-    width.push(outerWidth(nodes[i]));
-    height.push(outerHeight(nodes[i]));
+    width.push(outerWidth(nodes[i], false, void 0, true));
+    height.push(outerHeight(nodes[i], false, void 0, true));
   }
 
   data.width = width;
@@ -722,8 +722,8 @@ export const Scale = defineClass({
     var O = this.options;
 
     const basis = vert(O)
-      ? innerHeight(this.element)
-      : innerWidth(this.element);
+      ? innerHeight(this.element, void 0, true)
+      : innerWidth(this.element, void 0, true);
     this.update('basis', basis);
   },
 
