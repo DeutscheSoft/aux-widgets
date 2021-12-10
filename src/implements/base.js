@@ -84,6 +84,18 @@ const __native_events = {
 
   submit: true,
   contextmenu: true,
+
+  // pointer events
+  pointerover: true,
+  pointerenter: true,
+  pointerdown: true,
+  pointermove: true,
+  pointerup: true,
+  pointercancel: true,
+  pointerout: true,
+  pointerleave: true,
+  gotpointercapture: true,
+  lostpointercapture: true,
 };
 export function isNativeEvent(type) {
   return __native_events[type];
