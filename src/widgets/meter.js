@@ -459,8 +459,8 @@ export class Meter extends Widget {
   resize() {
     const O = this.options;
     super.resize();
-    const w = innerWidth(this._bar);
-    const h = innerHeight(this._bar);
+    const w = innerWidth(this._bar, void 0, true);
+    const h = innerHeight(this._bar, void 0, true);
     this.set('_width', w);
     this.set('_height', h);
     const i = vert(O) ? h : w;
