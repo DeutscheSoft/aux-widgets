@@ -374,8 +374,8 @@ export const Meter = defineClass({
   resize: function () {
     var O = this.options;
     Widget.prototype.resize.call(this);
-    var w = innerWidth(this._bar);
-    var h = innerHeight(this._bar);
+    var w = innerWidth(this._bar, void 0, true);
+    var h = innerHeight(this._bar, void 0, true);
     this.set('_width', w);
     this.set('_height', h);
     var i = vert(O) ? h : w;
