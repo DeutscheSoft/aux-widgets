@@ -68,6 +68,11 @@ function setScrollRange() {
  *
  * @property {String} [position='right'] - The border the scrollbar is
  *   attached to, either `top`, `right`, `bottom` or `left`.
+ * @property {Integer} [content=0] - The height of the content to be scrolled.
+ * @property {Integer} [clip=0] - The height of the area clipping the content.
+ * @property {Integer} [scroll=0] - The scroll position.
+ * @property {Integer} [min_size=32] - The minimal size of the scroll bar.
+ * 
  */
 export const ScrollBar = defineClass({
   Extends: Widget,
@@ -81,6 +86,7 @@ export const ScrollBar = defineClass({
       content: 'number',
       clip: 'number',
       scroll: 'number',
+      min_size: 'number',
     },
   ),
   options: {
@@ -89,6 +95,7 @@ export const ScrollBar = defineClass({
     clip: 0,
     scroll: 0,
     reverse: true,
+    min_size: 32,
   },
   static_events: {
     set_content: setScrollRange,
@@ -142,7 +149,8 @@ export const ScrollBar = defineClass({
       const content = O.content;
       const scroll = O.scroll;
       if (clip && content) {
-        let size = clip / content;
+        const size = clip / content;
+        const rsize = Math.max(O.min_size, clip * size);
         if (size >= 1) {
           //this.update('visible', false);
           this.element.style.display = 'none';
@@ -150,13 +158,13 @@ export const ScrollBar = defineClass({
           //this.update('visible', true);
           this.element.style.display = 'block';
           let pos = scroll / (content - clip);
-          pos = (pos * (clip - (size * clip)));
+          pos = (pos * (clip - (rsize)));
           if (vert.call(this)) {
-            outerHeight(this.element, true, clip * size);
+            outerHeight(this.element, true, rsize);
             this.element.style.top = pos + 'px';
           }
           else {
-            outerWidth(this.element, true, clip * size);
+            outerWidth(this.element, true, rsize);
             this.element.style.left = pos + 'px';
           }
         }
