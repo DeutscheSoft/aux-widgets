@@ -1229,6 +1229,7 @@ body.aux-cursor-row-resize * {
   position: absolute;
   display: block;
   transform: translateZ(1000px);
+  z-index: 1000;
 }
 .aux-scroller > .aux-scrollbar.aux-top {
   top: 0;
