@@ -403,7 +403,12 @@ export class Base {
    * @emits Base#set_[option]
    */
   update(key, value) {
-    if (this.options[key] === value) return;
+    const current_value = this.options[key];
+
+    // If both the old and the new value are NaN there is no need to set them,
+    // either.
+    if (current_value === value ||
+        current_value !== current_value && value !== value) return;
     this.set(key, value);
   }
 
