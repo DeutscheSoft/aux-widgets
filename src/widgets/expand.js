@@ -123,10 +123,10 @@ function changedExpanded(value) {
       other_expand = grp.active;
       grp.active = this;
       if (other_expand && other_expand !== this)
-        other_expand.set('expanded', false);
+        other_expand.userset('expanded', false);
     } else if (grp.active === this) {
       grp.active = false;
-      if (grp.default) grp.default.set('expanded', true);
+      if (grp.default) grp.default.userset('expanded', true);
     }
   }
   updateVisibility.call(this);
