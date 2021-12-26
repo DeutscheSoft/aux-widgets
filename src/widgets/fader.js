@@ -136,7 +136,7 @@ export class Fader extends Widget {
         show_labels: 'boolean',
         labels: 'function',
         layout: 'string',
-        direction: 'int',
+        direction: 'string',
         reset: 'number',
         bind_click: 'boolean',
         bind_dblclick: 'boolean',
