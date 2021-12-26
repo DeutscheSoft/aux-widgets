@@ -1209,3 +1209,7 @@ export class Widget extends Base {
  *
  * @event Widget##GenericDOMEvents
  */
+
+export function addRenderTask(widget, task) {
+  widget.getRenderer().addTask(task);
+}

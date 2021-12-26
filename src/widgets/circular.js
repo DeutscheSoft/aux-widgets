@@ -29,7 +29,8 @@ import {
   makeRanged,
 } from '../utils/make_ranged.js';
 import { defineChildElement } from '../widget_helpers.js';
-import { Widget } from './widget.js';
+import { Resize, Widget } from './widget.js';
+import { defineRender, defineMeasure, deferMeasure, deferRender } from '../renderer.js';
 
 function interpretLabel(x) {
   if (typeof x === 'object') return x;
@@ -67,185 +68,10 @@ const formatTranslate = FORMAT('translate(%f, %f)');
 const formatTranslateRotate = FORMAT('translate(%f %f) rotate(%f %f %f)');
 const formatRotate = FORMAT('rotate(%f %f %f)');
 
-function drawDots() {
-  // depends on dots, dot, min, max, size
-  const _dots = this._dots;
-  const O = this.options;
-  const dots = O.dots;
-  const dot = O.dots_defaults;
-  const angle = O.angle;
-  const transformation = O.transformation;
-  const snap_module = O.snap_module;
-  empty(_dots);
-  for (let i = 0; i < dots.length; i++) {
-    let m = dots[i];
-    if (typeof m == 'number') m = { pos: m };
+const DotsChanged = Symbol('_dots changed');
+const LabelsChanged = Symbol('_labels changed');
+const MarkersChanged = Symbol('_markers changed');
 
-    const r = makeSVG('rect', { class: 'aux-dot' });
-
-    const length = m.length === void 0 ? dot.length : m.length;
-    const width = m.width === void 0 ? dot.width : m.width;
-    const margin = m.margin === void 0 ? dot.margin : m.margin;
-    const pos = Math.min(O.max, Math.max(O.min, m.pos));
-    // TODO: consider adding them all at once
-    _dots.appendChild(r);
-    if (m['class']) addClass(r, m['class']);
-    if (m.color) r.style.fill = m.color;
-
-    r.setAttribute('x', O.size - length - margin);
-    r.setAttribute('y', O.size / 2 - width / 2);
-
-    r.setAttribute('width', length);
-    r.setAttribute('height', width);
-
-    r.setAttribute(
-      'transform',
-      'rotate(' +
-        transformation.valueToCoef(snap_module.snap(pos)) * angle +
-        ' ' +
-        O.size / 2 +
-        ' ' +
-        this.options.size / 2 +
-        ')'
-    );
-  }
-  /**
-   * Is fired when dots are (re)drawn.
-   * @event Circular#dotsdrawn
-   */
-  this.emit('dotsdrawn');
-}
-function drawMarkers() {
-  // depends on size, markers, marker, min, max
-  const O = this.options;
-  const markers = O.markers;
-  const marker = O.markers_defaults;
-  empty(this._markers);
-
-  const stroke = O._stroke_width;
-  const outer = O.size / 2;
-  const angle = O.angle;
-  const transformation = O.transformation;
-  const snap_module = O.snap_module;
-
-  for (let i = 0; i < markers.length; i++) {
-    const m = markers[i];
-    const thick = m.thickness === void 0 ? marker.thickness : m.thickness;
-    const margin = m.margin === void 0 ? marker.margin : m.margin;
-    const inner = outer - thick;
-    const outer_p = outer - margin - stroke / 2;
-    const inner_p = inner - margin - stroke / 2;
-    let from, to;
-
-    if (m.from === void 0) from = O.min;
-    else from = Math.min(O.max, Math.max(O.min, m.from));
-
-    if (m.to === void 0) to = O.max;
-    else to = Math.min(O.max, Math.max(O.min, m.to));
-
-    const s = makeSVG('path', { class: 'aux-marker' });
-    this._markers.appendChild(s);
-
-    if (m['class']) addClass(s, m['class']);
-    if (m.color) s.style.fill = m.color;
-    if (!m.nosnap) {
-      from = snap_module.snap(from);
-      to = snap_module.snap(to);
-    }
-    from = transformation.valueToCoef(from) * angle;
-    to = transformation.valueToCoef(to) * angle;
-
-    drawSlice.call(this, from, to, inner_p, outer_p, outer, s);
-  }
-  /**
-   * Is fired when markers are (re)drawn.
-   * @event Circular#markersdrawn
-   */
-  this.emit('markersdrawn');
-}
-function drawLabels() {
-  // depends on size, labels, label, min, max, start
-  const _labels = this._labels;
-  const O = this.options;
-  const labels = O.labels;
-  const label = O.labels_defaults;
-  empty(this._labels);
-
-  if (!labels.length) return;
-
-  const outer = O.size / 2;
-  const a = new Array(labels.length);
-  const positions = new Array(labels.length);
-  let i;
-
-  let l, p;
-
-  for (i = 0; i < labels.length; i++) {
-    l = labels[i];
-    p = makeSVG('text', {
-      class: 'aux-label',
-      style: 'dominant-baseline: central;',
-    });
-
-    if (l['class']) addClass(p, l['class']);
-    if (l.color) p.style.fill = l.color;
-
-    if (l.label !== void 0) p.textContent = l.label;
-    else p.textContent = label.format(l.pos);
-
-    p.setAttribute('text-anchor', 'middle');
-
-    _labels.appendChild(p);
-    a[i] = p;
-  }
-  /* FORCE_RELAYOUT */
-
-  S.add(
-    function () {
-      let j, q;
-      const transformation = O.transformation;
-      const snap_module = O.snap_module;
-      for (j = 0; j < labels.length; j++) {
-        l = labels[j];
-        q = a[j];
-
-        const margin = l.margin !== void 0 ? l.margin : label.margin;
-        const align = (l.align !== void 0 ? l.align : label.align) === 'inner';
-        const pos = Math.min(O.max, Math.max(O.min, l.pos));
-        const bb = q.getBBox();
-        const angle =
-          (transformation.valueToCoef(snap_module.snap(pos)) * O.angle +
-            O.start) %
-          360;
-        const outer_p = outer - margin;
-        const coords = _getCoordsSingle(angle, outer_p, outer);
-
-        const mx =
-          (((coords.x - outer) / outer_p) * (bb.width + bb.height / 2.5)) /
-          (align ? -2 : 2);
-        const my =
-          (((coords.y - outer) / outer_p) * bb.height) / (align ? -2 : 2);
-
-        positions[j] = formatTranslate(coords.x + mx, coords.y + my);
-      }
-
-      S.add(
-        function () {
-          for (j = 0; j < labels.length; j++) {
-            q = a[j];
-            q.setAttribute('transform', positions[j]);
-          }
-          /**
-           * Is fired when labels are (re)drawn.
-           * @event Circular#labelsdrawn
-           */
-          this.emit('labelsdrawn');
-        }.bind(this),
-        1
-      );
-    }.bind(this)
-  );
-}
 function drawSlice(a_from, a_to, r_inner, r_outer, pos, slice) {
   a_from = +a_from;
   a_to = +a_to;
@@ -379,6 +205,7 @@ export class Circular extends Widget {
       show_base: 'boolean',
       show_value: 'boolean',
       show_hand: 'boolean',
+      show_labels: 'boolean',
       x: 'number',
       y: 'number',
       dots_defaults: 'object',
@@ -401,11 +228,6 @@ export class Circular extends Widget {
         // the initial redraw
         this.set('value', this.options.value);
       },
-      rangedchanged: function () {
-        const I = this.invalid;
-        I.size = I.markers = I.dots = I.labels = true;
-        this.triggerDraw();
-      },
     };
   }
 
@@ -425,6 +247,7 @@ export class Circular extends Widget {
       show_base: true,
       show_value: true,
       show_hand: true,
+      show_labels: true,
       x: 0,
       y: 0,
       dots_defaults: { width: 1, length: 3, margin: 0.5 },
@@ -440,6 +263,260 @@ export class Circular extends Widget {
       },
       labels: [],
     });
+  }
+
+  static get renderers() {
+    return [
+      defineRender('show_hand', function(show_hand) {
+        this._hand.style.display = show_hand ? 'block' : 'none';
+      }),
+      defineMeasure(Resize, function() {
+        this.set('_stroke_width', this.getStroke());
+        this.invalidate('labels');
+      }),
+      defineRender(
+        [ DotsChanged, 'show_dots', 'dots', 'dots_defaults', 'angle', 'transformation', 'snap_module', 'max', 'min', 'size' ],
+        function(show_dots, dots, dots_defaults, angle, transformation, snap_module, max, min, size) {
+          const _dots = this._dots;
+
+          if (_dots)
+            return;
+
+          empty(_dots);
+
+          if (!show_dots)
+            return;
+
+          // TODO: consider caching nodes
+
+          for (let i = 0; i < dots.length; i++) {
+            let m = dots[i];
+            if (typeof m == 'number') m = { pos: m };
+
+            const r = makeSVG('rect', { class: 'aux-dot' });
+
+            const length = m.length === void 0 ? dots_defaults.length : m.length;
+            const width = m.width === void 0 ? dots_defaults.width : m.width;
+            const margin = m.margin === void 0 ? dots_defaults.margin : m.margin;
+            const pos = Math.min(max, Math.max(min, m.pos));
+            _dots.appendChild(r);
+            if (m['class']) addClass(r, m['class']);
+            if (m.color) r.style.fill = m.color;
+
+            r.setAttribute('x', size - length - margin);
+            r.setAttribute('y', size / 2 - width / 2);
+
+            r.setAttribute('width', length);
+            r.setAttribute('height', width);
+
+            r.setAttribute(
+              'transform',
+              'rotate(' +
+                transformation.valueToCoef(snap_module.snap(pos)) * angle +
+                ' ' +
+                size / 2 +
+                ' ' +
+                size / 2 +
+                ')'
+            );
+          }
+          /**
+           * Is fired when dots are (re)drawn.
+           * @event Circular#dotsdrawn
+           */
+          this.emit('dotsdrawn');
+        }),
+      defineRender(
+        [ LabelsChanged, 'show_labels', 'labels', 'labels_defaults', 'transformation', 'snap_module', 'min', 'max', 'angle', 'start', 'size' ],
+        function(show_labels, labels, labels_defaults, transformation, snap_module, min, max, angle, start, size) {
+          // depends on size, labels, label, min, max, start
+          const _labels = this._labels;
+
+          if (!_labels)
+            return;
+
+          empty(this._labels);
+
+          if (!show_labels || !labels.length) return;
+
+          const outerSize = size / 2;
+          const a = new Array(labels.length);
+
+          const elements = labels.map((l) => {
+            const p = makeSVG('text', {
+              class: 'aux-label',
+              style: 'dominant-baseline: central;',
+            });
+
+            if (l['class']) addClass(p, l['class']);
+            if (l.color) p.style.fill = l.color;
+
+            if (l.label !== void 0) p.textContent = l.label;
+            else p.textContent = labels_defaults.format(l.pos);
+
+            p.setAttribute('text-anchor', 'middle');
+
+            _labels.appendChild(p);
+            return p;
+          });
+          /* FORCE_RELAYOUT */
+
+          return deferMeasure(() => {
+              const positions = labels.map((l, i) => {
+                const element = elements[i];
+
+                const margin = l.margin !== void 0 ? l.margin : labels_defaults.margin;
+                const align = (l.align !== void 0 ? l.align : labels_defaults.align) === 'inner';
+                const pos = Math.min(max, Math.max(min, l.pos));
+                const bb = element.getBBox();
+                const _angle =
+                  (transformation.valueToCoef(snap_module.snap(pos)) * angle +
+                    start) %
+                  360;
+                const outer_p = outerSize - margin;
+                const coords = _getCoordsSingle(_angle, outer_p, outerSize);
+
+                const mx =
+                  (((coords.x - outerSize) / outer_p) * (bb.width + bb.height / 2.5)) /
+                  (align ? -2 : 2);
+                const my =
+                  (((coords.y - outerSize) / outer_p) * bb.height) / (align ? -2 : 2);
+
+                return formatTranslate(coords.x + mx, coords.y + my);
+              });
+
+              return deferRender(() => {
+                  elements.forEach((element, i) => {
+                    element.setAttribute('transform', positions[i]);
+                  });
+                  /**
+                   * Is fired when labels are (re)drawn.
+                   * @event Circular#labelsdrawn
+                   */
+                  this.emit('labelsdrawn');
+                });
+            });
+        }),
+      defineRender([ 'x', 'y', 'start', 'size' ], function(x, y, start, size) {
+        const outerSize = size / 2;
+        this.element.setAttribute(
+          'transform', formatTranslateRotate(x, y, start, outerSize, outerSize));
+      }),
+      defineRender([ 'start', 'size' ], function(start, size) {
+        const _labels = this._labels;
+        const outerSize = size / 2;
+        if (!_labels)
+          return;
+        _labels.setAttribute(
+          'transform', formatRotate(-start, outerSize, outerSize));
+      }),
+      defineRender(
+        [ MarkersChanged, 'show_markers', 'markers', 'markers_defaults', 'transformation', 'snap_module', 'size', 'angle', 'min', 'max', '_stroke_width' ],
+        function(show_markers, markers, markers_defaults, transformation, snap_module, size, angle, min, max, _stroke_width) {
+          const _markers = this._markers;
+
+          if (!_markers)
+            return;
+
+          empty(this._markers);
+
+          if (!show_markers)
+            return;
+
+          const outerSize = size / 2;
+
+          for (let i = 0; i < markers.length; i++) {
+            const m = markers[i];
+            const thick = m.thickness === void 0 ? markers_defaults.thickness : m.thickness;
+            const margin = m.margin === void 0 ? markers_defaults.margin : m.margin;
+            const inner = outerSize - thick;
+            const outer_p = outerSize - margin - _stroke_width / 2;
+            const inner_p = inner - margin - _stroke_width / 2;
+            let from, to;
+
+            if (m.from === void 0) from = min;
+            else from = Math.min(max, Math.max(min, m.from));
+
+            if (m.to === void 0) to = max;
+            else to = Math.min(max, Math.max(min, m.to));
+
+            const s = makeSVG('path', { class: 'aux-marker' });
+
+            if (m['class']) addClass(s, m['class']);
+            if (m.color) s.style.fill = m.color;
+            if (!m.nosnap) {
+              from = snap_module.snap(from);
+              to = snap_module.snap(to);
+            }
+            from = transformation.valueToCoef(from) * angle;
+            to = transformation.valueToCoef(to) * angle;
+
+            drawSlice(from, to, inner_p, outer_p, outerSize, s);
+            this._markers.appendChild(s);
+          }
+          /**
+           * Is fired when markers are (re)drawn.
+           * @event Circular#markersdrawn
+           */
+          this.emit('markersdrawn');
+        }),
+      defineRender(
+        [ 'show_value', 'transformation', 'snap_module', 'base', 'angle', 'value_ring', '_stroke_width', 'thickness', 'margin', 'size' ],
+        function(show_value, transformation, snap_module, base, angle, value_ring, _stroke_width, thickness, margin, size) {
+          const _value = this._value;
+
+          if (show_value) {
+            const outerSize = size / 2;
+            const inner = outerSize - thickness;
+            const outer_p = outerSize - _stroke_width / 2 - margin;
+            const inner_p = inner - _stroke_width / 2 - margin;
+
+            drawSlice(
+              transformation.valueToCoef(snap_module.snap(base)) * angle,
+              transformation.valueToCoef(snap_module.snap(value_ring)) * angle,
+              inner_p,
+              outer_p,
+              outerSize,
+              _value
+            );
+          } else {
+            _value.removeAttribute('d');
+          }
+        }),
+      defineRender(
+        [ 'show_base', 'size', 'base', 'margin', '_stroke_width', 'thickness', 'angle' ],
+        function (show_base, size, base, margin, _stroke_width, thickness, angle) {
+          const _base = this._base;
+
+          if (show_base) {
+            const outerSize = size / 2;
+            const inner = outerSize - thickness;
+            const outer_p = outerSize - _stroke_width / 2 - margin;
+            const inner_p = inner - _stroke_width / 2 - margin;
+
+            drawSlice(0, angle, inner_p, outer_p, outerSize, _base);
+          } else {
+            _base.removeAttribute('d');
+          }
+        }),
+      defineRender(
+        [ 'size', 'value_hand', 'hand', 'transformation', 'snap_module', 'angle' ],
+        function  (size, value_hand, hand, transformation, snap_module, angle) {
+          const _hand = this._hand;
+          _hand.setAttribute('x', size - hand.length - hand.margin);
+          _hand.setAttribute('y', (size - hand.width) / 2.0);
+          _hand.setAttribute('width', hand.length);
+          _hand.setAttribute('height', hand.width);
+          _hand.setAttribute(
+            'transform',
+            formatRotate(
+              transformation.valueToCoef(snap_module.snap(value_hand)) * angle,
+              size / 2,
+              size / 2
+            )
+          );
+        }),
+    ];
   }
 
   initialize(options) {
@@ -471,13 +548,6 @@ export class Circular extends Widget {
     if (this.options.labels) this.set('labels', this.options.labels);
   }
 
-  resize() {
-    this.update('_stroke_width', this.getStroke());
-    this.invalid.labels = true;
-    this.triggerDraw();
-    super.resize();
-  }
-
   draw(O, element) {
     addClass(element, 'aux-circular');
     element.insertBefore(this._value, this._markers);
@@ -485,149 +555,6 @@ export class Circular extends Widget {
     element.appendChild(this._hand);
 
     super.draw(O, element);
-  }
-
-  redraw() {
-    super.redraw();
-    const I = this.invalid;
-    const O = this.options;
-    const E = this.element;
-    const outer = O.size / 2;
-    let tmp;
-
-    if (I.validate('x', 'y') || I.start || I.size) {
-      E.setAttribute(
-        'transform',
-        formatTranslateRotate(O.x, O.y, O.start, outer, outer)
-      );
-      if (this._labels)
-        this._labels.setAttribute(
-          'transform',
-          formatRotate(-O.start, outer, outer)
-        );
-    }
-
-    if (
-      O.show_labels &&
-      (I.validate('show_labels', 'labels', 'label') ||
-        I.size ||
-        I.min ||
-        I.max ||
-        I.start ||
-        I.angle)
-    ) {
-      drawLabels.call(this);
-    }
-
-    if (
-      O.show_dots &&
-      (I.validate('show_dots', 'dots', 'dot') ||
-        I.min ||
-        I.max ||
-        I.size ||
-        I.base ||
-        I.angle)
-    ) {
-      drawDots.call(this);
-    }
-
-    if (
-      O.show_markers &&
-      (I.validate('show_markers', 'markers', 'marker') ||
-        I.size ||
-        I.min ||
-        I.max ||
-        I.start ||
-        I.angle)
-    ) {
-      drawMarkers.call(this);
-    }
-
-    const stroke = O._stroke_width;
-    const inner = outer - O.thickness;
-    const outer_p = outer - stroke / 2 - O.margin;
-    const inner_p = inner - stroke / 2 - O.margin;
-    const transformation = O.transformation;
-    const snap_module = O.snap_module;
-
-    if (
-      I.show_value ||
-      I.value_ring ||
-      I.size ||
-      I._stroke_width ||
-      I.base ||
-      I.angle ||
-      I.thickness ||
-      I.margin
-    ) {
-      I.show_value = I.value_ring = false;
-      if (O.show_value) {
-        drawSlice.call(
-          this,
-          transformation.valueToCoef(snap_module.snap(O.base)) * O.angle,
-          transformation.valueToCoef(snap_module.snap(O.value_ring)) * O.angle,
-          inner_p,
-          outer_p,
-          outer,
-          this._value
-        );
-      } else {
-        this._value.removeAttribute('d');
-      }
-    }
-
-    if (
-      I.show_base ||
-      I.size ||
-      I._stroke_width ||
-      I.base ||
-      I.angle ||
-      I.thickness ||
-      I.margin
-    ) {
-      I.show_base = false;
-      if (O.show_base) {
-        drawSlice.call(this, 0, O.angle, inner_p, outer_p, outer, this._base);
-      } else {
-        /* TODO: make this a child element */
-        this._base.removeAttribute('d');
-      }
-    }
-    if (I.show_hand || I.size || I.base || I.angle) {
-      I.show_hand = false;
-      if (O.show_hand) {
-        this._hand.style.display = 'block';
-      } else {
-        this._hand.style.display = 'none';
-      }
-    }
-    if (
-      I.validate(
-        'size',
-        'value_hand',
-        'hand',
-        'min',
-        'max',
-        'start',
-        'base',
-        'angle'
-      )
-    ) {
-      tmp = this._hand;
-      tmp.setAttribute('x', O.size - O.hand.length - O.hand.margin);
-      tmp.setAttribute('y', (O.size - O.hand.width) / 2.0);
-      tmp.setAttribute('width', O.hand.length);
-      tmp.setAttribute('height', O.hand.width);
-      tmp.setAttribute(
-        'transform',
-        formatRotate(
-          transformation.valueToCoef(snap_module.snap(O.value_hand)) * O.angle,
-          O.size / 2,
-          O.size / 2
-        )
-      );
-    }
-    I._stroke_width = false;
   }
 
   destroy() {
@@ -666,8 +593,7 @@ export class Circular extends Widget {
 
     if (label) {
       O.labels.push(label);
-      this.invalid.labels = true;
-      this.triggerDraw();
+      this.invalidate('labels');
       return label;
     }
   }
@@ -689,8 +615,7 @@ export class Circular extends Widget {
     if (i === -1) return;
 
     O.labels.splice(i);
-    this.invalid.labels = true;
-    this.triggerDraw();
+    this.invalidate('labels');
   }
 
   // GETTERS & SETTERS
@@ -729,6 +654,7 @@ defineChildElement(Circular, 'markers', {
   //option: "markers",
   //display_check: function(v) { return !!v.length; },
   show: true,
+  dependency: MarkersChanged,
   create: function () {
     return makeSVG('g', { class: 'aux-markers' });
   },
@@ -741,10 +667,12 @@ defineChildElement(Circular, 'dots', {
   //option: "dots",
   //display_check: function(v) { return !!v.length; },
   show: true,
+  dependency: DotsChanged,
   create: function () {
     return makeSVG('g', { class: 'aux-dots' });
   },
 });
+
 /**
  * @member {SVGGroup} Circular#_labels - A group containing all labels.
  *      Has class <code>.aux-labels</code>
@@ -753,7 +681,9 @@ defineChildElement(Circular, 'labels', {
   //option: "labels",
   //display_check: function(v) { return !!v.length; },
   show: true,
+  dependency: LabelsChanged,
   create: function () {
     return makeSVG('g', { class: 'aux-labels' });
   },
 });
+
