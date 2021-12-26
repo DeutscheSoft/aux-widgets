@@ -25,6 +25,7 @@ import {
   removeClass,
 } from './../utils/dom.js';
 import { Widget } from './widget.js';
+import { defineRender } from '../renderer.js';
 
 /**
  * Icon represents a <code>&lt;DIV></code> element showing either
@@ -56,6 +57,35 @@ export class Icon extends Widget {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender('icon', function(icon) {
+        const E = this.element;
+        const old = this._icon_old;
+
+        if (old !== null) {
+          if (isCSSVariableName(old) || !isClassName(old)) {
+            E.style['background-image'] = null;
+          } else {
+            removeClass(E, old);
+          }
+          this._icon_old = null;
+        }
+
+        if (icon) {
+          if (isCSSVariableName(icon)) {
+            E.style['background-image'] = 'var(' + icon + ')';
+          } else if (isClassName(icon)) {
+            addClass(E, icon);
+          } else {
+            E.style['background-image'] = 'url(' + JSON.stringify(icon) + ')';
+          }
+          this._icon_old = icon;
+        }
+      }),
+    ];
+  }
+
   initialize(options) {
     if (!options.element) options.element = element('div');
     super.initialize(options);
@@ -69,39 +99,5 @@ export class Icon extends Widget {
     addClass(element, 'aux-icon');
 
     super.draw(O, element);
-  }
-
-  redraw() {
-    const O = this.options;
-    const I = this.invalid;
-    const E = this.element;
-
-    super.redraw();
-
-    if (I.icon) {
-      I.icon = false;
-      const old = this._icon_old;
-      const icon = O.icon;
-
-      if (old !== null) {
-        if (isCSSVariableName(old) || !isClassName(old)) {
-          E.style['background-image'] = null;
-        } else {
-          removeClass(E, old);
-        }
-        this._icon_old = null;
-      }
-
-      if (icon) {
-        if (isCSSVariableName(icon)) {
-          E.style['background-image'] = 'var(' + icon + ')';
-        } else if (isClassName(icon)) {
-          addClass(E, icon);
-        } else {
-          E.style['background-image'] = 'url(' + JSON.stringify(icon) + ')';
-        }
-        this._icon_old = icon;
-      }
-    }
   }
 }
