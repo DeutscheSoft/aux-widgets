@@ -22,6 +22,7 @@ import { defineChildWidget } from './../child_widget.js';
 import { Widget } from './widget.js';
 import { Icon } from './icon.js';
 import { Label } from './label.js';
+import { defineRender } from '../renderer.js';
 
 function resetDelayTo() {
   window.clearTimeout(this.__delayed_to);
@@ -318,37 +319,35 @@ export class Button extends Widget {
     super.draw(O, element);
   }
 
-  redraw() {
-    super.redraw();
-    const I = this.invalid;
-    const O = this.options;
-    const E = this.element;
+  static get renderers() {
+    return [
+      defineRender('layout', function(layout) {
+        const E = this.element;
+        toggleClass(E, 'aux-vertical', layout === 'vertical');
+        toggleClass(E, 'aux-horizontal', layout !== 'vertical');
+      }),
+      defineRender('state', function(state) {
+        const E = this.element;
+        toggleClass(E, 'aux-active', state);
+      }),
+      defineRender([ 'label', 'icon' ], function(label, icon) {
+        const E = this.element;
 
-    if (I.layout) {
-      I.layout = false;
-      toggleClass(E, 'aux-vertical', O.layout === 'vertical');
-      toggleClass(E, 'aux-horizontal', O.layout !== 'vertical');
-    }
+        if (label !== false) {
+          const labelID = this._labelID;
 
-    if (I.state) {
-      I.state = false;
-      toggleClass(E, 'aux-active', O.state);
-    }
-
-    if (I.label || I.icon) {
-      if (O.label !== false) {
-        this.label.set('id', this._labelID);
-        this.element.setAttribute('aria-labelledby', this._labelID);
-        this.element.removeAttribute('aria-label');
-      } else if (O.icon && isCSSVariableName(O.icon)) {
-        this.element.setAttribute('aria-label', this.icon);
-        this.element.removeAttribute('aria-labelledby');
-      } else {
-        this.element.setAttribute('aria-label', 'Button');
-        this.element.removeAttribute('aria-labelledby');
-      }
-      I.label = I.icon = false;
-    }
+          this.label.set('id', labelID);
+          E.setAttribute('aria-labelledby', labelID);
+          E.removeAttribute('aria-label');
+        } else if (icon && isCSSVariableName(icon)) {
+          E.setAttribute('aria-label', icon);
+          E.removeAttribute('aria-labelledby');
+        } else {
+          E.setAttribute('aria-label', 'Button');
+          E.removeAttribute('aria-labelledby');
+        }
+      }),
+    ];
   }
 }
 

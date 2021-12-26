@@ -39,7 +39,23 @@ import { GlobalResize } from '../utils/global_resize.js';
 import { GlobalVisibilityChange } from '../utils/global_visibility_change.js';
 import { ProximityTimers } from '../utils/timers.js';
 
+import { Scheduler } from '../scheduler/scheduler.js';
+import {
+  Renderer,
+  RenderState,
+  getRenderers,
+  defineRender,
+  defineMeasure,
+} from '../renderer.js';
+
+const domScheduler = new Scheduler();
+
 const enableTimers = new ProximityTimers();
+
+export const Resize = Symbol('resize');
+export const Resized = Symbol('resized');
+export const Redraw = Symbol('redraw');
+export const InitialDraw = Symbol('initialDraw');
 
 const KEYS = [
   'ArrowUp',
@@ -84,29 +100,6 @@ Invalid.prototype = {
     }
   },
 };
-function redraw(fun) {
-  if (!this._drawn) return;
-
-  if (this.needs_draw) {
-    this.needs_draw = false;
-    this.draw(this.options, this.element);
-  }
-
-  this.needs_redraw = false;
-  this.emit('redraw');
-  fun.call(this);
-}
-function resize() {
-  if (this.isDestructed()) return;
-
-  // we were turned off before we could resize
-  if (!this.isDrawn()) {
-    this.triggerResize();
-    return;
-  }
-
-  this.resize();
-}
 function onVisibilityChange() {
   if (document.hidden) {
     this.disableDraw();
@@ -219,7 +212,6 @@ function onSetTabindex(tabindex) {
  * @property {Boolean} [options.active] - Toggles the class <code>.aux-inactive</code>.
  * @property {Boolean} [options.visible] - Toggles the class <code>.aux-hide</code> and <code>.aux-show</code>. This option also enables and disabled rendering by
  *  calling Widget#hide and Widget#show.
- * @property {Boolean} [options.needs_resize=true] - Set to true if the resize function shall be called before the next redraw.
  * @property {Boolean} [options.dblclick=400] - Set a time in milliseconds for triggering double click event. If 0, no double click events are fired.
  * @property {String} [options.preset] - Set a preset. This string
  *   gets set as class attribute `aux-preset-[preset]`. If `options.presets` has a member
@@ -291,7 +283,6 @@ export class Widget extends Base {
       element: 'object',
       active: 'boolean',
       visible: 'boolean',
-      needs_resize: 'boolean',
       dblclick: 'number',
       interacting: 'boolean',
       notransitions: 'boolean',
@@ -311,7 +302,6 @@ export class Widget extends Base {
       notransitions: void 0,
       disabled: false, // Widgets can be disabled by setting this to true
       visible: true,
-      needs_resize: true,
       dblclick: 0,
       interacting: false,
       notransitions_duration: 500,
@@ -372,11 +362,89 @@ export class Widget extends Base {
     };
   }
 
+  static getRenderer() {
+    let renderer = this._renderer;
+
+    if (this.hasOwnProperty('_renderer'))
+      return renderer;
+
+    this._renderer = renderer = new Renderer();
+
+    getRenderers(this).forEach((task) => renderer.addTask(task));
+
+    return renderer;
+  }
+
+  static get renderers() {
+    return [
+      defineRender(InitialDraw, function() {
+        this.draw(this.options, this.element);
+      }),
+      defineMeasure(Resize, function() {
+        this.resize();
+      }),
+      defineRender(Resized, function() {
+        this.emit('resized');
+        this.resize();
+      }),
+      defineRender(Redraw, function() {
+        this.redraw();
+        this.emit('redraw');
+      }),
+      defineRender('notransitions', function(notransitions) {
+        toggleClass(this.element, 'aux-notransitions', notransitions);
+      }),
+      defineRender('visible', function(visible) {
+        this.getFocusTargets().forEach(v => v.setAttribute('aria-hidden', !visible));
+
+        const E = this.element;
+
+        toggleClass(E, 'aux-hide', visible === false);
+        toggleClass(E, 'aux-show', visible === true);
+      }),
+      defineRender('active', function(active) {
+        const E = this.getStyleTarget();
+        if (!E) return;
+        toggleClass(E, 'aux-inactive', !active);
+      }),
+      defineRender('disabled', function(disabled) {
+        const E = this.getStyleTarget();
+        if (E)
+          toggleClass(E, 'aux-disabled', disabled);
+        this.getFocusTargets().forEach(v => v.setAttribute('aria-disabled', disabled));
+      }),
+      defineRender('title', function(title) {
+        const E = this.getStyleTarget();
+        if (!E) return;
+        E.setAttribute('title', title);
+      }),
+      defineRender('tabindex', function(tabindex) {
+        const F = this.getFocusTargets();
+
+        if (tabindex !== false) {
+          F.forEach(v => v.setAttribute('tabindex', tabindex));
+        } else {
+          F.forEach(v => v.removeAttribute('tabindex'));
+        }
+      }),
+      defineRender('role', function(role) {
+        this.getRoleTarget().setAttribute('role', role);
+      }),
+      defineRender('id', function(id) {
+        this.element.setAttribute('id', id);
+      }),
+    ];
+  }
+
   constructor(options) {
     super(options || {});
   }
 
   initialize(options) {
+    this._renderState = new RenderState(
+      domScheduler,
+      this.constructor.getRenderer(),
+      this);
     super.initialize(options);
     // Main actions every widget needs to take
     const E = options.element || null;
@@ -387,12 +455,6 @@ export class Widget extends Base {
     this.element = E;
     this.invalid = new Invalid(this.options);
     if (!this.value_time) this.value_time = null;
-    this.needs_redraw = false;
-    this.needs_draw = true;
-    this._drawn = false;
-    this._redraw = redraw.bind(this, this.redraw);
-    this.__resize = resize.bind(this);
-    this._schedule_resize = this.scheduleResize.bind(this);
     this.parent = void 0;
     this.children = null;
     this.draw_queue = null;
@@ -410,6 +472,7 @@ export class Widget extends Base {
     this._subscriptions = initSubscriptions();
     this._onfocuskeydown = onFocusKeyDown.bind(this);
     this._lasttabindex = this.options.tabindex;
+    this.invalidateAll();
   }
 
   getStyleTarget() {
@@ -450,6 +513,9 @@ export class Widget extends Base {
     }
   }
 
+  /**
+   * Invalidates all dependencies which will trigger all renderers to rerun.
+   */
   invalidateAll() {
     for (const key in this.options) {
       if (!this.constructor.hasOption(key)) {
@@ -457,6 +523,7 @@ export class Widget extends Base {
           warn('%O %s: unknown option %s', this, this._class, key);
       } else this.invalid[key] = true;
     }
+    this._renderState.invalidateAll();
   }
 
   assertNoneInvalid() {
@@ -473,22 +540,14 @@ export class Widget extends Base {
   }
 
   triggerResize() {
-    if (!this.options.needs_resize) {
-      if (this.isDestructed()) {
-        // This object was destroyed but trigger resize was still scheduled for the next frame.
-        // FIXME: fix this whole problem properly
-        return;
-      }
+    this.invalidate(Resize);
 
-      this.set('needs_resize', true);
+    const C = this.children;
 
-      const C = this.children;
+    if (!C) return;
 
-      if (!C) return;
-
-      for (let i = 0; i < C.length; i++) {
-        C[i].triggerResize();
-      }
+    for (let i = 0; i < C.length; i++) {
+      C[i].triggerResize();
     }
   }
 
@@ -502,19 +561,13 @@ export class Widget extends Base {
     }
   }
 
-  scheduleResize() {
-    if (this.__resize === null) return;
-    S.addNext(this.__resize, 0);
-  }
-
   resize() {
     this.emit('resize');
 
     if (this.constructor.hasOption('resized')) this.set('resized', true);
 
-    if (this.hasEventListeners('resized')) {
-      S.afterFrame(this.emit.bind(this, 'resized'));
-    }
+    if (this.hasEventListeners('resized'))
+      this.invalidate(Resized);
   }
 
   recalculate() {
@@ -551,17 +604,11 @@ export class Widget extends Base {
   }
 
   triggerDraw() {
-    if (!this.needs_redraw) {
-      this.needs_redraw = true;
-      if (this._drawn) S.add(this._redraw, 1);
-    }
+    this._renderState.invalidate(Redraw);
   }
 
   triggerDrawNext() {
-    if (!this.needs_redraw) {
-      this.needs_redraw = true;
-      if (this._drawn) S.addNext(this._redraw, 1);
-    }
+    // FIXME
   }
 
   initialized() {
@@ -633,8 +680,6 @@ export class Widget extends Base {
     }
 
     if (O.container) O.container.appendChild(element);
-
-    this.scheduleResize();
   }
 
   redraw() {
@@ -642,78 +687,15 @@ export class Widget extends Base {
     const O = this.options;
     let E = this.element;
 
-    if (I.notransitions) {
-      I.notransitions = false;
-      toggleClass(E, 'aux-notransitions', O.notransitions);
-    }
-
     if (I.visible) {
       I.visible = false;
 
       const visible = O.visible;
 
-      this.getFocusTargets().forEach(v => v.setAttribute('aria-hidden', !visible));
-
-      if (visible === true) {
-        removeClass(E, 'aux-hide');
-        addClass(E, 'aux-show');
-      } else if (visible === false) {
-        removeClass(E, 'aux-show');
-        addClass(E, 'aux-hide');
+      if (visible === false) {
         this.disableDraw();
         return;
       }
-    }
-
-    E = this.getStyleTarget();
-
-    if (E) {
-      if (I.active) {
-        I.active = false;
-        toggleClass(E, 'aux-inactive', !O.active);
-      }
-
-      if (I.disabled) {
-        I.disabled = false;
-        toggleClass(E, 'aux-disabled', O.disabled);
-        this.getFocusTargets().forEach(v => v.setAttribute('aria-disabled', O.disabled));
-        this.getFocusTargets().forEach(v => v.setAttribute('aria-readonly', O.disabled));
-      }
-    }
-
-    if (I.needs_resize) {
-      I.needs_resize = false;
-
-      if (O.needs_resize) {
-        O.needs_resize = false;
-
-        S.afterFrame(this._schedule_resize);
-      }
-    }
-
-    if (I.title) {
-      I.title = false;
-      E.setAttribute('title', O.title);
-    }
-
-    if (I.tabindex) {
-      const F = this.getFocusTargets();
-      if (O.tabindex !== false) {
-        F.forEach(v => v.setAttribute('tabindex', O.tabindex));
-      } else {
-        F.forEach(v => v.removeAttribute('tabindex'));
-      }
-      I.tabindex = false;
-    }
-
-    if (I.role) {
-      this.getRoleTarget().setAttribute('role', O.role);
-      I.role = false;
-    }
-
-    if (I.id && this.element) {
-      this.element.setAttribute('id', O.id);
-      I.id = false;
     }
 
     const q = this.draw_queue;
@@ -757,9 +739,6 @@ export class Widget extends Base {
 
     super.destroy();
 
-    this._redraw = null;
-    this.__resize = null;
-    this._schedule_resize = null;
     this.options = null;
 
     if (this.element) {
@@ -843,6 +822,7 @@ export class Widget extends Base {
   invalidate(key) {
     this.invalid[key] = true;
     this.triggerDraw();
+    this._renderState.invalidate(key);
   }
 
   /**
@@ -870,6 +850,12 @@ export class Widget extends Base {
         value
       );
     }
+
+    const currentValue = this.options[key];
+
+    if (currentValue !== value && (value === value || currentValue === currentValue))
+      this.invalidate(key);
+
     super.set(key, value);
     return value;
   }
@@ -897,11 +883,10 @@ export class Widget extends Base {
    * @emits Widget#show
    */
   enableDraw() {
-    if (this._drawn) return;
-    this._drawn = true;
-    if (this.needs_redraw) {
-      S.add(this._redraw, 1);
-    }
+    const renderState = this._renderState;
+
+    if (!renderState.isPaused()) return;
+    renderState.unpause();
     this.emit('show');
     this.enableDrawChildren();
   }
@@ -919,12 +904,9 @@ export class Widget extends Base {
    * @emits Widget#hide
    */
   disableDraw() {
-    if (!this._drawn) return;
-    this._drawn = false;
-    if (this.needs_redraw) {
-      S.remove(this._redraw, 1);
-      S.removeNext(this._redraw, 1);
-    }
+    const renderState = this._renderState;
+    if (renderState.isPaused()) return;
+    renderState.pause();
     /**
      * Is fired when the visibility state changes. The first argument
      * is the visibility state, which is either <code>true</code>
@@ -1013,7 +995,7 @@ export class Widget extends Base {
   }
 
   isDrawn() {
-    return this._drawn;
+    return !this._renderState.isPaused();
   }
 
   /**

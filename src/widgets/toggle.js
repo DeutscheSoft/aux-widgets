@@ -19,6 +19,7 @@
 
 import { addClass } from './../utils/dom.js';
 import { Button } from './button.js';
+import { defineRender } from '../renderer.js';
 
 function toggle(O) {
   if (this.userset('state', !O.state) === false) return;
@@ -94,22 +95,23 @@ export class Toggle extends Button {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender([ 'state' ], function(state) {
+        // FIXME: the dependencies seem wrong here.
+        const O = this.options;
+        let tmp = (state && O.label_active) || O.label;
+        if (tmp) this.label.set('label', tmp || '');
+        tmp = (state && O.icon_active) || O.icon;
+        if (tmp) this.icon.set('icon', tmp || '');
+        this.getFocusTargets()[0].setAttribute('aria-pressed', state);
+      }),
+    ];
+  }
+
   draw(O, element) {
     addClass(element, 'aux-toggle');
     super.draw(O, element);
-  }
-
-  redraw() {
-    const O = this.options;
-    const I = this.invalid;
-    if (I.state) {
-      let tmp = (O.state && O.label_active) || O.label;
-      if (tmp) this.label.set('label', tmp || '');
-      tmp = (O.state && O.icon_active) || O.icon;
-      if (tmp) this.icon.set('icon', tmp || '');
-      this.getFocusTargets()[0].setAttribute('aria-pressed', O.state);
-    }
-    super.redraw();
   }
 
   /**
