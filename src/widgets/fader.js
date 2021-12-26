@@ -26,7 +26,7 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { Widget } from './widget.js';
+import { Resize, Widget } from './widget.js';
 import { warning } from '../utils/warning.js';
 import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
 import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
@@ -52,14 +52,15 @@ import {
   innerWidth,
 } from '../utils/dom.js';
 import { defineChildWidget } from '../child_widget.js';
+import { defineRender, defineMeasure } from '../renderer.js';
 
-function vert(O) {
-  return O.layout === 'left' || O.layout === 'right';
+function vert(layout) {
+  return layout === 'left' || layout === 'right';
 }
 function getValue(ev) {
   const O = this.options;
   const transformation = O.transformation;
-  const is_vertical = vert(O);
+  const is_vertical = vert(O.layout);
   const hsize = this._handle_size / 2;
   const pad = this._padding;
 
@@ -176,8 +177,8 @@ export class Fader extends Widget {
         if (value) this.on('dblclick', dblClick);
         else this.off('dblclick', dblClick);
       },
-      set_layout: function () {
-        this.options.direction = vert(this.options) ? 'vertical' : 'horizontal';
+      set_layout: function (layout) {
+        this.options.direction = vert(layout) ? 'vertical' : 'horizontal';
         this.drag.set('direction', this.options.direction);
         this.scroll.set('direction', this.options.direction);
       },
@@ -193,6 +194,67 @@ export class Fader extends Widget {
       },
       focus_move: focusMoveDefault(),
     };
+  }
+
+  static get renderers() {
+    return [
+      defineRender('layout', function(layout) {
+        const E = this.element;
+        removeClass(
+          E,
+          'aux-vertical',
+          'aux-horizontal',
+          'aux-left',
+          'aux-right',
+          'aux-top',
+          'aux-bottom'
+        );
+        addClass(E, vert(layout) ? 'aux-vertical' : 'aux-horizontal');
+        addClass(E, 'aux-' + layout);
+        this.triggerResize();
+      }),
+      defineMeasure(Resize, function() {
+        const T = this._track,
+          H = this._handle;
+        let basis;
+        const layout = this.options.layout;
+
+        this._padding = CSSSpace(T, 'padding', 'border');
+
+        if (vert(layout)) {
+          this._handle_size = outerHeight(H, true);
+          basis = innerHeight(T) - this._handle_size;
+        } else {
+          this._handle_size = outerWidth(H, true);
+          basis = innerWidth(T) - this._handle_size;
+        }
+
+        this.set('basis', basis);
+      }),
+      supports_transform ?
+        defineRender([ 'value', 'transformation', 'snap_module' ], function(value, transformation, snap_module) {
+          const tmp = transformation.valueToPixel(snap_module.snap(value)) + 'px';
+          const _handle = this._handle;
+          const layout = this.options.layout;
+
+          if (vert(layout)) {
+            _handle.style.transform = 'translateY(-' + tmp + ')';
+          } else {
+            _handle.style.transform = 'translateX(' + tmp + ')';
+          }
+        }) :
+        defineRender([ 'value', 'transformation', 'snap_module' ], function(value, transformation, snap_module) {
+          const tmp = transformation.valueToPixel(snap_module.snap(value)) + 'px';
+          const _handle = this._handle;
+          const layout = this.options.layout;
+
+          if (vert(layout)) {
+            _handle.style.bottom = tmp;
+          } else {
+            _handle.style.left = tmp;
+          }
+        }),
+    ];
   }
 
   initialize(options) {
@@ -222,7 +284,7 @@ export class Fader extends Widget {
     if (O.reset === void 0) O.reset = O.value;
 
     if (O.direction === void 0)
-      O.direction = vert(O) ? 'vertical' : 'horizontal';
+      O.direction = vert(O.layout) ? 'vertical' : 'horizontal';
     /**
      * @member {DragValue} Fader#drag - Instance of {@link DragValue} used for the handle
      *   interaction.
@@ -259,75 +321,6 @@ export class Fader extends Widget {
     announceFocusMoveKeys.call(this);
 
     super.draw(O, element);
-  }
-
-  redraw() {
-    super.redraw();
-    const I = this.invalid;
-    const O = this.options;
-    const E = this.element;
-    let value;
-    let tmp;
-
-    if (I.layout) {
-      I.layout = false;
-      value = O.layout;
-      removeClass(
-        E,
-        'aux-vertical',
-        'aux-horizontal',
-        'aux-left',
-        'aux-right',
-        'aux-top',
-        'aux-bottom'
-      );
-      addClass(E, vert(O) ? 'aux-vertical' : 'aux-horizontal');
-      addClass(E, 'aux-' + value);
-
-      if (supports_transform) this._handle.style.transform = null;
-      else {
-        if (vert(O)) this._handle.style.left = null;
-        else this._handle.style.bottom = null;
-      }
-      I.value = false;
-    }
-
-    if (I.validate('value', 'transformation')) {
-      const transformation = O.transformation;
-      const snap_module = O.snap_module;
-      tmp = transformation.valueToPixel(snap_module.snap(O.value)) + 'px';
-
-      if (vert(O)) {
-        if (supports_transform)
-          this._handle.style.transform = 'translateY(-' + tmp + ')';
-        else this._handle.style.bottom = tmp;
-      } else {
-        if (supports_transform)
-          this._handle.style.transform = 'translateX(' + tmp + ')';
-        else this._handle.style.left = tmp;
-      }
-    }
-  }
-
-  resize() {
-    const O = this.options;
-    const T = this._track,
-      H = this._handle;
-    let basis;
-
-    super.resize();
-
-    this._padding = CSSSpace(T, 'padding', 'border');
-
-    if (vert(O)) {
-      this._handle_size = outerHeight(H, true);
-      basis = innerHeight(T) - this._handle_size;
-    } else {
-      this._handle_size = outerWidth(H, true);
-      basis = innerWidth(T) - this._handle_size;
-    }
-
-    this.set('basis', basis);
   }
 
   destroy() {
