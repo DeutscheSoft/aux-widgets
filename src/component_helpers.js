@@ -28,7 +28,7 @@ import { initSubscriptions, unsubscribeSubscriptions } from './utils/subscriptio
 function attributeForWidget(Widget) {
   const attributes = [];
   const skip = ['class', 'id', 'container', 'element', 'styles'];
-  const rename = ['title'];
+  const rename = ['title', 'role', 'tabindex' ];
 
   for (let i in Widget.getOptionTypes()) {
     if (skip.indexOf(i) !== -1) continue;
