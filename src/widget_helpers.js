@@ -129,6 +129,8 @@ export function defineChildElement(widget, name, config) {
       this.element.appendChild(this[index]);
     };
 
+  const dependency = config.dependency;
+
   widget.addStaticEvent('set_' + show_option, function (value) {
     let C = this[index];
     const show = display_check ? display_check(value) : value !== false;
@@ -141,6 +143,8 @@ export function defineChildElement(widget, name, config) {
       this[index] = null;
       C.remove();
     }
+    if (dependency)
+      this.invalidate(dependency);
     if (config.toggle_class) toggleClass(this.element, 'aux-has-' + name, show);
     this.triggerResize();
   });
