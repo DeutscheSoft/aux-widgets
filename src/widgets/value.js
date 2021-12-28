@@ -19,6 +19,9 @@
 
 import { Widget } from './widget.js';
 import { element, addClass, removeClass } from './../utils/dom.js';
+import { defineRender } from '../renderer.js';
+
+const Editing = Symbol('__editing changed');
 
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -117,6 +120,7 @@ function valueInput() {
 function valueDone(noblur) {
   if (!this.__editing) return;
   this.__editing = false;
+  this.invalidate(Editing);
   removeClass(this.element, 'aux-active');
   if (!noblur) this._input.blur();
   /**
@@ -127,13 +131,12 @@ function valueDone(noblur) {
    * @param {string} value - The new value of the widget.
    */
   this.emit('valuedone', this.options.value);
-  this.invalid.value = true;
   this.stopInteracting();
-  this.triggerDraw();
 }
 function valueFocus() {
   const O = this.options;
   this.__editing = true;
+  this.invalidate(Editing);
   addClass(this.element, 'aux-active');
   if (O.auto_select) this._input.setSelectionRange(0, this._input.value.length);
   this.startInteracting();
@@ -221,6 +224,49 @@ export class Value extends Widget {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender('size', function(size) {
+        this._input.setAttribute('size', size);
+      }),
+      defineRender('maxlength', function(maxlength) {
+        const E = this._input;
+        if (maxlength) E.setAttribute('maxlength', maxlength);
+        else E.removeAttribute('maxlength');
+      }),
+      defineRender('placeholder', function(placeholder) {
+        const E = this._input;
+        if (placeholder) E.setAttribute('placeholder', placeholder);
+        else E.removeAttribute('placeholder');
+      }),
+      defineRender(
+        [ 'value', 'format', Editing ],
+        function (value, format) {
+          if (this.__editing)
+            return;
+          this._input.value = format(value);
+        }),
+      defineRender('readonly', function(readonly) {
+        const E = this._input;
+        if (readonly) E.setAttribute('readonly', 'readonly');
+        else E.removeAttribute('readonly');
+      }),
+      defineRender('type', function(type) {
+        this._input.setAttribute('type', type);
+      }),
+      defineRender('autocomplete', function(autocomplete) {
+        const E = this._input;
+        if (autocomplete) {
+          E.setAttribute('name', autocomplete);
+          E.setAttribute('autocomplete', 'on');
+        } else {
+          E.removeAttribute('name');
+          E.removeAttribute('autocomplete');
+        }
+      }),
+    ];
+  }
+
   initialize(options) {
     if (!options.element) options.element = element('div');
     /**
@@ -271,58 +317,6 @@ export class Value extends Widget {
     this._input.addEventListener('submit', submitCallback);
 
     super.draw(O, elmnt);
-  }
-
-  redraw() {
-    const I = this.invalid;
-    const O = this.options;
-    const E = this._input;
-
-    super.redraw();
-
-    if (I.size) {
-      I.size = false;
-      E.setAttribute('size', O.size);
-    }
-
-    if (I.maxlength) {
-      I.maxlength = false;
-      if (O.maxlength) E.setAttribute('maxlength', O.maxlength);
-      else E.removeAttribute('maxlength');
-    }
-
-    if (I.placeholder) {
-      I.placeholder = false;
-      if (O.placeholder) E.setAttribute('placeholder', O.placeholder);
-      else E.removeAttribute('placeholder');
-    }
-
-    if ((I.value || I.format) && !this.__editing) {
-      I.format = I.value = false;
-      E.value = O.format(O.value);
-    }
-
-    if (I.readonly) {
-      I.readonly = false;
-      if (O.readonly) E.setAttribute('readonly', 'readonly');
-      else E.removeAttribute('readonly');
-    }
-
-    if (I.type) {
-      I.type = false;
-      E.setAttribute('type', O.type);
-    }
-
-    if (I.autocomplete) {
-      I.autocomplete = false;
-      if (O.autocomplete) {
-        E.setAttribute('name', O.autocomplete);
-        E.setAttribute('autocomplete', 'on');
-      } else {
-        E.removeAttribute('name');
-        E.removeAttribute('autocomplete');
-      }
-    }
   }
 
   destroy() {
