@@ -638,6 +638,7 @@ export class Scale extends Widget {
     const node = document.createElement('DIV');
 
     addClass(node, 'aux-dot');
+    node.setAttribute('role', 'presentation');
 
     let value;
 
@@ -685,6 +686,7 @@ export class Scale extends Widget {
     const node = document.createElement('SPAN');
 
     addClass(node, 'aux-label');
+    node.setAttribute('role', 'presentation');
 
     let value;
 
