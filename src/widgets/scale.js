@@ -41,12 +41,10 @@ import {
 import { FORMAT } from '../utils/sprintf.js';
 import { warn } from '../utils/log.js';
 import { S } from '../dom_scheduler.js';
+import { defineRender, defineMeasure, deferRender, deferMeasure, combineDefer } from '../renderer.js';
 
-function getBase(O) {
-  return Math.max(Math.min(O.max, O.base), O.min);
-}
-function vert(O) {
-  return O.layout === 'left' || O.layout === 'right';
+function vert(layout) {
+  return layout === 'left' || layout === 'right';
 }
 function fillInterval(transformation, steps, i, from, to, min_gap, result) {
   const to_pos = transformation.valueToPixel(to);
@@ -204,41 +202,59 @@ function createDOMNodes(data, create) {
     E.appendChild(node);
   }
 }
+
+const createLabelDependencies = [ 'basis', 'labels', 'layout', 'min', 'max', 'base' ];
+
 function createLabel(value, position) {
-  const O = this.options;
+  const { basis, labels, layout, min, max, base } = this.options;
   const elem = document.createElement('SPAN');
   elem.className = 'aux-label';
   elem.setAttribute('role', 'presentation');
   
-  if (vert(O)) {
-    elem.style.bottom = (position / O.basis) * 100 + '%';
+  if (vert(layout)) {
+    elem.style.bottom = (position / basis) * 100 + '%';
   } else {
-    elem.style.left = (position / O.basis) * 100 + '%';
+    elem.style.left = (position / basis) * 100 + '%';
   }
 
-  setContent(elem, O.labels(value));
+  setContent(elem, labels(value));
 
-  if (getBase(O) === value) addClass(elem, 'aux-base');
-  if (O.max === value) addClass(elem, 'aux-max');
-  if (O.min === value) addClass(elem, 'aux-min');
+  const effectiveBase = Math.max(Math.min(max, base), min);
+
+  if (effectiveBase === value) addClass(elem, 'aux-base');
+  if (max === value) addClass(elem, 'aux-max');
+  if (min === value) addClass(elem, 'aux-min');
 
   return elem;
 }
+
+function removeDotsAndLabels(node) {
+  Array.from(node.children)
+    .filter((node) => {
+      return node.classList.contains('aux-dot') || node.classList.contains('aux-label');
+    })
+    .forEach((node) => node.remove());
+}
+
+const createDotDependencies = [ 'basis', 'layout', 'min', 'max', 'base' ];
+
 function createDot(value, position) {
-  const O = this.options;
+  const { basis, layout, min, max, base } = this.options;
   const elem = document.createElement('DIV');
   elem.className = 'aux-dot';
   elem.setAttribute('role', 'presentation');
 
-  if (O.layout === 'left' || O.layout === 'right') {
-    elem.style.bottom = (position / O.basis) * 100 + '%';
+  if (vert(layout)) {
+    elem.style.bottom = (position / basis) * 100 + '%';
   } else {
-    elem.style.left = (position / O.basis) * 100 + '%';
+    elem.style.left = (position / basis) * 100 + '%';
   }
 
-  if (getBase(O) === value) addClass(elem, 'aux-base');
-  if (O.max === value) addClass(elem, 'aux-max');
-  if (O.min === value) addClass(elem, 'aux-min');
+  const effectiveBase = Math.max(Math.min(max, base), min);
+
+  if (effectiveBase === value) addClass(elem, 'aux-base');
+  if (max === value) addClass(elem, 'aux-max');
+  if (min === value) addClass(elem, 'aux-min');
 
   return elem;
 }
@@ -265,11 +281,29 @@ function handleEnd(O, labels, i) {
     addClass(node, 'aux-max');
   } else return;
 }
+
+function uniq(a) {
+  return a.filter((item, i, a) => a.indexOf(item) === i);
+}
+
+const generateScaleDependencies = uniq([
+  'layout', 'transformation', 'show_markers', 'show_labels',
+  'levels', 'levels_labels', 'gap_labels', 'gap_dots',
+  'avoid_collisions', 'min', 'max', 'base'
+].concat(createLabelDependencies, createDotDependencies));
+
 function generateScale(from, to, include_from, show_to) {
   const O = this.options;
-  let labels;
+  const {
+    layout, transformation, show_markers, show_labels,
+    levels, levels_labels, gap_labels, gap_dots,
+    avoid_collisions, min, max, base
+  } = O;
 
-  if (O.show_labels || O.show_markers)
+  let labels;
+  const effectiveBase = Math.min(max, Math.max(min, base));
+
+  if (show_labels || show_markers)
     labels = {
       values: [],
       positions: [],
@@ -279,10 +313,8 @@ function generateScale(from, to, include_from, show_to) {
     values: [],
     positions: [],
   };
-  const is_vert = vert(O);
+  const is_vert = vert(layout);
   let tmp;
-
-  const transformation = O.transformation;
 
   if (include_from) {
     tmp = transformation.valueToPixel(from);
@@ -296,28 +328,26 @@ function generateScale(from, to, include_from, show_to) {
     dots.positions.push(tmp);
   }
 
-  let levels = O.levels;
-
   fillInterval(
     transformation,
     levels,
     levels.length - 1,
     from,
     to,
-    O.gap_dots,
+    gap_dots,
     dots
   );
 
   if (labels) {
-    if (O.levels_labels) levels = O.levels_labels;
+    const positions = levels_labels ? levels_labels : levels;
 
     fillInterval(
       transformation,
-      levels,
-      levels.length - 1,
+      positions,
+      positions.length - 1,
       from,
       to,
-      O.gap_labels,
+      gap_labels,
       labels
     );
 
@@ -325,7 +355,7 @@ function generateScale(from, to, include_from, show_to) {
 
     if (
       show_to ||
-      Math.abs(tmp - transformation.valueToPixel(from)) >= O.gap_labels
+      Math.abs(tmp - transformation.valueToPixel(from)) >= gap_labels
     ) {
       labels.values.push(to);
       labels.positions.push(tmp);
@@ -338,18 +368,18 @@ function generateScale(from, to, include_from, show_to) {
     dots.positions.push(transformation.valueToPixel(to));
   }
 
-  if (O.show_labels) {
+  if (show_labels) {
     createDOMNodes.call(this, labels, createLabel.bind(this));
 
-    if (labels.values.length && labels.values[0] === getBase(O)) {
+    if (labels.values.length && labels.values[0] === effectiveBase) {
       addClass(labels.nodes[0], 'aux-base');
     }
   }
 
-  const render_cb = function () {
+  const render_cb = () => {
     let markers;
 
-    if (O.show_markers) {
+    if (show_markers) {
       markers = {
         values: labels.values,
         positions: labels.positions,
@@ -359,30 +389,33 @@ function generateScale(from, to, include_from, show_to) {
         addClass(markers.nodes[i], 'aux-marker');
     }
 
-    if (O.show_labels && labels.values.length > 1) {
+    if (show_labels && labels.values.length > 1) {
       handleEnd(O, labels, 0);
       handleEnd(O, labels, labels.nodes.length - 1);
     }
 
-    if (O.avoid_collisions && O.show_labels) {
-      dots = removeCollisions(dots, labels, O.gap_dots, is_vert);
+    if (avoid_collisions && show_labels) {
+      dots = removeCollisions(dots, labels, gap_dots, is_vert);
     } else if (markers) {
-      dots = removeCollisions(dots, markers, O.gap_dots);
+      dots = removeCollisions(dots, markers, gap_dots);
     }
 
     createDOMNodes.call(this, dots, createDot.bind(this));
   };
 
-  if (O.show_labels && O.avoid_collisions)
-    S.add(
-      function () {
+  if (show_labels && avoid_collisions) {
+    return deferMeasure(() => {
         measureDimensions(labels);
-        S.add(render_cb.bind(this), 3);
-      }.bind(this),
-      2
-    );
-  else render_cb.call(this);
+
+        return deferRender(render_cb);
+      });
+  } else {
+    render_cb();
+  }
 }
+
+const BarChanged = Symbol('_bar changed');
+
 /**
  * Interface for dots passed to the `fixed_dots` option of `Scale`.
  * @interface ScaleDot
@@ -484,6 +517,107 @@ export class Scale extends Widget {
     });
   }
 
+  static get renderers() {
+    return [
+      defineRender('reverse', function(reverse) {
+        toggleClass(this.element, 'aux-reverse', reverse);
+      }),
+      defineRender('layout', function(layout) {
+        const E = this.element;
+        removeClass(
+          E,
+          'aux-vertical',
+          'aux-horizontal',
+          'aux-top',
+          'aux-bottom',
+          'aux-right',
+          'aux-left'
+        );
+        switch (layout) {
+          case 'left':
+            addClass(E, 'aux-vertical', 'aux-left');
+            break;
+          case 'right':
+            addClass(E, 'aux-vertical', 'aux-right');
+            break;
+          case 'top':
+            addClass(E, 'aux-horizontal', 'aux-top');
+            break;
+          case 'bottom':
+            addClass(E, 'aux-horizontal', 'aux-bottom');
+            break;
+          default:
+            warn('Unsupported layout setting:', layout);
+        }
+        this.triggerResize();
+      }),
+      defineRender(
+        [ BarChanged, 'layout', 'snap_module', 'transformation', 'bar', 'base', 'basis' ],
+        function (layout, snap_module, transformation, bar, base, basis) {
+          const _bar = this._bar;
+
+          if (!_bar) return;
+
+          const tmpval = transformation.valueToPixel(snap_module.snap(bar));
+          const tmpbase = transformation.valueToPixel(base);
+          const min = Math.min(tmpval, tmpbase);
+          const max = Math.max(tmpval, tmpbase);
+
+          const style = _bar.style;
+
+          if (vert(layout)) {
+            style.top = ((basis - max) / basis) * 100 + '%';
+            style.bottom = (min / basis) * 100 + '%';
+            style.removeProperty('left');
+            style.removeProperty('right');
+          } else {
+            style.right = ((basis - max) / basis) * 100 + '%';
+            style.left = (min / basis) * 100 + '%';
+            style.removeProperty('top');
+            style.removeProperty('bottom');
+          }
+        }),
+      defineRender(
+        [ 'fixed_dots', 'fixed_labels', 'show_labels', 'show_markers', 'min', 'max', 'transformation', 'layout', 'basis', 'base' ],
+        function (fixed_dots, fixed_labels, show_labels, show_markers) {
+          if (!fixed_dots || !fixed_labels)
+            return;
+
+          const E = this.element;
+
+          removeDotsAndLabels(E);
+
+          const dotNodes = this._createDots(fixed_dots);
+
+          if (show_labels) {
+            const labelNodes = this._createLabels(fixed_labels);
+
+            if (show_markers) {
+              this._highlightMarkers(fixed_labels, fixed_dots, dotNodes);
+            }
+
+            labelNodes.forEach((node) => E.appendChild(node));
+          }
+
+          dotNodes.forEach((node) => E.appendChild(node));
+        }),
+        defineRender(
+          uniq([ 'fixed_dots', 'fixed_labels', 'min', 'max', 'base', 'show_min', 'show_max' ].concat(generateScaleDependencies)),
+          function (fixed_dots, fixed_labels, min, max, base, show_min, show_max) {
+            if (fixed_dots && fixed_labels)
+              return;
+
+            removeDotsAndLabels(this.element);
+
+            const effectiveBase = Math.min(max, Math.max(min, base));
+
+            return combineDefer(
+              (base !== min) ? generateScale.call(this, base, min, base === max, show_min) : null,
+              (base !== max) ? generateScale.call(this, base, max, true, show_max) : null);
+          }),
+    ];
+  }
+
   initialize(options) {
     if (!options.element) options.element = element('div');
     super.initialize(options);
@@ -496,127 +630,6 @@ export class Scale extends Widget {
     addClass(element, 'aux-scale');
 
     super.draw(O, element);
-  }
-
-  redraw() {
-    super.redraw();
-
-    const I = this.invalid;
-    const O = this.options;
-    const E = this.element;
-
-    if (I.layout) {
-      I.layout = false;
-      removeClass(
-        E,
-        'aux-vertical',
-        'aux-horizontal',
-        'aux-top',
-        'aux-bottom',
-        'aux-right',
-        'aux-left'
-      );
-      if (this._bar) {
-        this._bar.style.removeProperty('top');
-        this._bar.style.removeProperty('bottom');
-        this._bar.style.removeProperty('left');
-        this._bar.style.removeProperty('right');
-        I.bar = true;
-      }
-      switch (O.layout) {
-        case 'left':
-          addClass(E, 'aux-vertical', 'aux-left');
-          break;
-        case 'right':
-          addClass(E, 'aux-vertical', 'aux-right');
-          break;
-        case 'top':
-          addClass(E, 'aux-horizontal', 'aux-top');
-          break;
-        case 'bottom':
-          addClass(E, 'aux-horizontal', 'aux-bottom');
-          break;
-        default:
-          warn('Unsupported layout setting:', O.layout);
-      }
-    }
-
-    if (I.reverse) {
-      /* NOTE: reverse will be validated below */
-      toggleClass(E, 'aux-reverse', O.reverse);
-    }
-
-    if (this._bar && (I.bar || I.basis || I.base || I.reverse)) {
-      /* NOTE: options will be validated below */
-      const transformation = O.transformation;
-      const tmpval = transformation.valueToPixel(O.snap_module.snap(O.bar));
-      const tmpbase = transformation.valueToPixel(O.base);
-      const min = Math.min(tmpval, tmpbase);
-      const max = Math.max(tmpval, tmpbase);
-
-      if (vert(O)) {
-        this._bar.style.top = ((O.basis - max) / O.basis) * 100 + '%';
-        this._bar.style.bottom = (min / O.basis) * 100 + '%';
-      } else {
-        this._bar.style.right = ((O.basis - max) / O.basis) * 100 + '%';
-        this._bar.style.left = (min / O.basis) * 100 + '%';
-      }
-    }
-
-    if (
-      I.validate(
-        'base',
-        'show_base',
-        'gap_labels',
-        'min',
-        'show_min',
-        'division',
-        'max',
-        'show_markers',
-        'fixed_dots',
-        'fixed_labels',
-        'levels',
-        'basis',
-        'scale',
-        'reverse',
-        'show_labels',
-        'labels'
-      )
-    ) {
-      empty(E);
-      const fixedDots = O.fixed_dots;
-      const fixedLabels = O.fixed_labels;
-
-      if (fixedDots && fixedLabels) {
-        const dotNodes = this._createDots(fixedDots);
-
-        if (O.show_labels) {
-          const labelNodes = this._createLabels(fixedLabels);
-
-          if (O.show_markers) {
-            this._highlightMarkers(fixedLabels, fixedDots, dotNodes);
-          }
-
-          labelNodes.forEach((node) => E.appendChild(node));
-        }
-
-        dotNodes.forEach((node) => E.appendChild(node));
-      } else {
-        const base = getBase(O);
-
-        if (base !== O.max)
-          generateScale.call(this, base, O.max, true, O.show_max);
-        if (base !== O.min)
-          generateScale.call(this, base, O.min, base === O.max, O.show_min);
-      }
-
-      {
-        const _bar = this._bar;
-        const _pointer = this._pointer;
-        if (_bar) E.appendChild(_bar);
-        if (_pointer) E.appendChild(_pointer);
-      }
-    }
   }
 
   _highlightMarkers(labels, dots, dotNodes) {
@@ -634,7 +647,7 @@ export class Scale extends Widget {
   }
 
   _createDot(args) {
-    const O = this.options;
+    const { transformation, layout, basis, min, max, base } = this.options;
     const node = document.createElement('DIV');
 
     addClass(node, 'aux-dot');
@@ -656,19 +669,19 @@ export class Scale extends Widget {
       }
     }
 
-    const transformation = O.transformation;
-
     const position = transformation.valueToPixel(value);
 
-    if (O.layout === 'left' || O.layout === 'right') {
-      node.style.bottom = (position / O.basis) * 100 + '%';
+    if (vert(layout)) {
+      node.style.bottom = (position / basis) * 100 + '%';
     } else {
-      node.style.left = (position / O.basis) * 100 + '%';
+      node.style.left = (position / basis) * 100 + '%';
     }
 
-    if (getBase(O) === value) addClass(node, 'aux-base');
-    if (O.max === value) addClass(node, 'aux-max');
-    if (O.min === value) addClass(node, 'aux-min');
+    const effectiveBase = Math.max(Math.min(max, base), min);
+
+    if (effectiveBase === value) addClass(node, 'aux-base');
+    if (max === value) addClass(node, 'aux-max');
+    if (min === value) addClass(node, 'aux-min');
 
     return node;
   }
@@ -678,8 +691,7 @@ export class Scale extends Widget {
   }
 
   _createLabel(args) {
-    const O = this.options;
-    const transformation = O.transformation;
+    const { transformation, labels, layout, basis, min, max, base } = this.options;
 
     let position, label;
 
@@ -694,7 +706,7 @@ export class Scale extends Widget {
       value = args;
       position = transformation.valueToPixel(value);
 
-      label = O.labels(value);
+      label = labels(value);
     } else {
       value = args.value;
 
@@ -709,23 +721,24 @@ export class Scale extends Widget {
       }
 
       if (args.label === void 0) {
-        label = O.labels(value);
+        label = labels(value);
       } else {
         label = args.label;
       }
     }
 
-    if (vert(O)) {
-      node.style.bottom = (position / O.basis) * 100 + '%';
+    if (vert(layout)) {
+      node.style.bottom = (position / basis) * 100 + '%';
     } else {
-      node.style.left = (position / O.basis) * 100 + '%';
+      node.style.left = (position / basis) * 100 + '%';
     }
 
     setContent(node, label);
 
-    if (getBase(O) === value) addClass(node, 'aux-base');
-    if (O.max === value) addClass(node, 'aux-max');
-    if (O.min === value) addClass(node, 'aux-min');
+    const effectiveBase = Math.max(Math.min(max, base), min);
+    if (effectiveBase === value) addClass(node, 'aux-base');
+    if (max === value) addClass(node, 'aux-max');
+    if (min === value) addClass(node, 'aux-min');
 
     return node;
   }
@@ -738,7 +751,7 @@ export class Scale extends Widget {
     super.resize();
     const O = this.options;
 
-    const basis = vert(O)
+    const basis = vert(O.layout)
       ? innerHeight(this.element, void 0, true)
       : innerWidth(this.element, void 0, true);
     this.update('basis', basis);
@@ -776,18 +789,19 @@ defineChildElement(Scale, 'pointer', {
   show: false,
   toggle_class: true,
   option: 'pointer',
-  draw_options: Object.keys(rangedOptionsTypes).concat(['pointer', 'basis']),
+  debug: true,
+  draw_options: ['pointer', 'transformation', 'snap_module', 'layout' ],
   draw: function (O) {
-    if (this._pointer) {
-      const transformation = O.transformation;
-      const snap_module = O.snap_module;
-      const tmp =
-        transformation.valueToCoef(snap_module.snap(O.pointer)) * 100 + '%';
-      if (vert(O)) {
-        this._pointer.style.bottom = tmp;
-      } else {
-        this._pointer.style.left = tmp;
-      }
+    const { _pointer } = this;
+    if (!_pointer) return;
+
+    const { transformation, snap_module, pointer, layout } = O;
+    const tmp =
+      transformation.valueToCoef(snap_module.snap(pointer)) * 100 + '%';
+    if (vert(layout)) {
+      _pointer.style.bottom = tmp;
+    } else {
+      _pointer.style.left = tmp;
     }
   },
 });
@@ -799,4 +813,5 @@ defineChildElement(Scale, 'bar', {
   show: false,
   toggle_class: true,
   option: 'bar',
+  dependency: BarChanged,
 });
