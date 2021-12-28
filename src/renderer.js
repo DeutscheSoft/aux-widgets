@@ -59,6 +59,29 @@ export function deferMeasureNext(callback) {
   return [ 1, PHASE_CALCULATE, callback ];
 }
 
+export function combineDefer(... args) {
+  args = args.filter((arg) => Array.isArray(arg));
+
+  if (args.length === 0)
+    return null;
+  if (args.length === 1)
+    return args[0];
+
+  const [ frameOffset, phase ] = args[0];
+
+  for (let i = 1; i < args.length; i++) {
+    if (args[i][0] !== args[0][0] ||
+        args[i][1] !== args[0][1])
+      throw Error('Different defer calls cannot be combined.');
+  }
+
+  const callbacks = args.map((entry) => entry[2]);
+
+  return [ frameOffset, phase, () => {
+    return combineDefer(...callbacks.map((cb) => cb()));
+  } ];
+}
+
 export class Renderer {
   constructor() {
     // list of tasks
