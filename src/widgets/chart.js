@@ -32,11 +32,13 @@ import {
 import { defineRange } from '../utils/define_range.js';
 import { makeSVG } from '../utils/svg.js';
 import { error, warn } from '../utils/log.js';
-import { Widget } from './widget.js';
+import { Widget, Resize } from './widget.js';
 import { Graph } from './graph.js';
 import { ChartHandle } from './charthandle.js';
 import { defineChildWidget } from '../child_widget.js';
 import { Grid } from './grid.js';
+import { defineRender, defineMeasure, combineDefer, deferRender, deferMeasure } from '../renderer.js';
+import { ChildWidgets } from '../utils/child_widgets.js';
 
 function calculateOverlap(X, Y) {
   /* no overlap, return 0 */
@@ -75,197 +77,10 @@ function STOP(e) {
   e.stopPropagation();
   return false;
 }
-function drawKey() {
-  let __key, bb;
 
-  const _key = this._key;
-  const _key_bg = this._key_background;
-
-  if (!_key || !_key_bg) return;
-
-  while (_key.firstChild !== _key.lastChild) _key.removeChild(_key.lastChild);
-
-  empty(_key.firstChild);
-
-  const O = this.options;
-
-  let disp = 'none';
-  const gpad = CSSSpace(_key, 'padding');
-  const gmarg = CSSSpace(_key, 'margin');
-  let c = 0;
-  let w = 0;
-  let top = 0;
-  const lines = [];
-  for (let i = 0; i < this.graphs.length; i++) {
-    if (this.graphs[i].get('key') !== false) {
-      const t = makeSVG('tspan', {
-        class: 'aux-label',
-        style: 'dominant-baseline: central;',
-      });
-      t.textContent = this.graphs[i].get('key');
-      t.setAttribute('x', gpad.left);
-      _key.firstChild.appendChild(t);
-
-      if (!bb) bb = _key.getBoundingClientRect();
-      top += c ? parseInt(getStyle(t, 'line-height')) : gpad.top;
-      t.setAttribute('y', top + bb.height / 2);
-
-      lines.push({
-        x: parseInt(getStyle(t, 'margin-right')) || 0,
-        y: Math.round(top),
-        width: Math.round(bb.width),
-        height: Math.round(bb.height),
-        class: this.graphs[i].element.getAttribute('class'),
-        color: this.graphs[i].element.getAttribute('color') || '',
-        style: this.graphs[i].element.getAttribute('style'),
-      });
-      w = Math.max(w, t.getComputedTextLength());
-      disp = 'block';
-      c++;
-    }
-  }
-  for (let i = 0; i < lines.length; i++) {
-    const b = makeSVG('rect', {
-      class: lines[i]['class'] + '.aux-rect',
-      color: lines[i].color,
-      style: lines[i].style,
-      x: lines[i].x + 0.5 + w + gpad.left,
-      y: lines[i].y + 0.5 + parseInt(lines[i].height / 2 - O.key_size.y / 2),
-      height: O.key_size.y,
-      width: O.key_size.x,
-    });
-    _key.appendChild(b);
-  }
-  _key_bg.style.display = disp;
-  _key.style.display = disp;
-
-  bb = _key.getBoundingClientRect();
-  const width = this.range_x.options.basis;
-  const height = this.range_y.options.basis;
-
-  switch (O.key) {
-    case 'top-left':
-      __key = {
-        x1: gmarg.left,
-        y1: gmarg.top,
-        x2: gmarg.left + parseInt(bb.width) + gpad.left + gpad.right,
-        y2: gmarg.top + parseInt(bb.height) + gpad.top + gpad.bottom,
-      };
-      break;
-    case 'top-right':
-      __key = {
-        x1: width - gmarg.right - parseInt(bb.width) - gpad.left - gpad.right,
-        y1: gmarg.top,
-        x2: width - gmarg.right,
-        y2: gmarg.top + parseInt(bb.height) + gpad.top + gpad.bottom,
-      };
-      break;
-    case 'bottom-left':
-      __key = {
-        x1: gmarg.left,
-        y1:
-          height - gmarg.bottom - parseInt(bb.height) - gpad.top - gpad.bottom,
-        x2: gmarg.left + parseInt(bb.width) + gpad.left + gpad.right,
-        y2: height - gmarg.bottom,
-      };
-      break;
-    case 'bottom-right':
-      __key = {
-        x1: width - gmarg.right - parseInt(bb.width) - gpad.left - gpad.right,
-        y1:
-          height - gmarg.bottom - parseInt(bb.height) - gpad.top - gpad.bottom,
-        x2: width - gmarg.right,
-        y2: height - gmarg.bottom,
-      };
-      break;
-    default:
-      warn('Unsupported key', O.key);
-  }
-  _key.setAttribute(
-    'transform',
-    'translate(' + __key.x1 + ',' + __key.y1 + ')'
-  );
-  _key_bg.setAttribute('x', __key.x1);
-  _key_bg.setAttribute('y', __key.y1);
-  _key_bg.setAttribute('width', __key.x2 - __key.x1);
-  _key_bg.setAttribute('height', __key.y2 - __key.y1);
-}
-function drawLabel() {
-  const _label = this._label;
-  if (!_label) return;
-
-  _label.textContent = this.options.label;
-
-  /* FORCE_RELAYOUT */
-  S.add(
-    function () {
-      const mtop = parseInt(getStyle(_label, 'margin-top') || 0);
-      const mleft = parseInt(getStyle(_label, 'margin-left') || 0);
-      const mbottom = parseInt(getStyle(_label, 'margin-bottom') || 0);
-      const mright = parseInt(getStyle(_label, 'margin-right') || 0);
-      const bb = _label.getBoundingClientRect();
-      const range_x = this.range_x;
-      const range_y = this.range_y;
-
-      let x, y, anchor;
-
-      switch (this.options.label_position) {
-        case 'top-left':
-          anchor = 'start';
-          x = mleft;
-          y = mtop + bb.height / 2;
-          break;
-        case 'top':
-          anchor = 'middle';
-          x = range_x.options.basis / 2;
-          y = mtop + bb.height / 2;
-          break;
-        case 'top-right':
-          anchor = 'end';
-          x = range_x.options.basis - mright;
-          y = mtop + bb.height / 2;
-          break;
-        case 'left':
-          anchor = 'start';
-          x = mleft;
-          y = range_y.options.basis / 2;
-          break;
-        case 'center':
-          anchor = 'middle';
-          x = range_x.options.basis / 2;
-          y = range_y.options.basis / 2;
-          break;
-        case 'right':
-          anchor = 'end';
-          x = range_x.options.basis - mright;
-          y = range_y.options.basis / 2;
-          break;
-        case 'bottom-left':
-          anchor = 'start';
-          x = mleft;
-          y = range_y.options.basis - mtop - bb.height / 2;
-          break;
-        case 'bottom':
-          anchor = 'middle';
-          x = range_x.options.basis / 2;
-          y = range_y.options.basis - mbottom - bb.height / 2;
-          break;
-        case 'bottom-right':
-          anchor = 'end';
-          x = range_x.options.basis - mright;
-          y = range_y.options.basis - mbottom - bb.height / 2;
-          break;
-        default:
-          warn('Unsupported label_position', this.options.label_position);
-      }
-      S.add(function () {
-        _label.setAttribute('text-anchor', anchor);
-        _label.setAttribute('x', x);
-        _label.setAttribute('y', y);
-      }, 1);
-    }.bind(this)
-  );
-}
+const LabelChanged = Symbol('_label changed');
+const KeyChanged = Symbol('_key or _key_background changed');
+const Graphs = Symbol('graphs changed');
 
 /**
  * Chart is an SVG image containing one or more Graphs. Chart
@@ -404,12 +219,242 @@ export class Chart extends Widget {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender([ '_width', '_height' ], function (_width, _height) {
+        const E = this.svg;
+
+        if (_width && _height) {
+          E.setAttribute('width', _width + 'px');
+          E.setAttribute('height', _height + 'px');
+        }
+      }),
+      defineRender(
+        [ 'label', 'label_position', 'range_x', 'range_y', LabelChanged ],
+        function(label, label_position, range_x, range_y) {
+          const _label = this._label;
+
+          if (!_label) return;
+
+          _label.textContent = label;
+
+          return deferMeasure(() => {
+            const mtop = parseInt(getStyle(_label, 'margin-top') || 0);
+            const mleft = parseInt(getStyle(_label, 'margin-left') || 0);
+            const mbottom = parseInt(getStyle(_label, 'margin-bottom') || 0);
+            const mright = parseInt(getStyle(_label, 'margin-right') || 0);
+            const { height } = _label.getBoundingClientRect();
+            const xBasis = range_x.options.basis;
+            const yBasis = range_y.options.basis;
+
+            let x, y, anchor;
+
+            switch (label_position) {
+              case 'top-left':
+                anchor = 'start';
+                x = mleft;
+                y = mtop + height / 2;
+                break;
+              case 'top':
+                anchor = 'middle';
+                x = xBasis / 2;
+                y = mtop + height / 2;
+                break;
+              case 'top-right':
+                anchor = 'end';
+                x = xBasis - mright;
+                y = mtop + height / 2;
+                break;
+              case 'left':
+                anchor = 'start';
+                x = mleft;
+                y = yBasis / 2;
+                break;
+              case 'center':
+                anchor = 'middle';
+                x = xBasis / 2;
+                y = yBasis / 2;
+                break;
+              case 'right':
+                anchor = 'end';
+                x = xBasis - mright;
+                y = yBasis / 2;
+                break;
+              case 'bottom-left':
+                anchor = 'start';
+                x = mleft;
+                y = yBasis - mtop - height / 2;
+                break;
+              case 'bottom':
+                anchor = 'middle';
+                x = xBasis / 2;
+                y = yBasis - mbottom - height / 2;
+                break;
+              case 'bottom-right':
+                anchor = 'end';
+                x = xBasis - mright;
+                y = yBasis - mbottom - height / 2;
+                break;
+              default:
+                warn('Unsupported label_position', label_position);
+            }
+
+            return deferRender(() => {
+              _label.setAttribute('text-anchor', anchor);
+              _label.setAttribute('x', x);
+              _label.setAttribute('y', y);
+            });
+          });
+        }),
+      defineRender('show_handles', function(show_handles) {
+          const style = this._handles.style;
+          if (show_handles) {
+            style.removeProperty('display');
+          } else {
+            style.display = 'none';
+          }
+        }),
+      defineRender(
+        [ 'key', 'key_size', 'range_x', 'range_y', KeyChanged, Graphs ],
+        function(key, key_size, range_x, range_y) {
+          const { _key, _key_background } = this;
+
+          if (!_key || !_key_background) return;
+
+          while (_key.firstChild !== _key.lastChild) _key.removeChild(_key.lastChild);
+          empty(_key.firstChild);
+
+          const gpad = CSSSpace(_key, 'padding');
+          const gmarg = CSSSpace(_key, 'margin');
+          let bb;
+          let c = 0;
+          let w = 0;
+          let top = 0;
+          const lines = this.getGraphs().map((graph) => {
+            if (graph.get('key') === false)
+              return;
+            const t = makeSVG('tspan', {
+              class: 'aux-label',
+              style: 'dominant-baseline: central;',
+            });
+            t.textContent = graph.get('key');
+            t.setAttribute('x', gpad.left);
+            _key.firstChild.appendChild(t);
+
+            if (!bb) bb = _key.getBoundingClientRect();
+            top += c ? parseInt(getStyle(t, 'line-height')) : gpad.top;
+            t.setAttribute('y', top + bb.height / 2);
+
+            c++;
+            w = Math.max(w, t.getComputedTextLength());
+
+            return {
+              x: parseInt(getStyle(t, 'margin-right')) || 0,
+              y: Math.round(top),
+              width: Math.round(bb.width),
+              height: Math.round(bb.height),
+              class: graph.element.getAttribute('class'),
+              color: graph.element.getAttribute('color') || '',
+              style: graph.element.getAttribute('style'),
+            };
+          });
+
+          lines.forEach((line) => {
+            const b = makeSVG('rect', {
+              class: line['class'] + '.aux-rect',
+              color: line.color,
+              style: line.style,
+              x: line.x + 0.5 + w + gpad.left,
+              y: line.y + 0.5 + parseInt(line.height / 2 - key_size.y / 2),
+              height: key_size.y,
+              width: key_size.x,
+            });
+            _key.appendChild(b);
+          });
+
+          if (lines.length) {
+            _key_background.style.display = 'block';
+            _key.style.display = 'block';
+          } else {
+            _key_background.style.display = 'none';
+            _key.style.display = 'none';
+          }
+
+          bb = _key.getBoundingClientRect();
+          const width = this.range_x.options.basis;
+          const height = this.range_y.options.basis;
+
+          let position;
+
+          switch (key) {
+            case 'top-left':
+              position = {
+                x1: gmarg.left,
+                y1: gmarg.top,
+                x2: gmarg.left + parseInt(bb.width) + gpad.left + gpad.right,
+                y2: gmarg.top + parseInt(bb.height) + gpad.top + gpad.bottom,
+              };
+              break;
+            case 'top-right':
+              position = {
+                x1: width - gmarg.right - parseInt(bb.width) - gpad.left - gpad.right,
+                y1: gmarg.top,
+                x2: width - gmarg.right,
+                y2: gmarg.top + parseInt(bb.height) + gpad.top + gpad.bottom,
+              };
+              break;
+            case 'bottom-left':
+              position = {
+                x1: gmarg.left,
+                y1:
+                  height - gmarg.bottom - parseInt(bb.height) - gpad.top - gpad.bottom,
+                x2: gmarg.left + parseInt(bb.width) + gpad.left + gpad.right,
+                y2: height - gmarg.bottom,
+              };
+              break;
+            case 'bottom-right':
+              position = {
+                x1: width - gmarg.right - parseInt(bb.width) - gpad.left - gpad.right,
+                y1:
+                  height - gmarg.bottom - parseInt(bb.height) - gpad.top - gpad.bottom,
+                x2: width - gmarg.right,
+                y2: height - gmarg.bottom,
+              };
+              break;
+            default:
+              warn('Unsupported key', key);
+          }
+          _key.setAttribute(
+            'transform',
+            'translate(' + position.x1 + ',' + position.y1 + ')'
+          );
+          _key_background.setAttribute('x', position.x1);
+          _key_background.setAttribute('y', position.y1);
+          _key_background.setAttribute('width', position.x2 - position.x1);
+          _key_background.setAttribute('height', position.y2 - position.y1);
+        }),
+      defineMeasure([ 'square', Resize ], function(square) {
+        const E = this.element;
+        const SVG = this.svg;
+
+        const tmp = CSSSpace(SVG, 'border', 'padding');
+        let w = innerWidth(E) - tmp.left - tmp.right;
+        let h = innerHeight(E) - tmp.top - tmp.bottom;
+
+        if (square) {
+          w = h = Math.min(h, w);
+        }
+
+        this.set('_width', w);
+        this.range_x.set('basis', w);
+        this.set('_height', h);
+        this.range_y.set('basis', h);
+      }),
+    ];
+  }
+
   initialize(options) {
     let SVG;
-    /**
-     * @member {Array} Chart#graphs - An array containing all SVG paths acting as graphs.
-     */
-    this.graphs = [];
     /**
      * @member {Array} Chart#handles - An array containing all {@link ChartHandle} instances.
      */
@@ -457,6 +502,44 @@ export class Chart extends Widget {
     SVG.onselectstart = function () {
       return false;
     };
+    this._graphChildren = new ChildWidgets(this, {
+      filter: Graph,
+    });
+    this._graphChildren.forEachAsync((graph) => {
+      graph.set('range_x', this.range_x);
+      graph.set('range_y', this.range_y);
+      this._graphs.appendChild(graph.element);
+
+      /**
+       * Is fired when a graph was added. Arguments are the graph
+       * and its position in the array.
+       *
+       * @event Chart#graphadded
+       *
+       * @param {Graph} graph - The {@link Graph} which was added.
+       */
+      this.emit('graphadded', graph);
+
+      const sub = graph.subscribe('set', (key) => {
+        if (key === 'color' || key === 'class' || key === 'key')
+          this.invalidate(Graphs);
+      });
+
+      this.invalidate(Graphs);
+
+      return () => {
+        sub();
+        /**
+         * Is fired when a graph was removed. Arguments are the graph
+         * and its position in the array.
+         *
+         * @event Chart#graphremoved
+         *
+         * @param {Graph} graph - The {@link Graph} which was removed.
+         */
+        this.emit('graphremoved', graph);
+      };
+    });
     this.addHandles(this.options.handles);
   }
 
@@ -467,80 +550,11 @@ export class Chart extends Widget {
     super.draw(O, element);
   }
 
-  resize() {
-    const E = this.element;
-    const O = this.options;
-    const SVG = this.svg;
-
-    super.resize();
-
-    const tmp = CSSSpace(SVG, 'border', 'padding');
-    let w = innerWidth(E) - tmp.left - tmp.right;
-    let h = innerHeight(E) - tmp.top - tmp.bottom;
-
-    if (O.square) {
-      w = h = Math.min(h, w);
-    }
-
-    if (w > 0 && O._width !== w) {
-      this.set('_width', w);
-      this.range_x.set('basis', w);
-      this.invalid._width = true;
-      this.triggerDraw();
-    }
-    if (h > 0 && O._height !== h) {
-      this.set('_height', h);
-      this.range_y.set('basis', h);
-      this.invalid._height = true;
-      this.triggerDraw();
-    }
-  }
-
-  redraw() {
-    const I = this.invalid;
-    const E = this.svg;
-    const O = this.options;
-
-    super.redraw();
-
-    if (I.validate('ranges', '_width', '_height', 'range_x', 'range_y')) {
-      /* we need to redraw both key and label, because
-       * they do depend on the size */
-      I.label = true;
-      I.key = true;
-      const w = O._width;
-      const h = O._height;
-      if (w && h) {
-        E.setAttribute('width', w + 'px');
-        E.setAttribute('height', h + 'px');
-      }
-    }
-
-    if (I.graphs) {
-      for (let i = 0; i < this.graphs.length; i++) {
-        this.graphs[i].redraw();
-      }
-    }
-    if (I.validate('label', 'label_position')) {
-      drawLabel.call(this);
-    }
-    if (I.validate('key', 'key_size', 'graphs')) {
-      drawKey.call(this);
-    }
-    if (I.show_handles) {
-      I.show_handles = false;
-      if (O.show_handles) {
-        this._handles.style.removeProperty('display');
-      } else {
-        this._handles.style.display = 'none';
-      }
-    }
+  getGraphs() {
+    return this._graphChildren.getList();
   }
 
   destroy() {
-    for (let i = 0; i < this.graphs.length; i++) {
-      this.graphs[i].destroy();
-    }
     this._graphs.remove();
     this._handles.remove();
     super.destroy();
@@ -550,36 +564,7 @@ export class Chart extends Widget {
     if (!(child instanceof ChartHandle) || this.options.show_handles)
       super.addChild(child);
 
-    if (child instanceof Graph) {
-      const g = child;
-      g.set('range_x', this.range_x);
-      g.set('range_y', this.range_y);
-
-      this.graphs.push(g);
-      this._graphs.appendChild(g.element);
-      g.on(
-        'set',
-        function (key) {
-          if (key === 'color' || key === 'class' || key === 'key') {
-            this.invalid.graphs = true;
-            this.triggerDraw();
-          }
-        }.bind(this)
-      );
-      /**
-       * Is fired when a graph was added. Arguments are the graph
-       * and its position in the array.
-       *
-       * @event Chart#graphadded
-       *
-       * @param {Graph} graph - The {@link Graph} which was added.
-       * @param {int} id - The ID of the added {@link Graph}.
-       */
-      this.emit('graphadded', g, this.graphs.length - 1);
-
-      this.invalid.graphs = true;
-      this.triggerDraw();
-    } else if (child instanceof ChartHandle) {
+    if (child instanceof ChartHandle) {
       child.set('intersect', this.intersect.bind(this));
       child.set('range_x', () => this.range_x);
       child.set('range_y', () => this.range_y);
@@ -598,27 +583,7 @@ export class Chart extends Widget {
   }
 
   removeChild(child) {
-    if (child instanceof Graph) {
-      const G = this.graphs;
-      const i = G.indexOf(child);
-
-      if (i !== -1) {
-        /**
-         * Is fired when a graph was removed. Arguments are the graph
-         * and its position in the array.
-         *
-         * @event Chart#graphremoved
-         *
-         * @param {Graph} graph - The {@link Graph} which was removed.
-         * @param {int} id - The ID of the removed {@link Graph}.
-         */
-        this.emit('graphremoved', child, i);
-        this.graphs.splice(i, 1);
-        child.element.remove();
-        this.invalid.graphs = true;
-        this.triggerDraw();
-      }
-    } else if (child instanceof ChartHandle) {
+    if (child instanceof ChartHandle) {
       const H = this.handles;
       const i = H.indexOf(child);
 
@@ -686,7 +651,7 @@ export class Chart extends Widget {
    * @emits Chart#emptied
    */
   empty() {
-    this.graphs.map(this.removeGraph, this);
+    this.getGraphs().forEach((graph) => this.removeChild(graph));
     /**
      * Is fired when all graphs are removed from the chart.
      *
@@ -877,6 +842,7 @@ defineChildElement(Chart, 'key_background', {
   append: function () {
     this.svg.appendChild(this._key_background);
   },
+  dependency: KeyChanged,
 });
 /**
  * @member {SVGGroup} Chart#_key - The SVG group containing all descriptions.
@@ -895,6 +861,8 @@ defineChildElement(Chart, 'key', {
   append: function () {
     this.svg.appendChild(this._key);
   },
+  dependency: KeyChanged,
+  debug: true,
 });
 /**
  * @member {SVGText} Chart#_label - The label of the chart.
@@ -902,6 +870,7 @@ defineChildElement(Chart, 'key', {
  */
 defineChildElement(Chart, 'label', {
   option: 'label',
+  dependency: LabelChanged,
   display_check: function (v) {
     return typeof v === 'string' && v.length;
   },
