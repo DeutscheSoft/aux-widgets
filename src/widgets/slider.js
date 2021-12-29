@@ -38,6 +38,7 @@ import {
 } from '../utils/make_ranged.js';
 import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
 import { warn } from '../utils/log.js';
+import { defineRender } from '../renderer.js';
 
 function dblClick() {
   this.userset('value', this.options.reset);
@@ -51,15 +52,13 @@ function dblClick() {
   this.emit('doubleclick', this.options.value);
 }
 
-function setBackground(horiz, vert, size) {
-  const E = this.element;
-  E.style['background-position'] = '-' + horiz + 'px -' + vert + 'px';
-
-  E.style['-webkit-background-size'] = size;
-  E.style['-moz-background-size'] = size;
-  E.style['-ms-background-size'] = size;
-  E.style['-o-background-size'] = size;
-  E.style['background-size'] = size;
+function setBackground(style, horiz, vert, size) {
+  style['background-position'] = '-' + horiz + 'px -' + vert + 'px';
+  style['-webkit-background-size'] = size;
+  style['-moz-background-size'] = size;
+  style['-ms-background-size'] = size;
+  style['-o-background-size'] = size;
+  style['background-size'] = size;
 }
 /**
  * Slider is a {@link Widget} moving its background image
@@ -132,6 +131,41 @@ export class Slider extends Widget {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender('image', function(image) {
+        const style = this.element.style;
+        if (image)
+          style['background-image'] = "url('" + image + "')";
+        else style['background-image'] = void 0;
+      }),
+      defineRender(
+        [ 'value', 'alignment', 'frames', 'transformation', '_width', '_height', 'snap_module' ],
+        function (value, alignment, frames, transformation, _width, _height, snap_module) {
+          value = snap_module.snap(value);
+
+          const coef = transformation.valueToCoef(value);
+          const frame = Math.round(Math.max(0, frames - 1) * coef);
+          const style = this.element.style;
+
+          switch (alignment) {
+            default:
+              warn(
+                "Unknown alignment, only 'vertical' and 'horizontal' are allowed"
+              );
+              break;
+            case 'vertical':
+              setBackground(style, 0, frame * _width, '100% auto');
+              break;
+            case 'horizontal':
+              setBackground(style, frame * _height, 0, 'auto 100%');
+              break;
+          }
+        }
+      ),
+    ];
+  }
+
   initialize(options) {
     if (!options.element) options.element = element('div');
     super.initialize(options);
@@ -179,55 +213,16 @@ export class Slider extends Widget {
     super.draw(O, element);
   }
 
-  redraw() {
-    const I = this.invalid;
-    const O = this.options;
-
-    if (I.image) {
-      I.image = false;
-      if (O.image)
-        this.element.style['background-image'] = "url('" + O.image + "')";
-      else this.element.style['background-image'] = void 0;
-      I.value = true;
-    }
-
-    if (I.value || I.alignment || O.frames) {
-      I.value = false;
-      I.alignment = false;
-      I.frames = false;
-      const transformation = O.transformation;
-      const coef = transformation.valueToCoef(O.value);
-      const frame = Math.round(Math.max(0, O.frames - 1) * coef);
-      switch (O.alignment) {
-        default:
-          warn(
-            "Unknown alignment, only 'vertical' and 'horizontal' are allowed"
-          );
-          break;
-        case 'vertical':
-          setBackground.call(this, 0, frame * O._width, '100% auto');
-          break;
-        case 'horizontal':
-          setBackground.call(this, frame * O._height, 0, 'auto 100%');
-          break;
-      }
-    }
-
-    super.redraw();
-  }
-
   resize() {
-    this.set('_width', outerWidth(this.element));
-    this.set('_height', outerHeight(this.element));
+    const E = this.element;
+    this.set('_width', outerWidth(E));
+    this.set('_height', outerHeight(E));
   }
 
   set(key, value) {
-    switch (key) {
-      case 'value':
-        if (value > this.options.max || value < this.options.min)
-          warning(this.element);
-        value = this.get('snap_module').snap(value);
-        break;
+    if (key === 'value') {
+      if (value > this.options.max || value < this.options.min)
+        warning(this.element);
     }
     if (DragValue.hasOption(key)) this.drag.set(key, value);
     return super.set(key, value);
