@@ -39,7 +39,7 @@ import { GlobalResize } from '../utils/global_resize.js';
 import { GlobalVisibilityChange } from '../utils/global_visibility_change.js';
 import { ProximityTimers } from '../utils/timers.js';
 
-import { Scheduler } from '../scheduler/scheduler.js';
+import { Scheduler, MASK_RENDER } from '../scheduler/scheduler.js';
 import {
   Renderer,
   RenderState,
@@ -55,7 +55,6 @@ const enableTimers = new ProximityTimers();
 export const Resize = Symbol('resize');
 export const Resized = Symbol('resized');
 export const Redraw = Symbol('redraw');
-export const InitialDraw = Symbol('initialDraw');
 
 const KEYS = [
   'ArrowUp',
@@ -377,9 +376,6 @@ export class Widget extends Base {
 
   static get renderers() {
     return [
-      defineRender(InitialDraw, function() {
-        this.draw(this.options, this.element);
-      }),
       defineMeasure(Resize, function() {
         this.resize();
       }),
@@ -416,7 +412,11 @@ export class Widget extends Base {
       defineRender('title', function(title) {
         const E = this.getStyleTarget();
         if (!E) return;
-        E.setAttribute('title', title);
+        if (typeof title === 'string') {
+          E.setAttribute('title', title);
+        } else {
+          E.removeAttribute('title', title);
+        }
       }),
       defineRender('tabindex', function(tabindex) {
         const F = this.getFocusTargets();
@@ -431,7 +431,13 @@ export class Widget extends Base {
         this.getRoleTarget().setAttribute('role', role);
       }),
       defineRender('id', function(id) {
-        this.element.setAttribute('id', id);
+        const E = this.element;
+
+        if (typeof id === 'string') {
+          E.setAttribute('id', id);
+        } else if (id !== void 0) {
+          E.removeAttribute('id');
+        }
       }),
     ];
   }
@@ -472,7 +478,14 @@ export class Widget extends Base {
     this._subscriptions = initSubscriptions();
     this._onfocuskeydown = onFocusKeyDown.bind(this);
     this._lasttabindex = this.options.tabindex;
-    this.invalidateAll();
+    this._drawn = false;
+    this._initialDraw = () => {
+      if (!this._drawn) return;
+      if (!this._initialDraw) return;
+      this._initialDraw = null;
+      this.draw(this.options, this.element);
+      this._renderState.unpause();
+    };
   }
 
   getStyleTarget() {
@@ -680,6 +693,7 @@ export class Widget extends Base {
     }
 
     if (O.container) O.container.appendChild(element);
+    this.triggerResize();
   }
 
   redraw() {
@@ -883,10 +897,16 @@ export class Widget extends Base {
    * @emits Widget#show
    */
   enableDraw() {
-    const renderState = this._renderState;
+    if (this._drawn) return;
+    this._drawn = true;
+    if (this._initialDraw) {
+      domScheduler.schedule(MASK_RENDER, this._initialDraw);
+    } else {
+      const renderState = this._renderState;
 
-    if (!renderState.isPaused()) return;
-    renderState.unpause();
+      renderState.unpause();
+    }
+
     this.emit('show');
     this.enableDrawChildren();
   }
@@ -904,9 +924,13 @@ export class Widget extends Base {
    * @emits Widget#hide
    */
   disableDraw() {
-    const renderState = this._renderState;
-    if (renderState.isPaused()) return;
-    renderState.pause();
+    if (!this._drawn) return;
+    this._drawn = false;
+
+    if (!this._initialDraw) {
+      const renderState = this._renderState;
+      renderState.pause();
+    }
     /**
      * Is fired when the visibility state changes. The first argument
      * is the visibility state, which is either <code>true</code>
@@ -995,7 +1019,7 @@ export class Widget extends Base {
   }
 
   isDrawn() {
-    return !this._renderState.isPaused();
+    return this._drawn;
   }
 
   /**
