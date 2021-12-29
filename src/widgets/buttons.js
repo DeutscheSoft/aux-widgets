@@ -22,6 +22,7 @@ import { Container } from './container.js';
 import { Button } from './button.js';
 import { warning } from '../utils/warning.js';
 import { ChildWidgets } from '../utils/child_widgets.js';
+import { defineRender } from '../renderer.js';
 
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -291,6 +292,16 @@ export class Buttons extends Container {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender('direction', function (direction) {
+        const E = this.element;
+        removeClass(E, 'aux-vertical', 'aux-horizontal');
+        addClass(E, 'aux-' + direction);
+      }),
+    ];
+  }
+
   initialize(options) {
     super.initialize(options);
     /**
@@ -460,19 +471,6 @@ export class Buttons extends Container {
     this.buttons.destroy();
     this.set('buttons', []);
     super.destroy();
-  }
-
-  redraw() {
-    super.redraw();
-    const I = this.invalid;
-    const O = this.options;
-
-    if (I.direction) {
-      I.direction = false;
-      const E = this.element;
-      removeClass(E, 'aux-vertical', 'aux-horizontal');
-      addClass(E, 'aux-' + O.direction);
-    }
   }
 
   /**
