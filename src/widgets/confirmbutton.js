@@ -166,7 +166,7 @@ export class ConfirmButton extends Button {
     if (key == 'confirm' && value == false) {
       this.set('state', false);
     }
-    super.set(key, value);
+    return super.set(key, value);
   }
 
   destroy() {
