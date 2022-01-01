@@ -1,9 +1,19 @@
 /*
  * Bitset handling
  */
+export const getFirstBit = Math.clz32;
+
+export function getLimbMask(bit) {
+  return 1 << (31 - (bit & 31));
+}
+
+export function getBitIndex(limbNumber, bit) {
+  return (limbNumber << 5) + bit;
+}
+
 export function setBit(set, n) {
   const index = n >> 5;
-  const mask = 1 << (n & 31);
+  const mask = 1 << (31 - (n & 31));
   const tmp = set[index] | 0;
   set[index] = tmp | mask;
   return set;
@@ -16,7 +26,7 @@ export function createBitset(length) {
 
 export function testBit(set, n) {
   const index = n >> 5;
-  const mask = 1 << (n & 31);
+  const mask = 1 << (31 - (n & 31));
   const tmp = set[index] | 0;
 
   return (tmp & mask) !== 0;
@@ -24,13 +34,13 @@ export function testBit(set, n) {
 
 export function clearBit(set, n) {
   const index = n >> 5;
-  const mask = 1 << (n & 31);
+  const mask = 1 << (31 - (n & 31));
   const tmp = set[index] | 0;
   set[index] = tmp & ~mask;
   return set;
 }
 
-export function createTestList(indices) {
+export function createBitList(indices) {
   const set = [];
   for (let i = 0; i < indices.length; i++) {
     setBit(set, indices[i]);

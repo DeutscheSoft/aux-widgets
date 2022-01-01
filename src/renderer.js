@@ -1,5 +1,8 @@
 import { FRAME_SHIFT, PHASE_MASK, PHASE_RENDER, PHASE_CALCULATE } from './scheduler/scheduler.js';
-import { createBitset, setBit, testBit, clearBit, createTestList, setBitList } from './scheduler/bitset.js';
+import {
+  getFirstBit, getLimbMask, createBitset, setBit, testBit, clearBit, createBitList, setBitList,
+  getBitIndex
+} from './scheduler/bitset.js';
 
 function buildDependencyMap(tasks) {
   const m = new Map();
@@ -20,7 +23,7 @@ function buildDependencyMap(tasks) {
 
   return new Map(
     Array.from(m.entries()).map(([ dependency, tmp ]) => {
-      return [ dependency, [ tmp[0], createTestList(tmp[1]) ] ];
+      return [ dependency, [ tmp[0], createBitList(tmp[1]) ] ];
     })
   );
 }
@@ -112,12 +115,15 @@ export class Renderer {
       let tmp = runnable[i];
 
       while (tmp !== 0) {
-        const j = 31 - Math.clz32(tmp);
-        const index = (i << 5) + j;
+        const j = getFirstBit(tmp);
+        const index = getBitIndex(i, j);
 
-        //context.log('mask %d -> %d', tmp, tmp & ~(1 << j));
+        //console.log('mask %d -> %d. index: %d', tmp, tmp & ~getLimbMask(j), index);
 
-        tmp &= ~(1 << j);
+        tmp &= ~getLimbMask(j);
+
+        if (getFirstBit(tmp) === j)
+          throw new Error('boo');
 
         const task = tasks[index];
 
@@ -151,7 +157,7 @@ export class Renderer {
         }
 
         // clear the bit
-        runnable[i] &= ~(1 << j);
+        runnable[i] &= ~getLimbMask(j);
       }
     }
 
@@ -456,15 +462,11 @@ export class RenderState {
 }
 
 export function getRenderers(Class) {
-  let a = [];
-  for (; Class; Class = Object.getPrototypeOf(Class)) {
-    const renderers = Class.renderers; 
+  if (!Class)
+    return [];
 
-    if (!renderers)
-      continue;
+  const parentRenderers = getRenderers(Object.getPrototypeOf(Class));
+  const renderers = Class.renderers;
 
-    a = a.concat(renderers);
-  }
-
-  return a;
+  return renderers ? parentRenderers.concat(renderers) : parentRenderers;
 }
