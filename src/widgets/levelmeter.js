@@ -24,6 +24,7 @@ import { Meter } from './meter.js';
 import { State } from './state.js';
 import { addClass, toggleClass } from '../utils/dom.js';
 import { effectiveValue } from '../modules/range.js';
+import { defineRender, defineMeasure, deferRenderNext } from '../renderer.js';
 
 function clearTimeout(to) {
   if (to >= 0) window.clearTimeout(to);
@@ -151,6 +152,22 @@ export class LevelMeter extends Meter {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender('show_hold', function (show_hold) {
+        toggleClass(this.element, 'aux-has-hold', show_hold);
+      }),
+      defineMeasure([ 'top', 'bottom', 'base' ], function() {
+        /* top and bottom require a meter redraw, so lets invalidate
+         * value */
+        this.invalidate('value');
+      }),
+      defineRender('clip', function (clip) {
+        toggleClass(this.element, 'aux-clipping', clip);
+      }),
+    ];
+  }
+
   initialize(options) {
     /* track the age of the value option */
     this.trackOption('value');
@@ -177,31 +194,24 @@ export class LevelMeter extends Meter {
     super.draw(O, element);
   }
 
-  redraw() {
+  drawMeter() {
+    super.drawMeter();
+
     const O = this.options;
-    const I = this.invalid;
-    const E = this.element;
+    const falling = +O.falling;
 
-    if (I.show_hold) {
-      I.show_hold = false;
-      toggleClass(E, 'aux-has-hold', O.show_hold);
-    }
+    if (!falling)
+      return;
 
-    if (I.top || I.bottom) {
-      /* top and bottom require a meter redraw, so lets invalidate
-       * value */
-      I.top = I.bottom = false;
-      I.value = true;
-    }
+    const base = +O.base;
+    const value = this.effectiveValue();
 
-    if (I.base) I.value = true;
+    if (value === base)
+      return null;
 
-    super.redraw();
-
-    if (I.clip) {
-      I.clip = false;
-      toggleClass(E, 'aux-clipping', O.clip);
-    }
+    return deferRenderNext(() => {
+      return this.drawMeter();
+    });
   }
 
   destroy() {
@@ -320,18 +330,7 @@ export class LevelMeter extends Meter {
     const falling = +O.falling;
     const base = +O.base;
     const transformation = O.transformation;
-    value = +value;
-
-    // this is a bit unelegant...
-    if (falling) {
-      value = this.effectiveValue();
-      // continue animation
-      if (value !== base) {
-        this.invalid.value = true;
-        // request another frame
-        this.triggerDrawNext();
-      }
-    }
+    value = +this.effectiveValue();
 
     i = super.calculateMeter(to, value, i);
 
@@ -388,20 +387,6 @@ export class LevelMeter extends Meter {
       // snap will enforce clipping
       value = O.snap_module.snap(value);
 
-      if (O.falling) {
-        const v = this.effectiveValue();
-        if (
-          (v >= base && value >= base && value < v) ||
-          (v <= base && value <= base && value > v)
-        ) {
-          /* NOTE: we are doing a falling animation, but maybe its not running */
-          if (!this.invalid.value) {
-            this.invalid.value = true;
-            this.triggerDraw();
-          }
-          return;
-        }
-      }
       if (O.auto_clip !== false && value >= O.clipping && !this.hasBase()) {
         this.set('clip', true);
         clipTimeout.call(this);

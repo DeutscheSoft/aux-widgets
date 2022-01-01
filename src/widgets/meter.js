@@ -36,11 +36,12 @@ import {
   innerWidth,
   innerHeight,
 } from '../utils/dom.js';
+import { defineRender, defineMeasure } from '../renderer.js';
 
 import { FORMAT } from '../utils/sprintf.js';
 
-function vert(O) {
-  return O.layout === 'left' || O.layout === 'right';
+function vert(layout) {
+  return layout === 'left' || layout === 'right';
 }
 function fillInterval(ctx, w, h, a, is_vertical) {
   let i;
@@ -131,28 +132,19 @@ function subtractIntervals(a, b) {
   return ret;
 }
 
-function drawGradient(element, gradient, fallback, range) {
-  const O = this.options;
-  let bg = '';
-  range = range || this;
+function drawGradient(element, O) {
+  const {
+    gradient, background, _width, _height, reverse, transformation, snap_module,
+    layout
+  } = O;
 
-  if (!gradient && !O.gradient) {
-    bg = fallback || O.background;
-    if (element.tagName === 'CANVAS') {
-      const ctx = element.getContext('2d');
-      ctx.fillStyle = bg;
-      ctx.fillRect(0, 0, O._width, O._height);
-      return;
-    }
+  if (!gradient) {
+    const ctx = element.getContext('2d');
+    ctx.fillStyle = background;
+    ctx.fillRect(0, 0, _width, _height);
   } else {
-    gradient = gradient || this.options.gradient;
-
-    let keys = Object.keys(gradient);
-    for (let i = 0; i < keys.length; i++) {
-      keys[i] = parseFloat(keys[i]);
-    }
-    keys = keys.sort(
-      O.reverse
+    const keys = Object.keys(gradient).map((value) => parseFloat(value)).sort(
+      reverse
         ? function (a, b) {
             return b - a;
           }
@@ -161,53 +153,23 @@ function drawGradient(element, gradient, fallback, range) {
           }
     );
 
-    const transformation = O.transformation;
-    const snap_module = O.snap_module;
-
-    if (element.tagName === 'CANVAS') {
-      const vert = O.layout == 'left' || O.layout == 'right';
-      const ctx = element.getContext('2d');
-      const grd = ctx.createLinearGradient(
-        0,
-        0,
-        vert ? 0 : O._width || 0,
-        vert ? O._height || 0 : 0
-      );
-      for (let i = 0; i < keys.length; i++) {
-        let pos = transformation.valueToCoef(snap_module.snap(keys[i]));
-        pos = Math.min(1, Math.max(0, pos));
-        if (vert) pos = 1 - pos;
-        grd.addColorStop(pos, gradient[keys[i] + '']);
-      }
-      ctx.fillStyle = grd;
-      ctx.fillRect(0, 0, O._width, O._height);
-      return;
-    }
-
-    let m_regular = '';
-    const s_regular = 'linear-gradient(%s, %s)';
-    const c_regular = '%s %s%%, ';
-
-    const d_w3c = {};
-    d_w3c.sleft = 'to top';
-    d_w3c.sright = 'to top';
-    d_w3c.stop = 'to right';
-    d_w3c.sbottom = 'to right';
-
-    for (let i = 0; i < keys.length; i++) {
-      const ps = (
-        100 * transformation.valueToCoef(snap_module.snap(keys[i]))
-      ).toFixed(2);
-      m_regular += sprintf(c_regular, gradient[keys[i] + ''], ps);
-    }
-    m_regular = m_regular.substr(0, m_regular.length - 2);
-    bg = sprintf(s_regular, d_w3c['s' + this.options.layout], m_regular);
+    const vert = layout == 'left' || layout == 'right';
+    const ctx = element.getContext('2d');
+    const grd = ctx.createLinearGradient(
+      0,
+      0,
+      vert ? 0 : _width || 0,
+      vert ? _height || 0 : 0
+    );
+    keys.forEach((value) => {
+      let pos = transformation.valueToCoef(snap_module.snap(value));
+      pos = Math.min(1, Math.max(0, pos));
+      if (vert) pos = 1 - pos;
+      grd.addColorStop(pos, gradient[value + '']);
+    });
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, _width, _height);
   }
-
-  if (element) {
-    element.style.background = bg ? bg : void 0;
-  }
-  return bg;
 }
 
 /**
@@ -331,6 +293,91 @@ export class Meter extends Widget {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender('reverse', function(reverse) {
+        toggleClass(this.element, 'aux-reverse', reverse);
+      }),
+      defineRender('layout', function(layout) {
+        const E = this.element;
+        const scale = this.scale ? this.scale.element : null;
+        const bar = this._bar;
+        removeClass(
+          E,
+          'aux-vertical',
+          'aux-horizontal',
+          'aux-left',
+          'aux-right',
+          'aux-top',
+          'aux-bottom'
+        );
+        switch (layout) {
+          case 'left':
+            addClass(E, 'aux-vertical', 'aux-left');
+            if (scale) insertAfter(scale, bar);
+            break;
+          case 'right':
+            addClass(E, 'aux-vertical', 'aux-right');
+            if (scale) insertAfter(bar, scale);
+            break;
+          case 'top':
+            addClass(E, 'aux-horizontal', 'aux-top');
+            if (scale) insertAfter(scale, bar);
+            break;
+          case 'bottom':
+            addClass(E, 'aux-horizontal', 'aux-bottom');
+            if (scale) insertAfter(bar, scale);
+            break;
+          default:
+            throw new Error('unsupported layout');
+        }
+      }),
+      defineRender(
+        [ 'basis', '_width', '_height' ],
+        function (basis, _width, _height) {
+          const { _canvas, _backdrop } = this;
+
+          if (!(_height > 0 && _width > 0)) return;
+
+          _canvas.setAttribute('height', Math.round(_height));
+          _canvas.setAttribute('width', Math.round(_width));
+          /* FIXME: I am not sure why this is even necessary */
+          _canvas.style.width = _width + 'px';
+          _canvas.style.height = _height + 'px';
+
+          this.invalidate('foreground');
+        }
+      ),
+      defineRender(
+        [
+          'gradient', 'background', '_width', '_height', 'reverse', 'transformation',
+          'snap_module', 'layout'
+        ],
+        function (gradient, background, _width, _height, transformation, snap_module) {
+          if (!(_height > 0 && _width > 0)) return;
+          const { _backdrop } = this;
+          _backdrop.setAttribute('height', Math.round(_height));
+          _backdrop.setAttribute('width', Math.round(_width));
+          /* FIXME: I am not sure why this is even necessary */
+          _backdrop.style.width = _width + 'px';
+          _backdrop.style.height = _height + 'px';
+          drawGradient(_backdrop, this.options);
+        }),
+      defineMeasure(
+          [ '_width', '_height', 'layout' ],
+          function (_width, _height, layout) {
+            this.set('basis', vert(layout) ? _height : _width);
+            this._last_meters.length = 0;
+          }),
+      defineRender(
+        [ 'value', 'transformation', 'segment', 'foreground', '_width', '_height' ],
+        function () {
+          return this.drawMeter();
+        }
+      ),
+    ];
+  }
+
   initialize(options) {
     if (!options.element) options.element = element('div');
     super.initialize(options);
@@ -379,94 +426,16 @@ export class Meter extends Widget {
     super.draw(O, element);
   }
 
-  redraw() {
-    const I = this.invalid;
-    const O = this.options;
-    const E = this.element;
-
-    if (I.reverse) {
-      I.reverse = false;
-      toggleClass(E, 'aux-reverse', O.reverse);
-    }
-
-    super.redraw();
-
-    if (I.layout) {
-      I.layout = false;
-      removeClass(
-        E,
-        'aux-vertical',
-        'aux-horizontal',
-        'aux-left',
-        'aux-right',
-        'aux-top',
-        'aux-bottom'
-      );
-      const scale = this.scale ? this.scale.element : null;
-      const bar = this._bar;
-      switch (O.layout) {
-        case 'left':
-          addClass(E, 'aux-vertical', 'aux-left');
-          if (scale) insertAfter(scale, bar);
-          break;
-        case 'right':
-          addClass(E, 'aux-vertical', 'aux-right');
-          if (scale) insertAfter(bar, scale);
-          break;
-        case 'top':
-          addClass(E, 'aux-horizontal', 'aux-top');
-          if (scale) insertAfter(scale, bar);
-          break;
-        case 'bottom':
-          addClass(E, 'aux-horizontal', 'aux-bottom');
-          if (scale) insertAfter(bar, scale);
-          break;
-        default:
-          throw new Error('unsupported layout');
-      }
-    }
-
-    if (O.foreground === false) return;
-
-    if (I.basis && O._height > 0 && O._width > 0) {
-      I.basis = false;
-
-      this._canvas.setAttribute('height', Math.round(O._height));
-      this._canvas.setAttribute('width', Math.round(O._width));
-      /* FIXME: I am not sure why this is even necessary */
-      this._canvas.style.width = O._width + 'px';
-      this._canvas.style.height = O._height + 'px';
-      this._canvas.getContext('2d').fillStyle = O.foreground;
-
-      this._backdrop.setAttribute('height', Math.round(O._height));
-      this._backdrop.setAttribute('width', Math.round(O._width));
-      /* FIXME: I am not sure why this is even necessary */
-      this._backdrop.style.width = O._width + 'px';
-      this._backdrop.style.height = O._height + 'px';
-    }
-
-    if (I.gradient || I.background) {
-      I.gradient = I.background = false;
-      drawGradient.call(this, this._backdrop, O.gradient, O.background);
-    }
-
-    if (I.value || I.transformation || I.segment || I.foreground) {
-      I.transformation = I.value = I.segment = I.foreground = false;
-      this.drawMeter();
-    }
-  }
-
   resize() {
-    const O = this.options;
     super.resize();
-    const w = innerWidth(this._bar, void 0, true);
-    const h = innerHeight(this._bar, void 0, true);
+
+    const _bar = this._bar;
+
+    const w = innerWidth(_bar, void 0, true);
+    const h = innerHeight(_bar, void 0, true);
+
     this.set('_width', w);
     this.set('_height', h);
-    const i = vert(O) ? h : w;
-    this.set('basis', i);
-    this._last_meters.length = 0;
-    this.set('gradient', O.gradient);
   }
 
   calculateMeter(to, value, i) {
@@ -533,8 +502,13 @@ export class Meter extends Widget {
     if (diff == 1 || 'safari' in window) diff = 4;
 
     const ctx = this._canvas.getContext('2d');
-    ctx.fillStyle = O.foreground;
-    const is_vertical = vert(O);
+
+    if (ctx.fillStyle !== O.foreground) {
+      ctx.fillStyle = O.foreground;
+      diff = 4;
+    }
+
+    const is_vertical = vert(O.layout);
 
     if (diff === 1) {
       /* a - tmp is non-empty */
