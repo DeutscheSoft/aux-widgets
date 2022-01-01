@@ -20,7 +20,8 @@
 /* jshint -W018 */
 
 import { Widget } from './widget.js';
-import { element, addClass } from '../utils/dom.js';
+import { element, addClass, toggleClass } from '../utils/dom.js';
+import { defineRender } from '../renderer.js';
 
 /**
  * The State widget is a multi-functional adaption of a traditional LED. It
@@ -59,6 +60,24 @@ export class State extends Widget {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender('color', function (color) {
+        this.element.style['background-color'] = color ? color : void 0;
+      }),
+      defineRender('state', function (state) {
+        const E = this.element;
+        toggleClass(E, 'aux-state-on', state);
+        toggleClass(E, 'aux-state-off', !state);
+
+        if (!(state >= 0)) state = 0;
+        if (!(state <= 1)) state = 1;
+
+        this._mask.style.opacity = '' + (1 - state);
+      }),
+    ];
+  }
+
   initialize(options) {
     if (!options.element) options.element = element('div');
     super.initialize(options);
@@ -85,33 +104,5 @@ export class State extends Widget {
     element.appendChild(this._mask);
 
     super.draw(O, element);
-  }
-
-  redraw() {
-    super.redraw();
-    const I = this.invalid;
-    const O = this.options;
-
-    if (I.color) {
-      I.color = false;
-      if (O.color) this.element.style['background-color'] = O.color;
-      else this.element.style['background-color'] = void 0;
-    }
-
-    if (I.state) {
-      I.state = false;
-      let v = +O.state;
-      if (!(v >= 0)) v = 0;
-      if (!(v <= 1)) v = 1;
-
-      if (!O.state) {
-        this.removeClass('aux-state-on');
-        this.addClass('aux-state-off');
-      } else {
-        this.removeClass('aux-state-off');
-        this.addClass('aux-state-on');
-      }
-      this._mask.style.opacity = '' + (1 - v);
-    }
   }
 }
