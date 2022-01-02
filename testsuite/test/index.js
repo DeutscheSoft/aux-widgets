@@ -18,6 +18,7 @@
  */
 
 export * from './base_widgets.js';
+export * from './bitset.js';
 export * from './events.js';
 export * from './css_helpers.js';
 export * from './helpers.js';
