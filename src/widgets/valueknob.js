@@ -23,6 +23,7 @@ import { Knob } from './knob.js';
 import { Value } from './value.js';
 import { Label } from './label.js';
 import { addClass, removeClass, element } from '../utils/dom.js';
+import { defineRender } from '../renderer.js';
 
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -89,6 +90,16 @@ export class ValueKnob extends Widget {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender('layout', function (layout) {
+        const E = this.element;
+        removeClass(E, 'aux-vertical', 'aux-horizontal', 'aux-left', 'aux-right');
+        addClass(E, 'aux-' + layout);
+      }),
+    ];
+  }
+
   initialize(options) {
     if (!options.element) options.element = element('div');
     super.initialize(options);
@@ -105,19 +116,6 @@ export class ValueKnob extends Widget {
     this.knob.scroll.set('classes', this.element);
 
     super.draw(O, element);
-  }
-
-  redraw() {
-    super.redraw();
-    const I = this.invalid;
-    const O = this.options;
-    const E = this.element;
-    if (I.layout) {
-      I.layout = false;
-      const value = O.layout;
-      removeClass(E, 'aux-vertical', 'aux-horizontal', 'aux-left', 'aux-right');
-      addClass(E, 'aux-' + value);
-    }
   }
 
   getRange() {
