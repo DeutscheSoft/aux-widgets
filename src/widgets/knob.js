@@ -35,6 +35,7 @@ import { makeSVG } from '../utils/svg.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
 import { objectAnd, objectSub } from '../utils/object.js';
+import { defineRender } from '../renderer.js';
 
 const formatViewbox = FORMAT('0 0 %d %d');
 function dblClick() {
@@ -182,6 +183,14 @@ export class Knob extends Widget {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender('size', function (size) {
+        this.svg.setAttribute('viewBox', formatViewbox(size, size));
+      }),
+    ];
+  }
+
   initialize(options) {
     if (!options.element) options.element = element('div');
     super.initialize(options);
@@ -272,18 +281,6 @@ export class Knob extends Widget {
     const rect = this.element.getBoundingClientRect();
     const size = Math.min(rect.width, rect.height);
     this.set('size', size);
-  }
-
-  redraw() {
-    const I = this.invalid;
-    const O = this.options;
-
-    if (I.size) {
-      I.size = false;
-      this.svg.setAttribute('viewBox', formatViewbox(O.size, O.size));
-    }
-
-    super.redraw();
   }
 
   /**
