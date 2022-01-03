@@ -24,6 +24,7 @@ import { Button } from './button.js';
 import { Label } from './label.js';
 import { setDelayedFocus, createID } from '../utils/dom.js';
 import { Timer } from '../utils/timers.js';
+import { Resize } from './widget.js';
 
 import {
   element,
@@ -41,8 +42,10 @@ import {
   getDuration,
   empty,
   removeClass,
+  toggleClass,
 } from '../utils/dom.js';
 import { typecheckInteger } from '../utils/typecheck.js';
+import { defineRender, defineMeasure, deferRender, deferMeasure } from '../renderer.js';
 
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -54,67 +57,7 @@ import { typecheckInteger } from '../utils/typecheck.js';
  * @param {mixed} value - The new value of the option
  */
 
-function hideList() {
-  this.__transition = false;
-  this.__timeout = false;
-  if (!this.__open) {
-    this._list.remove();
-    setDelayedFocus(this.element);
-    this.element.removeAttribute('aria-expanded');
-  } else {
-    document.addEventListener('touchstart', this._globalTouchStart);
-    document.addEventListener('mousedown', this._globalTouchStart);
-  }
-}
-function showList(show) {
-  const E = this.element;
-  const O = this.options;
-  if (show) {
-    const ew = outerWidth(E, true);
-    if (O.list_class) this._list.classList.add(O.list_class);
-    document.body.appendChild(this._list);
-    const cw = width();
-    const ch = height();
-    const sx = scrollLeft();
-    const sy = scrollTop();
-    setStyles(this._list, {
-      opacity: '0',
-      maxHeight: ch + 'px',
-      maxWidth: cw + 'px',
-      minWidth: ew + 'px',
-    });
-    const lw = outerWidth(this._list, true);
-    const lh = outerHeight(this._list, true);
-    setStyles(this._list, {
-      top: Math.min(positionTop(E) + outerHeight(E, true), ch + sy - lh) + 'px',
-      left: Math.min(positionLeft(E), cw + sx - lw) + 'px',
-    });
-    E.setAttribute('aria-expanded', 'true');
-  } else {
-    document.removeEventListener('touchstart', this._globalTouchStart);
-    document.removeEventListener('mousedown', this._globalTouchStart);
-    setDelayedFocus(E);
-    E.removeAttribute('aria-expanded');
-  }
-  setStyle(this._list, 'opacity', show ? '1' : '0');
-  this.__transition = true;
-  this.__open = show;
-  if (this.__timeout !== false) window.clearTimeout(this.__timeout);
-  const dur = getDuration(this._list);
-  this.__timeout = window.setTimeout(hideList.bind(this), dur);
-  if (this.current())
-    this._list.scrollTop =
-      this.current().element.offsetTop - this._list.offsetHeight / 2;
-}
-
-function setLabelSize() {
-  if (!this.label || !this.sizer) return;
-  outerWidth(
-    this.label.element,
-    true,
-    outerWidth(this.sizer.element, true)
-  );
-}
+const EntriesChanged = Symbol('entries changes');
 
 /**
  * Select provides a {@link Button} with a select list to choose from
@@ -236,23 +179,137 @@ export class Select extends Button {
 
         if (!selected_entry) this.update('label', label);
       },
-      set_label: function () {
-        if (this.options.auto_size)
-          setLabelSize.call(this);
-      },
     };
   }
 
-  initialize(options) {
-    this.__open = false;
+  static get renderers() {
+    return [
+      defineRender(EntriesChanged, function () {
+        const _list = this._list;
 
-    this.__timeout = -1;
+        this.entries.forEach((entry) => _list.appendChild(entry.element));
+      }),
+      defineMeasure(
+        [ 'show_list', 'list_class' ],
+        function (show_list, list_class) {
+          const { element, _list } = this;
+
+          if (this.__timeout !== false) {
+            window.clearTimeout(this.__timeout);
+            this.__timeout = false;
+          }
+
+          if (show_list) {
+            const ew = outerWidth(element, true);
+            const cw = width();
+            const ch = height();
+            const sx = scrollLeft();
+            const sy = scrollTop();
+
+            return deferRender(() => {
+              _list.className = 'aux-selectlist';
+              if (list_class) addClass(_list, list_class);
+              setStyles(_list, {
+                opacity: '0',
+                maxHeight: ch + 'px',
+                maxWidth: cw + 'px',
+                minWidth: ew + 'px',
+              });
+              this.set('_show_list', true);
+              document.body.appendChild(_list);
+              document.addEventListener('touchstart', this._globalTouchStart);
+              document.addEventListener('mousedown', this._globalTouchStart);
+
+              const lw = outerWidth(_list, true);
+              const lh = outerHeight(_list, true);
+
+              const top = Math.min(positionTop(element) + outerHeight(element, true), ch + sy - lh) + 'px';
+              const left = Math.min(positionLeft(element), cw + sx - lw) + 'px';
+
+              return deferRender(() => {
+                setStyles(_list, { top, left, opacity: '1' });
+                element.setAttribute('aria-expanded', 'true');
+
+                const current = this.current();
+
+                if (!current)
+                  return;
+
+                return deferMeasure(() => {
+                  const scrollTop = current.element.offsetTop - _list.offsetHeight / 2;
+                  return deferRender(() => {
+                    _list.scrollTop = scrollTop;
+                  });
+                });
+              });
+            });
+          } else {
+            document.removeEventListener('touchstart', this._globalTouchStart);
+            document.removeEventListener('mousedown', this._globalTouchStart);
+
+            return deferRender(() => {
+              element.removeAttribute('aria-expanded');
+              setStyle(_list, 'opacity', '0');
+
+              const duration = getDuration(_list);
+
+              if (duration > 0) {
+                this.__timeout = window.setTimeout(() => {
+                  this.set('_show_list', false);
+                }, duration);
+              } else {
+                this.set('_show_list', false);
+              }
+            });
+          }
+        }),
+      defineRender([ '_show_list' ], function (_show_list) {
+        const { element, _list } = this;
+
+        if (!_show_list) {
+          _list.remove();
+          setDelayedFocus(element);
+          element.removeAttribute('aria-expanded');
+        }
+      }),
+      defineRender([ 'selected', EntriesChanged ], function (selected) {
+        this.entries.forEach((entry, i) => {
+          toggleClass(entry.element, 'aux-active', i === selected);
+        });
+      }),
+      defineRender([ Resize, 'auto_size', EntriesChanged ], function (auto_size) {
+        if (auto_size) {
+          const S = this.sizer.element;
+          empty(S);
+          const frag = document.createDocumentFragment();
+          this.entries.forEach((entry) => {
+            const s = element('span', { class: 'aux-sizerentry' });
+            s.textContent = entry.get('label');
+            frag.appendChild(s);
+          });
+          S.appendChild(frag);
+          return deferMeasure(() => {
+            const width = outerWidth(S, true)
+            return deferRender(() => {
+              if (this.label)
+                outerWidth(this.label.element, true, width);
+            });
+          });
+        } else {
+          if (this.label)
+            this.label.element.style.width = null;
+        }
+      }),
+    ];
+  }
+
+  initialize(options) {
+    this.__timeout = false;
 
     /**
      * @member {Array} Select#entries - An array containing all entry objects with members <code>label</code> and <code>value</code>.
      */
     this.entries = [];
-    this._active = null;
     super.initialize(options);
     /**
      * @member {HTMLDivElement} Select#element - The main DIV container.
@@ -266,16 +323,12 @@ export class Select extends Button {
     this._list = element('div', 'aux-selectlist');
     this._list.setAttribute('role', 'listbox');
 
-    this._globalTouchStart = function (e) {
-      if (
-        this.__open &&
-        !this.__transition &&
-        !this._list.contains(e.target) &&
-        !this.element.contains(e.target)
-      ) {
-        this.showList(false);
-      }
-    }.bind(this);
+    this._globalTouchStart = (e) => {
+      if (this._list.contains(e.target) ||
+        this.element.contains(e.target))
+        return;
+      this.showList(false);
+    };
 
     const sel = this.options.selected;
     const val = this.options.value;
@@ -445,7 +498,7 @@ export class Select extends Button {
     const index = entries.indexOf(entry);
 
     // invalidate entries.
-    this.invalid.entries = true;
+    this.invalidate(EntriesChanged);
 
     const selected = this.options.selected;
 
@@ -453,7 +506,6 @@ export class Select extends Button {
     if (selected !== -1 && selected >= index) {
       this.set('selected', selected + 1);
     }
-    this.triggerDraw();
     /**
      * Is fired when a new {@link SelectEntry} is added to the list.
      *
@@ -549,8 +601,7 @@ export class Select extends Button {
 
     // remove from DOM
     if (li.parentElement == this._list) li.remove();
-    this.invalid.entries = true;
-    this.triggerDraw();
+    this.invalidate(EntriesChanged);
     /**
      * Is fired when an entry was removed from the list.
      *
@@ -775,71 +826,6 @@ export class Select extends Button {
     this.element.setAttribute('aria-haspopup', 'listbox');
 
     super.draw(O, element);
-  }
-
-  resize() {
-    super.resize();
-    this.invalidate('auto_size');
-  }
-
-  redraw() {
-    super.redraw();
-
-    const I = this.invalid;
-    const O = this.options;
-
-    if (I.entries || I.auto_size) {
-      if (O.auto_size) {
-        I.show_list = true;
-        I.auto_size = false;
-
-        const S = this.sizer.element;
-        const v = O.entries;
-        empty(S);
-        const frag = document.createDocumentFragment();
-        for (let i = 0, m = v.length; i < m; ++i) {
-          const s = element('span', { class: 'aux-sizerentry' });
-          s.textContent = typeof v[i] == 'string' ? v[i] : v[i].label;
-          frag.appendChild(s);
-        }
-        S.appendChild(frag);
-
-        setLabelSize.call(this);
-          
-      } else if (this.label) {
-        this.label.element.style.width = null;
-      }
-    }
-
-    if (I.entries) {
-      I.entries = false;
-
-      const _list = this._list;
-      const entries = this.entries;
-
-      for (let i = 0; i < entries.length; i++) {
-        _list.appendChild(entries[i].element);
-      }
-    }
-
-    if (I.selected || I.value) {
-      I.selected = I.value = false;
-      if (this._active) {
-        removeClass(this._active, 'aux-active');
-      }
-      const entry = this.entries[O.selected];
-
-      if (entry) {
-        this._active = entry.element;
-        addClass(entry.element, 'aux-active');
-      } else {
-        this._active = null;
-      }
-    }
-
-    if (I.validate('show_list', 'resized')) {
-      showList.call(this, O.show_list);
-    }
   }
 
   /**
