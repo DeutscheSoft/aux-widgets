@@ -868,7 +868,7 @@ export class Widget extends Base {
     const currentValue = this.options[key];
 
     if (currentValue !== value && (value === value || currentValue === currentValue))
-      this.invalidate(key);
+      this._renderState.invalidate(key);
 
     super.set(key, value);
     return value;

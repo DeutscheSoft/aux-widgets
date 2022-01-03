@@ -23,6 +23,7 @@ import { Label } from './label.js';
 import { Container } from './container.js';
 import { addClass, removeClass, toggleClass } from '../utils/dom.js';
 import { objectSub } from '../utils/object.js';
+import { defineRender } from '../renderer.js';
 
 const mapped_options = {
   labels: 'label',
@@ -47,36 +48,20 @@ function extractChildOptions(O, i) {
   return o;
 }
 
-function addMeter(options) {
+function addMeter() {
   const l = this.meters.length;
-  const O = options;
-  const opt = extractChildOptions(O, l);
+  const opt = extractChildOptions(this.options, this.meters.length);
   const m = new LevelMeter(opt);
 
   this.meters.push(m);
   this.appendChild(m);
 }
-function removeMeter(meter) {
+function removeMeter() {
   /* meter can be int or meter instance */
-  let M = this.meters;
+  const meter = this.meters.pop();
 
-  let m = -1;
-  if (typeof meter == 'number') {
-    m = meter;
-  } else {
-    for (let i = 0; i < M.length; i++) {
-      if (M[i] == meter) {
-        m = i;
-        break;
-      }
-    }
-  }
-  if (m < 0 || m > M.length - 1) return;
-  this.removeChild(M[m]);
-  M[m].element.remove();
-  // TODO: no destroy function in levelmeter at this point?
-  //this.meters[m].destroy();
-  M = M.splice(m, 1);
+  this.removeChild(meter);
+  meter.element.remove();
 }
 
 function mapChildOptionSimple(value, key) {
@@ -268,6 +253,76 @@ export class MultiMeter extends Container {
     return multimeterStaticEvents;
   }
 
+  static get renderers() {
+    return [
+      defineRender('show_value', function (show_value) {
+        toggleClass(this.element, 'aux-has-values', show_value !== false);
+      }),
+      defineRender('labels', function (labels) {
+        toggleClass(this.element, 'aux-has-labels', labels !== false);
+      }),
+      defineRender('count', function (count) {
+        const E = this.element;
+        const prevCount = this.meters.length;
+
+        if (prevCount === count)
+          return;
+
+        if (count > prevCount) {
+          for (let i = 0; i < (count - prevCount); i++)
+            addMeter.call(this);
+        } else {
+          for (let i = 0; i < (prevCount - count); i++)
+            removeMeter.call(this);
+        }
+        removeClass(E, 'aux-count-' + prevCount);
+        addClass(E, 'aux-count-' + count);
+      }),
+      defineRender('layout', function (layout) {
+        const E = this.element;
+        removeClass(
+          E,
+          'aux-vertical',
+          'aux-horizontal',
+          'aux-left',
+          'aux-right',
+          'aux-top',
+          'aux-bottom'
+        );
+        switch (layout) {
+          case 'left':
+            addClass(E, 'aux-vertical', 'aux-left');
+            break;
+          case 'right':
+            addClass(E, 'aux-vertical', 'aux-right');
+            break;
+          case 'top':
+            addClass(E, 'aux-horizontal', 'aux-top');
+            break;
+          case 'bottom':
+            addClass(E, 'aux-horizontal', 'aux-bottom');
+            break;
+          default:
+            throw new Error('unsupported layout');
+        }
+      }),
+      defineRender([ 'count', 'layout', 'show_scale' ], function (count, layout, show_scale) {
+        const E = this.element;
+
+        switch (layout) {
+          case 'top':
+          case 'left':
+            this.meters.forEach((meter, i, meters) => meter.set('show_scale', show_scale && i + 1 === meters.length));
+            break;
+          case 'bottom':
+          case 'right':
+            this.meters.forEach((meter, i) => meter.set('show_scale', show_scale && i === 0));
+            break;
+        }
+      }),
+    ];
+  }
+
   initialize(options) {
     super.initialize(options, true);
     /**
@@ -281,78 +336,6 @@ export class MultiMeter extends Container {
     addClass(element, 'aux-multimeter');
 
     super.draw(O, element);
-  }
-
-  redraw() {
-    const O = this.options;
-    const I = this.invalid;
-    const E = this.element;
-    const M = this.meters;
-
-    if (I.count) {
-      while (M.length > O.count) removeMeter.call(this, M[M.length - 1]);
-      while (M.length < O.count) addMeter.call(this, O);
-      E.setAttribute(
-        'class',
-        E.getAttribute('class').replace(/aux-count-[0-9]*/g, '')
-      );
-      E.setAttribute('class', E.getAttribute('class').replace(/ +/g, ' '));
-      addClass(E, 'aux-count-' + O.count);
-    }
-
-    if (I.layout || I.count) {
-      I.count = I.layout = false;
-      removeClass(
-        E,
-        'aux-vertical',
-        'aux-horizontal',
-        'aux-left',
-        'aux-right',
-        'aux-top',
-        'aux-bottom'
-      );
-      switch (O.layout) {
-        case 'left':
-          addClass(E, 'aux-vertical', 'aux-left');
-          break;
-        case 'right':
-          addClass(E, 'aux-vertical', 'aux-right');
-          break;
-        case 'top':
-          addClass(E, 'aux-horizontal', 'aux-top');
-          break;
-        case 'bottom':
-          addClass(E, 'aux-horizontal', 'aux-bottom');
-          break;
-        default:
-          throw new Error('unsupported layout');
-      }
-      switch (O.layout) {
-        case 'top':
-        case 'left':
-          for (let i = 0; i < M.length - 1; i++) M[i].set('show_scale', false);
-          if (M.length)
-            M[this.meters.length - 1].set('show_scale', O.show_scale);
-          break;
-        case 'bottom':
-        case 'right':
-          for (let i = 0; i < M.length; i++) M[i].set('show_scale', false);
-          if (M.length) M[0].set('show_scale', O.show_scale);
-          break;
-      }
-    }
-
-    if (I.show_value) {
-      I.show_value = false;
-      toggleClass(E, 'aux-has-values', O.show_value !== false);
-    }
-
-    if (I.labels) {
-      I.labels = false;
-      toggleClass(E, 'aux-has-labels', O.labels !== false);
-    }
-
-    super.redraw();
   }
 }
 
