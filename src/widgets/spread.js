@@ -26,7 +26,7 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { Widget } from './widget.js';
+import { Widget, Resize } from './widget.js';
 import { warning } from '../utils/warning.js';
 import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
 import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
@@ -53,9 +53,10 @@ import {
 } from '../utils/dom.js';
 import { defineChildWidget } from '../child_widget.js';
 import { defineRecalculation } from '../define_recalculation.js';
+import { defineRender, defineMeasure } from '../renderer.js';
 
-function vert(O) {
-  return O.layout === 'left' || O.layout === 'right';
+function vert(layout) {
+  return layout === 'left' || layout === 'right';
 }
 
 function dblClick() {
@@ -78,21 +79,19 @@ function focusMove(O) {
   return false;
 }
 
-function setHandle(handle, value, O) {
-  const transformation = O.transformation;
-  const snap_module = O.snap_module;
-  const tmp = transformation.valueToPixel(snap_module.snap(value)) + 'px';
-   
-  if (vert(O)) {
-    if (supports_transform)
-      handle.style.transform = 'translateY(-' + tmp + ')';
-    else handle.style.bottom = tmp;
-  } else {
-    if (supports_transform)
-      handle.style.transform = 'translateX(' + tmp + ')';
-    else handle.style.left = tmp;
-  }
-}
+const setHandlePosition = supports_transform
+  ? function (handle, layout, position) {
+      handle.style.transform = (vert(layout) ? 'translateY(-' : 'translateX(' ) + position + ')';
+    }
+  : function (handle, layout, position) {
+      if (vert(layout)) {
+        handle.style.bottom = position;
+        handle.style.left = null;
+      } else {
+        handle.style.bottom = null;
+        handle.style.left = position;
+      }
+    };
 
 /**
  * Spread is a slidable control with a {@link Scale} next to it which
@@ -180,7 +179,7 @@ export class Spread extends Widget {
         else this.off('dblclick', dblClick);
       },
       set_layout: function () {
-        this.options.direction = vert(this.options) ? 'vertical' : 'horizontal';
+        this.options.direction = vert(this.options.layout) ? 'vertical' : 'horizontal';
         this.drag.set('direction', this.options.direction);
         this.scroll.set('direction', this.options.direction);
       },
@@ -192,6 +191,50 @@ export class Spread extends Widget {
       },
       focus_move: focusMove,
     };
+  }
+
+  static get renderers() {
+    return [
+      defineMeasure([ 'layout', Resize ], function (layout) {
+        const { _track, _lower } = this;
+
+        let basis;
+
+        if (vert(layout)) {
+          basis = innerHeight(_track) - outerHeight(_lower, true) * 2;
+        } else {
+          basis = innerWidth(_track) - outerWidth(_lower, true) * 2;
+        }
+
+        this.set('basis', basis);
+      }),
+      defineRender('layout', function (layout) {
+        const element = this.element;
+        removeClass(
+          element,
+          'aux-vertical',
+          'aux-horizontal',
+          'aux-left',
+          'aux-right',
+          'aux-top',
+          'aux-bottom'
+        );
+        addClass(element, vert(layout) ? 'aux-vertical' : 'aux-horizontal');
+        addClass(element, 'aux-' + layout);
+      }),
+      defineRender(
+        [ 'transformation', 'layout', 'lower', 'snap_module' ],
+        function (transformation, layout, lower, snap_module) {
+          const position = transformation.valueToPixel(snap_module.snap(lower)) + 'px';
+          setHandlePosition(this._lower, layout, position);
+        }),
+      defineRender(
+        [ 'transformation', 'layout', 'upper', 'snap_module' ],
+        function (transformation, layout, upper, snap_module) {
+          const position = transformation.valueToPixel(snap_module.snap(upper)) + 'px';
+          setHandlePosition(this._upper, layout, position);
+        }),
+    ];
   }
 
   initialize(options) {
@@ -214,8 +257,6 @@ export class Spread extends Widget {
      */
     this._track = element('div', 'aux-track');
 
-    this._handle_size = 0;
-
     /**
      * @member {HTMLDivElement} Spread#_lower - The lower handle of the spread. Has class <code>.aux-lower</code>.
      */
@@ -232,7 +273,7 @@ export class Spread extends Widget {
     if (O.reset_upper === void 0) O.reset_upper = O.upper;
 
     if (O.direction === void 0)
-      O.direction = vert(O) ? 'vertical' : 'horizontal';
+      O.direction = vert(O.layout) ? 'vertical' : 'horizontal';
     /**
      * @member {DragValue} Spread#draglower - Instance of {@link DragValue} used for the lower handle
      *   interaction.
@@ -276,73 +317,6 @@ export class Spread extends Widget {
     super.draw(O, element);
   }
 
-  redraw() {
-    super.redraw();
-    const I = this.invalid;
-    const O = this.options;
-    const E = this.element;
-    let tmp;
-
-    if (I.layout) {
-      I.layout = false;
-      const value = O.layout;
-      removeClass(
-        E,
-        'aux-vertical',
-        'aux-horizontal',
-        'aux-left',
-        'aux-right',
-        'aux-top',
-        'aux-bottom'
-      );
-      addClass(E, vert(O) ? 'aux-vertical' : 'aux-horizontal');
-      addClass(E, 'aux-' + value);
-
-      if (supports_transform) {
-        this._lower.style.transform = null;
-        this._upper.style.transform = null;
-      } else {
-        if (vert(O)) {
-          this._lower.style.left = null;
-          this._upper.style.left = null;
-        } else {
-          this._lower.style.bottom = null;
-          this._upper.style.bottom = null;
-        }
-      }
-      I.value = false;
-    }
-
-    if (I.validate('lower') ||  I.transformation) {
-      setHandle(this._lower, O.lower, O);
-    }
-    if (I.validate('upper') || I.transformation) {
-      setHandle(this._upper, O.upper, O);
-    }
-    I.transformation = false;
-  }
-
-  resize() {
-    const O = this.options;
-    const T = this._track,
-      H = this._lower;
-    let basis;
-
-    super.resize();
-
-    this._padding = CSSSpace(T, 'padding', 'border');
-
-    if (vert(O)) {
-      this._handle_size = outerHeight(H, true);
-      basis = innerHeight(T) - this._handle_size * 2;
-    } else {
-      this._handle_size = outerWidth(H, true);
-      basis = innerWidth(T) - this._handle_size * 2;
-    }
-
-    this.set('basis', basis);
-  }
-
   destroy() {
     this._lower.remove();
     this._upper.remove();
@@ -369,7 +343,11 @@ export class Spread extends Widget {
     const O = this.options;
     if (key === 'lower' || key === 'upper') {
       if (value > O.max || value < O.min) warning(this.element);
-      value = O.snap_module.snap(Math.max(O.min, Math.min(O.max, value)));
+      if (key === 'lower') {
+        value = O.snap_module.snap(Math.max(O.min, Math.min(O.upper, value)));
+      } else {
+        value = O.snap_module.snap(Math.max(O.lower, Math.min(O.max, value)));
+      }
     }
     return super.set(key, value);
   }
