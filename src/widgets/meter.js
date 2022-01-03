@@ -333,8 +333,8 @@ export class Meter extends Widget {
         }
       }),
       defineRender(
-        [ 'basis', '_width', '_height' ],
-        function (basis, _width, _height) {
+        [ '_width', '_height' ],
+        function (_width, _height) {
           const { _canvas, _backdrop } = this;
 
           if (!(_height > 0 && _width > 0)) return;
