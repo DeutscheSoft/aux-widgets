@@ -154,7 +154,7 @@ export class Scheduler {
 
           iterations++;
 
-          if (iterations === trapThreshold)
+          if (false && iterations === trapThreshold)
             this._installTrap();
         }
 
@@ -183,7 +183,7 @@ export class Scheduler {
       _queues[length + PHASE_RENDER] = q2;
     }
 
-    if (iterations >= trapThreshold)
+    if (false && iterations >= trapThreshold)
       this._removeTrap();
   }
 
