@@ -23,6 +23,7 @@ import { FrequencyResponse } from './frequencyresponse.js';
 import { EqBand } from './eqband.js';
 import { Graph } from './graph.js';
 import { inheritChildOptions } from '../child_widget.js';
+import { defineRecalculation } from '../renderer.js';
 
 function fastDrawPLinear(X, Y) {
   const ret = [];
@@ -116,8 +117,7 @@ function drawGraph(bands) {
   return fastDrawPLinear(X, Y);
 }
 function invalidateBands() {
-  this.invalid.bands = true;
-  this.triggerDraw();
+  this.invalidate('bands');
 }
 
 /**
@@ -164,25 +164,19 @@ export class EqualizerGraph extends Graph {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRecalculation(
+        [ 'bands', 'accuracy', 'rendering_filter', 'oversampling', 'threshold' ],
+        function () {
+          this.set('dots', this.drawPath());
+        }),
+    ];
+  }
+
   initialize(options) {
     super.initialize(options);
     this._invalidate_bands = invalidateBands.bind(this);
-  }
-
-  redraw() {
-    const I = this.invalid;
-    if (
-      I.validate(
-        'bands',
-        'accuracy',
-        'rendering_filter',
-        'oversampling',
-        'threshold'
-      )
-    ) {
-      this.set('dots', this.drawPath());
-    }
-    super.redraw();
   }
 
   /**
