@@ -28,40 +28,7 @@ import {
 import { Container } from './container.js';
 import { Label } from './label.js';
 import { defineChildWidget } from '../child_widget.js';
-
-function setAnimation() {
-  const O = this.options;
-  const easing = O.easing;
-  const speed = O.speed;
-  const pause = O.pause;
-  const inner = O._inner;
-  const outer = O._outer;
-  const range = inner - outer;
-  const msecs = (range / speed) * 1000;
-  const duration = Math.round(msecs + pause);
-  const perc = ((pause / 2 / duration) * 100).toFixed(2);
-  const to = (100 - perc).toFixed(2);
-  const id = this.label.get('id');
-
-  if (range <= 0) {
-    this._style.textContent = '';
-    addClass(this.element, 'aux-static');
-    return;
-  }
-
-  this._style.textContent = `
-  #${id} {
-    animation: ${id} ${duration}ms ${easing} infinite alternate;
-  }
-  @keyframes ${id} {
-    0% { left: 0; transform: translateX(0); }
-    ${perc}% { left: 0; transform: translateX(0); }
-    ${to}% { left: 100%; transform: translateX(-100%); }
-    100% { left: 100%; transform: translateX(-100%); }
-  }
-  `;
-  removeClass(this.element, 'aux-static');
-}
+import { defineRender } from '../renderer.js';
 
 /**
  * Marquee is a {@link Label} inside a {@link Container}. Marquee
@@ -106,6 +73,39 @@ export class Marquee extends Container {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender(
+        [ 'easing', 'speed', 'pause', '_inner', '_outer' ],
+        function (easing, speed, pause, _inner, _outer) {
+          const range = _inner - _outer;
+          const msecs = (range / speed) * 1000;
+          const duration = Math.round(msecs + pause);
+          const perc = ((pause / 2 / duration) * 100).toFixed(2);
+          const to = (100 - perc).toFixed(2);
+          const id = this.label.get('id');
+
+          if (!(range > 0)) {
+            this._style.textContent = '';
+            addClass(this.element, 'aux-static');
+          } else {
+            this._style.textContent = `
+            #${id} {
+              animation: ${id} ${duration}ms ${easing} infinite alternate;
+            }
+            @keyframes ${id} {
+              0% { left: 0; transform: translateX(0); }
+              ${perc}% { left: 0; transform: translateX(0); }
+              ${to}% { left: 100%; transform: translateX(-100%); }
+              100% { left: 100%; transform: translateX(-100%); }
+            }
+            `;
+            removeClass(this.element, 'aux-static');
+          }
+        }),
+    ];
+  }
+
   initialize(options) {
     if (!options.element) options.element = element('div');
     super.initialize(options);
@@ -120,17 +120,6 @@ export class Marquee extends Container {
     addClass(element, 'aux-marquee');
     this.label.set('id', createID('aux-label-'));
     super.draw(O, element);
-  }
-
-  redraw() {
-    const I = this.invalid;
-
-    super.redraw();
-
-    if (I.speed || I.pause || I._inner || I._outer || I.label) {
-      I.speed = I.pause = I._inner = I._outer = false;
-      setAnimation.call(this);
-    }
   }
 
   resize() {
