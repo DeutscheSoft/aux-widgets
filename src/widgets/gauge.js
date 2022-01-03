@@ -23,6 +23,7 @@ import { element, addClass } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { objectAnd, objectSub } from '../utils/object.js';
+import { defineRender } from '../renderer.js';
 
 function getCoordsSingle(deg, inner, pos) {
   deg = (deg * Math.PI) / 180;
@@ -74,6 +75,58 @@ export class Gauge extends Widget {
     });
   }
 
+  static get renderers() {
+    return [
+      defineRender([ 'width', 'height' ], function (width, height) {
+        this.svg.setAttribute('viewBox', formatViewbox(width, height));
+      }),
+      defineRender(
+        [ 'label', 'x', 'y', 'size' ],
+        function (label, x, y, size) {
+          const _label = this._label;
+
+          _label.textContent = label.label;
+
+          /**
+           * Is fired when the label changed.
+           *
+           * @event Gauge#labeldrawn
+           */
+          this.emit('labeldrawn');
+
+          if (!label.label)
+            return;
+
+          return deferMeasure(() => {
+            const outer = O.size / 2;
+            const margin = label.margin;
+            const align = label.align === 'inner';
+            const bb = _label.getBoundingClientRect();
+            const angle = label.pos % 360;
+            const outer_p = outer - margin;
+            const coords = getCoordsSingle(angle, outer_p, outer);
+
+            let mx =
+              (((coords.x - outer) / outer_p) * (bb.width + bb.height / 2.5)) /
+              (align ? -2 : 2);
+            let my =
+              (((coords.y - outer) / outer_p) * bb.height) / (align ? -2 : 2);
+
+            mx += x;
+            my += y;
+
+            return deferRender(() => {
+              _label.setAttribute(
+                'transform',
+                formatTranslate(coords.x + mx, coords.y + my)
+              );
+              _label.setAttribute('text-anchor', 'middle');
+            });
+          });
+        }),
+    ];
+  }
+
   initialize(options) {
     super.initialize(options);
 
@@ -112,12 +165,6 @@ export class Gauge extends Widget {
     this.addChild(this.circular);
   }
 
-  resize() {
-    super.resize();
-    this.invalid.label = true;
-    this.triggerDraw();
-  }
-
   draw(O, element) {
     addClass(element, 'aux-gauge');
     element.appendChild(this.svg);
@@ -125,69 +172,11 @@ export class Gauge extends Widget {
     super.draw(O, element);
   }
 
-  redraw() {
-    const I = this.invalid,
-      O = this.options;
-    const S = this.svg;
-
-    super.redraw();
-
-    if (I.validate('width', 'height')) {
-      S.setAttribute('viewBox', formatViewbox(O.width, O.height));
-    }
-
-    if (I.validate('label', 'size', 'x', 'y')) {
-      const _label = this._label;
-      _label.textContent = O.label.label;
-
-      if (O.label.label) {
-        S.add(
-          function () {
-            const t = O.label;
-            const outer = O.size / 2;
-            const margin = t.margin;
-            const align = t.align === 'inner';
-            const bb = _label.getBoundingClientRect();
-            const angle = t.pos % 360;
-            const outer_p = outer - margin;
-            const coords = getCoordsSingle(angle, outer_p, outer);
-
-            let mx =
-              (((coords.x - outer) / outer_p) * (bb.width + bb.height / 2.5)) /
-              (align ? -2 : 2);
-            let my =
-              (((coords.y - outer) / outer_p) * bb.height) / (align ? -2 : 2);
-
-            mx += O.x;
-            my += O.y;
-
-            S.add(
-              function () {
-                _label.setAttribute(
-                  'transform',
-                  formatTranslate(coords.x + mx, coords.y + my)
-                );
-                _label.setAttribute('text-anchor', 'middle');
-              }.bind(this),
-              1
-            );
-            /**
-             * Is fired when the label changed.
-             *
-             * @event Gauge#labeldrawn
-             */
-            this.emit('labeldrawn');
-          }.bind(this)
-        );
-      }
-    }
-  }
-
   // GETTERS & SETTERS
   set(key, value) {
     if (key === 'label') {
       if (typeof value === 'string') value = { label: value };
-      value = Object.assign(this.options.label, value);
+      value = Object.assign({}, this.options.label, value);
     }
     // Circular does the snapping
     if (!Widget.getOptionTypes()[key] && Circular.getOptionTypes()[key])
