@@ -20,6 +20,7 @@
 import { Chart } from './chart.js';
 import { addClass, removeClass } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
+import { defineRender, defineMeasure } from '../renderer.js';
 
 function rangeSet(value, key) {
   this.range_x.set(key, value);
@@ -130,6 +131,51 @@ export class Dynamics extends Chart {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender('type', function (type) {
+        const element = this.element;
+        removeClass(element, 'aux-compressor', 'aux-expander', 'aux-gate', 'aux-limiter');
+        addClass(element, 'aux-' + type);
+      }),
+      defineMeasure(
+        [ 'min', 'max', 'grid_labels', 'db_grid' ],
+        function (min, max, grid_labels, db_grid) {
+          const grid_x = [];
+          const grid_y = [];
+          let cls;
+          for (let i = min; i <= max; i += db_grid) {
+            cls = i ? '' : 'aux-highlight';
+            grid_x.push({
+              pos: i,
+              label: i === min ? '' : grid_labels(i),
+              class: cls,
+            });
+            grid_y.push({
+              pos: i,
+              label: i === min ? '' : grid_labels(i),
+              class: cls,
+            });
+          }
+          if (this.grid) {
+            this.grid.set('grid_x', grid_x);
+            this.grid.set('grid_y', grid_y);
+          }
+
+          if (this.steady)
+            this.steady.set('dots', [
+              { x: min, y: min },
+              { x: max, y: max },
+            ]);
+        }),
+      defineMeasure(
+        [ 'type', 'min', 'max', 'range', 'ratio', 'threshold', 'gain', 'reference', 'makeup', 'knee' ],
+        function (type, min, max, range, ratio, threshold, gain, reference, makeup, knee) {
+          this.drawGraph();
+        }),
+    ];
+  }
+
   initialize(options) {
     super.initialize(options, true);
     const O = this.options;
@@ -138,7 +184,6 @@ export class Dynamics extends Chart {
      *   Has class <code>.aux-dynamics</code>.
      */
     this.set('scale', O.scale);
-    if (O.size) this.set('size', O.size);
     this.set('min', O.min);
     this.set('max', O.max);
     /**
@@ -162,6 +207,8 @@ export class Dynamics extends Chart {
     });
     this.handle.addEventListener('userset', dragHandle.bind(this));
 
+    this.graph = this.addGraph({});
+
     this.set('handle_label', this.options.handle_label);
     this.set('show_handle', this.options.show_handle);
     this.set('ratio', this.options.ratio);
@@ -174,104 +221,29 @@ export class Dynamics extends Chart {
     super.draw(O, element);
   }
 
-  redraw() {
-    const O = this.options;
-    const I = this.invalid;
-
-    super.redraw();
-
-    if (I.validate('size', 'min', 'max', 'scale')) {
-      const grid_x = [];
-      const grid_y = [];
-      const min = this.range_x.get('min');
-      const max = this.range_x.get('max');
-      const step = O.db_grid;
-      let cls;
-      for (let i = min; i <= max; i += step) {
-        cls = i ? '' : 'aux-highlight';
-        grid_x.push({
-          pos: i,
-          label: i === min ? '' : O.grid_labels(i),
-          class: cls,
-        });
-        grid_y.push({
-          pos: i,
-          label: i === min ? '' : O.grid_labels(i),
-          class: cls,
-        });
-      }
-      if (this.grid) {
-        this.grid.set('grid_x', grid_x);
-        this.grid.set('grid_y', grid_y);
-      }
-
-      if (this.steady)
-        this.steady.set('dots', [
-          { x: O.min, y: O.min },
-          { x: O.max, y: O.max },
-        ]);
-    }
-
-    if (I.type) {
-      if (O._last_type) removeClass(this.element, 'aux-' + O._last_type);
-      addClass(this.element, 'aux-' + O.type);
-    }
-
-    if (
-      I.validate(
-        'ratio',
-        'threshold',
-        'range',
-        'makeup',
-        'gain',
-        'reference',
-        'type',
-        'knee'
-      )
-    ) {
-      this.drawGraph();
-    }
-  }
-
   drawGraph() {
     const O = this.options;
-    if (O.type === false) return;
-    if (!this.graph) {
-      this.graph = this.addGraph({
-        dots: [
-          { x: O.min, y: O.min },
-          { x: O.max, y: O.max },
-        ],
-      });
-    }
+    const { type, min, max, range, ratio, threshold, gain, reference, makeup, knee } = this.options;
+    if (type === false) return;
     const curve = [];
-    const range = O.range;
-    const ratio = O.ratio;
-    const thres = O.threshold;
-    const gain = O.gain;
-    const ref = O.reference;
-    const makeup = O.makeup;
-    const min = O.min;
-    const max = O.max;
-    let s;
-    if (ref == 0) {
-      s = 0;
+    let slope;
+    if (reference == 0) {
+      slope = 0;
     } else if (!isFinite(ratio)) {
-      s = ref;
+      slope = reference;
     } else {
-      s = (1 / (Math.max(ratio, 1.001) - 1)) * ratio * ref;
+      slope = (1 / (Math.max(ratio, 1.001) - 1)) * ratio * reference;
     }
     const l = 5; // estimated width of line. dirty workaround for
     // keeping the line end out of sight in case
     // salient point is outside the visible area
-    switch (O.type) {
+    switch (type) {
       case 'compressor': {
-        const knee = O.knee;
-        const sx = thres + gain - s;
-        const sy = thres + makeup - s + ref;
+        const sx = threshold + gain - slope;
+        const sy = threshold + makeup - slope + reference;
 
         // entry point
-        curve.push({ x: min - l, y: min + makeup - gain + ref - l });
+        curve.push({ x: min - l, y: min + makeup - gain + reference - l });
         if (knee > 0) {
           const dy0 = 1;
           const dy1 = isFinite(ratio) ? 1 / ratio : 0;
@@ -300,38 +272,38 @@ export class Dynamics extends Chart {
         if (isFinite(ratio) && ratio > 0) {
           curve.push({
             x: max,
-            y: thres + makeup + (max - thres - gain) / ratio,
+            y: threshold + makeup + (max - threshold - gain) / ratio,
           });
         } else if (ratio === 0) {
-          curve.push({ x: thres, y: max });
+          curve.push({ x: threshold, y: max });
         } else {
-          curve.push({ x: max, y: thres + makeup });
+          curve.push({ x: max, y: threshold + makeup });
         }
 
         break;
       }
       case 'limiter':
         curve.push({ x: min, y: min + makeup - gain });
-        curve.push({ x: thres + gain, y: thres + makeup });
-        curve.push({ x: max, y: thres + makeup });
+        curve.push({ x: threshold + gain, y: threshold + makeup });
+        curve.push({ x: max, y: threshold + makeup });
         break;
       case 'gate':
-        curve.push({ x: thres, y: min });
-        curve.push({ x: thres, y: thres + makeup });
+        curve.push({ x: threshold, y: min });
+        curve.push({ x: threshold, y: threshold + makeup });
         curve.push({ x: max, y: max + makeup });
         break;
       case 'expander':
-        if (O.ratio !== 1) {
+        if (ratio !== 1) {
           curve.push({ x: min, y: min + makeup + range });
 
-          const y = (ratio * range + (ratio - 1) * thres) / (ratio - 1);
+          const y = (ratio * range + (ratio - 1) * threshold) / (ratio - 1);
           curve.push({ x: y - range, y: y + makeup });
-          curve.push({ x: thres, y: thres + makeup });
+          curve.push({ x: threshold, y: threshold + makeup });
         } else curve.push({ x: min, y: min + makeup });
         curve.push({ x: max, y: max + makeup });
         break;
       default:
-        warn('Unsupported type', O.type);
+        warn('Unsupported type', type);
     }
     this.graph.set('dots', curve);
   }
