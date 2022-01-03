@@ -17,8 +17,9 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { element, addClass } from './../utils/dom.js';
+import { element, addClass, setText } from './../utils/dom.js';
 import { Widget } from './widget.js';
+import { defineRender } from '../renderer.js';
 
 /**
  * Label is a simple text field displaying strings.
@@ -45,6 +46,14 @@ export class Label extends Widget {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender([ 'label', 'format' ], function (label, format) {
+        setText(this._text, format ? format(label) : label);
+      }),
+    ];
+  }
+
   initialize(options) {
     if (!options.element) options.element = element('div');
     super.initialize(options);
@@ -59,17 +68,5 @@ export class Label extends Widget {
     element.appendChild(this._text);
 
     super.draw(O, element);
-  }
-
-  redraw() {
-    const I = this.invalid;
-    const O = this.options;
-
-    super.redraw();
-
-    if (I.label || I.format) {
-      I.label = I.format = false;
-      this._text.data = O.format ? O.format.call(this, O.label) : O.label;
-    }
   }
 }
