@@ -753,7 +753,7 @@ export class Chart extends Widget {
     for (let i = 0; i < this.handles.length; i++) {
       const h = this.handles[i];
       if (h === handle || !h.get('active') || !h.get('show_handle')) continue;
-      _a = calculateOverlap(X, h.handle);
+      _a = calculateOverlap(X, h.getHandlePosition());
 
       if (_a) {
         c++;
@@ -771,7 +771,7 @@ export class Chart extends Widget {
       for (let i = 0; i < this.bands.length; i++) {
         const b = this.bands[i];
         if (b === handle || !b.get('active') || !b.get('show_handle')) continue;
-        _a = calculateOverlap(X, b.handle);
+        _a = calculateOverlap(X, b.getHandlePosition());
 
         if (_a > 0) {
           c++;

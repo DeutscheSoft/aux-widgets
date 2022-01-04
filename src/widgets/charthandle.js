@@ -30,6 +30,7 @@ import { setText, removeClass, addClass, toggleClass } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
 import { Range } from '../modules/range.js';
 import { Timer } from '../utils/timers.js';
+import { defineRender, defineRecalculation, defineMeasure, deferRender, deferMeasure } from '../renderer.js';
 
 import { DragCapture } from '../modules/dragcapture.js';
 
@@ -208,8 +209,8 @@ const LABEL_ALIGN = {
   },
 };
 
-function getLabelAlign(O, pos) {
-  return LABEL_ALIGN[modeToHandle(O.mode)][pos];
+function getLabelAlign(mode, pos) {
+  return LABEL_ALIGN[modeToHandle(mode)][pos];
 }
 
 /* The following arrays contain multipliers, alternating x and y, starting with x.
@@ -265,12 +266,11 @@ const LABEL_POSITION = {
   },
 };
 
-function getLabelPosition(O, X, pos, label_size) {
+function getLabelPosition(mode, margin, X, pos, label_size) {
   /* X: array containing [X0, Y0, X1, Y1] of the handle
    * pos: string describing the position of the label ("top", "bottom-right", ...)
    * label_size: array containing width and height of the label
    */
-  const m = O.margin;
 
   // Pivot (x, y) is the center of the handle.
   let x = (X[0] + X[2]) / 2;
@@ -281,10 +281,10 @@ function getLabelPosition(O, X, pos, label_size) {
   const height = +X[3] - +X[1];
 
   // multipliers
-  const vec = LABEL_POSITION[modeToHandle(O.mode)][pos];
+  const vec = LABEL_POSITION[modeToHandle(mode)][pos];
 
-  x += (vec[0] * width) / 2 + vec[2] * label_size[0] + vec[4] * m;
-  y += (vec[1] * height) / 2 + vec[3] * label_size[1] + vec[5] * m;
+  x += (vec[0] * width) / 2 + vec[2] * label_size[0] + vec[4] * margin;
+  y += (vec[1] * height) / 2 + vec[3] * label_size[1] + vec[5] * margin;
 
   // result is [x, y] of the "real" label position. Please note that
   // the final x position depends on the LABEL_ALIGN value for pos.
@@ -359,133 +359,8 @@ function getLabelDimensions(align, X, label_size) {
   }
 }
 
-function redrawHandle(O, X) {
-  const _handle = this._handle;
-
-  if (!O.show_handle) {
-    if (_handle) removeHandle.call(this);
-    return;
-  }
-
-  const range_x = O.range_x;
-  const range_y = O.range_y;
-  const range_z = O.range_z;
-
-  if (!range_x.options.basis || !range_y.options.basis) return;
-
-  const x = range_x.valueToPixel(O.x);
-  const y = range_y.valueToPixel(O.y);
-  const z = range_z.valueToCoef(O.z) || 0;
-
-  let tmp;
-
-  if (O.mode === 'circular') {
-    tmp = (O.min_size + z * (O.max_size - O.min_size)) / 2;
-    X[0] = x - tmp;
-    X[1] = y - tmp;
-    X[2] = x + tmp;
-    X[3] = y + tmp;
-
-    _handle.setAttribute('r', tmp.toFixed(2));
-    _handle.setAttribute('cx', x.toFixed(2));
-    _handle.setAttribute('cy', y.toFixed(2));
-  } else if (O.mode === 'block') {
-    tmp = Math.max(O.min_size, z) / 2;
-    X[0] = x - tmp;
-    X[1] = y - tmp;
-    X[2] = x + tmp;
-    X[3] = y + tmp;
-
-    _handle.setAttribute('x', Math.round(+X[0]).toFixed(0));
-    _handle.setAttribute('y', Math.round(+X[1]).toFixed(0));
-    _handle.setAttribute('width', Math.round(+X[2] - X[0]).toFixed(0));
-    _handle.setAttribute('height', Math.round(+X[3] - X[1]).toFixed(0));
-  } else {
-    let x_min =
-      O.x_min !== false ? range_x.valueToPixel(range_x.snap(O.x_min)) : 0;
-    let x_max =
-      O.x_max !== false
-        ? range_x.valueToPixel(range_x.snap(O.x_max))
-        : range_x.options.basis;
-
-    if (x_min > x_max) {
-      tmp = x_min;
-      x_min = x_max;
-      x_max = tmp;
-    }
-
-    let y_min =
-      O.y_min !== false ? range_y.valueToPixel(range_y.snap(O.y_min)) : 0;
-    let y_max =
-      O.y_max !== false
-        ? range_y.valueToPixel(range_y.snap(O.y_max))
-        : range_y.options.basis;
-
-    if (y_min > y_max) {
-      tmp = y_min;
-      y_min = y_max;
-      y_max = tmp;
-    }
-
-    tmp = O.min_size / 2;
-
-    /* All other modes are drawn as rectangles */
-    switch (O.mode) {
-      case 'line-vertical':
-        tmp = Math.max(tmp, (z * O.max_size) / 2);
-        X[0] = x - tmp;
-        X[1] = y_min;
-        X[2] = x + tmp;
-        X[3] = y_max;
-        break;
-      case 'line-horizontal':
-        // line horizontal
-        tmp = Math.max(tmp, (z * O.max_size) / 2);
-        X[0] = x_min;
-        X[1] = y - tmp;
-        X[2] = x_max;
-        X[3] = y + tmp;
-        break;
-      case 'block-left':
-        // rect lefthand
-        X[0] = 0;
-        X[1] = y_min;
-        X[2] = Math.max(x, tmp);
-        X[3] = y_max;
-        break;
-      case 'block-right':
-        // rect righthand
-        X[0] = x;
-        X[1] = y_min;
-        X[2] = range_x.options.basis;
-        X[3] = y_max;
-        if (X[2] - X[0] < tmp) X[0] = X[2] - tmp;
-        break;
-      case 'block-top':
-        // rect top
-        X[0] = x_min;
-        X[1] = 0;
-        X[2] = x_max;
-        X[3] = Math.max(y, tmp);
-        break;
-      case 'block-bottom':
-        // rect bottom
-        X[0] = x_min;
-        X[1] = y;
-        X[2] = x_max;
-        X[3] = range_y.options.basis;
-        if (X[3] - X[1] < tmp) X[1] = X[3] - tmp;
-        break;
-      default:
-        warn('Unsupported mode:', O.mode);
-    }
-
-    /* Draw the rectangle */
-    _handle.setAttribute('x', Math.round(+X[0]).toFixed(0));
-    _handle.setAttribute('y', Math.round(+X[1]).toFixed(0));
-    _handle.setAttribute('width', Math.round(+X[2] - X[0]).toFixed(0));
-    _handle.setAttribute('height', Math.round(+X[3] - X[1]).toFixed(0));
-  }
+function toInteger(value) {
+  return Math.round(+value).toFixed(0);
 }
 
 function redrawZHandle(O, X) {
@@ -575,21 +450,6 @@ function removeLabel() {
   this.label = [0, 0, 0, 0];
 }
 
-function createHandle() {
-  const O = this.options;
-
-  if (this._handle) removeHandle.call(this);
-
-  const E = makeSVG(O.mode === 'circular' ? 'circle' : 'rect', {
-    class: 'aux-handle',
-  });
-  addEventListener(E, 'wheel', this._onWheel);
-  addEventListener(E, 'selectstart', preventDefault);
-  addEventListener(E, 'contextmenu', preventDefault);
-  this._handle = E;
-  this.element.appendChild(E);
-}
-
 function removeHandle() {
   const E = this._handle;
   if (!E) return;
@@ -600,101 +460,17 @@ function removeHandle() {
   removeEventListener(E, 'contextmenu', preventDefault);
 }
 
-function redrawLabel(O, X) {
-  if (!O.show_handle || O.format_label === false) {
-    if (this._label) removeLabel.call(this);
-    return false;
-  }
+function createHandle(mode) {
+  if (this._handle) removeHandle.call(this);
 
-  const a = O.format_label.call(this, O.label, O.x, O.y, O.z).split('\n');
-  const c = this._label.childNodes;
-  let i;
-
-  while (c.length < a.length) {
-    this._label.appendChild(makeSVG('tspan', { dy: '1.0em' }));
-  }
-  while (c.length > a.length) {
-    this._label.removeChild(this._label.lastChild);
-  }
-  for (i = 0; i < a.length; i++) {
-    setText(c[i], a[i]);
-  }
-
-  if (!this._label.parentNode) this.element.appendChild(this._label);
-
-  S.add(
-    function () {
-      let w = 0;
-      for (i = 0; i < a.length; i++) {
-        w = Math.max(w, c[i].getComputedTextLength());
-      }
-
-      let bbox;
-
-      try {
-        bbox = this._label.getBBox();
-      } catch (e) {
-        /* _label is not in the DOM yet */
-        return;
-      }
-
-      S.add(
-        function () {
-          const label_size = [w, bbox.height];
-
-          const pref = O.preferences;
-          let area = 0;
-          let label_position;
-          let text_position;
-          let text_anchor;
-          let tmp;
-          let j;
-
-          /*
-           * Calculate possible positions of the labels and calculate their intersections. Choose
-           * that position which has the smallest intersection area with all other handles and labels
-           */
-          for (j = 0; j < pref.length; j++) {
-            /* get alignment */
-            const align = getLabelAlign(O, pref[j]);
-
-            /* get label position */
-            const LX = getLabelPosition(O, X, pref[j], label_size);
-
-            /* calculate the label bounding box using anchor and dimensions */
-            const pos = getLabelDimensions(align, LX, label_size);
-
-            tmp = O.intersect(pos, this);
-
-            /* We require at least one square px smaller intersection
-             * to avoid flickering label positions */
-            if (area === 0 || tmp.intersect + 1 < area) {
-              area = tmp.intersect;
-              label_position = pos;
-              text_position = LX;
-              text_anchor = align;
-
-              /* there is no intersections, we are done */
-              if (area === 0) break;
-            }
-          }
-
-          this.label = label_position;
-          tmp = Math.round(text_position[0]) + 'px';
-          this._label.setAttribute('x', tmp);
-          this._label.setAttribute('y', Math.round(text_position[1]) + 'px');
-          this._label.setAttribute('text-anchor', text_anchor);
-          const cn = this._label.childNodes;
-          for (j = 0; j < cn.length; j++) cn[j].setAttribute('x', tmp);
-
-          redrawLines.call(this, O, X);
-        }.bind(this),
-        1
-      );
-    }.bind(this)
-  );
-
-  return true;
+  const E = makeSVG(mode === 'circular' ? 'circle' : 'rect', {
+    class: 'aux-handle',
+  });
+  addEventListener(E, 'wheel', this._onWheel);
+  addEventListener(E, 'selectstart', preventDefault);
+  addEventListener(E, 'contextmenu', preventDefault);
+  this._handle = E;
+  this.element.appendChild(E);
 }
 
 function redrawLines(O, X) {
@@ -773,37 +549,6 @@ function redrawLines(O, X) {
     this.element.appendChild(this._line1);
   if (this._line2 && !this._line2.parentNode)
     this.element.appendChild(this._line2);
-}
-
-function setMainClass(O) {
-  const E = this.element;
-  let i;
-
-  for (i = 0; i < MODES.length; i++) removeClass(E, 'aux-' + MODES[i]);
-
-  removeClass(E, 'aux-line');
-  removeClass(E, 'aux-block');
-
-  switch (O.mode) {
-    case 'line-vertical':
-    case 'line-horizontal':
-      addClass(E, 'aux-line');
-      break;
-    case 'circular':
-      break;
-    case 'block-left':
-    case 'block-right':
-    case 'block-top':
-    case 'block-bottom':
-    case 'block':
-      addClass(E, 'aux-block');
-      break;
-    default:
-      warn('Unsupported mode:', O.mode);
-      return;
-  }
-
-  addClass(E, 'aux-' + O.mode);
 }
 
 function startDrag() {
@@ -916,6 +661,9 @@ function setRange(range, key) {
   this.set(name, range.snap(this.get(name)));
 }
 
+const movedDependencies = [ 'x', 'y', 'z', 'mode', 'show_handle', 'x_min', 'x_max', 'y_min', 'y_max', 'z_min', 'z_max' ];
+
+
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
  * The event is emitted for the options <code>x</code>, <code>y</code> and <code>z</code>.
@@ -1011,9 +759,6 @@ export class ChartHandle extends Widget {
         if (O.mode === 'circular') createLine1.call(this);
         createLine2.call(this);
       },
-      set_format_label: function (value) {
-        if (value !== false && !this._label) createLabel.call(this);
-      },
       set_show_handle: function () {
         this.set('mode', this.options.mode);
         this.set('show_axis', this.options.show_axis);
@@ -1022,7 +767,6 @@ export class ChartHandle extends Widget {
       set_mode: function (value) {
         const O = this.options;
         if (!O.show_handle) return;
-        createHandle.call(this);
         if (O.z_handle !== false) createZHandle.call(this);
         if (value !== 'circular') createLine1.call(this);
       },
@@ -1054,6 +798,336 @@ export class ChartHandle extends Widget {
         this.stopInteracting();
       },
     };
+  }
+
+  static get renderers() {
+    return [
+      defineRender('hover', function (hover) {
+        toggleClass(this.element, 'aux-hover', hover);
+      }),
+      defineRender('dragging', function (dragging) {
+        toggleClass(this.element, 'aux-dragging', dragging);
+      }),
+      defineRender('mode', function (mode) {
+        const E = this.element;
+
+        MODES.forEach((mode) => removeClass(E, 'aux-' + mode));
+
+        removeClass(E, 'aux-line');
+        removeClass(E, 'aux-block');
+
+        switch (mode) {
+          case 'line-vertical':
+          case 'line-horizontal':
+            addClass(E, 'aux-line');
+            break;
+          case 'circular':
+            break;
+          case 'block-left':
+          case 'block-right':
+          case 'block-top':
+          case 'block-bottom':
+          case 'block':
+            addClass(E, 'aux-block');
+            break;
+          default:
+            warn('Unsupported mode:', mode);
+            return;
+        }
+
+        addClass(E, 'aux-' + mode);
+      }),
+      defineRecalculation(
+        [ 'show_handle', 'range_x', 'range_y', 'range_z', 'x', 'y', 'z', 'mode', 'min_size', 'max_size', 'x_min', 'x_max', 'y_min', 'y_max' ],
+        function (show_handle, range_x, range_y, range_z, x, y, z, mode, min_size, max_size, x_min, x_max, y_min, y_max) {
+          const xSize = range_x.options.basis;
+          const ySize = range_y.options.basis;
+
+          let X = null;
+
+          if (show_handle && xSize && ySize) {
+            const xPosition = range_x.valueToPixel(x);
+            const yPosition = range_y.valueToPixel(y);
+            const zPosition = range_z.valueToCoef(z) || 0;
+
+            if (mode === 'circular') {
+              const radius = (min_size + zPosition * (max_size - min_size)) / 2;
+              X = [
+                xPosition - radius,
+                yPosition - radius,
+                xPosition + radius,
+                yPosition + radius
+              ];
+            } else if (mode === 'block') {
+              const halfWidth = Math.max(min_size, zPosition) / 2;
+              X = [
+                xPosition - halfWidth,
+                yPosition - halfWidth,
+                xPosition + halfWidth,
+                yPosition + halfWidth
+              ];
+            } else {
+              let xMinPosition =
+                x_min !== false ? range_x.valueToPixel(range_x.snap(x_min)) : 0;
+              let xMaxPosition =
+                x_max !== false
+                  ? range_x.valueToPixel(range_x.snap(x_max))
+                  : xSize;
+
+              if (xMinPosition > xMaxPosition) {
+                const tmp = xMinPosition;
+                xMinPosition = xMaxPosition;
+                xMaxPosition = tmp;
+              }
+
+              let yMinPosition =
+                y_min !== false ? range_y.valueToPixel(range_y.snap(y_min)) : 0;
+              let yMaxPosition =
+                y_max !== false
+                  ? range_y.valueToPixel(range_y.snap(y_max))
+                  : ySize;
+
+              if (yMinPosition > yMaxPosition) {
+                const tmp = yMinPosition;
+                yMinPosition = yMaxPosition;
+                yMaxPosition = tmp;
+              }
+
+              const minHalfSize = min_size / 2;
+
+              /* All other modes are drawn as rectangles */
+              switch (mode) {
+                case 'line-vertical': {
+                  const tmp = Math.max(minHalfSize, (zPosition * max_size) / 2);
+                  X = [
+                    xPosition - tmp,
+                    yMinPosition,
+                    xPosition + tmp,
+                    yMaxPosition
+                  ];
+                  break;
+                }
+                case 'line-horizontal': {
+                  // line horizontal
+                  const tmp = Math.max(minHalfSize, (zPosition * max_size) / 2);
+                  X = [
+                    xMinPosition,
+                    yPosition - tmp,
+                    xMaxPosition,
+                    yPosition + tmp
+                  ];
+                  break;
+                }
+                case 'block-left':
+                  // rect lefthand
+                  X = [
+                    0,
+                    yMinPosition,
+                    Math.max(xPosition, minHalfSize),
+                    yMaxPosition
+                  ];
+                  break;
+                case 'block-right':
+                  // rect righthand
+                  X = [
+                    (xSize - xPosition < minHalfSize) ? (xSize - minHalfSize) : xPosition,
+                    yMinPosition,
+                    xSize,
+                    yMaxPosition
+                  ];
+                  break;
+                case 'block-top':
+                  // rect top
+                  X = [
+                    xMinPosition,
+                    0,
+                    xMaxPosition,
+                    Math.max(yPosition, minHalfSize)
+                  ];
+                  break;
+                case 'block-bottom':
+                  // rect bottom
+                  X = [
+                    (ySize - yPosition < minHalfSize) ? (ySize - minHalfSize) : xMinPosition,
+                    yPosition,
+                    xMaxPosition,
+                    ySize
+                  ];
+                  break;
+                default:
+                  warn('Unsupported mode:', mode);
+              }
+
+            }
+          }
+
+          const currentPosition = this.get('_handle_position');
+
+          if (currentPosition && X && X.every((element, i) => element === currentPosition[i]))
+            return;
+
+          this.set('_handle_position', X);
+        }),
+      defineRender(
+        [ 'mode', 'show_handle' ],
+        function (mode, show_handle) {
+          if (show_handle) {
+            createHandle.call(this, mode);
+          } else {
+            removeHandle.call(this);
+          }
+        }),
+      defineRender(
+        [ '_handle_position', 'mode' ],
+        function (_handle_position, mode) {
+          const { _handle } = this;
+
+          if (!_handle_position)
+            return;
+
+          const [ x1, y1, x2, y2 ] = _handle_position;
+
+          if (mode === 'circular') {
+            const radius = (x2 - x1) / 2;
+            const cx = x1 + radius;
+            const cy = y1 + radius;
+
+            _handle.setAttribute('r', radius.toFixed(2));
+            _handle.setAttribute('cx', cx.toFixed(2));
+            _handle.setAttribute('cy', cy.toFixed(2));
+          } else {
+            /* All other modes are drawn as rectangles */
+            _handle.setAttribute('x', toInteger(x1));
+            _handle.setAttribute('y', toInteger(y1));
+            _handle.setAttribute('width', toInteger(x2 - x1));
+            _handle.setAttribute('height', toInteger(y2 - y1));
+          }
+        }),
+      defineRender([ '_handle_position', 'z_handle' ],
+        function (_handle_position, z_handle) {
+          redrawZHandle.call(this, this.options, _handle_position);
+        }),
+      defineRecalculation(
+        [ 'show_handle', 'format_label', 'x', 'y', 'z', 'label' ],
+        function (show_handle, format_label, x, y, z, label) {
+          let result = null;
+
+          if (show_handle && format_label) {
+            result = format_label.call(this, label, x, y, z);
+          }
+
+          this.set('_formatted_label', result);
+        }),
+      defineRender([ 'show_handle', 'mode' ], function (show_handle, mode) {
+        if (!show_handle) {
+          removeHandle.call(this);
+        } else {
+          createHandle.call(this, mode);
+        }
+      }),
+      defineRender([ '_formatted_label' ], function (_formatted_label) {
+        if (!this._label !== !_formatted_label) {
+          if (_formatted_label) {
+            createLabel.call(this);
+          } else {
+            removeLabel.call(this);
+          }
+        }
+
+        const { _label, element } = this;
+
+        // We unset both resulting sizes here
+        // to prevent the positioning code below
+        // to run twice if the label content changes.
+        this.set('_label_width', 0);
+        this.set('_label_height', 0);
+
+        if (!_label)
+          return;
+
+        const lines = _formatted_label.split('\n');
+        const tspans = _label.childNodes;
+
+        while (tspans.length < lines.length) {
+          _label.appendChild(makeSVG('tspan', { dy: '1.0em' }));
+        }
+        while (tspans.length > lines.length) {
+          _label.removeChild(_label.lastChild);
+        }
+
+        lines.forEach((line, i) => setText(tspans[i], line));
+
+        if (!_label.parentNode) element.appendChild(_label);
+
+        return deferMeasure(() => {
+          const width = Array.from(tspans).reduce((max, tspan) => Math.max(max, tspan.getComputedTextLength()), 0);
+
+          this.set('_label_width', width);
+
+          try {
+            const height = _label.getBBox().height;
+            this.set('_label_height', height);
+          } catch (e) {
+            /* _label is not in the DOM yet */
+          }
+        });
+      }),
+      defineRender(
+        [ '_label_width', '_label_height', 'preferences', '_handle_position', 'mode', 'margin', 'intersect' ],
+        function (_label_width, _label_height, preferences, _handle_position, mode, margin, intersect) {
+
+          if (!_label_width || !_label_height || !_handle_position)
+            return;
+
+          const label_size = [ _label_width, _label_height ];
+          let area = 0;
+          let label_position;
+          let text_position;
+          let text_anchor;
+          let tmp;
+
+          /*
+           * Calculate possible positions of the labels and calculate their intersections. Choose
+           * that position which has the smallest intersection area with all other handles and labels
+           */
+          for (let i = 0; i < preferences.length; i++) {
+            const preference = preferences[i];
+            /* get alignment */
+            const align = getLabelAlign(mode, preference);
+
+            /* get label position */
+            const LX = getLabelPosition(mode, margin, _handle_position, preference, label_size);
+
+            /* calculate the label bounding box using anchor and dimensions */
+            const pos = getLabelDimensions(align, LX, label_size);
+            const intersectionArea = intersect(pos, this).intersect;
+
+            /* We require at least one square px smaller intersection
+             * to avoid flickering label positions */
+            if (area === 0 || intersectionArea + 1 < area) {
+              area = intersectionArea;
+              label_position = pos;
+              text_position = LX;
+              text_anchor = align;
+
+              /* there is no intersections, we are done */
+              if (area === 0) break;
+            }
+          }
+
+          const _label = this._label;
+
+          this.label = label_position;
+          const x = Math.round(text_position[0]) + 'px';
+          const y = Math.round(text_position[1]) + 'px';
+          _label.setAttribute('x', x);
+          _label.setAttribute('y', y);
+          _label.setAttribute('text-anchor', text_anchor);
+          const cn = _label.childNodes;
+          Array.from(_label.childNodes).forEach((tspan) => tspan.setAttribute('x', x));
+          redrawLines.call(this, this.options, _handle_position);
+        }),
+    ];
   }
 
   onWheel(e) {
@@ -1108,9 +1182,13 @@ export class ChartHandle extends Widget {
     timer.restart(250);
   }
 
+  getHandlePosition() {
+    return this.get('_handle_position') || new Array(4).fill(0);
+
+  }
+
   initialize(options) {
     this.label = [0, 0, 0, 0];
-    this.handle = [0, 0, 0, 0];
     this._wheel_timer = null;
     if (!options.element) options.element = makeSVG('g');
     super.initialize(options);
@@ -1328,60 +1406,6 @@ export class ChartHandle extends Widget {
     super.draw(O, element);
   }
 
-  redraw() {
-    super.redraw();
-    const O = this.options;
-    const I = this.invalid;
-
-    /* These are the coordinates of the corners (x1, y1, x2, y2)
-     * NOTE: x,y are not necessarily in the midde. */
-    const X = this.handle;
-    if (I.mode) setMainClass.call(this, O);
-
-    if (I.hover) {
-      I.hover = false;
-      toggleClass(this.element, 'aux-hover', O.hover);
-    }
-    if (I.dragging) {
-      I.dragging = false;
-      toggleClass(this.element, 'aux-dragging', O.dragging);
-    }
-
-    const moved = I.validate(
-      'x',
-      'y',
-      'z',
-      'mode',
-      'show_handle',
-      'x_min',
-      'x_max',
-      'y_min',
-      'y_max',
-      'z_min',
-      'z_max'
-    );
-
-    if (moved) redrawHandle.call(this, O, X);
-
-    // Z-HANDLE
-
-    if (I.validate('z_handle') || moved) {
-      redrawZHandle.call(this, O, X);
-    }
-
-    let delay_lines;
-
-    // LABEL
-    if (I.validate('format_label', 'label', 'preference') || moved) {
-      delay_lines = redrawLabel.call(this, O, X);
-    }
-
-    // LINES
-    if (I.validate('show_axis') || moved) {
-      if (!delay_lines) redrawLines.call(this, O, X);
-    }
-  }
-
   /**
    * Moves the handle to the front, i.e. add as last element to the containing
    * SVG group element.
@@ -1470,16 +1494,6 @@ export class ChartHandle extends Widget {
           } else if (!(value instanceof Range)) {
             throw new Error('Bad argument.\n');
           }
-
-          // FIXME: solve this better
-          // see #248
-          value.on(
-            'set',
-            function () {
-              this.invalid.x = true;
-              this.triggerDraw();
-            }.bind(this)
-          );
         }
         break;
     }
