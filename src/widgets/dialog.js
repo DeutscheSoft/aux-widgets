@@ -20,6 +20,7 @@
 import { Container } from './container.js';
 import { translateAnchor } from '../utils/anchor.js';
 import { element, addClass, getFocusableElements, observeDOM, setDelayedFocus } from '../utils/dom.js';
+import { defineRender } from '../renderer.js';
 
 function autocloseCallback(e) {
   let curr = e.target;
@@ -212,6 +213,41 @@ export class Dialog extends Container {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender('anchor', function (anchor) {
+        const pos = translateAnchor(anchor, 0, 0, -100, -100);
+        this.element.style.transform =
+          'translate(' + pos.x + '%, ' + pos.y + '%)';
+      }),
+      defineRender('x', function (x) {
+        this.element.style.left = typeof x === 'string' ? x : x + 'px';
+      }),
+      defineRender('y', function (y) {
+        this.element.style.top = typeof y === 'string' ? y : y + 'px';
+      }),
+      defineRender('modal', function (modal) {
+        const element = this.element;
+        if (modal) {
+          element.setAttribute('aria-modal', 'true');
+        } else {
+          element.removeAttribute('aria-modal');
+        }
+      }),
+      defineRender(
+        [ 'modal', 'visible', 'container' ],
+        function (modal, visible, container) {
+          const _modal = this._modal;
+          if (modal && visible && container) {
+            if (_modal.parentNode !== container)
+              container.appendChild(_modal);
+          } else {
+            _modal.remove();
+          }
+        }),
+    ];
+  }
+
   initialize(options) {
     super.initialize(options);
     const O = this.options;
@@ -245,37 +281,6 @@ export class Dialog extends Container {
   draw(O, element) {
     addClass(element, 'aux-dialog');
     super.draw(O, element);
-  }
-
-  redraw() {
-    super.redraw();
-    const I = this.invalid;
-    const O = this.options;
-    const E = this.element;
-    if (I.anchor) {
-      const pos = translateAnchor(O.anchor, 0, 0, -100, -100);
-      this.element.style.transform =
-        'translate(' + pos.x + '%, ' + pos.y + '%)';
-    }
-    if (I.x) {
-      I.x = false;
-      E.style.left = typeof O.x === 'string' ? O.x : O.x + 'px';
-    }
-    if (I.y) {
-      I.y = false;
-      E.style.top = typeof O.y === 'string' ? O.y : O.y + 'px';
-    }
-    if (I.modal) {
-      I.modal = false;
-      if (O.modal && O.visible)
-        O.container.appendChild(this._modal);
-      else
-        this._modal.remove();
-      if (O.modal)
-        E.setAttribute('aria-modal', 'true');
-      else
-        E.removeAttribute('aria-modal');
-    }
   }
 
   /**
