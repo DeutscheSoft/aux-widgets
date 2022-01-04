@@ -22,9 +22,10 @@
 
 import { defineRange } from '../utils/define_range.js';
 import { Widget } from './widget.js';
-import { addClass, removeClass } from '../utils/dom.js';
+import { toggleClass, addClass, removeClass } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
 import { error } from '../utils/log.js';
+import { defineRender } from '../renderer.js';
 
 // this is not really a rounding operation but simply adds 0.5. we do this to make sure
 // that integer pixel positions result in actual pixels, instead of being spread across
@@ -191,6 +192,130 @@ export class Graph extends Widget {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender('color', function (color) {
+        this.element.style.stroke = color;
+      }),
+      defineRender('mode', function (mode) {
+        const element = this.element;
+        const filled = mode !== 'line';
+        toggleClass(element, 'aux-filled', filled);
+        toggleClass(element, 'aux-outline', !filled);
+      }),
+      defineRender(
+        [ 'dots', 'type', 'mode', 'range_x', 'range_y' ],
+        function (dots, type, mode, range_x, range_y) {
+          let path;
+
+          if (typeof dots === 'function') {
+            dots = dots(this);
+          }
+
+          if (typeof dots === 'string') {
+            path = dots;
+          } else if (!dots) {
+            path = '';
+          } else if (Array.isArray(dots)) {
+            // if we are drawing a line, _start will do the first point
+            let i = mode === 'line' ? 1 : 0;
+            const s = [];
+
+            if (dots.length > 0) {
+              _start.call(this, dots, s);
+            }
+
+            if (i === 0 && (dots[i].type || type).startsWith('H')) {
+              i++;
+              const dot = dots[i];
+              const X = getPixels(dot.x, range_x);
+              const Y = getPixels(dot.y, range_y);
+
+              s.push(' S' + X + ',' + Y + ' ' + X + ',' + Y);
+            }
+
+            for (; i < dots.length; i++) {
+              const dot = dots[i];
+              const _type = dot.type || type;
+              const t = _type.substr(0, 1);
+
+              switch (t) {
+                case 'L':
+                case 'T': {
+                  const X = getPixels(dot.x, range_x);
+                  const Y = getPixels(dot.y, range_y);
+
+                  s.push(' ' + t + ' ' + X + ' ' + Y);
+                  break;
+                }
+                case 'Q':
+                case 'S': {
+                  const X = getPixels(dot.x, range_x);
+                  const X1 = getPixels(dot.x1, range_x);
+                  const Y = getPixels(dot.y, range_y);
+                  const Y1 = getPixels(dot.y1, range_y);
+
+                  s.push(' ' + t + ' ' + X1 + ',' + Y1 + ' ' + X + ',' + Y);
+                  break;
+                }
+                case 'C': {
+                  const X = getPixels(dot.x, range_x);
+                  const X1 = getPixels(dot.x1, range_x);
+                  const X2 = getPixels(dot.x2, range_x);
+                  const Y = getPixels(dot.y, range_y);
+                  const Y1 = getPixels(dot.y1, range_y);
+                  const Y2 = getPixels(dot.y2, range_y);
+
+                  s.push(
+                    ' ' +
+                      t +
+                      ' ' +
+                      X1 +
+                      ',' +
+                      Y1 +
+                      ' ' +
+                      X2 +
+                      ',' +
+                      Y2 +
+                      ' ' +
+                      X +
+                      ',' +
+                      Y
+                  );
+                  break;
+                }
+                case 'H': {
+                  const f = _type.length > 1 ? parseFloat(type.substr(1)) : 3;
+                  const X = getPixels(dot.x, range_x);
+                  const Y = getPixels(dot.y, range_y);
+                  const X1 = getPixels(
+                    dot.x - Math.round(dot.x - dots[i - 1].x) / f,
+                    range_x
+                  );
+
+                  s.push(' S ' + X1 + ',' + Y + ' ' + X + ',' + Y);
+                  break;
+                }
+                default:
+                  error('Unsupported graph type', _type);
+              }
+            }
+
+            if (dots.length > 0) {
+              _end.call(this, dots, s);
+            }
+
+            path = s.join('');
+          } else {
+            error('Unsupported "dots" type', dots);
+            path = '';
+          }
+
+          this.element.setAttribute('d', path);
+        }),
+    ];
+  }
+
   initialize(options) {
     if (!options.element) options.element = makeSVG('path');
     super.initialize(options);
@@ -211,133 +336,6 @@ export class Graph extends Widget {
     addClass(element, 'aux-graph');
 
     super.draw(O, element);
-  }
-
-  redraw() {
-    const I = this.invalid;
-    const O = this.options;
-    const E = this.element;
-
-    if (I.color) {
-      I.color = false;
-      E.style.stroke = O.color;
-    }
-
-    if (I.mode) {
-      removeClass(E, 'aux-filled');
-      removeClass(E, 'aux-outline');
-      addClass(E, O.mode === 'line' ? 'aux-outline' : 'aux-filled');
-    }
-
-    if (I.validate('dots', 'type', 'mode', 'range_x', 'range_y')) {
-      let dots = O.dots;
-      const type = O.type;
-
-      if (typeof dots === 'function') {
-        dots = dots(this);
-      }
-
-      if (typeof dots === 'string') {
-        E.setAttribute('d', dots);
-      } else if (!dots) {
-        E.setAttribute('d', '');
-      } else if (Array.isArray(dots)) {
-        // if we are drawing a line, _start will do the first point
-        let i = O.mode === 'line' ? 1 : 0;
-        const s = [];
-        const RX = this.range_x;
-        const RY = this.range_y;
-
-        if (dots.length > 0) {
-          _start.call(this, dots, s);
-        }
-
-        if (i === 0 && (dots[i].type || type).startsWith('H')) {
-          i++;
-          const dot = dots[i];
-          const X = getPixels(dot.x, RX);
-          const Y = getPixels(dot.y, RY);
-
-          s.push(' S' + X + ',' + Y + ' ' + X + ',' + Y);
-        }
-
-        for (; i < dots.length; i++) {
-          const dot = dots[i];
-          const _type = dot.type || type;
-          const t = _type.substr(0, 1);
-
-          switch (t) {
-            case 'L':
-            case 'T': {
-              const X = getPixels(dot.x, RX);
-              const Y = getPixels(dot.y, RY);
-
-              s.push(' ' + t + ' ' + X + ' ' + Y);
-              break;
-            }
-            case 'Q':
-            case 'S': {
-              const X = getPixels(dot.x, RX);
-              const X1 = getPixels(dot.x1, RX);
-              const Y = getPixels(dot.y, RY);
-              const Y1 = getPixels(dot.y1, RY);
-
-              s.push(' ' + t + ' ' + X1 + ',' + Y1 + ' ' + X + ',' + Y);
-              break;
-            }
-            case 'C': {
-              const X = getPixels(dot.x, RX);
-              const X1 = getPixels(dot.x1, RX);
-              const X2 = getPixels(dot.x2, RX);
-              const Y = getPixels(dot.y, RY);
-              const Y1 = getPixels(dot.y1, RY);
-              const Y2 = getPixels(dot.y2, RY);
-
-              s.push(
-                ' ' +
-                  t +
-                  ' ' +
-                  X1 +
-                  ',' +
-                  Y1 +
-                  ' ' +
-                  X2 +
-                  ',' +
-                  Y2 +
-                  ' ' +
-                  X +
-                  ',' +
-                  Y
-              );
-              break;
-            }
-            case 'H': {
-              const f = _type.length > 1 ? parseFloat(type.substr(1)) : 3;
-              const X = getPixels(dot.x, RX);
-              const Y = getPixels(dot.y, RY);
-              const X1 = getPixels(
-                dot.x - Math.round(dot.x - dots[i - 1].x) / f,
-                RX
-              );
-
-              s.push(' S ' + X1 + ',' + Y + ' ' + X + ',' + Y);
-              break;
-            }
-            default:
-              error('Unsupported graph type', _type);
-          }
-        }
-
-        if (dots.length > 0) {
-          _end.call(this, dots, s);
-        }
-
-        E.setAttribute('d', s.join(''));
-      } else {
-        error('Unsupported "dots" type', dots);
-      }
-    }
-    super.redraw();
   }
 
   /**
