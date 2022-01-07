@@ -29,6 +29,7 @@ import {
   isDomNode,
 } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
+import { defineRender } from '../renderer.js';
 
 function afterHiding() {
   this.__hide_id = false;
@@ -107,6 +108,80 @@ export class Container extends Widget {
           this.disableDrawChildren();
       },
     };
+  }
+
+  static get renderers() {
+    return [
+      defineRender('content', function (content) {
+        if (content === void 0)
+          return;
+        const element = this.element;
+        empty(element);
+        if (typeof content === 'string') {
+          element.innerHTML = content;
+        } else if (isDomNode(content)) {
+          element.appendChild(content);
+        } else if (content !== void 0) {
+          warn('Unsupported content option: %o', content);
+        }
+      }),
+      defineRender('visible', function (visible) {
+        if (typeof visible === 'boolean')
+          return;
+
+        let time;
+        const element = this.element;
+        removeClass(element, 'aux-hiding', 'aux-showing', 'aux-hide', 'aux-show');
+
+        const { hiding_duration, showing_duration } = this.options;
+
+        if (this.__hide_id !== false) {
+          window.clearTimeout(this.__hide_id);
+          this.__hide_id = false;
+        }
+
+        switch (visible) {
+          case 'hiding': {
+            time = hiding_duration;
+
+            if (time !== 0) {
+              addClass(element, 'aux-hiding');
+
+              if (time === -1) time = getDuration(element);
+
+              if (time > 0) {
+                this.__hide_id = window.setTimeout(this.__after_hiding, time);
+              } else {
+                removeClass(element, 'aux-hiding');
+                this.set('visible', false);
+              }
+            } else {
+              this.set('visible', false);
+            }
+            break;
+          }
+          case 'showing': {
+            time = showing_duration;
+
+            if (time !== 0) {
+              addClass(element, 'aux-showing');
+
+              if (time === -1) time = getDuration(element);
+
+              if (time > 0) {
+                this.__hide_id = window.setTimeout(this.__after_showing, time);
+              } else {
+                removeClass(element, 'aux-showing');
+                this.set('visible', true);
+              }
+            } else {
+              this.set('visible', true);
+            }
+            break;
+          }
+        }
+      }),
+    ];
   }
 
   initialize(options) {
@@ -327,77 +402,5 @@ export class Container extends Widget {
     addClass(element, 'aux-show');
 
     super.draw(O, element);
-  }
-
-  redraw() {
-    const O = this.options;
-    const I = this.invalid;
-    const E = this.element;
-
-    if (I.visible) {
-      let time;
-      removeClass(E, 'aux-hiding', 'aux-showing', 'aux-hide', 'aux-show');
-
-      if (this.__hide_id !== false) {
-        window.clearTimeout(this.__hide_id);
-        this.__hide_id = false;
-      }
-
-      switch (O.visible) {
-        case 'hiding': {
-          time = O.hiding_duration;
-
-          if (time !== 0) {
-            addClass(E, 'aux-hiding');
-
-            if (time === -1) time = getDuration(E);
-
-            if (time > 0) {
-              this.__hide_id = window.setTimeout(this.__after_hiding, time);
-            } else {
-              removeClass(E, 'aux-hiding');
-              this.set('visible', false);
-            }
-          } else {
-            this.set('visible', false);
-          }
-          break;
-        }
-        case 'showing': {
-          time = O.showing_duration;
-
-          if (time !== 0) {
-            addClass(E, 'aux-showing');
-
-            if (time === -1) time = getDuration(E);
-
-            if (time > 0) {
-              this.__hide_id = window.setTimeout(this.__after_showing, time);
-            } else {
-              removeClass(E, 'aux-showing');
-              this.set('visible', true);
-            }
-          } else {
-            this.set('visible', true);
-          }
-          break;
-        }
-      }
-    }
-
-    super.redraw();
-
-    if (I.content) {
-      I.content = false;
-      const content = O.content;
-      empty(E);
-      if (typeof content === 'string') {
-        E.innerHTML = content;
-      } else if (isDomNode(content)) {
-        E.appendChild(content);
-      } else if (content !== void 0) {
-        warn('Unsupported content option: %o', content);
-      }
-    }
   }
 }
