@@ -36,13 +36,14 @@ import {
   outerHeight,
   positionLeft,
   positionTop,
-  width,
+  width as viewportWidth,
   innerWidth,
   innerHeight,
-  height,
+  height as viewportHeight,
   toggleClass,
   setContent,
 } from '../utils/dom.js';
+import { defineRender, defineMeasure, deferRender } from '../renderer.js';
 
 function headerAction() {
   const that = this.parent;
@@ -92,6 +93,15 @@ function maxWidth() {
     ? Number.MAX_SAFE_INTEGER
     : this.options.max_width;
 }
+
+function maxSize(size) {
+  return size < 0 ? Number.MAX_SAFE_INTEGER : size;
+}
+
+function clipSize(size, min, max) {
+  return Math.min(maxSize(max), Math.max(size, min));
+}
+
 function close() {
   /**
    * The user clicked the close button.
@@ -225,7 +235,7 @@ function startDrag(ev) {
     y = !this.options.fixed ? window.scrollY : 0;
   }
   if (horizMax.call(this)) {
-    x = ev.clientX - (ev.clientX / width()) * this.options.width;
+    x = ev.clientX - (ev.clientX / viewportWidth()) * this.options.width;
     x += !this.options.fixed ? window.scrollX : 0;
   }
   const pos = translateAnchor(
@@ -279,90 +289,6 @@ function dragging(ev) {
    */
   this.emit('dragging', ev);
 }
-function initPosition(pos) {
-  const O = this.options;
-  if (pos) {
-    const x0 = O.fixed ? 0 : window.scrollX;
-    const y0 = O.fixed ? 0 : window.scrollY;
-    const pos1 = translateAnchor(
-      O.open,
-      x0,
-      y0,
-      window.innerWidth - O.width,
-      window.innerHeight - O.height
-    );
-    const pos2 = translateAnchor(O.anchor, pos1.x, pos1.y, O.width, O.height);
-    O.x = pos2.x;
-    O.y = pos2.y;
-  }
-  setDimensions.call(this);
-  setPosition.call(this);
-}
-function setPosition() {
-  const O = this.options;
-  const D = this.dimensions;
-  const _width = innerWidth(this.element);
-  const _height = innerHeight(this.element);
-  const pos = translateAnchor(O.anchor, O.x, O.y, -_width, -_height);
-  if (horizMax.call(this)) {
-    this.element.style.left = (O.fixed ? 0 : window.scrollX) + 'px';
-  } else {
-    this.element.style.left = pos.x + 'px';
-  }
-  if (vertMax.call(this)) {
-    this.element.style.top = (O.fixed ? 0 : window.scrollY) + 'px';
-  } else {
-    this.element.style.top = pos.y + 'px';
-  }
-  D.x = O.x;
-  D.y = O.y;
-  D.x1 = pos.x;
-  D.y1 = pos.y;
-  D.x2 = pos.x + D.width;
-  D.y2 = pos.y + D.height;
-  /**
-   * The position of the window changed.
-   * @event Window.positionchanged
-   * @param {Object} event - The {@link Window#dimensions} dimensions object.
-   */
-  this.emit('positionchanged', D);
-}
-function setDimensions() {
-  const O = this.options;
-  const D = this.dimensions;
-  if (O.width >= 0) {
-    O.width = Math.min(maxWidth.call(this), Math.max(O.width, O.min_width));
-    if (horizMax.call(this)) {
-      outerWidth(this.element, true, width());
-      D.width = width();
-    } else {
-      outerWidth(this.element, true, O.width);
-      D.width = O.width;
-    }
-  } else {
-    D.width = outerWidth(this.element);
-  }
-  if (O.height >= 0) {
-    O.height = Math.min(maxHeight.call(this), Math.max(O.height, O.min_height));
-    if (vertMax.call(this)) {
-      outerHeight(this.element, true, height());
-      D.height = height();
-    } else {
-      outerHeight(this.element, true, O.height);
-      D.height = O.height;
-    }
-  } else {
-    D.height = outerHeight(this.element, true);
-  }
-  D.x2 = D.x1 + D.width;
-  D.y2 = D.y1 + D.height;
-  /**
-   * The dimensions of the window changed.
-   * @event Window.dimensionschanged
-   * @param {Object} event - The {@link Window#dimensions} dimensions object.
-   */
-  this.emit('dimensionschanged', this.dimensions);
-}
 function buildHeader() {
   buildFromConst.call(this, 'header');
   if (!this.drag) {
@@ -373,7 +299,7 @@ function buildHeader() {
       onStopdrag: stopDrag.bind(this),
       onDragging: dragging.bind(this),
       min: { x: 0 - this.options.width + 20, y: 0 },
-      max: { x: width() - 20, y: height() - 20 },
+      max: { x: viewportWidth() - 20, y: viewportHeight() - 20 },
     });
     //this.header.on("dblclick", headerAction.bind(this));
   }
@@ -581,6 +507,137 @@ export class Window extends Container {
     };
   }
 
+  static get renderers() {
+    return [
+      defineMeasure(
+        [ 'width', 'height', 'min_width', 'min_height', 'max_width', 'max_height', 'maximize' ],
+        function(width, height, min_width, min_height, max_width, max_height, maximize) {
+          const { dimensions, element } = this;
+          let setWidth, setHeight;
+
+          if (width >= 0) {
+            width = clipSize(width, min_width, max_width);
+            this.set('width', width);
+            if (maximize.x) {
+              dimensions.width = viewportWidth();
+            } else {
+              dimensions.width = width;
+            }
+            setWidth = true;
+          } else {
+            dimensions.width = outerWidth(element);
+          }
+          if (height >= 0) {
+            height = clipSize(height, min_height, max_height);
+            if (maximize.y) {
+              dimensions.height = viewportHeight();
+            } else {
+              dimensions.height = height;
+            }
+            setHeight = true;
+          } else {
+            dimensions.height = outerHeight(element, true);
+          }
+          dimensions.x2 = dimensions.x1 + dimensions.width;
+          dimensions.y2 = dimensions.y1 + dimensions.height;
+          /**
+           * The dimensions of the window changed.
+           * @event Window.dimensionschanged
+           * @param {Object} event - The {@link Window#dimensions} dimensions object.
+           */
+          this.emit('dimensionschanged', this.dimensions);
+
+          if (!setWidth && !setHeight)
+            return null;
+
+          return deferRender(() => {
+            if (setWidth)
+              outerWidth(element, true, dimensions.width);
+            if (setHeight)
+              outerHeight(element, true, dimensions.height);
+
+            this.triggerResize();
+          });
+        }),
+      defineMeasure(
+        [ 'anchor', 'x', 'y', '_inner_width', '_inner_height', 'maximize', 'fixed' ],
+        function (anchor, x, y, _inner_width, _inner_height, maximize, fixed) {
+          const { element, dimensions } = this;
+
+          const pos = translateAnchor(anchor, x, y, -_inner_width, -_inner_height);
+
+          const left = maximize.x ? (fixed ? 0 : window.scrollX) : pos.x;
+          const top = maximize.y ? (fixed ? 0 : window.scrollY) : pos.y;
+
+          Object.assign(dimensions, {
+            x,
+            y,
+            x1: pos.x,
+            y1: pos.y,
+            x2: pos.x + dimensions.width,
+            y2: pos.y + dimensions.height,
+          });
+          /**
+           * The position of the window changed.
+           * @event Window.positionchanged
+           * @param {Object} event - The {@link Window#dimensions} dimensions object.
+           */
+          this.emit('positionchanged', dimensions);
+
+          return deferRender(() => {
+            element.style.left = left + 'px';
+            element.style.top = top + 'px';
+          });
+        }),
+      defineRender('maximize', function (maximize) {
+        toggleClass(this.element, 'aux-maximized-horizontal', maximize.x);
+        toggleClass(this.element, 'aux-maximized-vertical', maximize.y);
+      }),
+      defineRender('z_index', function (z_index) {
+        this.element.style.zIndex = z_index;
+      }),
+      defineRender([ 'header', 'show_header' ], function (header, show_header) {
+        if (header && show_header)
+          buildHeader.call(this);
+      }),
+      defineRender([ 'footer', 'show_footer' ], function (footer, show_footer) {
+        if (footer && show_footer)
+          buildFooter.call(this);
+      }),
+      defineMeasure([ 'status', 'hide_status' ], function (status, hide_status) {
+        statusTimeout.call(this);
+      }),
+      defineRender('fixed', function (fixes) {
+        this.element.style.position = fixed ? 'fixed' : 'absolute';
+      }),
+      defineRender('active', function (active) {
+        toggleClass(this.element, 'aux-active', active);
+      }),
+      defineRender('shrink', function (shrink) {
+        toggleClass(this.element, 'aux-shrinked', shrink);
+      }),
+      defineRender('draggable', function (draggable) {
+        toggleClass(this.element, 'aux-draggable', draggable);
+      }),
+      defineRender('resizable', function (resizable) {
+        toggleClass(this.element, 'aux-resizable', resizable);
+      }),
+      defineRender('content', function (content) {
+        if (content) {
+          if (
+            Object.prototype.isPrototypeOf.call(Container.prototype, content)
+          ) {
+            setContent(this.content.element, '');
+            this.appendChild(content);
+          } else {
+            setContent(this.content.element, content);
+          }
+        }
+        this.triggerResize();
+      }),
+    ];
+  }
+
   initialize(options) {
     this.dimensions = {
       anchor: 'top-left',
@@ -595,7 +652,6 @@ export class Window extends Container {
     };
     super.initialize(options);
     this.__status_to = false;
-    initPosition.call(this, this.options.open);
     this.set('maximize', this.options.maximize);
     this.set('minimize', this.options.minimize);
   }
@@ -660,7 +716,9 @@ export class Window extends Container {
 
   resize() {
     this.drag.set('min', { x: 0 - this.options.width + 20, y: 0 });
-    this.drag.set('max', { x: width() - 20, y: height() - 20 });
+    this.drag.set('max', { x: viewportWidth() - 20, y: viewportHeight() - 20 });
+    this.set('_inner_width', innerWidth(this.element));
+    this.set('_inner_height', innerHeight(this.element));
     super.resize();
   }
 
@@ -668,129 +726,57 @@ export class Window extends Container {
     addClass(element, 'aux-window');
 
     super.draw(O, element);
-  }
 
-  redraw() {
-    const I = this.invalid;
-    const O = this.options;
+    const { open, width, height, fixed, anchor } = O;
 
-    let setP = false;
-    let setD = false;
-
-    if (I.maximize) {
-      I.maximize = false;
-      if (O.shrink) {
-        O.shrink = false;
-        I.shrink = true;
-      }
-      toggleClass(this.element, 'aux-maximized-horizontal', O.maximize.x);
-      toggleClass(this.element, 'aux-maximized-vertical', O.maximize.y);
-      setD = true;
+    if (open) {
+      const x0 = fixed ? 0 : window.scrollX;
+      const y0 = fixed ? 0 : window.scrollY;
+      const pos1 = translateAnchor(
+        open,
+        x0,
+        y0,
+        window.innerWidth - width,
+        window.innerHeight - height
+      );
+      const pos2 = translateAnchor(anchor, pos1.x, pos1.y, width, height);
+      this.set('x', pos2.x);
+      this.set('y', pos2.y);
     }
-    if (I.anchor) {
-      I.anchor = false;
-      this.dimensions.anchor = O.anchor;
-      setP = setD = true;
-    }
-    if (I.width || I.height) {
-      I.width = I.height = false;
-      setD = true;
-    }
-    if (I.x || I.y) {
-      I.x = I.y = false;
-      setP = true;
-    }
-    if (I.z_index) {
-      I.z_index = false;
-      this.element.style.zIndex = O.z_index;
-    }
-    if (I.header) {
-      I.header = false;
-      this.set('show_header', !!O.header);
-      if (O.header) buildHeader.call(this);
-    }
-    if (I.footer) {
-      I.footer = false;
-      this.set('show_footer', !!O.footer);
-      if (O.footer) buildFooter.call(this);
-    }
-    if (I.status) {
-      I.status = false;
-      statusTimeout.call(this);
-    }
-    if (I.fixed) {
-      this.element.style.position = O.fixed ? 'fixed' : 'absolute';
-      setP = true;
-    }
-    if (I.active) {
-      I.active = false;
-      toggleClass(this.element, 'aux-active', O.active);
-    }
-    if (I.shrink) {
-      I.shrink = false;
-      this.options.maximize.y = false;
-      toggleClass(this.element, 'aux-shrinked', O.shrink);
-    }
-    if (I.draggable) {
-      I.draggable = false;
-      toggleClass(this.element, 'aux-draggable', O.draggable);
-    }
-    if (I.resizable) {
-      I.resizable = false;
-      toggleClass(this.element, 'aux-resizable', O.resizable);
-    }
-    if (I.content) {
-      I.content = false;
-      if (O.content) {
-        if (
-          Object.prototype.isPrototypeOf.call(Container.prototype, O.content)
-        ) {
-          setContent(this.content.element, '');
-          this.appendChild(O.content);
-        } else {
-          setContent(this.content.element, O.content);
-        }
-      }
-      setD = true;
-      setP = true;
-    }
-
-    if (setD) setDimensions.call(this);
-    if (setP) setPosition.call(this);
-    super.redraw();
   }
 
   set(key, value) {
-    const O = this.options;
-    const E = this.element;
-
     if (key == 'maximize') {
       if (value === false)
-        value = this.options.maximize = { x: false, y: false };
+        value = { x: false, y: false };
       else if (value === true)
-        value = this.options.maximize = { x: true, y: true };
-      else value = Object.assign(this.options.maximize, value);
+        value = { x: true, y: true };
+      else value = Object.assign({}, this.get('maximize'), value);
     }
-    O[key] = value;
+
+    value = super.set(key, value);
 
     switch (key) {
+      case 'maximize':
+        if ((value.y || value.x) && this.get('shrink')) {
+          this.set('shrink', false);
+        }
+        break;
       case 'shrink':
-        O.maximize.y = false;
+        const maximize = this.get('maximize');
+        if (value && maximize.y) {
+          this.set('maximize', { y: false });
+        }
         break;
       case 'minimize':
-        if (value) {
-          if (!this.options.container && E.parentElement)
-            O.container = E.parentElement;
-          E.remove();
-        } else if (O.container) {
-          this.set('container', O.container);
-        }
+        this.set('visible', !value);
         break;
       case 'resizable':
         this.resize.set('active', value);
         break;
     }
-    return super.set(key, value);
+
+    return value;
   }
 }
 
