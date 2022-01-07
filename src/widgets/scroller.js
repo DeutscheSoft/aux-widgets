@@ -22,6 +22,7 @@ import { Widget } from './widget.js';
 import { addClass, element, innerWidth, innerHeight, outerWidth, outerHeight } from '../utils/dom.js';
 import { defineChildWidget } from '../child_widget.js';
 import { DragValue } from '../modules/dragvalue.js';
+import { defineRender } from '../renderer.js';
 
 import {
   rangedOptionsDefaults,
@@ -29,8 +30,8 @@ import {
   makeRanged,
 } from '../utils/make_ranged.js';
 
-function vert () {
-  return this.options.position === ('right' || 'left');
+function is_vert(position) {
+  return position === 'left' || position === 'right';
 }
 
 /**
@@ -86,6 +87,7 @@ export class ScrollBar extends Widget {
       }
     );
   }
+
   static get options() {
     return Object.assign({}, rangedOptionsDefaults, {
       position: 'right',
@@ -94,16 +96,61 @@ export class ScrollBar extends Widget {
       scroll: 0,
     });
   }
+
   static get static_events() {
     return {
       set_content: setScrollRange,
       set_clip: setScrollRange,
       set_position: function (pos) {
-        this.drag.set('direction', vert.call(this) ? 'vertical' : 'horizontal');
-        this.drag.set('reverse', vert.call(this) ? true : false);
+        const vertical = is_vert(this.get('position'));
+        this.drag.set('direction', vertical ? 'vertical' : 'horizontal');
+        this.drag.set('reverse', vertical);
       },
     }
   }
+
+  static get renderers() {
+    return [
+      defineRender('position', function (position) {
+        this.removeClass(
+          'aux-left',
+          'aux-right',
+          'aux-top',
+          'aux-bottom',
+          'aux-vertical',
+          'aux-horizontal'
+        );
+        this.addClass('aux-' + position);
+        this.addClass('aux-' + (is_vert(position) ? 'vertical' : 'horizontal'));
+      }),
+      defineRender(
+        [ 'position', 'content', 'clip', 'scroll' ],
+        function (position, content, clip, scroll) {
+          const element = this.element;
+          if (clip && content) {
+            let size = clip / content;
+            if (size >= 1) {
+              element.style.display = 'none';
+            } else {
+              element.style.display = 'block';
+              let pos = scroll / (content - clip);
+              pos = (pos * (clip - (size * clip)));
+              if (is_vert(position)) {
+                outerHeight(element, true, clip * size);
+                element.style.top = pos + 'px';
+              }
+              else {
+                outerWidth(element, true, clip * size);
+                element.style.left = pos + 'px';
+              }
+            }
+          } else {
+            element.style.display = 'none';
+          }
+        }),
+    ];
+  }
+
   initialize(options) {
     if (!options.element) options.element = element('div');
     const E = this.element;
@@ -119,6 +166,7 @@ export class ScrollBar extends Widget {
     });
     this.set('position', this.options.position);
   }
+
   draw(O, element) {
     /**
      * @member {HTMLDivElement} Scroller#element - The scrollbar handle.
@@ -127,52 +175,6 @@ export class ScrollBar extends Widget {
     addClass(element, 'aux-scrollbar');
 
     super.draw(O, element);
-  }
-  redraw() {
-    const O = this.options;
-    const E = this.element;
-    const I = this.invalid;
-    if (I.position) {
-      this.removeClass(
-        'aux-left',
-        'aux-right',
-        'aux-top',
-        'aux-bottom',
-        'aux-vertical',
-        'aux-horizontal'
-      );
-      this.addClass('aux-' + O.position);
-      this.addClass('aux-' + (vert.call(this) ? 'vertical' : 'horizontal'));
-    }
-    if (I.validate('position', 'content', 'clip', 'scroll')) {
-      const clip = O.clip;
-      const content = O.content;
-      const scroll = O.scroll;
-      if (clip && content) {
-        let size = clip / content;
-        if (size >= 1) {
-          //this.update('visible', false);
-          this.element.style.display = 'none';
-        } else {
-          //this.update('visible', true);
-          this.element.style.display = 'block';
-          let pos = scroll / (content - clip);
-          pos = (pos * (clip - (size * clip)));
-          if (vert.call(this)) {
-            outerHeight(this.element, true, clip * size);
-            this.element.style.top = pos + 'px';
-          }
-          else {
-            outerWidth(this.element, true, clip * size);
-            this.element.style.left = pos + 'px';
-          }
-        }
-      } else {
-        //this.update('visible', false);
-        this.element.style.display = 'none';
-      }
-    }
-    super.redraw();
   }
 }
 makeRanged(ScrollBar);
@@ -217,6 +219,18 @@ export class Scroller extends Container {
       scroll_y: true,
     }
   }
+
+  static get renderers() {
+    return [
+      defineRender('scroll_x', function (scroll_x) {
+        this[scroll_x ? 'addClass' : 'removeClass']('aux-scrollx');
+      }),
+      defineRender('scroll_y', function (scroll_y) {
+        this[scroll_y ? 'addClass' : 'removeClass']('aux-scrolly');
+      }),
+    ];
+  }
+
   initialize(options) {
     this.__elementChildren = [];
     if (!options.element) options.element = element('div');
@@ -242,18 +256,6 @@ export class Scroller extends Container {
     this.scrollhide.element.addEventListener('scroll', this._changed);
     
     super.draw(O, element);
-  }
-  redraw() {
-    const O = this.options;
-    const E = this.element;
-    const I = this.invalid;
-    if (I.validate('scroll_x')) {
-      this[O.scroll_x ? 'addClass' : 'removeClass']('aux-scrollx');
-    }
-    if (I.validate('scroll_y')) {
-      this[O.scroll_y ? 'addClass' : 'removeClass']('aux-scrolly');
-    }
-    super.redraw();
   }
   resize() {
     this._changed();
