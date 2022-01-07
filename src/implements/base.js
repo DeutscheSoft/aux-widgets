@@ -368,7 +368,10 @@ export class Base {
    * @emits Base#set_[option]
    */
   set(key, value) {
-    this.options[key] = value;
+    const options = this.options;
+    const currentValue = options[key];
+
+    options[key] = value;
     /**
      * Is fired when an option is set.
      *
@@ -377,7 +380,7 @@ export class Base {
      * @param {string} name - The name of the option.
      * @param {mixed} value - The value of the option.
      */
-    if (this.hasEventListeners('set')) this.emit('set', key, value);
+    if (this.hasEventListeners('set')) this.emit('set', key, value, currentValue);
     /**
      * Is fired when an option is set.
      *
@@ -386,7 +389,7 @@ export class Base {
      * @param {mixed} value - The value of the option.
      */
     const e = 'set_' + key;
-    if (this.hasEventListeners(e)) this.emit(e, value, key);
+    if (this.hasEventListeners(e)) this.emit(e, value, key, currentValue);
 
     return value;
   }
