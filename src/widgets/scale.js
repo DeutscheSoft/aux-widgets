@@ -40,7 +40,6 @@ import {
 } from '../utils/dom.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { warn } from '../utils/log.js';
-import { S } from '../dom_scheduler.js';
 import { defineRender, defineMeasure, deferRender, deferMeasure, combineDefer } from '../renderer.js';
 
 function vert(layout) {

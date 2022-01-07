@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-export * from './dom_scheduler.js';
 export * from './utils/dom.js';
 export * from './utils/object.js';
 export * from './utils/log.js';

@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { S } from '../dom_scheduler.js';
 import { defineChildWidget } from '../child_widget.js';
 import {
   addClass,
@@ -30,6 +29,8 @@ import { Button } from './button.js';
 import { Buttons } from './buttons.js';
 import { Container } from './container.js';
 import { defineRender } from '../renderer.js';
+import { domScheduler } from './widget.js';
+import { MASK_RENDER } from '../scheduler/scheduler.js';
 
 function easeLinear(t) {
   return t;
@@ -57,7 +58,12 @@ class ScrollAnimation {
     this.vertical = options.vertical;
     this.easing = options.easing || easeLinear;
     this.startTime = performance.now();
+    this.paused = true;
+    this.scheduled = false;
+
     this._draw = () => {
+      this.scheduled = false;
+      if (this.paused) return;
       let t =
         this.duration > 0
           ? (performance.now() - this.startTime) / this.duration
@@ -76,22 +82,24 @@ class ScrollAnimation {
       }
 
       if (t < 1) {
-        S.addNext(this._draw);
+        domScheduler.scheduleNext(MASK_RENDER, this._draw);
       }
     };
     this.start();
   }
 
   stop() {
-    S.remove(this._draw);
+    this.paused = true;
   }
 
   pause() {
-    S.remove(this._draw);
+    this.stop();
   }
 
   start() {
-    S.add(this._draw);
+    if (this.scheduled) return;
+    this.paused = false;
+    domScheduler.scheduleNext(MASK_RENDER, this._draw);
   }
 }
 

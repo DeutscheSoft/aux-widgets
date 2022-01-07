@@ -41,10 +41,12 @@ export class Scheduler {
     this._schedule = schedule || defaultSchedule;
     this._onError = onError || handleError;
     this._trap = null;
+    this._now = 0;
     this._run = () => {
       this._scheduled = false;
       this._running = true;
       this._phase = PHASE_NONE;
+      this._now = performance.now();
       const frame = this._frame;
       this.run(frame);
       this._running = false;
@@ -54,6 +56,10 @@ export class Scheduler {
 
   get frame() {
     return this._frame;
+  }
+
+  now() {
+    return this._running ? this._now : performance.now();
   }
 
   schedule(phaseMask, callback) {
@@ -98,6 +104,10 @@ export class Scheduler {
     }
 
     return this._frame;
+  }
+
+  scheduleNext(phaseMask, callback) {
+    this.schedule(phaseMask << FRAME_SHIFT, callback);
   }
 
   log(fmt, ...args) {

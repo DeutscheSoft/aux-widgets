@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { S } from '../dom_scheduler.js';
 import {
   toggleClass,
   setStyles,
@@ -39,7 +38,7 @@ import { GlobalResize } from '../utils/global_resize.js';
 import { GlobalVisibilityChange } from '../utils/global_visibility_change.js';
 import { ProximityTimers } from '../utils/timers.js';
 
-import { Scheduler, MASK_RENDER } from '../scheduler/scheduler.js';
+import { Scheduler, MASK_RENDER, MASK_CALCULATE } from '../scheduler/scheduler.js';
 import {
   Renderer,
   RenderState,
@@ -49,7 +48,7 @@ import {
   deferMeasure,
 } from '../renderer.js';
 
-const domScheduler = new Scheduler();
+export const domScheduler = new Scheduler();
 
 const enableTimers = new ProximityTimers();
 
@@ -491,7 +490,7 @@ export class Widget extends Base {
     this.parent = void 0;
     this.children = null;
     this.draw_queue = null;
-    this._creation_time = S.now();
+    this._creation_time = domScheduler.now();
     this._onresize = onResize.bind(this);
     this._onvisibilitychange = onVisibilityChange.bind(this);
     this._preset_origins = {};
@@ -624,7 +623,7 @@ export class Widget extends Base {
       O.notransitions = true;
 
       const targetTime = this._creation_time + O.notransitions_duration;
-      const time = targetTime - S.now();
+      const time = targetTime - domScheduler.now();
 
       const do_enable = () => {
         if (this.isDestructed()) return;
@@ -634,7 +633,7 @@ export class Widget extends Base {
       if (time > 20) {
         enableTimers.scheduleAt(do_enable, targetTime);
       } else {
-        S.addNext(do_enable);
+        domScheduler.scheduleNext(MASK_CALCULATE, do_enable);
       }
     }
 
@@ -1141,7 +1140,7 @@ export class Widget extends Base {
     return this.subscribe('resize', () => {
       if (triggered) return;
       triggered = true;
-      S.addNext(callback);
+      domScheduler.scheduleNext(MASK_CALCULATE, callback);
     });
   }
 }

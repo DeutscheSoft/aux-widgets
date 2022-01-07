@@ -18,7 +18,6 @@
  */
 
 import { defineChildElement } from './../widget_helpers.js';
-import { S } from '../dom_scheduler.js';
 import {
   empty,
   CSSSpace,

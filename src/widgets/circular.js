@@ -21,7 +21,6 @@ import { FORMAT } from '../utils/sprintf.js';
 import { error } from '../utils/log.js';
 import { empty, addClass, getStyle } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
-import { S } from '../dom_scheduler.js';
 import { warning } from '../utils/warning.js';
 import {
   rangedOptionsDefaults,

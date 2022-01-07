@@ -24,7 +24,6 @@ import { addClass } from '../utils/dom.js';
 import { Container } from './container.js';
 import { Button } from './button.js';
 import { Icon } from './icon.js';
-import { S } from '../dom_scheduler.js';
 import { defineRender } from '../renderer.js';
 
 /**
@@ -108,12 +107,10 @@ function closeClicked() {
 }
 
 function afterHide() {
-  S.afterFrame(
-    function () {
+  Promise.resolve().then(() => {
       if (this.isDestructed()) return;
       this.destroy();
-    }.bind(this)
-  );
+  });
 }
 
 function timeout() {

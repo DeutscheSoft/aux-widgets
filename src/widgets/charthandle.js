@@ -22,7 +22,6 @@
 import { Widget } from './widget.js';
 import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
 import { warning } from '../utils/warning.js';
-import { S } from '../dom_scheduler.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { warn } from '../utils/log.js';
 import { addEventListener, removeEventListener } from '../utils/events.js';

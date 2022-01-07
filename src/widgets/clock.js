@@ -22,7 +22,6 @@ import { Circular } from './circular.js';
 import { setText, element, addClass, getStyle } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
 import { FORMAT } from '../utils/sprintf.js';
-import { S } from '../dom_scheduler.js';
 import { defineRender, deferMeasure, deferRender } from '../renderer.js';
 
 const formatViewbox = FORMAT('0 0 %d %d');

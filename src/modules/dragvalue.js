@@ -23,8 +23,9 @@
 import { DragCapture } from './dragcapture.js';
 import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
 import { warn } from '../utils/log.js';
-import { addClass, removeClass } from '../utils/dom.js';
-import { S } from '../dom_scheduler.js';
+import { toggleClass } from '../utils/dom.js';
+import { domScheduler } from '../widgets/widget.js';
+import { MASK_RENDER } from '../scheduler/scheduler.js';
 
 function startDrag(value) {
   if (!value) return;
@@ -232,6 +233,7 @@ export class DragValue extends DragCapture {
       reverse: 'boolean',
       limit: 'boolean',
       absolute: 'boolean',
+      dragging: 'boolean',
     };
   }
 
@@ -258,12 +260,28 @@ export class DragValue extends DragCapture {
       reverse: false,
       limit: false,
       absolute: false,
+      dragging: false,
     };
   }
 
   static get static_events() {
     return {
       set_state: startDrag,
+      set_dragging: function () {
+        domScheduler.schedule(MASK_RENDER, () => {
+          const O = this.options;
+          const node = O.classes || O.node;
+          const dragging = O.dragging;
+
+          toggleClass(node, 'aux-dragging', dragging);
+
+          if (dragging) {
+            setCursor.call(this);
+          } else {
+            removeCursor();
+          }
+        });
+      },
       stopcapture: stopDrag,
       startcapture: function () {
         if (this.options.active) return true;
@@ -278,28 +296,10 @@ export class DragValue extends DragCapture {
       },
       movecapture: moveCapture,
       startdrag: function () {
-        S.add(
-          function () {
-            const O = this.options;
-            addClass(O.classes || O.node, 'aux-dragging');
-            if (O.cursor) {
-              setCursor.call(this);
-            }
-          }.bind(this),
-          1
-        );
+        this.set('dragging', true);
       },
       stopdrag: function () {
-        S.add(
-          function () {
-            const O = this.options;
-            removeClass(O.classes || O.node, 'aux-dragging');
-            if (O.cursor) {
-              removeCursor.call(this);
-            }
-          }.bind(this),
-          1
-        );
+        this.set('dragging', false);
       },
     };
   }

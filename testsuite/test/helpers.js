@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { S } from '../src/index.js';
+import { domScheduler } from '../src/index.js';
 
 export function compare(a, b) {
   if (a === b) return true;
@@ -74,6 +74,10 @@ export function assertError(cb, msg) {
   assert(ok, msg || 'expected error.');
 }
 
+export function assertEqual(a, b) {
+  assert(compare(a, b));
+}
+
 export function sleep(n) {
   return new Promise((resolve) => setTimeout(resolve, n));
 }
@@ -86,6 +90,29 @@ export function waitForEvent(widget, name) {
     });
   });
 }
+
+export function makeCallback(fun) {
+  const calls = [];
+  const cb = (...args) => {
+    calls.push(args);
+    if (fun)
+      return fun(...args);
+  };
+
+  cb.assertCalls = (n) => {
+    assertEqual(calls.length, n);
+  };
+
+  cb.assertArgs = (...args) => {
+    assert(calls.length > 0);
+    const firstCall = calls[0];
+    assertEqual(firstCall, args);
+    calls.shift();
+  };
+
+  return cb;
+}
+
 
 let _canvas;
 
@@ -105,9 +132,7 @@ export function waitForDrawn(widget) {
     widget.enableDraw();
   }
 
-  return new Promise((resolve, reject) => {
-    S.afterFrame(resolve);
-  });
+  return domScheduler.waitForFrame();
 }
 
 export function defer() {

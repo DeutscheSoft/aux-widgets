@@ -17,20 +17,122 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { DOMScheduler } from '../src/index.js';
+import {
+  Scheduler, MASK_CALCULATE, MASK_RENDER,
+  PHASE_CALCULATE, PHASE_RENDER
+} from '../src/scheduler/scheduler.js';
 
-describe('DOMScheduler', () => {
-  const S = new DOMScheduler();
+import { makeCallback } from './helpers.js';
 
-  it('add()', (done) => {
-    S.add(done);
+function schedule(callback) {
+  Promise.resolve().then(callback);
+}
+
+describe('Scheduler', () => {
+  const onError = makeCallback();
+  const scheduler = new Scheduler(schedule, onError);
+
+  it('schedule() basic', async () => {
+    // Schedule a function
+    const cb = makeCallback();
+    const frame = scheduler.frame;
+
+    scheduler.schedule(MASK_CALCULATE, cb);
+    scheduler.schedule(MASK_RENDER, cb);
+    scheduler.schedule(MASK_RENDER, cb);
+    scheduler.schedule(MASK_CALCULATE, cb);
+    cb.assertCalls(0);
+    await scheduler.waitForFrame();
+    cb.assertCalls(4);
+    cb.assertArgs(frame, PHASE_CALCULATE);
+    cb.assertArgs(frame, PHASE_CALCULATE);
+    cb.assertArgs(frame, PHASE_RENDER);
+    cb.assertArgs(frame, PHASE_RENDER);
+    onError.assertCalls(0);
   });
-  it('remove()', (done) => {
-    const cb = () => {
-      done(new Error('should not run!'));
-    };
-    S.add(cb);
-    S.remove(cb);
-    S.add(done);
+
+  it('schedule() reentrant', async () => {
+    // Reschedule a function from run().
+    const frame = scheduler.frame;
+    let cb;
+    let first = true;
+    cb = makeCallback(() => {
+      if (first) {
+        scheduler.schedule(MASK_CALCULATE, cb);
+        scheduler.schedule(MASK_RENDER, cb);
+        first = false;
+      }
+    });
+
+    scheduler.schedule(MASK_RENDER, cb);
+    cb.assertCalls(0);
+    await scheduler.waitForFrame();
+    cb.assertCalls(3);
+    cb.assertArgs(frame, PHASE_RENDER);
+    cb.assertArgs(frame, PHASE_RENDER);
+    cb.assertArgs(frame, PHASE_CALCULATE);
+    onError.assertCalls(0);
+  });
+
+  it('error handling', async () => {
+    // Error handling.
+    const frame = scheduler.frame;
+    const err = new Error('Ignore.');
+    const cb = makeCallback(() => {
+      throw err;
+    });
+    scheduler.schedule(MASK_RENDER, cb);
+    scheduler.schedule(MASK_RENDER, cb);
+    scheduler.schedule(MASK_CALCULATE, cb);
+    cb.assertCalls(0);
+    await scheduler.waitForFrame();
+    cb.assertCalls(3);
+    cb.assertArgs(frame, PHASE_CALCULATE);
+    cb.assertArgs(frame, PHASE_RENDER);
+    cb.assertArgs(frame, PHASE_RENDER);
+    onError.assertCalls(3);
+    onError.assertArgs(scheduler, cb, err);
+    onError.assertArgs(scheduler, cb, err);
+    onError.assertArgs(scheduler, cb, err);
+  });
+
+  it('reschedule into next frame', async () => {
+    // Reschedule a function from run()
+    // into the next frame.
+    const frame = scheduler.frame;
+    let cb;
+    let first = true;
+    cb = makeCallback(() => {
+      if (first) {
+        scheduler.scheduleNext(MASK_CALCULATE, cb);
+        scheduler.scheduleNext(MASK_RENDER, cb);
+        first = false;
+      }
+    });
+
+    scheduler.schedule(MASK_RENDER, cb);
+    cb.assertCalls(0);
+    await scheduler.waitForFrame();
+    cb.assertCalls(1);
+    cb.assertArgs(frame, PHASE_RENDER);
+    await scheduler.waitForFrame();
+    cb.assertCalls(2);
+    cb.assertArgs(frame+1, PHASE_CALCULATE);
+    cb.assertArgs(frame+1, PHASE_RENDER);
+    onError.assertCalls(0);
+  });
+
+  if (false)
+  it('recursion detection', async () => {
+    // Test that recursively scheduling the same callback
+    // is being detected.
+    let cb;
+    cb = makeCallback(() => {
+      scheduler.schedule(MASK_RENDER, cb);
+    });
+    scheduler.schedule(MASK_RENDER, cb);
+    await scheduler.waitForFrame();
+    onError.assertCalls(1);
   });
 });
+

@@ -245,26 +245,29 @@ describe('Chart', () => {
 
     done();
   });
-  it('switching graphs position', (done) => {
+  it('switching graphs position', async () => {
     const chart = new Chart();
+
+    chart.show();
 
     const g1 = chart.addGraph({});
     const g2 = chart.addGraph({});
-    g2.redraw();
+
+    await waitForDrawn(chart);
 
     g2.toBack();
-    g2.redraw();
+
+    await waitForDrawn(chart);
 
     if (g2.element !== g2.element.parentElement.firstChild)
       throw new Error('Graph.toBack() failed.');
 
     g2.toFront();
-    g2.redraw();
+
+    await waitForDrawn(chart);
 
     if (g2.element !== g2.element.parentElement.lastChild)
       throw new Error('Graph.toFront() failed.');
-
-    done();
   });
   it('creating handles', (done) => {
     const chart = new Chart();
@@ -282,26 +285,25 @@ describe('Chart', () => {
 
     done();
   });
-  it('switching handles position', (done) => {
+  it('switching handles position', async () => {
     const chart = new Chart();
 
     const h1 = chart.addHandle({});
     const h2 = chart.addHandle({});
-    chart.redraw();
+
+    await waitForDrawn(chart);
 
     h2.toBack();
-    h2.redraw();
+    await waitForDrawn(chart);
 
     if (h2.element !== h2.element.parentElement.firstChild)
       throw new Error('ChartHandle.toBack() failed.');
 
     h2.toFront();
-    h2.redraw();
+    await waitForDrawn(chart);
 
     if (h2.element !== h2.element.parentElement.lastChild)
       throw new Error('ChartHandle.toFront() failed.');
-
-    done();
   });
 });
 
