@@ -162,16 +162,4 @@ export class FrequencyResponse extends Chart {
 
     super.draw(O, element);
   }
-
-  redraw() {
-    const I = this.invalid;
-
-    if (I.scale) {
-      I.scale = false;
-      // tell chart to redraw
-      I.ranges = true;
-    }
-
-    super.redraw();
-  }
 }
