@@ -26,10 +26,11 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { addClass, removeClass, isDomNode } from '../utils/dom.js';
+import { addClass, removeClass, toggleClass, isDomNode } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 import { Container } from './container.js';
 import { ChildWidgets } from '../utils/child_widgets.js';
+import { defineRender } from '../renderer.js';
 
 function onPageSetActive(value) {
   const pages = this.parent;
@@ -191,6 +192,30 @@ export class Pages extends Container {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender('direction', function (direction) {
+        const element = this.element;
+        toggleClass(element, 'aux-forward', direction === 'forward');
+        toggleClass(element, 'aux-backward', direction === 'backward');
+      }),
+      defineRender('animation', function (animation) {
+        const element = this.element;
+        toggleClass(element, 'aux-vertical', animation === 'vertical');
+        toggleClass(element, 'aux-horizontal', animation === 'horizontal');
+      }),
+      defineRender('show', function (show) {
+        this.getPages().forEach((page, index) => {
+          if (index === show) {
+            page.addClass('aux-active');
+          } else {
+            page.removeClass('aux-active');
+          }
+        });
+      }),
+    ];
+  }
+
   initialize(options) {
     super.initialize(options);
     /**
@@ -215,46 +240,6 @@ export class Pages extends Container {
     addClass(element, 'aux-pages');
 
     super.draw(O, element);
-  }
-
-  redraw() {
-    super.redraw();
-    const O = this.options;
-    const I = this.invalid;
-    const E = this.element;
-
-    if (I.direction) {
-      I.direction = false;
-      removeClass(E, 'aux-forward', 'aux-backward');
-      addClass(E, 'aux-' + O.direction);
-    }
-
-    if (I.animation) {
-      I.animation = false;
-      removeClass(E, 'aux-vertical', 'aux-horizontal');
-      switch (O.animation) {
-        case 'vertical':
-          addClass(E, 'aux-vertical');
-          break;
-        case 'horizontal':
-          addClass(E, 'aux-horizontal');
-          break;
-        default:
-          warn('Unsupported animation', O.animation);
-      }
-    }
-
-    if (I.show) {
-      I.show = false;
-      const pages = this.getPages();
-
-      for (let i = 0; i < pages.length; i++) {
-        const page = pages[i];
-
-        if (i === O.show) page.addClass('aux-active');
-        else page.removeClass('aux-active');
-      }
-    }
   }
 
   /**
