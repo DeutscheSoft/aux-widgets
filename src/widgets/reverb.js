@@ -24,6 +24,7 @@ import { addClass } from '../utils/dom.js';
 import { defineChildWidget } from '../child_widget.js';
 import { sprintf } from '../utils/sprintf.js';
 import { defineRecalculation } from '../define_recalculation.js';
+import { defineMeasure, defineRender } from '../renderer.js';
 
 function setInputMode() {
   const O = this.options;
@@ -48,36 +49,6 @@ function drawInput() {
       x: Math.min(O.delay_max, Math.max(O.delay_min, O.delay)),
       y: Math.min(O.gain_max, Math.max(O.gain_min, O.gain)),
     },
-  ]);
-}
-
-function drawReverb() {
-  const O = this.options;
-  const rstart = O.delay + O.predelay;
-  let x0 = rstart;
-  const attack = Math.min(O.attack, O.predelay);
-
-  Math.min(O.delay_max, Math.max(O.delay_min, O.delay));
-
-  if (O.attack) {
-    const rate = O.noisefloor / attack;
-    x0 -= this.range_y.get('min') / rate;
-  }
-  const y0 = this.range_y.get('min');
-
-  const x1 = rstart;
-  const y1 = O.rlevel + O.gain;
-
-  const rate = O.reference / O.rtime;
-
-  const x2 =
-    (this.range_y.get('min') - O.gain - O.rlevel) / rate + O.delay + O.predelay;
-  const y2 = this.range_y.get('min');
-
-  this.reverb.set('dots', [
-    { x: x0, y: y0 },
-    { x: x1, y: y1 },
-    { x: x2, y: y2 },
   ]);
 }
 
@@ -149,21 +120,6 @@ function adjustReflections(reflections) {
   }
 
   this.invalidate('_reflections');
-  this.triggerDraw();
-}
-
-function drawReflections() {
-  const O = this.options;
-  const R = O._reflections;
-
-  for (let i = 0, m = R.length; i < m; ++i) {
-    const y = this.range_y.get('min');
-    const x = R[i].time + O.delay;
-    R[i].graph.set('dots', [
-      { x: x, y: y },
-      { x: x, y: R[i].level + O.gain + O.erlevel },
-    ]);
-  }
 }
 
 /**
@@ -359,6 +315,59 @@ export class Reverb extends Chart {
     };
   }
 
+  static get renderers() {
+    return [
+      defineMeasure(
+        [ 'delay', 'delay_min', 'delay_max', 'predelay', 'attack', 'noisefloor', 'rlevel', 'gain', 'rtime', 'reference', 'range_y' ],
+        function (delay, delay_min, delay_max, predelay, attack, noisefloor, rlevel, gain, rtime, reference, range_y) {
+          const rstart = delay + predelay;
+          let x0 = rstart;
+          attack = Math.min(attack, predelay);
+
+          range_y = this.range_y;
+
+          delay = Math.min(delay_max, Math.max(delay_min, delay));
+
+          if (attack) {
+            const rate = noisefloor / attack;
+            x0 -= range_y.get('min') / rate;
+          }
+          const y0 = range_y.get('min');
+
+          const x1 = rstart;
+          const y1 = rlevel + gain;
+
+          const rate = reference / rtime;
+
+          const x2 =
+            (range_y.get('min') - gain - rlevel) / rate + delay + predelay;
+          const y2 = range_y.get('min');
+
+          this.reverb.set('dots', [
+            { x: x0, y: y0 },
+            { x: x1, y: y1 },
+            { x: x2, y: y2 },
+          ]);
+        }),
+      defineRender('show_input', function (show_input) {
+        this.input.set('visible', show_input);
+      }),
+      defineMeasure(
+        [ '_reflections', 'range_y', 'delay', 'gain', 'erlevel' ],
+        function (_reflections, range_y, delay, gain, erlevel) {
+          range_y = this.range_y;
+          _reflections.forEach((reflection) => {
+            const y = range_y.get('min');
+            const x = reflection.time + delay;
+            reflection.graph.set('dots', [
+              { x: x, y: y },
+              { x: x, y: reflection.level + gain + erlevel },
+            ]);
+          });
+        }),
+    ];
+  }
+
   initialize(options) {
     super.initialize(options);
 
@@ -400,44 +409,6 @@ export class Reverb extends Chart {
 
     this.set('reflections', O.reflections);
     this.set('show_input', O.show_input);
-  }
-
-  redraw() {
-    const O = this.options;
-    const I = this.invalid;
-
-    super.redraw();
-
-    if (I.show_input) {
-      I.show_input = false;
-      this.input.set('visible', O.show_input);
-    }
-
-    if (I.input || I.delay) {
-      I.input = false; //keep delay for further tests
-      drawInput.call(this);
-      drawReverb.call(this);
-    }
-
-    if (I.validate('predelay', 'rlevel', 'rtime', 'attack') || I.gain) {
-      drawReverb.call(this);
-    }
-
-    if (I.validate('reflections', 'erlevel', 'delay', 'gain')) {
-      drawReflections.call(this);
-    }
-  }
-
-  set(key, value) {
-    if (key == 'reflections') {
-      if (
-        typeof value == 'object' &&
-        typeof this.options.reflections == 'object'
-      ) {
-        value = this.options.reflections.concat(value);
-      }
-    }
-    return super.set(key, value);
   }
 }
 
