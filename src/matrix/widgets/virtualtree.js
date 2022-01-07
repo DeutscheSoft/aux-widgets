@@ -22,6 +22,7 @@ import { scrollbarSize } from './../../utils/scrollbar_size.js';
 import { Subscriptions } from '../../utils/subscriptions.js';
 import { subscribeDOMEvent } from '../../utils/events.js';
 import { defineRecalculation } from '../../define_recalculation.js';
+import { defineRender, defineMeasure } from '../../renderer.js';
 
 import { Container } from './../../widgets/container.js';
 import { Scroller } from './../../widgets/scroller.js';
@@ -104,6 +105,59 @@ export class VirtualTree extends Scroller {
       },
     }
   }
+
+  static get renderers() {
+    return [
+      defineRender('virtualtreeview', function (virtualtreeview) {
+          if (!virtualtreeview)
+            return;
+          const subs = this.virtualtreeview_subs;
+          this._subscribeToTreeView(subs, virtualtreeview);
+        }),
+      defineMeasure(
+        [ 'virtualtreeview', '_startIndex', 'prerender_top' ],
+        function (virtualtreeview, _startIndex, prerender_top) {
+          if (!virtualtreeview)
+            return;
+          virtualtreeview.scrollStartIndexTo(
+            Math.max(0, O._startIndex - O.prerender_top)
+          );
+        }),
+      defineMeasure(
+        [ 'virtualtreeview', '_amount' ],
+        function (virtualtreeview, _amount) {
+          if (!virtualtreeview)
+            return;
+          virtualtreeview.setAmount(O._amount);
+        }),
+      defineRender([ '_sizer_size', 'size' ], function (_sizer_size, size) {
+        this._sizer.style.height =
+          this.calculateEntryPosition(_sizer_size) + 'px';
+      }),
+      defineRender('_scroll', function (_sizer_size, size) {
+        this.scrollhide.element.scrollTop = _scroll;
+      }),
+      defineRender('size', function (size) {
+        const { virtualtreeview } = this.options;
+
+        if (virtualtreeview)
+          return;
+
+        const entries = this.entries;
+
+        for (
+          let index = virtualtreeview.startIndex, i = 0;
+          i < entries.length;
+          i++, index++
+        ) {
+          const entry = entries[index % entries.length];
+          entry.element.style.transform =
+            'translateY(' + this.calculateEntryPosition(index) + 'px)';
+        }
+      }),
+    ];
+  }
+
   initialize(options) {
     super.initialize(options);
     this.virtualtreeview_subs = new Subscriptions();
@@ -315,79 +369,6 @@ export class VirtualTree extends Scroller {
         setEntryPosition(entry, index);
       })
     );
-  }
-
-  redraw() {
-    const O = this.options;
-    const I = this.invalid;
-    const E = this.element;
-
-    if (I.virtualtreeview) {
-      I.virtualtreeview = false;
-
-      const virtualtreeview = O.virtualtreeview;
-
-      if (virtualtreeview) {
-        const subs = this.virtualtreeview_subs;
-        this._subscribeToTreeView(subs, virtualtreeview);
-        virtualtreeview.setAmount(O._amount);
-        virtualtreeview.scrollStartIndexTo(
-          Math.max(0, O._startIndex - O.prerender_top)
-        );
-      }
-    }
-
-    if (I._startIndex || I.prerender_top) {
-      I._startIndex = I.prerender_top = false;
-
-      const virtualtreeview = O.virtualtreeview;
-
-      if (virtualtreeview)
-        virtualtreeview.scrollStartIndexTo(
-          Math.max(0, O._startIndex - O.prerender_top)
-        );
-    }
-
-    if (I._amount) {
-      I._amount = false;
-
-      if (O.virtualtreeview) {
-        O.virtualtreeview.setAmount(O._amount);
-      }
-    }
-
-    if (I._sizer_size || I.size) {
-      I._sizer_size = false;
-      this._sizer.style.height =
-        this.calculateEntryPosition(O._sizer_size) + 'px';
-    }
-
-    if (I.size) {
-      I.size = false;
-
-      const virtualtreeview = O.virtualtreeview;
-
-      if (virtualtreeview) {
-        const entries = this.entries;
-
-        for (
-          let index = virtualtreeview.startIndex, i = 0;
-          i < entries.length;
-          i++, index++
-        ) {
-          const entry = entries[index % entries.length];
-          entry.element.style.transform =
-            'translateY(' + this.calculateEntryPosition(index) + 'px)';
-        }
-      }
-    }
-
-    if (I._scroll) {
-      I._scroll = false;
-      this.scrollhide.element.scrollTop = O._scroll;
-    }
-
-    super.redraw();
   }
 
   resize() {

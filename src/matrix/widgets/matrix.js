@@ -19,6 +19,7 @@
 
 import { defineChildWidget } from './../../child_widget.js';
 import { innerWidth, outerWidth, addClass } from './../../utils/dom.js';
+import { defineRender } from '../../renderer.js';
 
 import { Indicators } from './indicators.js';
 import { Indicator } from './indicator.js';
@@ -97,6 +98,16 @@ export class Matrix extends Patchbay {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender('_virtualtree_size', function (_virtualtree_size) {
+        const virtualtree = this.virtualtree_top;
+        virtualtree.element.style.height = _virtualtree_size + 'px';
+        virtualtree.triggerResize();
+      }),
+    ];
+  }
+
   /**
    * Returns the virtual tree view instance of the left tree.
    */
@@ -167,21 +178,6 @@ export class Matrix extends Patchbay {
     this.virtualtree_top.scroll_y.drag.set('direction', 'horizontal');
     this.virtualtree_top.scroll_y.drag.set('reverse', true);
     setVirtualtreeviews.call(this);
-  }
-
-  redraw() {
-    const O = this.options;
-    const I = this.invalid;
-    const E = this.element;
-
-    if (I._virtualtree_size) {
-      I._virtualtree_size = false;
-      const virtualtree = this.virtualtree_top;
-      virtualtree.element.style.height = O._virtualtree_size + 'px';
-      virtualtree.resize();
-    }
-
-    super.redraw();
   }
 
   resize() {

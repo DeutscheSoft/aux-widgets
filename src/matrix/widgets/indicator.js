@@ -20,6 +20,7 @@
 import { addClass, toggleClass } from './../../utils/dom.js';
 
 import { Button } from './../../widgets/button.js';
+import { defineRender } from '../../renderer.js';
 
 /**
  * Indicator is a button element inside the {@link Indicators} widget
@@ -50,6 +51,26 @@ export class Indicator extends Button {
       sinkisgroup: 'boolean',
       isgroup: 'boolean',
     });
+  }
+
+  static get renderers() {
+    return [
+      defineRender('connected', function (connected) {
+        toggleClass(this.element, 'aux-connected', connected);
+      }),
+      defineRender('connectable', function (connectable) {
+        toggleClass(this.element, 'aux-connectable', connectable);
+      }),
+      defineRender('sourceisgroup', function (sourceisgroup) {
+        toggleClass(this.element, 'aux-sourceisgroup', sourceisgroup);
+      }),
+      defineRender('sinkisgroup', function (sinkisgroup) {
+        toggleClass(this.element, 'aux-sinkisgroup', sinkisgroup);
+      }),
+      defineRender('isgroup', function (isgroup) {
+        toggleClass(this.element, 'aux-isgroup', isgroup);
+      }),
+    ];
   }
 
   initialize(options) {
@@ -89,38 +110,5 @@ export class Indicator extends Button {
   draw(options, element) {
     addClass(this.element, 'aux-indicator');
     super.draw(options, element);
-  }
-
-  redraw() {
-    super.redraw();
-
-    const E = this.element;
-    const I = this.invalid;
-    const O = this.options;
-
-    if (I.connected) {
-      I.connected = false;
-      toggleClass(E, 'aux-connected', O.connected);
-    }
-
-    if (I.connectable) {
-      I.connectable = false;
-      toggleClass(E, 'aux-connectable', O.connectable);
-    }
-
-    if (I.sourceisgroup) {
-      I.sourceisgroup = false;
-      toggleClass(E, 'aux-sourceisgroup', O.sourceisgroup);
-    }
-
-    if (I.sinkisgroup) {
-      I.sinkisgroup = false;
-      toggleClass(E, 'aux-sinkisgroup', O.sinkisgroup);
-    }
-
-    if (I.isgroup) {
-      I.isgroup = false;
-      toggleClass(E, 'aux-isgroup', O.isgroup);
-    }
   }
 }

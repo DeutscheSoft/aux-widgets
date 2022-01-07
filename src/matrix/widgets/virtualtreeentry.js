@@ -30,6 +30,7 @@ import { Container } from '../../widgets/container.js';
 import { Button } from '../../widgets/button.js';
 import { Label } from '../../widgets/label.js';
 import { Icon } from '../../widgets/icon.js';
+import { defineRender, defineMeasure } from '../../renderer.js';
 
 const indent_to_glyph = {
   trunk: '',
@@ -122,6 +123,49 @@ export class VirtualTreeEntry extends VirtualTreeEntryBase {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender('depth', function (depth) {
+        const { element } = this;
+
+        let C = element.getAttribute('class');
+        C = C.replace(/aux-depth-[0-9]*/gm, '');
+        C = C.replace(/\s\s+/g, ' ');
+        element.setAttribute('class', C);
+
+        if (!depth)
+          return;
+
+        const d = depth.length;
+        element.classList.add('aux-depth-' + d);
+        element.style.setProperty('--aux-entry-depth', d);
+
+        const s = depth.map((indent) => indent_to_glyph[indent]).join('');
+        setText(this.indent.element, s);
+      }),
+      defineRender('odd', function (odd) {
+        const { element } = this;
+
+        toggleClass(element, 'aux-even', !odd);
+        toggleClass(element, 'aux-odd', odd);
+      }),
+      defineRender('collapsable', function (collapsable) {
+        toggleClass(this.element, 'aux-collapsable', collapsable);
+      }),
+      defineRender('group', function (group) {
+        toggleClass(this.element, 'aux-group', group);
+      }),
+      defineMeasure(
+        [ 'collapsed', 'icon_collapsed', 'icon_uncollapsed' ],
+        function (collapsed, icon_collapsed, icon_uncollapsed) {
+          this.collapse.set(
+            'icon',
+            collapsed ? icon_collapsed : icon_uncollapsed
+          );
+        }),
+    ];
+  }
+
   initialize(options) {
     super.initialize(options);
     this.data_subscriptions = new Subscriptions();
@@ -192,58 +236,6 @@ export class VirtualTreeEntry extends VirtualTreeEntryBase {
       this.update('icon', element.icon);
 
       this.subscribeData();
-    }
-  }
-
-  redraw() {
-    super.redraw();
-
-    const O = this.options;
-    const E = this.element;
-    const I = this.invalid;
-
-    if (I.depth) {
-      I.depth = false;
-      var C = E.getAttribute('class');
-      C = C.replace(/aux-depth-[0-9]*/gm, '');
-      C = C.replace(/\s\s+/g, ' ');
-      E.setAttribute('class', C);
-
-      if (O.depth) {
-        var d = O.depth.length;
-        E.classList.add('aux-depth-' + d);
-        E.style.setProperty('--aux-entry-depth', d);
-        var s = '';
-        for (var i = 0; i < d; ++i) {
-          s += indent_to_glyph[O.depth[i]];
-        }
-        setText(this.indent.element, s);
-      }
-    }
-
-    if (I.odd) {
-      I.odd = false;
-      removeClass(E, 'aux-even');
-      removeClass(E, 'aux-odd');
-      addClass(E, O.odd ? 'aux-odd' : 'aux-even');
-    }
-
-    if (I.collapsable) {
-      I.collapsable = false;
-      toggleClass(E, 'aux-collapsable', O.collapsable);
-    }
-
-    if (I.group) {
-      I.group = false;
-      toggleClass(E, 'aux-group', O.group);
-    }
-
-    if (I.collapsed) {
-      I.collapsed = false;
-      this.collapse.set(
-        'icon',
-        O[O.collapsed ? 'icon_collapsed' : 'icon_uncollapsed']
-      );
     }
   }
 }
