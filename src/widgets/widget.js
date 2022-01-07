@@ -84,6 +84,12 @@ function onVisibilityChange() {
 function onResize() {
   this.triggerResize();
 }
+
+// doubleclick detection handling
+
+let lastClickTarget = null;
+let lastClickTime = 0;
+
 function dblClick(e) {
   /**
    * Is fired after a double click appeared. Set `dblclick` to 0 to
@@ -94,17 +100,17 @@ function dblClick(e) {
    * @param {string} event - The browsers `MouseEvent`.
    *
    */
-  const O = this.options;
-  const dbc = O.dblclick;
-  if (!dbc) return;
-  const d = +new Date();
-  if (this.__lastclick + dbc > d) {
-    e.lastclick = this.__lastclick;
+  const { dblclick } = this.options;
+  const now = performance.now();
+
+  if (lastClickTarget === this && lastClickTime + dblclick > now) {
+    // FIXME: setting properties on events is not quite ok
+    e.lastclick = lastClickTime;
     this.emit('doubleclick', e);
-    this.__lastclick = 0;
-  } else {
-    this.__lastclick = d;
   }
+
+  lastClickTarget = this;
+  lastClickTime = now;
 }
 
 function setPreset(preset) {
@@ -290,11 +296,12 @@ export class Widget extends Base {
       set_class: function () {
         throw new Error('class is not a dynamic option.');
       },
-      set_dblclick: function (val) {
+      set_dblclick: function (val, _, prevValue) {
         const event_target = this.getEventTarget();
         if (!event_target) return;
-        if (val) event_target.addEventListener('click', this.__dblclick_cb);
-        else event_target.removeEventListener('click', this.__dblclick_cb);
+        if ((val > 0) === (prevValue > 0))
+          return;
+        if (val > 0) this.on('click', dblClick);
       },
       initialized: function () {
         const v = this.options.dblclick;
@@ -465,9 +472,7 @@ export class Widget extends Base {
     this.draw_queue = null;
     this._recalculate_queue = null;
     this._recalculate = null;
-    this.__lastclick = 0;
     this._creation_time = S.now();
-    this.__dblclick_cb = dblClick.bind(this);
     this._onresize = onResize.bind(this);
     this._onvisibilitychange = onVisibilityChange.bind(this);
     this._interaction_count = 0;
