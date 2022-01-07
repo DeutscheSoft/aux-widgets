@@ -55,7 +55,7 @@ import {
  * Boston, MA  02110-1301  USA
  */
 
-import { waitForDrawn, assert, compare, objectMinus } from './helpers.js';
+import { waitForDrawn, assert, assertEqual, compare, objectMinus } from './helpers.js';
 
 const widgets = [
   Container,
@@ -344,7 +344,7 @@ describe('Crossover', () => {
 });
 
 describe('Clock', () => {
-  it('clock labels', (done) => {
+  it('clock labels', async () => {
     const c = new Clock({
       label: function (date, fps, days, months) {
         return 'label';
@@ -356,14 +356,10 @@ describe('Clock', () => {
         return 'lower';
       },
     });
-    c.invalid.time = true;
-    c.redraw();
-    var l =
-      c._label.innerHTML + c._label_upper.innerHTML + c._label_lower.innerHTML;
-    if (l !== 'labelupperlower')
-      throw new Error(
-        "Wrong label content: '" + l + "' - should be 'labelupperlower'"
-      );
-    done();
+    c.invalidate('time');
+    await waitForDrawn(c);
+    assertEqual(
+      c._label.innerHTML + c._label_upper.innerHTML + c._label_lower.innerHTML,
+      'labelupperlower');
   });
 });

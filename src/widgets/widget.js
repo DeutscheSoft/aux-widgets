@@ -55,7 +55,6 @@ const enableTimers = new ProximityTimers();
 
 export const Resize = Symbol('resize');
 export const Resized = Symbol('resized');
-export const Redraw = Symbol('redraw');
 
 const DrawOnce = Symbol('drawOnce');
 
@@ -70,38 +69,11 @@ const KEYS = [
   'End',
 ];
 
-/* jshint -W089 */
-function Invalid(options) {
-  for (const key in options) this[key] = true;
+function getOwnProperty(o, name) {
+  if (Object.prototype.hasOwnProperty.call(o, name))
+    return o[name];
 }
-/* jshint +W089 */
 
-Invalid.prototype = {
-  validate: function () {
-    let i = 0,
-      key;
-    let ret = false;
-    for (i = 0; i < arguments.length; i++) {
-      key = arguments[i];
-      if (Object.prototype.hasOwnProperty.call(this, key) && this[key]) {
-        this[key] = false;
-        ret = true;
-      }
-    }
-
-    return ret;
-  },
-  test: function () {
-    let i = 0,
-      key;
-    for (i = 0; i < arguments.length; i++) {
-      key = arguments[i];
-      if (Object.prototype.hasOwnProperty.call(this, key) && this[key]) {
-        return true;
-      }
-    }
-  },
-};
 function onVisibilityChange() {
   if (document.hidden) {
     this.disableDraw();
@@ -236,12 +208,6 @@ function onSetTabindex(tabindex) {
  * @event Widget#set
  */
 /**
- * The <code>redraw</code> event is emitted when a widget is redrawn. This can be used
- * to do additional DOM modifications to a Widget.
- *
- * @event Widget#redraw
- */
-/**
  * The <code>resize</code> event is emitted whenever a widget is being resized. This event can
  * be used to e.g. measure its new size. Note that some widgets do internal adjustments after
  * the <code>resize</code> event. If that is relevant, the {@link Widget#resized} event can
@@ -364,6 +330,20 @@ export class Widget extends Base {
     };
   }
 
+  static getRenderers() {
+    let _renderers = getOwnProperty(this,  '_renderers');
+
+    if (!_renderers) {
+      const parent = Object.getPrototypeOf(this);
+
+      let parentRenderers = parent.getRenderers ? parent.getRenderers() : [];
+
+      this._renderers = _renderers = parentRenderers.concat(getOwnProperty(this, 'renderers') || []);
+    }
+
+    return _renderers;
+  }
+
   static getRenderer() {
     let renderer = this._renderer;
 
@@ -372,9 +352,13 @@ export class Widget extends Base {
 
     this._renderer = renderer = new Renderer();
 
-    getRenderers(this).forEach((task) => renderer.addTask(task));
+    this.getRenderers().forEach((task) => renderer.addTask(task));
 
     return renderer;
+  }
+
+  static addTask(task) {
+    this.getRenderers().push(task);
   }
 
   static get renderers() {
@@ -385,10 +369,6 @@ export class Widget extends Base {
       defineRender(Resized, function() {
         this.emit('resized');
         this.resize();
-      }),
-      defineRender(Redraw, function() {
-        this.redraw();
-        this.emit('redraw');
       }),
       defineRender('notransitions', function(notransitions) {
         toggleClass(this.element, 'aux-notransitions', notransitions);
@@ -480,7 +460,6 @@ export class Widget extends Base {
       E.isAuxWidget = true;
     }
     this.element = E;
-    this.invalid = new Invalid(this.options);
     this.parent = void 0;
     this.children = null;
     this.draw_queue = null;
@@ -550,26 +529,7 @@ export class Widget extends Base {
    * Invalidates all dependencies which will trigger all renderers to rerun.
    */
   invalidateAll() {
-    for (const key in this.options) {
-      if (!this.constructor.hasOption(key)) {
-        if (key.charCodeAt(0) !== 95)
-          warn('%O %s: unknown option %s', this, this._class, key);
-      } else this.invalid[key] = true;
-    }
     this._renderState.invalidateAll();
-  }
-
-  assertNoneInvalid() {
-    const _warn = [];
-    for (const key in this.invalid) {
-      if (this.invalid[key] === true) {
-        _warn.push(key);
-      }
-    }
-
-    if (_warn.length) {
-      warn('found', _warn.length, 'invalid in', this, ':', _warn);
-    }
   }
 
   triggerResize() {
@@ -636,14 +596,6 @@ export class Widget extends Base {
     if (!q.includes(cb)) q.push(cb);
   }
 
-  triggerDraw() {
-    this._renderState.invalidate(Redraw);
-  }
-
-  triggerDrawNext() {
-    // FIXME
-  }
-
   initialized() {
     // Main actions every widget needs to take
     /**
@@ -652,7 +604,6 @@ export class Widget extends Base {
      * @event Widget#initialized
      */
     super.initialized();
-    this.triggerDraw();
 
     const O = this.options;
 
@@ -715,8 +666,6 @@ export class Widget extends Base {
     if (O.container) O.container.appendChild(element);
     this.triggerResize();
   }
-
-  redraw() { }
 
   addSubscriptions(...subs) {
     subs.forEach((sub) => {
@@ -830,8 +779,6 @@ export class Widget extends Base {
    * @param {string} key
    */
   invalidate(key) {
-    this.invalid[key] = true;
-    this.triggerDraw();
     this._renderState.invalidate(key);
   }
 
@@ -844,12 +791,7 @@ export class Widget extends Base {
    * @param value - The option value.
    */
   set(key, value) {
-    /* These options are special and need to be handled immediately, in order
-     * to preserve correct ordering */
-    if (this.constructor.hasOption(key)) {
-      this.invalid[key] = true;
-      this.triggerDraw();
-    } else if (key.charCodeAt(0) !== 95) {
+    if (key.charCodeAt(0) !== 95 && !this.constructor.hasOption(key)) {
       warn(
         '%O: %s.set(%s, %O): unknown option.',
         this,

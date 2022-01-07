@@ -20,6 +20,7 @@
 import { addClass, removeClass } from './utils/dom.js';
 import { warn } from './utils/log.js';
 import { Widget } from './widgets/widget.js';
+import { defineRender } from './renderer.js';
 
 function getChildOptions(parent, name, options, config) {
   let ret = {};
@@ -230,8 +231,8 @@ export function defineChildWidget(widget, name, config) {
     }
     if (!config.no_resize) this.triggerResize();
   });
-  widget.addStaticEvent('redraw', function () {
-    const show = fixed || this.options[key];
+  widget.addTask(defineRender(fixed ? [] : [ key ], function (show) {
+    if (fixed) show = true;
     const C = this[name];
 
     if (show && C && !C.element.parentNode) {
@@ -246,7 +247,7 @@ export function defineChildWidget(widget, name, config) {
       }
       if (!config.no_resize) this.triggerResize();
     }
-  });
+  }));
   let setCallback = function (val, key) {
     if (this[name]) this[name].set(key.substr(name.length + 1), val);
   };

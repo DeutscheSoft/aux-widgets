@@ -90,8 +90,6 @@ describe('Visibility', () => {
     container.show();
 
     const check = async () => {
-      container.triggerDraw();
-      widget.triggerDraw();
       await waitForDrawn(container);
       checkErrors();
     };
@@ -110,9 +108,6 @@ describe('Visibility', () => {
     const widget = new DebugWidget();
 
     const check = async () => {
-      outer.triggerDraw();
-      inner.triggerDraw();
-      widget.triggerDraw();
       await waitForDrawn(outer);
       checkErrors();
     };
@@ -142,9 +137,6 @@ describe('Visibility', () => {
     const widget = widgetComponent.auxWidget;
 
     const check = async () => {
-      outer.triggerDraw();
-      inner.triggerDraw();
-      widget.triggerDraw();
       await waitForDrawn(outer);
       checkErrors();
     };

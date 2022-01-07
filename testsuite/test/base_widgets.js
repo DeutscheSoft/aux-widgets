@@ -26,7 +26,6 @@ describe('Options', () => {
     const o = new Widget();
     o.set('disabled', true);
     if (o.options.disabled !== true) throw new Error('fail.');
-    if (!o.invalid.disabled) throw new Error('fail.');
     done();
   });
 });
@@ -38,7 +37,6 @@ describe('Components', () => {
     const widget = o.auxWidget;
     if (widget.options.disabled !== true)
       throw new Error('fail: ' + widget.options.disabled);
-    if (!widget.invalid.disabled) throw new Error('fail.');
   });
   it('removeAttribute()', () => {
     const o = document.createElement('aux-widget');
