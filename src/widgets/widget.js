@@ -481,7 +481,6 @@ export class Widget extends Base {
     }
     this.element = E;
     this.invalid = new Invalid(this.options);
-    if (!this.value_time) this.value_time = null;
     this.parent = void 0;
     this.children = null;
     this.draw_queue = null;
@@ -849,8 +848,6 @@ export class Widget extends Base {
      * to preserve correct ordering */
     if (this.constructor.hasOption(key)) {
       this.invalid[key] = true;
-      if (this.value_time && this.value_time[key])
-        this.value_time[key] = Date.now();
       this.triggerDraw();
     } else if (key.charCodeAt(0) !== 95) {
       warn(
@@ -869,11 +866,6 @@ export class Widget extends Base {
 
     super.set(key, value);
     return value;
-  }
-
-  trackOption(key) {
-    if (!this.value_time) this.value_time = {};
-    this.value_time[key] = Date.now();
   }
 
   /**

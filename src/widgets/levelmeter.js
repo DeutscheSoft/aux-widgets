@@ -170,7 +170,6 @@ export class LevelMeter extends Meter {
 
   initialize(options) {
     /* track the age of the value option */
-    this.trackOption('value');
     super.initialize(options);
     this._reset_value = this.resetValue.bind(this);
     this._reset_clip = this.resetClip.bind(this);
@@ -219,16 +218,9 @@ export class LevelMeter extends Meter {
   }
 
   effectiveValue() {
-    const O = this.options;
+    const { value, base, falling, falling_duration, falling_init, _value_time } = this.options;
 
-    return effectiveValue(
-      +O.value,
-      +O.base,
-      +O.falling,
-      +O.falling_duration,
-      +O.falling_init,
-      +this.value_time.value
-    );
+    return effectiveValue(value, base, falling, falling_duration, falling_init, _value_time);
   }
 
   /**
@@ -383,6 +375,8 @@ export class LevelMeter extends Meter {
     if (key === 'value') {
       const O = this.options;
       const base = O.base;
+
+      this.set('_value_time', performance.now());
 
       // snap will enforce clipping
       value = O.snap_module.snap(value);
