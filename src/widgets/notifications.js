@@ -25,6 +25,7 @@ import { Container } from './container.js';
 import { Button } from './button.js';
 import { Icon } from './icon.js';
 import { S } from '../dom_scheduler.js';
+import { defineRender } from '../renderer.js';
 
 /**
  * Notifications is a {@link Container} displaying {@link Notification}
@@ -155,6 +156,18 @@ export class Notification extends Container {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender('content', function () {
+        const { element, icon, close } = this;
+        if (icon)
+          element.insertBefore(icon.element, element.firstChild);
+        if (close)
+          element.insertBefore(close.element, element.firstChild);
+      }),
+    ];
+  }
+
   initialize(options) {
     super.initialize(options);
     const O = this.options;
@@ -170,16 +183,6 @@ export class Notification extends Container {
     addClass(element, 'aux-notification');
 
     super.draw(O, element);
-  }
-
-  redraw() {
-    const I = this.invalid;
-    const i = I.content;
-    super.redraw();
-    if (i && this.icon)
-      this.element.insertBefore(this.icon.element, this.element.firstChild);
-    if (i && this.close)
-      this.element.insertBefore(this.close.element, this.element.firstChild);
   }
 
   remove() {
