@@ -21,6 +21,7 @@ import { Filter } from '../modules/filter.js';
 import { ChartHandle } from './charthandle.js';
 import { addClass, toggleClass } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
+import { defineRender } from '../renderer.js';
 
 const type_to_mode = {
   parametric: 'circular',
@@ -190,6 +191,14 @@ export class EqBand extends ChartHandle {
     };
   }
 
+  static get renderer() {
+    return [
+      defineRender('active', function (active) {
+        toggleClass(this.element, 'aux-inactive', !active);
+      }),
+    ];
+  }
+
   initialize(options) {
     /**
      * @member {Filter} EqBand#filter - The filter providing the graphical calculations.
@@ -220,16 +229,6 @@ export class EqBand extends ChartHandle {
     addClass(element, 'aux-eqband');
 
     super.draw(O, element);
-  }
-
-  redraw() {
-    const I = this.invalid;
-    const O = this.options;
-    if (I.active) {
-      I.active = false;
-      toggleClass(this.element, 'aux-inactive', !O.active);
-    }
-    super.redraw();
   }
 
   /**
