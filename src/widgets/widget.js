@@ -491,8 +491,6 @@ export class Widget extends Base {
     this.parent = void 0;
     this.children = null;
     this.draw_queue = null;
-    this._recalculate_queue = null;
-    this._recalculate = null;
     this._creation_time = S.now();
     this._onresize = onResize.bind(this);
     this._onvisibilitychange = onVisibilityChange.bind(this);
@@ -587,39 +585,6 @@ export class Widget extends Base {
 
     if (this.hasEventListeners('resized'))
       this.invalidate(Resized);
-  }
-
-  recalculate() {
-    const recalculate_queue = this._recalculate_queue;
-    const q = recalculate_queue.slice(0);
-    const O = this.options;
-
-    recalculate_queue.length = 0;
-
-    for (let i = 0; i < q.length; i++) {
-      q[i].call(this, O);
-    }
-  }
-
-  triggerRecalculate(cb) {
-    let q = this._recalculate_queue;
-
-    if (q === null) this._recalculate_queue = q = [];
-
-    if (q.length === 0) {
-      let cb = this._recalculate;
-
-      if (cb === null) {
-        this._recalculate = cb = () => {
-          if (this.isDestructed()) return;
-          this.recalculate();
-        };
-      }
-
-      S.add(cb, 0);
-    }
-
-    if (!q.includes(cb)) q.push(cb);
   }
 
   initialized() {

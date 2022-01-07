@@ -1,3 +1,5 @@
+import { defineRecalculation as defineRecalculationTask } from './renderer.js';
+
 /**
  * Register a reclaculation function. If one of the dependencies
  * changes it will be called before the next call to redraw().
@@ -17,8 +19,9 @@ export function defineRecalculation(widget, dependencies, cb) {
     this.triggerRecalculate(cb);
   };
 
-  widget.addStaticEvent('initialized', trigger);
-  dependencies.forEach((name) => {
-    widget.addStaticEvent('set_' + name, trigger);
+  const task = defineRecalculationTask(dependencies, function () {
+    cb.call(this, this.options);
   });
+
+  widget.addTask(task);
 }
