@@ -37,6 +37,7 @@ import {
 import { Pages } from './pages.js';
 import { Container } from './container.js';
 import { Navigation } from './navigation.js';
+import { defineRender } from '../renderer.js';
 
 /**
  * Pager, also known as Notebook in other UI toolkits, provides
@@ -100,6 +101,40 @@ export class Pager extends Container {
         if (this.pages) this.pages.set('animation', badir);
       },
     };
+  }
+
+  static get renderers() {
+    return [
+      defineRender('position', function (position) {
+        const element = this.element;
+
+        removeClass(
+          element,
+          'aux-top',
+          'aux-right',
+          'aux-bottom',
+          'aux-left',
+          'aux-vertical',
+          'aux-horizontal'
+        );
+        switch (position) {
+          case 'top':
+            addClass(element, 'aux-top', 'aux-vertical');
+            break;
+          case 'bottom':
+            addClass(element, 'aux-bottom', 'aux-vertical');
+            break;
+          case 'left':
+            addClass(element, 'aux-left', 'aux-horizontal');
+            break;
+          case 'right':
+            addClass(element, 'aux-right', 'aux-horizontal');
+            break;
+          default:
+            warn('Unsupported position', position);
+        }
+      }),
+    ];
   }
 
   initializePages() {
@@ -272,42 +307,6 @@ export class Pager extends Container {
 
       this.pages = child;
       this.initializePages();
-    }
-  }
-
-  redraw() {
-    super.redraw();
-    const O = this.options;
-    const I = this.invalid;
-    const E = this.element;
-
-    if (I.position) {
-      I.position = false;
-      removeClass(
-        E,
-        'aux-top',
-        'aux-right',
-        'aux-bottom',
-        'aux-left',
-        'aux-vertical',
-        'aux-horizontal'
-      );
-      switch (O.position) {
-        case 'top':
-          addClass(E, 'aux-top', 'aux-vertical');
-          break;
-        case 'bottom':
-          addClass(E, 'aux-bottom', 'aux-vertical');
-          break;
-        case 'left':
-          addClass(E, 'aux-left', 'aux-horizontal');
-          break;
-        case 'right':
-          addClass(E, 'aux-right', 'aux-horizontal');
-          break;
-        default:
-          warn('Unsupported position', O.position);
-      }
     }
   }
 
