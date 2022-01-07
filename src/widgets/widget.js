@@ -175,16 +175,6 @@ function onFocusKeyDown(e) {
   this.emit('focus_move', o);
 }
 
-function onSetTabindex(tabindex) {
-  if (tabindex === this._lasttabindex) return;
-  if (tabindex === false)
-    this.getFocusTargets().forEach(v => v.removeEventListener('keydown', this._onfocuskeydown));
-  if (this._lasttabindex === false)
-    this.getFocusTarget().forEach(v => v.addEventListener('keydown', this._onfocuskeydown));
-  this._lasttabindex = tabindex;
-}
-
-
 /**
  * Widget is the base class for all widgets drawing DOM elements. It
  * provides basic functionality like delegating events, setting options and
@@ -349,7 +339,6 @@ export class Widget extends Base {
         }
         if (val === false) this.disableDrawChildren();
       },
-      set_tabindex: onSetTabindex.bind(this),
     };
   }
 
@@ -433,6 +422,22 @@ export class Widget extends Base {
           F.forEach(v => v.removeAttribute('tabindex'));
         }
       }),
+      defineRender('tabindex', function(tabindex) {
+        const isInstalled = this._onfocuskeydown !== null;
+
+        if ((tabindex !== false) === isInstalled)
+          return;
+
+        const focusTargets = this.getFocusTargets();
+
+        if (isInstalled) {
+          focusTargets.forEach(v => v.removeEventListener('keydown', this._onfocuskeydown));
+          this._onfocuskeydown = null;
+        } else {
+          this._onfocuskeydown = onFocusKeyDown.bind(this);
+          focusTargets.forEach(v => v.addEventListener('keydown', this._onfocuskeydown));
+        }
+      }),
       defineRender('role', function(role) {
         this.getRoleTarget().setAttribute('role', role);
       }),
@@ -495,8 +500,7 @@ export class Widget extends Base {
     this._last_preset = null;
     this._presetting = false;
     this._subscriptions = initSubscriptions();
-    this._onfocuskeydown = onFocusKeyDown.bind(this);
-    this._lasttabindex = this.options.tabindex;
+    this._onfocuskeydown = null;
     this._drawn = false;
     this._initialDraw = () => {
       if (!this._drawn) return;
@@ -679,10 +683,6 @@ export class Widget extends Base {
 
     if (O.styles && (E = this.getStyleTarget())) {
       setStyles(E, O.styles);
-    }
-
-    if (this._lasttabindex !== false) {
-      this.getFocusTargets().forEach(v => v.addEventListener('keydown', this._onfocuskeydown));
     }
 
     if (O.container) O.container.appendChild(element);
