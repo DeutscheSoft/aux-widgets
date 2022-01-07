@@ -21,7 +21,8 @@ import { defineChildWidget } from '../child_widget.js';
 import { Container } from './container.js';
 import { Toggle } from './toggle.js';
 import { Timer } from './../utils/timers.js';
-import { addClass } from '../utils/dom.js';
+import { addClass, toggleClass } from '../utils/dom.js';
+import { defineRender } from '../renderer.js';
 
 function set_class(cls) {
   const classes = [
@@ -45,43 +46,6 @@ function expand_cb() {
 function collapse_cb() {
   set_class.call(this, 'aux-collapsed');
   this.emit('collapsed');
-}
-
-function expand() {
-  const O = this.options;
-  if (O.expanded) {
-    if (this.timer_collapse.active) this.timer_collapse.stop();
-    if (O.showing_duration && !this.timer_expand.active) {
-      set_class.call(this, 'aux-expanding');
-      this.timer_expand.start(O.showing_duration);
-    } else if (O.showing_duration && this.timer_expand.active) {
-      return;
-    } else {
-      set_class.call(this, 'aux-expanded');
-      /**
-       * Is fired after the expand was expanded
-       *
-       * @event Expand#expanded
-       */
-      this.emit('expanded');
-    }
-  } else {
-    if (this.timer_expand.active) this.timer_expand.stop();
-    if (O.hiding_duration && !this.timer_collapse.active) {
-      set_class.call(this, 'aux-collapsing');
-      this.timer_collapse.start(O.hiding_duration);
-    } else if (O.showing_duration) {
-      return;
-    } else {
-      set_class.call(this, 'aux-collapsed');
-      /**
-       * Is fired after the expand was collapsed
-       *
-       * @event Expand#collapsed
-       */
-      this.emit('collapsed');
-    }
-  }
 }
 
 function toggle(e) {
@@ -257,6 +221,51 @@ export class Expand extends Container {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender('always_expanded', function (always_expanded) {
+        toggleClass(this.element, 'aux-always-expanded', always_expanded);
+      }),
+      defineRender(
+        [ 'expanded', 'showing_duration', 'hiding_duration' ],
+        function (expanded, showing_duration, hiding_duration) {
+          if (expanded) {
+            if (this.timer_collapse.active) this.timer_collapse.stop();
+            if (showing_duration && !this.timer_expand.active) {
+              set_class.call(this, 'aux-expanding');
+              this.timer_expand.start(showing_duration);
+            } else if (showing_duration && this.timer_expand.active) {
+              return;
+            } else {
+              set_class.call(this, 'aux-expanded');
+              /**
+               * Is fired after the expand was expanded
+               *
+               * @event Expand#expanded
+               */
+              this.emit('expanded');
+            }
+          } else {
+            if (this.timer_expand.active) this.timer_expand.stop();
+            if (hiding_duration && !this.timer_collapse.active) {
+              set_class.call(this, 'aux-collapsing');
+              this.timer_collapse.start(hiding_duration);
+            } else if (showing_duration) {
+              return;
+            } else {
+              set_class.call(this, 'aux-collapsed');
+              /**
+               * Is fired after the expand was collapsed
+               *
+               * @event Expand#collapsed
+               */
+              this.emit('collapsed');
+            }
+          }
+        }),
+    ];
+  }
+
   /**
    * Toggles the collapsed state of the widget.
    *
@@ -264,24 +273,6 @@ export class Expand extends Container {
    */
   toggle() {
     toggle.call(this);
-  }
-
-  redraw() {
-    const I = this.invalid;
-    const O = this.options;
-
-    super.redraw();
-
-    if (I.always_expanded) {
-      this[O.always_expanded ? 'addClass' : 'removeClass'](
-        'aux-always-expanded'
-      );
-    }
-
-    if (I.expanded || I.always_expanded) {
-      I.always_expanded = I.expanded = false;
-      expand.call(this);
-    }
   }
 
   initialize(options) {
