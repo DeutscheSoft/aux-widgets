@@ -29,6 +29,7 @@ import {
 import { Button } from './button.js';
 import { Buttons } from './buttons.js';
 import { Container } from './container.js';
+import { defineRender } from '../renderer.js';
 
 function easeLinear(t) {
   return t;
@@ -213,20 +214,72 @@ export class Navigation extends Container {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender('direction', function (direction) {
+        const { element } = this;
+        removeClass(element, 'aux-vertical', 'aux-horizontal');
+        addClass(element, 'aux-' + direction);
+      }),
+      defineRender('arrows', function (arrows) {
+        const { prev, next, element } = this;
+
+        toggleClass(element, 'aux-over', arrows);
+
+        if (!prev.element.parentElement === !arrows)
+          return;
+
+        if (arrows) {
+          element.appendChild(prev.element);
+          element.appendChild(next.element);
+          this.addChild(prev);
+          this.addChild(next);
+        } else {
+          this.removeChild(prev);
+          this.removeChild(next);
+          prev.element.remove();
+          next.element.remove();
+        }
+      }),
+      defineRender(
+        [ 'direction', 'scroll', 'select', '_clip_width', '_clip_height', '_list_width', '_list_height', '_button_positions' ],
+        function (direction, scroll) {
+          if (this._scroll_animation) {
+            this._scroll_animation.stop();
+            this._scroll_animation = null;
+          }
+
+          const position = this._getButtonScrollPosition();
+          const is_vertical = direction === 'vertical';
+          const from = is_vertical ? this._scroll_top : this._scroll_left;
+
+          if (position !== from) {
+            this._scroll_animation = new ScrollAnimation({
+              element: this.buttons.element,
+              duration: scroll,
+              from: from,
+              to: position,
+              easing: easeInOut,
+              vertical: is_vertical,
+            });
+          }
+        }),
+    ];
+  }
+
   _getButtonScrollPosition() {
-    const O = this.options;
-    const show = O.select;
+    const { select, _clip_width, _clip_height, _list_width, _list_height, _button_positions, direction } = this.options;
     const button_list = this.buttons.getButtons();
 
-    if (show < 0 || show >= button_list.length) return 0;
+    if (select < 0 || select >= button_list.length) return 0;
 
-    const button_position = O._button_positions.get(button_list[show]);
+    const button_position = _button_positions.get(button_list[select]);
 
     if (!button_position) return 0;
 
-    const is_vertical = O.direction === 'vertical';
-    const clip_size = is_vertical ? O._clip_height : O._clip_width;
-    const list_size = is_vertical ? O._list_height : O._list_width;
+    const is_vertical = direction === 'vertical';
+    const clip_size = is_vertical ? _clip_height : _clip_width;
+    const list_size = is_vertical ? _list_height : _list_width;
     const offset = is_vertical ? button_position.top : button_position.left;
     const button_size = is_vertical
       ? button_position.height
@@ -361,69 +414,6 @@ export class Navigation extends Container {
   draw(O, element) {
     addClass(element, 'aux-navigation');
     super.draw(O, element);
-  }
-
-  redraw() {
-    const O = this.options;
-    const I = this.invalid;
-    const E = this.element;
-
-    if (I.direction) {
-      removeClass(E, 'aux-vertical', 'aux-horizontal');
-      addClass(E, 'aux-' + O.direction);
-    }
-    if (I.validate('arrows')) {
-      if (O.arrows) {
-        if (!this.prev.element.parentElement) {
-          E.appendChild(this.prev.element);
-          E.appendChild(this.next.element);
-          this.addChild(this.prev);
-          this.addChild(this.next);
-        }
-      } else {
-        if (this.prev.element.parentElement) {
-          E.removeChild(this.prev.element);
-          E.removeChild(this.next.element);
-          this.removeChild(this.prev);
-          this.removeChild(this.next);
-        }
-      }
-      toggleClass(E, 'aux-over', O.arrows);
-    }
-
-    if (
-      I.validate(
-        'select',
-        'direction',
-        '_list_width',
-        '_list_height',
-        '_clip_width',
-        '_clip_height',
-        '_button_positions'
-      )
-    ) {
-      if (this._scroll_animation) {
-        this._scroll_animation.stop();
-        this._scroll_animation = null;
-      }
-
-      const position = this._getButtonScrollPosition();
-      const is_vertical = O.direction === 'vertical';
-      const from = is_vertical ? this._scroll_top : this._scroll_left;
-
-      if (position !== from) {
-        this._scroll_animation = new ScrollAnimation({
-          element: this.buttons.element,
-          duration: O.scroll,
-          from: from,
-          to: position,
-          easing: easeInOut,
-          vertical: is_vertical,
-        });
-      }
-    }
-
-    super.redraw();
   }
 
   addButton(...arg) {
