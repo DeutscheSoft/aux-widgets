@@ -46,6 +46,7 @@ import {
   getRenderers,
   defineRender,
   defineMeasure,
+  deferMeasure,
 } from '../renderer.js';
 
 const domScheduler = new Scheduler();
@@ -439,6 +440,14 @@ export class Widget extends Base {
           E.removeAttribute('id');
         }
       }),
+      defineRender('visible', function (visible) {
+        if (visible)
+          return;
+
+        return deferMeasure(() => {
+          this.disableDraw();
+        });
+      }),
     ];
   }
 
@@ -700,17 +709,6 @@ export class Widget extends Base {
     const I = this.invalid;
     const O = this.options;
     let E = this.element;
-
-    if (I.visible) {
-      I.visible = false;
-
-      const visible = O.visible;
-
-      if (visible === false) {
-        this.disableDraw();
-        return;
-      }
-    }
 
     const q = this.draw_queue;
 
