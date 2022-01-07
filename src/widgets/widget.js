@@ -113,6 +113,22 @@ function dblClick(e) {
   lastClickTime = now;
 }
 
+// interaction tracking. We store one count per widget.
+
+const interactionCounts = new Map();
+
+function getInteractionCount(widget) {
+  return interactionCounts.get(widget) || 0;
+}
+
+function setInteractionCount(widget, value) {
+  if (value === 0) {
+    interactionCounts.delete(widget);
+  } else {
+    interactionCounts.set(widget, value);
+  }
+}
+
 function setPreset(preset) {
   const O = this.options;
   let key, val;
@@ -475,7 +491,6 @@ export class Widget extends Base {
     this._creation_time = S.now();
     this._onresize = onResize.bind(this);
     this._onvisibilitychange = onVisibilityChange.bind(this);
-    this._interaction_count = 0;
     this._preset_origins = {};
     this._last_preset = null;
     this._presetting = false;
@@ -517,17 +532,19 @@ export class Widget extends Base {
   }
 
   startInteracting() {
-    const count = this._interaction_count++;
+    const count = getInteractionCount(this);
     if (!count) {
       this.set('interacting', true);
     }
+    setInteractionCount(this, count + 1);
   }
 
   stopInteracting() {
-    const count = --this._interaction_count;
-    if (!count) {
+    const count = getInteractionCount(this);
+    if (count === 1) {
       this.set('interacting', false);
     }
+    setInteractionCount(this, count - 1);
   }
 
   /**
@@ -709,6 +726,8 @@ export class Widget extends Base {
       this.element.remove();
       this.element = null;
     }
+
+    setInteractionCount(this, 0);
   }
 
   addClass(cls) {
