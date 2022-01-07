@@ -57,6 +57,8 @@ export const Resize = Symbol('resize');
 export const Resized = Symbol('resized');
 export const Redraw = Symbol('redraw');
 
+const DrawOnce = Symbol('drawOnce');
+
 const KEYS = [
   'ArrowUp',
   'ArrowDown',
@@ -448,6 +450,16 @@ export class Widget extends Base {
           this.disableDraw();
         });
       }),
+      defineRender(DrawOnce, function () {
+        const q = this.draw_queue;
+
+        this.draw_queue = null;
+
+        if (q)
+          for (let i = 0; i < q.length; i++) {
+            q[i].call(this, this.options);
+          }
+      }),
     ];
   }
 
@@ -655,11 +667,11 @@ export class Widget extends Base {
 
     if (q === null) {
       this.draw_queue = [fun];
+      this.invalidate(DrawOnce);
     } else {
       if (q.includes(fun)) return;
       q.push(fun);
     }
-    this.triggerDraw();
   }
 
   draw(O, element) {
@@ -705,20 +717,7 @@ export class Widget extends Base {
     this.triggerResize();
   }
 
-  redraw() {
-    const I = this.invalid;
-    const O = this.options;
-    let E = this.element;
-
-    const q = this.draw_queue;
-
-    this.draw_queue = null;
-
-    if (q)
-      for (let i = 0; i < q.length; i++) {
-        q[i].call(this, O);
-      }
-  }
+  redraw() { }
 
   addSubscriptions(...subs) {
     subs.forEach((sub) => {
