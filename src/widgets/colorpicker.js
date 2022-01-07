@@ -34,6 +34,7 @@ import {
   HSLToRGB,
   hexToRGB,
 } from '../utils/colors.js';
+import { defineRender } from '../renderer.js';
 
 const color_options = [
   'rgb',
@@ -199,6 +200,39 @@ export class ColorPicker extends Container {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender('saturation', function(saturation) {
+        this._grayscale.style.opacity = 1 - saturation;
+      }),
+      defineRender(
+        [ 'hue', 'lightness', 'hex', 'rgb', 'red', 'green', 'blue' ],
+        function(hue, lightness, hex, rgb, red, green, blue) {
+          const { _indicator } = this;
+          const _hex = this.hex;
+
+          const bw = RGBToBW(rgb);
+          const bg =
+            'rgb(' +
+            parseInt(red) +
+            ',' +
+            parseInt(green) +
+            ',' +
+            parseInt(blue) +
+            ')';
+
+          _hex._input.style.backgroundColor = bg;
+          _hex._input.style.color = bw;
+          _hex.set('value', hex);
+
+          _indicator.style.left = hue * 100 + '%';
+          _indicator.style.top = lightness * 100 + '%';
+          _indicator.style.backgroundColor = bg;
+          _indicator.style.color = bw;
+        }),
+    ];
+  }
+
   initialize(options) {
     super.initialize(options);
     options = this.options;
@@ -280,45 +314,6 @@ export class ColorPicker extends Container {
     addClass(element, 'aux-colorpicker');
 
     super.draw(O, element);
-  }
-
-  redraw() {
-    super.redraw();
-    const I = this.invalid;
-    const O = this.options;
-    if (
-      I.validate(
-        'rgb',
-        'hsl',
-        'hex',
-        'hue',
-        'saturation',
-        'lightness',
-        'red',
-        'green',
-        'blue'
-      )
-    ) {
-      const bw = RGBToBW(O.rgb);
-      const bg =
-        'rgb(' +
-        parseInt(O.red) +
-        ',' +
-        parseInt(O.green) +
-        ',' +
-        parseInt(O.blue) +
-        ')';
-      this.hex._input.style.backgroundColor = bg;
-      this.hex._input.style.color = bw;
-      this.hex.set('value', O.hex);
-
-      this._indicator.style.left = O.hue * 100 + '%';
-      this._indicator.style.top = O.lightness * 100 + '%';
-      this._indicator.style.backgroundColor = bg;
-      this._indicator.style.color = bw;
-
-      this._grayscale.style.opacity = 1 - O.saturation;
-    }
   }
 
   set(key, value) {
