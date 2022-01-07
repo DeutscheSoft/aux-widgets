@@ -55,6 +55,39 @@ const enableTimers = new ProximityTimers();
 export const Resize = Symbol('resize');
 export const Resized = Symbol('resized');
 
+const rootWidgets = new Map();
+
+function onVisibilityChange() {
+  if (document.hidden) {
+    this.disableDraw();
+  } else {
+    this.enableDraw();
+  }
+}
+
+function onResize() {
+  this.triggerResize();
+}
+
+function addRootWidget(widget) {
+  if (rootWidgets.has(widget))
+    throw new Error('Already registered.');
+
+  const resized = onResize.bind(widget);
+  const visibilityChanged = onVisibilityChange.bind(widget);
+
+  rootWidgets.set(widget, [ resized, visibilityChanged ]);
+  GlobalResize.add(resized);
+  GlobalVisibilityChange.add(visibilityChanged);
+}
+
+function removeRootWidget(widget) {
+  const [ resized, visibilityChanged ] = rootWidgets.get(widget);
+
+  GlobalResize.delete(resized);
+  GlobalVisibilityChange.delete(visibilityChanged);
+}
+
 const DrawOnce = Symbol('drawOnce');
 
 const KEYS = [
@@ -71,17 +104,6 @@ const KEYS = [
 function getOwnProperty(o, name) {
   if (Object.prototype.hasOwnProperty.call(o, name))
     return o[name];
-}
-
-function onVisibilityChange() {
-  if (document.hidden) {
-    this.disableDraw();
-  } else {
-    this.enableDraw();
-  }
-}
-function onResize() {
-  this.triggerResize();
 }
 
 // doubleclick detection handling
@@ -491,8 +513,6 @@ export class Widget extends Base {
     this.children = null;
     this.draw_queue = null;
     this._creation_time = domScheduler.now();
-    this._onresize = onResize.bind(this);
-    this._onvisibilitychange = onVisibilityChange.bind(this);
     this._preset_origins = {};
     this._last_preset = null;
     this._presetting = false;
@@ -961,13 +981,11 @@ export class Widget extends Base {
 
     if (parent === null) {
       if (old_parent !== parent) {
-        GlobalResize.add(this._onresize);
-        GlobalVisibilityChange.add(this._onvisibilitychange);
-        this._onvisibilitychange();
+        addRootWidget(this);
+        onVisibilityChange.call(this);
       }
     } else if (parent !== null && old_parent === null) {
-      GlobalResize.delete(this._onresize);
-      GlobalVisibilityChange.delete(this._onvisibilitychange);
+      removeRootWidget(this);
     }
 
     if (old_parent && !no_remove_child) {
