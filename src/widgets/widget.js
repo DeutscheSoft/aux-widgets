@@ -399,7 +399,7 @@ export class Widget extends Base {
       defineMeasure(Resize, function() {
         this.resize();
       }),
-      defineRender(Resized, function() {
+      defineMeasure(Resized, function() {
         this.emit('resized');
         this.resize();
       }),
