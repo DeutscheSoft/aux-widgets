@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { addClass, removeClass } from './utils/dom.js';
+import { addClass, removeClass, toggleClass } from './utils/dom.js';
 import { warn } from './utils/log.js';
 import { Widget } from './widgets/widget.js';
 import { defineRender } from './renderer.js';
@@ -190,12 +190,6 @@ export function defineChildWidget(widget, name, config) {
     /* we do not want to trash the class cache */
     this[name] = null;
   });
-  widget.addStaticEvent('initialize_children', function () {
-    /* we do not want to trash the class cache */
-    if (!this[name]) {
-      this.set(key, this.options[key]);
-    }
-  });
 
   /* clean up on destroy */
   widget.addStaticEvent('destroy', function () {
@@ -208,46 +202,78 @@ export function defineChildWidget(widget, name, config) {
   });
 
   const fixed = config.fixed;
-  let append = config.append;
+  const append = (config.append === void 0) ? true : config.append;
 
-  if (append === void 0) append = true;
+  const createWidget = function () {
+    const O = getChildOptions(this, name, this.options, config);
+    const w = new ChildWidget(O);
+    this[name] = w;
+    this.addChild(w);
+  };
 
-  /* child widget creation */
-  widget.addStaticEvent('set_' + key, function (val) {
-    const C = this[name];
-    const show = fixed || val !== false;
-    if (show && !C) {
-      const O = getChildOptions(this, name, this.options, config);
-      const w = new ChildWidget(O);
-      this.addChild(w);
-      this[name] = w;
-    } else if (!show && C) {
-      if (map_interacting && C.get('interacting')) {
-        this.stopInteracting();
-      }
-      this[name] = null;
-      if (config.toggle_class) removeClass(this.element, 'aux-has-' + name);
-      C.destroy();
+  const appendWidget = function () {
+    const w = this[name];
+
+    if (!w || w.element.parentNode)
+      return;
+
+    const element = this.element;
+
+    if (append === true) {
+      element.appendChild(w.element);
+    } else if (typeof append === 'function') {
+      append.call(this);
     }
-    if (!config.no_resize) this.triggerResize();
-  });
-  widget.addTask(defineRender(fixed ? [] : [ key ], function (show) {
-    if (fixed) show = true;
-    const C = this[name];
+  };
 
-    if (show && C && !C.element.parentNode) {
-      const E = this.element;
+  if (fixed) {
+    widget.addStaticEvent('initialize_children', createWidget);
+    widget.addTask(defineRender([], appendWidget));
+    if (config.toggle_class) {
+      widget.addTask(defineRender([], function () {
+        addClass(this.element, 'aux-has-' + name);
+      }));
+    }
+  } else {
+    widget.addStaticEvent('initialize_children', function () {
+      /* we do not want to trash the class cache */
+      if (!this[name]) {
+        this.set(key, this.options[key]);
+      }
+    });
+    widget.addStaticEvent('set_' + key, function (val) {
+      const show = val !== false;
 
-      if (config.toggle_class) addClass(E, 'aux-has-' + name);
+      if ((this[name] !== null) === show)
+        return;
 
-      if (append === true) {
-        E.appendChild(C.element);
-      } else if (typeof append === 'function') {
-        append.call(this);
+      if (show) {
+        createWidget.call(this);
+      }
+    });
+    widget.addTask(defineRender([ key ], function (val) {
+      const show = val !== false;
+      const w = this[name];
+
+      if (show === (w && !!w.element.parentNode))
+        return;
+
+      if (config.toggle_class)
+        toggleClass(this.element, 'aux-has-' + name, show);
+
+      if (show) {
+        appendWidget.call(this);
+      } else if (w) {
+        this[name] = null;
+        if (map_interacting && w.get('interacting')) {
+          this.stopInteracting();
+        }
+        w.destroy();
       }
       if (!config.no_resize) this.triggerResize();
-    }
-  }));
+    }));
+  }
+
   let setCallback = function (val, key) {
     if (this[name]) this[name].set(key.substr(name.length + 1), val);
   };
