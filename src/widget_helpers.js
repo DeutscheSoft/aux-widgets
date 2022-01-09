@@ -18,6 +18,7 @@
  */
 
 import { toggleClass, element } from './utils/dom.js';
+import { defineRender } from './renderer.js';
 
 export function addEvent(to, event, fun) {
   const tmp = to[event];
@@ -134,35 +135,45 @@ export function defineChildElement(widget, name, config) {
   widget.addStaticEvent('set_' + show_option, function (value) {
     let C = this[index];
     const show = display_check ? display_check(value) : value !== false;
-    if (show === !!C) return;
+    if (!show || show === !!C) return;
     if (show && !C) {
       C = create.call(this);
       this[index] = C;
-      append.call(this, this.options);
-    } else if (C && !show) {
-      this[index] = null;
-      C.remove();
     }
-    if (dependency)
-      this.invalidate(dependency);
+  });
+  widget.addTask(defineRender([ show_option ], function (value) {
+    const childElement = this[index];
+
+    const show = display_check ? display_check(value) : value !== false;
+
+    if (show) {
+      if (!childElement.parentNode)
+        append.call(this, this.options);
+    } else if (childElement !== null) {
+      this[index] = null;
+      childElement.remove();
+    }
     if (config.toggle_class) toggleClass(this.element, 'aux-has-' + name, show);
     this.triggerResize();
-  });
+    if (dependency)
+      this.invalidate(dependency);
+  }));
 
   if (config.draw) {
-    let m = config.draw_options;
+    let draw_options = config.draw_options;
 
-    if (!m) m = [show_option];
-    else m.push(show_option);
+    if (!draw_options) draw_options = [show_option];
+    else draw_options = [ show_option, ...draw_options ];
 
-    for (let i = 0; i < m.length; i++) {
-      widget.addStaticEvent('set_' + m[i], function () {
-        const value = this.options[show_option];
-        const show = display_check ? display_check(value) : value !== false;
+    // filter out options which are not unique
+    draw_options = draw_options.filter((name, i, a) => i === a.indexOf(name));
 
-        if (show) this.drawOnce(config.draw);
-      });
-    }
+    widget.addTask(defineRender(draw_options, function (value) {
+      const show = display_check ? display_check(value) : value !== false;
+
+      if (show)
+        config.draw.call(this, this.options);
+    }));
   }
 
   if (!widget.hasOption(show_option)) {
