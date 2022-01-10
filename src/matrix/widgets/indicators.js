@@ -92,6 +92,7 @@ function onBatchStart() {
 }
 
 function onBatchEnd() {
+  console.log(this);
   this.set('show_cancel', false);
   this.set('show_select_diagonal', false);
   this.set('show_deselect_diagonal', false);
@@ -512,7 +513,7 @@ defineChildWidget(Indicators, 'cancel', {
       ev.stopPropagation();
       return false;
     },
-    click: cancel,
+    click: function () { cancel.call(this.parent); },
   },
   append: function () {
     this.buttons.element.appendChild(this.cancel.element);
