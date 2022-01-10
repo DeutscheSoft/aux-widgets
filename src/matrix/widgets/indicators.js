@@ -511,7 +511,7 @@ defineChildWidget(Indicators, 'cancel', {
       ev.stopPropagation();
       return false;
     },
-    click: cancel,
+    click: function () { cancel.call(this.parent); },
   },
   append: function () {
     this.buttons.element.appendChild(this.cancel.element);
