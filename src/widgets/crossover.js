@@ -288,7 +288,7 @@ export class Crossover extends Equalizer {
       this.crossover_graphs.push(graph);
     } else if (child instanceof CrossoverGraph) {
       // add all bands to this crossover
-      this.children
+      this.getChildren()
         .filter((_child) => _child instanceof CrossoverBand)
         .forEach((band) => child.addBand(band));
     }
@@ -303,7 +303,7 @@ export class Crossover extends Equalizer {
       limitBands.call(this);
       this.crossover_graphs.forEach((g) => g.removeBand(child));
     } else if (child instanceof CrossoverGraph) {
-      this.children
+      this.getChildren()
         .filter((_child) => _child instanceof CrossoverBand)
         .forEach((band) => child.removeBand(band));
     }
