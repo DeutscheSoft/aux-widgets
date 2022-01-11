@@ -67,9 +67,7 @@ const formatTranslate = FORMAT('translate(%f, %f)');
 const formatTranslateRotate = FORMAT('translate(%f %f) rotate(%f %f %f)');
 const formatRotate = FORMAT('rotate(%f %f %f)');
 
-const DotsChanged = Symbol('_dots changed');
 const LabelsChanged = Symbol('_labels changed');
-const MarkersChanged = Symbol('_markers changed');
 
 function drawSlice(a_from, a_to, r_inner, r_outer, pos, slice) {
   a_from = +a_from;
@@ -274,7 +272,7 @@ export class Circular extends Widget {
         this.invalidate('labels');
       }),
       defineRender(
-        [ DotsChanged, 'show_dots', 'dots', 'dots_defaults', 'angle', 'transformation', 'snap_module', 'max', 'min', 'size' ],
+        [ 'show_dots', 'dots', 'dots_defaults', 'angle', 'transformation', 'snap_module', 'max', 'min', 'size' ],
         function(show_dots, dots, dots_defaults, angle, transformation, snap_module, max, min, size) {
           const _dots = this._dots;
 
@@ -410,7 +408,7 @@ export class Circular extends Widget {
           'transform', formatRotate(-start, outerSize, outerSize));
       }),
       defineRender(
-        [ MarkersChanged, 'show_markers', 'markers', 'markers_defaults', 'transformation', 'snap_module', 'size', 'angle', 'min', 'max', '_stroke_width' ],
+        [ 'show_markers', 'markers', 'markers_defaults', 'transformation', 'snap_module', 'size', 'angle', 'min', 'max', '_stroke_width' ],
         function(show_markers, markers, markers_defaults, transformation, snap_module, size, angle, min, max, _stroke_width) {
           const _markers = this._markers;
 
@@ -544,13 +542,27 @@ export class Circular extends Widget {
      */
     this._hand = makeSVG('rect', { class: 'aux-hand' });
 
+    /**
+     * @member {SVGGroup} Circular#_markers - A group containing all markers.
+     *      Has class <code>.aux-markers</code>
+     */
+    this._markers = makeSVG('g', { class: 'aux-markers' });
+
+    /**
+     * @member {SVGGroup} Circular#_dots - A group containing all dots.
+     *      Has class <code>.aux-dots</code>
+     */
+    this._dots = makeSVG('g', { class: 'aux-dots' });
+
     if (this.options.labels) this.set('labels', this.options.labels);
   }
 
   draw(O, element) {
     addClass(element, 'aux-circular');
-    element.insertBefore(this._value, this._markers);
-    element.insertBefore(this._base, this._value);
+    element.appendChild(this._dots);
+    element.appendChild(this._base);
+    element.appendChild(this._value);
+    element.appendChild(this._markers);
     element.appendChild(this._hand);
 
     super.draw(O, element);
@@ -561,6 +573,7 @@ export class Circular extends Widget {
     this._markers.remove();
     this._base.remove();
     this._value.remove();
+    this._hand.remove();
     super.destroy();
   }
 
@@ -645,33 +658,6 @@ export class Circular extends Widget {
   }
 }
 makeRanged(Circular);
-/**
- * @member {SVGGroup} Circular#_markers - A group containing all markers.
- *      Has class <code>.aux-markers</code>
- */
-defineChildElement(Circular, 'markers', {
-  //option: "markers",
-  //display_check: function(v) { return !!v.length; },
-  show: true,
-  dependency: MarkersChanged,
-  create: function () {
-    return makeSVG('g', { class: 'aux-markers' });
-  },
-});
-/**
- * @member {SVGGroup} Circular#_dots - A group containing all dots.
- *      Has class <code>.aux-dots</code>
- */
-defineChildElement(Circular, 'dots', {
-  //option: "dots",
-  //display_check: function(v) { return !!v.length; },
-  show: true,
-  dependency: DotsChanged,
-  create: function () {
-    return makeSVG('g', { class: 'aux-dots' });
-  },
-});
-
 /**
  * @member {SVGGroup} Circular#_labels - A group containing all labels.
  *      Has class <code>.aux-labels</code>
