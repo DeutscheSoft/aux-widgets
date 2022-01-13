@@ -7,13 +7,6 @@
    viewBox="0 0 96 80"
    id="svg2"
    version="1.1"
-   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
-   sodipodi:docname="aux_logo_2c.svg"
-   inkscape:export-filename="/home/markus/DeusO/Development/AUX/AUXLogo.png"
-   inkscape:export-xdpi="300"
-   inkscape:export-ydpi="300"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -21,50 +14,6 @@
    xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="1"
-     inkscape:pageshadow="2"
-     inkscape:zoom="5.28"
-     inkscape:cx="106.43939"
-     inkscape:cy="39.015152"
-     inkscape:document-units="px"
-     inkscape:current-layer="svg2"
-     showgrid="true"
-     units="px"
-     inkscape:window-width="3840"
-     inkscape:window-height="2063"
-     inkscape:window-x="3840"
-     inkscape:window-y="57"
-     inkscape:window-maximized="1"
-     inkscape:snap-bbox="true"
-     inkscape:bbox-nodes="true"
-     inkscape:object-paths="true"
-     inkscape:object-nodes="true"
-     inkscape:snap-smooth-nodes="true"
-     inkscape:snap-object-midpoints="true"
-     inkscape:snap-center="true"
-     inkscape:snap-others="true"
-     inkscape:snap-global="true"
-     showguides="false"
-     fit-margin-top="0"
-     fit-margin-left="0"
-     fit-margin-right="0"
-     fit-margin-bottom="0"
-     inkscape:pagecheckerboard="0"
-     inkscape:snap-nodes="true"
-     inkscape:snap-bbox-midpoints="true"
-     inkscape:snap-bbox-edge-midpoints="true">
-    <inkscape:grid
-       type="xygrid"
-       id="grid1"
-       empspacing="8"
-       originx="0"
-       originy="0" />
-  </sodipodi:namedview>
   <metadata
      id="metadata">
     <rdf:RDF>
@@ -77,13 +26,18 @@
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="Ebene 1"
-     inkscape:groupmode="layer"
      id="layer1"
      transform="translate(-37.150434,-125.66708)" />
   <g
      transform="matrix(0.77857717,0,0,0.77857717,-804.83366,156.86316)"
      id="g1818" />
+  <rect
+     style="color:#000000;overflow:visible;fill:#ffffff;stroke-width:3;stroke-linecap:square;stroke-linejoin:round;paint-order:markers fill stroke;stop-color:#000000"
+     id="rect1017"
+     width="96"
+     height="80"
+     x="0"
+     y="0" />
   <path
      id="path10883"
      style="color:#000000;fill:#666666;fill-opacity:1;stroke-linecap:square;stroke-linejoin:round;-inkscape-stroke:none;paint-order:markers fill stroke"
@@ -91,10 +45,8 @@
   <path
      style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#666666;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:49.8289;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:normal;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
      d="m 48.000208,8 c -8.635276,8.92e-5 -17.645635,2.898105 -20.973552,7.694818 -0.266445,0.384107 -0.488441,0.773425 -0.677009,1.165557 h -0.003 l -0.01912,0.0432 c -0.129957,0.274671 -0.244805,0.551157 -0.337136,0.828296 l -1.548617,3.796144 c -1.079341,0.876024 -2.003873,1.819462 -2.710777,2.83834 C 15.626471,33.166598 25.96945,43.999534 47.999986,44 70.030532,43.999534 80.373501,33.166598 74.268999,24.366355 73.562306,23.347754 72.63717,22.40385 71.558223,21.528015 l -1.556841,-3.823124 c -0.08807,-0.26084 -0.19653,-0.521086 -0.317951,-0.779737 l -0.02738,-0.0647 h -0.005 C 69.462452,16.468322 69.240436,16.079004 68.97401,15.694897 65.646134,10.898155 56.635735,8.0001684 48.000459,8.0000793 Z m -0.139791,1.2384018 c 3.610286,0 6.962239,0.5098998 9.749463,1.3813952 -0.304503,-0.02636 -0.609872,-0.0539 -0.909987,-0.05935 -0.113449,-0.002 -0.225952,-0.003 -0.337126,-0.003 -0.78768,0.0069 -1.50148,0.09224 -2.074885,0.248227 -1.910866,0.519749 -1.882501,1.703934 0.148014,2.662967 0.997709,0.471526 2.347793,0.821896 3.746835,0.9659 1.405515,0.144747 2.725815,0.06747 3.659134,-0.210448 0.705546,-0.210299 1.112366,-0.509286 1.244386,-0.849886 1.44637,1.185542 2.283181,2.551372 2.283191,4.011982 10e-6,4.499906 -7.838697,7.373756 -17.509025,7.373756 -9.670328,0 -17.511773,-2.87385 -17.511763,-7.373756 0,-4.499916 7.841435,-8.1480827 17.511763,-8.1480827 z"
-     id="path11588"
-     inkscape:connector-curvature="0" />
+     id="path11588" />
   <g
-     inkscape:label="Ebene 1"
      id="layer1-3"
      transform="translate(50.849566,-125.66708)" />
   <g
