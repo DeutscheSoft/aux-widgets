@@ -958,12 +958,17 @@ export class ChartHandle extends Widget {
               }
 
             }
+
+            // There are situations where the ranges are invalid (e.g. the
+            // transformations are singular).
+            if (X.some((v) => isNaN(v)))
+              return;
+
+            const currentPosition = this.get('_handle_position');
+
+            if (currentPosition && X.every((element, i) => element === currentPosition[i]))
+              return;
           }
-
-          const currentPosition = this.get('_handle_position');
-
-          if (currentPosition && X && X.every((element, i) => element === currentPosition[i]))
-            return;
 
           this.set('_handle_position', X);
         }),
