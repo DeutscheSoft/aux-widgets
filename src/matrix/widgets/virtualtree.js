@@ -377,6 +377,10 @@ export const VirtualTree = defineClass({
     const O = this.options;
     this.update('_view_height', E.offsetHeight);
 
+    // This is required because removing/adding a list to/from
+    // the dom will change the scroll position
+    this.emit('scrollTopChanged', this.scrollhide.element.scrollTop);
+
     Scroller.prototype.resize.call(this);
   },
   /**
