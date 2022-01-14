@@ -92,7 +92,6 @@ function onBatchStart() {
 }
 
 function onBatchEnd() {
-  console.log(this);
   this.set('show_cancel', false);
   this.set('show_select_diagonal', false);
   this.set('show_deselect_diagonal', false);
