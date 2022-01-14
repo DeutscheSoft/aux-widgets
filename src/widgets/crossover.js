@@ -129,8 +129,7 @@ export class CrossoverGraph extends EqualizerGraph {
   }
 
   getFilterFunctions() {
-    const bands = this.options.bands;
-    const index = this.options.index;
+    const { bands, index } = this.options;
 
     // sort bands by frequency
     bands.sort(function (a, b) {
@@ -264,8 +263,7 @@ export class Crossover extends Equalizer {
       setFreq.call(self, this);
     };
     this.removeChild(this.baseline);
-    const graph = this.addGraph(new CrossoverGraph({ index: 0 }));
-    this.crossover_graphs = [graph];
+    this.addGraph(new CrossoverGraph());
   }
 
   draw(O, element) {
@@ -274,38 +272,52 @@ export class Crossover extends Equalizer {
     super.draw(O, element);
   }
 
+  getCrossoverBands() {
+    return this.getChildren().filter((child) => child instanceof CrossoverBand);
+  }
+
+  getCrossoverGraphs() {
+    return this.getChildren().filter((child) => child instanceof CrossoverGraph);
+  }
+
   addChild(child) {
     super.addChild(child);
     if (child instanceof CrossoverBand) {
       // add this band to all crossover graphs
-      this.crossover_graphs.forEach((g) => g.addBand(child));
+      const bands = this.getCrossoverBands();
+      this.getCrossoverGraphs().forEach((graph) => graph.set('bands', bands));
       child.on('set_freq', this.set_freq_cb);
       limitBands.call(this);
       // add an additional crossover graph
-      const graph = this.addGraph(
-        new CrossoverGraph({ index: this.crossover_graphs.length })
-      );
-      this.crossover_graphs.push(graph);
+      this.addGraph(new CrossoverGraph());
     } else if (child instanceof CrossoverGraph) {
-      // add all bands to this crossover
-      this.getChildren()
-        .filter((_child) => _child instanceof CrossoverBand)
-        .forEach((band) => child.addBand(band));
+      child.set('bands', this.getCrossoverBands());
+      child.set('index', this.getCrossoverGraphs().indexOf(child));
     }
   }
 
   removeChild(child) {
     super.removeChild(child);
     if (child instanceof CrossoverBand) {
-      const graph = this.crossover_graphs.pop();
-      this.removeGraph(graph);
+      const graphs = this.getCrossoverGraphs();
+      const bands = this.getCrossoverBands();
+
+      // Adjust the number of graphs to match.
+      if (graphs.length > bands.length + 1) {
+        const count = graphs.length - bands.length - 1;
+
+        for (let i = graphs.length - count; i < graphs.length; i++) {
+          this.removeChild(graphs[i]);
+        }
+      }
+
       child.off('set_freq', this.set_freq_cb);
       limitBands.call(this);
-      this.crossover_graphs.forEach((g) => g.removeBand(child));
+      this.getCrossoverGraphs().forEach((graph) => graph.set('bands', bands));
     } else if (child instanceof CrossoverGraph) {
-      this.getChildren()
-        .filter((_child) => _child instanceof CrossoverBand)
-        .forEach((band) => child.removeBand(band));
+      child.set('bands', []);
+      child.set('index', this.getCrossoverGraphs().length-1);
+      this.getCrossoverGraphs().forEach((graph, index) => graph.set('index', index));
     }
   }
 
@@ -320,5 +332,11 @@ export class Crossover extends Equalizer {
     }
     this.addChild(band);
     return band;
+  }
+
+  empty() {
+    this.getCrossoverBands().forEach((band) => this.removeChild(band));
+    super.empty();
+    this.addGraph(new CrossoverGraph());
   }
 }

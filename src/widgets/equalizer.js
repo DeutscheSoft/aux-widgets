@@ -116,9 +116,6 @@ function drawGraph(bands) {
 
   return fastDrawPLinear(X, Y);
 }
-function invalidateBands() {
-  this.invalidate('bands');
-}
 
 /**
  * EqualizerGraph is a special {@link Graph}, which contains a list of {@link EqBand}s and draws the
@@ -164,6 +161,17 @@ export class EqualizerGraph extends Graph {
     };
   }
 
+  static get static_events() {
+    return {
+      set_bands: function (value, key, previousValue) {
+        const newBands = value.filter((band) => !previousValue.includes(band));
+        const oldBands = previousValue.filter((band) => !value.includes(band));
+        newBands.forEach((band) => band.on('set', this._invalidate_bands));
+        oldBands.forEach((band) => band.off('set', this._invalidate_bands));
+      },
+    };
+  }
+
   static get renderers() {
     return [
       defineRecalculation(
@@ -176,7 +184,8 @@ export class EqualizerGraph extends Graph {
 
   initialize(options) {
     super.initialize(options);
-    this._invalidate_bands = invalidateBands.bind(this);
+    this._invalidate_bands = this.invalidate.bind(this, 'bands');
+    this.get('bands').forEach((band) => band.on('set', this._invalidate_bands));
   }
 
   /**
@@ -196,23 +205,20 @@ export class EqualizerGraph extends Graph {
   }
 
   resize() {
-    invalidateBands.call(this);
+    this.invalidate('bands');
   }
 
   addBand(band) {
-    band.on('set', this._invalidate_bands);
-    this.set('bands', this.options.bands.concat([band]));
+    this.set('bands', this.get('bands').concat([band]));
   }
 
   removeBand(band) {
-    const O = this.options;
     this.set(
       'bands',
-      O.bands.filter(function (b) {
+      this.get('bands').filter((b) => {
         return b !== band;
       })
     );
-    band.off('set', this._invalidate_bands);
   }
 }
 
