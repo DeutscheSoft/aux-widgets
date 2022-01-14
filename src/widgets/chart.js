@@ -78,7 +78,6 @@ function STOP(e) {
 }
 
 const LabelChanged = Symbol('_label changed');
-const KeyChanged = Symbol('_key or _key_background changed');
 const Graphs = Symbol('graphs changed');
 
 /**
@@ -99,14 +98,6 @@ const Graphs = Symbol('graphs changed');
  *   <code>"left"</code>, <code>"center"</code>, <code>"right"</code>,
  *   <code>"bottom-left"</code>, <code>"bottom"</code> and
  *   <code>"bottom-right"</code>.
- * @property {Boolean|String} [options.key=false] - If set to a string
- *   a key is rendered into the chart at the given position. The key
- *   will detail names and colors of the graphs inside of this chart.
- *   Possible values are <code>"top-left"</code>, <code>"top-right"</code>,
- *   <code>"bottom-left"</code> and <code>"bottom-right"</code>. Set to `false`
- *   to remove the key from the DOM.
- * @property {Object} [options.key_size={x:20,y:10}] - Size of the colored
- *   rectangles inside of the key describing individual graphs.
  * @property {Array<Object>} [options.grid_x=[]] - An array containing
  *   objects with the following optional members to draw the grid:
  * @property {Number} [options.grid_x.pos] - The value where to draw  grid line and corresponding label.
@@ -157,8 +148,6 @@ export class Chart extends Widget {
       range_x: 'object',
       range_y: 'object',
       range_z: 'object',
-      key: 'string',
-      key_size: 'object',
       label: 'string',
       label_position: 'string',
       resized: 'boolean',
@@ -182,9 +171,6 @@ export class Chart extends Widget {
       range_y: {}, // an object with options for a range for the y axis
       // or a function returning a Range instance (only on init)
       range_z: { scale: 'linear', min: 0, max: 1 }, // Range z options
-      key: false, // key draws a description for the graphs at the given
-      // position, use false for no key
-      key_size: { x: 20, y: 10 }, // size of the key rects
       label: '', // a label for the chart
       label_position: 'top-left', // the position of the label
       resized: false,
@@ -312,125 +298,6 @@ export class Chart extends Widget {
           } else {
             style.display = 'none';
           }
-        }),
-      defineRender(
-        [ 'key', 'key_size', 'range_x', 'range_y', KeyChanged, Graphs ],
-        function(key, key_size, range_x, range_y) {
-          const { _key, _key_background } = this;
-
-          if (!_key || !_key_background) return;
-
-          while (_key.firstChild !== _key.lastChild) _key.removeChild(_key.lastChild);
-          empty(_key.firstChild);
-
-          const gpad = CSSSpace(_key, 'padding');
-          const gmarg = CSSSpace(_key, 'margin');
-          let bb;
-          let c = 0;
-          let w = 0;
-          let top = 0;
-          const lines = this.getGraphs().map((graph) => {
-            if (graph.get('key') === false)
-              return;
-            const t = makeSVG('tspan', {
-              class: 'aux-label',
-              style: 'dominant-baseline: central;',
-            });
-            t.textContent = graph.get('key');
-            t.setAttribute('x', gpad.left);
-            _key.firstChild.appendChild(t);
-
-            if (!bb) bb = _key.getBoundingClientRect();
-            top += c ? parseInt(getStyle(t, 'line-height')) : gpad.top;
-            t.setAttribute('y', top + bb.height / 2);
-
-            c++;
-            w = Math.max(w, t.getComputedTextLength());
-
-            return {
-              x: parseInt(getStyle(t, 'margin-right')) || 0,
-              y: Math.round(top),
-              width: Math.round(bb.width),
-              height: Math.round(bb.height),
-              class: graph.element.getAttribute('class'),
-              color: graph.element.getAttribute('color') || '',
-              style: graph.element.getAttribute('style'),
-            };
-          });
-
-          lines.forEach((line) => {
-            const b = makeSVG('rect', {
-              class: line['class'] + '.aux-rect',
-              color: line.color,
-              style: line.style,
-              x: line.x + 0.5 + w + gpad.left,
-              y: line.y + 0.5 + parseInt(line.height / 2 - key_size.y / 2),
-              height: key_size.y,
-              width: key_size.x,
-            });
-            _key.appendChild(b);
-          });
-
-          if (lines.length) {
-            _key_background.style.display = 'block';
-            _key.style.display = 'block';
-          } else {
-            _key_background.style.display = 'none';
-            _key.style.display = 'none';
-          }
-
-          bb = _key.getBoundingClientRect();
-          const width = this.range_x.options.basis;
-          const height = this.range_y.options.basis;
-
-          let position;
-
-          switch (key) {
-            case 'top-left':
-              position = {
-                x1: gmarg.left,
-                y1: gmarg.top,
-                x2: gmarg.left + parseInt(bb.width) + gpad.left + gpad.right,
-                y2: gmarg.top + parseInt(bb.height) + gpad.top + gpad.bottom,
-              };
-              break;
-            case 'top-right':
-              position = {
-                x1: width - gmarg.right - parseInt(bb.width) - gpad.left - gpad.right,
-                y1: gmarg.top,
-                x2: width - gmarg.right,
-                y2: gmarg.top + parseInt(bb.height) + gpad.top + gpad.bottom,
-              };
-              break;
-            case 'bottom-left':
-              position = {
-                x1: gmarg.left,
-                y1:
-                  height - gmarg.bottom - parseInt(bb.height) - gpad.top - gpad.bottom,
-                x2: gmarg.left + parseInt(bb.width) + gpad.left + gpad.right,
-                y2: height - gmarg.bottom,
-              };
-              break;
-            case 'bottom-right':
-              position = {
-                x1: width - gmarg.right - parseInt(bb.width) - gpad.left - gpad.right,
-                y1:
-                  height - gmarg.bottom - parseInt(bb.height) - gpad.top - gpad.bottom,
-                x2: width - gmarg.right,
-                y2: height - gmarg.bottom,
-              };
-              break;
-            default:
-              warn('Unsupported key', key);
-          }
-          _key.setAttribute(
-            'transform',
-            'translate(' + position.x1 + ',' + position.y1 + ')'
-          );
-          _key_background.setAttribute('x', position.x1);
-          _key_background.setAttribute('y', position.y1);
-          _key_background.setAttribute('width', position.x2 - position.x1);
-          _key_background.setAttribute('height', position.y2 - position.y1);
         }),
       defineMeasure([ 'square', Resize ], function(square) {
         const E = this.element;
@@ -816,52 +683,6 @@ defineChildWidget(Chart, 'grid', {
       range_y: this.range_y,
     };
   },
-});
-function keyHoverCallback(ev) {
-  const b = ev.type === 'mouseenter';
-  toggleClass(this, 'aux-hover', b);
-  /* this.nextSibling is the key */
-  toggleClass(this.nextSibling, 'aux-hover', b);
-}
-/**
- * @member {SVGRect} Chart#_key_background - The SVG rectangle of the key.
- *   Has class <code>.aux-background</code>.
- */
-defineChildElement(Chart, 'key_background', {
-  option: 'key',
-  display_check: function (v) {
-    return !!v;
-  },
-  create: function () {
-    const k = makeSVG('rect', { class: 'aux-background' });
-    k.addEventListener('mouseenter', keyHoverCallback);
-    k.addEventListener('mouseleave', keyHoverCallback);
-    return k;
-  },
-  append: function () {
-    this.svg.appendChild(this._key_background);
-  },
-  dependency: KeyChanged,
-});
-/**
- * @member {SVGGroup} Chart#_key - The SVG group containing all descriptions.
- *   Has class <code>.aux-key</code>.
- */
-defineChildElement(Chart, 'key', {
-  option: 'key',
-  display_check: function (v) {
-    return !!v;
-  },
-  create: function () {
-    const key = makeSVG('g', { class: 'aux-key' });
-    key.appendChild(makeSVG('text', { class: 'aux-keytext' }));
-    return key;
-  },
-  append: function () {
-    this.svg.appendChild(this._key);
-  },
-  dependency: KeyChanged,
-  debug: true,
 });
 /**
  * @member {SVGText} Chart#_label - The label of the chart.
