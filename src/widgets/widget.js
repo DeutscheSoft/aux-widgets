@@ -47,8 +47,7 @@ import {
   defineMeasure,
   deferMeasure,
 } from '../renderer.js';
-
-export const domScheduler = new Scheduler();
+import { domScheduler } from '../dom_scheduler.js';
 
 const enableTimers = new ProximityTimers();
 

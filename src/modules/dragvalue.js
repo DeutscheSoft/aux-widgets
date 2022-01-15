@@ -24,7 +24,7 @@ import { DragCapture } from './dragcapture.js';
 import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
 import { warn } from '../utils/log.js';
 import { toggleClass } from '../utils/dom.js';
-import { domScheduler } from '../widgets/widget.js';
+import { domScheduler } from '../dom_scheduler.js';
 import { MASK_RENDER } from '../scheduler/scheduler.js';
 
 function startDrag(value) {

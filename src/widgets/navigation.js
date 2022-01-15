@@ -29,7 +29,7 @@ import { Button } from './button.js';
 import { Buttons } from './buttons.js';
 import { Container } from './container.js';
 import { defineRender } from '../renderer.js';
-import { domScheduler } from './widget.js';
+import { domScheduler } from '../dom_scheduler.js';
 import { MASK_RENDER } from '../scheduler/scheduler.js';
 
 function easeLinear(t) {
