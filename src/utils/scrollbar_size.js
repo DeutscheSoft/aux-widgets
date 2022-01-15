@@ -1,3 +1,6 @@
+import { domScheduler } from '../dom_scheduler.js';
+import { MASK_CALCULATE, MASK_RENDER } from '../scheduler/scheduler.js';
+
 /**
  * Evaluate size of scroll bars. The size is set as CSS variable
  * `--aux-scrollbar-size` on the `body` element.
@@ -5,6 +8,7 @@
  * @function scrollbarSize
  */
 let scrollbarMeasured = false;
+let scheduled = false;
 
 function measureScrollbarSize() {
   const div = document.createElement('div');
@@ -12,17 +16,30 @@ function measureScrollbarSize() {
   div.style.position = 'fixed';
   div.style.visibility = 'hidden';
   document.body.appendChild(div);
-  const size = div.offsetWidth - div.clientWidth;
-  document.body.removeChild(div);
-  document.body.style.setProperty('--aux-scrollbar-size', size + 'px');
+
+  domScheduler.schedule(MASK_CALCULATE, () => {
+    scheduled = false;
+    const size = div.offsetWidth - div.clientWidth;
+
+    domScheduler.schedule(MASK_RENDER, () => {
+      div.remove();
+      document.body.style.setProperty('--aux-scrollbar-size', size + 'px');
+    });
+  });
+}
+
+function triggerMeasure() {
+  if (scheduled) return;
+  scheduled = true;
+
+  domScheduler.schedule(MASK_RENDER, measureScrollbarSize);
 }
 
 export function scrollbarSize() {
   if (scrollbarMeasured) return;
   scrollbarMeasured = true;
 
-  if (document.body) measureScrollbarSize();
-  else document.addEventListener('DOMContentLoaded', measureScrollbarSize);
+  if (document.body) triggerMeasure();
+  else document.addEventListener('DOMContentLoaded', triggerMeasure);
+  window.addEventListener('resize', triggerMeasure);
 }
-
-window.addEventListener('resize', measureScrollbarSize);
