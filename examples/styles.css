@@ -199,3 +199,11 @@ body > #navigation > li:hover {
   background: var(--aux-active-base);
   color: var(--aux-active-text);
 }
+
+.aux-chart {
+  width: 300px;
+  height: 150px;
+}
+.aux-panorama {
+  width: 150px;
+}
