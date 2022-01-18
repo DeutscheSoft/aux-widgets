@@ -53,6 +53,7 @@ export function defineRange(widget, args, name) {
     range = new Range(args);
   }
   if (name) {
+    widget.set(name, range);
     widget[name] = range;
     widget.on('set_' + name, rangeOptionChanged);
   }

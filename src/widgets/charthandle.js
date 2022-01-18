@@ -29,6 +29,7 @@ import { setText, removeClass, addClass, toggleClass } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
 import { Range } from '../modules/range.js';
 import { Timer } from '../utils/timers.js';
+import { defineRange } from '../utils/define_range.js';
 import { defineRender, defineRecalculation, defineMeasure, deferRender, deferMeasure } from '../renderer.js';
 
 import { DragCapture } from '../modules/dragcapture.js';
@@ -1207,9 +1208,9 @@ export class ChartHandle extends Widget {
     /**
      * @member {Range} ChartHandle#range_z - The {@link Range} for the z axis.
      */
-    this.set('range_x', O.range_x);
-    this.set('range_y', O.range_y);
-    this.set('range_z', O.range_z);
+    defineRange(this, O.range_x, 'range_x');
+    defineRange(this, O.range_y, 'range_y');
+    defineRange(this, O.range_z, 'range_z');
 
     /**
      * @member {SVGGroup} ChartHandle#element - The main SVG group containing all handle elements. Has class <code>.aux-charthandle</code>.
