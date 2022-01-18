@@ -1461,29 +1461,40 @@ export class ChartHandle extends Widget {
         }
         if (value !== false) createZHandle.call(this);
         break;
-      case 'x':
-        value = O.range_x.snap(value);
-        if (O.x_min !== false && value < O.x_min) value = O.x_min;
-        if (O.x_max !== false && value > O.x_max) value = O.x_max;
+      case 'x': {
+        const { range_x, x_min, x_max } = O;
+
+        if (range_x)
+          value = range_x.snap(value);
+        if (x_min !== false && value < x_min) value = x_min;
+        if (x_max !== false && value > x_max) value = x_max;
         break;
-      case 'y':
-        value = O.range_y.snap(value);
-        if (O.y_min !== false && value < O.y_min) value = O.y_min;
-        if (O.y_max !== false && value > O.y_max) value = O.y_max;
+      }
+      case 'y': {
+        const { range_y, y_min, y_max } = O;
+        value = range_y.snap(value);
+        if (y_min !== false && value < y_min) value = y_min;
+        if (y_max !== false && value > y_max) value = y_max;
         break;
-      case 'z':
-        if (O.z_min !== false && value < O.z_min) {
-          value = O.z_min;
+      }
+      case 'z': {
+        const { range_z, z_min, z_max } = O;
+
+        if (z_min !== false && value < z_min) {
+          value = z_min;
           warning(this.element);
-        } else if (O.z_max !== false && value > O.z_max) {
-          value = O.z_max;
+        } else if (z_max !== false && value > z_max) {
+          value = z_max;
           warning(this.element);
         }
-        if (value < O.range_z.options.min || value > O.range_z.options.max) {
-          warning(this.element);
+        if (range_z) {
+          if (value < range_z.options.min || value > range_z.options.max) {
+            warning(this.element);
+          }
+          value = range_z.snap(value);
         }
-        value = O.range_z.snap(value);
         break;
+      }
 
       case 'range_x':
       case 'range_y':
