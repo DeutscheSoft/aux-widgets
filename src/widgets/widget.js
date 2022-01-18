@@ -302,6 +302,7 @@ export class Widget extends Base {
       notransitions: void 0,
       disabled: false, // Widgets can be disabled by setting this to true
       visible: true,
+      active: true,
       dblclick: 0,
       interacting: false,
       notransitions_duration: 500,
