@@ -40,7 +40,7 @@ function extractChildOptions(O, i) {
     const _type = LevelMeter.getOptionType(_key) || '';
     if (Array.isArray(value) && _type.search('array') === -1) {
       if (i < value.length) o[ckey] = value[i];
-    } else {
+    } else if (value !== null) {
       o[ckey] = value;
     }
   }
