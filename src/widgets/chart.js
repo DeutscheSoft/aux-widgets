@@ -337,7 +337,7 @@ export class Chart extends Widget {
     defineRange(this, this.options.range_x, 'range_x');
     defineRange(this, this.options.range_y, 'range_y');
     defineRange(this, this.options.range_z, 'range_z');
-    this.range_y.set('reverse', true, true, true);
+    this.range_y.set('reverse', true);
 
     /**
      * @member {HTMLDivElement} Chart#element - The main DIV container.
