@@ -357,7 +357,7 @@ function dragRatio(key, y) {
   const r_max = this.range_z.get('max');
 
   this.userset('ratio', Math.min(r_max, Math.max(r_min, R)));
-  console.log(y, R, r_min, r_max, Math.min(r_max, Math.max(r_min, R)), this.ratio)
+
   return false;
 }
 
