@@ -1273,15 +1273,21 @@ export const ChartHandle = defineClass({
         var ox = range_x.options;
         var oy = range_y.options;
 
-        var x = Math.min(
+        let x = Math.min(
           ox.max,
           Math.max(ox.min, range_x.pixelToValue(state.x + v[0]))
         );
-        var y = Math.min(
+        let y = Math.min(
           oy.max,
           Math.max(oy.min, range_y.pixelToValue(state.y + v[1]))
         );
+        
+        if (_O.x_min !== false && x < _O.x_min) x = _O.x_min;
+        if (_O.x_max !== false && x > _O.x_max) x = _O.x_max;
 
+        if (_O.y_min !== false && y < _O.y_min) y = _O.y_min;
+        if (_O.y_max !== false && y > _O.y_max) y = _O.y_max;
+        
         self.userset('x', _O.range_x.snap(x));
         self.userset('y', _O.range_y.snap(y));
       },
