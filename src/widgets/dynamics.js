@@ -343,16 +343,125 @@ export class Dynamics extends Chart {
   }
 }
 
+
+function dragRatio(key, y) {
+  if (key !== 'y') return;
+  
+  const thres = this.get('threshold');
+  const ratio_x = this.get('ratio_x');
+  const max = this.get('max');
+
+  const R = (max - thres - ratio_x) / (y - thres);
+
+  const r_min = this.range_z.get('min');
+  const r_max = this.range_z.get('max');
+
+  this.userset('ratio', Math.min(r_max, Math.max(r_min, R)));
+  console.log(y, R, r_min, r_max, Math.min(r_max, Math.max(r_min, R)), this.ratio)
+  return false;
+}
+
+function setRatio() {
+  if (!this.ratio) return;
+  
+  const thres = this.get('threshold');
+  const ratio = this.get('ratio');
+  const ratio_x = this.get('ratio_x');
+  const max = this.get('max');
+  
+  const Y = thres + (max - thres - ratio_x) / ratio;
+  
+  this.ratio.set('y', Y);
+}
+
+function setRatioLimits() {
+  if (!this.ratio) return;
+  
+  const thres = this.get('threshold');
+  const ratio = this.get('ratio');
+  const ratio_x = this.get('ratio_x');
+  const max = this.get('max');
+  const r_min = this.range_z.get('min');
+  const r_max = this.range_z.get('max');
+
+  const num = (max - thres - ratio_x);
+
+  this.ratio.set('y_max', thres + num / r_min);
+  this.ratio.set('y_min', thres + num / r_max);
+}
+
 /**
  * Compressor is a pre-configured {@link Dynamics} widget.
  * @extends Dynamics
  * @class Compressor
  */
 export class Compressor extends Dynamics {
+
+  static get _options() {
+    return Object.assign({}, Dynamics.getOptionTypes(), {
+      show_ratio: 'boolean',
+      ratio_label: 'boolean|function',
+      ratio_x: 'number',
+    });
+  }
   static get options() {
-    return { type: 'compressor' };
+    return {
+      type: 'compressor',
+      show_ratio: true,
+      ratio_label: false,
+      ratio_x: 12,
+    };
   }
 
+  static get static_events() {
+    return {
+      set_ratio_label: function (v) {
+        this.ratio.set('format_label', v);
+      },
+      set_show_ratio: function (v) {
+        this.ratio.set('visible', v);
+      },
+      set_ratio_x: function (v) {
+        this.ratio.set('x_min', v);
+        this.ratio.set('x_max', v);
+        setRatio.call(this);
+        setRatioLimits.call(this);
+      },
+      set_threshold: function (v) {
+        setRatio.call(this);
+        setRatioLimits.call(this);
+      },
+      set_ratio: function (v) {
+        setRatio.call(this);
+      },
+      set_min: function (v) {
+        setRatio.call(this);
+        setRatioLimits.call(this);
+      },
+      set_max: function (v) {
+        setRatio.call(this);
+        setRatioLimits.call(this);
+      },
+    }
+  }
+
+  initialize(options) {
+    super.initialize(options);
+    /**
+     * @member {ChartHandle} Compressor#ratio - The handle to set ratio. Has class <code>.aux-ratio</code>
+     */
+    this.ratio = this.addHandle({
+      range_x: this.range_x,
+      range_y: this.range_y,
+      range_z: this.range_z,
+    });
+    this.ratio.addEventListener('userset', dragRatio.bind(this));
+
+    this.set('ratio_label', this.options.ratio_label);
+    this.set('show_ratio', this.options.show_ratio);
+    this.set('ratio_x', this.options.ratio_x);
+    setRatio.call(this);
+  }
   draw(O, element) {
     /**
      * @member {HTMLDivElement} Compressor#element - The main DIV container.
