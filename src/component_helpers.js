@@ -23,12 +23,15 @@ import { HTML } from './utils/dom.js';
 import { isNativeEvent } from './implements/base.js';
 import { subscribeOptionsAttributes } from './options.js';
 import { SubscriberMap } from './utils/subscriber_map.js';
-import { initSubscriptions, unsubscribeSubscriptions } from './utils/subscriptions.js';
+import {
+  initSubscriptions,
+  unsubscribeSubscriptions,
+} from './utils/subscriptions.js';
 
 function attributeForWidget(Widget) {
   const attributes = [];
   const skip = ['class', 'id', 'container', 'element', 'styles'];
-  const rename = ['title', 'role', 'tabindex' ];
+  const rename = ['title', 'role', 'tabindex'];
 
   for (let i in Widget.getOptionTypes()) {
     if (skip.indexOf(i) !== -1) continue;
@@ -166,13 +169,11 @@ export function findParentNode(node) {
   return null;
 }
 
-
 const baseCache = new WeakMap();
 
 function createComponent(base) {
   if (!base) base = HTMLElement;
-  if (baseCache.has(base))
-    return baseCache.get(base);
+  if (baseCache.has(base)) return baseCache.get(base);
 
   class BaseComponent extends base {
     _auxCalculateAttributes(parentAttributes) {
@@ -300,8 +301,7 @@ function createComponent(base) {
 
       this._detachFromParent = unsubscribeSubscriptions(this._detachFromParent);
 
-      if (!this.isConnected && parentNode === null)
-      {
+      if (!this.isConnected && parentNode === null) {
         this._auxParentNode = void 0;
         return null;
       }
@@ -355,7 +355,9 @@ function createComponent(base) {
     }
 
     disconnectedCallback() {
-      this._auxAttributesSubscription = unsubscribeSubscriptions(this._auxAttributesSubscription);
+      this._auxAttributesSubscription = unsubscribeSubscriptions(
+        this._auxAttributesSubscription
+      );
       this._auxParentChanged();
     }
 
@@ -426,7 +428,7 @@ function createComponent(base) {
     auxResize() {
       this.auxWidget.triggerResize();
     }
-  };
+  }
 
   baseCache.set(base, BaseComponent);
 
@@ -505,8 +507,7 @@ export function componentFromWidget(Widget, base) {
         return () => {
           // There are situations where we are removed from the
           // parent programmatically.
-          if (widget.parent == parentWidget)
-          {
+          if (widget.parent == parentWidget) {
             parentWidget.removeChild(widget);
           }
           widget.disableDraw();

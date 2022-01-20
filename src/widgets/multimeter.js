@@ -265,15 +265,12 @@ export class MultiMeter extends Container {
         const E = this.element;
         const prevCount = this.meters.length;
 
-        if (prevCount === count)
-          return;
+        if (prevCount === count) return;
 
         if (count > prevCount) {
-          for (let i = 0; i < (count - prevCount); i++)
-            addMeter.call(this);
+          for (let i = 0; i < count - prevCount; i++) addMeter.call(this);
         } else {
-          for (let i = 0; i < (prevCount - count); i++)
-            removeMeter.call(this);
+          for (let i = 0; i < prevCount - count; i++) removeMeter.call(this);
         }
         removeClass(E, 'aux-count-' + prevCount);
         addClass(E, 'aux-count-' + count);
@@ -306,17 +303,25 @@ export class MultiMeter extends Container {
             throw new Error('unsupported layout');
         }
       }),
-      defineRender([ 'count', 'layout', 'show_scale' ], function (count, layout, show_scale) {
+      defineRender(['count', 'layout', 'show_scale'], function (
+        count,
+        layout,
+        show_scale
+      ) {
         const E = this.element;
 
         switch (layout) {
           case 'top':
           case 'left':
-            this.meters.forEach((meter, i, meters) => meter.set('show_scale', show_scale && i + 1 === meters.length));
+            this.meters.forEach((meter, i, meters) =>
+              meter.set('show_scale', show_scale && i + 1 === meters.length)
+            );
             break;
           case 'bottom':
           case 'right':
-            this.meters.forEach((meter, i) => meter.set('show_scale', show_scale && i === 0));
+            this.meters.forEach((meter, i) =>
+              meter.set('show_scale', show_scale && i === 0)
+            );
             break;
         }
       }),

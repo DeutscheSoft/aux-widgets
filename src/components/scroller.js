@@ -17,8 +17,11 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { componentFromWidget, subcomponentFromWidget } from './../component_helpers.js';
-import { Scroller, ScrollHide  } from './../widgets/scroller.js';
+import {
+  componentFromWidget,
+  subcomponentFromWidget,
+} from './../component_helpers.js';
+import { Scroller, ScrollHide } from './../widgets/scroller.js';
 
 /**
  * WebComponent for the Scroller widget. Available in the DOM as

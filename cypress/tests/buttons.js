@@ -18,144 +18,118 @@ function deactivateButton(button) {
 
 describe('Buttons', () => {
   it('events and classes', () => {
-
     cy.visit('http://localhost:1234/tests/Buttons.html');
 
-    cy.get('aux-buttons').eq(0).within(($el) => {
+    cy.get('aux-buttons')
+      .eq(0)
+      .within(($el) => {
+        const buttons = cy.get('.aux-button');
 
-      const buttons = cy.get('.aux-button');
+        let oldb = {};
 
-      let oldb = {};
-      
-      buttons.each(($el) => {
-        
-        let button = cy.wrap($el);
+        buttons.each(($el) => {
+          let button = cy.wrap($el);
 
-        if(!Cypress.$.isEmptyObject(oldb)) {
-          oldb.should(beInactive);
-        }
-        button.click()
-              .should(beActive);
+          if (!Cypress.$.isEmptyObject(oldb)) {
+            oldb.should(beInactive);
+          }
+          button.click().should(beActive);
 
-        oldb = button;
-      
-      });
-    });
-
-
-    cy.get('aux-buttons').eq(1).within(($el) => {
-
-      const buttons = cy.get('.aux-button');
-
-      const cb = cy.spy();
-
-      buttons.each(($el, i) => {
-        
-        let button = cy.wrap($el);
-        
-        if(i < 2) {
-          button
-            .onAuxEvent('click', cb)
-            .click()
-            .should(beActive)
-            .then(() => {
-              expect(cb).to.be.called;
-            });
-        }
-        if(i > 1) {
-          button
-            .onAuxEvent('click', cb)
-            .click()
-            .should(beWarning)
-            .then(() => {
-              expect(cb).to.be.called;
-            })
-            .wait(500)
-            .should(beInactive);
-        }
+          oldb = button;
+        });
       });
 
-      buttons.each(($el, i) => {
-        
-        let button = cy.wrap($el);
-        
-        if(i === 1) {
-          deactivateButton(button);
-        }
-        if(i === 2) {
-          button.click()
-                .should(beActive);
-        }
-        if(i > 2) {
-          button.click()
-                .should(beWarning)
-                .wait(500)
-                .should(beInactive);
-        }
+    cy.get('aux-buttons')
+      .eq(1)
+      .within(($el) => {
+        const buttons = cy.get('.aux-button');
 
-      });
-    });
+        const cb = cy.spy();
 
+        buttons.each(($el, i) => {
+          let button = cy.wrap($el);
 
-    cy.get('aux-buttons').eq(2).within(($el) => {
-
-      const buttons = cy.get('.aux-button');
-
-      buttons.each(($el, i) => {
-       
-        let button = cy.wrap($el);
-        
-        button.click()
-              .should(beActive)
-              .wait(100)
+          if (i < 2) {
+            button
+              .onAuxEvent('click', cb)
               .click()
+              .should(beActive)
+              .then(() => {
+                expect(cb).to.be.called;
+              });
+          }
+          if (i > 1) {
+            button
+              .onAuxEvent('click', cb)
+              .click()
+              .should(beWarning)
+              .then(() => {
+                expect(cb).to.be.called;
+              })
+              .wait(500)
               .should(beInactive);
+          }
         });
 
-      let oldb = {};
-      
-      buttons.each(($el, i) => {
-        
-        let button = cy.wrap($el);
-        
-        if(!Cypress.$.isEmptyObject(oldb)) {
-          oldb.should(beInactive);
-        }
-        
-        button.click()
-              .should(beActive)
-              .wait(100)
-              .click()
-              .should(beInactive);
-        
-        oldb = button;
+        buttons.each(($el, i) => {
+          let button = cy.wrap($el);
 
+          if (i === 1) {
+            deactivateButton(button);
+          }
+          if (i === 2) {
+            button.click().should(beActive);
+          }
+          if (i > 2) {
+            button.click().should(beWarning).wait(500).should(beInactive);
+          }
+        });
       });
 
-    });
+    cy.get('aux-buttons')
+      .eq(2)
+      .within(($el) => {
+        const buttons = cy.get('.aux-button');
 
-    cy.get('aux-buttons').eq(3).within(($el) => {
+        buttons.each(($el, i) => {
+          let button = cy.wrap($el);
 
-      const buttons = cy.get('aux-button');
+          button.click().should(beActive).wait(100).click().should(beInactive);
+        });
 
-      let oldb = {};
-      
-      buttons.each(($el, i) => {
-        
-        let button = cy.wrap($el);
-        
-        if(!Cypress.$.isEmptyObject(oldb)) {
-          oldb.should(beInactive);
-        }
-        
-        button.click()
-              .should(beActive);
+        let oldb = {};
 
-        oldb = button;
+        buttons.each(($el, i) => {
+          let button = cy.wrap($el);
 
+          if (!Cypress.$.isEmptyObject(oldb)) {
+            oldb.should(beInactive);
+          }
+
+          button.click().should(beActive).wait(100).click().should(beInactive);
+
+          oldb = button;
+        });
       });
 
-    });
+    cy.get('aux-buttons')
+      .eq(3)
+      .within(($el) => {
+        const buttons = cy.get('aux-button');
 
+        let oldb = {};
+
+        buttons.each(($el, i) => {
+          let button = cy.wrap($el);
+
+          if (!Cypress.$.isEmptyObject(oldb)) {
+            oldb.should(beInactive);
+          }
+
+          button.click().should(beActive);
+
+          oldb = button;
+        });
+      });
   });
 });

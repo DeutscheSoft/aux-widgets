@@ -380,7 +380,8 @@ export class Base {
      * @param {string} name - The name of the option.
      * @param {mixed} value - The value of the option.
      */
-    if (this.hasEventListeners('set')) this.emit('set', key, value, currentValue);
+    if (this.hasEventListeners('set'))
+      this.emit('set', key, value, currentValue);
     /**
      * Is fired when an option is set.
      *
@@ -410,8 +411,11 @@ export class Base {
 
     // If both the old and the new value are NaN there is no need to set them,
     // either.
-    if (current_value === value ||
-        current_value !== current_value && value !== value) return;
+    if (
+      current_value === value ||
+      (current_value !== current_value && value !== value)
+    )
+      return;
     this.set(key, value);
   }
 

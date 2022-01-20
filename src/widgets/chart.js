@@ -36,7 +36,13 @@ import { Graph } from './graph.js';
 import { ChartHandle } from './charthandle.js';
 import { defineChildWidget } from '../child_widget.js';
 import { Grid } from './grid.js';
-import { defineRender, defineMeasure, combineDefer, deferRender, deferMeasure } from '../renderer.js';
+import {
+  defineRender,
+  defineMeasure,
+  combineDefer,
+  deferRender,
+  deferMeasure,
+} from '../renderer.js';
 import { ChildWidgets } from '../utils/child_widgets.js';
 
 function calculateOverlap(X, Y) {
@@ -206,7 +212,7 @@ export class Chart extends Widget {
 
   static get renderers() {
     return [
-      defineRender([ '_width', '_height' ], function (_width, _height) {
+      defineRender(['_width', '_height'], function (_width, _height) {
         const E = this.svg;
 
         if (_width && _height) {
@@ -215,8 +221,8 @@ export class Chart extends Widget {
         }
       }),
       defineRender(
-        [ 'label', 'label_position', 'range_x', 'range_y', LabelChanged ],
-        function(label, label_position, range_x, range_y) {
+        ['label', 'label_position', 'range_x', 'range_y', LabelChanged],
+        function (label, label_position, range_x, range_y) {
           const _label = this._label;
 
           if (!_label) return;
@@ -290,16 +296,17 @@ export class Chart extends Widget {
               _label.setAttribute('y', y);
             });
           });
-        }),
-      defineRender('show_handles', function(show_handles) {
-          const style = this._handles.style;
-          if (show_handles) {
-            style.removeProperty('display');
-          } else {
-            style.display = 'none';
-          }
-        }),
-      defineMeasure([ 'square', Resize ], function(square) {
+        }
+      ),
+      defineRender('show_handles', function (show_handles) {
+        const style = this._handles.style;
+        if (show_handles) {
+          style.removeProperty('display');
+        } else {
+          style.display = 'none';
+        }
+      }),
+      defineMeasure(['square', Resize], function (square) {
         const E = this.element;
         const SVG = this.svg;
 

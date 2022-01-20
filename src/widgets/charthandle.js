@@ -30,7 +30,13 @@ import { makeSVG } from '../utils/svg.js';
 import { Range } from '../modules/range.js';
 import { Timer } from '../utils/timers.js';
 import { defineRange } from '../utils/define_range.js';
-import { defineRender, defineRecalculation, defineMeasure, deferRender, deferMeasure } from '../renderer.js';
+import {
+  defineRender,
+  defineRecalculation,
+  defineMeasure,
+  deferRender,
+  deferMeasure,
+} from '../renderer.js';
 
 import { DragCapture } from '../modules/dragcapture.js';
 
@@ -661,8 +667,19 @@ function setRange(range, key) {
   this.set(name, range.snap(this.get(name)));
 }
 
-const movedDependencies = [ 'x', 'y', 'z', 'mode', 'show_handle', 'x_min', 'x_max', 'y_min', 'y_max', 'z_min', 'z_max' ];
-
+const movedDependencies = [
+  'x',
+  'y',
+  'z',
+  'mode',
+  'show_handle',
+  'x_min',
+  'x_max',
+  'y_min',
+  'y_max',
+  'z_min',
+  'z_max',
+];
 
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -838,8 +855,38 @@ export class ChartHandle extends Widget {
         addClass(E, 'aux-' + mode);
       }),
       defineRecalculation(
-        [ 'show_handle', 'range_x', 'range_y', 'range_z', 'x', 'y', 'z', 'mode', 'min_size', 'max_size', 'x_min', 'x_max', 'y_min', 'y_max' ],
-        function (show_handle, range_x, range_y, range_z, x, y, z, mode, min_size, max_size, x_min, x_max, y_min, y_max) {
+        [
+          'show_handle',
+          'range_x',
+          'range_y',
+          'range_z',
+          'x',
+          'y',
+          'z',
+          'mode',
+          'min_size',
+          'max_size',
+          'x_min',
+          'x_max',
+          'y_min',
+          'y_max',
+        ],
+        function (
+          show_handle,
+          range_x,
+          range_y,
+          range_z,
+          x,
+          y,
+          z,
+          mode,
+          min_size,
+          max_size,
+          x_min,
+          x_max,
+          y_min,
+          y_max
+        ) {
           const xSize = range_x.options.basis;
           const ySize = range_y.options.basis;
 
@@ -856,7 +903,7 @@ export class ChartHandle extends Widget {
                 xPosition - radius,
                 yPosition - radius,
                 xPosition + radius,
-                yPosition + radius
+                yPosition + radius,
               ];
             } else if (mode === 'block') {
               const halfWidth = Math.max(min_size, zPosition) / 2;
@@ -864,7 +911,7 @@ export class ChartHandle extends Widget {
                 xPosition - halfWidth,
                 yPosition - halfWidth,
                 xPosition + halfWidth,
-                yPosition + halfWidth
+                yPosition + halfWidth,
               ];
             } else {
               let xMinPosition =
@@ -903,7 +950,7 @@ export class ChartHandle extends Widget {
                     xPosition - tmp,
                     yMinPosition,
                     xPosition + tmp,
-                    yMaxPosition
+                    yMaxPosition,
                   ];
                   break;
                 }
@@ -914,7 +961,7 @@ export class ChartHandle extends Widget {
                     xMinPosition,
                     yPosition - tmp,
                     xMaxPosition,
-                    yPosition + tmp
+                    yPosition + tmp,
                   ];
                   break;
                 }
@@ -924,16 +971,18 @@ export class ChartHandle extends Widget {
                     0,
                     yMinPosition,
                     Math.max(xPosition, minHalfSize),
-                    yMaxPosition
+                    yMaxPosition,
                   ];
                   break;
                 case 'block-right':
                   // rect righthand
                   X = [
-                    (xSize - xPosition < minHalfSize) ? (xSize - minHalfSize) : xPosition,
+                    xSize - xPosition < minHalfSize
+                      ? xSize - minHalfSize
+                      : xPosition,
                     yMinPosition,
                     xSize,
-                    yMaxPosition
+                    yMaxPosition,
                   ];
                   break;
                 case 'block-top':
@@ -942,78 +991,82 @@ export class ChartHandle extends Widget {
                     xMinPosition,
                     0,
                     xMaxPosition,
-                    Math.max(yPosition, minHalfSize)
+                    Math.max(yPosition, minHalfSize),
                   ];
                   break;
                 case 'block-bottom':
                   // rect bottom
                   X = [
-                    (ySize - yPosition < minHalfSize) ? (ySize - minHalfSize) : xMinPosition,
+                    ySize - yPosition < minHalfSize
+                      ? ySize - minHalfSize
+                      : xMinPosition,
                     yPosition,
                     xMaxPosition,
-                    ySize
+                    ySize,
                   ];
                   break;
                 default:
                   warn('Unsupported mode:', mode);
               }
-
             }
 
             // There are situations where the ranges are invalid (e.g. the
             // transformations are singular).
-            if (X.some((v) => isNaN(v)))
-              return;
+            if (X.some((v) => isNaN(v))) return;
 
             const currentPosition = this.get('_handle_position');
 
-            if (currentPosition && X.every((element, i) => element === currentPosition[i]))
+            if (
+              currentPosition &&
+              X.every((element, i) => element === currentPosition[i])
+            )
               return;
           }
 
           this.set('_handle_position', X);
-        }),
-      defineRender(
-        [ 'mode', 'show_handle' ],
-        function (mode, show_handle) {
-          if (show_handle) {
-            createHandle.call(this, mode);
-          } else {
-            removeHandle.call(this);
-          }
-        }),
-      defineRender(
-        [ '_handle_position', 'mode' ],
-        function (_handle_position, mode) {
-          const { _handle } = this;
+        }
+      ),
+      defineRender(['mode', 'show_handle'], function (mode, show_handle) {
+        if (show_handle) {
+          createHandle.call(this, mode);
+        } else {
+          removeHandle.call(this);
+        }
+      }),
+      defineRender(['_handle_position', 'mode'], function (
+        _handle_position,
+        mode
+      ) {
+        const { _handle } = this;
 
-          if (!_handle_position)
-            return;
+        if (!_handle_position) return;
 
-          const [ x1, y1, x2, y2 ] = _handle_position;
+        const [x1, y1, x2, y2] = _handle_position;
 
-          if (mode === 'circular') {
-            const radius = (x2 - x1) / 2;
-            const cx = x1 + radius;
-            const cy = y1 + radius;
+        if (mode === 'circular') {
+          const radius = (x2 - x1) / 2;
+          const cx = x1 + radius;
+          const cy = y1 + radius;
 
-            _handle.setAttribute('r', radius.toFixed(2));
-            _handle.setAttribute('cx', cx.toFixed(2));
-            _handle.setAttribute('cy', cy.toFixed(2));
-          } else {
-            /* All other modes are drawn as rectangles */
-            _handle.setAttribute('x', toInteger(x1));
-            _handle.setAttribute('y', toInteger(y1));
-            _handle.setAttribute('width', toInteger(x2 - x1));
-            _handle.setAttribute('height', toInteger(y2 - y1));
-          }
-        }),
-      defineRender([ '_handle_position', 'z_handle' ],
-        function (_handle_position, z_handle) {
-          redrawZHandle.call(this, this.options, _handle_position);
-        }),
+          _handle.setAttribute('r', radius.toFixed(2));
+          _handle.setAttribute('cx', cx.toFixed(2));
+          _handle.setAttribute('cy', cy.toFixed(2));
+        } else {
+          /* All other modes are drawn as rectangles */
+          _handle.setAttribute('x', toInteger(x1));
+          _handle.setAttribute('y', toInteger(y1));
+          _handle.setAttribute('width', toInteger(x2 - x1));
+          _handle.setAttribute('height', toInteger(y2 - y1));
+        }
+      }),
+      defineRender(['_handle_position', 'z_handle'], function (
+        _handle_position,
+        z_handle
+      ) {
+        redrawZHandle.call(this, this.options, _handle_position);
+      }),
       defineRecalculation(
-        [ 'show_handle', 'format_label', 'x', 'y', 'z', 'label' ],
+        ['show_handle', 'format_label', 'x', 'y', 'z', 'label'],
         function (show_handle, format_label, x, y, z, label) {
           let result = null;
 
@@ -1022,15 +1075,16 @@ export class ChartHandle extends Widget {
           }
 
           this.set('_formatted_label', result);
-        }),
-      defineRender([ 'show_handle', 'mode' ], function (show_handle, mode) {
+        }
+      ),
+      defineRender(['show_handle', 'mode'], function (show_handle, mode) {
         if (!show_handle) {
           removeHandle.call(this);
         } else {
           createHandle.call(this, mode);
         }
       }),
-      defineRender([ '_formatted_label' ], function (_formatted_label) {
+      defineRender(['_formatted_label'], function (_formatted_label) {
         if (!this._label !== !_formatted_label) {
           if (_formatted_label) {
             createLabel.call(this);
@@ -1047,8 +1101,7 @@ export class ChartHandle extends Widget {
         this.set('_label_width', 0);
         this.set('_label_height', 0);
 
-        if (!_label)
-          return;
+        if (!_label) return;
 
         const lines = _formatted_label.split('\n');
         const tspans = _label.childNodes;
@@ -1065,7 +1118,10 @@ export class ChartHandle extends Widget {
         if (!_label.parentNode) element.appendChild(_label);
 
         return deferMeasure(() => {
-          const width = Array.from(tspans).reduce((max, tspan) => Math.max(max, tspan.getComputedTextLength()), 0);
+          const width = Array.from(tspans).reduce(
+            (max, tspan) => Math.max(max, tspan.getComputedTextLength()),
+            0
+          );
 
           this.set('_label_width', width);
 
@@ -1078,13 +1134,27 @@ export class ChartHandle extends Widget {
         });
       }),
       defineRender(
-        [ '_label_width', '_label_height', 'preferences', '_handle_position', 'mode', 'margin', 'intersect' ],
-        function (_label_width, _label_height, preferences, _handle_position, mode, margin, intersect) {
+        [
+          '_label_width',
+          '_label_height',
+          'preferences',
+          '_handle_position',
+          'mode',
+          'margin',
+          'intersect',
+        ],
+        function (
+          _label_width,
+          _label_height,
+          preferences,
+          _handle_position,
+          mode,
+          margin,
+          intersect
+        ) {
+          if (!_label_width || !_label_height || !_handle_position) return;
 
-          if (!_label_width || !_label_height || !_handle_position)
-            return;
-
-          const label_size = [ _label_width, _label_height ];
+          const label_size = [_label_width, _label_height];
           let area = 0;
           let label_position;
           let text_position;
@@ -1101,7 +1171,13 @@ export class ChartHandle extends Widget {
             const align = getLabelAlign(mode, preference);
 
             /* get label position */
-            const LX = getLabelPosition(mode, margin, _handle_position, preference, label_size);
+            const LX = getLabelPosition(
+              mode,
+              margin,
+              _handle_position,
+              preference,
+              label_size
+            );
 
             /* calculate the label bounding box using anchor and dimensions */
             const pos = getLabelDimensions(align, LX, label_size);
@@ -1129,9 +1205,12 @@ export class ChartHandle extends Widget {
           _label.setAttribute('y', y);
           _label.setAttribute('text-anchor', text_anchor);
           const cn = _label.childNodes;
-          Array.from(_label.childNodes).forEach((tspan) => tspan.setAttribute('x', x));
+          Array.from(_label.childNodes).forEach((tspan) =>
+            tspan.setAttribute('x', x)
+          );
           redrawLines.call(this, this.options, _handle_position);
-        }),
+        }
+      ),
     ];
   }
 
@@ -1189,7 +1268,6 @@ export class ChartHandle extends Widget {
 
   getHandlePosition() {
     return this.get('_handle_position') || new Array(4).fill(0);
-
   }
 
   initialize(options) {
@@ -1357,13 +1435,13 @@ export class ChartHandle extends Widget {
           oy.max,
           Math.max(oy.min, range_y.pixelToValue(state.y + v[1]))
         );
-        
+
         if (_O.x_min !== false && x < _O.x_min) x = _O.x_min;
         if (_O.x_max !== false && x > _O.x_max) x = _O.x_max;
 
         if (_O.y_min !== false && y < _O.y_min) y = _O.y_min;
         if (_O.y_max !== false && y > _O.y_max) y = _O.y_max;
-        
+
         self.userset('x', _O.range_x.snap(x));
         self.userset('y', _O.range_y.snap(y));
       },
@@ -1464,8 +1542,7 @@ export class ChartHandle extends Widget {
       case 'x': {
         const { range_x, x_min, x_max } = O;
 
-        if (range_x)
-          value = range_x.snap(value);
+        if (range_x) value = range_x.snap(value);
         if (x_min !== false && value < x_min) value = x_min;
         if (x_max !== false && value > x_max) value = x_max;
         break;

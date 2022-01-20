@@ -446,10 +446,8 @@ export function outerWidth(element, margin, width, notransform) {
     return width;
   } else {
     let w;
-    if (notransform)
-      w = element.offsetWidth;
-    else
-      w = element.getBoundingClientRect().width;
+    if (notransform) w = element.offsetWidth;
+    else w = element.getBoundingClientRect().width;
     return w + m;
   }
 }
@@ -483,10 +481,8 @@ export function outerHeight(element, margin, height, notransform) {
     return height;
   } else {
     let h;
-    if (notransform)
-      h = element.offsetHeight;
-    else
-      h = element.getBoundingClientRect().height;
+    if (notransform) h = element.offsetHeight;
+    else h = element.getBoundingClientRect().height;
     return h + m;
   }
 }
@@ -511,10 +507,8 @@ export function innerWidth(element, width, notransform) {
     return width;
   } else {
     let w;
-    if (notransform)
-      w = element.offsetWidth;
-    else
-      w = element.getBoundingClientRect().width;
+    if (notransform) w = element.offsetWidth;
+    else w = element.getBoundingClientRect().width;
     return w - x;
   }
 }
@@ -539,10 +533,8 @@ export function innerHeight(element, height, notransform) {
     return height;
   } else {
     let h;
-    if (notransform)
-      h = element.offsetHeight;
-    else
-      h = element.getBoundingClientRect().height;
+    if (notransform) h = element.offsetHeight;
+    else h = element.getBoundingClientRect().height;
     return h - y;
   }
 }
@@ -700,14 +692,15 @@ export function createID(prefix) {
 export function getFocusableElements(element) {
   element = element || document.body;
   var E = element.querySelectorAll(
-    '[tabindex]:not([tabindex="-1"]), ' + 
-    'a[href]:not([disabled]), ' + 
-    'button:not([disabled]), ' + 
-    'textarea:not([disabled]), ' + 
-    'input[type="text"]:not([disabled]), ' + 
-    'input[type="radio"]:not([disabled]), ' + 
-    'input[type="checkbox"]:not([disabled]), ' + 
-    'select:not([disabled])');
+    '[tabindex]:not([tabindex="-1"]), ' +
+      'a[href]:not([disabled]), ' +
+      'button:not([disabled]), ' +
+      'textarea:not([disabled]), ' +
+      'input[type="text"]:not([disabled]), ' +
+      'input[type="radio"]:not([disabled]), ' +
+      'input[type="checkbox"]:not([disabled]), ' +
+      'select:not([disabled])'
+  );
   return E;
 }
 
@@ -725,8 +718,8 @@ export function getFocusableElements(element) {
  */
 export function observeDOM(element, callback, options) {
   element = element || document.body;
-  options = options || {childList: true, subtree: true};
-  if(element.nodeType !== 1) return; 
+  options = options || { childList: true, subtree: true };
+  if (element.nodeType !== 1) return;
   const mo = new MutationObserver(callback);
   mo.observe(element, options);
   return mo;
@@ -741,8 +734,8 @@ export function observeDOM(element, callback, options) {
  *
  * @function setDelayedFocus
  */
-export function setDelayedFocus (element, timeout) {
-  setTimeout(v => {
+export function setDelayedFocus(element, timeout) {
+  setTimeout((v) => {
     element.focus();
   }, timeout || 50);
 }

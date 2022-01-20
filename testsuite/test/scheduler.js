@@ -18,8 +18,11 @@
  */
 
 import {
-  Scheduler, MASK_CALCULATE, MASK_RENDER,
-  PHASE_CALCULATE, PHASE_RENDER
+  Scheduler,
+  MASK_CALCULATE,
+  MASK_RENDER,
+  PHASE_CALCULATE,
+  PHASE_RENDER,
 } from '../src/scheduler/scheduler.js';
 
 import { makeCallback } from './helpers.js';
@@ -117,22 +120,21 @@ describe('Scheduler', () => {
     cb.assertArgs(frame, PHASE_RENDER);
     await scheduler.waitForFrame();
     cb.assertCalls(2);
-    cb.assertArgs(frame+1, PHASE_CALCULATE);
-    cb.assertArgs(frame+1, PHASE_RENDER);
+    cb.assertArgs(frame + 1, PHASE_CALCULATE);
+    cb.assertArgs(frame + 1, PHASE_RENDER);
     onError.assertCalls(0);
   });
 
   if (false)
-  it('recursion detection', async () => {
-    // Test that recursively scheduling the same callback
-    // is being detected.
-    let cb;
-    cb = makeCallback(() => {
+    it('recursion detection', async () => {
+      // Test that recursively scheduling the same callback
+      // is being detected.
+      let cb;
+      cb = makeCallback(() => {
+        scheduler.schedule(MASK_RENDER, cb);
+      });
       scheduler.schedule(MASK_RENDER, cb);
+      await scheduler.waitForFrame();
+      onError.assertCalls(1);
     });
-    scheduler.schedule(MASK_RENDER, cb);
-    await scheduler.waitForFrame();
-    onError.assertCalls(1);
-  });
 });
-

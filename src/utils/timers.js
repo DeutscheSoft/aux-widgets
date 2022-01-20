@@ -108,10 +108,13 @@ export class ProximityTimers {
    * in the future.
    */
   scheduleAt(callback, target) {
-    if (this._calls !== null && Math.abs(this._target - target) < this._accuracy) {
+    if (
+      this._calls !== null &&
+      Math.abs(this._target - target) < this._accuracy
+    ) {
       this._calls.push(callback);
     } else {
-      const calls = [ callback ];
+      const calls = [callback];
 
       this._calls = calls;
       this._target = target;
@@ -119,7 +122,7 @@ export class ProximityTimers {
         calls.forEach((cb) => {
           try {
             cb();
-          } catch(err) {
+          } catch (err) {
             error(err);
           }
         });

@@ -10,18 +10,26 @@ export const MASK_CALCULATE = 1 << PHASE_CALCULATE;
 
 function phaseName(phase) {
   switch (phase) {
-  case PHASE_NONE: return 'NONE';
-  case PHASE_CALCULATE: return 'CALCULATE';
-  case PHASE_RENDER: return 'RENDER';
-  default: throw new TypeError('Unknown phase: ' + phase);
+    case PHASE_NONE:
+      return 'NONE';
+    case PHASE_CALCULATE:
+      return 'CALCULATE';
+    case PHASE_RENDER:
+      return 'RENDER';
+    default:
+      throw new TypeError('Unknown phase: ' + phase);
   }
 }
 
 const defaultSchedule = requestAnimationFrame.bind(window);
 
 function handleError(scheduler, fun, error) {
-  console.error('Scheduler(%o) Task %o threw an error: %o',
-                scheduler.getStatus(), fun, error);
+  console.error(
+    'Scheduler(%o) Task %o threw an error: %o',
+    scheduler.getStatus(),
+    fun,
+    error
+  );
 }
 
 function qSize(q) {
@@ -68,16 +76,14 @@ export class Scheduler {
 
     phaseMask |= 0;
 
-    if (phaseMask === 0)
-      return this._frame;
+    if (phaseMask === 0) return this._frame;
 
     if (this._trap !== null && phaseMask & PHASE_MASK)
       this._checkTrap(callback);
 
     do {
       for (let phase = PHASE_MIN; phase <= PHASE_MAX; phase++) {
-        if (!(phaseMask & (1 << phase)))
-          continue;
+        if (!(phaseMask & (1 << phase))) continue;
 
         const index = phase + frameOffset * FRAME_SHIFT;
 
@@ -86,11 +92,11 @@ export class Scheduler {
         if (q) {
           q.push(callback);
         } else {
-          _queues[index] = [ callback ];
+          _queues[index] = [callback];
         }
       }
 
-      frameOffset ++;
+      frameOffset++;
       phaseMask >>= FRAME_SHIFT;
     } while (phaseMask);
 
@@ -137,8 +143,9 @@ export class Scheduler {
     //this.log('Frame %d', frame);
 
     let iterations = 0;
-    const trapThreshold = 100 + 10 * (qSize(_queues[PHASE_CALCULATE]) +
-                                      qSize(_queues[PHASE_RENDER]));
+    const trapThreshold =
+      100 +
+      10 * (qSize(_queues[PHASE_CALCULATE]) + qSize(_queues[PHASE_RENDER]));
 
     do {
       for (let phase = PHASE_MIN; phase <= PHASE_MAX; phase++) {
@@ -164,8 +171,7 @@ export class Scheduler {
 
           iterations++;
 
-          if (false && iterations === trapThreshold)
-            this._installTrap();
+          if (false && iterations === trapThreshold) this._installTrap();
         }
 
         //this.log('ran %d tasks.', q.length);
@@ -185,16 +191,15 @@ export class Scheduler {
       length -= 2;
 
       for (let i = 0; i < length; i += 2) {
-        _queues[i] = _queues[i+2];
-        _queues[i+1] = _queues[i+3];
+        _queues[i] = _queues[i + 2];
+        _queues[i + 1] = _queues[i + 3];
       }
 
       _queues[length + PHASE_CALCULATE] = q1;
       _queues[length + PHASE_RENDER] = q2;
     }
 
-    if (false && iterations >= trapThreshold)
-      this._removeTrap();
+    if (false && iterations >= trapThreshold) this._removeTrap();
   }
 
   _installTrap() {
@@ -209,10 +214,8 @@ export class Scheduler {
   _checkTrap(callback) {
     const trap = this._trap;
 
-    if (trap.has(callback))
-      throw new Error('Callback recursively scheduled.');
+    if (trap.has(callback)) throw new Error('Callback recursively scheduled.');
 
     trap.add(callback);
   }
 }
-

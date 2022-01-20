@@ -19,7 +19,14 @@
 
 import { Container } from './container.js';
 import { Widget } from './widget.js';
-import { addClass, element, innerWidth, innerHeight, outerWidth, outerHeight } from '../utils/dom.js';
+import {
+  addClass,
+  element,
+  innerWidth,
+  innerHeight,
+  outerWidth,
+  outerHeight,
+} from '../utils/dom.js';
 import { defineChildWidget } from '../child_widget.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { defineRender } from '../renderer.js';
@@ -51,7 +58,7 @@ export class ScrollHide extends Container {
     addClass(element, 'aux-scrollhide');
     super.draw(O, element);
   }
-};
+}
 
 function setScrollRange() {
   const O = this.options;
@@ -66,7 +73,7 @@ function setScrollRange() {
  * native scroll bar handle.
  *
  * @extends Widget
- * 
+ *
  * @class ScrollBar
  *
  * @property {String} [position='right'] - The border the scrollbar is
@@ -106,7 +113,7 @@ export class ScrollBar extends Widget {
         this.drag.set('direction', vertical ? 'vertical' : 'horizontal');
         this.drag.set('reverse', vertical);
       },
-    }
+    };
   }
 
   static get renderers() {
@@ -123,31 +130,33 @@ export class ScrollBar extends Widget {
         this.addClass('aux-' + position);
         this.addClass('aux-' + (is_vert(position) ? 'vertical' : 'horizontal'));
       }),
-      defineRender(
-        [ 'position', 'content', 'clip', 'scroll' ],
-        function (position, content, clip, scroll) {
-          const element = this.element;
-          if (clip && content) {
-            let size = clip / content;
-            if (size >= 1) {
-              element.style.display = 'none';
-            } else {
-              element.style.display = 'block';
-              let pos = scroll / (content - clip);
-              pos = (pos * (clip - (size * clip)));
-              if (is_vert(position)) {
-                outerHeight(element, true, clip * size);
-                element.style.top = pos + 'px';
-              }
-              else {
-                outerWidth(element, true, clip * size);
-                element.style.left = pos + 'px';
-              }
-            }
-          } else {
+      defineRender(['position', 'content', 'clip', 'scroll'], function (
+        position,
+        content,
+        clip,
+        scroll
+      ) {
+        const element = this.element;
+        if (clip && content) {
+          let size = clip / content;
+          if (size >= 1) {
             element.style.display = 'none';
+          } else {
+            element.style.display = 'block';
+            let pos = scroll / (content - clip);
+            pos = pos * (clip - size * clip);
+            if (is_vert(position)) {
+              outerHeight(element, true, clip * size);
+              element.style.top = pos + 'px';
+            } else {
+              outerWidth(element, true, clip * size);
+              element.style.left = pos + 'px';
+            }
           }
-        }),
+        } else {
+          element.style.display = 'none';
+        }
+      }),
     ];
   }
 
@@ -159,8 +168,12 @@ export class ScrollBar extends Widget {
     this.drag = new DragValue(this, {
       node: E,
       classes: E,
-      get: function () { return this.parent.options.scroll; },
-      set: function (v) { return this.parent.userset('scroll', v); },
+      get: function () {
+        return this.parent.options.scroll;
+      },
+      set: function (v) {
+        return this.parent.userset('scroll', v);
+      },
       limit: true,
       absolute: true,
     });
@@ -194,7 +207,7 @@ makeRanged(ScrollBar);
  * @property {Boolean} [scroll_y=true] Scroll in y direction.
  */
 
-function changed (e) {
+function changed(e) {
   this.scroll_x.update('content', this.scrollhide.element.scrollWidth);
   this.scroll_x.update('scroll', this.scrollhide.element.scrollLeft);
   this.scroll_y.update('content', this.scrollhide.element.scrollHeight);
@@ -217,7 +230,7 @@ export class Scroller extends Container {
     return {
       scroll_x: true,
       scroll_y: true,
-    }
+    };
   }
 
   static get renderers() {
@@ -254,7 +267,7 @@ export class Scroller extends Container {
     this.scroll_y.addEventListener('userset', usersetScrollY);
 
     this.scrollhide.element.addEventListener('scroll', this._changed);
-    
+
     super.draw(O, element);
   }
   resize() {
@@ -268,8 +281,7 @@ export class Scroller extends Container {
     this.scrollhide.appendChild(child.element);
   }
   set(key, value) {
-    if (key === 'scroll' && value == this.options.scroll)
-      return;
+    if (key === 'scroll' && value == this.options.scroll) return;
     super.set(key, value);
   }
 }

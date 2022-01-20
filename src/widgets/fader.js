@@ -198,7 +198,7 @@ export class Fader extends Widget {
 
   static get renderers() {
     return [
-      defineRender('layout', function(layout) {
+      defineRender('layout', function (layout) {
         const E = this.element;
         removeClass(
           E,
@@ -213,7 +213,7 @@ export class Fader extends Widget {
         addClass(E, 'aux-' + layout);
         this.triggerResize();
       }),
-      defineMeasure(Resize, function() {
+      defineMeasure(Resize, function () {
         const T = this._track,
           H = this._handle;
         let basis;
@@ -231,29 +231,39 @@ export class Fader extends Widget {
 
         this.set('basis', basis);
       }),
-      supports_transform ?
-        defineRender([ 'value', 'transformation', 'snap_module' ], function(value, transformation, snap_module) {
-          const tmp = transformation.valueToPixel(snap_module.snap(value)) + 'px';
-          const _handle = this._handle;
-          const layout = this.options.layout;
+      supports_transform
+        ? defineRender(['value', 'transformation', 'snap_module'], function (
+            value,
+            transformation,
+            snap_module
+          ) {
+            const tmp =
+              transformation.valueToPixel(snap_module.snap(value)) + 'px';
+            const _handle = this._handle;
+            const layout = this.options.layout;
 
-          if (vert(layout)) {
-            _handle.style.transform = 'translateY(-' + tmp + ')';
-          } else {
-            _handle.style.transform = 'translateX(' + tmp + ')';
-          }
-        }) :
-        defineRender([ 'value', 'transformation', 'snap_module' ], function(value, transformation, snap_module) {
-          const tmp = transformation.valueToPixel(snap_module.snap(value)) + 'px';
-          const _handle = this._handle;
-          const layout = this.options.layout;
+            if (vert(layout)) {
+              _handle.style.transform = 'translateY(-' + tmp + ')';
+            } else {
+              _handle.style.transform = 'translateX(' + tmp + ')';
+            }
+          })
+        : defineRender(['value', 'transformation', 'snap_module'], function (
+            value,
+            transformation,
+            snap_module
+          ) {
+            const tmp =
+              transformation.valueToPixel(snap_module.snap(value)) + 'px';
+            const _handle = this._handle;
+            const layout = this.options.layout;
 
-          if (vert(layout)) {
-            _handle.style.bottom = tmp;
-          } else {
-            _handle.style.left = tmp;
-          }
-        }),
+            if (vert(layout)) {
+              _handle.style.bottom = tmp;
+            } else {
+              _handle.style.left = tmp;
+            }
+          }),
     ];
   }
 

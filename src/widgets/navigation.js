@@ -234,8 +234,7 @@ export class Navigation extends Container {
 
         toggleClass(element, 'aux-over', arrows);
 
-        if (!prev.element.parentElement === !arrows)
-          return;
+        if (!prev.element.parentElement === !arrows) return;
 
         if (arrows) {
           element.appendChild(prev.element);
@@ -250,7 +249,16 @@ export class Navigation extends Container {
         }
       }),
       defineRender(
-        [ 'direction', 'scroll', 'select', '_clip_width', '_clip_height', '_list_width', '_list_height', '_button_positions' ],
+        [
+          'direction',
+          'scroll',
+          'select',
+          '_clip_width',
+          '_clip_height',
+          '_list_width',
+          '_list_height',
+          '_button_positions',
+        ],
         function (direction, scroll) {
           if (this._scroll_animation) {
             this._scroll_animation.stop();
@@ -271,12 +279,21 @@ export class Navigation extends Container {
               vertical: is_vertical,
             });
           }
-        }),
+        }
+      ),
     ];
   }
 
   _getButtonScrollPosition() {
-    const { select, _clip_width, _clip_height, _list_width, _list_height, _button_positions, direction } = this.options;
+    const {
+      select,
+      _clip_width,
+      _clip_height,
+      _list_width,
+      _list_height,
+      _button_positions,
+      direction,
+    } = this.options;
     const button_list = this.buttons.getButtons();
 
     if (select < 0 || select >= button_list.length) return 0;
@@ -319,11 +336,19 @@ export class Navigation extends Container {
     /**
      * @member {Button} Navigation#prev - The previous arrow {@link Button} instance.
      */
-    this.prev = new Button({ class: 'aux-previous', dblclick: 400, tabindex: false });
+    this.prev = new Button({
+      class: 'aux-previous',
+      dblclick: 400,
+      tabindex: false,
+    });
     /**
      * @member {Button} Navigation#next - The next arrow {@link Button} instance.
      */
-    this.next = new Button({ class: 'aux-next', dblclick: 400, tabindex: false });
+    this.next = new Button({
+      class: 'aux-next',
+      dblclick: 400,
+      tabindex: false,
+    });
 
     this.prev.on('click', prevClicked.bind(this));
     this.prev.on('doubleclick', prevDblClicked.bind(this));

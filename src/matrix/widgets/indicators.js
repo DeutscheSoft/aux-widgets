@@ -166,15 +166,15 @@ export class Indicators extends Container {
   static get renderers() {
     return [
       defineRecalculation(
-        [ '_x0', '_y0', '_xd', '_yd', '_xinit', '_yinit' ],
+        ['_x0', '_y0', '_xd', '_yd', '_xinit', '_yinit'],
         function (_x0, _y0, _xd, _yd, _xinit, _yinit) {
           this.set('_rect', this._calculateRectangle());
-        }),
-      defineRender([ 'show_buttons', '_rect' ], function (show_buttons, _rect) {
+        }
+      ),
+      defineRender(['show_buttons', '_rect'], function (show_buttons, _rect) {
         const { _batch } = this;
 
-        if (!_batch)
-          return;
+        if (!_batch) return;
 
         const x = rect.flip_x ? 'left' : 'right';
         const y = rect.flip_y ? 'top' : 'bottom';
@@ -187,8 +187,7 @@ export class Indicators extends Container {
       defineRender('_rect', function (_rect) {
         const { _batch } = this;
 
-        if (!_batch)
-          return;
+        if (!_batch) return;
 
         const style = _batch.style;
 
@@ -197,106 +196,105 @@ export class Indicators extends Container {
         style.width = rect.width + 'px';
         style.height = rect.height + 'px';
       }),
-      defineRender(
-        [ '_columns', '_rows', 'size' ],
-        function (_columns, _rows, size) {
-          this._scroller.style.width = _columns * _size + 'px';
-          this._scroller.style.height = _rows * _size + 'px';
-        }),
-      defineRender(
-        [ 'connectionview', 'size' ],
-        function (connectionview, size) {
-          this.connectionview_subs.unsubscribe();
+      defineRender(['_columns', '_rows', 'size'], function (
+        _columns,
+        _rows,
+        size
+      ) {
+        this._scroller.style.width = _columns * _size + 'px';
+        this._scroller.style.height = _rows * _size + 'px';
+      }),
+      defineRender(['connectionview', 'size'], function (connectionview, size) {
+        this.connectionview_subs.unsubscribe();
 
-          if (!connectionview)
-            return;
+        if (!connectionview) return;
 
-          const sub = this.connectionview_subs;
+        const sub = this.connectionview_subs;
 
-          sub.add(
-            connectionview.subscribeSize((rows, columns) => {
-              this.set('_rows', rows);
-              this.set('_columns', columns);
-            })
+        sub.add(
+          connectionview.subscribeSize((rows, columns) => {
+            this.set('_rows', rows);
+            this.set('_columns', columns);
+          })
+        );
+
+        const setIndicatorPosition = (indicator, index1, index2) => {
+          indicator.element.style.transform = formatIndicatorTransform(
+            index1 * size,
+            index2 * size
           );
+        };
 
-          const setIndicatorPosition = (indicator, index1, index2) => {
-            indicator.element.style.transform = formatIndicatorTransform(
-              index1 * size,
-              index2 * size
+        const createIndicator = (index1, index2) => {
+          const indicator = this.createIndicator();
+
+          indicator.on('click', onIndicatorClicked);
+          setIndicatorPosition(indicator, index1, index2);
+
+          this._scroller.appendChild(indicator.element);
+          this.addChild(indicator);
+
+          return indicator;
+        };
+
+        const removeIndicator = (indicator) => {
+          indicator.element.remove();
+          indicator.off('click', onIndicatorClicked);
+          this.removeChild(indicator);
+        };
+
+        sub.add(
+          connectionview.subscribeAmount((rows, columns) => {
+            const createRow = (index1) => {
+              const row = new Array(columns);
+
+              for (let i = 0; i < columns; i++) {
+                const index2 = connectionview.startIndex2 + i;
+                row[index2 % columns] = createIndicator(index1, index2);
+              }
+
+              return row;
+            };
+
+            const destroyRow = (row) => {
+              row.forEach(removeIndicator);
+            };
+
+            resizeArrayMod(
+              this.entries,
+              rows,
+              connectionview.startIndex1,
+              createRow,
+              destroyRow
             );
-          };
 
-          const createIndicator = (index1, index2) => {
-            const indicator = this.createIndicator();
-
-            indicator.on('click', onIndicatorClicked);
-            setIndicatorPosition(indicator, index1, index2);
-
-            this._scroller.appendChild(indicator.element);
-            this.addChild(indicator);
-
-            return indicator;
-          };
-
-          const removeIndicator = (indicator) => {
-            indicator.element.remove();
-            indicator.off('click', onIndicatorClicked);
-            this.removeChild(indicator);
-          };
-
-          sub.add(
-            connectionview.subscribeAmount((rows, columns) => {
-              const createRow = (index1) => {
-                const row = new Array(columns);
-
-                for (let i = 0; i < columns; i++) {
-                  const index2 = connectionview.startIndex2 + i;
-                  row[index2 % columns] = createIndicator(index1, index2);
-                }
-
-                return row;
-              };
-
-              const destroyRow = (row) => {
-                row.forEach(removeIndicator);
-              };
-
+            for (let i = 0; i < rows; i++) {
+              const index1 = connectionview.startIndex1 + i;
+              const row = this.entries[index1 % rows];
               resizeArrayMod(
-                this.entries,
-                rows,
-                connectionview.startIndex1,
-                createRow,
-                destroyRow
+                row,
+                columns,
+                connectionview.startIndex2,
+                (index2) => createIndicator(index1, index2),
+                removeIndicator
               );
+            }
+          })
+        );
 
-              for (let i = 0; i < rows; i++) {
-                const index1 = connectionview.startIndex1 + i;
-                const row = this.entries[index1 % rows];
-                resizeArrayMod(
-                  row,
-                  columns,
-                  connectionview.startIndex2,
-                  (index2) => createIndicator(index1, index2),
-                  removeIndicator
-                );
-              }
-            })
-          );
+        sub.add(
+          connectionview.subscribeElements(
+            (index1, index2, connection, source, sink) => {
+              const entries = this.entries;
+              const row = entries[index1 % entries.length];
+              const indicator = row[index2 % row.length];
 
-          sub.add(
-            connectionview.subscribeElements(
-              (index1, index2, connection, source, sink) => {
-                const entries = this.entries;
-                const row = entries[index1 % entries.length];
-                const indicator = row[index2 % row.length];
-
-                indicator.updateData(index1, index2, connection, source, sink);
-                setIndicatorPosition(indicator, index1, index2);
-              }
-            )
-          );
-        }),
+              indicator.updateData(index1, index2, connection, source, sink);
+              setIndicatorPosition(indicator, index1, index2);
+            }
+          )
+        );
+      }),
     ];
   }
 
@@ -547,7 +545,9 @@ defineChildWidget(Indicators, 'cancel', {
       ev.stopPropagation();
       return false;
     },
-    click: function () { cancel.call(this.parent); },
+    click: function () {
+      cancel.call(this.parent);
+    },
   },
   append: function () {
     this.buttons.element.appendChild(this.cancel.element);

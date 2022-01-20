@@ -44,17 +44,15 @@
   --aux-dialog-background: var(--aux-contrast-base);
   --aux-dialog-color: var(--aux-contrast-text);
   --aux-dialog-shadow: 1px 3px 12px rgba(0, 0, 0, 0.5);
-  
+
   --aux-dialog-modal-background: var(--aux-main-base);
   --aux-dialog-modal-color: var(--aux-main-text);
   --aux-dialog-modal-opacity: 0.5;
 
-  --aux-fader-handle-shadow:
-    1px 1px 12px rgba(0, 0, 0, 0.5),
-    1px 3px 3px rgba(0, 0, 0, 0.2),
-    2px 6px 3px rgba(0, 0, 0, 0.18),
+  --aux-fader-handle-shadow: 1px 1px 12px rgba(0, 0, 0, 0.5),
+    1px 3px 3px rgba(0, 0, 0, 0.2), 2px 6px 3px rgba(0, 0, 0, 0.18),
     3px 9px 3px rgba(0, 0, 0, 0.16);
-    
+
   --aux-fader-handle1: #5d6666;
   --aux-fader-handle2: #363a3a;
   --aux-fader-handle3: #1e2121;
@@ -64,20 +62,15 @@
   --aux-fader-handle7: #212424;
   --aux-fader-handle8: #191c1c;
 
-  --aux-knob-shadow:
-    1px 1px 12px rgba(0, 0, 0, 0.5),
-    1px 3px 3px rgba(0, 0, 0, 0.2),
-    2px 6px 3px rgba(0, 0, 0, 0.18),
-    3px 9px 3px rgba(0, 0, 0, 0.16),
-    4px 12px 3px rgba(0, 0, 0, 0.14),
+  --aux-knob-shadow: 1px 1px 12px rgba(0, 0, 0, 0.5),
+    1px 3px 3px rgba(0, 0, 0, 0.2), 2px 6px 3px rgba(0, 0, 0, 0.18),
+    3px 9px 3px rgba(0, 0, 0, 0.16), 4px 12px 3px rgba(0, 0, 0, 0.14),
     5px 15px 3px rgba(0, 0, 0, 0.12);
 
-  --aux-spread-shadow:
-    1px 1px 12px rgba(0, 0, 0, 0.5),
-    1px 3px 3px rgba(0, 0, 0, 0.2),
-    2px 6px 3px rgba(0, 0, 0, 0.18),
+  --aux-spread-shadow: 1px 1px 12px rgba(0, 0, 0, 0.5),
+    1px 3px 3px rgba(0, 0, 0, 0.2), 2px 6px 3px rgba(0, 0, 0, 0.18),
     3px 9px 3px rgba(0, 0, 0, 0.16);
-    
+
   --aux-spread-handle1: #5d6666;
   --aux-spread-handle2: #363a3a;
   --aux-spread-handle3: #1e2121;
@@ -86,7 +79,7 @@
   --aux-spread-handle6: #353a3a;
   --aux-spread-handle7: #212424;
   --aux-spread-handle8: #191c1c;
-  
+
   --aux-warn-base: #ee6b11;
   --aux-warn-text: #ffffff;
 

@@ -45,7 +45,12 @@ import {
   toggleClass,
 } from '../utils/dom.js';
 import { typecheckInteger } from '../utils/typecheck.js';
-import { defineRender, defineMeasure, deferRender, deferMeasure } from '../renderer.js';
+import {
+  defineRender,
+  defineMeasure,
+  deferRender,
+  deferMeasure,
+} from '../renderer.js';
 
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -129,19 +134,18 @@ export class Select extends Button {
         this.set('icon', v ? 'arrowup' : 'arrowdown');
         if (v) {
           const entry = this.get('selected_entry') || this.entries[0];
-          if (entry)
-            setDelayedFocus(entry.element);
+          if (entry) setDelayedFocus(entry.element);
         }
       },
       set_selected_entry: function (entry) {
         const entries = this.entries;
-        entries.forEach(v => v.element.removeAttribute('aria-selected'));
+        entries.forEach((v) => v.element.removeAttribute('aria-selected'));
         if (entry) {
           this.update('selected', entries.indexOf(entry));
           this.update('value', entry.get('value'));
           this.update('label', entry.get('label'));
           this._list.setAttribute('aria-activedescendant', entry.get('id'));
-          entry.element.setAttribute('aria-selected', 'true')
+          entry.element.setAttribute('aria-selected', 'true');
         } else {
           this.update('selected', -1);
           this.update('value', void 0);
@@ -189,81 +193,86 @@ export class Select extends Button {
 
         this.entries.forEach((entry) => _list.appendChild(entry.element));
       }),
-      defineMeasure(
-        [ 'show_list', 'list_class' ],
-        function (show_list, list_class) {
-          const { element, _list } = this;
+      defineMeasure(['show_list', 'list_class'], function (
+        show_list,
+        list_class
+      ) {
+        const { element, _list } = this;
 
-          if (this.__timeout !== false) {
-            window.clearTimeout(this.__timeout);
-            this.__timeout = false;
-          }
+        if (this.__timeout !== false) {
+          window.clearTimeout(this.__timeout);
+          this.__timeout = false;
+        }
 
-          if (show_list) {
-            const ew = outerWidth(element, true);
-            const cw = width();
-            const ch = height();
-            const sx = scrollLeft();
-            const sy = scrollTop();
+        if (show_list) {
+          const ew = outerWidth(element, true);
+          const cw = width();
+          const ch = height();
+          const sx = scrollLeft();
+          const sy = scrollTop();
+
+          return deferRender(() => {
+            _list.className = 'aux-selectlist';
+            if (list_class) addClass(_list, list_class);
+            setStyles(_list, {
+              opacity: '0',
+              maxHeight: ch + 'px',
+              maxWidth: cw + 'px',
+              minWidth: ew + 'px',
+            });
+            this.set('_show_list', true);
+            document.body.appendChild(_list);
+            document.addEventListener('touchstart', this._globalTouchStart);
+            document.addEventListener('mousedown', this._globalTouchStart);
+
+            const lw = outerWidth(_list, true);
+            const lh = outerHeight(_list, true);
+
+            const top =
+              Math.min(
+                positionTop(element) + outerHeight(element, true),
+                ch + sy - lh
+              ) + 'px';
+            const left = Math.min(positionLeft(element), cw + sx - lw) + 'px';
 
             return deferRender(() => {
-              _list.className = 'aux-selectlist';
-              if (list_class) addClass(_list, list_class);
-              setStyles(_list, {
-                opacity: '0',
-                maxHeight: ch + 'px',
-                maxWidth: cw + 'px',
-                minWidth: ew + 'px',
-              });
-              this.set('_show_list', true);
-              document.body.appendChild(_list);
-              document.addEventListener('touchstart', this._globalTouchStart);
-              document.addEventListener('mousedown', this._globalTouchStart);
+              setStyles(_list, { top, left, opacity: '1' });
+              element.setAttribute('aria-expanded', 'true');
 
-              const lw = outerWidth(_list, true);
-              const lh = outerHeight(_list, true);
+              const current = this.current();
 
-              const top = Math.min(positionTop(element) + outerHeight(element, true), ch + sy - lh) + 'px';
-              const left = Math.min(positionLeft(element), cw + sx - lw) + 'px';
+              if (!current) return;
 
-              return deferRender(() => {
-                setStyles(_list, { top, left, opacity: '1' });
-                element.setAttribute('aria-expanded', 'true');
-
-                const current = this.current();
-
-                if (!current)
-                  return;
-
-                return deferMeasure(() => {
-                  const scrollTop = current.element.offsetTop - _list.offsetHeight / 2;
-                  return deferRender(() => {
-                    _list.scrollTop = scrollTop;
-                  });
+              return deferMeasure(() => {
+                const scrollTop =
+                  current.element.offsetTop - _list.offsetHeight / 2;
+                return deferRender(() => {
+                  _list.scrollTop = scrollTop;
                 });
               });
             });
-          } else {
-            document.removeEventListener('touchstart', this._globalTouchStart);
-            document.removeEventListener('mousedown', this._globalTouchStart);
+          });
+        } else {
+          document.removeEventListener('touchstart', this._globalTouchStart);
+          document.removeEventListener('mousedown', this._globalTouchStart);
 
-            return deferRender(() => {
-              element.removeAttribute('aria-expanded');
-              setStyle(_list, 'opacity', '0');
+          return deferRender(() => {
+            element.removeAttribute('aria-expanded');
+            setStyle(_list, 'opacity', '0');
 
-              const duration = getDuration(_list);
+            const duration = getDuration(_list);
 
-              if (duration > 0) {
-                this.__timeout = window.setTimeout(() => {
-                  this.set('_show_list', false);
-                }, duration);
-              } else {
+            if (duration > 0) {
+              this.__timeout = window.setTimeout(() => {
                 this.set('_show_list', false);
-              }
-            });
-          }
-        }),
-      defineRender([ '_show_list' ], function (_show_list) {
+              }, duration);
+            } else {
+              this.set('_show_list', false);
+            }
+          });
+        }
+      }),
+      defineRender(['_show_list'], function (_show_list) {
         const { element, _list } = this;
 
         if (!_show_list) {
@@ -272,12 +281,12 @@ export class Select extends Button {
           element.removeAttribute('aria-expanded');
         }
       }),
-      defineRender([ 'selected', EntriesChanged ], function (selected) {
+      defineRender(['selected', EntriesChanged], function (selected) {
         this.entries.forEach((entry, i) => {
           toggleClass(entry.element, 'aux-active', i === selected);
         });
       }),
-      defineRender([ Resize, 'auto_size', EntriesChanged ], function (auto_size) {
+      defineRender([Resize, 'auto_size', EntriesChanged], function (auto_size) {
         if (auto_size) {
           const S = this.sizer.element;
           empty(S);
@@ -289,15 +298,13 @@ export class Select extends Button {
           });
           S.appendChild(frag);
           return deferMeasure(() => {
-            const width = outerWidth(S, true)
+            const width = outerWidth(S, true);
             return deferRender(() => {
-              if (this.label)
-                outerWidth(this.label.element, true, width);
+              if (this.label) outerWidth(this.label.element, true, width);
             });
           });
         } else {
-          if (this.label)
-            this.label.element.style.width = null;
+          if (this.label) this.label.element.style.width = null;
         }
       }),
     ];
@@ -324,8 +331,7 @@ export class Select extends Button {
     this._list.setAttribute('role', 'listbox');
 
     this._globalTouchStart = (e) => {
-      if (this._list.contains(e.target) ||
-        this.element.contains(e.target))
+      if (this._list.contains(e.target) || this.element.contains(e.target))
         return;
       this.showList(false);
     };
@@ -870,10 +876,9 @@ export class Select extends Button {
     else
       entry = this.nextEntryByPartialLabel(
         this.__typing.toLowerCase(),
-        this.indexByElement(document.activeElement),
+        this.indexByElement(document.activeElement)
       );
-    if (entry)
-      entry.element.focus();
+    if (entry) entry.element.focus();
   }
 
   set(key, value) {
@@ -919,35 +924,27 @@ function onSelect(e) {
 }
 
 function onFocusMove(O) {
-  const {direction, speed} = O;
+  const { direction, speed } = O;
   const parent = this.parent;
   const last = parent.entries.length - 1;
   let i;
   if (speed === 'full') {
-    if (direction === 'up' || direction === 'right')
-      i = last;
-    else
-      i = 0;
+    if (direction === 'up' || direction === 'right') i = last;
+    else i = 0;
   } else {
     i = parent.indexByEntry(this);
-    if (direction === 'up' || direction === 'right')
-      i -= 1;
-    else
-      i += 1;
+    if (direction === 'up' || direction === 'right') i -= 1;
+    else i += 1;
     i = Math.max(0, Math.min(i, last));
   }
   setDelayedFocus(parent.entries[i].element);
 }
 
 function onKeyDown(e) {
-  if (e.code === 'Tab')
-    this.parent.set('show_list', false);
-  if (e.code === 'Escape')
-    this.parent.set('show_list', false);
-  if (e.key.length === 1)
-    this.parent.focusWhileTyping(e.key);
-  if (e.code === 'Enter' || e.code === 'Space')
-    this.element.click();
+  if (e.code === 'Tab') this.parent.set('show_list', false);
+  if (e.code === 'Escape') this.parent.set('show_list', false);
+  if (e.key.length === 1) this.parent.focusWhileTyping(e.key);
+  if (e.code === 'Enter' || e.code === 'Space') this.element.click();
 }
 
 /**

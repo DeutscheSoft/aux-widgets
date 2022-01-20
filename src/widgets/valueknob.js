@@ -94,7 +94,13 @@ export class ValueKnob extends Widget {
     return [
       defineRender('layout', function (layout) {
         const E = this.element;
-        removeClass(E, 'aux-vertical', 'aux-horizontal', 'aux-left', 'aux-right');
+        removeClass(
+          E,
+          'aux-vertical',
+          'aux-horizontal',
+          'aux-left',
+          'aux-right'
+        );
         addClass(E, 'aux-' + layout);
       }),
     ];

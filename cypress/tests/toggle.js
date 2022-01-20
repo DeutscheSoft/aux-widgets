@@ -29,13 +29,11 @@ describe('Toggle', () => {
     cy.visit('http://localhost:1234/tests/Toggle.html');
 
     cy.get('aux-toggle').each(($el, i) => {
-      
       let toggle = cy.wrap($el);
       const cb = cy.spy();
 
-      switch(i) {
+      switch (i) {
         case 0:
-          
           toggle
             .trigger('mousedown')
             .wait(2000)
@@ -60,9 +58,8 @@ describe('Toggle', () => {
             });
 
           break;
-        
-        case 1:
 
+        case 1:
           toggle
             .trigger('mousedown')
             .wait(2000)
@@ -83,7 +80,7 @@ describe('Toggle', () => {
             })
             .parent()
             .then(() => {
-              deactivateToggle(toggle)
+              deactivateToggle(toggle);
             })
             .onAuxEvent('click', cb)
             .click()
@@ -110,7 +107,7 @@ describe('Toggle', () => {
             })
             .parent()
             .then(() => {
-              deactivateToggle(toggle)
+              deactivateToggle(toggle);
             })
             .onAuxEvent('click', cb)
             .click()
@@ -126,11 +123,8 @@ describe('Toggle', () => {
             .click();
 
           break;
-        default: 
-
+        default:
       }
-    
     });
-
   });
 });

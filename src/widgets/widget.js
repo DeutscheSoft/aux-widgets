@@ -38,7 +38,11 @@ import { GlobalResize } from '../utils/global_resize.js';
 import { GlobalVisibilityChange } from '../utils/global_visibility_change.js';
 import { ProximityTimers } from '../utils/timers.js';
 
-import { Scheduler, MASK_RENDER, MASK_CALCULATE } from '../scheduler/scheduler.js';
+import {
+  Scheduler,
+  MASK_RENDER,
+  MASK_CALCULATE,
+} from '../scheduler/scheduler.js';
 import {
   Renderer,
   RenderState,
@@ -69,19 +73,18 @@ function onResize() {
 }
 
 function addRootWidget(widget) {
-  if (rootWidgets.has(widget))
-    throw new Error('Already registered.');
+  if (rootWidgets.has(widget)) throw new Error('Already registered.');
 
   const resized = onResize.bind(widget);
   const visibilityChanged = onVisibilityChange.bind(widget);
 
-  rootWidgets.set(widget, [ resized, visibilityChanged ]);
+  rootWidgets.set(widget, [resized, visibilityChanged]);
   GlobalResize.add(resized);
   GlobalVisibilityChange.add(visibilityChanged);
 }
 
 function removeRootWidget(widget) {
-  const [ resized, visibilityChanged ] = rootWidgets.get(widget);
+  const [resized, visibilityChanged] = rootWidgets.get(widget);
 
   GlobalResize.delete(resized);
   GlobalVisibilityChange.delete(visibilityChanged);
@@ -101,8 +104,7 @@ const KEYS = [
 ];
 
 function getOwnProperty(o, name) {
-  if (Object.prototype.hasOwnProperty.call(o, name))
-    return o[name];
+  if (Object.prototype.hasOwnProperty.call(o, name)) return o[name];
 }
 
 // doubleclick detection handling
@@ -326,8 +328,7 @@ export class Widget extends Base {
       set_dblclick: function (val, _, prevValue) {
         const event_target = this.getEventTarget();
         if (!event_target) return;
-        if ((val > 0) === (prevValue > 0))
-          return;
+        if (val > 0 === prevValue > 0) return;
         if (val > 0) this.on('click', dblClick);
       },
       initialized: function () {
@@ -364,14 +365,16 @@ export class Widget extends Base {
   }
 
   static getRenderers() {
-    let _renderers = getOwnProperty(this,  '_renderers');
+    let _renderers = getOwnProperty(this, '_renderers');
 
     if (!_renderers) {
       const parent = Object.getPrototypeOf(this);
 
       let parentRenderers = parent.getRenderers ? parent.getRenderers() : [];
 
-      this._renderers = _renderers = parentRenderers.concat(getOwnProperty(this, 'renderers') || []);
+      this._renderers = _renderers = parentRenderers.concat(
+        getOwnProperty(this, 'renderers') || []
+      );
     }
 
     return _renderers;
@@ -380,8 +383,7 @@ export class Widget extends Base {
   static getRenderer() {
     let renderer = this._renderer;
 
-    if (this.hasOwnProperty('_renderer'))
-      return renderer;
+    if (this.hasOwnProperty('_renderer')) return renderer;
 
     this._renderer = renderer = new Renderer();
 
@@ -396,36 +398,39 @@ export class Widget extends Base {
 
   static get renderers() {
     return [
-      defineMeasure(Resize, function() {
+      defineMeasure(Resize, function () {
         this.resize();
       }),
-      defineMeasure(Resized, function() {
+      defineMeasure(Resized, function () {
         this.emit('resized');
         this.resize();
       }),
-      defineRender('notransitions', function(notransitions) {
+      defineRender('notransitions', function (notransitions) {
         toggleClass(this.element, 'aux-notransitions', notransitions);
       }),
-      defineRender('visible', function(visible) {
-        this.getFocusTargets().forEach(v => v.setAttribute('aria-hidden', !visible));
+      defineRender('visible', function (visible) {
+        this.getFocusTargets().forEach((v) =>
+          v.setAttribute('aria-hidden', !visible)
+        );
 
         const E = this.element;
 
         toggleClass(E, 'aux-hide', visible === false);
         toggleClass(E, 'aux-show', visible === true);
       }),
-      defineRender('active', function(active) {
+      defineRender('active', function (active) {
         const E = this.getStyleTarget();
         if (!E) return;
         toggleClass(E, 'aux-inactive', !active);
       }),
-      defineRender('disabled', function(disabled) {
+      defineRender('disabled', function (disabled) {
         const E = this.getStyleTarget();
-        if (E)
-          toggleClass(E, 'aux-disabled', disabled);
-        this.getFocusTargets().forEach(v => v.setAttribute('aria-disabled', disabled));
+        if (E) toggleClass(E, 'aux-disabled', disabled);
+        this.getFocusTargets().forEach((v) =>
+          v.setAttribute('aria-disabled', disabled)
+        );
       }),
-      defineRender('title', function(title) {
+      defineRender('title', function (title) {
         const E = this.getStyleTarget();
         if (!E) return;
         if (typeof title === 'string') {
@@ -434,35 +439,38 @@ export class Widget extends Base {
           E.removeAttribute('title', title);
         }
       }),
-      defineRender('tabindex', function(tabindex) {
+      defineRender('tabindex', function (tabindex) {
         const F = this.getFocusTargets();
 
         if (tabindex !== false) {
-          F.forEach(v => v.setAttribute('tabindex', tabindex));
+          F.forEach((v) => v.setAttribute('tabindex', tabindex));
         } else {
-          F.forEach(v => v.removeAttribute('tabindex'));
+          F.forEach((v) => v.removeAttribute('tabindex'));
         }
       }),
-      defineRender('tabindex', function(tabindex) {
+      defineRender('tabindex', function (tabindex) {
         const isInstalled = this._onfocuskeydown !== null;
 
-        if ((tabindex !== false) === isInstalled)
-          return;
+        if ((tabindex !== false) === isInstalled) return;
 
         const focusTargets = this.getFocusTargets();
 
         if (isInstalled) {
-          focusTargets.forEach(v => v.removeEventListener('keydown', this._onfocuskeydown));
+          focusTargets.forEach((v) =>
+            v.removeEventListener('keydown', this._onfocuskeydown)
+          );
           this._onfocuskeydown = null;
         } else {
           this._onfocuskeydown = onFocusKeyDown.bind(this);
-          focusTargets.forEach(v => v.addEventListener('keydown', this._onfocuskeydown));
+          focusTargets.forEach((v) =>
+            v.addEventListener('keydown', this._onfocuskeydown)
+          );
         }
       }),
-      defineRender('role', function(role) {
+      defineRender('role', function (role) {
         this.getRoleTarget().setAttribute('role', role);
       }),
-      defineRender('id', function(id) {
+      defineRender('id', function (id) {
         const E = this.element;
 
         if (typeof id === 'string') {
@@ -472,8 +480,7 @@ export class Widget extends Base {
         }
       }),
       defineRender('visible', function (visible) {
-        if (visible)
-          return;
+        if (visible) return;
 
         return deferMeasure(() => {
           this.disableDraw();
@@ -500,7 +507,8 @@ export class Widget extends Base {
     this._renderState = new RenderState(
       domScheduler,
       this.constructor.getRenderer(),
-      this);
+      this
+    );
     super.initialize(options);
     // Main actions every widget needs to take
     const E = options.element || null;
@@ -547,7 +555,7 @@ export class Widget extends Base {
   getRoleTarget() {
     return this.element;
   }
-  
+
   isDestructed() {
     return this.options === null;
   }
@@ -602,8 +610,7 @@ export class Widget extends Base {
 
     if (this.constructor.hasOption('resized')) this.set('resized', true);
 
-    if (this.hasEventListeners('resized'))
-      this.invalidate(Resized);
+    if (this.hasEventListeners('resized')) this.invalidate(Resized);
   }
 
   initialized() {
@@ -811,7 +818,10 @@ export class Widget extends Base {
 
     const currentValue = this.options[key];
 
-    if (currentValue !== value && (value === value || currentValue === currentValue))
+    if (
+      currentValue !== value &&
+      (value === value || currentValue === currentValue)
+    )
       this._renderState.invalidate(key);
 
     super.set(key, value);

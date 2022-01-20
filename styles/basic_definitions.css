@@ -946,7 +946,6 @@
   margin: var(--aux-scroller-bar-margin);
 }
 .aux-scroller > .aux-scrollbar.aux-vertical {
-  
 }
 .aux-scroller > .aux-scrollbar.aux-vertical {
   width: var(--aux-scroller-bar-size);

@@ -17,7 +17,13 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { element, addClass, toggleClass, isCSSVariableName, createID } from './../utils/dom.js';
+import {
+  element,
+  addClass,
+  toggleClass,
+  isCSSVariableName,
+  createID,
+} from './../utils/dom.js';
 import { defineChildWidget } from './../child_widget.js';
 import { Widget } from './widget.js';
 import { Icon } from './icon.js';
@@ -321,16 +327,16 @@ export class Button extends Widget {
 
   static get renderers() {
     return [
-      defineRender('layout', function(layout) {
+      defineRender('layout', function (layout) {
         const E = this.element;
         toggleClass(E, 'aux-vertical', layout === 'vertical');
         toggleClass(E, 'aux-horizontal', layout !== 'vertical');
       }),
-      defineRender('state', function(state) {
+      defineRender('state', function (state) {
         const E = this.element;
         toggleClass(E, 'aux-active', state);
       }),
-      defineRender([ 'label', 'icon' ], function(label, icon) {
+      defineRender(['label', 'icon'], function (label, icon) {
         const E = this.element;
 
         if (label !== false) {

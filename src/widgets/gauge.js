@@ -77,53 +77,50 @@ export class Gauge extends Widget {
 
   static get renderers() {
     return [
-      defineRender([ 'width', 'height' ], function (width, height) {
+      defineRender(['width', 'height'], function (width, height) {
         this.svg.setAttribute('viewBox', formatViewbox(width, height));
       }),
-      defineRender(
-        [ 'label', 'x', 'y', 'size' ],
-        function (label, x, y, size) {
-          const _label = this._label;
+      defineRender(['label', 'x', 'y', 'size'], function (label, x, y, size) {
+        const _label = this._label;
 
-          _label.textContent = label.label;
+        _label.textContent = label.label;
 
-          /**
-           * Is fired when the label changed.
-           *
-           * @event Gauge#labeldrawn
-           */
-          this.emit('labeldrawn');
+        /**
+         * Is fired when the label changed.
+         *
+         * @event Gauge#labeldrawn
+         */
+        this.emit('labeldrawn');
 
-          if (!label.label)
-            return;
+        if (!label.label) return;
 
-          return deferMeasure(() => {
-            const outer = O.size / 2;
-            const margin = label.margin;
-            const align = label.align === 'inner';
-            const bb = _label.getBoundingClientRect();
-            const angle = label.pos % 360;
-            const outer_p = outer - margin;
-            const coords = getCoordsSingle(angle, outer_p, outer);
+        return deferMeasure(() => {
+          const outer = O.size / 2;
+          const margin = label.margin;
+          const align = label.align === 'inner';
+          const bb = _label.getBoundingClientRect();
+          const angle = label.pos % 360;
+          const outer_p = outer - margin;
+          const coords = getCoordsSingle(angle, outer_p, outer);
 
-            let mx =
-              (((coords.x - outer) / outer_p) * (bb.width + bb.height / 2.5)) /
-              (align ? -2 : 2);
-            let my =
-              (((coords.y - outer) / outer_p) * bb.height) / (align ? -2 : 2);
+          let mx =
+            (((coords.x - outer) / outer_p) * (bb.width + bb.height / 2.5)) /
+            (align ? -2 : 2);
+          let my =
+            (((coords.y - outer) / outer_p) * bb.height) / (align ? -2 : 2);
 
-            mx += x;
-            my += y;
+          mx += x;
+          my += y;
 
-            return deferRender(() => {
-              _label.setAttribute(
-                'transform',
-                formatTranslate(coords.x + mx, coords.y + my)
-              );
-              _label.setAttribute('text-anchor', 'middle');
-            });
+          return deferRender(() => {
+            _label.setAttribute(
+              'transform',
+              formatTranslate(coords.x + mx, coords.y + my)
+            );
+            _label.setAttribute('text-anchor', 'middle');
           });
-        }),
+        });
+      }),
     ];
   }
 

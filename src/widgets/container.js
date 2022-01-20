@@ -113,8 +113,7 @@ export class Container extends Widget {
   static get renderers() {
     return [
       defineRender('content', function (content) {
-        if (content === void 0)
-          return;
+        if (content === void 0) return;
         const element = this.element;
         empty(element);
         if (typeof content === 'string') {
@@ -126,12 +125,17 @@ export class Container extends Widget {
         }
       }),
       defineRender('visible', function (visible) {
-        if (typeof visible === 'boolean')
-          return;
+        if (typeof visible === 'boolean') return;
 
         let time;
         const element = this.element;
-        removeClass(element, 'aux-hiding', 'aux-showing', 'aux-hide', 'aux-show');
+        removeClass(
+          element,
+          'aux-hiding',
+          'aux-showing',
+          'aux-hide',
+          'aux-show'
+        );
 
         const { hiding_duration, showing_duration } = this.options;
 

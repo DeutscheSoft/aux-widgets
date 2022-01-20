@@ -457,7 +457,7 @@
 /* SCROLLER */
 
 .aux-scroller > .aux-scrollbar::before {
-  content: "";
+  content: '';
   display: block;
   position: absolute;
   top: 4px;
@@ -528,7 +528,7 @@
     var(--aux-spread-handle6) 58%,
     var(--aux-spread-handle7) 60%,
     var(--aux-spread-handle8) 100%
-  )
+  );
 }
 .aux-spread.aux-vertical .aux-upper {
   border-top-right-radius: var(--aux-border-radius);
@@ -555,7 +555,7 @@
     var(--aux-spread-handle4) 96%,
     var(--aux-active-base) 97%,
     var(--aux-active-base) 100%
-  )
+  );
 }
 .aux-spread.aux-horizontal .aux-upper {
   border-top-right-radius: var(--aux-border-radius);

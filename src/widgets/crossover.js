@@ -277,7 +277,9 @@ export class Crossover extends Equalizer {
   }
 
   getCrossoverGraphs() {
-    return this.getChildren().filter((child) => child instanceof CrossoverGraph);
+    return this.getChildren().filter(
+      (child) => child instanceof CrossoverGraph
+    );
   }
 
   addChild(child) {
@@ -316,8 +318,10 @@ export class Crossover extends Equalizer {
       this.getCrossoverGraphs().forEach((graph) => graph.set('bands', bands));
     } else if (child instanceof CrossoverGraph) {
       child.set('bands', []);
-      child.set('index', this.getCrossoverGraphs().length-1);
-      this.getCrossoverGraphs().forEach((graph, index) => graph.set('index', index));
+      child.set('index', this.getCrossoverGraphs().length - 1);
+      this.getCrossoverGraphs().forEach((graph, index) =>
+        graph.set('index', index)
+      );
     }
   }
 

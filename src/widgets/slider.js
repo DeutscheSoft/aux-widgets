@@ -133,15 +133,30 @@ export class Slider extends Widget {
 
   static get renderers() {
     return [
-      defineRender('image', function(image) {
+      defineRender('image', function (image) {
         const style = this.element.style;
-        if (image)
-          style['background-image'] = "url('" + image + "')";
+        if (image) style['background-image'] = "url('" + image + "')";
         else style['background-image'] = void 0;
       }),
       defineRender(
-        [ 'value', 'alignment', 'frames', 'transformation', '_width', '_height', 'snap_module' ],
-        function (value, alignment, frames, transformation, _width, _height, snap_module) {
+        [
+          'value',
+          'alignment',
+          'frames',
+          'transformation',
+          '_width',
+          '_height',
+          'snap_module',
+        ],
+        function (
+          value,
+          alignment,
+          frames,
+          transformation,
+          _width,
+          _height,
+          snap_module
+        ) {
           value = snap_module.snap(value);
 
           const coef = transformation.valueToCoef(value);

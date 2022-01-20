@@ -19,7 +19,13 @@
 
 import { Container } from './container.js';
 import { translateAnchor } from '../utils/anchor.js';
-import { element, addClass, getFocusableElements, observeDOM, setDelayedFocus } from '../utils/dom.js';
+import {
+  element,
+  addClass,
+  getFocusableElements,
+  observeDOM,
+  setDelayedFocus,
+} from '../utils/dom.js';
 import { defineRender } from '../renderer.js';
 
 function autocloseCallback(e) {
@@ -40,17 +46,27 @@ function autocloseCallback(e) {
 
 function activateAutoclose() {
   if (this._autoclose_active) return;
-  setTimeout((function () {
-    document.body.addEventListener('click', this._autoclose_cb, { capture: false });
-  }).bind(this), 50);
+  setTimeout(
+    function () {
+      document.body.addEventListener('click', this._autoclose_cb, {
+        capture: false,
+      });
+    }.bind(this),
+    50
+  );
   this._autoclose_active = true;
 }
 
 function deactivateAutoclose() {
   if (!this._autoclose_active) return;
-  setTimeout((function () {
-    document.body.removeEventListener('click', this._autoclose_cb, { capture: false });
-  }).bind(this), 50);
+  setTimeout(
+    function () {
+      document.body.removeEventListener('click', this._autoclose_cb, {
+        capture: false,
+      });
+    }.bind(this),
+    50
+  );
   this._autoclose_active = false;
 }
 
@@ -59,7 +75,7 @@ function keepInside(e) {
     const E = getFocusableElements(this.element);
     const first = E[0];
     const last = E[E.length - 1];
-    if ( e.shiftKey ) {
+    if (e.shiftKey) {
       if (document.activeElement === first) {
         last.focus();
         e.preventDefault();
@@ -80,8 +96,7 @@ function handleTabbing() {
     }
     this._tabeventtargets = [];
   }
-  if (!this.options.contain_focus)
-    return;
+  if (!this.options.contain_focus) return;
   const F = getFocusableElements(this.element);
   if (F[0]) {
     F[0].addEventListener('keydown', this._tabbing_cb);
@@ -91,7 +106,7 @@ function handleTabbing() {
   }
 }
 
-function off (e) {
+function off(e) {
   e.preventDefault();
   e.stopImmediatePropagation();
 }
@@ -165,8 +180,7 @@ export class Dialog extends Container {
 
         if (val === true) {
           if (O.auto_close) activateAutoclose.call(this);
-          if (O.modal)
-            C.appendChild(this._modal);
+          if (O.modal) C.appendChild(this._modal);
           this.triggerResize();
         } else {
           deactivateAutoclose.call(this);
@@ -175,18 +189,13 @@ export class Dialog extends Container {
         if (val === 'showing') {
           if (C) {
             C.appendChild(this.element);
-            if (O.modal)
-              C.appendChild(this._modal);
+            if (O.modal) C.appendChild(this._modal);
           }
           this.reposition();
         }
 
         if (val) {
-          if (
-            O.toplevel &&
-            C.tagName !== 'AWML-ROOT' &&
-            C.tagName !== 'BODY'
-          ) {
+          if (O.toplevel && C.tagName !== 'AWML-ROOT' && C.tagName !== 'BODY') {
             let p = this.element;
             while (
               (p = p.parentElement) &&
@@ -194,8 +203,7 @@ export class Dialog extends Container {
               p.tagName !== 'BODY'
             );
             p.appendChild(this.element);
-            if (O.modal)
-              p.appendChild(this._modal);
+            if (O.modal) p.appendChild(this._modal);
           }
         } else {
           O.container = this.element.parentElement;
@@ -234,17 +242,18 @@ export class Dialog extends Container {
           element.removeAttribute('aria-modal');
         }
       }),
-      defineRender(
-        [ 'modal', 'visible', 'container' ],
-        function (modal, visible, container) {
-          const _modal = this._modal;
-          if (modal && visible && container) {
-            if (_modal.parentNode !== container)
-              container.appendChild(_modal);
-          } else {
-            _modal.remove();
-          }
-        }),
+      defineRender(['modal', 'visible', 'container'], function (
+        modal,
+        visible,
+        container
+      ) {
+        const _modal = this._modal;
+        if (modal && visible && container) {
+          if (_modal.parentNode !== container) container.appendChild(_modal);
+        } else {
+          _modal.remove();
+        }
+      }),
     ];
   }
 
@@ -263,13 +272,13 @@ export class Dialog extends Container {
     this._modal.addEventListener('click', off, { capture: true });
     this._modal.addEventListener('mousedown', off, { capture: true });
     this._modal.addEventListener('touchstart', off, { capture: true });
-    
+
     this._autoclose_active = false;
     this._autoclose_cb = autocloseCallback.bind(this);
     this._tabbing_cb = keepInside.bind(this);
     this._tabeventtargets = [];
     this.set('contain_focus', O.contain_focus);
-      
+
     observeDOM(this.element, handleTabbing.bind(this));
     handleTabbing.call(this);
   }

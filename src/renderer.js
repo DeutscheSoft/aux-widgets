@@ -1,7 +1,19 @@
-import { FRAME_SHIFT, PHASE_MASK, PHASE_RENDER, PHASE_CALCULATE } from './scheduler/scheduler.js';
 import {
-  getFirstBit, getLimbMask, createBitset, setBit, testBit, clearBit, createBitList, setBitList,
-  getBitIndex
+  FRAME_SHIFT,
+  PHASE_MASK,
+  PHASE_RENDER,
+  PHASE_CALCULATE,
+} from './scheduler/scheduler.js';
+import {
+  getFirstBit,
+  getLimbMask,
+  createBitset,
+  setBit,
+  testBit,
+  clearBit,
+  createBitList,
+  setBitList,
+  getBitIndex,
 } from './scheduler/bitset.js';
 
 function buildDependencyMap(tasks) {
@@ -12,7 +24,7 @@ function buildDependencyMap(tasks) {
       let tmp = m.get(dependency);
 
       if (!tmp) {
-        tmp = [ 0, [] ];
+        tmp = [0, []];
         m.set(dependency, tmp);
       }
 
@@ -22,8 +34,8 @@ function buildDependencyMap(tasks) {
   });
 
   return new Map(
-    Array.from(m.entries()).map(([ dependency, tmp ]) => {
-      return [ dependency, [ tmp[0], createBitList(tmp[1]) ] ];
+    Array.from(m.entries()).map(([dependency, tmp]) => {
+      return [dependency, [tmp[0], createBitList(tmp[1])]];
     })
   );
 }
@@ -47,42 +59,43 @@ function makeAnimation(frame, phase, run, task) {
 }
 
 export function deferRender(callback) {
-  return [ 0, PHASE_RENDER, callback ];
+  return [0, PHASE_RENDER, callback];
 }
 
 export function deferMeasure(callback) {
-  return [ 0, PHASE_CALCULATE, callback ];
+  return [0, PHASE_CALCULATE, callback];
 }
 
 export function deferRenderNext(callback) {
-  return [ 1, PHASE_RENDER, callback ];
+  return [1, PHASE_RENDER, callback];
 }
 
 export function deferMeasureNext(callback) {
-  return [ 1, PHASE_CALCULATE, callback ];
+  return [1, PHASE_CALCULATE, callback];
 }
 
-export function combineDefer(... args) {
+export function combineDefer(...args) {
   args = args.filter((arg) => Array.isArray(arg));
 
-  if (args.length === 0)
-    return null;
-  if (args.length === 1)
-    return args[0];
+  if (args.length === 0) return null;
+  if (args.length === 1) return args[0];
 
-  const [ frameOffset, phase ] = args[0];
+  const [frameOffset, phase] = args[0];
 
   for (let i = 1; i < args.length; i++) {
-    if (args[i][0] !== args[0][0] ||
-        args[i][1] !== args[0][1])
+    if (args[i][0] !== args[0][0] || args[i][1] !== args[0][1])
       throw Error('Different defer calls cannot be combined.');
   }
 
   const callbacks = args.map((entry) => entry[2]);
 
-  return [ frameOffset, phase, () => {
-    return combineDefer(...callbacks.map((cb) => cb()));
-  } ];
+  return [
+    frameOffset,
+    phase,
+    () => {
+      return combineDefer(...callbacks.map((cb) => cb()));
+    },
+  ];
 }
 
 export class Renderer {
@@ -99,10 +112,9 @@ export class Renderer {
   getDependencyMap() {
     let dependencyMap = this._dependencyMap;
 
-    if (dependencyMap)
-      return dependencyMap;
+    if (dependencyMap) return dependencyMap;
 
-    return this._dependencyMap = buildDependencyMap(this.tasks);
+    return (this._dependencyMap = buildDependencyMap(this.tasks));
   }
 
   run(frame, phase, runnable, animations, context) {
@@ -122,14 +134,12 @@ export class Renderer {
 
         tmp &= ~getLimbMask(j);
 
-        if (getFirstBit(tmp) === j)
-          throw new Error('boo');
+        if (getFirstBit(tmp) === j) throw new Error('boo');
 
         const task = tasks[index];
 
         // Check if the task is in the right phase
-        if (task.phase !== phase)
-          continue;
+        if (task.phase !== phase) continue;
 
         removeAnimation(animations, task);
 
@@ -144,16 +154,17 @@ export class Renderer {
               mask |= 1 << phase;
               //context.log('Adding animation', makeAnimation(frame, phase, result, task));
             } else if (Array.isArray(result)) {
-              const [ frameOffset, phase, func ] = result;
-              animations.push(makeAnimation(frame + frameOffset, phase, func, task));
+              const [frameOffset, phase, func] = result;
+              animations.push(
+                makeAnimation(frame + frameOffset, phase, func, task)
+              );
 
               mask |= 1 << (phase + frameOffset * FRAME_SHIFT);
               //context.log('Adding animation', makeAnimation(frame + frameOffset, phase, func, task));
             }
           }
         } catch (err) {
-          console.error('A task %o threw an error: %o',
-                        task, err);
+          console.error('A task %o threw an error: %o', task, err);
         }
 
         // clear the bit
@@ -167,8 +178,7 @@ export class Renderer {
     for (let i = 0; i < animations.length; i++) {
       const animation = animations[i];
 
-      if (animation.phase !== phase)
-        continue;
+      if (animation.phase !== phase) continue;
 
       if (animation.frame !== frame) {
         if (animation.frame < frame)
@@ -183,8 +193,7 @@ export class Renderer {
 
         const result = animation.run.call(context);
 
-        if (result === null || result === void 0)
-        {
+        if (result === null || result === void 0) {
           //console.log('Stopping animation', animation);
           stop = true;
         } else if (typeof result === 'function') {
@@ -192,7 +201,7 @@ export class Renderer {
           animation.frame += 1;
           mask |= 1 << (phase + FRAME_SHIFT);
         } else if (Array.isArray(result)) {
-          const [ frameOffset, _phase, func ] = result;
+          const [frameOffset, _phase, func] = result;
 
           animation.frame += frameOffset;
           animation.phase = _phase;
@@ -225,7 +234,7 @@ export class Renderer {
     const tmp = this.getDependencyMap().get(dependency);
 
     if (tmp !== void 0) {
-      const [ mask, list ] = tmp;
+      const [mask, list] = tmp;
       setBitList(runnable, list);
       return mask;
     } else {
@@ -237,8 +246,7 @@ export class Renderer {
     let mask = 0;
     const tasks = this.tasks;
 
-    for (let i = 0; i < tasks.length; i++)
-    {
+    for (let i = 0; i < tasks.length; i++) {
       mask |= 1 << tasks[i].phase;
 
       setBit(runnable, i);
@@ -277,24 +285,25 @@ export class Renderer {
  */
 
 export function defineTask(phase, dependencies, run, debug) {
-
   if (!debug) debug = false;
 
-  if (!Array.isArray(dependencies))
-    dependencies = [ dependencies ];
+  if (!Array.isArray(dependencies)) dependencies = [dependencies];
 
   const optionNames = dependencies.filter((dep) => typeof dep === 'string');
 
   if (optionNames.length) {
     const arglistIn = optionNames.join(', ');
-    const arglistOut = [ 'this', ...optionNames ].join(', ');
+    const arglistOut = ['this', ...optionNames].join(', ');
 
-    run = new Function('renderFunction', `
+    run = new Function(
+      'renderFunction',
+      `
       return function () {
         const { ${arglistIn} } = this.options;
         return renderFunction.call(${arglistOut});
       };
-    `)(run);
+    `
+    )(run);
   }
 
   return {
@@ -364,10 +373,15 @@ export class RenderState {
 
         //this.log('Starting renderer.');
 
-        const mask = _renderer.run(frame, phase, _runnable, _animations, _context);
+        const mask = _renderer.run(
+          frame,
+          phase,
+          _runnable,
+          _animations,
+          _context
+        );
 
-        if (mask)
-          this._schedule(mask);
+        if (mask) this._schedule(mask);
       }
     };
     this.invalidateAll();
@@ -393,8 +407,7 @@ export class RenderState {
 
       mask &= ~scheduled;
 
-      if (mask === 0)
-        return;
+      if (mask === 0) return;
 
       _scheduler.schedule(mask, this._run);
 
@@ -416,8 +429,7 @@ export class RenderState {
   invalidateAll() {
     const mask = this._renderer.scheduleAll(this._runnable);
 
-    if (mask)
-      this._schedule(mask);
+    if (mask) this._schedule(mask);
   }
 
   getSchedulingStatus() {
@@ -435,7 +447,7 @@ export class RenderState {
     this._pscheduled = this._scheduled;
     this._pframe = this._frame;
   }
-  
+
   unpause() {
     if (!this._paused) return;
     this._paused = false;
@@ -462,8 +474,7 @@ export class RenderState {
 }
 
 export function getRenderers(Class) {
-  if (!Class)
-    return [];
+  if (!Class) return [];
 
   const parentRenderers = getRenderers(Object.getPrototypeOf(Class));
   const renderers = Class.renderers;

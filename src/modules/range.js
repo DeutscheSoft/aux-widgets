@@ -137,7 +137,14 @@ makeRanged(Range);
 
 /* jshint +W079 */
 
-export function effectiveValue(value, base, falling, duration, init, value_time) {
+export function effectiveValue(
+  value,
+  base,
+  falling,
+  duration,
+  init,
+  value_time
+) {
   if (falling <= 0) return value;
 
   const age = performance.now() - value_time;

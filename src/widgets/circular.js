@@ -29,7 +29,12 @@ import {
 } from '../utils/make_ranged.js';
 import { defineChildElement } from '../widget_helpers.js';
 import { Resize, Widget } from './widget.js';
-import { defineRender, defineMeasure, deferMeasure, deferRender } from '../renderer.js';
+import {
+  defineRender,
+  defineMeasure,
+  deferMeasure,
+  deferRender,
+} from '../renderer.js';
 
 function interpretLabel(x) {
   if (typeof x === 'object') return x;
@@ -264,25 +269,43 @@ export class Circular extends Widget {
 
   static get renderers() {
     return [
-      defineRender('show_hand', function(show_hand) {
+      defineRender('show_hand', function (show_hand) {
         this._hand.style.display = show_hand ? 'block' : 'none';
       }),
-      defineMeasure(Resize, function() {
+      defineMeasure(Resize, function () {
         this.set('_stroke_width', this.getStroke());
         this.invalidate('labels');
       }),
       defineRender(
-        [ 'show_dots', 'dots', 'dots_defaults', 'angle', 'transformation', 'snap_module', 'max', 'min', 'size' ],
-        function(show_dots, dots, dots_defaults, angle, transformation, snap_module, max, min, size) {
+        [
+          'show_dots',
+          'dots',
+          'dots_defaults',
+          'angle',
+          'transformation',
+          'snap_module',
+          'max',
+          'min',
+          'size',
+        ],
+        function (
+          show_dots,
+          dots,
+          dots_defaults,
+          angle,
+          transformation,
+          snap_module,
+          max,
+          min,
+          size
+        ) {
           const _dots = this._dots;
 
-          if (_dots)
-            return;
+          if (_dots) return;
 
           empty(_dots);
 
-          if (!show_dots)
-            return;
+          if (!show_dots) return;
 
           // TODO: consider caching nodes
 
@@ -292,9 +315,11 @@ export class Circular extends Widget {
 
             const r = makeSVG('rect', { class: 'aux-dot' });
 
-            const length = m.length === void 0 ? dots_defaults.length : m.length;
+            const length =
+              m.length === void 0 ? dots_defaults.length : m.length;
             const width = m.width === void 0 ? dots_defaults.width : m.width;
-            const margin = m.margin === void 0 ? dots_defaults.margin : m.margin;
+            const margin =
+              m.margin === void 0 ? dots_defaults.margin : m.margin;
             const pos = Math.min(max, Math.max(min, m.pos));
             _dots.appendChild(r);
             if (m['class']) addClass(r, m['class']);
@@ -322,15 +347,38 @@ export class Circular extends Widget {
            * @event Circular#dotsdrawn
            */
           this.emit('dotsdrawn');
-        }),
+        }
+      ),
       defineRender(
-        [ LabelsChanged, 'show_labels', 'labels', 'labels_defaults', 'transformation', 'snap_module', 'min', 'max', 'angle', 'start', 'size' ],
-        function(show_labels, labels, labels_defaults, transformation, snap_module, min, max, angle, start, size) {
+        [
+          LabelsChanged,
+          'show_labels',
+          'labels',
+          'labels_defaults',
+          'transformation',
+          'snap_module',
+          'min',
+          'max',
+          'angle',
+          'start',
+          'size',
+        ],
+        function (
+          show_labels,
+          labels,
+          labels_defaults,
+          transformation,
+          snap_module,
+          min,
+          max,
+          angle,
+          start,
+          size
+        ) {
           // depends on size, labels, label, min, max, start
           const _labels = this._labels;
 
-          if (!_labels)
-            return;
+          if (!_labels) return;
 
           empty(this._labels);
 
@@ -359,73 +407,104 @@ export class Circular extends Widget {
           /* FORCE_RELAYOUT */
 
           return deferMeasure(() => {
-              const positions = labels.map((l, i) => {
-                const element = elements[i];
+            const positions = labels.map((l, i) => {
+              const element = elements[i];
 
-                const margin = l.margin !== void 0 ? l.margin : labels_defaults.margin;
-                const align = (l.align !== void 0 ? l.align : labels_defaults.align) === 'inner';
-                const pos = Math.min(max, Math.max(min, l.pos));
-                const bb = element.getBBox();
-                const _angle =
-                  (transformation.valueToCoef(snap_module.snap(pos)) * angle +
-                    start) %
-                  360;
-                const outer_p = outerSize - margin;
-                const coords = _getCoordsSingle(_angle, outer_p, outerSize);
+              const margin =
+                l.margin !== void 0 ? l.margin : labels_defaults.margin;
+              const align =
+                (l.align !== void 0 ? l.align : labels_defaults.align) ===
+                'inner';
+              const pos = Math.min(max, Math.max(min, l.pos));
+              const bb = element.getBBox();
+              const _angle =
+                (transformation.valueToCoef(snap_module.snap(pos)) * angle +
+                  start) %
+                360;
+              const outer_p = outerSize - margin;
+              const coords = _getCoordsSingle(_angle, outer_p, outerSize);
 
-                const mx =
-                  (((coords.x - outerSize) / outer_p) * (bb.width + bb.height / 2.5)) /
-                  (align ? -2 : 2);
-                const my =
-                  (((coords.y - outerSize) / outer_p) * bb.height) / (align ? -2 : 2);
+              const mx =
+                (((coords.x - outerSize) / outer_p) *
+                  (bb.width + bb.height / 2.5)) /
+                (align ? -2 : 2);
+              const my =
+                (((coords.y - outerSize) / outer_p) * bb.height) /
+                (align ? -2 : 2);
 
-                return formatTranslate(coords.x + mx, coords.y + my);
-              });
-
-              return deferRender(() => {
-                  elements.forEach((element, i) => {
-                    element.setAttribute('transform', positions[i]);
-                  });
-                  /**
-                   * Is fired when labels are (re)drawn.
-                   * @event Circular#labelsdrawn
-                   */
-                  this.emit('labelsdrawn');
-                });
+              return formatTranslate(coords.x + mx, coords.y + my);
             });
-        }),
-      defineRender([ 'x', 'y', 'start', 'size' ], function(x, y, start, size) {
+
+            return deferRender(() => {
+              elements.forEach((element, i) => {
+                element.setAttribute('transform', positions[i]);
+              });
+              /**
+               * Is fired when labels are (re)drawn.
+               * @event Circular#labelsdrawn
+               */
+              this.emit('labelsdrawn');
+            });
+          });
+        }
+      ),
+      defineRender(['x', 'y', 'start', 'size'], function (x, y, start, size) {
         const outerSize = size / 2;
         this.element.setAttribute(
-          'transform', formatTranslateRotate(x, y, start, outerSize, outerSize));
+          'transform',
+          formatTranslateRotate(x, y, start, outerSize, outerSize)
+        );
       }),
-      defineRender([ 'start', 'size' ], function(start, size) {
+      defineRender(['start', 'size'], function (start, size) {
         const _labels = this._labels;
         const outerSize = size / 2;
-        if (!_labels)
-          return;
+        if (!_labels) return;
         _labels.setAttribute(
-          'transform', formatRotate(-start, outerSize, outerSize));
+          'transform',
+          formatRotate(-start, outerSize, outerSize)
+        );
       }),
       defineRender(
-        [ 'show_markers', 'markers', 'markers_defaults', 'transformation', 'snap_module', 'size', 'angle', 'min', 'max', '_stroke_width' ],
-        function(show_markers, markers, markers_defaults, transformation, snap_module, size, angle, min, max, _stroke_width) {
+        [
+          'show_markers',
+          'markers',
+          'markers_defaults',
+          'transformation',
+          'snap_module',
+          'size',
+          'angle',
+          'min',
+          'max',
+          '_stroke_width',
+        ],
+        function (
+          show_markers,
+          markers,
+          markers_defaults,
+          transformation,
+          snap_module,
+          size,
+          angle,
+          min,
+          max,
+          _stroke_width
+        ) {
           const _markers = this._markers;
 
-          if (!_markers)
-            return;
+          if (!_markers) return;
 
           empty(this._markers);
 
-          if (!show_markers)
-            return;
+          if (!show_markers) return;
 
           const outerSize = size / 2;
 
           for (let i = 0; i < markers.length; i++) {
             const m = markers[i];
-            const thick = m.thickness === void 0 ? markers_defaults.thickness : m.thickness;
-            const margin = m.margin === void 0 ? markers_defaults.margin : m.margin;
+            const thick =
+              m.thickness === void 0 ? markers_defaults.thickness : m.thickness;
+            const margin =
+              m.margin === void 0 ? markers_defaults.margin : m.margin;
             const inner = outerSize - thick;
             const outer_p = outerSize - margin - _stroke_width / 2;
             const inner_p = inner - margin - _stroke_width / 2;
@@ -456,10 +535,33 @@ export class Circular extends Widget {
            * @event Circular#markersdrawn
            */
           this.emit('markersdrawn');
-        }),
+        }
+      ),
       defineRender(
-        [ 'show_value', 'transformation', 'snap_module', 'base', 'angle', 'value_ring', '_stroke_width', 'thickness', 'margin', 'size' ],
-        function(show_value, transformation, snap_module, base, angle, value_ring, _stroke_width, thickness, margin, size) {
+        [
+          'show_value',
+          'transformation',
+          'snap_module',
+          'base',
+          'angle',
+          'value_ring',
+          '_stroke_width',
+          'thickness',
+          'margin',
+          'size',
+        ],
+        function (
+          show_value,
+          transformation,
+          snap_module,
+          base,
+          angle,
+          value_ring,
+          _stroke_width,
+          thickness,
+          margin,
+          size
+        ) {
           const _value = this._value;
 
           if (show_value) {
@@ -479,10 +581,27 @@ export class Circular extends Widget {
           } else {
             _value.removeAttribute('d');
           }
-        }),
+        }
+      ),
       defineRender(
-        [ 'show_base', 'size', 'base', 'margin', '_stroke_width', 'thickness', 'angle' ],
-        function (show_base, size, base, margin, _stroke_width, thickness, angle) {
+        [
+          'show_base',
+          'size',
+          'base',
+          'margin',
+          '_stroke_width',
+          'thickness',
+          'angle',
+        ],
+        function (
+          show_base,
+          size,
+          base,
+          margin,
+          _stroke_width,
+          thickness,
+          angle
+        ) {
           const _base = this._base;
 
           if (show_base) {
@@ -495,10 +614,18 @@ export class Circular extends Widget {
           } else {
             _base.removeAttribute('d');
           }
-        }),
+        }
+      ),
       defineRender(
-        [ 'size', 'value_hand', 'hand', 'transformation', 'snap_module', 'angle' ],
-        function  (size, value_hand, hand, transformation, snap_module, angle) {
+        [
+          'size',
+          'value_hand',
+          'hand',
+          'transformation',
+          'snap_module',
+          'angle',
+        ],
+        function (size, value_hand, hand, transformation, snap_module, angle) {
           const _hand = this._hand;
           _hand.setAttribute('x', size - hand.length - hand.margin);
           _hand.setAttribute('y', (size - hand.width) / 2.0);
@@ -512,7 +639,8 @@ export class Circular extends Widget {
               size / 2
             )
           );
-        }),
+        }
+      ),
     ];
   }
 
@@ -671,4 +799,3 @@ defineChildElement(Circular, 'labels', {
     return makeSVG('g', { class: 'aux-labels' });
   },
 });
-

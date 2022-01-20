@@ -18,15 +18,23 @@
  */
 
 import {
-  createBitset, testBit, setBit, clearBit, createBitList, testBitList, setBitList,
-  getFirstBit, getBitIndex, getLimbMask
+  createBitset,
+  testBit,
+  setBit,
+  clearBit,
+  createBitList,
+  testBitList,
+  setBitList,
+  getFirstBit,
+  getBitIndex,
+  getLimbMask,
 } from '../src/scheduler/bitset.js';
 import { assert, assertError, compare } from './helpers.js';
 
 describe('bitset', () => {
   it('set, test and clear', () => {
     const N = 44;
-    const set = createBitset(N); 
+    const set = createBitset(N);
 
     for (let i = 0; i < N; i++) {
       assert(!testBit(set, i));
@@ -44,7 +52,7 @@ describe('bitset', () => {
     }
   });
   it('createBitList', () => {
-    const indices = [ 3, 5, 6, 7, 24, 33, 67 ];
+    const indices = [3, 5, 6, 7, 24, 33, 67];
     const list = createBitList(indices);
     const N = 71;
 
@@ -53,9 +61,9 @@ describe('bitset', () => {
     assert(!testBitList(set, list));
 
     for (let i = 0; i < N; i++) {
-      setBit(set, i); 
+      setBit(set, i);
       assert(testBitList(set, list) === indices.includes(i));
-      clearBit(set, i); 
+      clearBit(set, i);
     }
 
     setBitList(set, list);
@@ -74,14 +82,14 @@ describe('bitset', () => {
     const N = 71;
     const set = createBitset(N);
 
-    const indices = [ 3, 5, 6, 7, 24, 33, 67 ];
+    const indices = [3, 5, 6, 7, 24, 33, 67];
     const result = [];
 
     indices.forEach((bit) => setBit(set, bit));
 
     set.forEach((limb, index) => {
       while (limb !== 0) {
-        const bit = getFirstBit(limb); 
+        const bit = getFirstBit(limb);
 
         result.push(getBitIndex(index, bit));
 
@@ -89,6 +97,6 @@ describe('bitset', () => {
       }
     });
 
-    assert(compare(indices, result)); 
+    assert(compare(indices, result));
   });
 });

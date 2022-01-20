@@ -59,7 +59,7 @@ export class Icon extends Widget {
 
   static get renderers() {
     return [
-      defineRender('icon', function(icon) {
+      defineRender('icon', function (icon) {
         const E = this.element;
         const old = this._icon_old;
 

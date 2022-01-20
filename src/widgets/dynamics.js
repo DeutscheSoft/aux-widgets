@@ -135,44 +135,76 @@ export class Dynamics extends Chart {
     return [
       defineRender('type', function (type) {
         const element = this.element;
-        removeClass(element, 'aux-compressor', 'aux-expander', 'aux-gate', 'aux-limiter');
+        removeClass(
+          element,
+          'aux-compressor',
+          'aux-expander',
+          'aux-gate',
+          'aux-limiter'
+        );
         addClass(element, 'aux-' + type);
       }),
-      defineMeasure(
-        [ 'min', 'max', 'grid_labels', 'db_grid' ],
-        function (min, max, grid_labels, db_grid) {
-          const grid_x = [];
-          const grid_y = [];
-          let cls;
-          for (let i = min; i <= max; i += db_grid) {
-            cls = i ? '' : 'aux-highlight';
-            grid_x.push({
-              pos: i,
-              label: i === min ? '' : grid_labels(i),
-              class: cls,
-            });
-            grid_y.push({
-              pos: i,
-              label: i === min ? '' : grid_labels(i),
-              class: cls,
-            });
-          }
-          if (this.grid) {
-            this.grid.set('grid_x', grid_x);
-            this.grid.set('grid_y', grid_y);
-          }
+      defineMeasure(['min', 'max', 'grid_labels', 'db_grid'], function (
+        min,
+        max,
+        grid_labels,
+        db_grid
+      ) {
+        const grid_x = [];
+        const grid_y = [];
+        let cls;
+        for (let i = min; i <= max; i += db_grid) {
+          cls = i ? '' : 'aux-highlight';
+          grid_x.push({
+            pos: i,
+            label: i === min ? '' : grid_labels(i),
+            class: cls,
+          });
+          grid_y.push({
+            pos: i,
+            label: i === min ? '' : grid_labels(i),
+            class: cls,
+          });
+        }
+        if (this.grid) {
+          this.grid.set('grid_x', grid_x);
+          this.grid.set('grid_y', grid_y);
+        }
 
-          if (this.steady)
-            this.steady.set('dots', [
-              { x: min, y: min },
-              { x: max, y: max },
-            ]);
-        }),
+        if (this.steady)
+          this.steady.set('dots', [
+            { x: min, y: min },
+            { x: max, y: max },
+          ]);
+      }),
       defineMeasure(
-        [ 'type', 'min', 'max', 'range', 'ratio', 'threshold', 'gain', 'reference', 'makeup', 'knee' ],
-        function (type, min, max, range, ratio, threshold, gain, reference, makeup, knee) {
+        [
+          'type',
+          'min',
+          'max',
+          'range',
+          'ratio',
+          'threshold',
+          'gain',
+          'reference',
+          'makeup',
+          'knee',
+        ],
+        function (
+          type,
+          min,
+          max,
+          range,
+          ratio,
+          threshold,
+          gain,
+          reference,
+          makeup,
+          knee
+        ) {
           this.drawGraph();
-        }),
+        }
+      ),
     ];
   }
 
@@ -223,7 +255,18 @@ export class Dynamics extends Chart {
 
   drawGraph() {
     const O = this.options;
-    const { type, min, max, range, ratio, threshold, gain, reference, makeup, knee } = this.options;
+    const {
+      type,
+      min,
+      max,
+      range,
+      ratio,
+      threshold,
+      gain,
+      reference,
+      makeup,
+      knee,
+    } = this.options;
     if (type === false) return;
     const curve = [];
     let slope;
@@ -315,10 +358,9 @@ export class Dynamics extends Chart {
   }
 }
 
-
 function dragRatio(key, y) {
   if (key !== 'y') return;
-  
+
   const thres = this.get('threshold');
   const ratio_x = this.get('ratio_x');
   const max = this.get('max');
@@ -335,20 +377,20 @@ function dragRatio(key, y) {
 
 function setRatio() {
   if (!this.ratio) return;
-  
+
   const thres = this.get('threshold');
   const ratio = this.get('ratio');
   const ratio_x = this.get('ratio_x');
   const max = this.get('max');
-  
+
   const Y = thres + (max - thres - ratio_x) / ratio;
-  
+
   this.ratio.set('y', Y);
 }
 
 function setRatioLimits() {
   if (!this.ratio) return;
-  
+
   const thres = this.get('threshold');
   const ratio = this.get('ratio');
   const ratio_x = this.get('ratio_x');
@@ -356,7 +398,7 @@ function setRatioLimits() {
   const r_min = this.range_z.get('min');
   const r_max = this.range_z.get('max');
 
-  const num = (max - thres - ratio_x);
+  const num = max - thres - ratio_x;
 
   this.ratio.set('y_max', thres + num / r_min);
   this.ratio.set('y_min', thres + num / r_max);
@@ -368,7 +410,6 @@ function setRatioLimits() {
  * @class Compressor
  */
 export class Compressor extends Dynamics {
-
   static get _options() {
     return Object.assign({}, Dynamics.getOptionTypes(), {
       show_ratio: 'boolean',
@@ -414,7 +455,7 @@ export class Compressor extends Dynamics {
         setRatio.call(this);
         setRatioLimits.call(this);
       },
-    }
+    };
   }
 
   initialize(options) {

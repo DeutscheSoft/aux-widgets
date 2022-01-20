@@ -72,16 +72,15 @@ function dblClick() {
 }
 
 function focusMove(O) {
-  if (O.event.target == this._lower)
-    this._lowercb(O);
-  else
-    this._uppercb(O);
+  if (O.event.target == this._lower) this._lowercb(O);
+  else this._uppercb(O);
   return false;
 }
 
 const setHandlePosition = supports_transform
   ? function (handle, layout, position) {
-      handle.style.transform = (vert(layout) ? 'translateY(-' : 'translateX(' ) + position + ')';
+      handle.style.transform =
+        (vert(layout) ? 'translateY(-' : 'translateX(') + position + ')';
     }
   : function (handle, layout, position) {
       if (vert(layout)) {
@@ -179,7 +178,9 @@ export class Spread extends Widget {
         else this.off('dblclick', dblClick);
       },
       set_layout: function () {
-        this.options.direction = vert(this.options.layout) ? 'vertical' : 'horizontal';
+        this.options.direction = vert(this.options.layout)
+          ? 'vertical'
+          : 'horizontal';
         this.drag.set('direction', this.options.direction);
         this.scroll.set('direction', this.options.direction);
       },
@@ -195,7 +196,7 @@ export class Spread extends Widget {
 
   static get renderers() {
     return [
-      defineMeasure([ 'layout', Resize ], function (layout) {
+      defineMeasure(['layout', Resize], function (layout) {
         const { _track, _lower } = this;
 
         let basis;
@@ -223,17 +224,21 @@ export class Spread extends Widget {
         addClass(element, 'aux-' + layout);
       }),
       defineRender(
-        [ 'transformation', 'layout', 'lower', 'snap_module' ],
+        ['transformation', 'layout', 'lower', 'snap_module'],
         function (transformation, layout, lower, snap_module) {
-          const position = transformation.valueToPixel(snap_module.snap(lower)) + 'px';
+          const position =
+            transformation.valueToPixel(snap_module.snap(lower)) + 'px';
           setHandlePosition(this._lower, layout, position);
-        }),
+        }
+      ),
       defineRender(
-        [ 'transformation', 'layout', 'upper', 'snap_module' ],
+        ['transformation', 'layout', 'upper', 'snap_module'],
         function (transformation, layout, upper, snap_module) {
-          const position = transformation.valueToPixel(snap_module.snap(upper)) + 'px';
+          const position =
+            transformation.valueToPixel(snap_module.snap(upper)) + 'px';
           setHandlePosition(this._upper, layout, position);
-        }),
+        }
+      ),
     ];
   }
 
@@ -284,7 +289,7 @@ export class Spread extends Widget {
       direction: O.direction,
       limit: true,
       focus: this._lower,
-      set: v => this.userset("lower", v),
+      set: (v) => this.userset('lower', v),
       get: () => this.options.lower,
     });
     this.draglower.on('startdrag', () => this.startInteracting());
@@ -299,14 +304,14 @@ export class Spread extends Widget {
       direction: O.direction,
       limit: true,
       focus: this._upper,
-      set: v => this.userset("upper", v),
+      set: (v) => this.userset('upper', v),
       get: () => this.options.upper,
     });
     this.dragupper.on('startdrag', () => this.startInteracting());
     this.dragupper.on('stopdrag', () => this.stopInteracting());
 
     announceFocusMoveKeys.call(this);
-    
+
     this.set('bind_dblclick', O.bind_dblclick);
   }
 

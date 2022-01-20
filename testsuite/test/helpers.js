@@ -95,8 +95,7 @@ export function makeCallback(fun) {
   const calls = [];
   const cb = (...args) => {
     calls.push(args);
-    if (fun)
-      return fun(...args);
+    if (fun) return fun(...args);
   };
 
   cb.assertCalls = (n) => {
@@ -112,7 +111,6 @@ export function makeCallback(fun) {
 
   return cb;
 }
-
 
 let _canvas;
 

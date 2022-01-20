@@ -226,35 +226,32 @@ export class Value extends Widget {
 
   static get renderers() {
     return [
-      defineRender('size', function(size) {
+      defineRender('size', function (size) {
         this._input.setAttribute('size', size);
       }),
-      defineRender('maxlength', function(maxlength) {
+      defineRender('maxlength', function (maxlength) {
         const E = this._input;
         if (maxlength) E.setAttribute('maxlength', maxlength);
         else E.removeAttribute('maxlength');
       }),
-      defineRender('placeholder', function(placeholder) {
+      defineRender('placeholder', function (placeholder) {
         const E = this._input;
         if (placeholder) E.setAttribute('placeholder', placeholder);
         else E.removeAttribute('placeholder');
       }),
-      defineRender(
-        [ 'value', 'format', Editing ],
-        function (value, format) {
-          if (this.__editing)
-            return;
-          this._input.value = format(value);
-        }),
-      defineRender('readonly', function(readonly) {
+      defineRender(['value', 'format', Editing], function (value, format) {
+        if (this.__editing) return;
+        this._input.value = format(value);
+      }),
+      defineRender('readonly', function (readonly) {
         const E = this._input;
         if (readonly) E.setAttribute('readonly', 'readonly');
         else E.removeAttribute('readonly');
       }),
-      defineRender('type', function(type) {
+      defineRender('type', function (type) {
         this._input.setAttribute('type', type);
       }),
-      defineRender('autocomplete', function(autocomplete) {
+      defineRender('autocomplete', function (autocomplete) {
         const E = this._input;
         if (autocomplete) {
           E.setAttribute('name', autocomplete);

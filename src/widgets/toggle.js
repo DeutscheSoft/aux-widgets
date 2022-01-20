@@ -97,7 +97,7 @@ export class Toggle extends Button {
 
   static get renderers() {
     return [
-      defineRender([ 'state' ], function(state) {
+      defineRender(['state'], function (state) {
         // FIXME: the dependencies seem wrong here.
         const O = this.options;
         let tmp = (state && O.label_active) || O.label;

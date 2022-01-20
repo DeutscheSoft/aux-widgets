@@ -90,7 +90,7 @@ export class VirtualTree extends Scroller {
       entry_class: VirtualTreeEntry,
       prerender_top: 3,
       prerender_bottom: 3,
-    }
+    };
   }
   static get static_events() {
     return {
@@ -103,34 +103,33 @@ export class VirtualTree extends Scroller {
       scrollTopChanged: function (position) {
         this._scrollDataTo(position);
       },
-    }
+    };
   }
 
   static get renderers() {
     return [
       defineRender('virtualtreeview', function (virtualtreeview) {
-          if (!virtualtreeview)
-            return;
-          const subs = this.virtualtreeview_subs;
-          this._subscribeToTreeView(subs, virtualtreeview);
-        }),
+        if (!virtualtreeview) return;
+        const subs = this.virtualtreeview_subs;
+        this._subscribeToTreeView(subs, virtualtreeview);
+      }),
       defineMeasure(
-        [ 'virtualtreeview', '_startIndex', 'prerender_top' ],
+        ['virtualtreeview', '_startIndex', 'prerender_top'],
         function (virtualtreeview, _startIndex, prerender_top) {
-          if (!virtualtreeview)
-            return;
+          if (!virtualtreeview) return;
           virtualtreeview.scrollStartIndexTo(
             Math.max(0, O._startIndex - O.prerender_top)
           );
-        }),
-      defineMeasure(
-        [ 'virtualtreeview', '_amount' ],
-        function (virtualtreeview, _amount) {
-          if (!virtualtreeview)
-            return;
-          virtualtreeview.setAmount(O._amount);
-        }),
-      defineRender([ '_sizer_size', 'size' ], function (_sizer_size, size) {
+        }
+      ),
+      defineMeasure(['virtualtreeview', '_amount'], function (
+        virtualtreeview,
+        _amount
+      ) {
+        if (!virtualtreeview) return;
+        virtualtreeview.setAmount(O._amount);
+      }),
+      defineRender(['_sizer_size', 'size'], function (_sizer_size, size) {
         this._sizer.style.height =
           this.calculateEntryPosition(_sizer_size) + 'px';
       }),
@@ -140,8 +139,7 @@ export class VirtualTree extends Scroller {
       defineRender('size', function (size) {
         const { virtualtreeview } = this.options;
 
-        if (virtualtreeview)
-          return;
+        if (virtualtreeview) return;
 
         const entries = this.entries;
 

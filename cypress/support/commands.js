@@ -9,24 +9,36 @@ function getAuxWidget(subject) {
   return element.auxWidget;
 }
 
-Cypress.Commands.add('onAuxEvent', { prevSubject: 'element' }, (subject, event, callback) => {
-  const widget = getAuxWidget(subject);
+Cypress.Commands.add(
+  'onAuxEvent',
+  { prevSubject: 'element' },
+  (subject, event, callback) => {
+    const widget = getAuxWidget(subject);
 
-  widget.on(event, callback);
+    widget.on(event, callback);
 
-  return subject;
-});
+    return subject;
+  }
+);
 
-Cypress.Commands.add('auxOption', { prevSubject: 'element' }, (subject, name) => {
-  const widget = getAuxWidget(subject);
+Cypress.Commands.add(
+  'auxOption',
+  { prevSubject: 'element' },
+  (subject, name) => {
+    const widget = getAuxWidget(subject);
 
-  return widget.get(name);
-});
+    return widget.get(name);
+  }
+);
 
-Cypress.Commands.add('setAuxOption', { prevSubject: 'element' }, (subject, name, value) => {
-  const widget = getAuxWidget(subject);
+Cypress.Commands.add(
+  'setAuxOption',
+  { prevSubject: 'element' },
+  (subject, name, value) => {
+    const widget = getAuxWidget(subject);
 
-  widget.set(name, value);
+    widget.set(name, value);
 
-  return subject;
-});
+    return subject;
+  }
+);

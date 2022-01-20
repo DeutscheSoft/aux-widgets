@@ -157,7 +157,7 @@ export class LevelMeter extends Meter {
       defineRender('show_hold', function (show_hold) {
         toggleClass(this.element, 'aux-has-hold', show_hold);
       }),
-      defineMeasure([ 'top', 'bottom', 'base' ], function() {
+      defineMeasure(['top', 'bottom', 'base'], function () {
         /* top and bottom require a meter redraw, so lets invalidate
          * value */
         this.invalidate('value');
@@ -199,14 +199,12 @@ export class LevelMeter extends Meter {
     const O = this.options;
     const falling = +O.falling;
 
-    if (!falling)
-      return;
+    if (!falling) return;
 
     const base = +O.base;
     const value = this.effectiveValue();
 
-    if (value === base)
-      return null;
+    if (value === base) return null;
 
     return deferRenderNext(() => {
       return this.drawMeter();
@@ -218,9 +216,23 @@ export class LevelMeter extends Meter {
   }
 
   effectiveValue() {
-    const { value, base, falling, falling_duration, falling_init, _value_time } = this.options;
+    const {
+      value,
+      base,
+      falling,
+      falling_duration,
+      falling_init,
+      _value_time,
+    } = this.options;
 
-    return effectiveValue(value, base, falling, falling_duration, falling_init, _value_time);
+    return effectiveValue(
+      value,
+      base,
+      falling,
+      falling_duration,
+      falling_init,
+      _value_time
+    );
   }
 
   /**

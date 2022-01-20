@@ -21,11 +21,9 @@ describe('Bitstring', () => {
     buttons.each(($el) => {
       let button = deactivateButton(cy.wrap($el));
 
-      button.click()
-            .should(beActive);
+      button.click().should(beActive);
 
-      button.click()
-            .should(beInactive);
+      button.click().should(beInactive);
     });
   });
 });

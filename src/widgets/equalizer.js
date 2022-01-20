@@ -175,10 +175,11 @@ export class EqualizerGraph extends Graph {
   static get renderers() {
     return [
       defineRecalculation(
-        [ 'bands', 'accuracy', 'rendering_filter', 'oversampling', 'threshold' ],
+        ['bands', 'accuracy', 'rendering_filter', 'oversampling', 'threshold'],
         function () {
           this.set('dots', this.drawPath());
-        }),
+        }
+      ),
     ];
   }
 

@@ -134,8 +134,14 @@ function subtractIntervals(a, b) {
 
 function drawGradient(element, O) {
   const {
-    gradient, background, _width, _height, reverse, transformation, snap_module,
-    layout
+    gradient,
+    background,
+    _width,
+    _height,
+    reverse,
+    transformation,
+    snap_module,
+    layout,
   } = O;
 
   if (!gradient) {
@@ -143,15 +149,17 @@ function drawGradient(element, O) {
     ctx.fillStyle = background;
     ctx.fillRect(0, 0, _width, _height);
   } else {
-    const keys = Object.keys(gradient).map((value) => parseFloat(value)).sort(
-      reverse
-        ? function (a, b) {
-            return b - a;
-          }
-        : function (a, b) {
-            return a - b;
-          }
-    );
+    const keys = Object.keys(gradient)
+      .map((value) => parseFloat(value))
+      .sort(
+        reverse
+          ? function (a, b) {
+              return b - a;
+            }
+          : function (a, b) {
+              return a - b;
+            }
+      );
 
     const vert = layout == 'left' || layout == 'right';
     const ctx = element.getContext('2d');
@@ -295,10 +303,10 @@ export class Meter extends Widget {
 
   static get renderers() {
     return [
-      defineRender('reverse', function(reverse) {
+      defineRender('reverse', function (reverse) {
         toggleClass(this.element, 'aux-reverse', reverse);
       }),
-      defineRender('layout', function(layout) {
+      defineRender('layout', function (layout) {
         const E = this.element;
         const scale = this.scale ? this.scale.element : null;
         const bar = this._bar;
@@ -332,28 +340,38 @@ export class Meter extends Widget {
             throw new Error('unsupported layout');
         }
       }),
-      defineRender(
-        [ '_width', '_height' ],
-        function (_width, _height) {
-          const { _canvas, _backdrop } = this;
+      defineRender(['_width', '_height'], function (_width, _height) {
+        const { _canvas, _backdrop } = this;
 
-          if (!(_height > 0 && _width > 0)) return;
+        if (!(_height > 0 && _width > 0)) return;
 
-          _canvas.setAttribute('height', Math.round(_height));
-          _canvas.setAttribute('width', Math.round(_width));
-          /* FIXME: I am not sure why this is even necessary */
-          _canvas.style.width = _width + 'px';
-          _canvas.style.height = _height + 'px';
+        _canvas.setAttribute('height', Math.round(_height));
+        _canvas.setAttribute('width', Math.round(_width));
+        /* FIXME: I am not sure why this is even necessary */
+        _canvas.style.width = _width + 'px';
+        _canvas.style.height = _height + 'px';
 
-          this.invalidate('foreground');
-        }
-      ),
+        this.invalidate('foreground');
+      }),
       defineRender(
         [
-          'gradient', 'background', '_width', '_height', 'reverse', 'transformation',
-          'snap_module', 'layout'
+          'gradient',
+          'background',
+          '_width',
+          '_height',
+          'reverse',
+          'transformation',
+          'snap_module',
+          'layout',
         ],
-        function (gradient, background, _width, _height, transformation, snap_module) {
+        function (
+          gradient,
+          background,
+          _width,
+          _height,
+          transformation,
+          snap_module
+        ) {
           if (!(_height > 0 && _width > 0)) return;
           const { _backdrop } = this;
           _backdrop.setAttribute('height', Math.round(_height));
@@ -362,15 +380,25 @@ export class Meter extends Widget {
           _backdrop.style.width = _width + 'px';
           _backdrop.style.height = _height + 'px';
           drawGradient(_backdrop, this.options);
-        }),
-      defineMeasure(
-          [ '_width', '_height', 'layout' ],
-          function (_width, _height, layout) {
-            this.set('basis', vert(layout) ? _height : _width);
-            this._last_meters.length = 0;
-          }),
+        }
+      ),
+      defineMeasure(['_width', '_height', 'layout'], function (
+        _width,
+        _height,
+        layout
+      ) {
+        this.set('basis', vert(layout) ? _height : _width);
+        this._last_meters.length = 0;
+      }),
       defineRender(
-        [ 'value', 'transformation', 'segment', 'foreground', '_width', '_height' ],
+        [
+          'value',
+          'transformation',
+          'segment',
+          'foreground',
+          '_width',
+          '_height',
+        ],
         function () {
           return this.drawMeter();
         }

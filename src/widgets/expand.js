@@ -227,7 +227,7 @@ export class Expand extends Container {
         toggleClass(this.element, 'aux-always-expanded', always_expanded);
       }),
       defineRender(
-        [ 'expanded', 'showing_duration', 'hiding_duration' ],
+        ['expanded', 'showing_duration', 'hiding_duration'],
         function (expanded, showing_duration, hiding_duration) {
           if (expanded) {
             if (this.timer_collapse.active) this.timer_collapse.stop();
@@ -262,7 +262,8 @@ export class Expand extends Container {
               this.emit('collapsed');
             }
           }
-        }),
+        }
+      ),
     ];
   }
 

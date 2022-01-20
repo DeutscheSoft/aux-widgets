@@ -318,8 +318,32 @@ export class Reverb extends Chart {
   static get renderers() {
     return [
       defineMeasure(
-        [ 'delay', 'delay_min', 'delay_max', 'predelay', 'attack', 'noisefloor', 'rlevel', 'gain', 'rtime', 'reference', 'range_y' ],
-        function (delay, delay_min, delay_max, predelay, attack, noisefloor, rlevel, gain, rtime, reference, range_y) {
+        [
+          'delay',
+          'delay_min',
+          'delay_max',
+          'predelay',
+          'attack',
+          'noisefloor',
+          'rlevel',
+          'gain',
+          'rtime',
+          'reference',
+          'range_y',
+        ],
+        function (
+          delay,
+          delay_min,
+          delay_max,
+          predelay,
+          attack,
+          noisefloor,
+          rlevel,
+          gain,
+          rtime,
+          reference,
+          range_y
+        ) {
           const rstart = delay + predelay;
           let x0 = rstart;
           attack = Math.min(attack, predelay);
@@ -348,12 +372,13 @@ export class Reverb extends Chart {
             { x: x1, y: y1 },
             { x: x2, y: y2 },
           ]);
-        }),
+        }
+      ),
       defineRender('show_input', function (show_input) {
         this.input.set('visible', show_input);
       }),
       defineMeasure(
-        [ '_reflections', 'range_y', 'delay', 'gain', 'erlevel' ],
+        ['_reflections', 'range_y', 'delay', 'gain', 'erlevel'],
         function (_reflections, range_y, delay, gain, erlevel) {
           range_y = this.range_y;
           _reflections.forEach((reflection) => {
@@ -364,7 +389,8 @@ export class Reverb extends Chart {
               { x: x, y: reflection.level + gain + erlevel },
             ]);
           });
-        }),
+        }
+      ),
     ];
   }
 

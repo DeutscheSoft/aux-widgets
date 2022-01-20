@@ -108,8 +108,8 @@ function closeClicked() {
 
 function afterHide() {
   Promise.resolve().then(() => {
-      if (this.isDestructed()) return;
-      this.destroy();
+    if (this.isDestructed()) return;
+    this.destroy();
   });
 }
 
@@ -157,10 +157,8 @@ export class Notification extends Container {
     return [
       defineRender('content', function () {
         const { element, icon, close } = this;
-        if (icon)
-          element.insertBefore(icon.element, element.firstChild);
-        if (close)
-          element.insertBefore(close.element, element.firstChild);
+        if (icon) element.insertBefore(icon.element, element.firstChild);
+        if (close) element.insertBefore(close.element, element.firstChild);
       }),
     ];
   }

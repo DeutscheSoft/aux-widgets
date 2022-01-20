@@ -133,8 +133,7 @@ export class VirtualTreeEntry extends VirtualTreeEntryBase {
         C = C.replace(/\s\s+/g, ' ');
         element.setAttribute('class', C);
 
-        if (!depth)
-          return;
+        if (!depth) return;
 
         const d = depth.length;
         element.classList.add('aux-depth-' + d);
@@ -156,13 +155,14 @@ export class VirtualTreeEntry extends VirtualTreeEntryBase {
         toggleClass(this.element, 'aux-group', group);
       }),
       defineMeasure(
-        [ 'collapsed', 'icon_collapsed', 'icon_uncollapsed' ],
+        ['collapsed', 'icon_collapsed', 'icon_uncollapsed'],
         function (collapsed, icon_collapsed, icon_uncollapsed) {
           this.collapse.set(
             'icon',
             collapsed ? icon_collapsed : icon_uncollapsed
           );
-        }),
+        }
+      ),
     ];
   }
 
@@ -202,7 +202,11 @@ export class VirtualTreeEntry extends VirtualTreeEntryBase {
     this.update('label', element.label);
     this.update('icon', element.icon);
 
-    subs.add(element.subscribe('propertyChanged', (key, value) => this._onDataChanged(key, value)));
+    subs.add(
+      element.subscribe('propertyChanged', (key, value) =>
+        this._onDataChanged(key, value)
+      )
+    );
   }
 
   /**

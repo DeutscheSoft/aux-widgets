@@ -28,13 +28,13 @@
  * Default handler for controlling values via keyboard. It sets an option
  *   depending on `step`, `shgift_up`, `shift_down`, `min` and `max`.
  *
- * @param {string} The name of the option to set. 
+ * @param {string} The name of the option to set.
  *
  * @returns A Function receiving an object defining the movement. This object
  *   has two members,
  *   `speed` and `direction`. `speed` is either `slow`, `normal`, `fast` or `full`,
  *   `direction` is one out of `up`, `left`, `right`, `down`.
- * 
+ *
  * @function focusMoveDefault
  */
 export function focusMoveDefault(v) {
@@ -42,27 +42,20 @@ export function focusMoveDefault(v) {
   return function (o) {
     const O = this.options;
     const value = this.get(valName);
-    const direction =
-      o.direction == 'left' || o.direction == 'down' ? -1 : 1;
+    const direction = o.direction == 'left' || o.direction == 'down' ? -1 : 1;
     let step = (O.step || 1) * direction;
     let newval;
     if (o.speed == 'slow') {
-      newval = Math.min(
-        O.max,
-        Math.max(O.min, value + step * O.shift_down)
-      );
+      newval = Math.min(O.max, Math.max(O.min, value + step * O.shift_down));
     } else if (o.speed == 'fast') {
-      newval = Math.min(
-        O.max,
-        Math.max(O.min, value + step * O.shift_up)
-      );
+      newval = Math.min(O.max, Math.max(O.min, value + step * O.shift_up));
     } else if (o.speed == 'full') {
       newval = direction < 0 ? O.min : O.max;
     } else {
       newval = Math.min(O.max, Math.max(O.min, value + step));
     }
     this.userset(valName, newval);
-  }
+  };
 }
 
 /**
@@ -73,8 +66,12 @@ export function focusMoveDefault(v) {
  * @function announceFocusMoveKeys
  */
 export function announceFocusMoveKeys() {
-  this.getFocusTargets().forEach(v => v.setAttribute('aria-keyshortcuts',
-    'ArrowLeft ArrowRight ArrowUp ArrowDown Home End PageUp PageDown ' +
-    'Control+ArrowLeft Control+ArrowRight Control+ArrowUp Control+ArrowDown ' +
-    'Shift+ArrowLeft Shift+ArrowRight Shift+ArrowUp Shift+ArrowDown'));
+  this.getFocusTargets().forEach((v) =>
+    v.setAttribute(
+      'aria-keyshortcuts',
+      'ArrowLeft ArrowRight ArrowUp ArrowDown Home End PageUp PageDown ' +
+        'Control+ArrowLeft Control+ArrowRight Control+ArrowUp Control+ArrowDown ' +
+        'Shift+ArrowLeft Shift+ArrowRight Shift+ArrowUp Shift+ArrowDown'
+    )
+  );
 }

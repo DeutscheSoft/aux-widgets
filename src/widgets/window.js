@@ -510,8 +510,24 @@ export class Window extends Container {
   static get renderers() {
     return [
       defineMeasure(
-        [ 'width', 'height', 'min_width', 'min_height', 'max_width', 'max_height', 'maximize' ],
-        function(width, height, min_width, min_height, max_width, max_height, maximize) {
+        [
+          'width',
+          'height',
+          'min_width',
+          'min_height',
+          'max_width',
+          'max_height',
+          'maximize',
+        ],
+        function (
+          width,
+          height,
+          min_width,
+          min_height,
+          max_width,
+          max_height,
+          maximize
+        ) {
           const { dimensions, element } = this;
           let setWidth, setHeight;
 
@@ -547,24 +563,36 @@ export class Window extends Container {
            */
           this.emit('dimensionschanged', this.dimensions);
 
-          if (!setWidth && !setHeight)
-            return null;
+          if (!setWidth && !setHeight) return null;
 
           return deferRender(() => {
-            if (setWidth)
-              outerWidth(element, true, dimensions.width);
-            if (setHeight)
-              outerHeight(element, true, dimensions.height);
+            if (setWidth) outerWidth(element, true, dimensions.width);
+            if (setHeight) outerHeight(element, true, dimensions.height);
 
             this.triggerResize();
           });
-        }),
+        }
+      ),
       defineMeasure(
-        [ 'anchor', 'x', 'y', '_inner_width', '_inner_height', 'maximize', 'fixed' ],
+        [
+          'anchor',
+          'x',
+          'y',
+          '_inner_width',
+          '_inner_height',
+          'maximize',
+          'fixed',
+        ],
         function (anchor, x, y, _inner_width, _inner_height, maximize, fixed) {
           const { element, dimensions } = this;
 
-          const pos = translateAnchor(anchor, x, y, -_inner_width, -_inner_height);
+          const pos = translateAnchor(
+            anchor,
+            x,
+            y,
+            -_inner_width,
+            -_inner_height
+          );
 
           const left = maximize.x ? (fixed ? 0 : window.scrollX) : pos.x;
           const top = maximize.y ? (fixed ? 0 : window.scrollY) : pos.y;
@@ -588,7 +616,8 @@ export class Window extends Container {
             element.style.left = left + 'px';
             element.style.top = top + 'px';
           });
-        }),
+        }
+      ),
       defineRender('maximize', function (maximize) {
         toggleClass(this.element, 'aux-maximized-horizontal', maximize.x);
         toggleClass(this.element, 'aux-maximized-vertical', maximize.y);
@@ -596,15 +625,13 @@ export class Window extends Container {
       defineRender('z_index', function (z_index) {
         this.element.style.zIndex = z_index;
       }),
-      defineRender([ 'header', 'show_header' ], function (header, show_header) {
-        if (header && show_header)
-          buildHeader.call(this);
+      defineRender(['header', 'show_header'], function (header, show_header) {
+        if (header && show_header) buildHeader.call(this);
       }),
-      defineRender([ 'footer', 'show_footer' ], function (footer, show_footer) {
-        if (footer && show_footer)
-          buildFooter.call(this);
+      defineRender(['footer', 'show_footer'], function (footer, show_footer) {
+        if (footer && show_footer) buildFooter.call(this);
       }),
-      defineMeasure([ 'status', 'hide_status' ], function (status, hide_status) {
+      defineMeasure(['status', 'hide_status'], function (status, hide_status) {
         statusTimeout.call(this);
       }),
       defineRender('fixed', function (fixes) {
@@ -747,10 +774,8 @@ export class Window extends Container {
 
   set(key, value) {
     if (key == 'maximize') {
-      if (value === false)
-        value = { x: false, y: false };
-      else if (value === true)
-        value = { x: true, y: true };
+      if (value === false) value = { x: false, y: false };
+      else if (value === true) value = { x: true, y: true };
       else value = Object.assign({}, this.get('maximize'), value);
     }
 

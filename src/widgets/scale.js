@@ -40,7 +40,13 @@ import {
 } from '../utils/dom.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { warn } from '../utils/log.js';
-import { defineRender, defineMeasure, deferRender, deferMeasure, combineDefer } from '../renderer.js';
+import {
+  defineRender,
+  defineMeasure,
+  deferRender,
+  deferMeasure,
+  combineDefer,
+} from '../renderer.js';
 
 function vert(layout) {
   return layout === 'left' || layout === 'right';
@@ -202,14 +208,21 @@ function createDOMNodes(data, create) {
   }
 }
 
-const createLabelDependencies = [ 'basis', 'labels', 'layout', 'min', 'max', 'base' ];
+const createLabelDependencies = [
+  'basis',
+  'labels',
+  'layout',
+  'min',
+  'max',
+  'base',
+];
 
 function createLabel(value, position) {
   const { basis, labels, layout, min, max, base } = this.options;
   const elem = document.createElement('SPAN');
   elem.className = 'aux-label';
   elem.setAttribute('role', 'presentation');
-  
+
   if (vert(layout)) {
     elem.style.bottom = (position / basis) * 100 + '%';
   } else {
@@ -230,12 +243,15 @@ function createLabel(value, position) {
 function removeDotsAndLabels(node) {
   Array.from(node.children)
     .filter((node) => {
-      return node.classList.contains('aux-dot') || node.classList.contains('aux-label');
+      return (
+        node.classList.contains('aux-dot') ||
+        node.classList.contains('aux-label')
+      );
     })
     .forEach((node) => node.remove());
 }
 
-const createDotDependencies = [ 'basis', 'layout', 'min', 'max', 'base' ];
+const createDotDependencies = ['basis', 'layout', 'min', 'max', 'base'];
 
 function createDot(value, position) {
   const { basis, layout, min, max, base } = this.options;
@@ -285,18 +301,38 @@ function uniq(a) {
   return a.filter((item, i, a) => a.indexOf(item) === i);
 }
 
-const generateScaleDependencies = uniq([
-  'layout', 'transformation', 'show_markers', 'show_labels',
-  'levels', 'levels_labels', 'gap_labels', 'gap_dots',
-  'avoid_collisions', 'min', 'max', 'base'
-].concat(createLabelDependencies, createDotDependencies));
+const generateScaleDependencies = uniq(
+  [
+    'layout',
+    'transformation',
+    'show_markers',
+    'show_labels',
+    'levels',
+    'levels_labels',
+    'gap_labels',
+    'gap_dots',
+    'avoid_collisions',
+    'min',
+    'max',
+    'base',
+  ].concat(createLabelDependencies, createDotDependencies)
+);
 
 function generateScale(from, to, include_from, show_to) {
   const O = this.options;
   const {
-    layout, transformation, show_markers, show_labels,
-    levels, levels_labels, gap_labels, gap_dots,
-    avoid_collisions, min, max, base
+    layout,
+    transformation,
+    show_markers,
+    show_labels,
+    levels,
+    levels_labels,
+    gap_labels,
+    gap_dots,
+    avoid_collisions,
+    min,
+    max,
+    base,
   } = O;
 
   let labels;
@@ -404,10 +440,10 @@ function generateScale(from, to, include_from, show_to) {
 
   if (show_labels && avoid_collisions) {
     return deferMeasure(() => {
-        measureDimensions(labels);
+      measureDimensions(labels);
 
-        return deferRender(render_cb);
-      });
+      return deferRender(render_cb);
+    });
   } else {
     render_cb();
   }
@@ -518,10 +554,10 @@ export class Scale extends Widget {
 
   static get renderers() {
     return [
-      defineRender('reverse', function(reverse) {
+      defineRender('reverse', function (reverse) {
         toggleClass(this.element, 'aux-reverse', reverse);
       }),
-      defineRender('layout', function(layout) {
+      defineRender('layout', function (layout) {
         const E = this.element;
         removeClass(
           E,
@@ -551,7 +587,15 @@ export class Scale extends Widget {
         this.triggerResize();
       }),
       defineRender(
-        [ BarChanged, 'layout', 'snap_module', 'transformation', 'bar', 'base', 'basis' ],
+        [
+          BarChanged,
+          'layout',
+          'snap_module',
+          'transformation',
+          'bar',
+          'base',
+          'basis',
+        ],
         function (layout, snap_module, transformation, bar, base, basis) {
           const _bar = this._bar;
 
@@ -575,12 +619,23 @@ export class Scale extends Widget {
             style.removeProperty('top');
             style.removeProperty('bottom');
           }
-        }),
+        }
+      ),
       defineRender(
-        [ 'fixed_dots', 'fixed_labels', 'show_labels', 'show_markers', 'min', 'max', 'transformation', 'layout', 'basis', 'base' ],
+        [
+          'fixed_dots',
+          'fixed_labels',
+          'show_labels',
+          'show_markers',
+          'min',
+          'max',
+          'transformation',
+          'layout',
+          'basis',
+          'base',
+        ],
         function (fixed_dots, fixed_labels, show_labels, show_markers) {
-          if (!fixed_dots || !fixed_labels)
-            return;
+          if (!fixed_dots || !fixed_labels) return;
 
           const E = this.element;
 
@@ -599,21 +654,45 @@ export class Scale extends Widget {
           }
 
           dotNodes.forEach((node) => E.appendChild(node));
-        }),
-        defineRender(
-          uniq([ 'fixed_dots', 'fixed_labels', 'min', 'max', 'base', 'show_min', 'show_max' ].concat(generateScaleDependencies)),
-          function (fixed_dots, fixed_labels, min, max, base, show_min, show_max) {
-            if (fixed_dots && fixed_labels)
-              return;
+        }
+      ),
+      defineRender(
+        uniq(
+          [
+            'fixed_dots',
+            'fixed_labels',
+            'min',
+            'max',
+            'base',
+            'show_min',
+            'show_max',
+          ].concat(generateScaleDependencies)
+        ),
+        function (
+          fixed_dots,
+          fixed_labels,
+          min,
+          max,
+          base,
+          show_min,
+          show_max
+        ) {
+          if (fixed_dots && fixed_labels) return;
 
-            removeDotsAndLabels(this.element);
+          removeDotsAndLabels(this.element);
 
-            const effectiveBase = Math.min(max, Math.max(min, base));
+          const effectiveBase = Math.min(max, Math.max(min, base));
 
-            return combineDefer(
-              (base !== min) ? generateScale.call(this, base, min, base === max, show_min) : null,
-              (base !== max) ? generateScale.call(this, base, max, true, show_max) : null);
-          }),
+          return combineDefer(
+            base !== min
+              ? generateScale.call(this, base, min, base === max, show_min)
+              : null,
+            base !== max
+              ? generateScale.call(this, base, max, true, show_max)
+              : null
+          );
+        }
+      ),
     ];
   }
 
@@ -690,7 +769,15 @@ export class Scale extends Widget {
   }
 
   _createLabel(args) {
-    const { transformation, labels, layout, basis, min, max, base } = this.options;
+    const {
+      transformation,
+      labels,
+      layout,
+      basis,
+      min,
+      max,
+      base,
+    } = this.options;
 
     let position, label;
 
@@ -789,7 +876,7 @@ defineChildElement(Scale, 'pointer', {
   toggle_class: true,
   option: 'pointer',
   debug: true,
-  draw_options: ['pointer', 'transformation', 'snap_module', 'layout' ],
+  draw_options: ['pointer', 'transformation', 'snap_module', 'layout'],
   draw: function (O) {
     const { _pointer } = this;
     if (!_pointer) return;

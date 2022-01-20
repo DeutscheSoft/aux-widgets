@@ -83,26 +83,31 @@ export class FileSelect extends Container {
 
   static get renderers() {
     return [
-      defineMeasure(
-        [ 'files', 'placeholder', 'format_multiple' ],
-        function (files, placeholder, format_multiple) {
-          let filename;
-          if (!files.length) {
-            filename = placeholder;
-          } else if (files.length == 1) {
-            filename = files[0].name;
-          } else {
-            filename = format_multiple(files.length);
-          }
+      defineMeasure(['files', 'placeholder', 'format_multiple'], function (
+        files,
+        placeholder,
+        format_multiple
+      ) {
+        let filename;
+        if (!files.length) {
+          filename = placeholder;
+        } else if (files.length == 1) {
+          filename = files[0].name;
+        } else {
+          filename = format_multiple(files.length);
+        }
 
-          this.set('filename', filename);
-        }),
+        this.set('filename', filename);
+      }),
       defineMeasure('files', function (files) {
         let filesize = 0;
-        files.forEach((file) => filesize += file.size);
+        files.forEach((file) => (filesize += file.size));
         this.set('filesize', filesize);
       }),
-      defineMeasure([ 'filesize', 'format_size' ], function (filesize, format_size) {
+      defineMeasure(['filesize', 'format_size'], function (
+        filesize,
+        format_size
+      ) {
         this.size.set('label', format_size(filesize));
       }),
       defineMeasure('filename', function (filename) {

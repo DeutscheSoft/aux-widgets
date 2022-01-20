@@ -8,7 +8,6 @@ function beHidden(modal) {
 
 describe('Dialog', () => {
   it('click event open close modals', () => {
-
     cy.visit('http://localhost:1234/tests/Dialog.html');
 
     const dialogs = cy.get('aux-dialog');
@@ -27,32 +26,25 @@ describe('Dialog', () => {
         .click()
         .then(() => {
           expect(cb).to.be.called;
-        });  
+        });
     });
-    buttons.each(($el,i) => {
+    buttons.each(($el, i) => {
       cy.get($el)
         .click()
         .then(() => {
-        
-        if(i === 0) {
-          cy.get('#dialog1')
-            .should(beVisible);
-          cy.get('#dialog2')
-            .should(beHidden);
-        } else {
-          cy.get('#dialog1')
-            .should(beHidden);
-        }
-        if(i === 1) {
-          cy.get('#dialog2')
-            .should(beVisible);
-        }
-        if(i === 2) {
-          cy.get('#dialog2')
-            .should(beHidden);
-        }
-
-      });
+          if (i === 0) {
+            cy.get('#dialog1').should(beVisible);
+            cy.get('#dialog2').should(beHidden);
+          } else {
+            cy.get('#dialog1').should(beHidden);
+          }
+          if (i === 1) {
+            cy.get('#dialog2').should(beVisible);
+          }
+          if (i === 2) {
+            cy.get('#dialog2').should(beHidden);
+          }
+        });
     });
   });
 });

@@ -141,39 +141,41 @@ export function defineChildElement(widget, name, config) {
       this[index] = C;
     }
   });
-  widget.addTask(defineRender([ show_option ], function (value) {
-    const childElement = this[index];
+  widget.addTask(
+    defineRender([show_option], function (value) {
+      const childElement = this[index];
 
-    const show = display_check ? display_check(value) : value !== false;
+      const show = display_check ? display_check(value) : value !== false;
 
-    if (show) {
-      if (!childElement.parentNode)
-        append.call(this, this.options);
-    } else if (childElement !== null) {
-      this[index] = null;
-      childElement.remove();
-    }
-    if (config.toggle_class) toggleClass(this.element, 'aux-has-' + name, show);
-    this.triggerResize();
-    if (dependency)
-      this.invalidate(dependency);
-  }));
+      if (show) {
+        if (!childElement.parentNode) append.call(this, this.options);
+      } else if (childElement !== null) {
+        this[index] = null;
+        childElement.remove();
+      }
+      if (config.toggle_class)
+        toggleClass(this.element, 'aux-has-' + name, show);
+      this.triggerResize();
+      if (dependency) this.invalidate(dependency);
+    })
+  );
 
   if (config.draw) {
     let draw_options = config.draw_options;
 
     if (!draw_options) draw_options = [show_option];
-    else draw_options = [ show_option, ...draw_options ];
+    else draw_options = [show_option, ...draw_options];
 
     // filter out options which are not unique
     draw_options = draw_options.filter((name, i, a) => i === a.indexOf(name));
 
-    widget.addTask(defineRender(draw_options, function (value) {
-      const show = display_check ? display_check(value) : value !== false;
+    widget.addTask(
+      defineRender(draw_options, function (value) {
+        const show = display_check ? display_check(value) : value !== false;
 
-      if (show)
-        config.draw.call(this, this.options);
-    }));
+        if (show) config.draw.call(this, this.options);
+      })
+    );
   }
 
   if (!widget.hasOption(show_option)) {

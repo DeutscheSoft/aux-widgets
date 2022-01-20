@@ -55,7 +55,13 @@ import {
  * Boston, MA  02110-1301  USA
  */
 
-import { waitForDrawn, assert, assertEqual, compare, objectMinus } from './helpers.js';
+import {
+  waitForDrawn,
+  assert,
+  assertEqual,
+  compare,
+  objectMinus,
+} from './helpers.js';
 
 const widgets = [
   Container,
@@ -362,6 +368,7 @@ describe('Clock', () => {
     await waitForDrawn(c);
     assertEqual(
       c._label.innerHTML + c._label_upper.innerHTML + c._label_lower.innerHTML,
-      'labelupperlower');
+      'labelupperlower'
+    );
   });
 });

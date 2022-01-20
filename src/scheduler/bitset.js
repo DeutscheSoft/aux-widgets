@@ -49,8 +49,7 @@ export function createBitList(indices) {
   const list = [];
 
   for (let i = 0; i < set.length; i++) {
-    if (set[i])
-      list.push(i, set[i]);
+    if (set[i]) list.push(i, set[i]);
   }
 
   return list;
@@ -59,10 +58,9 @@ export function createBitList(indices) {
 export function testBitList(set, list) {
   for (let i = 0; i < list.length; i += 2) {
     const index = list[i];
-    const mask = list[i+1];
+    const mask = list[i + 1];
 
-    if (set[index] & mask)
-      return true;
+    if (set[index] & mask) return true;
   }
 
   return false;
@@ -71,7 +69,7 @@ export function testBitList(set, list) {
 export function setBitList(set, list) {
   for (let i = 0; i < list.length; i += 2) {
     const index = list[i];
-    const mask = list[i+1];
+    const mask = list[i + 1];
 
     set[index] = set[index] | mask;
   }

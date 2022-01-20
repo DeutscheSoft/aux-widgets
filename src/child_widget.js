@@ -202,7 +202,7 @@ export function defineChildWidget(widget, name, config) {
   });
 
   const fixed = config.fixed;
-  const append = (config.append === void 0) ? true : config.append;
+  const append = config.append === void 0 ? true : config.append;
 
   const createWidget = function () {
     const O = getChildOptions(this, name, this.options, config);
@@ -214,8 +214,7 @@ export function defineChildWidget(widget, name, config) {
   const appendWidget = function () {
     const w = this[name];
 
-    if (!w || w.element.parentNode)
-      return;
+    if (!w || w.element.parentNode) return;
 
     const element = this.element;
 
@@ -230,9 +229,11 @@ export function defineChildWidget(widget, name, config) {
     widget.addStaticEvent('initialize_children', createWidget);
     widget.addTask(defineRender([], appendWidget));
     if (config.toggle_class) {
-      widget.addTask(defineRender([], function () {
-        addClass(this.element, 'aux-has-' + name);
-      }));
+      widget.addTask(
+        defineRender([], function () {
+          addClass(this.element, 'aux-has-' + name);
+        })
+      );
     }
   } else {
     widget.addStaticEvent('initialize_children', function () {
@@ -244,34 +245,34 @@ export function defineChildWidget(widget, name, config) {
     widget.addStaticEvent('set_' + key, function (val) {
       const show = val !== false;
 
-      if ((this[name] !== null) === show)
-        return;
+      if ((this[name] !== null) === show) return;
 
       if (show) {
         createWidget.call(this);
       }
     });
-    widget.addTask(defineRender([ key ], function (val) {
-      const show = val !== false;
-      const w = this[name];
+    widget.addTask(
+      defineRender([key], function (val) {
+        const show = val !== false;
+        const w = this[name];
 
-      if (show === (w && !!w.element.parentNode))
-        return;
+        if (show === (w && !!w.element.parentNode)) return;
 
-      if (config.toggle_class)
-        toggleClass(this.element, 'aux-has-' + name, show);
+        if (config.toggle_class)
+          toggleClass(this.element, 'aux-has-' + name, show);
 
-      if (show) {
-        appendWidget.call(this);
-      } else if (w) {
-        this[name] = null;
-        if (map_interacting && w.get('interacting')) {
-          this.stopInteracting();
+        if (show) {
+          appendWidget.call(this);
+        } else if (w) {
+          this[name] = null;
+          if (map_interacting && w.get('interacting')) {
+            this.stopInteracting();
+          }
+          w.destroy();
         }
-        w.destroy();
-      }
-      if (!config.no_resize) this.triggerResize();
-    }));
+        if (!config.no_resize) this.triggerResize();
+      })
+    );
   }
 
   let setCallback = function (val, key) {

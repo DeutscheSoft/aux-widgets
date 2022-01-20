@@ -202,12 +202,12 @@ export class ColorPicker extends Container {
 
   static get renderers() {
     return [
-      defineRender('saturation', function(saturation) {
+      defineRender('saturation', function (saturation) {
         this._grayscale.style.opacity = 1 - saturation;
       }),
       defineRender(
-        [ 'hue', 'lightness', 'hex', 'rgb', 'red', 'green', 'blue' ],
-        function(hue, lightness, hex, rgb, red, green, blue) {
+        ['hue', 'lightness', 'hex', 'rgb', 'red', 'green', 'blue'],
+        function (hue, lightness, hex, rgb, red, green, blue) {
           const { _indicator } = this;
           const _hex = this.hex;
 
@@ -229,7 +229,8 @@ export class ColorPicker extends Container {
           _indicator.style.top = lightness * 100 + '%';
           _indicator.style.backgroundColor = bg;
           _indicator.style.color = bw;
-        }),
+        }
+      ),
     ];
   }
 

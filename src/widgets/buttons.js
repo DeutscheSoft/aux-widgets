@@ -410,8 +410,7 @@ export class Buttons extends Container {
       } else if (e.code === 'End' || e.code === 'PageDown') {
         sibling = siblings[siblings.length - 1];
       }
-      if (sibling)
-        sibling.focus();
+      if (sibling) sibling.focus();
     });
 
     return button;

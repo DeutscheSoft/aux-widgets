@@ -48,7 +48,7 @@ export class Label extends Widget {
 
   static get renderers() {
     return [
-      defineRender([ 'label', 'format' ], function (label, format) {
+      defineRender(['label', 'format'], function (label, format) {
         setText(this._text, format ? format(label) : label);
       }),
     ];

@@ -196,8 +196,22 @@ export class Clock extends Widget {
         this.svg.setAttribute('viewBox', formatViewbox(size, size));
       }),
       defineRender(
-        [ 'thickness', 'margin', 'size', 'show_hours', 'show_minutes', 'show_seconds' ],
-        function (thickness, margin, size, show_hours, show_minutes, show_seconds) {
+        [
+          'thickness',
+          'margin',
+          'size',
+          'show_hours',
+          'show_minutes',
+          'show_seconds',
+        ],
+        function (
+          thickness,
+          margin,
+          size,
+          show_hours,
+          show_minutes,
+          show_seconds
+        ) {
           const show = {
             hours: show_hours,
             minutes: show_minutes,
@@ -207,7 +221,8 @@ export class Clock extends Widget {
           let _margin = 0;
 
           for (const name in this.circulars) {
-            if (!Object.prototype.hasOwnProperty.call(this.circulars, name)) continue;
+            if (!Object.prototype.hasOwnProperty.call(this.circulars, name))
+              continue;
             const circular = this.circulars[name];
 
             if (show[name]) {
@@ -226,15 +241,36 @@ export class Clock extends Widget {
           }
 
           this.set('_margin', _margin);
-        }),
+        }
+      ),
 
       defineRender(
-        [ 'label', 'months', 'days', 'label_margin', 'size', 'label_upper_pos', 'label_scale', 'label_lower_pos', '_margin' ],
-        function (label, months, days, label_margin, size, label_upper_pos, label_scale, label_lower_pos, _margin) {
+        [
+          'label',
+          'months',
+          'days',
+          'label_margin',
+          'size',
+          'label_upper_pos',
+          'label_scale',
+          'label_lower_pos',
+          '_margin',
+        ],
+        function (
+          label,
+          months,
+          days,
+          label_margin,
+          size,
+          label_upper_pos,
+          label_scale,
+          label_lower_pos,
+          _margin
+        ) {
           const { _label } = this;
 
           setText(
-            _label, 
+            _label,
             label(
               new Date(2000, 8, 30, 24, 59, 59, 999),
               2000,
@@ -248,7 +284,8 @@ export class Clock extends Widget {
               999,
               months,
               days
-            ));
+            )
+          );
           _label.setAttribute('transform', '');
 
           return deferMeasure(() => {
@@ -262,7 +299,6 @@ export class Clock extends Widget {
             const space = size - mleft - mright - _margin * 2 - mlabel * 2;
             const scale = space / bb.width;
             const pos = size / 2;
-
 
             return deferRender(() => {
               _label.setAttribute(
@@ -303,9 +339,18 @@ export class Clock extends Widget {
               });
             });
           });
-        }),
+        }
+      ),
       defineRender(
-        [ 'time', 'label', 'label_upper', 'label_lower', 'fps', 'months', 'days' ],
+        [
+          'time',
+          'label',
+          'label_upper',
+          'label_lower',
+          'fps',
+          'months',
+          'days',
+        ],
         function (time, label, label_upper, label_lower, fps, months, days) {
           const { hours, seconds, minutes } = this.circulars;
 
@@ -328,7 +373,8 @@ export class Clock extends Widget {
            * @event Clock#timedrawn
            */
           this.emit('timedrawn', time);
-        }),
+        }
+      ),
     ];
   }
 
