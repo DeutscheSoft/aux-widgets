@@ -52,8 +52,13 @@ body {
   display: inline-block;
   vertical-align: middle;
   position: relative;
-  user-select: none;
   box-sizing: border-box;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 /* ######## WIDGETS ######## */
@@ -74,7 +79,6 @@ body {
 }
 .aux-button > .aux-label,
 .aux-button > .aux-icon {
-  user-select: none;
   pointer-events: none;
 }
 .aux-button > .aux-icon {
@@ -105,7 +109,6 @@ body {
 
 .aux-chart {
   overflow: hidden;
-  user-select: none;
 }
 .aux-chart > svg {
   box-sizing: content-box;
@@ -403,7 +406,6 @@ body {
 /* FADER */
 
 .aux-fader {
-  user-select: none;
   box-sizing: border-box;
   display: inline-grid;
 }
@@ -1310,6 +1312,11 @@ body.aux-cursor-row-resize * {
 /* VALUE */
 
 .aux-value > .aux-input {
+  -webkit-touch-callout: auto !important;
+  -webkit-user-select: auto !important;
+  -khtml-user-select: auto !important;
+  -moz-user-select: auto !important;
+  -ms-user-select: auto !important;
   user-select: auto !important;
   text-align: center;
   border: none;
@@ -1455,6 +1462,11 @@ body.aux-cursor-row-resize * {
   flex: 1 1 auto;
 }
 .aux-window > .aux-header {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   cursor: default;
   order: 1;
