@@ -20,7 +20,7 @@
 import { defineRange } from '../utils/define_range.js';
 import { addClass, getStyle, empty } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
-import { Widget, Resize } from './widget.js';
+import { Widget, SymResize } from './widget.js';
 import {
   defineRender,
   combineDefer,
@@ -290,7 +290,7 @@ export class Grid extends Widget {
           'x_max',
           'y_min',
           'y_max',
-          Resize,
+          SymResize,
         ],
         function (
           range_x,

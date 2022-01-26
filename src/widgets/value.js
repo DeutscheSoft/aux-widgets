@@ -21,7 +21,7 @@ import { Widget } from './widget.js';
 import { element, addClass, removeClass } from './../utils/dom.js';
 import { defineRender } from '../renderer.js';
 
-const Editing = Symbol('__editing changed');
+const SymEditing = Symbol('__editing changed');
 
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -120,7 +120,7 @@ function valueInput() {
 function valueDone(noblur) {
   if (!this.__editing) return;
   this.__editing = false;
-  this.invalidate(Editing);
+  this.invalidate(SymEditing);
   removeClass(this.element, 'aux-active');
   if (!noblur) this._input.blur();
   /**
@@ -136,7 +136,7 @@ function valueDone(noblur) {
 function valueFocus() {
   const O = this.options;
   this.__editing = true;
-  this.invalidate(Editing);
+  this.invalidate(SymEditing);
   addClass(this.element, 'aux-active');
   if (O.auto_select) this._input.setSelectionRange(0, this._input.value.length);
   this.startInteracting();
@@ -239,7 +239,7 @@ export class Value extends Widget {
         if (placeholder) E.setAttribute('placeholder', placeholder);
         else E.removeAttribute('placeholder');
       }),
-      defineRender(['value', 'format', Editing], function (value, format) {
+      defineRender(['value', 'format', SymEditing], function (value, format) {
         if (this.__editing) return;
         this._input.value = format(value);
       }),

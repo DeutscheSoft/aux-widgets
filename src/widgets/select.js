@@ -24,7 +24,7 @@ import { Button } from './button.js';
 import { Label } from './label.js';
 import { setDelayedFocus, createID } from '../utils/dom.js';
 import { Timer } from '../utils/timers.js';
-import { Resize } from './widget.js';
+import { SymResize } from './widget.js';
 
 import {
   element,
@@ -62,7 +62,7 @@ import {
  * @param {mixed} value - The new value of the option
  */
 
-const EntriesChanged = Symbol('entries changes');
+const SymEntriesChanged = Symbol('entries changes');
 
 /**
  * Select provides a {@link Button} with a select list to choose from
@@ -188,7 +188,7 @@ export class Select extends Button {
 
   static get renderers() {
     return [
-      defineRender(EntriesChanged, function () {
+      defineRender(SymEntriesChanged, function () {
         const _list = this._list;
 
         this.entries.forEach((entry) => _list.appendChild(entry.element));
@@ -281,12 +281,12 @@ export class Select extends Button {
           element.removeAttribute('aria-expanded');
         }
       }),
-      defineRender(['selected', EntriesChanged], function (selected) {
+      defineRender(['selected', SymEntriesChanged], function (selected) {
         this.entries.forEach((entry, i) => {
           toggleClass(entry.element, 'aux-active', i === selected);
         });
       }),
-      defineRender([Resize, 'auto_size', EntriesChanged], function (auto_size) {
+      defineRender([SymResize, 'auto_size', SymEntriesChanged], function (auto_size) {
         if (auto_size) {
           const S = this.sizer.element;
           empty(S);
@@ -502,7 +502,7 @@ export class Select extends Button {
     const index = entries.indexOf(entry);
 
     // invalidate entries.
-    this.invalidate(EntriesChanged);
+    this.invalidate(SymEntriesChanged);
 
     const selected = this.options.selected;
 
@@ -605,7 +605,7 @@ export class Select extends Button {
 
     // remove from DOM
     if (li.parentElement == this._list) li.remove();
-    this.invalidate(EntriesChanged);
+    this.invalidate(SymEntriesChanged);
     /**
      * Is fired when an entry was removed from the list.
      *

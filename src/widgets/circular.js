@@ -28,7 +28,7 @@ import {
   makeRanged,
 } from '../utils/make_ranged.js';
 import { defineChildElement } from '../widget_helpers.js';
-import { Resize, Widget } from './widget.js';
+import { SymResize, Widget } from './widget.js';
 import {
   defineRender,
   defineMeasure,
@@ -72,7 +72,7 @@ const formatTranslate = FORMAT('translate(%f, %f)');
 const formatTranslateRotate = FORMAT('translate(%f %f) rotate(%f %f %f)');
 const formatRotate = FORMAT('rotate(%f %f %f)');
 
-const LabelsChanged = Symbol('_labels changed');
+const SymLabelsChanged = Symbol('_labels changed');
 
 function drawSlice(a_from, a_to, r_inner, r_outer, pos, slice) {
   a_from = +a_from;
@@ -272,7 +272,7 @@ export class Circular extends Widget {
       defineRender('show_hand', function (show_hand) {
         this._hand.style.display = show_hand ? 'block' : 'none';
       }),
-      defineMeasure(Resize, function () {
+      defineMeasure(SymResize, function () {
         this.set('_stroke_width', this.getStroke());
         this.invalidate('labels');
       }),
@@ -351,7 +351,7 @@ export class Circular extends Widget {
       ),
       defineRender(
         [
-          LabelsChanged,
+          SymLabelsChanged,
           'show_labels',
           'labels',
           'labels_defaults',
@@ -794,7 +794,7 @@ defineChildElement(Circular, 'labels', {
   //option: "labels",
   //display_check: function(v) { return !!v.length; },
   show: true,
-  dependency: LabelsChanged,
+  dependency: SymLabelsChanged,
   create: function () {
     return makeSVG('g', { class: 'aux-labels' });
   },

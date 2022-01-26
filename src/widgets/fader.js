@@ -26,7 +26,7 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { Resize, Widget } from './widget.js';
+import { SymResize, Widget } from './widget.js';
 import { warning } from '../utils/warning.js';
 import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
 import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
@@ -213,7 +213,7 @@ export class Fader extends Widget {
         addClass(E, 'aux-' + layout);
         this.triggerResize();
       }),
-      defineMeasure(Resize, function () {
+      defineMeasure(SymResize, function () {
         const T = this._track,
           H = this._handle;
         let basis;

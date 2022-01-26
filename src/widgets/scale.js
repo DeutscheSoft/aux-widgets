@@ -449,7 +449,7 @@ function generateScale(from, to, include_from, show_to) {
   }
 }
 
-const BarChanged = Symbol('_bar changed');
+const SymBarChanged = Symbol('_bar changed');
 
 /**
  * Interface for dots passed to the `fixed_dots` option of `Scale`.
@@ -588,7 +588,7 @@ export class Scale extends Widget {
       }),
       defineRender(
         [
-          BarChanged,
+          SymBarChanged,
           'layout',
           'snap_module',
           'transformation',
@@ -899,5 +899,5 @@ defineChildElement(Scale, 'bar', {
   show: false,
   toggle_class: true,
   option: 'bar',
-  dependency: BarChanged,
+  dependency: SymBarChanged,
 });

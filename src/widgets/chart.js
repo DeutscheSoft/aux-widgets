@@ -31,7 +31,7 @@ import {
 import { defineRange } from '../utils/define_range.js';
 import { makeSVG } from '../utils/svg.js';
 import { error, warn } from '../utils/log.js';
-import { Widget, Resize } from './widget.js';
+import { Widget, SymResize } from './widget.js';
 import { Graph } from './graph.js';
 import { ChartHandle } from './charthandle.js';
 import { defineChildWidget } from '../child_widget.js';
@@ -83,8 +83,8 @@ function STOP(e) {
   return false;
 }
 
-const LabelChanged = Symbol('_label changed');
-const Graphs = Symbol('graphs changed');
+const SymLabelChanged = Symbol('_label changed');
+const SymGraphs = Symbol('graphs changed');
 
 /**
  * Chart is an SVG image containing one or more Graphs. Chart
@@ -221,7 +221,7 @@ export class Chart extends Widget {
         }
       }),
       defineRender(
-        ['label', 'label_position', 'range_x', 'range_y', LabelChanged],
+        ['label', 'label_position', 'range_x', 'range_y', SymLabelChanged],
         function (label, label_position, range_x, range_y) {
           const _label = this._label;
 
@@ -306,7 +306,7 @@ export class Chart extends Widget {
           style.display = 'none';
         }
       }),
-      defineMeasure(['square', Resize], function (square) {
+      defineMeasure(['square', SymResize], function (square) {
         const E = this.element;
         const SVG = this.svg;
 
@@ -395,10 +395,10 @@ export class Chart extends Widget {
 
       const sub = graph.subscribe('set', (key) => {
         if (key === 'color' || key === 'class' || key === 'key')
-          this.invalidate(Graphs);
+          this.invalidate(SymGraphs);
       });
 
-      this.invalidate(Graphs);
+      this.invalidate(SymGraphs);
 
       return () => {
         sub();
@@ -697,7 +697,7 @@ defineChildWidget(Chart, 'grid', {
  */
 defineChildElement(Chart, 'label', {
   option: 'label',
-  dependency: LabelChanged,
+  dependency: SymLabelChanged,
   display_check: function (v) {
     return typeof v === 'string' && v.length;
   },

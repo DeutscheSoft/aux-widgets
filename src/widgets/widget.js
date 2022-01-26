@@ -55,8 +55,8 @@ import { domScheduler } from '../dom_scheduler.js';
 
 const enableTimers = new ProximityTimers();
 
-export const Resize = Symbol('resize');
-export const Resized = Symbol('resized');
+export const SymResize = Symbol('resize');
+export const SymResized = Symbol('resized');
 
 const rootWidgets = new Map();
 
@@ -90,7 +90,7 @@ function removeRootWidget(widget) {
   GlobalVisibilityChange.delete(visibilityChanged);
 }
 
-const DrawOnce = Symbol('drawOnce');
+const SymDrawOnce = Symbol('drawOnce');
 
 const KEYS = [
   'ArrowUp',
@@ -398,10 +398,10 @@ export class Widget extends Base {
 
   static get renderers() {
     return [
-      defineMeasure(Resize, function () {
+      defineMeasure(SymResize, function () {
         this.resize();
       }),
-      defineMeasure(Resized, function () {
+      defineMeasure(SymResized, function () {
         this.emit('resized');
         this.resize();
       }),
@@ -486,7 +486,7 @@ export class Widget extends Base {
           this.disableDraw();
         });
       }),
-      defineRender(DrawOnce, function () {
+      defineRender(SymDrawOnce, function () {
         const q = this.draw_queue;
 
         this.draw_queue = null;
@@ -584,7 +584,7 @@ export class Widget extends Base {
   }
 
   triggerResize() {
-    this.invalidate(Resize);
+    this.invalidate(SymResize);
 
     const C = this.children;
 
@@ -610,7 +610,7 @@ export class Widget extends Base {
 
     if (this.constructor.hasOption('resized')) this.set('resized', true);
 
-    if (this.hasEventListeners('resized')) this.invalidate(Resized);
+    if (this.hasEventListeners('resized')) this.invalidate(SymResized);
   }
 
   initialized() {
@@ -634,7 +634,7 @@ export class Widget extends Base {
 
     if (q === null) {
       this.draw_queue = [fun];
-      this.invalidate(DrawOnce);
+      this.invalidate(SymDrawOnce);
     } else {
       if (q.includes(fun)) return;
       q.push(fun);

@@ -26,7 +26,7 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { Widget, Resize } from './widget.js';
+import { Widget, SymResize } from './widget.js';
 import { warning } from '../utils/warning.js';
 import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
 import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
@@ -196,7 +196,7 @@ export class Spread extends Widget {
 
   static get renderers() {
     return [
-      defineMeasure(['layout', Resize], function (layout) {
+      defineMeasure(['layout', SymResize], function (layout) {
         const { _track, _lower } = this;
 
         let basis;
