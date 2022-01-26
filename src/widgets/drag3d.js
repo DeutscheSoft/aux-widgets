@@ -155,20 +155,22 @@ export class Drag3D extends Container {
   }
 }
 
-const setCallback = function (val, key) {
-  if (this[name]) this[name].set(key.substr(name.length + 1), val);
-};
+const setCallback = function(name) {
+  return function (val, key) {
+    if (this[name]) this[name].set(key.substr(name.length + 1), val);
+  };
+}
 
 for (const i in { x: 0, y: 0, z: 0 }) {
   for (const name in DragValue.getOptionTypes()) {
-    Drag3D.addStaticEvent('set_drag_' + i + '.' + name, setCallback);
+    Drag3D.addStaticEvent('set_drag_' + i + '.' + name, setCallback(name));
     Drag3D.defineOption(
       'drag_' + i + '.' + name,
       DragValue.getOptionType(name)
     );
   }
   for (const name in Range.getOptionTypes()) {
-    Drag3D.addStaticEvent('set_range_' + i + '.' + name, setCallback);
+    Drag3D.addStaticEvent('set_range_' + i + '.' + name, setCallback(name));
     Drag3D.defineOption('range_' + i + '.' + name, Range.getOptionType(name));
   }
 }

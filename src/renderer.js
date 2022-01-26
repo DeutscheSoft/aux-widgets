@@ -14,6 +14,7 @@ import {
   createBitList,
   setBitList,
   getBitIndex,
+  printBitMask,
 } from './scheduler/bitset.js';
 
 function buildDependencyMap(tasks) {

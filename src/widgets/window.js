@@ -634,7 +634,7 @@ export class Window extends Container {
       defineMeasure(['status', 'hide_status'], function (status, hide_status) {
         statusTimeout.call(this);
       }),
-      defineRender('fixed', function (fixes) {
+      defineRender('fixed', function (fixed) {
         this.element.style.position = fixed ? 'fixed' : 'absolute';
       }),
       defineRender('active', function (active) {

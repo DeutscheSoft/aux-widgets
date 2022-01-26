@@ -23,7 +23,7 @@ import { element, addClass } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { objectAnd, objectSub } from '../utils/object.js';
-import { defineRender } from '../renderer.js';
+import { defineRender, deferMeasure, deferRender } from '../renderer.js';
 
 function getCoordsSingle(deg, inner, pos) {
   deg = (deg * Math.PI) / 180;
@@ -82,6 +82,7 @@ export class Gauge extends Widget {
       }),
       defineRender(['label', 'x', 'y', 'size'], function (label, x, y, size) {
         const _label = this._label;
+        const O = this.options;
 
         _label.textContent = label.label;
 

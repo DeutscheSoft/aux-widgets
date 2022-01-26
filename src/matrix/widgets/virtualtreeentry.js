@@ -32,6 +32,8 @@ import { Label } from '../../widgets/label.js';
 import { Icon } from '../../widgets/icon.js';
 import { defineRender, defineMeasure } from '../../renderer.js';
 
+import { VirtualTreeEntryBase } from './virtualtreeentrybase.js';
+
 const indent_to_glyph = {
   trunk: '',
   branch: '',
@@ -91,7 +93,6 @@ function composeDepth(tree_position) {
  * @class VirtualTreeEntry
  */
 
-import { VirtualTreeEntryBase } from './virtualtreeentrybase.js';
 
 export class VirtualTreeEntry extends VirtualTreeEntryBase {
   static get _options() {

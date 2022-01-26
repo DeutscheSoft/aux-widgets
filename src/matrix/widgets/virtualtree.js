@@ -118,7 +118,7 @@ export class VirtualTree extends Scroller {
         function (virtualtreeview, _startIndex, prerender_top) {
           if (!virtualtreeview) return;
           virtualtreeview.scrollStartIndexTo(
-            Math.max(0, O._startIndex - O.prerender_top)
+            Math.max(0, _startIndex - prerender_top)
           );
         }
       ),
@@ -127,13 +127,13 @@ export class VirtualTree extends Scroller {
         _amount
       ) {
         if (!virtualtreeview) return;
-        virtualtreeview.setAmount(O._amount);
+        virtualtreeview.setAmount(_amount);
       }),
       defineRender(['_sizer_size', 'size'], function (_sizer_size, size) {
         this._sizer.style.height =
           this.calculateEntryPosition(_sizer_size) + 'px';
       }),
-      defineRender('_scroll', function (_sizer_size, size) {
+      defineRender('_scroll', function (_scroll) {
         this.scrollhide.element.scrollTop = _scroll;
       }),
       defineRender('size', function (size) {

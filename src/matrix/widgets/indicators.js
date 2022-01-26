@@ -176,8 +176,8 @@ export class Indicators extends Container {
 
         if (!_batch) return;
 
-        const x = rect.flip_x ? 'left' : 'right';
-        const y = rect.flip_y ? 'top' : 'bottom';
+        const x = _rect.flip_x ? 'left' : 'right';
+        const y = _rect.flip_y ? 'top' : 'bottom';
         removeClass(_batch, 'aux-top-left');
         removeClass(_batch, 'aux-bottom-left');
         removeClass(_batch, 'aux-top-right');
@@ -191,18 +191,18 @@ export class Indicators extends Container {
 
         const style = _batch.style;
 
-        style.left = rect.x + 'px';
-        style.top = rect.y + 'px';
-        style.width = rect.width + 'px';
-        style.height = rect.height + 'px';
+        style.left = _rect.x + 'px';
+        style.top = _rect.y + 'px';
+        style.width = _rect.width + 'px';
+        style.height = _rect.height + 'px';
       }),
       defineRender(['_columns', '_rows', 'size'], function (
         _columns,
         _rows,
         size
       ) {
-        this._scroller.style.width = _columns * _size + 'px';
-        this._scroller.style.height = _rows * _size + 'px';
+        this._scroller.style.width = _columns * size + 'px';
+        this._scroller.style.height = _rows * size + 'px';
       }),
       defineRender(['connectionview', 'size'], function (connectionview, size) {
         this.connectionview_subs.unsubscribe();
