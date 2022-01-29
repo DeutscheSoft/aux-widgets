@@ -386,7 +386,16 @@ export class LevelMeter extends Meter {
   set(key, value) {
     if (key === 'value') {
       const O = this.options;
-      const base = O.base;
+      const { base, falling } = O;
+
+      if (falling) {
+        const effectiveValue = this.effectiveValue();
+
+        if (base < effectiveValue && value < effectiveValue ||
+            base > effectiveValue && value > effectiveValue) {
+          return value;
+        }
+      }
 
       this.set('_value_time', performance.now());
 
