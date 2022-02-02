@@ -337,6 +337,10 @@ function mergeFrames(mask) {
   return (PHASE_MASK & mask) | (mask >> FRAME_SHIFT);
 }
 
+function notCalledError() {
+  throw new Error('Not called in last frame.');
+}
+
 export class RenderState {
   constructor(scheduler, renderer, context) {
     this._runnable = createBitset(renderer.taskCount);
@@ -356,7 +360,7 @@ export class RenderState {
 
       if (frame !== this._frame) {
         if (scheduled & PHASE_MASK)
-          throw new Error('Not called in last frame.');
+          notCalledError();
 
         scheduled >>= FRAME_SHIFT;
         //this.log('%d -> %d', this._scheduled, scheduled);
@@ -392,21 +396,29 @@ export class RenderState {
     this._context.log(fmt, ...args);
   }
 
+  _adjustFrame() {
+    const { _scheduler, _frame } = this;
+    const frame = _scheduler.frame;
+
+    if (_frame === frame) return false;
+
+    if (this._scheduled & PHASE_MASK)
+      notCalledError();
+
+    this._scheduled >>= FRAME_SHIFT;
+    this._frame = frame;
+    return true;
+  }
+
   _schedule(mask) {
     if (this._paused) {
       this._pscheduled |= mask;
     } else {
-      const { _scheduler } = this;
-      const frame = _scheduler.frame;
+      this._adjustFrame();
 
-      if (frame !== this._frame) {
-        this._scheduled >>= FRAME_SHIFT;
-        this._frame = frame;
-      }
+      const { _scheduler, _scheduled } = this;
 
-      const scheduled = this._scheduled;
-
-      mask &= ~scheduled;
+      mask &= ~_scheduled;
 
       if (mask === 0) return;
 
@@ -452,6 +464,12 @@ export class RenderState {
   unpause() {
     if (!this._paused) return;
     this._paused = false;
+
+    if (this._adjustFrame())
+      this._animations.forEach((animation) => {
+        if (animation.frame < this._frame)
+          animation.frame = this._frame;
+      });
 
     let pscheduled = this._pscheduled;
     const scheduled = this._scheduled;
