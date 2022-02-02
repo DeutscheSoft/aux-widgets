@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { domScheduler } from '../src/index.js';
+import { domScheduler } from '../src/dom_scheduler.js';
 
 export function compare(a, b) {
   if (a === b) return true;
