@@ -327,6 +327,10 @@ export class Base {
     if (element !== this.__event_target) addNativeEvents.call(this, element);
   }
 
+  isDestructed() {
+    return this.options === null;
+  }
+
   /**
    * Destroys all event handlers and the options object.
    *
@@ -554,7 +558,11 @@ export class Base {
     return () => {
       if (!active) return;
       active = false;
-      this.removeEventListener(event, func);
+      if (!this.isDestructed()) {
+        this.removeEventListener(event, func);
+      }
+      event = null;
+      func = null;
     };
   }
 

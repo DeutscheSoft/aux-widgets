@@ -556,10 +556,6 @@ export class Widget extends Base {
     return this.element;
   }
 
-  isDestructed() {
-    return this.options === null;
-  }
-
   startInteracting() {
     const count = getInteractionCount(this);
     if (!count) {
