@@ -37,7 +37,7 @@ function makeScheduler() {
   return new Scheduler(schedule, onError);
 }
 
-describe.only('Renderer', () => {
+describe('Renderer', () => {
   it('animations survive pause', async () => {
     const scheduler = makeScheduler();
     const renderer = new Renderer();
