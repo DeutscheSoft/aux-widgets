@@ -223,6 +223,16 @@ export class EqualizerGraph extends Graph {
   }
 }
 
+function createEqBand(options, type) {
+  if (options instanceof EqBand)
+    return options;
+
+  if (!type)
+    type = EqBand;
+
+  return new type(options);
+}
+
 /**
  * Equalizer is a {@link FrequencyResponse}, utilizing {@link EqBand}s instead of
  * simple {@link ChartHandle}s. An Equalizer - by default - has one
@@ -251,9 +261,13 @@ export class Equalizer extends FrequencyResponse {
 
   static get static_events() {
     return {
-      set_bands: function (value) {
-        if (this.bands.length) this.removeBands();
-        this.addBands(value);
+      set_bands: function (value, key, previousValue) {
+        if (!value) value = [];
+        if (!previousValue) previousValue = [];
+        const newBands = value.filter((band) => !previousValue.includes(band));
+        const oldBands = previousValue.filter((band) => !value.includes(band));
+        oldBands.forEach((band) => this.removeChild(band));
+        newBands.forEach((band) => this.addChild(band));
       },
       set_show_bands: function (value) {
         this.set('show_handles', value);
@@ -285,7 +299,11 @@ export class Equalizer extends FrequencyResponse {
       class: 'aux-baseline',
     });
     this.addGraph(this.baseline);
-    this.addBands(this.options.bands);
+
+    const bands = (options.bands || []).map((options) => createEqBand(options));
+
+    this.options.bands = bands;
+    this.addBands(bands);
   }
 
   destroy() {
@@ -348,18 +366,11 @@ export class Equalizer extends FrequencyResponse {
   }
 
   addBand(options, type) {
-    let b;
+    const band = createEqBand(options, type);
 
-    if (options instanceof EqBand) {
-      b = options;
-    } else {
-      type = type || EqBand;
-      b = new type(options);
-    }
+    this.addChild(band);
 
-    this.addChild(b);
-
-    return b;
+    return band;
   }
 
   /**
@@ -406,6 +417,20 @@ export class Equalizer extends FrequencyResponse {
      * @event Equalizer#emptied
      */
     if (!this.getBands().length) this.emit('emptied');
+  }
+
+  set(key, value) {
+    if (key === 'bands') {
+      if (!value) {
+        value = [];
+      } else if (!Array.isArray(value)) {
+        throw new TypeError('Expected array of bands.');
+      } else {
+        value = value.slice(0);
+      }
+    }
+
+    return super.set(key, value);
   }
 }
 

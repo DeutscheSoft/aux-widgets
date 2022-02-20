@@ -38,3 +38,4 @@ export * from './regressions.js';
 export * from './range.js';
 export * from './icon.js';
 export * from './renderer.js';
+export * from './equalizer.js';
