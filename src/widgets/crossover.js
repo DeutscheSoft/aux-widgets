@@ -151,13 +151,13 @@ export class CrossoverGraph extends EqualizerGraph {
 }
 
 function sortBands() {
-  this.bands.sort(function (a, b) {
+  this.getBands().sort(function (a, b) {
     return a.options.freq - b.options.freq;
   });
 }
 
 function unlimitBands() {
-  this.bands.forEach((band) => {
+  this.getBands().forEach((band) => {
     band.set('x_min', false);
     band.set('x_max', false);
   });
@@ -190,19 +190,22 @@ function limitBands() {
   sortBands.call(this);
 
   const distance = Math.abs(this.get('distance'));
-  for (let i = 0; i < this.bands.length; i++)
-    limitBand(this.bands, i, distance);
+  const bands = this.getBands();
+
+  for (let i = 0; i < bands.length; i++)
+    limitBand(bands, i, distance);
 }
 
 function setFreq(band) {
   if (this.options.leap) return;
-  const i = this.bands.indexOf(band);
+  const bands = this.getBands();
+  const i = bands.indexOf(band);
   if (i < 0) {
     error('Band no member of crossover');
     return;
   }
   const distance = Math.abs(this.get('distance'));
-  limitBand(this.bands, i, distance);
+  limitBand(bands, i, distance);
 }
 
 /**

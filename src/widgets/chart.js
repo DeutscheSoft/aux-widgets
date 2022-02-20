@@ -306,7 +306,6 @@ export class Chart extends Widget {
     /**
      * @member {Array} Chart#handles - An array containing all {@link ChartHandle} instances.
      */
-    this.handles = [];
     if (!options.element) options.element = element('div');
     super.initialize(options);
 
@@ -402,6 +401,10 @@ export class Chart extends Widget {
     return this._graphChildren.getList();
   }
 
+  getHandles() {
+    return this.getChildren().filter((child) => child instanceof ChartHandle);
+  }
+
   destroy() {
     this._graphs.remove();
     this._handles.remove();
@@ -416,7 +419,6 @@ export class Chart extends Widget {
       child.set('range_x', () => this.range_x);
       child.set('range_y', () => this.range_y);
       child.set('range_z', () => this.range_z);
-      this.handles.push(child);
       this._handles.appendChild(child.element);
       /**
        * Is fired when a new handle was added.
@@ -430,22 +432,16 @@ export class Chart extends Widget {
   }
 
   removeChild(child) {
-    if (child instanceof ChartHandle) {
-      const H = this.handles;
-      const i = H.indexOf(child);
-
-      if (i !== -1) {
-        this.handles.splice(i, 1);
-        /**
-         * Is fired when a handle was removed.
-         *
-         * @event Chart#handleremoved
-         */
-        this.emit('handleremoved');
-      }
-    }
-
     super.removeChild(child);
+
+    if (child instanceof ChartHandle) {
+      /**
+       * Is fired when a handle was removed.
+       *
+       * @event Chart#handleremoved
+       */
+      this.emit('handleremoved', child);
+    }
   }
 
   /**
@@ -567,12 +563,12 @@ export class Chart extends Widget {
    *   `false`, all handles are removed from the widget.
    */
   removeHandles(handles) {
-    const H = handles || this.handles.slice();
-    for (let i = 0; i < H.length; i++) {
-      this.removeHandle(H[i]);
-    }
-    if (!handles) {
-      this.handles = [];
+    if (!handles)
+      handles = this.getHandles();
+
+    handles.forEach((handle) => this.removeHandle(handle));
+
+    if (!this.getHandles().length) {
       /**
        * Is fired when all handles are removed.
        *
@@ -594,9 +590,10 @@ export class Chart extends Widget {
     const O = this.options;
     const importance_handle = O.importance_handle;
     const importance_label = O.importance_label;
+    const handles = this.getHandles();
 
-    for (let i = 0; i < this.handles.length; i++) {
-      const h = this.handles[i];
+    for (let i = 0; i < handles.length; i++) {
+      const h = handles[i];
       if (h === handle || !h.get('active') || !h.get('show_handle')) continue;
       _a = calculateOverlap(X, h.getHandlePosition());
 

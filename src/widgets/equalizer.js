@@ -264,11 +264,6 @@ export class Equalizer extends FrequencyResponse {
   initialize(options) {
     super.initialize(options);
     /**
-     * @member {Array} Equalizer#bands - Array of {@link EqBand} instances.
-     */
-    this.bands = this.handles;
-
-    /**
      * @member {HTMLDivElement} Equalizer#element - The main DIV container.
      *   Has class <code>.aux-equalizer</code>.
      */
@@ -303,6 +298,10 @@ export class Equalizer extends FrequencyResponse {
     addClass(element, 'aux-equalizer');
 
     super.draw(O, element);
+  }
+
+  getBands() {
+    return this.getChildren().filter((child) => child instanceof EqBand);
   }
 
   /**
@@ -398,15 +397,15 @@ export class Equalizer extends FrequencyResponse {
    * @param {Array<EqBand>} bands - An array of {@link EqBand} instances.
    */
   removeBands(bands) {
-    if (!bands) bands = this.bands.slice(0);
+    if (!bands) bands = this.getBands();
 
-    for (let i = 0; i < bands.length; i++) this.removeBand(bands[i]);
+    bands.forEach((band) => this.removeBand(band));
     /**
      * Is fired when all bands are removed.
      *
      * @event Equalizer#emptied
      */
-    if (!bands) this.emit('emptied');
+    if (!this.getBands().length) this.emit('emptied');
   }
 }
 
