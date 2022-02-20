@@ -501,6 +501,7 @@ export class Page extends Container {
       hiding_duration: -1,
       showing_duration: -1,
       role: 'tabpanel',
+      active: false,
     };
   }
 }
