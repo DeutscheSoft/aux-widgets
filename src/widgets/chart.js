@@ -55,28 +55,6 @@ function calculateOverlap(X, Y) {
   );
 }
 
-function showHandles() {
-  const handles = this.handles;
-
-  if (handles.length === 0) return;
-  if (handles[0].parent === this) return;
-
-  for (let i = 0; i < handles.length; i++) {
-    this.addChild(handles[i]);
-  }
-}
-
-function hideHandles() {
-  const handles = this.handles;
-
-  if (handles.length === 0) return;
-  if (handles[0].parent !== this) return;
-
-  for (let i = 0; i < handles.length; i++) {
-    this.removeChild(handles[i]);
-  }
-}
-
 function STOP(e) {
   e.preventDefault();
   e.stopPropagation();
@@ -203,9 +181,6 @@ export class Chart extends Widget {
       DOMMouseScroll: STOP,
       set_depth: function (value) {
         this.range_z.set('basis', value);
-      },
-      set_show_handles: function (value) {
-        (value ? showHandles : hideHandles).call(this);
       },
     };
   }
@@ -434,8 +409,7 @@ export class Chart extends Widget {
   }
 
   addChild(child) {
-    if (!(child instanceof ChartHandle) || this.options.show_handles)
-      super.addChild(child);
+    super.addChild(child);
 
     if (child instanceof ChartHandle) {
       child.set('intersect', this.intersect.bind(this));
@@ -468,8 +442,6 @@ export class Chart extends Widget {
          * @event Chart#handleremoved
          */
         this.emit('handleremoved');
-
-        if (this.options.show_handles) return;
       }
     }
 
