@@ -85,6 +85,7 @@ function onPageAdded(page, position) {
     if (pages.isDrawn()) page.set('visible', true);
     pages.showChild(page);
   } else {
+    pages.hideChild(page);
     page.forceHide();
   }
 
