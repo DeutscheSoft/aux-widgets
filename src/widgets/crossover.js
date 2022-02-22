@@ -302,6 +302,7 @@ export class Crossover extends Equalizer {
   }
 
   removeChild(child) {
+    if (this.isDestructed()) return;
     super.removeChild(child);
     if (child instanceof CrossoverBand) {
       const graphs = this.getCrossoverGraphs();

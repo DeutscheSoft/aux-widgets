@@ -350,6 +350,7 @@ export class Equalizer extends FrequencyResponse {
   }
 
   removeChild(child) {
+    if (this.isDestructed()) return;
     if (child instanceof EqBand) {
       /**
        * Is fired when a band was removed.

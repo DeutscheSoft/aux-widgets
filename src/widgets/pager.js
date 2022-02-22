@@ -279,6 +279,7 @@ export class Pager extends Container {
   }
 
   removeChild(child) {
+    if (this.isDestructed()) return;
     if (child instanceof Pages) {
       if (this.pages === child) {
         this.pages.element.remove();

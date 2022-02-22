@@ -432,6 +432,7 @@ export class Chart extends Widget {
   }
 
   removeChild(child) {
+    if (this.isDestructed()) return;
     super.removeChild(child);
 
     if (child instanceof ChartHandle) {
