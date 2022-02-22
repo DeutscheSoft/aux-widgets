@@ -435,6 +435,12 @@ export class Chart extends Widget {
     super.removeChild(child);
 
     if (child instanceof ChartHandle) {
+      const childElement = child.element;
+      const _handles = this._handles;
+
+      if (childElement.parentNode === _handles)
+        childElement.remove();
+
       /**
        * Is fired when a handle was removed.
        *
