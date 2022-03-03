@@ -26,6 +26,7 @@ export * from './components/clock.js';
 export * from './components/colorpicker.js';
 export * from './components/colorpickerdialog.js';
 export * from './components/confirmbutton.js';
+export * from './components/combobox.js';
 export * from './components/container.js';
 export * from './components/crossover.js';
 export * from './components/dialog.js';

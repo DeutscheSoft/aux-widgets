@@ -22,7 +22,7 @@
  * set here are required for the functionality of the library. Always
  * include this file if you want to build a custom AUX theme from
  * scratch.
- * 
+ *
  * And better DO NOT EDIT this one.
  */
 
@@ -241,6 +241,21 @@ body {
 }
 .aux-colorpicker > .aux-cancel {
   grid-area: cancel;
+}
+
+/* COMBOBOX */
+
+.aux-combobox > .aux-select {
+  width: 100%;
+}
+
+.aux-combobox > .aux-value {
+  position: absolute;
+  top: 50%;
+  left: var(--aux-button-paddinghorizontal);
+  transform: translateY(-50%);
+  right: calc(var(--aux-select-icon-size) + var(--aux-select-icon-margin) + var(--aux-button-paddinghorizontal));
+  margin: 0;
 }
 
 /* DIALOG */
@@ -1276,11 +1291,6 @@ body.aux-cursor-row-resize * {
 .aux-button.aux-select > .aux-icon {
   order: 2;
   flex: 0 0 auto;
-  font-size: 16px;
-  line-height: 16px;
-  height: 16px;
-  width: 16px;
-  margin: 0 0 0 4px !important;
 }
 .aux-button.aux-select > .aux-label.aux-sizer {
   position: absolute !important;

@@ -17,11 +17,11 @@
  * Boston, MA  02110-1301  USA
  */
 
-/* 
+/*
  * This theme file sets some general defaults suitable for most
  * situations. It mainly covers sizes, margins and paddings, skipping
  * all design-related aspects like fonts, colors, radii and the like.
- * 
+ *
  * Use this as a starting point to build your custom theme on top.
  */
 
@@ -117,6 +117,10 @@
   --aux-scroller-bar-size: 12px;
   --aux-scroller-bar-size-hover: 24px;
   --aux-scroller-bar-min-size: 40px;
+
+  --aux-select-icon-size: 16px;
+  --aux-select-icon-fontsize: 16px;
+  --aux-select-icon-margin: 4px;
 
   --aux-selectentry-lineheight: 2em;
 

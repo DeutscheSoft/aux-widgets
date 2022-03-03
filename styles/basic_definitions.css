@@ -17,11 +17,11 @@
  * Boston, MA  02110-1301  USA
  */
 
-/* 
+/*
  * This theme file sets some general defaults suitable for most
  * situations. It mainly covers sizes, margins and paddings, skipping
  * all design-related aspects like fonts, colors, radii and the like.
- * 
+ *
  * Use this as a starting point to build your custom theme on top.
  */
 
@@ -890,7 +890,7 @@
 }
 /*
  * enable to keep labels inside the scales container
- * 
+ *
 .aux-scale.aux-horizontal > .aux-max,
 .aux-scale.aux-horizontal.aux-reverse > .aux-min {
     transform: translateX(-100%);
@@ -966,6 +966,13 @@
 
 /* SELECT */
 
+.aux-button.aux-select > .aux-icon {
+  font-size: var(--aux-select-icon-fontsize);
+  line-height: var(--aux-select-icon-size);
+  height: var(--aux-select-icon-size);
+  width: var(--aux-select-icon-size);
+  margin: 0 0 0 var(--aux-select-icon-margin) !important;
+}
 .aux-selectlist {
   padding: 0;
   text-align: left;

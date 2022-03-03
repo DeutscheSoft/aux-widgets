@@ -4,7 +4,7 @@ import './components/buttons.registration.js';
 import './components/chart.registration.js';
 import './components/clock.registration.js';
 import './components/colorpicker.registration.js';
-import './components/colorpickerdialog.registration.js';
+import './components/combobox.registration.js';
 import './components/confirmbutton.registration.js';
 import './components/container.registration.js';
 import './components/crossover.registration.js';
