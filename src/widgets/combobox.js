@@ -84,7 +84,7 @@ defineChildWidget(ComboBox, 'select', {
     'list_class': 'list_class',
   },
   static_events: {
-    'userset': function (key, v) { this.parent.set('value', v); },
+    'userset': function (key, v) { this.parent.userset('value', v); },
   },
   default_options: {
 
@@ -101,7 +101,7 @@ defineChildWidget(ComboBox, 'value', {
     'editmode': 'editmode',
   },
   static_events: {
-    'userset': function (key, v) { this.parent.set('value', v); },
+    'userset': function (key, v) { this.parent.userset('value', v); },
   },
   default_options: {
     'editmode': 'immediate',
