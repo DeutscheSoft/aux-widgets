@@ -20,8 +20,6 @@
 import {
   element,
   addClass,
-  toggleClass,
-  createID,
 } from './../utils/dom.js';
 import { defineChildWidget } from './../child_widget.js';
 import { Widget } from './widget.js';
@@ -72,14 +70,6 @@ export class ComboBox extends Widget {
     addClass(element, 'aux-combobox');
     super.draw(O, element);
     this.set('value', O.value);
-  }
-
-  static get renderers() {
-    return [
-      // defineRender('layout', function (layout) {
-      //   const E = this.element;
-      // }),
-    ];
   }
 }
 
