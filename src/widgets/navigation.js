@@ -441,6 +441,8 @@ export class Navigation extends Container {
 
   resize() {
     autoArrows.call(this);
+    this._scroll_top = this.buttons.element.scrollTop;
+    this._scroll_left = this.buttons.element.scrollLeft;
     super.resize();
   }
 
