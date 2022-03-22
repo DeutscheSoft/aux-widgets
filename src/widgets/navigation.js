@@ -345,6 +345,8 @@ export const Navigation = defineClass({
   resize: function () {
     autoArrows.call(this);
     Container.prototype.resize.call(this);
+    this._scroll_top = this.buttons.element.scrollTop;
+    this._scroll_left = this.buttons.element.scrollLeft;
   },
   draw: function (O, element) {
     addClass(element, 'aux-navigation');
