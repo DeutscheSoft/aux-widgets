@@ -34,9 +34,17 @@
  * var f = FORMAT("%.2f Hz");
  * @see sprintf
  */
+function round(num, precision) {
+  var base = 10 ** precision;
+  return (Math.round(num * base) / base).toFixed(precision);
+}
+const fun = 'function round(num, precision) { \n\
+  var base = 10 ** precision; \n\
+  return (Math.round(num * base) / base).toFixed(precision);\n\
+};'
 export function FORMAT(fmt) {
   var args = [];
-  var s = 'return ';
+  var s = fun + ' return ';
   var res;
   var last = 0;
   var argnum = 0;
@@ -64,7 +72,7 @@ export function FORMAT(fmt) {
         if (res[1]) {
           // length qualifier
           precision = parseInt(res[1].substr(1));
-          s += '(+' + argname + ').toFixed(' + precision + ')';
+          s += 'round(+' + argname + ', ' + precision + ')';
         } else {
           s += '(+' + argname + ')';
         }
@@ -141,7 +149,7 @@ export function sprintf(fmt) {
       case 102 /* f */:
         s = +s;
         if (has_precision) {
-          s = s.toFixed(precision);
+          s = round(s, precision);
         }
         break;
       case 100 /* d */:
