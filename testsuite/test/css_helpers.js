@@ -17,7 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { addClass, removeClass } from '../src/index.js';
+import { addClass, removeClass, isDocumentFragment, setContent, isDomNode } from '../src/index.js';
+import { assert } from './helpers.js';
 
 describe('CSSHelpers', () => {
   const div = document.createElement('DIV');
@@ -33,5 +34,36 @@ describe('CSSHelpers', () => {
     removeClass(div, 'foobar');
     if (!div.classList.contains('foobar')) done();
     else done(new Error('class found'));
+  });
+  it('isDocumentFragment()', (done) => {
+    assert(isDocumentFragment(document.createDocumentFragment()));
+    assert(!isDocumentFragment(0));
+    assert(!isDocumentFragment(document.createElement('div')));
+    done();
+  });
+  it('isDomNode()', (done) => {
+    assert(isDomNode(document.createDocumentFragment()));
+    assert(!isDomNode(0));
+    assert(isDomNode(document.createElement('div')));
+    done();
+  });
+  it('setContent()', (done) => {
+    const div = document.createElement('div');
+
+    setContent(div, 'foobar');
+    assert(div.textContent === 'foobar');
+
+    setContent(div, 'bar');
+    assert(div.textContent === 'bar');
+
+    const fragment1 = document.createDocumentFragment();
+    fragment1.textContent = 'foo';
+    setContent(div, fragment1);
+
+    // fragment is unchanged
+    assert(fragment1.textContent, 'foo');
+    assert(div.textContent, 'foo');
+
+    done();
   });
 });

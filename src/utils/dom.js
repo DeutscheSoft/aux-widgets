@@ -261,11 +261,17 @@ export function HTML(string) {
 /**
  * Sets the (exclusive) content of an HTMLElement.
  * @param {HTMLElement} element - The element receiving the content
- * @param{string|HTMLElement} content - A string or HTMLElement to set as content
+ * @param{string|HTMLElement|DocumentFragment} content
+ *      A string, HTMLElement or DocumentFragment to set as content. Strings are
+ *      set as textContent. HTMLElements and DocumentFragments are added as children.
+ *      Note that DocumentFragments are cloned.
  * @function setContent
  */
 export function setContent(element, content) {
-  if (isDomNode(content)) {
+  if (isDocumentFragment(content)) {
+    empty(element);
+    element.appendChild(content.cloneNode(true));
+  } else if (isDomNode(content)) {
     empty(element);
     if (content.parentNode) {
       warn('setContent: possible reuse of a DOM node. cloning\n');
@@ -659,6 +665,15 @@ export function uniqueId() {
 export function isDomNode(o) {
   /* this is broken for SVG */
   return typeof o === 'object' && o instanceof Node;
+}
+
+/**
+ * Check if an object is a DocumentFragment.
+ * @returns {boolean}
+ * @function isDocumentFragment
+ */
+export function isDocumentFragment(o) {
+  return typeof o === 'object' && o instanceof DocumentFragment;
 }
 
 /**
