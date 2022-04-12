@@ -43,25 +43,14 @@ const fun = 'function round(num, precision) { \n\
   return (Math.round(num * base) / base).toFixed(precision);\n\
 };'
 export function FORMAT(fmt) {
-<<<<<<< HEAD
   const args = [];
-  let s = 'return ';
+  let s = fun + ' return ';
   let res;
   let last = 0;
   let argnum = 0;
   let precision;
   const regexp = /%(\.\d+)?([bcdefgosO%])/g;
   let argname;
-=======
-  var args = [];
-  var s = fun + ' return ';
-  var res;
-  var last = 0;
-  var argnum = 0;
-  var precision;
-  var regexp = /%(\.\d+)?([bcdefgosO%])/g;
-  var argname;
->>>>>>> 456b04d3 (sprintf and FORMAT: fix rounding errors)
 
   while ((res = regexp.exec(fmt))) {
     if (argnum) s += '+';

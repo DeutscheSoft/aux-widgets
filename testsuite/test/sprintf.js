@@ -17,26 +17,21 @@
  * Boston, MA  02110-1301  USA
  */
 
-export * from './base_widgets.js';
-export * from './bitset.js';
-export * from './events.js';
-export * from './css_helpers.js';
-export * from './helpers.js';
-export * from './scheduler.js';
-export * from './widgets.js';
-export * from './timers.js';
-export * from './bindings.js';
-export * from './pager.js';
-export * from './select.js';
-export * from './visibility.js';
-export * from './buttons.js';
-export * from './options.js';
-export * from './pages.js';
-export * from './pager.js';
-export * from './subscriptions.js';
-export * from './regressions.js';
-export * from './range.js';
-export * from './icon.js';
-export * from './renderer.js';
-export * from './equalizer.js';
-export * from './sprintf.js';
+import { sprintf, FORMAT } from '../src/utils/sprintf.js';
+import { assert } from './helpers.js';
+
+describe('sprintf', () => {
+  it('sprintf()', (done) => {
+    assert(sprintf('%d', 234) === '234'); 
+    assert(sprintf('%s', '234') === '234'); 
+    assert(sprintf('%.1f', 1.45) === '1.5');
+    done();
+  });
+
+  it('FORMAT()', (done) => {
+    assert(FORMAT('%d')(234) === '234'); 
+    assert(FORMAT('%s')('234') === '234'); 
+    assert(FORMAT('%.1f')(1.45) === '1.5');
+    done();
+  });
+});
