@@ -12,6 +12,7 @@ let scheduled = false;
 
 function measureScrollbarSize() {
   const div = document.createElement('div');
+  div.classList.add('aux-widget');
   div.style.overflow = 'scroll';
   div.style.position = 'fixed';
   div.style.visibility = 'hidden';

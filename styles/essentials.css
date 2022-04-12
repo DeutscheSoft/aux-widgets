@@ -61,6 +61,25 @@ body {
   user-select: none;
 }
 
+.aux-widget::-webkit-scrollbar,
+.aux-widget *::-webkit-scrollbar {
+   -webkit-appearance: none;
+   width: 0px !important;
+   height: 0px !important;
+ }
+
+.aux-widget::-webkit-scrollbar-track,
+.aux-widget *::-webkit-scrollbar-track {
+   width: 0px !important;
+   height: 0px !important;
+}
+
+.aux-widget::-webkit-scrollbar-thumb,
+.aux-widget *::-webkit-scrollbar-thumb {
+  width: 0px !important;
+  height: 0px !important;
+}
+
 /* ######## WIDGETS ######## */
 
 /* ROOT */
@@ -1256,21 +1275,6 @@ body.aux-cursor-row-resize * {
   overflow: scroll;
   contain: strict;
   margin: 0;
-}
-.aux-scroller > .aux-scrollhide::-webkit-scrollbar {
-   -webkit-appearance: none;
-   width: 0px !important;
-   height: 0px !important;
- }
-
-.aux-scroller > .aux-scrollhide::-webkit-scrollbar-track {
-   width: 0px !important;
-   height: 0px !important;
-}
-
-.aux-scroller > .aux-scrollhide::-webkit-scrollbar-thumb {
-  width: 0px !important;
-  height: 0px !important;
 }
 .aux-scroller > .aux-scrollbar {
   position: absolute;
