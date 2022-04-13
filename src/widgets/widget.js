@@ -549,15 +549,15 @@ export class Widget extends Base {
   }
 
   getFocusTargets() {
-    return [this.element];
+    return [ this.element ];
   }
 
   getRoleTarget() {
     return this.element;
   }
 
-  getARIATarget() {
-    return this.element;
+  getARIATargets() {
+    return [ this.element ];
   }
 
   startInteracting() {
@@ -817,7 +817,7 @@ export class Widget extends Base {
     }
 
     if (key.startsWith('aria-')) {
-      this.getARIATarget.setAttribute(key, value);
+      this.getARIATargets.map(v => v.setAttribute(key, value));
     } else {
       const currentValue = this.options[key];
 
