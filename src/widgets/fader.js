@@ -164,6 +164,7 @@ export class Fader extends Widget {
       cursor: false,
       tabindex: 0,
       role: 'slider',
+      set_aria: true,
     });
   }
 
@@ -350,6 +351,9 @@ export class Fader extends Widget {
   getFocusTargets() {
     return [this._handle];
   }
+  getARIATargets() {
+    return [this._handle, this.value._input];
+  }
 
   // GETTER & SETTER
   set(key, value) {
@@ -371,6 +375,7 @@ defineChildWidget(Fader, 'scale', {
   create: Scale,
   show: true,
   inherit_options: true,
+  blacklist_options: ['set_aria'],
   toggle_class: true,
   static_events: {
     set: function (key, value) {
