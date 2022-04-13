@@ -352,7 +352,7 @@ export class Fader extends Widget {
     return [this._handle];
   }
   getARIATargets() {
-    return [this._handle, this.value._input];
+    return [this._handle];
   }
 
   // GETTER & SETTER
