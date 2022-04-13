@@ -121,6 +121,7 @@ export class Slider extends Widget {
       basis: 300,
       role: 'slider',
       tabindex: 0,
+      set_aria: true,
     });
   }
 
