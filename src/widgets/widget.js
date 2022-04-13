@@ -556,6 +556,10 @@ export class Widget extends Base {
     return this.element;
   }
 
+  getARIATarget() {
+    return this.element;
+  }
+
   startInteracting() {
     const count = getInteractionCount(this);
     if (!count) {
@@ -802,7 +806,7 @@ export class Widget extends Base {
    * @param value - The option value.
    */
   set(key, value) {
-    if (key.charCodeAt(0) !== 95 && !this.constructor.hasOption(key)) {
+    if (key.charCodeAt(0) !== 95 && !this.constructor.hasOption(key) && !key.startsWith('aria-')) {
       warn(
         '%O: %s.set(%s, %O): unknown option.',
         this,
@@ -812,15 +816,19 @@ export class Widget extends Base {
       );
     }
 
-    const currentValue = this.options[key];
+    if (key.startsWith('aria-')) {
+      this.getARIATarget.setAttribute(key, value);
+    } else {
+      const currentValue = this.options[key];
 
-    if (
-      currentValue !== value &&
-      (value === value || currentValue === currentValue)
-    )
-      this._renderState.invalidate(key);
+      if (
+        currentValue !== value &&
+        (value === value || currentValue === currentValue)
+      )
+        this._renderState.invalidate(key);
 
-    super.set(key, value);
+      super.set(key, value);
+    }
     return value;
   }
 
