@@ -62,18 +62,18 @@ function moduleRange() {
  * only showing the default values.
  *
  * @class Knob
- * 
+ *
  * @extends Widget
  *
  * @param {Object} [options={ }] - An object containing initial options.
- * 
+ *
  * @property {Number} [options.reset] - Reset to this value on double click.
  * @property {boolean} [options.bind_dblclick=true] - If true, bind the dblclick
  *      event to reset the value to the `reset` option.
  * @property {Object} [options.hand={width: 1, length: 12, margin: 24}]
  * @property {Number} [options.margin=13]
  * @property {Number} [options.thickness=6]
- * @property {Number} [options.step=1] 
+ * @property {Number} [options.step=1]
  * @property {Number} [options.shift_up=4]
  * @property {Number} [options.shift_down=0.25]
  * @property {Object} [options.dots_defaults={length: 6, margin: 13, width: 2}]
@@ -173,6 +173,7 @@ export class Knob extends Widget {
       bind_dblclick: true,
       tabindex: 0,
       role: 'slider',
+      set_aria: true,
     });
   }
 
@@ -260,6 +261,10 @@ export class Knob extends Widget {
 
   getRange() {
     return this.circular;
+  }
+
+  getARIATargets() {
+    return [this.circular];
   }
 
   draw(O, element) {
