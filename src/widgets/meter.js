@@ -35,6 +35,7 @@ import {
   insertAfter,
   innerWidth,
   innerHeight,
+  createID,
 } from '../utils/dom.js';
 import { defineRender, defineMeasure } from '../renderer.js';
 
@@ -262,6 +263,8 @@ export class Meter extends Widget {
       background: false,
       gradient: false,
       foreground: 'black',
+      role: 'meter',
+      set_aria: true,
     });
   }
 
@@ -403,12 +406,25 @@ export class Meter extends Widget {
           return this.drawMeter();
         }
       ),
+      defineRender('label', function (label) {
+        const E = this.element;
+        if (label !== false) {
+          const labelID = this._labelID;
+          this.label.set('id', labelID);
+          E.setAttribute('aria-labelledby', labelID);
+          E.removeAttribute('aria-label');
+        } else {
+          E.setAttribute('aria-label', 'Meter');
+          E.removeAttribute('aria-labelledby');
+        }
+      }),
     ];
   }
 
   initialize(options) {
     if (!options.element) options.element = element('div');
     super.initialize(options);
+    this._labelID = createID('aux-label-');
     const O = this.options;
     /**
      * @member {HTMLDivElement} Meter#element - The main DIV container.
