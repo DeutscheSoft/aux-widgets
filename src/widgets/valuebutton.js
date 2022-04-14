@@ -118,7 +118,7 @@ export class ValueButton extends Button {
           E.setAttribute('aria-labelledby', labelID);
           E.removeAttribute('aria-label');
         } else {
-          E.setAttribute('aria-label', 'ValueKnob');
+          E.setAttribute('aria-label', 'ValueButton');
           E.removeAttribute('aria-labelledby');
         }
       }),
