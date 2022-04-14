@@ -29,9 +29,10 @@ import {
 import { DragValue } from '../modules/dragvalue.js';
 import { Scale } from './scale.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
-import { addClass } from '../utils/dom.js';
+import { addClass, createID } from '../utils/dom.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
+import { defineRender } from '../renderer.js';
 
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -107,6 +108,23 @@ export class ValueButton extends Button {
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender('label', function (label) {
+        const E = this.element;
+        if (label !== false) {
+          const labelID = this._labelID;
+          this.label.set('id', labelID);
+          E.setAttribute('aria-labelledby', labelID);
+          E.removeAttribute('aria-label');
+        } else {
+          E.setAttribute('aria-label', 'ValueKnob');
+          E.removeAttribute('aria-labelledby');
+        }
+      }),
+    ];
+  }
+
   initialize(options) {
     super.initialize(options);
 
@@ -153,6 +171,7 @@ export class ValueButton extends Button {
         this.emit('doubleclick', this.options.value);
       }.bind(this)
     );
+    this._labelID = createID('aux-label-');
   }
 
   draw(O, element) {
