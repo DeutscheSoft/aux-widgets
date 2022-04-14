@@ -265,6 +265,7 @@ export class Meter extends Widget {
       foreground: 'black',
       role: 'meter',
       set_aria: true,
+      'aria-live': 'off',
     });
   }
 
@@ -466,6 +467,7 @@ export class Meter extends Widget {
   draw(O, element) {
     addClass(element, 'aux-meter');
     element.appendChild(this._bar);
+    this.set('aria-live', O['aria-live']);
 
     super.draw(O, element);
   }
