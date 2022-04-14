@@ -50,6 +50,7 @@ import {
   innerHeight,
   outerWidth,
   innerWidth,
+  createID,
 } from '../utils/dom.js';
 import { defineChildWidget } from '../child_widget.js';
 import { defineRender, defineMeasure } from '../renderer.js';
@@ -265,6 +266,18 @@ export class Fader extends Widget {
               _handle.style.left = tmp;
             }
           }),
+      defineRender('label', function (label) {
+        const E = this._handle;
+        if (label !== false) {
+          const labelID = this._labelID;
+          this.label.set('id', labelID);
+          E.setAttribute('aria-labelledby', labelID);
+          E.removeAttribute('aria-label');
+        } else {
+          E.setAttribute('aria-label', 'ValueKnob');
+          E.removeAttribute('aria-labelledby');
+        }
+      }),
     ];
   }
 
@@ -272,6 +285,7 @@ export class Fader extends Widget {
     this.__tt = false;
     if (!options.element) options.element = element('div');
     super.initialize(options);
+    this._labelID = createID('aux-label-');
 
     const O = this.options;
 
