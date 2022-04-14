@@ -29,8 +29,8 @@ export const rangedOptionsDefaults = {
   trafo_reverse: false /* used internally, no documentation */,
   transformation: null,
   snap_module: TrivialSnapModule,
-  format_aria: v => v.toFixed(2),
-  set_aria: false,
+  format_ariavalue: v => v.toFixed(2),
+  set_ariavalue: false,
 };
 
 export const rangedOptionsTypes = {
@@ -50,8 +50,8 @@ export const rangedOptionsTypes = {
   trafo_reverse: 'boolean',
   transformation: 'object',
   snap_module: 'object',
-  format_aria: 'function',
-  set_aria: 'boolean'
+  format_ariavalue: 'function',
+  set_ariavalue: 'boolean'
 };
 
 function numSort(arr) {
@@ -148,16 +148,16 @@ function updateTransformation() {
 function setCallback(key, value) {
   switch (key) {
     case 'value':
-      if (this.get('set_aria'))
-        this.set('aria-valuenow', this.get('format_aria')(value));
+      if (this.get('set_ariavalue'))
+        this.set('aria_valuenow', this.get('format_ariavalue')(value));
       break;
     case 'min':
-      if (this.get('set_aria'))
-        this.set('aria-valuemin', value);
+      if (this.get('set_ariavalue'))
+        this.set('aria_valuemin', value);
     /* fall through */
     case 'max':
-      if (this.get('set_aria'))
-        this.set('aria-valuemax', value);
+      if (this.get('set_ariavalue'))
+        this.set('aria_valuemax', value);
     /* fall through */
     case 'snap':
     case 'clip':
@@ -184,11 +184,11 @@ function initializedCallback() {
       ', options:',
       O
     );
-  if (this.get('set_aria')) {
-    this.set('aria-valuemin', O.min);
-    this.set('aria-valuemax', O.max);
+  if (this.get('set_ariavalue')) {
+    this.set('aria_valuemin', O.min);
+    this.set('aria_valuemax', O.max);
     if (typeof O.value !== 'undefined')
-      this.set('aria-valuenow', this.get('format_aria')(O.value));
+      this.set('aria_valuenow', this.get('format_ariavalue')(O.value));
   }
   updateSnap.call(this);
   updateTransformation.call(this);
@@ -251,8 +251,8 @@ function initializedCallback() {
  *  {@link ScrollValue} when simultaneously pressing 'shift'.
  * @property {Number} [options.shift_down=0.25] - Multiplier for decreased stepping speed, e.g. used by
  *  {@link ScrollValue} when simultaneously pressing 'shift' and 'ctrl'.
- * @property {Function} [options.format_aria=v => v.toFixed(2)] - Function to format the aria-valuenow attribute.
- * @property {Boolean} [options.set_aria=false] - Define if aria-valuemin, aria-valuemax and aria-valuenow should be set.
+ * @property {Function} [options.format_ariavalue=v => v.toFixed(2)] - Function to format the aria-valuenow attribute.
+ * @property {Boolean} [options.set_ariavalue=false] - Define if aria-valuemin, aria-valuemax and aria-valuenow should be set.
  *
  * @function makeRanged
  */

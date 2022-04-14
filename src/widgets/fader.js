@@ -165,7 +165,7 @@ export class Fader extends Widget {
       cursor: false,
       tabindex: 0,
       role: 'slider',
-      set_aria: true,
+      set_ariavalue: true,
     });
   }
 
@@ -389,7 +389,7 @@ defineChildWidget(Fader, 'scale', {
   create: Scale,
   show: true,
   inherit_options: true,
-  blacklist_options: ['set_aria'],
+  blacklist_options: ['set_ariavalue'],
   toggle_class: true,
   static_events: {
     set: function (key, value) {

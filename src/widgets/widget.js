@@ -809,7 +809,7 @@ export class Widget extends Base {
    * @param value - The option value.
    */
   set(key, value) {
-    if (key.charCodeAt(0) !== 95 && !this.constructor.hasOption(key) && !key.startsWith('aria-')) {
+    if (key.charCodeAt(0) !== 95 && !this.constructor.hasOption(key) && !key.startsWith('aria_')) {
       warn(
         '%O: %s.set(%s, %O): unknown option.',
         this,
@@ -818,8 +818,8 @@ export class Widget extends Base {
         value
       );
     }
-    if (key.startsWith('aria-')) {
-      this.getARIATargets().map(v => v.setAttribute(key, value));
+    if (key.startsWith('aria_')) {
+      this.getARIATargets().map(v => v.setAttribute(key.replace('_', '-'), value));
     } else {
       const currentValue = this.options[key];
 

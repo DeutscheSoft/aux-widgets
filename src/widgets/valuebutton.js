@@ -89,7 +89,7 @@ export class ValueButton extends Button {
       labels: FORMAT('%d'),
       layout: 'top',
       role: 'slider',
-      set_aria: true,
+      set_ariavalue: true,
     });
   }
 
@@ -259,7 +259,7 @@ defineChildWidget(ValueButton, 'scale', {
   show: true,
   toggle_class: true,
   inherit_options: true,
-  blacklist_options: ['set_aria'],
+  blacklist_options: ['set_ariavalue'],
   map_options: {
     value: 'bar',
   },

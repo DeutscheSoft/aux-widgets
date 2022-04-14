@@ -168,7 +168,7 @@ export class Spread extends Widget {
       cursor: false,
       tabindex: 0,
       role: 'slider',
-      set_aria: true,
+      set_ariavalue: true,
     });
   }
 
@@ -355,10 +355,10 @@ export class Spread extends Widget {
       if (value > O.max || value < O.min) warning(this.element);
       if (key === 'lower') {
         value = O.snap_module.snap(Math.max(O.min, Math.min(O.upper, value)));
-        this._lower.setAttribute('aria-valuenow', O.format_aria(value));
+        this._lower.setAttribute('aria-valuenow', O.format_ariavalue(value));
       } else {
         value = O.snap_module.snap(Math.max(O.lower, Math.min(O.max, value)));
-        this._upper.setAttribute('aria-valuenow', O.format_aria(value));
+        this._upper.setAttribute('aria-valuenow', O.format_ariavalue(value));
       }
     }
     return super.set(key, value);
@@ -374,7 +374,7 @@ defineChildWidget(Spread, 'scale', {
   create: Scale,
   show: true,
   inherit_options: true,
-  blacklist_options: ['set_aria'],
+  blacklist_options: ['set_ariavalue'],
   toggle_class: true,
   static_events: {
     set: function (key, value) {

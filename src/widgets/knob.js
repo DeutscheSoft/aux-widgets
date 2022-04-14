@@ -173,7 +173,7 @@ export class Knob extends Widget {
       bind_dblclick: true,
       tabindex: 0,
       role: 'slider',
-      set_aria: true,
+      set_ariavalue: true,
     });
   }
 
