@@ -229,9 +229,10 @@ function onFocusKeyDown(e) {
  *   specific options. Refer to `options.preset` for more information.
  * @property {number} [options.notransitions_duration=500] - A time in
  *    milliseconds until transitions are activated.
- * @property {number|boolean} [options.tabindex]=false] - Set tabindex to activate focus on widgets. Tabindex
+ * @property {number|boolean} [options.tabindex=false] - Set tabindex to activate focus on widgets. Tabindex
  *   is set on the element returned by `getFocusElement`. Try to only use `false` or `0`, avoiding positive integers.
  *   To set a hierarchy for the tabindex, better create an appropriate DOM structure.
+ * @property {array|boolean} [options.aria_targets=false] - Set an array of targets for ARIA values.
  */
 /**
  * The <code>set</code> event is emitted when an option was set using the {@link Widget#set}
@@ -294,6 +295,7 @@ export class Widget extends Base {
       title: 'string',
       tabindex: 'number|boolean',
       role: 'string',
+      aria_targets: 'boolean|array',
     };
   }
 
@@ -311,6 +313,7 @@ export class Widget extends Base {
       presets: {},
       tabindex: false,
       role: 'none',
+      aria_targets: false,
     };
   }
 
@@ -557,7 +560,7 @@ export class Widget extends Base {
   }
 
   getARIATargets() {
-    return [this.element];
+    return this.options.aria_targets || [this.element];
   }
 
   startInteracting() {
