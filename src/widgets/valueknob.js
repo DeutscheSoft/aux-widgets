@@ -22,7 +22,7 @@ import { Widget } from './widget.js';
 import { Knob } from './knob.js';
 import { Value } from './value.js';
 import { Label } from './label.js';
-import { addClass, removeClass, element } from '../utils/dom.js';
+import { addClass, removeClass, element, createID } from '../utils/dom.js';
 import { defineRender } from '../renderer.js';
 
 /**
@@ -103,11 +103,24 @@ export class ValueKnob extends Widget {
         );
         addClass(E, 'aux-' + layout);
       }),
+      defineRender('label', function (label) {
+        const E = this.knob.svg;
+        if (label !== false) {
+          const labelID = this._labelID;
+          this.label.set('id', labelID);
+          E.setAttribute('aria-labelledby', labelID);
+          E.removeAttribute('aria-label');
+        } else {
+          E.setAttribute('aria-label', 'ValueKnob');
+          E.removeAttribute('aria-labelledby');
+        }
+      }),
     ];
   }
 
   initialize(options) {
     if (!options.element) options.element = element('div');
+    this._labelID = createID('aux-label-');
     super.initialize(options);
     /**
      * @member {HTMLDivElement} ValueKnob#element - The main DIV container.
