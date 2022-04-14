@@ -31,6 +31,7 @@ import { Scale } from './scale.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
 import { addClass } from '../utils/dom.js';
 import { FORMAT } from '../utils/sprintf.js';
+import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
 
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -87,6 +88,7 @@ export class ValueButton extends Button {
       labels: FORMAT('%d'),
       layout: 'top',
       role: 'slider',
+      set_aria: true,
     });
   }
 
@@ -101,6 +103,7 @@ export class ValueButton extends Button {
       set_blind_angle: function (value) {
         this.drag.set('blind_angle', value);
       },
+      focus_move: focusMoveDefault(),
     };
   }
 
@@ -154,6 +157,7 @@ export class ValueButton extends Button {
 
   draw(O, element) {
     addClass(element, 'aux-valuebutton');
+    announceFocusMoveKeys.call(this);
 
     super.draw(O, element);
   }
@@ -236,6 +240,7 @@ defineChildWidget(ValueButton, 'scale', {
   show: true,
   toggle_class: true,
   inherit_options: true,
+  blacklist_options: ['set_aria'],
   map_options: {
     value: 'bar',
   },
