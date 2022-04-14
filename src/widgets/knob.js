@@ -210,6 +210,7 @@ export class Knob extends Widget {
     let co = objectAnd(options, Circular.getOptionTypes());
     co = objectSub(co, Widget.getOptionTypes());
     co.container = S;
+    co.aria_targets = [this.svg];
 
     /**
      * @member {Circular} Knob#circular - The {@link Circular} module.
@@ -261,10 +262,6 @@ export class Knob extends Widget {
 
   getRange() {
     return this.circular;
-  }
-
-  getARIATargets() {
-    return [this.circular];
   }
 
   draw(O, element) {
