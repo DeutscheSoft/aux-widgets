@@ -358,7 +358,7 @@ export class Clock extends Widget {
 
           seconds.set('value', time.getSeconds());
           minutes.set('value', time.getMinutes());
-          hours.set('value', time.getHours());
+          hours.set('value', time.getHours() % 12);
 
           const args = [time, fps, months, days];
 
