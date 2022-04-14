@@ -274,7 +274,7 @@ export class Fader extends Widget {
           E.setAttribute('aria-labelledby', labelID);
           E.removeAttribute('aria-label');
         } else {
-          E.setAttribute('aria-label', 'ValueKnob');
+          E.setAttribute('aria-label', 'Fader');
           E.removeAttribute('aria-labelledby');
         }
       }),
