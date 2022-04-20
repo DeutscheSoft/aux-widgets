@@ -308,6 +308,8 @@ export class Buttons extends Container {
         const select = enforceMultiSelect(O.select, multi_select);
 
         this.update('select', select);
+
+        this.set('aria_multiselectable', multi_select ? 'true' : 'false');
       },
       set_direction: function (direction) {
         this.set('aria_orientation', direction);
