@@ -310,7 +310,7 @@ export class Buttons extends Container {
         this.update('select', select);
       },
       set_direction: function (direction) {
-
+        this.set('aria_orientation', direction);
       },
     };
   }
