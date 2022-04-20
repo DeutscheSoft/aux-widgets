@@ -271,7 +271,7 @@ export class Buttons extends Container {
       button_class: Button,
       multi_select: 0,
       deselect: false,
-      role: 'group',
+      role: 'listbox',
     };
   }
 
@@ -308,6 +308,9 @@ export class Buttons extends Container {
         const select = enforceMultiSelect(O.select, multi_select);
 
         this.update('select', select);
+      },
+      set_direction: function (direction) {
+
       },
     };
   }
