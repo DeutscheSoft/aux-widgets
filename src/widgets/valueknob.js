@@ -105,14 +105,19 @@ export class ValueKnob extends Widget {
       }),
       defineRender('label', function (label) {
         const E = this.knob.svg;
+        const V = this.value._input;
         if (label !== false) {
           const labelID = this._labelID;
           this.label.set('id', labelID);
           E.setAttribute('aria-labelledby', labelID);
           E.removeAttribute('aria-label');
+          V.setAttribute('aria-labelledby', labelID);
+          V.removeAttribute('aria-label');
         } else {
           E.setAttribute('aria-label', 'ValueKnob');
           E.removeAttribute('aria-labelledby');
+          V.setAttribute('aria-label', 'ValueKnob');
+          V.removeAttribute('aria-labelledby');
         }
       }),
     ];

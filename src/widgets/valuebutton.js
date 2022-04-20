@@ -112,14 +112,19 @@ export class ValueButton extends Button {
     return [
       defineRender('label', function (label) {
         const E = this.element;
+        const V = this.value._input;
         if (label !== false) {
           const labelID = this._labelID;
           this.label.set('id', labelID);
           E.setAttribute('aria-labelledby', labelID);
           E.removeAttribute('aria-label');
+          V.setAttribute('aria-labelledby', labelID);
+          V.removeAttribute('aria-label');
         } else {
           E.setAttribute('aria-label', 'ValueButton');
           E.removeAttribute('aria-labelledby');
+          V.setAttribute('aria-label', 'ValueButton');
+          V.removeAttribute('aria-labelledby');
         }
       }),
     ];
