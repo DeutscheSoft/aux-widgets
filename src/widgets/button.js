@@ -21,7 +21,7 @@ import {
   element,
   addClass,
   toggleClass,
-  isCSSVariableName,
+  isClassName,
   createID,
 } from './../utils/dom.js';
 import { defineChildWidget } from './../child_widget.js';
@@ -345,8 +345,8 @@ export class Button extends Widget {
           this.label.set('id', labelID);
           E.setAttribute('aria-labelledby', labelID);
           E.removeAttribute('aria-label');
-        } else if (icon && isCSSVariableName(icon)) {
-          E.setAttribute('aria-label', icon);
+        } else if (icon && isClassName(icon)) {
+          E.setAttribute('aria-label', icon + ' icon');
           E.removeAttribute('aria-labelledby');
         } else {
           E.setAttribute('aria-label', 'Button');
