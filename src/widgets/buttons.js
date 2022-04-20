@@ -377,6 +377,7 @@ export class Buttons extends Container {
       if (!options.get('id')) {
         options.set('id', createID('aux-button-'));
       }
+      options.set('role', 'option');
       return options;
     } else {
       if (typeof options === 'string') {
@@ -388,7 +389,7 @@ export class Buttons extends Container {
       }
       if (!options.id)
         options.id = createID('aux-button-');
-
+      options.role = 'option';
       return new this.options.button_class(options);
     }
   }
