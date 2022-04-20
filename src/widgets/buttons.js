@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { addClass, removeClass } from './../utils/dom.js';
+import { addClass, removeClass, createID } from './../utils/dom.js';
 import { Container } from './container.js';
 import { Button } from './button.js';
 import { warning } from '../utils/warning.js';
@@ -114,7 +114,12 @@ function onButtonSetState(value) {
     O.multi_select
   );
 
-  if (select === O.select) return;
+  if (value)
+    this.element.setAttribute('aria-current', 'true');
+  else
+    this.element.setAttribute('aria-current', 'false');
+
+    if (select === O.select) return;
 
   return parent.set('select', select);
 }
@@ -139,11 +144,20 @@ function onButtonAdded(button, position) {
 
   if (Array.isArray(select)) {
     select = select.map(correctIndex);
-    if (button.get('state') && select.indexOf(position) === -1)
+    if (button.get('state') && select.indexOf(position) === -1) {
       select = [position].concat(select);
+      button.element.setAttribute('aria-current', 'true');
+    } else {
+      button.element.setAttribute('aria-current', 'false');
+    }
   } else {
     select = correctIndex(select);
-    if (button.get('state')) select = position;
+    if (button.get('state')) {
+      select = position;
+      button.element.setAttribute('aria-current', 'true');
+    } else {
+      button.element.setAttribute('aria-current', 'false');
+    }
   }
 
   buttons.set('select', select);
@@ -271,6 +285,7 @@ export class Buttons extends Container {
       },
       set_select: function (value) {
         const list = this.buttons.getList();
+        const current = []
         const selected = Array.isArray(value)
           ? value
           : value === -1
@@ -279,8 +294,13 @@ export class Buttons extends Container {
         for (let i = 0; i < list.length; i++) {
           // we use update, it avoids changing the state if it is already
           // correct.
-          list[i].update('state', selected.includes(i));
+          const state = selected.includes(i);
+          list[i].update('state', state);
+          if (state)
+            current.push(list[i].get('id'));
+          list[i].set('aria_current', state ? 'true' : 'false');
         }
+        this.set('aria_current', current.join(' '));
       },
       set_multi_select: function (multi_select) {
         const O = this.options;
@@ -349,6 +369,9 @@ export class Buttons extends Container {
 
   createButton(options) {
     if (options instanceof Button) {
+      if (!options.get('id')) {
+        options.set('id', createID('aux-button-'));
+      }
       return options;
     } else {
       if (typeof options === 'string') {
@@ -358,6 +381,8 @@ export class Buttons extends Container {
       } else if (typeof options !== 'object') {
         throw new TypeError('Expected object of options.');
       }
+      if (!options.id)
+        options.id = createID('aux-button-');
 
       return new this.options.button_class(options);
     }
