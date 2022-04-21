@@ -1005,7 +1005,6 @@ body.aux-cursor-row-resize * {
 /* NAVIGATION */
 
 .aux-navigation {
-  overflow: hidden;
   display: flex;
 }
 .aux-navigation.aux-vertical {
