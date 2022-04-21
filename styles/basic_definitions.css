@@ -52,6 +52,14 @@
 .aux-buttons > .aux-button {
   flex: 0 0 auto;
 }
+.aux-buttons.aux-horizontal > .aux-button {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.aux-buttons.aux-vertical > .aux-button {
+  margin-left: 0;
+  margin-right: 0;
+}
 .aux-buttons.aux-horizontal > .aux-button:first-of-type {
   margin-left: 0;
 }
