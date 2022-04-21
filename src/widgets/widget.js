@@ -233,6 +233,7 @@ function onFocusKeyDown(e) {
  *   is set on the element returned by `getFocusElement`. Try to only use `false` or `0`, avoiding positive integers.
  *   To set a hierarchy for the tabindex, better create an appropriate DOM structure.
  * @property {array|boolean} [options.aria_targets=false] - Set an array of targets for ARIA values.
+ * @property {Boolean} [options.focus=false] - Toggles the class <code>.aux-focus</code>.
  */
 /**
  * The <code>set</code> event is emitted when an option was set using the {@link Widget#set}
@@ -296,6 +297,7 @@ export class Widget extends Base {
       tabindex: 'number|boolean',
       role: 'string',
       aria_targets: 'boolean|array',
+      focus: 'boolean',
     };
   }
 
@@ -314,6 +316,7 @@ export class Widget extends Base {
       tabindex: false,
       role: 'none',
       aria_targets: false,
+      focus: false,
     };
   }
 
@@ -498,6 +501,11 @@ export class Widget extends Base {
           for (let i = 0; i < q.length; i++) {
             q[i].call(this, this.options);
           }
+      }),
+      defineRender('focus', function (focus) {
+        const E = this.getStyleTarget();
+        if (!E) return;
+        toggleClass(E, 'aux-focus', !!focus);
       }),
     ];
   }
