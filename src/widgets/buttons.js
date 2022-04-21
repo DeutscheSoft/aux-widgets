@@ -200,6 +200,24 @@ function onButtonRemoved(button, position) {
   buttons.triggerResize();
 }
 
+function moveFocus(to) {
+  const list = this.buttons.getList();
+  const focus = this.get('_focus');
+  if (focus === false && list.length) {
+    this.set('_focus', 0);
+    return;
+  }
+  if (!list.length) {
+    this.set('_focus', false);
+    return;
+  }
+  this.set('_focus', Math.min(list.length - 1, Math.max(0, focus + to)));
+}
+
+function clearFocus() {
+  this.buttons.list.map(b => b.set('focus', false));
+}
+
 /**
  * Buttons is a list of ({@link Button})s, arranged
  * either vertically or horizontally. Single buttons can be selected by clicking.
@@ -273,6 +291,7 @@ export class Buttons extends Container {
       deselect: false,
       role: 'listbox',
       tabindex: 0,
+      _focus: false,
     };
   }
 
@@ -314,7 +333,27 @@ export class Buttons extends Container {
       },
       set_direction: function (direction) {
         this.set('aria_orientation', direction);
+        const keys = [
+          'Home',
+          'End',
+          'Space',
+          'Enter',
+        ];
+        if (direction === 'vertical')
+          keys.push('ArrowUp', 'ArrowDown');
+        else
+          keys.push('ArrowUp', 'ArrowDown');
+        this.element.setAttribute('aria-keyshortcuts', keys.join(' '));
       },
+      set__focus: function (focus) {
+        clearFocus.call(this);
+        this.element.setAttribute('aria-activedescendant', '');
+        const button = this.buttons.list[focus];
+        if (!button)
+          return;
+        button.set('focus', true);
+        this.element.setAttribute('aria-activedescendant', button.get('id'));
+      }
     };
   }
 
@@ -351,6 +390,52 @@ export class Buttons extends Container {
     const buttons = options.buttons;
     this.options.buttons = [];
     this.set('buttons', buttons);
+
+    this.element.addEventListener('keydown', (e) => {
+      if (e.code === 'ArrowLeft' || e.code === 'ArrowUp') {
+        this.focusPrevious();
+      }
+      if (e.code === 'ArrowRight' || e.code === 'ArrowDown') {
+        this.focusNext();
+      }
+      if (e.code === 'Home') {
+        this.focusFirst();
+      }
+      if (e.code === 'End') {
+        this.focusLast();
+      }
+      if (e.code === 'Space' || e.code === 'Enter') {
+        const focus = this.get('_focus');
+        if (focus === false)
+          return;
+        const button = this.buttons.list[focus];
+        if (!button)
+          return;
+        button.set('state', !button.get('state'));
+      }
+    });
+    this.element.addEventListener('focus', e => {
+      this.reFocus();
+    });
+    this.element.addEventListener('blur', e => {
+      clearFocus.call(this);
+    });
+  }
+
+  focusNext() {
+    moveFocus.call(this, 1);
+  }
+  focusPrevious() {
+    moveFocus.call(this, -1);
+  }
+  focusFirst() {
+    moveFocus.call(this, -this.buttons.list.length);
+  }
+  focusLast() {
+    moveFocus.call(this, this.buttons.list.length);
+  }
+  reFocus() {
+    moveFocus.call(this, 0);
   }
 
   draw(O, element) {
@@ -434,27 +519,6 @@ export class Buttons extends Container {
       // already triggered a call to addChild
       this.addChild(button);
     }
-    button.addEventListener('keydown', function (e) {
-      let sibling, self;
-      const siblings = this.element.parentNode.querySelectorAll('.aux-button');
-      for (let i = 0; i < siblings.length; i++) {
-        if (siblings[i] === this.element) {
-          self = i;
-          break;
-        }
-      }
-      if (e.code === 'ArrowLeft' || e.code === 'ArrowUp') {
-        sibling = siblings[Math.max(0, self - 1)];
-      } else if (e.code === 'ArrowRight' || e.code === 'ArrowDown') {
-        sibling = siblings[Math.min(siblings.length - 1, self + 1)];
-      } else if (e.code === 'Home' || e.code === 'PageUp') {
-        sibling = siblings[0];
-      } else if (e.code === 'End' || e.code === 'PageDown') {
-        sibling = siblings[siblings.length - 1];
-      }
-      if (sibling) sibling.focus();
-    });
-
     return button;
   }
 
