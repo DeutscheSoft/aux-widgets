@@ -272,6 +272,7 @@ export class Buttons extends Container {
       multi_select: 0,
       deselect: false,
       role: 'listbox',
+      tabindex: 0,
     };
   }
 
@@ -378,6 +379,7 @@ export class Buttons extends Container {
         options.set('id', createID('aux-button-'));
       }
       options.set('role', 'option');
+      options.set('tabindex', false);
       return options;
     } else {
       if (typeof options === 'string') {
@@ -390,7 +392,16 @@ export class Buttons extends Container {
       if (!options.id)
         options.id = createID('aux-button-');
       options.role = 'option';
+      options.tabindex = false;
       return new this.options.button_class(options);
+    }
+  }
+
+  addChild(child) {
+    super.addChild(child);
+
+    if (child instanceof Button) {
+      this.addButton(child);
     }
   }
 
