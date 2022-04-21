@@ -484,4 +484,12 @@ defineChildWidget(Navigation, 'buttons', {
   show: true,
   inherit_options: true,
   userset_delegate: true,
+  static_events: {
+    'set__focus': function (focus) {
+      const button = this.buttons.list[focus];
+      if (!button)
+        return;
+      button.element.scrollIntoView({behavior: "smooth"});
+    },
+  }
 });
