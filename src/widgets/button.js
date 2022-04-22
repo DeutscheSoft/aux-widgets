@@ -235,6 +235,7 @@ function keyDown(e) {
   if (this.__keydown) return;
   this.__keydown = true;
   pressStart.call(this, e);
+  return false;
 }
 function keyUp(e) {
   if (!this.__keydown) return;

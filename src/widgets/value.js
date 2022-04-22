@@ -59,6 +59,7 @@ function valueKeydown(e) {
       );
       valueDone.call(this, true);
       this.emit('valueset', O.value);
+      return false;
   }
 }
 function valueTyping(e) {

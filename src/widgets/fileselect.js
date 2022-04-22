@@ -195,6 +195,7 @@ defineChildWidget(FileSelect, 'button', {
     keydown: function (e) {
       if (e.code === 'Enter' || e.code === 'Space') {
         this.parent._input.click();
+        return false;
       }
     },
   },

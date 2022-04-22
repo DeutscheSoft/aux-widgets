@@ -195,6 +195,7 @@ function onFocusKeyDown(e) {
     o.speed = 'full';
   }
   this.emit('focus_move', o);
+  return false;
 }
 
 /**

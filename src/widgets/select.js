@@ -941,10 +941,22 @@ function onFocusMove(O) {
 }
 
 function onKeyDown(e) {
-  if (e.code === 'Tab') this.parent.set('show_list', false);
-  if (e.code === 'Escape') this.parent.set('show_list', false);
-  if (e.key.length === 1) this.parent.focusWhileTyping(e.key);
-  if (e.code === 'Enter' || e.code === 'Space') this.element.click();
+  if (e.code === 'Tab') {
+    this.parent.set('show_list', false);
+    return false;
+  }
+  if (e.code === 'Escape') {
+    this.parent.set('show_list', false);
+    return false;
+  }
+  if (e.key.length === 1) {
+    this.parent.focusWhileTyping(e.key);
+    return false;
+  }
+  if (e.code === 'Enter' || e.code === 'Space') {
+    this.element.click();
+    return false;
+  }
 }
 
 /**

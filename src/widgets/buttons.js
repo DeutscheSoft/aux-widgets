@@ -413,6 +413,7 @@ export class Buttons extends Container {
           return;
         button.set('state', !button.get('state'));
       }
+      return false;
     });
     this.element.addEventListener('focus', e => {
       this.reFocus();
