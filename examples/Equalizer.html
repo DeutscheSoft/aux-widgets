@@ -73,8 +73,7 @@
 <script type="text/javascript">
   const eq = document.querySelector('aux-equalizer.extra_curve').auxWidget;
   const EqualizerGraph = eq.baseline.constructor;
-
-  eq.bands.forEach((band) => {
+  eq.getBands().forEach((band) => {
     let graph;
     band.subscribe('set_interacting', (interacting) => {
       if (!!graph == interacting) return;
@@ -135,7 +134,7 @@
   const eq = document.querySelector('aux-equalizer.individual_curve').auxWidget;
   const EqualizerGraph = eq.baseline.constructor;
 
-  eq.bands.forEach((band) => {
+  eq.getBands().forEach((band) => {
     let graph = new EqualizerGraph({ class: 'individual' });
     graph.addBand(band);
     eq.addGraph(graph);
