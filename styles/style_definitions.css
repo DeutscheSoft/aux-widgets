@@ -59,7 +59,7 @@
 .aux-button:focus,
 .aux-button.aux-focus {
   outline: var(--aux-outline);
-  outline-offset: 2px;
+  outline-offset: var(--aux-outline-offset);
   border-color: var(--aux-active-base);
 }
 .aux-button.aux-active {
@@ -394,6 +394,25 @@
 
 .aux-meter .aux-mask {
   opacity: 0.86;
+}
+
+/* NAVIGATION */
+
+.aux-navigation.aux-horizontal {
+  height: calc(var(--aux-clickable-size) + 2 * var(--aux-outline-offset) + 2 * var(--aux-outline-width))
+}
+.aux-navigation.aux-horizontal > .aux-buttons {
+  padding: calc(var(--aux-outline-offset) + var(--aux-outline-width));
+}
+.aux-navigation.aux-horizontal > .aux-button {
+  margin: calc(var(--aux-outline-offset) + var(--aux-outline-width)) 0;
+}
+
+.aux-navigation.aux-vertical > .aux-buttons {
+  padding: calc(var(--aux-outline-offset) + var(--aux-outline-width));
+}
+.aux-navigation.aux-vertical > .aux-button {
+  margin: 0 calc(var(--aux-outline-offset) + var(--aux-outline-width));
 }
 
 /* NOTIFICATIONS */

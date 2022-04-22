@@ -93,5 +93,7 @@
 
   --aux-border-radius: 4px;
 
-  --aux-outline: 2px solid var(--aux-active-base);
+  --aux-outline: var(--aux-outline-width) solid var(--aux-active-base);
+  --aux-outline-width: 2px;
+  --aux-outline-offset: 2px;
 }
