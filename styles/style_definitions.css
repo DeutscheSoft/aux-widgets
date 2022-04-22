@@ -79,17 +79,6 @@
   border-color: var(--aux-warn-base);
 }
 
-/* BUTTONS */
-
-.aux-buttons {
-  border-radius: var(--aux-border-radius);
-}
-.aux-buttons:focus {
-  outline: var(--aux-outline);
-  outline-offset: 2px;
-  border-color: var(--aux-active-base);
-}
-
 /* CHART */
 
 .aux-chart > svg {
