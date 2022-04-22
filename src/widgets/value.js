@@ -236,8 +236,13 @@ export class Value extends Widget {
       }),
       defineRender('placeholder', function (placeholder) {
         const E = this._input;
-        if (placeholder) E.setAttribute('placeholder', placeholder);
-        else E.removeAttribute('placeholder');
+        if (placeholder) {
+          E.setAttribute('placeholder', placeholder);
+          E.setAttribute('aria-placeholder', placeholder);
+        } else {
+          E.removeAttribute('placeholder');
+          E.removeAttribute('aria-placeholder');
+        }
       }),
       defineRender(['value', 'format', SymEditing], function (value, format) {
         if (this.__editing) return;
