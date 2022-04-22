@@ -202,12 +202,9 @@ export class ColorPicker extends Container {
 
   static get renderers() {
     return [
-      defineRender('saturation', function (saturation) {
-        this._grayscale.style.opacity = 1 - saturation;
-      }),
       defineRender(
-        ['hue', 'lightness', 'hex', 'rgb', 'red', 'green', 'blue'],
-        function (hue, lightness, hex, rgb, red, green, blue) {
+        ['saturation', 'hue', 'lightness', 'hex', 'rgb', 'red', 'green', 'blue'],
+        function (saturation, hue, lightness, hex, rgb, red, green, blue) {
           const { _indicator } = this;
           const _hex = this.hex;
 
@@ -229,6 +226,7 @@ export class ColorPicker extends Container {
           _indicator.style.top = lightness * 100 + '%';
           _indicator.style.backgroundColor = bg;
           _indicator.style.color = bw;
+          this._grayscale.style.opacity = 1 - saturation;
         }
       ),
     ];
