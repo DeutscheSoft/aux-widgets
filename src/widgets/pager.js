@@ -27,7 +27,7 @@
  * @param {mixed} value - The new value of the option
  */
 import { defineChildWidget } from '../child_widget.js';
-import { addClass, removeClass } from '../utils/dom.js';
+import { addClass, removeClass, createID } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 import {
   initSubscriptions,
@@ -374,10 +374,22 @@ export class Pager extends Container {
   addPage(buttonOptions, content, options, position) {
     const p = this.pages.addPage(content, position, options);
 
+    let pid;
+    if (!options || !options.id) {
+      pid = createID('aux-page-');
+      p.set('id', pid);
+    } else {
+      pid = options.id;
+    }
+
     const button = this.getButtonForPage(p);
+
+    let bid;
 
     if (typeof buttonOptions === 'string') {
       p.set('label', buttonOptions);
+      bid = createID('aux-button-');
+      button.set('id', bid);
     } else if (typeof buttonOptions === 'object') {
       const label = buttonOptions.label;
 
@@ -387,9 +399,19 @@ export class Pager extends Container {
         if (Object.prototype.hasOwnProperty.call(buttonOptions, key))
           button.set(key, buttonOptions[key]);
       }
+
+      if (!buttonOptions.id) {
+        bid = createID('aux-button-');
+      } else {
+        bid = buttonOptions.id;
+      }
+      button.set('id', bid);
     } else {
       throw new TypeError('Unsupported API.');
     }
+
+    button.set('aria_controls', pid);
+    p.set('aria_labelledby', bid);
 
     return p;
   }
@@ -482,6 +504,10 @@ defineChildWidget(Pager, 'navigation', {
   show: true,
   map_options: {
     show: 'select',
+  },
+  default_options: {
+    'buttons.role': 'tablist',
+    'buttons.button_role': 'tab',
   },
   static_events: {
     userset: function (key, value) {
