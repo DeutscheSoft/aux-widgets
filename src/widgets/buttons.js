@@ -75,7 +75,10 @@ function enforceMultiSelect(select, multi_select) {
 }
 
 function onButtonClick() {
+  const parent = this.parent;
   this.userset('state', !this.get('state'));
+  const position = parent.buttons.indexOf(this);
+  parent.set('_focus', position);
 }
 
 function onButtonUserset(key, value) {
