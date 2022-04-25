@@ -242,6 +242,8 @@ function clearFocus() {
  *   de-select any selected button.
  * @property {Object} [options.button_class=Button] - A class to
  *   be used for instantiating new buttons.
+ * @property {String} [options.button_role='option'] - A role to
+ *   be used for instantiating new buttons.
  * @property {Integer} [options.multi_select=0] - Set to `0` to disable
  *   multiple selection, `1` for unlimited and any other number for
  *   a defined maximum amount of selectable buttons. If an array is given
@@ -276,6 +278,7 @@ export class Buttons extends Container {
       direction: 'string',
       select: 'int|array',
       button_class: 'Button',
+      button_role: 'string',
       multi_select: 'int',
       deselect: 'boolean',
     });
@@ -287,6 +290,7 @@ export class Buttons extends Container {
       direction: 'horizontal',
       select: -1,
       button_class: Button,
+      button_role: 'option',
       multi_select: 0,
       deselect: false,
       role: 'listbox',
@@ -460,24 +464,25 @@ export class Buttons extends Container {
   }
 
   createButton(options) {
+    const O = this.options;
     if (options instanceof Button) {
       if (!options.get('id')) {
         options.set('id', createID('aux-button-'));
       }
-      options.set('role', 'option');
+      options.set('role', O.button_role);
       options.set('tabindex', false);
       return options;
     } else {
       if (typeof options === 'string') {
-        options = { label: options };
+        options = { label: options, role: O.button_role };
       } else if (options === void 0) {
-        options = {};
+        options = { role: O.button_role };
       } else if (typeof options !== 'object') {
         throw new TypeError('Expected object of options.');
       }
       if (!options.id)
         options.id = createID('aux-button-');
-      options.role = 'option';
+      options.role = O.button_role;
       options.tabindex = false;
       return new this.options.button_class(options);
     }
