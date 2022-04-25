@@ -489,7 +489,7 @@ defineChildWidget(Navigation, 'buttons', {
       const button = this.buttons.list[focus];
       if (!button)
         return;
-      button.element.scrollIntoView({behavior: "smooth"});
+      //button.element.scrollIntoView({behavior: "smooth"});
     },
   }
 });
