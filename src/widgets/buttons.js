@@ -412,12 +412,14 @@ export class Buttons extends Container {
         this.focusLast();
       }
       if (e.code === 'Space' || e.code === 'Enter') {
+        if (e.preventDefault)
+          e.preventDefault();
         const focus = this.get('_focus');
         if (focus === false)
-          return;
+          return false;
         const button = this.buttons.list[focus];
         if (!button)
-          return;
+          return false;
         button.userset('state', !button.get('state'));
       }
       return false;
