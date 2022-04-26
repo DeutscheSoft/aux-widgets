@@ -418,7 +418,7 @@ export class Buttons extends Container {
         const button = this.buttons.list[focus];
         if (!button)
           return;
-        button.set('state', !button.get('state'));
+        button.userset('state', !button.get('state'));
       }
       return false;
     });
