@@ -117,12 +117,15 @@ function onButtonSetState(value) {
     O.multi_select
   );
 
-  if (value)
+  if (value) {
     this.element.setAttribute('aria-current', 'true');
-  else
+    this.element.setAttribute('aria-selected', 'true');
+  } else {
     this.element.setAttribute('aria-current', 'false');
+    this.element.setAttribute('aria-selected', 'false');
+  }
 
-    if (select === O.select) return;
+  if (select === O.select) return;
 
   return parent.set('select', select);
 }
@@ -150,16 +153,20 @@ function onButtonAdded(button, position) {
     if (button.get('state') && select.indexOf(position) === -1) {
       select = [position].concat(select);
       button.element.setAttribute('aria-current', 'true');
+      button.element.setAttribute('aria-selected', 'true');
     } else {
       button.element.setAttribute('aria-current', 'false');
+      button.element.setAttribute('aria-selected', 'false');
     }
   } else {
     select = correctIndex(select);
     if (button.get('state')) {
       select = position;
       button.element.setAttribute('aria-current', 'true');
+      button.element.setAttribute('aria-selected', 'true');
     } else {
       button.element.setAttribute('aria-current', 'false');
+      button.element.setAttribute('aria-selected', 'false');
     }
   }
 
