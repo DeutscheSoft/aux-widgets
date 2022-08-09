@@ -2,6 +2,7 @@
   "name": "@deutschesoft/aux-widgets",
   "version": "1.0.34",
   "description": "AUX Audio Widget Library",
+  "license": "GPL-3.0",
   "main": "src/index.js",
   "module": "src/index.js",
   "browser": "src/index.js",
@@ -36,6 +37,5 @@
     "*.sideeffects.js",
     "*.registration.js"
   ],
-  "private": true,
   "devDependencies": {}
 }
