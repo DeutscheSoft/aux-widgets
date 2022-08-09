@@ -19,3 +19,4 @@ examples.html
 favicon.*
 angular/
 /cypress/
+/eslint/
