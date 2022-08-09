@@ -6,3 +6,15 @@
 /prettier/
 /testsuite/
 /tools/
+*toolkit.all.js
+*toolkit.min.js
+*toolkit.max.js
+*toolkit.min.map
+backup.html
+javascript/items.js
+*toolkit.min.css
+*toolkit.all.css
+export/
+examples.html
+favicon.*
+angular/
