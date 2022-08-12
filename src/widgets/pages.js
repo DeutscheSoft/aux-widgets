@@ -359,7 +359,9 @@ export class Pages extends Container {
       this.removeChild(page);
     }
 
-    if (destroy) page.destroy();
+    if (destroy) {
+      page.destroyAndRemove();
+    }
   }
 
   /**

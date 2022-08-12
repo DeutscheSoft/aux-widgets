@@ -94,7 +94,7 @@ function adjustReflections(reflections) {
   for (let i = reflections.length, m = R.length; i < m; ++i) {
     const G = R[i].graph;
     this.removeGraph(G);
-    G.destroy();
+    G.destroyAndRemove();
   }
 
   R.length = reflections.length;
