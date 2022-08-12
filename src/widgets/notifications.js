@@ -109,7 +109,7 @@ function closeClicked() {
 function afterHide() {
   Promise.resolve().then(() => {
     if (this.isDestructed()) return;
-    this.destroy();
+    this.destroyAndRemove();
   });
 }
 

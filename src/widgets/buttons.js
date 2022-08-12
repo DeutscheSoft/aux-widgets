@@ -570,7 +570,9 @@ export class Buttons extends Container {
       this.removeChild(button);
     }
 
-    if (destroy) button.destroy();
+    if (destroy) {
+      button.destroyAndRemove();
+    }
   }
 
   /**

@@ -698,6 +698,9 @@ export class Widget extends Base {
     });
   }
 
+  /**
+   * Dispose of this Widget.
+   */
   destroy() {
     /**
      * Is fired when a widget is destroyed.
@@ -724,13 +727,18 @@ export class Widget extends Base {
     super.destroy();
 
     this.options = null;
-
-    if (this.element) {
-      this.element.remove();
-      this.element = null;
-    }
+    this.element = null;
 
     setInteractionCount(this, 0);
+  }
+
+  /**
+   * Dispose of this Widget and remove it from the DOM.
+   */
+  destroyAndRemove() {
+    const element = this.element;
+    this.destroy();
+    if (element) element.remove();
   }
 
   addClass(cls) {
