@@ -19,7 +19,7 @@
 
 import { SelectComponent, SelectEntryComponent, Select } from '../src/index.js';
 
-import { assert, waitForEvent } from './helpers.js';
+import { assert, waitForDrawn } from './helpers.js';
 
 describe('Select', () => {
   const checkSelected = function (widget, entry) {
@@ -88,17 +88,23 @@ describe('Select', () => {
 
     select.appendChild(entry42);
 
+    // Entries: 42
+
     document.body.appendChild(select);
 
-    await waitForEvent(widget, 'redraw');
+    await waitForDrawn(widget);
 
     checkSelected(widget, null);
 
     select.appendChild(entry23);
 
+    // Entries: 42, 23
+
     checkSelect(widget);
 
     select.insertBefore(entry0, select.firstChild);
+
+    // Entries: 0, 42, 23
 
     widget.set('selected', 0);
     assert(widget.currentValue() === 0);
