@@ -92,5 +92,7 @@ export const SelectEntryComponent = subcomponentFromWidget(
   SelectEntry,
   Select,
   addEntry,
-  removeEntry
+  removeEntry,
+  null,
+  true
 );
