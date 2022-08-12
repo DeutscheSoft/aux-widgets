@@ -500,14 +500,6 @@ export class Buttons extends Container {
     }
   }
 
-  addChild(child) {
-    super.addChild(child);
-
-    if (child instanceof Button) {
-      this.addButton(child);
-    }
-  }
-
   /**
    * Adds a {@link Button} to Buttons.
    *

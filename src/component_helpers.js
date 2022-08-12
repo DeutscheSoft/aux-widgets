@@ -289,13 +289,14 @@ function createComponent(base) {
       this._auxAttributes = this._auxCalculateAttributes(null);
       this._auxParentNode = void 0;
       this._detachFromParent = initSubscriptions();
+      this._positionIndependent = true;
     }
 
     _auxParentChanged() {
       const parentNode = findParentNode(this.parentNode);
 
       // The parent node has not changed, no need to do anything.
-      if (parentNode === this._auxParentNode) {
+      if (parentNode === this._auxParentNode && this._positionIndependent) {
         return;
       }
 
@@ -526,7 +527,8 @@ export function subcomponentFromWidget(
   ParentWidget,
   appendCallback,
   removeCallback,
-  base
+  base,
+  positionSensitive
 ) {
   const compbase = createComponent(base);
   const attributes = attributeForWidget(Widget);
@@ -548,6 +550,7 @@ export function subcomponentFromWidget(
 
     constructor() {
       super();
+      this._positionIndependent = !positionSensitive;
       const options = this.auxOptions(Widget);
 
       options.class = this.getAttribute('class');
