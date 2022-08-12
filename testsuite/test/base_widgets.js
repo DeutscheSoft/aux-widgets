@@ -163,4 +163,18 @@ describe('Components', () => {
       c.destroy();
     }
   });
+  it('dom event cleanup', () => {
+      const w = new Widget({ element: document.createElement('div') });
+      const element = w.element;
+
+      console.log(w, element);
+
+      w.on('click', (ev) => {});
+      w.destroy();
+
+      document.body.appendChild(element);
+
+      // should not generate an error
+      element.dispatchEvent(new CustomEvent('click'));
+  });
 });
