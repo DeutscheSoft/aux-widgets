@@ -167,8 +167,6 @@ describe('Components', () => {
       const w = new Widget({ element: document.createElement('div') });
       const element = w.element;
 
-      console.log(w, element);
-
       w.on('click', (ev) => {});
       w.destroy();
 
