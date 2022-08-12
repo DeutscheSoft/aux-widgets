@@ -64,7 +64,7 @@ function headerAction() {
       that.toggleMinimize();
       break;
     case 'close':
-      that.destroy();
+      that.destroyAndRemove();
       break;
   }
   /**
@@ -108,7 +108,9 @@ function close() {
    * @event Window.closeclicked
    */
   this.emit('closeclicked');
-  if (this.options.auto_close) this.destroy();
+  if (this.options.auto_close) {
+    this.destroyAndRemove();
+  }
 }
 function maximize() {
   if (this.options.auto_maximize) this.toggleMaximize();

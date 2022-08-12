@@ -4,6 +4,7 @@ Refactoring
 ===========
 
 * All mixins have either been removed or replaced by equivalent functionality
+* Widget.destroy no longer removes the node from the DOM
 
 Removed Features
 ================
