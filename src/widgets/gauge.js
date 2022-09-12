@@ -170,6 +170,11 @@ export class Gauge extends Widget {
     super.draw(O, element);
   }
 
+  destroy() {
+    this.removeChildNode(this.svg);
+    super.destroy();
+  }
+
   // GETTERS & SETTERS
   set(key, value) {
     if (key === 'label') {
