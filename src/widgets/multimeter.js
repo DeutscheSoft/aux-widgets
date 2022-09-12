@@ -342,6 +342,13 @@ export class MultiMeter extends Container {
 
     super.draw(O, element);
   }
+
+  destroy() {
+    this.removeChildNode(this.label.element);
+    this.meters.map((meter) => {
+      this.removeChildNode(meter.element);
+    });
+  }
 }
 
 /**
