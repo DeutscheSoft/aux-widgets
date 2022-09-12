@@ -1208,7 +1208,7 @@ export class Widget extends Base {
    */
   removeChildNode(node, parent) {
     const E = parent || this.element;
-    if (node && node.parentElement === parent)
+    if (node && node.parentElement === E)
       node.remove();
   }
 }
