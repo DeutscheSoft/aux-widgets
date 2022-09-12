@@ -153,9 +153,9 @@ export class FileSelect extends Container {
   destroy() {
     this.removeChildNode(this._input);
     this.removeChildNode(this._label);
-    this.removeChildNode(this.button.element);
-    this.removeChildNode(this.name.element);
-    this.removeChildNode(this.size.element);
+    this.removeChildNode(this.button?.element);
+    this.removeChildNode(this.name?.element);
+    this.removeChildNode(this.size?.element);
     super.destroy();
   }
 }

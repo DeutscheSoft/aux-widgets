@@ -281,9 +281,9 @@ export class Scroller extends Container {
     this.scrollhide.appendChild(child.element);
   }
   destroy() {
-    this.removeChildNode(this.scrollhide.element);
-    this.removeChildNode(this.scroll_x.element);
-    this.removeChildNode(this.scroll_y.element);
+    this.removeChildNode(this.scrollhide?.element);
+    this.removeChildNode(this.scroll_x?.element);
+    this.removeChildNode(this.scroll_y?.element);
   }
   set(key, value) {
     if (key === 'scroll' && value == this.options.scroll) return;

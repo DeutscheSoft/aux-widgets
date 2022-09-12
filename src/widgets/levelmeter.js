@@ -212,7 +212,7 @@ export class LevelMeter extends Meter {
   }
 
   destroy() {
-    this.removeChildNode(this.clip.element);
+    this.removeChildNode(this.clip?.element);
     super.destroy();
   }
 

@@ -60,7 +60,7 @@ export class Frame extends Container {
   }
 
   destroy() {
-    this.removeChildNode(this.label.element);
+    this.removeChildNode(this.label?.element);
     super.destroy();
   }
 }

@@ -344,7 +344,7 @@ export class MultiMeter extends Container {
   }
 
   destroy() {
-    this.removeChildNode(this.label.element);
+    this.removeChildNode(this.label?.element);
     this.meters.map((meter) => {
       this.removeChildNode(meter.element);
     });

@@ -314,7 +314,7 @@ export class Expand extends Container {
   }
 
   destroy() {
-    this.removeChildNode(this.button.element);
+    this.removeChildNode(this.button?.element);
     super.destroy();
   }
 

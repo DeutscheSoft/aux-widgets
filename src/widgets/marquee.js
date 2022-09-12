@@ -134,7 +134,7 @@ export class Marquee extends Container {
 
   destroy() {
     if (this._style) this._style.remove();
-    this.removeChildNode(this.label.element);
+    this.removeChildNode(this.label?.element);
   }
 }
 

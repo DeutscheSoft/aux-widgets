@@ -461,9 +461,9 @@ export class Meter extends Widget {
 
   destroy() {
     this._bar.remove();
-    this.removeChildNode(this.label.element);
-    this.removeChildNode(this.scale.element);
-    this.removeChildNode(this.value.element);
+    this.removeChildNode(this.label?.element);
+    this.removeChildNode(this.scale?.element);
+    this.removeChildNode(this.value?.element);
     super.destroy();
   }
 
