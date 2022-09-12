@@ -468,6 +468,9 @@ export class Navigation extends Container {
   }
 
   destroy() {
+    this.removeChildNode(this.prev.element);
+    this.removeChildNode(this.next.element);
+    this.removeChildNode(this.buttons.element);
     super.destroy();
 
     if (this._scroll_animation) {
