@@ -473,6 +473,11 @@ export class Pages extends Container {
   getPages() {
     return this.pages.getList();
   }
+
+  destroy() {
+    this.empty();
+    super.destroy();
+  }
 }
 
 /**
