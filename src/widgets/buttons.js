@@ -585,6 +585,7 @@ export class Buttons extends Container {
   }
 
   destroy() {
+    this.empty();
     this.buttons.destroy();
     this.set('buttons', []);
     super.destroy();
