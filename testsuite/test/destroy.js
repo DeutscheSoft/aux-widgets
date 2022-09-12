@@ -17,27 +17,25 @@
  * Boston, MA  02110-1301  USA
  */
 
-export * from './base_widgets.js';
-export * from './bitset.js';
-export * from './events.js';
-export * from './css_helpers.js';
-export * from './helpers.js';
-export * from './scheduler.js';
-export * from './widgets.js';
-export * from './timers.js';
-export * from './bindings.js';
-export * from './pager.js';
-export * from './select.js';
-export * from './visibility.js';
-export * from './buttons.js';
-export * from './options.js';
-export * from './pages.js';
-export * from './pager.js';
-export * from './subscriptions.js';
-export * from './regressions.js';
-export * from './range.js';
-export * from './icon.js';
-export * from './renderer.js';
-export * from './equalizer.js';
-export * from './sprintf.js';
-export * from './destroy.js';
+import { assertChildren, canvas, waitForDrawn } from './helpers.js';
+
+describe.only('Destroy Widgets', () => {
+  const C = canvas();
+  const widgets = [
+    { name: 'Button', tag: 'aux-button', options: { label: 'Foobar', icon: 'speaker' } },
+
+  ];
+
+  widgets.map((widget) => {
+    it(`${widget.name}.destroy()`, async () => {
+      const node = document.createElement(widget.tag);
+      Object.keys(widget.options).map((option) => {
+        node.setAttribute(option, widget.options[option]);
+      })
+      C.appendChild(node);
+      await waitForDrawn(node.auxWidget);
+      node.auxWidget.destroy();
+      assertChildren(node);
+    });
+  });
+});
