@@ -326,6 +326,11 @@ export class Spread extends Widget {
   destroy() {
     this._lower.remove();
     this._upper.remove();
+    this._track.remove();
+    this.removeChildNode(this.scale?.element);
+    this.removeChildNode(this.label?.element);
+    this.removeChildNode(this.valuelower?.element);
+    this.removeChildNode(this.valueupper?.element);
     super.destroy();
   }
 
