@@ -25,9 +25,9 @@ window.__test_eq_band = new EqBand({ freq: 1000, gain: 6, type: 'parametric' });
 describe.only('Empty Widgets on destroy()', () => {
   const C = canvas();
   const widgets = [
-    //{ name: 'Bitstring', tag: 'bitstring', options: { length: 8 } },
+    // { name: 'Bitstring', tag: 'bitstring', options: { length: 8 } },
     { name: 'Button', tag: 'button', options: { label: 'Foobar', icon: 'speaker' } },
-    //{ tag: 'buttons', options: { buttons: 'js:["Foobar", "Barfoo"]' } },
+    // { tag: 'buttons', options: { buttons: 'js:["Foobar", "Barfoo"]' } },
     { name: 'Chart and ChartHandle', tag: 'chart', options: {
       label: 'Foobar',
       key: 'top-left',
@@ -53,6 +53,15 @@ describe.only('Empty Widgets on destroy()', () => {
     { name: 'FrequencyResponse', tag: 'frequencyresponse', options: { } },
     { name: 'Gauge', tag: 'gauge', options: { } },
     { name: 'Icon', tag: 'icon', options: { icon: 'speaker' } },
+    // { name: 'Knob', tag: 'knob', options: { } },
+    { name: 'Label', tag: 'label', options: { label: 'Foobar' } },
+    // { name: 'LevelMeter', tag: 'levelmeter', options: { label: 'Foobar', show_clip: true, show_hold: true, peak_value: -1 } },
+    { name: 'Limiter', tag: 'limiter', options: { } },
+    { name: 'Marquee', tag: 'marquee', options: { label: 'Foobar' } },
+    // { name: 'Meter', tag: 'meter', options: { label: 'Foobar', show_label: true, } },
+    { name: 'MultiMeter', tag: 'multimeter', options: { count: 2, label: 'Foobar', show_label: true, show_clip: true, show_hold: true, peak_value: -1 } },
+
+
   ];
 
   widgets.map((widget) => {
