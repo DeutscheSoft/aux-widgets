@@ -508,6 +508,11 @@ export class Chart extends Widget {
     this.emit('emptied');
   }
 
+  destroy() {
+    this.removeChildNode(this.svg);
+    super.destroy();
+  }
+
   /**
    * Add a new handle to the widget. Options is an object containing
    * options for the {@link ChartHandle}.
