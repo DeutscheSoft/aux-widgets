@@ -22,13 +22,23 @@ import { assertChildren, canvas, waitForDrawn } from './helpers.js';
 describe.only('Destroy Widgets', () => {
   const C = canvas();
   const widgets = [
-    { name: 'Button', tag: 'aux-button', options: { label: 'Foobar', icon: 'speaker' } },
-
+    { tag: 'button', options: { label: 'Foobar', icon: 'speaker' } },
+    //{ tag: 'buttons', options: { buttons: 'js:["Foobar", "Barfoo"]' } },
+    { tag: 'chart', options: {
+      label: 'Foobar',
+      key: 'top-left',
+      'grid-x': 'js:[1,2]',
+      'grid-y': 'js:[1,2]',
+      'range-x': 'js:[{min: 0, max: 3}]',
+      'range-y': 'js:[{min: 0, max: 3}]',
+    } },
+    { tag: 'icon', options: { icon: 'speaker' } },
   ];
 
   widgets.map((widget) => {
-    it(`${widget.name}.destroy()`, async () => {
-      const node = document.createElement(widget.tag);
+    it(`aux-${widget.tag}`, async () => {
+      console.log(widget)
+      const node = document.createElement('aux-' + widget.tag);
       Object.keys(widget.options).map((option) => {
         node.setAttribute(option, widget.options[option]);
       })
