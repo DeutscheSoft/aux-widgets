@@ -70,6 +70,12 @@ describe.only('Empty Widgets on destroy()', () => {
     { name: 'Reverb', tag: 'reverb', options: { show_input: true, show_input_handle: true, show_rlevel_handle: true, show_rtime_handle: true } },
     { name: 'Root', tag: 'root', options: { } },
     { name: 'Scale', tag: 'scale', options: { min: 0, max: 1, fixed_dots: 'js:[0, 0.5, 1]', fixed_labels: 'js:[0, 0.5, 1]', pointer: 0.5, bar: 0.5 } },
+    { name: 'ScrollArea', tag: 'scrollarea', options: { } },
+    { name: 'Spread', tag: 'spread', options: { label: 'Foobar' } },
+    { name: 'State', tag: 'state', options: { } },
+    // { name: 'Value', tag: 'value', options: { } },
+    // { name: 'ValueButton', tag: 'valuebutton', options: { label: 'Foobar', icon: 'speaker' } },
+    { name: 'ValueKnob', tag: 'valueknob', options: { label: 'Foobar' } },
 
   ];
 
