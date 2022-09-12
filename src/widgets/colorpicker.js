@@ -315,6 +315,20 @@ export class ColorPicker extends Container {
     super.draw(O, element);
   }
 
+  destroy() {
+    this.removeChildNode(this._canvas);
+    this.removeChildNode(this._grayscale);
+    this.removeChildNode(this.hex.element);
+    this.removeChildNode(this.hue.element);
+    this.removeChildNode(this.saturation.element);
+    this.removeChildNode(this.lightness.element);
+    this.removeChildNode(this.red.element);
+    this.removeChildNode(this.green.element);
+    this.removeChildNode(this.blue.element);
+    this.removeChildNode(this.apply.element);
+    this.removeChildNode(this.cancel.element);
+  }
+
   set(key, value) {
     const O = this.options;
     if (color_options.indexOf(key) > -1) {
