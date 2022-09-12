@@ -17,27 +17,40 @@
  * Boston, MA  02110-1301  USA
  */
 
+import { EqBand } from '../src/index.js';
 import { assertChildren, canvas, waitForDrawn } from './helpers.js';
 
-describe.only('Destroy Widgets', () => {
+window.__test_eq_band = new EqBand({ freq: 1000, gain: 6, type: 'parametric' });
+
+describe.only('Empty Widgets on destroy()', () => {
   const C = canvas();
   const widgets = [
-    { tag: 'button', options: { label: 'Foobar', icon: 'speaker' } },
+    //{ name: 'Bitstring', tag: 'bitstring', options: { length: 8 } },
+    { name: 'Button', tag: 'button', options: { label: 'Foobar', icon: 'speaker' } },
     //{ tag: 'buttons', options: { buttons: 'js:["Foobar", "Barfoo"]' } },
-    { tag: 'chart', options: {
+    { name: 'Chart and ChartHandle', tag: 'chart', options: {
       label: 'Foobar',
       key: 'top-left',
       'grid-x': 'js:[1,2]',
       'grid-y': 'js:[1,2]',
       'range-x': 'js:[{min: 0, max: 3}]',
       'range-y': 'js:[{min: 0, max: 3}]',
+      handles: 'js:[{ label: "Foobar" }]',
     } },
-    { tag: 'icon', options: { icon: 'speaker' } },
+    { name: 'Icon', tag: 'icon', options: { icon: 'speaker' } },
+    { name: 'Clock', tag: 'clock', options: { } },
+    { name: 'ColorPicker', tag: 'colorpicker', options: { } },
+    { name: 'ComboBox', tag: 'combobox', options: { value: 'Foobar', entries: 'js:["Foobar", "Barfoo"]' } },
+    { name: 'ConfirmButton', tag: 'confirmbutton', options: { label: 'Foobar', icon: 'speaker' } },
+    { name: 'Container', tag: 'container', options: { } },
+    { name: 'Crossover', tag: 'crossover', options: { } },
+    { name: 'Drag3D', tag: 'drag3d', options: { } },
+    { name: 'Dynamics', tag: 'dynamics', options: { type: 'compressor' } },
+    { name: 'Equalizer and EqBand', tag: 'equalizer', options: { bands: 'js:[ window.__test_eq_band ]' } },
   ];
 
   widgets.map((widget) => {
-    it(`aux-${widget.tag}`, async () => {
-      console.log(widget)
+    it(`${widget.name}`, async () => {
       const node = document.createElement('aux-' + widget.tag);
       Object.keys(widget.options).map((option) => {
         node.setAttribute(option, widget.options[option]);
