@@ -843,6 +843,11 @@ export class Scale extends Widget {
     this.update('basis', basis);
   }
 
+  destroy() {
+    removeDotsAndLabels(this.element);
+    super.destroy();
+  }
+
   // GETTER & SETTER
   set(key, value) {
     super.set(key, value);
