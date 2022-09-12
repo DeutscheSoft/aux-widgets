@@ -143,9 +143,9 @@ export class ValueKnob extends Widget {
   }
 
   destroy() {
-    this.removeChildNode(this.label?.node);
-    this.removeChildNode(this.knob?.node);
-    this.removeChildNode(this.value?.node);
+    this.removeChildNode(this.label?.element);
+    this.removeChildNode(this.knob?.element);
+    this.removeChildNode(this.value?.element);
     super.destroy();
   }
 
