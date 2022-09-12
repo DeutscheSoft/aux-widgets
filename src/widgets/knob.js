@@ -276,6 +276,7 @@ export class Knob extends Widget {
     this.drag.destroy();
     this.scroll.destroy();
     this.circular.destroyAndRemove();
+    this.removeChildNode(this.svg);
     super.destroy();
   }
 
