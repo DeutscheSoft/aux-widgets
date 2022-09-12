@@ -330,6 +330,7 @@ export class Value extends Widget {
     this._input.removeEventListener('focus', this._value_focus);
     this._input.removeEventListener('click', this._value_clicked);
     this._input.removeEventListener('submit', submitCallback);
+    this._input.remove();
     super.destroy();
   }
 }
