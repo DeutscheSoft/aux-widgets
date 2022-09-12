@@ -37,7 +37,6 @@ describe.only('Empty Widgets on destroy()', () => {
       'range-y': 'js:[{min: 0, max: 3}]',
       handles: 'js:[{ label: "Foobar" }]',
     } },
-    { name: 'Icon', tag: 'icon', options: { icon: 'speaker' } },
     { name: 'Clock', tag: 'clock', options: { } },
     { name: 'ColorPicker', tag: 'colorpicker', options: { } },
     { name: 'ComboBox', tag: 'combobox', options: { value: 'Foobar', entries: 'js:["Foobar", "Barfoo"]' } },
@@ -47,6 +46,13 @@ describe.only('Empty Widgets on destroy()', () => {
     { name: 'Drag3D', tag: 'drag3d', options: { } },
     { name: 'Dynamics', tag: 'dynamics', options: { type: 'compressor' } },
     { name: 'Equalizer and EqBand', tag: 'equalizer', options: { bands: 'js:[ window.__test_eq_band ]' } },
+    { name: 'Expand', tag: 'expand', options: { label: 'Foobar', icon: 'speaker' } },
+    { name: 'Fader', tag: 'fader', options: { label: 'Foobar', show_value: true } },
+    { name: 'FileSelect', tag: 'fileselect', options: { } },
+    { name: 'Frame', tag: 'frame', options: { label: 'Foobar' } },
+    { name: 'FrequencyResponse', tag: 'frequencyresponse', options: { } },
+    { name: 'Gauge', tag: 'gauge', options: { } },
+    { name: 'Icon', tag: 'icon', options: { icon: 'speaker' } },
   ];
 
   widgets.map((widget) => {
