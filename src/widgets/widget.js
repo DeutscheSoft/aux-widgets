@@ -1172,6 +1172,8 @@ export class Widget extends Base {
    * Calls a callback whenever the widget resizes. This method will
    * trigger one resize.
    *
+   * @method Widget#observeResize
+   *
    * @param {Function} cb
    */
   observeResize(cb) {
@@ -1193,6 +1195,21 @@ export class Widget extends Base {
       triggered = true;
       domScheduler.scheduleNext(MASK_CALCULATE, callback);
     });
+  }
+
+  /**
+   * Removes a child element if it is an actual child of either `element`
+   * or the parent element specified.
+   *
+   * @method Widget#removeChildNode
+   *
+   * @param {DOMNode} node - The node to be removed.
+   * @param {DOMNode} parent - Optional parent element the node has to be removed from.
+   */
+  removeChildNode(node, parent) {
+    const E = parent || this.element;
+    if (node && node.parentElement === parent)
+      node.remove();
   }
 }
 /**
