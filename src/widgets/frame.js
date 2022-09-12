@@ -58,6 +58,11 @@ export class Frame extends Container {
 
     super.draw(O, element);
   }
+
+  destroy() {
+    this.removeChildNode(this.label.element);
+    super.destroy();
+  }
 }
 /**
  * @member {Label} Frame#label - The {@link Label} of the frame.
