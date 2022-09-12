@@ -60,7 +60,16 @@ describe.only('Empty Widgets on destroy()', () => {
     { name: 'Marquee', tag: 'marquee', options: { label: 'Foobar' } },
     // { name: 'Meter', tag: 'meter', options: { label: 'Foobar', show_label: true, } },
     { name: 'MultiMeter', tag: 'multimeter', options: { count: 2, label: 'Foobar', show_label: true, show_clip: true, show_hold: true, peak_value: -1 } },
-
+    { name: 'Navigation', tag: 'navigation', options: { arrows: true } },
+    { name: 'Notifications', tag: 'notifications', options: { } },
+    { name: 'Pager', tag: 'pager', options: { pages: 'js:[ { label: "Foobar", content: "Foobar" }]' } },
+    { name: 'Pages', tag: 'pages', options: { pages: 'js:[ "Foobar", "Barfoo" ]' } },
+    { name: 'Panorama', tag: 'panorama', options: { } },
+    // { name: 'PhaseMeter', tag: 'phasemeter', options: { } },
+    // { name: 'ProgressBar', tag: 'progressbar', options: { } },
+    { name: 'Reverb', tag: 'reverb', options: { show_input: true, show_input_handle: true, show_rlevel_handle: true, show_rtime_handle: true } },
+    { name: 'Root', tag: 'root', options: { } },
+    { name: 'Scale', tag: 'scale', options: { min: 0, max: 1, fixed_dots: 'js:[0, 0.5, 1]', fixed_labels: 'js:[0, 0.5, 1]', pointer: 0.5, bar: 0.5 } },
 
   ];
 
