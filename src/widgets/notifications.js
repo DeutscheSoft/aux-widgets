@@ -94,6 +94,13 @@ export class Notifications extends Container {
     this.removeChild(n);
     return n;
   }
+
+  destroy() {
+    this.children?.map((widget) => {
+      this.removeChildNode(widget.element);
+    });
+    super.destroy();
+  }
 }
 
 function closeClicked() {
