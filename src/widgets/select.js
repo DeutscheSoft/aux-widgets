@@ -355,6 +355,7 @@ export class Select extends Button {
   destroy() {
     this.clear();
     this._list.remove();
+    this.removeChildNode(this.sizer?.element);
     super.destroy();
   }
 
