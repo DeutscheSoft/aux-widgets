@@ -460,7 +460,7 @@ export class Navigation extends Container {
   }
 
   removeButton(...arg) {
-    return this.buttons.removeButton(...arg);
+    return this.buttons?.removeButton(...arg);
   }
 
   empty(...arg) {
