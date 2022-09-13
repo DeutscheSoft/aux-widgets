@@ -135,12 +135,12 @@ export class Bitstring extends Buttons {
      * @member {HTMLDivElement} Bitstring#element - The main DIV container.
      *   Has class <code>.aux-bitstring</code>.
      */
-    this.set('length', options.length);
-    this.set('bitstring', options.bitstring);
   }
 
   draw(O, element) {
     addClass(element, 'aux-bitstring');
+    this.set('length', this.options.length);
+    this.set('bitstring', this.options.bitstring);
     super.draw(O, element);
   }
 }
