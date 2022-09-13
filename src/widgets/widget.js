@@ -633,12 +633,6 @@ export class Widget extends Base {
      * @event Widget#initialized
      */
     super.initialized();
-
-    const O = this.options;
-
-    if (O.preset) {
-      this.set('preset', O.preset);
-    }
   }
 
   drawOnce(fun) {
@@ -654,6 +648,10 @@ export class Widget extends Base {
   }
 
   draw(O, element) {
+    if (O.preset) {
+      this.set('preset', O.preset);
+    }
+
     let E;
 
     const notransitions = O.notransitions;
