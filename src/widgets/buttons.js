@@ -118,11 +118,11 @@ function onButtonSetState(value) {
   );
 
   if (value) {
-    this.element.setAttribute('aria-current', 'true');
-    this.element.setAttribute('aria-selected', 'true');
+    this.set('aria_current', 'true');
+    this.set('aria_selected', 'true');
   } else {
-    this.element.setAttribute('aria-current', 'false');
-    this.element.setAttribute('aria-selected', 'false');
+    this.set('aria_current', 'false');
+    this.set('aria_selected', 'false');
   }
 
   if (select === O.select) return;
@@ -152,21 +152,21 @@ function onButtonAdded(button, position) {
     select = select.map(correctIndex);
     if (button.get('state') && select.indexOf(position) === -1) {
       select = [position].concat(select);
-      button.element.setAttribute('aria-current', 'true');
-      button.element.setAttribute('aria-selected', 'true');
+      button.set('aria_current', 'true');
+      button.set('aria_selected', 'true');
     } else {
-      button.element.setAttribute('aria-current', 'false');
-      button.element.setAttribute('aria-selected', 'false');
+      button.set('aria_current', 'false');
+      button.set('aria_selected', 'false');
     }
   } else {
     select = correctIndex(select);
     if (button.get('state')) {
       select = position;
-      button.element.setAttribute('aria-current', 'true');
-      button.element.setAttribute('aria-selected', 'true');
+      button.set('aria_current', 'true');
+      button.set('aria_selected', 'true');
     } else {
-      button.element.setAttribute('aria-current', 'false');
-      button.element.setAttribute('aria-selected', 'false');
+      button.set('aria_current', 'false');
+      button.set('aria_selected', 'false');
     }
   }
 
@@ -357,16 +357,16 @@ export class Buttons extends Container {
           keys.push('ArrowUp', 'ArrowDown');
         else
           keys.push('ArrowUp', 'ArrowDown');
-        this.element.setAttribute('aria-keyshortcuts', keys.join(' '));
+        this.set('aria_keyshortcuts', keys.join(' '));
       },
       set__focus: function (focus) {
         clearFocus.call(this);
-        this.element.setAttribute('aria-activedescendant', '');
+        this.set('aria_activedescendant', '');
         const button = this.buttons.list[focus];
         if (!button)
           return;
         button.set('focus', true);
-        this.element.setAttribute('aria-activedescendant', button.get('id'));
+        this.set('aria_activedescendant', button.get('id'));
       }
     };
   }
@@ -397,13 +397,9 @@ export class Buttons extends Container {
     this.buttons.on('child_added', onButtonAdded);
     this.buttons.on('child_removed', onButtonRemoved);
 
-    this.set('direction', this.options.direction);
-    this.set('multi_select', this.options.multi_select);
-
     // the set() method would otherwise try to remove initial buttons
     const buttons = options.buttons;
     this.options.buttons = [];
-    this.set('buttons', buttons);
 
     this.element.addEventListener('keydown', (e) => {
       if (e.code === 'ArrowLeft' || e.code === 'ArrowUp') {
@@ -457,6 +453,9 @@ export class Buttons extends Container {
 
   draw(O, element) {
     addClass(element, 'aux-buttons');
+    this.set('direction', this.options.direction);
+    this.set('multi_select', this.options.multi_select);
+    this.set('buttons', this.options.buttons);
 
     super.draw(O, element);
   }
