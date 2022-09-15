@@ -52,6 +52,7 @@ import {
   PhaseMeter,
   ProgressBar,
   Reverb,
+  Root,
   Scale,
   ScrollArea,
   Spread,
@@ -110,14 +111,14 @@ describe.only('Empty Widgets on destroy()', () => {
     { widget: PhaseMeter, name: 'PhaseMeter', tag: 'phasemeter', options: { } },
     { widget: ProgressBar, name: 'ProgressBar', tag: 'progressbar', options: { } },
     { widget: Reverb, name: 'Reverb', tag: 'reverb', options: { show_input: true, show_input_handle: true, show_rlevel_handle: true, show_rtime_handle: true } },
-    { name: 'Root', tag: 'root', options: { } },
+    { widget: Root, name: 'Root', tag: 'root', options: { } },
     { widget: Scale, name: 'Scale', tag: 'scale', options: { min: 0, max: 1, fixed_dots: [0, 0.5, 1], fixed_labels: [0, 0.5, 1], pointer: 0.5, bar: 0.5 } },
     { widget: ScrollArea, name: 'ScrollArea', tag: 'scrollarea', options: { } },
     { widget: Spread, name: 'Spread', tag: 'spread', options: { label: 'Foobar' } },
     { widget: State, name: 'State', tag: 'state', options: { } },
-    // { widget: Value, name: 'Value', tag: 'value', options: { } },
-    // { name: 'ValueButton', tag: 'valuebutton', options: { label: 'Foobar', icon: 'speaker' } },
-    // { widget: ValueKnob, name: 'ValueKnob', tag: 'valueknob', options: { label: 'Foobar' } },
+    { widget: Value, name: 'Value', tag: 'value', options: { } },
+    { widget: ValueButton, name: 'ValueButton', tag: 'valuebutton', options: { label: 'Foobar', icon: 'speaker' } },
+    { widget: ValueKnob, name: 'ValueKnob', tag: 'valueknob', options: { label: 'Foobar' } },
 
   ];
 
