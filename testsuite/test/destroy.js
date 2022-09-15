@@ -65,7 +65,7 @@ import { assertChildren, canvas, waitForDrawn } from './helpers.js';
 
 window.__test_eq_band = new EqBand({ freq: 1000, gain: 6, type: 'parametric' });
 
-describe.only('Empty Widgets on destroy()', () => {
+describe('Empty Widgets on destroy()', () => {
   const C = canvas();
   const widgets = [
     { widget: Bitstring, name: 'Bitstring', tag: 'bitstring', options: { length: 8 } },
