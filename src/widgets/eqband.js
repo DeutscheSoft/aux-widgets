@@ -175,18 +175,26 @@ export class EqBand extends ChartHandle {
   static get static_events() {
     return {
       set_freq: function (v) {
-        this.set('x', v);
+        this.update('x', v);
       },
       set_gain: function (v) {
-        this.set('y', v);
+        this.update('y', v);
       },
       set_q: function (v) {
-        this.set('z', v);
+        this.update('z', v);
       },
-      useraction: function (k, v) {
-        if (k === 'x') this.set('freq', v);
-        if (k === 'y') this.set('gain', v);
-        if (k === 'z') this.set('q', v);
+      userset: function (k, v) {
+        switch (k) {
+        case 'x':
+          this.userset('freq', v);
+          return false;
+        case 'y':
+          this.userset('gain', v);
+          return false;
+        case 'z':
+          this.userset('q', v);
+          return false;
+        }
       },
     };
   }

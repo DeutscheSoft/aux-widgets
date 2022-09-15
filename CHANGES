@@ -1,3 +1,14 @@
+AUX 1.2: Changes since AUX 1.1
+
+API Changes
+===========
+
+* EqBand: When the parameters of an eq band are changed by the user, the
+  userset and useraction events will now fire for the parameters freq, gain
+  and q. Previously, the userset and useraction events fired for the options x,
+  y, and z. This behavior was confusing and made it difficult to correctly bind
+  to those parameters. This is now resolved.
+
 AUX 1.1: Changes since AUX 1.0
 
 Refactoring
