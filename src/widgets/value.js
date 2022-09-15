@@ -283,7 +283,6 @@ export class Value extends Widget {
      *   Has class <code>aux-input</code>.
      */
     this._input = element('input');
-    this.element.appendChild(this._input);
 
     this._value_typing = valueTyping.bind(this);
     this._value_keydown = valueKeydown.bind(this);
@@ -310,6 +309,8 @@ export class Value extends Widget {
   draw(O, elmnt) {
     addClass(elmnt, 'aux-value');
     addClass(this._input, 'aux-input');
+
+    this.element.appendChild(this._input);
 
     this._input.addEventListener('keyup', this._value_typing);
     this._input.addEventListener('keydown', this._value_keydown);
