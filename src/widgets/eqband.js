@@ -266,15 +266,6 @@ export class EqBand extends ChartHandle {
       case 'q':
         value = this.filter.set(key, value);
         break;
-      //case "x":
-      //value = this.options.range_x.snap(value);
-      //break;
-      //case "y":
-      //value = this.options.range_y.snap(value);
-      //break;
-      //case "z":
-      //value = this.options.range_z.snap(value);
-      //break;
     }
     return super.set(key, value);
   }
