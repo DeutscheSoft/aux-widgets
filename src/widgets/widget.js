@@ -37,6 +37,7 @@ import { typecheckFunction } from '../utils/typecheck.js';
 import { GlobalResize } from '../utils/global_resize.js';
 import { GlobalVisibilityChange } from '../utils/global_visibility_change.js';
 import { ProximityTimers } from '../utils/timers.js';
+import { ariaAttributes } from '../aria_attributes.js';
 
 import {
   Scheduler,
@@ -59,6 +60,8 @@ export const SymResize = Symbol('resize');
 export const SymResized = Symbol('resized');
 
 const rootWidgets = new Map();
+
+const ariaOptions = ariaAttributes.map(a => a.replace('-', '_'));
 
 function onVisibilityChange() {
   if (document.hidden) {
@@ -404,7 +407,7 @@ export class Widget extends Base {
   }
 
   static get renderers() {
-    return [
+    const renders = [
       defineMeasure(SymResize, function () {
         this.resize();
       }),
@@ -509,6 +512,16 @@ export class Widget extends Base {
         toggleClass(E, 'aux-focus', !!focus);
       }),
     ];
+    ariaOptions.forEach((o) => {
+      renders.push(defineRender(o, function (v) {
+        if (typeof v === 'undefined' || v === null) {
+          this.getARIATargets().map(t => t.removeAttribute(o.replace('_', '-')));
+        } else {
+          this.getARIATargets().map(t => t.setAttribute(o.replace('_', '-'), v));
+        }
+      }));
+    });
+    return renders;
   }
 
   constructor(options) {
@@ -833,19 +846,15 @@ export class Widget extends Base {
         value
       );
     }
-    if (key.startsWith('aria_')) {
-      this.getARIATargets().map(v => v.setAttribute(key.replace('_', '-'), value));
-    } else {
-      const currentValue = this.options[key];
+    const currentValue = this.options[key];
 
-      if (
-        currentValue !== value &&
-        (value === value || currentValue === currentValue)
-      )
-        this._renderState.invalidate(key);
+    if (
+      currentValue !== value &&
+      (value === value || currentValue === currentValue)
+    )
+      this._renderState.invalidate(key);
 
-      super.set(key, value);
-    }
+    super.set(key, value);
     return value;
   }
 
