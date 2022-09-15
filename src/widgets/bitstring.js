@@ -139,13 +139,10 @@ export class Bitstring extends Buttons {
 
   draw(O, element) {
     addClass(element, 'aux-bitstring');
-<<<<<<< HEAD
-    this.set('length', this.options.length);
-    this.set('bitstring', this.options.bitstring);
-=======
+
     this.set('length', O.length);
     this.set('bitstring', O.bitstring);
->>>>>>> 61d6d5e2 (Bitstring: move initial setters to draw())
+    
     super.draw(O, element);
   }
 }
