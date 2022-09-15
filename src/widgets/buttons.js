@@ -397,10 +397,6 @@ export class Buttons extends Container {
     this.buttons.on('child_added', onButtonAdded);
     this.buttons.on('child_removed', onButtonRemoved);
 
-    // the set() method would otherwise try to remove initial buttons
-    const buttons = options.buttons;
-    this.options.buttons = [];
-
     this.element.addEventListener('keydown', (e) => {
       if (e.code === 'ArrowLeft' || e.code === 'ArrowUp') {
         this.focusPrevious();
@@ -451,11 +447,19 @@ export class Buttons extends Container {
     moveFocus.call(this, 0);
   }
 
+  initialized() {
+    // the set() method would otherwise try to remove initial buttons
+    const O = this.options;
+    const buttons = O.buttons;
+    O.buttons = [];
+    this.set('buttons', buttons);
+    super.initialized();
+  }
+
   draw(O, element) {
     addClass(element, 'aux-buttons');
-    this.set('direction', this.options.direction);
-    this.set('multi_select', this.options.multi_select);
-    this.set('buttons', this.options.buttons);
+    this.set('direction', O.direction);
+    this.set('multi_select', O.multi_select);
 
     super.draw(O, element);
   }
@@ -541,7 +545,7 @@ export class Buttons extends Container {
    * @param {Boolean} destroy - destroy the {@link Button} after removal.
    */
   removeButton(button, destroy) {
-    const buttons = this.buttons;
+    const buttons = this.getButtons();
     let position = -1;
 
     if (button instanceof Button) {
@@ -610,12 +614,19 @@ export class Buttons extends Container {
   set(key, value) {
     if (key === 'buttons') {
       // remove all buttons which were added using this option
-      this.options.buttons.forEach((b) => this.removeButton(b, true));
+      this.buttons.list.forEach((b) => this.removeButton(b, true));
       value = this.addButtons(value || []);
     } else if (key === 'select') {
       value = enforceMultiSelect(value, this.options.multi_select);
     }
 
     return super.set(key, value);
+  }
+
+  get(key) {
+    if (key === 'buttons')
+      return this.getButtons();
+    else
+      return super.get(key);
   }
 }
