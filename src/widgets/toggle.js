@@ -27,13 +27,14 @@ function toggle(O) {
 }
 function pressStart(e) {
   const O = this.options;
-  if (O.press || O.delay) toggle.call(this, O);
+  if (O.press || O.delay || (!O.toggle && !O.press)) toggle.call(this, O);
 }
 function pressEnd(e) {
   const O = this.options;
   if (
     (O.press && e.timeStamp > this.__time_stamp + O.press) ||
-    (!O.press && !O.delay)
+    (!O.press && !O.delay) ||
+    (!O.toggle && !O.press)
   )
     toggle.call(this, O);
 }
