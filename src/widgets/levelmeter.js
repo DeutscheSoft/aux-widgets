@@ -25,17 +25,17 @@ import { State } from './state.js';
 import { addClass, toggleClass } from '../utils/dom.js';
 import { effectiveValue } from '../modules/range.js';
 import { defineRender, defineMeasure, deferRenderNext } from '../renderer.js';
+import {
+  createTimer,
+  startTimer,
+  destroyTimer,
+  cancelTimer,
+} from '../utils/timers.js';
 
 function clearTimeout(to) {
   if (to >= 0) window.clearTimeout(to);
 }
 
-function clipTimeout() {
-  const O = this.options;
-  if (!O.auto_clip || O.auto_clip < 0) return false;
-  clearTimeout(this.__cto);
-  this.__cto = window.setTimeout(this._reset_clip, O.auto_clip);
-}
 function valueTimeout() {
   const peak_value = 0 | this.options.peak_value;
   if (peak_value <= 0) return false;
@@ -133,8 +133,7 @@ export class LevelMeter extends Meter {
   static get static_events() {
     return {
       set_auto_clip: function (value) {
-        if (this.__cto >= 0 && 0 | (value <= 0))
-          window.clearTimeout(this.__cto);
+        if (!(value > 0)) this._clip_timer = destroyTimer(this._clip_timer);
       },
       set_peak_value: function (value) {
         if (this.__lto >= 0 && 0 | (value <= 0))
@@ -172,7 +171,7 @@ export class LevelMeter extends Meter {
     /* track the age of the value option */
     super.initialize(options);
     this._reset_value = this.resetValue.bind(this);
-    this._reset_clip = this.resetClip.bind(this);
+    this._clip_timer = createTimer(this.resetClip.bind(this));
     this._reset_top = this.resetTop.bind(this);
     this._reset_bottom = this.resetBottom.bind(this);
 
@@ -212,6 +211,7 @@ export class LevelMeter extends Meter {
   }
 
   destroy() {
+    this._clip_timer = destroyTimer(this._clip_timer);
     this.removeChildNode(this.clip?.element);
     super.destroy();
   }
@@ -262,7 +262,7 @@ export class LevelMeter extends Meter {
    * @emits LevelMeter#resetclip
    */
   resetClip() {
-    clearTimeout(this.__cto);
+    this._clip_timer = cancelTimer(this._clip_timer);
     this.set('clip', false);
     /**
      * Is fired when the clipping LED was reset.
@@ -405,7 +405,8 @@ export class LevelMeter extends Meter {
 
       if (O.auto_clip !== false && value >= O.clipping && !this.hasBase()) {
         this.set('clip', true);
-        clipTimeout.call(this);
+        if (O.auto_clip >= 0)
+          this._clip_timer = startTimer(this._clip_timer, O.auto_clip);
       }
       if (
         O.show_value &&
