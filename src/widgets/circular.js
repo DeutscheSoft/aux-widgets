@@ -208,6 +208,7 @@ export class Circular extends Widget {
       show_value: 'boolean',
       show_hand: 'boolean',
       show_labels: 'boolean',
+      show_dots: "boolean",
       x: 'number',
       y: 'number',
       dots_defaults: 'object',
@@ -250,6 +251,7 @@ export class Circular extends Widget {
       show_value: true,
       show_hand: true,
       show_labels: true,
+      show_dots: true,
       x: 0,
       y: 0,
       dots_defaults: { width: 1, length: 3, margin: 0.5 },
@@ -301,7 +303,7 @@ export class Circular extends Widget {
         ) {
           const _dots = this._dots;
 
-          if (_dots) return;
+          if (!_dots) return;
 
           empty(_dots);
 
@@ -687,10 +689,10 @@ export class Circular extends Widget {
 
   draw(O, element) {
     addClass(element, 'aux-circular');
-    element.appendChild(this._dots);
     element.appendChild(this._base);
     element.appendChild(this._value);
     element.appendChild(this._markers);
+    element.appendChild(this._dots);
     element.appendChild(this._hand);
 
     super.draw(O, element);
