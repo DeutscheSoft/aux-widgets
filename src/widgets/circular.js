@@ -126,7 +126,7 @@ function drawSlice(a_from, a_to, r_inner, r_outer, pos, slice) {
  * Circular is a SVG group element containing two paths for displaying
  * numerical values in a circular manner. Circular is able to draw labels,
  * dots and markers and can show a hand. Circular e.g. is implemented by
- * {@link Clock} to draw hours, minutes and seconds.
+ * {@link Clock} to draw hours, minutes and seconds. Circular is based on {@link Range}.
  *
  * @class Circular
  *
