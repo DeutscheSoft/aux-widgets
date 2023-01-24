@@ -22,6 +22,7 @@
  */
 
 import { error } from './log.js';
+import { typecheckFunction } from './typecheck.js';
 
 /**
  * This class represents a single timer. It is faster than manual setTimeout
@@ -33,6 +34,7 @@ export class Timer {
    * @param callback - The callback to be called when the timer expires.
    */
   constructor(callback) {
+    typecheckFunction(callback);
     this.callback = callback;
     this.id = void 0;
     this.time = 0;
@@ -136,4 +138,46 @@ export class ProximityTimers {
   scheduleIn(callback, offset) {
     this.scheduleAt(callback, offset + performance.now());
   }
+}
+
+/**
+ * Initialize a timer from a given callback. Returns
+ * the timer handle.
+ */
+export function createTimer(callback) {
+  typecheckFunction(callback);
+  return callback;
+}
+
+/**
+ * Reschedules the timer for the given timer handle. Returns
+ * the new timer handle.
+ */
+export function startTimer(timer, delta) {
+  if (typeof timer === 'function') timer = new Timer(timer);
+
+  timer.start(delta);
+  return timer;
+}
+
+/**
+ * Stops the timer for the given timer handle. Returns
+ * the new timer handle.
+ */
+export function destroyTimer(timer) {
+  if (typeof timer === 'function') return timer;
+
+  timer.stop();
+
+  return timer.callback;
+}
+
+/**
+ * Cancels the timer for the given timer handle. Returns
+ * the new timer handle.
+ */
+export function cancelTimer(timer) {
+  if (typeof timer !== 'function') timer.stop();
+
+  return timer;
 }
