@@ -32,17 +32,6 @@ import {
   cancelTimer,
 } from '../utils/timers.js';
 
-function clearTimeout(to) {
-  if (to >= 0) window.clearTimeout(to);
-}
-
-function valueTimeout() {
-  const peak_value = 0 | this.options.peak_value;
-  if (peak_value <= 0) return false;
-  clearTimeout(this.__lto);
-  this.__lto = window.setTimeout(this._reset_value, peak_value);
-}
-
 /**
  * LevelMeter is a fully functional meter bar displaying numerical values.
  * LevelMeter is an enhanced {@link Meter} containing a clip LED and hold markers.
@@ -124,8 +113,9 @@ export class LevelMeter extends Meter {
         if (!(value > 0)) this._clip_timer = destroyTimer(this._clip_timer);
       },
       set_peak_value: function (value) {
-        if (this.__lto >= 0 && 0 | (value <= 0))
-          window.clearTimeout(this.__lto);
+        if (!(value > 0))
+          this._value_timer = destroyTimer(this._value_timer);
+
         if (value === false) this.set('sync_value', this.options._sync_value);
         else this.set('sync_value', false);
       },
@@ -160,7 +150,7 @@ export class LevelMeter extends Meter {
   initialize(options) {
     /* track the age of the value option */
     super.initialize(options);
-    this._reset_value = this.resetValue.bind(this);
+    this._value_timer = createTimer(this.resetValue.bind(this));
     this._clip_timer = createTimer(this.resetClip.bind(this));
     this._top_timer = createTimer(this.resetTop.bind(this));
     this._bottom_timer = createTimer(this.resetBottom.bind(this));
@@ -204,6 +194,7 @@ export class LevelMeter extends Meter {
     this._clip_timer = destroyTimer(this._clip_timer);
     this._top_timer = destroyTimer(this._top_timer);
     this._bottom_timer = destroyTimer(this._bottom_timer);
+    this._value_timer = destroyTimer(this._value_timer);
     this.removeChildNode(this.clip?.element);
     super.destroy();
   }
@@ -236,7 +227,7 @@ export class LevelMeter extends Meter {
    * @emits LevelMeter#resetvalue
    */
   resetValue() {
-    clearTimeout(this.__lto);
+    this._value_timer = cancelTimer(this._value_timer);
     this.set('value_label', this.effectiveValue());
     /**
      * Is fired when the value label was reset.
@@ -400,22 +391,25 @@ export class LevelMeter extends Meter {
         if (O.auto_clip >= 0)
           this._clip_timer = startTimer(this._clip_timer, O.auto_clip);
       }
-      if (
-        O.show_value &&
-        O.peak_value !== false &&
-        ((value > O.value_label && value > base) ||
-          (value < O.value_label && value < base))
-      ) {
-        clearTimeout(this.__lto);
-        this.set('value_label', value);
-      }
-      if (
-        O.show_value &&
-        O.peak_value !== false &&
-        ((value < O.value_label && value > base) ||
-          (value > O.value_label && value < base))
-      ) {
-        valueTimeout.call(this);
+
+      const peak_value = O.peak_value;
+
+      if (O.show_value && peak_value !== false) {
+        const value_label = O.value_label;
+
+        if (
+          ((value > value_label && value > base) ||
+            (value < value_label && value < base))
+        ) {
+          this._value_timer = cancelTimer(this._value_timer);
+          this.set('value_label', value);
+        }
+        if (peak_value > 0 &&
+          ((value < value_label && value > base) ||
+            (value > value_label && value < base))
+        ) {
+          this._value_timer = startTimer(this._value_timer, peak_value);
+        }
       }
 
       if (O.auto_hold !== false && O.show_hold) {
