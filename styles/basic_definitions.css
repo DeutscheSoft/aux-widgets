@@ -984,14 +984,12 @@
 .aux-selectlist {
   padding: 0;
   text-align: left;
+  border-radius: var(--aux-border-radius);
 }
 
 .aux-selectlist > .aux-selectentry {
   margin: 0;
-  padding: var(--aux-button-paddingvertical) var(--aux-button-paddinghorizontal);
-  line-height: var(--aux-selectentry-lineheight);
-  cursor: pointer;
-  display: block;
+  display: flex;
 }
 
 /* SPREAD */

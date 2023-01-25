@@ -497,11 +497,30 @@
   box-shadow: 2px 6px 12px rgba(0, 0, 0, 0.25);
 }
 .aux-selectlist > .aux-selectentry {
+  background: none;
+  border: none;
+  border-radius: 0;
+  justify-content: flex-start;
+  color: var(--aux-contrast-text);
   transition: background var(--aux-transition-duration),
     color var(--aux-transition-duration);
 }
+.aux-selectlist > .aux-selectentry:first-of-type {
+  border-top-left-radius:var(--aux-border-radius);
+  border-top-right-radius:var(--aux-border-radius);
+}
+.aux-selectlist > .aux-selectentry:last-of-type {
+  border-bottom-left-radius: var(--aux-border-radius);
+  border-bottom-right-radius: var(--aux-border-radius);
+}
+.aux-selectlist > .aux-selectentry:hover {
+  background: var(--aux-main-base);
+  color: var(--aux-main-text);
+}
 .aux-selectlist > .aux-selectentry.aux-active {
   background: var(--aux-active-base);
+  color: var(--aux-active-text);
+  border: none;
 }
 .aux-selectlist > .aux-selectentry:focus {
   outline: 2px solid var(--aux-active-base);

@@ -1313,14 +1313,14 @@ body.aux-cursor-row-resize * {
 .aux-button.aux-select > .aux-label.aux-sizer {
   position: absolute !important;
   top: 0 !important;
-  left: 0 !important;
-  margin: 0 !important;
+  left: var(--aux-button-paddinghorizontal) !important;
   height: 0px !important;
   overflow: hidden !important;
   visibility: hidden !important;
 }
 .aux-button.aux-select > .aux-label.aux-sizer > .aux-sizerentry {
   display: block;
+  white-space: nowrap;
 }
 .aux-selectlist {
   position: absolute;

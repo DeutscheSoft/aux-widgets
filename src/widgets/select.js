@@ -79,7 +79,7 @@ const SymEntriesChanged = Symbol('entries changes');
  * @property {mixed} [options.value] - The value of the selected entry.
  * @property {SelectEntry} [options.selected_entry] - The currently selected
  *    entry.
- * @property {Boolean} [options.auto_size=true] - If `true`, the Select is
+ * @property {Boolean} [options.auto_size=false] - If `true`, the Select is
  *   auto-sized to be as wide as the widest {@link SelectEntry}.
  * @property {Array<Object>} [options.entries=[]] - The list of {@link SelectEntry}. Each member is an
  *   object with the two properties <code>label</code> and <code>value</code>, a string used
@@ -205,7 +205,7 @@ export class Select extends Button {
         }
 
         if (show_list) {
-          const ew = outerWidth(element, true);
+          const ew = outerWidth(element, false);
           const cw = width();
           const ch = height();
           const sx = scrollLeft();
@@ -961,11 +961,11 @@ function onKeyDown(e) {
 }
 
 /**
- * SelectEntry provides a {@link Label} as an entry for {@link Select}.
+ * SelectEntry provides a {@link Button} as an entry for {@link Select}.
  *
  * @class SelectEntry
  *
- * @extends Label
+ * @extends Button
  *
  * @param {Object} [options={ }] - An object containing initial options.
  *
@@ -973,18 +973,18 @@ function onKeyDown(e) {
  * @property {mixed} [options.value] - The value of the selected entry.
  *
  */
-export class SelectEntry extends Label {
+export class SelectEntry extends Button {
   static get _options() {
-    return Object.assign({}, Label.getOptionTypes(), {
+    return Object.assign({}, Button.getOptionTypes(), {
       value: 'mixed',
     });
   }
 
   static get options() {
     return {
+      label: '',
       value: null,
       role: 'option',
-      tabindex: 0,
     };
   }
 
