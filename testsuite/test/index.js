@@ -41,3 +41,4 @@ export * from './renderer.js';
 export * from './equalizer.js';
 export * from './sprintf.js';
 export * from './destroy.js';
+export * from './levelmeter.js';
