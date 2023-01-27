@@ -263,6 +263,7 @@ export class LevelMeter extends Meter {
    * @emits LevelMeter#resettop
    */
   resetTop() {
+    this._top_timer = cancelTimer(this._top_timer);
     this.set('top', this.effectiveValue());
     /**
      * Is fired when the top hold was reset.
@@ -280,6 +281,7 @@ export class LevelMeter extends Meter {
    * @emits LevelMeter#resetbottom
    */
   resetBottom() {
+    this._bottom_timer = cancelTimer(this._bottom_timer);
     this.set('bottom', this.effectiveValue());
     /**
      * Is fired when the bottom hold was reset.
@@ -416,21 +418,17 @@ export class LevelMeter extends Meter {
         const auto_hold = O.auto_hold;
         const top = O.top;
 
-        if (value > top) {
-          this._top_timer = cancelTimer(this._top_timer);
-          this.set('top', value);
-        } else if (value < top) {
+        if (value >= top) {
           if (auto_hold >= 0)
             this._top_timer = startTimer(this._top_timer, auto_hold);
+          this.set('top', value);
         }
 
         if (this.hasBase()) {
           const bottom = O.bottom;
 
-          if (value < bottom) {
-            this._bottom_timer = cancelTimer(this._bottom_timer);
+          if (value <= bottom) {
             this.set('bottom', value);
-          } else if (value > bottom) {
             if (auto_hold >= 0)
               this._bottom_timer = startTimer(this._bottom_timer, auto_hold);
           }
