@@ -373,8 +373,10 @@ export class LevelMeter extends Meter {
       if (falling) {
         const effectiveValue = this.effectiveValue();
 
-        if (base < effectiveValue && value < effectiveValue ||
-            base > effectiveValue && value > effectiveValue) {
+        if (
+          (base < effectiveValue && value < effectiveValue) ||
+          (base > effectiveValue && value > effectiveValue)
+        ) {
           return value;
         }
       }
