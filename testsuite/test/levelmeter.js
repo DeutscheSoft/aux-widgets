@@ -293,4 +293,77 @@ describe('LevelMeter', () => {
     assertEqual(levelmeter.get('bottom'), 25);
   });
 
+  // peak_value handling
+  it('peak_value > 0', async () => {
+    const levelmeter = createMeter({ show_value: true, peak_value: 100 });
+    levelmeter.set('value', 24);
+    assertEqual(levelmeter.get('value_label'), 24);
+    await delay(20);
+    levelmeter.set('value', 23);
+    assertEqual(levelmeter.get('value_label'), 24);
+    await delay(200);
+    assertEqual(levelmeter.get('value_label'), 23);
+  });
+
+  it('resetValue resets timer', async () => {
+    const levelmeter = createMeter({ show_value: true, peak_value: 100 });
+    levelmeter.set('value', 24);
+    assertEqual(levelmeter.get('value_label'), 24);
+    await delay(20);
+    levelmeter.resetValue();
+    assertEqual(levelmeter.get('value_label'), 24);
+    levelmeter.set('value', 23);
+    await delay(200);
+    assertEqual(levelmeter.get('value_label'), 24);
+  });
+
+  it('peak_value=false resets timer', async () => {
+    const levelmeter = createMeter({ show_value: true, peak_value: 100 });
+    levelmeter.set('value', 24);
+    assertEqual(levelmeter.get('value_label'), 24);
+    await delay(20);
+    levelmeter.set('peak_value', false);
+    assertEqual(levelmeter.get('value_label'), 24);
+    levelmeter.set('value', 23);
+    await delay(200);
+    assertEqual(levelmeter.get('value_label'), 24);
+  });
+
+  it('resetting peak resets timer', async () => {
+    const levelmeter = createMeter({ show_value: true, peak_value: 100 });
+    levelmeter.set('value', 24);
+    assertEqual(levelmeter.get('value_label'), 24);
+    levelmeter.set('value', 23);
+    await delay(60);
+    assertEqual(levelmeter.get('value_label'), 24);
+    levelmeter.set('value', 25);
+    assertEqual(levelmeter.get('value_label'), 25);
+    levelmeter.set('value', 23);
+    assertEqual(levelmeter.get('value_label'), 25);
+    await delay(200);
+    assertEqual(levelmeter.get('value_label'), 23);
+  });
+
+  it('peak_value < 0', async () => {
+    const levelmeter = createMeter({ show_value: true, peak_value: -1 });
+    levelmeter.set('value', 24);
+    assertEqual(levelmeter.get('value_label'), 24);
+    levelmeter.set('value', 23);
+    assertEqual(levelmeter.get('value_label'), 24);
+    await delay(200);
+    assertEqual(levelmeter.get('value_label'), 24);
+    levelmeter.set('value', 25);
+    assertEqual(levelmeter.get('value_label'), 25);
+    await delay(200);
+    assertEqual(levelmeter.get('value_label'), 25);
+  });
+
+  it('peak_value !== false resets sync_value', async () => {
+    const levelmeter = createMeter({});
+    assertEqual(levelmeter.get('sync_value'), true);
+    levelmeter.set('peak_value', -1);
+    assertEqual(levelmeter.get('sync_value'), false);
+    levelmeter.set('peak_value', false);
+    assertEqual(levelmeter.get('sync_value'), false);
+  });
 });

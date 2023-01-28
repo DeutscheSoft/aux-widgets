@@ -113,14 +113,8 @@ export class LevelMeter extends Meter {
         if (!(value > 0)) this._clip_timer = destroyTimer(this._clip_timer);
       },
       set_peak_value: function (value) {
-        if (!(value > 0))
-          this._value_timer = destroyTimer(this._value_timer);
-
-        if (value === false) this.set('sync_value', this.options._sync_value);
-        else this.set('sync_value', false);
-      },
-      set_sync_value: function (v) {
-        this.set('_sync_value', v);
+        if (!(value > 0)) this._value_timer = destroyTimer(this._value_timer);
+        if (value !== false) this.set('sync_value', false);
       },
       set_auto_hold: function (value) {
         if (!(value > 0)) {
@@ -164,6 +158,8 @@ export class LevelMeter extends Meter {
     if (O.top === false) O.top = O.value;
     if (O.bottom === false) O.bottom = O.value;
     if (O.falling < 0) O.falling = -O.falling;
+
+    if (O.peak_value !== false) this.set('peak_value', O.peak_value);
   }
 
   draw(O, element) {
@@ -400,17 +396,12 @@ export class LevelMeter extends Meter {
         const value_label = O.value_label;
 
         if (
-          ((value > value_label && value > base) ||
-            (value < value_label && value < base))
+          (value > value_label && value > base) ||
+          (value < value_label && value < base)
         ) {
-          this._value_timer = cancelTimer(this._value_timer);
           this.set('value_label', value);
-        }
-        if (peak_value > 0 &&
-          ((value < value_label && value > base) ||
-            (value > value_label && value < base))
-        ) {
-          this._value_timer = startTimer(this._value_timer, peak_value);
+          if (peak_value >= 0)
+            this._value_timer = startTimer(this._value_timer, peak_value);
         }
       }
 

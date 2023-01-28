@@ -287,7 +287,8 @@ export class Meter extends Widget {
         }
       },
       set_value: function (val) {
-        if (this.options.sync_value) this.set('value_label', val);
+        if (this.options.sync_value)
+          this.set('value_label', val);
       },
       set_value_label: function (val) {
         if (this.value) this.value.set('label', this.options.format_value(val));

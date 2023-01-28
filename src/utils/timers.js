@@ -65,6 +65,9 @@ export class Timer {
    * @param delta - Offset in milliseconds.
    */
   restart(delta) {
+    if (!(delta >= 0))
+      throw new TypeError('Expected non-negative number.');
+
     const time = performance.now() + delta;
     const id = this.id;
 
