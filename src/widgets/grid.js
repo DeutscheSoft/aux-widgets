@@ -43,14 +43,8 @@ function getPadding(element) {
   return tmp.map((entry) => parseInt(entry) || 0);
 }
 
-function drawLines(a, mode, last) {
-  const { range_x, range_y, x_min, x_max, y_min, y_max } = this.options;
-  const xBasis = range_x.options.basis;
-  const yBasis = range_y.options.basis;
-
-  if (!xBasis || !yBasis) return;
-
-  const labels = a.map((obj) => {
+function createLabels(grid, element, horizontal) {
+  return grid.map((obj) => {
     if (typeof obj === 'number') return null;
 
     const label = obj.label;
@@ -59,144 +53,160 @@ function drawLines(a, mode, last) {
 
     const labelNode = makeSVG('text');
     labelNode.textContent = label;
-    labelNode.style['dominant-baseline'] = 'central';
+    labelNode.style[ 'dominant-baseline' ] = 'central';
     addClass(labelNode, 'aux-gridlabel');
-    addClass(labelNode, mode ? 'aux-horizontal' : 'aux-vertical');
+    addClass(labelNode, horizontal ? 'aux-horizontal' : 'aux-vertical');
 
     const cl = obj.class;
     if (cl) addClass(labelNode, cl);
 
-    this.element.appendChild(labelNode);
+    element.appendChild(labelNode);
     return labelNode;
   });
+}
+
+function positionLabels(labels, coords) {
+  labels.forEach((label, i) => {
+    if (!label) return;
+    const position = coords[ i ];
+
+    if (position) {
+      label.setAttribute('x', position.x);
+      label.setAttribute('y', position.y);
+    } else {
+      label.remove();
+    }
+  });
+}
+
+function measureCoords(grid, labels, last, basis_x, basis_y, range, horizontal) {
+  return grid.map((obj, i) => {
+    const label = labels[ i ];
+    if (!label) return;
+
+    let bb;
+    try {
+      bb = label.getBBox();
+    } catch (e) {
+      // if we are hidden, this may throw. we should force redraw at some later point, but its hard to do. the grid should really be deactivated by an option.
+      return;
+    }
+
+    const { width, height } = bb;
+    const [ pt, pr, pb, pl ] = getPadding(label);
+    let x, y, m;
+
+    if (horizontal) {
+      y = Math.max(
+        height / 2,
+        Math.min(basis_y - height / 2 - pt, range.valueToPixel(obj.pos))
+      );
+      if (y > last) return;
+      x = basis_x - width - pl;
+      if (!i) last = y - height;
+      m = width + pl + pr;
+    } else {
+      x = Math.max(
+        pl,
+        Math.min(
+          basis_x - width - pl,
+          range.valueToPixel(obj.pos) - width / 2
+        )
+      );
+      if (x < last) return;
+      y = basis_y - height / 2 - pt;
+      last = x + width;
+      m = height + pt + pb;
+    }
+
+    return {
+      x,
+      y,
+      m,
+      x_min: obj.x_min,
+      x_max: obj.x_max,
+    };
+  });
+}
+
+function drawLines(grid, coords, last, range, opprange, basis, oppbasis, min, max, path, element, cls, dir) {
+  for (let j = 0; j < grid.length; j++) {
+    const obj = grid[ j ];
+    const label = coords[ j ];
+    let margin, pos;
+
+    if (label) margin = label.m;
+    else margin = 0;
+
+    if (obj.pos === opprange.options.min || obj.pos === opprange.options.max)
+      continue;
+
+    let line = makeSVG('path');
+    addClass(line, 'aux-gridline');
+    addClass(line, cls);
+    if (obj[ 'class' ]) addClass(line, obj[ 'class' ]);
+    if (obj.color) line.setAttribute('style', 'stroke:' + obj.color);
+
+    const _min = obj[ dir + '_min' ];
+    const _max = obj[ dir + '_max' ];
+
+    pos = Math.round(opprange.valueToPixel(obj.pos));
+
+    if (pos >= oppbasis - last) {
+      line = null;
+    } else {
+      let start, end;
+      if (typeof _min === 'number')
+        start = Math.max(0, range.valueToPixel(_min));
+      else if (min !== false)
+        start = Math.max(0, range.valueToPixel(min));
+      else start = 0;
+      if (typeof _max === 'number')
+        end = Math.min(basis - margin, range.valueToPixel(_max));
+      else if (max !== false)
+        end = Math.min(basis - margin, range.valueToPixel(max));
+      else end = basis - margin;
+      line.setAttribute('d', path(pos, start, end));
+    }
+
+    if (line)
+      element.appendChild(line);
+  }
+}
+
+function drawGrid() {
+  const { grid_x, grid_y, range_x, range_y, x_min, x_max, y_min, y_max } = this.options;
+
+  const basis_x = range_x.options.basis;
+  const basis_y = range_y.options.basis;
+
+  if (!basis_x || !basis_y) return;
+
+  empty(this.element);
+
+  const labels_x = createLabels(grid_x, this.element, false);
+  const labels_y = createLabels(grid_y, this.element, true);
 
   return deferMeasure(() => {
-    const coords = a.map((obj, i) => {
-      const label = labels[i];
-      if (!label) return;
-      let bb;
-      try {
-        bb = label.getBBox();
-      } catch (e) {
-        // if we are hidden, this may throw
-        // we should force redraw at some later point, but
-        // its hard to do. the grid should really be deactivated
-        // by an option.
-        return;
-      }
-      const { width, height } = bb;
-      const [pt, pr, pb, pl] = getPadding(label);
-      let x, y, m;
-      let coordinates;
-      if (mode) {
-        y = Math.max(
-          height / 2,
-          Math.min(yBasis - height / 2 - pt, range_y.valueToPixel(obj.pos))
-        );
-        if (y > last) return;
-        x = xBasis - width - pl;
-        if (!i) last = y - height;
-        m = width + pl + pr;
-      } else {
-        x = Math.max(
-          pl,
-          Math.min(
-            xBasis - width - pl,
-            range_x.valueToPixel(obj.pos) - width / 2
-          )
-        );
-        if (x < last) return;
-        y = yBasis - height / 2 - pt;
-        last = x + width;
-        m = height + pt + pb;
-      }
-
-      return {
-        x,
-        y,
-        m,
-        x_min: obj.x_min,
-        x_max: obj.x_max,
-      };
-    });
+    const coords_x = measureCoords(grid_x, labels_x, 0, basis_x, basis_y, range_x, false);
+    const coords_y = measureCoords(grid_y, labels_y, basis_y, basis_x, basis_y, range_y, true);
 
     return deferRender(() => {
-      Array.from(
-        this.element.querySelectorAll(
-          '.aux-gridline.aux-' + (mode ? 'horizontal' : 'vertical')
-        )
-      ).forEach((element) => element.remove());
+      positionLabels(labels_x, coords_x);
+      positionLabels(labels_y, coords_y);
 
-      labels.forEach((label, i) => {
-        if (!label) return;
-        const position = coords[i];
+      const margins_x = coords_x.map(v => v ? v.m : 0);
+      const margins_y = coords_y.map(v => v ? v.m : 0);
 
-        if (position) {
-          label.setAttribute('x', position.x);
-          label.setAttribute('y', position.y);
-        } else {
-          label.remove();
-        }
-      });
+      const last_x = Math.max(...margins_y);
+      const last_y = Math.max(...margins_x);
 
-      for (let j = 0; j < a.length; j++) {
-        const obj = a[j];
-        const label = coords[j];
-        let m, x, y;
-        if (label) m = label.m;
-        else m = 0;
-
-        if (
-          (mode && obj.pos === range_y.options.min) ||
-          (mode && obj.pos === range_y.options.max) ||
-          (!mode && obj.pos === range_x.options.min) ||
-          (!mode && obj.pos === range_x.options.max)
-        )
-          continue;
-        const line = makeSVG('path');
-        addClass(line, 'aux-gridline');
-        addClass(line, mode ? 'aux-horizontal' : 'aux-vertical');
-        if (obj['class']) addClass(line, obj['class']);
-        if (obj.color) line.setAttribute('style', 'stroke:' + obj.color);
-        if (mode) {
-          let xMin, xMax;
-          // line from left to right
-          if (typeof obj.x_min === 'number')
-            xMin = Math.max(0, range_x.valueToPixel(obj.x_min));
-          else if (x_min !== false)
-            xMin = Math.max(0, range_x.valueToPixel(x_min));
-          else xMin = 0;
-          if (typeof obj.x_max === 'number')
-            xMax = Math.min(xBasis - m, range_x.valueToPixel(obj.x_max));
-          else if (x_max !== false)
-            xMax = Math.min(xBasis - m, range_x.valueToPixel(x_max));
-          else xMax = xBasis - m;
-          y = Math.round(range_y.valueToPixel(obj.pos));
-          line.setAttribute(
-            'd',
-            'M' + xMin + ' ' + y + '.5 L' + xMax + ' ' + y + '.5'
-          );
-        } else {
-          let yMin, yMax;
-          // line from top to bottom
-          if (typeof obj.y_min === 'number')
-            yMin = Math.max(0, range_y.valueToPixel(obj.y_min));
-          else if (y_min !== false)
-            yMin = Math.max(0, range_y.valueToPixel(y_min));
-          else yMin = 0;
-          if (typeof obj.y_max === 'number')
-            yMax = Math.min(yBasis - m, range_y.valueToPixel(obj.y_max));
-          else if (y_max !== false)
-            yMax = Math.min(yBasis - m, range_y.valueToPixel(y_max));
-          else yMax = yBasis - m;
-          x = Math.round(range_x.valueToPixel(obj.pos));
-          line.setAttribute(
-            'd',
-            'M' + x + '.5 ' + yMin + ' L' + x + '.5 ' + yMax
-          );
-        }
-        this.element.appendChild(line);
-      }
+      drawLines(grid_x, coords_x, last_x, range_y, range_x, basis_y, basis_x, y_min, y_max,
+        (pos, min, max) => 'M' + pos + '.5 ' + min + ' L' + pos + '.5 ' + max,
+        this.element, 'aux-vertical', 'y');
+      drawLines(grid_y, coords_y, last_y, range_x, range_y, basis_x, basis_y, x_min, x_max,
+        (pos, min, max) => 'M' + min + ' ' + pos + '.5 L' + max + ' ' + pos + '.5',
+        this.element, 'aux-horizontal', 'x');
     });
   });
 }
@@ -302,11 +312,8 @@ export class Grid extends Widget {
           y_min,
           y_max
         ) {
-          empty(this.element);
-
           return combineDefer(
-            drawLines.call(this, grid_x, false, 0),
-            drawLines.call(this, grid_y, true, this.range_y.options.basis)
+            drawGrid.call(this)
           );
         }
       ),
