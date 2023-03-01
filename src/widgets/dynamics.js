@@ -369,7 +369,7 @@ function dragRatio(key, y) {
   const ratio_x = this.get('ratio_x');
   const max = this.get('max');
 
-  const R = (max - thres - ratio_x) / (y - thres);
+  const R = (max + ratio_x) / (y - thres);
 
   const r_min = this.range_z.get('min');
   const r_max = this.range_z.get('max');
@@ -387,7 +387,7 @@ function setRatio() {
   const ratio_x = this.get('ratio_x');
   const max = this.get('max');
 
-  const Y = thres + (max - thres - ratio_x) / ratio;
+  const Y = thres + (max + ratio_x) / ratio;
 
   this.ratio.set('y', Y);
 }
@@ -402,7 +402,7 @@ function setRatioLimits() {
   const r_min = this.range_z.get('min');
   const r_max = this.range_z.get('max');
 
-  const num = max - thres - ratio_x;
+  const num = max + ratio_x;
 
   this.ratio.set('y_max', thres + num / r_min);
   this.ratio.set('y_min', thres + num / r_max);
@@ -426,7 +426,7 @@ export class Compressor extends Dynamics {
       type: 'compressor',
       show_ratio: true,
       ratio_label: false,
-      ratio_x: 0,
+      ratio_x: 12,
     };
   }
 
