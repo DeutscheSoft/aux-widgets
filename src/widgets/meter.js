@@ -149,6 +149,8 @@ function drawGradient(element, O) {
     const ctx = element.getContext('2d');
     ctx.fillStyle = background;
     ctx.fillRect(0, 0, _width, _height);
+  } else if (typeof gradient === 'function') {
+    gradient.call(this, element.getContext('2d'), O, element, _width, _height);
   } else {
     const keys = Object.keys(gradient)
       .map((value) => parseFloat(value))
@@ -183,8 +185,7 @@ function drawGradient(element, O) {
 
 /**
  * Meter is a base class to build different meters from, such as {@link LevelMeter}.
- * Meter uses {@link Gradient} and contains a {@link Scale} widget.
- * Meter inherits all options from {@link Scale}.
+ * Meter contains a {@link Scale} widgetand inherits all its options.
  *
  * Note that level meters with high update frequencies can be very demanding when it comes
  * to rendering performance. These performance requirements can be reduced by increasing the
@@ -230,6 +231,11 @@ function drawGradient(element, O) {
  * @property {String|Boolean} [options.foreground] - Color to draw the overlay. Has to be set
  *   via option for performance reasons. Use pure opaque color. If opacity is needed, set via CSS
  *   on `.aux-meter > .aux-bar > .aux-mask`.
+ * @property {Object|Boolean|Function} [options.gradient=false] - The color gradient of the meter.
+ *   Set to `false` to use the `background` option. Alternatively provide a callback to draw on
+ *   the canvas manually. It receives the canvas's context, the widgets options, the canvas element
+ *   and its with and height. ALternatively provide an object with the value as key and the color as value.
+ * @property {String|Boolean} [options.background] - Background color to be used if no gradient is set.
  */
 
 export class Meter extends Widget {
@@ -244,7 +250,7 @@ export class Meter extends Widget {
       sync_value: 'boolean',
       format_value: 'function',
       background: 'string|boolean',
-      gradient: 'object|boolean',
+      gradient: 'object|boolean|function',
       foreground: 'string|boolean',
     });
   }
