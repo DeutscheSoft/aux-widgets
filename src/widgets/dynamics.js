@@ -236,10 +236,14 @@ export class Dynamics extends Chart {
       range_x: this.range_x,
       range_y: this.range_y,
       range_z: this.range_z,
+      class: 'aux-handle',
     });
     this.handle.addEventListener('userset', dragHandle.bind(this));
 
-    this.graph = this.addGraph({});
+    /**
+     * @member {Graph} Dynamics#response - The graph drawing the dynamics response. Has class <code>.aux-response</code>
+     */
+    this.response = this.addGraph({ class: 'aux-response' });
 
     this.set('handle_label', this.options.handle_label);
     this.set('show_handle', this.options.show_handle);
@@ -348,7 +352,7 @@ export class Dynamics extends Chart {
       default:
         warn('Unsupported type', type);
     }
-    this.graph.set('dots', curve);
+    this.response.set('dots', curve);
   }
 
   set(key, val) {
@@ -422,7 +426,7 @@ export class Compressor extends Dynamics {
       type: 'compressor',
       show_ratio: true,
       ratio_label: false,
-      ratio_x: 12,
+      ratio_x: 0,
     };
   }
 
@@ -467,6 +471,7 @@ export class Compressor extends Dynamics {
       range_x: this.range_x,
       range_y: this.range_y,
       range_z: this.range_z,
+      class: 'aux-ratio',
     });
     this.ratio.addEventListener('userset', dragRatio.bind(this));
 
