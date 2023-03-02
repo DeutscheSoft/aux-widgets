@@ -1401,10 +1401,10 @@ body.aux-cursor-row-resize * {
 .aux-spread.aux-horizontal > .aux-label {
   text-align: left;
 }
-.aux-spread > .aux-value.aux-lower {
+.aux-spread > .aux-value.aux-valuelower {
   grid-area: lower;
 }
-.aux-spread > .aux-value.aux-upper {
+.aux-spread > .aux-value.aux-valueupper {
   grid-area: upper;
 }
 
