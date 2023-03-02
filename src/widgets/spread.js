@@ -413,7 +413,6 @@ defineChildWidget(Spread, 'label', {
 defineChildWidget(Spread, 'valuelower', {
   create: Value,
   show: false,
-  option: 'show_values',
   userset_delegate: true,
   map_options: {
     lower: 'value',
@@ -429,7 +428,6 @@ defineChildWidget(Spread, 'valuelower', {
 defineChildWidget(Spread, 'valueupper', {
   create: Value,
   show: false,
-  option: 'show_values',
   userset_delegate: true,
   map_options: {
     upper: 'value',
