@@ -102,9 +102,9 @@ function measureCoords(grid, labels, last, basis_x, basis_y, range, horizontal) 
         Math.min(basis_y - height / 2 - pt, range.valueToPixel(obj.pos))
       );
       if (y > last) return;
-      x = basis_x - width - pl;
+      x = basis_x - width - ( width ? pl : 0 );
       if (!i) last = y - height;
-      m = width + pl + pr;
+      m = width + ( width ? pl + pr : 0 );
     } else {
       x = Math.max(
         pl,
@@ -114,9 +114,9 @@ function measureCoords(grid, labels, last, basis_x, basis_y, range, horizontal) 
         )
       );
       if (x < last) return;
-      y = basis_y - height / 2 - pt;
+      y = basis_y - height / 2 - ( height ? pt : 0 );
       last = x + width;
-      m = height + pt + pb;
+      m = height + ( height ? pt + pb : 0 );
     }
 
     return {
