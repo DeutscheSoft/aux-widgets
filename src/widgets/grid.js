@@ -23,7 +23,6 @@ import { makeSVG } from '../utils/svg.js';
 import { Widget, SymResize } from './widget.js';
 import {
   defineRender,
-  combineDefer,
   deferRender,
   deferMeasure,
 } from '../renderer.js';
@@ -312,9 +311,7 @@ export class Grid extends Widget {
           y_min,
           y_max
         ) {
-          return combineDefer(
-            drawGrid.call(this)
-          );
+          return drawGrid.call(this);
         }
       ),
     ];
