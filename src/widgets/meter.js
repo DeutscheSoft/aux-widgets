@@ -185,7 +185,7 @@ function drawGradient(element, O) {
 
 /**
  * Meter is a base class to build different meters from, such as {@link LevelMeter}.
- * Meter contains a {@link Scale} widgetand inherits all its options.
+ * Meter contains a {@link Scale} widget and inherits all its options.
  *
  * Note that level meters with high update frequencies can be very demanding when it comes
  * to rendering performance. These performance requirements can be reduced by increasing the
@@ -234,7 +234,8 @@ function drawGradient(element, O) {
  * @property {Object|Boolean|Function} [options.gradient=false] - The color gradient of the meter.
  *   Set to `false` to use the `background` option. Alternatively provide a callback to draw on
  *   the canvas manually. It receives the canvas's context, the widgets options, the canvas element
- *   and its with and height. ALternatively provide an object with the value as key and the color as value.
+ *   and its width and height. Alternatively, provide an object with numeric values as key and the
+ *   color as value.
  * @property {String|Boolean} [options.background] - Background color to be used if no gradient is set.
  */
 
