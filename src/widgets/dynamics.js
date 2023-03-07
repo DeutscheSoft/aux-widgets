@@ -413,6 +413,9 @@ function setRatioLimits() {
  * Compressor is a pre-configured {@link Dynamics} widget.
  * @extends Dynamics
  * @class Compressor
+ * @property {Boolean} [options.show_ratio=true] - Show the ratio handle.
+ * @property {Boolean|Function} [options.ratio_label=false] - Function to format the label of the ratio. False for no label.
+ * @property {Number} [options.ratio_x=12] - X position of the ratio handle.
  */
 export class Compressor extends Dynamics {
   static get _options() {
