@@ -61,7 +61,7 @@ export const SymResized = Symbol('resized');
 
 const rootWidgets = new Map();
 
-const ariaOptions = ariaAttributes.map(a => a.replace('-', '_'));
+const ariaOptions = ariaAttributes.map((a) => a.replace('-', '_'));
 
 function onVisibilityChange() {
   if (document.hidden) {
@@ -513,13 +513,19 @@ export class Widget extends Base {
       }),
     ];
     ariaOptions.forEach((o) => {
-      renders.push(defineRender(o, function (v) {
-        if (typeof v === 'undefined' || v === null) {
-          this.getARIATargets().map(t => t.removeAttribute(o.replace('_', '-')));
-        } else {
-          this.getARIATargets().map(t => t.setAttribute(o.replace('_', '-'), v));
-        }
-      }));
+      renders.push(
+        defineRender(o, function (v) {
+          if (typeof v === 'undefined' || v === null) {
+            this.getARIATargets().map((t) =>
+              t.removeAttribute(o.replace('_', '-'))
+            );
+          } else {
+            this.getARIATargets().map((t) =>
+              t.setAttribute(o.replace('_', '-'), v)
+            );
+          }
+        })
+      );
     });
     return renders;
   }
@@ -837,7 +843,11 @@ export class Widget extends Base {
    * @param value - The option value.
    */
   set(key, value) {
-    if (key.charCodeAt(0) !== 95 && !this.constructor.hasOption(key) && !key.startsWith('aria_')) {
+    if (
+      key.charCodeAt(0) !== 95 &&
+      !this.constructor.hasOption(key) &&
+      !key.startsWith('aria_')
+    ) {
       warn(
         '%O: %s.set(%s, %O): unknown option.',
         this,
@@ -1215,8 +1225,7 @@ export class Widget extends Base {
    */
   removeChildNode(node, parent) {
     const E = parent || this.element;
-    if (node && node.parentElement === E)
-      node.remove();
+    if (node && node.parentElement === E) node.remove();
   }
 }
 /**

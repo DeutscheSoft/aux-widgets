@@ -17,7 +17,13 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { addClass, removeClass, isDocumentFragment, setContent, isDomNode } from '../src/index.js';
+import {
+  addClass,
+  removeClass,
+  isDocumentFragment,
+  setContent,
+  isDomNode,
+} from '../src/index.js';
 import { assert } from './helpers.js';
 
 describe('CSSHelpers', () => {

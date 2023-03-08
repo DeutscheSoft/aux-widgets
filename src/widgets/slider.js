@@ -238,8 +238,7 @@ export class Slider extends Widget {
   set(key, value) {
     const O = this.options;
     if (key === 'value') {
-      if (value > O.max || value < O.min)
-        warning(this.element);
+      if (value > O.max || value < O.min) warning(this.element);
       value = O.snap_module.snap(Math.max(O.min, Math.min(O.max, value)));
     }
     if (DragValue.hasOption(key)) this.drag.set(key, value);

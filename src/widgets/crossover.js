@@ -192,8 +192,7 @@ function limitBands() {
   const distance = Math.abs(this.get('distance'));
   const bands = this.getBands();
 
-  for (let i = 0; i < bands.length; i++)
-    limitBand(bands, i, distance);
+  for (let i = 0; i < bands.length; i++) limitBand(bands, i, distance);
 }
 
 function setFreq(band) {

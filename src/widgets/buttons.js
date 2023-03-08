@@ -225,7 +225,7 @@ function moveFocus(to) {
 }
 
 function clearFocus() {
-  this.buttons.list.map(b => b.set('focus', false));
+  this.buttons.list.map((b) => b.set('focus', false));
 }
 
 /**
@@ -319,7 +319,7 @@ export class Buttons extends Container {
       },
       set_select: function (value) {
         const list = this.buttons.getList();
-        const current = []
+        const current = [];
         const selected = Array.isArray(value)
           ? value
           : value === -1
@@ -330,8 +330,7 @@ export class Buttons extends Container {
           // correct.
           const state = selected.includes(i);
           list[i].update('state', state);
-          if (state)
-            current.push(list[i].get('id'));
+          if (state) current.push(list[i].get('id'));
           list[i].set('aria_current', state ? 'true' : 'false');
         }
         this.set('aria_current', current.join(' '));
@@ -347,27 +346,19 @@ export class Buttons extends Container {
       },
       set_direction: function (direction) {
         this.set('aria_orientation', direction);
-        const keys = [
-          'Home',
-          'End',
-          'Space',
-          'Enter',
-        ];
-        if (direction === 'vertical')
-          keys.push('ArrowUp', 'ArrowDown');
-        else
-          keys.push('ArrowUp', 'ArrowDown');
+        const keys = ['Home', 'End', 'Space', 'Enter'];
+        if (direction === 'vertical') keys.push('ArrowUp', 'ArrowDown');
+        else keys.push('ArrowUp', 'ArrowDown');
         this.set('aria_keyshortcuts', keys.join(' '));
       },
       set__focus: function (focus) {
         clearFocus.call(this);
         this.set('aria_activedescendant', '');
         const button = this.buttons.list[focus];
-        if (!button)
-          return;
+        if (!button) return;
         button.set('focus', true);
         this.set('aria_activedescendant', button.get('id'));
-      }
+      },
     };
   }
 
@@ -411,22 +402,19 @@ export class Buttons extends Container {
         this.focusLast();
       }
       if (e.code === 'Space' || e.code === 'Enter') {
-        if (e.preventDefault)
-          e.preventDefault();
+        if (e.preventDefault) e.preventDefault();
         const focus = this.get('_focus');
-        if (focus === false)
-          return false;
+        if (focus === false) return false;
         const button = this.buttons.list[focus];
-        if (!button)
-          return false;
+        if (!button) return false;
         button.userset('state', !button.get('state'));
       }
       return false;
     });
-    this.element.addEventListener('focus', e => {
+    this.element.addEventListener('focus', (e) => {
       this.reFocus();
     });
-    this.element.addEventListener('blur', e => {
+    this.element.addEventListener('blur', (e) => {
       clearFocus.call(this);
     });
   }
@@ -495,8 +483,7 @@ export class Buttons extends Container {
       } else if (typeof options !== 'object') {
         throw new TypeError('Expected object of options.');
       }
-      if (!options.id)
-        options.id = createID('aux-button-');
+      if (!options.id) options.id = createID('aux-button-');
       options.role = O.button_role;
       options.tabindex = false;
       return new this.options.button_class(options);
@@ -624,9 +611,7 @@ export class Buttons extends Container {
   }
 
   get(key) {
-    if (key === 'buttons')
-      return this.getButtons();
-    else
-      return super.get(key);
+    if (key === 'buttons') return this.getButtons();
+    else return super.get(key);
   }
 }

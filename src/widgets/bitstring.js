@@ -142,7 +142,7 @@ export class Bitstring extends Buttons {
 
     this.set('length', O.length);
     this.set('bitstring', O.bitstring);
-    
+
     super.draw(O, element);
   }
 }

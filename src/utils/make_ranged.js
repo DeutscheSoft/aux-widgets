@@ -48,7 +48,7 @@ export const rangedOptionsDefaults = {
   trafo_reverse: false /* used internally, no documentation */,
   transformation: null,
   snap_module: TrivialSnapModule,
-  format_ariavalue: v => v.toFixed(2),
+  format_ariavalue: (v) => v.toFixed(2),
   set_ariavalue: false,
 };
 
@@ -70,7 +70,7 @@ export const rangedOptionsTypes = {
   transformation: 'object',
   snap_module: 'object',
   format_ariavalue: 'function',
-  set_ariavalue: 'boolean'
+  set_ariavalue: 'boolean',
 };
 
 function numSort(arr) {
@@ -171,12 +171,10 @@ function setCallback(key, value) {
         this.set('aria_valuenow', this.get('format_ariavalue')(value));
       break;
     case 'min':
-      if (this.get('set_ariavalue'))
-        this.set('aria_valuemin', value);
+      if (this.get('set_ariavalue')) this.set('aria_valuemin', value);
     /* fall through */
     case 'max':
-      if (this.get('set_ariavalue'))
-        this.set('aria_valuemax', value);
+      if (this.get('set_ariavalue')) this.set('aria_valuemax', value);
     /* fall through */
     case 'snap':
     case 'clip':

@@ -378,8 +378,7 @@ export class RenderState {
       //this.log('run(%d, %d)', frame, phase);
 
       if (frame !== this._frame) {
-        if (scheduled & PHASE_MASK)
-          notCalledError();
+        if (scheduled & PHASE_MASK) notCalledError();
 
         scheduled >>= FRAME_SHIFT;
         //this.log('%d -> %d', this._scheduled, scheduled);
@@ -421,8 +420,7 @@ export class RenderState {
 
     if (_frame === frame) return false;
 
-    if (this._scheduled & PHASE_MASK)
-      notCalledError();
+    if (this._scheduled & PHASE_MASK) notCalledError();
 
     this._scheduled >>= FRAME_SHIFT;
     this._frame = frame;
@@ -486,8 +484,7 @@ export class RenderState {
 
     if (this._adjustFrame())
       this._animations.forEach((animation) => {
-        if (animation.frame < this._frame)
-          animation.frame = this._frame;
+        if (animation.frame < this._frame) animation.frame = this._frame;
       });
 
     let pscheduled = this._pscheduled;

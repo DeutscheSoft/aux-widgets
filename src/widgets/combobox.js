@@ -17,10 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import {
-  element,
-  addClass,
-} from './../utils/dom.js';
+import { element, addClass } from './../utils/dom.js';
 import { defineChildWidget } from './../child_widget.js';
 import { Widget } from './widget.js';
 import { Select } from './select.js';
@@ -45,7 +42,7 @@ import { defineRender } from '../renderer.js';
 export class ComboBox extends Widget {
   static get _options() {
     return Object.assign({}, Widget.getOptionTypes(), {
-      'value': 'string',
+      value: 'string',
     });
   }
 
@@ -57,7 +54,10 @@ export class ComboBox extends Widget {
 
   static get static_events() {
     return {
-      'set_value': function (v) { this.value.update('value', v); this.select.update('value', v); },
+      set_value: function (v) {
+        this.value.update('value', v);
+        this.select.update('value', v);
+      },
     };
   }
 
@@ -86,15 +86,15 @@ defineChildWidget(ComboBox, 'select', {
   create: Select,
   show: true,
   map_options: {
-    'entries': 'entries',
-    'list_class': 'list_class',
+    entries: 'entries',
+    list_class: 'list_class',
   },
   static_events: {
-    'userset': function (key, v) { this.parent.userset('value', v); },
+    userset: function (key, v) {
+      this.parent.userset('value', v);
+    },
   },
-  default_options: {
-
-  },
+  default_options: {},
 });
 
 /**
@@ -104,13 +104,15 @@ defineChildWidget(ComboBox, 'value', {
   create: Value,
   show: true,
   map_options: {
-    'editmode': 'editmode',
+    editmode: 'editmode',
   },
   static_events: {
-    'userset': function (key, v) { this.parent.userset('value', v); },
+    userset: function (key, v) {
+      this.parent.userset('value', v);
+    },
   },
   default_options: {
-    'editmode': 'immediate',
-    'preset': 'string',
+    editmode: 'immediate',
+    preset: 'string',
   },
 });

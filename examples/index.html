@@ -4,64 +4,66 @@
     <meta charset="utf-8" />
     <title>AUX Examples</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type=module src="src/index.js"></script>
-    <script type=module>
+    <script type="module" src="src/index.js"></script>
+    <script type="module">
       const examples = [
-        "Bitstring",
-        "Button",
-        "Buttons",
-        "Chart",
-        "Clock",
-        "ColorPicker",
-        "ColorPickerDialog",
-        "ComboBox",
-        "Compressor",
-        "ConfirmButton",
-        "Crossover",
-        "Dialog",
-        "Dynamics",
-        "Equalizer",
-        "Expander",
-        "Fader",
-        "FileSelect",
-        "FrequencyResponse",
-        "Gate",
-        "Gauge",
-        "Knob",
-        "LevelMeter",
-        "Limiter",
-        "Marquee",
-        "Meter",
-        "MultiMeter",
-        "Navigation",
-        "Pager",
-        "Pages",
-        "Panorama",
-        "PhaseMeter",
-        "ProgressBar",
-        "Reverb",
-        "Scale",
-        "Scroller",
-        "Select",
-        "Slider",
-        "Spread",
-        "State",
-        "Toggle",
-        "Value",
-        "ValueButton",
-        "ValueKnob",
+        'Bitstring',
+        'Button',
+        'Buttons',
+        'Chart',
+        'Clock',
+        'ColorPicker',
+        'ColorPickerDialog',
+        'ComboBox',
+        'Compressor',
+        'ConfirmButton',
+        'Crossover',
+        'Dialog',
+        'Dynamics',
+        'Equalizer',
+        'Expander',
+        'Fader',
+        'FileSelect',
+        'FrequencyResponse',
+        'Gate',
+        'Gauge',
+        'Knob',
+        'LevelMeter',
+        'Limiter',
+        'Marquee',
+        'Meter',
+        'MultiMeter',
+        'Navigation',
+        'Pager',
+        'Pages',
+        'Panorama',
+        'PhaseMeter',
+        'ProgressBar',
+        'Reverb',
+        'Scale',
+        'Scroller',
+        'Select',
+        'Slider',
+        'Spread',
+        'State',
+        'Toggle',
+        'Value',
+        'ValueButton',
+        'ValueKnob',
       ];
 
       import { HTML } from './src/utils/dom.js';
 
       function isint(v) {
-        return typeof v !== "undefined" && parseInt(v).toString() === v.toString();
+        return (
+          typeof v !== 'undefined' && parseInt(v).toString() === v.toString()
+        );
       }
 
       async function loadExample(widget) {
-        var file = widget + ".html";
+        var file = widget + '.html';
 
-        const header = document.createElement("h3");
+        const header = document.createElement('h3');
         header.innerHTML = widget;
 
         const cont = document.createElement('aux-container');
@@ -80,60 +82,50 @@
         };
       }
 
-      function decodeHash()
-      {
-        const atoms = window.location.hash.substr(1).split(",");
+      function decodeHash() {
+        const atoms = window.location.hash.substr(1).split(',');
         let widgets = [];
         let scroll = 0;
         let all = false;
         for (var i = 0; i < atoms.length; i++) {
           var a = atoms[i];
-          if (a === "*") {
+          if (a === '*') {
             widgets = examples;
             all = true;
-          }
-          else if (!all && examples.indexOf(a) >= 0)
-            widgets.push(a);
-          else if (isint(a))
-            scroll = parseInt(a);
+          } else if (!all && examples.indexOf(a) >= 0) widgets.push(a);
+          else if (isint(a)) scroll = parseInt(a);
         }
 
-        return [ all, scroll, widgets ];
+        return [all, scroll, widgets];
       }
 
-      function updateHashSilent(hash)
-      {
+      function updateHashSilent(hash) {
         window.location.hash = hash;
       }
 
-      function updateScroll()
-      {
-        const [ all, scroll, widgets ] = decodeHash();
+      function updateScroll() {
+        const [all, scroll, widgets] = decodeHash();
 
         const root = document.querySelector('aux-root');
         let s = parseInt(root.scrollTop);
-        var h = "#" + s + ",";
-        if (all)
-          h += "*";
-        else
-          h += widgets.join(",");
+        var h = '#' + s + ',';
+        if (all) h += '*';
+        else h += widgets.join(',');
 
         updateHashSilent(h);
       }
 
-      function buildListEntry (item, name, is_active) {
-        var li = document.createElement("li");
+      function buildListEntry(item, name, is_active) {
+        var li = document.createElement('li');
         li.innerHTML = name ? name : item;
-        li.addEventListener("click", function (e) {
+        li.addEventListener('click', function (e) {
           window.location.hash = item;
         });
-        if (is_active)
-        {
+        if (is_active) {
           const toggle_active = (current) => {
             const v = is_active(current);
             li.classList.toggle('active', v);
-            if (v)
-              li.scrollIntoView({ block: "nearest" });
+            if (v) li.scrollIntoView({ block: 'nearest' });
           };
           current_subscribers.push(toggle_active);
         }
@@ -142,19 +134,26 @@
 
       const current_subscribers = [];
 
-      function cmp(name)
-      {
-        return function(v) { return name === v; };
+      function cmp(name) {
+        return function (v) {
+          return name === v;
+        };
       }
 
-      function buildNavigation (list) {
-        var ul = document.createElement("ul");
-        ul.setAttribute("id", "navigation");
-        const home = buildListEntry("", "Home", current => current === void(0));
+      function buildNavigation(list) {
+        var ul = document.createElement('ul');
+        ul.setAttribute('id', 'navigation');
+        const home = buildListEntry(
+          '',
+          'Home',
+          (current) => current === void 0
+        );
         ul.appendChild(home);
-        ul.appendChild(buildListEntry("*", "All", current => current === null));
+        ul.appendChild(
+          buildListEntry('*', 'All', (current) => current === null)
+        );
         for (var i = 0; i < list.length; i++) {
-          const li = buildListEntry(list[i], "", cmp(list[i]))
+          const li = buildListEntry(list[i], '', cmp(list[i]));
           ul.appendChild(li);
         }
         return ul;
@@ -162,24 +161,23 @@
 
       let last_info = null;
 
-      function loadExamples()
-      {
+      function loadExamples() {
         const root = document.querySelector('aux-root');
-        const [ all, scroll, widgets ] = decodeHash();
+        const [all, scroll, widgets] = decodeHash();
 
-        if (last_info)
-        {
-          if (last_info[0] == all &&
-              JSON.stringify(last_info[2]) == JSON.stringify(widgets))
+        if (last_info) {
+          if (
+            last_info[0] == all &&
+            JSON.stringify(last_info[2]) == JSON.stringify(widgets)
+          )
             return;
         }
 
-        last_info = [ all, scroll, widgets ];
+        last_info = [all, scroll, widgets];
 
         const introduction = root.querySelector('#introduction');
 
-        while (introduction.nextSibling)
-          introduction.nextSibling.remove();
+        while (introduction.nextSibling) introduction.nextSibling.remove();
 
         introduction.style.display = widgets.length ? 'none' : null;
 
@@ -189,7 +187,7 @@
           cbs.forEach((cb) => cb(root));
           setTimeout(function () {
             root.scrollTo(0, scroll);
-            root.addEventListener("scroll", function () {
+            root.addEventListener('scroll', function () {
               updateScroll(root.scrollTop);
             });
 
@@ -200,7 +198,12 @@
                 node.constructor.observedAttributes.forEach((name) => {
                   if (!node.hasAttribute(name)) return;
                   const widget = node.auxWidget;
-                  console.log('%s %o %o', name, node.getAttribute(name), widget.get(name));
+                  console.log(
+                    '%s %o %o',
+                    name,
+                    node.getAttribute(name),
+                    widget.get(name)
+                  );
                 });
                 ev.stopPropagation();
               });
@@ -212,47 +215,45 @@
         current_subscribers.forEach((cb) => cb(current));
       }
 
-      window.addEventListener('hashchange', function() {
+      window.addEventListener('hashchange', function () {
         loadExamples();
       });
 
-      window.addEventListener('load', function() {
+      window.addEventListener('load', function () {
         const ul = buildNavigation(examples);
         document.body.appendChild(ul);
 
         loadExamples();
       });
-
     </script>
 
-    <link rel="stylesheet" id=stylesheet href="styles/default.css" />
-    <link rel="stylesheet" id=stylesheet href="./styles.css" />
+    <link rel="stylesheet" id="stylesheet" href="styles/default.css" />
+    <link rel="stylesheet" id="stylesheet" href="./styles.css" />
 
-    <style>
-    </style>
+    <style></style>
   </head>
   <body>
     <aux-root>
-      <div id=introduction>
+      <div id="introduction">
         <h1>AUX Examples</h1>
-        <img src="aux_logo_4c.svg" id=logo>
+        <img src="aux_logo_4c.svg" id="logo" />
         <p>
-            This is a collection of AUX widgets in different configurations
-            for development, demonstration and guideline purposes. to get
-            an insight into structure and relation, browsers with developer
-            tools (try <code>F12</code>) are recommended.
+          This is a collection of AUX widgets in different configurations for
+          development, demonstration and guideline purposes. to get an insight
+          into structure and relation, browsers with developer tools (try
+          <code>F12</code>) are recommended.
         </p>
         <p>
-            Select a single widget from the menu to the right or click "All"
-            to see all examples on one page (might slow down your computer).
+          Select a single widget from the menu to the right or click "All" to
+          see all examples on one page (might slow down your computer).
         </p>
         <p>
-            The full documentation can be found online at
-            <a href="http://docs.deuso.de/AUX">docs.deuso.de/AUX</a>.
+          The full documentation can be found online at
+          <a href="http://docs.deuso.de/AUX">docs.deuso.de/AUX</a>.
         </p>
         <p>
-            AUX AudioWidgets is a product of
-            <a href="https://deuso.de">DeusO GmbH</a>.
+          AUX AudioWidgets is a product of
+          <a href="https://deuso.de">DeusO GmbH</a>.
         </p>
       </div>
     </aux-root>

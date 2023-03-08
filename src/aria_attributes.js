@@ -65,5 +65,5 @@ export const ariaAttributes = [
   'aria-valuemax',
   'aria-valuemin',
   'aria-valuenow',
-  'aria-valuetext'
-]
+  'aria-valuetext',
+];

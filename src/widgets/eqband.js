@@ -185,15 +185,15 @@ export class EqBand extends ChartHandle {
       },
       userset: function (k, v) {
         switch (k) {
-        case 'x':
-          this.userset('freq', v);
-          return false;
-        case 'y':
-          this.userset('gain', v);
-          return false;
-        case 'z':
-          this.userset('q', v);
-          return false;
+          case 'x':
+            this.userset('freq', v);
+            return false;
+          case 'y':
+            this.userset('gain', v);
+            return false;
+          case 'z':
+            this.userset('q', v);
+            return false;
         }
       },
     };

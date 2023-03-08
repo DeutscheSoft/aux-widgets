@@ -85,7 +85,8 @@ function keepInside(e) {
         first.focus();
         e.preventDefault();
       }
-    }return false;
+    }
+    return false;
   }
 }
 

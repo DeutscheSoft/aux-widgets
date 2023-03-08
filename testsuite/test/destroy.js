@@ -68,58 +68,220 @@ window.__test_eq_band = new EqBand({ freq: 1000, gain: 6, type: 'parametric' });
 describe('Empty Widgets on destroy()', () => {
   const C = canvas();
   const widgets = [
-    { widget: Bitstring, name: 'Bitstring', tag: 'bitstring', options: { length: 8 } },
-    { widget: Button, name: 'Button', tag: 'button', options: { label: 'Foobar', icon: 'speaker' } },
-    { widget: Buttons, name: 'Buttons', tag: 'buttons', options: { buttons: ["Foobar", "Barfoo"] } },
-    { name: 'Chart and ChartHandle', tag: 'chart', options: {
-      label: 'Foobar',
-      key: 'top-left',
-      'grid-x': [1,2],
-      'grid-y': [1,2],
-      'range-x': [{min: 0, max: 3}],
-      'range-y': [{min: 0, max: 3}],
-      handles: [{ label: "Foobar" }],
-    } },
-    { widget: Clock, name: 'Clock', tag: 'clock', options: { } },
-    { widget: ColorPicker, name: 'ColorPicker', tag: 'colorpicker', options: { } },
-    { widget: null, name: 'ComboBox', tag: 'combobox', options: { value: 'Foobar', entries: ["Foobar", "Barfoo"] } },
-    { widget: ConfirmButton, name: 'ConfirmButton', tag: 'confirmbutton', options: { label: 'Foobar', icon: 'speaker' } },
-    { widget: Container, name: 'Container', tag: 'container', options: { } },
-    { widget: Crossover, name: 'Crossover', tag: 'crossover', options: { } },
-    { widget: Drag3D, name: 'Drag3D', tag: 'drag3d', options: { } },
-    { widget: Dynamics, name: 'Dynamics', tag: 'dynamics', options: { type: 'compressor' } },
-    { widget: Equalizer, name: 'Equalizer and EqBand', tag: 'equalizer', options: { bands: [ window.__test_eq_band ] } },
-    { widget: Expand, name: 'Expand', tag: 'expand', options: { label: 'Foobar', icon: 'speaker' } },
-    { widget: Fader, name: 'Fader', tag: 'fader', options: { label: 'Foobar', show_value: true } },
-    { widget: FileSelect, name: 'FileSelect', tag: 'fileselect', options: { } },
-    { widget: Frame, name: 'Frame', tag: 'frame', options: { label: 'Foobar' } },
-    { widget: FrequencyResponse, name: 'FrequencyResponse', tag: 'frequencyresponse', options: { } },
-    { widget: Gauge, name: 'Gauge', tag: 'gauge', options: { } },
+    {
+      widget: Bitstring,
+      name: 'Bitstring',
+      tag: 'bitstring',
+      options: { length: 8 },
+    },
+    {
+      widget: Button,
+      name: 'Button',
+      tag: 'button',
+      options: { label: 'Foobar', icon: 'speaker' },
+    },
+    {
+      widget: Buttons,
+      name: 'Buttons',
+      tag: 'buttons',
+      options: { buttons: ['Foobar', 'Barfoo'] },
+    },
+    {
+      name: 'Chart and ChartHandle',
+      tag: 'chart',
+      options: {
+        label: 'Foobar',
+        key: 'top-left',
+        'grid-x': [1, 2],
+        'grid-y': [1, 2],
+        'range-x': [{ min: 0, max: 3 }],
+        'range-y': [{ min: 0, max: 3 }],
+        handles: [{ label: 'Foobar' }],
+      },
+    },
+    { widget: Clock, name: 'Clock', tag: 'clock', options: {} },
+    {
+      widget: ColorPicker,
+      name: 'ColorPicker',
+      tag: 'colorpicker',
+      options: {},
+    },
+    {
+      widget: null,
+      name: 'ComboBox',
+      tag: 'combobox',
+      options: { value: 'Foobar', entries: ['Foobar', 'Barfoo'] },
+    },
+    {
+      widget: ConfirmButton,
+      name: 'ConfirmButton',
+      tag: 'confirmbutton',
+      options: { label: 'Foobar', icon: 'speaker' },
+    },
+    { widget: Container, name: 'Container', tag: 'container', options: {} },
+    { widget: Crossover, name: 'Crossover', tag: 'crossover', options: {} },
+    { widget: Drag3D, name: 'Drag3D', tag: 'drag3d', options: {} },
+    {
+      widget: Dynamics,
+      name: 'Dynamics',
+      tag: 'dynamics',
+      options: { type: 'compressor' },
+    },
+    {
+      widget: Equalizer,
+      name: 'Equalizer and EqBand',
+      tag: 'equalizer',
+      options: { bands: [window.__test_eq_band] },
+    },
+    {
+      widget: Expand,
+      name: 'Expand',
+      tag: 'expand',
+      options: { label: 'Foobar', icon: 'speaker' },
+    },
+    {
+      widget: Fader,
+      name: 'Fader',
+      tag: 'fader',
+      options: { label: 'Foobar', show_value: true },
+    },
+    { widget: FileSelect, name: 'FileSelect', tag: 'fileselect', options: {} },
+    {
+      widget: Frame,
+      name: 'Frame',
+      tag: 'frame',
+      options: { label: 'Foobar' },
+    },
+    {
+      widget: FrequencyResponse,
+      name: 'FrequencyResponse',
+      tag: 'frequencyresponse',
+      options: {},
+    },
+    { widget: Gauge, name: 'Gauge', tag: 'gauge', options: {} },
     { widget: Icon, name: 'Icon', tag: 'icon', options: { icon: 'speaker' } },
-    { widget: Knob, name: 'Knob', tag: 'knob', options: { } },
-    { widget: Label, name: 'Label', tag: 'label', options: { label: 'Foobar' } },
-    { widget: LevelMeter, name: 'LevelMeter', tag: 'levelmeter', options: { label: 'Foobar', show_clip: true, show_hold: true, peak_value: -1 } },
-    { widget: Limiter, name: 'Limiter', tag: 'limiter', options: { } },
-    { widget: Marquee, name: 'Marquee', tag: 'marquee', options: { label: 'Foobar' } },
-    { widget: Meter, name: 'Meter', tag: 'meter', options: { label: 'Foobar', show_label: true, } },
-    { widget: MultiMeter, name: 'MultiMeter', tag: 'multimeter', options: { count: 2, label: 'Foobar', show_label: true, show_clip: true, show_hold: true, peak_value: -1 } },
-    { widget: Navigation, name: 'Navigation', tag: 'navigation', options: { arrows: true } },
-    { widget: Notifications, name: 'Notifications', tag: 'notifications', options: { } },
-    { widget: Pager, name: 'Pager', tag: 'pager', options: { pages: [ { label: "Foobar", content: "Foobar" }] } },
-    { widget: Pages, name: 'Pages', tag: 'pages', options: { pages: [ "Foobar", "Barfoo" ] } },
-    { widget: Panorama, name: 'Panorama', tag: 'panorama', options: { } },
-    { widget: PhaseMeter, name: 'PhaseMeter', tag: 'phasemeter', options: { } },
-    { widget: ProgressBar, name: 'ProgressBar', tag: 'progressbar', options: { } },
-    { widget: Reverb, name: 'Reverb', tag: 'reverb', options: { show_input: true, show_input_handle: true, show_rlevel_handle: true, show_rtime_handle: true } },
-    { widget: Root, name: 'Root', tag: 'root', options: { } },
-    { widget: Scale, name: 'Scale', tag: 'scale', options: { min: 0, max: 1, fixed_dots: [0, 0.5, 1], fixed_labels: [0, 0.5, 1], pointer: 0.5, bar: 0.5 } },
-    { widget: ScrollArea, name: 'ScrollArea', tag: 'scrollarea', options: { } },
-    { widget: Spread, name: 'Spread', tag: 'spread', options: { label: 'Foobar' } },
-    { widget: State, name: 'State', tag: 'state', options: { } },
-    { widget: Value, name: 'Value', tag: 'value', options: { } },
-    { widget: ValueButton, name: 'ValueButton', tag: 'valuebutton', options: { label: 'Foobar', icon: 'speaker' } },
-    { widget: ValueKnob, name: 'ValueKnob', tag: 'valueknob', options: { label: 'Foobar' } },
-
+    { widget: Knob, name: 'Knob', tag: 'knob', options: {} },
+    {
+      widget: Label,
+      name: 'Label',
+      tag: 'label',
+      options: { label: 'Foobar' },
+    },
+    {
+      widget: LevelMeter,
+      name: 'LevelMeter',
+      tag: 'levelmeter',
+      options: {
+        label: 'Foobar',
+        show_clip: true,
+        show_hold: true,
+        peak_value: -1,
+      },
+    },
+    { widget: Limiter, name: 'Limiter', tag: 'limiter', options: {} },
+    {
+      widget: Marquee,
+      name: 'Marquee',
+      tag: 'marquee',
+      options: { label: 'Foobar' },
+    },
+    {
+      widget: Meter,
+      name: 'Meter',
+      tag: 'meter',
+      options: { label: 'Foobar', show_label: true },
+    },
+    {
+      widget: MultiMeter,
+      name: 'MultiMeter',
+      tag: 'multimeter',
+      options: {
+        count: 2,
+        label: 'Foobar',
+        show_label: true,
+        show_clip: true,
+        show_hold: true,
+        peak_value: -1,
+      },
+    },
+    {
+      widget: Navigation,
+      name: 'Navigation',
+      tag: 'navigation',
+      options: { arrows: true },
+    },
+    {
+      widget: Notifications,
+      name: 'Notifications',
+      tag: 'notifications',
+      options: {},
+    },
+    {
+      widget: Pager,
+      name: 'Pager',
+      tag: 'pager',
+      options: { pages: [{ label: 'Foobar', content: 'Foobar' }] },
+    },
+    {
+      widget: Pages,
+      name: 'Pages',
+      tag: 'pages',
+      options: { pages: ['Foobar', 'Barfoo'] },
+    },
+    { widget: Panorama, name: 'Panorama', tag: 'panorama', options: {} },
+    { widget: PhaseMeter, name: 'PhaseMeter', tag: 'phasemeter', options: {} },
+    {
+      widget: ProgressBar,
+      name: 'ProgressBar',
+      tag: 'progressbar',
+      options: {},
+    },
+    {
+      widget: Reverb,
+      name: 'Reverb',
+      tag: 'reverb',
+      options: {
+        show_input: true,
+        show_input_handle: true,
+        show_rlevel_handle: true,
+        show_rtime_handle: true,
+      },
+    },
+    { widget: Root, name: 'Root', tag: 'root', options: {} },
+    {
+      widget: Scale,
+      name: 'Scale',
+      tag: 'scale',
+      options: {
+        min: 0,
+        max: 1,
+        fixed_dots: [0, 0.5, 1],
+        fixed_labels: [0, 0.5, 1],
+        pointer: 0.5,
+        bar: 0.5,
+      },
+    },
+    { widget: ScrollArea, name: 'ScrollArea', tag: 'scrollarea', options: {} },
+    {
+      widget: Spread,
+      name: 'Spread',
+      tag: 'spread',
+      options: { label: 'Foobar' },
+    },
+    { widget: State, name: 'State', tag: 'state', options: {} },
+    { widget: Value, name: 'Value', tag: 'value', options: {} },
+    {
+      widget: ValueButton,
+      name: 'ValueButton',
+      tag: 'valuebutton',
+      options: { label: 'Foobar', icon: 'speaker' },
+    },
+    {
+      widget: ValueKnob,
+      name: 'ValueKnob',
+      tag: 'valueknob',
+      options: { label: 'Foobar' },
+    },
   ];
 
   widgets.map((entry) => {
@@ -127,7 +289,7 @@ describe('Empty Widgets on destroy()', () => {
       const node = document.createElement('aux-' + entry.tag);
       Object.keys(entry.options).map((option) => {
         node[option] = entry.options[option];
-      })
+      });
       C.appendChild(node);
       await waitForDrawn(node.auxWidget);
       node.auxWidget.destroy();
@@ -136,18 +298,18 @@ describe('Empty Widgets on destroy()', () => {
     });
     if (!entry.widget) return;
     it(`${entry.name} created with element`, async () => {
-        const element = document.createElement('div');
-        const widget = new entry.widget({
-          ...entry.options,
-          element,
-        });
+      const element = document.createElement('div');
+      const widget = new entry.widget({
+        ...entry.options,
+        element,
+      });
 
-        C.appendChild(element);
-        widget.show();
-        await waitForDrawn(widget);
-        widget.destroy();
-        assertChildren(element);
-        element.remove();
+      C.appendChild(element);
+      widget.show();
+      await waitForDrawn(widget);
+      widget.destroy();
+      assertChildren(element);
+      element.remove();
     });
   });
 });

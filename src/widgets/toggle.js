@@ -40,8 +40,7 @@ function pressEnd(e) {
 }
 function pressCancel(e) {
   const O = this.options;
-  if (O.press || (!O.toggle && !O.press))
-    toggle.call(this, O);
+  if (O.press || (!O.toggle && !O.press)) toggle.call(this, O);
 }
 
 /**

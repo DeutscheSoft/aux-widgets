@@ -399,7 +399,10 @@
 /* NAVIGATION */
 
 .aux-navigation.aux-horizontal {
-  height: calc(var(--aux-clickable-size) + 2 * var(--aux-outline-offset) + 2 * var(--aux-outline-width))
+  height: calc(
+    var(--aux-clickable-size) + 2 * var(--aux-outline-offset) + 2 *
+      var(--aux-outline-width)
+  );
 }
 .aux-navigation.aux-horizontal > .aux-buttons {
   padding: calc(var(--aux-outline-offset) + var(--aux-outline-width));
@@ -506,8 +509,8 @@
     color var(--aux-transition-duration);
 }
 .aux-selectlist > .aux-selectentry:first-of-type {
-  border-top-left-radius:var(--aux-border-radius);
-  border-top-right-radius:var(--aux-border-radius);
+  border-top-left-radius: var(--aux-border-radius);
+  border-top-right-radius: var(--aux-border-radius);
 }
 .aux-selectlist > .aux-selectentry:last-of-type {
   border-bottom-left-radius: var(--aux-border-radius);

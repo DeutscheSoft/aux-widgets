@@ -155,11 +155,11 @@ export class Drag3D extends Container {
   }
 }
 
-const setCallback = function(name) {
+const setCallback = function (name) {
   return function (val, key) {
     if (this[name]) this[name].set(key.substr(name.length + 1), val);
   };
-}
+};
 
 for (const i in { x: 0, y: 0, z: 0 }) {
   for (const name in DragValue.getOptionTypes()) {

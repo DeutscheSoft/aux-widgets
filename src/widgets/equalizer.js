@@ -227,11 +227,9 @@ export class EqualizerGraph extends Graph {
 }
 
 function createEqBand(options, type) {
-  if (options instanceof EqBand)
-    return options;
+  if (options instanceof EqBand) return options;
 
-  if (!type)
-    type = EqBand;
+  if (!type) type = EqBand;
 
   return new type(options);
 }

@@ -93,7 +93,6 @@ function composeDepth(tree_position) {
  * @class VirtualTreeEntry
  */
 
-
 export class VirtualTreeEntry extends VirtualTreeEntryBase {
   static get _options() {
     return Object.assign({}, VirtualTreeEntryBase.getOptionTypes(), {

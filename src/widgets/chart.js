@@ -439,8 +439,7 @@ export class Chart extends Widget {
       const childElement = child.element;
       const _handles = this._handles;
 
-      if (childElement.parentNode === _handles)
-        childElement.remove();
+      if (childElement.parentNode === _handles) childElement.remove();
 
       /**
        * Is fired when a handle was removed.
@@ -575,8 +574,7 @@ export class Chart extends Widget {
    *   `false`, all handles are removed from the widget.
    */
   removeHandles(handles) {
-    if (!handles)
-      handles = this.getHandles();
+    if (!handles) handles = this.getHandles();
 
     handles.forEach((handle) => this.removeHandle(handle));
 

@@ -339,8 +339,7 @@ export class Base {
   destroy() {
     const element = this.getEventTarget();
 
-    if (element)
-      removeNativeEvents.call(this, element);
+    if (element) removeNativeEvents.call(this, element);
 
     this.__events = null;
     this.__event_target = null;

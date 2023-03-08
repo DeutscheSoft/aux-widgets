@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-
 import {
   Scheduler,
   MASK_CALCULATE,
@@ -25,7 +24,14 @@ import {
   PHASE_CALCULATE,
   PHASE_RENDER,
 } from '../src/scheduler/scheduler.js';
-import { Renderer, RenderState, defineRender, defineMeasure, deferRender, deferRenderNext } from '../src/renderer.js';
+import {
+  Renderer,
+  RenderState,
+  defineRender,
+  defineMeasure,
+  deferRender,
+  deferRenderNext,
+} from '../src/renderer.js';
 import { makeCallback } from './helpers.js';
 
 function schedule(callback) {
@@ -47,16 +53,18 @@ describe('Renderer', () => {
     const taskCb = makeCallback();
     const animateCb = makeCallback();
 
-    renderer.addTask(defineRender([ Dependency ], function () {
-      taskCb();
+    renderer.addTask(
+      defineRender([Dependency], function () {
+        taskCb();
 
-      function animate() {
-        animateCb(); 
-        return deferRenderNext(animate);
-      };
+        function animate() {
+          animateCb();
+          return deferRenderNext(animate);
+        }
 
-      return deferRender(animate);
-    }));
+        return deferRender(animate);
+      })
+    );
 
     taskCb.assertCalls(0);
     animateCb.assertCalls(0);

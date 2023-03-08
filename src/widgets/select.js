@@ -286,7 +286,9 @@ export class Select extends Button {
           toggleClass(entry.element, 'aux-active', i === selected);
         });
       }),
-      defineRender([SymResize, 'auto_size', SymEntriesChanged], function (auto_size) {
+      defineRender([SymResize, 'auto_size', SymEntriesChanged], function (
+        auto_size
+      ) {
         if (auto_size) {
           const S = this.sizer.element;
           empty(S);

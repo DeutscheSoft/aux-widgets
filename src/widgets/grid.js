@@ -21,11 +21,7 @@ import { defineRange } from '../utils/define_range.js';
 import { addClass, getStyle, empty } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
 import { Widget, SymResize } from './widget.js';
-import {
-  defineRender,
-  deferRender,
-  deferMeasure,
-} from '../renderer.js';
+import { defineRender, deferRender, deferMeasure } from '../renderer.js';
 
 function getPadding(element) {
   const tmp = getStyle(element, 'padding').split(' ');
@@ -52,7 +48,7 @@ function createLabels(grid, element, horizontal) {
 
     const labelNode = makeSVG('text');
     labelNode.textContent = label;
-    labelNode.style[ 'dominant-baseline' ] = 'central';
+    labelNode.style['dominant-baseline'] = 'central';
     addClass(labelNode, 'aux-gridlabel');
     addClass(labelNode, horizontal ? 'aux-horizontal' : 'aux-vertical');
 
@@ -67,7 +63,7 @@ function createLabels(grid, element, horizontal) {
 function positionLabels(labels, coords) {
   labels.forEach((label, i) => {
     if (!label) return;
-    const position = coords[ i ];
+    const position = coords[i];
 
     if (position) {
       label.setAttribute('x', position.x);
@@ -78,9 +74,17 @@ function positionLabels(labels, coords) {
   });
 }
 
-function measureCoords(grid, labels, last, basis_x, basis_y, range, horizontal) {
+function measureCoords(
+  grid,
+  labels,
+  last,
+  basis_x,
+  basis_y,
+  range,
+  horizontal
+) {
   return grid.map((obj, i) => {
-    const label = labels[ i ];
+    const label = labels[i];
     if (!label) return;
 
     let bb;
@@ -92,7 +96,7 @@ function measureCoords(grid, labels, last, basis_x, basis_y, range, horizontal) 
     }
 
     const { width, height } = bb;
-    const [ pt, pr, pb, pl ] = getPadding(label);
+    const [pt, pr, pb, pl] = getPadding(label);
     let x, y, m;
 
     if (horizontal) {
@@ -101,21 +105,18 @@ function measureCoords(grid, labels, last, basis_x, basis_y, range, horizontal) 
         Math.min(basis_y - height / 2 - pt, range.valueToPixel(obj.pos))
       );
       if (y > last) return;
-      x = basis_x - width - ( width ? pl : 0 );
+      x = basis_x - width - (width ? pl : 0);
       if (!i) last = y - height;
-      m = width + ( width ? pl + pr : 0 );
+      m = width + (width ? pl + pr : 0);
     } else {
       x = Math.max(
         pl,
-        Math.min(
-          basis_x - width - pl,
-          range.valueToPixel(obj.pos) - width / 2
-        )
+        Math.min(basis_x - width - pl, range.valueToPixel(obj.pos) - width / 2)
       );
       if (x < last) return;
-      y = basis_y - height / 2 - ( height ? pt : 0 );
+      y = basis_y - height / 2 - (height ? pt : 0);
       last = x + width;
-      m = height + ( height ? pt + pb : 0 );
+      m = height + (height ? pt + pb : 0);
     }
 
     return {
@@ -128,10 +129,24 @@ function measureCoords(grid, labels, last, basis_x, basis_y, range, horizontal) 
   });
 }
 
-function drawLines(grid, coords, last, range, opprange, basis, oppbasis, min, max, path, element, cls, dir) {
+function drawLines(
+  grid,
+  coords,
+  last,
+  range,
+  opprange,
+  basis,
+  oppbasis,
+  min,
+  max,
+  path,
+  element,
+  cls,
+  dir
+) {
   for (let j = 0; j < grid.length; j++) {
-    const obj = grid[ j ];
-    const label = coords[ j ];
+    const obj = grid[j];
+    const label = coords[j];
     let margin, pos;
 
     if (label) margin = label.m;
@@ -143,11 +158,11 @@ function drawLines(grid, coords, last, range, opprange, basis, oppbasis, min, ma
     let line = makeSVG('path');
     addClass(line, 'aux-gridline');
     addClass(line, cls);
-    if (obj[ 'class' ]) addClass(line, obj[ 'class' ]);
+    if (obj['class']) addClass(line, obj['class']);
     if (obj.color) line.setAttribute('style', 'stroke:' + obj.color);
 
-    const _min = obj[ dir + '_min' ];
-    const _max = obj[ dir + '_max' ];
+    const _min = obj[dir + '_min'];
+    const _max = obj[dir + '_max'];
 
     pos = Math.round(opprange.valueToPixel(obj.pos));
 
@@ -157,8 +172,7 @@ function drawLines(grid, coords, last, range, opprange, basis, oppbasis, min, ma
       let start, end;
       if (typeof _min === 'number')
         start = Math.max(0, range.valueToPixel(_min));
-      else if (min !== false)
-        start = Math.max(0, range.valueToPixel(min));
+      else if (min !== false) start = Math.max(0, range.valueToPixel(min));
       else start = 0;
       if (typeof _max === 'number')
         end = Math.min(basis - margin, range.valueToPixel(_max));
@@ -168,13 +182,21 @@ function drawLines(grid, coords, last, range, opprange, basis, oppbasis, min, ma
       line.setAttribute('d', path(pos, start, end));
     }
 
-    if (line)
-      element.appendChild(line);
+    if (line) element.appendChild(line);
   }
 }
 
 function drawGrid() {
-  const { grid_x, grid_y, range_x, range_y, x_min, x_max, y_min, y_max } = this.options;
+  const {
+    grid_x,
+    grid_y,
+    range_x,
+    range_y,
+    x_min,
+    x_max,
+    y_min,
+    y_max,
+  } = this.options;
 
   const basis_x = range_x.options.basis;
   const basis_y = range_y.options.basis;
@@ -187,25 +209,66 @@ function drawGrid() {
   const labels_y = createLabels(grid_y, this.element, true);
 
   return deferMeasure(() => {
-    const coords_x = measureCoords(grid_x, labels_x, 0, basis_x, basis_y, range_x, false);
-    const coords_y = measureCoords(grid_y, labels_y, basis_y, basis_x, basis_y, range_y, true);
+    const coords_x = measureCoords(
+      grid_x,
+      labels_x,
+      0,
+      basis_x,
+      basis_y,
+      range_x,
+      false
+    );
+    const coords_y = measureCoords(
+      grid_y,
+      labels_y,
+      basis_y,
+      basis_x,
+      basis_y,
+      range_y,
+      true
+    );
 
     return deferRender(() => {
       positionLabels(labels_x, coords_x);
       positionLabels(labels_y, coords_y);
 
-      const margins_x = coords_x.map(v => v ? v.m : 0);
-      const margins_y = coords_y.map(v => v ? v.m : 0);
+      const margins_x = coords_x.map((v) => (v ? v.m : 0));
+      const margins_y = coords_y.map((v) => (v ? v.m : 0));
 
       const last_x = Math.max(...margins_y);
       const last_y = Math.max(...margins_x);
 
-      drawLines(grid_x, coords_x, last_x, range_y, range_x, basis_y, basis_x, y_min, y_max,
+      drawLines(
+        grid_x,
+        coords_x,
+        last_x,
+        range_y,
+        range_x,
+        basis_y,
+        basis_x,
+        y_min,
+        y_max,
         (pos, min, max) => 'M' + pos + '.5 ' + min + ' L' + pos + '.5 ' + max,
-        this.element, 'aux-vertical', 'y');
-      drawLines(grid_y, coords_y, last_y, range_x, range_y, basis_x, basis_y, x_min, x_max,
-        (pos, min, max) => 'M' + min + ' ' + pos + '.5 L' + max + ' ' + pos + '.5',
-        this.element, 'aux-horizontal', 'x');
+        this.element,
+        'aux-vertical',
+        'y'
+      );
+      drawLines(
+        grid_y,
+        coords_y,
+        last_y,
+        range_x,
+        range_y,
+        basis_x,
+        basis_y,
+        x_min,
+        x_max,
+        (pos, min, max) =>
+          'M' + min + ' ' + pos + '.5 L' + max + ' ' + pos + '.5',
+        this.element,
+        'aux-horizontal',
+        'x'
+      );
     });
   });
 }

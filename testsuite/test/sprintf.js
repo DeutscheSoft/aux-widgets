@@ -22,15 +22,15 @@ import { assert } from './helpers.js';
 
 describe('sprintf', () => {
   it('sprintf()', (done) => {
-    assert(sprintf('%d', 234) === '234'); 
-    assert(sprintf('%s', '234') === '234'); 
+    assert(sprintf('%d', 234) === '234');
+    assert(sprintf('%s', '234') === '234');
     assert(sprintf('%.1f', 1.45) === '1.5');
     done();
   });
 
   it('FORMAT()', (done) => {
-    assert(FORMAT('%d')(234) === '234'); 
-    assert(FORMAT('%s')('234') === '234'); 
+    assert(FORMAT('%d')(234) === '234');
+    assert(FORMAT('%s')('234') === '234');
     assert(FORMAT('%.1f')(1.45) === '1.5');
     done();
   });

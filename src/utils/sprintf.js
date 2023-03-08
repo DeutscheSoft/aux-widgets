@@ -38,10 +38,11 @@ function round(num, precision) {
   var base = 10 ** precision;
   return (Math.round(num * base) / base).toFixed(precision);
 }
-const fun = 'function round(num, precision) { \n\
+const fun =
+  'function round(num, precision) { \n\
   var base = 10 ** precision; \n\
   return (Math.round(num * base) / base).toFixed(precision);\n\
-};'
+};';
 export function FORMAT(fmt) {
   const args = [];
   let s = fun + ' return ';

@@ -1,19 +1,12 @@
-import {
-  Equalizer,
-  EqBand,
-} from '../src/index.js';
+import { Equalizer, EqBand } from '../src/index.js';
 
 import { waitForDrawn, assert, compare, compareOptions } from './helpers.js';
 
 describe('Equalizer', () => {
-  it('setting \'bands\' property', () => {
+  it("setting 'bands' property", () => {
     const eq = new Equalizer();
 
-    const bands = [
-      new EqBand(),
-      new EqBand(),
-      new EqBand(),
-    ];
+    const bands = [new EqBand(), new EqBand(), new EqBand()];
 
     eq.set('bands', bands);
 

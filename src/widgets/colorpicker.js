@@ -203,7 +203,16 @@ export class ColorPicker extends Container {
   static get renderers() {
     return [
       defineRender(
-        ['saturation', 'hue', 'lightness', 'hex', 'rgb', 'red', 'green', 'blue'],
+        [
+          'saturation',
+          'hue',
+          'lightness',
+          'hex',
+          'rgb',
+          'red',
+          'green',
+          'blue',
+        ],
         function (saturation, hue, lightness, hex, rgb, red, green, blue) {
           const { _indicator } = this;
           const _hex = this.hex;
