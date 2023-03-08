@@ -19,6 +19,7 @@
 
 import { addClass } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
+import { forEachArrayDiff } from '../utils/array_diff.js';
 import { FrequencyResponse } from './frequencyresponse.js';
 import { EqBand } from './eqband.js';
 import { Graph } from './graph.js';
@@ -164,10 +165,12 @@ export class EqualizerGraph extends Graph {
   static get static_events() {
     return {
       set_bands: function (value, key, previousValue) {
-        const newBands = value.filter((band) => !previousValue.includes(band));
-        const oldBands = previousValue.filter((band) => !value.includes(band));
-        newBands.forEach((band) => band.on('set', this._invalidate_bands));
-        oldBands.forEach((band) => band.off('set', this._invalidate_bands));
+        forEachArrayDiff(
+          previousValue,
+          value,
+          (band) => band.off('set', this._invalidate_bands),
+          (band) => band.on('set', this._invalidate_bands)
+        );
       },
     };
   }
@@ -262,12 +265,12 @@ export class Equalizer extends FrequencyResponse {
   static get static_events() {
     return {
       set_bands: function (value, key, previousValue) {
-        if (!value) value = [];
-        if (!previousValue) previousValue = [];
-        const newBands = value.filter((band) => !previousValue.includes(band));
-        const oldBands = previousValue.filter((band) => !value.includes(band));
-        oldBands.forEach((band) => this.removeChild(band));
-        newBands.forEach((band) => this.addChild(band));
+        forEachArrayDiff(
+          previousValue,
+          value,
+          (band) => this.removeChild(band),
+          (band) => this.addChild(band)
+        );
       },
       set_show_bands: function (value) {
         this.set('show_handles', value);

@@ -42,3 +42,4 @@ import './equalizer.js';
 import './sprintf.js';
 import './destroy.js';
 import './levelmeter.js';
+import './array_diff.js';
