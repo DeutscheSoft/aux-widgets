@@ -229,6 +229,10 @@ export class Slider extends Widget {
     super.draw(O, element);
   }
 
+  getResizeElements() {
+    return [this.element];
+  }
+
   resize() {
     const E = this.element;
     this.set('_width', outerWidth(E));

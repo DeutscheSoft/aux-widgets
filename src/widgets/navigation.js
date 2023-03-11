@@ -439,6 +439,10 @@ export class Navigation extends Container {
     );
   }
 
+  getResizeTargets() {
+    return [this.buttons.element];
+  }
+
   resize() {
     autoArrows.call(this);
     this._scroll_top = this.buttons.element.scrollTop;

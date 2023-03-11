@@ -482,6 +482,10 @@ export class Meter extends Widget {
     super.draw(O, element);
   }
 
+  getResizeTargets() {
+    return [this._bar];
+  }
+
   resize() {
     super.resize();
 

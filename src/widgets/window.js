@@ -743,6 +743,10 @@ export class Window extends Container {
     this.set('shrink', !this.options.shrink);
   }
 
+  getResizeTargets() {
+    return [this.element];
+  }
+
   resize() {
     this.drag.set('min', { x: 0 - this.options.width + 20, y: 0 });
     this.drag.set('max', { x: viewportWidth() - 20, y: viewportHeight() - 20 });

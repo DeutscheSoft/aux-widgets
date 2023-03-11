@@ -280,6 +280,10 @@ export class Knob extends Widget {
     super.destroy();
   }
 
+  getResizeTargets() {
+    return [this.element];
+  }
+
   resize() {
     const rect = this.element.getBoundingClientRect();
     const size = Math.min(rect.width, rect.height);

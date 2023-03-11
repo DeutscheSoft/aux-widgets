@@ -312,6 +312,10 @@ export class ColorPicker extends Container {
     });
   }
 
+  getResizeTargets() {
+    return [this._canvas];
+  }
+
   resize() {
     const rect = this._canvas.getBoundingClientRect();
     this.range_x.set('basis', rect.width);

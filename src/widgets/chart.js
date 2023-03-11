@@ -397,6 +397,10 @@ export class Chart extends Widget {
     super.draw(O, element);
   }
 
+  getResizeTargets() {
+    return [this.element, this.svg];
+  }
+
   getGraphs() {
     return this._graphChildren.getList();
   }

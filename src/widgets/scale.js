@@ -833,6 +833,10 @@ export class Scale extends Widget {
     return values.map((value) => this._createLabel(value));
   }
 
+  getResizeTargets() {
+    return [this.element];
+  }
+
   resize() {
     super.resize();
     const O = this.options;

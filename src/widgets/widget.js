@@ -26,6 +26,7 @@ import {
   setStyle,
   getStyle,
 } from './../utils/dom.js';
+import { observeResize } from '../utils/observe_resize.js';
 import { log, warn, error } from './../utils/log.js';
 import { Base } from './../implements/base.js';
 import {
@@ -591,6 +592,10 @@ export class Widget extends Base {
     return this.options.aria_targets || [this.element];
   }
 
+  getResizeTargets() {
+    return null;
+  }
+
   startInteracting() {
     const count = getInteractionCount(this);
     if (!count) {
@@ -707,6 +712,14 @@ export class Widget extends Base {
 
     if (O.container) O.container.appendChild(element);
     this.triggerResize();
+
+    const resizeTargets = this.getResizeTargets();
+
+    if (resizeTargets && resizeTargets.length) {
+      this.addSubscriptions(
+        observeResize(resizeTargets, () => this.triggerResize())
+      );
+    }
   }
 
   addSubscriptions(...subs) {

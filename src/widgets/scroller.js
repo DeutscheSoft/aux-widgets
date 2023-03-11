@@ -252,6 +252,7 @@ export class Scroller extends Container {
     this._changed = changed.bind(this);
     this.observer = new MutationObserver(this._changed);
   }
+
   draw(O, element) {
     /**
      * @member {HTMLDivElement} Scroller#element - The scrollbar handle.
@@ -270,6 +271,11 @@ export class Scroller extends Container {
 
     super.draw(O, element);
   }
+
+  getResizeTargets() {
+    return [this.element];
+  }
+
   resize() {
     this._changed();
     this.scroll_x.update('clip', innerWidth(this.element, undefined, true));

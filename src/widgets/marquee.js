@@ -126,6 +126,10 @@ export class Marquee extends Container {
     super.draw(O, element);
   }
 
+  getResizeTargets() {
+    return [this.element, this.label.element];
+  }
+
   resize() {
     super.resize();
     this.set('_outer', innerWidth(this.element));
