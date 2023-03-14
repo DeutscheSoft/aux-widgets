@@ -20,3 +20,4 @@ favicon.*
 angular/
 /cypress/
 /eslint/
+/benchmark/
