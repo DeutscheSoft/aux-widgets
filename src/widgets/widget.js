@@ -742,6 +742,15 @@ export class Widget extends Base {
       return;
     }
 
+    const _onfocuskeydown = this._onfocuskeydown;
+
+    if (_onfocuskeydown !== null) {
+      this._onfocuskeydown = null;
+      this.getFocusTargets().forEach((v) =>
+        v.removeEventListener('keydown', _onfocuskeydown)
+      );
+    }
+
     this._subscriptions = unsubscribeSubscriptions(this._subscriptions);
 
     this.emit('destroy');
