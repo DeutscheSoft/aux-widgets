@@ -61,9 +61,63 @@ import {
   ValueButton,
   ValueKnob,
 } from '../src/index.js';
-import { assertChildren, canvas, waitForDrawn } from './helpers.js';
+import { assert, assertChildren, canvas, waitForDrawn } from './helpers.js';
 
 window.__test_eq_band = new EqBand({ freq: 1000, gain: 6, type: 'parametric' });
+
+function interceptEventListeners(node) {
+  const listeners = new Map();
+
+  function addListener(name, callback) {
+    let set = listeners.get(name);
+
+    if (!set) {
+      set = [];
+      listeners.set(name, set);
+    }
+
+    set.push(callback);
+  }
+
+  function removeListener(name, callback) {
+    let set = listeners.get(name);
+
+    if (!set) {
+      console.warn('Trying to remove event handler', name, callback, 'from node', node, 'Does not exist.');
+      return;
+    }
+
+    const pos = set.indexOf(callback);
+
+    if (pos === -1) {
+      console.warn('Trying to remove event handler', name, callback, 'from node', node, 'Does not exist.');
+      return;
+    }
+
+    set.splice(pos, 1);
+
+    if (!set.length)
+      listeners.delete(name);
+  }
+
+  {
+    const addEventListener = node.addEventListener;
+    node.addEventListener = (name, callback, ...args) => {
+      addEventListener.call(node, name, callback, ...args);
+      addListener(name, callback);
+    };
+  }
+
+  {
+    const removeEventListener = node.removeEventListener;
+    node.removeEventListener = (name, callback, ...args) => {
+      removeEventListener.call(node, name, callback, ...args);
+      removeListener(name, callback);
+    };
+  }
+
+  return listeners;
+}
 
 describe('Empty Widgets on destroy()', () => {
   const C = canvas();
@@ -285,31 +339,49 @@ describe('Empty Widgets on destroy()', () => {
   ];
 
   widgets.map((entry) => {
-    it(`${entry.name} as web component`, async () => {
-      const node = document.createElement('aux-' + entry.tag);
-      Object.keys(entry.options).map((option) => {
-        node[option] = entry.options[option];
-      });
-      C.appendChild(node);
-      await waitForDrawn(node.auxWidget);
-      node.auxWidget.destroy();
-      assertChildren(node);
-      node.remove();
-    });
-    if (!entry.widget) return;
-    it(`${entry.name} created with element`, async () => {
-      const element = document.createElement('div');
-      const widget = new entry.widget({
-        ...entry.options,
-        element,
-      });
+    it(`${entry.name}`, async () => {
+      {
+        const node = document.createElement('aux-' + entry.tag);
+        Object.keys(entry.options).map((option) => {
+          node[option] = entry.options[option];
+        });
+        C.appendChild(node);
+        await waitForDrawn(node.auxWidget);
+        node.auxWidget.destroy();
+        assertChildren(node);
+        node.remove();
+      }
+      if (!entry.widget) return;
+      {
+        const element = document.createElement('div');
+        const widget = new entry.widget({
+          ...entry.options,
+          element,
+        });
 
-      C.appendChild(element);
-      widget.show();
-      await waitForDrawn(widget);
-      widget.destroy();
-      assertChildren(element);
-      element.remove();
+        C.appendChild(element);
+        widget.show();
+        await waitForDrawn(widget);
+        widget.destroy();
+        assertChildren(element);
+        element.remove();
+      }
+      {
+        const element = document.createElement('div');
+        const listeners = interceptEventListeners(element);
+        const widget = new entry.widget({
+          ...entry.options,
+          element,
+        });
+
+        C.appendChild(element);
+        widget.show();
+        await waitForDrawn(widget);
+        widget.destroy();
+        assertChildren(element);
+        element.remove();
+        assert(!listeners.size, ` ${ entry.name } leaks event listeners ${ Array.from(listeners.keys()).join(', ') }.`);
+      }
     });
   });
 });
