@@ -105,6 +105,18 @@ export class ValueButton extends Button {
         this.drag.set('blind_angle', value);
       },
       focus_move: focusMoveDefault(),
+      dblclick: function (e) {
+        this.userset('value', this.options.reset);
+        /**
+         * Is fired when the user doubleclicks the valuebutton in order to to reset to initial value.
+         * The Argument is the new value.
+         *
+         * @event ValueButton#doubleclick
+         *
+         * @param {number} value - The value of the widget.
+         */
+        this.emit('doubleclick', this.options.value);
+      },
     };
   }
 
@@ -161,21 +173,6 @@ export class ValueButton extends Button {
     this.scroll.on('scrollended', () => this.stopInteracting());
 
     if (this.options.reset === void 0) this.options.reset = this.options.value;
-    this.element.addEventListener(
-      'dblclick',
-      function () {
-        this.userset('value', this.options.reset);
-        /**
-         * Is fired when the user doubleclicks the valuebutton in order to to reset to initial value.
-         * The Argument is the new value.
-         *
-         * @event ValueButton#doubleclick
-         *
-         * @param {number} value - The value of the widget.
-         */
-        this.emit('doubleclick', this.options.value);
-      }.bind(this)
-    );
     this._labelID = createID('aux-label-');
   }
 
