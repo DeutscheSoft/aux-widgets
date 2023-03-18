@@ -22,6 +22,7 @@ import { Container } from './container.js';
 import { Button } from './button.js';
 import { warning } from '../utils/warning.js';
 import { ChildWidgets } from '../utils/child_widgets.js';
+import { subscribeDOMEvent } from '../utils/events.js';
 import { defineRender } from '../renderer.js';
 
 /**
@@ -359,6 +360,35 @@ export class Buttons extends Container {
         button.set('focus', true);
         this.set('aria_activedescendant', button.get('id'));
       },
+      keydown: function (e) {
+        if (e.code === 'ArrowLeft' || e.code === 'ArrowUp') {
+          this.focusPrevious();
+        }
+        if (e.code === 'ArrowRight' || e.code === 'ArrowDown') {
+          this.focusNext();
+        }
+        if (e.code === 'Home') {
+          this.focusFirst();
+        }
+        if (e.code === 'End') {
+          this.focusLast();
+        }
+        if (e.code === 'Space' || e.code === 'Enter') {
+          if (e.preventDefault) e.preventDefault();
+          const focus = this.get('_focus');
+          if (focus === false) return false;
+          const button = this.buttons.list[focus];
+          if (!button) return false;
+          button.userset('state', !button.get('state'));
+        }
+        return false;
+      },
+      focus: function (e) {
+        this.reFocus();
+      },
+      blur: function (e) {
+        clearFocus.call(this);
+      },
     };
   }
 
@@ -387,36 +417,6 @@ export class Buttons extends Container {
     });
     this.buttons.on('child_added', onButtonAdded);
     this.buttons.on('child_removed', onButtonRemoved);
-
-    this.element.addEventListener('keydown', (e) => {
-      if (e.code === 'ArrowLeft' || e.code === 'ArrowUp') {
-        this.focusPrevious();
-      }
-      if (e.code === 'ArrowRight' || e.code === 'ArrowDown') {
-        this.focusNext();
-      }
-      if (e.code === 'Home') {
-        this.focusFirst();
-      }
-      if (e.code === 'End') {
-        this.focusLast();
-      }
-      if (e.code === 'Space' || e.code === 'Enter') {
-        if (e.preventDefault) e.preventDefault();
-        const focus = this.get('_focus');
-        if (focus === false) return false;
-        const button = this.buttons.list[focus];
-        if (!button) return false;
-        button.userset('state', !button.get('state'));
-      }
-      return false;
-    });
-    this.element.addEventListener('focus', (e) => {
-      this.reFocus();
-    });
-    this.element.addEventListener('blur', (e) => {
-      clearFocus.call(this);
-    });
   }
 
   focusNext() {
