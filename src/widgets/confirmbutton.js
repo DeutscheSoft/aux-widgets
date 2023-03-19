@@ -83,25 +83,6 @@ function stateReset() {
   this.set('state', false);
 }
 
-/**
- * Is fired when the button was hit two times with at least
- *   <code>interrupt</code> milliseconds between both clicks.
- *
- * @event ConfirmButton#confirmed
- */
-
-function clicked() {
-  const T = this.__temp;
-  const O = this.options;
-  if (!O.confirm) {
-    this.emit('confirmed');
-  } else if (O.state && Date.now() > T.click + O.interrupt) {
-    this.emit('confirmed');
-    stateReset.call(this);
-  } else if (!O.state) {
-    stateSet.call(this);
-  }
-}
 
 /**
  * ConfirmButton is a {@link Button} firing the `confirmed` event
@@ -144,9 +125,31 @@ export class ConfirmButton extends Button {
     };
   }
 
+  static get static_events() {
+    return {
+      click: function () {
+        const T = this.__temp;
+        const O = this.options;
+        /**
+         * Is fired when the button was hit two times with at least
+         *   <code>interrupt</code> milliseconds between both clicks.
+         *
+         * @event ConfirmButton#confirmed
+         */
+        if (!O.confirm) {
+          this.emit('confirmed');
+        } else if (O.state && Date.now() > T.click + O.interrupt) {
+          this.emit('confirmed');
+          stateReset.call(this);
+        } else if (!O.state) {
+          stateSet.call(this);
+        }
+      }
+    };
+  }
+
   initialize(options) {
     super.initialize(options);
-    this.on('click', clicked.bind(this));
     this.__temp = {
       label: '',
       icon: '',
