@@ -340,6 +340,9 @@ export class ColorPicker extends Container {
     this.removeChildNode(this.blue?.element);
     this.removeChildNode(this.apply?.element);
     this.removeChildNode(this.cancel?.element);
+    this.drag_x.destroy();
+    this.drag_y.destroy();
+    super.destroy();
   }
 
   set(key, value) {
