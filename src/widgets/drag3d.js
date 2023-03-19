@@ -153,6 +153,13 @@ export class Drag3D extends Container {
     addClass(element, 'aux-drag3d');
     super.draw(O, element);
   }
+
+  destroy() {
+    this.drag_x.destroy();
+    this.drag_y.destroy();
+    this.drag_z.destroy();
+    super.destroy();
+  }
 }
 
 const setCallback = function (name) {
