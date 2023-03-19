@@ -240,9 +240,15 @@ export class Base {
   }
 
   constructor(...args) {
+    this.is_initialized = false;
     this.initialize(...args);
     this.initializeChildren();
     this.initialized();
+    this.is_initialized = true;
+
+    const element = this.getEventTarget();
+
+    if (element !== this.__event_target) addNativeEvents.call(this, element);
   }
 
   initialize(options) {
@@ -321,10 +327,6 @@ export class Base {
      * @event Base#initialized
      */
     this.emit('initialized');
-
-    const element = this.getEventTarget();
-
-    if (element !== this.__event_target) addNativeEvents.call(this, element);
   }
 
   isDestructed() {
@@ -517,14 +519,14 @@ export class Base {
 
     if (arguments.length !== 2) throw new Error('Bad number of arguments.');
 
-    if (
-      isNativeEvent(event) &&
-      (ev = this.getEventTarget()) &&
-      !this.hasEventListeners(event)
-    )
-      addActiveEventListener(ev, event, this.__native_handler);
-    ev = this.__events;
-    addEvent(ev, event, func);
+    const __events = this.__events;
+
+    if (isNativeEvent(event) && this.is_initialized) {
+      const __event_target = this.getEventTarget();
+      if (__event_target && !this.hasEventListeners(event))
+        addActiveEventListener(__event_target, event, this.__native_handler);
+    }
+    addEvent(__events, event, func);
   }
 
   addEventListener(event, func) {
@@ -589,7 +591,7 @@ export class Base {
     removeEvent(this.__events, event, fun);
 
     // remove native DOM event listener from getEventTarget()
-    if (isNativeEvent(event) && !this.hasEventListeners(event)) {
+    if (isNativeEvent(event) && this.is_initialized && !this.hasEventListeners(event)) {
       const ev = this.getEventTarget();
       if (ev) removeActiveEventListener(ev, event, this.__native_handler);
     }
