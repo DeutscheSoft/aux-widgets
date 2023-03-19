@@ -235,19 +235,6 @@ function touchEnd(ev) {
 function touchCancel(ev) {
   return touchEnd.call(this, ev);
 }
-const dummy = function () {};
-
-function getParents(element) {
-  const ret = [];
-  if (Array.isArray(element))
-    element.map(function (e) {
-      e = e.parentNode;
-      if (e) ret.push(e);
-    });
-  else if ((element = element.parentNode)) ret.push(element);
-  return ret;
-}
-
 const static_events = {
   set_node: function (value) {
     this.delegateEvents(value);
@@ -259,11 +246,6 @@ const static_events = {
     function (element, old_element) {
       /* cancel the current capture */
       if (old_element) this.stopCapture();
-    },
-    function (elem, old) {
-      /* NOTE: this works around a bug in chrome (#673102) */
-      if (old) removeEventListener(getParents(old), 'touchstart', dummy);
-      if (elem) addEventListener(getParents(elem), 'touchstart', dummy);
     },
   ],
   touchstart: touchStart,
