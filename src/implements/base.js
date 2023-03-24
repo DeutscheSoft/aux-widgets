@@ -591,7 +591,11 @@ export class Base {
     removeEvent(this.__events, event, fun);
 
     // remove native DOM event listener from getEventTarget()
-    if (isNativeEvent(event) && this.is_initialized && !this.hasEventListeners(event)) {
+    if (
+      isNativeEvent(event) &&
+      this.is_initialized &&
+      !this.hasEventListeners(event)
+    ) {
       const ev = this.getEventTarget();
       if (ev) removeActiveEventListener(ev, event, this.__native_handler);
     }

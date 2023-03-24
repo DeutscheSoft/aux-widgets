@@ -369,6 +369,10 @@ export class Fader extends Widget {
     super.destroy();
   }
 
+  getResizeTargets() {
+    return [this.element, this._track, this._handle];
+  }
+
   /**
    * Resets the fader value to <code>options.reset</code>.
    *

@@ -83,21 +83,34 @@ function interceptEventListeners(node) {
     let set = listeners.get(name);
 
     if (!set) {
-      console.warn('Trying to remove event handler', name, callback, 'from node', node, 'Does not exist.');
+      console.warn(
+        'Trying to remove event handler',
+        name,
+        callback,
+        'from node',
+        node,
+        'Does not exist.'
+      );
       return;
     }
 
     const pos = set.indexOf(callback);
 
     if (pos === -1) {
-      console.warn('Trying to remove event handler', name, callback, 'from node', node, 'Does not exist.');
+      console.warn(
+        'Trying to remove event handler',
+        name,
+        callback,
+        'from node',
+        node,
+        'Does not exist.'
+      );
       return;
     }
 
     set.splice(pos, 1);
 
-    if (!set.length)
-      listeners.delete(name);
+    if (!set.length) listeners.delete(name);
   }
 
   {
@@ -380,7 +393,12 @@ describe('Empty Widgets on destroy()', () => {
         widget.destroy();
         assertChildren(element);
         element.remove();
-        assert(!listeners.size, ` ${ entry.name } leaks event listeners ${ Array.from(listeners.keys()).join(', ') }.`);
+        assert(
+          !listeners.size,
+          ` ${entry.name} leaks event listeners ${Array.from(
+            listeners.keys()
+          ).join(', ')}.`
+        );
       }
     });
   });

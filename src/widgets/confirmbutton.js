@@ -83,7 +83,6 @@ function stateReset() {
   this.set('state', false);
 }
 
-
 /**
  * ConfirmButton is a {@link Button} firing the `confirmed` event
  * after it was hit a second time. While waiting for the confirmation, a
@@ -144,7 +143,7 @@ export class ConfirmButton extends Button {
         } else if (!O.state) {
           stateSet.call(this);
         }
-      }
+      },
     };
   }
 
