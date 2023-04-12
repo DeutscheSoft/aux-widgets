@@ -113,6 +113,8 @@ const SymGraphs = Symbol('graphs changed');
  *   square pixels on hit testing borders to gain importance.
  * @property {Array<Object>} [options.handles=[]] - An array of options for
  *   creating {@link ChartHandle} on init.
+ * @property {Array<Object>} [options.graphs=[]] - An array of options for
+ *   creating {@link Graph} on init.
  * @property {Boolean} [options.show_handles=true] - Show or hide all
  *   handles.
  * @property {Boolean} [options.square=false] - Keep the Graph as a square.
@@ -140,6 +142,7 @@ export class Chart extends Widget {
       importance_handle: 'number',
       importance_border: 'number',
       handles: 'array',
+      graphs: 'array',
       show_handles: 'boolean',
       depth: 'number',
       square: 'boolean',
@@ -166,6 +169,7 @@ export class Chart extends Widget {
       importance_border: 50, // multiplicator of square pixels on hit testing
       // borders to gain importance
       handles: [], // list of bands to create on init
+      graphs: [], // list of graphs to create on init
       show_handles: true,
       square: false,
       role: 'group',
@@ -388,6 +392,7 @@ export class Chart extends Widget {
       };
     });
     this.addHandles(this.options.handles);
+    this.addGraphs(this.options.graphs);
   }
 
   draw(O, element) {
@@ -479,6 +484,19 @@ export class Chart extends Widget {
     this.addChild(g);
 
     return g;
+  }
+
+
+  /**
+   * Add multiple new {@link Graph} to the widget. Options is an array
+   * of objects containing options for the new instances of {@link Graph}.
+   *
+   * @method Chart#addGraphs
+   *
+   * @param {Array<Object>} options - An array of options objects for the {@link Graph}.
+   */
+  addGraphs(graphs) {
+    for (let i = 0; i < graphs.length; i++) this.addGraph(graphs[ i ]);
   }
 
   /**
