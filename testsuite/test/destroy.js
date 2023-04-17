@@ -400,6 +400,13 @@ describe('Empty Widgets on destroy()', () => {
           ).join(', ')}.`
         );
       }
+      {
+        const widget = new entry.widget({
+          ...entry.options,
+        });
+        widget.destroy();
+        assert(widget.isDestructed());
+      }
     });
   });
 });
