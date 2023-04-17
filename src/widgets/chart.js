@@ -486,7 +486,6 @@ export class Chart extends Widget {
     return g;
   }
 
-
   /**
    * Add multiple new {@link Graph} to the widget. Options is an array
    * of objects containing options for the new instances of {@link Graph}.
@@ -496,7 +495,7 @@ export class Chart extends Widget {
    * @param {Array<Object>} options - An array of options objects for the {@link Graph}.
    */
   addGraphs(graphs) {
-    for (let i = 0; i < graphs.length; i++) this.addGraph(graphs[ i ]);
+    for (let i = 0; i < graphs.length; i++) this.addGraph(graphs[i]);
   }
 
   /**
