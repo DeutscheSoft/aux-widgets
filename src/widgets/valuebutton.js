@@ -186,8 +186,6 @@ export class ValueButton extends Button {
   destroy() {
     this.drag.destroy();
     this.scroll.destroy();
-    this.removeChildNode(this.scale?.element);
-    this.removeChildNode(this.value?.element);
     super.destroy();
   }
 

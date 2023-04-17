@@ -282,15 +282,12 @@ export class Scroller extends Container {
     this.scroll_y.update('clip', innerHeight(this.element, undefined, true));
     super.resize();
   }
+
   appendChild(child) {
     super.appendChild(child);
     this.scrollhide.appendChild(child.element);
   }
-  destroy() {
-    this.removeChildNode(this.scrollhide?.element);
-    this.removeChildNode(this.scroll_x?.element);
-    this.removeChildNode(this.scroll_y?.element);
-  }
+
   set(key, value) {
     if (key === 'scroll' && value == this.options.scroll) return;
     super.set(key, value);
@@ -309,6 +306,7 @@ defineChildWidget(Scroller, 'scroll_x', {
     position: 'bottom',
   },
 });
+
 defineChildWidget(Scroller, 'scroll_y', {
   create: ScrollBar,
   show: true,

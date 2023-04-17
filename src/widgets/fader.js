@@ -360,10 +360,6 @@ export class Fader extends Widget {
   destroy() {
     this._handle.remove();
     this._track.remove();
-    this.removeChildNode(this._track);
-    this.removeChildNode(this.scale?.element);
-    this.removeChildNode(this.label?.element);
-    this.removeChildNode(this.value?.element);
     this.scroll.destroy();
     this.drag.destroy();
     super.destroy();

@@ -98,11 +98,7 @@ export class ScrollArea extends Widget {
   }
 
   destroy() {
-    const children = this.getChildren();
-    children.map((widget) => {
-      this.removeChildNode(widget.element);
-    });
-    super.destroy();
     this._observer.disconnect();
+    super.destroy();
   }
 }

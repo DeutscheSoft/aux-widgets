@@ -97,7 +97,7 @@ export class Notifications extends Container {
 
   destroy() {
     this.children?.map((widget) => {
-      this.removeChildNode(widget.element);
+      widget.element.remove();
     });
     super.destroy();
   }

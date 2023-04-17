@@ -196,6 +196,7 @@ export function defineChildWidget(widget, name, config) {
     const child = this[name];
 
     if (child) {
+      child.element.remove();
       child.destroy();
       this[name] = null;
     }

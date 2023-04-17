@@ -530,7 +530,7 @@ export class Chart extends Widget {
   }
 
   destroy() {
-    this.removeChildNode(this.svg);
+    this.svg.remove();
     super.destroy();
   }
 

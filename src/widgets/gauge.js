@@ -171,7 +171,7 @@ export class Gauge extends Widget {
   }
 
   destroy() {
-    this.removeChildNode(this.svg);
+    this.svg.remove();
     super.destroy();
   }
 

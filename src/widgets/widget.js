@@ -1235,20 +1235,6 @@ export class Widget extends Base {
       domScheduler.scheduleNext(MASK_CALCULATE, callback);
     });
   }
-
-  /**
-   * Removes a child element if it is an actual child of either `element`
-   * or the parent element specified.
-   *
-   * @method Widget#removeChildNode
-   *
-   * @param {DOMNode} node - The node to be removed.
-   * @param {DOMNode} parent - Optional parent element the node has to be removed from.
-   */
-  removeChildNode(node, parent) {
-    const E = parent || this.element;
-    if (node && node.parentElement === E) node.remove();
-  }
 }
 /**
  * Generic DOM events. Please refer to

@@ -149,15 +149,6 @@ export class FileSelect extends Container {
      */
     this.emit('select', this.options.files);
   }
-
-  destroy() {
-    this.removeChildNode(this._input);
-    this.removeChildNode(this._label);
-    this.removeChildNode(this.button?.element);
-    this.removeChildNode(this.name?.element);
-    this.removeChildNode(this.size?.element);
-    super.destroy();
-  }
 }
 
 /** @member {HTMLFileInput} FileSelect#_input - HTMLFileInput element.

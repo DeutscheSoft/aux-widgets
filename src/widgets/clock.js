@@ -468,7 +468,7 @@ export class Clock extends Widget {
     this.circulars.minutes.destroyAndRemove();
     this.circulars.hours.destroyAndRemove();
     if (this.__to) window.clearTimeout(this.__to);
-    this.removeChildNode(this.svg);
+    this.svg.remove();
     super.destroy();
   }
 

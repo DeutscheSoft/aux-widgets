@@ -71,12 +71,6 @@ export class ComboBox extends Widget {
     super.draw(O, element);
     this.set('value', O.value);
   }
-
-  destroy() {
-    this.removeChildNode(this.select?.element);
-    this.removeChildNode(this.value?.element);
-    super.destroy();
-  }
 }
 
 /**

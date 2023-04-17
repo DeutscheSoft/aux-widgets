@@ -191,7 +191,6 @@ export class LevelMeter extends Meter {
     this._top_timer = destroyTimer(this._top_timer);
     this._bottom_timer = destroyTimer(this._bottom_timer);
     this._value_timer = destroyTimer(this._value_timer);
-    this.removeChildNode(this.clip?.element);
     super.destroy();
   }
 

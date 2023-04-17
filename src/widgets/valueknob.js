@@ -142,13 +142,6 @@ export class ValueKnob extends Widget {
     super.draw(O, element);
   }
 
-  destroy() {
-    this.removeChildNode(this.label?.element);
-    this.removeChildNode(this.knob?.element);
-    this.removeChildNode(this.value?.element);
-    super.destroy();
-  }
-
   getRange() {
     return this.knob.getRange();
   }

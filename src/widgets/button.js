@@ -326,12 +326,6 @@ export class Button extends Widget {
     super.draw(O, element);
   }
 
-  destroy() {
-    this.removeChildNode(this.icon?.element);
-    this.removeChildNode(this.label?.element);
-    super.destroy();
-  }
-
   static get renderers() {
     return [
       defineRender('layout', function (layout) {

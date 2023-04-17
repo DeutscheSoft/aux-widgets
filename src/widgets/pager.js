@@ -492,12 +492,6 @@ export class Pager extends Container {
   getPages() {
     return this.pages.getPages();
   }
-
-  destroy() {
-    this.removeChildNode(this.navigation?.element);
-    this.removeChildNode(this.pages?.element);
-    super.destroy();
-  }
 }
 
 /**

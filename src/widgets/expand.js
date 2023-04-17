@@ -313,11 +313,6 @@ export class Expand extends Container {
     child.off('set__collapsed', this._update_visibility);
   }
 
-  destroy() {
-    this.removeChildNode(this.button?.element);
-    super.destroy();
-  }
-
   set(key, value) {
     let group;
     if (key === 'group') {
