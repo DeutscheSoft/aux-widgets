@@ -9,6 +9,12 @@ API Changes
   y, and z. This behavior was confusing and made it difficult to correctly bind
   to those parameters. This is now resolved.
 
+* Chart: It is now possible to pass a list of charts on creation.
+
+* All widgets now use ResizeObserver to detect size changes. This helps in situations
+  in which a widget is resized using CSS (and not a change which results from changing
+  the window size).
+
 AUX 1.1: Changes since AUX 1.0
 
 Refactoring
