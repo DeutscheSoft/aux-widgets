@@ -139,13 +139,15 @@ export class Select extends Button {
       },
       set_selected_entry: function (entry) {
         const entries = this.entries;
-        entries.forEach((v) => v.element.removeAttribute('aria-selected'));
+        entries.forEach((entry) => {
+          entry.set('selected', false);
+        });
         if (entry) {
           this.update('selected', entries.indexOf(entry));
           this.update('value', entry.get('value'));
           this.update('label', entry.get('label'));
+          entry.set('selected', true);
           this._list.setAttribute('aria-activedescendant', entry.get('id'));
-          entry.element.setAttribute('aria-selected', 'true');
         } else {
           this.update('selected', -1);
           this.update('value', void 0);
@@ -280,11 +282,6 @@ export class Select extends Button {
           setDelayedFocus(element);
           element.removeAttribute('aria-expanded');
         }
-      }),
-      defineRender(['selected', SymEntriesChanged], function (selected) {
-        this.entries.forEach((entry, i) => {
-          toggleClass(entry.element, 'aux-active', i === selected);
-        });
       }),
       defineRender([SymResize, 'auto_size', SymEntriesChanged], function (
         auto_size
@@ -509,8 +506,10 @@ export class Select extends Button {
     const selected = this.options.selected;
 
     // adjust selected
-    if (selected !== -1 && selected >= index) {
+    if (selected !== -1 && selected >= index && selected + 1 < entries.length) {
       this.set('selected', selected + 1);
+    } else if (selected === index) {
+      this.set('selected', selected);
     }
     /**
      * Is fired when a new {@link SelectEntry} is added to the list.
@@ -978,6 +977,7 @@ export class SelectEntry extends Button {
   static get _options() {
     return Object.assign({}, Button.getOptionTypes(), {
       value: 'mixed',
+      selected: 'boolean',
     });
   }
 
@@ -986,14 +986,32 @@ export class SelectEntry extends Button {
       label: '',
       value: null,
       role: 'option',
+      selected: false,
     };
   }
 
+  static get renderers() {
+    return [
+      defineRender('selected', function (selected) {
+        const element = this.element;
+        toggleClass(element, 'aux-active', selected);
+        if (selected) {
+          element.removeAttribute('aria-selected');
+        } else {
+          element.setAttribute('aria-selected', 'true');
+        }
+      }),
+    ];
+  }
+
   initialize(options) {
-    if (!options.element) options.element = element('div');
     super.initialize(options);
-    addClass(this.element, 'aux-selectentry');
     this.set('id', createID('aux-select-entry-'));
+  }
+
+  draw(O, element) {
+    addClass(this.element, 'aux-selectentry');
+    super.draw(O, element);
   }
 
   static get static_events() {
