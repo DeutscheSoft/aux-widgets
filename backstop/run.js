@@ -44,7 +44,7 @@ function find_chromes() {
 
 // we assume 500mb for each chrome
 const captureLimit = Math.round(
-  Math.max(Math.min(os.freemem() / 500e6, os.cpus().length), 1)
+  Math.max(Math.min(1, os.freemem() / 500e6, os.cpus().length), 1)
 );
 // and 100mb for each nodejs
 const compareLimit = Math.round(
@@ -71,8 +71,6 @@ const config = {
       height: 768,
     },
   ],
-  onBeforeScript: 'puppet/onBefore.js',
-  onReadyScript: 'puppet/onReady.js',
   scenarios: [],
   paths: {
     bitmaps_reference: 'backstop_data/bitmaps_reference',
@@ -84,8 +82,7 @@ const config = {
   report: [],
   engine: 'puppeteer',
   engineOptions: {
-    args: ['--no-sandbox'],
-    executablePath: null,
+    headless: true,
   },
   asyncCaptureLimit: captureLimit,
   asyncCompareLimit: compareLimit,
@@ -99,17 +96,8 @@ function make_scenario(path) {
   return {
     label: path,
     url: 'http://localhost:' + http_port + '/tests/' + path,
-    referenceUrl: '',
-    readyEvent: '',
-    readySelector: '',
-    delay: 500,
-    hideSelectors: [],
-    removeSelectors: [],
-    hoverSelector: '',
-    clickSelector: '',
-    postInteractionWait: 0,
+    delay: 1000,
     selectors: [],
-    selectorExpansion: true,
     expect: 0,
     misMatchThreshold: 0.5,
     requireSameDimensions: true,

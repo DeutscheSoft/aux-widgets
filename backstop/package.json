@@ -11,7 +11,7 @@
   "author": "Arne Goedeke",
   "private": true,
   "dependencies": {
-    "backstopjs": "^4.3.2",
+    "backstopjs": "^6.2.1",
     "connect": "^3.7.0",
     "http-server": "^0.11.1",
     "serve-index": "^1.9.1",
