@@ -75,13 +75,29 @@ export function inheritChildOptions(dst, child_name, src, blacklist) {
     if (C) C.set(key, value);
   };
 
+  const inheritedOptions = [];
+
   for (const tmp in src.getOptionTypes()) {
     if (dst.hasOption(tmp)) continue;
     if (blacklist.indexOf(tmp) > -1) continue;
+    inheritedOptions.push(tmp);
     dst.addStaticEvent('set_' + tmp, setCallback);
     if (!dst.hasOption(tmp))
       dst.defineOption(tmp, src.getOptionType(tmp), src.getDefault(tmp));
   }
+
+  // we use initialized, which happens after initialize_children
+  dst.addStaticEvent('initialized', function () {
+    const child = this[child_name];
+
+    if (!child) return;
+
+    inheritedOptions.forEach((name) => {
+      const value = this.get(name);
+      if (value === src.getDefault(name)) return;
+      child.set(name, this.get(name));
+    });
+  });
 }
 
 export function defineChildWidget(widget, name, config) {
