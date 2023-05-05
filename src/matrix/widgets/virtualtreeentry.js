@@ -242,6 +242,11 @@ export class VirtualTreeEntry extends VirtualTreeEntryBase {
       this.subscribeData();
     }
   }
+
+  destroy() {
+    this.data_subscriptions.unsubscribe();
+    super.destroy();
+  }
 }
 
 defineChildWidget(VirtualTreeEntry, 'label', {
