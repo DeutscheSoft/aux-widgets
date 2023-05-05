@@ -765,6 +765,13 @@ export class Widget extends Base {
 
     super.destroy();
 
+    const element = this.element;
+
+    if (element) {
+      delete element.isAuxWidget;
+      delete element.auxWidget;
+    }
+
     this.options = null;
     this.element = null;
 
