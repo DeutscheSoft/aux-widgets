@@ -62,8 +62,6 @@ export const SymResized = Symbol('resized');
 
 const rootWidgets = new Map();
 
-const ariaOptions = ariaAttributes.map((a) => a.replace('-', '_'));
-
 function onVisibilityChange() {
   if (document.hidden) {
     this.disableDraw();
@@ -408,7 +406,7 @@ export class Widget extends Base {
   }
 
   static get renderers() {
-    const renders = [
+    return [
       defineMeasure(SymResize, function () {
         this.resize();
       }),
@@ -512,23 +510,23 @@ export class Widget extends Base {
         if (!E) return;
         toggleClass(E, 'aux-focus', !!focus);
       }),
-    ];
-    ariaOptions.forEach((o) => {
-      renders.push(
-        defineRender(o, function (v) {
-          if (typeof v === 'undefined' || v === null) {
-            this.getARIATargets().map((t) =>
-              t.removeAttribute(o.replace('_', '-'))
-            );
+      ...ariaAttributes.map((attributeName) => {
+        const optionName = attributeName.replace('-', '_');
+        return defineRender(optionName, function (value) {
+          const targets = this.getARIATargets();
+
+          if (typeof value === 'undefined' || value === null) {
+            targets.forEach((element) => {
+              element.removeAttribute(attributeName);
+            });
           } else {
-            this.getARIATargets().map((t) =>
-              t.setAttribute(o.replace('_', '-'), v)
-            );
+            targets.forEach((element) => {
+              element.setAttribute(attributeName, value);
+            });
           }
-        })
-      );
-    });
-    return renders;
+        });
+      }),
+    ];
   }
 
   constructor(options) {
