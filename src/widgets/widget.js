@@ -62,6 +62,12 @@ export const SymResized = Symbol('resized');
 
 const rootWidgets = new Map();
 
+const ariaOptions = Object.fromEntries(
+  ariaAttributes.map((attributeName) => {
+    return [attributeName.replace('-', '_'), 'string'];
+  })
+);
+
 function onVisibilityChange() {
   if (document.hidden) {
     this.disableDraw();
@@ -275,33 +281,36 @@ function onFocusKeyDown(e) {
  */
 export class Widget extends Base {
   static get _options() {
-    return {
-      // A CSS class to add to the main element
-      class: 'string',
-      // A DOM element as container to inject the element
-      // into
-      container: 'object',
-      // a id to set on the element. If omitted a random
-      // string is generated.
-      debug: 'boolean',
-      id: 'string',
-      styles: 'object',
-      disabled: 'boolean',
-      element: 'object',
-      active: 'boolean',
-      visible: 'boolean',
-      dblclick: 'number',
-      interacting: 'boolean',
-      notransitions: 'boolean',
-      notransitions_duration: 'number',
-      presets: 'object',
-      preset: 'string',
-      title: 'string',
-      tabindex: 'number|boolean',
-      role: 'string',
-      aria_targets: 'boolean|array',
-      focus: 'boolean',
-    };
+    return Object.assign(
+      {
+        // A CSS class to add to the main element
+        class: 'string',
+        // A DOM element as container to inject the element
+        // into
+        container: 'object',
+        // a id to set on the element. If omitted a random
+        // string is generated.
+        debug: 'boolean',
+        id: 'string',
+        styles: 'object',
+        disabled: 'boolean',
+        element: 'object',
+        active: 'boolean',
+        visible: 'boolean',
+        dblclick: 'number',
+        interacting: 'boolean',
+        notransitions: 'boolean',
+        notransitions_duration: 'number',
+        presets: 'object',
+        preset: 'string',
+        title: 'string',
+        tabindex: 'number|boolean',
+        role: 'string',
+        aria_targets: 'boolean|array',
+        focus: 'boolean',
+      },
+      ariaOptions
+    );
   }
 
   static get options() {
@@ -870,11 +879,7 @@ export class Widget extends Base {
    * @param value - The option value.
    */
   set(key, value) {
-    if (
-      key.charCodeAt(0) !== 95 &&
-      !this.constructor.hasOption(key) &&
-      !key.startsWith('aria_')
-    ) {
+    if (key.charCodeAt(0) !== 95 && !this.constructor.hasOption(key)) {
       warn(
         '%O: %s.set(%s, %O): unknown option.',
         this,
