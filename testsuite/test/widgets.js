@@ -128,7 +128,7 @@ const standalone_widgets = [
 
 describe('Widgets', () => {
   it('creating Widgets', () => {
-    widgets.map((w) => {
+    widgets.forEach((w) => {
       const widget = new w();
       widget.destroy();
     });
@@ -144,20 +144,18 @@ describe('Widgets', () => {
   });
 
   it('additional options', async () => {
-    Promise.all(
-      standalone_widgets.map(async (w, i) => {
-        const widget = new w({ id: 'foobar' });
-        widget.show();
-        await waitForDrawn(widget);
-        assert(widget.element.getAttribute('id') === 'foobar');
+    for (const w of standalone_widgets) {
+      const widget = new w({ id: 'foobar' });
+      widget.show();
+      await waitForDrawn(widget);
+      assertEqual(widget.element.getAttribute('id'), 'foobar');
 
-        widget.set('title', 'foobar');
-        await waitForDrawn(widget);
-        assert(widget.element.getAttribute('title') === 'foobar');
+      widget.set('title', 'foobar');
+      await waitForDrawn(widget);
+      assertEqual(widget.element.getAttribute('title'), 'foobar');
 
-        widget.destroy();
-      })
-    );
+      widget.destroy();
+    }
   });
 
   function assertHidden(widget) {
@@ -175,40 +173,38 @@ describe('Widgets', () => {
   }
 
   it('visible', async () => {
-    Promise.all(
-      standalone_widgets.map(async (w, i) => {
-        const widget = new w();
+    for (const w of standalone_widgets) {
+      const widget = new w();
 
-        // show()
-        widget.show();
-        assert(widget.isDrawn());
-        await waitForDrawn(widget);
-        assertVisible(widget);
+      // show()
+      widget.show();
+      assert(widget.isDrawn());
+      await waitForDrawn(widget);
+      assertVisible(widget);
 
-        // hide()
-        widget.hide();
-        await waitForDrawn(widget);
-        assertHidden(widget);
+      // hide()
+      widget.hide();
+      await waitForDrawn(widget);
+      assertHidden(widget);
 
-        // set visible = true
-        widget.set('visible', true);
-        await waitForDrawn(widget);
-        assertVisible(widget);
+      // set visible = true
+      widget.set('visible', true);
+      await waitForDrawn(widget);
+      assertVisible(widget);
 
-        // set visible = false
-        widget.set('visible', false);
-        await waitForDrawn(widget);
-        assertHidden(widget);
+      // set visible = false
+      widget.set('visible', false);
+      await waitForDrawn(widget);
+      assertHidden(widget);
 
-        widget.forceShow();
-        assertVisible(widget);
+      widget.forceShow();
+      assertVisible(widget);
 
-        widget.forceHide();
-        assertHidden(widget);
+      widget.forceHide();
+      assertHidden(widget);
 
-        widget.destroy();
-      })
-    );
+      widget.destroy();
+    }
   });
 
   it('child_widget', async () => {
