@@ -368,18 +368,10 @@ export class Fader extends Widget {
     return [this.element, this._track, this._handle];
   }
 
-  /**
-   * Resets the fader value to <code>options.reset</code>.
-   *
-   * @method Fader#reset
-   */
-  reset() {
-    this.set('value', this.options.reset);
-  }
-
   getFocusTargets() {
     return [this._handle];
   }
+
   getARIATargets() {
     return [this._handle];
   }
