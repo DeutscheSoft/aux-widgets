@@ -17,11 +17,24 @@
  * Boston, MA  02110-1301  USA
  */
 
+import { canvas } from './helpers.js';
+
+afterEach(() => {
+  const div = canvas();
+
+  while (div.lastChild) {
+    const element = div.lastChild;
+
+    if (element.auxWidget) element.auxWidget.destroy();
+
+    element.remove();
+  }
+});
+
 import './base_widgets.js';
 import './bitset.js';
 import './events.js';
 import './css_helpers.js';
-import './helpers.js';
 import './scheduler.js';
 import './widgets.js';
 import './timers.js';

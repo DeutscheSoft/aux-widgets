@@ -123,9 +123,22 @@ let _canvas;
 
 export function canvas() {
   if (!_canvas) {
+    const clip = document.createElement('div');
+    document.body.appendChild(clip);
+
+    Object.assign(clip.style, {
+      overflow: 'hidden',
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      height: '10vh',
+      width: '10vw',
+      visibility: 'hidden',
+      'pointer-events': 'none',
+    });
+
     _canvas = document.createElement('div');
-    _canvas.style.visibility = 'hidden';
-    document.body.appendChild(_canvas);
+    clip.appendChild(_canvas);
   }
 
   return _canvas;
