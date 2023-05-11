@@ -312,8 +312,19 @@ export function defineTask(phase, dependencies, run, debug) {
   const optionNames = dependencies.filter((dep) => typeof dep === 'string');
 
   if (optionNames.length) {
-    const arglistIn = optionNames.join(', ');
-    const arglistOut = ['this', ...optionNames].join(', ');
+    const variableNames = optionNames.map((name) => {
+      return name.replaceAll('.', '_');
+    });
+    const arglistIn = optionNames
+      .map((name, i) => {
+        if (name !== variableNames[i]) {
+          return `[${JSON.stringify(name)}]: ${variableNames[i]}`;
+        } else {
+          return name;
+        }
+      })
+      .join(', ');
+    const arglistOut = ['this', ...variableNames].join(', ');
 
     run = new Function(
       'renderFunction',
