@@ -22,7 +22,13 @@ import { Widget } from './widget.js';
 import { Knob } from './knob.js';
 import { Value } from './value.js';
 import { Label } from './label.js';
-import { addClass, removeClass, element, createID } from '../utils/dom.js';
+import {
+  applyAttribute,
+  addClass,
+  removeClass,
+  element,
+  createID,
+} from '../utils/dom.js';
 import { defineRender } from '../renderer.js';
 
 /**
@@ -103,29 +109,24 @@ export class ValueKnob extends Widget {
         );
         addClass(E, 'aux-' + layout);
       }),
-      defineRender('label', function (label) {
-        const E = this.knob.svg;
-        const V = this.value._input;
-        if (label !== false) {
-          const labelID = this._labelID;
-          this.label.set('id', labelID);
-          E.setAttribute('aria-labelledby', labelID);
-          E.removeAttribute('aria-label');
-          V.setAttribute('aria-labelledby', labelID);
-          V.removeAttribute('aria-label');
-        } else {
-          E.setAttribute('aria-label', 'ValueKnob');
-          E.removeAttribute('aria-labelledby');
-          V.setAttribute('aria-label', 'ValueKnob');
-          V.removeAttribute('aria-labelledby');
-        }
+      defineRender(['label', 'aria_labelledby'], function (
+        label,
+        aria_labelledby
+      ) {
+        if (aria_labelledby !== void 0) return;
+
+        const { svg } = this.knob;
+        const { _input } = this.value;
+
+        const value = label !== false ? this.label.get('id') : null;
+        applyAttribute(_input, 'aria-labelledby', value);
+        applyAttribute(svg, 'aria-labelledby', value);
       }),
     ];
   }
 
   initialize(options) {
     if (!options.element) options.element = element('div');
-    this._labelID = createID('aux-label-');
     super.initialize(options);
     /**
      * @member {HTMLDivElement} ValueKnob#element - The main DIV container.
@@ -162,6 +163,13 @@ defineChildWidget(ValueKnob, 'label', {
   toggle_class: true,
   map_options: {
     label: 'label',
+  },
+  static_events: {
+    initialized: function () {
+      if (!this.get('id')) {
+        this.set('id', createID('aux-label-'));
+      }
+    },
   },
 });
 /**

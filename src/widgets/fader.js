@@ -51,9 +51,11 @@ import {
   outerWidth,
   innerWidth,
   createID,
+  applyAttribute,
 } from '../utils/dom.js';
 import { defineChildWidget } from '../child_widget.js';
 import { defineRender, defineMeasure } from '../renderer.js';
+import { selectAriaAttribute } from '../utils/select_aria_attribute.js';
 
 function vert(layout) {
   return layout === 'left' || layout === 'right';
@@ -266,34 +268,40 @@ export class Fader extends Widget {
               _handle.style.left = tmp;
             }
           }),
-      defineRender('label', function (label) {
-        const E = this._handle;
-        const V = this.value ? this.value._input : null;
-        if (label !== false) {
-          const labelID = this._labelID;
-          this.label.set('id', labelID);
-          E.setAttribute('aria-labelledby', labelID);
-          E.removeAttribute('aria-label');
-          if (V) {
-            V.setAttribute('aria-labelledby', labelID);
-            V.removeAttribute('aria-label');
-          }
-        } else {
-          E.setAttribute('aria-label', 'Fader');
-          E.removeAttribute('aria-labelledby');
-          if (V) {
-            V.setAttribute('aria-label', 'Fader');
-            V.removeAttribute('aria-labelledby');
-          }
-        }
+      defineRender(['label', 'aria_labelledby'], function (
+        label,
+        aria_labelledby
+      ) {
+        if (aria_labelledby !== void 0) return;
+
+        const { _handle } = this;
+
+        const value = label !== false ? this.label.get('id') : null;
+        applyAttribute(_handle, 'aria-labelledby', value);
       }),
+      defineRender(
+        ['label', 'aria_labelledby', 'value.aria_labelledby', 'show_value'],
+        function (label, aria_labelledby, value_aria_labelledby, show_value) {
+          if (value_aria_labelledby !== void 0) return;
+
+          if (!show_value) return;
+
+          const { _input } = this.value;
+
+          const value = selectAriaAttribute(
+            aria_labelledby,
+            label !== false ? this.label.get('id') : null
+          );
+
+          applyAttribute(_input, 'aria-labelledby', value);
+        }
+      ),
     ];
   }
 
   initialize(options) {
     if (!options.element) options.element = element('div');
     super.initialize(options);
-    this._labelID = createID('aux-label-');
 
     const O = this.options;
 
@@ -422,6 +430,13 @@ defineChildWidget(Fader, 'label', {
   option: 'label',
   map_options: {
     label: 'label',
+  },
+  static_events: {
+    initialized: function () {
+      if (!this.get('id')) {
+        this.set('id', createID('aux-label-'));
+      }
+    },
   },
 });
 /**

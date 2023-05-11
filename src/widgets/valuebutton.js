@@ -29,10 +29,11 @@ import {
 import { DragValue } from '../modules/dragvalue.js';
 import { Scale } from './scale.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
-import { addClass, createID } from '../utils/dom.js';
+import { addClass, createID, applyAttribute } from '../utils/dom.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
 import { defineRender } from '../renderer.js';
+import { selectAriaAttribute } from '../utils/select_aria_attribute.js';
 
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -122,23 +123,21 @@ export class ValueButton extends Button {
 
   static get renderers() {
     return [
-      defineRender('label', function (label) {
-        const E = this.element;
-        const V = this.value._input;
-        if (label !== false) {
-          const labelID = this._labelID;
-          this.label.set('id', labelID);
-          E.setAttribute('aria-labelledby', labelID);
-          E.removeAttribute('aria-label');
-          V.setAttribute('aria-labelledby', labelID);
-          V.removeAttribute('aria-label');
-        } else {
-          E.setAttribute('aria-label', 'ValueButton');
-          E.removeAttribute('aria-labelledby');
-          V.setAttribute('aria-label', 'ValueButton');
-          V.removeAttribute('aria-labelledby');
+      defineRender(
+        ['label', 'aria_labelledby', 'value.aria_labelledby'],
+        function (label, aria_labelledby, value_aria_labelledby) {
+          if (value_aria_labelledby !== void 0) return;
+
+          const { _input } = this.value;
+
+          const value = selectAriaAttribute(
+            aria_labelledby,
+            label !== false ? this.label.get('id') : null
+          );
+
+          applyAttribute(_input, 'aria-labelledby', value);
         }
-      }),
+      ),
     ];
   }
 

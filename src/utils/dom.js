@@ -754,3 +754,16 @@ export function setDelayedFocus(element, timeout) {
     element.focus();
   }, timeout || 50);
 }
+
+/**
+ * If the given attributeValue is either null nor undefined, the given
+ * attributeName is removed using removeAttribute. Otherwise, it is
+ * set using setAttribute.
+ */
+export function applyAttribute(element, attributeName, attributeValue) {
+  if (attributeValue !== void 0 && attributeValue !== null) {
+    element.setAttribute(attributeName, attributeValue);
+  } else {
+    element.removeAttribute(attributeName);
+  }
+}

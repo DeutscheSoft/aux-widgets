@@ -36,8 +36,10 @@ import {
   innerWidth,
   innerHeight,
   createID,
+  applyAttribute,
 } from '../utils/dom.js';
 import { defineRender, defineMeasure } from '../renderer.js';
+import { selectAriaAttribute } from '../utils/select_aria_attribute.js';
 
 import { FORMAT } from '../utils/sprintf.js';
 
@@ -414,17 +416,16 @@ export class Meter extends Widget {
           return this.drawMeter();
         }
       ),
-      defineRender('label', function (label) {
+      defineRender(['label', 'aria_labelledby'], function (
+        label,
+        aria_labelledby
+      ) {
+        if (aria_labelledby !== void 0) return;
+
         const E = this.element;
-        if (label !== false) {
-          const labelID = this._labelID;
-          this.label.set('id', labelID);
-          E.setAttribute('aria-labelledby', labelID);
-          E.removeAttribute('aria-label');
-        } else {
-          E.setAttribute('aria-label', 'Meter');
-          E.removeAttribute('aria-labelledby');
-        }
+
+        const value = label !== false ? this.label.get('id') : null;
+        applyAttribute(this.element, 'aria-labelledby', value);
       }),
     ];
   }
@@ -432,7 +433,6 @@ export class Meter extends Widget {
   initialize(options) {
     if (!options.element) options.element = element('div');
     super.initialize(options);
-    this._labelID = createID('aux-label-');
     const O = this.options;
     /**
      * @member {HTMLDivElement} Meter#element - The main DIV container.
@@ -615,6 +615,13 @@ defineChildWidget(Meter, 'label', {
   option: 'label',
   map_options: { label: 'label' },
   toggle_class: true,
+  static_events: {
+    initialized: function () {
+      if (!this.get('id')) {
+        this.set('id', createID('aux-label-'));
+      }
+    },
+  },
 });
 /**
  * @member {Label} Meter#value - The {@link Label} displaying the value.

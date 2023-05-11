@@ -23,6 +23,7 @@ import {
   toggleClass,
   isClassName,
   createID,
+  applyAttribute,
 } from './../utils/dom.js';
 import { defineChildWidget } from './../child_widget.js';
 import { Widget } from './widget.js';
@@ -318,7 +319,6 @@ export class Button extends Widget {
     this.__init_target = null;
     this.__delayed_to = -1;
     super.initialize(options);
-    this._labelID = createID('aux-label-');
   }
 
   draw(O, element) {
@@ -337,22 +337,14 @@ export class Button extends Widget {
         const E = this.element;
         toggleClass(E, 'aux-active', state);
       }),
-      defineRender(['label', 'icon'], function (label, icon) {
-        const E = this.element;
+      defineRender(['label', 'aria_labelledby'], function (
+        label,
+        aria_labelledby
+      ) {
+        if (aria_labelledby !== void 0) return;
 
-        if (label !== false) {
-          const labelID = this._labelID;
-
-          this.label.set('id', labelID);
-          E.setAttribute('aria-labelledby', labelID);
-          E.removeAttribute('aria-label');
-        } else if (icon && isClassName(icon)) {
-          E.setAttribute('aria-label', icon + ' icon');
-          E.removeAttribute('aria-labelledby');
-        } else {
-          E.setAttribute('aria-label', 'Button');
-          E.removeAttribute('aria-labelledby');
-        }
+        const value = label !== false ? this.label.get('id') : null;
+        applyAttribute(this.element, 'aria-labelledby', value);
       }),
     ];
   }
@@ -379,4 +371,11 @@ defineChildWidget(Button, 'label', {
   option: 'label',
   inherit_options: true,
   toggle_class: true,
+  static_events: {
+    initialized: function () {
+      if (!this.get('id')) {
+        this.set('id', createID('aux-label-'));
+      }
+    },
+  },
 });

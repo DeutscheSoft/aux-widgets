@@ -133,8 +133,9 @@ describe('Widgets', () => {
       widget.destroy();
     });
   });
+
   it('basic options', () => {
-    widgets.map((w) => {
+    widgets.forEach((w) => {
       const widget = new w();
       if (widget instanceof Widget) {
         assert(!widget.get('interacting'));
@@ -153,6 +154,62 @@ describe('Widgets', () => {
       widget.set('title', 'foobar');
       await waitForDrawn(widget);
       assertEqual(widget.element.getAttribute('title'), 'foobar');
+
+      widget.destroy();
+    }
+  });
+
+  it('aria-label', async () => {
+    for (const w of standalone_widgets) {
+      const widget = new w({ aria_label: null });
+      widget.show();
+
+      const targets = widget.getARIATargets();
+
+      await waitForDrawn(widget);
+      targets.forEach((element) => {
+        assertEqual(element.getAttribute('aria-label'), null);
+      });
+
+      widget.set('aria_label', 'foobar');
+      await waitForDrawn(widget);
+      targets.forEach((element) => {
+        assertEqual(element.getAttribute('aria-label'), 'foobar');
+      });
+
+      widget.set('aria_label', null);
+      await waitForDrawn(widget);
+      targets.forEach((element) => {
+        assertEqual(element.getAttribute('aria-label'), null);
+      });
+
+      widget.destroy();
+    }
+  });
+
+  it('aria-labelledby', async () => {
+    for (const w of standalone_widgets) {
+      const widget = new w({ aria_labelledby: null });
+      widget.show();
+
+      const targets = widget.getARIATargets();
+
+      await waitForDrawn(widget);
+      targets.forEach((element) => {
+        assertEqual(element.getAttribute('aria-labelledby'), null);
+      });
+
+      widget.set('aria_labelledby', 'foobar');
+      await waitForDrawn(widget);
+      targets.forEach((element) => {
+        assertEqual(element.getAttribute('aria-labelledby'), 'foobar');
+      });
+
+      widget.set('aria_labelledby', null);
+      await waitForDrawn(widget);
+      targets.forEach((element) => {
+        assertEqual(element.getAttribute('aria-labelledby'), null);
+      });
 
       widget.destroy();
     }
@@ -366,5 +423,129 @@ describe('Clock', () => {
       c._label.innerHTML + c._label_upper.innerHTML + c._label_lower.innerHTML,
       'labelupperlower'
     );
+  });
+});
+
+describe('aria-labelledby with label', () => {
+  const WidgetsWithValue = [
+    [Fader, 'Fader'],
+    [ValueButton, 'ValueButton'],
+  ];
+  WidgetsWithValue.forEach(([W, Name, getTargets]) => {
+    it(Name, async () => {
+      const widget = new W({});
+      widget.show();
+
+      // Test that setting aria-labelledby overwrites label
+      // and that label otherwise will be marked as being the
+      // label for the handle.
+
+      const targets = widget.getARIATargets();
+
+      widget.set('aria_labelledby', 'foobar');
+      widget.set('label', 'testtest');
+      await waitForDrawn(widget);
+      targets.forEach((element) => {
+        assertEqual(element.getAttribute('aria-labelledby'), 'foobar');
+      });
+
+      widget.set('aria_labelledby', null);
+      await waitForDrawn(widget);
+      targets.forEach((element) => {
+        assertEqual(element.getAttribute('aria-labelledby'), null);
+      });
+
+      widget.reset('aria_labelledby');
+      await waitForDrawn(widget);
+      targets.forEach((element) => {
+        assertEqual(
+          element.getAttribute('aria-labelledby'),
+          widget.label.element.getAttribute('id')
+        );
+      });
+
+      widget.set('aria_labelledby', null);
+      await waitForDrawn(widget);
+      targets.forEach((element) => {
+        assertEqual(element.getAttribute('aria-labelledby'), null);
+      });
+
+      widget.set('show_value', true);
+      await waitForDrawn(widget);
+      const _input = widget.value._input;
+
+      widget.set('value.aria_labelledby', 'foobar');
+      await waitForDrawn(widget);
+      assertEqual(
+        widget.value.element.getAttribute('aria-labelledby'),
+        'foobar'
+      );
+
+      widget.set('value.aria_labelledby', null);
+      await waitForDrawn(widget);
+      assertEqual(_input.getAttribute('aria-labelledby'), null);
+
+      widget.reset('value.aria_labelledby');
+      await waitForDrawn(widget);
+      assertEqual(_input.getAttribute('aria-labelledby'), null);
+
+      widget.reset('aria_labelledby');
+      await waitForDrawn(widget);
+      assertEqual(
+        _input.getAttribute('aria-labelledby'),
+        widget.label.element.getAttribute('id')
+      );
+
+      widget.set('aria_labelledby', 'foobar');
+      await waitForDrawn(widget);
+      assertEqual(_input.getAttribute('aria-labelledby'), 'foobar');
+
+      widget.destroy();
+    });
+  });
+
+  [
+    [Meter, 'Meter'],
+    [Button, 'Button'],
+  ].forEach(([W, Name]) => {
+    it(Name, async () => {
+      const widget = new W({});
+      widget.show();
+
+      // Test that setting aria-labelledby overwrites label
+      // and that label otherwise will be marked as being the
+      // label for the handle.
+      const targets = widget.getARIATargets();
+
+      widget.set('aria_labelledby', 'foobar');
+      widget.set('label', 'testtest');
+      await waitForDrawn(widget);
+      targets.forEach((element) => {
+        assertEqual(element.getAttribute('aria-labelledby'), 'foobar');
+      });
+
+      widget.set('aria_labelledby', null);
+      await waitForDrawn(widget);
+      targets.forEach((element) => {
+        assertEqual(element.getAttribute('aria-labelledby'), null);
+      });
+
+      widget.reset('aria_labelledby');
+      await waitForDrawn(widget);
+      targets.forEach((element) => {
+        assertEqual(
+          element.getAttribute('aria-labelledby'),
+          widget.label.element.getAttribute('id')
+        );
+      });
+
+      widget.set('aria_labelledby', null);
+      await waitForDrawn(widget);
+      targets.forEach((element) => {
+        assertEqual(element.getAttribute('aria-labelledby'), null);
+      });
+
+      widget.destroy();
+    });
   });
 });
