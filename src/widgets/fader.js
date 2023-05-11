@@ -291,7 +291,6 @@ export class Fader extends Widget {
   }
 
   initialize(options) {
-    this.__tt = false;
     if (!options.element) options.element = element('div');
     super.initialize(options);
     this._labelID = createID('aux-label-');
