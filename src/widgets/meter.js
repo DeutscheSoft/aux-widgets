@@ -304,15 +304,6 @@ export class Meter extends Widget {
           O.base = value = O.min;
         }
       },
-      rangedchanged: function () {
-        /* redraw the gradient, if we have any */
-
-        const gradient = this.options.gradient;
-
-        if (gradient) {
-          this.set('gradient', gradient);
-        }
-      },
       set_value: function (val) {
         if (this.options.sync_value) this.set('value_label', val);
       },
