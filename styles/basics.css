@@ -73,6 +73,8 @@
 
   --aux-grid-labelpadding: 0 3px;
 
+  --aux-icon-size: var(--aux-main-fontsize);
+
   --aux-knob-tiny: 40px;
   --aux-knob-small: 64px;
   --aux-knob-medium: 96px;

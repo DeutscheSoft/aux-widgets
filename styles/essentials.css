@@ -1311,6 +1311,10 @@ body.aux-cursor-row-resize * {
   flex: 1 1 auto;
 }
 .aux-button.aux-select > .aux-icon {
+  order: 0;
+  flex: 0 0 auto;
+}
+.aux-button.aux-select > .aux-arrow {
   order: 2;
   flex: 0 0 auto;
 }

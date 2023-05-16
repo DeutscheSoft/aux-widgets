@@ -22,6 +22,7 @@
 import { defineChildWidget } from './../child_widget.js';
 import { Button } from './button.js';
 import { Label } from './label.js';
+import { Icon } from './icon.js';
 import { setDelayedFocus, createID } from '../utils/dom.js';
 import { Timer } from '../utils/timers.js';
 import { SymResize } from './widget.js';
@@ -64,6 +65,11 @@ import {
 
 const SymEntriesChanged = Symbol('entries changes');
 
+function setHasIcon() {
+  const _has_icon = !!this.entries.find((entry) => { return !!entry.options.icon });
+  this.set('_has_icon', _has_icon);
+}
+
 /**
  * Select provides a {@link Button} with a select list to choose from
  * a list of {@link SelectEntry}.
@@ -105,6 +111,7 @@ export class Select extends Button {
       placeholder: 'string|boolean',
       list_class: 'string',
       typing_delay: 'number',
+      arrow: 'string',
     });
   }
 
@@ -116,10 +123,11 @@ export class Select extends Button {
       selected_entry: null,
       auto_size: false,
       show_list: false,
-      icon: 'arrowdown',
+      arrow: 'arrowdown',
       placeholder: false,
       list_class: '',
       label: '',
+      icon: '',
       role: 'select',
       typing_delay: 250,
     };
@@ -131,7 +139,7 @@ export class Select extends Button {
         this.set('show_list', !this.options.show_list);
       },
       set_show_list: function (v) {
-        this.set('icon', v ? 'arrowup' : 'arrowdown');
+        this.set('arrow', v ? 'arrowup' : 'arrowdown');
         if (v) {
           const entry = this.get('selected_entry') || this.entries[0];
           if (entry) setDelayedFocus(entry.element);
@@ -143,15 +151,18 @@ export class Select extends Button {
           entry.set('selected', false);
         });
         if (entry) {
+          const icon = this.options._has_icon ? (entry.get('icon') ? entry.get('icon') : 'blank') : false;
           this.update('selected', entries.indexOf(entry));
           this.update('value', entry.get('value'));
           this.update('label', entry.get('label'));
+          this.update('icon', icon);
           entry.set('selected', true);
           this._list.setAttribute('aria-activedescendant', entry.get('id'));
         } else {
           this.update('selected', -1);
           this.update('value', void 0);
           this.update('label', this.get('placeholder'));
+          this.update('icon', this.options._has_icon ? 'blank' : false);
           this._list.removeAttribute('aria-activedescendant');
         }
       },
@@ -184,6 +195,15 @@ export class Select extends Button {
         const selected_entry = this.get('selected_entry');
 
         if (!selected_entry) this.update('label', label);
+      },
+      set__has_icon: function (_has_icon) {
+        if (_has_icon && !this.options.icon) {
+          this.set('icon', 'blank');
+        } else if (_has_icon) {
+          this.update('icon', this.options.icon);
+        } else if (!_has_icon) {
+          this.update('icon', false);
+        }
       },
     };
   }
@@ -469,7 +489,7 @@ export class Select extends Button {
         value: ent,
         label: ent,
       });
-    } else if (typeof ent === 'object' && 'value' in ent && 'label' in ent) {
+    } else if (typeof ent === 'object' && 'value' in ent && ('label' in ent || 'icon' in ent)) {
       ent.element = null;
       entry = new SelectEntry(ent);
     } else {
@@ -502,6 +522,8 @@ export class Select extends Button {
 
     // invalidate entries.
     this.invalidate(SymEntriesChanged);
+
+    setHasIcon.call(this);
 
     const selected = this.options.selected;
 
@@ -607,6 +629,9 @@ export class Select extends Button {
     // remove from DOM
     if (li.parentElement == this._list) li.remove();
     this.invalidate(SymEntriesChanged);
+
+    setHasIcon.call(this);
+
     /**
      * Is fired when an entry was removed from the list.
      *
@@ -923,6 +948,21 @@ function onSelect(e) {
 
   return false;
 }
+
+/**
+ * @member {Select} Select#arrow - The arrow icon.
+ */
+defineChildWidget(Select, 'arrow', {
+  create: Icon,
+  show: true,
+  default_options: {
+    icon: 'arrowdown',
+    class: 'aux-arrow',
+  },
+  map_options: {
+    arrow: 'icon',
+  }
+});
 
 function onFocusMove(O) {
   const { direction, speed } = O;

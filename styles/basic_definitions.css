@@ -251,6 +251,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  font-size: var(--aux-icon-size);
+  line-height: var(--aux-icon-size);
+  width: var(--aux-icon-size);
+  height: var(--aux-icon-size);
 }
 
 /* KNOB */
@@ -974,7 +978,7 @@
 
 /* SELECT */
 
-.aux-button.aux-select > .aux-icon {
+.aux-button.aux-select > .aux-arrow {
   font-size: var(--aux-select-icon-fontsize);
   line-height: var(--aux-select-icon-size);
   height: var(--aux-select-icon-size);
