@@ -134,20 +134,20 @@ function autoArrows() {
 }
 
 function prevClicked() {
-  this.userset('select', Math.max(0, this.options.select - 1));
+  this.parent.userset('select', Math.max(0, this.parent.get('select') - 1));
 }
 function prevDblClicked() {
-  this.userset('select', 0);
+  this.parent.userset('select', 0);
 }
 
 function nextClicked() {
-  this.userset(
+  this.parent.userset(
     'select',
-    Math.min(this.buttons.getButtons().length - 1, this.options.select + 1)
+    Math.min(this.parent.buttons.getButtons().length - 1, this.parent.get('select') + 1)
   );
 }
 function nextDblClicked() {
-  this.userset('select', this.buttons.getButtons().length - 1);
+  this.parent.userset('select', this.parent.buttons.getButtons().length - 1);
 }
 
 /**
@@ -162,6 +162,8 @@ function nextDblClicked() {
  *
  * @property {String} [options.direction="horizontal"] - The layout of
  *   the Navigation, either `horizontal` or `vertical`.
+ * @property {Boolean} [options.icons=true] - Set icons on previous and next {@link Button}s to standard arrows.
+ *   Set to `false` to use custom icons via child widget.
  * @property {Boolean} [options.arrows=false] - Show or hide previous and next {@link Button}s.
  * @property {Boolean} [options.auto_arrows=true] - Set to false to disable
  *   automatic creation of the previous/next buttons.
@@ -179,6 +181,7 @@ export class Navigation extends Container {
       _button_positions: 'object',
 
       direction: 'string',
+      icons: 'boolean',
       arrows: 'boolean',
       auto_arrows: 'boolean',
       resized: 'boolean',
@@ -189,6 +192,7 @@ export class Navigation extends Container {
   static get options() {
     return {
       direction: 'horizontal',
+      icons: true,
       arrows: false,
       auto_arrows: true,
       resized: false,
@@ -199,6 +203,8 @@ export class Navigation extends Container {
   static get static_events() {
     return {
       set_direction: function (value) {
+        if (!this.get('icons'))
+          return;
         this.prev.set('icon', value === 'vertical' ? 'arrowup' : 'arrowleft'); //"\u25B2" : "\u25C0");
         this.next.set(
           'icon',
@@ -333,27 +339,6 @@ export class Navigation extends Container {
      * @member {HTMLDivElement} Navigation#element - The main DIV container.
      *   Has class <code>.aux-navigation</code>.
      */
-    /**
-     * @member {Button} Navigation#prev - The previous arrow {@link Button} instance.
-     */
-    this.prev = new Button({
-      class: 'aux-previous',
-      dblclick: 400,
-      tabindex: false,
-    });
-    /**
-     * @member {Button} Navigation#next - The next arrow {@link Button} instance.
-     */
-    this.next = new Button({
-      class: 'aux-next',
-      dblclick: 400,
-      tabindex: false,
-    });
-
-    this.prev.on('click', prevClicked.bind(this));
-    this.prev.on('doubleclick', prevDblClicked.bind(this));
-    this.next.on('click', nextClicked.bind(this));
-    this.next.on('doubleclick', nextDblClicked.bind(this));
 
     // these properties contain the scroll position of the buttons child
     // element
@@ -361,9 +346,6 @@ export class Navigation extends Container {
     this._scroll_top = 0;
 
     this.set('_button_positions', new Map());
-
-    this.set('auto_arrows', this.options.auto_arrows);
-    this.set('direction', this.options.direction);
   }
 
   initialized() {
@@ -437,6 +419,9 @@ export class Navigation extends Container {
         this._scroll_left = this.buttons.element.scrollLeft;
       })
     );
+
+    this.set('auto_arrows', this.options.auto_arrows);
+    this.set('direction', this.options.direction);
   }
 
   getResizeTargets() {
@@ -494,5 +479,39 @@ defineChildWidget(Navigation, 'buttons', {
       if (!button) return;
       //button.element.scrollIntoView({behavior: "smooth"});
     },
+  },
+});
+
+/**
+ * @member {Button} Navigation#prev - The previous arrow {@link Button} instance.
+ */
+defineChildWidget(Navigation, 'prev', {
+  create: Button,
+  show: true,
+  default_options: {
+    class: 'aux-previous',
+    dblclick: 300,
+    tabindex: false,
+  },
+  static_events: {
+    'click': prevClicked,
+    'dblclick': prevDblClicked,
+  },
+});
+
+/**
+ * @member {Button} Navigation#next - The next arrow {@link Button} instance.
+ */
+defineChildWidget (Navigation, 'next', {
+  create: Button,
+  show: true,
+  default_options: {
+    class: 'aux-next',
+    dblclick: 300,
+    tabindex: false,
+  },
+  static_events: {
+    'click': nextClicked,
+    'dblclick': nextDblClicked,
   },
 });
