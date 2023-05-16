@@ -33,6 +33,7 @@ export * from './utils/binding.js';
 
 export { Base } from './implements/base.js';
 
+export * from './renderer.js';
 export * from './modules.js';
 export * from './widgets.js';
 export * from './components.js';
