@@ -82,7 +82,7 @@ const SymEntriesChanged = Symbol('entries changes');
  * @property {Boolean} [options.auto_size=false] - If `true`, the Select is
  *   auto-sized to be as wide as the widest {@link SelectEntry}.
  * @property {Array<Object>} [options.entries=[]] - The list of {@link SelectEntry}. Each member is an
- *   object with the two properties <code>label</code> and <code>value</code>, a string used
+ *   object containing properties of {@link Button} and <code>value</code>, a string used
  *   as label for constructing a {@link SelectEntry} or an instance of {@link SelectEntry}.
  * @property {String|Boolean} [options.placeholder=false] - Placeholder
  *   for the button label. Set to <code>false</code> to have an empty
