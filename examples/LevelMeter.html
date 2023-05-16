@@ -76,6 +76,7 @@
   layout="bottom"
   background="#2577a1"
   foreground="#e0e0e0"
+  falling="40"
 >
 </aux-levelmeter>
 <span>LevelMeter with <code>layout="top"</code></span>
@@ -92,5 +93,23 @@
   layout="top"
   background="#2577a1"
   foreground="#e0e0e0"
+  falling="40"
 >
 </aux-levelmeter>
+<script type="text/javascript">
+  function runMeter(meter) {
+    meter = meter.auxWidget;
+    const min = meter.get('min');
+    const max = meter.get('max');
+    window.setInterval(() => {
+      meter.set('value', Math.random() * (max - min) + min);
+    }, 250);
+  }
+  function init() {
+    const meters = document.querySelectorAll('.aux-meter');
+    console.log("init", meters)
+    meters.forEach(runMeter);
+  }
+  setTimeout(init, 3000);
+  document.addEventListener('DOMContentLoaded', init);
+</script>
