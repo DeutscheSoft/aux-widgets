@@ -281,6 +281,7 @@ export function defineChildWidget(widget, name, config) {
         if (show) {
           appendWidget.call(this);
         } else if (w) {
+          w.element.remove();
           this[name] = null;
           if (map_interacting && w.get('interacting')) {
             this.stopInteracting();
