@@ -208,17 +208,6 @@ export class Dynamics extends Chart {
     this.set('scale', O.scale);
     this.set('min', O.min);
     this.set('max', O.max);
-    /**
-     * @member {Graph} Dynamics#steady - The graph drawing the zero line. Has class <code>.aux-steady</code>
-     */
-    this.steady = this.addGraph({
-      dots: [
-        { x: O.min, y: O.min },
-        { x: O.max, y: O.max },
-      ],
-      class: 'aux-steady',
-      mode: 'line',
-    });
 
     this.set('handle_label', this.options.handle_label);
     this.set('show_handle', this.options.show_handle);
@@ -359,6 +348,17 @@ defineChildWidget(Dynamics, 'handle', {
   static_events: {
     userset: dragHandle,
   }
+});
+/**
+ * @member {Graph} Dynamics#steady - The graph drawing the zero line. Has class <code>.aux-steady</code>
+ */
+defineChildWidget(Dynamics, 'steady', {
+  create: Graph,
+  show: true,
+  default_options: {
+    class: 'aux-steady',
+    mode: 'line',
+  },
 });
 /**
  * @member {Graph} Dynamics#response - The graph drawing the dynamics response. Has class <code>.aux-response</code>
