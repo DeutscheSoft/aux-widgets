@@ -231,9 +231,7 @@ export class Dynamics extends Chart {
       class: 'aux-steady',
       mode: 'line',
     });
-    /**
-     * @member {ChartHandle} Dynamics#handle - The handle to set threshold. Has class <code>.aux-handle</code>
-     */
+
     this.handle = this.addHandle({
       range_x: this.range_x,
       range_y: this.range_y,
@@ -364,6 +362,25 @@ export class Dynamics extends Chart {
   }
 }
 
+/**
+ * @member {ChartHandle} Dynamics#handle - The handle to set threshold. Has class <code>.aux-handle</code>
+ */
+defineChildWidget(Dynamics, 'handle', {
+  create: ChartHandle,
+  map_options: {
+    'threshold': [ 'x', 'y' ],
+    'ratio': 'z',
+    'handle_label': 'format_label',
+    'show_handle': 'visible',
+  },
+  default_options: {
+    class: 'aux-handle',
+  },
+  static_events: {
+    'userset': dragHandle,
+  }
+});
+
 function dragRatio(key, y) {
   if (key !== 'y') return;
 
@@ -440,10 +457,6 @@ export class Compressor extends Dynamics {
   static get static_events() {
     return {
       set_ratio_x: function (v) {
-        if (this.ratio) {
-          this.ratio.set('x_min', v);
-          this.ratio.set('x_max', v);
-        }
         setRatio.call(this);
         setRatioLimits.call(this);
       },
@@ -498,7 +511,7 @@ defineChildWidget(Compressor, 'ratio', {
   static_events: {
     'userset': dragRatio,
   }
-})
+});
 
 /**
  * Expander is a pre-configured {@link Dynamics} widget.
