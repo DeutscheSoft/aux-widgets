@@ -21,6 +21,8 @@ import { Chart } from './chart.js';
 import { addClass, removeClass } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 import { defineRender, defineMeasure } from '../renderer.js';
+import { defineChildWidget } from '../child_widget.js';
+import { ChartHandle } from './charthandle.js';
 
 function rangeSet(value, key) {
   this.range_x.set(key, value);
@@ -365,17 +367,18 @@ export class Dynamics extends Chart {
 function dragRatio(key, y) {
   if (key !== 'y') return;
 
-  const thres = this.get('threshold');
-  const ratio_x = this.get('ratio_x');
-  const max = this.get('max');
+  const parent = this.parent;
+  const thres = parent.get('threshold');
+  const ratio_x = parent.get('ratio_x');
+  const max = parent.get('max');
 
   const num = max - thres - (max - ratio_x);
   const R = num / (y - thres);
 
-  const r_min = this.range_z.get('min');
-  const r_max = this.range_z.get('max');
+  const r_min = parent.range_z.get('min');
+  const r_max = parent.range_z.get('max');
 
-  this.userset('ratio', Math.min(r_max, Math.max(r_min, R)));
+  parent.userset('ratio', Math.min(r_max, Math.max(r_min, R)));
 
   return false;
 }
@@ -436,15 +439,11 @@ export class Compressor extends Dynamics {
 
   static get static_events() {
     return {
-      set_ratio_label: function (v) {
-        this.ratio.set('format_label', v);
-      },
-      set_show_ratio: function (v) {
-        this.ratio.set('visible', v);
-      },
       set_ratio_x: function (v) {
-        this.ratio.set('x_min', v);
-        this.ratio.set('x_max', v);
+        if (this.ratio) {
+          this.ratio.set('x_min', v);
+          this.ratio.set('x_max', v);
+        }
         setRatio.call(this);
         setRatioLimits.call(this);
       },
@@ -468,17 +467,6 @@ export class Compressor extends Dynamics {
 
   initialize(options) {
     super.initialize(options);
-    /**
-     * @member {ChartHandle} Compressor#ratio - The handle to set ratio. Has class <code>.aux-ratio</code>
-     */
-    this.ratio = this.addHandle({
-      range_x: this.range_x,
-      range_y: this.range_y,
-      range_z: this.range_z,
-      class: 'aux-ratio',
-    });
-    this.ratio.addEventListener('userset', dragRatio.bind(this));
-
     this.set('ratio_label', this.options.ratio_label);
     this.set('show_ratio', this.options.show_ratio);
     this.set('ratio_x', this.options.ratio_x);
@@ -493,6 +481,25 @@ export class Compressor extends Dynamics {
     super.draw(O, element);
   }
 }
+
+/**
+ * @member {ChartHandle} Compressor#ratio - The handle to set ratio. Has class <code>.aux-ratio</code>
+ */
+defineChildWidget(Compressor, 'ratio', {
+  create: ChartHandle,
+  map_options: {
+    'ratio_label': 'format_label',
+    'show_ratio': 'visible',
+    'ratio_x': [ 'x_min', 'x_max' ],
+  },
+  default_options: {
+    class: 'aux-ratio',
+  },
+  static_events: {
+    'userset': dragRatio,
+  }
+})
+
 /**
  * Expander is a pre-configured {@link Dynamics} widget.
  * @extends Dynamics
