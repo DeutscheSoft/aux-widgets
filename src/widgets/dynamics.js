@@ -23,6 +23,7 @@ import { warn } from '../utils/log.js';
 import { defineRender, defineMeasure } from '../renderer.js';
 import { defineChildWidget } from '../child_widget.js';
 import { ChartHandle } from './charthandle.js';
+import { Graph } from './graph.js';
 
 function rangeSet(value, key) {
   this.range_x.set(key, value);
@@ -219,11 +220,6 @@ export class Dynamics extends Chart {
       mode: 'line',
     });
 
-    /**
-     * @member {Graph} Dynamics#response - The graph drawing the dynamics response. Has class <code>.aux-response</code>
-     */
-    this.response = this.addGraph({ class: 'aux-response' });
-
     this.set('handle_label', this.options.handle_label);
     this.set('show_handle', this.options.show_handle);
     this.set('ratio', this.options.ratio);
@@ -237,6 +233,8 @@ export class Dynamics extends Chart {
   }
 
   drawGraph() {
+    if (!this.response)
+      return;
     const O = this.options;
     const {
       type,
@@ -346,6 +344,7 @@ export class Dynamics extends Chart {
  */
 defineChildWidget(Dynamics, 'handle', {
   create: ChartHandle,
+  show: true,
   map_options: {
     threshold: [ 'x', 'y' ],
     ratio: 'z',
@@ -360,6 +359,16 @@ defineChildWidget(Dynamics, 'handle', {
   static_events: {
     userset: dragHandle,
   }
+});
+/**
+ * @member {Graph} Dynamics#response - The graph drawing the dynamics response. Has class <code>.aux-response</code>
+ */
+defineChildWidget(Dynamics, 'response', {
+  create: Graph,
+  show: true,
+  default_options: {
+    class: 'aux-response',
+  },
 });
 
 function dragRatio(key, y) {
@@ -481,6 +490,7 @@ export class Compressor extends Dynamics {
  */
 defineChildWidget(Compressor, 'ratio', {
   create: ChartHandle,
+  show: true,
   map_options: {
     ratio_label: 'format_label',
     show_ratio: 'visible',
