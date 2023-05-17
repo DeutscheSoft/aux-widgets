@@ -31,11 +31,11 @@ function rangeSet(value, key) {
 
 function dragHandle(key, value) {
   if (key == 'z') {
-    this.userset('ratio', value);
+    this.parent.userset('ratio', value);
     return true;
   }
   if (key == 'y') {
-    this.userset('threshold', value);
+    this.parent.userset('threshold', value);
   }
   return false;
 }
@@ -117,19 +117,6 @@ export class Dynamics extends Chart {
       set_min: rangeSet,
       set_max: rangeSet,
       set_scale: rangeSet,
-      set_threshold: function (v) {
-        this.handle.set('x', v);
-        this.handle.set('y', v);
-      },
-      set_ratio: function (v) {
-        this.handle.set('z', v);
-      },
-      set_handle_label: function (v) {
-        this.handle.set('format_label', v);
-      },
-      set_show_handle: function (v) {
-        this.handle.set('visible', v);
-      },
     };
   }
 
@@ -231,14 +218,6 @@ export class Dynamics extends Chart {
       class: 'aux-steady',
       mode: 'line',
     });
-
-    this.handle = this.addHandle({
-      range_x: this.range_x,
-      range_y: this.range_y,
-      range_z: this.range_z,
-      class: 'aux-handle',
-    });
-    this.handle.addEventListener('userset', dragHandle.bind(this));
 
     /**
      * @member {Graph} Dynamics#response - The graph drawing the dynamics response. Has class <code>.aux-response</code>
@@ -368,16 +347,18 @@ export class Dynamics extends Chart {
 defineChildWidget(Dynamics, 'handle', {
   create: ChartHandle,
   map_options: {
-    'threshold': [ 'x', 'y' ],
-    'ratio': 'z',
-    'handle_label': 'format_label',
-    'show_handle': 'visible',
+    threshold: [ 'x', 'y' ],
+    ratio: 'z',
+    handle_label: 'format_label',
+    show_handle: 'visible',
   },
   default_options: {
     class: 'aux-handle',
+    min_size: 24,
+    max_size: 80,
   },
   static_events: {
-    'userset': dragHandle,
+    userset: dragHandle,
   }
 });
 
@@ -501,15 +482,18 @@ export class Compressor extends Dynamics {
 defineChildWidget(Compressor, 'ratio', {
   create: ChartHandle,
   map_options: {
-    'ratio_label': 'format_label',
-    'show_ratio': 'visible',
-    'ratio_x': [ 'x_min', 'x_max' ],
+    ratio_label: 'format_label',
+    show_ratio: 'visible',
+    ratio_x: [ 'x_min', 'x_max' ],
   },
   default_options: {
     class: 'aux-ratio',
+    min_size: 24,
+    max_size: 24,
+    range_z: { min: 1, max: 1 },
   },
   static_events: {
-    'userset': dragRatio,
+    userset: dragRatio,
   }
 });
 
