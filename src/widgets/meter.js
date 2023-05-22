@@ -145,6 +145,8 @@ function drawGradient(element, O) {
     transformation,
     snap_module,
     layout,
+    base,
+    segment,
   } = O;
 
   if (!gradient) {
@@ -174,10 +176,28 @@ function drawGradient(element, O) {
       vert ? 0 : _width || 0,
       vert ? _height || 0 : 0
     );
+
+    let last;
     keys.forEach((value) => {
-      let pos = transformation.valueToCoef(snap_module.snap(value));
+      const snapped = snap_module.snap(value);
+      let segmented = snapped;
+
+      if (segment !== 1) {
+        const snapppx = transformation.valueToPixel(snapped);
+        const basepx = transformation.valueToPixel(base);
+        const segmentpx = (basepx + segment * Math.round((snapppx - basepx) / segment)) | 0;
+        segmented = transformation.pixelToValue(segmentpx);
+      }
+
+      while (segmented <= last) {
+        segmented += 1e-9;
+      }
+      last = segmented;
+
+      let pos = transformation.valueToCoef(segmented);
       pos = Math.min(1, Math.max(0, pos));
       if (vert) pos = 1 - pos;
+
       grd.addColorStop(pos, gradient[value + '']);
     });
     ctx.fillStyle = grd;
