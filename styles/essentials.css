@@ -518,7 +518,6 @@ body {
   position: absolute;
   z-index: 10;
   will-change: transform;
-  transform: translate3d(0, 0, 0);
 }
 .aux-fader .aux-handle:hover {
   cursor: pointer;
@@ -663,7 +662,6 @@ body.aux-cursor-row-resize * {
 .aux-knob > svg {
   width: 100%;
   height: 100%;
-  transform: translate3d(0, 0, 0);
   will-change: transform;
   cursor: pointer;
   overflow: visible;
@@ -800,8 +798,6 @@ body.aux-cursor-row-resize * {
   top: 0;
   width: 100%;
   height: 100%;
-  will-change: transform;
-  transform: translate3d(0, 0, 0);
   background: transparent !important;
 }
 
@@ -1084,7 +1080,6 @@ body.aux-cursor-row-resize * {
   opacity: 1;
   overflow: auto;
   will-change: transform;
-  transform: translate3d(0, 0, 0);
 }
 .aux-pager > .aux-navigation {
   flex: 0 0 auto;
@@ -1115,7 +1110,6 @@ body.aux-cursor-row-resize * {
   opacity: 1;
   overflow: auto;
   will-change: transform;
-  transform: translate3d(0, 0, 0);
   contain: strict;
 }
 
@@ -1421,7 +1415,6 @@ body.aux-cursor-row-resize * {
   position: absolute;
   z-index: 10;
   will-change: transform;
-  transform: translate3d(0, 0, 0);
 }
 .aux-spread .aux-lower:hover,
 .aux-spread .aux-upper:hover {
