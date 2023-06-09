@@ -185,7 +185,8 @@ function drawGradient(element, O) {
       if (segment !== 1) {
         const snapppx = transformation.valueToPixel(snapped);
         const basepx = transformation.valueToPixel(base);
-        const segmentpx = (basepx + segment * Math.round((snapppx - basepx) / segment)) | 0;
+        const segmentpx =
+          (basepx + segment * Math.round((snapppx - basepx) / segment)) | 0;
         segmented = transformation.pixelToValue(segmentpx);
       }
 

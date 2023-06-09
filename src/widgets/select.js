@@ -66,7 +66,9 @@ import {
 const SymEntriesChanged = Symbol('entries changes');
 
 function setHasIcon() {
-  const _has_icon = !!this.entries.find((entry) => { return !!entry.options.icon });
+  const _has_icon = !!this.entries.find((entry) => {
+    return !!entry.options.icon;
+  });
   this.set('_has_icon', _has_icon);
 }
 
@@ -151,7 +153,11 @@ export class Select extends Button {
           entry.set('selected', false);
         });
         if (entry) {
-          const icon = this.options._has_icon ? (entry.get('icon') ? entry.get('icon') : 'blank') : false;
+          const icon = this.options._has_icon
+            ? entry.get('icon')
+              ? entry.get('icon')
+              : 'blank'
+            : false;
           this.update('selected', entries.indexOf(entry));
           this.update('value', entry.get('value'));
           this.update('label', entry.get('label'));
@@ -489,7 +495,11 @@ export class Select extends Button {
         value: ent,
         label: ent,
       });
-    } else if (typeof ent === 'object' && 'value' in ent && ('label' in ent || 'icon' in ent)) {
+    } else if (
+      typeof ent === 'object' &&
+      'value' in ent &&
+      ('label' in ent || 'icon' in ent)
+    ) {
       ent.element = null;
       entry = new SelectEntry(ent);
     } else {
@@ -961,7 +971,7 @@ defineChildWidget(Select, 'arrow', {
   },
   map_options: {
     arrow: 'icon',
-  }
+  },
 });
 
 function onFocusMove(O) {

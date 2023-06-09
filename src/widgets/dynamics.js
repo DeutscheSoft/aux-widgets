@@ -222,8 +222,7 @@ export class Dynamics extends Chart {
   }
 
   drawGraph() {
-    if (!this.response)
-      return;
+    if (!this.response) return;
     const O = this.options;
     const {
       type,
@@ -335,7 +334,7 @@ defineChildWidget(Dynamics, 'handle', {
   create: ChartHandle,
   show: true,
   map_options: {
-    threshold: [ 'x', 'y' ],
+    threshold: ['x', 'y'],
     ratio: 'z',
     handle_label: 'format_label',
     show_handle: 'visible',
@@ -347,7 +346,7 @@ defineChildWidget(Dynamics, 'handle', {
   },
   static_events: {
     userset: dragHandle,
-  }
+  },
 });
 /**
  * @member {Graph} Dynamics#steady - The graph drawing the zero line. Has class <code>.aux-steady</code>
@@ -494,7 +493,7 @@ defineChildWidget(Compressor, 'ratio', {
   map_options: {
     ratio_label: 'format_label',
     show_ratio: 'visible',
-    ratio_x: [ 'x_min', 'x_max' ],
+    ratio_x: ['x_min', 'x_max'],
   },
   default_options: {
     class: 'aux-ratio',
@@ -504,7 +503,7 @@ defineChildWidget(Compressor, 'ratio', {
   },
   static_events: {
     userset: dragRatio,
-  }
+  },
 });
 
 /**

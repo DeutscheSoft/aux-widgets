@@ -326,19 +326,18 @@ export function defineChildWidget(widget, name, config) {
 
   if (map_options) {
     for (const parent_key in map_options) {
-      let child_key = map_options[ parent_key ];
-      if (!Array.isArray(child_key))
-        child_key = [ child_key ];
+      let child_key = map_options[parent_key];
+      if (!Array.isArray(child_key)) child_key = [child_key];
 
       if (!widget.hasOption(parent_key)) {
         widget.defineOption(
           parent_key,
-          ChildWidget.getOptionType(child_key[ 0 ]),
-          ChildWidget.getDefault(child_key[ 0 ])
+          ChildWidget.getOptionType(child_key[0]),
+          ChildWidget.getDefault(child_key[0])
         );
       }
 
-      child_key.forEach(key => {
+      child_key.forEach((key) => {
         widget.addStaticEvent('set_' + parent_key, setCallback(key));
       });
     }

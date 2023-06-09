@@ -143,7 +143,10 @@ function prevDblClicked() {
 function nextClicked() {
   this.parent.userset(
     'select',
-    Math.min(this.parent.buttons.getButtons().length - 1, this.parent.get('select') + 1)
+    Math.min(
+      this.parent.buttons.getButtons().length - 1,
+      this.parent.get('select') + 1
+    )
   );
 }
 function nextDblClicked() {
@@ -203,8 +206,7 @@ export class Navigation extends Container {
   static get static_events() {
     return {
       set_direction: function (value) {
-        if (!this.get('icons'))
-          return;
+        if (!this.get('icons')) return;
         this.prev.set('icon', value === 'vertical' ? 'arrowup' : 'arrowleft'); //"\u25B2" : "\u25C0");
         this.next.set(
           'icon',
@@ -494,15 +496,15 @@ defineChildWidget(Navigation, 'prev', {
     tabindex: false,
   },
   static_events: {
-    'click': prevClicked,
-    'dblclick': prevDblClicked,
+    click: prevClicked,
+    dblclick: prevDblClicked,
   },
 });
 
 /**
  * @member {Button} Navigation#next - The next arrow {@link Button} instance.
  */
-defineChildWidget (Navigation, 'next', {
+defineChildWidget(Navigation, 'next', {
   create: Button,
   show: true,
   default_options: {
@@ -511,7 +513,7 @@ defineChildWidget (Navigation, 'next', {
     tabindex: false,
   },
   static_events: {
-    'click': nextClicked,
-    'dblclick': nextDblClicked,
+    click: nextClicked,
+    dblclick: nextDblClicked,
   },
 });
