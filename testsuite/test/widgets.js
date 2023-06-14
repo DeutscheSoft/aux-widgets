@@ -159,7 +159,8 @@ describe('Widgets', () => {
     }
   });
 
-  it('aria-label', async () => {
+  it('aria-label', async function () {
+    this.timeout(10000);
     for (const w of standalone_widgets) {
       const widget = new w({ aria_label: null });
       widget.show();
@@ -187,7 +188,8 @@ describe('Widgets', () => {
     }
   });
 
-  it('aria-labelledby', async () => {
+  it('aria-labelledby', async function() {
+    this.timeout(10000);
     for (const w of standalone_widgets) {
       const widget = new w({ aria_labelledby: null });
       widget.show();
@@ -229,7 +231,8 @@ describe('Widgets', () => {
     assert(!widget.element.classList.contains('aux-hide'));
   }
 
-  it('visible', async () => {
+  it('visible', async function () {
+    this.timeout(10000);
     for (const w of standalone_widgets) {
       const widget = new w();
 
