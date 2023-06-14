@@ -5,6 +5,20 @@
     <title>AUX Tests</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="node_modules/mocha/mocha.css" />
+    <style>
+      #mocha-report {
+        display: flex;
+        flex-direction: column-reverse;
+      }
+      #mocha-report > li {
+        display: flex;
+        flex-direction: column-reverse;
+      }
+      #mocha-report > li > h1,
+      #mocha-report > li > h2 {
+        order: 20000000;
+      }
+    </style>
   </head>
   <body>
     <div id="mocha"></div>
