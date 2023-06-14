@@ -153,6 +153,13 @@ function nextDblClicked() {
   this.parent.userset('select', this.parent.buttons.getButtons().length - 1);
 }
 
+function measure_clip () {
+  const buttons = this.buttons;
+
+  this.update('_clip_height', innerHeight(buttons.element));
+  this.update('_clip_width', innerWidth(buttons.element));
+};
+
 /**
  * Navigation is a {@link Container} including a {@Buttons} widget for e.g. navigating between
  * pages inside a {@link Pager}. It keeps the currently highlighted {@link Button}
@@ -227,6 +234,10 @@ export class Navigation extends Container {
         this.prev.set('disabled', val <= 0);
         this.next.set('disabled', val == this.buttons.getButtons().length - 1);
       },
+      set_arrows: function (arrows) {
+        this.set('show_prev', arrows);
+        this.set('show_next', arrows);
+      }
     };
   }
 
@@ -238,23 +249,7 @@ export class Navigation extends Container {
         addClass(element, 'aux-' + direction);
       }),
       defineRender('arrows', function (arrows) {
-        const { prev, next, element } = this;
-
-        toggleClass(element, 'aux-over', arrows);
-
-        if (!prev.element.parentElement === !arrows) return;
-
-        if (arrows) {
-          element.appendChild(prev.element);
-          element.appendChild(next.element);
-          this.addChild(prev);
-          this.addChild(next);
-        } else {
-          this.removeChild(prev);
-          this.removeChild(next);
-          prev.element.remove();
-          next.element.remove();
-        }
+        toggleClass(this.element, 'aux-over', arrows);
       }),
       defineRender(
         [
@@ -353,13 +348,6 @@ export class Navigation extends Container {
   initialized() {
     super.initialized();
 
-    const measure_clip = () => {
-      const buttons = this.buttons;
-
-      this.update('_clip_height', innerHeight(buttons.element));
-      this.update('_clip_width', innerWidth(buttons.element));
-    };
-
     this.addSubscriptions(
       this.buttons.buttons.forEachAsync((button) => {
         let measured = false;
@@ -413,9 +401,7 @@ export class Navigation extends Container {
           }
         };
       }),
-      this.buttons.observeResize(measure_clip),
-      this.next.observeResize(measure_clip),
-      this.prev.observeResize(measure_clip),
+      this.buttons.observeResize(measure_clip.bind(this)),
       this.buttons.subscribe('scroll', () => {
         this._scroll_top = this.buttons.element.scrollTop;
         this._scroll_left = this.buttons.element.scrollLeft;
@@ -499,6 +485,13 @@ defineChildWidget(Navigation, 'prev', {
     click: prevClicked,
     dblclick: prevDblClicked,
   },
+  append: function () {
+    this.element.appendChild(this.prev.element);
+    if (!this.prev.__measure_clip) {
+      this.prev.observeResize(measure_clip.bind(this));
+      this.prev.__measure_clip = true;
+    }
+  },
 });
 
 /**
@@ -515,5 +508,12 @@ defineChildWidget(Navigation, 'next', {
   static_events: {
     click: nextClicked,
     dblclick: nextDblClicked,
+  },
+  append: function () {
+    this.element.appendChild(this.next.element);
+    if (!this.next.__measure_clip) {
+      this.next.observeResize(measure_clip.bind(this));
+      this.next.__measure_clip = true;
+    }
   },
 });
