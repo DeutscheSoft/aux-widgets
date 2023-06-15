@@ -43,12 +43,12 @@ function reset(e) {
 function stateSet() {
   const T = this.__temp;
   const O = this.options;
-  if (O.label_confirm) {
+  if (O.label_confirm || O.label_confirm === false) {
     T.label = O.label;
     this.set('label', O.label_confirm);
   }
 
-  if (O.icon_confirm) {
+  if (O.icon_confirm || O.icon_confirm === false) {
     T.icon = O.icon;
     this.set('icon', O.icon_confirm);
   }
@@ -66,9 +66,9 @@ function stateSet() {
 function stateReset() {
   if (this.isDestructed()) return;
   const T = this.__temp;
-  if (T.label) this.set('label', T.label);
 
-  if (T.icon) this.set('icon', T.icon);
+  this.set('label', T.label);
+  this.set('icon', T.icon);
 
   if (T.timeout >= 0) window.clearTimeout(T.timeout);
 
@@ -76,8 +76,8 @@ function stateReset() {
 
   T.reset = null;
   T.timeout = -1;
-  T.label = '';
-  T.icon = '';
+  T.label = undefined;
+  T.icon = undefined;
   T.click = 0;
 
   this.set('state', false);
@@ -100,8 +100,8 @@ function stateReset() {
  * @property {Boolean} [options.confirm=true] - Defines if the button acts as <code>ConfirmButton</code> or normal <code>Button</code>.
  * @property {Number} [options.timeout=2000] - Defines a time in milliseconds after the button resets to defaults if no second click happens.
  * @property {Number} [options.interrupt=0] - Defines a duration in milliseconds within further clicks are ignored. Set to avoid double-clicks being recognized as confirmation.
- * @property {String} [options.label_confirm] - The label to be used while in active state.
- * @property {String} [options.icon_confirm] - The icon to be used while in active state.
+ * @property {String|Boolean} [options.label_confirm] - The label to be used while in active state.
+ * @property {String|Boolean} [options.icon_confirm] - The icon to be used while in active state.
  */
 export class ConfirmButton extends Button {
   static get _options() {
@@ -119,8 +119,8 @@ export class ConfirmButton extends Button {
       confirm: true,
       timeout: 2000,
       interrupt: 0,
-      label_confirm: '',
-      icon_confirm: '',
+      label_confirm: undefined,
+      icon_confirm: undefined,
     };
   }
 
@@ -150,8 +150,8 @@ export class ConfirmButton extends Button {
   initialize(options) {
     super.initialize(options);
     this.__temp = {
-      label: '',
-      icon: '',
+      label: undefined,
+      icon: undefined,
       timeout: -1,
       reset: null,
       click: 0,
