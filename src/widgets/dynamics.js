@@ -512,6 +512,9 @@ defineChildWidget(Compressor, 'ratio', {
  * @class Expander
  */
 export class Expander extends Dynamics {
+  static get _options() {
+    return Dynamics.getOptionTypes();
+  }
   static get options() {
     return { type: 'expander' };
   }
@@ -531,6 +534,9 @@ export class Expander extends Dynamics {
  * @class Gate
  */
 export class Gate extends Dynamics {
+  static get _options() {
+    return Dynamics.getOptionTypes();
+  }
   static get options() {
     return { type: 'gate', range_z: { min: 1, max: 1 } };
   }
@@ -550,6 +556,9 @@ export class Gate extends Dynamics {
  * @class Limiter
  */
 export class Limiter extends Dynamics {
+  static get _options() {
+    return Dynamics.getOptionTypes();
+  }
   static get options() {
     return { type: 'limiter', range_z: { min: 1, max: 1 } };
   }
