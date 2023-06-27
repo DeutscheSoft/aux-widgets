@@ -35,7 +35,7 @@
  * @see sprintf
  */
 function round(num, precision) {
-  var base = 10 ** precision;
+  const base = Math.pow(10, precision);
   return (Math.round(num * base) / base).toFixed(precision);
 }
 const fun =

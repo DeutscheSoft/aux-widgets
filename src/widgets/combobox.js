@@ -22,7 +22,6 @@ import { defineChildWidget } from './../child_widget.js';
 import { Widget } from './widget.js';
 import { Select } from './select.js';
 import { Value } from './value.js';
-import { defineRender } from '../renderer.js';
 
 /**
  * Combobox is a combination of a {@link Select} and a {@link Value}.

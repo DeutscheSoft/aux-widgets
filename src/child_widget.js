@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { addClass, removeClass, toggleClass } from './utils/dom.js';
+import { addClass, toggleClass } from './utils/dom.js';
 import { warn } from './utils/log.js';
 import { Widget } from './widgets/widget.js';
 import { defineRender } from './renderer.js';

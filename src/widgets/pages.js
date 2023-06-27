@@ -26,8 +26,7 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { addClass, removeClass, toggleClass, isDomNode } from '../utils/dom.js';
-import { warn } from '../utils/log.js';
+import { addClass, toggleClass, isDomNode } from '../utils/dom.js';
 import { Container } from './container.js';
 import { ChildWidgets } from '../utils/child_widgets.js';
 import { defineRender } from '../renderer.js';

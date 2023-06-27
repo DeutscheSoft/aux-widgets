@@ -138,7 +138,7 @@ export class ScrollBar extends Widget {
       ) {
         const element = this.element;
         if (clip && content) {
-          let size = clip / content;
+          const size = clip / content;
           if (size >= 1) {
             element.style.display = 'none';
           } else {

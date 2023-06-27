@@ -22,7 +22,7 @@
 
 import { defineRange } from '../utils/define_range.js';
 import { Widget } from './widget.js';
-import { toggleClass, addClass, removeClass } from '../utils/dom.js';
+import { toggleClass, addClass } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
 import { error } from '../utils/log.js';
 import { defineRender } from '../renderer.js';

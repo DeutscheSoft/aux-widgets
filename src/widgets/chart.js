@@ -19,13 +19,11 @@
 
 import { defineChildElement } from './../widget_helpers.js';
 import {
-  empty,
   CSSSpace,
   getStyle,
   element,
   addClass,
   innerWidth,
-  toggleClass,
   innerHeight,
 } from '../utils/dom.js';
 import { defineRange } from '../utils/define_range.js';
@@ -39,7 +37,6 @@ import { Grid } from './grid.js';
 import {
   defineRender,
   defineMeasure,
-  combineDefer,
   deferRender,
   deferMeasure,
 } from '../renderer.js';

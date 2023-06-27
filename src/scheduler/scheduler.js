@@ -204,8 +204,8 @@ export class Scheduler {
     // Move the current queues to the back
     if (length > FRAME_SHIFT) {
       // Note: this code assumes FRAME_SHIFT == 2
-      let q1 = _queues[PHASE_CALCULATE];
-      let q2 = _queues[PHASE_RENDER];
+      const q1 = _queues[PHASE_CALCULATE];
+      const q2 = _queues[PHASE_RENDER];
 
       length -= 2;
 

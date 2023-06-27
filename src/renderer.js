@@ -28,8 +28,6 @@ import {
   getLimbMask,
   createBitset,
   setBit,
-  testBit,
-  clearBit,
   createBitList,
   setBitList,
   getBitIndex,
@@ -58,10 +56,6 @@ function buildDependencyMap(tasks) {
       return [dependency, [tmp[0], createBitList(tmp[1])]];
     })
   );
-}
-
-function findAnimation(animations, task) {
-  return animations.find((animation) => animation.task === task);
 }
 
 function removeAnimation(animations, task) {
@@ -130,7 +124,7 @@ export class Renderer {
   }
 
   getDependencyMap() {
-    let dependencyMap = this._dependencyMap;
+    const dependencyMap = this._dependencyMap;
 
     if (dependencyMap) return dependencyMap;
 
@@ -360,11 +354,6 @@ export function defineMeasure(dependencies, run, debug) {
 
 export function defineMultiPhaseRenderer(phase, dependencies, run, debug) {
   return defineTask(phase, dependencies, run, debug);
-}
-
-// Merges the masks of two frames
-function mergeFrames(mask) {
-  return (PHASE_MASK & mask) | (mask >> FRAME_SHIFT);
 }
 
 function notCalledError() {

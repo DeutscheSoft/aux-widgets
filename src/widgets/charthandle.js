@@ -33,8 +33,6 @@ import { defineRange } from '../utils/define_range.js';
 import {
   defineRender,
   defineRecalculation,
-  defineMeasure,
-  deferRender,
   deferMeasure,
 } from '../renderer.js';
 
@@ -667,20 +665,6 @@ function setRange(range, key) {
   this.set(name, range.snap(this.get(name)));
 }
 
-const movedDependencies = [
-  'x',
-  'y',
-  'z',
-  'mode',
-  'show_handle',
-  'x_min',
-  'x_max',
-  'y_min',
-  'y_max',
-  'z_min',
-  'z_max',
-];
-
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
  * The event is emitted for the options <code>x</code>, <code>y</code> and <code>z</code>.
@@ -1159,7 +1143,6 @@ export class ChartHandle extends Widget {
           let label_position;
           let text_position;
           let text_anchor;
-          let tmp;
 
           /*
            * Calculate possible positions of the labels and calculate their intersections. Choose
@@ -1204,7 +1187,6 @@ export class ChartHandle extends Widget {
           _label.setAttribute('x', x);
           _label.setAttribute('y', y);
           _label.setAttribute('text-anchor', text_anchor);
-          const cn = _label.childNodes;
           Array.from(_label.childNodes).forEach((tspan) =>
             tspan.setAttribute('x', x)
           );

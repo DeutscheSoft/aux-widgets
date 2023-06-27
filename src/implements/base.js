@@ -258,7 +258,7 @@ export class Base {
     this.options = Object.assign({}, this.getDefaultOptions());
 
     for (const key in options)
-      if (options.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(options, key)) {
         const value = options[key];
 
         if (key.startsWith('on')) {
@@ -511,8 +511,6 @@ export class Base {
    * @param {Function} func - The function to call when the event happens.
    */
   on(event, func) {
-    let ev;
-
     if (typeof event !== 'string') throw new TypeError('Expected string.');
 
     if (typeof func !== 'function') throw new TypeError('Expected function.');

@@ -38,20 +38,6 @@ function setInputMode() {
   );
 }
 
-function drawInput() {
-  const O = this.options;
-  this.input.set('dots', [
-    {
-      x: Math.min(O.delay_max, Math.max(O.delay_min, O.delay)),
-      y: Math.min(O.gain_max, Math.min(O.gain_min, this.range_y.get('min'))),
-    },
-    {
-      x: Math.min(O.delay_max, Math.max(O.delay_min, O.delay)),
-      y: Math.min(O.gain_max, Math.max(O.gain_min, O.gain)),
-    },
-  ]);
-}
-
 function initValues(type, O) {
   this.set(type, O[type]);
   this.set(type + '_min', O[type + '_min']);

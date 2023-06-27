@@ -32,7 +32,6 @@ import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
 import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
 import { Scale } from './scale.js';
 import { DragValue } from '../modules/dragvalue.js';
-import { ScrollValue } from '../modules/scrollvalue.js';
 import { Value } from './value.js';
 import { Label } from './label.js';
 import {
@@ -45,7 +44,6 @@ import {
   addClass,
   removeClass,
   supports_transform,
-  CSSSpace,
   outerHeight,
   innerHeight,
   outerWidth,

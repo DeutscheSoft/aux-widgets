@@ -223,7 +223,6 @@ export class Dynamics extends Chart {
 
   drawGraph() {
     if (!this.response) return;
-    const O = this.options;
     const {
       type,
       min,
@@ -406,7 +405,6 @@ function setRatioLimits() {
   if (!this.ratio) return;
 
   const thres = this.get('threshold');
-  const ratio = this.get('ratio');
   const ratio_x = this.get('ratio_x');
   const max = this.get('max');
   const r_min = this.range_z.get('min');

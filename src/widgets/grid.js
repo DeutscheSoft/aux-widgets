@@ -29,10 +29,13 @@ function getPadding(element) {
   switch (tmp.length) {
     case 1:
       tmp[1] = tmp[0];
+      break;
     case 2:
       tmp[2] = tmp[0];
+      break;
     case 3:
       tmp[3] = tmp[1];
+      break;
   }
 
   return tmp.map((entry) => parseInt(entry) || 0);
@@ -147,7 +150,7 @@ function drawLines(
   for (let j = 0; j < grid.length; j++) {
     const obj = grid[j];
     const label = coords[j];
-    let margin, pos;
+    let margin;
 
     if (label) margin = label.m;
     else margin = 0;
@@ -164,7 +167,7 @@ function drawLines(
     const _min = obj[dir + '_min'];
     const _max = obj[dir + '_max'];
 
-    pos = Math.round(opprange.valueToPixel(obj.pos));
+    const pos = Math.round(opprange.valueToPixel(obj.pos));
 
     if (pos >= oppbasis - last) {
       line = null;
