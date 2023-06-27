@@ -417,6 +417,7 @@ export class Chart extends Widget {
   destroy() {
     this._graphs.remove();
     this._handles.remove();
+    this.svg.remove();
     super.destroy();
   }
 
@@ -526,11 +527,6 @@ export class Chart extends Widget {
      * @event Chart#emptied
      */
     this.emit('emptied');
-  }
-
-  destroy() {
-    this.svg.remove();
-    super.destroy();
   }
 
   /**
