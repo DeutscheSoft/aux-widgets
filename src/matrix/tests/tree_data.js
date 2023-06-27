@@ -76,49 +76,49 @@ test('forEachAsync', () => {
   // add some ports
   const port1 = group.addPort({ label: 'port1' });
 
-  assert(tmp.size == 1);
+  assert(tmp.size === 1);
   assert(tmp.has(port1));
 
   const port2 = group.addPort({ label: 'port2' });
 
-  assert(tmp.size == 2);
+  assert(tmp.size === 2);
   assert(tmp.has(port2));
 
   const port3 = group.addPort({ label: 'port3' });
 
-  assert(tmp.size == 3);
+  assert(tmp.size === 3);
   assert(tmp.has(port3));
 
   const port4 = group.addPort({ label: 'port4' });
 
-  assert(tmp.size == 4);
+  assert(tmp.size === 4);
   assert(tmp.has(port4));
 
   // remove those ports
   group.deletePort(port4);
 
-  assert(tmp.size == 3);
+  assert(tmp.size === 3);
   assert(!tmp.has(port4));
 
   group.deletePort(port3);
 
-  assert(tmp.size == 2);
+  assert(tmp.size === 2);
   assert(!tmp.has(port3));
 
   group.deletePort(port2);
 
-  assert(tmp.size == 1);
+  assert(tmp.size === 1);
   assert(!tmp.has(port2));
 
   group.deletePort(port1);
 
-  assert(tmp.size == 0);
+  assert(tmp.size === 0);
 
   // unsubscribe
   sub();
 
   group.addPort({ label: 'port1' });
-  assert(tmp.size == 0);
+  assert(tmp.size === 0);
 });
 
 test('Connections', () => {

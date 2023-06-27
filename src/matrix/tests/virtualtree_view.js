@@ -106,7 +106,7 @@ test('VirtualTreeDataView basics', () => {
     const port = group2.addPort({ label: 'port5' });
     check();
     assert(virtualtreeview.getSubtreeSize(group) === 6);
-    assert(virtualtreeview.getDepth(port) == 2);
+    assert(virtualtreeview.getDepth(port) === 2);
     group.deleteGroup(group2);
     check();
     assert(virtualtreeview.getSubtreeSize(group) === 4);

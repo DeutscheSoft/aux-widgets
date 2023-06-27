@@ -44,7 +44,7 @@ const indent_to_glyph = {
 function composeDepth(tree_position) {
   let depth = [];
 
-  if (tree_position.length == 1) return depth;
+  if (tree_position.length === 1) return depth;
 
   for (let i = 1, m = tree_position.length - 1; i < m; ++i) {
     if (tree_position[i]) depth.push('none');
