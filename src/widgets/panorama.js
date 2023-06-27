@@ -139,10 +139,10 @@ export class Panorama extends Chart {
 function handleLabel(label, x, y, z) {
   const O = this.options;
   let s = '';
-  if (O._mode == 'balance') s += label + '\n';
+  if (O._mode === 'balance') s += label + '\n';
   const lr = x ? (x < 0 ? 'L' : 'R') : '';
   s += lr + ' ' + Math.abs(x).toFixed(+O._digits);
-  if (O._mode == 'surround') {
+  if (O._mode === 'surround') {
     const fb = y ? (y < 0 ? 'F' : 'B') : '';
     s += '\n' + fb + ' ' + Math.abs(y).toFixed(+O._digits);
   }

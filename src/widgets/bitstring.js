@@ -111,7 +111,7 @@ export class Bitstring extends Buttons {
       useraction: function (key, value) {
         if (key != 'select') return;
         const O = this.options;
-        if (typeof O.bitstring == 'number') {
+        if (typeof O.bitstring === 'number') {
           let bitstring = 0;
           for (let i = 0, m = value.length; i < m; ++i) {
             if (value[i] === null) continue;

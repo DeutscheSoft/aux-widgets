@@ -31,11 +31,11 @@ function rangeSet(value, key) {
 }
 
 function dragHandle(key, value) {
-  if (key == 'z') {
+  if (key === 'z') {
     this.parent.userset('ratio', value);
     return true;
   }
-  if (key == 'y') {
+  if (key === 'y') {
     this.parent.userset('threshold', value);
   }
   return false;
@@ -239,7 +239,7 @@ export class Dynamics extends Chart {
     if (type === false) return;
     const curve = [];
     let slope;
-    if (reference == 0) {
+    if (reference === 0) {
       slope = 0;
     } else if (!isFinite(ratio)) {
       slope = reference;
@@ -321,8 +321,8 @@ export class Dynamics extends Chart {
   }
 
   set(key, val) {
-    if (key == 'type') this.options._last_type = this.options.type;
-    if (key == 'ratio') val = this.range_z.snap(val);
+    if (key === 'type') this.options._last_type = this.options.type;
+    if (key === 'ratio') val = this.range_z.snap(val);
     return super.set(key, val);
   }
 }

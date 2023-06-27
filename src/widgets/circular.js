@@ -315,7 +315,7 @@ export class Circular extends Widget {
 
           for (let i = 0; i < dots.length; i++) {
             let m = dots[i];
-            if (typeof m == 'number') m = { pos: m };
+            if (typeof m === 'number') m = { pos: m };
 
             const r = makeSVG('rect', { class: 'aux-dot' });
 

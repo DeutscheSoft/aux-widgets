@@ -72,7 +72,7 @@ function dblClick() {
 }
 
 function focusMove(O) {
-  if (O.event.target == this._lower) this._lowercb(O);
+  if (O.event.target === this._lower) this._lowercb(O);
   else this._uppercb(O);
   return false;
 }

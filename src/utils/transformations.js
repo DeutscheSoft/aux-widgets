@@ -390,14 +390,14 @@ export function makeLinearTransformation(options) {
   // compatibility
   function valueToPixel(n) {
     n = +n;
-    if (basis == 0.0) basis = 1.0;
+    if (basis === 0.0) basis = 1.0;
     return +valueToBased(n, basis);
   }
   // just a wrapper for having understandable code and backward
   // compatibility
   function pixelToValue(n) {
     n = +n;
-    if (basis == 0.0) basis = 1.0;
+    if (basis === 0.0) basis = 1.0;
     return +basedToValue(n, basis);
   }
   // calculates a coefficient for the value

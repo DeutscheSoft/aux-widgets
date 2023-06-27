@@ -5,7 +5,7 @@
     var nav = document.getElementById('navigation');
     var hash = location.hash.substr(1);
 
-    if (hash == 'run') {
+    if (hash === 'run') {
       setTimeout(run_example, 500);
     } else {
       var match = hash.match(/nav:([0-9]*)/);
@@ -67,7 +67,7 @@
   function filter_nav(str) {
     for (var key in navsearch) {
       var display = 'block';
-      if (str && key.indexOf(str) == -1) display = 'none';
+      if (str && key.indexOf(str) === -1) display = 'none';
       navsearch[key].parentElement.style.display = display;
     }
   }

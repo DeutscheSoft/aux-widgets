@@ -104,7 +104,7 @@ export function dBToCoef(value, min, max, reverse, factor) {
   reverse = reverse | 0;
   factor = +factor;
   let logfac = 1.0;
-  if (factor == 0.0) factor = 1.0;
+  if (factor === 0.0) factor = 1.0;
   else logfac = +MAX(1.0, +pow(2.0, factor) - 1.0);
   if (reverse) value = max - (value - min);
   value = +log2(1.0 + ((value - min) / (max - min)) * logfac) / factor;
@@ -133,7 +133,7 @@ export function coefToDB(coef, min, max, reverse, factor) {
   reverse = reverse | 0;
   factor = +factor;
   let logfac = 1.0;
-  if (factor == 0.0) factor = 1.0;
+  if (factor === 0.0) factor = 1.0;
   else logfac = +MAX(1.0, +pow(2.0, factor) - 1.0);
   if (reverse) coef = -coef + 1.0;
   coef = ((+pow(2.0, coef * factor) - 1.0) / logfac) * (max - min) + min;
@@ -163,7 +163,7 @@ export function dBToScale(value, min, max, scale, reverse, factor) {
   reverse = reverse | 0;
   factor = +factor;
   let logfac = 1.0;
-  if (factor == 0.0) factor = 1.0;
+  if (factor === 0.0) factor = 1.0;
   else logfac = +MAX(1.0, +pow(2.0, factor) - 1.0);
   if (reverse) value = max - (value - min);
   value = +log2(1.0 + ((value - min) / (max - min)) * logfac) / factor;
@@ -193,7 +193,7 @@ export function scaleToDB(value, min, max, scale, reverse, factor) {
   reverse = reverse | 0;
   factor = +factor;
   let logfac = 1.0;
-  if (factor == 0.0) factor = 1.0;
+  if (factor === 0.0) factor = 1.0;
   else logfac = +MAX(1.0, +pow(2.0, factor) - 1.0);
   value = value / scale;
   if (reverse) value = -value + 1.0;

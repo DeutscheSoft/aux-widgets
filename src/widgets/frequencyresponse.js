@@ -27,7 +27,7 @@ function calculateGrid(range, step) {
   let i, cls;
 
   for (i = min; i <= max; i += step) {
-    if (i == 0) {
+    if (i === 0) {
       cls = 'aux-highlight';
     } else {
       cls = '';

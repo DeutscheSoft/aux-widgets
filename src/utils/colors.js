@@ -305,7 +305,7 @@ export function RGBToHSL() {
   const l = (max + min) / 2;
   let h, s;
 
-  if (max == min) {
+  if (max === min) {
     h = s = 0; // achromatic
   } else {
     const d = max - min;
@@ -412,7 +412,7 @@ export function HSLToRGB() {
 
   let r, g, b;
 
-  if (s == 0) {
+  if (s === 0) {
     r = g = b = l; // achromatic
   } else {
     const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
@@ -503,8 +503,8 @@ export function HSLToGray() {
  */
 export function hexToRGB(hex) {
   hex = hex || '000000';
-  if (hex[0] == '#') hex = hex.substr(1);
-  if (hex.length == 3)
+  if (hex[0] === '#') hex = hex.substr(1);
+  if (hex.length === 3)
     return {
       r: parseInt('0x' + hex[0] + hex[0]),
       g: parseInt('0x' + hex[1] + hex[1]),

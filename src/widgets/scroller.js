@@ -289,7 +289,7 @@ export class Scroller extends Container {
   }
 
   set(key, value) {
-    if (key === 'scroll' && value == this.options.scroll) return;
+    if (key === 'scroll' && value === this.options.scroll) return;
     super.set(key, value);
   }
 }

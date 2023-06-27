@@ -42,14 +42,14 @@ export function focusMoveDefault(v) {
   return function (o) {
     const O = this.options;
     const value = this.get(valName);
-    const direction = o.direction == 'left' || o.direction == 'down' ? -1 : 1;
+    const direction = o.direction === 'left' || o.direction === 'down' ? -1 : 1;
     let step = (O.step || 1) * direction;
     let newval;
-    if (o.speed == 'slow') {
+    if (o.speed === 'slow') {
       newval = Math.min(O.max, Math.max(O.min, value + step * O.shift_down));
-    } else if (o.speed == 'fast') {
+    } else if (o.speed === 'fast') {
       newval = Math.min(O.max, Math.max(O.min, value + step * O.shift_up));
-    } else if (o.speed == 'full') {
+    } else if (o.speed === 'full') {
       newval = direction < 0 ? O.min : O.max;
     } else {
       newval = Math.min(O.max, Math.max(O.min, value + step));

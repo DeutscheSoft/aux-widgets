@@ -91,7 +91,7 @@ export class FileSelect extends Container {
         let filename;
         if (!files.length) {
           filename = placeholder;
-        } else if (files.length == 1) {
+        } else if (files.length === 1) {
           filename = files[0].name;
         } else {
           filename = format_multiple(files.length);

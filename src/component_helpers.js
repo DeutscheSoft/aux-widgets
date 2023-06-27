@@ -508,7 +508,7 @@ export function componentFromWidget(Widget, base) {
         return () => {
           // There are situations where we are removed from the
           // parent programmatically.
-          if (widget.parent == parentWidget) {
+          if (widget.parent === parentWidget) {
             parentWidget.removeChild(widget);
           }
           widget.disableDraw();

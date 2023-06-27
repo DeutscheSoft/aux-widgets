@@ -77,7 +77,7 @@
     eq.getBands().forEach((band) => {
       let graph;
       band.subscribe('set_interacting', (interacting) => {
-        if (!!graph == interacting) return;
+        if (!!graph === interacting) return;
         if (interacting) {
           graph = new EqualizerGraph({ class: 'highlite' });
           graph.addBand(band);

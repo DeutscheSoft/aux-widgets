@@ -40,7 +40,7 @@
 export function translateAnchor(anchor, x, y, width, height) {
   const amnt = anchor.split('%').length - 1;
   if (amnt) {
-    if (amnt == 1) {
+    if (amnt === 1) {
       x += (parseInt(anchor) / 100) * width;
       y += (parseInt(anchor) / 100) * height;
     } else {

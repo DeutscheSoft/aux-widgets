@@ -194,11 +194,11 @@ function onFocusKeyDown(e) {
     o.direction = e.code.substr(4).toLowerCase();
     o.speed = 'full';
   }
-  if (e.code == 'Home') {
+  if (e.code === 'Home') {
     o.direction = 'left';
     o.speed = 'full';
   }
-  if (e.code == 'End') {
+  if (e.code === 'End') {
     o.direction = 'right';
     o.speed = 'full';
   }

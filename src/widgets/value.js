@@ -112,7 +112,7 @@ function valueInput() {
   const O = this.options;
   if (O.set === false) return;
   if (!this.__editing) return;
-  if (O.editmode == 'immediate')
+  if (O.editmode === 'immediate')
     this.userset(
       'value',
       O.set ? O.set.call(this, this._input.value) : this._input.value

@@ -232,7 +232,7 @@ export class Navigation extends Container {
       },
       set_select: function (val) {
         this.prev.set('disabled', val <= 0);
-        this.next.set('disabled', val == this.buttons.getButtons().length - 1);
+        this.next.set('disabled', val === this.buttons.getButtons().length - 1);
       },
       set_arrows: function (arrows) {
         this.set('show_prev', arrows);

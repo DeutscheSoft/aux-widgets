@@ -168,7 +168,7 @@ function drawGradient(element, O) {
             }
       );
 
-    const vert = layout == 'left' || layout == 'right';
+    const vert = layout === 'left' || layout === 'right';
     const ctx = element.getContext('2d');
     const grd = ctx.createLinearGradient(
       0,
@@ -573,11 +573,11 @@ export class Meter extends Widget {
     if (!diff) return;
 
     // FIXME:
-    //  - diff == 1 is currently broken for some reason
+    //  - diff === 1 is currently broken for some reason
     // Note: Safari has a rendering bug, it leads to rendering artifacts
     // in certain situations. It is unclear what triggers this issue, simply
     // drawing the full meter is a valid workaround for the issue.
-    if (diff == 1 || 'safari' in window) diff = 4;
+    if (diff === 1 || 'safari' in window) diff = 4;
 
     const ctx = this._canvas.getContext('2d');
 

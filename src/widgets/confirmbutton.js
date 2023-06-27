@@ -32,7 +32,7 @@ function reset(e) {
   if (e) {
     let t = e.target;
     while (t) {
-      if (t == this.element) return;
+      if (t === this.element) return;
       t = t.parentElement;
     }
   }
@@ -165,7 +165,7 @@ export class ConfirmButton extends Button {
   }
 
   set(key, value) {
-    if (key == 'confirm' && value == false) {
+    if (key === 'confirm' && value === false) {
       this.set('state', false);
     }
     return super.set(key, value);

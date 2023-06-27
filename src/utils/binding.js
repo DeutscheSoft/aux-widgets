@@ -55,7 +55,7 @@ export function observeUseraction(widget, name, callback) {
     throw new Error('No such options: ' + name);
 
   return widget.subscribe('useraction', (key, value) => {
-    if (key == name) callback(value);
+    if (key === name) callback(value);
   });
 }
 

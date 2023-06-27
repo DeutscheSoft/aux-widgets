@@ -474,11 +474,11 @@ defineChildWidget(Reverb, 'input_handle', {
   static_events: {
     set_interacting: onInteractingChanged,
     userset: function (key, value) {
-      if (key == 'x') {
+      if (key === 'x') {
         this.parent.userset('delay', value);
         return false;
       }
-      if (key == 'y') {
+      if (key === 'y') {
         this.parent.userset('gain', value);
         return false;
       }
@@ -515,11 +515,11 @@ defineChildWidget(Reverb, 'rlevel_handle', {
     set_interacting: onInteractingChanged,
     userset: function (key, value) {
       const O = this.parent.options;
-      if (key == 'x') {
+      if (key === 'x') {
         this.parent.userset('predelay', value - O.delay);
         return false;
       }
-      if (key == 'y') {
+      if (key === 'y') {
         this.parent.userset('rlevel', value - O.gain);
         return false;
       }
@@ -554,7 +554,7 @@ defineChildWidget(Reverb, 'rtime_handle', {
     set_interacting: onInteractingChanged,
     userset: function (key, value) {
       const O = this.parent.options;
-      if (key == 'x') {
+      if (key === 'x') {
         this.parent.userset('rtime', value - O.delay - O.predelay);
         return false;
       }

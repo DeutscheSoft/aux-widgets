@@ -167,8 +167,8 @@
 
         if (last_info) {
           if (
-            last_info[0] == all &&
-            JSON.stringify(last_info[2]) == JSON.stringify(widgets)
+            last_info[0] === all &&
+            JSON.stringify(last_info[2]) === JSON.stringify(widgets)
           )
             return;
         }

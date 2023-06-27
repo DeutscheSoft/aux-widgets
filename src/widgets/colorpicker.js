@@ -50,16 +50,16 @@ const color_options = [
 
 function checkInput(e) {
   const I = this.hex.element;
-  if (e.keyCode && e.keyCode == 13) {
+  if (e.keyCode && e.keyCode === 13) {
     apply.call(this);
     return;
   }
-  if (e.keyCode && e.keyCode == 27) {
+  if (e.keyCode && e.keyCode === 27) {
     cancel.call(this);
     return;
   }
-  if (I.value.substr(0, 1) == '#') I.value = I.value.substr(1);
-  if (e.type == 'paste' && I.value.length == 3) {
+  if (I.value.substr(0, 1) === '#') I.value = I.value.substr(1);
+  if (e.type === 'paste' && I.value.length === 3) {
     I.value =
       I.value[0] +
       I.value[0] +
@@ -68,7 +68,7 @@ function checkInput(e) {
       I.value[2] +
       I.value[2];
   }
-  if (I.value.length == 6) {
+  if (I.value.length === 6) {
     this.set('hex', I.value);
   }
 }
@@ -441,7 +441,7 @@ defineChildWidget(ColorPicker, 'hex', {
   show: true,
   static_events: {
     userset: function (key, val) {
-      if (key == 'value') this.parent.userset('hex', val);
+      if (key === 'value') this.parent.userset('hex', val);
     },
     keyup: function (e) {
       checkInput.call(this.parent, e);
@@ -456,7 +456,7 @@ defineChildWidget(ColorPicker, 'hex', {
     set: function (v) {
       let p = 0,
         tmp;
-      if (v[0] == '#') v = v.substring(1);
+      if (v[ 0 ] === '#') v = v.substring(1);
       while (v.length < 6) {
         tmp = v.slice(0, p + 1);
         tmp += v[p];
@@ -485,7 +485,7 @@ defineChildWidget(ColorPicker, 'hue', {
   show: true,
   static_events: {
     userset: function (key, val) {
-      if (key == 'value') this.parent.userset('hue', val);
+      if (key === 'value') this.parent.userset('hue', val);
     },
   },
   default_options: {
@@ -513,7 +513,7 @@ defineChildWidget(ColorPicker, 'saturation', {
   show: true,
   static_events: {
     userset: function (key, val) {
-      if (key == 'value') this.parent.userset('saturation', val);
+      if (key === 'value') this.parent.userset('saturation', val);
     },
   },
   default_options: {
@@ -542,7 +542,7 @@ defineChildWidget(ColorPicker, 'lightness', {
   show: true,
   static_events: {
     userset: function (key, val) {
-      if (key == 'value') this.parent.userset('lightness', val);
+      if (key === 'value') this.parent.userset('lightness', val);
     },
   },
   default_options: {
@@ -571,7 +571,7 @@ defineChildWidget(ColorPicker, 'red', {
   show: true,
   static_events: {
     userset: function (key, val) {
-      if (key == 'value') this.parent.userset('red', val);
+      if (key === 'value') this.parent.userset('red', val);
     },
   },
   default_options: {
@@ -604,7 +604,7 @@ defineChildWidget(ColorPicker, 'green', {
   show: true,
   static_events: {
     userset: function (key, val) {
-      if (key == 'value') this.parent.userset('green', val);
+      if (key === 'value') this.parent.userset('green', val);
     },
   },
   default_options: {
@@ -637,7 +637,7 @@ defineChildWidget(ColorPicker, 'blue', {
   show: true,
   static_events: {
     userset: function (key, val) {
-      if (key == 'value') this.parent.userset('blue', val);
+      if (key === 'value') this.parent.userset('blue', val);
     },
   },
   default_options: {

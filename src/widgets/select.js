@@ -637,7 +637,7 @@ export class Select extends Button {
     const li = entry.element;
 
     // remove from DOM
-    if (li.parentElement == this._list) li.remove();
+    if (li.parentElement === this._list) li.remove();
     this.invalidate(SymEntriesChanged);
 
     setHasIcon.call(this);

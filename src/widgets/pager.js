@@ -511,7 +511,7 @@ defineChildWidget(Pager, 'navigation', {
   },
   static_events: {
     userset: function (key, value) {
-      if (key == 'select') {
+      if (key === 'select') {
         this.parent.userset('show', value);
       } else {
         this.parent.userset(key, value);

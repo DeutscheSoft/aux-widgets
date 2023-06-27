@@ -329,7 +329,7 @@ function buildFromConst(element) {
     if (L[i] !== 'spacer') {
       this.set('show_' + L[i], true);
       E.appendChild(this[L[i]].element);
-      if (L[i] == 'size' && !this.resize && this.size) {
+      if (L[ i ] === 'size' && !this.resize && this.size) {
         this.resize = new Resize({
           node: this.element,
           handle: this.size.element,
@@ -779,7 +779,7 @@ export class Window extends Container {
   }
 
   set(key, value) {
-    if (key == 'maximize') {
+    if (key === 'maximize') {
       if (value === false) value = { x: false, y: false };
       else if (value === true) value = { x: true, y: true };
       else value = Object.assign({}, this.get('maximize'), value);

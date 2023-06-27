@@ -76,7 +76,7 @@ export class Notifications extends Container {
     if (options instanceof Notification) n = options;
     else n = new Notification(options);
     this.addChild(n);
-    if (this.options.stack == 'start')
+    if (this.options.stack === 'start')
       this.element.insertBefore(n.element, this.element.firstChild);
     else this.element.appendChild(n.element);
     n.show();
