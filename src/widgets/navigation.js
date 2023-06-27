@@ -153,12 +153,12 @@ function nextDblClicked() {
   this.parent.userset('select', this.parent.buttons.getButtons().length - 1);
 }
 
-function measure_clip () {
+function measure_clip() {
   const buttons = this.buttons;
 
   this.update('_clip_height', innerHeight(buttons.element));
   this.update('_clip_width', innerWidth(buttons.element));
-};
+}
 
 /**
  * Navigation is a {@link Container} including a {@Buttons} widget for e.g. navigating between
@@ -237,7 +237,7 @@ export class Navigation extends Container {
       set_arrows: function (arrows) {
         this.set('show_prev', arrows);
         this.set('show_next', arrows);
-      }
+      },
     };
   }
 

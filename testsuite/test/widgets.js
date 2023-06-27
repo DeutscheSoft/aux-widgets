@@ -188,7 +188,7 @@ describe('Widgets', () => {
     }
   });
 
-  it('aria-labelledby', async function() {
+  it('aria-labelledby', async function () {
     this.timeout(10000);
     for (const w of standalone_widgets) {
       const widget = new w({ aria_labelledby: null });
