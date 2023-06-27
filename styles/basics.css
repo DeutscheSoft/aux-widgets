@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*
  * This file is part of AUX.
  *
@@ -24,8 +25,6 @@
  *
  * Use this as a starting point to build your custom theme on top.
  */
-
-@charset "UTF-8";
 
 @import './basic_definitions.css';
 

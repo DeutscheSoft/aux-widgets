@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*
  * This file is part of AUX.
  *
@@ -22,8 +23,6 @@
  * Use it as a basis to build your custom interface design. This file
  * includes no fonts for text being displayed inside user interfaces.
  */
-
-@charset "UTF-8";
 
 @import './essentials.css';
 @import './basics.css';

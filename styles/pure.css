@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*
  * This file is part of AUX.
  *
@@ -24,8 +25,6 @@
  * every single variable manually. This file includes all fonts needed
  * for basic interfaces, not including variants like bold or italic.
  */
-
-@charset "UTF-8";
 
 @import './essentials.css';
 @import './basic_definitions.css';
