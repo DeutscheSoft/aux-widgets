@@ -188,10 +188,10 @@ function onFocusKeyDown(e) {
   if (e.code.startsWith('Arrow')) {
     if (e.ctrlKey) o.speed = 'slow';
     else if (e.shiftKey) o.speed = 'fast';
-    o.direction = e.code.substr(5).toLowerCase();
+    o.direction = e.code.substring(5).toLowerCase();
   }
   if (e.code.startsWith('Page')) {
-    o.direction = e.code.substr(4).toLowerCase();
+    o.direction = e.code.substring(4).toLowerCase();
     o.speed = 'full';
   }
   if (e.code === 'Home') {

@@ -262,7 +262,7 @@ export class Base {
         const value = options[key];
 
         if (key.startsWith('on')) {
-          this.on(key.substr(2).toLowerCase(), options[key]);
+          this.on(key.substring(2).toLowerCase(), options[key]);
         } else {
           const defaultValue = this.options[key];
 

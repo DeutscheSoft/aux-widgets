@@ -83,7 +83,7 @@
       }
 
       function decodeHash() {
-        const atoms = window.location.hash.substr(1).split(',');
+        const atoms = window.location.hash.substring(1).split(',');
         let widgets = [];
         let scroll = 0;
         let all = false;

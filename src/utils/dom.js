@@ -694,7 +694,7 @@ export function isTouch() {
 export function createID(prefix) {
   let id;
   while (!id || document.getElementById(id))
-    id = prefix + Math.random().toString(16).substr(2, 8);
+    id = prefix + Math.random().toString(16).substring(2, 10);
   return id;
 }
 

@@ -25,7 +25,7 @@ import { addClass, removeClass } from '../utils/dom.js';
 function extractMatrix(t) {
   const a = t.indexOf('matrix(');
   if (a < 0) return;
-  t = t.substr(a + 7);
+  t = t.substring(a + 7);
   return t
     .split(')')[0]
     .split(',')

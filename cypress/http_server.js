@@ -33,7 +33,7 @@ const frame = fs.readFileSync(path.join(HTDOCS, 'frame.html'), {
 function maybeAddStyle(fname) {
   let ret = '';
   if (fs.existsSync(fname)) {
-    const pathname = '/' + fname.substr(HTDOCS.length);
+    const pathname = '/' + fname.substring(HTDOCS.length);
     ret += '<link rel=stylesheet href="' + pathname + '" />';
   }
   return ret;
@@ -44,7 +44,7 @@ function start(port) {
     .use('/tests', function (req, res, next) {
       const url = req.originalUrl;
 
-      const test_name = url.substr('/tests'.length + 1);
+      const test_name = url.substring('/tests'.length + 1);
 
       if (!test_name.endsWith('.html')) {
         next();

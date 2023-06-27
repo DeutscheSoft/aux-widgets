@@ -651,19 +651,19 @@ function stopDrag() {
  */
 
 function setMin(value, key) {
-  const name = key.substr(0, 1);
+  const name = key.substring(0, 1);
   const O = this.options;
   if (value !== false && O[name] < value) this.set(name, value);
 }
 
 function setMax(value, key) {
-  const name = key.substr(0, 1);
+  const name = key.substring(0, 1);
   const O = this.options;
   if (value !== false && O[name] > value) this.set(name, value);
 }
 
 function setRange(range, key) {
-  const name = key.substr(6);
+  const name = key.substring(6);
   this.set(name, range.snap(this.get(name)));
 }
 
