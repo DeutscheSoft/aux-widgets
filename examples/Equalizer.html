@@ -71,23 +71,25 @@
   }
 </style>
 <script type="text/javascript">
-  const eq = document.querySelector('aux-equalizer.extra_curve').auxWidget;
-  const EqualizerGraph = eq.baseline.constructor;
-  eq.getBands().forEach((band) => {
-    let graph;
-    band.subscribe('set_interacting', (interacting) => {
-      if (!!graph == interacting) return;
-      if (interacting) {
-        graph = new EqualizerGraph({ class: 'highlite' });
-        graph.addBand(band);
-        eq.addGraph(graph);
-      } else {
-        eq.removeGraph(graph);
-        graph.removeBand(band);
-        graph = null;
-      }
+  {
+    const eq = document.querySelector('aux-equalizer.extra_curve').auxWidget;
+    const EqualizerGraph = eq.baseline.constructor;
+    eq.getBands().forEach((band) => {
+      let graph;
+      band.subscribe('set_interacting', (interacting) => {
+        if (!!graph == interacting) return;
+        if (interacting) {
+          graph = new EqualizerGraph({ class: 'highlite' });
+          graph.addBand(band);
+          eq.addGraph(graph);
+        } else {
+          eq.removeGraph(graph);
+          graph.removeBand(band);
+          graph = null;
+        }
+      });
     });
-  });
+  }
 </script>
 
 <span>Empty Equalizer</span>
