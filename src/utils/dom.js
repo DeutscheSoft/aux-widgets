@@ -47,8 +47,7 @@ export function addClass(e) {
   let i;
   e = e.classList;
   for (i = 1; i < arguments.length; i++) {
-    const a = arguments[i].split(' ');
-    for (let j = 0; j < a.length; j++) e.add(a[j]);
+    e.add(...splitClassNames(arguments[ i ]));
   }
 }
 /**
@@ -60,7 +59,9 @@ export function addClass(e) {
 export function removeClass(e) {
   let i;
   e = e.classList;
-  for (i = 1; i < arguments.length; i++) e.remove(arguments[i]);
+  for (i = 1; i < arguments.length; i++) {
+    e.remove(...splitClassNames(arguments[ i ]));
+  }
 }
 /**
  * Toggles a CSS class from a DOM node.
@@ -766,4 +767,22 @@ export function applyAttribute(element, attributeName, attributeValue) {
   } else {
     element.removeAttribute(attributeName);
   }
+}
+
+/* Takes false-ish, strings or arrays as input and generates
+ * an array of class names. Strings will be split on spaces.
+ */
+export function splitClassNames(input) {
+  if (!input)
+    return [];
+
+  if (Array.isArray(input))
+    return input;
+
+  input = input.toString();
+
+  if (!input.includes(' '))
+    return [ input ];
+
+  return input.split(/\ +/g).filter((tmp) => tmp.length > 0);
 }
