@@ -694,7 +694,7 @@ export function isTouch() {
 export function createID(prefix) {
   let id;
   while (!id || document.getElementById(id))
-    id = prefix + Math.random().toString(16).substr(2, 8);
+    id = prefix + Math.random().toString(16).substring(2, 10);
   return id;
 }
 
@@ -706,7 +706,7 @@ export function createID(prefix) {
  */
 export function getFocusableElements(element) {
   element = element || document.body;
-  var E = element.querySelectorAll(
+  const E = element.querySelectorAll(
     '[tabindex]:not([tabindex="-1"]), ' +
       'a[href]:not([disabled]), ' +
       'button:not([disabled]), ' +

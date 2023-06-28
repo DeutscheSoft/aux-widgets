@@ -18,7 +18,6 @@
  */
 
 import { Module } from './module.js';
-import { addEventListener, removeEventListener } from '../utils/events.js';
 
 /* this has no global symbol */
 function CaptureState(start) {

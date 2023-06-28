@@ -22,7 +22,6 @@ import { Container } from './container.js';
 import { Button } from './button.js';
 import { warning } from '../utils/warning.js';
 import { ChildWidgets } from '../utils/child_widgets.js';
-import { subscribeDOMEvent } from '../utils/events.js';
 import { defineRender } from '../renderer.js';
 
 /**

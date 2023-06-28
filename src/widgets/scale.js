@@ -34,7 +34,6 @@ import {
   element,
   removeClass,
   toggleClass,
-  empty,
   innerHeight,
   innerWidth,
 } from '../utils/dom.js';
@@ -42,7 +41,6 @@ import { FORMAT } from '../utils/sprintf.js';
 import { warn } from '../utils/log.js';
 import {
   defineRender,
-  defineMeasure,
   deferRender,
   deferMeasure,
   combineDefer,
@@ -680,8 +678,6 @@ export class Scale extends Widget {
           if (fixed_dots && fixed_labels) return;
 
           removeDotsAndLabels(this.element);
-
-          const effectiveBase = Math.min(max, Math.max(min, base));
 
           return combineDefer(
             base !== min

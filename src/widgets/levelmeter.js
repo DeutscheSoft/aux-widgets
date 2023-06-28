@@ -312,7 +312,6 @@ export class LevelMeter extends Meter {
    */
   calculateMeter(to, value, i) {
     const O = this.options;
-    const falling = +O.falling;
     const base = +O.base;
     const transformation = O.transformation;
     value = +this.effectiveValue();

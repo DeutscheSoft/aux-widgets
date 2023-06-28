@@ -19,13 +19,11 @@
 
 import { defineChildElement } from './../widget_helpers.js';
 import {
-  empty,
   CSSSpace,
   getStyle,
   element,
   addClass,
   innerWidth,
-  toggleClass,
   innerHeight,
 } from '../utils/dom.js';
 import { defineRange } from '../utils/define_range.js';
@@ -39,7 +37,6 @@ import { Grid } from './grid.js';
 import {
   defineRender,
   defineMeasure,
-  combineDefer,
   deferRender,
   deferMeasure,
 } from '../renderer.js';
@@ -417,6 +414,7 @@ export class Chart extends Widget {
   destroy() {
     this._graphs.remove();
     this._handles.remove();
+    this.svg.remove();
     super.destroy();
   }
 
@@ -526,11 +524,6 @@ export class Chart extends Widget {
      * @event Chart#emptied
      */
     this.emit('emptied');
-  }
-
-  destroy() {
-    this.svg.remove();
-    super.destroy();
   }
 
   /**

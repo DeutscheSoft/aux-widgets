@@ -42,7 +42,6 @@ import {
   setStyle,
   getDuration,
   empty,
-  removeClass,
   toggleClass,
 } from '../utils/dom.js';
 import { typecheckInteger } from '../utils/typecheck.js';

@@ -389,7 +389,6 @@ export class Circular extends Widget {
           if (!show_labels || !labels.length) return;
 
           const outerSize = size / 2;
-          const a = new Array(labels.length);
 
           const elements = labels.map((l) => {
             const p = makeSVG('text', {

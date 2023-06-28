@@ -116,10 +116,10 @@ function parseAttribute(option_type, value) {
   const pos = value.indexOf(':');
 
   if (pos !== -1) {
-    const format = value.substr(0, pos);
+    const format = value.substring(0, pos);
 
     if (FORMAT_TYPES.has(format)) {
-      return lowParseAttribute.call(this, format, value.substr(pos + 1));
+      return lowParseAttribute.call(this, format, value.substring(pos + 1));
     }
   }
 
@@ -205,7 +205,7 @@ function createComponent(base) {
     _auxAttributeChanged(name, oldValue, newValue) {
       this._auxAttributes.set(name, newValue);
 
-      if (name.startsWith('aux')) name = name.substr(3);
+      if (name.startsWith('aux')) name = name.substring(3);
 
       try {
         const widget = this.auxWidget;
@@ -271,7 +271,7 @@ function createComponent(base) {
 
         if (!attributes.has(name)) continue;
 
-        const option_name = name.startsWith('aux') ? name.substr(3) : name;
+        const option_name = name.startsWith('aux') ? name.substring(3) : name;
 
         const type = _options[option_name];
         const attribute_value = attributes.get(name);

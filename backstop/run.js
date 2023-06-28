@@ -132,7 +132,7 @@ const test_files = readdir_recursive(test_dir)
   .filter((fname) => !fname.includes('Marquee')); // ignore Marquee, it animates
 test_files
   .map((fname) => {
-    return fname.substr(test_dir.length);
+    return fname.substring(test_dir.length);
   })
   .forEach((fname) => {
     config.scenarios.push(make_scenario(fname));

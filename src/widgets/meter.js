@@ -22,11 +22,9 @@ import { Widget } from './widget.js';
 import { Label } from './label.js';
 import {
   rangedOptionsDefaults,
-  rangedOptionsTypes,
   makeRanged,
 } from '../utils/make_ranged.js';
 import { Scale } from './scale.js';
-import { sprintf } from '../utils/sprintf.js';
 import {
   element,
   addClass,
@@ -39,7 +37,6 @@ import {
   applyAttribute,
 } from '../utils/dom.js';
 import { defineRender, defineMeasure } from '../renderer.js';
-import { selectAriaAttribute } from '../utils/select_aria_attribute.js';
 
 import { FORMAT } from '../utils/sprintf.js';
 
@@ -375,7 +372,7 @@ export class Meter extends Widget {
         }
       }),
       defineRender(['_width', '_height'], function (_width, _height) {
-        const { _canvas, _backdrop } = this;
+        const { _canvas } = this;
 
         if (!(_height > 0 && _width > 0)) return;
 
@@ -442,8 +439,6 @@ export class Meter extends Widget {
         aria_labelledby
       ) {
         if (aria_labelledby !== void 0) return;
-
-        const E = this.element;
 
         const value = label !== false ? this.label.get('id') : null;
         applyAttribute(this.element, 'aria-labelledby', value);

@@ -35,7 +35,7 @@
  * @see sprintf
  */
 function round(num, precision) {
-  var base = 10 ** precision;
+  const base = Math.pow(10, precision);
   return (Math.round(num * base) / base).toFixed(precision);
 }
 const fun =
@@ -56,7 +56,7 @@ export function FORMAT(fmt) {
   while ((res = regexp.exec(fmt))) {
     if (argnum) s += '+';
     s += JSON.stringify(
-      fmt.substr(last, regexp.lastIndex - res[0].length - last)
+      fmt.substring(last, regexp.lastIndex - res[0].length)
     );
     s += '+';
     argname = 'a' + argnum;
@@ -72,7 +72,7 @@ export function FORMAT(fmt) {
       case 102: // f
         if (res[1]) {
           // length qualifier
-          precision = parseInt(res[1].substr(1));
+          precision = parseInt(res[ 1 ].substring(1));
           s += 'round(+' + argname + ', ' + precision + ')';
         } else {
           s += '(+' + argname + ')';
@@ -97,7 +97,7 @@ export function FORMAT(fmt) {
   }
 
   if (argnum) s += '+';
-  s += JSON.stringify(fmt.substr(last));
+  s += JSON.stringify(fmt.substring(last));
   /* jshint -W054 */
   return new Function(args, s);
 }
@@ -133,7 +133,7 @@ export function sprintf(fmt) {
 
     if ((has_precision = fmt.charCodeAt(i) === 46) /* '.' */) {
       i++;
-      precision = parseInt(fmt.substr(i));
+      precision = parseInt(fmt.substring(i));
       while ((c = fmt.charCodeAt(i)) >= 48 && c <= 57) i++;
     }
 

@@ -34,10 +34,6 @@ import { defineRecalculation as defineRecalculationTask } from './renderer.js';
  *      of the widget.
  */
 export function defineRecalculation(widget, dependencies, cb) {
-  const trigger = function () {
-    this.triggerRecalculate(cb);
-  };
-
   const task = defineRecalculationTask(dependencies, function () {
     cb.call(this, this.options);
   });

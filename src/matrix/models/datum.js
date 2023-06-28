@@ -33,7 +33,7 @@ export class Datum extends Events {
 
     if (o) {
       for (let name in o)
-        if (o.hasOwnProperty(name)) {
+        if (Object.prototype.hasOwnProperty.call(o, name)) {
           this.set(name, o[name]);
         }
     }

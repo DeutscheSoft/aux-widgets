@@ -21,7 +21,6 @@ import {
   element,
   addClass,
   toggleClass,
-  isClassName,
   createID,
   applyAttribute,
 } from './../utils/dom.js';

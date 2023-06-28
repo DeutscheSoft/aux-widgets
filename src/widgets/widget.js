@@ -41,14 +41,12 @@ import { ProximityTimers } from '../utils/timers.js';
 import { ariaAttributes } from '../aria_attributes.js';
 
 import {
-  Scheduler,
   MASK_RENDER,
   MASK_CALCULATE,
 } from '../scheduler/scheduler.js';
 import {
   Renderer,
   RenderState,
-  getRenderers,
   defineRender,
   defineMeasure,
   deferMeasure,
@@ -188,10 +186,10 @@ function onFocusKeyDown(e) {
   if (e.code.startsWith('Arrow')) {
     if (e.ctrlKey) o.speed = 'slow';
     else if (e.shiftKey) o.speed = 'fast';
-    o.direction = e.code.substr(5).toLowerCase();
+    o.direction = e.code.substring(5).toLowerCase();
   }
   if (e.code.startsWith('Page')) {
-    o.direction = e.code.substr(4).toLowerCase();
+    o.direction = e.code.substring(4).toLowerCase();
     o.speed = 'full';
   }
   if (e.code === 'Home') {
@@ -388,7 +386,7 @@ export class Widget extends Base {
     if (!_renderers) {
       const parent = Object.getPrototypeOf(this);
 
-      let parentRenderers = parent.getRenderers ? parent.getRenderers() : [];
+      const parentRenderers = parent.getRenderers ? parent.getRenderers() : [];
 
       this._renderers = _renderers = parentRenderers.concat(
         getOwnProperty(this, 'renderers') || []
@@ -401,7 +399,7 @@ export class Widget extends Base {
   static getRenderer() {
     let renderer = this._renderer;
 
-    if (this.hasOwnProperty('_renderer')) return renderer;
+    if (Object.prototype.hasOwnProperty.call(this, '_renderer')) return renderer;
 
     this._renderer = renderer = new Renderer();
 

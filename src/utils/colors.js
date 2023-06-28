@@ -503,7 +503,7 @@ export function HSLToGray() {
  */
 export function hexToRGB(hex) {
   hex = hex || '000000';
-  if (hex[0] === '#') hex = hex.substr(1);
+  if (hex[0] === '#') hex = hex.substring(1);
   if (hex.length === 3)
     return {
       r: parseInt('0x' + hex[0] + hex[0]),
@@ -511,9 +511,9 @@ export function hexToRGB(hex) {
       b: parseInt('0x' + hex[2] + hex[2]),
     };
   return {
-    r: parseInt('0x' + hex.substr(0, 2)),
-    g: parseInt('0x' + hex.substr(2, 2)),
-    b: parseInt('0x' + hex.substr(4, 2)),
+    r: parseInt('0x' + hex.substring(0, 2)),
+    g: parseInt('0x' + hex.substring(2, 4)),
+    b: parseInt('0x' + hex.substring(4)),
   };
 }
 

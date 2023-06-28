@@ -49,7 +49,6 @@ function extractChildOptions(O, i) {
 }
 
 function addMeter() {
-  const l = this.meters.length;
   const opt = extractChildOptions(this.options, this.meters.length);
   const m = new LevelMeter(opt);
 
@@ -165,7 +164,7 @@ const levelmeterOwnOptions = objectSub(
 for (const key in levelmeterOwnOptions) {
   if (!Object.prototype.hasOwnProperty.call(levelmeterOwnOptions, key))
     continue;
-  if (multimeterOptionTypes.hasOwnProperty(key)) continue;
+  if (Object.prototype.hasOwnProperty.call(multimeterOptionTypes, key)) continue;
 
   const type = levelmeterOwnOptions[key];
 
@@ -308,8 +307,6 @@ export class MultiMeter extends Container {
         layout,
         show_scale
       ) {
-        const E = this.element;
-
         switch (layout) {
           case 'top':
           case 'left':

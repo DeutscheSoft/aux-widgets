@@ -793,12 +793,13 @@ export class Window extends Container {
           this.set('shrink', false);
         }
         break;
-      case 'shrink':
+      case 'shrink': {
         const maximize = this.get('maximize');
         if (value && maximize.y) {
           this.set('maximize', { y: false });
         }
         break;
+      }
       case 'minimize':
         this.set('visible', !value);
         break;

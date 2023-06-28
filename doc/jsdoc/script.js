@@ -3,7 +3,7 @@
   var navsearch = {};
   w.__init__ = function () {
     var nav = document.getElementById('navigation');
-    var hash = location.hash.substr(1);
+    var hash = location.hash.substring(1);
 
     if (hash === 'run') {
       setTimeout(run_example, 500);

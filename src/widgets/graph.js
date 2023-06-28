@@ -22,7 +22,7 @@
 
 import { defineRange } from '../utils/define_range.js';
 import { Widget } from './widget.js';
-import { toggleClass, addClass, removeClass } from '../utils/dom.js';
+import { toggleClass, addClass } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
 import { error } from '../utils/log.js';
 import { defineRender } from '../renderer.js';
@@ -241,7 +241,7 @@ export class Graph extends Widget {
           for (; i < dots.length; i++) {
             const dot = dots[i];
             const _type = dot.type || type;
-            const t = _type.substr(0, 1);
+            const t = _type.substring(0, 1);
 
             switch (t) {
               case 'L':
@@ -289,7 +289,7 @@ export class Graph extends Widget {
                 break;
               }
               case 'H': {
-                const f = _type.length > 1 ? parseFloat(type.substr(1)) : 3;
+                const f = _type.length > 1 ? parseFloat(type.substring(1)) : 3;
                 const X = getPixels(dot.x, range_x);
                 const Y = getPixels(dot.y, range_y);
                 const X1 = getPixels(

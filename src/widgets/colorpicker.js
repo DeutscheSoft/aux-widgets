@@ -58,7 +58,7 @@ function checkInput(e) {
     cancel.call(this);
     return;
   }
-  if (I.value.substr(0, 1) === '#') I.value = I.value.substr(1);
+  if (I.value.substring(0, 1) === '#') I.value = I.value.substring(1);
   if (e.type === 'paste' && I.value.length === 3) {
     I.value =
       I.value[0] +
@@ -131,7 +131,7 @@ function setAtoms(key) {
   for (let i = 0; i < atoms.length; i++) {
     const atom = atoms[i];
     if (key !== atom) {
-      O[atom] = O[color_atoms[atom]][atom.substr(0, 1)];
+      O[ atom ] = O[ color_atoms[ atom ] ][ atom.substring(0, 1)];
       this[atom].set('value', O[atom]);
     }
   }

@@ -30,7 +30,7 @@ export function observeResize(elements, callback) {
     callback();
   });
 
-  for (let element of elements) {
+  for (const element of elements) {
     observer.observe(element);
   }
 

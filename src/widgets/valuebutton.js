@@ -260,11 +260,10 @@ defineChildWidget(ValueButton, 'scale', {
   show: true,
   toggle_class: true,
   inherit_options: true,
-  blacklist_options: ['set_ariavalue'],
   map_options: {
     value: 'bar',
   },
-  blacklist_options: ['layout'],
+  blacklist_options: [ 'layout', 'set_ariavalue' ],
   default_options: {
     layout: 'top',
   },

@@ -76,7 +76,7 @@ function publish(data, opts, tutorials) {
         if (!property.name.startsWith('options.')) return;
         if (properties.some((p) => p.name === property.name)) return;
         const p = Object.assign({}, property);
-        p.description = p.description.substr(0, p.description.length - 4);
+        p.description = p.description.substring(0, p.description.length - 4);
         p.description += ' (<i>Defined in {@link ' + parent.name + '}</i>)</p>';
         properties.push(p);
       });

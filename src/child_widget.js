@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { addClass, removeClass, toggleClass } from './utils/dom.js';
+import { addClass, toggleClass } from './utils/dom.js';
 import { warn } from './utils/log.js';
 import { Widget } from './widgets/widget.js';
 import { defineRender } from './renderer.js';
@@ -40,7 +40,7 @@ function getChildOptions(parent, name, options, config) {
 
   for (const key in options) {
     if (key.startsWith(pref)) {
-      ret[key.substr(pref.length)] = options[key];
+      ret[ key.substring(pref.length) ] = options[key];
     } else if (inherit_options && blacklist_options.indexOf(key) < 0) {
       if (Object.prototype.hasOwnProperty.call(options, pref + key)) continue;
       if (config.create.hasOption(key) && !Widget.hasOption(key)) {
@@ -294,7 +294,7 @@ export function defineChildWidget(widget, name, config) {
   }
 
   let setCallback = function (val, key) {
-    if (this[name]) this[name].set(key.substr(name.length + 1), val);
+    if (this[ name ]) this[ name ].set(key.substring(name.length + 1), val);
   };
 
   for (tmp in ChildWidget.getOptionTypes()) {
