@@ -22,10 +22,11 @@
 import { defineChildElement } from '../widget_helpers.js';
 import { Widget } from './widget.js';
 import {
+  rangedEvents,
   rangedOptionsDefaults,
   rangedOptionsTypes,
-  makeRanged,
-} from '../utils/make_ranged.js';
+  rangedRenderers,
+} from '../utils/ranged.js';
 import {
   setContent,
   addClass,
@@ -550,8 +551,13 @@ export class Scale extends Widget {
     });
   }
 
+  static get static_events() {
+    return rangedEvents;
+  }
+
   static get renderers() {
     return [
+      ...rangedRenderers,
       defineRender('reverse', function (reverse) {
         toggleClass(this.element, 'aux-reverse', reverse);
       }),
@@ -871,7 +877,6 @@ export class Scale extends Widget {
     }
   }
 }
-makeRanged(Scale);
 
 /**
  * @member {HTMLDivElement} Fader#_pointer - The DIV element of the pointer. It can be used to e.g. visualize the value set in the backend.

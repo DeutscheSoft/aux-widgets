@@ -17,13 +17,16 @@
  * Boston, MA  02110-1301  USA
  */
 
+import { mergeStaticEvents } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
 import { Widget } from './widget.js';
 import { Label } from './label.js';
 import {
+  rangedEvents,
   rangedOptionsDefaults,
-  makeRanged,
-} from '../utils/make_ranged.js';
+  rangedOptionsTypes,
+  rangedRenderers,
+} from '../utils/ranged.js';
 import { Scale } from './scale.js';
 import {
   element,
@@ -297,7 +300,7 @@ export class Meter extends Widget {
   }
 
   static get static_events() {
-    return {
+    return mergeStaticEvents(rangedEvents, {
       set_base: function (value) {
         if (value === false) {
           const O = this.options;
@@ -320,11 +323,12 @@ export class Meter extends Widget {
         this.set('value', this.get('value'));
         this.set('base', this.get('base'));
       },
-    };
+    });
   }
 
   static get renderers() {
     return [
+      ...rangedRenderers,
       defineRender('reverse', function (reverse) {
         toggleClass(this.element, 'aux-reverse', reverse);
       }),
@@ -391,8 +395,10 @@ export class Meter extends Widget {
           background,
           _width,
           _height,
+          reverse,
           transformation,
-          snap_module
+          snap_module,
+          layout
         ) {
           if (!(_height > 0 && _width > 0)) return;
           const { _backdrop } = this;
@@ -421,7 +427,7 @@ export class Meter extends Widget {
           '_width',
           '_height',
         ],
-        function () {
+        function (value, transformation) {
           return this.drawMeter();
         }
       ),
@@ -593,7 +599,6 @@ export class Meter extends Widget {
     return O.base > O.min;
   }
 }
-makeRanged(Meter);
 /**
  * @member {Scale} Meter#scale - The {@link Scale} of the meter.
  */

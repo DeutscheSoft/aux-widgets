@@ -24,12 +24,12 @@ import { dBToScale, scaleToDB, freqToScale, scaleToFreq } from './audiomath.js';
  * snaps to values which are distributed at equal distance
  * on a range.
  */
-export function LinearSnapModule(options) {
-  const min = +options.min;
-  const max = +options.max;
-  const step = +options.step;
-  const base = +options.base;
-  const clip = !!options.clip;
+export function LinearSnapModule({ base, clip, max, min, step }) {
+  min = +min;
+  max = +max;
+  step = +step;
+  base = +base;
+  clip = !!clip;
 
   function lowSnap(v, direction) {
     v = +v;
@@ -116,12 +116,23 @@ export function LinearSnapModule(options) {
  * A factory function which creates a snap module which snaps to values
  * in a sorted list.
  */
-export function ArraySnapModule(options, heap) {
+export function ArraySnapModule({ clip, max, min }, heap) {
   const values = new Float64Array(heap);
   const len = (heap.byteLength >> 3) | 0;
-  const min = +(options.min !== void 0 ? options.min : values[0]);
-  const max = +(options.max !== void 0 ? options.max : values[len - 1]);
-  const clip = !!options.clip;
+
+  if (min !== void 0) {
+    min = +min;
+  } else {
+    min = values[0];
+  }
+
+  if (max !== void 0) {
+    max = +max;
+  } else {
+    max = values[len - 1];
+  }
+
+  clip = !!clip;
 
   function lowSnap(v, direction) {
     v = +v;
@@ -184,10 +195,10 @@ export function ArraySnapModule(options, heap) {
  * no snapping. If <code>options.clip</code> is <code>true</code>,
  * it will clip to <code>options.min</code> and <code>options.max</code>.
  */
-export function NullSnapModule(options) {
-  const min = +options.min;
-  const max = +options.max;
-  const clip = !!options.clip;
+export function NullSnapModule({ max, min, clip }) {
+  min = +min;
+  max = +max;
+  clip = !!clip;
 
   function snap(v) {
     v = +v;
@@ -223,12 +234,12 @@ export const TrivialSnapModule = {
 /**
  * Factory function which creates a piecewise linear transformation.
  */
-export function makePiecewiseLinearTransformation(options, heap) {
-  const reverse = options.reverse | 0;
+export function makePiecewiseLinearTransformation({ basis, reverse }, heap) {
+  reverse |= 0;
+  basis = +basis;
   const l = heap.byteLength >> 4;
   const X = new Float64Array(heap, 0, l);
   const Y = new Float64Array(heap, l * 8, l);
-  const basis = +options.basis;
 
   if (!(l >= 2))
     throw new TypeError(
@@ -324,10 +335,10 @@ export function makePiecewiseLinearTransformation(options, heap) {
 /**
  * Factory function which creates a transformation from generic function.
  */
-export function makeFunctionTransformation(options) {
-  const reverse = options.reverse | 0;
-  const scale = options.scale;
-  const basis = +options.basis;
+export function makeFunctionTransformation({ reverse, scale, basis }, options) {
+  reverse |= 0;
+  basis = +basis;
+
   function valueToBased(value, size) {
     value = +value;
     size = +size;
@@ -367,11 +378,12 @@ export function makeFunctionTransformation(options) {
 /**
  * Creates a linear transformation.
  */
-export function makeLinearTransformation(options) {
-  const reverse = options.reverse | 0;
-  const min = +options.min;
-  const max = +options.max;
-  let basis = +options.basis;
+export function makeLinearTransformation({ reverse, min, max, basis }) {
+  reverse |= 0;
+  min = +min;
+  max = +max;
+  basis = +basis || 1.0;
+
   function valueToBased(value, size) {
     value = +value;
     size = +size;
@@ -386,18 +398,12 @@ export function makeLinearTransformation(options) {
     coef = (coef / size) * (max - min) + min;
     return coef;
   }
-  // just a wrapper for having understandable code and backward
-  // compatibility
   function valueToPixel(n) {
     n = +n;
-    if (basis === 0.0) basis = 1.0;
     return +valueToBased(n, basis);
   }
-  // just a wrapper for having understandable code and backward
-  // compatibility
   function pixelToValue(n) {
     n = +n;
-    if (basis === 0.0) basis = 1.0;
     return +basedToValue(n, basis);
   }
   // calculates a coefficient for the value
@@ -479,13 +485,21 @@ export function makeLinearTransformation(options) {
 /**
  * Factory function which creates a logarithmic transformation.
  */
-export function makeLogarithmicTransformation(options) {
-  const reverse = options.reverse | 0;
-  const min = +options.min;
-  const max = +options.max;
-  const log_factor = +options.log_factor;
-  const trafo_reverse = options.trafo_reverse | 0;
-  const basis = +options.basis;
+export function makeLogarithmicTransformation({
+  basis,
+  log_factor,
+  max,
+  min,
+  reverse,
+  trafo_reverse,
+}) {
+  reverse |= 0;
+  min = +min;
+  max = +max;
+  log_factor = +log_factor;
+  trafo_reverse |= 0;
+  basis = +basis;
+
   function valueToBased(value, size) {
     value = +value;
     size = +size;
@@ -525,12 +539,19 @@ export function makeLogarithmicTransformation(options) {
 /**
  * Factory function which creates a transformation for frequency scales.
  */
-export function makeFrequencyTransformation(options) {
-  const reverse = options.reverse | 0;
-  const min = +options.min;
-  const max = +options.max;
-  const trafo_reverse = options.trafo_reverse | 0;
-  const basis = +options.basis;
+export function makeFrequencyTransformation({
+  basis,
+  max,
+  min,
+  reverse,
+  trafo_reverse,
+}) {
+  reverse |= 0;
+  min = +min;
+  max = +max;
+  trafo_reverse |= 0;
+  basis = +basis;
+
   function valueToBased(value, size) {
     value = +value;
     size = +size;

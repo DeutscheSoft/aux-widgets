@@ -28,6 +28,8 @@ import {
   makeLogarithmicTransformation,
   makeFrequencyTransformation,
 } from './transformations.js';
+import { defineRender } from '../renderer.js';
+import { applyAttribute } from './dom.js';
 
 import { error, warn } from './log.js';
 
@@ -43,12 +45,8 @@ export const rangedOptionsDefaults = {
   shift_up: 4,
   shift_down: 0.25,
   snap: 0,
-  round: true /* default for Range, no dedicated option */,
   log_factor: 1,
-  trafo_reverse: false /* used internally, no documentation */,
-  transformation: null,
-  snap_module: TrivialSnapModule,
-  format_ariavalue: (v) => v.toFixed(2),
+  format_ariavalue: (v) => (isFinite(v) ? v.toFixed(2) : ''),
   set_ariavalue: false,
 };
 
@@ -64,9 +62,7 @@ export const rangedOptionsTypes = {
   shift_up: 'number',
   shift_down: 'number',
   snap: 'number|array',
-  round: 'boolean',
   log_factor: 'number',
-  trafo_reverse: 'boolean',
   transformation: 'object',
   snap_module: 'object',
   format_ariavalue: 'function',
@@ -80,41 +76,54 @@ function numSort(arr) {
   });
   return arr;
 }
-function updateSnap() {
-  const O = this.options;
-  let snap_module;
-  // Notify that the ranged options have been modified
-  if (Array.isArray(O.snap)) {
-    snap_module = ArraySnapModule(O, new Float64Array(numSort(O.snap)).buffer);
-  } else if (typeof O.snap === 'number' && O.snap > 0.0) {
-    snap_module = LinearSnapModule({
-      min: Math.min(O.min, O.max),
-      max: Math.max(O.min, O.max),
-      step: O.snap,
-      base: O.base || 0,
-      clip: O.clip,
+
+export function makeSnapModule(snap, clip, min, max, base) {
+  if (Array.isArray(snap)) {
+    return ArraySnapModule(
+      {
+        min,
+        max,
+        clip,
+      },
+      new Float64Array(numSort(snap)).buffer
+    );
+  } else if (typeof snap === 'number' && snap > 0.0) {
+    return LinearSnapModule({
+      min: Math.min(min, max),
+      max: Math.max(min, max),
+      step: snap,
+      base: base || 0,
+      clip: clip,
     });
-  } else if (O.clip && O.min < Infinity && O.max > -Infinity) {
-    snap_module = NullSnapModule({
-      min: Math.min(O.min, O.max),
-      max: Math.max(O.min, O.max),
-      clip: O.clip,
+  } else if (clip && min < Infinity && max > -Infinity) {
+    return NullSnapModule({
+      min: Math.min(min, max),
+      max: Math.max(min, max),
+      clip,
     });
   } else {
-    snap_module = TrivialSnapModule;
+    return TrivialSnapModule;
   }
-
-  this.update('snap_module', snap_module);
 }
 
-function updateTransformation() {
-  const O = this.options;
-  const scale = O.scale;
-
-  let module;
-
+export function makeTransformation(
+  basis,
+  log_factor,
+  max,
+  min,
+  reverse,
+  scale,
+  options
+) {
   if (typeof scale === 'function') {
-    module = makeFunctionTransformation(O);
+    return makeFunctionTransformation(
+      {
+        basis,
+        scale,
+        reverse,
+      },
+      options
+    );
   } else if (Array.isArray(scale)) {
     let i = 0;
     if (scale.length % 2) {
@@ -132,83 +141,52 @@ function updateTransformation() {
         error('piecewise-linear array not sorted.');
     }
 
-    module = makePiecewiseLinearTransformation(
-      O,
+    return makePiecewiseLinearTransformation(
+      { basis, reverse },
       new Float64Array(scale).buffer
     );
   } else {
     switch (scale) {
       case 'linear':
-        module = makeLinearTransformation(O);
-        break;
+        return makeLinearTransformation({ basis, max, min, reverse });
       case 'decibel':
-        O.trafo_reverse = 1;
-        module = makeLogarithmicTransformation(O);
-        break;
+        return makeLogarithmicTransformation({
+          basis,
+          log_factor,
+          max,
+          min,
+          reverse,
+          trafo_reverse: 1,
+        });
       case 'log2':
-        O.trafo_reverse = 0;
-        module = makeLogarithmicTransformation(O);
-        break;
+        return makeLogarithmicTransformation({
+          basis,
+          log_factor,
+          max,
+          min,
+          reverse,
+          trafo_reverse: 0,
+        });
       case 'frequency':
-        O.trafo_reverse = 0;
-        module = makeFrequencyTransformation(O);
-        break;
+        return makeFrequencyTransformation({
+          basis,
+          max,
+          min,
+          reverse,
+          trafo_reverse: 0,
+        });
       case 'frequency-reverse':
-        O.trafo_reverse = 1;
-        module = makeFrequencyTransformation(O);
-        break;
+        return makeFrequencyTransformation({
+          basis,
+          max,
+          min,
+          reverse,
+          trafo_reverse: 1,
+        });
       default:
         warn('Unsupported scale', scale);
     }
   }
-
-  this.update('transformation', module);
-}
-function setCallback(key, value) {
-  switch (key) {
-    case 'value':
-      if (this.get('set_ariavalue'))
-        this.set('aria_valuenow', this.get('format_ariavalue')(value));
-      break;
-    case 'min':
-      if (this.get('set_ariavalue')) this.set('aria_valuemin', value);
-    /* fall through */
-    case 'max':
-      if (this.get('set_ariavalue')) this.set('aria_valuemax', value);
-    /* fall through */
-    case 'snap':
-    case 'clip':
-      updateSnap.call(this);
-    /* fall through */
-    case 'log_factor':
-    case 'scale':
-    case 'reverse':
-    case 'basis':
-      updateTransformation.call(this);
-      this.emit('rangedchanged');
-      break;
-  }
-}
-
-function initializedCallback() {
-  const O = this.options;
-  if (!(O.min <= O.max))
-    warn(
-      'Ranged needs min <= max. min: ',
-      O.min,
-      ', max:',
-      O.max,
-      ', options:',
-      O
-    );
-  if (this.get('set_ariavalue')) {
-    this.set('aria_valuemin', O.min);
-    this.set('aria_valuemax', O.max);
-    if (typeof O.value !== 'undefined')
-      this.set('aria_valuenow', this.get('format_ariavalue')(O.value));
-  }
-  updateSnap.call(this);
-  updateTransformation.call(this);
 }
 
 /**
@@ -271,9 +249,84 @@ function initializedCallback() {
  * @property {Function} [options.format_ariavalue=v => v.toFixed(2)] - Function to format the aria-valuenow attribute.
  * @property {Boolean} [options.set_ariavalue=false] - Define if aria-valuemin, aria-valuemax and aria-valuenow should be set.
  *
- * @function makeRanged
  */
-export function makeRanged(widget) {
-  widget.addStaticEvent('set', setCallback);
-  widget.addStaticEvent('initialized', initializedCallback);
+export const rangedRenderers = [
+  defineRender(
+    ['value', 'aria_valuenow', 'format_ariavalue', 'set_ariavalue'],
+    function (value, aria_valuenow, format_ariavalue, set_ariavalue) {
+      if (aria_valuenow !== void 0) return;
+      if (!set_ariavalue) return;
+
+      const targets = this.getARIATargets();
+
+      targets.forEach((element) => {
+        applyAttribute(element, 'aria-valuenow', format_ariavalue(value));
+      });
+    }
+  ),
+  defineRender(
+    ['min', 'aria_valuemin', 'format_ariavalue', 'set_ariavalue'],
+    function (min, aria_valuemin, format_ariavalue, set_ariavalue) {
+      if (aria_valuemin !== void 0) return;
+      if (!set_ariavalue) return;
+
+      const targets = this.getARIATargets();
+
+      targets.forEach((element) => {
+        applyAttribute(element, 'aria-valuemin', format_ariavalue(min));
+      });
+    }
+  ),
+  defineRender(
+    ['max', 'aria_valuemax', 'format_ariavalue', 'set_ariavalue'],
+    function (max, aria_valuemax, format_ariavalue, set_ariavalue) {
+      if (aria_valuemax !== void 0) return;
+      if (!set_ariavalue) return;
+
+      const targets = this.getARIATargets();
+
+      targets.forEach((element) => {
+        applyAttribute(element, 'aria-valuemax', format_ariavalue(max));
+      });
+    }
+  ),
+];
+
+function updateSnapModule() {
+  const { snap, clip, min, max, base } = this.options;
+  this.update('snap_module', makeSnapModule(snap, clip, min, max, base));
 }
+
+function updateTransformation() {
+  const { basis, log_factor, max, min, reverse, scale } = this.options;
+
+  this.update(
+    'transformation',
+    makeTransformation(
+      basis,
+      log_factor,
+      max,
+      min,
+      reverse,
+      scale,
+      this.options
+    )
+  );
+}
+
+export const rangedEvents = {
+  // changes both
+  set_max: [updateSnapModule, updateTransformation],
+  set_min: [updateSnapModule, updateTransformation],
+  // changes snap_module
+  set_base: updateSnapModule,
+  set_clip: updateSnapModule,
+  set_snap: updateSnapModule,
+  // changes transformation
+  set_basis: updateTransformation,
+  set_log_factor: updateTransformation,
+  set_reverse: updateTransformation,
+  set_scale: updateTransformation,
+
+  initialized: [updateSnapModule, updateTransformation],
+};

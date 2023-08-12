@@ -32,13 +32,15 @@ import { ScrollValue } from '../modules/scrollvalue.js';
 import { warning } from '../utils/warning.js';
 import { element, addClass, outerWidth, outerHeight } from '../utils/dom.js';
 import {
+  rangedEvents,
   rangedOptionsDefaults,
   rangedOptionsTypes,
-  makeRanged,
-} from '../utils/make_ranged.js';
+  rangedRenderers,
+} from '../utils/ranged.js';
 import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
 import { warn } from '../utils/log.js';
 import { defineRender } from '../renderer.js';
+import { mergeStaticEvents } from '../widget_helpers.js';
 
 function dblClick() {
   this.userset('value', this.options.reset);
@@ -126,14 +128,15 @@ export class Slider extends Widget {
   }
 
   static get static_events() {
-    return {
+    return mergeStaticEvents(rangedEvents, {
       dblclick: dblClick,
       focus_move: focusMoveDefault(),
-    };
+    });
   }
 
   static get renderers() {
     return [
+      ...rangedRenderers,
       defineRender('image', function (image) {
         const style = this.element.style;
         if (image) style['background-image'] = "url('" + image + "')";
@@ -249,4 +252,3 @@ export class Slider extends Widget {
     return super.set(key, value);
   }
 }
-makeRanged(Slider);

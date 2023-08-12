@@ -22,7 +22,11 @@ import {
   removeActiveEventListener,
   addActiveEventListener,
 } from './../utils/events.js';
-import { addEvent, removeEvent } from './../widget_helpers.js';
+import {
+  addEvent,
+  removeEvent,
+  mergeStaticEvents,
+} from './../widget_helpers.js';
 
 function callHandler(self, fun, args) {
   try {
@@ -139,25 +143,6 @@ function nativeHandler(ev) {
    * * beforeunload is cancelled with null
    */
   if (this.emit(ev.type, ev) === false) return false;
-}
-function arrayify(x) {
-  if (!Array.isArray(x)) x = [x];
-  return x;
-}
-
-function mergeStaticEvents(a, b) {
-  let event;
-  if (!a) return b;
-  if (!b) return Object.assign({}, a);
-  for (event in a) {
-    const tmp = a[event];
-    if (Object.prototype.hasOwnProperty.call(b, event)) {
-      b[event] = arrayify(tmp).concat(arrayify(b[event]));
-    } else {
-      b[event] = Array.isArray(tmp) ? tmp.slice(0) : tmp;
-    }
-  }
-  return Object.assign({}, a, b);
 }
 
 /**

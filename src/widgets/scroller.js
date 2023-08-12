@@ -30,12 +30,14 @@ import {
 import { defineChildWidget } from '../child_widget.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { defineRender } from '../renderer.js';
+import { mergeStaticEvents } from '../widget_helpers.js';
 
 import {
+  rangedEvents,
   rangedOptionsDefaults,
   rangedOptionsTypes,
-  makeRanged,
-} from '../utils/make_ranged.js';
+  rangedRenderers,
+} from '../utils/ranged.js';
 
 function is_vert(position) {
   return position === 'left' || position === 'right';
@@ -105,7 +107,7 @@ export class ScrollBar extends Widget {
   }
 
   static get static_events() {
-    return {
+    return mergeStaticEvents(rangedEvents, {
       set_content: setScrollRange,
       set_clip: setScrollRange,
       set_position: function (pos) {
@@ -113,11 +115,12 @@ export class ScrollBar extends Widget {
         this.drag.set('direction', vertical ? 'vertical' : 'horizontal');
         this.drag.set('reverse', vertical);
       },
-    };
+    });
   }
 
   static get renderers() {
     return [
+      ...rangedRenderers,
       defineRender('position', function (position) {
         this.removeClass(
           'aux-left',
@@ -190,7 +193,6 @@ export class ScrollBar extends Widget {
     super.draw(O, element);
   }
 }
-makeRanged(ScrollBar);
 
 /**
  * Scroller mimics the behavior of typical operating system scrollbars

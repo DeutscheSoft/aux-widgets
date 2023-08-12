@@ -44,6 +44,25 @@ export function removeEvent(from, event, fun) {
   }
 }
 
+function arrayify(x) {
+  if (!Array.isArray(x)) x = [x];
+  return x;
+}
+
+export function mergeStaticEvents(a, b) {
+  if (!a || !b) return Object.assign({}, a || b || {});
+
+  const result = Object.assign({}, a, b);
+
+  for (let event in a) {
+    if (!(event in b)) continue;
+
+    result[event] = arrayify(a[event]).concat(arrayify(b[event]));
+  }
+
+  return result;
+}
+
 export function addStaticEvent(w, event, fun) {
   w.addStaticEvent(event, fun);
 }

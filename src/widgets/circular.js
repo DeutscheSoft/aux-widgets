@@ -25,9 +25,10 @@ import { warning } from '../utils/warning.js';
 import {
   rangedOptionsDefaults,
   rangedOptionsTypes,
-  makeRanged,
-} from '../utils/make_ranged.js';
-import { defineChildElement } from '../widget_helpers.js';
+  rangedRenderers,
+  rangedEvents,
+} from '../utils/ranged.js';
+import { defineChildElement, mergeStaticEvents } from '../widget_helpers.js';
 import { SymResize, Widget } from './widget.js';
 import {
   defineRender,
@@ -222,17 +223,20 @@ export class Circular extends Widget {
   }
 
   static get static_events() {
-    return {
-      set_value: function (value) {
-        this.set('value_hand', value);
-        this.set('value_ring', value);
-      },
-      initialized: function () {
-        // calculate the stroke here once. this happens before
-        // the initial redraw
-        this.set('value', this.options.value);
-      },
-    };
+    return mergeStaticEvents(
+      rangedEvents,
+      {
+        set_value: function (value) {
+          this.set('value_hand', value);
+          this.set('value_ring', value);
+        },
+        initialized: function () {
+          // calculate the stroke here once. this happens before
+          // the initial redraw
+          this.set('value', this.options.value);
+        },
+      }
+    );
   }
 
   static get options() {
@@ -273,6 +277,7 @@ export class Circular extends Widget {
 
   static get renderers() {
     return [
+      ...rangedRenderers,
       defineRender('show_hand', function (show_hand) {
         this._hand.style.display = show_hand ? 'block' : 'none';
       }),
@@ -788,7 +793,7 @@ export class Circular extends Widget {
     return super.set(key, value);
   }
 }
-makeRanged(Circular);
+
 /**
  * @member {SVGGroup} Circular#_labels - A group containing all labels.
  *      Has class <code>.aux-labels</code>

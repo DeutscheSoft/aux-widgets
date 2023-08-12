@@ -19,12 +19,12 @@
 
 import { Base } from '../implements/base.js';
 import {
+  rangedEvents,
   rangedOptionsDefaults,
   rangedOptionsTypes,
-  makeRanged,
-} from '../utils/make_ranged.js';
-
-/* jshint -W079 */
+  makeTransformation,
+  makeSnapModule,
+} from '../utils/ranged.js';
 
 /**
  * Range is used for calculating linear scales from
@@ -71,11 +71,6 @@ import {
  *   math in JavaScript. Using a step size of e.g. 1.125
  *   reduces the maximum usable value from 9,007,199,254,740,992 to
  *   9,007,199,254,740.992 (note the decimal point).
- * @property {Boolean} [options.round=false] - if snap is set,
- *   decide how to jump between snaps. Setting this to true
- *   slips to the next snap if the value is more than on its half way to it.
- *   Otherwise the value has to reach the next snap until it is hold there
- *   again.
  */
 export class Range extends Base {
   static get _options() {
@@ -93,8 +88,11 @@ export class Range extends Base {
       shift_up: 4,
       shift_down: 0.25,
       snap: 0,
-      round: false,
     });
+  }
+
+  static get static_events() {
+    return rangedEvents;
   }
 
   valueToBased(coef, size) {
@@ -133,7 +131,6 @@ export class Range extends Base {
     return this.get('snap_module').snap(value);
   }
 }
-makeRanged(Range);
 
 /* jshint +W079 */
 

@@ -34,11 +34,13 @@ import { Scale } from './scale.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { Value } from './value.js';
 import { Label } from './label.js';
+import { mergeStaticEvents } from '../widget_helpers.js';
 import {
+  rangedEvents,
   rangedOptionsDefaults,
   rangedOptionsTypes,
-  makeRanged,
-} from '../utils/make_ranged.js';
+  rangedRenderers,
+} from '../utils/ranged.js';
 import {
   element,
   addClass,
@@ -171,7 +173,7 @@ export class Spread extends Widget {
   }
 
   static get static_events() {
-    return {
+    return mergeStaticEvents(rangedEvents, {
       set_bind_dblclick: function (value) {
         if (value) this.on('dblclick', dblClick);
         else this.off('dblclick', dblClick);
@@ -190,11 +192,12 @@ export class Spread extends Widget {
         else unsetGlobalCursor(cursor);
       },
       focus_move: focusMove,
-    };
+    });
   }
 
   static get renderers() {
     return [
+      ...rangedRenderers,
       defineMeasure(['layout', SymResize], function (layout) {
         const { _track, _lower } = this;
 
@@ -363,8 +366,6 @@ export class Spread extends Widget {
     return super.set(key, value);
   }
 }
-
-makeRanged(Spread);
 
 /**
  * @member {Scale} Spread#scale - A {@link Scale} to display a scale next to the fader.

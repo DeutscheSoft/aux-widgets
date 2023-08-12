@@ -22,10 +22,11 @@ import { Button } from './button.js';
 import { Value } from './value.js';
 import { warning } from '../utils/warning.js';
 import {
+  rangedEvents,
   rangedOptionsDefaults,
   rangedOptionsTypes,
-  makeRanged,
-} from '../utils/make_ranged.js';
+  rangedRenderers,
+} from '../utils/ranged.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { Scale } from './scale.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
@@ -34,6 +35,7 @@ import { FORMAT } from '../utils/sprintf.js';
 import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
 import { defineRender } from '../renderer.js';
 import { selectAriaAttribute } from '../utils/select_aria_attribute.js';
+import { mergeStaticEvents } from '../widget_helpers.js';
 
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -95,7 +97,7 @@ export class ValueButton extends Button {
   }
 
   static get static_events() {
-    return {
+    return mergeStaticEvents(rangedEvents, {
       set_direction: function (value) {
         this.drag.set('direction', value);
       },
@@ -118,11 +120,12 @@ export class ValueButton extends Button {
          */
         this.emit('doubleclick', this.options.value);
       },
-    };
+    });
   }
 
   static get renderers() {
     return [
+      ...rangedRenderers,
       defineRender(
         ['label', 'aria_labelledby', 'value.aria_labelledby'],
         function (label, aria_labelledby, value_aria_labelledby) {
@@ -200,7 +203,7 @@ export class ValueButton extends Button {
     return super.set(key, value);
   }
 }
-makeRanged(ValueButton);
+
 function valueClicked() {
   const self = this.parent;
   self.scroll.set('active', false);

@@ -36,10 +36,11 @@ import { ScrollValue } from '../modules/scrollvalue.js';
 import { Value } from './value.js';
 import { Label } from './label.js';
 import {
+  rangedEvents,
   rangedOptionsDefaults,
   rangedOptionsTypes,
-  makeRanged,
-} from '../utils/make_ranged.js';
+  rangedRenderers,
+} from '../utils/ranged.js';
 import {
   element,
   addClass,
@@ -53,6 +54,7 @@ import {
   createID,
   applyAttribute,
 } from '../utils/dom.js';
+import { mergeStaticEvents } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
 import { defineRender, defineMeasure } from '../renderer.js';
 import { selectAriaAttribute } from '../utils/select_aria_attribute.js';
@@ -172,36 +174,40 @@ export class Fader extends Widget {
   }
 
   static get static_events() {
-    return {
-      set_bind_click: function (value) {
-        if (value) this.on('click', clicked);
-        else this.off('click', clicked);
+    return mergeStaticEvents(
+      {
+        set_bind_click: function (value) {
+          if (value) this.on('click', clicked);
+          else this.off('click', clicked);
+        },
+        set_bind_dblclick: function (value) {
+          if (value) this.on('dblclick', dblClick);
+          else this.off('dblclick', dblClick);
+        },
+        set_layout: function (layout) {
+          this.options.direction = vert(layout) ? 'vertical' : 'horizontal';
+          this.drag.set('direction', this.options.direction);
+          this.scroll.set('direction', this.options.direction);
+        },
+        set_interacting: function (v) {
+          const cursor = this.options.cursor;
+          if (!cursor) return;
+          if (v) setGlobalCursor(cursor);
+          else unsetGlobalCursor(cursor);
+        },
+        click: function (e) {
+          if (this.value && this.value.element.contains(e.target)) return;
+          this._handle.focus();
+        },
+        focus_move: focusMoveDefault(),
       },
-      set_bind_dblclick: function (value) {
-        if (value) this.on('dblclick', dblClick);
-        else this.off('dblclick', dblClick);
-      },
-      set_layout: function (layout) {
-        this.options.direction = vert(layout) ? 'vertical' : 'horizontal';
-        this.drag.set('direction', this.options.direction);
-        this.scroll.set('direction', this.options.direction);
-      },
-      set_interacting: function (v) {
-        const cursor = this.options.cursor;
-        if (!cursor) return;
-        if (v) setGlobalCursor(cursor);
-        else unsetGlobalCursor(cursor);
-      },
-      click: function (e) {
-        if (this.value && this.value.element.contains(e.target)) return;
-        this._handle.focus();
-      },
-      focus_move: focusMoveDefault(),
-    };
+      rangedEvents
+    );
   }
 
   static get renderers() {
     return [
+      ...rangedRenderers,
       defineRender('layout', function (layout) {
         const E = this.element;
         removeClass(
@@ -394,8 +400,6 @@ export class Fader extends Widget {
     return super.set(key, value);
   }
 }
-
-makeRanged(Fader);
 
 /**
  * @member {Scale} Fader#scale - A {@link Scale} to display a scale next to the fader.
