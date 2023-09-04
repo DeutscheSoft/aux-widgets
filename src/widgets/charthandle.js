@@ -1210,8 +1210,9 @@ export class ChartHandle extends Widget {
 
     const direction = e.deltaY < 0 ? -1 : 1;
     const range = this.options.range_z;
+    const rev = e.webkitDirectionInvertedFromDevice ? -1 : 1;
 
-    let diff = direction;
+    let diff = direction * (range.options.step || 1) * rev;
 
     if (e.getModifierState('Shift')) {
       diff *= range.get(
