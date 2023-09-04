@@ -156,7 +156,6 @@
 .aux-icon.dd2_1::before                                               { font-family: 'AUXIcons'; content: '􀁸'; }
 .aux-icon.dd2_1_1::before                                             { font-family: 'AUXIcons'; content: '􀁹'; }
 .aux-icon.mc3_1::before                                               { font-family: 'AUXIcons'; content: '􀂀'; }
-.aux-icon.dd2_1_1::before                                             { font-family: 'AUXIcons'; content: '􀂀'; }
 .aux-icon.mc4_0::before                                               { font-family: 'AUXIcons'; content: '􀂁'; }
 .aux-icon.quadro::before                                              { font-family: 'AUXIcons'; content: '􀂁'; }
 .aux-icon.dd2_2::before                                               { font-family: 'AUXIcons'; content: '􀂁'; }
@@ -173,8 +172,6 @@
 .aux-icon.mc5_1::before                                               { font-family: 'AUXIcons'; content: '􀂆'; }
 .aux-icon.dd3_2_1::before                                             { font-family: 'AUXIcons'; content: '􀂆'; }
 .aux-icon.dolbyprologic2::before                                      { font-family: 'AUXIcons'; content: '􀂆'; }
-.aux-icon.mc3_1::before                                               { font-family: 'AUXIcons'; content: '􀂇'; }
-.aux-icon.dd2_1_1::before                                             { font-family: 'AUXIcons'; content: '􀂇'; }
 .aux-icon.mc6_1::before                                               { font-family: 'AUXIcons'; content: '􀂈'; }
 .aux-icon.ddex::before                                                { font-family: 'AUXIcons'; content: '􀂈'; }
 .aux-icon.mc7_1::before                                               { font-family: 'AUXIcons'; content: '􀂉'; }

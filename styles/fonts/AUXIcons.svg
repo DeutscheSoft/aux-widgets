@@ -435,7 +435,7 @@
          unicode="􀁹"
          d="M 32,992 V 800 H 96 V 96 H 416 V 32 h 192 v 64 h 320 v 704 h 64 V 992 H 800 V 928 H 224 v 64 z M 224,864 h 576 v -64 h 64 V 160 H 608 v 64 H 416 V 160 H 160 v 640 h 64 z M 416,608 V 416 h 192 v 192 z" />
       <glyph
-         glyph-name="MC 3.1/DD 2.1.1"
+         glyph-name="MC 3.1"
          id="glyph80"
          unicode="􀂀"
          d="M 32,992 V 800 H 96 V 96 h 832 v 704 h 64 V 992 H 800 V 928 H 608 v 64 H 416 V 928 H 224 v 64 z M 224,864 h 192 v -64 h 192 v 64 h 192 v -64 h 64 V 160 H 160 v 640 h 64 z M 416,608 V 416 h 192 v 192 z" />
@@ -469,11 +469,6 @@
          id="glyph86"
          unicode="􀂆"
          d="M 32,992 V 800 H 96 V 224 H 32 V 32 H 224 V 96 H 800 V 32 h 192 v 192 h -64 v 576 h 64 V 992 H 800 V 928 H 608 v 64 H 416 V 928 H 224 v 64 z M 224,864 h 192 v -64 h 192 v 64 h 192 v -64 h 64 V 224 H 800 V 160 H 224 v 64 h -64 v 576 h 64 z M 416,608 V 416 h 192 v 192 z" />
-      <glyph
-         glyph-name="MC 3.1/DD 2.1.1"
-         id="glyph87"
-         unicode="􀂇"
-         d="M 32,992 V 800 H 96 V 96 h 832 v 704 h 64 V 992 H 800 V 928 H 608 v 64 H 416 V 928 H 224 v 64 z M 224,864 h 192 v -64 h 192 v 64 h 192 v -64 h 64 V 160 H 160 v 640 h 64 z M 416,608 V 416 h 192 v 192 z" />
       <glyph
          glyph-name="MC 6.1/DD EX"
          id="glyph88"
@@ -1658,9 +1653,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.5"
-     inkscape:cx="393"
-     inkscape:cy="1062"
+     inkscape:zoom="0.1767767"
+     inkscape:cx="-2033.6391"
+     inkscape:cy="169.70563"
      inkscape:document-units="px"
      inkscape:current-layer="layer3"
      showgrid="true"
