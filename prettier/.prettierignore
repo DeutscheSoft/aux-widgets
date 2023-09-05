@@ -15,6 +15,15 @@
 ../backstop/backstop_data
 ../backstop/htdocs
 ../backstop/tests/examples
+../backstop/htdocs/src
+../backstop/htdocs/styles
+../backstop/tests/examples
+../examples/src
+../examples/styles
+../cypress/htdocs/src
+../cypress/htdocs/styles
+../cypress/htdocs/tests/examples
+
 
 ../doc/out
 
