@@ -40,10 +40,7 @@ import { GlobalVisibilityChange } from '../utils/global_visibility_change.js';
 import { ProximityTimers } from '../utils/timers.js';
 import { ariaAttributes } from '../aria_attributes.js';
 
-import {
-  MASK_RENDER,
-  MASK_CALCULATE,
-} from '../scheduler/scheduler.js';
+import { MASK_RENDER, MASK_CALCULATE } from '../scheduler/scheduler.js';
 import {
   Renderer,
   RenderState,
@@ -399,7 +396,8 @@ export class Widget extends Base {
   static getRenderer() {
     let renderer = this._renderer;
 
-    if (Object.prototype.hasOwnProperty.call(this, '_renderer')) return renderer;
+    if (Object.prototype.hasOwnProperty.call(this, '_renderer'))
+      return renderer;
 
     this._renderer = renderer = new Renderer();
 

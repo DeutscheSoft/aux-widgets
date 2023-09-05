@@ -329,7 +329,7 @@ function buildFromConst(element) {
     if (L[i] !== 'spacer') {
       this.set('show_' + L[i], true);
       E.appendChild(this[L[i]].element);
-      if (L[ i ] === 'size' && !this.resize && this.size) {
+      if (L[i] === 'size' && !this.resize && this.size) {
         this.resize = new Resize({
           node: this.element,
           handle: this.size.element,

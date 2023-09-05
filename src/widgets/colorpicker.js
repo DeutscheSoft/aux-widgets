@@ -131,7 +131,7 @@ function setAtoms(key) {
   for (let i = 0; i < atoms.length; i++) {
     const atom = atoms[i];
     if (key !== atom) {
-      O[ atom ] = O[ color_atoms[ atom ] ][ atom.substring(0, 1)];
+      O[atom] = O[color_atoms[atom]][atom.substring(0, 1)];
       this[atom].set('value', O[atom]);
     }
   }
@@ -456,7 +456,7 @@ defineChildWidget(ColorPicker, 'hex', {
     set: function (v) {
       let p = 0,
         tmp;
-      if (v[ 0 ] === '#') v = v.substring(1);
+      if (v[0] === '#') v = v.substring(1);
       while (v.length < 6) {
         tmp = v.slice(0, p + 1);
         tmp += v[p];

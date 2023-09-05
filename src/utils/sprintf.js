@@ -55,9 +55,7 @@ export function FORMAT(fmt) {
 
   while ((res = regexp.exec(fmt))) {
     if (argnum) s += '+';
-    s += JSON.stringify(
-      fmt.substring(last, regexp.lastIndex - res[0].length)
-    );
+    s += JSON.stringify(fmt.substring(last, regexp.lastIndex - res[0].length));
     s += '+';
     argname = 'a' + argnum;
     if (args.indexOf(argname) === -1) args.push(argname);
@@ -72,7 +70,7 @@ export function FORMAT(fmt) {
       case 102: // f
         if (res[1]) {
           // length qualifier
-          precision = parseInt(res[ 1 ].substring(1));
+          precision = parseInt(res[1].substring(1));
           s += 'round(+' + argname + ', ' + precision + ')';
         } else {
           s += '(+' + argname + ')';
