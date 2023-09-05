@@ -266,7 +266,7 @@ defineChildWidget(ValueButton, 'scale', {
   map_options: {
     value: 'bar',
   },
-  blacklist_options: [ 'layout', 'set_ariavalue' ],
+  blacklist_options: ['layout', 'set_ariavalue'],
   default_options: {
     layout: 'top',
   },

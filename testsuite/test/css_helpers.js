@@ -30,17 +30,29 @@ describe('CSSHelpers', () => {
   const div = document.createElement('DIV');
 
   it('addClass()', (done) => {
-    addClass(div, 'a', [ 'b' ], 'c  d');
+    addClass(div, 'a', ['b'], 'c  d');
     const c = div.classList;
-    if (c.contains('a') && c.contains('b') && c.contains('c') && c.contains('d')) done();
+    if (
+      c.contains('a') &&
+      c.contains('b') &&
+      c.contains('c') &&
+      c.contains('d')
+    )
+      done();
     else done(new Error('class not found'));
     div.classList.remove('a', 'b', 'c', 'd');
   });
   it('removeClass()', (done) => {
-    addClass(div, 'a', [ 'b' ], 'c  d');
-    removeClass(div, 'a', [ 'b' ], 'c  d');
+    addClass(div, 'a', ['b'], 'c  d');
+    removeClass(div, 'a', ['b'], 'c  d');
     const c = div.classList;
-    if (!c.contains('a') && !c.contains('b') && !c.contains('c') && !c.contains('d')) done();
+    if (
+      !c.contains('a') &&
+      !c.contains('b') &&
+      !c.contains('c') &&
+      !c.contains('d')
+    )
+      done();
     else done(new Error('class found'));
   });
   it('isDocumentFragment()', (done) => {

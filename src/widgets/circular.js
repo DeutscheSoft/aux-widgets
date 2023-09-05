@@ -223,20 +223,17 @@ export class Circular extends Widget {
   }
 
   static get static_events() {
-    return mergeStaticEvents(
-      rangedEvents,
-      {
-        set_value: function (value) {
-          this.set('value_hand', value);
-          this.set('value_ring', value);
-        },
-        initialized: function () {
-          // calculate the stroke here once. this happens before
-          // the initial redraw
-          this.set('value', this.options.value);
-        },
-      }
-    );
+    return mergeStaticEvents(rangedEvents, {
+      set_value: function (value) {
+        this.set('value_hand', value);
+        this.set('value_ring', value);
+      },
+      initialized: function () {
+        // calculate the stroke here once. this happens before
+        // the initial redraw
+        this.set('value', this.options.value);
+      },
+    });
   }
 
   static get options() {

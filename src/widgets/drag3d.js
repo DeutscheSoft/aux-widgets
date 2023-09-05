@@ -164,7 +164,7 @@ export class Drag3D extends Container {
 
 const setCallback = function (name) {
   return function (val, key) {
-    if (this[ name ]) this[ name ].set(key.substring(name.length + 1), val);
+    if (this[name]) this[name].set(key.substring(name.length + 1), val);
   };
 };
 

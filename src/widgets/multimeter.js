@@ -164,7 +164,8 @@ const levelmeterOwnOptions = objectSub(
 for (const key in levelmeterOwnOptions) {
   if (!Object.prototype.hasOwnProperty.call(levelmeterOwnOptions, key))
     continue;
-  if (Object.prototype.hasOwnProperty.call(multimeterOptionTypes, key)) continue;
+  if (Object.prototype.hasOwnProperty.call(multimeterOptionTypes, key))
+    continue;
 
   const type = levelmeterOwnOptions[key];
 
