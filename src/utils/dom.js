@@ -47,7 +47,7 @@ export function addClass(e) {
   let i;
   e = e.classList;
   for (i = 1; i < arguments.length; i++) {
-    e.add(...splitClassNames(arguments[ i ]));
+    e.add(...splitClassNames(arguments[i]));
   }
 }
 /**
@@ -60,7 +60,7 @@ export function removeClass(e) {
   let i;
   e = e.classList;
   for (i = 1; i < arguments.length; i++) {
-    e.remove(...splitClassNames(arguments[ i ]));
+    e.remove(...splitClassNames(arguments[i]));
   }
 }
 /**
@@ -773,16 +773,13 @@ export function applyAttribute(element, attributeName, attributeValue) {
  * an array of class names. Strings will be split on spaces.
  */
 export function splitClassNames(input) {
-  if (!input)
-    return [];
+  if (!input) return [];
 
-  if (Array.isArray(input))
-    return input;
+  if (Array.isArray(input)) return input;
 
   input = input.toString();
 
-  if (!input.includes(' '))
-    return [ input ];
+  if (!input.includes(' ')) return [input];
 
   return input.split(/\ +/g).filter((tmp) => tmp.length > 0);
 }

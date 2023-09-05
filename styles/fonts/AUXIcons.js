@@ -18,947 +18,946 @@
  */
 
 export const AUXIcons = {
-  'warning': {
+  warning: {
     name: 'Warning',
     char: '􀀀',
     family: 'AUXIcons',
     id: 'warning',
   },
-  'information': {
+  information: {
     name: 'Information',
     char: '􀀁',
     family: 'AUXIcons',
     id: 'information',
   },
-  'info': {
+  info: {
     name: 'Information',
     char: '􀀁',
     family: 'AUXIcons',
     id: 'info',
   },
-  'error': {
+  error: {
     name: 'Error',
     char: '􀀂',
     family: 'AUXIcons',
     id: 'error',
   },
-  'message': {
+  message: {
     name: 'Message',
     char: '􀀃',
     family: 'AUXIcons',
     id: 'message',
   },
-  'close': {
+  close: {
     name: 'Close',
     char: '􀀄',
     family: 'AUXIcons',
     id: 'close',
   },
-  'success': {
+  success: {
     name: 'Success',
     char: '􀀅',
     family: 'AUXIcons',
     id: 'success',
   },
-  'hourglass': {
+  hourglass: {
     name: 'Hourglass',
     char: '􀀆',
     family: 'AUXIcons',
     id: 'hourglass',
   },
-  'loading': {
+  loading: {
     name: 'Hourglass',
     char: '􀀆',
     family: 'AUXIcons',
     id: 'loading',
   },
-  'questionmark': {
+  questionmark: {
     name: 'Questionmark',
     char: '􀀇',
     family: 'AUXIcons',
     id: 'questionmark',
   },
-  'screensize': {
+  screensize: {
     name: 'Screen Size',
     char: '􀀈',
     family: 'AUXIcons',
     id: 'screensize',
   },
-  'windowminimize': {
+  windowminimize: {
     name: 'Window Minimize',
     char: '􀀉',
     family: 'AUXIcons',
     id: 'windowminimize',
   },
-  'winmin': {
+  winmin: {
     name: 'Window Minimize',
     char: '􀀉',
     family: 'AUXIcons',
     id: 'winmin',
   },
-  'windowclose': {
+  windowclose: {
     name: 'Window Close',
     char: '􀀐',
     family: 'AUXIcons',
     id: 'windowclose',
   },
-  'winclose': {
+  winclose: {
     name: 'Window Close',
     char: '􀀐',
     family: 'AUXIcons',
     id: 'winclose',
   },
-  'windowmaximize': {
+  windowmaximize: {
     name: 'Window Maximize',
     char: '􀀑',
     family: 'AUXIcons',
     id: 'windowmaximize',
   },
-  'winmax': {
+  winmax: {
     name: 'Window Maximize',
     char: '􀀑',
     family: 'AUXIcons',
     id: 'winmax',
   },
-  'windowmaximizevertical': {
+  windowmaximizevertical: {
     name: 'Window Maximize Vertical',
     char: '􀀒',
     family: 'AUXIcons',
     id: 'windowmaximizevertical',
   },
-  'winmaxvert': {
+  winmaxvert: {
     name: 'Window Maximize Vertical',
     char: '􀀒',
     family: 'AUXIcons',
     id: 'winmaxvert',
   },
-  'windowmaximizehorizontal': {
+  windowmaximizehorizontal: {
     name: 'Window Maximize Horizontal',
     char: '􀀓',
     family: 'AUXIcons',
     id: 'windowmaximizehorizontal',
   },
-  'winmaxhoriz': {
+  winmaxhoriz: {
     name: 'Window Maximize Horizontal',
     char: '􀀓',
     family: 'AUXIcons',
     id: 'winmaxhoriz',
   },
-  'windowshrink': {
+  windowshrink: {
     name: 'Window Shrink',
     char: '􀀔',
     family: 'AUXIcons',
     id: 'windowshrink',
   },
-  'winshrink': {
+  winshrink: {
     name: 'Window Shrink',
     char: '􀀔',
     family: 'AUXIcons',
     id: 'winshrink',
   },
-  'windowresize': {
+  windowresize: {
     name: 'Window Resize',
     char: '􀀕',
     family: 'AUXIcons',
     id: 'windowresize',
   },
-  'unchecked': {
+  unchecked: {
     name: 'Unchecked',
     char: '􀀖',
     family: 'AUXIcons',
     id: 'unchecked',
   },
-  'checked': {
+  checked: {
     name: 'Checked',
     char: '􀀗',
     family: 'AUXIcons',
     id: 'checked',
   },
-  'speaker': {
+  speaker: {
     name: 'Speaker',
     char: '􀀘',
     family: 'AUXIcons',
     id: 'speaker',
   },
-  'speakeractive': {
+  speakeractive: {
     name: 'Speaker',
     char: '􀀘',
     family: 'AUXIcons',
     id: 'speakeractive',
   },
-  'sound': {
+  sound: {
     name: 'Speaker',
     char: '􀀘',
     family: 'AUXIcons',
     id: 'sound',
   },
-  'speakermute': {
+  speakermute: {
     name: 'Speaker Mute',
     char: '􀀙',
     family: 'AUXIcons',
     id: 'speakermute',
   },
-  'mute': {
+  mute: {
     name: 'Speaker Mute',
     char: '􀀙',
     family: 'AUXIcons',
     id: 'mute',
   },
-  'gear': {
+  gear: {
     name: 'Gear',
     char: '􀀠',
     family: 'AUXIcons',
     id: 'gear',
   },
-  'cogwheel': {
+  cogwheel: {
     name: 'Gear',
     char: '􀀠',
     family: 'AUXIcons',
     id: 'cogwheel',
   },
-  'cog': {
+  cog: {
     name: 'Gear',
     char: '􀀠',
     family: 'AUXIcons',
     id: 'cog',
   },
-  'power': {
+  power: {
     name: 'Power',
     char: '􀀡',
     family: 'AUXIcons',
     id: 'power',
   },
-  'phase': {
+  phase: {
     name: 'Phase',
     char: '􀀢',
     family: 'AUXIcons',
     id: 'phase',
   },
-  'phaseinvert': {
+  phaseinvert: {
     name: 'Phase',
     char: '􀀢',
     family: 'AUXIcons',
     id: 'phaseinvert',
   },
-  'arrowdown': {
+  arrowdown: {
     name: 'Arrow Down',
     char: '􀀣',
     family: 'AUXIcons',
     id: 'arrowdown',
   },
-  'arrowup': {
+  arrowup: {
     name: 'Arrow Up',
     char: '􀀤',
     family: 'AUXIcons',
     id: 'arrowup',
   },
-  'arrowleft': {
+  arrowleft: {
     name: 'Arrow Left',
     char: '􀀥',
     family: 'AUXIcons',
     id: 'arrowleft',
   },
-  'arrowright': {
+  arrowright: {
     name: 'Arrow Right',
     char: '􀀦',
     family: 'AUXIcons',
     id: 'arrowright',
   },
-  'hide': {
+  hide: {
     name: 'Hide',
     char: '􀀧',
     family: 'AUXIcons',
     id: 'hide',
   },
-  'show': {
+  show: {
     name: 'Show',
     char: '􀀨',
     family: 'AUXIcons',
     id: 'show',
   },
-  'highpass': {
+  highpass: {
     name: 'High Pass',
     char: '􀀩',
     family: 'AUXIcons',
     id: 'highpass',
   },
-  'hipass': {
+  hipass: {
     name: 'High Pass',
     char: '􀀩',
     family: 'AUXIcons',
     id: 'hipass',
   },
-  'lowpass': {
+  lowpass: {
     name: 'Low Pass',
     char: '􀀰',
     family: 'AUXIcons',
     id: 'lowpass',
   },
-  'lopass': {
+  lopass: {
     name: 'Low Pass',
     char: '􀀰',
     family: 'AUXIcons',
     id: 'lopass',
   },
-  'highshelf': {
+  highshelf: {
     name: 'High Shelf',
     char: '􀀱',
     family: 'AUXIcons',
     id: 'highshelf',
   },
-  'hishelf': {
+  hishelf: {
     name: 'High Shelf',
     char: '􀀱',
     family: 'AUXIcons',
     id: 'hishelf',
   },
-  'lowshelf': {
+  lowshelf: {
     name: 'Low Shelf',
     char: '􀀲',
     family: 'AUXIcons',
     id: 'lowshelf',
   },
-  'loshelf': {
+  loshelf: {
     name: 'Low Shelf',
     char: '􀀲',
     family: 'AUXIcons',
     id: 'loshelf',
   },
-  'bandpass': {
+  bandpass: {
     name: 'Band Pass',
     char: '􀀳',
     family: 'AUXIcons',
     id: 'bandpass',
   },
-  'bandreject': {
+  bandreject: {
     name: 'Band Reject',
     char: '􀀴',
     family: 'AUXIcons',
     id: 'bandreject',
   },
-  'notch': {
+  notch: {
     name: 'Notch',
     char: '􀀵',
     family: 'AUXIcons',
     id: 'notch',
   },
-  'parametric': {
+  parametric: {
     name: 'Parametric',
     char: '􀀶',
     family: 'AUXIcons',
     id: 'parametric',
   },
-  'sine': {
+  sine: {
     name: 'Sine',
     char: '􀀷',
     family: 'AUXIcons',
     id: 'sine',
   },
-  'pulse': {
+  pulse: {
     name: 'Pulse',
     char: '􀀸',
     family: 'AUXIcons',
     id: 'pulse',
   },
-  'sawtooth': {
+  sawtooth: {
     name: 'Sawtooth',
     char: '􀀹',
     family: 'AUXIcons',
     id: 'sawtooth',
   },
-  'saw': {
+  saw: {
     name: 'Sawtooth',
     char: '􀀹',
     family: 'AUXIcons',
     id: 'saw',
   },
-  'triangle': {
+  triangle: {
     name: 'Triangle',
     char: '􀁀',
     family: 'AUXIcons',
     id: 'triangle',
   },
-  'triangular': {
+  triangular: {
     name: 'Triangle',
     char: '􀁀',
     family: 'AUXIcons',
     id: 'triangular',
   },
-  'tri': {
+  tri: {
     name: 'Triangle',
     char: '􀁀',
     family: 'AUXIcons',
     id: 'tri',
   },
-  'bypass': {
+  bypass: {
     name: 'Bypass',
     char: '􀁁',
     family: 'AUXIcons',
     id: 'bypass',
   },
-  'stairs': {
+  stairs: {
     name: 'Stairs',
     char: '􀁂',
     family: 'AUXIcons',
     id: 'stairs',
   },
-  'aliased': {
+  aliased: {
     name: 'Stairs',
     char: '􀁂',
     family: 'AUXIcons',
     id: 'aliased',
   },
-  'stereo': {
+  stereo: {
     name: 'Stereo',
     char: '􀁃',
     family: 'AUXIcons',
     id: 'stereo',
   },
-  'mono': {
+  mono: {
     name: 'Mono',
     char: '􀁄',
     family: 'AUXIcons',
     id: 'mono',
   },
-  'zoom': {
+  zoom: {
     name: 'Zoom',
     char: '􀁅',
     family: 'AUXIcons',
     id: 'zoom',
   },
-  'magnifier': {
+  magnifier: {
     name: 'Zoom',
     char: '􀁅',
     family: 'AUXIcons',
     id: 'magnifier',
   },
-  'zoomin': {
+  zoomin: {
     name: 'Zoom In',
     char: '􀁆',
     family: 'AUXIcons',
     id: 'zoomin',
   },
-  'zoomout': {
+  zoomout: {
     name: 'Zoom Out',
     char: '􀁇',
     family: 'AUXIcons',
     id: 'zoomout',
   },
-  'home': {
+  home: {
     name: 'Home',
     char: '􀁈',
     family: 'AUXIcons',
     id: 'home',
   },
-  'start': {
+  start: {
     name: 'Home',
     char: '􀁈',
     family: 'AUXIcons',
     id: 'start',
   },
-  'rewind': {
+  rewind: {
     name: 'Rewind',
     char: '􀁉',
     family: 'AUXIcons',
     id: 'rewind',
   },
-  'rew': {
+  rew: {
     name: 'Rewind',
     char: '􀁉',
     family: 'AUXIcons',
     id: 'rew',
   },
-  'pause': {
+  pause: {
     name: 'Pause',
     char: '􀁐',
     family: 'AUXIcons',
     id: 'pause',
   },
-  'play': {
+  play: {
     name: 'Play',
     char: '􀁑',
     family: 'AUXIcons',
     id: 'play',
   },
-  'stop': {
+  stop: {
     name: 'Stop',
     char: '􀁒',
     family: 'AUXIcons',
     id: 'stop',
   },
-  'record': {
+  record: {
     name: 'Record',
     char: '􀁓',
     family: 'AUXIcons',
     id: 'record',
   },
-  'rec': {
+  rec: {
     name: 'Record',
     char: '􀁓',
     family: 'AUXIcons',
     id: 'rec',
   },
-  'eject': {
+  eject: {
     name: 'Eject',
     char: '􀁔',
     family: 'AUXIcons',
     id: 'eject',
   },
-  'fastforward': {
+  fastforward: {
     name: 'Fast Forward',
     char: '􀁕',
     family: 'AUXIcons',
     id: 'fastforward',
   },
-  'ffwd': {
+  ffwd: {
     name: 'Fast Forward',
     char: '􀁕',
     family: 'AUXIcons',
     id: 'ffwd',
   },
-  'end': {
+  end: {
     name: 'End',
     char: '􀁖',
     family: 'AUXIcons',
     id: 'end',
   },
-  'repeat': {
+  repeat: {
     name: 'Repeat',
     char: '􀁗',
     family: 'AUXIcons',
     id: 'repeat',
   },
-  'random': {
+  random: {
     name: 'Random',
     char: '􀁘',
     family: 'AUXIcons',
     id: 'random',
   },
-  'day': {
+  day: {
     name: 'Day',
     char: '􀁙',
     family: 'AUXIcons',
     id: 'day',
   },
-  'sun': {
+  sun: {
     name: 'Day',
     char: '􀁙',
     family: 'AUXIcons',
     id: 'sun',
   },
-  'daylight': {
+  daylight: {
     name: 'Day',
     char: '􀁙',
     family: 'AUXIcons',
     id: 'daylight',
   },
-  'light': {
+  light: {
     name: 'Day',
     char: '􀁙',
     family: 'AUXIcons',
     id: 'light',
   },
-  'night': {
+  night: {
     name: 'Night',
     char: '􀁠',
     family: 'AUXIcons',
     id: 'night',
   },
-  'moon': {
+  moon: {
     name: 'Night',
     char: '􀁠',
     family: 'AUXIcons',
     id: 'moon',
   },
-  'dark': {
+  dark: {
     name: 'Night',
     char: '􀁠',
     family: 'AUXIcons',
     id: 'dark',
   },
-  'connected': {
+  connected: {
     name: 'Connected',
     char: '􀁡',
     family: 'AUXIcons',
     id: 'connected',
   },
-  'disconnected': {
+  disconnected: {
     name: 'Disconnected',
     char: '􀁢',
     family: 'AUXIcons',
     id: 'disconnected',
   },
-  'headphones': {
+  headphones: {
     name: 'Headphones',
     char: '􀁣',
     family: 'AUXIcons',
     id: 'headphones',
   },
-  'headphonesactive': {
+  headphonesactive: {
     name: 'Headphones',
     char: '􀁣',
     family: 'AUXIcons',
     id: 'headphonesactive',
   },
-  'headphonesmute': {
+  headphonesmute: {
     name: 'Headphones Mute',
     char: '􀁤',
     family: 'AUXIcons',
     id: 'headphonesmute',
   },
-  'microphone': {
+  microphone: {
     name: 'Microphone',
     char: '􀁥',
     family: 'AUXIcons',
     id: 'microphone',
   },
-  'mic': {
+  mic: {
     name: 'Microphone',
     char: '􀁥',
     family: 'AUXIcons',
     id: 'mic',
   },
-  'micro': {
+  micro: {
     name: 'Microphone',
     char: '􀁥',
     family: 'AUXIcons',
     id: 'micro',
   },
-  'microphonemute': {
+  microphonemute: {
     name: 'Microphone Mute',
     char: '􀁦',
     family: 'AUXIcons',
     id: 'microphonemute',
   },
-  'micmute': {
+  micmute: {
     name: 'Microphone Mute',
     char: '􀁦',
     family: 'AUXIcons',
     id: 'micmute',
   },
-  'micromute': {
+  micromute: {
     name: 'Microphone Mute',
     char: '􀁦',
     family: 'AUXIcons',
     id: 'micromute',
   },
-  'trash': {
+  trash: {
     name: 'Trash',
     char: '􀁧',
     family: 'AUXIcons',
     id: 'trash',
   },
-  'delete': {
+  delete: {
     name: 'Trash',
     char: '􀁧',
     family: 'AUXIcons',
     id: 'delete',
   },
-  'save': {
+  save: {
     name: 'Save',
     char: '􀁨',
     family: 'AUXIcons',
     id: 'save',
   },
-  'diskette': {
+  diskette: {
     name: 'Save',
     char: '􀁨',
     family: 'AUXIcons',
     id: 'diskette',
   },
-  'load': {
+  load: {
     name: 'Load',
     char: '􀁩',
     family: 'AUXIcons',
     id: 'load',
   },
-  'folder': {
+  folder: {
     name: 'Load',
     char: '􀁩',
     family: 'AUXIcons',
     id: 'folder',
   },
-  'open': {
+  open: {
     name: 'Load',
     char: '􀁩',
     family: 'AUXIcons',
     id: 'open',
   },
-  'rectangular': {
+  rectangular: {
     name: 'Rectangular',
     char: '􀁰',
     family: 'AUXIcons',
     id: 'rectangular',
   },
-  'rect': {
+  rect: {
     name: 'Rectangular',
     char: '􀁰',
     family: 'AUXIcons',
     id: 'rect',
   },
-  'rectangle': {
+  rectangle: {
     name: 'Rectangular',
     char: '􀁰',
     family: 'AUXIcons',
     id: 'rectangle',
   },
-  'whitenoise': {
+  whitenoise: {
     name: 'White Noise',
     char: '􀁱',
     family: 'AUXIcons',
     id: 'whitenoise',
   },
-  'pinknoise': {
+  pinknoise: {
     name: 'Pink Noise',
     char: '􀁲',
     family: 'AUXIcons',
     id: 'pinknoise',
   },
-  'sweep': {
+  sweep: {
     name: 'Sweep',
     char: '􀁳',
     family: 'AUXIcons',
     id: 'sweep',
   },
-  'mcmono': {
+  mcmono: {
     name: 'MC Mono',
     char: '􀁴',
     family: 'AUXIcons',
     id: 'mcmono',
   },
-  'mc1_0': {
+  mc1_0: {
     name: 'MC Mono',
     char: '􀁴',
     family: 'AUXIcons',
     id: 'mc1_0',
   },
-  'dd1_0': {
+  dd1_0: {
     name: 'MC Mono',
     char: '􀁴',
     family: 'AUXIcons',
     id: 'dd1_0',
   },
-  'mcstereo': {
+  mcstereo: {
     name: 'MC Stereo',
     char: '􀁵',
     family: 'AUXIcons',
     id: 'mcstereo',
   },
-  'mc2_0': {
+  mc2_0: {
     name: 'MC Stereo',
     char: '􀁵',
     family: 'AUXIcons',
     id: 'mc2_0',
   },
-  'dd2_0': {
+  dd2_0: {
     name: 'MC Stereo',
     char: '􀁵',
     family: 'AUXIcons',
     id: 'dd2_0',
   },
-  'mc3stereo': {
+  mc3stereo: {
     name: 'MC 3 Stereo',
     char: '􀁶',
     family: 'AUXIcons',
     id: 'mc3stereo',
   },
-  'mc3_0': {
+  mc3_0: {
     name: 'MC 3 Stereo',
     char: '􀁶',
     family: 'AUXIcons',
     id: 'mc3_0',
   },
-  'dd3_0': {
+  dd3_0: {
     name: 'MC 3 Stereo',
     char: '􀁶',
     family: 'AUXIcons',
     id: 'dd3_0',
   },
-  'mc2_1': {
+  mc2_1: {
     name: 'MC 2.1',
     char: '􀁷',
     family: 'AUXIcons',
     id: 'mc2_1',
   },
-  'dd2_1': {
+  dd2_1: {
     name: 'DD 2.1',
     char: '􀁸',
     family: 'AUXIcons',
     id: 'dd2_1',
   },
-  'dd2_1_1': {
+  dd2_1_1: {
     name: 'DD 2.1.1',
     char: '􀁹',
     family: 'AUXIcons',
     id: 'dd2_1_1',
   },
-  'mc3_1': {
+  mc3_1: {
     name: 'MC 3.1',
     char: '􀂀',
     family: 'AUXIcons',
     id: 'mc3_1',
   },
-  'mc4_0': {
+  mc4_0: {
     name: 'MC 4.0',
     char: '􀂁',
     family: 'AUXIcons',
     id: 'mc4_0',
   },
-  'quadro': {
+  quadro: {
     name: 'MC 4.0',
     char: '􀂁',
     family: 'AUXIcons',
     id: 'quadro',
   },
-  'dd2_2': {
+  dd2_2: {
     name: 'MC 4.0',
     char: '􀂁',
     family: 'AUXIcons',
     id: 'dd2_2',
   },
-  'mc4_1': {
+  mc4_1: {
     name: 'MC 4.1',
     char: '􀂂',
     family: 'AUXIcons',
     id: 'mc4_1',
   },
-  'dd2_2_1': {
+  dd2_2_1: {
     name: 'MC 4.1',
     char: '􀂂',
     family: 'AUXIcons',
     id: 'dd2_2_1',
   },
-  'dolbydigital': {
+  dolbydigital: {
     name: 'Dolby Digital',
     char: '􀂃',
     family: 'AUXIcons',
     id: 'dolbydigital',
   },
-  'dolbystereo': {
+  dolbystereo: {
     name: 'Dolby Digital',
     char: '􀂃',
     family: 'AUXIcons',
     id: 'dolbystereo',
   },
-  'dd3_1': {
+  dd3_1: {
     name: 'Dolby Digital',
     char: '􀂃',
     family: 'AUXIcons',
     id: 'dd3_1',
   },
-  'museld': {
+  museld: {
     name: 'Dolby Digital',
     char: '􀂃',
     family: 'AUXIcons',
     id: 'museld',
   },
-  'dolbyprologic': {
+  dolbyprologic: {
     name: 'Dolby Digital',
     char: '􀂃',
     family: 'AUXIcons',
     id: 'dolbyprologic',
   },
-  'dd3_1_1': {
+  dd3_1_1: {
     name: 'DD 3.1.1',
     char: '􀂄',
     family: 'AUXIcons',
     id: 'dd3_1_1',
   },
-  'mc5': {
+  mc5: {
     name: 'MC 5',
     char: '􀂅',
     family: 'AUXIcons',
     id: 'mc5',
   },
-  'dd3_2': {
+  dd3_2: {
     name: 'MC 5',
     char: '􀂅',
     family: 'AUXIcons',
     id: 'dd3_2',
   },
-  'mc5_1': {
+  mc5_1: {
     name: 'MC 5.1',
     char: '􀂆',
     family: 'AUXIcons',
     id: 'mc5_1',
   },
-  'dd3_2_1': {
+  dd3_2_1: {
     name: 'MC 5.1',
     char: '􀂆',
     family: 'AUXIcons',
     id: 'dd3_2_1',
   },
-  'dolbyprologic2': {
+  dolbyprologic2: {
     name: 'MC 5.1',
     char: '􀂆',
     family: 'AUXIcons',
     id: 'dolbyprologic2',
   },
-  'mc6_1': {
+  mc6_1: {
     name: 'MC 6.1',
     char: '􀂈',
     family: 'AUXIcons',
     id: 'mc6_1',
   },
-  'ddex': {
+  ddex: {
     name: 'MC 6.1',
     char: '􀂈',
     family: 'AUXIcons',
     id: 'ddex',
   },
-  'mc7_1': {
+  mc7_1: {
     name: 'MC 7.1',
     char: '􀂉',
     family: 'AUXIcons',
     id: 'mc7_1',
   },
-  'dolbyprologic2x': {
+  dolbyprologic2x: {
     name: 'MC 7.1',
     char: '􀂉',
     family: 'AUXIcons',
     id: 'dolbyprologic2x',
   },
-  'matrixselectdiagonal': {
+  matrixselectdiagonal: {
     name: 'Matrix Select Diagonal',
     char: '􀂐',
     family: 'AUXIcons',
     id: 'matrixselectdiagonal',
   },
-  'matrixdeselectdiagonal': {
+  matrixdeselectdiagonal: {
     name: 'Matrix Deselect Diagonal',
     char: '􀂑',
     family: 'AUXIcons',
     id: 'matrixdeselectdiagonal',
   },
-  'matrixselectall': {
+  matrixselectall: {
     name: 'Matrix Select All',
     char: '􀂒',
     family: 'AUXIcons',
     id: 'matrixselectall',
   },
-  'matrixdeselectall': {
+  matrixdeselectall: {
     name: 'Matrix Deselect All',
     char: '􀂓',
     family: 'AUXIcons',
     id: 'matrixdeselectall',
   },
-  'edit': {
+  edit: {
     name: 'Edit',
     char: '􀂔',
     family: 'AUXIcons',
     id: 'edit',
   },
-  'pencil': {
+  pencil: {
     name: 'Edit',
     char: '􀂔',
     family: 'AUXIcons',
     id: 'pencil',
   },
-  'blank': {
+  blank: {
     name: 'Blank',
     char: '􀂕',
     family: 'AUXIcons',
     id: 'blank',
   },
-
-}
+};

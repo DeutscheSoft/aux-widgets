@@ -29,13 +29,13 @@ function getPadding(element) {
   /*eslint no-fallthrough: "error"*/
   switch (tmp.length) {
     case 1:
-      tmp[ 1 ] = tmp[ 0 ];
-      // falls through
+      tmp[1] = tmp[0];
+    // falls through
     case 2:
-      tmp[ 2 ] = tmp[ 0 ];
-      // falls through
+      tmp[2] = tmp[0];
+    // falls through
     case 3:
-      tmp[ 3 ] = tmp[ 1 ];
+      tmp[3] = tmp[1];
   }
 
   return tmp.map((entry) => parseInt(entry) || 0);

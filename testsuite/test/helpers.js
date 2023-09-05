@@ -78,13 +78,6 @@ export function assertEqual(a, b) {
   assert(compare(a, b));
 }
 
-export function assertChildren(node) {
-  assert(
-    !node.children.length,
-    `${node.tagName} has ${node.children.length} child(ren)`
-  );
-}
-
 export function sleep(n) {
   return new Promise((resolve) => setTimeout(resolve, n));
 }

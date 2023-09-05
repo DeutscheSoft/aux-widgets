@@ -20,166 +20,637 @@
  */
 
 @font-face {
-  font-family: "AUXIcons";
+  font-family: 'AUXIcons';
   font-style: normal;
   font-weight: normal;
-  src: url("AUXIcons.ttf") format("truetype");
+  src: url('AUXIcons.ttf') format('truetype');
 }
 
-.aux-icon.warning::before                                             { font-family: 'AUXIcons'; content: '􀀀'; }
-.aux-icon.information::before                                         { font-family: 'AUXIcons'; content: '􀀁'; }
-.aux-icon.info::before                                                { font-family: 'AUXIcons'; content: '􀀁'; }
-.aux-icon.error::before                                               { font-family: 'AUXIcons'; content: '􀀂'; }
-.aux-icon.message::before                                             { font-family: 'AUXIcons'; content: '􀀃'; }
-.aux-icon.close::before                                               { font-family: 'AUXIcons'; content: '􀀄'; }
-.aux-icon.success::before                                             { font-family: 'AUXIcons'; content: '􀀅'; }
-.aux-icon.hourglass::before                                           { font-family: 'AUXIcons'; content: '􀀆'; }
-.aux-icon.loading::before                                             { font-family: 'AUXIcons'; content: '􀀆'; }
-.aux-icon.questionmark::before                                        { font-family: 'AUXIcons'; content: '􀀇'; }
-.aux-icon.screensize::before                                          { font-family: 'AUXIcons'; content: '􀀈'; }
-.aux-icon.windowminimize::before                                      { font-family: 'AUXIcons'; content: '􀀉'; }
-.aux-icon.winmin::before                                              { font-family: 'AUXIcons'; content: '􀀉'; }
-.aux-icon.windowclose::before                                         { font-family: 'AUXIcons'; content: '􀀐'; }
-.aux-icon.winclose::before                                            { font-family: 'AUXIcons'; content: '􀀐'; }
-.aux-icon.windowmaximize::before                                      { font-family: 'AUXIcons'; content: '􀀑'; }
-.aux-icon.winmax::before                                              { font-family: 'AUXIcons'; content: '􀀑'; }
-.aux-icon.windowmaximizevertical::before                              { font-family: 'AUXIcons'; content: '􀀒'; }
-.aux-icon.winmaxvert::before                                          { font-family: 'AUXIcons'; content: '􀀒'; }
-.aux-icon.windowmaximizehorizontal::before                            { font-family: 'AUXIcons'; content: '􀀓'; }
-.aux-icon.winmaxhoriz::before                                         { font-family: 'AUXIcons'; content: '􀀓'; }
-.aux-icon.windowshrink::before                                        { font-family: 'AUXIcons'; content: '􀀔'; }
-.aux-icon.winshrink::before                                           { font-family: 'AUXIcons'; content: '􀀔'; }
-.aux-icon.windowresize::before                                        { font-family: 'AUXIcons'; content: '􀀕'; }
-.aux-icon.unchecked::before                                           { font-family: 'AUXIcons'; content: '􀀖'; }
-.aux-icon.checked::before                                             { font-family: 'AUXIcons'; content: '􀀗'; }
-.aux-icon.speaker::before                                             { font-family: 'AUXIcons'; content: '􀀘'; }
-.aux-icon.speakeractive::before                                       { font-family: 'AUXIcons'; content: '􀀘'; }
-.aux-icon.sound::before                                               { font-family: 'AUXIcons'; content: '􀀘'; }
-.aux-icon.speakermute::before                                         { font-family: 'AUXIcons'; content: '􀀙'; }
-.aux-icon.mute::before                                                { font-family: 'AUXIcons'; content: '􀀙'; }
-.aux-icon.gear::before                                                { font-family: 'AUXIcons'; content: '􀀠'; }
-.aux-icon.cogwheel::before                                            { font-family: 'AUXIcons'; content: '􀀠'; }
-.aux-icon.cog::before                                                 { font-family: 'AUXIcons'; content: '􀀠'; }
-.aux-icon.power::before                                               { font-family: 'AUXIcons'; content: '􀀡'; }
-.aux-icon.phase::before                                               { font-family: 'AUXIcons'; content: '􀀢'; }
-.aux-icon.phaseinvert::before                                         { font-family: 'AUXIcons'; content: '􀀢'; }
-.aux-icon.arrowdown::before                                           { font-family: 'AUXIcons'; content: '􀀣'; }
-.aux-icon.arrowup::before                                             { font-family: 'AUXIcons'; content: '􀀤'; }
-.aux-icon.arrowleft::before                                           { font-family: 'AUXIcons'; content: '􀀥'; }
-.aux-icon.arrowright::before                                          { font-family: 'AUXIcons'; content: '􀀦'; }
-.aux-icon.hide::before                                                { font-family: 'AUXIcons'; content: '􀀧'; }
-.aux-icon.show::before                                                { font-family: 'AUXIcons'; content: '􀀨'; }
-.aux-icon.highpass::before                                            { font-family: 'AUXIcons'; content: '􀀩'; }
-.aux-icon.hipass::before                                              { font-family: 'AUXIcons'; content: '􀀩'; }
-.aux-icon.lowpass::before                                             { font-family: 'AUXIcons'; content: '􀀰'; }
-.aux-icon.lopass::before                                              { font-family: 'AUXIcons'; content: '􀀰'; }
-.aux-icon.highshelf::before                                           { font-family: 'AUXIcons'; content: '􀀱'; }
-.aux-icon.hishelf::before                                             { font-family: 'AUXIcons'; content: '􀀱'; }
-.aux-icon.lowshelf::before                                            { font-family: 'AUXIcons'; content: '􀀲'; }
-.aux-icon.loshelf::before                                             { font-family: 'AUXIcons'; content: '􀀲'; }
-.aux-icon.bandpass::before                                            { font-family: 'AUXIcons'; content: '􀀳'; }
-.aux-icon.bandreject::before                                          { font-family: 'AUXIcons'; content: '􀀴'; }
-.aux-icon.notch::before                                               { font-family: 'AUXIcons'; content: '􀀵'; }
-.aux-icon.parametric::before                                          { font-family: 'AUXIcons'; content: '􀀶'; }
-.aux-icon.sine::before                                                { font-family: 'AUXIcons'; content: '􀀷'; }
-.aux-icon.pulse::before                                               { font-family: 'AUXIcons'; content: '􀀸'; }
-.aux-icon.sawtooth::before                                            { font-family: 'AUXIcons'; content: '􀀹'; }
-.aux-icon.saw::before                                                 { font-family: 'AUXIcons'; content: '􀀹'; }
-.aux-icon.triangle::before                                            { font-family: 'AUXIcons'; content: '􀁀'; }
-.aux-icon.triangular::before                                          { font-family: 'AUXIcons'; content: '􀁀'; }
-.aux-icon.tri::before                                                 { font-family: 'AUXIcons'; content: '􀁀'; }
-.aux-icon.bypass::before                                              { font-family: 'AUXIcons'; content: '􀁁'; }
-.aux-icon.stairs::before                                              { font-family: 'AUXIcons'; content: '􀁂'; }
-.aux-icon.aliased::before                                             { font-family: 'AUXIcons'; content: '􀁂'; }
-.aux-icon.stereo::before                                              { font-family: 'AUXIcons'; content: '􀁃'; }
-.aux-icon.mono::before                                                { font-family: 'AUXIcons'; content: '􀁄'; }
-.aux-icon.zoom::before                                                { font-family: 'AUXIcons'; content: '􀁅'; }
-.aux-icon.magnifier::before                                           { font-family: 'AUXIcons'; content: '􀁅'; }
-.aux-icon.zoomin::before                                              { font-family: 'AUXIcons'; content: '􀁆'; }
-.aux-icon.zoomout::before                                             { font-family: 'AUXIcons'; content: '􀁇'; }
-.aux-icon.home::before                                                { font-family: 'AUXIcons'; content: '􀁈'; }
-.aux-icon.start::before                                               { font-family: 'AUXIcons'; content: '􀁈'; }
-.aux-icon.rewind::before                                              { font-family: 'AUXIcons'; content: '􀁉'; }
-.aux-icon.rew::before                                                 { font-family: 'AUXIcons'; content: '􀁉'; }
-.aux-icon.pause::before                                               { font-family: 'AUXIcons'; content: '􀁐'; }
-.aux-icon.play::before                                                { font-family: 'AUXIcons'; content: '􀁑'; }
-.aux-icon.stop::before                                                { font-family: 'AUXIcons'; content: '􀁒'; }
-.aux-icon.record::before                                              { font-family: 'AUXIcons'; content: '􀁓'; }
-.aux-icon.rec::before                                                 { font-family: 'AUXIcons'; content: '􀁓'; }
-.aux-icon.eject::before                                               { font-family: 'AUXIcons'; content: '􀁔'; }
-.aux-icon.fastforward::before                                         { font-family: 'AUXIcons'; content: '􀁕'; }
-.aux-icon.ffwd::before                                                { font-family: 'AUXIcons'; content: '􀁕'; }
-.aux-icon.end::before                                                 { font-family: 'AUXIcons'; content: '􀁖'; }
-.aux-icon.repeat::before                                              { font-family: 'AUXIcons'; content: '􀁗'; }
-.aux-icon.random::before                                              { font-family: 'AUXIcons'; content: '􀁘'; }
-.aux-icon.day::before                                                 { font-family: 'AUXIcons'; content: '􀁙'; }
-.aux-icon.sun::before                                                 { font-family: 'AUXIcons'; content: '􀁙'; }
-.aux-icon.daylight::before                                            { font-family: 'AUXIcons'; content: '􀁙'; }
-.aux-icon.light::before                                               { font-family: 'AUXIcons'; content: '􀁙'; }
-.aux-icon.night::before                                               { font-family: 'AUXIcons'; content: '􀁠'; }
-.aux-icon.moon::before                                                { font-family: 'AUXIcons'; content: '􀁠'; }
-.aux-icon.dark::before                                                { font-family: 'AUXIcons'; content: '􀁠'; }
-.aux-icon.connected::before                                           { font-family: 'AUXIcons'; content: '􀁡'; }
-.aux-icon.disconnected::before                                        { font-family: 'AUXIcons'; content: '􀁢'; }
-.aux-icon.headphones::before                                          { font-family: 'AUXIcons'; content: '􀁣'; }
-.aux-icon.headphonesactive::before                                    { font-family: 'AUXIcons'; content: '􀁣'; }
-.aux-icon.headphonesmute::before                                      { font-family: 'AUXIcons'; content: '􀁤'; }
-.aux-icon.microphone::before                                          { font-family: 'AUXIcons'; content: '􀁥'; }
-.aux-icon.mic::before                                                 { font-family: 'AUXIcons'; content: '􀁥'; }
-.aux-icon.micro::before                                               { font-family: 'AUXIcons'; content: '􀁥'; }
-.aux-icon.microphonemute::before                                      { font-family: 'AUXIcons'; content: '􀁦'; }
-.aux-icon.micmute::before                                             { font-family: 'AUXIcons'; content: '􀁦'; }
-.aux-icon.micromute::before                                           { font-family: 'AUXIcons'; content: '􀁦'; }
-.aux-icon.trash::before                                               { font-family: 'AUXIcons'; content: '􀁧'; }
-.aux-icon.delete::before                                              { font-family: 'AUXIcons'; content: '􀁧'; }
-.aux-icon.save::before                                                { font-family: 'AUXIcons'; content: '􀁨'; }
-.aux-icon.diskette::before                                            { font-family: 'AUXIcons'; content: '􀁨'; }
-.aux-icon.load::before                                                { font-family: 'AUXIcons'; content: '􀁩'; }
-.aux-icon.folder::before                                              { font-family: 'AUXIcons'; content: '􀁩'; }
-.aux-icon.open::before                                                { font-family: 'AUXIcons'; content: '􀁩'; }
-.aux-icon.rectangular::before                                         { font-family: 'AUXIcons'; content: '􀁰'; }
-.aux-icon.rect::before                                                { font-family: 'AUXIcons'; content: '􀁰'; }
-.aux-icon.rectangle::before                                           { font-family: 'AUXIcons'; content: '􀁰'; }
-.aux-icon.whitenoise::before                                          { font-family: 'AUXIcons'; content: '􀁱'; }
-.aux-icon.pinknoise::before                                           { font-family: 'AUXIcons'; content: '􀁲'; }
-.aux-icon.sweep::before                                               { font-family: 'AUXIcons'; content: '􀁳'; }
-.aux-icon.mcmono::before                                              { font-family: 'AUXIcons'; content: '􀁴'; }
-.aux-icon.mc1_0::before                                               { font-family: 'AUXIcons'; content: '􀁴'; }
-.aux-icon.dd1_0::before                                               { font-family: 'AUXIcons'; content: '􀁴'; }
-.aux-icon.mcstereo::before                                            { font-family: 'AUXIcons'; content: '􀁵'; }
-.aux-icon.mc2_0::before                                               { font-family: 'AUXIcons'; content: '􀁵'; }
-.aux-icon.dd2_0::before                                               { font-family: 'AUXIcons'; content: '􀁵'; }
-.aux-icon.mc3stereo::before                                           { font-family: 'AUXIcons'; content: '􀁶'; }
-.aux-icon.mc3_0::before                                               { font-family: 'AUXIcons'; content: '􀁶'; }
-.aux-icon.dd3_0::before                                               { font-family: 'AUXIcons'; content: '􀁶'; }
-.aux-icon.mc2_1::before                                               { font-family: 'AUXIcons'; content: '􀁷'; }
-.aux-icon.dd2_1::before                                               { font-family: 'AUXIcons'; content: '􀁸'; }
-.aux-icon.dd2_1_1::before                                             { font-family: 'AUXIcons'; content: '􀁹'; }
-.aux-icon.mc3_1::before                                               { font-family: 'AUXIcons'; content: '􀂀'; }
-.aux-icon.mc4_0::before                                               { font-family: 'AUXIcons'; content: '􀂁'; }
-.aux-icon.quadro::before                                              { font-family: 'AUXIcons'; content: '􀂁'; }
-.aux-icon.dd2_2::before                                               { font-family: 'AUXIcons'; content: '􀂁'; }
-.aux-icon.mc4_1::before                                               { font-family: 'AUXIcons'; content: '􀂂'; }
-.aux-icon.dd2_2_1::before                                             { font-family: 'AUXIcons'; content: '􀂂'; }
-.aux-icon.dolbydigital::before                                        { font-family: 'AUXIcons'; content: '􀂃'; }
-.aux-icon.dolbystereo::before                                         { font-family: 'AUXIcons'; content: '􀂃'; }
-.aux-icon.dd3_1::before                                               { font-family: 'AUXIcons'; content: '􀂃'; }
-.aux-icon.museld::before                                              { font-family: 'AUXIcons'; content: '􀂃'; }
-.aux-icon.dolbyprologic::before                                       { font-family: 'AUXIcons'; content: '􀂃'; }
-.aux-icon.dd3_1_1::before                                             { font-family: 'AUXIcons'; content: '􀂄'; }
-.aux-icon.mc5::before                                                 { font-family: 'AUXIcons'; content: '􀂅'; }
-.aux-icon.dd3_2::before                                               { font-family: 'AUXIcons'; content: '􀂅'; }
-.aux-icon.mc5_1::before                                               { font-family: 'AUXIcons'; content: '􀂆'; }
-.aux-icon.dd3_2_1::before                                             { font-family: 'AUXIcons'; content: '􀂆'; }
-.aux-icon.dolbyprologic2::before                                      { font-family: 'AUXIcons'; content: '􀂆'; }
-.aux-icon.mc6_1::before                                               { font-family: 'AUXIcons'; content: '􀂈'; }
-.aux-icon.ddex::before                                                { font-family: 'AUXIcons'; content: '􀂈'; }
-.aux-icon.mc7_1::before                                               { font-family: 'AUXIcons'; content: '􀂉'; }
-.aux-icon.dolbyprologic2x::before                                     { font-family: 'AUXIcons'; content: '􀂉'; }
-.aux-icon.matrixselectdiagonal::before                                { font-family: 'AUXIcons'; content: '􀂐'; }
-.aux-icon.matrixdeselectdiagonal::before                              { font-family: 'AUXIcons'; content: '􀂑'; }
-.aux-icon.matrixselectall::before                                     { font-family: 'AUXIcons'; content: '􀂒'; }
-.aux-icon.matrixdeselectall::before                                   { font-family: 'AUXIcons'; content: '􀂓'; }
-.aux-icon.edit::before                                                { font-family: 'AUXIcons'; content: '􀂔'; }
-.aux-icon.pencil::before                                              { font-family: 'AUXIcons'; content: '􀂔'; }
-.aux-icon.blank::before                                               { font-family: 'AUXIcons'; content: '􀂕'; }
+.aux-icon.warning::before {
+  font-family: 'AUXIcons';
+  content: '􀀀';
+}
+.aux-icon.information::before {
+  font-family: 'AUXIcons';
+  content: '􀀁';
+}
+.aux-icon.info::before {
+  font-family: 'AUXIcons';
+  content: '􀀁';
+}
+.aux-icon.error::before {
+  font-family: 'AUXIcons';
+  content: '􀀂';
+}
+.aux-icon.message::before {
+  font-family: 'AUXIcons';
+  content: '􀀃';
+}
+.aux-icon.close::before {
+  font-family: 'AUXIcons';
+  content: '􀀄';
+}
+.aux-icon.success::before {
+  font-family: 'AUXIcons';
+  content: '􀀅';
+}
+.aux-icon.hourglass::before {
+  font-family: 'AUXIcons';
+  content: '􀀆';
+}
+.aux-icon.loading::before {
+  font-family: 'AUXIcons';
+  content: '􀀆';
+}
+.aux-icon.questionmark::before {
+  font-family: 'AUXIcons';
+  content: '􀀇';
+}
+.aux-icon.screensize::before {
+  font-family: 'AUXIcons';
+  content: '􀀈';
+}
+.aux-icon.windowminimize::before {
+  font-family: 'AUXIcons';
+  content: '􀀉';
+}
+.aux-icon.winmin::before {
+  font-family: 'AUXIcons';
+  content: '􀀉';
+}
+.aux-icon.windowclose::before {
+  font-family: 'AUXIcons';
+  content: '􀀐';
+}
+.aux-icon.winclose::before {
+  font-family: 'AUXIcons';
+  content: '􀀐';
+}
+.aux-icon.windowmaximize::before {
+  font-family: 'AUXIcons';
+  content: '􀀑';
+}
+.aux-icon.winmax::before {
+  font-family: 'AUXIcons';
+  content: '􀀑';
+}
+.aux-icon.windowmaximizevertical::before {
+  font-family: 'AUXIcons';
+  content: '􀀒';
+}
+.aux-icon.winmaxvert::before {
+  font-family: 'AUXIcons';
+  content: '􀀒';
+}
+.aux-icon.windowmaximizehorizontal::before {
+  font-family: 'AUXIcons';
+  content: '􀀓';
+}
+.aux-icon.winmaxhoriz::before {
+  font-family: 'AUXIcons';
+  content: '􀀓';
+}
+.aux-icon.windowshrink::before {
+  font-family: 'AUXIcons';
+  content: '􀀔';
+}
+.aux-icon.winshrink::before {
+  font-family: 'AUXIcons';
+  content: '􀀔';
+}
+.aux-icon.windowresize::before {
+  font-family: 'AUXIcons';
+  content: '􀀕';
+}
+.aux-icon.unchecked::before {
+  font-family: 'AUXIcons';
+  content: '􀀖';
+}
+.aux-icon.checked::before {
+  font-family: 'AUXIcons';
+  content: '􀀗';
+}
+.aux-icon.speaker::before {
+  font-family: 'AUXIcons';
+  content: '􀀘';
+}
+.aux-icon.speakeractive::before {
+  font-family: 'AUXIcons';
+  content: '􀀘';
+}
+.aux-icon.sound::before {
+  font-family: 'AUXIcons';
+  content: '􀀘';
+}
+.aux-icon.speakermute::before {
+  font-family: 'AUXIcons';
+  content: '􀀙';
+}
+.aux-icon.mute::before {
+  font-family: 'AUXIcons';
+  content: '􀀙';
+}
+.aux-icon.gear::before {
+  font-family: 'AUXIcons';
+  content: '􀀠';
+}
+.aux-icon.cogwheel::before {
+  font-family: 'AUXIcons';
+  content: '􀀠';
+}
+.aux-icon.cog::before {
+  font-family: 'AUXIcons';
+  content: '􀀠';
+}
+.aux-icon.power::before {
+  font-family: 'AUXIcons';
+  content: '􀀡';
+}
+.aux-icon.phase::before {
+  font-family: 'AUXIcons';
+  content: '􀀢';
+}
+.aux-icon.phaseinvert::before {
+  font-family: 'AUXIcons';
+  content: '􀀢';
+}
+.aux-icon.arrowdown::before {
+  font-family: 'AUXIcons';
+  content: '􀀣';
+}
+.aux-icon.arrowup::before {
+  font-family: 'AUXIcons';
+  content: '􀀤';
+}
+.aux-icon.arrowleft::before {
+  font-family: 'AUXIcons';
+  content: '􀀥';
+}
+.aux-icon.arrowright::before {
+  font-family: 'AUXIcons';
+  content: '􀀦';
+}
+.aux-icon.hide::before {
+  font-family: 'AUXIcons';
+  content: '􀀧';
+}
+.aux-icon.show::before {
+  font-family: 'AUXIcons';
+  content: '􀀨';
+}
+.aux-icon.highpass::before {
+  font-family: 'AUXIcons';
+  content: '􀀩';
+}
+.aux-icon.hipass::before {
+  font-family: 'AUXIcons';
+  content: '􀀩';
+}
+.aux-icon.lowpass::before {
+  font-family: 'AUXIcons';
+  content: '􀀰';
+}
+.aux-icon.lopass::before {
+  font-family: 'AUXIcons';
+  content: '􀀰';
+}
+.aux-icon.highshelf::before {
+  font-family: 'AUXIcons';
+  content: '􀀱';
+}
+.aux-icon.hishelf::before {
+  font-family: 'AUXIcons';
+  content: '􀀱';
+}
+.aux-icon.lowshelf::before {
+  font-family: 'AUXIcons';
+  content: '􀀲';
+}
+.aux-icon.loshelf::before {
+  font-family: 'AUXIcons';
+  content: '􀀲';
+}
+.aux-icon.bandpass::before {
+  font-family: 'AUXIcons';
+  content: '􀀳';
+}
+.aux-icon.bandreject::before {
+  font-family: 'AUXIcons';
+  content: '􀀴';
+}
+.aux-icon.notch::before {
+  font-family: 'AUXIcons';
+  content: '􀀵';
+}
+.aux-icon.parametric::before {
+  font-family: 'AUXIcons';
+  content: '􀀶';
+}
+.aux-icon.sine::before {
+  font-family: 'AUXIcons';
+  content: '􀀷';
+}
+.aux-icon.pulse::before {
+  font-family: 'AUXIcons';
+  content: '􀀸';
+}
+.aux-icon.sawtooth::before {
+  font-family: 'AUXIcons';
+  content: '􀀹';
+}
+.aux-icon.saw::before {
+  font-family: 'AUXIcons';
+  content: '􀀹';
+}
+.aux-icon.triangle::before {
+  font-family: 'AUXIcons';
+  content: '􀁀';
+}
+.aux-icon.triangular::before {
+  font-family: 'AUXIcons';
+  content: '􀁀';
+}
+.aux-icon.tri::before {
+  font-family: 'AUXIcons';
+  content: '􀁀';
+}
+.aux-icon.bypass::before {
+  font-family: 'AUXIcons';
+  content: '􀁁';
+}
+.aux-icon.stairs::before {
+  font-family: 'AUXIcons';
+  content: '􀁂';
+}
+.aux-icon.aliased::before {
+  font-family: 'AUXIcons';
+  content: '􀁂';
+}
+.aux-icon.stereo::before {
+  font-family: 'AUXIcons';
+  content: '􀁃';
+}
+.aux-icon.mono::before {
+  font-family: 'AUXIcons';
+  content: '􀁄';
+}
+.aux-icon.zoom::before {
+  font-family: 'AUXIcons';
+  content: '􀁅';
+}
+.aux-icon.magnifier::before {
+  font-family: 'AUXIcons';
+  content: '􀁅';
+}
+.aux-icon.zoomin::before {
+  font-family: 'AUXIcons';
+  content: '􀁆';
+}
+.aux-icon.zoomout::before {
+  font-family: 'AUXIcons';
+  content: '􀁇';
+}
+.aux-icon.home::before {
+  font-family: 'AUXIcons';
+  content: '􀁈';
+}
+.aux-icon.start::before {
+  font-family: 'AUXIcons';
+  content: '􀁈';
+}
+.aux-icon.rewind::before {
+  font-family: 'AUXIcons';
+  content: '􀁉';
+}
+.aux-icon.rew::before {
+  font-family: 'AUXIcons';
+  content: '􀁉';
+}
+.aux-icon.pause::before {
+  font-family: 'AUXIcons';
+  content: '􀁐';
+}
+.aux-icon.play::before {
+  font-family: 'AUXIcons';
+  content: '􀁑';
+}
+.aux-icon.stop::before {
+  font-family: 'AUXIcons';
+  content: '􀁒';
+}
+.aux-icon.record::before {
+  font-family: 'AUXIcons';
+  content: '􀁓';
+}
+.aux-icon.rec::before {
+  font-family: 'AUXIcons';
+  content: '􀁓';
+}
+.aux-icon.eject::before {
+  font-family: 'AUXIcons';
+  content: '􀁔';
+}
+.aux-icon.fastforward::before {
+  font-family: 'AUXIcons';
+  content: '􀁕';
+}
+.aux-icon.ffwd::before {
+  font-family: 'AUXIcons';
+  content: '􀁕';
+}
+.aux-icon.end::before {
+  font-family: 'AUXIcons';
+  content: '􀁖';
+}
+.aux-icon.repeat::before {
+  font-family: 'AUXIcons';
+  content: '􀁗';
+}
+.aux-icon.random::before {
+  font-family: 'AUXIcons';
+  content: '􀁘';
+}
+.aux-icon.day::before {
+  font-family: 'AUXIcons';
+  content: '􀁙';
+}
+.aux-icon.sun::before {
+  font-family: 'AUXIcons';
+  content: '􀁙';
+}
+.aux-icon.daylight::before {
+  font-family: 'AUXIcons';
+  content: '􀁙';
+}
+.aux-icon.light::before {
+  font-family: 'AUXIcons';
+  content: '􀁙';
+}
+.aux-icon.night::before {
+  font-family: 'AUXIcons';
+  content: '􀁠';
+}
+.aux-icon.moon::before {
+  font-family: 'AUXIcons';
+  content: '􀁠';
+}
+.aux-icon.dark::before {
+  font-family: 'AUXIcons';
+  content: '􀁠';
+}
+.aux-icon.connected::before {
+  font-family: 'AUXIcons';
+  content: '􀁡';
+}
+.aux-icon.disconnected::before {
+  font-family: 'AUXIcons';
+  content: '􀁢';
+}
+.aux-icon.headphones::before {
+  font-family: 'AUXIcons';
+  content: '􀁣';
+}
+.aux-icon.headphonesactive::before {
+  font-family: 'AUXIcons';
+  content: '􀁣';
+}
+.aux-icon.headphonesmute::before {
+  font-family: 'AUXIcons';
+  content: '􀁤';
+}
+.aux-icon.microphone::before {
+  font-family: 'AUXIcons';
+  content: '􀁥';
+}
+.aux-icon.mic::before {
+  font-family: 'AUXIcons';
+  content: '􀁥';
+}
+.aux-icon.micro::before {
+  font-family: 'AUXIcons';
+  content: '􀁥';
+}
+.aux-icon.microphonemute::before {
+  font-family: 'AUXIcons';
+  content: '􀁦';
+}
+.aux-icon.micmute::before {
+  font-family: 'AUXIcons';
+  content: '􀁦';
+}
+.aux-icon.micromute::before {
+  font-family: 'AUXIcons';
+  content: '􀁦';
+}
+.aux-icon.trash::before {
+  font-family: 'AUXIcons';
+  content: '􀁧';
+}
+.aux-icon.delete::before {
+  font-family: 'AUXIcons';
+  content: '􀁧';
+}
+.aux-icon.save::before {
+  font-family: 'AUXIcons';
+  content: '􀁨';
+}
+.aux-icon.diskette::before {
+  font-family: 'AUXIcons';
+  content: '􀁨';
+}
+.aux-icon.load::before {
+  font-family: 'AUXIcons';
+  content: '􀁩';
+}
+.aux-icon.folder::before {
+  font-family: 'AUXIcons';
+  content: '􀁩';
+}
+.aux-icon.open::before {
+  font-family: 'AUXIcons';
+  content: '􀁩';
+}
+.aux-icon.rectangular::before {
+  font-family: 'AUXIcons';
+  content: '􀁰';
+}
+.aux-icon.rect::before {
+  font-family: 'AUXIcons';
+  content: '􀁰';
+}
+.aux-icon.rectangle::before {
+  font-family: 'AUXIcons';
+  content: '􀁰';
+}
+.aux-icon.whitenoise::before {
+  font-family: 'AUXIcons';
+  content: '􀁱';
+}
+.aux-icon.pinknoise::before {
+  font-family: 'AUXIcons';
+  content: '􀁲';
+}
+.aux-icon.sweep::before {
+  font-family: 'AUXIcons';
+  content: '􀁳';
+}
+.aux-icon.mcmono::before {
+  font-family: 'AUXIcons';
+  content: '􀁴';
+}
+.aux-icon.mc1_0::before {
+  font-family: 'AUXIcons';
+  content: '􀁴';
+}
+.aux-icon.dd1_0::before {
+  font-family: 'AUXIcons';
+  content: '􀁴';
+}
+.aux-icon.mcstereo::before {
+  font-family: 'AUXIcons';
+  content: '􀁵';
+}
+.aux-icon.mc2_0::before {
+  font-family: 'AUXIcons';
+  content: '􀁵';
+}
+.aux-icon.dd2_0::before {
+  font-family: 'AUXIcons';
+  content: '􀁵';
+}
+.aux-icon.mc3stereo::before {
+  font-family: 'AUXIcons';
+  content: '􀁶';
+}
+.aux-icon.mc3_0::before {
+  font-family: 'AUXIcons';
+  content: '􀁶';
+}
+.aux-icon.dd3_0::before {
+  font-family: 'AUXIcons';
+  content: '􀁶';
+}
+.aux-icon.mc2_1::before {
+  font-family: 'AUXIcons';
+  content: '􀁷';
+}
+.aux-icon.dd2_1::before {
+  font-family: 'AUXIcons';
+  content: '􀁸';
+}
+.aux-icon.dd2_1_1::before {
+  font-family: 'AUXIcons';
+  content: '􀁹';
+}
+.aux-icon.mc3_1::before {
+  font-family: 'AUXIcons';
+  content: '􀂀';
+}
+.aux-icon.mc4_0::before {
+  font-family: 'AUXIcons';
+  content: '􀂁';
+}
+.aux-icon.quadro::before {
+  font-family: 'AUXIcons';
+  content: '􀂁';
+}
+.aux-icon.dd2_2::before {
+  font-family: 'AUXIcons';
+  content: '􀂁';
+}
+.aux-icon.mc4_1::before {
+  font-family: 'AUXIcons';
+  content: '􀂂';
+}
+.aux-icon.dd2_2_1::before {
+  font-family: 'AUXIcons';
+  content: '􀂂';
+}
+.aux-icon.dolbydigital::before {
+  font-family: 'AUXIcons';
+  content: '􀂃';
+}
+.aux-icon.dolbystereo::before {
+  font-family: 'AUXIcons';
+  content: '􀂃';
+}
+.aux-icon.dd3_1::before {
+  font-family: 'AUXIcons';
+  content: '􀂃';
+}
+.aux-icon.museld::before {
+  font-family: 'AUXIcons';
+  content: '􀂃';
+}
+.aux-icon.dolbyprologic::before {
+  font-family: 'AUXIcons';
+  content: '􀂃';
+}
+.aux-icon.dd3_1_1::before {
+  font-family: 'AUXIcons';
+  content: '􀂄';
+}
+.aux-icon.mc5::before {
+  font-family: 'AUXIcons';
+  content: '􀂅';
+}
+.aux-icon.dd3_2::before {
+  font-family: 'AUXIcons';
+  content: '􀂅';
+}
+.aux-icon.mc5_1::before {
+  font-family: 'AUXIcons';
+  content: '􀂆';
+}
+.aux-icon.dd3_2_1::before {
+  font-family: 'AUXIcons';
+  content: '􀂆';
+}
+.aux-icon.dolbyprologic2::before {
+  font-family: 'AUXIcons';
+  content: '􀂆';
+}
+.aux-icon.mc6_1::before {
+  font-family: 'AUXIcons';
+  content: '􀂈';
+}
+.aux-icon.ddex::before {
+  font-family: 'AUXIcons';
+  content: '􀂈';
+}
+.aux-icon.mc7_1::before {
+  font-family: 'AUXIcons';
+  content: '􀂉';
+}
+.aux-icon.dolbyprologic2x::before {
+  font-family: 'AUXIcons';
+  content: '􀂉';
+}
+.aux-icon.matrixselectdiagonal::before {
+  font-family: 'AUXIcons';
+  content: '􀂐';
+}
+.aux-icon.matrixdeselectdiagonal::before {
+  font-family: 'AUXIcons';
+  content: '􀂑';
+}
+.aux-icon.matrixselectall::before {
+  font-family: 'AUXIcons';
+  content: '􀂒';
+}
+.aux-icon.matrixdeselectall::before {
+  font-family: 'AUXIcons';
+  content: '􀂓';
+}
+.aux-icon.edit::before {
+  font-family: 'AUXIcons';
+  content: '􀂔';
+}
+.aux-icon.pencil::before {
+  font-family: 'AUXIcons';
+  content: '􀂔';
+}
+.aux-icon.blank::before {
+  font-family: 'AUXIcons';
+  content: '􀂕';
+}

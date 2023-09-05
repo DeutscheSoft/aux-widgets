@@ -18,53 +18,52 @@
  */
 
 export default AUXShapes = {
-  'trunk': {
+  trunk: {
     name: 'Trunk',
     char: '',
     family: 'AUXShapes',
     id: 'trunk',
   },
-  'stem': {
+  stem: {
     name: 'Trunk',
     char: '',
     family: 'AUXShapes',
     id: 'stem',
   },
-  'pipe': {
+  pipe: {
     name: 'Trunk',
     char: '',
     family: 'AUXShapes',
     id: 'pipe',
   },
-  'branch': {
+  branch: {
     name: 'Branch',
     char: '',
     family: 'AUXShapes',
     id: 'branch',
   },
-  'end': {
+  end: {
     name: 'End',
     char: '',
     family: 'AUXShapes',
     id: 'end',
   },
-  'none': {
+  none: {
     name: 'None',
     char: '',
     family: 'AUXShapes',
     id: 'none',
   },
-  'null': {
+  null: {
     name: 'None',
     char: '',
     family: 'AUXShapes',
     id: 'null',
   },
-  'clear': {
+  clear: {
     name: 'None',
     char: '',
     family: 'AUXShapes',
     id: 'clear',
   },
-
-}
+};
