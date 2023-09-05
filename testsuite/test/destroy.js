@@ -62,9 +62,20 @@ import {
   ValueButton,
   ValueKnob,
 } from '../src/index.js';
-import { assert, assertChildren, canvas, waitForDrawn } from './helpers.js';
+import { assert, canvas, waitForDrawn } from './helpers.js';
 
 window.__test_eq_band = new EqBand({ freq: 1000, gain: 6, type: 'parametric' });
+
+export function assertNoChildren(node) {
+  assert(
+    !node.children.length,
+    `${node.tagName} has ${node.children.length} child(ren)`
+  );
+  assert(
+    !node.childNodes.length,
+    `${node.tagName} has ${node.childNodes.length} childNodes`
+  );
+}
 
 function interceptEventListeners(node) {
   const listeners = new Map();
@@ -363,7 +374,7 @@ describe('Empty Widgets on destroy()', () => {
         C.appendChild(node);
         await waitForDrawn(node.auxWidget);
         node.auxWidget.destroy();
-        assertChildren(node);
+        assertNoChildren(node);
         node.remove();
       }
       if (!entry.widget) return;
@@ -378,7 +389,7 @@ describe('Empty Widgets on destroy()', () => {
         widget.show();
         await waitForDrawn(widget);
         widget.destroy();
-        assertChildren(element);
+        assertNoChildren(element);
         element.remove();
       }
       {
@@ -393,7 +404,7 @@ describe('Empty Widgets on destroy()', () => {
         widget.show();
         await waitForDrawn(widget);
         widget.destroy();
-        assertChildren(element);
+        assertNoChildren(element);
         element.remove();
         assert(
           !listeners.size,
