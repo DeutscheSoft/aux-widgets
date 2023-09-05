@@ -69,4 +69,9 @@ export class Label extends Widget {
 
     super.draw(O, element);
   }
+
+  destroy() {
+    super.destroy();
+    this._text.remove();
+  }
 }
