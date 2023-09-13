@@ -26,20 +26,10 @@ function scrollWheel(e) {
   if (!O.active) return;
   e.preventDefault();
   if (O.focus) O.focus.focus();
-  const range = O.range.call(this);
-  const DIR = O.scroll_direction;
-  const RO = range.options;
-  const rev = e.webkitDirectionInvertedFromDevice ? -1 : 1;
-  const d = e.deltaX * DIR[0] + e.deltaY * DIR[1] + e.deltaZ * DIR[2];
-  let direction = d > 0 ? 1 : -1;
-  direction *= rev;
-  let v;
 
-  // timeout for resetting the class
-  if (this._wheel) {
-    v = this._raw_value;
-  } else {
-    this._raw_value = v = O.get.call(this);
+  if (!this._isScrolling) {
+    this._isScrolling = true;
+    this._value = O.get.call(this);
     addClass(O.classes, 'aux-scrolling');
     /**
      * Is fired when scrolling starts.
@@ -49,28 +39,42 @@ function scrollWheel(e) {
      * @param {DOMEvent} event - The native DOM event.
      */
     fireEvent.call(this, 'scrollstarted', e);
-    this._wheel = true;
   }
   this._scrollTimer = startTimer(this._scrollTimer, 200);
 
+  const range = O.range.call(this);
+  const { scroll_direction } = O;
+  const d =
+    e.deltaX * scroll_direction[0] +
+    e.deltaY * scroll_direction[1] +
+    e.deltaZ * scroll_direction[2];
+  const direction =
+    (d > 0 ? 1 : -1) * (e.webkitDirectionInvertedFromDevice ? -1 : 1);
+
+  const { _value } = this;
+  const {
+    step,
+    shift_down,
+    shift_up,
+    min,
+    max,
+    transformation,
+  } = range.options;
+
   // calc step depending on options.step, .shift up and .shift down
-  let step = (RO.step || 1) * direction;
+  let distance = (step || 1) * direction;
   if (e.ctrlKey || e.altKey) {
-    step *= RO.shift_down;
+    distance *= shift_down;
   } else if (e.shiftKey) {
-    step *= RO.shift_up;
+    distance *= shift_up;
   }
 
-  const transformation = range.get('transformation');
+  const pos = transformation.valueToPixel(_value) + distance;
 
-  let pos = transformation.valueToPixel(v);
+  const value = transformation.pixelToValue(pos);
 
-  pos += step;
-
-  v = transformation.pixelToValue(pos);
-
-  if (O.limit) O.set.call(this, Math.min(RO.max, Math.max(RO.min, v)));
-  else O.set.call(this, v);
+  if (O.limit) O.set.call(this, Math.min(max, Math.max(min, value)));
+  else O.set.call(this, value);
 
   /**
    * Is fired while scrolling happens.
@@ -82,7 +86,7 @@ function scrollWheel(e) {
   fireEvent.call(this, 'scrolling', e);
 
   /* do not remember out of range values */
-  if (v > RO.min && v < RO.max) this._raw_value = v;
+  if (value > min && value < max) this._value = value;
 
   return false;
 }
@@ -168,12 +172,12 @@ export class ScrollValue extends Module {
        * @event ScrollValue#scrollended
        */
       fireEvent.call(this, 'scrollended');
-      this._wheel = false;
+      this._isScrolling = false;
       this.set('scrolling', false);
       removeClass(this.options.classes, 'aux-scrolling');
     });
-    this._wheel = false;
-    this._raw_value = 0.0;
+    this._isScrolling = false;
+    this._value = 0.0;
     this.set('node', this.options.node);
     this.set('events', this.options.events);
     this.set('classes', this.options.classes);
