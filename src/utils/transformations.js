@@ -256,6 +256,9 @@ export function makePiecewiseLinearTransformation({ basis, reverse }, heap) {
       'piece-wise linear transformations need at least 2 entries.'
     );
 
+  const min = Y[0];
+  const max = Y[l - 1];
+
   function valueToBased(coef, size) {
     let a = 0,
       b = (l - 1) | 0,
@@ -332,6 +335,12 @@ export function makePiecewiseLinearTransformation({ basis, reverse }, heap) {
   function coefToValue(n) {
     return basedToValue(n, 1);
   }
+  function clampValue(value) {
+    return clamp(min, max, value);
+  }
+  function clampPixel(pos) {
+    return clamp(0, basis, pos);
+  }
   return {
     valueToBased: valueToBased,
     basedToValue: basedToValue,
@@ -339,6 +348,8 @@ export function makePiecewiseLinearTransformation({ basis, reverse }, heap) {
     pixelToValue: pixelToValue,
     valueToCoef: valueToCoef,
     coefToValue: coefToValue,
+    clampValue: clampValue,
+    clampPixel: clampPixel,
   };
 }
 
@@ -348,6 +359,8 @@ export function makePiecewiseLinearTransformation({ basis, reverse }, heap) {
 export function makeFunctionTransformation({ reverse, scale, basis }, options) {
   reverse |= 0;
   basis = +basis;
+
+  const { min, max } = options;
 
   function valueToBased(value, size) {
     value = +value;
@@ -375,6 +388,12 @@ export function makeFunctionTransformation({ reverse, scale, basis }, options) {
   function coefToValue(n) {
     return basedToValue(n, 1);
   }
+  function clampValue(value) {
+    return clamp(min, max, value);
+  }
+  function clampPixel(pos) {
+    return clamp(0, basis, pos);
+  }
   return {
     valueToBased: valueToBased,
     basedToValue: basedToValue,
@@ -382,6 +401,8 @@ export function makeFunctionTransformation({ reverse, scale, basis }, options) {
     pixelToValue: pixelToValue,
     valueToCoef: valueToCoef,
     coefToValue: coefToValue,
+    clampValue: clampValue,
+    clampPixel: clampPixel,
   };
 }
 
@@ -425,6 +446,12 @@ export function makeLinearTransformation({ reverse, min, max, basis }) {
   function coefToValue(n) {
     n = +n;
     return +basedToValue(n, 1.0);
+  }
+  function clampValue(value) {
+    return clamp(min, max, value);
+  }
+  function clampPixel(pos) {
+    return clamp(0, basis, pos);
   }
   return {
     /**
@@ -489,6 +516,14 @@ export function makeLinearTransformation({ reverse, min, max, basis }) {
      * @returns {number}
      */
     coefToValue: coefToValue,
+    /**
+     * Clamps the given value into the value range of this transformation.
+     */
+    clampValue: clampValue,
+    /**
+     * Clamps the given value into the pixel range of this transformation.
+     */
+    clampPixel: clampPixel,
   };
 }
 
@@ -536,6 +571,12 @@ export function makeLogarithmicTransformation({
   function coefToValue(n) {
     return basedToValue(n, 1);
   }
+  function clampValue(value) {
+    return clamp(min, max, value);
+  }
+  function clampPixel(pos) {
+    return clamp(0, basis, pos);
+  }
   return {
     valueToBased: valueToBased,
     basedToValue: basedToValue,
@@ -543,6 +584,8 @@ export function makeLogarithmicTransformation({
     pixelToValue: pixelToValue,
     valueToCoef: valueToCoef,
     coefToValue: coefToValue,
+    clampValue: clampValue,
+    clampPixel: clampPixel,
   };
 }
 
@@ -588,6 +631,12 @@ export function makeFrequencyTransformation({
   function coefToValue(n) {
     return basedToValue(n, 1);
   }
+  function clampValue(value) {
+    return clamp(min, max, value);
+  }
+  function clampPixel(pos) {
+    return clamp(0, basis, pos);
+  }
   return {
     valueToBased: valueToBased,
     basedToValue: basedToValue,
@@ -595,5 +644,7 @@ export function makeFrequencyTransformation({
     pixelToValue: pixelToValue,
     valueToCoef: valueToCoef,
     coefToValue: coefToValue,
+    clampValue: clampValue,
+    clampPixel: clampPixel,
   };
 }
