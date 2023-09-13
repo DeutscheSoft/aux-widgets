@@ -56,8 +56,13 @@ import {
 } from '../utils/dom.js';
 import { mergeStaticEvents } from '../widget_helpers.js';
 import { defineChildWidget } from '../child_widget.js';
-import { defineRender, defineMeasure } from '../renderer.js';
+import {
+  defineRender,
+  defineMeasure,
+  defineRecalculation,
+} from '../renderer.js';
 import { selectAriaAttribute } from '../utils/select_aria_attribute.js';
+import { applyLegacyUsersetEventsRanged } from '../utils/legacy_userset_events.js';
 
 function vert(layout) {
   return layout === 'left' || layout === 'right';
@@ -242,16 +247,20 @@ export class Fader extends Widget {
 
         this.set('basis', basis);
       }),
+      defineRecalculation(['value', 'transformation', 'snap_module'], function (
+        value,
+        transformation,
+        snap_module
+      ) {
+        const _value = snap_module.snap(transformation.clampValue(value));
+        const _position = transformation.valueToPixel(_value);
+        this.update('_value', _value);
+        this.update('_position', _position);
+      }),
       supports_transform
-        ? defineRender(['value', 'transformation', 'snap_module'], function (
-            value,
-            transformation,
-            snap_module
-          ) {
-            const tmp =
-              transformation.valueToPixel(snap_module.snap(value)) + 'px';
+        ? defineRender(['_position', 'layout'], function (position, layout) {
+            const tmp = position + 'px';
             const _handle = this._handle;
-            const layout = this.options.layout;
 
             if (vert(layout)) {
               _handle.style.transform = 'translateY(-' + tmp + ')';
@@ -259,15 +268,9 @@ export class Fader extends Widget {
               _handle.style.transform = 'translateX(' + tmp + ')';
             }
           })
-        : defineRender(['value', 'transformation', 'snap_module'], function (
-            value,
-            transformation,
-            snap_module
-          ) {
-            const tmp =
-              transformation.valueToPixel(snap_module.snap(value)) + 'px';
+        : defineRender(['_position', 'layout'], function (position, layout) {
+            const tmp = position + 'px';
             const _handle = this._handle;
-            const layout = this.options.layout;
 
             if (vert(layout)) {
               _handle.style.bottom = tmp;
@@ -304,6 +307,21 @@ export class Fader extends Widget {
         }
       ),
     ];
+  }
+
+  userset(key, value) {
+    if (key === 'value') {
+      const { transformation, snap_module } = this.options;
+      return applyLegacyUsersetEventsRanged(
+        this,
+        transformation,
+        snap_module,
+        key,
+        value
+      );
+    } else {
+      return super.userset(key, value);
+    }
   }
 
   initialize(options) {
@@ -393,10 +411,9 @@ export class Fader extends Widget {
 
   // GETTER & SETTER
   set(key, value) {
-    const O = this.options;
     if (key === 'value') {
+      const O = this.options;
       if (value > O.max || value < O.min) warning(this.element);
-      value = O.snap_module.snap(Math.max(O.min, Math.min(O.max, value)));
     }
     return super.set(key, value);
   }
@@ -452,7 +469,7 @@ defineChildWidget(Fader, 'value', {
   show: false,
   userset_delegate: true,
   map_options: {
-    value: 'value',
+    _value: 'value',
   },
   toggle_class: true,
 });
