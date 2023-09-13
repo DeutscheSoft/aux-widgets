@@ -20,6 +20,7 @@
 import { addClass, removeClass } from '../utils/dom.js';
 import { createTimer, startTimer, destroyTimer } from '../utils/timers.js';
 import { Module } from './module.js';
+import { clamp } from '../utils/transformations.js';
 
 function scrollWheel(e) {
   const O = this.options;
@@ -51,7 +52,6 @@ function scrollWheel(e) {
   const direction =
     (d > 0 ? 1 : -1) * (e.webkitDirectionInvertedFromDevice ? -1 : 1);
 
-  const { _value } = this;
   const {
     step,
     shift_down,
@@ -69,12 +69,13 @@ function scrollWheel(e) {
     distance *= shift_up;
   }
 
-  const pos = transformation.valueToPixel(_value) + distance;
+  let value = transformation.pixelToValue(
+    transformation.valueToPixel(this._value) + distance
+  );
 
-  const value = transformation.pixelToValue(pos);
+  if (O.limit) value = clamp(min, max, value);
 
-  if (O.limit) O.set.call(this, Math.min(max, Math.max(min, value)));
-  else O.set.call(this, value);
+  O.set.call(this, value);
 
   /**
    * Is fired while scrolling happens.
@@ -85,8 +86,7 @@ function scrollWheel(e) {
    */
   fireEvent.call(this, 'scrolling', e);
 
-  /* do not remember out of range values */
-  if (value > min && value < max) this._value = value;
+  this._value = value;
 
   return false;
 }

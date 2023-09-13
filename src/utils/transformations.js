@@ -20,6 +20,17 @@
 import { dBToScale, scaleToDB, freqToScale, scaleToFreq } from './audiomath.js';
 
 /**
+ * Clamps <code>value</code> into the range
+ * between <code>min</code> and <code>max</code>,
+ * inclusively.
+ */
+export function clamp(min, max, value) {
+  if (!(value > min)) return min;
+  if (!(value < max)) return max;
+  return value;
+}
+
+/**
  * A factory function which creates a snap module which
  * snaps to values which are distributed at equal distance
  * on a range.
@@ -145,8 +156,7 @@ export function ArraySnapModule({ clip, max, min }, heap) {
     b = len - 1;
 
     if (clip) {
-      if (!(v > min)) v = min;
-      if (!(v < max)) v = max;
+      v = clamp(min, max, v);
     }
 
     if (!(v < +values[(b << 3) >> 3])) return +values[(b << 3) >> 3];
