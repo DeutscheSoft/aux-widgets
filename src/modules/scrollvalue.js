@@ -18,20 +18,9 @@
  */
 
 import { addClass, removeClass } from '../utils/dom.js';
+import { createTimer, startTimer, destroyTimer } from '../utils/timers.js';
 import { Module } from './module.js';
 
-function scrollTimeout() {
-  /**
-   * Is fired when scrolling ended.
-   *
-   * @event ScrollValue#scrollended
-   */
-  fireEvent.call(this, 'scrollended');
-  this._wheel = false;
-  this.__sto = false;
-  this.set('scrolling', false);
-  removeClass(this.options.classes, 'aux-scrolling');
-}
 function scrollWheel(e) {
   const O = this.options;
   if (!O.active) return;
@@ -49,7 +38,6 @@ function scrollWheel(e) {
   // timeout for resetting the class
   if (this._wheel) {
     v = this._raw_value;
-    window.clearTimeout(this.__sto);
   } else {
     this._raw_value = v = O.get.call(this);
     addClass(O.classes, 'aux-scrolling');
@@ -63,7 +51,7 @@ function scrollWheel(e) {
     fireEvent.call(this, 'scrollstarted', e);
     this._wheel = true;
   }
-  this.__sto = window.setTimeout(scrollTimeout.bind(this), 200);
+  this._scrollTimer = startTimer(this._scrollTimer, 200);
 
   // calc step depending on options.step, .shift up and .shift down
   let step = (RO.step || 1) * direction;
@@ -173,11 +161,27 @@ export class ScrollValue extends Module {
 
   initialize(widget, options) {
     super.initialize(widget, options);
+    this._scrollTimer = createTimer(() => {
+      /**
+       * Is fired when scrolling ended.
+       *
+       * @event ScrollValue#scrollended
+       */
+      fireEvent.call(this, 'scrollended');
+      this._wheel = false;
+      this.set('scrolling', false);
+      removeClass(this.options.classes, 'aux-scrolling');
+    });
     this._wheel = false;
     this._raw_value = 0.0;
     this.set('node', this.options.node);
     this.set('events', this.options.events);
     this.set('classes', this.options.classes);
+  }
+
+  destroy() {
+    super.destroy();
+    this._scrollTimer = destroyTimer(this._scrollTimer);
   }
 
   static get static_events() {
