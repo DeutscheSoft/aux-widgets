@@ -56,14 +56,7 @@ function scrollWheel(e) {
   const direction =
     (d > 0 ? 1 : -1) * (e.webkitDirectionInvertedFromDevice ? -1 : 1);
 
-  const {
-    step,
-    shift_down,
-    shift_up,
-    min,
-    max,
-    transformation,
-  } = range.options;
+  const { step, shift_down, shift_up, transformation } = range.options;
 
   // calc step depending on options.step, .shift up and .shift down
   let distance = (step || 1) * direction;
@@ -77,7 +70,7 @@ function scrollWheel(e) {
     transformation.valueToPixel(this._value) + distance
   );
 
-  if (O.limit) value = clamp(min, max, value);
+  if (O.limit) value = transformation.clampValue(value);
 
   O.set.call(this, value);
 
@@ -125,7 +118,7 @@ function fireEvent(title, event) {
  * @property {Boolean} [options.active=true] - Disable the scroll event.
  * @property {Array<Number>} [options.scroll_direction=[0, -1, 0]] - An array
  *   containing values for x, y and z defining the direction of scrolling.
- * @property {Boolean} [options.limit=false] - Limit the returned value to min and max of the range.
+ * @property {Boolean} [options.limit=false] - Clamp the returned value using clampValue of the tranformation.
  * @property {HTMLElement|Boolean} [options.focus=false] - Focus this element on scroll. Set to `false`
  *   if no focus should be set.
  */
