@@ -22,6 +22,10 @@ import { createTimer, startTimer, destroyTimer } from '../utils/timers.js';
 import { Module } from './module.js';
 import { clamp } from '../utils/transformations.js';
 
+function getClassesTarget(options) {
+  return options.classes || options.node;
+}
+
 function scrollWheel(e) {
   const O = this.options;
   if (!O.active) return;
@@ -31,7 +35,7 @@ function scrollWheel(e) {
   if (!this._isScrolling) {
     this._isScrolling = true;
     this._value = O.get.call(this);
-    addClass(O.classes, 'aux-scrolling');
+    addClass(getClassesTarget(O), 'aux-scrolling');
     /**
      * Is fired when scrolling starts.
      *
@@ -174,13 +178,11 @@ export class ScrollValue extends Module {
       fireEvent.call(this, 'scrollended');
       this._isScrolling = false;
       this.set('scrolling', false);
-      removeClass(this.options.classes, 'aux-scrolling');
+      removeClass(getClassesTarget(this.options), 'aux-scrolling');
     });
     this._isScrolling = false;
     this._value = 0.0;
     this.set('node', this.options.node);
-    this.set('events', this.options.events);
-    this.set('classes', this.options.classes);
   }
 
   destroy() {
@@ -192,14 +194,8 @@ export class ScrollValue extends Module {
     return {
       set_node: function (value) {
         this.delegateEvents(value);
-        if (value && !this.options.classes) this.set('classes', value);
       },
       wheel: scrollWheel,
     };
-  }
-
-  set(key, value) {
-    if (key === 'classes' && !value) value = this.options.node;
-    return super.set(key, value);
   }
 }
