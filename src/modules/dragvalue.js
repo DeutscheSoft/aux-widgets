@@ -31,9 +31,25 @@ function startDrag(value) {
   if (!value) return;
   const O = this.options;
   const ranged = O.range.call(this);
-  this.start_pos = ranged.get('transformation').valueToPixel(O.get.call(this));
+  this._position = ranged.get('transformation').valueToPixel(O.get.call(this));
   this.emit('startdrag', this.drag_state.start);
   if (O.events) O.events.call(this).emit('startdrag', this.drag_state.start);
+}
+
+function applyPosition(O, range, position) {
+  const { transformation } = range.options;
+  const { limit, set } = O;
+
+  let value = transformation.pixelToValue(position);
+  let clamped = false;
+
+  if (limit) {
+    const clampedValue = transformation.clampValue(value);
+    if (clampedValue !== value) clamped = true;
+  }
+
+  set.call(this, value);
+  return clamped;
 }
 
 /* This version integrates movements, instead
@@ -43,75 +59,61 @@ function moveCaptureInt(O, range, state) {
 
   /* movement since last event */
   const v = state.prevDistance();
-  const RO = range.options;
+  const rangeOptions = range.options;
+  const { _direction, absolute, _cutoff } = O;
 
   if (!v[0] && !v[1]) return;
 
-  const V = O._direction;
+  let distance = Math.sqrt(v[0] * v[0] + v[1] * v[1]);
 
-  let dist = Math.sqrt(v[0] * v[0] + v[1] * v[1]);
+  const c = (_direction[0] * v[0] - _direction[1] * v[1]) / distance;
 
-  const c = (V[0] * v[0] - V[1] * v[1]) / dist;
+  if (Math.abs(c) > _cutoff) return;
 
-  if (Math.abs(c) > O._cutoff) return;
+  if (v[0] * _direction[1] + v[1] * _direction[0] < 0) distance = -distance;
 
-  if (v[0] * V[1] + v[1] * V[0] < 0) dist = -dist;
+  const { step } = rangeOptions;
 
-  let multi = RO.step || 1;
+  distance *= step || 1;
+
   const e = state.current;
 
   if (e.ctrlKey || e.altKey) {
-    multi *= RO.shift_down;
+    distance *= rangeOptions.shift_down;
   } else if (e.shiftKey) {
-    multi *= RO.shift_up;
+    distance *= rangeOptions.shift_up;
   }
 
-  dist *= multi;
-  const start_pos = this.start_pos + dist;
-  const transformation = range.get('transformation');
+  const position = this._position + distance;
 
-  const nval = transformation.pixelToValue(start_pos);
-  if (O.limit) O.set.call(this, Math.min(RO.max, Math.max(RO.min, nval)));
-  else O.set.call(this, nval);
+  const clamped = applyPosition.call(this, O, range, position);
 
-  if (!O.absolute && (!(nval > RO.min) || !(nval < RO.max))) return;
+  if (!absolute && clamped) return;
 
-  this.start_pos = start_pos;
+  this._position = position;
 }
 
 function moveCaptureAbs(O, range, state) {
-  let dist;
-  const RO = range.options;
-  switch (O.direction) {
-    case 'vertical':
-      dist = -state.vDistance()[1];
-      break;
-    default:
-      warn('Unsupported direction:', O.direction);
-      break;
-    case 'horizontal':
-      dist = state.vDistance()[0];
-      break;
-  }
-  if (O.reverse) dist *= -1;
+  const { direction, reverse } = O;
+  const rangeOptions = range.options;
+  const { step } = rangeOptions;
+  const vDistance = state.vDistance();
 
-  let multi = RO.step || 1;
+  let distance = direction === 'vertical' ? -vDistance[1] : vDistance[0];
+
+  if (reverse) distance = -distance;
+
+  distance *= step || 1;
+
   const e = state.current;
 
   if (e.ctrlKey && e.shiftKey) {
-    multi *= RO.shift_down;
+    distance *= rangeOptions.shift_down;
   } else if (e.shiftKey) {
-    multi *= RO.shift_up;
+    distance *= rangeOptions.shift_up;
   }
 
-  dist *= multi;
-
-  const transformation = range.get('transformation');
-
-  const nval = transformation.pixelToValue(this.start_pos + dist);
-
-  if (O.limit) O.set.call(this, Math.min(RO.max, Math.max(RO.min, nval)));
-  else O.set.call(this, nval);
+  applyPosition.call(this, O, range, this._position + distance);
 }
 
 function moveCapture(state) {
@@ -306,7 +308,7 @@ export class DragValue extends DragCapture {
 
   initialize(widget, options) {
     super.initialize(widget, options);
-    this.start_pos = 0;
+    this._position = 0;
     const O = this.options;
     this.set('rotation', O.rotation);
     this.set('blind_angle', O.blind_angle);
