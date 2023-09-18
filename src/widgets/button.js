@@ -280,13 +280,13 @@ function keyUp(e) {
  */
 export class Button extends Widget {
   static get _options() {
-    return Object.assign({}, Widget.getOptionTypes(), {
+    return {
       label: 'string|boolean',
       icon: 'string|boolean',
       state: 'boolean',
       layout: 'string',
       delay: 'int',
-    });
+    };
   }
 
   static get options() {

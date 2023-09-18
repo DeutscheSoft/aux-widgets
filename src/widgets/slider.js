@@ -94,9 +94,7 @@ function setBackground(style, horiz, vert, size) {
  */
 export class Slider extends Widget {
   static get _options() {
-    return Object.assign(
-      {},
-      Widget.getOptionTypes(),
+    return [
       rangedOptionsTypes,
       DragValue.getOptionTypes(),
       {
@@ -106,25 +104,27 @@ export class Slider extends Widget {
         image: 'string|boolean',
         _width: 'number',
         _height: 'number',
-      }
-    );
+      },
+    ];
   }
 
   static get options() {
-    return Object.assign({}, rangedOptionsDefaults, {
-      value: 0,
-      frames: 1,
-      alignment: 'horizontal',
-      image: false,
-
-      direction: 'polar',
-      rotation: 45,
-      blind_angle: 20,
-      basis: 300,
-      role: 'slider',
-      tabindex: 0,
-      set_ariavalue: true,
-    });
+    return [
+      rangedOptionsDefaults,
+      {
+        value: 0,
+        frames: 1,
+        alignment: 'horizontal',
+        image: false,
+        direction: 'polar',
+        rotation: 45,
+        blind_angle: 20,
+        basis: 300,
+        role: 'slider',
+        tabindex: 0,
+        set_ariavalue: true,
+      },
+    ];
   }
 
   static get static_events() {

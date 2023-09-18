@@ -75,11 +75,11 @@ function setVirtualtreeviews() {
  */
 export class Matrix extends Patchbay {
   static get _options() {
-    return Object.assign({}, Patchbay.getOptionTypes(), {
+    return {
       _virtualtree_size: 'number',
       indicator_class: 'object',
       signal_flow: 'string',
-    });
+    };
   }
 
   static get options() {

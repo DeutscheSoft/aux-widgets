@@ -128,9 +128,7 @@ function dblClick() {
  */
 export class Fader extends Widget {
   static get _options() {
-    return Object.assign(
-      {},
-      Widget.getOptionTypes(),
+    return [
       rangedOptionsTypes,
       Scale.getOptionTypes(),
       {
@@ -147,30 +145,33 @@ export class Fader extends Widget {
         bind_click: 'boolean',
         bind_dblclick: 'boolean',
         cursor: 'boolean|string',
-      }
-    );
+      },
+    ];
   }
 
   static get options() {
-    return Object.assign({}, rangedOptionsDefaults, {
-      value: 0,
-      division: 1,
-      levels: [1, 6, 12, 24],
-      gap_dots: 3,
-      gap_labels: 40,
-      show_labels: true,
-      labels: function (val) {
-        return val.toFixed(2);
+    return [
+      rangedOptionsDefaults,
+      {
+        value: 0,
+        division: 1,
+        levels: [1, 6, 12, 24],
+        gap_dots: 3,
+        gap_labels: 40,
+        show_labels: true,
+        labels: function (val) {
+          return val.toFixed(2);
+        },
+        layout: 'left',
+        bind_click: false,
+        bind_dblclick: true,
+        label: false,
+        cursor: false,
+        tabindex: 0,
+        role: 'slider',
+        set_ariavalue: true,
       },
-      layout: 'left',
-      bind_click: false,
-      bind_dblclick: true,
-      label: false,
-      cursor: false,
-      tabindex: 0,
-      role: 'slider',
-      set_ariavalue: true,
-    });
+    ];
   }
 
   static get static_events() {

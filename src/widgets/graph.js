@@ -169,7 +169,7 @@ function _end(d, s) {
  */
 export class Graph extends Widget {
   static get _options() {
-    return Object.assign({}, Widget.getOptionTypes(), {
+    return {
       dots: 'array',
       type: 'string',
       mode: 'string',
@@ -178,7 +178,7 @@ export class Graph extends Widget {
       range_x: 'object',
       range_y: 'object',
       key: 'string|boolean',
-    });
+    };
   }
 
   static get options() {

@@ -33,10 +33,10 @@ import { defineRender } from '../renderer.js';
  */
 export class Label extends Widget {
   static get _options() {
-    return Object.assign({}, Widget.getOptionTypes(), {
+    return {
       label: 'string',
       format: 'function|boolean',
-    });
+    };
   }
 
   static get options() {

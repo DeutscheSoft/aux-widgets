@@ -81,14 +81,14 @@ function afterShowing() {
  */
 export class Container extends Widget {
   static get _options() {
-    return Object.assign({}, Widget.getOptionTypes(), {
+    return {
       content: 'string|DOMNode',
       visible: 'string|boolean',
       hiding_duration: 'number',
       showing_duration: 'number',
       children: 'array',
       render_while_hiding: 'boolean',
-    });
+    };
   }
 
   static get options() {

@@ -70,7 +70,7 @@ function dragHandle(key, value) {
  */
 export class Dynamics extends Chart {
   static get _options() {
-    return Object.assign({}, Chart.getOptionTypes(), {
+    return {
       min: 'number',
       max: 'number',
       scale: 'string',
@@ -86,7 +86,7 @@ export class Dynamics extends Chart {
       db_grid: 'number',
       show_handle: 'boolean',
       handle_label: 'boolean|function',
-    });
+    };
   }
 
   static get options() {
@@ -426,12 +426,13 @@ function setRatioLimits() {
  */
 export class Compressor extends Dynamics {
   static get _options() {
-    return Object.assign({}, Dynamics.getOptionTypes(), {
+    return {
       show_ratio: 'boolean',
       ratio_label: 'boolean|function',
       ratio_x: 'number',
-    });
+    };
   }
+
   static get options() {
     return {
       type: 'compressor',

@@ -67,7 +67,7 @@ function collapse(state) {
  */
 export class VirtualTree extends Scroller {
   static get _options() {
-    return Object.assign({}, Scroller.getOptionTypes(), {
+    return {
       _amount: 'number',
       _sizer_size: 'number',
       _scroll: 'number',
@@ -78,8 +78,9 @@ export class VirtualTree extends Scroller {
       virtualtreeview: 'object',
       prerender_top: 'number',
       prerender_bottom: 'number',
-    });
+    };
   }
+
   static get options() {
     return {
       _amount: 0,

@@ -42,9 +42,9 @@ import { defineRender } from '../renderer.js';
 
 export class Notifications extends Container {
   static get _options() {
-    return Object.assign({}, Container.getOptionTypes(), {
+    return {
       stack: 'string',
-    });
+    };
   }
 
   static get options() {
@@ -146,11 +146,11 @@ function timeout() {
 
 export class Notification extends Container {
   static get _options() {
-    return Object.assign({}, Container.getOptionTypes(), {
+    return {
       timeout: 'number',
       icon: 'string',
       show_close: 'boolean',
-    });
+    };
   }
 
   static get options() {

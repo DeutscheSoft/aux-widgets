@@ -162,12 +162,12 @@ function onPageRemoved(page, position) {
  */
 export class Pages extends Container {
   static get _options() {
-    return Object.assign({}, Container.getOptionTypes(), {
+    return {
       direction: 'string',
       pages: 'array',
       show: 'int',
       animation: 'string',
-    });
+    };
   }
 
   static get options() {
@@ -494,10 +494,10 @@ export class Pages extends Container {
  */
 export class Page extends Container {
   static get _options() {
-    return Object.assign({}, Container.getOptionTypes(), {
+    return {
       label: 'string',
       icon: 'string',
-    });
+    };
   }
 
   static get options() {

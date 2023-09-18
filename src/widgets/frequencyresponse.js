@@ -68,12 +68,12 @@ function calculateGrid(range, step) {
  */
 export class FrequencyResponse extends Chart {
   static get _options() {
-    return Object.assign({}, Chart.getOptionTypes(), {
+    return {
       db_grid: 'number',
       grid_x: 'array',
       scale: 'boolean',
       depth: 'number',
-    });
+    };
   }
 
   static get options() {

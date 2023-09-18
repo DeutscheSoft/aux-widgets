@@ -90,7 +90,7 @@ function onhide() {
  */
 export class Clock extends Widget {
   static get _options() {
-    return Object.assign({}, Widget.getOptionTypes(), {
+    return {
       thickness: 'number',
       margin: 'number',
       size: 'number',
@@ -111,7 +111,7 @@ export class Clock extends Widget {
       label_upper_pos: 'number',
       label_lower_pos: 'number',
       time: 'object|string|number',
-    });
+    };
   }
 
   static get options() {

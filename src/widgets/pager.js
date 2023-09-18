@@ -73,11 +73,11 @@ import { defineRender } from '../renderer.js';
  */
 export class Pager extends Container {
   static get _options() {
-    return Object.assign({}, Container.getOptionTypes(), {
+    return {
       pages: 'array',
       position: 'string',
       show: 'int',
-    });
+    };
   }
 
   static get options() {

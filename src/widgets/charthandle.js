@@ -677,7 +677,7 @@ function setRange(range, key) {
  */
 export class ChartHandle extends Widget {
   static get _options() {
-    return Object.assign({}, Widget.getOptionTypes(), {
+    return {
       range_x: 'mixed',
       range_y: 'mixed',
       range_z: 'mixed',
@@ -707,7 +707,7 @@ export class ChartHandle extends Widget {
       hover: 'boolean',
       dragging: 'boolean',
       show_handle: 'boolean',
-    });
+    };
   }
 
   static get options() {

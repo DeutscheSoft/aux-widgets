@@ -264,39 +264,45 @@ function drawGradient(element, O) {
 
 export class Meter extends Widget {
   static get _options() {
-    return Object.assign({}, Widget.getOptionTypes(), Scale.getOptionTypes(), {
-      layout: 'string',
-      segment: 'number',
-      value: 'number',
-      value_label: 'number',
-      base: 'number|boolean',
-      label: 'string|boolean',
-      sync_value: 'boolean',
-      format_value: 'function',
-      background: 'string|boolean',
-      gradient: 'object|boolean|function',
-      foreground: 'string|boolean',
-    });
+    return [
+      Scale.getOptionTypes(),
+      {
+        layout: 'string',
+        segment: 'number',
+        value: 'number',
+        value_label: 'number',
+        base: 'number|boolean',
+        label: 'string|boolean',
+        sync_value: 'boolean',
+        format_value: 'function',
+        background: 'string|boolean',
+        gradient: 'object|boolean|function',
+        foreground: 'string|boolean',
+      },
+    ];
   }
 
   static get options() {
-    return Object.assign({}, rangedOptionsDefaults, {
-      layout: 'left',
-      segment: 1,
-      value: 0,
-      value_label: 0,
-      base: false,
-      label: false,
-      sync_value: true,
-      format_value: FORMAT('%.2f'),
-      levels: [1, 5, 10], // array of steps where to draw labels
-      background: false,
-      gradient: false,
-      foreground: 'black',
-      role: 'meter',
-      set_ariavalue: true,
-      aria_live: 'off',
-    });
+    return [
+      rangedOptionsDefaults,
+      {
+        layout: 'left',
+        segment: 1,
+        value: 0,
+        value_label: 0,
+        base: false,
+        label: false,
+        sync_value: true,
+        format_value: FORMAT('%.2f'),
+        levels: [1, 5, 10], // array of steps where to draw labels
+        background: false,
+        gradient: false,
+        foreground: 'black',
+        role: 'meter',
+        set_ariavalue: true,
+        aria_live: 'off',
+      },
+    ];
   }
 
   static get static_events() {

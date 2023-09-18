@@ -188,7 +188,7 @@ const expand_groups = {};
  */
 export class Expand extends Container {
   static get _options() {
-    return Object.assign({}, Container.getOptionTypes(), {
+    return {
       expanded: 'boolean',
       always_expanded: 'boolean',
       group: 'string',
@@ -196,7 +196,7 @@ export class Expand extends Container {
       label: 'string',
       icon: 'string',
       icon_active: 'string',
-    });
+    };
   }
 
   static get options() {

@@ -85,9 +85,9 @@ function valueDone() {
  */
 export class ValueKnob extends Widget {
   static get _options() {
-    return Object.assign({}, Widget.getOptionTypes(), {
+    return {
       layout: 'string',
-    });
+    };
   }
 
   static get options() {

@@ -31,10 +31,6 @@ import { addClass } from '../utils/dom.js';
  * @class Root
  */
 export class Root extends Container {
-  static get _options() {
-    return Object.assign({}, Container.getOptionTypes());
-  }
-
   initialize(options) {
     super.initialize(options);
     /**

@@ -283,7 +283,7 @@ function clearFocus() {
  */
 export class Buttons extends Container {
   static get _options() {
-    return Object.assign({}, Container.getOptionTypes(), {
+    return {
       buttons: 'array',
       direction: 'string',
       select: 'int|array',
@@ -291,7 +291,7 @@ export class Buttons extends Container {
       button_role: 'string',
       multi_select: 'int',
       deselect: 'boolean',
-    });
+    };
   }
 
   static get options() {

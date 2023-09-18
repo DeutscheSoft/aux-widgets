@@ -93,88 +93,90 @@ function moduleRange() {
  */
 export class Knob extends Widget {
   static get _options() {
-    return Object.assign(
-      {},
+    return [
       Widget.getOptionTypes(),
       Circular.getOptionTypes(),
       DragValue.getOptionTypes(),
       {
         reset: 'number',
         bind_dblclick: 'boolean',
-      }
-    );
+      },
+    ];
   }
 
   static get options() {
-    return Object.assign({}, Circular.getDefaultOptions(), {
-      hand: { width: 1, length: 10, margin: 25 },
-      margin: 13,
-      thickness: 6,
-      step: 1,
-      shift_up: 4,
-      shift_down: 0.25,
-      dots_defaults: { length: 6, margin: 13.5, width: 1 },
-      markers_defaults: { thickness: 2, margin: 11 },
-      labels_defaults: {
-        margin: 12,
-        align: 'outer',
-        format: function (val) {
-          return val;
+    return [
+      Circular.getDefaultOptions(),
+      {
+        hand: { width: 1, length: 10, margin: 25 },
+        margin: 13,
+        thickness: 6,
+        step: 1,
+        shift_up: 4,
+        shift_down: 0.25,
+        dots_defaults: { length: 6, margin: 13.5, width: 1 },
+        markers_defaults: { thickness: 2, margin: 11 },
+        labels_defaults: {
+          margin: 12,
+          align: 'outer',
+          format: function (val) {
+            return val;
+          },
         },
+        direction: 'polar',
+        rotation: 45,
+        blind_angle: 20,
+        basis: 300,
+        preset: 'medium',
+        presets: {
+          tiny: {
+            margin: 0,
+            thickness: 4,
+            hand: { width: 1, length: 6, margin: 8 },
+            dots_defaults: { length: 4, margin: 0.5, width: 1 },
+            markers_defaults: { thickness: 2, margin: 0 },
+            show_labels: false,
+          },
+          small: {
+            margin: 8,
+            thickness: 4.5,
+            hand: { width: 1, length: 8, margin: 17 },
+            dots_defaults: { length: 4.5, margin: 8.5, width: 1 },
+            markers_defaults: { thickness: 2, margin: 8 },
+            labels_defaults: { margin: 9 },
+            show_labels: true,
+          },
+          medium: {
+            margin: 13,
+            thickness: 6,
+            hand: { width: 1, length: 10, margin: 25 },
+            dots_defaults: { length: 6, margin: 13.5, width: 1 },
+            markers_defaults: { thickness: 2, margin: 11 },
+            show_labels: true,
+          },
+          large: {
+            margin: 13,
+            thickness: 6,
+            hand: { width: 1.5, length: 12, margin: 26 },
+            dots_defaults: { length: 6, margin: 13.5, width: 1 },
+            markers_defaults: { thickness: 2, margin: 11 },
+            show_labels: true,
+          },
+          huge: {
+            margin: 13,
+            thickness: 6,
+            hand: { width: 2, length: 12, margin: 28 },
+            dots_defaults: { length: 6, margin: 13.5, width: 1 },
+            markers_defaults: { thickness: 2, margin: 11 },
+            show_labels: true,
+          },
+        },
+        bind_dblclick: true,
+        tabindex: 0,
+        role: 'slider',
+        set_ariavalue: true,
       },
-      direction: 'polar',
-      rotation: 45,
-      blind_angle: 20,
-      basis: 300,
-      preset: 'medium',
-      presets: {
-        tiny: {
-          margin: 0,
-          thickness: 4,
-          hand: { width: 1, length: 6, margin: 8 },
-          dots_defaults: { length: 4, margin: 0.5, width: 1 },
-          markers_defaults: { thickness: 2, margin: 0 },
-          show_labels: false,
-        },
-        small: {
-          margin: 8,
-          thickness: 4.5,
-          hand: { width: 1, length: 8, margin: 17 },
-          dots_defaults: { length: 4.5, margin: 8.5, width: 1 },
-          markers_defaults: { thickness: 2, margin: 8 },
-          labels_defaults: { margin: 9 },
-          show_labels: true,
-        },
-        medium: {
-          margin: 13,
-          thickness: 6,
-          hand: { width: 1, length: 10, margin: 25 },
-          dots_defaults: { length: 6, margin: 13.5, width: 1 },
-          markers_defaults: { thickness: 2, margin: 11 },
-          show_labels: true,
-        },
-        large: {
-          margin: 13,
-          thickness: 6,
-          hand: { width: 1.5, length: 12, margin: 26 },
-          dots_defaults: { length: 6, margin: 13.5, width: 1 },
-          markers_defaults: { thickness: 2, margin: 11 },
-          show_labels: true,
-        },
-        huge: {
-          margin: 13,
-          thickness: 6,
-          hand: { width: 2, length: 12, margin: 28 },
-          dots_defaults: { length: 6, margin: 13.5, width: 1 },
-          markers_defaults: { thickness: 2, margin: 11 },
-          show_labels: true,
-        },
-      },
-      bind_dblclick: true,
-      tabindex: 0,
-      role: 'slider',
-      set_ariavalue: true,
-    });
+    ];
   }
 
   static get static_events() {

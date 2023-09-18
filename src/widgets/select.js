@@ -100,7 +100,7 @@ function setHasIcon() {
  */
 export class Select extends Button {
   static get _options() {
-    return Object.assign({}, Button.getOptionTypes(), {
+    return {
       entries: 'array',
       selected: 'int',
       selected_entry: 'object',
@@ -113,7 +113,7 @@ export class Select extends Button {
       list_class: 'string',
       typing_delay: 'number',
       arrow: 'string',
-    });
+    };
   }
 
   static get options() {
@@ -1024,10 +1024,10 @@ function onKeyDown(e) {
  */
 export class SelectEntry extends Button {
   static get _options() {
-    return Object.assign({}, Button.getOptionTypes(), {
+    return {
       value: 'mixed',
       selected: 'boolean',
-    });
+    };
   }
 
   static get options() {

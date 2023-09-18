@@ -193,33 +193,36 @@ function drawSlice(a_from, a_to, r_inner, r_outer, pos, slice) {
  */
 export class Circular extends Widget {
   static get _options() {
-    return Object.assign({}, Widget.getOptionTypes(), rangedOptionsTypes, {
-      _stroke_width: 'number',
-      value: 'number',
-      value_hand: 'number',
-      value_ring: 'number',
-      size: 'number',
-      thickness: 'number',
-      margin: 'number',
-      hand: 'object',
-      start: 'number',
-      angle: 'number',
-      base: 'number|boolean',
-      show_base: 'boolean',
-      show_value: 'boolean',
-      show_hand: 'boolean',
-      show_labels: 'boolean',
-      show_dots: 'boolean',
-      show_markers: 'boolean',
-      x: 'number',
-      y: 'number',
-      dots_defaults: 'object',
-      dots: 'array',
-      markers_defaults: 'object',
-      markers: 'array',
-      labels_defaults: 'object',
-      labels: 'array',
-    });
+    return [
+      rangedOptionsTypes,
+      {
+        _stroke_width: 'number',
+        value: 'number',
+        value_hand: 'number',
+        value_ring: 'number',
+        size: 'number',
+        thickness: 'number',
+        margin: 'number',
+        hand: 'object',
+        start: 'number',
+        angle: 'number',
+        base: 'number|boolean',
+        show_base: 'boolean',
+        show_value: 'boolean',
+        show_hand: 'boolean',
+        show_labels: 'boolean',
+        show_dots: 'boolean',
+        show_markers: 'boolean',
+        x: 'number',
+        y: 'number',
+        dots_defaults: 'object',
+        dots: 'array',
+        markers_defaults: 'object',
+        markers: 'array',
+        labels_defaults: 'object',
+        labels: 'array',
+      },
+    ];
   }
 
   static get static_events() {
@@ -237,39 +240,42 @@ export class Circular extends Widget {
   }
 
   static get options() {
-    return Object.assign({}, rangedOptionsDefaults, {
-      _stroke_width: 0,
-      value: 0,
-      value_hand: 0,
-      value_ring: 0,
-      size: 100,
-      thickness: 3,
-      margin: 0,
-      hand: { width: 2, length: 30, margin: 10 },
-      start: 135,
-      angle: 270,
-      base: false,
-      show_base: true,
-      show_value: true,
-      show_hand: true,
-      show_labels: true,
-      show_dots: true,
-      show_markers: true,
-      x: 0,
-      y: 0,
-      dots_defaults: { width: 1, length: 3, margin: 0.5 },
-      dots: [],
-      markers_defaults: { thickness: 3, margin: 0 },
-      markers: [],
-      labels_defaults: {
-        margin: 8,
-        align: 'inner',
-        format: function (val) {
-          return val;
+    return [
+      rangedOptionsDefaults,
+      {
+        _stroke_width: 0,
+        value: 0,
+        value_hand: 0,
+        value_ring: 0,
+        size: 100,
+        thickness: 3,
+        margin: 0,
+        hand: { width: 2, length: 30, margin: 10 },
+        start: 135,
+        angle: 270,
+        base: false,
+        show_base: true,
+        show_value: true,
+        show_hand: true,
+        show_labels: true,
+        show_dots: true,
+        show_markers: true,
+        x: 0,
+        y: 0,
+        dots_defaults: { width: 1, length: 3, margin: 0.5 },
+        dots: [],
+        markers_defaults: { thickness: 3, margin: 0 },
+        markers: [],
+        labels_defaults: {
+          margin: 8,
+          align: 'inner',
+          format: function (val) {
+            return val;
+          },
         },
+        labels: [],
       },
-      labels: [],
-    });
+    ];
   }
 
   static get renderers() {

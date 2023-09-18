@@ -507,48 +507,54 @@ const SymBarChanged = Symbol('_bar changed');
  */
 export class Scale extends Widget {
   static get _options() {
-    return Object.assign({}, Widget.getOptionTypes(), rangedOptionsTypes, {
-      layout: 'string',
-      division: 'number',
-      levels: 'array',
-      levels_labels: 'array',
-      base: 'number',
-      labels: 'function',
-      gap_dots: 'number',
-      gap_labels: 'number',
-      show_labels: 'boolean',
-      show_min: 'boolean',
-      show_max: 'boolean',
-      show_base: 'boolean',
-      fixed_dots: 'boolean|array',
-      fixed_labels: 'boolean|array',
-      avoid_collisions: 'boolean',
-      show_markers: 'boolean',
-      bar: 'boolean|number',
-      pointer: 'boolean|number',
-    });
+    return [
+      rangedOptionsTypes,
+      {
+        layout: 'string',
+        division: 'number',
+        levels: 'array',
+        levels_labels: 'array',
+        base: 'number',
+        labels: 'function',
+        gap_dots: 'number',
+        gap_labels: 'number',
+        show_labels: 'boolean',
+        show_min: 'boolean',
+        show_max: 'boolean',
+        show_base: 'boolean',
+        fixed_dots: 'boolean|array',
+        fixed_labels: 'boolean|array',
+        avoid_collisions: 'boolean',
+        show_markers: 'boolean',
+        bar: 'boolean|number',
+        pointer: 'boolean|number',
+      },
+    ];
   }
 
   static get options() {
-    return Object.assign({}, rangedOptionsDefaults, {
-      layout: 'right',
-      division: 1,
-      levels: [1],
-      base: false,
-      labels: FORMAT('%.2f'),
-      avoid_collisions: false,
-      gap_dots: 4,
-      gap_labels: 40,
-      show_labels: true,
-      show_min: true,
-      show_max: true,
-      show_base: true,
-      show_markers: true,
-      fixed_dots: false,
-      fixed_labels: false,
-      bar: false,
-      pointer: false,
-    });
+    return [
+      rangedOptionsDefaults,
+      {
+        layout: 'right',
+        division: 1,
+        levels: [1],
+        base: false,
+        labels: FORMAT('%.2f'),
+        avoid_collisions: false,
+        gap_dots: 4,
+        gap_labels: 40,
+        show_labels: true,
+        show_min: true,
+        show_max: true,
+        show_base: true,
+        show_markers: true,
+        fixed_dots: false,
+        fixed_labels: false,
+        bar: false,
+        pointer: false,
+      },
+    ];
   }
 
   static get static_events() {

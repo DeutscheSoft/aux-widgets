@@ -173,7 +173,7 @@ function setAtoms(key) {
 
 export class ColorPicker extends Container {
   static get _options() {
-    return Object.assign({}, Container.getOptionTypes(), {
+    return {
       hsl: 'object',
       rgb: 'object',
       hex: 'string',
@@ -183,7 +183,7 @@ export class ColorPicker extends Container {
       red: 'number',
       green: 'number',
       blue: 'number',
-    });
+    };
   }
 
   static get options() {

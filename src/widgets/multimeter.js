@@ -238,15 +238,11 @@ for (const key in levelmeterOwnOptions) {
   LevelMeters and Meter options. */
 export class MultiMeter extends Container {
   static get _options() {
-    return Object.assign({}, Container.getOptionTypes(), multimeterOptionTypes);
+    return multimeterOptionTypes;
   }
 
   static get options() {
-    return Object.assign(
-      {},
-      multimeterOptionDefaults,
-      LevelMeter.getDefaultOptions()
-    );
+    return [multimeterOptionDefaults, LevelMeter.getDefaultOptions()];
   }
 
   static get static_events() {

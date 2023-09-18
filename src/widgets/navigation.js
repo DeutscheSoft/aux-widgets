@@ -183,7 +183,7 @@ function measure_clip() {
  */
 export class Navigation extends Container {
   static get _options() {
-    return Object.assign({}, Container.getOptionTypes(), {
+    return {
       _clip_width: 'number',
       _clip_height: 'number',
       _list_width: 'number',
@@ -196,7 +196,7 @@ export class Navigation extends Container {
       auto_arrows: 'boolean',
       resized: 'boolean',
       scroll: 'int',
-    });
+    };
   }
 
   static get options() {

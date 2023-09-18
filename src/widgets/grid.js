@@ -324,7 +324,7 @@ function drawGrid() {
  */
 export class Grid extends Widget {
   static get _options() {
-    return Object.assign({}, Widget.getOptionTypes(), {
+    return {
       grid_x: 'array',
       grid_y: 'array',
       range_x: 'object',
@@ -335,7 +335,7 @@ export class Grid extends Widget {
       x_max: 'boolean|number',
       y_min: 'boolean|number',
       y_max: 'boolean|number',
-    });
+    };
   }
 
   static get options() {

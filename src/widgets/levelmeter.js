@@ -75,7 +75,7 @@ import {
  */
 export class LevelMeter extends Meter {
   static get _options() {
-    return Object.assign({}, Meter.getOptionTypes(), {
+    return {
       falling: 'number',
       falling_duration: 'int',
       falling_init: 'number',
@@ -87,7 +87,7 @@ export class LevelMeter extends Meter {
       auto_clip: 'int|boolean',
       auto_hold: 'int|boolean',
       peak_value: 'int|boolean',
-    });
+    };
   }
 
   static get options() {

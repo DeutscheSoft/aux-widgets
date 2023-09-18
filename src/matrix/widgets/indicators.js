@@ -125,7 +125,7 @@ function cancel() {
 
 export class Indicators extends Container {
   static get _options() {
-    return Object.assign({}, Container.getOptionTypes(), {
+    return {
       indicator_class: 'object',
       connectionview: 'object',
       batch: 'boolean',
@@ -137,7 +137,7 @@ export class Indicators extends Container {
       _yd: 'number',
       _xinit: 'number',
       _yinit: 'number',
-    });
+    };
   }
 
   static get options() {

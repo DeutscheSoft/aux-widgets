@@ -31,7 +31,7 @@ import { Widget } from './../../widgets/widget.js';
  */
 export class Canvas extends Widget {
   static get _options() {
-    return Object.assign({}, Widget.getOptionTypes(), {});
+    return {};
   }
 
   static get options() {

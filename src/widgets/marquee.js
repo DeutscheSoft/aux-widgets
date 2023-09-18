@@ -46,13 +46,13 @@ import { defineRender } from '../renderer.js';
  */
 export class Marquee extends Container {
   static get _options() {
-    return Object.assign({}, Container.getOptionTypes(), {
+    return {
       speed: 'number',
       pause: 'number',
       easing: 'string',
       _inner: 'number',
       _outer: 'number',
-    });
+    };
   }
 
   static get options() {

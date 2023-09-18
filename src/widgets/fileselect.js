@@ -55,7 +55,7 @@ import { defineMeasure, defineRender } from '../renderer.js';
 
 export class FileSelect extends Container {
   static get _options() {
-    return Object.assign({}, Container.getOptionTypes(), {
+    return {
       accept: 'string',
       multiple: 'boolean',
       placeholder: 'string',
@@ -64,7 +64,7 @@ export class FileSelect extends Container {
       filesize: 'number',
       format_size: 'function',
       format_multiple: 'function',
-    });
+    };
   }
 
   static get options() {

@@ -29,10 +29,6 @@ import { addClass } from '../utils/dom.js';
  * @class ProgressBar
  */
 export class ProgressBar extends Meter {
-  static get _options() {
-    return Object.assign({}, Meter.getOptionTypes());
-  }
-
   static get options() {
     return {
       min: 0,

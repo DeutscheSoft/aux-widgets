@@ -152,7 +152,7 @@ function adjustReflections(reflections) {
 
 export class Reverb extends Chart {
   static get _options() {
-    return Object.assign({}, Chart.getOptionTypes(), {
+    return {
       timeframe: 'number',
 
       delay: 'number',
@@ -187,7 +187,7 @@ export class Reverb extends Chart {
 
       reflections: 'boolean|array|object',
       _reflections: 'array',
-    });
+    };
   }
 
   static get options() {

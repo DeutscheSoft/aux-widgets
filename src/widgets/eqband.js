@@ -153,7 +153,7 @@ const type_to_pref = {
  */
 export class EqBand extends ChartHandle {
   static get _options() {
-    return Object.assign({}, ChartHandle.getOptionTypes(), {
+    return {
       type: 'string|function',
       gain: 'number',
       freq: 'number',
@@ -162,7 +162,7 @@ export class EqBand extends ChartHandle {
       z: 'number',
       q: 'number',
       active: 'boolean',
-    });
+    };
   }
 
   static get options() {

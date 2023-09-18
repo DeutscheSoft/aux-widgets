@@ -276,7 +276,7 @@ function onFocusKeyDown(e) {
  */
 export class Widget extends Base {
   static get _options() {
-    return Object.assign(
+    return [
       {
         // A CSS class to add to the main element
         class: 'string',
@@ -304,8 +304,8 @@ export class Widget extends Base {
         aria_targets: 'boolean|array',
         focus: 'boolean',
       },
-      ariaOptions
-    );
+      ariaOptions,
+    ];
   }
 
   static get options() {

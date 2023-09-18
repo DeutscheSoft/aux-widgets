@@ -29,10 +29,6 @@ import { addClass, element } from '../utils/dom.js';
  *
  */
 export class PhaseMeter extends LevelMeter {
-  static get _options() {
-    return Object.assign({}, LevelMeter.getOptionTypes());
-  }
-
   static get options() {
     return {
       show_clip: false,

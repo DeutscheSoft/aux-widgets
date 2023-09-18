@@ -95,7 +95,7 @@ function composeDepth(tree_position) {
 
 export class VirtualTreeEntry extends VirtualTreeEntryBase {
   static get _options() {
-    return Object.assign({}, VirtualTreeEntryBase.getOptionTypes(), {
+    return {
       label: 'string|boolean',
       depth: 'array|boolean',
       collapsable: 'boolean',
@@ -105,7 +105,7 @@ export class VirtualTreeEntry extends VirtualTreeEntryBase {
       icon: 'string|boolean',
       odd: 'boolean',
       group: 'boolean',
-    });
+    };
   }
 
   static get options() {

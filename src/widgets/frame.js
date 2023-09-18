@@ -35,7 +35,7 @@ import { addClass } from '../utils/dom.js';
  */
 export class Frame extends Container {
   static get _options() {
-    return Object.assign({}, Container.getOptionTypes());
+    return {};
   }
 
   static get options() {

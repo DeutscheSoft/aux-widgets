@@ -78,17 +78,20 @@ export class Range extends Base {
   }
 
   static get options() {
-    return Object.assign({}, rangedOptionsDefaults, {
-      scale: 'linear',
-      reverse: false,
-      basis: 0,
-      min: -Infinity,
-      max: Infinity,
-      step: 1,
-      shift_up: 4,
-      shift_down: 0.25,
-      snap: 0,
-    });
+    return [
+      rangedOptionsDefaults,
+      {
+        scale: 'linear',
+        reverse: false,
+        basis: 0,
+        min: -Infinity,
+        max: Infinity,
+        step: 1,
+        shift_up: 4,
+        shift_down: 0.25,
+        snap: 0,
+      },
+    ];
   }
 
   static get static_events() {

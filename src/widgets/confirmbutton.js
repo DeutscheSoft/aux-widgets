@@ -105,13 +105,13 @@ function stateReset() {
  */
 export class ConfirmButton extends Button {
   static get _options() {
-    return Object.assign({}, Button.getOptionTypes(), {
+    return {
       confirm: 'boolean',
       timeout: 'number',
       interrupt: 'number',
       label_confirm: 'string',
       icon_confirm: 'string',
-    });
+    };
   }
 
   static get options() {

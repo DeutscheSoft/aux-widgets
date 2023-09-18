@@ -47,10 +47,10 @@ import { defineRender } from '../renderer.js';
  */
 export class State extends Widget {
   static get _options() {
-    return Object.assign({}, Widget.getOptionTypes(), {
+    return {
       state: 'number|boolean',
       color: 'string|boolean',
-    });
+    };
   }
 
   static get options() {

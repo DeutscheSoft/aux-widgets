@@ -59,20 +59,26 @@ const formatViewbox = FORMAT('0 0 %d %d');
  */
 export class Gauge extends Widget {
   static get _options() {
-    return Object.assign({}, Circular.getOptionTypes(), {
-      width: 'number',
-      height: 'number',
-      label: 'object',
-    });
+    return [
+      Circular.getOptionTypes(),
+      {
+        width: 'number',
+        height: 'number',
+        label: 'object',
+      },
+    ];
   }
 
   static get options() {
-    return Object.assign({}, Circular.getDefaultOptions(), {
-      width: 100, // width of the element
-      height: 100, // height of the svg
-      size: 100,
-      label: { pos: 90, margin: 0, align: 'inner', label: '' },
-    });
+    return [
+      Circular.getDefaultOptions(),
+      {
+        width: 100, // width of the element
+        height: 100, // height of the svg
+        size: 100,
+        label: { pos: 90, margin: 0, align: 'inner', label: '' },
+      },
+    ];
   }
 
   static get renderers() {

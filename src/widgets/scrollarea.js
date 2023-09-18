@@ -31,14 +31,6 @@ import { element, addClass } from '../utils/dom.js';
  *
  */
 export class ScrollArea extends Widget {
-  static get _options() {
-    return Object.assign({}, Widget.getOptionTypes(), {});
-  }
-
-  static get options() {
-    return {};
-  }
-
   initialize(options) {
     if (!options.element) options.element = element('div');
     super.initialize(options);

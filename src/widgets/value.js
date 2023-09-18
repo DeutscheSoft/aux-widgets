@@ -174,7 +174,7 @@ function submitCallback(e) {
  */
 export class Value extends Widget {
   static get _options() {
-    return Object.assign({}, Widget.getOptionTypes(), {
+    return {
       value: 'number|string',
       format: 'function',
       size: 'number',
@@ -187,7 +187,7 @@ export class Value extends Widget {
       editmode: 'string',
       autocomplete: 'string|boolean',
       tab_to_set: 'boolean',
-    });
+    };
   }
 
   static get options() {

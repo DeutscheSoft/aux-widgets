@@ -45,11 +45,11 @@ import { warn } from '../utils/log.js';
  */
 export class Panorama extends Chart {
   static get _options() {
-    return Object.assign({}, Chart.getOptionTypes(), {
+    return {
       mode: 'string',
       range: 'number',
       digits: 'int',
-    });
+    };
   }
 
   static get options() {

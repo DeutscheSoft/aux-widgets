@@ -43,14 +43,14 @@ import { addClass } from '../utils/dom.js';
  */
 export class Drag3D extends Container {
   static get _options() {
-    return Object.assign({}, Container.getOptionTypes(), {
+    return {
       x: 'number',
       y: 'number',
       z: 'number',
       range_x: 'object',
       range_y: 'object',
       range_z: 'object',
-    });
+    };
   }
 
   static get options() {

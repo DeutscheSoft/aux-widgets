@@ -139,13 +139,16 @@ function drawGraph(bands) {
  */
 export class EqualizerGraph extends Graph {
   static get _options() {
-    return Object.assign({}, Graph.getOptionTypes(), {
-      accuracy: 'number',
-      oversampling: 'number',
-      threshold: 'number',
-      bands: 'array',
-      rendering_filter: 'function',
-    });
+    return [
+      Graph.getOptionTypes(),
+      {
+        accuracy: 'number',
+        oversampling: 'number',
+        threshold: 'number',
+        bands: 'array',
+        rendering_filter: 'function',
+      },
+    ];
   }
 
   static get options() {
@@ -249,9 +252,9 @@ function createEqBand(options, type) {
  */
 export class Equalizer extends FrequencyResponse {
   static get _options() {
-    return Object.assign({}, FrequencyResponse.getOptionTypes(), {
+    return {
       show_bands: 'boolean',
-    });
+    };
   }
 
   static get options() {

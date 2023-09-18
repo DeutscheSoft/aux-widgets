@@ -71,29 +71,35 @@ import { mergeStaticEvents } from '../widget_helpers.js';
  */
 export class ValueButton extends Button {
   static get _options() {
-    return Object.assign({}, Button.getOptionTypes(), rangedOptionsTypes, {
-      value: 'number',
-      direction: 'string',
-      rotation: 'number',
-      blind_angle: 'number',
-      snap: 'number',
-      reset: 'number',
-    });
+    return [
+      rangedOptionsTypes,
+      {
+        value: 'number',
+        direction: 'string',
+        rotation: 'number',
+        blind_angle: 'number',
+        snap: 'number',
+        reset: 'number',
+      },
+    ];
   }
 
   static get options() {
-    return Object.assign({}, rangedOptionsDefaults, {
-      value: 0,
-      direction: 'polar',
-      rotation: 45,
-      blind_angle: 20,
-      snap: 0.01,
-      basis: 300,
-      labels: FORMAT('%d'),
-      layout: 'top',
-      role: 'slider',
-      set_ariavalue: true,
-    });
+    return [
+      rangedOptionsDefaults,
+      {
+        value: 0,
+        direction: 'polar',
+        rotation: 45,
+        blind_angle: 20,
+        snap: 0.01,
+        basis: 300,
+        labels: FORMAT('%d'),
+        layout: 'top',
+        role: 'slider',
+        set_ariavalue: true,
+      },
+    ];
   }
 
   static get static_events() {

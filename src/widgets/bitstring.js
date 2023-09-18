@@ -54,12 +54,12 @@ import { error } from '../utils/log.js';
  */
 export class Bitstring extends Buttons {
   static get _options() {
-    return Object.assign({}, Buttons.getOptionTypes(), {
+    return {
       labels: 'function',
       icons: 'function',
       length: 'number|boolean',
       bitstring: 'array|number',
-    });
+    };
   }
 
   static get options() {

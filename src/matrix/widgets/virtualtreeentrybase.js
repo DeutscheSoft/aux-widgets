@@ -21,9 +21,9 @@ import { Container } from '../../widgets/container.js';
 
 export class VirtualTreeEntryBase extends Container {
   static get _options() {
-    return Object.assign({}, Container.getOptionTypes(), {
+    return {
       data: 'any',
-    });
+    };
   }
 
   static get options() {

@@ -83,9 +83,7 @@ function setScrollRange() {
  */
 export class ScrollBar extends Widget {
   static get _options() {
-    return Object.assign(
-      {},
-      Widget.getOptionTypes(),
+    return [
       rangedOptionsTypes,
       DragValue.getOptionTypes(),
       {
@@ -93,17 +91,20 @@ export class ScrollBar extends Widget {
         content: 'number',
         clip: 'number',
         scroll: 'number',
-      }
-    );
+      },
+    ];
   }
 
   static get options() {
-    return Object.assign({}, rangedOptionsDefaults, {
-      position: 'right',
-      content: 0,
-      clip: 0,
-      scroll: 0,
-    });
+    return [
+      rangedOptionsDefaults,
+      {
+        position: 'right',
+        content: 0,
+        clip: 0,
+        scroll: 0,
+      },
+    ];
   }
 
   static get static_events() {
@@ -223,10 +224,10 @@ function usersetScrollY(key, value) {
 }
 export class Scroller extends Container {
   static get _options() {
-    return Object.assign({}, Container.getOptionTypes(), {
+    return {
       scroll_x: 'boolean',
       scroll_y: 'boolean',
-    });
+    };
   }
   static get options() {
     return {

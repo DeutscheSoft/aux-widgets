@@ -44,13 +44,13 @@ import { defineRender } from '../../renderer.js';
 
 export class Indicator extends Button {
   static get _options() {
-    return Object.assign({}, Button.getOptionTypes(), {
+    return {
       connected: 'boolean',
       connectable: 'boolean',
       sourceisgroup: 'boolean',
       sinkisgroup: 'boolean',
       isgroup: 'boolean',
-    });
+    };
   }
 
   static get renderers() {

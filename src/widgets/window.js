@@ -425,7 +425,7 @@ function statusTimeout() {
 
 export class Window extends Container {
   static get _options() {
-    return Object.assign({}, Container.getOptionTypes(), {
+    return {
       width: 'number',
       height: 'number',
       x: 'number',
@@ -459,7 +459,7 @@ export class Window extends Container {
       header_action: 'string',
       active: 'boolean',
       hide_status: 'int',
-    });
+    };
   }
 
   static get options() {

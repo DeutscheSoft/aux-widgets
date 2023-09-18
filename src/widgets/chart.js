@@ -123,7 +123,7 @@ function geomSet(value, key) {
 }
 export class Chart extends Widget {
   static get _options() {
-    return Object.assign({}, Widget.getOptionTypes(), {
+    return {
       width: 'int',
       height: 'int',
       _width: 'int',
@@ -143,7 +143,7 @@ export class Chart extends Widget {
       show_handles: 'boolean',
       depth: 'number',
       square: 'boolean',
-    });
+    };
   }
 
   static get options() {

@@ -39,10 +39,10 @@ import { Filter } from '../modules/filter.js';
  */
 export class CrossoverBand extends EqBand {
   static get _options() {
-    return Object.assign({}, EqBand.getOptionTypes(), {
+    return {
       lower: 'string|function',
       upper: 'string|function',
-    });
+    };
   }
 
   static get options() {
@@ -117,9 +117,9 @@ export class CrossoverBand extends EqBand {
 
 export class CrossoverGraph extends EqualizerGraph {
   static get _options() {
-    return Object.assign({}, EqualizerGraph.getOptionTypes(), {
+    return {
       index: 'number',
-    });
+    };
   }
 
   static get options() {

@@ -70,12 +70,12 @@ function pressCancel(e) {
  */
 export class Toggle extends Button {
   static get _options() {
-    return Object.assign({}, Button.getOptionTypes(), {
+    return {
       label_active: 'string',
       icon_active: 'string',
       press: 'int',
       toggle: 'boolean',
-    });
+    };
   }
 
   static get options() {

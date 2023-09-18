@@ -137,7 +137,7 @@ function off(e) {
  */
 export class Dialog extends Container {
   static get _options() {
-    return Object.assign({}, Container.getOptionTypes(), {
+    return {
       anchor: 'string',
       x: 'string',
       y: 'string',
@@ -147,7 +147,7 @@ export class Dialog extends Container {
       modal: 'boolean',
       reset_focus: 'boolean',
       contain_focus: 'boolean',
-    });
+    };
   }
 
   static get options() {

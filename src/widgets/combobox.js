@@ -40,9 +40,9 @@ import { Value } from './value.js';
  */
 export class ComboBox extends Widget {
   static get _options() {
-    return Object.assign({}, Widget.getOptionTypes(), {
+    return {
       value: 'string',
-    });
+    };
   }
 
   static get options() {

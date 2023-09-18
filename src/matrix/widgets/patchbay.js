@@ -41,11 +41,11 @@ import { Container } from './../../widgets/container.js';
  */
 export class Patchbay extends Container {
   static get _options() {
-    return Object.assign({}, Container.getOptionTypes(), {
+    return {
       sources: 'object',
       sinks: 'object',
       size: 'number',
-    });
+    };
   }
 
   static get options() {
