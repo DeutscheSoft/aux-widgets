@@ -143,6 +143,8 @@ export class Chart extends Widget {
       show_handles: 'boolean',
       depth: 'number',
       square: 'boolean',
+      grid_x: 'array',
+      grid_y: 'array',
     };
   }
 

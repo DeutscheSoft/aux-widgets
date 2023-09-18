@@ -70,7 +70,6 @@ export class FrequencyResponse extends Chart {
   static get _options() {
     return {
       db_grid: 'number',
-      grid_x: 'array',
       scale: 'boolean',
       depth: 'number',
     };
