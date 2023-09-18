@@ -145,6 +145,39 @@ function nativeHandler(ev) {
   if (this.emit(ev.type, ev) === false) return false;
 }
 
+function mergeOptions(...options) {
+  options = options.flat();
+
+  return Object.assign({}, ...options);
+}
+
+function hasProperty(cl, name) {
+  return Object.prototype.hasOwnProperty.call(cl, name);
+}
+
+function getBaseOf(cl) {
+  const prototype = Object.getPrototypeOf(cl.prototype);
+
+  if (!prototype) return null;
+
+  return prototype.constructor;
+}
+
+function collectFromPrototypes(cl, name, funName) {
+  const result = [];
+  const base = getBaseOf(cl);
+
+  if (base && base[funName]) {
+    result.push(base[funName]());
+  }
+
+  if (hasProperty(cl, name)) {
+    result.push(cl[name]);
+  }
+
+  return result;
+}
+
 /**
  * This is the base class for all AUX widgets.
  * It provides an API for event handling and options.
@@ -153,8 +186,9 @@ function nativeHandler(ev) {
  */
 export class Base {
   static getOptionTypes() {
-    if (!Object.prototype.hasOwnProperty.call(this, 'auxOptionTypes')) {
-      this.auxOptionTypes = this._options;
+    if (!hasProperty(this, 'auxOptionTypes')) {
+      const options = collectFromPrototypes(this, '_options', 'getOptionTypes');
+      this.auxOptionTypes = mergeOptions(...options);
     }
 
     return this.auxOptionTypes;
@@ -165,20 +199,13 @@ export class Base {
   }
 
   static getDefaultOptions() {
-    if (!Object.prototype.hasOwnProperty.call(this, 'auxOptions')) {
-      const base = Object.getPrototypeOf(this.prototype).constructor;
-      const ownOptions = Object.prototype.hasOwnProperty.call(this, 'options')
-        ? this.options
-        : {};
-      let o;
-
-      if (base.getDefaultOptions) {
-        o = Object.assign({}, base.getDefaultOptions(), ownOptions);
-      } else {
-        o = Object.assign({}, ownOptions);
-      }
-
-      this.auxOptions = o;
+    if (!hasProperty(this, 'auxOptions')) {
+      const options = collectFromPrototypes(
+        this,
+        'options',
+        'getDefaultOptions'
+      );
+      this.auxOptions = mergeOptions(...options);
     }
 
     return this.auxOptions;
