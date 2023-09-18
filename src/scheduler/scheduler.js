@@ -136,8 +136,7 @@ export class Scheduler {
   }
 
   log(fmt, ...args) {
-    return;
-    console.log('Scheduler(%o): ' + fmt, this.getStatus(), ...args);
+    //console.log('Scheduler(%o): ' + fmt, this.getStatus(), ...args);
   }
 
   getStatus() {
