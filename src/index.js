@@ -17,5 +17,4 @@
  * Boston, MA  02110-1301  USA
  */
 
-import './index.sideeffects.js';
 export * from './index.pure.js';

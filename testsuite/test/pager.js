@@ -18,6 +18,7 @@
  */
 
 import { Page, Pager, PageComponent, PagerComponent } from '../src/index.js';
+import '../src/components.js';
 
 import { waitForDrawn, assert, compare, compareOptions } from './helpers.js';
 

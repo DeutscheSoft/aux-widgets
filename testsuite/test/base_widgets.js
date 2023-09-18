@@ -18,6 +18,7 @@
  */
 
 import { Widget, WidgetComponent } from '../src/index.js';
+import '../src/components.js';
 
 import { assert, assertError } from './helpers.js';
 
