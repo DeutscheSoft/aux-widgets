@@ -59,3 +59,4 @@ import './array_diff.js';
 import './knob.js';
 import './scale.js';
 import './fader.js';
+import './scale.js';
