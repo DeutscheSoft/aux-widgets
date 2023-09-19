@@ -35,6 +35,7 @@ import {
   defineMeasure,
   deferMeasure,
   deferRender,
+  defineRecalculation,
 } from '../renderer.js';
 
 function interpretLabel(x) {
@@ -551,11 +552,9 @@ export class Circular extends Widget {
       defineRender(
         [
           'show_value',
-          'transformation',
-          'snap_module',
           'base',
           'angle',
-          'value_ring',
+          '_coef_ring',
           '_stroke_width',
           'thickness',
           'margin',
@@ -563,17 +562,16 @@ export class Circular extends Widget {
         ],
         function (
           show_value,
-          transformation,
-          snap_module,
           base,
           angle,
-          value_ring,
+          _coef_ring,
           _stroke_width,
           thickness,
           margin,
           size
         ) {
           const _value = this._value;
+          const { snap_module, transformation } = this.options;
 
           if (show_value) {
             const outerSize = size / 2;
@@ -582,8 +580,10 @@ export class Circular extends Widget {
             const inner_p = inner - _stroke_width / 2 - margin;
 
             drawSlice(
-              transformation.valueToCoef(snap_module.snap(base)) * angle,
-              transformation.valueToCoef(snap_module.snap(value_ring)) * angle,
+              transformation.valueToCoef(
+                snap_module.snap(transformation.clampValue(base))
+              ) * angle,
+              _coef_ring * angle,
               inner_p,
               outer_p,
               outerSize,
@@ -627,29 +627,46 @@ export class Circular extends Widget {
           }
         }
       ),
-      defineRender(
-        [
-          'size',
-          'value_hand',
-          'hand',
-          'transformation',
-          'snap_module',
-          'angle',
-        ],
-        function (size, value_hand, hand, transformation, snap_module, angle) {
-          const _hand = this._hand;
-          _hand.setAttribute('x', size - hand.length - hand.margin);
-          _hand.setAttribute('y', (size - hand.width) / 2.0);
-          _hand.setAttribute('width', hand.length);
-          _hand.setAttribute('height', hand.width);
-          _hand.setAttribute(
-            'transform',
-            formatRotate(
-              transformation.valueToCoef(snap_module.snap(value_hand)) * angle,
-              size / 2,
-              size / 2
-            )
+      defineRender(['size', '_coef_hand', 'hand', 'angle'], function (
+        size,
+        _coef_hand,
+        hand,
+        angle
+      ) {
+        const _hand = this._hand;
+        _hand.setAttribute('x', size - hand.length - hand.margin);
+        _hand.setAttribute('y', (size - hand.width) / 2.0);
+        _hand.setAttribute('width', hand.length);
+        _hand.setAttribute('height', hand.width);
+        _hand.setAttribute(
+          'transform',
+          formatRotate(_coef_hand * angle, size / 2, size / 2)
+        );
+      }),
+      defineRecalculation(['value', 'transformation', 'snap_module'], function (
+        value,
+        transformation,
+        snap_module
+      ) {
+        const _value = snap_module.snap(transformation.clampValue(value));
+        this.update('_value', _value);
+      }),
+      defineRecalculation(
+        ['value_hand', 'transformation', 'snap_module'],
+        function (value_hand, transformation, snap_module) {
+          const value = transformation.valueToCoef(
+            snap_module.snap(transformation.clampValue(value_hand))
           );
+          this.update('_coef_hand', value);
+        }
+      ),
+      defineRecalculation(
+        ['value_ring', 'transformation', 'snap_module'],
+        function (value_ring, transformation, snap_module) {
+          const value = transformation.valueToCoef(
+            snap_module.snap(transformation.clampValue(value_ring))
+          );
+          this.update('_coef_ring', value);
         }
       ),
     ];
@@ -783,7 +800,6 @@ export class Circular extends Widget {
         break;
       case 'value':
         if (value > O.max || value < O.min) warning(this.element);
-        value = O.snap_module.snap(Math.max(O.min, Math.min(O.max, value)));
         break;
       case 'labels':
         if (value)
