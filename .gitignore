@@ -11,3 +11,4 @@ doc/toolkit
 *toolkit.all.css
 export/
 node_modules
+.vscode
