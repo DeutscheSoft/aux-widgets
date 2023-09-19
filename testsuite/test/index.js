@@ -61,3 +61,5 @@ import './scale.js';
 import './fader.js';
 import './scale.js';
 import './circular.js';
+import './knob.js';
+import './valueknob.js';

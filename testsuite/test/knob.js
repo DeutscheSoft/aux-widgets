@@ -18,7 +18,7 @@
  */
 
 import { Knob } from '../src/index.js';
-import { waitForDrawn } from './helpers.js';
+import { waitForDrawn, assertEqual } from './helpers.js';
 
 describe('Knob', () => {
   it('destroy while dragging', async () => {
@@ -28,5 +28,17 @@ describe('Knob', () => {
 
     knob.svg.dispatchEvent(new CustomEvent('mousedown'));
     knob.destroy();
+  });
+
+  it('set() does not clamp', () => {
+    const widget = new Knob({
+      min: -2,
+      max: 2,
+      value: 10,
+    });
+
+    assertEqual(widget.get('value'), 10);
+    widget.set('value', 7);
+    assertEqual(widget.get('value'), 7);
   });
 });
