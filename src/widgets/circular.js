@@ -43,6 +43,30 @@ function interpretLabel(x) {
   if (typeof x === 'number') return { pos: x };
   error('Unsupported label type ', x);
 }
+
+function createInternalLabel(label, labelDefaults, defaultLabelsDefaults) {
+  const tmp =
+    typeof label === 'object'
+      ? label
+      : typeof label === 'number'
+      ? { pos: label }
+      : null;
+
+  if (tmp === null) return null;
+
+  const internalLabel = Object.assign(
+    {},
+    defaultLabelsDefaults,
+    labelDefaults,
+    tmp
+  );
+
+  if (internalLabel.label === void 0)
+    internalLabel.label = internalLabel.format(internalLabel.pos);
+
+  return internalLabel;
+}
+
 const __rad = Math.PI / 180;
 function _getCoords(deg, inner, outer, pos) {
   deg = +deg;
@@ -366,12 +390,9 @@ export class Circular extends Widget {
         [
           SymLabelsChanged,
           'show_labels',
-          'labels',
-          'labels_defaults',
+          '_labels',
           'transformation',
           'snap_module',
-          'min',
-          'max',
           'angle',
           'start',
           'size',
@@ -379,23 +400,20 @@ export class Circular extends Widget {
         function (
           show_labels,
           labels,
-          labels_defaults,
           transformation,
           snap_module,
-          min,
-          max,
           angle,
           start,
           size
         ) {
-          // depends on size, labels, label, min, max, start
+          // depends on size, _labels, label, start
           const _labels = this._labels;
 
           if (!_labels) return;
 
           empty(this._labels);
 
-          if (!show_labels || !labels.length) return;
+          if (!show_labels || !labels || !labels.length) return;
 
           const outerSize = size / 2;
 
@@ -409,7 +427,6 @@ export class Circular extends Widget {
             if (l.color) p.style.fill = l.color;
 
             if (l.label !== void 0) p.textContent = l.label;
-            else p.textContent = labels_defaults.format(l.pos);
 
             p.setAttribute('text-anchor', 'middle');
 
@@ -422,12 +439,10 @@ export class Circular extends Widget {
             const positions = labels.map((l, i) => {
               const element = elements[i];
 
-              const margin =
-                l.margin !== void 0 ? l.margin : labels_defaults.margin;
-              const align =
-                (l.align !== void 0 ? l.align : labels_defaults.align) ===
-                'inner';
-              const pos = Math.min(max, Math.max(min, l.pos));
+              const margin = l.margin;
+              const alignOffset = l.align === 'inner' ? -2 : 2;
+
+              const pos = transformation.clampValue(l.pos);
               const bb = element.getBBox();
               const _angle =
                 (transformation.valueToCoef(snap_module.snap(pos)) * angle +
@@ -439,10 +454,9 @@ export class Circular extends Widget {
               const mx =
                 (((coords.x - outerSize) / outer_p) *
                   (bb.width + bb.height / 2.5)) /
-                (align ? -2 : 2);
+                alignOffset;
               const my =
-                (((coords.y - outerSize) / outer_p) * bb.height) /
-                (align ? -2 : 2);
+                (((coords.y - outerSize) / outer_p) * bb.height) / alignOffset;
 
               return formatTranslate(coords.x + mx, coords.y + my);
             });
@@ -661,6 +675,24 @@ export class Circular extends Widget {
           this.update('_coef_base', _coef_base);
         }
       ),
+      defineRecalculation(['labels', 'labels_defaults'], function (
+        labels,
+        labels_defaults
+      ) {
+        let _labels = null;
+        const defaultLabelsDefaults = this.getDefault('labels_defaults');
+
+        if (Array.isArray(labels) && labels.length) {
+          _labels = labels.map((entry) =>
+            createInternalLabel(entry, labels_defaults, defaultLabelsDefaults)
+          );
+
+          if (_labels.includes(null))
+            _labels = _labels.filter((label) => label !== null);
+        }
+
+        this.update('_labels', _labels);
+      }),
     ];
   }
 
@@ -784,17 +816,10 @@ export class Circular extends Widget {
     switch (key) {
       case 'dots_defaults':
       case 'markers_defaults':
-      case 'labels_defaults':
         value = Object.assign(O[key], value);
         break;
       case 'value':
         if (value > O.max || value < O.min) warning(this.element);
-        break;
-      case 'labels':
-        if (value)
-          for (let i = 0; i < value.length; i++) {
-            value[i] = interpretLabel(value[i]);
-          }
         break;
     }
 
