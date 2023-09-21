@@ -11,5 +11,7 @@ describe('Circular', () => {
     assertEqual(circ.get('value'), 10);
     circ.set('value', 7);
     assertEqual(circ.get('value'), 7);
+    circ.set('base', false);
+    assertEqual(circ.get('base'), false);
   });
 });
