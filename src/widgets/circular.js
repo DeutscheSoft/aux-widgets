@@ -38,21 +38,26 @@ import {
   defineRecalculation,
 } from '../renderer.js';
 
-function createInternalLabel(label, labelDefaults, defaultLabelsDefaults) {
+function createInternalDot(dot, dotDefaults, defaultDotDefaults) {
   const tmp =
-    typeof label === 'object'
-      ? label
-      : typeof label === 'number'
-      ? { pos: label }
+    typeof dot === 'object'
+      ? dot
+      : typeof dot === 'number'
+      ? { pos: dot }
       : null;
 
   if (tmp === null) return null;
 
-  const internalLabel = Object.assign(
-    {},
-    defaultLabelsDefaults,
+  const internalDot = Object.assign({}, defaultDotDefaults, dotDefaults, tmp);
+
+  return internalDot;
+}
+
+function createInternalLabel(label, labelDefaults, defaultLabelDefaults) {
+  const internalLabel = createInternalDot(
+    label,
     labelDefaults,
-    tmp
+    defaultLabelDefaults
   );
 
   if (internalLabel.label === void 0)
@@ -185,7 +190,7 @@ function drawSlice(a_from, a_to, r_inner, r_outer, pos, slice) {
  * @property {Array<Object|Number>} [options.dots=[]] - An array of objects describing where dots should be placed
  *   along the circle. Members are position <code>pos</code> in the value range and optionally
  *   <code>color</code> and <code>class</code> and any of the properties of <code>options.dot</code>.
- *   Optionally a number defining the position can be set.
+ *   If it is a number, it is equivalent to an object containing just <code>pos</code>.
  * @property {Boolean} [options.show_markers=true] - Show/hide all markers.
  * @property {Object} [options.markers_defaults] - This option acts as default values of the individual markers
  *   specified in <code>options.markers</code>.
@@ -310,26 +315,13 @@ export class Circular extends Widget {
       defineRender(
         [
           'show_dots',
-          'dots',
-          'dots_defaults',
+          '_dots',
           'angle',
           'transformation',
           'snap_module',
-          'max',
-          'min',
           'size',
         ],
-        function (
-          show_dots,
-          dots,
-          dots_defaults,
-          angle,
-          transformation,
-          snap_module,
-          max,
-          min,
-          size
-        ) {
+        function (show_dots, dots, angle, transformation, snap_module, size) {
           const _dots = this._dots;
 
           if (!_dots) return;
@@ -340,39 +332,33 @@ export class Circular extends Widget {
 
           // TODO: consider caching nodes
 
-          for (let i = 0; i < dots.length; i++) {
-            let m = dots[i];
-            if (typeof m === 'number') m = { pos: m };
+          if (dots)
+            dots.forEach((dot) => {
+              const r = makeSVG('rect', { class: 'aux-dot' });
 
-            const r = makeSVG('rect', { class: 'aux-dot' });
+              const { length, width, margin, color, class: cl } = dot;
+              const pos = transformation.clampValue(dot.pos);
+              if (cl) addClass(r, cl);
+              if (color) r.style.fill = color;
 
-            const length =
-              m.length === void 0 ? dots_defaults.length : m.length;
-            const width = m.width === void 0 ? dots_defaults.width : m.width;
-            const margin =
-              m.margin === void 0 ? dots_defaults.margin : m.margin;
-            const pos = Math.min(max, Math.max(min, m.pos));
-            _dots.appendChild(r);
-            if (m['class']) addClass(r, m['class']);
-            if (m.color) r.style.fill = m.color;
+              r.setAttribute('x', size - length - margin);
+              r.setAttribute('y', size / 2 - width / 2);
 
-            r.setAttribute('x', size - length - margin);
-            r.setAttribute('y', size / 2 - width / 2);
+              r.setAttribute('width', length);
+              r.setAttribute('height', width);
 
-            r.setAttribute('width', length);
-            r.setAttribute('height', width);
-
-            r.setAttribute(
-              'transform',
-              'rotate(' +
-                transformation.valueToCoef(snap_module.snap(pos)) * angle +
-                ' ' +
-                size / 2 +
-                ' ' +
-                size / 2 +
-                ')'
-            );
-          }
+              r.setAttribute(
+                'transform',
+                'rotate(' +
+                  transformation.valueToCoef(snap_module.snap(pos)) * angle +
+                  ' ' +
+                  size / 2 +
+                  ' ' +
+                  size / 2 +
+                  ')'
+              );
+              _dots.appendChild(r);
+            });
           /**
            * Is fired when dots are (re)drawn.
            * @event Circular#dotsdrawn
@@ -687,6 +673,23 @@ export class Circular extends Widget {
 
         this.update('_labels', _labels);
       }),
+      defineRecalculation(['dots', 'dots_defaults'], function (
+        dots,
+        dots_defaults
+      ) {
+        let _dots = null;
+        const defaultDotDefaults = this.getDefault('dots_defaults');
+
+        if (Array.isArray(dots) && dots.length) {
+          _dots = dots.map((entry) =>
+            createInternalDot(entry, dots_defaults, defaultDotDefaults)
+          );
+
+          if (_dots.includes(null)) _dots = _dots.filter((dot) => dot !== null);
+        }
+
+        this.update('_dots', _dots);
+      }),
     ];
   }
 
@@ -764,7 +767,6 @@ export class Circular extends Widget {
   set(key, value) {
     const O = this.options;
     switch (key) {
-      case 'dots_defaults':
       case 'markers_defaults':
         value = Object.assign(O[key], value);
         break;
