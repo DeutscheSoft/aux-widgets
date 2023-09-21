@@ -27,6 +27,7 @@ import {
   rangedOptionsTypes,
   rangedRenderers,
 } from '../utils/ranged.js';
+import { mergeStaticEvents } from '../widget_helpers.js';
 import {
   setContent,
   addClass,
@@ -561,7 +562,31 @@ export class Scale extends Widget {
   }
 
   static get static_events() {
-    return rangedEvents;
+    return mergeStaticEvents(
+      {
+        set: function (key, value) {
+          switch (key) {
+            case 'division':
+            case 'levels':
+            case 'labels':
+            case 'gap_dots':
+            case 'gap_labels':
+            case 'show_labels':
+              /**
+               * Gets fired when an option the rendering depends on was changed
+               *
+               * @event Scale#scalechanged
+               *
+               * @param {string} key - The name of the option which changed the {@link Scale}.
+               * @param {mixed} value - The value of the option.
+               */
+              this.emit('scalechanged', key, value);
+              break;
+          }
+        },
+      },
+      rangedEvents
+    );
   }
 
   static get renderers() {
@@ -861,29 +886,6 @@ export class Scale extends Widget {
   destroy() {
     removeDotsAndLabels(this.element);
     super.destroy();
-  }
-
-  // GETTER & SETTER
-  set(key, value) {
-    super.set(key, value);
-    switch (key) {
-      case 'division':
-      case 'levels':
-      case 'labels':
-      case 'gap_dots':
-      case 'gap_labels':
-      case 'show_labels':
-        /**
-         * Gets fired when an option the rendering depends on was changed
-         *
-         * @event Scale#scalechanged
-         *
-         * @param {string} key - The name of the option which changed the {@link Scale}.
-         * @param {mixed} value - The value of the option.
-         */
-        this.emit('scalechanged', key, value);
-        break;
-    }
   }
 }
 
