@@ -54,6 +54,28 @@ function dblClick() {
 function moduleRange() {
   return this.parent.circular;
 }
+
+class KnobCircular extends Circular {
+  static get options() {
+    return {
+      hand: { width: 1, length: 10, margin: 25 },
+      margin: 13,
+      thickness: 6,
+      dots_defaults: { length: 6, margin: 13.5, width: 1 },
+      markers_defaults: { thickness: 2, margin: 11 },
+      labels_defaults: {
+        margin: 12,
+        align: 'outer',
+        format: function (val) {
+          return val;
+        },
+      },
+      direction: 'polar',
+      rotation: 45,
+    };
+  }
+}
+
 /**
  * Knob is a {@link Circular} inside of an SVG which can be
  * modified both by dragging and scrolling utilizing {@link DragValue}
@@ -96,7 +118,7 @@ export class Knob extends Widget {
   static get _options() {
     return [
       Widget.getOptionTypes(),
-      Circular.getOptionTypes(),
+      KnobCircular.getOptionTypes(),
       DragValue.getOptionTypes(),
       {
         reset: 'number',
@@ -107,27 +129,13 @@ export class Knob extends Widget {
 
   static get options() {
     return [
-      Circular.getDefaultOptions(),
+      KnobCircular.getDefaultOptions(),
       {
-        hand: { width: 1, length: 10, margin: 25 },
-        margin: 13,
-        thickness: 6,
         step: 1,
+        basis: 300,
+        blind_angle: 20,
         shift_up: 4,
         shift_down: 0.25,
-        dots_defaults: { length: 6, margin: 13.5, width: 1 },
-        markers_defaults: { thickness: 2, margin: 11 },
-        labels_defaults: {
-          margin: 12,
-          align: 'outer',
-          format: function (val) {
-            return val;
-          },
-        },
-        direction: 'polar',
-        rotation: 45,
-        blind_angle: 20,
-        basis: 300,
         preset: 'medium',
         presets: {
           tiny: {
@@ -210,7 +218,7 @@ export class Knob extends Widget {
      */
     this.svg = S = makeSVG('svg');
 
-    let co = objectAnd(options, Circular.getOptionTypes());
+    let co = objectAnd(options, KnobCircular.getOptionTypes());
     co = objectSub(co, Widget.getOptionTypes());
     co.container = S;
     co.aria_targets = [this.svg];
@@ -218,7 +226,7 @@ export class Knob extends Widget {
     /**
      * @member {Circular} Knob#circular - The {@link Circular} module.
      */
-    this.circular = new Circular(co);
+    this.circular = new KnobCircular(co);
 
     /**
      * @member {DragValue} Knob#drag - Instance of {@link DragValue} used for the
@@ -334,7 +342,8 @@ export class Knob extends Widget {
       if (value === false) value = this.options.min;
     }
     if (!Widget.getOptionTypes()[key]) {
-      if (Circular.getOptionTypes()[key]) value = this.circular.set(key, value);
+      if (KnobCircular.getOptionTypes()[key])
+        value = this.circular.set(key, value);
       if (DragValue.getOptionTypes()[key]) this.drag.set(key, value);
     }
     return super.set(key, value);
