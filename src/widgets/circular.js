@@ -66,6 +66,10 @@ function createInternalLabel(label, labelDefaults, defaultLabelDefaults) {
   return internalLabel;
 }
 
+function createInternalMarker(marker, markerDefaults, defaultMarkerDefaults) {
+  return createInternalDot(marker, markerDefaults, defaultMarkerDefaults);
+}
+
 const __rad = Math.PI / 180;
 function _getCoords(deg, inner, outer, pos) {
   deg = +deg;
@@ -473,8 +477,7 @@ export class Circular extends Widget {
       defineRender(
         [
           'show_markers',
-          'markers',
-          'markers_defaults',
+          '_markers',
           'transformation',
           'snap_module',
           'size',
@@ -486,7 +489,6 @@ export class Circular extends Widget {
         function (
           show_markers,
           markers,
-          markers_defaults,
           transformation,
           snap_module,
           size,
@@ -505,37 +507,34 @@ export class Circular extends Widget {
 
           const outerSize = size / 2;
 
-          for (let i = 0; i < markers.length; i++) {
-            const m = markers[i];
-            const thick =
-              m.thickness === void 0 ? markers_defaults.thickness : m.thickness;
-            const margin =
-              m.margin === void 0 ? markers_defaults.margin : m.margin;
-            const inner = outerSize - thick;
-            const outer_p = outerSize - margin - _stroke_width / 2;
-            const inner_p = inner - margin - _stroke_width / 2;
-            let from, to;
+          if (markers)
+            markers.forEach((marker) => {
+              const { thickness, margin, color, class: cl, nosnap } = marker;
+              const inner = outerSize - thickness;
+              const outer_p = outerSize - margin - _stroke_width / 2;
+              const inner_p = inner - margin - _stroke_width / 2;
 
-            if (m.from === void 0) from = min;
-            else from = Math.min(max, Math.max(min, m.from));
+              let from = transformation.clampValue(
+                marker.from === void 0 ? min : marker.from
+              );
+              let to = transformation.clampValue(
+                marker.to === void 0 ? max : marker.to
+              );
 
-            if (m.to === void 0) to = max;
-            else to = Math.min(max, Math.max(min, m.to));
+              const s = makeSVG('path', { class: 'aux-marker' });
 
-            const s = makeSVG('path', { class: 'aux-marker' });
+              if (cl) addClass(s, cl);
+              if (color) s.style.fill = color;
+              if (!nosnap) {
+                from = snap_module.snap(from);
+                to = snap_module.snap(to);
+              }
+              from = transformation.valueToCoef(from) * angle;
+              to = transformation.valueToCoef(to) * angle;
 
-            if (m['class']) addClass(s, m['class']);
-            if (m.color) s.style.fill = m.color;
-            if (!m.nosnap) {
-              from = snap_module.snap(from);
-              to = snap_module.snap(to);
-            }
-            from = transformation.valueToCoef(from) * angle;
-            to = transformation.valueToCoef(to) * angle;
-
-            drawSlice(from, to, inner_p, outer_p, outerSize, s);
-            this._markers.appendChild(s);
-          }
+              drawSlice(from, to, inner_p, outer_p, outerSize, s);
+              _markers.appendChild(s);
+            });
           /**
            * Is fired when markers are (re)drawn.
            * @event Circular#markersdrawn
@@ -690,6 +689,24 @@ export class Circular extends Widget {
 
         this.update('_dots', _dots);
       }),
+      defineRecalculation(['markers', 'markers_defaults'], function (
+        markers,
+        markers_defaults
+      ) {
+        let _markers = null;
+        const defaultMarkerDefaults = this.getDefault('markers_defaults');
+
+        if (Array.isArray(markers) && markers.length) {
+          _markers = markers.map((entry) =>
+            createInternalMarker(entry, markers_defaults, defaultMarkerDefaults)
+          );
+
+          if (_markers.includes(null))
+            _markers = _markers.filter((marker) => marker !== null);
+        }
+
+        this.update('_markers', _markers);
+      }),
     ];
   }
 
@@ -767,9 +784,6 @@ export class Circular extends Widget {
   set(key, value) {
     const O = this.options;
     switch (key) {
-      case 'markers_defaults':
-        value = Object.assign(O[key], value);
-        break;
       case 'value':
         if (value > O.max || value < O.min) warning(this.element);
         break;
