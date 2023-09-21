@@ -552,7 +552,7 @@ export class Circular extends Widget {
       defineRender(
         [
           'show_value',
-          'base',
+          '_coef_base',
           'angle',
           '_coef_ring',
           '_stroke_width',
@@ -562,7 +562,7 @@ export class Circular extends Widget {
         ],
         function (
           show_value,
-          base,
+          _coef_base,
           angle,
           _coef_ring,
           _stroke_width,
@@ -580,9 +580,7 @@ export class Circular extends Widget {
             const inner_p = inner - _stroke_width / 2 - margin;
 
             drawSlice(
-              transformation.valueToCoef(
-                snap_module.snap(transformation.clampValue(base))
-              ) * angle,
+              _coef_base * angle,
               _coef_ring * angle,
               inner_p,
               outer_p,
@@ -595,24 +593,8 @@ export class Circular extends Widget {
         }
       ),
       defineRender(
-        [
-          'show_base',
-          'size',
-          'base',
-          'margin',
-          '_stroke_width',
-          'thickness',
-          'angle',
-        ],
-        function (
-          show_base,
-          size,
-          base,
-          margin,
-          _stroke_width,
-          thickness,
-          angle
-        ) {
+        ['show_base', 'size', 'margin', '_stroke_width', 'thickness', 'angle'],
+        function (show_base, size, margin, _stroke_width, thickness, angle) {
           const _base = this._base;
 
           if (show_base) {
@@ -667,6 +649,16 @@ export class Circular extends Widget {
             snap_module.snap(transformation.clampValue(value_ring))
           );
           this.update('_coef_ring', value);
+        }
+      ),
+      defineRecalculation(
+        ['base', 'min', 'transformation', 'snap_module'],
+        function (base, min, transformation, snap_module) {
+          const value = base === false ? min : base;
+          const _coef_base = transformation.valueToCoef(
+            snap_module.snap(transformation.clampValue(value))
+          );
+          this.update('_coef_base', _coef_base);
         }
       ),
     ];
@@ -794,9 +786,6 @@ export class Circular extends Widget {
       case 'markers_defaults':
       case 'labels_defaults':
         value = Object.assign(O[key], value);
-        break;
-      case 'base':
-        if (value === false) value = O.min;
         break;
       case 'value':
         if (value > O.max || value < O.min) warning(this.element);
