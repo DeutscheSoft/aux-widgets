@@ -38,12 +38,6 @@ import {
   defineRecalculation,
 } from '../renderer.js';
 
-function interpretLabel(x) {
-  if (typeof x === 'object') return x;
-  if (typeof x === 'number') return { pos: x };
-  error('Unsupported label type ', x);
-}
-
 function createInternalLabel(label, labelDefaults, defaultLabelsDefaults) {
   const tmp =
     typeof label === 'object'
@@ -764,50 +758,6 @@ export class Circular extends Widget {
     const strokev = parseInt(getStyle(this._value, 'stroke-width')) || 0;
     this._stroke = Math.max(strokeb, strokev);
     return this._stroke;
-  }
-
-  /**
-   * Adds a label.
-   *
-   * @method Circular#addLabel
-   * @param {Object|Number} label - The label. Please refer to the `options`
-   *   to learn more about possible values.
-   * @returns {Object} label - The interpreted object to build the label from.
-   */
-  addLabel(label) {
-    const O = this.options;
-
-    if (!O.labels) {
-      O.labels = [];
-    }
-
-    label = interpretLabel(label);
-
-    if (label) {
-      O.labels.push(label);
-      this.invalidate('labels');
-      return label;
-    }
-  }
-
-  /**
-   * Removes a label.
-   *
-   * @method Circular#removeLabel
-   * @param {Object} label - The label object as returned from `addLabel`.
-   * @returns {Object} label - The removed label object.
-   */
-  removeLabel(label) {
-    const O = this.options;
-
-    if (!O.labels) return;
-
-    const i = O.labels.indexOf(label);
-
-    if (i === -1) return;
-
-    O.labels.splice(i);
-    this.invalidate('labels');
   }
 
   // GETTERS & SETTERS
