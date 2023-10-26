@@ -338,8 +338,8 @@ export class DragCapture extends Module {
   }
 
   destroy() {
-    super.destroy();
     this.cancelDrag();
+    super.destroy();
   }
 
   stopCapture(ev) {
