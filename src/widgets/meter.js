@@ -168,6 +168,34 @@ function drawGradient(element, O) {
             }
       );
 
+    const colors = keys.map((key) => gradient[key + '']);
+
+    const snapped =
+      segment !== 1
+        ? keys.map((value) => {
+            const snapppx = transformation.valueToPixel(value);
+            const basepx = transformation.valueToPixel(base);
+            const segmentpx =
+              (basepx + segment * Math.round((snapppx - basepx) / segment)) | 0;
+            return transformation.pixelToValue(segmentpx);
+          })
+        : keys;
+
+    for (let i = 0, m = snapped.length; i < m; ++i) {
+      if (i < m - 1) {
+        let neighbors = 0;
+        let j = i + 1;
+        while (snapped[j] === snapped[i]) {
+          j++;
+          neighbors++;
+        }
+        for (let n = 0; n < neighbors; ++n) {
+          snapped[i + n] -= (neighbors - n) * 1e-12;
+        }
+        i += neighbors;
+      }
+    }
+
     const vert = layout === 'left' || layout === 'right';
     const ctx = element.getContext('2d');
     const grd = ctx.createLinearGradient(
@@ -177,29 +205,12 @@ function drawGradient(element, O) {
       vert ? _height || 0 : 0
     );
 
-    let last;
-    keys.forEach((value) => {
-      const snapped = snap_module.snap(value);
-      let segmented = snapped;
-
-      if (segment !== 1) {
-        const snapppx = transformation.valueToPixel(snapped);
-        const basepx = transformation.valueToPixel(base);
-        const segmentpx =
-          (basepx + segment * Math.round((snapppx - basepx) / segment)) | 0;
-        segmented = transformation.pixelToValue(segmentpx);
-      }
-
-      while (segmented <= last) {
-        segmented += 1e-9;
-      }
-      last = segmented;
-
-      let pos = transformation.valueToCoef(segmented);
+    snapped.forEach((position, index) => {
+      let pos = transformation.valueToCoef(position);
       pos = Math.min(1, Math.max(0, pos));
       if (vert) pos = 1 - pos;
 
-      grd.addColorStop(pos, gradient[value + '']);
+      grd.addColorStop(pos, colors[index]);
     });
     ctx.fillStyle = grd;
     ctx.fillRect(0, 0, _width, _height);
