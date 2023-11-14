@@ -33,10 +33,9 @@ import { ScrollValue } from '../modules/scrollvalue.js';
 import { addClass, createID, applyAttribute } from '../utils/dom.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
-import { defineRender, defineRecalculation } from '../renderer.js';
+import { defineRender } from '../renderer.js';
 import { selectAriaAttribute } from '../utils/select_aria_attribute.js';
 import { mergeStaticEvents } from '../widget_helpers.js';
-import { applyLegacyUsersetEventsRanged } from '../utils/legacy_userset_events.js';
 
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -148,14 +147,6 @@ export class ValueButton extends Button {
           applyAttribute(_input, 'aria-labelledby', value);
         }
       ),
-      defineRecalculation(['value', 'transformation', 'snap_module'], function (
-        value,
-        transformation,
-        snap_module
-      ) {
-        const _value = snap_module.snap(transformation.clampValue(value));
-        this.update('_value', _value);
-      }),
     ];
   }
 
@@ -206,29 +197,16 @@ export class ValueButton extends Button {
     super.destroy();
   }
 
+  // GETTERS & SETTERS
   set(key, value) {
     switch (key) {
       case 'value':
         if (value > this.options.max || value < this.options.min)
           warning(this.element);
+        value = this.options.snap_module.snap(value);
         break;
     }
     return super.set(key, value);
-  }
-
-  userset(key, value) {
-    if (key === 'value') {
-      const { transformation, snap_module } = this.options;
-      return applyLegacyUsersetEventsRanged(
-        this,
-        transformation,
-        snap_module,
-        key,
-        value
-      );
-    } else {
-      return super.userset(key, value);
-    }
   }
 }
 
@@ -265,7 +243,7 @@ defineChildWidget(ValueButton, 'value', {
   create: Value,
   show: true,
   map_options: {
-    _value: 'value',
+    value: 'value',
   },
   default_options: {
     format: function (val) {
@@ -292,7 +270,7 @@ defineChildWidget(ValueButton, 'scale', {
   toggle_class: true,
   inherit_options: true,
   map_options: {
-    _value: 'bar',
+    value: 'bar',
   },
   blacklist_options: ['layout', 'set_ariavalue'],
   default_options: {
