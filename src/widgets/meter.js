@@ -155,48 +155,55 @@ function drawGradient(element, O) {
     ctx.fillRect(0, 0, _width, _height);
   } else if (typeof gradient === 'function') {
     gradient.call(this, element.getContext('2d'), O, element, _width, _height);
-  } else {
-    const keys = Object.keys(gradient)
-      .map((value) => parseFloat(value))
-      .sort(
-        reverse
-          ? function (a, b) {
-              return b - a;
-            }
-          : function (a, b) {
-              return a - b;
-            }
-      );
+  } else if (typeof gradient === 'object') {
+    // We first extract the gradient entries into an array
+    // with entries { color, value }
 
-    const colors = keys.map((key) => gradient[key + '']);
+    let entries = [];
 
-    const snapped =
-      segment !== 1
-        ? keys.map((value) => {
-            const snapppx = transformation.valueToPixel(value);
-            const basepx = transformation.valueToPixel(base);
-            const segmentpx =
-              (basepx + segment * Math.round((snapppx - basepx) / segment)) | 0;
-            return transformation.pixelToValue(segmentpx);
-          })
-        : keys;
+    const basePx = transformation.valueToPixel(base);
+    const vert = layout === 'left' || layout === 'right';
 
-    for (let i = 0, m = snapped.length; i < m; ++i) {
-      if (i < m - 1) {
-        let neighbors = 0;
-        let j = i + 1;
-        while (snapped[j] === snapped[i]) {
-          j++;
-          neighbors++;
-        }
-        for (let n = 0; n < neighbors; ++n) {
-          snapped[i + n] -= (neighbors - n) * 1e-12;
-        }
-        i += neighbors;
+    for (const entry in gradient) {
+      const value = parseFloat(entry);
+      const color = gradient[entry];
+
+      if (isNaN(value) || !isFinite(value))
+        throw new TypeError(`Malformed gradient entry '${entry}'.`);
+
+      let coef;
+
+      if (segment > 1) {
+        const valuePx = transformation.valueToPixel(snap_module.snap(value));
+        const segmentPx = Math.round(
+          basePx + segment * Math.round((valuePx - basePx) / segment)
+        );
+        coef = transformation.valueToCoef(
+          transformation.pixelToValue(segmentPx)
+        );
+      } else {
+        coef = transformation.valueToCoef(snap_module.snap(value));
       }
+
+      if (!(coef >= 0)) coef = 0;
+      else if (!(coef <= 1)) coef = 1;
+
+      entries.push({
+        value,
+        color,
+        coef: vert ? 1 - coef : coef,
+      });
     }
 
-    const vert = layout === 'left' || layout === 'right';
+    entries.sort(function (a, b) {
+      return a.value - b.value;
+    });
+
+    const length = entries.length;
+
+    if (length > 1 && entries[0].coef > entries[length - 1].coef)
+      entries = entries.reverse();
+
     const ctx = element.getContext('2d');
     const grd = ctx.createLinearGradient(
       0,
@@ -205,15 +212,16 @@ function drawGradient(element, O) {
       vert ? _height || 0 : 0
     );
 
-    snapped.forEach((position, index) => {
-      let pos = transformation.valueToCoef(position);
-      pos = Math.min(1, Math.max(0, pos));
-      if (vert) pos = 1 - pos;
-
-      grd.addColorStop(pos, colors[index]);
+    // Add all colors starting from the lowest coefficient
+    entries.forEach((entry) => {
+      const { coef, color } = entry;
+      grd.addColorStop(coef, color);
     });
+
     ctx.fillStyle = grd;
     ctx.fillRect(0, 0, _width, _height);
+  } else {
+    throw new TypeError('Unexpected gradient type.');
   }
 }
 
