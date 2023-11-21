@@ -95,8 +95,11 @@ function fillInterval(transformation, steps, i, from, to, min_gap, result) {
       x += step;
     } else {
       const nextValue = transformation.pixelToValue(lastPos + displayStep);
+      let diff = Math.ceil((nextValue - x) / step) * step;
 
-      x += Math.ceil((nextValue - x) / step) * step;
+      if (!diff) diff = step;
+
+      x += diff;
     }
   }
 
