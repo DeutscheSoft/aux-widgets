@@ -135,6 +135,19 @@ function subtractIntervals(a, b) {
   return ret;
 }
 
+function fromGradientObject(gradient) {
+  const entries = [];
+
+  for (const entry in gradient) {
+    const value = parseFloat(entry);
+    const color = gradient[entry];
+
+    entries.push({ value, color });
+  }
+
+  return entries;
+}
+
 function drawGradient(element, O) {
   const {
     gradient,
@@ -156,18 +169,13 @@ function drawGradient(element, O) {
   } else if (typeof gradient === 'function') {
     gradient.call(this, element.getContext('2d'), O, element, _width, _height);
   } else if (typeof gradient === 'object') {
-    // We first extract the gradient entries into an array
-    // with entries { color, value }
-
-    let entries = [];
-
     const basePx = transformation.valueToPixel(base);
     const vert = layout === 'left' || layout === 'right';
 
-    for (const entry in gradient) {
-      const value = parseFloat(entry);
-      const color = gradient[entry];
-
+    let entries = (Array.isArray(gradient)
+      ? gradient
+      : fromGradientObject(gradient)
+    ).map(({ color, value }) => {
       if (isNaN(value) || !isFinite(value))
         throw new TypeError(`Malformed gradient entry '${entry}'.`);
 
@@ -188,12 +196,12 @@ function drawGradient(element, O) {
       if (!(coef >= 0)) coef = 0;
       else if (!(coef <= 1)) coef = 1;
 
-      entries.push({
+      return {
         value,
         color,
         coef: vert ? 1 - coef : coef,
-      });
-    }
+      };
+    });
 
     entries.sort(function (a, b) {
       return a.value - b.value;
@@ -213,8 +221,7 @@ function drawGradient(element, O) {
     );
 
     // Add all colors starting from the lowest coefficient
-    entries.forEach((entry) => {
-      const { coef, color } = entry;
+    entries.forEach(({ coef, color }) => {
       grd.addColorStop(coef, color);
     });
 
@@ -273,11 +280,11 @@ function drawGradient(element, O) {
  * @property {String|Boolean} [options.foreground] - Color to draw the overlay. Has to be set
  *   via option for performance reasons. Use pure opaque color. If opacity is needed, set via CSS
  *   on `.aux-meter > .aux-bar > .aux-mask`.
- * @property {Object|Boolean|Function} [options.gradient=false] - The color gradient of the meter.
+ * @property {Object[]|Object|Boolean|Function} [options.gradient=false] - The color gradient of the meter.
  *   Set to `false` to use the `background` option. Alternatively provide a callback to draw on
  *   the canvas manually. It receives the canvas's context, the widgets options, the canvas element
  *   and its width and height. Alternatively, provide an object with numeric values as key and the
- *   color as value.
+ *   color as value, or an array of objects with 'value' and 'color' entry.
  * @property {String|Boolean} [options.background] - Background color to be used if no gradient is set.
  */
 
