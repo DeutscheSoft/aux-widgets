@@ -263,6 +263,14 @@ export class Base {
     if (element !== this.__event_target) addNativeEvents.call(this, element);
   }
 
+  getObjectEntry(optionName, value, key) {
+    if (value && key in value) return value[key];
+
+    const defaultValue = this.getDefault(optionName);
+
+    return defaultValue ? defaultValue[key] : void 0;
+  }
+
   initialize(options) {
     this.__events = {};
     this.__event_target = null;
@@ -276,20 +284,7 @@ export class Base {
         if (key.startsWith('on')) {
           this.on(key.substring(2).toLowerCase(), options[key]);
         } else {
-          const defaultValue = this.options[key];
-
-          if (
-            typeof value === 'object' &&
-            typeof defaultValue === 'object' &&
-            value &&
-            defaultValue &&
-            Object.getPrototypeOf(Object.getPrototypeOf(value)) === null &&
-            Object.getPrototypeOf(Object.getPrototypeOf(defaultValue)) === null
-          ) {
-            this.options[key] = Object.assign({}, defaultValue, value);
-          } else {
-            this.options[key] = value;
-          }
+          this.options[key] = value;
         }
       }
 

@@ -61,7 +61,7 @@ class KnobCircular extends Circular {
       hand: { width: 1, length: 10, margin: 25 },
       margin: 13,
       thickness: 6,
-      dots_defaults: { length: 6, margin: 13.5, width: 1 },
+      dots_defaults: { length: 6, margin: 13.5, width: 1, foo: 'hello' },
       markers_defaults: { thickness: 2, margin: 11 },
       labels_defaults: {
         margin: 12,
@@ -200,6 +200,17 @@ export class Knob extends Widget {
       defineRender('size', function (size) {
         this.svg.setAttribute('viewBox', formatViewbox(size, size));
       }),
+      defineRender('preset', function (preset) {
+        const { element, _lastPreset } = this;
+
+        if (_lastPreset !== null) {
+          removeClass(element, 'aux-preset-' + _lastPreset);
+        }
+
+        if (preset) addClass(element, 'aux-preset-' + preset);
+
+        this._lastPreset = preset || null;
+      }),
     ];
   }
 
@@ -261,6 +272,7 @@ export class Knob extends Widget {
     this.set('base', options.base);
     if (options.reset === void 0) options.reset = options.value;
     this.addChild(this.circular);
+    this._lastPreset = null;
   }
 
   getFocusTargets() {

@@ -66,9 +66,8 @@ export function defineRange(widget, args, name) {
   } else if (args instanceof Range) {
     range = args;
   } else {
-    const currentRange = widget.get(name);
-    if (name && currentRange && typeof currentRange === 'object')
-      args = Object.assign({}, currentRange, args);
+    const currentRange = widget.getDefault(name);
+    args = Object.assign({}, currentRange || {}, args || {});
     range = new Range(args);
   }
   if (name) {

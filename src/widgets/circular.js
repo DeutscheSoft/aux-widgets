@@ -22,6 +22,7 @@ import { error } from '../utils/log.js';
 import { empty, addClass, getStyle } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
 import { warning } from '../utils/warning.js';
+import { mergeObjects } from '../utils/merge_objects.js';
 import {
   rangedOptionsDefaults,
   rangedOptionsTypes,
@@ -38,7 +39,7 @@ import {
   defineRecalculation,
 } from '../renderer.js';
 
-function createInternalDot(dot, dotDefaults, defaultDotDefaults) {
+function createInternalDot(dot, dotDefaults) {
   const tmp =
     typeof dot === 'object'
       ? dot
@@ -48,26 +49,22 @@ function createInternalDot(dot, dotDefaults, defaultDotDefaults) {
 
   if (tmp === null) return null;
 
-  const internalDot = Object.assign({}, defaultDotDefaults, dotDefaults, tmp);
-
-  return internalDot;
+  return mergeObjects(dotDefaults, tmp);
 }
 
-function createInternalLabel(label, labelDefaults, defaultLabelDefaults) {
-  const internalLabel = createInternalDot(
-    label,
-    labelDefaults,
-    defaultLabelDefaults
-  );
+function createInternalLabel(label, labelDefaults) {
+  const internalLabel = createInternalDot(label, labelDefaults);
 
-  if (internalLabel.label === void 0)
-    internalLabel.label = internalLabel.format(internalLabel.pos);
-
-  return internalLabel;
+  if (internalLabel && internalLabel.label === void 0) {
+    const label = internalLabel.format(internalLabel.pos);
+    return { label, ...internalLabel };
+  } else {
+    return internalLabel;
+  }
 }
 
-function createInternalMarker(marker, markerDefaults, defaultMarkerDefaults) {
-  return createInternalDot(marker, markerDefaults, defaultMarkerDefaults);
+function createInternalMarker(marker, markerDefaults) {
+  return createInternalDot(marker, markerDefaults);
 }
 
 const __rad = Math.PI / 180;
@@ -249,6 +246,8 @@ export class Circular extends Widget {
         markers: 'array',
         labels_defaults: 'object',
         labels: 'array',
+        presets: 'object',
+        preset: 'string',
       },
     ];
   }
@@ -304,6 +303,33 @@ export class Circular extends Widget {
         labels: [],
       },
     ];
+  }
+
+  getPresetOption(presets, presetName, optionName, value) {
+    const defaultValue = this.getDefault(optionName);
+    if (value !== defaultValue) {
+      return value;
+    }
+
+    if (presets && presetName) {
+      const preset = presets[presetName];
+
+      if (preset && optionName in preset) return preset[optionName];
+    }
+
+    return value;
+  }
+
+  getPresetOptionMerged(presets, presetName, optionName, value) {
+    const defaultValue = this.getDefault(optionName);
+
+    const preset = presets && presetName ? presets[presetName] : null;
+
+    return mergeObjects(
+      defaultValue,
+      preset ? preset[optionName] : null,
+      defaultValue !== value ? value : null
+    );
   }
 
   static get renderers() {
@@ -380,6 +406,8 @@ export class Circular extends Widget {
           'angle',
           'start',
           'size',
+          'presets',
+          'preset',
         ],
         function (
           show_labels,
@@ -388,7 +416,9 @@ export class Circular extends Widget {
           snap_module,
           angle,
           start,
-          size
+          size,
+          presets,
+          preset
         ) {
           // depends on size, _labels, label, start
           const _labels = this._labels;
@@ -396,6 +426,13 @@ export class Circular extends Widget {
           if (!_labels) return;
 
           empty(this._labels);
+
+          show_labels = this.getPresetOption(
+            presets,
+            preset,
+            'show_labels',
+            show_labels
+          );
 
           if (!show_labels || !labels || !labels.length) return;
 
@@ -552,6 +589,8 @@ export class Circular extends Widget {
           'thickness',
           'margin',
           'size',
+          'presets',
+          'preset',
         ],
         function (
           show_value,
@@ -561,10 +600,20 @@ export class Circular extends Widget {
           _stroke_width,
           thickness,
           margin,
-          size
+          size,
+          presets,
+          preset
         ) {
           const _value = this._value;
           const { snap_module, transformation } = this.options;
+
+          margin = this.getPresetOption(presets, preset, 'margin', margin);
+          thickness = this.getPresetOption(
+            presets,
+            preset,
+            'thickness',
+            thickness
+          );
 
           if (show_value) {
             const outerSize = size / 2;
@@ -586,9 +635,35 @@ export class Circular extends Widget {
         }
       ),
       defineRender(
-        ['show_base', 'size', 'margin', '_stroke_width', 'thickness', 'angle'],
-        function (show_base, size, margin, _stroke_width, thickness, angle) {
+        [
+          'show_base',
+          'size',
+          'margin',
+          '_stroke_width',
+          'thickness',
+          'angle',
+          'presets',
+          'preset',
+        ],
+        function (
+          show_base,
+          size,
+          margin,
+          _stroke_width,
+          thickness,
+          angle,
+          presets,
+          preset
+        ) {
           const _base = this._base;
+
+          margin = this.getPresetOption(presets, preset, 'margin', margin);
+          thickness = this.getPresetOption(
+            presets,
+            preset,
+            'thickness',
+            thickness
+          );
 
           if (show_base) {
             const outerSize = size / 2;
@@ -602,22 +677,21 @@ export class Circular extends Widget {
           }
         }
       ),
-      defineRender(['size', '_coef_hand', 'hand', 'angle'], function (
-        size,
-        _coef_hand,
-        hand,
-        angle
-      ) {
-        const _hand = this._hand;
-        _hand.setAttribute('x', size - hand.length - hand.margin);
-        _hand.setAttribute('y', (size - hand.width) / 2.0);
-        _hand.setAttribute('width', hand.length);
-        _hand.setAttribute('height', hand.width);
-        _hand.setAttribute(
-          'transform',
-          formatRotate(_coef_hand * angle, size / 2, size / 2)
-        );
-      }),
+      defineRender(
+        ['size', '_coef_hand', 'hand', 'angle', 'presets', 'preset'],
+        function (size, _coef_hand, hand, angle, presets, preset) {
+          const _hand = this._hand;
+          hand = this.getPresetOptionMerged(presets, preset, 'hand', hand);
+          _hand.setAttribute('x', size - hand.length - hand.margin);
+          _hand.setAttribute('y', (size - hand.width) / 2.0);
+          _hand.setAttribute('width', hand.length);
+          _hand.setAttribute('height', hand.width);
+          _hand.setAttribute(
+            'transform',
+            formatRotate(_coef_hand * angle, size / 2, size / 2)
+          );
+        }
+      ),
       defineRecalculation(['value', 'transformation', 'snap_module'], function (
         value,
         transformation,
@@ -654,59 +728,77 @@ export class Circular extends Widget {
           this.update('_coef_base', _coef_base);
         }
       ),
-      defineRecalculation(['labels', 'labels_defaults'], function (
-        labels,
-        labels_defaults
-      ) {
-        let _labels = null;
-        const defaultLabelsDefaults = this.getDefault('labels_defaults');
+      defineRecalculation(
+        ['labels', 'labels_defaults', 'presets', 'preset'],
+        function (labels, labels_defaults, presets, preset) {
+          let _labels = null;
 
-        if (Array.isArray(labels) && labels.length) {
-          _labels = labels.map((entry) =>
-            createInternalLabel(entry, labels_defaults, defaultLabelsDefaults)
+          labels_defaults = this.getPresetOptionMerged(
+            presets,
+            preset,
+            'labels_defaults',
+            labels_defaults
           );
 
-          if (_labels.includes(null))
-            _labels = _labels.filter((label) => label !== null);
+          if (Array.isArray(labels) && labels.length) {
+            _labels = labels.map((entry) =>
+              createInternalLabel(entry, labels_defaults)
+            );
+
+            if (_labels.includes(null))
+              _labels = _labels.filter((label) => label !== null);
+          }
+
+          this.update('_labels', _labels);
         }
-
-        this.update('_labels', _labels);
-      }),
-      defineRecalculation(['dots', 'dots_defaults'], function (
-        dots,
-        dots_defaults
-      ) {
-        let _dots = null;
-        const defaultDotDefaults = this.getDefault('dots_defaults');
-
-        if (Array.isArray(dots) && dots.length) {
-          _dots = dots.map((entry) =>
-            createInternalDot(entry, dots_defaults, defaultDotDefaults)
+      ),
+      defineRecalculation(
+        ['dots', 'dots_defaults', 'presets', 'preset'],
+        function (dots, dots_defaults, presets, preset) {
+          let _dots = null;
+          dots_defaults = this.getPresetOptionMerged(
+            presets,
+            preset,
+            'dots_defaults',
+            dots_defaults
           );
 
-          if (_dots.includes(null)) _dots = _dots.filter((dot) => dot !== null);
+          if (Array.isArray(dots) && dots.length) {
+            _dots = dots.map((entry) =>
+              createInternalDot(entry, dots_defaults)
+            );
+
+            if (_dots.includes(null))
+              _dots = _dots.filter((dot) => dot !== null);
+          }
+
+          this.update('_dots', _dots);
         }
+      ),
+      defineRecalculation(
+        ['markers', 'markers_defaults', 'presets', 'preset'],
+        function (markers, markers_defaults, presets, preset) {
+          let _markers = null;
 
-        this.update('_dots', _dots);
-      }),
-      defineRecalculation(['markers', 'markers_defaults'], function (
-        markers,
-        markers_defaults
-      ) {
-        let _markers = null;
-        const defaultMarkerDefaults = this.getDefault('markers_defaults');
-
-        if (Array.isArray(markers) && markers.length) {
-          _markers = markers.map((entry) =>
-            createInternalMarker(entry, markers_defaults, defaultMarkerDefaults)
+          markers_defaults = this.getPresetOptionMerged(
+            presets,
+            preset,
+            'markers_defaults',
+            markers_defaults
           );
 
-          if (_markers.includes(null))
-            _markers = _markers.filter((marker) => marker !== null);
-        }
+          if (Array.isArray(markers) && markers.length) {
+            _markers = markers.map((entry) =>
+              createInternalMarker(entry, markers_defaults)
+            );
 
-        this.update('_markers', _markers);
-      }),
+            if (_markers.includes(null))
+              _markers = _markers.filter((marker) => marker !== null);
+          }
+
+          this.update('_markers', _markers);
+        }
+      ),
     ];
   }
 

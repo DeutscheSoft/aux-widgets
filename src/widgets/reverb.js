@@ -51,6 +51,11 @@ function setReflections(reflections) {
     // reflections already is an array
     R = reflections;
   } else if (reflections) {
+    reflections = Object.assign(
+      {},
+      this.getDefault('reflections'),
+      reflections
+    );
     // build reflections array from options object
     for (let i = 0, m = reflections.amount; i < m; ++i) {
       if (i) {

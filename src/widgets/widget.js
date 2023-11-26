@@ -154,28 +154,6 @@ function setInteractionCount(widget, value) {
   }
 }
 
-function setPreset(preset) {
-  const O = this.options;
-  let key, val;
-  if (this._last_preset) {
-    this.removeClass('aux-preset-' + this._last_preset);
-  }
-  this.addClass('aux-preset-' + preset);
-  this._last_preset = preset;
-
-  const preset_options = O.presets[preset] || {};
-  this._presetting = true;
-  for (key in preset_options) {
-    if (!Object.prototype.hasOwnProperty.call(this._preset_origins, key))
-      this._preset_origins[key] = O[key];
-    if (Object.prototype.hasOwnProperty.call(preset_options, key))
-      val = preset_options[key];
-    else val = this._preset_origins[key];
-    this.set(key, val);
-  }
-  this._presetting = false;
-}
-
 function onFocusKeyDown(e) {
   if (KEYS.indexOf(e.code) < 0) return;
   if (e.preventDefault) e.preventDefault();
@@ -296,8 +274,6 @@ export class Widget extends Base {
         interacting: 'boolean',
         notransitions: 'boolean',
         notransitions_duration: 'number',
-        presets: 'object',
-        preset: 'string',
         title: 'string',
         tabindex: 'number|boolean',
         role: 'string',
@@ -319,7 +295,6 @@ export class Widget extends Base {
       dblclick: 0,
       interacting: false,
       notransitions_duration: 500,
-      presets: {},
       tabindex: false,
       role: 'none',
       aria_targets: false,
@@ -347,20 +322,6 @@ export class Widget extends Base {
       initialized: function () {
         const v = this.options.dblclick;
         if (v > 0) this.set('dblclick', v);
-      },
-      set_preset: function (v) {
-        setPreset.call(this, v);
-      },
-      set_presets: function (v) {
-        setPreset.call(this, this.options.preset);
-      },
-      set: function (key, val) {
-        if (
-          !this._presetting &&
-          Object.prototype.hasOwnProperty.call(this._preset_origins, key)
-        ) {
-          this._preset_origins[key] = val;
-        }
       },
       set_visible: function (val) {
         if (val === true) {
@@ -556,9 +517,6 @@ export class Widget extends Base {
     this.children = null;
     this.draw_queue = null;
     this._creation_time = domScheduler.now();
-    this._preset_origins = {};
-    this._last_preset = null;
-    this._presetting = false;
     this._subscriptions = initSubscriptions();
     this._onfocuskeydown = null;
     this._drawn = false;
@@ -675,10 +633,6 @@ export class Widget extends Base {
   }
 
   draw(O, element) {
-    if (O.preset) {
-      this.set('preset', O.preset);
-    }
-
     let E;
 
     const notransitions = O.notransitions;

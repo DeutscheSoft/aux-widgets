@@ -213,13 +213,6 @@ export class Value extends Widget {
       type: 'text',
       editmode: 'onenter',
       autocomplete: false,
-      presets: {
-        string: {
-          format: (v) => v + '',
-          set: (v) => v + '',
-          value: '',
-        },
-      },
       tab_to_set: false,
       role: 'textbox',
     };
