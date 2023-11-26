@@ -135,6 +135,19 @@ function subtractIntervals(a, b) {
   return ret;
 }
 
+function fromGradientObject(gradient) {
+  const entries = [];
+
+  for (const entry in gradient) {
+    const value = parseFloat(entry);
+    const color = gradient[entry];
+
+    entries.push({ value, color });
+  }
+
+  return entries;
+}
+
 function drawGradient(element, O) {
   const {
     gradient,
@@ -155,20 +168,50 @@ function drawGradient(element, O) {
     ctx.fillRect(0, 0, _width, _height);
   } else if (typeof gradient === 'function') {
     gradient.call(this, element.getContext('2d'), O, element, _width, _height);
-  } else {
-    const keys = Object.keys(gradient)
-      .map((value) => parseFloat(value))
-      .sort(
-        reverse
-          ? function (a, b) {
-              return b - a;
-            }
-          : function (a, b) {
-              return a - b;
-            }
-      );
-
+  } else if (typeof gradient === 'object') {
+    const basePx = transformation.valueToPixel(base);
     const vert = layout === 'left' || layout === 'right';
+
+    let entries = (Array.isArray(gradient)
+      ? gradient
+      : fromGradientObject(gradient)
+    ).map(({ color, value }) => {
+      if (isNaN(value) || !isFinite(value))
+        throw new TypeError(`Malformed gradient entry '${entry}'.`);
+
+      let coef;
+
+      if (segment > 1) {
+        const valuePx = transformation.valueToPixel(snap_module.snap(value));
+        const segmentPx = Math.round(
+          basePx + segment * Math.round((valuePx - basePx) / segment)
+        );
+        coef = transformation.valueToCoef(
+          transformation.pixelToValue(segmentPx)
+        );
+      } else {
+        coef = transformation.valueToCoef(snap_module.snap(value));
+      }
+
+      if (!(coef >= 0)) coef = 0;
+      else if (!(coef <= 1)) coef = 1;
+
+      return {
+        value,
+        color,
+        coef: vert ? 1 - coef : coef,
+      };
+    });
+
+    entries.sort(function (a, b) {
+      return a.value - b.value;
+    });
+
+    const length = entries.length;
+
+    if (length > 1 && entries[0].coef > entries[length - 1].coef)
+      entries = entries.reverse();
+
     const ctx = element.getContext('2d');
     const grd = ctx.createLinearGradient(
       0,
@@ -177,32 +220,15 @@ function drawGradient(element, O) {
       vert ? _height || 0 : 0
     );
 
-    let last;
-    keys.forEach((value) => {
-      const snapped = snap_module.snap(value);
-      let segmented = snapped;
-
-      if (segment !== 1) {
-        const snapppx = transformation.valueToPixel(snapped);
-        const basepx = transformation.valueToPixel(base);
-        const segmentpx =
-          (basepx + segment * Math.round((snapppx - basepx) / segment)) | 0;
-        segmented = transformation.pixelToValue(segmentpx);
-      }
-
-      while (segmented <= last) {
-        segmented += 1e-9;
-      }
-      last = segmented;
-
-      let pos = transformation.valueToCoef(segmented);
-      pos = Math.min(1, Math.max(0, pos));
-      if (vert) pos = 1 - pos;
-
-      grd.addColorStop(pos, gradient[value + '']);
+    // Add all colors starting from the lowest coefficient
+    entries.forEach(({ coef, color }) => {
+      grd.addColorStop(coef, color);
     });
+
     ctx.fillStyle = grd;
     ctx.fillRect(0, 0, _width, _height);
+  } else {
+    throw new TypeError('Unexpected gradient type.');
   }
 }
 
@@ -254,11 +280,11 @@ function drawGradient(element, O) {
  * @property {String|Boolean} [options.foreground] - Color to draw the overlay. Has to be set
  *   via option for performance reasons. Use pure opaque color. If opacity is needed, set via CSS
  *   on `.aux-meter > .aux-bar > .aux-mask`.
- * @property {Object|Boolean|Function} [options.gradient=false] - The color gradient of the meter.
+ * @property {Object[]|Object|Boolean|Function} [options.gradient=false] - The color gradient of the meter.
  *   Set to `false` to use the `background` option. Alternatively provide a callback to draw on
  *   the canvas manually. It receives the canvas's context, the widgets options, the canvas element
  *   and its width and height. Alternatively, provide an object with numeric values as key and the
- *   color as value.
+ *   color as value, or an array of objects with 'value' and 'color' entry.
  * @property {String|Boolean} [options.background] - Background color to be used if no gradient is set.
  */
 
