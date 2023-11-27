@@ -681,6 +681,11 @@ export class Circular extends Widget {
         ['size', '_coef_hand', 'hand', 'angle', 'presets', 'preset'],
         function (size, _coef_hand, hand, angle, presets, preset) {
           const _hand = this._hand;
+
+          const hand_angle = _coef_hand * angle;
+
+          if (isNaN(hand_angle) || !isFinite(hand_angle)) return;
+
           hand = this.getPresetOptionMerged(presets, preset, 'hand', hand);
           _hand.setAttribute('x', size - hand.length - hand.margin);
           _hand.setAttribute('y', (size - hand.width) / 2.0);
@@ -688,7 +693,7 @@ export class Circular extends Widget {
           _hand.setAttribute('height', hand.width);
           _hand.setAttribute(
             'transform',
-            formatRotate(_coef_hand * angle, size / 2, size / 2)
+            formatRotate(hand_angle, size / 2, size / 2)
           );
         }
       ),
