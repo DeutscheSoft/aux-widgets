@@ -18,6 +18,7 @@
  */
 
 import { Range } from '../modules/range.js';
+import { mergeObjects } from './merge_objects.js';
 
 /**
  * Add a new {@link Range} to the given widget. If <code>name</code> is set and
@@ -66,9 +67,8 @@ export function defineRange(widget, args, name) {
   } else if (args instanceof Range) {
     range = args;
   } else {
-    const currentRange = widget.getDefault(name);
-    args = Object.assign({}, currentRange || {}, args || {});
-    range = new Range(args);
+    const defaultRange = widget.getDefault(name);
+    range = new Range(mergeObjects(defaultRange, args));
   }
   if (name) {
     widget.set(name, range);
