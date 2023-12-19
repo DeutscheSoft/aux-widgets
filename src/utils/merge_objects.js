@@ -1,3 +1,5 @@
+import { objectShadows } from './compare_objects.js';
+
 function isNonEmptyObject(o) {
   if (o && typeof o === 'object')
     for (const key in o) if (Object.hasOwn(o, key)) return true;
@@ -35,11 +37,17 @@ export function mergeObjects(...args) {
   let first = 0;
   let last = length - 1;
 
-  while (first < last && nonEmptyArgs[last] === nonEmptyArgs[last - 1]) last--;
   while (
     first < last &&
-    (nonEmptyArgs[first] === nonEmptyArgs[last] ||
-      nonEmptyArgs[first] === nonEmptyArgs[first + 1])
+    objectShadows(nonEmptyArgs[last - 1], nonEmptyArgs[last])
+  ) {
+    nonEmptyArgs[last - 1] = nonEmptyArgs[last];
+    last--;
+  }
+
+  while (
+    first + 1 < last &&
+    objectShadows(nonEmptyArgs[first], nonEmptyArgs[last])
   )
     first++;
 

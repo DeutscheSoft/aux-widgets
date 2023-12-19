@@ -32,5 +32,7 @@ describe('merge_objects', () => {
     assert(mergeObjects(null, foo, null) === foo);
     assertEqual(mergeObjects(null, foo, null, bar, null), foobar);
     assert(mergeObjects(foo, foo, foo, foo, null) === foo);
+    // check that objects which are shadowed by later arguments are ignored
+    assert(mergeObjects({ ...foo }, null, foo, null) === foo);
   });
 });

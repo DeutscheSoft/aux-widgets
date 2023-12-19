@@ -1,6 +1,6 @@
 import benchmarkify from 'benchmarkify';
 
-const fileNames = ['array_diff', 'merge_objects'];
+const fileNames = ['array_diff', 'merge_objects', 'compare_objects'];
 
 async function run() {
   const suiteFactories = await Promise.all(
