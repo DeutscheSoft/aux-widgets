@@ -271,6 +271,7 @@ export class DragValue extends DragCapture {
       set_state: startDrag,
       set_dragging: function () {
         domScheduler.schedule(MASK_RENDER, () => {
+          if (this.isDestructed()) return;
           const O = this.options;
           const node = O.classes || O.node;
           const dragging = O.dragging;
