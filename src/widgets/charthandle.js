@@ -1061,13 +1061,6 @@ export class ChartHandle extends Widget {
           this.set('_formatted_label', result);
         }
       ),
-      defineRender(['show_handle', 'mode'], function (show_handle, mode) {
-        if (!show_handle) {
-          removeHandle.call(this);
-        } else {
-          createHandle.call(this, mode);
-        }
-      }),
       defineRender(['_formatted_label'], function (_formatted_label) {
         if (!this._label !== !_formatted_label) {
           if (_formatted_label) {
