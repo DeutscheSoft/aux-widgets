@@ -1047,6 +1047,7 @@ export class ChartHandle extends Widget {
         _handle_position,
         z_handle
       ) {
+        if (!_handle_position) return;
         redrawZHandle.call(this, this.options, _handle_position);
       }),
       defineRecalculation(
