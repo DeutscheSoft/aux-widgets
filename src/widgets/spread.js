@@ -60,7 +60,7 @@ function vert(layout) {
 }
 
 function dblClick() {
-  this.userset('value', this.options.reset);
+  this.reset();
   /**
    * Is fired when the handle receives a double click.
    *
@@ -137,6 +137,7 @@ export class Spread extends Widget {
         gap_dots: 'number',
         gap_labels: 'number',
         show_labels: 'boolean',
+        show_values: 'boolean',
         labels: 'function',
         layout: 'string',
         direction: 'int',
@@ -159,6 +160,7 @@ export class Spread extends Widget {
         gap_dots: 3,
         gap_labels: 40,
         show_labels: true,
+        show_values: false,
         labels: function (val) {
           return val.toFixed(2);
         },
@@ -409,6 +411,7 @@ defineChildWidget(Spread, 'label', {
 defineChildWidget(Spread, 'valuelower', {
   create: Value,
   show: false,
+  option: 'show_values',
   userset_delegate: true,
   map_options: {
     lower: 'value',
@@ -424,6 +427,7 @@ defineChildWidget(Spread, 'valuelower', {
 defineChildWidget(Spread, 'valueupper', {
   create: Value,
   show: false,
+  option: 'show_values',
   userset_delegate: true,
   map_options: {
     upper: 'value',
