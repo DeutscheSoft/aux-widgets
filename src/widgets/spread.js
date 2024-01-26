@@ -412,13 +412,17 @@ defineChildWidget(Spread, 'valuelower', {
   create: Value,
   show: false,
   option: 'show_values',
-  userset_delegate: true,
   map_options: {
     lower: 'value',
   },
   toggle_class: true,
   default_options: {
     class: 'aux-valuelower aux-value',
+  },
+  static_events: {
+    userset: function (key, value) {
+      if (key === 'value') this.parent.userset('lower', value);
+    },
   },
 });
 /**
@@ -428,13 +432,17 @@ defineChildWidget(Spread, 'valueupper', {
   create: Value,
   show: false,
   option: 'show_values',
-  userset_delegate: true,
   map_options: {
     upper: 'value',
   },
   toggle_class: true,
   default_options: {
     class: 'aux-valueupper aux-value',
+  },
+  static_events: {
+    userset: function (key, value) {
+      if (key === 'value') this.parent.userset('upper', value);
+    },
   },
 });
 
