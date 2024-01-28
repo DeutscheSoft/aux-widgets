@@ -420,7 +420,7 @@ defineChildWidget(Spread, 'valuelower', {
   },
   static_events: {
     userset: function (key, value) {
-      if (key === 'value') this.parent.userset('lower', value);
+      if (key === 'value') return this.parent.userset('lower', value);
     },
   },
 });
@@ -440,7 +440,7 @@ defineChildWidget(Spread, 'valueupper', {
   },
   static_events: {
     userset: function (key, value) {
-      if (key === 'value') this.parent.userset('upper', value);
+      if (key === 'value') return this.parent.userset('upper', value);
     },
   },
 });
