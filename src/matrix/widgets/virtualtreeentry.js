@@ -105,6 +105,8 @@ export class VirtualTreeEntry extends VirtualTreeEntryBase {
       icon: 'string|boolean',
       odd: 'boolean',
       group: 'boolean',
+      connected: 'boolean',
+      hovered: 'boolean',
     };
   }
 
@@ -120,6 +122,8 @@ export class VirtualTreeEntry extends VirtualTreeEntryBase {
       odd: false,
       group: false,
       role: 'treeitem',
+      connected: false,
+      hovered: false,
     };
   }
 
@@ -153,6 +157,12 @@ export class VirtualTreeEntry extends VirtualTreeEntryBase {
       }),
       defineRender('group', function (group) {
         toggleClass(this.element, 'aux-group', group);
+      }),
+      defineRender('connected', function (connected) {
+        toggleClass(this.element, 'aux-connected', connected);
+      }),
+      defineRender('hovered', function (hovered) {
+        toggleClass(this.element, 'aux-hovered', hovered);
       }),
       defineMeasure(
         ['collapsed', 'icon_collapsed', 'icon_uncollapsed'],

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>AUX Matrix Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link href="styles.css" rel="stylesheet" />
+    <script type="text/javascript" src="script.js"></script>
+
+    <script type="module" src="../../../index.js"></script>
+    <script type="module" src="../../../components.js"></script>
+
+    <link rel="stylesheet" href="../../../../styles/default.css" />
+
+    <script type="module">
+      import { MatrixData } from '../../models/matrix.js';
+
+      const sort = (a, b) => {
+        const la = a.id;
+        const lb = b.id;
+        if (la === lb) return 0;
+        return la > lb ? 1 : -1;
+      };
+      window.matrix = new MatrixData();
+      const ports = ['L', 'C', 'R', "L'", "R'", 'LF'];
+      const outputs = matrix.addGroup({ label: 'Outputs', icon: 'speaker' });
+      for (let i = 0; i < 100; i++) {
+        const group = outputs.addGroup({
+          label: 'Output #' + (i + 1),
+          icon: 'mc5_1',
+        });
+        for (let j = 0; j < 6; j++) {
+          const port = group.addPort({
+            label: 'Channel ' + ports[j],
+            icon: 'disconnected',
+          });
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const aux_matrix = document.querySelector('aux-matrix');
+        aux_matrix.sources = matrix.createVirtualTreeDataView(0, null, sort);
+        aux_matrix.sinks = matrix.createVirtualTreeDataView(0, null, sort);
+        aux_matrix.auxWidget.on('toggleConnection', (port1, port2) => {
+          console.log('wants to toggleConnection', port1, port2);
+          const connection = matrix.getConnection(port1, port2);
+          if (connection) {
+            matrix.deleteConnection(connection);
+          } else {
+            matrix.connect(port1, port2);
+          }
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <aux-root>
+      <aux-matrix></aux-matrix>
+    </aux-root>
+  </body>
+</html>

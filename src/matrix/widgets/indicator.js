@@ -22,6 +22,27 @@ import { addClass, toggleClass } from './../../utils/dom.js';
 import { Button } from './../../widgets/button.js';
 import { defineRender } from '../../renderer.js';
 
+function pointerEnter(e) {
+  this.sink.update('hovered', true);
+  this.source.update('hovered', true);
+  this.parent.parent.emit('indicatorEnter', {
+    sink: this.sink,
+    source: this.source,
+    event: e,
+    indicator: this,
+  });
+}
+function pointerLeave(e) {
+  this.sink.update('hovered', false);
+  this.source.update('hovered', false);
+  this.parent.parent.emit('indicatorLeave', {
+    sink: this.sink,
+    source: this.source,
+    event: e,
+    indicator: this,
+  });
+}
+
 /**
  * Indicator is a button element inside the {@link Indicators} widget
  * for the {@link Matrix}. All properties are reflected as class onto
@@ -50,6 +71,13 @@ export class Indicator extends Button {
       sourceisgroup: 'boolean',
       sinkisgroup: 'boolean',
       isgroup: 'boolean',
+    };
+  }
+
+  static get static_events() {
+    return {
+      pointerleave: pointerLeave,
+      pointerenter: pointerEnter,
     };
   }
 
