@@ -23,8 +23,8 @@ import { Button } from './../../widgets/button.js';
 import { defineRender } from '../../renderer.js';
 
 function pointerEnter(e) {
-  this.sink.update('hovered', true);
-  this.source.update('hovered', true);
+  this.sink.set('hovered', true);
+  this.source.set('hovered', true);
   this.parent.parent.emit('indicatorEnter', {
     sink: this.sink,
     source: this.source,
@@ -33,8 +33,8 @@ function pointerEnter(e) {
   });
 }
 function pointerLeave(e) {
-  this.sink.update('hovered', false);
-  this.source.update('hovered', false);
+  this.sink.set('hovered', false);
+  this.source.set('hovered', false);
   this.parent.parent.emit('indicatorLeave', {
     sink: this.sink,
     source: this.source,

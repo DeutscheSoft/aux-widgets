@@ -18,12 +18,7 @@
  */
 
 import { defineChildWidget } from '../../child_widget.js';
-import {
-  setText,
-  addClass,
-  removeClass,
-  toggleClass,
-} from '../../utils/dom.js';
+import { setText, toggleClass } from '../../utils/dom.js';
 import { Subscriptions } from '../../utils/subscriptions.js';
 
 import { Container } from '../../widgets/container.js';
@@ -87,6 +82,8 @@ function composeDepth(tree_position) {
  *   to style alternating entries.
  * @property {Boolean} [options.group=false] - Define if this entry is a
  *   group header.
+ * @property {Boolean} [options.connected=false] - Sets class aux-connected.
+ * @property {Boolean} [options.hovered=false] - Sets class aux-hovered.
  *
  * @extends VirtualTreeEntryBase
  *
@@ -194,6 +191,12 @@ export class VirtualTreeEntry extends VirtualTreeEntryBase {
       case 'icon':
         this.update('icon', value);
         break;
+      case 'connected':
+        this.update('connected', value);
+        break;
+      case 'hovered':
+        this.update('hovered', value);
+        break;
     }
   }
   /**
@@ -211,6 +214,8 @@ export class VirtualTreeEntry extends VirtualTreeEntryBase {
 
     this.update('label', element.label);
     this.update('icon', element.icon);
+    this.update('connected', element.connected);
+    this.update('hovered', element.hovered);
 
     subs.add(
       element.subscribe('propertyChanged', (key, value) =>
@@ -248,6 +253,8 @@ export class VirtualTreeEntry extends VirtualTreeEntryBase {
       );
       this.update('label', element.label);
       this.update('icon', element.icon);
+      this.update('connected', element.connected);
+      this.update('hovered', element.hovered);
 
       this.subscribeData();
     }

@@ -309,6 +309,14 @@
 .aux-virtualtreeentry.aux-odd {
   background-color: rgba(0, 0, 0, 0.05);
 }
+.aux-virtualtreeentry.aux-hovered {
+  background: var(--aux-active-base);
+  color: var(--aux-active-text);
+}
+.aux-virtualtreeentry.aux-hovered.aux-group {
+  background: var(--aux-widget-base);
+  color: var(--aux-widget-text);
+}
 .aux-virtualtreeentry > .aux-collapse {
   padding: 0;
   margin: 0;
@@ -340,6 +348,20 @@
 .aux-matrix .aux-indicator {
   border-radius: 0;
   border: 1px solid rgba(0, 0, 0, 0.05);
+  cursor: default;
+  transition: none;
+}
+.aux-matrix .aux-indicator.aux-connectable {
+  cursor: pointer;
+}
+.aux-matrix .aux-indicator.aux-isgroup {
+  background: var(--aux-main-base);
+}
+.aux-matrix .aux-indicator.aux-connected {
+  background: var(--aux-active-base);
+}
+.aux-matrix .aux-indicator.aux-connected.aux-isgroup {
+  background: var(--aux-main-base);
 }
 
 .aux-matrix > .aux-indicators > .aux-batch {
