@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="../../../../styles/default.css" />
 
     <script type="module">
-      import { MatrixData } from '../../models/matrix.js';
+      import { MatrixData, VirtualTreeDataView } from '../../models.js';
 
       const sort = (a, b) => {
         const la = a.id;
@@ -24,14 +24,23 @@
       };
       window.matrix = new MatrixData();
       const ports = ['L', 'C', 'R', "L'", "R'", 'LF'];
+      const inputs = matrix.addGroup({ label: 'Inputs', icon: 'speaker' });
       const outputs = matrix.addGroup({ label: 'Outputs', icon: 'speaker' });
       for (let i = 0; i < 100; i++) {
-        const group = outputs.addGroup({
+        const ogroup = outputs.addGroup({
           label: 'Output #' + (i + 1),
           icon: 'mc5_1',
         });
+        const igroup = inputs.addGroup({
+          label: 'Input #' + (i + 1),
+          icon: 'mc5_1',
+        });
         for (let j = 0; j < 6; j++) {
-          const port = group.addPort({
+          const iport = igroup.addPort({
+            label: 'Channel ' + ports[j],
+            icon: 'disconnected',
+          });
+          const oport = ogroup.addPort({
             label: 'Channel ' + ports[j],
             icon: 'disconnected',
           });
@@ -40,8 +49,9 @@
 
       document.addEventListener('DOMContentLoaded', () => {
         const aux_matrix = document.querySelector('aux-matrix');
-        aux_matrix.sources = matrix.createVirtualTreeDataView(0, null, sort);
-        aux_matrix.sinks = matrix.createVirtualTreeDataView(0, null, sort);
+        aux_matrix.sources = new VirtualTreeDataView(inputs, 10, null, sort);
+        aux_matrix.sinks = new VirtualTreeDataView(outputs, 10, null, sort);
+        // aux_matrix.sinks = matrix.createVirtualTreeDataView(0, null, sort);
         aux_matrix.auxWidget.on('toggleConnection', (port1, port2) => {
           console.log('wants to toggleConnection', port1, port2);
           const connection = matrix.getConnection(port1, port2);
