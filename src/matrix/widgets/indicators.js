@@ -117,6 +117,10 @@ function cancel() {
  *   {@link Indicator}.
  * @property {ConnectionView} options.connectionview - The
  *   {@link ConnectionView} data model.
+ * @property {Boolean} [options.batch=true] - Disable batch connection
+ *   rectangle.
+ * @property {Number} [options.min_distance] - Minimum distance the user
+ *   has to drag in order to display the batch rectangle.
  *
  * @extends Container
  *
@@ -462,6 +466,11 @@ defineChildElement(Indicators, 'batch', {
   option: '_batch',
 });
 
+/**
+ * @member {Container} Indicators#buttons - The container holding
+ *   the buttons for batch connection management.
+ *   Has class <code>.aux-batchbuttons</code>.
+ */
 defineChildWidget(Indicators, 'buttons', {
   create: Container,
   default_options: {
@@ -471,6 +480,11 @@ defineChildWidget(Indicators, 'buttons', {
     this._batch.appendChild(this.buttons.element);
   },
 });
+/**
+ * @member {Button} Indicators#deselect_diagonal - The button for
+ *   disconnecting diagonally.
+ *   Has class <code>.aux-deselectdiagonal</code>.
+ */
 defineChildWidget(Indicators, 'deselect_diagonal', {
   create: ConfirmButton,
   default_options: {
@@ -492,6 +506,11 @@ defineChildWidget(Indicators, 'deselect_diagonal', {
     this.buttons.element.appendChild(this.deselect_diagonal.element);
   },
 });
+/**
+ * @member {Button} Indicators#deselect_all - The button for
+ *   disconnecting all.
+ *   Has class <code>.aux-deselectall</code>.
+ */
 defineChildWidget(Indicators, 'deselect_all', {
   create: ConfirmButton,
   default_options: {
@@ -513,6 +532,11 @@ defineChildWidget(Indicators, 'deselect_all', {
     this.buttons.element.appendChild(this.deselect_all.element);
   },
 });
+/**
+ * @member {Button} Indicators#select_diagonal - The button for
+ *   connecting diagonally.
+ *   Has class <code>.aux-selectdiagonal</code>.
+ */
 defineChildWidget(Indicators, 'select_diagonal', {
   create: ConfirmButton,
   default_options: {
@@ -534,6 +558,11 @@ defineChildWidget(Indicators, 'select_diagonal', {
     this.buttons.element.appendChild(this.select_diagonal.element);
   },
 });
+/**
+ * @member {Button} Indicators#cancel - The button for
+ *   hiding the rectangle.
+ *   Has class <code>.aux-cancel</code>.
+ */
 defineChildWidget(Indicators, 'cancel', {
   create: Button,
   default_options: {
