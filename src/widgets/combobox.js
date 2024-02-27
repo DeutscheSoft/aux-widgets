@@ -38,6 +38,16 @@ import { Value } from './value.js';
  * @member {HTMLDivElement} ComboBox#element - The main DIV element.
  *   Has class <code>.aux-combobox</code>.
  */
+/**
+ * Is fired when the user selects an entry from the list.
+ *
+ * @event ComboBox#select
+ *
+ * @param {mixed} value - The value of the {@link ComboBox}.
+ * @param {number} index - The index of the selected entry.
+ * @param {string} label - The label of the selected entry.
+ * @param {SelectEntry} entry - The {@link SelectEntry}.
+ */
 export class ComboBox extends Widget {
   static get _options() {
     return {
@@ -86,6 +96,9 @@ defineChildWidget(ComboBox, 'select', {
     userset: function (key, v) {
       this.parent.userset('value', v);
     },
+    select: function (value, index, label, entry) {
+      this.parent.emit('select', value, index, label, entry);
+    },
   },
   default_options: {},
 });
@@ -106,6 +119,6 @@ defineChildWidget(ComboBox, 'value', {
   },
   default_options: {
     editmode: 'immediate',
-    preset: 'string',
+    set: (v) => v,
   },
 });
