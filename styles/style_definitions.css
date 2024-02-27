@@ -348,7 +348,6 @@
 .aux-matrix .aux-indicator {
   border-radius: 0;
   border: 1px solid rgba(0, 0, 0, 0.05);
-  cursor: default;
   transition: none;
 }
 .aux-matrix .aux-indicator.aux-connectable {

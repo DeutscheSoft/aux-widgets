@@ -445,6 +445,10 @@
   width: var(--aux-virtualtreeentry-size);
   height: var(--aux-virtualtreeentry-size);
   margin: 0;
+  cursor: default;
+}
+.aux-matrix .aux-indicator.aux-connectable {
+  cursor: pointer;
 }
 .aux-matrix > .aux-indicators > .aux-batch {
   display: block;
