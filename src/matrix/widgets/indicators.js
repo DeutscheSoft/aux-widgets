@@ -53,8 +53,7 @@ function getStartEvent(state) {
   }
 }
 function onDragStart(state, start, e) {
-  onBatchEnd.call(this);
-  return true;
+  return !this.get('_batch_open');
 }
 
 function onDragging(s, e) {
@@ -81,6 +80,7 @@ function onDragging(s, e) {
 
 function onDragStop(state, e) {
   if (this.get('_batch')) onBatchStart.call(this, e);
+  else onBatchEnd.call(this);
 }
 
 function onBatchStart() {
@@ -93,6 +93,7 @@ function onBatchStart() {
   this.set('show_select_diagonal', O.has_select_diagonal);
   this.set('show_deselect_diagonal', O.has_deselect_diagonal);
   this.set('show_deselect_all', O.has_deselect_all);
+  this.set('_batch_open', true);
 }
 
 function onBatchEnd() {
@@ -102,6 +103,7 @@ function onBatchEnd() {
   this.set('show_deselect_all', false);
   this.set('show_buttons', false);
   this.set('_batch', false);
+  this.set('_batch_open', false);
 }
 
 function cancel() {
@@ -147,6 +149,7 @@ export class Indicators extends Container {
       has_deselect_all: 'boolean',
       has_deselect_diagonal: 'boolean',
       _batch: 'boolean',
+      _batch_open: 'boolean',
       _x0: 'number',
       _y0: 'number',
       _xd: 'number',
@@ -165,6 +168,7 @@ export class Indicators extends Container {
       has_deselect_all: true,
       has_deselect_diagonal: true,
       _batch: false,
+      _batch_open: false,
       _x0: 0,
       _y0: 0,
       _xd: 0,
