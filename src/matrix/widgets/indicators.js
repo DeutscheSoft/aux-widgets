@@ -537,7 +537,7 @@ defineChildWidget(Indicators, 'select_diagonal', {
 defineChildWidget(Indicators, 'cancel', {
   create: Button,
   default_options: {
-    icon: 'cancel',
+    icon: 'close',
     class: 'aux-cancel',
   },
   static_events: {

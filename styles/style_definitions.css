@@ -381,6 +381,9 @@
 .aux-matrix > .aux-indicators > .aux-batch > .aux-batchbuttons {
   z-index: 2;
 }
+.aux-matrix > .aux-indicators > .aux-batch > .aux-batchbuttons > .aux-button {
+  margin: 0;
+}
 .aux-matrix
   > .aux-indicators
   > .aux-batch
