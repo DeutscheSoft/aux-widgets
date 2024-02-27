@@ -379,6 +379,8 @@ export class Select extends Button {
   destroy() {
     this.clear();
     this._list.remove();
+    document.removeEventListener('touchstart', this._globalTouchStart);
+    document.removeEventListener('mousedown', this._globalTouchStart);
     super.destroy();
   }
 
