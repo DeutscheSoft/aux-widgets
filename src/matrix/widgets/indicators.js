@@ -85,11 +85,14 @@ function onDragStop(state, e) {
 
 function onBatchStart() {
   const O = this.options;
-  this.set('show_buttons', true);
+  this.set(
+    'show_buttons',
+    O.has_select_diagonal || O.has_deselect_all || O.has_deselect_diagonal
+  );
   this.set('show_cancel', true);
-  this.set('show_select_diagonal', true);
-  this.set('show_deselect_diagonal', true);
-  this.set('show_deselect_all', true);
+  this.set('show_select_diagonal', O.has_select_diagonal);
+  this.set('show_deselect_diagonal', O.has_deselect_diagonal);
+  this.set('show_deselect_all', O.has_deselect_all);
 }
 
 function onBatchEnd() {
@@ -121,6 +124,12 @@ function cancel() {
  *   rectangle.
  * @property {Number} [options.min_distance] - Minimum distance the user
  *   has to drag in order to display the batch rectangle.
+ * @property {Number} [options.has_deselect_all] - Batch can deselect all
+ *   connections.
+ * @property {Number} [options.has_deselect_diagonal] - Batch can deselect
+ *   diagonal connections.
+ * @property {Number} [options.has_select_diagonal] - Batch can select
+ *   diagonal connections.
  *
  * @extends Container
  *
@@ -134,6 +143,9 @@ export class Indicators extends Container {
       connectionview: 'object',
       batch: 'boolean',
       min_distance: 'number',
+      has_select_diagonal: 'boolean',
+      has_deselect_all: 'boolean',
+      has_deselect_diagonal: 'boolean',
       _batch: 'boolean',
       _x0: 'number',
       _y0: 'number',
@@ -149,6 +161,9 @@ export class Indicators extends Container {
       indicator_class: Indicator,
       min_distance: 40,
       batch: true,
+      has_select_diagonal: true,
+      has_deselect_all: true,
+      has_deselect_diagonal: true,
       _batch: false,
       _x0: 0,
       _y0: 0,
