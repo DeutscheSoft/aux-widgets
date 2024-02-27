@@ -951,8 +951,9 @@ function onSelect(e) {
    * @param {mixed} value - The value of the selected entry.
    * @param {number} value - The ID of the selected entry.
    * @param {string} value - The label of the selected entry.
+   * @param {SelectEntry} value - The selected entry.
    */
-  w.emit('select', entry.options.value, id, entry.options.label);
+  w.emit('select', entry.options.value, id, entry.options.label, entry);
   w.showList(false);
 
   return false;
