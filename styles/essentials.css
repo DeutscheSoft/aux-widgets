@@ -775,11 +775,11 @@ body.aux-cursor-row-resize * {
   width: 100%;
 }
 .aux-meter.aux-top > .aux-bar {
-  justify-self: stretch;
+  justify-self: center;
   align-self: stretch;
 }
 .aux-meter.aux-bottom > .aux-bar {
-  justify-self: stretch;
+  justify-self: center;
   align-self: stretch;
 }
 .aux-meter.aux-left > .aux-bar {
