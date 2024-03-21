@@ -1327,7 +1327,10 @@ export class ChartHandle extends Widget {
         if (_O.min_drag > 0 && _O.min_drag > d) return;
 
         const range_z = _O.range_z;
-        const z = range_z.pixelToValue(state.z + d);
+        const z = Math.min(
+          range_z.options.max,
+          Math.max(range_z.options.min, range_z.pixelToValue(state.z + d))
+        );
 
         self.userset('z', z);
       },
