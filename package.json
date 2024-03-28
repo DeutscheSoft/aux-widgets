@@ -1,6 +1,6 @@
 {
   "name": "@deutschesoft/aux-widgets",
-  "version": "2.0.0-rc0",
+  "version": "1.3.0",
   "description": "AUX Audio Widget Library",
   "license": "GPL-3.0",
   "main": "src/index.js",
