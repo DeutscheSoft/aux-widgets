@@ -21,3 +21,5 @@ angular/
 /cypress/
 /eslint/
 /benchmark/
+/.editorconfig
+/.prettierrc
