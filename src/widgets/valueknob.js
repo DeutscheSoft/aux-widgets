@@ -29,6 +29,7 @@ import {
   element,
   createID,
 } from '../utils/dom.js';
+import { applyLegacyUsersetEventsRanged } from '../utils/legacy_userset_events.js';
 import { defineRender } from '../renderer.js';
 
 /**
@@ -123,6 +124,21 @@ export class ValueKnob extends Widget {
         applyAttribute(svg, 'aria-labelledby', value);
       }),
     ];
+  }
+
+  userset(key, value) {
+    if (key === 'value' && this.knob) {
+      const { transformation, snap_module } = this.knob.circular.options;
+      return applyLegacyUsersetEventsRanged(
+        this,
+        transformation,
+        snap_module,
+        key,
+        value
+      );
+    } else {
+      return super.userset(key, value);
+    }
   }
 
   initialize(options) {
