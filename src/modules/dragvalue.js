@@ -45,7 +45,10 @@ function applyPosition(O, range, position) {
 
   if (limit) {
     const clampedValue = transformation.clampValue(value);
-    if (clampedValue !== value) clamped = true;
+    if (clampedValue !== value) {
+      clamped = true;
+      value = clampedValue;
+    }
   }
 
   set.call(this, value);
