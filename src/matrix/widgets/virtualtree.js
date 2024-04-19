@@ -140,7 +140,7 @@ export class VirtualTree extends Scroller {
       defineRender('size', function (size) {
         const { virtualtreeview } = this.options;
 
-        if (virtualtreeview) return;
+        if (!virtualtreeview) return;
 
         const entries = this.entries;
 
