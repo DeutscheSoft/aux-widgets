@@ -18,6 +18,7 @@
  */
 
 import { addClass, toggleClass } from './../../utils/dom.js';
+import { Subscriptions } from '../../utils/subscriptions.js';
 
 import { Button } from './../../widgets/button.js';
 import { defineRender } from '../../renderer.js';
@@ -105,6 +106,10 @@ export class Indicator extends Button {
     super.initialize(options);
     this.source = null;
     this.sink = null;
+    this.connection = null;
+    this.source_subscriptions = new Subscriptions();
+    this.sink_subscriptions = new Subscriptions();
+    this.connection_subscriptions = new Subscriptions();
   }
 
   /**
@@ -133,10 +138,41 @@ export class Indicator extends Button {
 
     this.source = source;
     this.sink = sink;
+    this.connection = connection;
+
+    this.maybeSubscribeData(
+      source,
+      this.source_subscriptions,
+      '_onSourceChanged'
+    );
+    this.maybeSubscribeData(sink, this.sink_subscriptions, '_onSinkChanged');
+    this.maybeSubscribeData(
+      connection,
+      this.connection_subscriptions,
+      '_onConnectionChanged'
+    );
+  }
+
+  maybeSubscribeData(data, subscriptions, methodName) {
+    subscriptions.unsubscribe();
+    if (!data || !this[methodName]) return;
+
+    subscriptions.add(
+      data.subscribe('propertyChanged', (key, value) => {
+        this[methodName](key, value);
+      })
+    );
   }
 
   draw(options, element) {
     addClass(this.element, 'aux-indicator');
     super.draw(options, element);
+  }
+
+  destroy() {
+    this.source_subscriptions.unsubscribe();
+    this.sink_subscriptions.unsubscribe();
+    this.connection_subscriptions.unsubscribe();
+    super.destroy();
   }
 }
