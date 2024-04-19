@@ -320,6 +320,10 @@ export class VirtualTree extends Scroller {
     this.scrollhide.element.scrollTo(options);
   }
 
+  getScrollTop() {
+    return this.scrollhide.element.scrollTop;
+  }
+
   _subscribeToTreeView(subs, treeView) {
     const O = this.options;
 

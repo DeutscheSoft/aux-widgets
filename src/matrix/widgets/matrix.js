@@ -130,6 +130,18 @@ export class Matrix extends Patchbay {
     this._scroll_matrix = new ScrollDetector(scrollDetectorTimeout);
   }
 
+  scrollTo(options) {
+    if (options.top >= 0) this.virtualtree_left.scrollTo(options.top);
+    if (options.left >= 0) this.virtualtree_top.scrollTo(options.left);
+  }
+
+  getScrollPosition() {
+    const top = this.virtualtree_left.getScrollTop();
+    const left = this.virtualtree_top.getScrollTop();
+
+    return { top, left };
+  }
+
   draw(options, element) {
     const O = this.options;
     addClass(this.element, 'aux-matrix');
