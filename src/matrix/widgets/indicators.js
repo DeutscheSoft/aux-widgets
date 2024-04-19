@@ -312,7 +312,14 @@ export class Indicators extends Container {
               const row = entries[index1 % entries.length];
               const indicator = row[index2 % row.length];
 
-              indicator.updateData(index1, index2, connection, source, sink);
+              indicator.updateData(
+                index1,
+                index2,
+                connection,
+                source,
+                sink,
+                connectionview
+              );
               setIndicatorPosition(indicator, index1, index2);
             }
           )

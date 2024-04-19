@@ -124,7 +124,7 @@ export class Indicator extends Button {
    * @param {PortData} sink - The sink data.
    *
    */
-  updateData(index1, index2, connection, source, sink) {
+  updateData(index1, index2, connection, source, sink, connectionView) {
     this.update('connected', !!connection);
     this.update('sourceisgroup', source && source.isGroup);
     this.update('sinkisgroup', sink && sink.isGroup);
