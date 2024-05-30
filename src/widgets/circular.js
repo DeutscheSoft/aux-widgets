@@ -616,6 +616,8 @@ export class Circular extends Widget {
           );
 
           if (show_value) {
+            if (!isFinite(_coef_base) || !isFinite(_coef_ring)) return;
+
             const outerSize = size / 2;
             const inner = outerSize - thickness;
             const outer_p = outerSize - _stroke_width / 2 - margin;
