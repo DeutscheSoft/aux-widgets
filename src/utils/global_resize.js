@@ -17,17 +17,21 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { EventMultiplexer } from '../utils/event_multiplexer.js';
-import { subscribeDOMEvent } from '../utils/events.js';
+import { EventMultiplexer } from './event_multiplexer.js';
+import { subscribeDOMEvent } from './events.js';
+import { combineSubscriptions } from './subscriptions.js';
 
 export const GlobalResize = new EventMultiplexer((cb) => {
-  const sub1 = subscribeDOMEvent(window, 'resize', () => cb());
-  const sub2 = subscribeDOMEvent(window, 'load', () => cb());
-  const sub3 = subscribeDOMEvent(document.fonts, 'loadingdone', () => cb());
+  const callback = () => cb();
+  const unsubscribes = [
+    subscribeDOMEvent(window, 'resize', callback),
+    subscribeDOMEvent(window, 'load', callback),
+  ];
 
-  return () => {
-    sub1();
-    sub2();
-    sub3();
-  };
+  if (document.fonts)
+    unsubscribes.push(
+      subscribeDOMEvent(document.fonts, 'loadingdone', callback)
+    );
+
+  return combineSubscriptions(...unsubscribes);
 });
