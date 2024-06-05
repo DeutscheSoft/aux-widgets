@@ -139,7 +139,7 @@ export const Filter = defineClass({
       return;
     }
 
-    const filter = factory(O);
+    let filter = factory(O);
 
     if (typeof filter === 'object') {
       filter = filter.freq2gain;
