@@ -139,7 +139,10 @@ function valueFocus() {
   this.__editing = true;
   this.invalidate(SymEditing);
   addClass(this.element, 'aux-active');
-  if (O.auto_select) this._input.setSelectionRange(0, this._input.value.length);
+  setTimeout(() => {
+    if (O.auto_select)
+      this._input.setSelectionRange(0, this._input.value.length);
+  }, 10);
   this.startInteracting();
 }
 
