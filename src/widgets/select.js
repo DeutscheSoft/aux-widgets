@@ -377,6 +377,10 @@ export class Select extends Button {
   }
 
   destroy() {
+    if (this.__timeout !== false) {
+      window.clearTimeout(this.__timeout);
+      this.__timeout = false;
+    }
     this.clear();
     this._list.remove();
     document.removeEventListener('touchstart', this._globalTouchStart);
