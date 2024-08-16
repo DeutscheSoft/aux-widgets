@@ -91,3 +91,5 @@ for details.
 Copyright (c) 2013-2024 Markus Schmidt <markus@deuso.de>
 
 Copyright (c) 2014-2024 Arne G&ouml;deke <arne@deuso.de>
+
+Copyright (c) 2014-2024 DeusO GmbH
