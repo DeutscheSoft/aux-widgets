@@ -125,6 +125,9 @@ export class FrequencyResponse extends Chart {
       set_db_grid: function (value) {
         this.set('grid_y', calculateGrid(this.range_y, value));
       },
+      set_range_y: function () {
+        this.set('grid_y', calculateGrid(this.range_y, this.get('db_grid')));
+      },
     };
   }
 
