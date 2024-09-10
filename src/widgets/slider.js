@@ -238,8 +238,8 @@ export class Slider extends Widget {
 
   resize() {
     const E = this.element;
-    this.set('_width', outerWidth(E));
-    this.set('_height', outerHeight(E));
+    this.set('_width', outerWidth(E, false, undefined, true));
+    this.set('_height', outerHeight(E, false, undefined, true));
   }
 
   set(key, value) {

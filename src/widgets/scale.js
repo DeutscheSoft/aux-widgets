@@ -878,8 +878,8 @@ export class Scale extends Widget {
     const O = this.options;
 
     const basis = vert(O.layout)
-      ? innerHeight(this.element, void 0, true)
-      : innerWidth(this.element, void 0, true);
+      ? innerHeight(this.element, undefined, true)
+      : innerWidth(this.element, undefined, true);
     this.update('basis', basis);
   }
 

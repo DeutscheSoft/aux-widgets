@@ -176,7 +176,7 @@ export class Clock extends Widget {
       },
       label_scale: 0.33, // the scale of the upper and lower labels
       // compared to the main label
-      label_margin: 10,
+      label_margin: 0,
       label_upper_pos: 0.33,
       label_lower_pos: 0.66,
     };
@@ -289,15 +289,16 @@ export class Clock extends Widget {
           _label.setAttribute('transform', '');
 
           return deferMeasure(() => {
-            let bb = _label.getBoundingClientRect();
-            const eb = this.svg.getBoundingClientRect();
-            const size = Math.min(eb.width, eb.height);
-            if (bb.width === 0) return; // we are hidden
+            const svgwidth = this.svg.clientWidth;
+            const svgheight = this.svg.clientHeight;
+            const size = Math.min(svgwidth, svgheight);
+            let labelwidth = _label.getBBox().width;
+            if (labelwidth === 0) return; // we are hidden
             const mleft = parseInt(getStyle(_label, 'margin-left')) || 0;
             const mright = parseInt(getStyle(_label, 'margin-right')) || 0;
             const mlabel = (label_margin / 100) * size;
             const space = size - mleft - mright - _margin * 2 - mlabel * 2;
-            const scale = space / bb.width;
+            const scale = space / labelwidth;
             const pos = size / 2;
 
             return deferRender(() => {
@@ -307,7 +308,7 @@ export class Clock extends Widget {
               );
 
               return deferMeasure(() => {
-                bb = _label.getBoundingClientRect();
+                labelwidth = _label.clientWidth;
 
                 return deferRender(() => {
                   this._label_upper.setAttribute(

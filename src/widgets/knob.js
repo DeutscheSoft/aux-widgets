@@ -30,7 +30,7 @@ import { Widget } from './widget.js';
 import { Circular } from './circular.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
-import { element, addClass } from '../utils/dom.js';
+import { element, addClass, innerWidth, innerHeight } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
@@ -309,8 +309,9 @@ export class Knob extends Widget {
 
   resize() {
     super.resize();
-    const rect = this.element.getBoundingClientRect();
-    const size = Math.min(rect.width, rect.height);
+    const width = innerWidth(this.element, undefined, true);
+    const height = innerHeight(this.element, undefined, true);
+    const size = Math.min(width, height);
     this.set('size', size);
   }
 

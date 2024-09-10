@@ -289,8 +289,8 @@ export class Chart extends Widget {
         const SVG = this.svg;
 
         const tmp = CSSSpace(SVG, 'border', 'padding');
-        let w = innerWidth(E) - tmp.left - tmp.right;
-        let h = innerHeight(E) - tmp.top - tmp.bottom;
+        let w = innerWidth(E, undefined, true) - tmp.left - tmp.right;
+        let h = innerHeight(E, undefined, true) - tmp.top - tmp.bottom;
 
         if (square) {
           w = h = Math.min(h, w);

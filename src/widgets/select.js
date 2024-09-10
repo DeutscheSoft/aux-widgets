@@ -322,7 +322,7 @@ export class Select extends Button {
           });
           S.appendChild(frag);
           return deferMeasure(() => {
-            const width = outerWidth(S, true);
+            const width = outerWidth(S, true, undefined, true);
             return deferRender(() => {
               if (this.label) outerWidth(this.label.element, true, width);
             });

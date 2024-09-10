@@ -207,9 +207,13 @@ export class Spread extends Widget {
         let basis;
 
         if (vert(layout)) {
-          basis = innerHeight(_track) - outerHeight(_lower, true) * 2;
+          basis =
+            innerHeight(_track, undefined, true) -
+            outerHeight(_lower, true, undefined, true) * 2;
         } else {
-          basis = innerWidth(_track) - outerWidth(_lower, true) * 2;
+          basis =
+            innerWidth(_track, undefined, true) -
+            outerWidth(_lower, true, undefined, true) * 2;
         }
 
         this.set('basis', basis);

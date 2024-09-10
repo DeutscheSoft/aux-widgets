@@ -132,8 +132,8 @@ export class Marquee extends Container {
 
   resize() {
     super.resize();
-    this.set('_outer', innerWidth(this.element));
-    this.set('_inner', outerWidth(this.label.element));
+    this.set('_outer', innerWidth(this.element, undefined, true));
+    this.set('_inner', outerWidth(this.label.element, false, undefined, true));
   }
 
   destroy() {

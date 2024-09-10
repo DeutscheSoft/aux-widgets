@@ -24,6 +24,8 @@ import {
   toggleClass,
   innerHeight,
   innerWidth,
+  outerWidth,
+  outerHeight,
 } from '../utils/dom.js';
 import { Button } from './button.js';
 import { Buttons } from './buttons.js';
@@ -118,15 +120,16 @@ function autoArrows() {
   const B = this.buttons.getButtons();
   const vert = O.direction === 'vertical';
   const cons = vert
-    ? innerHeight(this.buttons.element)
-    : innerWidth(this.buttons.element);
+    ? innerHeight(this.buttons.element, undefined, true)
+    : innerWidth(this.buttons.element, undefined, true);
   let list;
   if (B.length) {
     const lastb = B[B.length - 1].element;
-    const rect = lastb.getBoundingClientRect();
-    list =
-      lastb[vert ? 'offsetTop' : 'offsetLeft'] +
-      rect[vert ? 'height' : 'width'];
+    if (vert) {
+      list = lastb.offsetTop + outerHeight(lastb, true, undefined, true);
+    } else {
+      list = lastb.offsetLeft + outerWidth(lastb, true, undefined, true);
+    }
   } else {
     list = 0;
   }
@@ -156,8 +159,8 @@ function nextDblClicked() {
 function measure_clip() {
   const buttons = this.buttons;
 
-  this.update('_clip_height', innerHeight(buttons.element));
-  this.update('_clip_width', innerWidth(buttons.element));
+  this.update('_clip_height', innerHeight(buttons.element, undefined, true));
+  this.update('_clip_width', innerWidth(buttons.element, undefined, true));
 }
 
 /**
@@ -373,10 +376,9 @@ export class Navigation extends Container {
         };
         const measure = (_button) => {
           const element = _button.element;
-          const bounding_box = element.getBoundingClientRect();
 
-          info.width = bounding_box.width;
-          info.height = bounding_box.height;
+          info.width = outerWidth(element, false, undefined, true);
+          info.height = outerHeight(element, false, undefined, true);
           info.left = element.offsetLeft;
           info.top = element.offsetTop;
 
