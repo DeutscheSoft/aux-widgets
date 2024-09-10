@@ -101,7 +101,7 @@ export class FileSelect extends Container {
       }),
       defineMeasure('files', function (files) {
         let filesize = 0;
-        files.forEach((file) => (filesize += file.size));
+        [...files].forEach((file) => (filesize += file.size));
         this.set('filesize', filesize);
       }),
       defineMeasure(['filesize', 'format_size'], function (
