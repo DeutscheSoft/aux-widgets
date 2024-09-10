@@ -308,7 +308,7 @@ export class Clock extends Widget {
               );
 
               return deferMeasure(() => {
-                labelwidth = _label.clientWidth;
+                labelwidth = _label.getBBox().width;
 
                 return deferRender(() => {
                   this._label_upper.setAttribute(
