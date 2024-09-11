@@ -5,12 +5,14 @@
 <span>Value with <code>readonly=true</code></span>
 <aux-value readonly="true"></aux-value>
 <span
-  >Value with <code>preset=string</code>, <code>placeholder="foobar"</code> and
-  <code>auto_select=true</code></span
+  >Value with <code>preset=string</code>, <code>placeholder="foobar"</code>,
+  format="v=>v+''"", set="v=>v" and <code>auto_select=true</code></span
 >
 <aux-value
-  preset="string"
   placeholder="foobar"
   size="10"
   auto_select="true"
+  format="js:v=>v+''"
+  set="js:v=>v"
+  value=""
 ></aux-value>
