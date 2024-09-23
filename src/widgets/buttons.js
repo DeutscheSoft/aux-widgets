@@ -543,7 +543,7 @@ export class Buttons extends Container {
 
     if (!button || position === -1) throw new Error('Unknown button.');
 
-    this.element.removeChild(button.element);
+    button.element.remove();
 
     if (buttons.at(position) === button) {
       // NOTE: if we remove a child which is a web component,
