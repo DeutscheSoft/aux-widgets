@@ -30,7 +30,13 @@ import { Widget } from './widget.js';
 import { Circular } from './circular.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
-import { element, addClass, innerWidth, innerHeight } from '../utils/dom.js';
+import {
+  element,
+  addClass,
+  innerWidth,
+  innerHeight,
+  removeClass,
+} from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
