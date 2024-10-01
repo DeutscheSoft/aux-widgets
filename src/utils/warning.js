@@ -17,6 +17,15 @@
  * Boston, MA  02110-1301  USA
  */
 
+import { defineRecalculation, defineRender } from '../renderer.js';
+import { toggleClass } from './dom.js';
+import {
+  createTimer,
+  startTimer,
+  destroyTimer,
+  cancelTimer,
+} from './timers.js';
+
 const timeouts = new Map();
 
 function removeClass() {
@@ -44,3 +53,54 @@ export function warning(element, timeout) {
   }
   timeouts.set(element, window.setTimeout(removeClass.bind(element), timeout));
 }
+
+export const warningOptionsTypes = {
+  show_warning: 'boolean',
+};
+
+export const warningOptionsDefaults = {
+  show_warning: true,
+};
+
+export const warningEvents = {
+  initialize: function () {
+    this._warning_timer = createTimer(() => {
+      this.update('_warning_state', false);
+    });
+  },
+  set_value: function () {
+    this.update('_value_time', performance.now());
+  },
+  destroy: function () {
+    this._warning_timer = destroyTimer(this._warning_timer);
+  },
+};
+
+export const warningRenderers = [
+  defineRecalculation(
+    ['min', 'max', 'value', 'show_warning', '_value_time'],
+    function (min, max, value, show_warning, _value_time) {
+      let state = false;
+
+      if (show_warning) {
+        if (!(min <= value && max >= value)) {
+          const warningDuration = 250 - (performance.now() - _value_time);
+          if (warningDuration > 0) {
+            this._warning_timer = startTimer(
+              this._warning_timer,
+              warningDuration
+            );
+            state = true;
+          }
+        }
+      }
+
+      if (!state) this._warning_timer = cancelTimer(this._warning_timer);
+
+      this.update('_warning_state', state);
+    }
+  ),
+  defineRender('_warning_state', function (_warning_state) {
+    toggleClass(this.element, 'aux-warn', _warning_state);
+  }),
+];
