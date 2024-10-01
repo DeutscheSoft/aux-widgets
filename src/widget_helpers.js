@@ -49,7 +49,7 @@ function arrayify(x) {
   return x;
 }
 
-export function mergeStaticEvents(a, b) {
+export function mergeStaticEvents(a, b, ...rest) {
   if (!a || !b) return Object.assign({}, a || b || {});
 
   const result = Object.assign({}, a, b);
@@ -58,6 +58,10 @@ export function mergeStaticEvents(a, b) {
     if (!(event in b)) continue;
 
     result[event] = arrayify(a[event]).concat(arrayify(b[event]));
+  }
+
+  if (rest.length) {
+    return mergeStaticEvents(result, ...rest);
   }
 
   return result;
