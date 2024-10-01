@@ -20,7 +20,12 @@
 import { FORMAT } from '../utils/sprintf.js';
 import { empty, addClass, getStyle } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
-import { warning } from '../utils/warning.js';
+import {
+  warningRenderers,
+  warningEvents,
+  warningOptionsTypes,
+  warningOptionsDefaults,
+} from '../utils/warning.js';
 import { mergeObjects } from '../utils/merge_objects.js';
 import {
   rangedOptionsDefaults,
@@ -218,6 +223,7 @@ function drawSlice(a_from, a_to, r_inner, r_outer, pos, slice) {
 export class Circular extends Widget {
   static get _options() {
     return [
+      warningOptionsTypes,
       rangedOptionsTypes,
       {
         _stroke_width: 'number',
@@ -252,7 +258,7 @@ export class Circular extends Widget {
   }
 
   static get static_events() {
-    return mergeStaticEvents(rangedEvents, {
+    return mergeStaticEvents(rangedEvents, warningEvents, {
       set_value: function (value) {
         this.set('value_hand', value);
         this.set('value_ring', value);
@@ -268,6 +274,7 @@ export class Circular extends Widget {
   static get options() {
     return [
       rangedOptionsDefaults,
+      warningOptionsDefaults,
       {
         _stroke_width: 0,
         value: 0,
@@ -334,6 +341,7 @@ export class Circular extends Widget {
   static get renderers() {
     return [
       ...rangedRenderers,
+      ...warningRenderers,
       defineRender('show_hand', function (show_hand) {
         this._hand.style.display = show_hand ? 'block' : 'none';
       }),
@@ -875,18 +883,6 @@ export class Circular extends Widget {
     const strokev = parseInt(getStyle(this._value, 'stroke-width')) || 0;
     this._stroke = Math.max(strokeb, strokev);
     return this._stroke;
-  }
-
-  // GETTERS & SETTERS
-  set(key, value) {
-    const O = this.options;
-    switch (key) {
-      case 'value':
-        if (value > O.max || value < O.min) warning(this.element);
-        break;
-    }
-
-    return super.set(key, value);
   }
 }
 
