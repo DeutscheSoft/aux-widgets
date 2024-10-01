@@ -182,7 +182,7 @@ export class MatrixData extends Datum {
   }
 
   _lowUnregisterConnection(from, to, connection) {
-    let connections_from = this.connections.get(from);
+    const connections_from = this.connections.get(from);
 
     if (connections_from) {
       const con = connections_from.get(to);

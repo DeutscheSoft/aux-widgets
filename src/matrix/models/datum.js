@@ -32,7 +32,7 @@ export class Datum extends Events {
     this.properties = {};
 
     if (o) {
-      for (let name in o)
+      for (const name in o)
         if (Object.prototype.hasOwnProperty.call(o, name)) {
           this.set(name, o[name]);
         }

@@ -32,7 +32,7 @@ import { ConnectionDataView } from '../models.js';
 const scrollDetectorTimeout = 200;
 
 function setVirtualtreeviews() {
-  var O = this.options;
+  const O = this.options;
   if (!O.sources || !O.sinks) return;
   switch (O.signal_flow) {
     case 'top-left': {

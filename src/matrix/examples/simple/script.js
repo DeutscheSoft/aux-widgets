@@ -122,7 +122,7 @@ function createList(into, listview) {
   list.appendChild(scrollarea);
   into.appendChild(list);
 
-  let entries = [];
+  const entries = [];
   let startIndex = 0;
 
   const setEntryPosition = (entry, index) => {
@@ -243,7 +243,7 @@ function createList(into, listview) {
   ScrollEvent.subscribe(onScroll);
 
   let got_scroll_event = false;
-  let send_scroll_timer = new Timer(() => {
+  const send_scroll_timer = new Timer(() => {
     if (!got_scroll_event) return;
 
     ScrollEvent.call(list.scrollTop);
@@ -447,7 +447,7 @@ function createMatrix(dst, listview1, listview2) {
   });
 
   let got_scroll_event = false;
-  let send_scroll_timer = new Timer(() => {
+  const send_scroll_timer = new Timer(() => {
     if (!got_scroll_event) return;
 
     ScrollEvent.call(dst.scrollTop, dst.scrollLeft);

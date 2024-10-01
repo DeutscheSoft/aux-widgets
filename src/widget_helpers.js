@@ -54,7 +54,7 @@ export function mergeStaticEvents(a, b) {
 
   const result = Object.assign({}, a, b);
 
-  for (let event in a) {
+  for (const event in a) {
     if (!(event in b)) continue;
 
     result[event] = arrayify(a[event]).concat(arrayify(b[event]));

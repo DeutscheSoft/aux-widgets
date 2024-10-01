@@ -163,7 +163,7 @@ export class VirtualTree extends Scroller {
 
   _scrollDataTo(position) {
     const O = this.options;
-    let startIndex = Math.floor(position / O.size);
+    const startIndex = Math.floor(position / O.size);
     const dataview = O.virtualtreeview;
 
     if (startIndex !== O._startIndex) {

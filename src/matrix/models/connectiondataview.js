@@ -131,8 +131,8 @@ export class ConnectionDataView extends Events {
 
     matrix[n][m] = connection;
 
-    let index1 = startIndex1 + subtractMod(n, startIndex1, rows.length);
-    let index2 = startIndex2 + subtractMod(m, startIndex2, columns.length);
+    const index1 = startIndex1 + subtractMod(n, startIndex1, rows.length);
+    const index2 = startIndex2 + subtractMod(m, startIndex2, columns.length);
 
     callSubscribers(
       this.subscribers,
@@ -172,7 +172,7 @@ export class ConnectionDataView extends Events {
   }
 
   _lowUnregisterConnection(row_element, column_element, connection) {
-    let connections_for = this.connections.get(row_element);
+    const connections_for = this.connections.get(row_element);
 
     if (connections_for === void 0) return;
 
@@ -298,7 +298,7 @@ export class ConnectionDataView extends Events {
           dst.add(node);
 
           if (node instanceof GroupData) {
-            let subscriptions = subscribe(node);
+            const subscriptions = subscribe(node);
 
             return addSubscription(subscriptions, () => dst.delete(node));
           } else {
@@ -400,7 +400,7 @@ export class ConnectionDataView extends Events {
           const j = (startIndex2 + n) % columns.length;
           const column_element = columns[j];
 
-          let connection = this.getConnectionFor(row_element, column_element);
+          const connection = this.getConnectionFor(row_element, column_element);
 
           // actually update and tell our subscribers
           matrix[i][j] = connection;
@@ -433,7 +433,7 @@ export class ConnectionDataView extends Events {
           const i = (startIndex1 + n) % rows.length;
           const row_element = rows[i];
 
-          let connection = this.getConnectionFor(row_element, column_element);
+          const connection = this.getConnectionFor(row_element, column_element);
 
           // actually update and tell our subscribers
           matrix[i][j] = connection;
@@ -537,7 +537,6 @@ export class ConnectionDataView extends Events {
     const matrix = this.matrix;
     const rows = this.rows;
     const columns = this.columns;
-    const subscribers = this.subscribers;
 
     const startIndex1 = this.startIndex1;
     const startIndex2 = this.startIndex2;
