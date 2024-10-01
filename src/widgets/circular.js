@@ -697,13 +697,14 @@ export class Circular extends Widget {
           );
         }
       ),
-      defineRecalculation(
-        ['value', 'transformation', 'snap_module'],
-        function (value, transformation, snap_module) {
-          const _value = snap_module.snap(transformation.clampValue(value));
-          this.update('_value', _value);
-        }
-      ),
+      defineRecalculation(['value', 'transformation', 'snap_module'], function (
+        value,
+        transformation,
+        snap_module
+      ) {
+        const _value = snap_module.snap(transformation.clampValue(value));
+        this.update('_value', _value);
+      }),
       defineRecalculation(
         ['value_hand', 'transformation', 'snap_module'],
         function (value_hand, transformation, snap_module) {
