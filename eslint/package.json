@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "check": "./node_modules/.bin/eslint -c .eslintrc.json ../src/**/*.js ../src/*.js",
-    "fix": "./node_modules/.bin/eslint -c .eslintrc.json --fix ../src/**/*.js ../src/*.js"
+    "check": "cd .. && ./eslint/node_modules/.bin/eslint",
+    "fix": "cd .. && ./eslint/node_modules/.bin/eslint --fix"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "eslint": "^7.15.0"
+    "eslint": "^9.11.1"
   }
 }
