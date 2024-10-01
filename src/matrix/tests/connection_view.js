@@ -19,7 +19,7 @@
 
 import { MatrixData } from '../models/matrix.js';
 import { ConnectionDataView } from '../models/connectiondataview.js';
-import { assert, test, assertError } from './helpers.js';
+import { assert, test } from './helpers.js';
 
 test('ConnectionDataView basics', () => {
   const matrix = new MatrixData();

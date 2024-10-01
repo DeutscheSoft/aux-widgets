@@ -24,7 +24,6 @@ import { Label } from './label.js';
 import {
   rangedEvents,
   rangedOptionsDefaults,
-  rangedOptionsTypes,
   rangedRenderers,
 } from '../utils/ranged.js';
 import { Scale } from './scale.js';
@@ -154,7 +153,6 @@ function drawGradient(element, O) {
     background,
     _width,
     _height,
-    reverse,
     transformation,
     snap_module,
     layout,
@@ -172,9 +170,8 @@ function drawGradient(element, O) {
     const basePx = transformation.valueToPixel(base);
     const vert = layout === 'left' || layout === 'right';
 
-    let entries = (Array.isArray(gradient)
-      ? gradient
-      : fromGradientObject(gradient)
+    let entries = (
+      Array.isArray(gradient) ? gradient : fromGradientObject(gradient)
     ).map(({ color, value }) => {
       if (isNaN(value) || !isFinite(value))
         throw new TypeError(`Malformed gradient entry '${entry}'.`);
@@ -442,14 +439,13 @@ export class Meter extends Widget {
           drawGradient(_backdrop, this.options);
         }
       ),
-      defineMeasure(['_width', '_height', 'layout'], function (
-        _width,
-        _height,
-        layout
-      ) {
-        this.set('basis', vert(layout) ? _height : _width);
-        this._last_meters.length = 0;
-      }),
+      defineMeasure(
+        ['_width', '_height', 'layout'],
+        function (_width, _height, layout) {
+          this.set('basis', vert(layout) ? _height : _width);
+          this._last_meters.length = 0;
+        }
+      ),
       defineRender(
         [
           'value',
@@ -463,15 +459,15 @@ export class Meter extends Widget {
           return this.drawMeter();
         }
       ),
-      defineRender(['label', 'aria_labelledby'], function (
-        label,
-        aria_labelledby
-      ) {
-        if (aria_labelledby !== void 0) return;
+      defineRender(
+        ['label', 'aria_labelledby'],
+        function (label, aria_labelledby) {
+          if (aria_labelledby !== void 0) return;
 
-        const value = label !== false ? this.label.get('id') : null;
-        applyAttribute(this.element, 'aria-labelledby', value);
-      }),
+          const value = label !== false ? this.label.get('id') : null;
+          applyAttribute(this.element, 'aria-labelledby', value);
+        }
+      ),
     ];
   }
 

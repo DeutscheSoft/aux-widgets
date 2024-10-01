@@ -22,8 +22,6 @@ import {
   rangedEvents,
   rangedOptionsDefaults,
   rangedOptionsTypes,
-  makeTransformation,
-  makeSnapModule,
 } from '../utils/ranged.js';
 
 /**

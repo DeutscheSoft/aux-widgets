@@ -143,7 +143,6 @@ export class Matrix extends Patchbay {
   }
 
   draw(options, element) {
-    const O = this.options;
     addClass(this.element, 'aux-matrix');
     super.draw(options, element);
 

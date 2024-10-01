@@ -18,7 +18,6 @@
  */
 
 import { FORMAT } from '../utils/sprintf.js';
-import { error } from '../utils/log.js';
 import { empty, addClass, getStyle } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
 import { warning } from '../utils/warning.js';
@@ -605,7 +604,6 @@ export class Circular extends Widget {
           preset
         ) {
           const _value = this._value;
-          const { snap_module, transformation } = this.options;
 
           margin = this.getPresetOption(presets, preset, 'margin', margin);
           thickness = this.getPresetOption(
@@ -699,14 +697,13 @@ export class Circular extends Widget {
           );
         }
       ),
-      defineRecalculation(['value', 'transformation', 'snap_module'], function (
-        value,
-        transformation,
-        snap_module
-      ) {
-        const _value = snap_module.snap(transformation.clampValue(value));
-        this.update('_value', _value);
-      }),
+      defineRecalculation(
+        ['value', 'transformation', 'snap_module'],
+        function (value, transformation, snap_module) {
+          const _value = snap_module.snap(transformation.clampValue(value));
+          this.update('_value', _value);
+        }
+      ),
       defineRecalculation(
         ['value_hand', 'transformation', 'snap_module'],
         function (value_hand, transformation, snap_module) {

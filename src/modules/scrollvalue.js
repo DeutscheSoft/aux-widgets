@@ -20,7 +20,6 @@
 import { addClass, removeClass } from '../utils/dom.js';
 import { createTimer, startTimer, destroyTimer } from '../utils/timers.js';
 import { Module } from './module.js';
-import { clamp } from '../utils/transformations.js';
 
 function getClassesTarget(options) {
   return options.classes || options.node;

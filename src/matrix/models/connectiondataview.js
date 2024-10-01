@@ -117,7 +117,6 @@ export class ConnectionDataView extends Events {
     const rows = this.rows;
     const columns = this.columns;
     const matrix = this.matrix;
-    const subscribers = this.subscribers;
 
     const startIndex1 = this.startIndex1;
     const startIndex2 = this.startIndex2;

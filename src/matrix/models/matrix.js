@@ -178,8 +178,6 @@ export class MatrixData extends Datum {
       throw new Error('Connection already exists.');
     }
 
-    let connections_from_to = connections_from.get(to);
-
     connections_from.set(to, connection);
   }
 

@@ -17,8 +17,9 @@
  * Boston, MA  02110-1301  USA
  */
 
+/* eslint no-unused-vars: "off" */
+
 import { MatrixData } from '../../models/matrix.js';
-import { ListDataView } from '../../models/listdataview.js';
 import {
   ConnectionDataView,
   resizeArrayMod,

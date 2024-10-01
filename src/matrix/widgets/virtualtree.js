@@ -24,10 +24,8 @@ import { subscribeDOMEvent } from '../../utils/events.js';
 import { defineRecalculation } from '../../define_recalculation.js';
 import { defineRender, defineMeasure } from '../../renderer.js';
 
-import { Container } from './../../widgets/container.js';
 import { Scroller } from './../../widgets/scroller.js';
 import { VirtualTreeEntry } from './virtualtreeentry.js';
-import { ScrollDetector } from './scroll_detector.js';
 import { resizeArrayMod } from '../models.js';
 
 scrollbarSize();
@@ -325,8 +323,6 @@ export class VirtualTree extends Scroller {
   }
 
   _subscribeToTreeView(subs, treeView) {
-    const O = this.options;
-
     const setEntryPosition = (entry, index) => {
       const pos = this.calculateEntryPosition(index);
       entry.element.style.transform = 'translateY(' + pos.toFixed(1) + 'px)';
@@ -376,7 +372,6 @@ export class VirtualTree extends Scroller {
 
   resize() {
     const E = this.element;
-    const O = this.options;
     this.update('_view_height', E.offsetHeight);
 
     super.resize();

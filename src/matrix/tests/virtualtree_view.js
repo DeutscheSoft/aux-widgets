@@ -17,6 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
+/* eslint no-unused-vars: "off" */
+
 import { MatrixData } from '../models/matrix.js';
 import { assert, test, assertError } from './helpers.js';
 

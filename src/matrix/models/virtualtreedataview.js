@@ -724,7 +724,6 @@ export class VirtualTreeDataView extends Events {
 
     const from = this.startIndex;
     const to = from + this.amount;
-    const list = this.list;
     let subscriptions = initSubscriptions();
 
     subscriptions = addSubscription(subscriptions, () => {
