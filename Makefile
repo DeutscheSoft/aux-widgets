@@ -19,7 +19,7 @@ prettier:
 	cd prettier && npm run prettier
 
 check:
-	cd jshint && npm run check
+	cd eslint && npm run check
 
 docs:
 	cd doc && npm run build
