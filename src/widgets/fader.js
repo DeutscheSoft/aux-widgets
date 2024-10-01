@@ -27,7 +27,12 @@
  * @param {mixed} value - The new value of the option
  */
 import { SymResize, Widget } from './widget.js';
-import { warning } from '../utils/warning.js';
+import {
+  warningEvents,
+  warningOptionsDefaults,
+  warningOptionsTypes,
+  warningRenderers,
+} from '../utils/warning.js';
 import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
 import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
 import { Scale } from './scale.js';
@@ -135,6 +140,7 @@ export class Fader extends Widget {
   static get _options() {
     return [
       rangedOptionsTypes,
+      warningOptionsTypes,
       Scale.getOptionTypes(),
       {
         value: 'number',
@@ -157,6 +163,7 @@ export class Fader extends Widget {
   static get options() {
     return [
       rangedOptionsDefaults,
+      warningOptionsDefaults,
       {
         value: 0,
         division: 1,
@@ -180,40 +187,38 @@ export class Fader extends Widget {
   }
 
   static get static_events() {
-    return mergeStaticEvents(
-      {
-        set_bind_click: function (value) {
-          if (value) this.on('click', clicked);
-          else this.off('click', clicked);
-        },
-        set_bind_dblclick: function (value) {
-          if (value) this.on('dblclick', dblClick);
-          else this.off('dblclick', dblClick);
-        },
-        set_layout: function (layout) {
-          this.options.direction = vert(layout) ? 'vertical' : 'horizontal';
-          this.drag.set('direction', this.options.direction);
-          this.scroll.set('direction', this.options.direction);
-        },
-        set_interacting: function (v) {
-          const cursor = this.options.cursor;
-          if (!cursor) return;
-          if (v) setGlobalCursor(cursor);
-          else unsetGlobalCursor(cursor);
-        },
-        click: function (e) {
-          if (this.value && this.value.element.contains(e.target)) return;
-          this._handle.focus();
-        },
-        focus_move: focusMoveDefault(),
+    return mergeStaticEvents(rangedEvents, warningEvents, {
+      set_bind_click: function (value) {
+        if (value) this.on('click', clicked);
+        else this.off('click', clicked);
       },
-      rangedEvents
-    );
+      set_bind_dblclick: function (value) {
+        if (value) this.on('dblclick', dblClick);
+        else this.off('dblclick', dblClick);
+      },
+      set_layout: function (layout) {
+        this.options.direction = vert(layout) ? 'vertical' : 'horizontal';
+        this.drag.set('direction', this.options.direction);
+        this.scroll.set('direction', this.options.direction);
+      },
+      set_interacting: function (v) {
+        const cursor = this.options.cursor;
+        if (!cursor) return;
+        if (v) setGlobalCursor(cursor);
+        else unsetGlobalCursor(cursor);
+      },
+      click: function (e) {
+        if (this.value && this.value.element.contains(e.target)) return;
+        this._handle.focus();
+      },
+      focus_move: focusMoveDefault(),
+    });
   }
 
   static get renderers() {
     return [
       ...rangedRenderers,
+      ...warningRenderers,
       defineRender('layout', function (layout) {
         const E = this.element;
         removeClass(
@@ -407,15 +412,6 @@ export class Fader extends Widget {
 
   getARIATargets() {
     return [this._handle];
-  }
-
-  // GETTER & SETTER
-  set(key, value) {
-    if (key === 'value') {
-      const O = this.options;
-      if (value > O.max || value < O.min) warning(this.element);
-    }
-    return super.set(key, value);
   }
 }
 
