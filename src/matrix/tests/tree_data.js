@@ -50,7 +50,7 @@ test('Adding and removing ports', () => {
     try {
       group.addPort(ports[0]);
       assert(false);
-    } catch (e) {}
+    } catch {}
   }
 
   ports.forEach((port) => group.deletePort(port));

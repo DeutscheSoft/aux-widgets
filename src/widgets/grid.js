@@ -93,7 +93,7 @@ function measureCoords(
     let bb;
     try {
       bb = label.getBBox();
-    } catch (e) {
+    } catch {
       // if we are hidden, this may throw. we should force redraw at some later point, but its hard to do. the grid should really be deactivated by an option.
       return;
     }

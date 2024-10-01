@@ -41,7 +41,7 @@
 export function error() {
   try {
     console.error.apply(console, arguments);
-  } catch (e) {
+  } catch {
     /* empty */
   }
 }
@@ -56,7 +56,7 @@ export function error() {
 export function warn() {
   try {
     console.warn.apply(console, arguments);
-  } catch (e) {
+  } catch {
     /* empty */
   }
 }
@@ -71,7 +71,7 @@ export function log() {
   if (!console) return;
   try {
     console.log.apply(console, arguments);
-  } catch (e) {
+  } catch {
     /* empty */
   }
 }

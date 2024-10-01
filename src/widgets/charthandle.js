@@ -1106,7 +1106,7 @@ export class ChartHandle extends Widget {
           try {
             const height = _label.getBBox().height;
             this.set('_label_height', height);
-          } catch (e) {
+          } catch {
             /* _label is not in the DOM yet */
           }
         });

@@ -103,7 +103,7 @@ function lowParseAttribute(type, x) {
     case 'array':
       try {
         return lowParseAttribute.call(this, 'json', x);
-      } catch (err) {
+      } catch {
         /* empty */
       }
       return lowParseAttribute.call(this, 'js', x);

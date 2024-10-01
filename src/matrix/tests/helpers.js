@@ -28,7 +28,7 @@ export function assertError(cb) {
   try {
     cb();
     assert(false, 'Expected an error.');
-  } catch (err) {
+  } catch {
     ok++;
     // we expect this
   }
