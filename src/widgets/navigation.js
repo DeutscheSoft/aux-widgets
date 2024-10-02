@@ -217,11 +217,13 @@ export class Navigation extends Container {
     return {
       set_direction: function (value) {
         if (!this.get('icons')) return;
-        this.prev.set('icon', value === 'vertical' ? 'arrowup' : 'arrowleft'); //"\u25B2" : "\u25C0");
-        this.next.set(
-          'icon',
-          value === 'vertical' ? 'arrowdown' : 'arrowright'
-        ); //"\u25BC" : "\u25B6");
+        if (this.prev)
+          this.prev.set('icon', value === 'vertical' ? 'arrowup' : 'arrowleft'); //"\u25B2" : "\u25C0");
+        if (this.next)
+          this.next.set(
+            'icon',
+            value === 'vertical' ? 'arrowdown' : 'arrowright'
+          ); //"\u25BC" : "\u25B6");
       },
       hide: function () {
         if (this._scroll_animation) {
@@ -234,8 +236,12 @@ export class Navigation extends Container {
         }
       },
       set_select: function (val) {
-        this.prev.set('disabled', val <= 0);
-        this.next.set('disabled', val === this.buttons.getButtons().length - 1);
+        if (this.prev) this.prev.set('disabled', val <= 0);
+        if (this.next)
+          this.next.set(
+            'disabled',
+            val === this.buttons.getButtons().length - 1
+          );
       },
       set_arrows: function (arrows) {
         this.set('show_prev', arrows);
