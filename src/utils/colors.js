@@ -255,6 +255,21 @@ function decodeColor(args) {
   return { r: S.a, g: S.b, b: S.c, type: 'rgb' };
 }
 
+function getLuminosity(color) {
+  let { r, g, b } = color;
+  r /= 255;
+  g /= 255;
+  b /= 255;
+
+  r = r < 0.03928 ? r / 12.92 : Math.pow((r + 0.055) / 1.055, 2.4);
+  g = g < 0.03928 ? g / 12.92 : Math.pow((g + 0.055) / 1.055, 2.4);
+  b = b < 0.03928 ? b / 12.92 : Math.pow((b + 0.055) / 1.055, 2.4);
+
+  const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+  return luminance;
+}
+
 /* RGB */
 
 /**
@@ -345,7 +360,8 @@ export function RGBToHSL() {
  * @returns {string} Hex color string.
  */
 export function RGBToBW() {
-  return RGBToGray.apply(null, arguments) >= 0.5 ? '#000000' : '#ffffff';
+  const luminosity = getLuminosity(decodeColor(arguments, 'r', 'g', 'b'));
+  return luminosity > 0.179 ? '#000000' : '#ffffff';
 }
 
 /**
@@ -361,7 +377,8 @@ export function RGBToBW() {
  * @returns {string} Hex color string.
  */
 export function RGBToWB() {
-  return RGBToGray.apply(null, arguments) < 0.5 ? '#000000' : '#ffffff';
+  const luminosity = getLuminosity(decodeColor(arguments, 'r', 'g', 'b'));
+  return luminosity <= 0.179 ? '#000000' : '#ffffff';
 }
 
 /**
