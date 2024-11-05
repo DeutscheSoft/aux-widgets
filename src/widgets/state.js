@@ -63,7 +63,8 @@ export class State extends Widget {
   static get renderers() {
     return [
       defineRender('color', function (color) {
-        this.element.style['background-color'] = color ? color : void 0;
+        if (color) this.element.style['background-color'] = color;
+        else this.element.style.removeProperty('background-color');
       }),
       defineRender('state', function (state) {
         const E = this.element;
