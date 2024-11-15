@@ -71,8 +71,8 @@ export function defineRange(widget, args, name) {
     range = new Range(mergeObjects(defaultRange, args));
   }
   if (name) {
-    widget.set(name, range);
     widget[name] = range;
+    widget.set(name, range);
     widget.on('set_' + name, rangeOptionChanged);
   }
   /**
