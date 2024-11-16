@@ -360,7 +360,7 @@ export function RGBToHSL() {
  * @returns {string} Hex color string.
  */
 export function RGBToBW() {
-  const luminosity = getLuminosity(decodeColor(arguments, 'r', 'g', 'b'));
+  const luminosity = getLuminosity(decodeArgs(arguments, 'r', 'g', 'b'));
   return luminosity > 0.179 ? '#000000' : '#ffffff';
 }
 
@@ -377,7 +377,7 @@ export function RGBToBW() {
  * @returns {string} Hex color string.
  */
 export function RGBToWB() {
-  const luminosity = getLuminosity(decodeColor(arguments, 'r', 'g', 'b'));
+  const luminosity = getLuminosity(decodeArgs(arguments, 'r', 'g', 'b'));
   return luminosity <= 0.179 ? '#000000' : '#ffffff';
 }
 
