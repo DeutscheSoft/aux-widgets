@@ -742,21 +742,6 @@ export function observeDOM(element, callback, options) {
 }
 
 /**
- * Set focus to an element after a short timeout. This can be used to
- * prevent browsers grabbing focus because of bubbling or collecting.
- *
- * @param {HTMLElement} element  - The element to set focus on.
- * @param {Number} [timeout=50] - The timeout to use in milliseconds.
- *
- * @function setDelayedFocus
- */
-export function setDelayedFocus(element, timeout) {
-  setTimeout((v) => {
-    element.focus();
-  }, timeout || 50);
-}
-
-/**
  * If the given attributeValue is either null nor undefined, the given
  * attributeName is removed using removeAttribute. Otherwise, it is
  * set using setAttribute.

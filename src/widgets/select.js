@@ -23,7 +23,7 @@ import { defineChildWidget } from './../child_widget.js';
 import { Button } from './button.js';
 import { Label } from './label.js';
 import { Icon } from './icon.js';
-import { setDelayedFocus, createID } from '../utils/dom.js';
+import { createID } from '../utils/dom.js';
 import { Timer } from '../utils/timers.js';
 import { SymResize } from './widget.js';
 
@@ -70,6 +70,8 @@ function setHasIcon() {
   });
   this.set('_has_icon', _has_icon);
 }
+
+const focusDelay = 50;
 
 /**
  * Select provides a {@link Button} with a select list to choose from
@@ -138,13 +140,6 @@ export class Select extends Button {
     return {
       click: function () {
         this.set('show_list', !this.options.show_list);
-      },
-      set_show_list: function (v) {
-        this.set('arrow', v ? 'arrowup' : 'arrowdown');
-        if (v) {
-          const entry = this.get('selected_entry') || this.entries[0];
-          if (entry) setDelayedFocus(entry.element);
-        }
       },
       set_selected_entry: function (entry) {
         const entries = this.entries;
@@ -231,6 +226,8 @@ export class Select extends Button {
           this.__timeout = false;
         }
 
+        this.update('arrow', show_list ? 'arrowup' : 'arrowdown');
+
         if (show_list) {
           const ew = outerWidth(element, false);
           const cw = width();
@@ -300,12 +297,19 @@ export class Select extends Button {
         }
       }),
       defineRender(['_show_list'], function (_show_list) {
-        const { element, _list } = this;
+        const { _list, _focus_entry_timer, _focus_element_timer } = this;
+
+        const activeElement = document.activeElement;
+
+        _focus_element_timer.stop();
+        _focus_entry_timer.stop();
 
         if (!_show_list) {
+          if (activeElement && _list.contains(activeElement))
+            _focus_element_timer.restart(focusDelay);
           _list.remove();
-          setDelayedFocus(element);
-          element.removeAttribute('aria-expanded');
+        } else {
+          _focus_entry_timer.restart(focusDelay);
         }
       }),
       defineRender([SymResize, 'auto_size', SymEntriesChanged], function (
@@ -336,6 +340,13 @@ export class Select extends Button {
 
   initialize(options) {
     this.__timeout = false;
+    this._focus_entry_timer = new Timer(() => {
+      const entry = this.get('selected_entry') || this.entries[0];
+      if (entry) entry.element.focus();
+    });
+    this._focus_element_timer = new Timer(() => {
+      this.element.focus();
+    });
 
     /**
      * @member {Array} Select#entries - An array containing all entry objects with members <code>label</code> and <code>value</code>.
@@ -383,6 +394,8 @@ export class Select extends Button {
     }
     this.clear();
     this._list.remove();
+    this._focus_element_timer.stop();
+    this._focus_entry_timer.stop();
     document.removeEventListener('touchstart', this._globalTouchStart);
     document.removeEventListener('mousedown', this._globalTouchStart);
     super.destroy();
@@ -992,9 +1005,12 @@ function onFocusMove(O) {
     i = parent.indexByEntry(this);
     if (direction === 'up' || direction === 'right') i -= 1;
     else i += 1;
-    i = Math.max(0, Math.min(i, last));
+    if (i < 0 || i > last) return;
   }
-  setDelayedFocus(parent.entries[i].element);
+  setTimeout(() => {
+    if (this.isDestructed() || parent.isDestructed()) return;
+    parent.entries[i].element.focus();
+  }, focusDelay);
 }
 
 function onKeyDown(e) {
