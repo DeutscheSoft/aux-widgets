@@ -221,10 +221,7 @@ export class Select extends Button {
       ) {
         const { element, _list } = this;
 
-        if (this.__timeout !== false) {
-          window.clearTimeout(this.__timeout);
-          this.__timeout = false;
-        }
+        this._close_animation_finished.stop();
 
         this.update('arrow', show_list ? 'arrowup' : 'arrowdown');
 
@@ -287,9 +284,7 @@ export class Select extends Button {
             const duration = getDuration(_list);
 
             if (duration > 0) {
-              this.__timeout = window.setTimeout(() => {
-                this.set('_show_list', false);
-              }, duration);
+              this._close_animation_finished.restart(duration);
             } else {
               this.set('_show_list', false);
             }
@@ -339,7 +334,9 @@ export class Select extends Button {
   }
 
   initialize(options) {
-    this.__timeout = false;
+    this._close_animation_finished = new Timer(() => {
+      this.set('_show_list', false);
+    });
     this._focus_entry_timer = new Timer(() => {
       const entry = this.get('selected_entry') || this.entries[0];
       if (entry) entry.element.focus();
@@ -388,12 +385,9 @@ export class Select extends Button {
   }
 
   destroy() {
-    if (this.__timeout !== false) {
-      window.clearTimeout(this.__timeout);
-      this.__timeout = false;
-    }
     this.clear();
     this._list.remove();
+    this._close_animation_finished.stop();
     this._focus_element_timer.stop();
     this._focus_entry_timer.stop();
     document.removeEventListener('touchstart', this._globalTouchStart);
