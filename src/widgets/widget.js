@@ -156,7 +156,7 @@ function setInteractionCount(widget, value) {
 
 function onFocusKeyDown(e) {
   if (KEYS.indexOf(e.code) < 0) return;
-  if (e.preventDefault) e.preventDefault();
+
   const o = { speed: 'normal', event: e };
   if (e.code.startsWith('Arrow')) {
     if (e.ctrlKey) o.speed = 'slow';
@@ -176,7 +176,12 @@ function onFocusKeyDown(e) {
     o.speed = 'full';
   }
   this.emit('focus_move', o);
-  return false;
+
+  if (e.srcElement.tagName !== 'INPUT') {
+    if (e.preventDefault) e.preventDefault();
+    return false;
+  }
+  return true;
 }
 
 /**
