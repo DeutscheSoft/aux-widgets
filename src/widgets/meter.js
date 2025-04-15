@@ -69,6 +69,7 @@ function clearInterval(ctx, w, h, a, is_vertical) {
     }
   }
 }
+
 function drawFull(ctx, w, h, a, is_vertical) {
   ctx.fillRect(0, 0, w, h);
   clearInterval(ctx, w, h, a, is_vertical);
@@ -132,6 +133,29 @@ function subtractIntervals(a, b) {
   }
 
   return ret;
+}
+function invertIntervals(intervals, size) {
+  const result = [];
+  let start = 0;
+  for (let i = 0; i < intervals.length; i += 2) {
+    const lhs = intervals[i];
+    const rhs = intervals[i + 1];
+
+    if (start < lhs) {
+      result.push(start, lhs);
+    }
+    start = rhs;
+  }
+
+  if (start < size) {
+    result.push(start, size);
+  }
+
+  for (let i = 0; i < result.length; i++) {
+    intervals[i] = result[i];
+  }
+
+  intervals.length = result.length;
 }
 
 function fromGradientObject(gradient) {
@@ -284,6 +308,12 @@ function drawGradient(element, O) {
  *   and its width and height. Alternatively, provide an object with numeric values as key and the
  *   color as value, or an array of objects with 'value' and 'color' entry.
  * @property {String|Boolean} [options.background] - Background color to be used if no gradient is set.
+ * @property {String} [options.paint_mode='inverse'] - Either <code>value</code> or <code>inverse</code>.
+ *   The meter value is drawn using two canvas elements. With `paint_mode=inverse` the foreground canvas shows
+ *   the inverse of the metering value. In this mode the foreground acts as a mask and the background element
+ *   represents the current metering value.
+ *   With `paint_mode=value` the foreground canvas shows the value itself. In this mode the meter is represented
+ *   by the foreground element.
  */
 
 export class Meter extends Widget {
@@ -302,6 +332,7 @@ export class Meter extends Widget {
         background: 'string|boolean',
         gradient: 'object|boolean|function',
         foreground: 'string|boolean',
+        paint_mode: 'string',
       },
     ];
   }
@@ -325,6 +356,7 @@ export class Meter extends Widget {
         role: 'meter',
         set_ariavalue: true,
         aria_live: 'off',
+        paint_mode: 'inverse',
       },
     ];
   }
@@ -456,6 +488,7 @@ export class Meter extends Widget {
           'foreground',
           '_width',
           '_height',
+          'paint_mode',
         ],
         function (value, transformation) {
           return this.drawMeter();
@@ -583,6 +616,12 @@ export class Meter extends Widget {
     if (i < a.length) a.length = i;
     makeInterval(a);
 
+    const is_vertical = vert(O.layout);
+
+    if (O.paint_mode === 'value') {
+      invertIntervals(a, is_vertical ? h : w);
+    }
+
     this._last_meters = a;
     this._current_meters = tmp;
 
@@ -607,8 +646,6 @@ export class Meter extends Widget {
       ctx.fillStyle = O.foreground;
       diff = 4;
     }
-
-    const is_vertical = vert(O.layout);
 
     if (diff === 1) {
       /* a - tmp is non-empty */
