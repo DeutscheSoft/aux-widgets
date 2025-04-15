@@ -64,6 +64,7 @@ function clearInterval(ctx, w, h, a, is_vertical) {
     }
   }
 }
+
 function drawFull(ctx, w, h, a, is_vertical) {
   ctx.fillRect(0, 0, w, h);
   clearInterval(ctx, w, h, a, is_vertical);
@@ -128,6 +129,31 @@ function subtractIntervals(a, b) {
 
   return ret;
 }
+
+function invertIntervals(intervals, size) {
+  const result = [];
+  let start = 0;
+  for (let i = 0; i < intervals.length; i += 2) {
+    const lhs = intervals[i];
+    const rhs = intervals[i + 1];
+
+    if (start < lhs) {
+      result.push(start, lhs);
+    }
+    start = rhs;
+  }
+
+  if (start < size) {
+    result.push(start, size);
+  }
+
+  for (let i = 0; i < result.length; i++) {
+    intervals[i] = result[i];
+  }
+
+  intervals.length = result.length;
+}
+
 export const Meter = defineClass({
   /**
    * Meter is a base class to build different meters from, such as {@link LevelMeter}.
@@ -180,6 +206,12 @@ export const Meter = defineClass({
    * @property {String|Boolean} [options.foreground] - Color to draw the overlay. Has to be set
    *   via option for performance reasons. Use pure opaque color. If opacity is needed, set via CSS
    *   on `.aux-meter > .aux-bar > .aux-mask`.
+   * @property {String} [options.paint_mode='inverse'] - Either <code>value</code> or <code>inverse</code>.
+   *   The meter value is drawn using two canvas elements. With `paint_mode=inverse` the foreground canvas shows
+   *   the inverse of the metering value. In this mode the foreground acts as a mask and the background element
+   *   represents the current metering value.
+   *   With `paint_mode=value` the foreground canvas shows the value itself. In this mode the meter is represented
+   *   by the foreground element.
    */
 
   Extends: Widget,
@@ -200,6 +232,7 @@ export const Meter = defineClass({
       background: 'string|boolean',
       gradient: 'object|boolean',
       foreground: 'string|boolean',
+      paint_mode: 'string',
     }
   ),
   options: {
@@ -215,6 +248,7 @@ export const Meter = defineClass({
     background: false,
     gradient: false,
     foreground: 'black',
+    paint_mode: 'inverse',
   },
   static_events: {
     set_base: function (value) {
@@ -429,6 +463,12 @@ export const Meter = defineClass({
     if (i < a.length) a.length = i;
     makeInterval(a);
 
+    const is_vertical = vert(O);
+
+    if (O.paint_mode === 'value') {
+      invertIntervals(a, is_vertical ? h : w);
+    }
+
     this._last_meters = a;
     this._current_meters = tmp;
 
@@ -449,7 +489,6 @@ export const Meter = defineClass({
 
     var ctx = this._canvas.getContext('2d');
     ctx.fillStyle = O.foreground;
-    var is_vertical = vert(O);
 
     if (diff === 1) {
       /* a - tmp is non-empty */
