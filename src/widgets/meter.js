@@ -38,7 +38,12 @@ import {
   createID,
   applyAttribute,
 } from '../utils/dom.js';
-import { defineRender, defineMeasure } from '../renderer.js';
+import { applyMeterFillStyle, computeMeterFillStyle } from '../utils/meter_fill_style.js';
+import {
+  defineRender,
+  defineMeasure,
+  defineRecalculation,
+} from '../renderer.js';
 
 import { FORMAT } from '../utils/sprintf.js';
 
@@ -158,101 +163,6 @@ function invertIntervals(intervals, size) {
   intervals.length = result.length;
 }
 
-function fromGradientObject(gradient) {
-  const entries = [];
-
-  for (const entry in gradient) {
-    const value = parseFloat(entry);
-    const color = gradient[entry];
-
-    entries.push({ value, color });
-  }
-
-  return entries;
-}
-
-function drawGradient(element, O) {
-  const {
-    gradient,
-    background,
-    _width,
-    _height,
-    transformation,
-    snap_module,
-    layout,
-    base,
-    segment,
-  } = O;
-
-  if (!gradient) {
-    const ctx = element.getContext('2d');
-    ctx.fillStyle = background;
-    ctx.fillRect(0, 0, _width, _height);
-  } else if (typeof gradient === 'function') {
-    gradient.call(this, element.getContext('2d'), O, element, _width, _height);
-  } else if (typeof gradient === 'object') {
-    const basePx = transformation.valueToPixel(base);
-    const vert = layout === 'left' || layout === 'right';
-
-    let entries = (Array.isArray(gradient)
-      ? gradient
-      : fromGradientObject(gradient)
-    ).map(({ color, value }) => {
-      if (isNaN(value) || !isFinite(value))
-        throw new TypeError(`Malformed gradient entry '${entry}'.`);
-
-      let coef;
-
-      if (segment > 1) {
-        const valuePx = transformation.valueToPixel(snap_module.snap(value));
-        const segmentPx = Math.round(
-          basePx + segment * Math.round((valuePx - basePx) / segment)
-        );
-        coef = transformation.valueToCoef(
-          transformation.pixelToValue(segmentPx)
-        );
-      } else {
-        coef = transformation.valueToCoef(snap_module.snap(value));
-      }
-
-      if (!(coef >= 0)) coef = 0;
-      else if (!(coef <= 1)) coef = 1;
-
-      return {
-        value,
-        color,
-        coef: vert ? 1 - coef : coef,
-      };
-    });
-
-    entries.sort(function (a, b) {
-      return a.value - b.value;
-    });
-
-    const length = entries.length;
-
-    if (length > 1 && entries[0].coef > entries[length - 1].coef)
-      entries = entries.reverse();
-
-    const ctx = element.getContext('2d');
-    const grd = ctx.createLinearGradient(
-      0,
-      0,
-      vert ? 0 : _width || 0,
-      vert ? _height || 0 : 0
-    );
-
-    // Add all colors starting from the lowest coefficient
-    entries.forEach(({ coef, color }) => {
-      grd.addColorStop(coef, color);
-    });
-
-    ctx.fillStyle = grd;
-    ctx.fillRect(0, 0, _width, _height);
-  } else {
-    throw new TypeError('Unexpected gradient type.');
-  }
-}
 
 /**
  * Meter is a base class to build different meters from, such as {@link LevelMeter}.
@@ -299,15 +209,16 @@ function drawGradient(element, O) {
  * @property {Number} [options.value_label=0] - The value to be drawn in the value label.
  * @property {Boolean} [options.sync_value=true] - Synchronize the value on the bar with
  *   the value label using `options.format_value` function.
- * @property {String|Boolean} [options.foreground] - Color to draw the overlay. Has to be set
- *   via option for performance reasons. Use pure opaque color. If opacity is needed, set via CSS
- *   on `.aux-meter > .aux-bar > .aux-mask`.
- * @property {Object[]|Object|Boolean|Function} [options.gradient=false] - The color gradient of the meter.
- *   Set to `false` to use the `background` option. Alternatively provide a callback to draw on
- *   the canvas manually. It receives the canvas's context, the widgets options, the canvas element
- *   and its width and height. Alternatively, provide an object with numeric values as key and the
- *   color as value, or an array of objects with 'value' and 'color' entry.
- * @property {String|Boolean} [options.background] - Background color to be used if no gradient is set.
+ * @property {String|Object|Object[]|Function} [options.foreground] - Color or gradient definition to draw the overlay.
+ *   Can be either a string containing a valid CSS color (e.g. '#12345678', 'rgba(0,112,45, 0.6)', 'black')
+ *   or an array containing objects like `[{value: -60, color: 'green'}, {value: 0, color: '#ff8800'}]`
+ *   or an object with numerical strings as keys, e.g. `{'-60': 'green', '0': '#ff8800'}`
+ *   or a function receiving the canvas' context, the widget's options, the canvas element and width and height.
+ * @property {String|Object[]|Object|Function} [options.background] - Color or gradient definition to draw the backdrop.
+ *   Can be either a string containing a valid CSS color (e.g. '#12345678', 'rgba(0,112,45, 0.6)', 'black')
+ *   or an array containing objects like `[{value: -60, color: 'green'}, {value: 0, color: '#ff8800'}]`
+ *   or an object with numerical strings as keys, e.g. `{'-60': 'green', '0': '#ff8800'}`
+ * @property {Boolean|Object[]|Object|Function} [options.gradient=false] - Deprecated. Use `background`, instead.
  * @property {String} [options.paint_mode='inverse'] - Either <code>value</code> or <code>inverse</code>.
  *   The meter value is drawn using two canvas elements. With `paint_mode=inverse` the foreground canvas shows
  *   the inverse of the metering value. In this mode the foreground acts as a mask and the background element
@@ -329,9 +240,9 @@ export class Meter extends Widget {
         label: 'string|boolean',
         sync_value: 'boolean',
         format_value: 'function',
-        background: 'string|boolean',
+        background: 'string|boolean|array|object',
         gradient: 'object|boolean|function',
-        foreground: 'string|boolean',
+        foreground: 'string|boolean|array|object',
         paint_mode: 'string',
       },
     ];
@@ -350,9 +261,9 @@ export class Meter extends Widget {
         sync_value: true,
         format_value: FORMAT('%.2f'),
         levels: [1, 5, 10], // array of steps where to draw labels
-        background: false,
+        background: 'transparent',
         gradient: false,
-        foreground: 'black',
+        foreground: 'transparent',
         role: 'meter',
         set_ariavalue: true,
         aria_live: 'off',
@@ -443,33 +354,26 @@ export class Meter extends Widget {
       }),
       defineRender(
         [
-          'gradient',
-          'background',
+          '_background_fillstyle',
           '_width',
           '_height',
+          'gradient',
+          'background',
           'reverse',
           'transformation',
           'snap_module',
           'layout',
         ],
-        function (
-          gradient,
-          background,
-          _width,
-          _height,
-          reverse,
-          transformation,
-          snap_module,
-          layout
-        ) {
+        function (_background_fillstyle, _width, _height) {
           if (!(_height > 0 && _width > 0)) return;
-          const { _backdrop } = this;
+          const { _backdrop, options } = this;
           _backdrop.setAttribute('height', Math.round(_height));
           _backdrop.setAttribute('width', Math.round(_width));
-          /* FIXME: I am not sure why this is even necessary */
           _backdrop.style.width = _width + 'px';
           _backdrop.style.height = _height + 'px';
-          drawGradient(_backdrop, this.options);
+          const ctx = _backdrop.getContext('2d');
+          applyMeterFillStyle(this, _backdrop, _background_fillstyle);
+          ctx.fillRect(0, 0, _width, _height);
         }
       ),
       defineMeasure(['_width', '_height', 'layout'], function (
@@ -485,7 +389,8 @@ export class Meter extends Widget {
           'value',
           'transformation',
           'segment',
-          'foreground',
+          'reverse',
+          '_foreground_fillstyle',
           '_width',
           '_height',
           'paint_mode',
@@ -503,6 +408,45 @@ export class Meter extends Widget {
         const value = label !== false ? this.label.get('id') : null;
         applyAttribute(this.element, 'aria-labelledby', value);
       }),
+      defineRecalculation(
+        [
+          'gradient',
+          'background',
+          '_width',
+          '_height',
+          'reverse',
+          'transformation',
+          'snap_module',
+          'layout',
+        ],
+        function (gradient, background) {
+          const fillStyle = computeMeterFillStyle(
+            gradient || background,
+            this._backdrop,
+            this.options
+          );
+          this.update('_background_fillstyle', fillStyle);
+        }
+      ),
+      defineRecalculation(
+        [
+          'foreground',
+          '_width',
+          '_height',
+          'reverse',
+          'transformation',
+          'snap_module',
+          'layout',
+        ],
+        function (foreground) {
+          const fillStyle = computeMeterFillStyle(
+            foreground,
+            this._canvas,
+            this.options
+          );
+          this.update('_foreground_fillstyle', fillStyle);
+        }
+      ),
     ];
   }
 
@@ -642,8 +586,7 @@ export class Meter extends Widget {
 
     const ctx = this._canvas.getContext('2d');
 
-    if (ctx.fillStyle !== O.foreground) {
-      ctx.fillStyle = O.foreground;
+    if (applyMeterFillStyle(this, this._canvas, O._foreground_fillstyle)) {
       diff = 4;
     }
 

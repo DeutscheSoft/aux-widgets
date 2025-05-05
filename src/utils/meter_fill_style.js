@@ -39,8 +39,9 @@ export function computeMeterFillStyle(definition, element, options) {
     const basePx = transformation.valueToPixel(base);
     const vert = layout === 'left' || layout === 'right';
 
-    let entries = (
-      Array.isArray(definition) ? definition : fromGradientObject(definition)
+    let entries = (Array.isArray(definition)
+      ? definition
+      : fromGradientObject(definition)
     ).map(({ color, value }) => {
       if (isNaN(value) || !isFinite(value))
         throw new TypeError(`Malformed definition entry '${entry}'.`);
