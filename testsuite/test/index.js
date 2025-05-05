@@ -64,3 +64,4 @@ import './circular.js';
 import './knob.js';
 import './valueknob.js';
 import './merge_objects.js';
+import './intervals.js';
