@@ -40,11 +40,11 @@ The following table lists the essential features defining the minimum
 versions of browers required. CSS Variables are used dynamically so they
 can't be replaced by transpilation.
 
-| Feature       | Edge  | Firefox | Chrome  | Safari | Safari iOS |
-| ------------: | :---: | :-----: | :-----: | :----: | :--------: |
-| CSS Vars      | 16    | 31      | 49      | 9.1    | 9.3        |
-| ES6 Modules   | 16    | 60      | 61      | 11     | 11         |
-| WebComponents | 79    | 63      | 67      | 10.1   | 10.3       |
+|       Feature | Edge | Firefox | Chrome | Safari | Safari iOS |
+| ------------: | :--: | :-----: | :----: | :----: | :--------: |
+|      CSS Vars |  16  |   31    |   49   |  9.1   |    9.3     |
+|   ES6 Modules |  16  |   60    |   61   |   11   |     11     |
+| WebComponents |  79  |   63    |   67   |  10.1  |    10.3    |
 
 AUX was designed to be lightweight and fast while keeping the full
 flexibility which comes with CSS. AUX widgets offer consistent and intuitive
@@ -55,8 +55,8 @@ APIs.
 The complete API documentation can be found at [http://docs.deuso.de/].
 
 Alternatively, the documentation can be directly built from the source
-code.  The documentation in the source files uses the common jsdoc
-syntax and [JSDoc 3](https://usejsdoc.org).  can be used to generate the
+code. The documentation in the source files uses the common jsdoc
+syntax and [JSDoc 3](https://usejsdoc.org). can be used to generate the
 documentation. If you have jsdoc installed, simply run
 
     npm run build

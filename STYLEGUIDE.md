@@ -7,20 +7,20 @@ same line and around 80 chars per line.
 
 ## Naming conventions
 
-* Classes: PascalCase (abbrevations uppercase, e.g. RGB, HTML or DOM)
-* Functions: camelCase (abbrevations uppercase, e.g. RGB, HTML or DOM)
-* variables, members, options ad attributes: lower_case_with_underscore
-* Private members: \_my_private_member
-* More private members: \__my_very_private_member
-* CSS classes: aux-myclassname
-* Event names: myeventname
+- Classes: PascalCase (abbrevations uppercase, e.g. RGB, HTML or DOM)
+- Functions: camelCase (abbrevations uppercase, e.g. RGB, HTML or DOM)
+- variables, members, options ad attributes: lower_case_with_underscore
+- Private members: \_my_private_member
+- More private members: \_\_my_very_private_member
+- CSS classes: aux-myclassname
+- Event names: myeventname
 
 ## Spaces
 
-* No spaces between `function` and arguments
-* Spaces around operators
-* Spaces after comma
-* No spaces between first and last member of array and object brackets
+- No spaces between `function` and arguments
+- Spaces around operators
+- Spaces after comma
+- No spaces between first and last member of array and object brackets
 
 ## Examples
 
