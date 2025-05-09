@@ -125,7 +125,7 @@ class CanvasDrawingContext {
           ctx.fillRect(start, 0, size, height);
         }
         sizeDrawn += size;
-      },
+      }
     );
 
     const nextState = this.nextState;
