@@ -20,7 +20,7 @@
 /* jshint -W018 */
 
 import { defineChildWidget } from '../child_widget.js';
-import { Meter } from './meter.js';
+import { Meter, addMeterInterval } from './meter.js';
 import { State } from './state.js';
 import { addClass, toggleClass } from '../utils/dom.js';
 import { effectiveValue } from '../modules/range.js';
@@ -179,7 +179,7 @@ export class LevelMeter extends Meter {
     const base = +O.base;
     const value = this.effectiveValue();
 
-    if (value === base) return null;
+    if (value === base) return;
 
     return deferRenderNext(() => {
       return this.drawMeter();
@@ -310,15 +310,14 @@ export class LevelMeter extends Meter {
    * of performance in cases where the segment size is > 1 or on small devices where
    * the meter has a relatively small pixel size.
    */
-  calculateMeter(to, value, i) {
+  calculateMeter(to) {
     const O = this.options;
     const base = +O.base;
     const transformation = O.transformation;
-    value = +this.effectiveValue();
 
-    i = super.calculateMeter(to, value, i);
+    super.calculateMeter(to);
 
-    if (!O.show_hold) return i;
+    if (!O.show_hold) return;
 
     // shorten things
     let hold = +O.top;
@@ -326,40 +325,33 @@ export class LevelMeter extends Meter {
     const hold_size = O.hold_size * segment;
     let pos;
 
-    if (!(hold_size > 0)) return i;
+    if (!(hold_size > 0)) return;
 
     const pos_base = +transformation.valueToPixel(base);
 
     if (hold > base) {
-      /* TODO: lets snap in set() */
-      pos = transformation.valueToPixel(hold) | 0;
-      if (segment !== 1) pos = segment * (Math.round(pos / segment) | 0);
+      pos = Math.round(transformation.valueToPixel(hold));
+      if (segment !== 1) pos = segment * Math.round(pos / segment);
 
       if (pos > pos_base) {
-        to[i++] = pos - hold_size;
-        to[i++] = pos;
+        addMeterInterval(to, pos - hold_size + 1, pos);
       } else {
-        to[i++] = pos;
-        to[i++] = pos + hold_size;
+        addMeterInterval(to, pos, pos + hold_size - 1);
       }
     }
 
     hold = +O.bottom;
 
     if (hold < base) {
-      pos = transformation.valueToPixel(hold) | 0;
+      pos = Math.round(transformation.valueToPixel(hold));
       if (segment !== 1) pos = segment * (Math.round(pos / segment) | 0);
 
       if (pos > pos_base) {
-        to[i++] = pos - hold_size;
-        to[i++] = pos;
+        addMeterInterval(to, pos - hold_size + 1, pos);
       } else {
-        to[i++] = pos;
-        to[i++] = pos + hold_size;
+        addMeterInterval(to, pos, pos + hold_size - 1);
       }
     }
-
-    return i;
   }
 
   // GETTER & SETTER

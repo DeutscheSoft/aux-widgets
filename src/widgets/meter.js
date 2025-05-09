@@ -38,7 +38,10 @@ import {
   createID,
   applyAttribute,
 } from '../utils/dom.js';
-import { applyMeterFillStyle, computeMeterFillStyle } from '../utils/meter_fill_style.js';
+import {
+  applyMeterFillStyle,
+  computeMeterFillStyle,
+} from '../utils/meter_fill_style.js';
 import {
   defineRender,
   defineMeasure,
@@ -46,123 +49,92 @@ import {
 } from '../renderer.js';
 
 import { FORMAT } from '../utils/sprintf.js';
+import {
+  addInterval,
+  clearIntervals,
+  diffIntervals,
+  emptyIntervals,
+  invertIntervals,
+} from '../utils/intervals.js';
 
 function vert(layout) {
   return layout === 'left' || layout === 'right';
 }
-function fillInterval(ctx, w, h, a, is_vertical) {
-  let i;
-  if (is_vertical) {
-    for (i = 0; i < a.length; i += 2) {
-      ctx.fillRect(0, h - a[i + 1], w, a[i + 1] - a[i]);
-    }
-  } else {
-    for (i = 0; i < a.length; i += 2) {
-      ctx.fillRect(a[i], 0, a[i + 1] - a[i], h);
-    }
-  }
-}
-function clearInterval(ctx, w, h, a, is_vertical) {
-  let i;
-  if (is_vertical) {
-    for (i = 0; i < a.length; i += 2) {
-      ctx.clearRect(0, h - a[i + 1], w, a[i + 1] - a[i]);
-    }
-  } else {
-    for (i = 0; i < a.length; i += 2) {
-      ctx.clearRect(a[i], 0, a[i + 1] - a[i], h);
-    }
-  }
+
+/**
+ *
+ * @param {number[]} to
+ * @param {number} lhs
+ * @param {number} rhs
+ */
+export function addMeterInterval(to, lhs, rhs) {
+  lhs = lhs | 0;
+  rhs = rhs | 0;
+  const min = Math.min(lhs, rhs);
+  const max = Math.max(lhs, rhs);
+  addInterval(to, min, max);
 }
 
-function drawFull(ctx, w, h, a, is_vertical) {
-  ctx.fillRect(0, 0, w, h);
-  clearInterval(ctx, w, h, a, is_vertical);
-}
-function makeInterval(a) {
-  let i, tmp, again;
+class CanvasDrawingContext {
+  /**
+   * @param {HTMLCanvasElement} canvas
+   * @param {object} options
+   * @param {string|CanvasGradient|CanvasPattern} options.fillStyle
+   * @param {number} options.height
+   * @param {number} options.width
+   * @param {boolean} options.vertical
+   */
+  constructor(canvas, options) {
+    this.canvas = canvas;
+    this.options = options;
+    this.currentState = null;
+    this.nextState = emptyIntervals();
+    this.ctx = canvas.getContext('2d');
+  }
 
-  do {
-    again = false;
-    for (i = 0; i < a.length - 2; i += 2) {
-      if (a[i] > a[i + 2]) {
-        tmp = a[i];
-        a[i] = a[i + 2];
-        a[i + 2] = tmp;
+  draw() {
+    const { ctx, options } = this;
 
-        tmp = a[i + 1];
-        a[i + 1] = a[i + 3];
-        a[i + 3] = tmp;
-        again = true;
-      }
+    const { width, height, vertical } = options;
+
+    if (this.currentState === null) {
+      ctx.fillStyle = options.fillStyle;
+      ctx.fillRect(0, 0, width, height);
+      this.currentState = emptyIntervals();
     }
-  } while (again);
 
-  for (i = 0; i < a.length - 2; i += 2) {
-    // the first interval overlaps with the next, we merge them
-    if (a[i + 1] > a[i + 2]) {
-      if (a[i + 3] > a[i + 1]) {
-        a[i + 1] = a[i + 3];
-      }
-      a.splice(i + 2, 2);
-      continue;
-    }
+    let sizeDrawn = 0;
+
+    diffIntervals(
+      this.currentState,
+      this.nextState,
+      (start, stop) => {
+        const size = stop - start + 1;
+        if (vertical) {
+          ctx.clearRect(0, height - stop, width, size);
+        } else {
+          ctx.clearRect(start, 0, size, height);
+        }
+        sizeDrawn += size;
+      },
+      (start, stop) => {
+        const size = stop - start + 1;
+        if (vertical) {
+          ctx.fillRect(0, height - stop, width, size);
+        } else {
+          ctx.fillRect(start, 0, size, height);
+        }
+        sizeDrawn += size;
+      },
+    );
+
+    const nextState = this.nextState;
+
+    this.nextState = this.currentState;
+    this.currentState = nextState;
+    clearIntervals(this.nextState);
   }
 }
-function cmpIntervals(a, b) {
-  let ret = 0;
-  let i;
-
-  for (i = 0; i < a.length; i += 2) {
-    if (a[i] === b[i]) {
-      if (a[i + 1] === b[i + 1]) continue;
-      ret |= a[i + 1] < b[i + 1] ? 1 : 2;
-    } else if (a[i + 1] === b[i + 1]) {
-      ret |= a[i] > b[i] ? 1 : 2;
-    } else return 4;
-  }
-  return ret;
-}
-function subtractIntervals(a, b) {
-  let i;
-  const ret = [];
-
-  for (i = 0; i < a.length; i += 2) {
-    if (a[i] === b[i]) {
-      if (a[i + 1] <= b[i + 1]) continue;
-      ret.push(b[i + 1], a[i + 1]);
-    } else {
-      if (a[i] > b[i]) continue;
-      ret.push(a[i], b[i]);
-    }
-  }
-
-  return ret;
-}
-function invertIntervals(intervals, size) {
-  const result = [];
-  let start = 0;
-  for (let i = 0; i < intervals.length; i += 2) {
-    const lhs = intervals[i];
-    const rhs = intervals[i + 1];
-
-    if (start < lhs) {
-      result.push(start, lhs);
-    }
-    start = rhs;
-  }
-
-  if (start < size) {
-    result.push(start, size);
-  }
-
-  for (let i = 0; i < result.length; i++) {
-    intervals[i] = result[i];
-  }
-
-  intervals.length = result.length;
-}
-
 
 /**
  * Meter is a base class to build different meters from, such as {@link LevelMeter}.
@@ -349,8 +321,6 @@ export class Meter extends Widget {
         /* FIXME: I am not sure why this is even necessary */
         _canvas.style.width = _width + 'px';
         _canvas.style.height = _height + 'px';
-
-        this.invalidate('foreground');
       }),
       defineRender(
         [
@@ -366,7 +336,7 @@ export class Meter extends Widget {
         ],
         function (_background_fillstyle, _width, _height) {
           if (!(_height > 0 && _width > 0)) return;
-          const { _backdrop, options } = this;
+          const { _backdrop } = this;
           _backdrop.setAttribute('height', Math.round(_height));
           _backdrop.setAttribute('width', Math.round(_width));
           _backdrop.style.width = _width + 'px';
@@ -382,20 +352,18 @@ export class Meter extends Widget {
         layout
       ) {
         this.set('basis', vert(layout) ? _height : _width);
-        this._last_meters.length = 0;
       }),
       defineRender(
         [
+          'paint_mode',
+          '_draw_context',
           'value',
+          'basis',
           'transformation',
           'segment',
-          'reverse',
-          '_foreground_fillstyle',
-          '_width',
-          '_height',
-          'paint_mode',
+          'base',
         ],
-        function (value, transformation) {
+        function () {
           return this.drawMeter();
         }
       ),
@@ -414,10 +382,11 @@ export class Meter extends Widget {
           'background',
           '_width',
           '_height',
-          'reverse',
+          'base',
           'transformation',
           'snap_module',
           'layout',
+          'segment',
         ],
         function (gradient, background) {
           const fillStyle = computeMeterFillStyle(
@@ -433,10 +402,11 @@ export class Meter extends Widget {
           'foreground',
           '_width',
           '_height',
-          'reverse',
+          'base',
           'transformation',
           'snap_module',
           'layout',
+          'segment',
         ],
         function (foreground) {
           const fillStyle = computeMeterFillStyle(
@@ -445,6 +415,20 @@ export class Meter extends Widget {
             this.options
           );
           this.update('_foreground_fillstyle', fillStyle);
+        }
+      ),
+      defineRecalculation(
+        ['_width', '_height', '_foreground_fillstyle', 'layout'],
+        function (width, height, fillStyle, layout) {
+          this.update(
+            '_draw_context',
+            new CanvasDrawingContext(this._canvas, {
+              fillStyle,
+              width,
+              height,
+              vertical: vert(layout),
+            })
+          );
         }
       ),
     ];
@@ -515,7 +499,12 @@ export class Meter extends Widget {
     this.set('_height', h);
   }
 
-  calculateMeter(to, value, i) {
+  effectiveValue() {
+    return this.options.value;
+  }
+
+  calculateMeter(to) {
+    const value = this.effectiveValue();
     const O = this.options;
     // Set the mask elements according to options.value to show a value in
     // the meter bar
@@ -527,81 +516,31 @@ export class Meter extends Widget {
      * to clear the area between base and value.
      */
 
-    /* canvas coordinates are reversed */
-    const v1 = transformation.valueToPixel(base) | 0;
-    let v2 = transformation.valueToPixel(value) | 0;
+    if (base !== value) {
+      const v1 = transformation.valueToPixel(base) | 0;
+      let v2 = transformation.valueToPixel(value) | 0;
 
-    if (segment !== 1) {
-      v2 = (v1 + segment * Math.round((v2 - v1) / segment)) | 0;
+      if (segment !== 1) {
+        v2 = (v1 + segment * Math.round((v2 - v1) / segment)) | 0;
+      }
+
+      addMeterInterval(to, v1, v2);
     }
-
-    if (v2 < v1) {
-      to[i++] = v2;
-      to[i++] = v1;
-    } else {
-      to[i++] = v1;
-      to[i++] = v2;
-    }
-
-    return i;
   }
 
   drawMeter() {
-    const O = this.options;
-    const w = Math.round(O._width);
-    const h = Math.round(O._height);
+    const { basis, paint_mode, value, _draw_context } = this.options;
+    if (!basis) return;
+    if (!_draw_context) return;
 
-    if (!(w > 0 && h > 0)) return;
+    const a = _draw_context.nextState;
+    this.calculateMeter(a, value);
 
-    const a = this._current_meters;
-    const tmp = this._last_meters;
-
-    const i = this.calculateMeter(a, O.value, 0);
-    if (i < a.length) a.length = i;
-    makeInterval(a);
-
-    const is_vertical = vert(O.layout);
-
-    if (O.paint_mode === 'value') {
-      invertIntervals(a, is_vertical ? h : w);
+    if (paint_mode === 'value') {
+      invertIntervals(a, 0, basis);
     }
 
-    this._last_meters = a;
-    this._current_meters = tmp;
-
-    let diff;
-
-    if (tmp.length === a.length) {
-      diff = cmpIntervals(tmp, a) | 0;
-    } else diff = 4;
-
-    if (!diff) return;
-
-    // FIXME:
-    //  - diff === 1 is currently broken for some reason
-    // Note: Safari has a rendering bug, it leads to rendering artifacts
-    // in certain situations. It is unclear what triggers this issue, simply
-    // drawing the full meter is a valid workaround for the issue.
-    if (diff === 1 || 'safari' in window) diff = 4;
-
-    const ctx = this._canvas.getContext('2d');
-
-    if (applyMeterFillStyle(this, this._canvas, O._foreground_fillstyle)) {
-      diff = 4;
-    }
-
-    if (diff === 1) {
-      /* a - tmp is non-empty */
-      clearInterval(ctx, w, h, subtractIntervals(a, tmp), is_vertical);
-      return;
-    }
-    if (diff === 2) {
-      /* tmp - a is non-empty */
-      fillInterval(ctx, w, h, subtractIntervals(tmp, a), is_vertical);
-      return;
-    }
-
-    drawFull(ctx, w, h, a, is_vertical);
+    _draw_context.draw();
   }
 
   hasBase() {
