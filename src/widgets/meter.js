@@ -379,7 +379,9 @@ export const Meter = defineClass({
 
     if (O.foreground === false) return;
 
-    if (I.basis && O._height > 0 && O._width > 0) {
+    if (!(O._height > 0 && O._width > 0)) return;
+
+    if (I.basis) {
       this._canvas.setAttribute('height', Math.round(O._height));
       this._canvas.setAttribute('width', Math.round(O._width));
       /* FIXME: I am not sure why this is even necessary */
@@ -394,10 +396,23 @@ export const Meter = defineClass({
       this._backdrop.style.height = O._height + 'px';
     }
 
-    if (I.gradient || I.background) {
-      I.gradient = I.background = false;
-      this.drawGradient(this._backdrop, O.gradient, O.background);
+    if (I.foreground || I.basis || I._width || I._height)
+    {
+      const canvas = this._canvas;
+      this.drawGradient(canvas, O.foreground);
+      const ctx = canvas.getContext('2d');
+      this._current_meters.length = 0;
+      ctx.fillRect(0, 0, O._width, O._height);
     }
+
+    if (I.gradient || I.background || I.basis || I._width || I._height) {
+      I.gradient = I.background = I._width = I._height = false;
+      const canvas = this._backdrop;
+      this.drawGradient(canvas, O.gradient || O.background);
+      const ctx = canvas.getContext('2d');
+      ctx.fillRect(0, 0, O._width, O._height);
+    }
+
 
     if (I.value || I.basis || I.min || I.max || I.segment || I.foreground) {
       I.basis = I.value = I.min = I.max = I.segment = I.foreground = false;
