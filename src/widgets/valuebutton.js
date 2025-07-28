@@ -133,9 +133,10 @@ export class ValueButton extends Button {
     return [
       ...rangedRenderers,
       defineRender(
-        ['label', 'aria_labelledby', 'value.aria_labelledby'],
+        ['label', 'aria_labelledby', 'value.aria_labelledby', 'show_value'],
         function (label, aria_labelledby, value_aria_labelledby) {
           if (value_aria_labelledby !== void 0) return;
+          if (!this.value) return;
 
           const { _input } = this.value;
 
