@@ -110,11 +110,12 @@ export class ValueKnob extends Widget {
         );
         addClass(E, 'aux-' + layout);
       }),
-      defineRender(['label', 'aria_labelledby'], function (
+      defineRender(['label', 'aria_labelledby', 'show_value'], function (
         label,
         aria_labelledby
       ) {
         if (aria_labelledby !== void 0) return;
+        if (!this.value) return;
 
         const { svg } = this.knob;
         const { _input } = this.value;
