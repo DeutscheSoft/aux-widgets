@@ -401,7 +401,7 @@ export const Meter = defineClass({
       const canvas = this._canvas;
       this.drawGradient(canvas, O.foreground);
       const ctx = canvas.getContext('2d');
-      this._current_meters.length = 0;
+      this._last_meters.length = 0;
       ctx.fillRect(0, 0, O._width, O._height);
     }
 
