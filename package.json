@@ -12,7 +12,8 @@
     "test": "tests"
   },
   "scripts": {
-    "format": "npx 'prettier@2.0.5' --write --single-quote --jsx-bracket-same-line ."
+    "format": "npx 'prettier@2.0.5' --write --single-quote --jsx-bracket-same-line .",
+    "format:check": "npx 'prettier@2.0.5' --write --single-quote --jsx-bracket-same-line --check ."
   },
   "repository": {
     "type": "git",
