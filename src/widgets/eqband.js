@@ -40,8 +40,26 @@ const type_to_mode = {
 };
 
 const type_to_pref = {
-  parametric: ['left', 'top', 'right', 'bottom'],
-  notch: ['left', 'right', 'top', 'bottom'],
+  parametric: [
+    'left',
+    'top',
+    'right',
+    'bottom',
+    'top-left',
+    'top-right',
+    'bottom-right',
+    'bottom-left',
+  ],
+  notch: [
+    'left',
+    'right',
+    'top',
+    'bottom',
+    'top-left',
+    'top-right',
+    'bottom-right',
+    'bottom-left',
+  ],
   lowpass1: [
     'left',
     'top-left',
