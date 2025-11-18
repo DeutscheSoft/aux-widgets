@@ -29,6 +29,7 @@ import { Widget } from './widget.js';
 import { Icon } from './icon.js';
 import { Label } from './label.js';
 import { defineRender } from '../renderer.js';
+import { isElementHit } from '../utils/isElementHit.js';
 
 function resetDelayTo() {
   window.clearTimeout(this.__delayed_to);
@@ -152,10 +153,18 @@ function mousedown(e) {
 }
 
 /* TOUCH handling */
+
+/**
+ *
+ * @param {string} id
+ * @param {TouchEvent} event
+ * @returns {Touch}
+ */
 function getCurrentTouch(id, event) {
   for (let i = 0; i < event.changedTouches.length; i++) {
-    if (event.changedTouches[i].identifier === id) {
-      return event.changedTouches[i];
+    const touch = event.changedTouches[i];
+    if (touch.identifier === id) {
+      return touch;
     }
   }
 }
@@ -175,11 +184,10 @@ function touchend(e) {
   this.off('touchcancel', touchcancel);
   document.removeEventListener('touchmove', this.__ontouchmove);
 
-  const E = document.elementFromPoint(
-    e.changedTouches[0].clientX,
-    e.changedTouches[0].clientY
-  );
-  if (this.element !== E) return;
+  if (!isElementHit(this.element, current.clientX, current.clientY))
+  {
+    return;
+  }
 
   const rect = current.target.getBoundingClientRect();
   if (rect.x != this.__init_target.x || rect.y != this.__init_target.y) {
@@ -211,11 +219,9 @@ function touchcancel(e) {
   pressCancel.call(this, e);
 }
 function touchmove(e) {
-  const E = document.elementFromPoint(
-    e.changedTouches[0].clientX,
-    e.changedTouches[0].clientY
-  );
-  if (this.element !== E) {
+  const current = getCurrentTouch(this.__touch_id, e);
+  if (!isElementHit(this.element, current.clientX, current.clientY))
+  {
     touchcancel.call(this, e);
   }
 }
@@ -312,6 +318,7 @@ export class Button extends Widget {
     if (!options.element) options.element = element('div');
     this.__time_stamp = 0;
     this.__touch_id = false;
+    this.__ontouchmove = touchmove.bind(this);
     this.__init_target = null;
     this.__delayed_to = -1;
     super.initialize(options);

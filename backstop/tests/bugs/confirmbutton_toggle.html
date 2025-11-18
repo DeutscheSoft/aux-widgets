@@ -1,0 +1,12 @@
+<h1>this select is inside a shadow dom</h1>
+<div>
+  <template shadowrootmode="open">
+    <link rel="stylesheet" id="stylesheet" href="/styles/default.css" />
+    <aux-toggle label="foo"></aux-toggle>
+  </template>
+</div>
+
+<h1>this select is outside the shadow dom</h1>
+<div>
+  <aux-toggle label="foo"></aux-toggle>
+</div>
