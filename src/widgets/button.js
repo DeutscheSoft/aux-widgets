@@ -36,8 +36,6 @@ function resetDelayTo() {
   this.removeClass('aux-delayed');
 }
 
-let _touchmoveHandler;
-
 function pressStart(e) {
   const O = this.options;
   this.__time_stamp = e.timeStamp;
@@ -175,7 +173,7 @@ function touchend(e) {
 
   this.off('touchend', touchend);
   this.off('touchcancel', touchcancel);
-  document.removeEventListener('touchmove', _touchmoveHandler);
+  document.removeEventListener('touchmove', this.__ontouchmove);
 
   const E = document.elementFromPoint(
     e.changedTouches[0].clientX,
@@ -197,8 +195,7 @@ function touchstart(e) {
 
   this.on('touchend', touchend);
   this.on('touchcancel', touchcancel);
-  _touchmoveHandler = touchmove.bind(this);
-  document.addEventListener('touchmove', _touchmoveHandler);
+  document.addEventListener('touchmove', this.__ontouchmove);
 
   pressStart.call(this, e);
   return false;
@@ -209,7 +206,7 @@ function touchcancel(e) {
 
   this.off('touchend', touchend);
   this.off('touchcancel', touchcancel);
-  document.removeEventListener('touchmove', _touchmoveHandler);
+  document.removeEventListener('touchmove', this.__ontouchmove);
 
   pressCancel.call(this, e);
 }
