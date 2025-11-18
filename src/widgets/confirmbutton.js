@@ -17,7 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { addClass } from './../utils/dom.js';
+import { addClass } from '../utils/dom.js';
+import { eventOriginatedIn } from '../utils/event_originated_in.js';
 import { Button } from './button.js';
 
 /**
@@ -30,10 +31,8 @@ import { Button } from './button.js';
 function reset(e) {
   if (!this.options.state) return;
   if (e) {
-    let t = e.target;
-    while (t) {
-      if (t === this.element) return;
-      t = t.parentElement;
+    if (eventOriginatedIn(e, this.element)) {
+      return;
     }
   }
   this.emit('canceled');

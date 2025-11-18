@@ -1,0 +1,42 @@
+<h1>this select is inside a shadow dom</h1>
+<div>
+  <template shadowrootmode="open">
+    <link rel="stylesheet" id="stylesheet" href="/styles/default.css" />
+    <aux-select placeholder="click me" selected="0">
+      <aux-select-entry
+        label="My First Option"
+        icon="sine"
+        value="js:1"
+      ></aux-select-entry>
+      <aux-select-entry
+        label="Entry Number #2"
+        icon="whitenoise"
+        value="js:2"
+      ></aux-select-entry>
+      <aux-select-entry label="Another Option" value="js:3"></aux-select-entry>
+      <aux-select-entry label="What About #4?" value="js:4"></aux-select-entry>
+      <aux-select-entry label="Another Option" value="js:5"></aux-select-entry>
+      <aux-select-entry label="Another Option" value="js:6"></aux-select-entry>
+    </aux-select>
+  </template>
+</div>
+
+<h1>this select is outside the shadow dom</h1>
+<div>
+  <aux-select placeholder="click me" selected="0">
+    <aux-select-entry
+      label="My First Option"
+      icon="sine"
+      value="js:1"
+    ></aux-select-entry>
+    <aux-select-entry
+      label="Entry Number #2"
+      icon="whitenoise"
+      value="js:2"
+    ></aux-select-entry>
+    <aux-select-entry label="Another Option" value="js:3"></aux-select-entry>
+    <aux-select-entry label="What About #4?" value="js:4"></aux-select-entry>
+    <aux-select-entry label="Another Option" value="js:5"></aux-select-entry>
+    <aux-select-entry label="Another Option" value="js:6"></aux-select-entry>
+  </aux-select>
+</div>

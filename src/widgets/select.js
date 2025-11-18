@@ -51,6 +51,7 @@ import {
   deferRender,
   deferMeasure,
 } from '../renderer.js';
+import { eventOriginatedIn } from '../utils/event_originated_in.js';
 
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -363,8 +364,9 @@ export class Select extends Button {
     this._list.setAttribute('role', 'listbox');
 
     this._globalTouchStart = (e) => {
-      if (this._list.contains(e.target) || this.element.contains(e.target))
+      if (eventOriginatedIn(e, this._list) || eventOriginatedIn(e, this.element))
         return;
+
       this.showList(false);
     };
 
