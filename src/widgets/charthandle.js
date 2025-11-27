@@ -1111,28 +1111,28 @@ export class ChartHandle extends Widget {
         if (!_label) return;
         const tspans = _label.childNodes;
 
-          const width = Array.from(tspans).reduce(
-            (max, tspan) => Math.max(max, tspan.getComputedTextLength()),
-            0
-          );
+        const width = Array.from(tspans).reduce(
+          (max, tspan) => Math.max(max, tspan.getComputedTextLength()),
+          0
+        );
 
-          this.update('_label_width', width);
+        this.update('_label_width', width);
 
-          let height;
+        let height;
 
-          try {
-            height = _label.getBBox().height;
-          } catch {
-            height = 0;
-            /* _label is not in the DOM yet.
-             * This is probably because active=false
-             * which sets aux-inactive, which may result
-             * in display:none.
-             * When active is changed, this calculation is
-             * run again.
-             */
-          }
-          this.update('_label_height', height);
+        try {
+          height = _label.getBBox().height;
+        } catch {
+          height = 0;
+          /* _label is not in the DOM yet.
+           * This is probably because active=false
+           * which sets aux-inactive, which may result
+           * in display:none.
+           * When active is changed, this calculation is
+           * run again.
+           */
+        }
+        this.update('_label_height', height);
       }),
       defineRender(
         [

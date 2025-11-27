@@ -184,8 +184,7 @@ function touchend(e) {
   this.off('touchcancel', touchcancel);
   document.removeEventListener('touchmove', this.__ontouchmove);
 
-  if (!isElementHit(this.element, current.clientX, current.clientY))
-  {
+  if (!isElementHit(this.element, current.clientX, current.clientY)) {
     return;
   }
 
@@ -220,8 +219,7 @@ function touchcancel(e) {
 }
 function touchmove(e) {
   const current = getCurrentTouch(this.__touch_id, e);
-  if (!isElementHit(this.element, current.clientX, current.clientY))
-  {
+  if (!isElementHit(this.element, current.clientX, current.clientY)) {
     touchcancel.call(this, e);
   }
 }

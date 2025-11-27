@@ -364,7 +364,10 @@ export class Select extends Button {
     this._list.setAttribute('role', 'listbox');
 
     this._globalTouchStart = (e) => {
-      if (eventOriginatedIn(e, this._list) || eventOriginatedIn(e, this.element))
+      if (
+        eventOriginatedIn(e, this._list) ||
+        eventOriginatedIn(e, this.element)
+      )
         return;
 
       this.showList(false);
