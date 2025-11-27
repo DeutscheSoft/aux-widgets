@@ -33,7 +33,7 @@ import { defineRange } from '../utils/define_range.js';
 import {
   defineRender,
   defineRecalculation,
-  deferMeasure,
+  defineMeasure,
 } from '../renderer.js';
 
 import { DragCapture } from '../modules/dragcapture.js';
@@ -665,6 +665,11 @@ function setRange(range, key) {
   this.set(name, range.snap(this.get(name)));
 }
 
+// This symbol is used as a dependency for the following reasons
+// - the labels have been updated
+// - the label has been made visible/invisible
+const LabelSizeChanged = Symbol('label size changed');
+
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
  * The event is emitted for the options <code>x</code>, <code>y</code> and <code>z</code>.
@@ -1095,21 +1100,39 @@ export class ChartHandle extends Widget {
 
         if (!_label.parentNode) element.appendChild(_label);
 
-        return deferMeasure(() => {
+        this.invalidate(LabelSizeChanged);
+      }),
+      defineRender(['active'], function () {
+        // active/inactive toggles display:none
+        this.invalidate(LabelSizeChanged);
+      }),
+      defineMeasure([LabelSizeChanged], function () {
+        const { _label } = this;
+        if (!_label) return;
+        const tspans = _label.childNodes;
+
           const width = Array.from(tspans).reduce(
             (max, tspan) => Math.max(max, tspan.getComputedTextLength()),
             0
           );
 
-          this.set('_label_width', width);
+          this.update('_label_width', width);
+
+          let height;
 
           try {
-            const height = _label.getBBox().height;
-            this.set('_label_height', height);
+            height = _label.getBBox().height;
           } catch {
-            /* _label is not in the DOM yet */
+            height = 0;
+            /* _label is not in the DOM yet.
+             * This is probably because active=false
+             * which sets aux-inactive, which may result
+             * in display:none.
+             * When active is changed, this calculation is
+             * run again.
+             */
           }
-        });
+          this.update('_label_height', height);
       }),
       defineRender(
         [
