@@ -586,7 +586,7 @@ export function CSSSpace(element) {
       if (Object.prototype.hasOwnProperty.call(o, p)) {
         s = a + '-' + p;
         if (a === 'border') s += '-width';
-        o[p] += parseFloat(cs.getPropertyValue(s));
+        o[p] += parseFloat(cs.getPropertyValue(s) || 0);
       }
     }
   }
