@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineChildWidget } from '../child_widget.js';
 import {
   addClass,
   removeClass,
@@ -460,68 +459,65 @@ export class Navigation extends Container {
       this._scroll_animation = null;
     }
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'buttons',
+        create: Buttons,
+        show: true,
+        inherit_options: true,
+        userset_delegate: true,
+        static_events: {
+          set__focus: function (focus) {
+            const button = this.buttons.list[focus];
+            if (!button) return;
+            //button.element.scrollIntoView({behavior: "smooth"});
+          },
+        },
+      },
+      {
+        name: 'prev',
+        create: Button,
+        show: true,
+        default_options: {
+          class: 'aux-previous',
+          dblclick: 300,
+          tabindex: false,
+        },
+        static_events: {
+          click: prevClicked,
+          dblclick: prevDblClicked,
+        },
+        append: function () {
+          this.element.appendChild(this.prev.element);
+          if (!this.prev.__measure_clip) {
+            this.prev.observeResize(measure_clip.bind(this));
+            this.prev.__measure_clip = true;
+          }
+        },
+      },
+      {
+        name: 'next',
+        create: Button,
+        show: true,
+        default_options: {
+          class: 'aux-next',
+          dblclick: 300,
+          tabindex: false,
+        },
+        static_events: {
+          click: nextClicked,
+          dblclick: nextDblClicked,
+        },
+        append: function () {
+          this.element.appendChild(this.next.element);
+          if (!this.next.__measure_clip) {
+            this.next.observeResize(measure_clip.bind(this));
+            this.next.__measure_clip = true;
+          }
+        },
+      },
+    ];
+  }
 }
-/**
- * @member {Buttons} Navigation#buttons - The {@link Buttons} of the Navigation.
- */
-defineChildWidget(Navigation, 'buttons', {
-  create: Buttons,
-  show: true,
-  inherit_options: true,
-  userset_delegate: true,
-  static_events: {
-    set__focus: function (focus) {
-      const button = this.buttons.list[focus];
-      if (!button) return;
-      //button.element.scrollIntoView({behavior: "smooth"});
-    },
-  },
-});
-
-/**
- * @member {Button} Navigation#prev - The previous arrow {@link Button} instance.
- */
-defineChildWidget(Navigation, 'prev', {
-  create: Button,
-  show: true,
-  default_options: {
-    class: 'aux-previous',
-    dblclick: 300,
-    tabindex: false,
-  },
-  static_events: {
-    click: prevClicked,
-    dblclick: prevDblClicked,
-  },
-  append: function () {
-    this.element.appendChild(this.prev.element);
-    if (!this.prev.__measure_clip) {
-      this.prev.observeResize(measure_clip.bind(this));
-      this.prev.__measure_clip = true;
-    }
-  },
-});
-
-/**
- * @member {Button} Navigation#next - The next arrow {@link Button} instance.
- */
-defineChildWidget(Navigation, 'next', {
-  create: Button,
-  show: true,
-  default_options: {
-    class: 'aux-next',
-    dblclick: 300,
-    tabindex: false,
-  },
-  static_events: {
-    click: nextClicked,
-    dblclick: nextDblClicked,
-  },
-  append: function () {
-    this.element.appendChild(this.next.element);
-    if (!this.next.__measure_clip) {
-      this.next.observeResize(measure_clip.bind(this));
-      this.next.__measure_clip = true;
-    }
-  },
-});

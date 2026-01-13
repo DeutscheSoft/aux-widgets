@@ -18,7 +18,6 @@
  */
 
 import { element, addClass } from './../utils/dom.js';
-import { defineChildWidget } from './../child_widget.js';
 import { Widget } from './widget.js';
 import { Select } from './select.js';
 import { Value } from './value.js';
@@ -80,45 +79,51 @@ export class ComboBox extends Widget {
     super.draw(O, element);
     this.set('value', O.value);
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'select',
+        create: Select,
+        show: true,
+        map_options: {
+          entries: 'entries',
+          list_class: 'list_class',
+        },
+        static_events: {
+          userset: function (key, v) {
+            this.parent.userset('value', v);
+          },
+          select: function (value, index, label, entry) {
+            this.parent.emit('select', value, index, label, entry);
+          },
+        },
+        default_options: {},
+      },
+      {
+        name: 'value',
+        create: Value,
+        show: true,
+        map_options: {
+          editmode: 'editmode',
+        },
+        static_events: {
+          userset: function (key, v) {
+            this.parent.userset('value', v);
+          },
+        },
+        default_options: {
+          editmode: 'immediate',
+          set: (v) => v,
+        },
+      },
+    ];
+  }
 }
 
 /**
  * @member {Value} ComboBox#select - The {@link Select} widget.
  */
-defineChildWidget(ComboBox, 'select', {
-  create: Select,
-  show: true,
-  map_options: {
-    entries: 'entries',
-    list_class: 'list_class',
-  },
-  static_events: {
-    userset: function (key, v) {
-      this.parent.userset('value', v);
-    },
-    select: function (value, index, label, entry) {
-      this.parent.emit('select', value, index, label, entry);
-    },
-  },
-  default_options: {},
-});
-
 /**
  * @member {Value} ComboBox#value - The {@link Value} widget.
  */
-defineChildWidget(ComboBox, 'value', {
-  create: Value,
-  show: true,
-  map_options: {
-    editmode: 'editmode',
-  },
-  static_events: {
-    userset: function (key, v) {
-      this.parent.userset('value', v);
-    },
-  },
-  default_options: {
-    editmode: 'immediate',
-    set: (v) => v,
-  },
-});

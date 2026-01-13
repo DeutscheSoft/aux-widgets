@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineChildWidget } from '../child_widget.js';
 import { Widget } from './widget.js';
 import { Knob } from './knob.js';
 import { Value } from './value.js';
@@ -127,6 +126,49 @@ export class ValueKnob extends Widget {
     ];
   }
 
+  static get child_widgets() {
+    return [
+      {
+        name: 'label',
+        create: Label,
+        option: 'label',
+        toggle_class: true,
+        map_options: {
+          label: 'label',
+        },
+        static_events: {
+          initialized: function () {
+            if (!this.get('id')) {
+              this.set('id', createID('aux-label-'));
+            }
+          },
+        },
+      },
+      {
+        name: 'knob',
+        create: Knob,
+        show: true,
+        inherit_options: true,
+        toggle_class: true,
+        blacklist_options: ['label', 'show_value'],
+      },
+      {
+        name: 'value',
+        create: Value,
+        show: true,
+        inherit_options: true,
+        map_options: {
+          value: 'value',
+        },
+        static_events: {
+          valueclicked: valueClicked,
+          valuedone: valueDone,
+        },
+        toggle_class: true,
+      },
+    ];
+  }
+
   userset(key, value) {
     if (key === 'value' && this.knob) {
       const { transformation, snap_module } = this.knob.circular.options;
@@ -174,44 +216,9 @@ export class ValueKnob extends Widget {
 /**
  * @member {Label} ValueKnob#label - The {@link Label} widget.
  */
-defineChildWidget(ValueKnob, 'label', {
-  create: Label,
-  option: 'label',
-  toggle_class: true,
-  map_options: {
-    label: 'label',
-  },
-  static_events: {
-    initialized: function () {
-      if (!this.get('id')) {
-        this.set('id', createID('aux-label-'));
-      }
-    },
-  },
-});
 /**
  * @member {Knob} ValueKnob#knob - The {@link Knob} widget.
  */
-defineChildWidget(ValueKnob, 'knob', {
-  create: Knob,
-  show: true,
-  inherit_options: true,
-  toggle_class: true,
-  blacklist_options: ['label', 'show_value'],
-});
 /**
  * @member {Value} ValueKnob#value - The {@link Value} widget.
  */
-defineChildWidget(ValueKnob, 'value', {
-  create: Value,
-  show: true,
-  inherit_options: true,
-  map_options: {
-    value: 'value',
-  },
-  static_events: {
-    valueclicked: valueClicked,
-    valuedone: valueDone,
-  },
-  toggle_class: true,
-});

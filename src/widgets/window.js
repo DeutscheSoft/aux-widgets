@@ -20,7 +20,6 @@
 /* jshint -W014 */
 /* jshint -W079 */
 
-import { defineChildWidget } from '../child_widget.js';
 import { Container } from './container.js';
 import { Icon } from './icon.js';
 import { Label } from './label.js';
@@ -810,34 +809,104 @@ export class Window extends Container {
 
     return value;
   }
+
+  static get child_widgets() {
+    function bFactory(name, handler) {
+      return {
+        name: name,
+        create: Button,
+        default_options: {
+          class: 'aux-' + name,
+          icon: 'window' + name,
+        },
+        static_events: {
+          click: function (e) {
+            handler.call(this.parent, e);
+          },
+          mousedown: function (e) {
+            e.stopPropagation();
+          },
+        },
+      };
+    }
+
+    return [
+      {
+        name: 'icon',
+        create: Icon,
+        map_options: { icon: 'icon' },
+        toggle_class: true,
+      },
+      {
+        name: 'title',
+        create: Label,
+        default_options: { class: 'aux-title' },
+        map_options: { title: 'label' },
+        toggle_class: true,
+      },
+      {
+        name: 'status',
+        create: Label,
+        default_options: { class: 'aux-status' },
+        map_options: { status: 'label' },
+        toggle_class: true,
+      },
+      bFactory('close', close),
+      bFactory('minimize', minimize),
+      bFactory('maximize', maximize),
+      bFactory('maximizevertical', maximizeVertical),
+      bFactory('maximizehorizontal', maximizeHorizontal),
+      bFactory('shrink', shrink),
+      {
+        name: 'size',
+        create: Icon,
+        default_options: { icon: 'windowresize', class: 'aux-size' },
+      },
+      {
+        name: 'content',
+        create: Container,
+        toggle_class: true,
+        show: true,
+        default_options: { class: 'aux-content' },
+      },
+      {
+        name: 'header',
+        create: Container,
+        toggle_class: true,
+        show: true,
+        default_options: { class: 'aux-header' },
+        static_events: {
+          dblclick: headerAction,
+        },
+        append: function () {
+          buildHeader.call(this);
+          this.element.appendChild(this.header.element);
+        },
+      },
+      {
+        name: 'footer',
+        create: Container,
+        toggle_class: true,
+        show: false,
+        default_options: { class: 'aux-footer' },
+        append: function () {
+          buildFooter.call(this);
+          this.element.appendChild(this.footer.element);
+        },
+      },
+    ];
+  }
 }
 
 /**
  * @member {Icon} Window#icon - A {@link Icon} widget to display the window icon.
  */
-defineChildWidget(Window, 'icon', {
-  create: Icon,
-  map_options: { icon: 'icon' },
-  toggle_class: true,
-});
 /**
  * @member {Label} Window#title - A {@link Label} to display the window title.
  */
-defineChildWidget(Window, 'title', {
-  create: Label,
-  default_options: { class: 'aux-title' },
-  map_options: { title: 'label' },
-  toggle_class: true,
-});
 /**
  * @member {Label} Window#status - A {@link Label} to display the window status.
  */
-defineChildWidget(Window, 'status', {
-  create: Label,
-  default_options: { class: 'aux-status' },
-  map_options: { status: 'label' },
-  toggle_class: true,
-});
 /**
  * @member {Button} Window#close - The close button.
  */
@@ -856,73 +925,15 @@ defineChildWidget(Window, 'status', {
 /**
  * @member {Button} Window#shrink - The shrink button.
  */
-
-function bFactory(name, handler) {
-  defineChildWidget(Window, name, {
-    create: Button,
-    default_options: {
-      class: 'aux-' + name,
-      icon: 'window' + name,
-    },
-    static_events: {
-      click: function (e) {
-        handler.call(this.parent, e);
-      },
-      mousedown: function (e) {
-        e.stopPropagation();
-      },
-    },
-  });
-}
-bFactory('close', close);
-bFactory('minimize', minimize);
-bFactory('maximize', maximize);
-bFactory('maximizevertical', maximizeVertical);
-bFactory('maximizehorizontal', maximizeHorizontal);
-bFactory('shrink', shrink);
-
 /**
  * @member {Icon} Window#size - A {@link Icon} acting as handle for window resize.
  */
-defineChildWidget(Window, 'size', {
-  create: Icon,
-  default_options: { icon: 'windowresize', class: 'aux-size' },
-});
 /**
  * @member {Container} Window#content - A {@link Container} for the window content.
  */
-defineChildWidget(Window, 'content', {
-  create: Container,
-  toggle_class: true,
-  show: true,
-  default_options: { class: 'aux-content' },
-});
 /**
  * @member {Container} Window#header - The top header bar.
  */
-defineChildWidget(Window, 'header', {
-  create: Container,
-  toggle_class: true,
-  show: true,
-  default_options: { class: 'aux-header' },
-  static_events: {
-    dblclick: headerAction,
-  },
-  append: function () {
-    buildHeader.call(this);
-    this.element.appendChild(this.header.element);
-  },
-});
 /**
  * @member {Container} Window#footer - The bottom footer bar.
  */
-defineChildWidget(Window, 'footer', {
-  create: Container,
-  toggle_class: true,
-  show: false,
-  default_options: { class: 'aux-footer' },
-  append: function () {
-    buildFooter.call(this);
-    this.element.appendChild(this.footer.element);
-  },
-});

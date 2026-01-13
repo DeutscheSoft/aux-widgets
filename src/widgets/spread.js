@@ -51,7 +51,6 @@ import {
   outerWidth,
   innerWidth,
 } from '../utils/dom.js';
-import { defineChildWidget } from '../child_widget.js';
 import { defineRecalculation } from '../define_recalculation.js';
 import { defineRender, defineMeasure } from '../renderer.js';
 
@@ -372,83 +371,92 @@ export class Spread extends Widget {
     }
     return super.set(key, value);
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'scale',
+        create: Scale,
+        show: true,
+        inherit_options: true,
+        blacklist_options: ['set_ariavalue'],
+        toggle_class: true,
+        static_events: {
+          set: function (key, value) {
+            /**
+             * Is fired when the scale was changed.
+             *
+             * @event Spread#scalechanged
+             *
+             * @param {string} key - The key of the option.
+             * @param {mixed} value - The value to which it was set.
+             */
+            if (this.parent) this.parent.emit('scalechanged', key, value);
+          },
+        },
+      },
+      {
+        name: 'label',
+        create: Label,
+        show: false,
+        toggle_class: true,
+        option: 'label',
+        map_options: {
+          label: 'label',
+        },
+      },
+      {
+        name: 'valuelower',
+        create: Value,
+        show: false,
+        option: 'show_values',
+        map_options: {
+          lower: 'value',
+        },
+        toggle_class: true,
+        default_options: {
+          class: 'aux-valuelower aux-value',
+        },
+        static_events: {
+          userset: function (key, value) {
+            if (key === 'value') return this.parent.userset('lower', value);
+          },
+        },
+      },
+      {
+        name: 'valueupper',
+        create: Value,
+        show: false,
+        option: 'show_values',
+        map_options: {
+          upper: 'value',
+        },
+        toggle_class: true,
+        default_options: {
+          class: 'aux-valueupper aux-value',
+        },
+        static_events: {
+          userset: function (key, value) {
+            if (key === 'value') return this.parent.userset('upper', value);
+          },
+        },
+      },
+    ];
+  }
 }
 
 /**
  * @member {Scale} Spread#scale - A {@link Scale} to display a scale next to the fader.
  */
-defineChildWidget(Spread, 'scale', {
-  create: Scale,
-  show: true,
-  inherit_options: true,
-  blacklist_options: ['set_ariavalue'],
-  toggle_class: true,
-  static_events: {
-    set: function (key, value) {
-      /**
-       * Is fired when the scale was changed.
-       *
-       * @event Spread#scalechanged
-       *
-       * @param {string} key - The key of the option.
-       * @param {mixed} value - The value to which it was set.
-       */
-      if (this.parent) this.parent.emit('scalechanged', key, value);
-    },
-  },
-});
 /**
  * @member {Label} Spread#label - A {@link Label} to display a title.
  */
-defineChildWidget(Spread, 'label', {
-  create: Label,
-  show: false,
-  toggle_class: true,
-  option: 'label',
-  map_options: {
-    label: 'label',
-  },
-});
 /**
  * @member {Value} Spread#valuelower - A {@link Value} to display the current lower value, offering a way to enter a value via keyboard.
  */
-defineChildWidget(Spread, 'valuelower', {
-  create: Value,
-  show: false,
-  option: 'show_values',
-  map_options: {
-    lower: 'value',
-  },
-  toggle_class: true,
-  default_options: {
-    class: 'aux-valuelower aux-value',
-  },
-  static_events: {
-    userset: function (key, value) {
-      if (key === 'value') return this.parent.userset('lower', value);
-    },
-  },
-});
 /**
  * @member {Value} Spread#valueupper - A {@link Value} to display the current upper value, offering a way to enter a value via keyboard.
  */
-defineChildWidget(Spread, 'valueupper', {
-  create: Value,
-  show: false,
-  option: 'show_values',
-  map_options: {
-    upper: 'value',
-  },
-  toggle_class: true,
-  default_options: {
-    class: 'aux-valueupper aux-value',
-  },
-  static_events: {
-    userset: function (key, value) {
-      if (key === 'value') return this.parent.userset('upper', value);
-    },
-  },
-});
 
 defineRecalculation(Spread, ['upper'], function (O) {
   this.update('upper', Math.max(O.lower, O.upper));

@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineChildWidget } from '../child_widget.js';
 import { LevelMeter } from './levelmeter.js';
 import { Label } from './label.js';
 import { Container } from './container.js';
@@ -344,16 +343,22 @@ export class MultiMeter extends Container {
     });
     super.destroy();
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'label',
+        create: Label,
+        show: false,
+        option: 'label',
+        default_options: { class: 'aux-label' },
+        map_options: { label: 'label' },
+        toggle_class: true,
+      },
+    ];
+  }
 }
 
 /**
  * @member {HTMLDivElement} MultiMeter#label - The {@link Label} widget displaying the meters title.
  */
-defineChildWidget(MultiMeter, 'label', {
-  create: Label,
-  show: false,
-  option: 'label',
-  default_options: { class: 'aux-label' },
-  map_options: { label: 'label' },
-  toggle_class: true,
-});

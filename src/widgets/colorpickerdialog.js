@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineChildWidget } from '../child_widget.js';
 import { Dialog } from './dialog.js';
 import { ColorPicker } from './colorpicker.js';
 import { addClass } from '../utils/dom.js';
@@ -59,18 +58,24 @@ export class ColorPickerDialog extends Dialog {
 
     super.draw(O, element);
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'colorpicker',
+        create: ColorPicker,
+        show: true,
+        inherit_options: true,
+        userset_delegate: true,
+        static_events: {
+          cancel: cancel,
+          apply: apply,
+        },
+      },
+    ];
+  }
 }
 
 /**
  * @member {ColorPicker} ColorPickerDialog#colorpicker - The {@link ColorPicker} widget.
  */
-defineChildWidget(ColorPickerDialog, 'colorpicker', {
-  create: ColorPicker,
-  show: true,
-  inherit_options: true,
-  userset_delegate: true,
-  static_events: {
-    cancel: cancel,
-    apply: apply,
-  },
-});

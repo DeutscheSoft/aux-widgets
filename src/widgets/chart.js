@@ -32,7 +32,6 @@ import { error, warn } from '../utils/log.js';
 import { Widget, SymResize } from './widget.js';
 import { Graph } from './graph.js';
 import { ChartHandle } from './charthandle.js';
-import { defineChildWidget } from '../child_widget.js';
 import { Grid } from './grid.js';
 import {
   defineRender,
@@ -663,29 +662,35 @@ export class Chart extends Widget {
     a += ((X[2] - X[0]) * (X[3] - X[1]) - _a) * O.importance_border;
     return { intersect: a, count: c };
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'grid',
+        create: Grid,
+        show: true,
+        no_resize: true,
+        append: function () {
+          this.svg.insertBefore(this.grid.element, this.svg.firstChild);
+        },
+        map_options: {
+          grid_x: 'grid_x',
+          grid_y: 'grid_y',
+        },
+        default_options: function () {
+          return {
+            range_x: this.range_x,
+            range_y: this.range_y,
+          };
+        },
+      },
+    ];
+  }
 }
 /**
  * @member {Grid} Chart#grid - The grid element of the chart.
  *   Has class <code>.aux-grid</code>.
  */
-defineChildWidget(Chart, 'grid', {
-  create: Grid,
-  show: true,
-  no_resize: true,
-  append: function () {
-    this.svg.insertBefore(this.grid.element, this.svg.firstChild);
-  },
-  map_options: {
-    grid_x: 'grid_x',
-    grid_y: 'grid_y',
-  },
-  default_options: function () {
-    return {
-      range_x: this.range_x,
-      range_y: this.range_y,
-    };
-  },
-});
 /**
  * @member {SVGText} Chart#_label - The label of the chart.
  *   Has class <code>.aux-label</code>.

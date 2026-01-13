@@ -19,7 +19,6 @@
 
 /* jshint -W079 */
 
-import { defineChildWidget } from '../child_widget.js';
 import { addClass } from '../utils/dom.js';
 import { Container } from './container.js';
 import { Button } from './button.js';
@@ -212,33 +211,39 @@ export class Notification extends Container {
       if (val > 0) this._timeout = window.setTimeout(timeout.bind(this), val);
     }
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'close',
+        create: Button,
+        show: false,
+        toggle_class: true,
+        static_events: {
+          click: closeClicked,
+        },
+        default_options: {
+          icon: 'close',
+          class: 'aux-close',
+        },
+      },
+      {
+        name: 'icon',
+        create: Icon,
+        show: false,
+        toggle_class: true,
+        option: 'icon',
+        map_options: {
+          icon: 'icon',
+        },
+      },
+    ];
+  }
 }
 
 /**
  * @member {Button} Notification#close - The Button for closing the notification.
  */
-defineChildWidget(Notification, 'close', {
-  create: Button,
-  show: false,
-  toggle_class: true,
-  static_events: {
-    click: closeClicked,
-  },
-  default_options: {
-    icon: 'close',
-    class: 'aux-close',
-  },
-});
-
 /**
  * @member {Icon} Notification#icon - The Icon widget.
  */
-defineChildWidget(Notification, 'icon', {
-  create: Icon,
-  show: false,
-  toggle_class: true,
-  option: 'icon',
-  map_options: {
-    icon: 'icon',
-  },
-});

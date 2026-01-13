@@ -19,7 +19,6 @@
 
 /* jshint -W014 */
 
-import { defineChildWidget } from './../child_widget.js';
 import { Button } from './button.js';
 import { Label } from './label.js';
 import { Icon } from './icon.js';
@@ -949,6 +948,32 @@ export class Select extends Button {
     }
     return value;
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'arrow',
+        create: Icon,
+        show: true,
+        default_options: {
+          icon: 'arrowdown',
+          class: 'aux-arrow',
+        },
+        map_options: {
+          arrow: 'icon',
+        },
+      },
+      {
+        name: 'sizer',
+        create: Label,
+        option: 'auto_size',
+        toggle_class: true,
+        default_options: {
+          class: 'aux-sizer',
+        },
+      },
+    ];
+  }
 }
 
 function onSelect(e) {
@@ -980,17 +1005,9 @@ function onSelect(e) {
 /**
  * @member {Select} Select#arrow - The arrow icon.
  */
-defineChildWidget(Select, 'arrow', {
-  create: Icon,
-  show: true,
-  default_options: {
-    icon: 'arrowdown',
-    class: 'aux-arrow',
-  },
-  map_options: {
-    arrow: 'icon',
-  },
-});
+/**
+ * @member {Select} Select#sizer - A blind element for `auto_size`.
+ */
 
 function onFocusMove(O) {
   const { direction, speed } = O;
@@ -1093,15 +1110,3 @@ export class SelectEntry extends Button {
     };
   }
 }
-
-/**
- * @member {Select} Select#sizer - A blind element for `auto_size`.
- */
-defineChildWidget(Select, 'sizer', {
-  create: Label,
-  option: 'auto_size',
-  toggle_class: true,
-  default_options: {
-    class: 'aux-sizer',
-  },
-});

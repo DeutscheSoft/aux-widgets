@@ -185,12 +185,20 @@ function collectFromPrototypes(cl, name, funName) {
  * @class Base
  */
 export class Base {
+  static initializeOptionTypes() {
+    if (hasProperty(this, 'auxOptionTypes')) return;
+    const options = collectFromPrototypes(this, '_options', 'getOptionTypes');
+    this.auxOptionTypes = mergeOptions(...options);
+  }
+
   static getOptionTypes() {
-    if (!hasProperty(this, 'auxOptionTypes')) {
-      const options = collectFromPrototypes(this, '_options', 'getOptionTypes');
-      this.auxOptionTypes = mergeOptions(...options);
+    if (!hasProperty(this, 'is_initialized')) {
+      this.maybeInitialize();
     }
 
+    if (!hasProperty(this, 'auxOptionTypes')) {
+      this.initializeOptionTypes();
+    }
     return this.auxOptionTypes;
   }
 
@@ -198,14 +206,19 @@ export class Base {
     return this.getOptionTypes()[name];
   }
 
+  static initializeDefaultOptions() {
+    if (hasProperty(this, 'auxOptions')) return;
+    const options = collectFromPrototypes(this, 'options', 'getDefaultOptions');
+    this.auxOptions = mergeOptions(...options);
+  }
+
   static getDefaultOptions() {
+    if (!hasProperty(this, 'is_initialized')) {
+      this.maybeInitialize();
+    }
+
     if (!hasProperty(this, 'auxOptions')) {
-      const options = collectFromPrototypes(
-        this,
-        'options',
-        'getDefaultOptions'
-      );
-      this.auxOptions = mergeOptions(...options);
+      this.initializeDefaultOptions();
     }
 
     return this.auxOptions;
@@ -215,25 +228,35 @@ export class Base {
     return this.getDefaultOptions()[name];
   }
 
-  static getStaticEvents() {
-    if (!Object.prototype.hasOwnProperty.call(this, 'auxStaticEvents')) {
-      const base = Object.getPrototypeOf(this.prototype).constructor;
-      const ownEvents = Object.prototype.hasOwnProperty.call(
-        this,
-        'static_events'
-      )
-        ? this.static_events
-        : {};
-      let events;
+  static initializeStaticEvents() {
+    if (hasProperty(this, 'auxStaticEvents')) return;
+    const base = Object.getPrototypeOf(this.prototype).constructor;
+    const ownEvents = Object.prototype.hasOwnProperty.call(
+      this,
+      'static_events'
+    )
+      ? this.static_events
+      : {};
+    let events;
 
-      if (base.getStaticEvents) {
-        events = mergeStaticEvents(base.getStaticEvents(), ownEvents);
-      } else {
-        events = Object.assign({}, ownEvents);
-      }
-
-      this.auxStaticEvents = events;
+    if (base.getStaticEvents) {
+      events = mergeStaticEvents(base.getStaticEvents(), ownEvents);
+    } else {
+      events = Object.assign({}, ownEvents);
     }
+
+    this.auxStaticEvents = events;
+  }
+
+  static getStaticEvents() {
+    if (!hasProperty(this, 'is_initialized')) {
+      this.maybeInitialize();
+    }
+
+    if (!hasProperty(this, 'auxStaticEvents')) {
+      this.initializeStaticEvents();
+    }
+
     return this.auxStaticEvents;
   }
 
@@ -251,7 +274,20 @@ export class Base {
     return Object.prototype.hasOwnProperty.call(this.getOptionTypes(), name);
   }
 
+  static initialize() {
+    this.initializeOptionTypes();
+    this.initializeDefaultOptions();
+    this.initializeStaticEvents();
+  }
+
+  static maybeInitialize() {
+    if (hasProperty(this, 'is_initialized')) return;
+    this.is_initialized = true;
+    this.initialize();
+  }
+
   constructor(...args) {
+    this.constructor.maybeInitialize();
     this.is_initialized = false;
     this.initialize(...args);
     this.initializeChildren();

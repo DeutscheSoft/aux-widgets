@@ -19,7 +19,6 @@
 
 /* jshint -W018 */
 
-import { defineChildWidget } from '../child_widget.js';
 import { Meter, addMeterInterval } from './meter.js';
 import { State } from './state.js';
 import { addClass, toggleClass } from '../utils/dom.js';
@@ -422,6 +421,23 @@ export class LevelMeter extends Meter {
     }
     return super.set(key, value);
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'clip',
+        create: State,
+        show: false,
+        map_options: {
+          clip: 'state',
+        },
+        default_options: {
+          class: 'aux-clip',
+        },
+        toggle_class: true,
+      },
+    ];
+  }
 }
 
 /**
@@ -429,14 +445,3 @@ export class LevelMeter extends Meter {
  * @member {HTMLDivElement} LevelMeter#clip.element - The DIV element of the clipping LED.
  *   Has class <code>.aux-clip</code>.
  */
-defineChildWidget(LevelMeter, 'clip', {
-  create: State,
-  show: false,
-  map_options: {
-    clip: 'state',
-  },
-  default_options: {
-    class: 'aux-clip',
-  },
-  toggle_class: true,
-});

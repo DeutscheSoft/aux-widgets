@@ -27,7 +27,6 @@ import {
   outerWidth,
   outerHeight,
 } from '../utils/dom.js';
-import { defineChildWidget } from '../child_widget.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { defineRender } from '../renderer.js';
 import { mergeStaticEvents } from '../widget_helpers.js';
@@ -295,22 +294,27 @@ export class Scroller extends Container {
     if (key === 'scroll' && value === this.options.scroll) return;
     super.set(key, value);
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'scrollhide',
+        create: ScrollHide,
+        show: true,
+      },
+      {
+        name: 'scroll_x',
+        create: ScrollBar,
+        show: true,
+        default_options: {
+          position: 'bottom',
+        },
+      },
+      {
+        name: 'scroll_y',
+        create: ScrollBar,
+        show: true,
+      },
+    ];
+  }
 }
-
-defineChildWidget(Scroller, 'scrollhide', {
-  create: ScrollHide,
-  show: true,
-});
-
-defineChildWidget(Scroller, 'scroll_x', {
-  create: ScrollBar,
-  show: true,
-  default_options: {
-    position: 'bottom',
-  },
-});
-
-defineChildWidget(Scroller, 'scroll_y', {
-  create: ScrollBar,
-  show: true,
-});

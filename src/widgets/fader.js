@@ -60,7 +60,6 @@ import {
   applyAttribute,
 } from '../utils/dom.js';
 import { mergeStaticEvents } from '../widget_helpers.js';
-import { defineChildWidget } from '../child_widget.js';
 import {
   defineRender,
   defineMeasure,
@@ -413,59 +412,67 @@ export class Fader extends Widget {
   getARIATargets() {
     return [this._handle];
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'scale',
+        create: Scale,
+        show: true,
+        inherit_options: true,
+        blacklist_options: ['set_ariavalue'],
+        toggle_class: true,
+        static_events: {
+          set: function (key, value) {
+            /**
+             * Is fired when the scale was changed.
+             *
+             * @event Fader#scalechanged
+             *
+             * @param {string} key - The key of the option.
+             * @param {mixed} value - The value to which it was set.
+             */
+            if (this.parent) this.parent.emit('scalechanged', key, value);
+          },
+        },
+      },
+      {
+        name: 'label',
+        create: Label,
+        show: false,
+        toggle_class: true,
+        option: 'label',
+        map_options: {
+          label: 'label',
+        },
+        static_events: {
+          initialized: function () {
+            if (!this.get('id')) {
+              this.set('id', createID('aux-label-'));
+            }
+          },
+        },
+      },
+      {
+        name: 'value',
+        create: Value,
+        show: false,
+        userset_delegate: true,
+        map_options: {
+          _value: 'value',
+        },
+        toggle_class: true,
+      },
+    ];
+  }
 }
 
 /**
  * @member {Scale} Fader#scale - A {@link Scale} to display a scale next to the fader.
  */
-defineChildWidget(Fader, 'scale', {
-  create: Scale,
-  show: true,
-  inherit_options: true,
-  blacklist_options: ['set_ariavalue'],
-  toggle_class: true,
-  static_events: {
-    set: function (key, value) {
-      /**
-       * Is fired when the scale was changed.
-       *
-       * @event Fader#scalechanged
-       *
-       * @param {string} key - The key of the option.
-       * @param {mixed} value - The value to which it was set.
-       */
-      if (this.parent) this.parent.emit('scalechanged', key, value);
-    },
-  },
-});
 /**
  * @member {Label} Fader#label - A {@link Label} to display a title.
  */
-defineChildWidget(Fader, 'label', {
-  create: Label,
-  show: false,
-  toggle_class: true,
-  option: 'label',
-  map_options: {
-    label: 'label',
-  },
-  static_events: {
-    initialized: function () {
-      if (!this.get('id')) {
-        this.set('id', createID('aux-label-'));
-      }
-    },
-  },
-});
 /**
  * @member {Value} Fader#value - A {@link Value} to display the current value, offering a way to enter a value via keyboard.
  */
-defineChildWidget(Fader, 'value', {
-  create: Value,
-  show: false,
-  userset_delegate: true,
-  map_options: {
-    _value: 'value',
-  },
-  toggle_class: true,
-});

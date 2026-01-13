@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineChildWidget } from '../child_widget.js';
 import { Label } from './label.js';
 import { Container } from './container.js';
 import { addClass } from '../utils/dom.js';
@@ -58,17 +57,23 @@ export class Frame extends Container {
 
     super.draw(O, element);
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'label',
+        create: Label,
+        option: 'label',
+        inherit_options: true,
+        default_options: {
+          class: 'aux-framelabel',
+          role: 'heading',
+        },
+        toggle_class: true,
+      },
+    ];
+  }
 }
 /**
  * @member {Label} Frame#label - The {@link Label} of the frame.
  */
-defineChildWidget(Frame, 'label', {
-  create: Label,
-  option: 'label',
-  inherit_options: true,
-  default_options: {
-    class: 'aux-framelabel',
-    role: 'heading',
-  },
-  toggle_class: true,
-});

@@ -49,6 +49,7 @@ import {
   deferMeasure,
 } from '../renderer.js';
 import { domScheduler } from '../dom_scheduler.js';
+import { defineChildWidget } from '../child_widget.js';
 
 const enableTimers = new ProximityTimers();
 
@@ -359,6 +360,19 @@ export class Widget extends Base {
     return _renderers;
   }
 
+  static initializeChildWidgets() {
+    const child_widgets = getOwnProperty(this, 'child_widgets') || [];
+
+    child_widgets.forEach((child_widget) => {
+      defineChildWidget(this, child_widget.name, child_widget);
+    });
+  }
+
+  static initialize() {
+    Base.initialize.call(this);
+    this.initializeChildWidgets();
+  }
+
   static getRenderer() {
     let renderer = this._renderer;
 
@@ -498,6 +512,10 @@ export class Widget extends Base {
         });
       }),
     ];
+  }
+
+  static get child_widgets() {
+    return [];
   }
 
   constructor(options) {
@@ -838,10 +856,12 @@ export class Widget extends Base {
       warn(
         '%O: %s.set(%s, %O): unknown option.',
         this,
-        this._class,
+        this.constructor.name,
         key,
-        value
+        value,
+        Object.keys(this.constructor.getOptionTypes())
       );
+      debugger;
     }
     const currentValue = this.options[key];
 

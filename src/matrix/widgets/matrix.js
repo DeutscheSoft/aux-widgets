@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineChildWidget } from './../../child_widget.js';
 import { innerWidth, outerWidth, addClass } from './../../utils/dom.js';
 import { defineRender } from '../../renderer.js';
 
@@ -205,57 +204,65 @@ export class Matrix extends Patchbay {
     this._scroll_matrix.destroy();
     super.destroy();
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'virtualtree_left',
+        create: VirtualTree,
+        show: true,
+        map_options: {
+          size: 'size',
+          entry_class: 'entry_class',
+        },
+        default_options: {
+          class: 'aux-virtualtreeleft',
+        },
+      },
+      {
+        name: 'virtualtree_top',
+        create: VirtualTree,
+        show: true,
+        map_options: {
+          size: 'size',
+          entry_class: 'entry_class',
+        },
+        default_options: {
+          class: 'aux-virtualtreetop',
+        },
+      },
+      {
+        name: 'indicators',
+        create: Indicators,
+        show: true,
+        map_options: {
+          size: 'size',
+          indicator_class: 'indicator_class',
+        },
+        static_events: {
+          connectDiagonal: function (...args) {
+            this.parent.emit('connectDiagonal', ...args);
+          },
+          disconnectDiagonal: function (...args) {
+            this.parent.emit('disconnectDiagonal', ...args);
+          },
+          disconnectAll: function (...args) {
+            this.parent.emit('disconnectAll', ...args);
+          },
+        },
+      },
+    ];
+  }
 }
 /**
  * @member {VirtualTree} Matrix#virtualtree_left - The {@link VirtualTree}
  *   on the left hand side. Has class <code>.aux-virtualtreeleft</code>.
  */
-defineChildWidget(Matrix, 'virtualtree_left', {
-  create: VirtualTree,
-  show: true,
-  map_options: {
-    size: 'size',
-    entry_class: 'entry_class',
-  },
-  default_options: {
-    class: 'aux-virtualtreeleft',
-  },
-});
 /**
  * @member {VirtualTree} Matrix#virtualtree_left - The {@link VirtualTree}
  *   on top. Has class <code>.aux-virtualtreetop</code>.
  */
-defineChildWidget(Matrix, 'virtualtree_top', {
-  create: VirtualTree,
-  show: true,
-  map_options: {
-    size: 'size',
-    entry_class: 'entry_class',
-  },
-  default_options: {
-    class: 'aux-virtualtreetop',
-  },
-});
 /**
  * @member {Indicators} Matrix#indicators - The {@link Indicators}
  *   widget. Has class <code>.aux-indicators</code>.
  */
-defineChildWidget(Matrix, 'indicators', {
-  create: Indicators,
-  show: true,
-  map_options: {
-    size: 'size',
-    indicator_class: 'indicator_class',
-  },
-  static_events: {
-    connectDiagonal: function (...args) {
-      this.parent.emit('connectDiagonal', ...args);
-    },
-    disconnectDiagonal: function (...args) {
-      this.parent.emit('disconnectDiagonal', ...args);
-    },
-    disconnectAll: function (...args) {
-      this.parent.emit('disconnectAll', ...args);
-    },
-  },
-});

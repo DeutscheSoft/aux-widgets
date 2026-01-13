@@ -18,7 +18,6 @@
  */
 
 import { mergeStaticEvents } from '../widget_helpers.js';
-import { defineChildWidget } from '../child_widget.js';
 import { Widget } from './widget.js';
 import { Label } from './label.js';
 import {
@@ -547,52 +546,60 @@ export class Meter extends Widget {
     const O = this.options;
     return O.base > O.min;
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'scale',
+        create: Scale,
+        default_options: {
+          labels: FORMAT('%.2f'),
+        },
+        inherit_options: true,
+        show: true,
+        toggle_class: true,
+        static_events: {
+          set: function (key, value) {
+            const p = this.parent;
+            if (p) p.emit('scalechanged', key, value);
+          },
+        },
+      },
+      {
+        name: 'label',
+        create: Label,
+        show: false,
+        option: 'label',
+        map_options: { label: 'label' },
+        toggle_class: true,
+        static_events: {
+          initialized: function () {
+            if (!this.get('id')) {
+              this.set('id', createID('aux-label-'));
+            }
+          },
+        },
+      },
+      {
+        name: 'value',
+        create: Label,
+        show: false,
+        toggle_class: true,
+        default_options: {
+          class: 'aux-value',
+          role: 'status',
+        },
+      },
+    ];
+  }
 }
 /**
  * @member {Scale} Meter#scale - The {@link Scale} of the meter.
  */
-defineChildWidget(Meter, 'scale', {
-  create: Scale,
-  default_options: {
-    labels: FORMAT('%.2f'),
-  },
-  inherit_options: true,
-  show: true,
-  toggle_class: true,
-  static_events: {
-    set: function (key, value) {
-      const p = this.parent;
-      if (p) p.emit('scalechanged', key, value);
-    },
-  },
-});
 /**
  * @member {Label} Meter#label - The {@link Label} displaying the title.
  *   Has class <code>.aux-label</code>.
  */
-defineChildWidget(Meter, 'label', {
-  create: Label,
-  show: false,
-  option: 'label',
-  map_options: { label: 'label' },
-  toggle_class: true,
-  static_events: {
-    initialized: function () {
-      if (!this.get('id')) {
-        this.set('id', createID('aux-label-'));
-      }
-    },
-  },
-});
 /**
  * @member {Label} Meter#value - The {@link Label} displaying the value.
  */
-defineChildWidget(Meter, 'value', {
-  create: Label,
-  show: false,
-  toggle_class: true,
-  default_options: {
-    class: 'aux-value',
-    role: 'status',
-  },
-});

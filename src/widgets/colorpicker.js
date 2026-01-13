@@ -18,7 +18,6 @@
  */
 
 import { defineChildElement } from '../widget_helpers.js';
-import { defineChildWidget } from '../child_widget.js';
 import { Container } from './container.js';
 import { Value } from './value.js';
 import { ValueKnob } from './valueknob.js';
@@ -241,6 +240,262 @@ export class ColorPicker extends Container {
     ];
   }
 
+  static get child_widgets() {
+    return [
+      {
+        name: 'hex',
+        create: Value,
+        show: true,
+        static_events: {
+          userset: function (key, val) {
+            if (key === 'value') this.parent.userset('hex', val);
+          },
+          keyup: function (e) {
+            checkInput.call(this.parent, e);
+          },
+          paste: function (e) {
+            checkInput.call(this.parent, e);
+          },
+        },
+        default_options: {
+          format: FORMAT('%s'),
+          class: 'aux-hex',
+          set: function (v) {
+            let p = 0,
+              tmp;
+            if (v[0] === '#') v = v.substring(1);
+            while (v.length < 6) {
+              tmp = v.slice(0, p + 1);
+              tmp += v[p];
+              tmp += v.slice(p + 1);
+              v = tmp;
+              p += 2;
+            }
+            return v;
+          },
+          size: 7,
+          maxlength: 7,
+        },
+        map_options: {
+          hex: 'value',
+        },
+        inherit_options: true,
+      },
+      {
+        name: 'hue',
+        create: ValueKnob,
+        option: 'show_hsl',
+        show: true,
+        static_events: {
+          userset: function (key, val) {
+            if (key === 'value') this.parent.userset('hue', val);
+          },
+        },
+        default_options: {
+          label: 'Hue',
+          min: 0,
+          max: 1,
+          class: 'aux-hue',
+          'value.format': function (v) {
+            return v.toFixed(2);
+          },
+          layout: 'left',
+        },
+        map_options: {
+          hue: 'value',
+        },
+        inherit_options: true,
+        blacklist_options: ['x', 'y', 'value'],
+      },
+      {
+        name: 'saturation',
+        create: ValueKnob,
+        show: true,
+        static_events: {
+          userset: function (key, val) {
+            if (key === 'value') this.parent.userset('saturation', val);
+          },
+        },
+        default_options: {
+          label: 'Saturation',
+          min: 0,
+          max: 1,
+          class: 'aux-saturation',
+          'value.format': function (v) {
+            return v.toFixed(2);
+          },
+          layout: 'left',
+        },
+        map_options: {
+          saturation: 'value',
+        },
+        inherit_options: true,
+        blacklist_options: ['x', 'y', 'value'],
+      },
+      {
+        name: 'lightness',
+        create: ValueKnob,
+        option: 'show_hsl',
+        show: true,
+        static_events: {
+          userset: function (key, val) {
+            if (key === 'value') this.parent.userset('lightness', val);
+          },
+        },
+        default_options: {
+          label: 'Lightness',
+          min: 0,
+          max: 1,
+          class: 'aux-lightness',
+          'value.format': function (v) {
+            return v.toFixed(2);
+          },
+          layout: 'left',
+        },
+        map_options: {
+          lightness: 'value',
+        },
+        inherit_options: true,
+        blacklist_options: ['x', 'y', 'value'],
+      },
+      {
+        name: 'red',
+        create: ValueKnob,
+        option: 'show_rgb',
+        show: true,
+        static_events: {
+          userset: function (key, val) {
+            if (key === 'value') this.parent.userset('red', val);
+          },
+        },
+        default_options: {
+          label: 'Red',
+          min: 0,
+          max: 255,
+          snap: 1,
+          'value.format': function (v) {
+            return parseInt(v);
+          },
+          set: function (v) {
+            return Math.round(v);
+          },
+          class: 'aux-red',
+          layout: 'right',
+        },
+        map_options: {
+          red: 'value',
+        },
+        inherit_options: true,
+        blacklist_options: ['x', 'y', 'value'],
+      },
+      {
+        name: 'green',
+        create: ValueKnob,
+        option: 'show_rgb',
+        show: true,
+        static_events: {
+          userset: function (key, val) {
+            if (key === 'value') this.parent.userset('green', val);
+          },
+        },
+        default_options: {
+          label: 'Green',
+          min: 0,
+          max: 255,
+          snap: 1,
+          'value.format': function (v) {
+            return parseInt(v);
+          },
+          set: function (v) {
+            return Math.round(v);
+          },
+          class: 'aux-green',
+          layout: 'right',
+        },
+        map_options: {
+          green: 'value',
+        },
+        inherit_options: true,
+        blacklist_options: ['x', 'y', 'value'],
+      },
+      {
+        name: 'blue',
+        create: ValueKnob,
+        option: 'show_rgb',
+        show: true,
+        static_events: {
+          userset: function (key, val) {
+            if (key === 'value') this.parent.userset('blue', val);
+          },
+        },
+        default_options: {
+          label: 'Blue',
+          min: 0,
+          max: 255,
+          snap: 1,
+          'value.format': function (v) {
+            return parseInt(v);
+          },
+          set: function (v) {
+            return Math.round(v);
+          },
+          class: 'aux-blue',
+          layout: 'right',
+        },
+        map_options: {
+          blue: 'value',
+        },
+        inherit_options: true,
+        blacklist_options: ['x', 'y', 'value'],
+      },
+      {
+        name: 'apply',
+        create: Button,
+        show: true,
+        static_events: {
+          click: function () {
+            apply.call(this.parent);
+          },
+        },
+        default_options: {
+          label: 'Apply',
+          class: 'aux-apply',
+        },
+      },
+      {
+        name: 'cancel',
+        create: Button,
+        show: true,
+        static_events: {
+          click: function () {
+            cancel.call(this.parent);
+          },
+        },
+        default_options: {
+          label: 'Cancel',
+          class: 'aux-cancel',
+        },
+      },
+    ];
+  }
+
+  static initializeChildWidgets() {
+    Container.initializeChildWidgets.call(this);
+    // This has to happen after all children are initialized
+    this.addStaticEvent('initialized', function () {
+      const options = {};
+      color_options.forEach((name) => {
+        if (this.options[name] !== this.getDefault(name)) {
+          options[name] = this.options[name];
+        }
+      });
+      for (const key in options) {
+        if (Object.prototype.hasOwnProperty.call(options, key))
+          this.set(key, options[key]);
+      }
+    });
+  }
+
   initialize(options) {
     super.initialize(options);
     options = this.options;
@@ -436,275 +691,35 @@ defineChildElement(ColorPicker, 'indicator', {
  * @member {Value} ColorPicker#hex - The {@link Value} for the HEX color.
  *   Has class .aux-hex`,
  */
-defineChildWidget(ColorPicker, 'hex', {
-  create: Value,
-  show: true,
-  static_events: {
-    userset: function (key, val) {
-      if (key === 'value') this.parent.userset('hex', val);
-    },
-    keyup: function (e) {
-      checkInput.call(this.parent, e);
-    },
-    paste: function (e) {
-      checkInput.call(this.parent, e);
-    },
-  },
-  default_options: {
-    format: FORMAT('%s'),
-    class: 'aux-hex',
-    set: function (v) {
-      let p = 0,
-        tmp;
-      if (v[0] === '#') v = v.substring(1);
-      while (v.length < 6) {
-        tmp = v.slice(0, p + 1);
-        tmp += v[p];
-        tmp += v.slice(p + 1);
-        v = tmp;
-        p += 2;
-      }
-      return v;
-    },
-    size: 7,
-    maxlength: 7,
-  },
-  map_options: {
-    hex: 'value',
-  },
-  inherit_options: true,
-});
-
 /**
  * @member {ValueKnob} ColorPicker#hue - The {@link ValueKnob} for the hue.
  *   Has class .aux-hue`,
  */
-defineChildWidget(ColorPicker, 'hue', {
-  create: ValueKnob,
-  option: 'show_hsl',
-  show: true,
-  static_events: {
-    userset: function (key, val) {
-      if (key === 'value') this.parent.userset('hue', val);
-    },
-  },
-  default_options: {
-    label: 'Hue',
-    min: 0,
-    max: 1,
-    class: 'aux-hue',
-    'value.format': function (v) {
-      return v.toFixed(2);
-    },
-    layout: 'left',
-  },
-  map_options: {
-    hue: 'value',
-  },
-  inherit_options: true,
-  blacklist_options: ['x', 'y', 'value'],
-});
 /**
  * @member {ValueKnob} ColorPicker#saturation - The {@link ValueKnob} for the saturation.
  *   Has class .aux-saturation`,
  */
-defineChildWidget(ColorPicker, 'saturation', {
-  create: ValueKnob,
-  show: true,
-  static_events: {
-    userset: function (key, val) {
-      if (key === 'value') this.parent.userset('saturation', val);
-    },
-  },
-  default_options: {
-    label: 'Saturation',
-    min: 0,
-    max: 1,
-    class: 'aux-saturation',
-    'value.format': function (v) {
-      return v.toFixed(2);
-    },
-    layout: 'left',
-  },
-  map_options: {
-    saturation: 'value',
-  },
-  inherit_options: true,
-  blacklist_options: ['x', 'y', 'value'],
-});
 /**
  * @member {ValueKnob} ColorPicker#lightness - The {@link ValueKnob} for the lightness.
  *   Has class .aux-lightness`,
  */
-defineChildWidget(ColorPicker, 'lightness', {
-  create: ValueKnob,
-  option: 'show_hsl',
-  show: true,
-  static_events: {
-    userset: function (key, val) {
-      if (key === 'value') this.parent.userset('lightness', val);
-    },
-  },
-  default_options: {
-    label: 'Lightness',
-    min: 0,
-    max: 1,
-    class: 'aux-lightness',
-    'value.format': function (v) {
-      return v.toFixed(2);
-    },
-    layout: 'left',
-  },
-  map_options: {
-    lightness: 'value',
-  },
-  inherit_options: true,
-  blacklist_options: ['x', 'y', 'value'],
-});
 /**
  * @member {ValueKnob} ColorPicker#red - The {@link ValueKnob} for the red color.
  *   Has class .aux-red`,
  */
-defineChildWidget(ColorPicker, 'red', {
-  create: ValueKnob,
-  option: 'show_rgb',
-  show: true,
-  static_events: {
-    userset: function (key, val) {
-      if (key === 'value') this.parent.userset('red', val);
-    },
-  },
-  default_options: {
-    label: 'Red',
-    min: 0,
-    max: 255,
-    snap: 1,
-    'value.format': function (v) {
-      return parseInt(v);
-    },
-    set: function (v) {
-      return Math.round(v);
-    },
-    class: 'aux-red',
-    layout: 'right',
-  },
-  map_options: {
-    red: 'value',
-  },
-  inherit_options: true,
-  blacklist_options: ['x', 'y', 'value'],
-});
 /**
  * @member {ValueKnob} ColorPicker#green - The {@link ValueKnob} for the green color.
  *   Has class .aux-green`,
  */
-defineChildWidget(ColorPicker, 'green', {
-  create: ValueKnob,
-  option: 'show_rgb',
-  show: true,
-  static_events: {
-    userset: function (key, val) {
-      if (key === 'value') this.parent.userset('green', val);
-    },
-  },
-  default_options: {
-    label: 'Green',
-    min: 0,
-    max: 255,
-    snap: 1,
-    'value.format': function (v) {
-      return parseInt(v);
-    },
-    set: function (v) {
-      return Math.round(v);
-    },
-    class: 'aux-green',
-    layout: 'right',
-  },
-  map_options: {
-    green: 'value',
-  },
-  inherit_options: true,
-  blacklist_options: ['x', 'y', 'value'],
-});
 /**
  * @member {ValueKnob} ColorPicker#blue - The {@link ValueKnob} for the blue color.
  *   Has class .aux-blue`,
  */
-defineChildWidget(ColorPicker, 'blue', {
-  create: ValueKnob,
-  option: 'show_rgb',
-  show: true,
-  static_events: {
-    userset: function (key, val) {
-      if (key === 'value') this.parent.userset('blue', val);
-    },
-  },
-  default_options: {
-    label: 'Blue',
-    min: 0,
-    max: 255,
-    snap: 1,
-    'value.format': function (v) {
-      return parseInt(v);
-    },
-    set: function (v) {
-      return Math.round(v);
-    },
-    class: 'aux-blue',
-    layout: 'right',
-  },
-  map_options: {
-    blue: 'value',
-  },
-  inherit_options: true,
-  blacklist_options: ['x', 'y', 'value'],
-});
 /**
  * @member {Button} ColorPicker#apply - The {@link Button} to apply.
  *   Has class .aux-apply`,
  */
-defineChildWidget(ColorPicker, 'apply', {
-  create: Button,
-  show: true,
-  static_events: {
-    click: function () {
-      apply.call(this.parent);
-    },
-  },
-  default_options: {
-    label: 'Apply',
-    class: 'aux-apply',
-  },
-});
 /**
  * @member {Button} ColorPicker#cancel - The {@link Button} to cancel.
  *   Has class .aux-cancel`,
  */
-defineChildWidget(ColorPicker, 'cancel', {
-  create: Button,
-  show: true,
-  static_events: {
-    click: function () {
-      cancel.call(this.parent);
-    },
-  },
-  default_options: {
-    label: 'Cancel',
-    class: 'aux-cancel',
-  },
-});
-
-// This has to happen after all children are initialized
-ColorPicker.addStaticEvent('initialized', function () {
-  const options = {};
-  color_options.forEach((name) => {
-    if (this.options[name] !== this.getDefault(name)) {
-      options[name] = this.options[name];
-    }
-  });
-  for (const key in options) {
-    if (Object.prototype.hasOwnProperty.call(options, key))
-      this.set(key, options[key]);
-  }
-});

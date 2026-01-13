@@ -27,7 +27,6 @@ import {
 } from './../utils/dom.js';
 import { Container } from './container.js';
 import { Label } from './label.js';
-import { defineChildWidget } from '../child_widget.js';
 import { defineRender } from '../renderer.js';
 
 /**
@@ -140,14 +139,20 @@ export class Marquee extends Container {
     if (this._style) this._style.remove();
     super.destroy();
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'label',
+        create: Label,
+        show: true,
+        inherit_options: true,
+      },
+    ];
+  }
 }
 
 /**
  * @member {Label} Marquee#label - Instance of {@link Label} displaying
  *   the text to be scrolled.
  */
-defineChildWidget(Marquee, 'label', {
-  create: Label,
-  show: true,
-  inherit_options: true,
-});

@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineChildWidget } from '../../child_widget.js';
 import { setText, toggleClass } from '../../utils/dom.js';
 import { Subscriptions } from '../../utils/subscriptions.js';
 
@@ -264,41 +263,46 @@ export class VirtualTreeEntry extends VirtualTreeEntryBase {
     this.data_subscriptions.unsubscribe();
     super.destroy();
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'label',
+        create: Label,
+        option: 'label',
+        inherit_options: true,
+        toggle_class: true,
+      },
+      {
+        name: 'icon',
+        create: Icon,
+        option: 'icon',
+        inherit_options: true,
+        toggle_class: true,
+      },
+      {
+        name: 'indent',
+        create: Container,
+        option: 'depth',
+        toggle_class: true,
+        default_options: {
+          class: 'aux-indent',
+        },
+      },
+      {
+        name: 'collapse',
+        create: Button,
+        show: true,
+        toggle_class: true,
+        default_options: {
+          class: 'aux-collapse',
+        },
+        static_events: {
+          click: function () {
+            this.parent.emit('collapse');
+          },
+        },
+      },
+    ];
+  }
 }
-
-defineChildWidget(VirtualTreeEntry, 'label', {
-  create: Label,
-  option: 'label',
-  inherit_options: true,
-  toggle_class: true,
-});
-
-defineChildWidget(VirtualTreeEntry, 'icon', {
-  create: Icon,
-  option: 'icon',
-  inherit_options: true,
-  toggle_class: true,
-});
-
-defineChildWidget(VirtualTreeEntry, 'indent', {
-  create: Container,
-  option: 'depth',
-  toggle_class: true,
-  default_options: {
-    class: 'aux-indent',
-  },
-});
-
-defineChildWidget(VirtualTreeEntry, 'collapse', {
-  create: Button,
-  show: true,
-  toggle_class: true,
-  default_options: {
-    class: 'aux-collapse',
-  },
-  static_events: {
-    click: function () {
-      this.parent.emit('collapse');
-    },
-  },
-});

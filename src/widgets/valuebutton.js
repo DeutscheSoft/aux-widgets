@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineChildWidget } from '../child_widget.js';
 import { Button } from './button.js';
 import { Value } from './value.js';
 import { warning } from '../utils/warning.js';
@@ -209,6 +208,47 @@ export class ValueButton extends Button {
     }
     return super.set(key, value);
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'value',
+        create: Value,
+        show: true,
+        map_options: {
+          value: 'value',
+        },
+        default_options: {
+          format: function (val) {
+            return val.toFixed(2);
+          },
+          size: 5,
+        },
+        userset_delegate: true,
+        static_events: {
+          dblclick: function (e) {
+            e.stopPropagation();
+          },
+          valueclicked: valueClicked,
+          valuedone: valueDone,
+        },
+      },
+      {
+        name: 'scale',
+        create: Scale,
+        show: true,
+        toggle_class: true,
+        inherit_options: true,
+        map_options: {
+          value: 'bar',
+        },
+        blacklist_options: ['layout', 'set_ariavalue'],
+        default_options: {
+          layout: 'top',
+        },
+      },
+    ];
+  }
 }
 
 function valueClicked() {
@@ -240,41 +280,6 @@ function valueDone() {
 /**
  * @member {Value} ValueButton#value - The value widget for editing the value manually.
  */
-defineChildWidget(ValueButton, 'value', {
-  create: Value,
-  show: true,
-  map_options: {
-    value: 'value',
-  },
-  default_options: {
-    format: function (val) {
-      return val.toFixed(2);
-    },
-    size: 5,
-  },
-  userset_delegate: true,
-  static_events: {
-    dblclick: function (e) {
-      e.stopPropagation();
-    },
-    valueclicked: valueClicked,
-    valuedone: valueDone,
-  },
-});
-
 /**
  * @member {Scale} ValueButton#scale - The {@link Scale} showing the value.
  */
-defineChildWidget(ValueButton, 'scale', {
-  create: Scale,
-  show: true,
-  toggle_class: true,
-  inherit_options: true,
-  map_options: {
-    value: 'bar',
-  },
-  blacklist_options: ['layout', 'set_ariavalue'],
-  default_options: {
-    layout: 'top',
-  },
-});

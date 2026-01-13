@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineChildWidget } from '../child_widget.js';
 import { Container } from './container.js';
 import { Toggle } from './toggle.js';
 import { Timer } from './../utils/timers.js';
@@ -267,6 +266,30 @@ export class Expand extends Container {
     ];
   }
 
+  static get child_widgets() {
+    return [
+      {
+        name: 'button',
+        create: Toggle,
+        show: true,
+        map_options: {
+          expanded: 'state',
+          label: 'label',
+          icon: 'icon',
+          icon_active: 'icon_active',
+        },
+        default_options: {
+          _expanded: true,
+          _collapsed: true,
+          class: 'aux-toggleexpand',
+        },
+        static_events: {
+          click: toggle,
+        },
+      },
+    ];
+  }
+
   /**
    * Toggles the collapsed state of the widget.
    *
@@ -330,21 +353,3 @@ export class Expand extends Container {
 /**
  * @member {Toggle} Expand#button - The button for toggling the state of the expand.
  */
-defineChildWidget(Expand, 'button', {
-  create: Toggle,
-  show: true,
-  map_options: {
-    expanded: 'state',
-    label: 'label',
-    icon: 'icon',
-    icon_active: 'icon_active',
-  },
-  default_options: {
-    _expanded: true,
-    _collapsed: true,
-    class: 'aux-toggleexpand',
-  },
-  static_events: {
-    click: toggle,
-  },
-});

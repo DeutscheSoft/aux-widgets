@@ -21,7 +21,6 @@ import { Chart } from './chart.js';
 import { addClass, removeClass } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 import { defineRender, defineMeasure } from '../renderer.js';
-import { defineChildWidget } from '../child_widget.js';
 import { ChartHandle } from './charthandle.js';
 import { Graph } from './graph.js';
 
@@ -324,50 +323,58 @@ export class Dynamics extends Chart {
     if (key === 'ratio') val = this.range_z.snap(val);
     return super.set(key, val);
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'handle',
+        create: ChartHandle,
+        show: true,
+        map_options: {
+          threshold: ['x', 'y'],
+          ratio: 'z',
+          handle_label: 'format_label',
+          show_handle: 'visible',
+        },
+        default_options: {
+          class: 'aux-handle',
+          min_size: 24,
+          max_size: 80,
+        },
+        static_events: {
+          userset: dragHandle,
+        },
+      },
+      {
+        name: 'steady',
+        create: Graph,
+        show: true,
+        default_options: {
+          class: 'aux-steady',
+          mode: 'line',
+        },
+      },
+      {
+        name: 'response',
+        create: Graph,
+        show: true,
+        default_options: {
+          class: 'aux-response',
+        },
+      },
+    ];
+  }
 }
 
 /**
  * @member {ChartHandle} Dynamics#handle - The handle to set threshold. Has class <code>.aux-handle</code>
  */
-defineChildWidget(Dynamics, 'handle', {
-  create: ChartHandle,
-  show: true,
-  map_options: {
-    threshold: ['x', 'y'],
-    ratio: 'z',
-    handle_label: 'format_label',
-    show_handle: 'visible',
-  },
-  default_options: {
-    class: 'aux-handle',
-    min_size: 24,
-    max_size: 80,
-  },
-  static_events: {
-    userset: dragHandle,
-  },
-});
 /**
  * @member {Graph} Dynamics#steady - The graph drawing the zero line. Has class <code>.aux-steady</code>
  */
-defineChildWidget(Dynamics, 'steady', {
-  create: Graph,
-  show: true,
-  default_options: {
-    class: 'aux-steady',
-    mode: 'line',
-  },
-});
 /**
  * @member {Graph} Dynamics#response - The graph drawing the dynamics response. Has class <code>.aux-response</code>
  */
-defineChildWidget(Dynamics, 'response', {
-  create: Graph,
-  show: true,
-  default_options: {
-    class: 'aux-response',
-  },
-});
 
 function dragRatio(key, y) {
   if (key !== 'y') return;
@@ -481,29 +488,35 @@ export class Compressor extends Dynamics {
     addClass(element, 'aux-compressor');
     super.draw(O, element);
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'ratio',
+        create: ChartHandle,
+        show: true,
+        map_options: {
+          ratio_label: 'format_label',
+          show_ratio: 'visible',
+          ratio_x: ['x_min', 'x_max'],
+        },
+        default_options: {
+          class: 'aux-ratio',
+          min_size: 24,
+          max_size: 24,
+          range_z: { min: 1, max: 1 },
+        },
+        static_events: {
+          userset: dragRatio,
+        },
+      },
+    ];
+  }
 }
 
 /**
  * @member {ChartHandle} Compressor#ratio - The handle to set ratio. Has class <code>.aux-ratio</code>
  */
-defineChildWidget(Compressor, 'ratio', {
-  create: ChartHandle,
-  show: true,
-  map_options: {
-    ratio_label: 'format_label',
-    show_ratio: 'visible',
-    ratio_x: ['x_min', 'x_max'],
-  },
-  default_options: {
-    class: 'aux-ratio',
-    min_size: 24,
-    max_size: 24,
-    range_z: { min: 1, max: 1 },
-  },
-  static_events: {
-    userset: dragRatio,
-  },
-});
 
 /**
  * Expander is a pre-configured {@link Dynamics} widget.

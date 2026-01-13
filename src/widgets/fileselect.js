@@ -23,7 +23,6 @@ import { FORMAT } from './../utils/sprintf.js';
 import { Container } from './container.js';
 import { Button } from './button.js';
 import { Label } from './label.js';
-import { defineChildWidget } from '../child_widget.js';
 import { defineChildElement } from '../widget_helpers.js';
 import { defineMeasure, defineRender } from '../renderer.js';
 
@@ -149,6 +148,48 @@ export class FileSelect extends Container {
      */
     this.emit('select', this.options.files);
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'button',
+        create: Button,
+        show: true,
+        toggle_class: true,
+        inherit_options: true,
+        append: function () {
+          this._label.appendChild(this.button.element);
+        },
+        option: 'foobar',
+        static_events: {
+          keydown: function (e) {
+            if (e.code === 'Enter' || e.code === 'Space') {
+              this.parent._input.click();
+              return false;
+            }
+          },
+        },
+      },
+      {
+        name: 'name',
+        create: Label,
+        show: true,
+        toggle_class: true,
+        default_options: {
+          class: 'aux-name',
+        },
+      },
+      {
+        name: 'size',
+        create: Label,
+        show: true,
+        toggle_class: true,
+        default_options: {
+          class: 'aux-size',
+        },
+      },
+    ];
+  }
 }
 
 /** @member {HTMLFileInput} FileSelect#_input - HTMLFileInput element.
@@ -182,45 +223,11 @@ defineChildElement(FileSelect, 'label', {
 /**
  * @member {Button} FileSelect#button - The {@link Button} for opening the file selector.
  */
-defineChildWidget(FileSelect, 'button', {
-  create: Button,
-  show: true,
-  toggle_class: true,
-  inherit_options: true,
-  append: function () {
-    this._label.appendChild(this.button.element);
-  },
-  option: 'foobar',
-  static_events: {
-    keydown: function (e) {
-      if (e.code === 'Enter' || e.code === 'Space') {
-        this.parent._input.click();
-        return false;
-      }
-    },
-  },
-});
 /**
  * @member {Label} FileSelect#name - The {@link Label} for displaying the file name.
  *   Has class `aux-name`.
  */
-defineChildWidget(FileSelect, 'name', {
-  create: Label,
-  show: true,
-  toggle_class: true,
-  default_options: {
-    class: 'aux-name',
-  },
-});
 /**
  * @member {Label} FileSelect#size - The {@link Label} for displaying the file size.
  *   Has class `aux-size`.
  */
-defineChildWidget(FileSelect, 'size', {
-  create: Label,
-  show: true,
-  toggle_class: true,
-  default_options: {
-    class: 'aux-size',
-  },
-});

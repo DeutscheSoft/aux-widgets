@@ -26,7 +26,6 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { defineChildWidget } from '../child_widget.js';
 import { addClass, removeClass, createID } from '../utils/dom.js';
 import { warn } from '../utils/log.js';
 import {
@@ -492,6 +491,44 @@ export class Pager extends Container {
   getPages() {
     return this.pages.getPages();
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'navigation',
+        create: Navigation,
+        show: true,
+        map_options: {
+          show: 'select',
+        },
+        default_options: {
+          'buttons.role': 'tablist',
+          'buttons.button_role': 'tab',
+        },
+        static_events: {
+          userset: function (key, value) {
+            if (key === 'select') {
+              this.parent.userset('show', value);
+            } else {
+              this.parent.userset(key, value);
+            }
+            return false;
+          },
+        },
+      },
+      {
+        name: 'pages',
+        create: Pages,
+        show: true,
+        inherit_options: true,
+        //static_events: {
+        //"added" : function (p) { this.emit("added", p); },
+        //"removed" : function (p) { this.emit("removed", p); },
+        //},
+        blacklist_options: ['pages'],
+      },
+    ];
+  }
 }
 
 /**
@@ -499,28 +536,6 @@ export class Pager extends Container {
  *
  * @member Pager#navigation
  */
-defineChildWidget(Pager, 'navigation', {
-  create: Navigation,
-  show: true,
-  map_options: {
-    show: 'select',
-  },
-  default_options: {
-    'buttons.role': 'tablist',
-    'buttons.button_role': 'tab',
-  },
-  static_events: {
-    userset: function (key, value) {
-      if (key === 'select') {
-        this.parent.userset('show', value);
-      } else {
-        this.parent.userset(key, value);
-      }
-      return false;
-    },
-  },
-});
-
 /**
  * The {@link Pages} instance.
  *
@@ -541,14 +556,3 @@ defineChildWidget(Pager, 'navigation', {
  *
  * @param {Container} page - The {@link Container} which was added as a page.
  */
-
-defineChildWidget(Pager, 'pages', {
-  create: Pages,
-  show: true,
-  inherit_options: true,
-  //static_events: {
-  //"added" : function (p) { this.emit("added", p); },
-  //"removed" : function (p) { this.emit("removed", p); },
-  //},
-  blacklist_options: ['pages'],
-});

@@ -21,7 +21,6 @@ import { Chart } from './chart.js';
 import { Graph } from './graph.js';
 import { ChartHandle } from './charthandle.js';
 import { addClass } from '../utils/dom.js';
-import { defineChildWidget } from '../child_widget.js';
 import { sprintf } from '../utils/sprintf.js';
 import { defineRecalculation } from '../define_recalculation.js';
 import { defineMeasure, defineRender } from '../renderer.js';
@@ -427,6 +426,118 @@ export class Reverb extends Chart {
     this.set('reflections', O.reflections);
     this.set('show_input', O.show_input);
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'input_handle',
+        create: ChartHandle,
+        show: true,
+        default_options: {
+          format_label: function (label, x, y, z) {
+            const O = this.options;
+            const output = [];
+            if (label) output.push(label);
+            if (O.delay !== false) {
+              if (x >= 1000) output.push(sprintf('%.2fs', x / 1000));
+              else output.push(sprintf('%dms', x));
+            }
+            if (O.input !== false) {
+              output.push(sprintf('%.2fdB', y));
+            }
+            return output.join('\n');
+          },
+          label: 'Input',
+          mode: 'circular',
+          active: true,
+        },
+        static_events: {
+          set_interacting: onInteractingChanged,
+          userset: function (key, value) {
+            if (key === 'x') {
+              this.parent.userset('delay', value);
+              return false;
+            }
+            if (key === 'y') {
+              this.parent.userset('gain', value);
+              return false;
+            }
+          },
+        },
+      },
+      {
+        name: 'rlevel_handle',
+        create: ChartHandle,
+        show: true,
+        default_options: {
+          format_label: function (label, x, y, z) {
+            const O = this.parent.options;
+            const output = [];
+            if (label) output.push(label);
+            if (O.delay !== false) {
+              if (x >= 1000)
+                output.push(sprintf('%.2fs', (x - O.delay) / 1000));
+              else output.push(sprintf('%dms', x - O.delay));
+            }
+            if (O.rlevel !== false) {
+              output.push(sprintf('%.2fdB', y - O.gain));
+            }
+            return output.join('\n');
+          },
+          label: 'Reverb',
+          mode: 'circular',
+          active: true,
+        },
+        static_events: {
+          set_interacting: onInteractingChanged,
+          userset: function (key, value) {
+            const O = this.parent.options;
+            if (key === 'x') {
+              this.parent.userset('predelay', value - O.delay);
+              return false;
+            }
+            if (key === 'y') {
+              this.parent.userset('rlevel', value - O.gain);
+              return false;
+            }
+          },
+        },
+      },
+      {
+        name: 'rtime_handle',
+        create: ChartHandle,
+        show: true,
+        default_options: {
+          format_label: function (label, x, y, z) {
+            const O = this.parent.options;
+            const output = [];
+            if (label) output.push(label);
+            if (O.delay !== false) {
+              if (x >= 1000)
+                output.push(
+                  sprintf('%.2fs', (x - O.delay - O.predelay) / 1000)
+                );
+              else output.push(sprintf('%dms', x - O.delay - O.predelay));
+            }
+            return output.join('\n');
+          },
+          label: 'Time',
+          mode: 'line-vertical',
+          active: true,
+        },
+        static_events: {
+          set_interacting: onInteractingChanged,
+          userset: function (key, value) {
+            const O = this.parent.options;
+            if (key === 'x') {
+              this.parent.userset('rtime', value - O.delay - O.predelay);
+              return false;
+            }
+          },
+        },
+      },
+    ];
+  }
 }
 
 function onInteractingChanged(value) {
@@ -441,117 +552,14 @@ function onInteractingChanged(value) {
  * @member {ChartHandle} Reverb#input_handle - The {@link ChartHandle}
  *   displaying/setting the initial delay and gain.
  */
-defineChildWidget(Reverb, 'input_handle', {
-  create: ChartHandle,
-  show: true,
-  default_options: {
-    format_label: function (label, x, y, z) {
-      const O = this.options;
-      const output = [];
-      if (label) output.push(label);
-      if (O.delay !== false) {
-        if (x >= 1000) output.push(sprintf('%.2fs', x / 1000));
-        else output.push(sprintf('%dms', x));
-      }
-      if (O.input !== false) {
-        output.push(sprintf('%.2fdB', y));
-      }
-      return output.join('\n');
-    },
-    label: 'Input',
-    mode: 'circular',
-    active: true,
-  },
-  static_events: {
-    set_interacting: onInteractingChanged,
-    userset: function (key, value) {
-      if (key === 'x') {
-        this.parent.userset('delay', value);
-        return false;
-      }
-      if (key === 'y') {
-        this.parent.userset('gain', value);
-        return false;
-      }
-    },
-  },
-});
-
 /**
  * @member {ChartHandle} Reverb#rlevel_handle - The {@link ChartHandle}
  *   displaying/setting the pre delay and reverb level.
  */
-defineChildWidget(Reverb, 'rlevel_handle', {
-  create: ChartHandle,
-  show: true,
-  default_options: {
-    format_label: function (label, x, y, z) {
-      const O = this.parent.options;
-      const output = [];
-      if (label) output.push(label);
-      if (O.delay !== false) {
-        if (x >= 1000) output.push(sprintf('%.2fs', (x - O.delay) / 1000));
-        else output.push(sprintf('%dms', x - O.delay));
-      }
-      if (O.rlevel !== false) {
-        output.push(sprintf('%.2fdB', y - O.gain));
-      }
-      return output.join('\n');
-    },
-    label: 'Reverb',
-    mode: 'circular',
-    active: true,
-  },
-  static_events: {
-    set_interacting: onInteractingChanged,
-    userset: function (key, value) {
-      const O = this.parent.options;
-      if (key === 'x') {
-        this.parent.userset('predelay', value - O.delay);
-        return false;
-      }
-      if (key === 'y') {
-        this.parent.userset('rlevel', value - O.gain);
-        return false;
-      }
-    },
-  },
-});
-
 /**
  * @member {ChartHandle} Reverb#rtime_handle - The {@link ChartHandle}
  *   displaying/setting the reverb time.
  */
-defineChildWidget(Reverb, 'rtime_handle', {
-  create: ChartHandle,
-  show: true,
-  default_options: {
-    format_label: function (label, x, y, z) {
-      const O = this.parent.options;
-      const output = [];
-      if (label) output.push(label);
-      if (O.delay !== false) {
-        if (x >= 1000)
-          output.push(sprintf('%.2fs', (x - O.delay - O.predelay) / 1000));
-        else output.push(sprintf('%dms', x - O.delay - O.predelay));
-      }
-      return output.join('\n');
-    },
-    label: 'Time',
-    mode: 'line-vertical',
-    active: true,
-  },
-  static_events: {
-    set_interacting: onInteractingChanged,
-    userset: function (key, value) {
-      const O = this.parent.options;
-      if (key === 'x') {
-        this.parent.userset('rtime', value - O.delay - O.predelay);
-        return false;
-      }
-    },
-  },
-});
 
 function clip(min, max, value) {
   if (!(value >= min)) return min;

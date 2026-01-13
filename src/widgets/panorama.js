@@ -20,7 +20,6 @@
 import { Chart } from './chart.js';
 import { ChartHandle } from './charthandle.js';
 import { addClass, removeClass } from '../utils/dom.js';
-import { defineChildWidget } from '../child_widget.js';
 import { warn } from '../utils/log.js';
 
 /**
@@ -135,6 +134,42 @@ export class Panorama extends Chart {
 
     super.draw(O, element);
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'handle1',
+        create: ChartHandle,
+        show: true,
+        toggle_class: true,
+        map_options: {
+          x: 'x',
+          y: 'y',
+        },
+        default_options: {
+          format_label: handleLabel,
+          preferences: ['top', 'bottom', 'left', 'right'],
+          label: 'In 1',
+        },
+        userset_delegate: true,
+      },
+      {
+        name: 'handle2',
+        create: ChartHandle,
+        show: true,
+        toggle_class: true,
+        map_options: {
+          y: 'x',
+        },
+        default_options: {
+          format_label: handleLabel,
+          mode: 'line-vertical',
+          preferences: ['top', 'bottom', 'left', 'right'],
+          label: 'In 2',
+        },
+      },
+    ];
+  }
 }
 function handleLabel(label, x, y, z) {
   const O = this.options;
@@ -154,37 +189,8 @@ function handleLabel(label, x, y, z) {
  *   In panorama mode it affects the `x` parameter, in surround it
  *   affects both, `x` and `y` parameters.
  */
-defineChildWidget(Panorama, 'handle1', {
-  create: ChartHandle,
-  show: true,
-  toggle_class: true,
-  map_options: {
-    x: 'x',
-    y: 'y',
-  },
-  default_options: {
-    format_label: handleLabel,
-    preferences: ['top', 'bottom', 'left', 'right'],
-    label: 'In 1',
-  },
-  userset_delegate: true,
-});
 /**
  * @member {ChartHandle} Panorama#handle2 - The {@link ChartHandle}
  *   displaying/setting the position of the second channel in balance
  *   mode. It affects the `y` parameter.
  */
-defineChildWidget(Panorama, 'handle2', {
-  create: ChartHandle,
-  show: true,
-  toggle_class: true,
-  map_options: {
-    y: 'x',
-  },
-  default_options: {
-    format_label: handleLabel,
-    mode: 'line-vertical',
-    preferences: ['top', 'bottom', 'left', 'right'],
-    label: 'In 2',
-  },
-});

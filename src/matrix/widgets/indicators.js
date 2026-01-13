@@ -18,7 +18,6 @@
  */
 
 import { defineChildElement } from './../../widget_helpers.js';
-import { defineChildWidget } from './../../child_widget.js';
 import { addClass, removeClass } from './../../utils/dom.js';
 import { scrollbarSize } from './../../utils/scrollbar_size.js';
 import { FORMAT } from '../../utils/sprintf.js';
@@ -471,6 +470,107 @@ export class Indicators extends Container {
     this.emit('disconnectAll', indexRectangle, rectangle);
     onBatchEnd.call(this);
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'buttons',
+        create: Container,
+        default_options: {
+          class: 'aux-batchbuttons',
+        },
+        append: function () {
+          this._batch.appendChild(this.buttons.element);
+        },
+      },
+      {
+        name: 'deselect_diagonal',
+        create: ConfirmButton,
+        default_options: {
+          icon: 'matrixdeselectdiagonal',
+          icon_confirm: 'questionmark',
+          class: 'aux-deselectdiagonal',
+        },
+        static_events: {
+          mousedown: function (ev) {
+            ev.stopPropagation();
+            return false;
+          },
+          confirmed: function () {
+            this.parent._onDisconnectDiagonalConfirmed();
+            return false;
+          },
+        },
+        append: function () {
+          this.buttons.element.appendChild(this.deselect_diagonal.element);
+        },
+      },
+      {
+        name: 'deselect_all',
+        create: ConfirmButton,
+        default_options: {
+          icon: 'matrixdeselectall',
+          icon_confirm: 'questionmark',
+          class: 'aux-deselectall',
+        },
+        static_events: {
+          mousedown: function (ev) {
+            ev.stopPropagation();
+            return false;
+          },
+          confirmed: function () {
+            this.parent._onDisconnectAllConfirmed();
+            return false;
+          },
+        },
+        append: function () {
+          this.buttons.element.appendChild(this.deselect_all.element);
+        },
+      },
+      {
+        name: 'select_diagonal',
+        create: ConfirmButton,
+        default_options: {
+          icon: 'matrixselectdiagonal',
+          icon_confirm: 'questionmark',
+          class: 'aux-selectdiagonal',
+        },
+        static_events: {
+          mousedown: function (ev) {
+            ev.stopPropagation();
+            return false;
+          },
+          confirmed: function () {
+            this.parent._onConnectDiagonalConfirmed();
+            return false;
+          },
+        },
+        append: function () {
+          this.buttons.element.appendChild(this.select_diagonal.element);
+        },
+      },
+      {
+        name: 'cancel',
+        create: Button,
+        default_options: {
+          icon: 'close',
+          class: 'aux-cancel',
+        },
+        static_events: {
+          mousedown: function (ev) {
+            ev.stopPropagation();
+            return false;
+          },
+          click: function () {
+            cancel.call(this.parent);
+          },
+        },
+        append: function () {
+          this.buttons.element.appendChild(this.cancel.element);
+        },
+      },
+    ];
+  }
 }
 
 /**
@@ -497,114 +597,23 @@ defineChildElement(Indicators, 'batch', {
  *   the buttons for batch connection management.
  *   Has class <code>.aux-batchbuttons</code>.
  */
-defineChildWidget(Indicators, 'buttons', {
-  create: Container,
-  default_options: {
-    class: 'aux-batchbuttons',
-  },
-  append: function () {
-    this._batch.appendChild(this.buttons.element);
-  },
-});
 /**
  * @member {Button} Indicators#deselect_diagonal - The button for
  *   disconnecting diagonally.
  *   Has class <code>.aux-deselectdiagonal</code>.
  */
-defineChildWidget(Indicators, 'deselect_diagonal', {
-  create: ConfirmButton,
-  default_options: {
-    icon: 'matrixdeselectdiagonal',
-    icon_confirm: 'questionmark',
-    class: 'aux-deselectdiagonal',
-  },
-  static_events: {
-    mousedown: function (ev) {
-      ev.stopPropagation();
-      return false;
-    },
-    confirmed: function () {
-      this.parent._onDisconnectDiagonalConfirmed();
-      return false;
-    },
-  },
-  append: function () {
-    this.buttons.element.appendChild(this.deselect_diagonal.element);
-  },
-});
 /**
  * @member {Button} Indicators#deselect_all - The button for
  *   disconnecting all.
  *   Has class <code>.aux-deselectall</code>.
  */
-defineChildWidget(Indicators, 'deselect_all', {
-  create: ConfirmButton,
-  default_options: {
-    icon: 'matrixdeselectall',
-    icon_confirm: 'questionmark',
-    class: 'aux-deselectall',
-  },
-  static_events: {
-    mousedown: function (ev) {
-      ev.stopPropagation();
-      return false;
-    },
-    confirmed: function () {
-      this.parent._onDisconnectAllConfirmed();
-      return false;
-    },
-  },
-  append: function () {
-    this.buttons.element.appendChild(this.deselect_all.element);
-  },
-});
 /**
  * @member {Button} Indicators#select_diagonal - The button for
  *   connecting diagonally.
  *   Has class <code>.aux-selectdiagonal</code>.
  */
-defineChildWidget(Indicators, 'select_diagonal', {
-  create: ConfirmButton,
-  default_options: {
-    icon: 'matrixselectdiagonal',
-    icon_confirm: 'questionmark',
-    class: 'aux-selectdiagonal',
-  },
-  static_events: {
-    mousedown: function (ev) {
-      ev.stopPropagation();
-      return false;
-    },
-    confirmed: function () {
-      this.parent._onConnectDiagonalConfirmed();
-      return false;
-    },
-  },
-  append: function () {
-    this.buttons.element.appendChild(this.select_diagonal.element);
-  },
-});
 /**
  * @member {Button} Indicators#cancel - The button for
  *   hiding the rectangle.
  *   Has class <code>.aux-cancel</code>.
  */
-defineChildWidget(Indicators, 'cancel', {
-  create: Button,
-  default_options: {
-    icon: 'close',
-    class: 'aux-cancel',
-  },
-  static_events: {
-    mousedown: function (ev) {
-      ev.stopPropagation();
-      return false;
-    },
-    click: function () {
-      cancel.call(this.parent);
-    },
-  },
-  append: function () {
-    this.buttons.element.appendChild(this.cancel.element);
-  },
-});

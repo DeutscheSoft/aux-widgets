@@ -24,7 +24,6 @@ import {
   createID,
   applyAttribute,
 } from './../utils/dom.js';
-import { defineChildWidget } from './../child_widget.js';
 import { Widget } from './widget.js';
 import { Icon } from './icon.js';
 import { Label } from './label.js';
@@ -349,34 +348,40 @@ export class Button extends Widget {
       }),
     ];
   }
+
+  static get child_widgets() {
+    return [
+      {
+        name: 'icon',
+        create: Icon,
+        option: 'icon',
+        inherit_options: true,
+        toggle_class: true,
+        default_options: {
+          role: 'presentation',
+        },
+      },
+      {
+        name: 'label',
+        create: Label,
+        option: 'label',
+        inherit_options: true,
+        toggle_class: true,
+        static_events: {
+          initialized: function () {
+            if (!this.get('id')) {
+              this.set('id', createID('aux-label-'));
+            }
+          },
+        },
+      },
+    ];
+  }
 }
 
 /**
  * @member {Icon} Button#icon - The {@link Icon} widget.
  */
-defineChildWidget(Button, 'icon', {
-  create: Icon,
-  option: 'icon',
-  inherit_options: true,
-  toggle_class: true,
-  default_options: {
-    role: 'presentation',
-  },
-});
-
 /**
  * @member {Label} Button#label - The {@link Label} of the button.
  */
-defineChildWidget(Button, 'label', {
-  create: Label,
-  option: 'label',
-  inherit_options: true,
-  toggle_class: true,
-  static_events: {
-    initialized: function () {
-      if (!this.get('id')) {
-        this.set('id', createID('aux-label-'));
-      }
-    },
-  },
-});
