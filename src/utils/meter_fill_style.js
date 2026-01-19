@@ -12,7 +12,7 @@ function fromGradientObject(gradient) {
 }
 
 /**
- *
+ * @internal
  * @param {*} definition
  * @param {HTMLCanvasElement} element
  * @param {*} options
