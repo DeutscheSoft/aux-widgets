@@ -22,8 +22,7 @@ import { Graph } from './graph.js';
 import { ChartHandle } from './charthandle.js';
 import { addClass } from '../utils/dom.js';
 import { sprintf } from '../utils/sprintf.js';
-import { defineRecalculation } from '../define_recalculation.js';
-import { defineMeasure, defineRender } from '../renderer.js';
+import { defineMeasure, defineRender, defineRecalculation } from '../renderer.js';
 
 function setInputMode() {
   const O = this.options;
@@ -110,6 +109,23 @@ function adjustReflections(reflections) {
   }
 
   this.invalidate('_reflections');
+}
+
+function clip(min, max, value) {
+  if (!(value >= min)) return min;
+
+  if (!(value <= max)) return max;
+
+  return value;
+}
+
+function defineClipCalculation(name) {
+  return defineRecalculation(
+    [name + '_min', name + '_max', name],
+    function (min, max, value) {
+      this.update(name, clip(min, max, value));
+    }
+  );
 }
 
 /**
@@ -307,6 +323,23 @@ export class Reverb extends Chart {
 
   static get renderers() {
     return [
+      defineClipCalculation('delay'),
+      defineClipCalculation('predelay'),
+      defineClipCalculation('rtime'),
+      defineClipCalculation('gain'),
+      defineClipCalculation('rlevel'),
+      defineRecalculation(
+        ['delay', 'predelay', 'rtime'],
+        function (delay, predelay, rtime) {
+          this.update('input_handle.x', delay);
+          this.update('rlevel_handle.x', delay + predelay);
+          this.update('rtime_handle.x', delay + predelay + rtime);
+        }
+      ),
+      defineRecalculation(['gain', 'rlevel'], function (gain, rlevel) {
+        this.update('input_handle.y', gain);
+        this.update('rlevel_handle.y', gain + rlevel);
+      }),
       defineMeasure(
         [
           'delay',
@@ -560,38 +593,3 @@ function onInteractingChanged(value) {
  * @member {ChartHandle} Reverb#rtime_handle - The {@link ChartHandle}
  *   displaying/setting the reverb time.
  */
-
-function clip(min, max, value) {
-  if (!(value >= min)) return min;
-
-  if (!(value <= max)) return max;
-
-  return value;
-}
-
-function defineClipCalculation(name) {
-  defineRecalculation(Reverb, [name + '_min', name + '_max', name], function (
-    O
-  ) {
-    this.update(name, clip(O[name + '_min'], O[name + '_max'], O[name]));
-  });
-}
-
-defineClipCalculation('delay');
-defineClipCalculation('predelay');
-defineClipCalculation('rtime');
-defineClipCalculation('gain');
-defineClipCalculation('rlevel');
-
-defineRecalculation(Reverb, ['delay', 'predelay', 'rtime'], function (O) {
-  const { delay, predelay, rtime } = O;
-  this.update('input_handle.x', delay);
-  this.update('rlevel_handle.x', delay + predelay);
-  this.update('rtime_handle.x', delay + predelay + rtime);
-});
-defineRecalculation(Reverb, ['gain', 'rlevel'], function (O) {
-  const { gain, rlevel } = O;
-
-  this.update('input_handle.y', gain);
-  this.update('rlevel_handle.y', gain + rlevel);
-});

@@ -20,8 +20,7 @@
 import { scrollbarSize } from './../../utils/scrollbar_size.js';
 import { Subscriptions } from '../../utils/subscriptions.js';
 import { subscribeDOMEvent } from '../../utils/events.js';
-import { defineRecalculation } from '../../define_recalculation.js';
-import { defineRender, defineMeasure } from '../../renderer.js';
+import { defineRender, defineMeasure, defineRecalculation } from '../../renderer.js';
 
 import { Scroller } from './../../widgets/scroller.js';
 import { VirtualTreeEntry } from './virtualtreeentry.js';
@@ -106,6 +105,15 @@ export class VirtualTree extends Scroller {
 
   static get renderers() {
     return [
+      defineRecalculation(
+        ['_view_height', 'prerender_top', 'prerender_bottom', 'size'],
+        function (_view_height, prerender_top, prerender_bottom, size) {
+          const _amount =
+            Math.ceil(_view_height / size) + prerender_top + prerender_bottom;
+
+          if (!isNaN(_amount)) this.update('_amount', _amount);
+        }
+      ),
       defineRender('virtualtreeview', function (virtualtreeview) {
         if (!virtualtreeview) return;
         const subs = this.virtualtreeview_subs;
@@ -444,15 +452,3 @@ export class VirtualTree extends Scroller {
  * @member {HTMLDiv} VirtualTree#_sizer - A container holding the
  *   {@link VirtualTreeEntry}s. Has class <code>.aux-sizer</code>.
  */
-defineRecalculation(
-  VirtualTree,
-  ['_view_height', 'prerender_top', 'prerender_bottom', 'size'],
-  function (O) {
-    const { _view_height, prerender_top, prerender_bottom, size } = O;
-
-    const _amount =
-      Math.ceil(_view_height / size) + prerender_top + prerender_bottom;
-
-    if (!isNaN(_amount)) this.update('_amount', _amount);
-  }
-);

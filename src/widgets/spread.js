@@ -51,8 +51,7 @@ import {
   outerWidth,
   innerWidth,
 } from '../utils/dom.js';
-import { defineRecalculation } from '../define_recalculation.js';
-import { defineRender, defineMeasure } from '../renderer.js';
+import { defineRender, defineMeasure, defineRecalculation } from '../renderer.js';
 
 function vert(layout) {
   return layout === 'left' || layout === 'right';
@@ -200,6 +199,12 @@ export class Spread extends Widget {
   static get renderers() {
     return [
       ...rangedRenderers,
+      defineRecalculation(['upper'], function (upper) {
+        this.update('upper', Math.max(this.options.lower, upper));
+      }),
+      defineRecalculation(['lower'], function (lower) {
+        this.update('lower', Math.min(lower, this.options.upper));
+      }),
       defineMeasure(['layout', SymResize], function (layout) {
         const { _track, _lower } = this;
 
@@ -458,9 +463,3 @@ export class Spread extends Widget {
  * @member {Value} Spread#valueupper - A {@link Value} to display the current upper value, offering a way to enter a value via keyboard.
  */
 
-defineRecalculation(Spread, ['upper'], function (O) {
-  this.update('upper', Math.max(O.lower, O.upper));
-});
-defineRecalculation(Spread, ['lower'], function (O) {
-  this.update('lower', Math.min(O.lower, O.upper));
-});
