@@ -33,7 +33,7 @@ import {
   rangedRenderers,
   rangedEvents,
 } from '../utils/ranged.js';
-import { defineChildElement, mergeStaticEvents } from '../widget_helpers.js';
+import { mergeStaticEvents } from '../widget_helpers.js';
 import { SymResize, Widget } from './widget.js';
 import {
   defineRender,
@@ -884,18 +884,24 @@ export class Circular extends Widget {
     this._stroke = Math.max(strokeb, strokev);
     return this._stroke;
   }
+
+  static get child_elements() {
+    return [
+      {
+        name: 'labels',
+        //option: "labels",
+        //display_check: function(v) { return !!v.length; },
+        show: true,
+        dependency: SymLabelsChanged,
+        create: function () {
+          return makeSVG('g', { class: 'aux-labels' });
+        },
+      },
+    ];
+  }
 }
 
 /**
  * @member {SVGGroup} Circular#_labels - A group containing all labels.
  *      Has class <code>.aux-labels</code>
  */
-defineChildElement(Circular, 'labels', {
-  //option: "labels",
-  //display_check: function(v) { return !!v.length; },
-  show: true,
-  dependency: SymLabelsChanged,
-  create: function () {
-    return makeSVG('g', { class: 'aux-labels' });
-  },
-});

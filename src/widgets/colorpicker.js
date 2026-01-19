@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineChildElement } from '../widget_helpers.js';
 import { Container } from './container.js';
 import { Value } from './value.js';
 import { ValueKnob } from './valueknob.js';
@@ -652,40 +651,48 @@ export class ColorPicker extends Container {
     }
     return super.set(key, value);
   }
+
+  static get child_elements() {
+    return [
+      {
+        name: 'canvas',
+        show: true,
+        append: function () {
+          this.element.appendChild(this._canvas);
+          this.drag_x.set('node', this._canvas);
+          this.drag_y.set('node', this._canvas);
+        },
+      },
+      {
+        name: 'grayscale',
+        show: true,
+        append: function () {
+          this._canvas.appendChild(this._grayscale);
+        },
+      },
+      {
+        name: 'indicator',
+        show: true,
+        append: function () {
+          this._canvas.appendChild(this._indicator);
+        },
+      },
+    ];
+  }
 }
 
 /**
  * @member {HTMLDivElement} ColorPicker#canvas - The color background.
  *   Has class .aux-canvas`,
  */
-defineChildElement(ColorPicker, 'canvas', {
-  show: true,
-  append: function () {
-    this.element.appendChild(this._canvas);
-    this.drag_x.set('node', this._canvas);
-    this.drag_y.set('node', this._canvas);
-  },
-});
 /**
  * @member {HTMLDivElement} ColorPicker#grayscale - The grayscale background.
  *   Has class .aux-grayscale`,
  */
-defineChildElement(ColorPicker, 'grayscale', {
-  show: true,
-  append: function () {
-    this._canvas.appendChild(this._grayscale);
-  },
-});
 /**
  * @member {HTMLDivElement} ColorPicker#indicator - The indicator element.
  *   Has class .aux-indicator`,
  */
-defineChildElement(ColorPicker, 'indicator', {
-  show: true,
-  append: function () {
-    this._canvas.appendChild(this._indicator);
-  },
-});
 
 /**
  * @member {Value} ColorPicker#hex - The {@link Value} for the HEX color.

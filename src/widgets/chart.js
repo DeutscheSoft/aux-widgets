@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineChildElement } from './../widget_helpers.js';
 import {
   CSSSpace,
   getStyle,
@@ -686,6 +685,29 @@ export class Chart extends Widget {
       },
     ];
   }
+
+  static get child_elements() {
+    return [
+      {
+        name: 'label',
+        option: 'label',
+        dependency: SymLabelChanged,
+        display_check: function (v) {
+          return typeof v === 'string' && v.length;
+        },
+        create: function () {
+          return makeSVG('text', {
+            class: 'aux-label',
+            style: 'dominant-baseline: central;',
+          });
+        },
+        append: function () {
+          const svg = this.svg;
+          svg.insertBefore(this._label, svg.firstChild);
+        },
+      },
+    ];
+  }
 }
 /**
  * @member {Grid} Chart#grid - The grid element of the chart.
@@ -695,20 +717,3 @@ export class Chart extends Widget {
  * @member {SVGText} Chart#_label - The label of the chart.
  *   Has class <code>.aux-label</code>.
  */
-defineChildElement(Chart, 'label', {
-  option: 'label',
-  dependency: SymLabelChanged,
-  display_check: function (v) {
-    return typeof v === 'string' && v.length;
-  },
-  create: function () {
-    return makeSVG('text', {
-      class: 'aux-label',
-      style: 'dominant-baseline: central;',
-    });
-  },
-  append: function () {
-    const svg = this.svg;
-    svg.insertBefore(this._label, svg.firstChild);
-  },
-});

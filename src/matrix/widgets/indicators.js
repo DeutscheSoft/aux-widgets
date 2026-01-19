@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineChildElement } from './../../widget_helpers.js';
 import { addClass, removeClass } from './../../utils/dom.js';
 import { scrollbarSize } from './../../utils/scrollbar_size.js';
 import { FORMAT } from '../../utils/sprintf.js';
@@ -471,6 +470,20 @@ export class Indicators extends Container {
     onBatchEnd.call(this);
   }
 
+  static get child_elements() {
+    return [
+      {
+        name: 'scroller',
+        show: true,
+      },
+      {
+        name: 'batch',
+        show: false,
+        option: '_batch',
+      },
+    ];
+  }
+
   static get child_widgets() {
     return [
       {
@@ -578,19 +591,11 @@ export class Indicators extends Container {
  *   the scroll bar.
  *   Has class <code>.aux-scroller</code>.
  */
-defineChildElement(Indicators, 'scroller', {
-  show: true,
-});
-
 /**
  * @member {HTMLDiv} Indicators#_batch - The rectangle to indicate
  *   batch selection/deselection.
  *   Has class `.aux-batch`.
  */
-defineChildElement(Indicators, 'batch', {
-  show: false,
-  option: '_batch',
-});
 
 /**
  * @member {Container} Indicators#buttons - The container holding

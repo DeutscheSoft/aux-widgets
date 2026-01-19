@@ -23,7 +23,6 @@ import { FORMAT } from './../utils/sprintf.js';
 import { Container } from './container.js';
 import { Button } from './button.js';
 import { Label } from './label.js';
-import { defineChildElement } from '../widget_helpers.js';
 import { defineMeasure, defineRender } from '../renderer.js';
 
 /**
@@ -190,35 +189,41 @@ export class FileSelect extends Container {
       },
     ];
   }
+
+  static get child_elements() {
+    return [
+      {
+        name: 'input',
+        show: true,
+        create: function () {
+          return element('INPUT', {
+            type: 'file',
+            class: 'aux-fileinput',
+          });
+        },
+      },
+      {
+        name: 'label',
+        show: true,
+        create: function () {
+          return element('LABEL', {
+            type: 'file',
+            class: 'aux-filelabel',
+          });
+        },
+        option: 'foobar',
+      },
+    ];
+  }
 }
 
 /** @member {HTMLFileInput} FileSelect#_input - HTMLFileInput element.
  *   Has class <code>.aux-fileinput</code>.
  */
-defineChildElement(FileSelect, 'input', {
-  show: true,
-  create: function () {
-    return element('INPUT', {
-      type: 'file',
-      class: 'aux-fileinput',
-    });
-  },
-});
-
 /** @member {HTMLLabel} FileSelect#_label - The HTMLLabel element connecting
  *   the widgets with the file input.
  *   Has class <code>.aux-filelabel</code>.
  */
-defineChildElement(FileSelect, 'label', {
-  show: true,
-  create: function () {
-    return element('LABEL', {
-      type: 'file',
-      class: 'aux-filelabel',
-    });
-  },
-  option: 'foobar',
-});
 
 /**
  * @member {Button} FileSelect#button - The {@link Button} for opening the file selector.

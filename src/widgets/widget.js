@@ -50,6 +50,7 @@ import {
 } from '../renderer.js';
 import { domScheduler } from '../dom_scheduler.js';
 import { defineChildWidget } from '../child_widget.js';
+import { defineChildElement } from '../widget_helpers.js';
 
 const enableTimers = new ProximityTimers();
 
@@ -368,9 +369,18 @@ export class Widget extends Base {
     });
   }
 
+  static initializeChildElements() {
+    const child_elements = getOwnProperty(this, 'child_elements') || [];
+
+    child_elements.forEach((child_element) => {
+      defineChildElement(this, child_element.name, child_element);
+    });
+  }
+
   static initialize() {
     Base.initialize.call(this);
     this.initializeChildWidgets();
+    this.initializeChildElements();
   }
 
   static getRenderer() {
@@ -515,6 +525,10 @@ export class Widget extends Base {
   }
 
   static get child_widgets() {
+    return [];
+  }
+
+  static get child_elements() {
     return [];
   }
 

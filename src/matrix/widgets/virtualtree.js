@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { defineChildElement } from './../../widget_helpers.js';
 import { scrollbarSize } from './../../utils/scrollbar_size.js';
 import { Subscriptions } from '../../utils/subscriptions.js';
 import { subscribeDOMEvent } from '../../utils/events.js';
@@ -428,17 +427,23 @@ export class VirtualTree extends Scroller {
 
     return super.set(key, value);
   }
+
+  static get child_elements() {
+    return [
+      {
+        name: 'sizer',
+        show: true,
+        append: function () {
+          this.scrollhide.element.appendChild(this._sizer);
+        },
+      },
+    ];
+  }
 }
 /**
  * @member {HTMLDiv} VirtualTree#_sizer - A container holding the
  *   {@link VirtualTreeEntry}s. Has class <code>.aux-sizer</code>.
  */
-defineChildElement(VirtualTree, 'sizer', {
-  show: true,
-  append: function () {
-    this.scrollhide.element.appendChild(this._sizer);
-  },
-});
 defineRecalculation(
   VirtualTree,
   ['_view_height', 'prerender_top', 'prerender_bottom', 'size'],

@@ -19,7 +19,6 @@
 
 /* jshint -W018 */
 
-import { defineChildElement } from '../widget_helpers.js';
 import { Widget } from './widget.js';
 import {
   rangedEvents,
@@ -887,38 +886,44 @@ export class Scale extends Widget {
     removeDotsAndLabels(this.element);
     super.destroy();
   }
+
+  static get child_elements() {
+    return [
+      {
+        name: 'pointer',
+        show: false,
+        toggle_class: true,
+        option: 'pointer',
+        debug: true,
+        draw_options: ['pointer', 'transformation', 'snap_module', 'layout'],
+        draw: function (O) {
+          const { _pointer } = this;
+          if (!_pointer) return;
+
+          const { transformation, snap_module, pointer, layout } = O;
+          const tmp =
+            transformation.valueToCoef(snap_module.snap(pointer)) * 100 + '%';
+          if (vert(layout)) {
+            _pointer.style.bottom = tmp;
+          } else {
+            _pointer.style.left = tmp;
+          }
+        },
+      },
+      {
+        name: 'bar',
+        show: false,
+        toggle_class: true,
+        option: 'bar',
+        dependency: SymBarChanged,
+      },
+    ];
+  }
 }
 
 /**
  * @member {HTMLDivElement} Fader#_pointer - The DIV element of the pointer. It can be used to e.g. visualize the value set in the backend.
  */
-defineChildElement(Scale, 'pointer', {
-  show: false,
-  toggle_class: true,
-  option: 'pointer',
-  debug: true,
-  draw_options: ['pointer', 'transformation', 'snap_module', 'layout'],
-  draw: function (O) {
-    const { _pointer } = this;
-    if (!_pointer) return;
-
-    const { transformation, snap_module, pointer, layout } = O;
-    const tmp =
-      transformation.valueToCoef(snap_module.snap(pointer)) * 100 + '%';
-    if (vert(layout)) {
-      _pointer.style.bottom = tmp;
-    } else {
-      _pointer.style.left = tmp;
-    }
-  },
-});
-
 /**
  * @member {HTMLDivElement} Fader#_bar - The DIV element of the bar. It can be used to e.g. visualize the value set in the backend or to draw a simple levelmeter.
  */
-defineChildElement(Scale, 'bar', {
-  show: false,
-  toggle_class: true,
-  option: 'bar',
-  dependency: SymBarChanged,
-});
