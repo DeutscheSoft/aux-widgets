@@ -109,16 +109,14 @@ class KnobCircular extends Circular {
  * @property {Object} [options.markers_defaults={thickness: 6, margin: 13}]
  * @property {Object} [options.labels_defaults={margin: 10, align: "outer", format: function(val){return val;}}]
  * @property {Number} [options.basis=300] - Distance to drag between <code>min</code> and <code>max</code>.
- * @property {String} [options.preset="medium"] - The preset to use. Presets
- *   are a functionality of {@link Widget}.
+ * @property {String} [options.preset="medium"] - The preset to use.
  * @property {Object} [options.presets={
             tiny: {margin:0, thickness:4, hand:{width: 1, length: 6, margin: 8}, dots_defaults:{length:4, margin:0, width:1}, markers_defaults: {thickness: 2, margin: 0}, show_labels:false},
             small: {margin:0, thickness:5, hand:{width: 1, length: 8, margin: 10}, dots_defaults: {length:5, margin:0,width:1}, markers_defaults: {thickness: 2, margin: 0}, show_labels:false},
             medium: {},
             large: {hand:{width:1.5, length:12, margin:26}},
             huge: {hand:{width:2, length:12, margin:28}},
-        }] - A set of available presets. Presets
- *   are a functionality of {@link Widget}.
+        }] - A set of available presets.
  */
 export class Knob extends Widget {
   static get _options() {

@@ -29,7 +29,7 @@ import { defineRender } from '../renderer.js';
  * @extends Widget
  *
  * @property {Mixed} [options.label=""] - The content of the label. Can be formatted via `options.format`.
- * @property {Function|Boolean} [options.format=false] - Optional format function.
+ * @property {Function|Boolean} [options.format=false] - Optional format function. Can be false to disable formatting.
  */
 export class Label extends Widget {
   static get _options() {
