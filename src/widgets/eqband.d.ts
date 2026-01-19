@@ -5,6 +5,7 @@ import {
   IChartHandleOptions,
   IChartHandleEvents,
 } from './charthandle.js';
+import { Filter } from '../modules/filter.js';
 
 /**
  * Options specific to the EqBand widget.
@@ -53,7 +54,7 @@ export declare class EqBand<
   /** The main SVG group. Has class .aux-eqband */
   element: SVGGElement;
   /** The filter providing the graphical calculations. */
-  filter: import('../modules/filter.js').Filter;
+  filter: Filter;
 
   /**
    * Calculate the gain for a given frequency in Hz.
