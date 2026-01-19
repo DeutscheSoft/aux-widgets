@@ -17,14 +17,16 @@
  * Boston, MA  02110-1301  USA
  */
 
+/**
+ * Returns a formatting function for numerical values for reducing
+ * the amount of digits displayed by adding SI prefixes.
+ *
+ * @param {Integer} limit - the amount of digits to display, excluding the SI prefix.
+ * @param {String} [add=''] - a possible additional string to add at the end (e.g. 'B' for bytes)
+ * @param {Integer} [base=1000] - the base for calculations, defaults to 1000
+ * @returns {Function} A formatting function that takes a numeric value and returns a formatted string
+ */
 export function limitDigits(limit, add = '', base) {
-  /** Returns a formatting function for numerical values for reducing
-   *  the amount of digits displayed by adding SI prefixes.
-   *  @function limitDigits
-   *  @param {Integer} limit - the amount of digits to display, excluding the SI prefix.
-   *  @param {String} add - a possible additional string to add ad the end (e.g. 'B' for bytes)
-   *  @param {Integer} base - the base for calculations, defaults to 1000
-   */
   return function (value) {
     base = base ? base : 1000;
     value = parseFloat(value);

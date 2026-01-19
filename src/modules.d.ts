@@ -17,22 +17,11 @@
  * Boston, MA  02110-1301  USA
  */
 
-/**
- * Tracks resizes of the given list of elements using a ResizeObserver.
- * The callback will be called whenever the resize observer triggers.
- * Returns an unsubscription callback which can be used to stop the
- * observation.
- */
-export function observeResize(elements, callback) {
-  if (typeof ResizeObserver === 'undefined') return () => {};
-
-  const observer = new ResizeObserver((entries) => {
-    callback();
-  });
-
-  for (const element of elements) {
-    observer.observe(element);
-  }
-
-  return () => observer.disconnect();
-}
+export * from './modules/drag.js';
+export * from './modules/dragcapture.js';
+export * from './modules/dragvalue.js';
+export * from './modules/filter.js';
+export * from './modules/module.js';
+export * from './modules/range.js';
+export * from './modules/resize.js';
+export * from './modules/scrollvalue.js';

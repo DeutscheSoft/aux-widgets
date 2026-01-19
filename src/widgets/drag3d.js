@@ -24,9 +24,12 @@ import { addClass } from '../utils/dom.js';
 
 /**
  * Drag3D is a {@link Container} with a collection of three
- * {@link DragValue}s applied. Use the dot notation to get access to
- * the options of the members, e.g. to set the drag angle in x direction
- * use `drag_x.rotation`.
+ * {@link DragValue}s applied. It does not draw any visuals by itself; it
+ * merely provides a three-axis drag controller for x/y/z values that you
+ * can wire to your own rendering.
+ *
+ * Use dot notation to configure the underlying DragValue and Range options,
+ * e.g. `drag_x.rotation` or `range_y.min`.
  *
  * @class Drag3D
  *
