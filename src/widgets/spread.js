@@ -105,7 +105,7 @@ const setHandlePosition = supports_transform
  *
  * @property {Number} [options.lower] - The spreads's lower position. This options is
  *   modified by user interaction.
- * @property {Number} [options.lower] - The spreads's upper position. This options is
+ * @property {Number} [options.upper] - The spreads's upper position. This options is
  *   modified by user interaction.
  * @property {String} [options.layout] - The spreads's layout. One out of
  *   `top`, `left`, `right` or `bottom`, defining the spreads handles position
