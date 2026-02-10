@@ -1,4 +1,4 @@
-import { Base } from '../implements/base.js';
+import { Base, IBaseEvents } from '../implements/base.js';
 
 /**
  * Options for ScrollValue.
@@ -31,7 +31,7 @@ export interface IScrollValueOptions {
 /**
  * Events for ScrollValue.
  */
-export interface IScrollValueEvents {
+export interface IScrollValueEvents extends IBaseEvents {
   /** Fired when scrolling starts. */
   scrollstarted: (event: WheelEvent) => void;
   /** Fired while scrolling happens. */
