@@ -20,7 +20,11 @@
 import { scrollbarSize } from './../../utils/scrollbar_size.js';
 import { Subscriptions } from '../../utils/subscriptions.js';
 import { subscribeDOMEvent } from '../../utils/events.js';
-import { defineRender, defineMeasure, defineRecalculation } from '../../renderer.js';
+import {
+  defineRender,
+  defineMeasure,
+  defineRecalculation,
+} from '../../renderer.js';
 
 import { Scroller } from './../../widgets/scroller.js';
 import { VirtualTreeEntry } from './virtualtreeentry.js';

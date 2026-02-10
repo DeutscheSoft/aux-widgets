@@ -51,7 +51,11 @@ import {
   outerWidth,
   innerWidth,
 } from '../utils/dom.js';
-import { defineRender, defineMeasure, defineRecalculation } from '../renderer.js';
+import {
+  defineRender,
+  defineMeasure,
+  defineRecalculation,
+} from '../renderer.js';
 
 function vert(layout) {
   return layout === 'left' || layout === 'right';
@@ -462,4 +466,3 @@ export class Spread extends Widget {
 /**
  * @member {Value} Spread#valueupper - A {@link Value} to display the current upper value, offering a way to enter a value via keyboard.
  */
-

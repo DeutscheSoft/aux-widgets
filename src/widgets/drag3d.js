@@ -82,7 +82,8 @@ function drag3dOptionDefaults() {
 
 function setCallback(childName) {
   return function (val, key) {
-    if (this[childName]) this[childName].set(key.substring(childName.length + 1), val);
+    if (this[childName])
+      this[childName].set(key.substring(childName.length + 1), val);
   };
 }
 

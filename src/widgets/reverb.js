@@ -22,7 +22,11 @@ import { Graph } from './graph.js';
 import { ChartHandle } from './charthandle.js';
 import { addClass } from '../utils/dom.js';
 import { sprintf } from '../utils/sprintf.js';
-import { defineMeasure, defineRender, defineRecalculation } from '../renderer.js';
+import {
+  defineMeasure,
+  defineRender,
+  defineRecalculation,
+} from '../renderer.js';
 
 function setInputMode() {
   const O = this.options;
@@ -120,12 +124,13 @@ function clip(min, max, value) {
 }
 
 function defineClipCalculation(name) {
-  return defineRecalculation(
-    [name + '_min', name + '_max', name],
-    function (min, max, value) {
-      this.update(name, clip(min, max, value));
-    }
-  );
+  return defineRecalculation([name + '_min', name + '_max', name], function (
+    min,
+    max,
+    value
+  ) {
+    this.update(name, clip(min, max, value));
+  });
 }
 
 /**
@@ -328,14 +333,15 @@ export class Reverb extends Chart {
       defineClipCalculation('rtime'),
       defineClipCalculation('gain'),
       defineClipCalculation('rlevel'),
-      defineRecalculation(
-        ['delay', 'predelay', 'rtime'],
-        function (delay, predelay, rtime) {
-          this.update('input_handle.x', delay);
-          this.update('rlevel_handle.x', delay + predelay);
-          this.update('rtime_handle.x', delay + predelay + rtime);
-        }
-      ),
+      defineRecalculation(['delay', 'predelay', 'rtime'], function (
+        delay,
+        predelay,
+        rtime
+      ) {
+        this.update('input_handle.x', delay);
+        this.update('rlevel_handle.x', delay + predelay);
+        this.update('rtime_handle.x', delay + predelay + rtime);
+      }),
       defineRecalculation(['gain', 'rlevel'], function (gain, rlevel) {
         this.update('input_handle.y', gain);
         this.update('rlevel_handle.y', gain + rlevel);

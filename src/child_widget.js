@@ -66,7 +66,6 @@ function getChildOptions(parent, name, options, config) {
   return ret;
 }
 
-
 /**
  * Generates the static event handlers needed to keep a child widget's options in sync
  * with its parent, without registering them via {@link Base.addStaticEvent}.
