@@ -1,0 +1,64 @@
+<span>Drag3D: drag in the area to change x, y, z. Values are shown below.</span>
+<aux-container style="display: flex; flex-direction: column; gap: 0.5rem;">
+  <aux-drag3d
+    id="drag3d-readout"
+    x="0.25"
+    y="0.5"
+    z="0.75"
+    range_x="js:{min:0,max:1,basis:200}"
+    range_y="js:{min:0,max:1,basis:200}"
+    range_z="js:{min:0,max:1,basis:200}"
+    style="width: 200px; height: 200px; background: #eee; border-radius: 8px;"
+  >
+  </aux-drag3d>
+  <div
+    class="drag3d-readout"
+    style="font-family: monospace; font-size: 0.9rem;"
+  >
+    x: <span data-x>—</span> · y: <span data-y>—</span> · z:
+    <span data-z>—</span>
+  </div>
+</aux-container>
+
+<span
+  >Drag3D with custom <code>drag_x.rotation</code>,
+  <code>drag_y.rotation</code>, <code>drag_z.rotation</code></span
+>
+<aux-drag3d
+  id="drag3d-rotations"
+  x="0.5"
+  y="0.5"
+  z="0.5"
+  drag_x.rotation="0"
+  drag_y.rotation="90"
+  drag_z.rotation="180"
+  style="
+    width: 160px;
+    height: 160px;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+  "
+>
+</aux-drag3d>
+
+<script type="text/javascript">
+  customElements.whenDefined('aux-drag3d').then(function () {
+    const el = document.getElementById('drag3d-readout');
+    if (!el || !el.auxWidget) return;
+    const drag3d = el.auxWidget;
+    const xEl = document.querySelector('.drag3d-readout [data-x]');
+    const yEl = document.querySelector('.drag3d-readout [data-y]');
+    const zEl = document.querySelector('.drag3d-readout [data-z]');
+
+    function updateReadout() {
+      xEl.textContent = drag3d.get('x').toFixed(3);
+      yEl.textContent = drag3d.get('y').toFixed(3);
+      zEl.textContent = drag3d.get('z').toFixed(3);
+    }
+
+    drag3d.on('set', function (key) {
+      if (key === 'x' || key === 'y' || key === 'z') updateReadout();
+    });
+    updateReadout();
+  });
+</script>
