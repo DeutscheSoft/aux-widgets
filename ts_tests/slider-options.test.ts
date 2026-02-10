@@ -1,0 +1,37 @@
+import { Slider, ISliderOptions } from '../src/widgets/slider.js';
+
+// A fully specified, valid Slider options object should typecheck.
+const sliderOptions: ISliderOptions = {
+  value: 0,
+  frames: 16,
+  alignment: 'horizontal',
+  image: 'slider-frames.png',
+  direction: 'vertical',
+  rotation: 45,
+  blind_angle: 10,
+  basis: 120,
+  reset: 0,
+  min: 0,
+  max: 100,
+};
+
+const slider = new Slider(sliderOptions);
+
+// Partial options must also be accepted by the constructor.
+new Slider({
+  value: 50,
+  image: false,
+});
+
+// Invalid value type should be rejected.
+new Slider({
+  // @ts-expect-error value must be a number
+  value: 'not-a-number',
+});
+
+// Invalid alignment option should be rejected.
+const badAlignment: ISliderOptions = {
+  // @ts-expect-error alignment must be 'horizontal' | 'vertical'
+  alignment: 'diagonal',
+};
+
