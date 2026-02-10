@@ -25,7 +25,7 @@ export declare class Module<
   TEvents extends IModuleEvents = IModuleEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Base<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The parent widget this module is attached to. */
   parent: unknown;

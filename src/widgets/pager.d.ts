@@ -50,7 +50,7 @@ export declare class Pager<
   TEvents extends IPagerEvents = IPagerEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Container<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV element. Has class .aux-pager */
   element: HTMLDivElement;

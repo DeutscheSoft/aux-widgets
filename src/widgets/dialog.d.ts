@@ -63,7 +63,7 @@ export declare class Dialog<
   TEvents extends IDialogEvents = IDialogEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Container<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV element. Has class .aux-dialog */
   element: HTMLDivElement;

@@ -69,7 +69,7 @@ export declare class Filter<
   TEvents extends IFilterEvents = IFilterEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Base<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The frequency-to-gain function. This is computed internally and may be null until getFrequencyToGain() is called. */
   frequencyToGain: ((frequency: number) => number) | null;

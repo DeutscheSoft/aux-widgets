@@ -45,7 +45,7 @@ export declare class EqualizerGraph<
   TEvents extends IEqualizerGraphEvents = IEqualizerGraphEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Graph<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The SVG path element. Has class .aux-graph */
   element: SVGPathElement;
@@ -116,7 +116,7 @@ export declare class Equalizer<
   TEvents extends IEqualizerEvents = IEqualizerEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends FrequencyResponse<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-equalizer */
   element: HTMLDivElement;

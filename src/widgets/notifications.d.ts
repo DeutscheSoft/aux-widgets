@@ -33,7 +33,7 @@ export declare class Notifications<
   TEvents extends INotificationsEvents = INotificationsEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Container<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /**
    * Create and show a new notification.
@@ -78,7 +78,7 @@ export declare class Notification<
   TEvents extends INotificationEvents = INotificationEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Container<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-notification */
   element: HTMLDivElement;

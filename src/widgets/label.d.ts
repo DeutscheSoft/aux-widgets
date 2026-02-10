@@ -28,7 +28,7 @@ export declare class Label<
   TEvents extends ILabelEvents = ILabelEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-label */
   element: HTMLDivElement;

@@ -34,7 +34,7 @@ export declare class State<
   TEvents extends IStateEvents = IStateEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-state */
   element: HTMLDivElement;

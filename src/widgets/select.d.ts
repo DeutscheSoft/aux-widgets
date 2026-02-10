@@ -97,7 +97,7 @@ export declare class SelectEntry<
   TEvents extends ISelectEntryEvents = ISelectEntryEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Button<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 }
 
 /**
@@ -108,7 +108,7 @@ export declare class Select<
   TEvents extends ISelectEvents = ISelectEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Button<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-select */
   element: HTMLDivElement;

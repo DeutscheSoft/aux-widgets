@@ -87,7 +87,7 @@ export declare class Dynamics<
   TEvents extends IDynamicsEvents = IDynamicsEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Chart<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-dynamics */
   element: HTMLDivElement;
@@ -133,7 +133,7 @@ export declare class Compressor<
   TEvents extends ICompressorEvents = ICompressorEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Dynamics<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-compressor */
   element: HTMLDivElement;
@@ -165,7 +165,7 @@ export declare class Expander<
   TEvents extends IExpanderEvents = IExpanderEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Dynamics<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-expander */
   element: HTMLDivElement;
@@ -195,7 +195,7 @@ export declare class Gate<
   TEvents extends IGateEvents = IGateEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Dynamics<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-gate */
   element: HTMLDivElement;
@@ -225,7 +225,7 @@ export declare class Limiter<
   TEvents extends ILimiterEvents = ILimiterEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Dynamics<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-limiter */
   element: HTMLDivElement;

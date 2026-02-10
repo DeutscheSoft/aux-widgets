@@ -10,8 +10,13 @@ const chart: IChartOptions = {
   square: true,
 };
 
-new Chart(chart);
+const chartWidget = new Chart(chart);
 new Chart({ label: false });
+
+// .set(key, value) API type-checking
+chartWidget.set('label', 'My Chart');
+// @ts-expect-error value for 'label_position' must be IChartLabelPosition
+chartWidget.set('label_position', 'middle');
 
 // Invalid label_position should be rejected.
 const badPos: IChartOptions = {

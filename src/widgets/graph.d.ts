@@ -116,7 +116,7 @@ export declare class Graph<
   TEvents extends IGraphEvents = IGraphEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The SVG path element. Has class .aux-graph */
   element: SVGPathElement;

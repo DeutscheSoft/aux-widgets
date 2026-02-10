@@ -9,8 +9,13 @@ const graph: IGraphOptions = {
   dots: [{ x: 0, y: 0 }, { x: 100, y: 1 }],
 };
 
-new Graph(graph);
+const graphWidget = new Graph(graph);
 new Graph({ mode: 'fill', base: 0.5 });
+
+// .set(key, value) API type-checking
+graphWidget.set('mode', 'fill');
+// @ts-expect-error value for 'type' must be IGraphType
+graphWidget.set('type', 'X');
 
 // Invalid type should be rejected.
 const badType: IGraphOptions = {

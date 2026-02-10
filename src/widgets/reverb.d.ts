@@ -116,7 +116,7 @@ export declare class Reverb<
   TEvents extends IReverbEvents = IReverbEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Chart<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The Graph displaying the input signal as a vertical bar. */
   input: Graph;

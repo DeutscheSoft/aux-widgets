@@ -12,8 +12,13 @@ const handle: IChartHandleOptions = {
   show_handle: true,
 };
 
-new ChartHandle(handle);
+const charthandleWidget = new ChartHandle(handle);
 new ChartHandle({ mode: 'circular', z_handle: 'center' });
+
+// .set(key, value) API type-checking
+charthandleWidget.set('x', 0.25);
+// @ts-expect-error value for 'x' must be number
+charthandleWidget.set('x', '0.25');
 
 // Invalid mode should be rejected.
 const badMode: IChartHandleOptions = {

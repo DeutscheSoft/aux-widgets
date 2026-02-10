@@ -32,7 +32,7 @@ export declare class FrequencyResponse<
   TEvents extends IFrequencyResponseEvents = IFrequencyResponseEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Chart<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-frequencyresponse */
   element: HTMLDivElement;

@@ -19,10 +19,15 @@ const iconOnlyButton: IButtonOptions = {
 };
 
 // Constructor should accept partial options.
-new Button({
+const buttonWidget = new Button({
   label: 'Click me',
   state: false,
 });
+
+// .set(key, value) API type-checking
+buttonWidget.set('label', 'OK');
+// @ts-expect-error value for 'label' must be string | false
+buttonWidget.set('label', 123);
 
 // Invalid layout should be rejected.
 const badLayoutButton: IButtonOptions = {

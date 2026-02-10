@@ -20,6 +20,11 @@ const knobOptions: IKnobOptions = {
 
 const knob = new Knob(knobOptions);
 
+// .set(key, value) API type-checking
+knob.set('value', 0.5);
+// @ts-expect-error value for 'direction' must be 'polar' | 'vertical' | 'horizontal'
+knob.set('direction', 'diagonal');
+
 // Partial options via constructor are allowed.
 new Knob({
   value: 0.5,

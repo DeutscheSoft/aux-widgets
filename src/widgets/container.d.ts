@@ -53,7 +53,7 @@ export declare class Container<
   TEvents extends IContainerEvents = IContainerEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV element. Has class .aux-container */
   element: HTMLDivElement;

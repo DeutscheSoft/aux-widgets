@@ -42,5 +42,5 @@ export declare class ConfirmButton<
   TEvents extends IConfirmButtonEvents = IConfirmButtonEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Button<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 }

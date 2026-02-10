@@ -11,6 +11,11 @@ const valueKnobOptions: IValueKnobOptions = {
 
 const valueKnob = new ValueKnob(valueKnobOptions);
 
+// .set(key, value) API type-checking
+valueKnob.set('value', 0.5);
+// @ts-expect-error value for 'value' must be number
+valueKnob.set('value', '0.5');
+
 // Partial options via constructor are allowed.
 new ValueKnob({
   label: false,

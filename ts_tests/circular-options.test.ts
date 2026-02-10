@@ -16,8 +16,13 @@ const circular: ICircularOptions = {
   labels: [0, 50, 100],
 };
 
-new Circular(circular);
+const circularWidget = new Circular(circular);
 new Circular({ value: 0, base: false });
+
+// .set(key, value) API type-checking
+circularWidget.set('value', 75);
+// @ts-expect-error value for 'value' must be number
+circularWidget.set('value', '75');
 
 // Invalid value type should be rejected.
 const badValue: ICircularOptions = {

@@ -8,8 +8,13 @@ const combobox: IComboBoxOptions = {
   editmode: 'onenter',
 };
 
-new ComboBox(combobox);
+const comboboxWidget = new ComboBox(combobox);
 new ComboBox({ value: null, entries: [{ label: 'One', value: 1 }] });
+
+// .set(key, value) API type-checking
+comboboxWidget.set('value', 'b');
+// @ts-expect-error value for 'editmode' must be 'onenter' | 'immediate'
+comboboxWidget.set('editmode', 'onblur');
 
 // Invalid editmode should be rejected.
 const badEditmode: IComboBoxOptions = {

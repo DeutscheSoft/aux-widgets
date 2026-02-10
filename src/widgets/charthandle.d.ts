@@ -196,7 +196,7 @@ export declare class ChartHandle<
   TEvents extends IChartHandleEvents = IChartHandleEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main SVG group containing all handle elements. Has class .aux-charthandle */
   element: SVGGElement;

@@ -7,8 +7,13 @@ const pager: IPagerOptions = {
   pages: [{ label: 'One', content: '<p>Page 1</p>' }, { label: 'Two', content: '<p>Page 2</p>' }],
 };
 
-new Pager(pager);
+const pagerWidget = new Pager(pager);
 new Pager({ position: 'bottom', show: null });
+
+// .set(key, value) API type-checking
+pagerWidget.set('position', 'bottom');
+// @ts-expect-error value for 'position' must be 'top' | 'right' | 'left' | 'bottom'
+pagerWidget.set('position', 'center');
 
 // Invalid position should be rejected.
 const badPosition: IPagerOptions = {

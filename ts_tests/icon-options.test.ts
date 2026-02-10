@@ -10,8 +10,13 @@ const noIcon: IIconOptions = {
   role: 'img',
 };
 
-new Icon(withIcon);
+const iconWidget = new Icon(withIcon);
 new Icon({ icon: '--my-icon-var' });
+
+// .set(key, value) API type-checking
+iconWidget.set('icon', 'check');
+// @ts-expect-error value for 'icon' must be string | false
+iconWidget.set('icon', 123);
 
 // Invalid icon type should be rejected.
 const badIcon: IIconOptions = {

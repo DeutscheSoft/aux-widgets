@@ -9,8 +9,13 @@ const colorpicker: IColorPickerOptions = {
   show_hex: true,
 };
 
-new ColorPicker(colorpicker);
+const colorpickerWidget = new ColorPicker(colorpicker);
 new ColorPicker({ rgb: { r: 255, g: 0, b: 0 } });
+
+// .set(key, value) API type-checking
+colorpickerWidget.set('hue', 0.5);
+// @ts-expect-error value for 'hue' must be number
+colorpickerWidget.set('hue', '0.5');
 
 // Invalid hue type should be rejected.
 const badHue: IColorPickerOptions = {

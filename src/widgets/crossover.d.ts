@@ -38,7 +38,7 @@ export declare class CrossoverBand<
   TEvents extends ICrossoverBandEvents = ICrossoverBandEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends EqBand<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main SVG group. Has class .aux-crossoverband */
   element: SVGGElement;
@@ -77,7 +77,7 @@ export declare class CrossoverGraph<
   TEvents extends ICrossoverGraphEvents = ICrossoverGraphEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends EqualizerGraph<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The SVG path element. Has class .aux-graph */
   element: SVGPathElement;
@@ -123,7 +123,7 @@ export declare class Crossover<
   TEvents extends ICrossoverEvents = ICrossoverEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Equalizer<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-crossover */
   element: HTMLDivElement;

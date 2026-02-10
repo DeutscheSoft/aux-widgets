@@ -12,8 +12,13 @@ const clock: IClockOptions = {
   fps: 24,
 };
 
-new Clock(clock);
+const clockWidget = new Clock(clock);
 new Clock({ time: new Date(), label_scale: 0.8 });
+
+// .set(key, value) API type-checking
+clockWidget.set('size', 150);
+// @ts-expect-error value for 'size' must be number
+clockWidget.set('size', '150');
 
 // Invalid size type should be rejected.
 const badSize: IClockOptions = {

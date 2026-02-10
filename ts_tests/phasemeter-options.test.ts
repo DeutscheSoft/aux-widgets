@@ -10,5 +10,10 @@ const phaseMeter: IPhaseMeterOptions = {
   show_clip: false,
 };
 
-new PhaseMeter(phaseMeter);
+const phasemeterWidget = new PhaseMeter(phaseMeter);
 new PhaseMeter({ value: 0.5 });
+
+// .set(key, value) API type-checking
+phasemeterWidget.set('value', 0.5);
+// @ts-expect-error value for 'value' must be number
+phasemeterWidget.set('value', '0.5');

@@ -17,6 +17,11 @@ const faderOptions: IFaderOptions = {
 
 const fader = new Fader(faderOptions);
 
+// .set(key, value) API type-checking
+fader.set('value', 0.5);
+// @ts-expect-error value for 'value' must be number
+fader.set('value', '0.5');
+
 // Partial options via constructor are allowed.
 new Fader({
   value: 0.5,

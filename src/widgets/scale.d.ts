@@ -96,7 +96,7 @@ export declare class Scale<
   TEvents extends IScaleEvents = IScaleEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV element. Has class .aux-scale */
   element: HTMLDivElement;

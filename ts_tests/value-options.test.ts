@@ -21,11 +21,16 @@ const textValue: IValueOptions = {
 };
 
 // Constructor should accept partial options.
-new Value({
+const valueWidget = new Value({
   value: 42,
   type: 'text',
   editmode: 'onenter',
 });
+
+// .set(key, value) API type-checking
+valueWidget.set('value', 100);
+// @ts-expect-error value for 'type' must be 'text' | 'password'
+valueWidget.set('type', 'email');
 
 // Invalid size type should be rejected.
 const badSize: IValueOptions = {

@@ -6,8 +6,13 @@ const multimeter: IMultiMeterOptions = {
   layout: 'right',
 };
 
-new MultiMeter(multimeter);
+const multimeterWidget = new MultiMeter(multimeter);
 new MultiMeter({ preset: 'mono' });
+
+// .set(key, value) API type-checking
+multimeterWidget.set('preset', 'mono');
+// @ts-expect-error value for 'preset' must be IMultiMeterPresetName
+multimeterWidget.set('preset', 'quad');
 
 // Invalid preset should be rejected.
 const badPreset: IMultiMeterOptions = {

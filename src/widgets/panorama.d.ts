@@ -37,7 +37,7 @@ export declare class Panorama<
   TEvents extends IPanoramaEvents = IPanoramaEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Chart<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The ChartHandle displaying/setting the position on panorama and surround modes. In panorama mode it affects the x parameter, in surround it affects both, x and y parameters. */
   handle1: ChartHandle;

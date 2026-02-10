@@ -14,8 +14,13 @@ const eqband: IEqBandOptions = {
   active: true,
 };
 
-new EqBand(eqband);
+const eqbandWidget = new EqBand(eqband);
 new EqBand({ gain: -6, active: false });
+
+// .set(key, value) API type-checking
+eqbandWidget.set('gain', -3);
+// @ts-expect-error value for 'gain' must be number
+eqbandWidget.set('gain', '-3');
 
 // Invalid gain type should be rejected.
 const badEqband: IEqBandOptions = {

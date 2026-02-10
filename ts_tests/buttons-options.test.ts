@@ -16,8 +16,13 @@ const vertical: IButtonsOptions = {
   multi_select: 2,
 };
 
-new Buttons(horizontal);
+const buttonsWidget = new Buttons(horizontal);
 new Buttons({ buttons: ['X'], select: -1 });
+
+// .set(key, value) API type-checking
+buttonsWidget.set('direction', 'vertical');
+// @ts-expect-error value for 'direction' must be 'horizontal' | 'vertical'
+buttonsWidget.set('direction', 'grid');
 
 // Invalid direction should be rejected.
 const badDirection: IButtonsOptions = {

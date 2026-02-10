@@ -52,7 +52,7 @@ export declare class ValueButton<
   TEvents extends IValueButtonEvents = IValueButtonEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Button<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-valuebutton */
   element: HTMLDivElement;

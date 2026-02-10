@@ -10,8 +10,13 @@ const progressBar: IProgressBarOptions = {
   format_value: (v) => `${v}%`,
 };
 
-new ProgressBar(progressBar);
+const progressbarWidget = new ProgressBar(progressBar);
 new ProgressBar({ value: 75 });
+
+// .set(key, value) API type-checking
+progressbarWidget.set('value', 50);
+// @ts-expect-error value for 'value' must be number
+progressbarWidget.set('value', '50');
 
 // Invalid value type should be rejected.
 const badValue: IProgressBarOptions = {

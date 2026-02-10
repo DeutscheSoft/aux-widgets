@@ -29,7 +29,7 @@ export declare class Icon<
   TEvents extends IIconEvents = IIconEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV element. Has class .aux-icon */
   element: HTMLDivElement;

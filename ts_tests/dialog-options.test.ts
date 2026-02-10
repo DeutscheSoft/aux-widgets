@@ -18,8 +18,13 @@ const modalDialog: IDialogOptions = {
   content: 'Modal content',
 };
 
-new Dialog(autoCloseDialog);
+const dialogWidget = new Dialog(autoCloseDialog);
 new Dialog({ x: 10, y: 20, anchor: 'top-left', reset_focus: true });
+
+// .set(key, value) API type-checking
+dialogWidget.set('anchor', 'center');
+// @ts-expect-error value for 'anchor' must be valid IAnchor
+dialogWidget.set('anchor', 'middle');
 
 // Invalid anchor should be rejected.
 const badAnchor: IDialogOptions = {

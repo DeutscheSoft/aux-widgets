@@ -27,7 +27,7 @@ export declare class ScrollArea<
   TEvents extends IScrollAreaEvents = IScrollAreaEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV element. Has class .aux-scroller */
   element: HTMLDivElement;

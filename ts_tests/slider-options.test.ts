@@ -17,6 +17,11 @@ const sliderOptions: ISliderOptions = {
 
 const slider = new Slider(sliderOptions);
 
+// .set(key, value) API type-checking
+slider.set('value', 50);
+// @ts-expect-error value for 'value' must be number
+slider.set('value', '50');
+
 // Partial options must also be accepted by the constructor.
 new Slider({
   value: 50,

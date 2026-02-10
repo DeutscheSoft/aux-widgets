@@ -13,8 +13,13 @@ const spread: ISpreadOptions = {
   show_scale: true,
 };
 
-new Spread(spread);
+const spreadWidget = new Spread(spread);
 new Spread({ lower: 10, upper: 90 });
+
+// .set(key, value) API type-checking
+spreadWidget.set('lower', 30);
+// @ts-expect-error value for 'layout' must be 'left' | 'right' | 'top' | 'bottom'
+spreadWidget.set('layout', 'center');
 
 // Invalid layout should be rejected.
 const badLayout: ISpreadOptions = {

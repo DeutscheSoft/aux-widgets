@@ -8,8 +8,13 @@ const reverb: IReverbOptions = {
   gain: 1,
 };
 
-new Reverb(reverb);
+const reverbWidget = new Reverb(reverb);
 new Reverb({ delay_min: 0, delay_max: 100 });
+
+// .set(key, value) API type-checking
+reverbWidget.set('timeframe', 3000);
+// @ts-expect-error value for 'timeframe' must be number
+reverbWidget.set('timeframe', '3000');
 
 // Invalid timeframe type should be rejected.
 const badReverb: IReverbOptions = {

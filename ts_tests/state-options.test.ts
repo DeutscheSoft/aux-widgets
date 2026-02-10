@@ -16,8 +16,13 @@ const noColor: IStateOptions = {
   color: false,
 };
 
-new State(onState);
+const stateWidget = new State(onState);
 new State({ state: 1 });
+
+// .set(key, value) API type-checking
+stateWidget.set('state', 0.5);
+// @ts-expect-error value for 'color' must be string | false
+stateWidget.set('color', 0xff0000);
 
 // Invalid color type should be rejected.
 const badColor: IStateOptions = {

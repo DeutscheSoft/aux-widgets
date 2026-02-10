@@ -11,8 +11,13 @@ const confirmBtn: IConfirmButtonOptions = {
   icon_confirm: 'check',
 };
 
-new ConfirmButton(confirmBtn);
+const confirmButtonWidget = new ConfirmButton(confirmBtn);
 new ConfirmButton({ label: 'Save', confirm: false });
+
+// .set(key, value) API type-checking
+confirmButtonWidget.set('timeout', 2000);
+// @ts-expect-error value for 'timeout' must be number
+confirmButtonWidget.set('timeout', '2000');
 
 // Invalid timeout type should be rejected.
 const badTimeout: IConfirmButtonOptions = {

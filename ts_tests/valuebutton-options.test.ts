@@ -21,12 +21,17 @@ const verticalValueButton: IValueButtonOptions = {
   layout: 'vertical',
 };
 
-new ValueButton(horizontalValueButton);
+const valuebuttonWidget = new ValueButton(horizontalValueButton);
 new ValueButton({
   value: 10,
   min: 0,
   max: 20,
 });
+
+// .set(key, value) API type-checking
+valuebuttonWidget.set('value', 25);
+// @ts-expect-error value for 'value' must be number
+valuebuttonWidget.set('value', '25');
 
 // Invalid value type should be rejected.
 new ValueButton({

@@ -10,5 +10,10 @@ const nav: INavigationOptions = {
   scroll: 300,
 };
 
-new Navigation(nav);
+const navigationWidget = new Navigation(nav);
 new Navigation({ arrows: false });
+
+// .set(key, value) API type-checking
+navigationWidget.set('direction', 'vertical');
+// @ts-expect-error value for 'direction' must be 'horizontal' | 'vertical'
+navigationWidget.set('direction', 'grid');

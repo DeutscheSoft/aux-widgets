@@ -27,8 +27,13 @@ const withGradient: IMeterOptions = {
   ],
 };
 
-new Meter(levelMeter);
+const meterWidget = new Meter(levelMeter);
 new Meter({ min: 0, max: 1, value: 0.5, show_scale: false });
+
+// .set(key, value) API type-checking
+meterWidget.set('value', 0.5);
+// @ts-expect-error value for 'layout' must be 'left' | 'right' | 'top' | 'bottom'
+meterWidget.set('layout', 'center');
 
 // Invalid layout should be rejected.
 const badLayout: IMeterOptions = {

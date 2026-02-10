@@ -8,8 +8,13 @@ const dynamics: IDynamicsOptions = {
   max: 24,
 };
 
-new Dynamics(dynamics);
+const dynamicsWidget = new Dynamics(dynamics);
 new Dynamics({ type: 'limiter' });
+
+// .set(key, value) API type-checking
+dynamicsWidget.set('type', 'limiter');
+// @ts-expect-error value for 'type' must be IDynamicsType
+dynamicsWidget.set('type', 'saturator');
 
 // Invalid type should be rejected.
 const badType: IDynamicsOptions = {

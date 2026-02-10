@@ -8,8 +8,13 @@ const fileselect: IFileSelectOptions = {
   placeholder: 'No file selected',
 };
 
-new FileSelect(fileselect);
+const fileselectWidget = new FileSelect(fileselect);
 new FileSelect({ multiple: true });
+
+// .set(key, value) API type-checking
+fileselectWidget.set('multiple', true);
+// @ts-expect-error value for 'multiple' must be boolean
+fileselectWidget.set('multiple', 'true');
 
 // Invalid multiple type should be rejected.
 const badMultiple: IFileSelectOptions = {

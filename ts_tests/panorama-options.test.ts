@@ -8,8 +8,13 @@ const panorama: IPanoramaOptions = {
   digits: 2,
 };
 
-new Panorama(panorama);
+const panoramaWidget = new Panorama(panorama);
 new Panorama({ mode: 'balance' });
+
+// .set(key, value) API type-checking
+panoramaWidget.set('mode', 'balance');
+// @ts-expect-error value for 'mode' must be IPanoramaMode
+panoramaWidget.set('mode', 'stereo');
 
 // Invalid mode should be rejected.
 const badMode: IPanoramaOptions = {

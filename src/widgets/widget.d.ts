@@ -159,7 +159,7 @@ export declare class Widget<
    *
    * @param options - An object containing initial options. All options are optional.
    */
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 }
 
 export type { EffectiveEvents };

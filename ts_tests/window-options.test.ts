@@ -14,7 +14,7 @@ const modalWindow: IWindowOptions = {
   content: 'This is a modal Dialog widget.',
 };
 
-new Window(autoCloseWindow);
+const windowWidget = new Window(autoCloseWindow);
 new Window({
   width: 200,
   height: 100,
@@ -23,6 +23,11 @@ new Window({
   header: ['title', 'close'],
   footer: false,
 });
+
+// .set(key, value) API type-checking
+windowWidget.set('anchor', 'top-left');
+// @ts-expect-error value for 'anchor' must be valid IWindowAnchor
+windowWidget.set('anchor', 'middle');
 
 // Invalid anchor option should be rejected.
 const badAnchor: IWindowOptions = {

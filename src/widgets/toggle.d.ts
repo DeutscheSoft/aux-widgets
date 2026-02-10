@@ -37,7 +37,7 @@ export declare class Toggle<
   TEvents extends IToggleEvents = IToggleEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Button<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /**
    * Toggle the button state.

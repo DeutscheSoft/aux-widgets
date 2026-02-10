@@ -10,8 +10,13 @@ const withFormat: ILabelOptions = {
   format: (s) => s.toUpperCase(),
 };
 
-new Label(simpleLabel);
+const labelWidget = new Label(simpleLabel);
 new Label({ label: 'x', format: false });
+
+// .set(key, value) API type-checking
+labelWidget.set('label', 'Updated');
+// @ts-expect-error value for 'label' must be string | false
+labelWidget.set('label', 123);
 
 // Invalid format type should be rejected.
 const badFormat: ILabelOptions = {

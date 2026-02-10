@@ -16,8 +16,13 @@ const levelMeter: ILevelMeterOptions = {
   falling_duration: 300,
 };
 
-new LevelMeter(levelMeter);
+const levelmeterWidget = new LevelMeter(levelMeter);
 new LevelMeter({ value: -6, clip: true });
+
+// .set(key, value) API type-checking
+levelmeterWidget.set('value', -12);
+// @ts-expect-error value for 'value' must be number
+levelmeterWidget.set('value', '-12');
 
 // Invalid clipping type should be rejected.
 const badClipping: ILevelMeterOptions = {

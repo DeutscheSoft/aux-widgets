@@ -10,8 +10,13 @@ const grid: IGridOptions = {
   height: 300,
 };
 
-new Grid(grid);
+const gridWidget = new Grid(grid);
 new Grid({ grid_x: [{ pos: 50, label: '50' }] });
+
+// .set(key, value) API type-checking
+gridWidget.set('width', 500);
+// @ts-expect-error value for 'width' must be number
+gridWidget.set('width', '500');
 
 // Invalid width type should be rejected.
 const badWidth: IGridOptions = {

@@ -7,5 +7,10 @@ const opts: IContainerOptions = {
   visible: true,
 };
 
-new Root(opts);
+const rootWidget = new Root(opts);
 new Root({ visible: 'show' });
+
+// .set(key, value) API type-checking
+rootWidget.set('visible', true);
+// @ts-expect-error value for 'visible' must be boolean | 'hiding' | 'showing' | 'show' | 'hide'
+rootWidget.set('visible', 'fade');

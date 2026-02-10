@@ -18,8 +18,13 @@ const entryObjects: ISelectOptions = {
   value: 1,
 };
 
-new Select(withEntries);
+const selectWidget = new Select(withEntries);
 new Select({ entries: [], selected: -1, show_list: false });
+
+// .set(key, value) API type-checking
+selectWidget.set('selected', 1);
+// @ts-expect-error value for 'selected' must be number
+selectWidget.set('selected', '1');
 
 // Invalid selected type should be rejected.
 const badSelected: ISelectOptions = {

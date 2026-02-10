@@ -49,7 +49,7 @@ export declare class Range<
   TEvents extends IRangeEvents = IRangeEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Base<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /**
    * Convert a coefficient to a based value.

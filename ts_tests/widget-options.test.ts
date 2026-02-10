@@ -12,6 +12,11 @@ const widget = new Widget<IWidgetOptions, IWidgetEvents>({
   tabindex: 0,
 });
 
+// .set(key, value) API type-checking
+widget.set('visible', false);
+// @ts-expect-error value for 'aria_label' must be string
+widget.set('aria_label', 123);
+
 // Partial options are allowed because the constructor takes Partial<TOptions>.
 new Widget({
   visible: false,

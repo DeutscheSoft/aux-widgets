@@ -26,7 +26,7 @@ export declare class ProgressBar<
   TEvents extends IProgressBarEvents = IProgressBarEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends Meter<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-progressbar */
   element: HTMLDivElement;

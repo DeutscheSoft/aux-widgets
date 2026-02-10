@@ -49,7 +49,7 @@ export declare class EqBand<
   TEvents extends IEqBandEvents = IEqBandEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
 > extends ChartHandle<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<TOptions>);
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main SVG group. Has class .aux-eqband */
   element: SVGGElement;

@@ -6,7 +6,12 @@ const equalizer: IEqualizerOptions = {
   show_bands: true,
 };
 
-new Equalizer(equalizer);
+const equalizerWidget = new Equalizer(equalizer);
+
+// .set(key, value) API type-checking
+equalizerWidget.set('show_bands', false);
+// @ts-expect-error value for 'show_bands' must be boolean
+equalizerWidget.set('show_bands', 1);
 
 // Invalid show_bands type should be rejected.
 const badEqualizer: IEqualizerOptions = {

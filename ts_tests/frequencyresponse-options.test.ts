@@ -8,8 +8,13 @@ const fr: IFrequencyResponseOptions = {
   depth: 1,
 };
 
-new FrequencyResponse(fr);
+const frWidget = new FrequencyResponse(fr);
 new FrequencyResponse({ scale: false });
+
+// .set(key, value) API type-checking
+frWidget.set('depth', 2);
+// @ts-expect-error value for 'depth' must be number
+frWidget.set('depth', '2');
 
 // Invalid depth type should be rejected.
 const badFr: IFrequencyResponseOptions = {

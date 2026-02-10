@@ -6,5 +6,10 @@ const opts: IScrollAreaOptions = {
   visible: true,
 };
 
-new ScrollArea(opts);
+const scrollareaWidget = new ScrollArea(opts);
 new ScrollArea({ id: 'scroller' });
+
+// .set(key, value) API type-checking
+scrollareaWidget.set('visible', true);
+// @ts-expect-error value for 'visible' must be boolean | string
+scrollareaWidget.set('visible', 123);

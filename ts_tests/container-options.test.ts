@@ -12,8 +12,13 @@ const withVisible: IContainerOptions = {
   render_while_hiding: false,
 };
 
-new Container(withContent);
+const containerWidget = new Container(withContent);
 new Container({ visible: 'show', content: 'x' });
+
+// .set(key, value) API type-checking
+containerWidget.set('visible', true);
+// @ts-expect-error value for 'visible' must be boolean | 'hiding' | 'showing' | 'show' | 'hide'
+containerWidget.set('visible', 'fade');
 
 // Invalid visible value should be rejected.
 const badVisible: IContainerOptions = {

@@ -7,8 +7,13 @@ const bitstring: IBitstringOptions = {
   direction: 'horizontal',
 };
 
-new Bitstring(bitstring);
+const bitstringWidget = new Bitstring(bitstring);
 new Bitstring({ length: 16, bitstring: [true, false, true] });
+
+// .set(key, value) API type-checking
+bitstringWidget.set('length', 8);
+// @ts-expect-error value for 'length' must be number | false
+bitstringWidget.set('length', '8');
 
 // Invalid length type should be rejected.
 const badLength: IBitstringOptions = {

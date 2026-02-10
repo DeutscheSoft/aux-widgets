@@ -30,11 +30,16 @@ const nonTogglePress: IToggleOptions = {
   toggle: false,
 };
 
-new Toggle(simpleToggle);
+const toggleWidget = new Toggle(simpleToggle);
 new Toggle({
   toggle: true,
   state: true,
 });
+
+// .set(key, value) API type-checking
+toggleWidget.set('state', true);
+// @ts-expect-error value for 'press' must be number
+toggleWidget.set('press', '250');
 
 // Invalid press type should be rejected.
 const badPress: IToggleOptions = {

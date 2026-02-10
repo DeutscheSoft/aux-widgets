@@ -20,8 +20,13 @@ const horizontalScale: IScaleOptions = {
   fixed_labels: [{ value: 0, label: '0' }, { value: 100, label: '100' }],
 };
 
-new Scale(verticalScale);
+const scaleWidget = new Scale(verticalScale);
 new Scale({ min: 0, max: 1, layout: 'top', pointer: false });
+
+// .set(key, value) API type-checking
+scaleWidget.set('pointer', 75);
+// @ts-expect-error value for 'layout' must be 'left' | 'right' | 'top' | 'bottom'
+scaleWidget.set('layout', 'center');
 
 // Invalid layout should be rejected.
 const badLayout: IScaleOptions = {

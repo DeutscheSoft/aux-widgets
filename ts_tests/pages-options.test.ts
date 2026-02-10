@@ -8,8 +8,13 @@ const pages: IPagesOptions = {
   direction: 'forward',
 };
 
-new Pages(pages);
+const pagesWidget = new Pages(pages);
 new Pages({ show: -1 });
+
+// .set(key, value) API type-checking
+pagesWidget.set('show', 1);
+// @ts-expect-error value for 'animation' must be 'horizontal' | 'vertical'
+pagesWidget.set('animation', 'fade');
 
 // Invalid animation should be rejected.
 const badAnimation: IPagesOptions = {

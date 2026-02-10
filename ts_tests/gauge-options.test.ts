@@ -18,8 +18,13 @@ const gaugeWithLabelConfig: IGaugeOptions = {
   label: { pos: 0, margin: 10, align: 'inner', label: '°' },
 };
 
-new Gauge(gauge);
+const gaugeWidget = new Gauge(gauge);
 new Gauge({ value: 75 });
+
+// .set(key, value) API type-checking
+gaugeWidget.set('value', 75);
+// @ts-expect-error value for 'value' must be number
+gaugeWidget.set('value', '75');
 
 // Invalid label type should be rejected.
 const badLabel: IGaugeOptions = {
