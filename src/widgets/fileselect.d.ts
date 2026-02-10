@@ -57,8 +57,8 @@ export declare class FileSelect<
   TOptions extends IFileSelectOptions = IFileSelectOptions,
   TEvents extends IFileSelectEvents = IFileSelectEvents,
   TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
-> extends Container {
-  constructor(options?: Partial<TOptions>);
+> extends Container<TOptions, TEvents, TEffectiveEvents> {
+  constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-fileselect */
   element: HTMLDivElement;
