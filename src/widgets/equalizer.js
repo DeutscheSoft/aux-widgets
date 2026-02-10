@@ -23,7 +23,11 @@ import { forEachArrayDiff } from '../utils/array_diff.js';
 import { FrequencyResponse } from './frequencyresponse.js';
 import { EqBand } from './eqband.js';
 import { Graph } from './graph.js';
-import { inheritChildOptions } from '../child_widget.js';
+import {
+  eventsToInheritChildOptions,
+  optionTypesToInheritChildOptions,
+  defaultOptionsToInheritChildOptions,
+} from '../child_widget.js';
 import { defineRecalculation } from '../renderer.js';
 
 function fastDrawPLinear(X, Y) {
@@ -252,19 +256,22 @@ function createEqBand(options, type) {
  */
 export class Equalizer extends FrequencyResponse {
   static get _options() {
-    return {
-      show_bands: 'boolean',
-    };
+    return [
+      optionTypesToInheritChildOptions(FrequencyResponse, EqualizerGraph),
+      { show_bands: 'boolean' },
+    ];
   }
 
   static get options() {
     return {
+      ...defaultOptionsToInheritChildOptions(FrequencyResponse, EqualizerGraph),
       show_bands: true,
     };
   }
 
   static get static_events() {
     return {
+      ...eventsToInheritChildOptions('baseline', EqualizerGraph),
       set_bands: function (value, key, previousValue) {
         forEachArrayDiff(
           previousValue,
@@ -438,5 +445,3 @@ export class Equalizer extends FrequencyResponse {
     return super.set(key, value);
   }
 }
-
-inheritChildOptions(Equalizer, 'baseline', EqualizerGraph);

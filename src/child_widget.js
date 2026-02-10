@@ -66,8 +66,24 @@ function getChildOptions(parent, name, options, config) {
   return ret;
 }
 
-export function inheritChildOptions(dst, child_name, src, blacklist) {
+
+/**
+ * Generates the static event handlers needed to keep a child widget's options in sync
+ * with its parent, without registering them via {@link Base.addStaticEvent}.
+ * The returned object is suitable to be merged into a widget's <code>static_events</code>
+ * map (e.g. <code>static get static_events() { return { ...eventsToInheritChildOptions(...), ... }; }</code>).
+ *
+ * @param {string} child_name - The property name of the child widget on `this`.
+ * @param {typeof Widget} src - The child widget class whose options should be inherited.
+ * @param {Array<string>} [blacklist=[]] - Option names that should not be inherited.
+ *
+ * @returns {Object<string, Function>} A map of event names to handler functions.
+ */
+export function eventsToInheritChildOptions(child_name, src, blacklist) {
   if (!blacklist) blacklist = [];
+
+  const inheritedOptions = [];
+  const events = {};
 
   const setCallback = function (value, key) {
     const C = this[child_name];
@@ -75,19 +91,14 @@ export function inheritChildOptions(dst, child_name, src, blacklist) {
     if (C) C.set(key, value);
   };
 
-  const inheritedOptions = [];
-
   for (const tmp in src.getOptionTypes()) {
-    if (dst.hasOption(tmp)) continue;
-    if (blacklist.indexOf(tmp) > -1) continue;
+    if (blacklist.includes(tmp)) continue;
     inheritedOptions.push(tmp);
-    dst.addStaticEvent('set_' + tmp, setCallback);
-    if (!dst.hasOption(tmp))
-      dst.defineOption(tmp, src.getOptionType(tmp), src.getDefault(tmp));
+    events['set_' + tmp] = setCallback;
   }
 
   // we use initialized, which happens after initialize_children
-  dst.addStaticEvent('initialized', function () {
+  events.initialized = function () {
     const child = this[child_name];
 
     if (!child) return;
@@ -97,7 +108,60 @@ export function inheritChildOptions(dst, child_name, src, blacklist) {
       if (value === src.getDefault(name)) return;
       child.set(name, this.get(name));
     });
-  });
+  };
+
+  return events;
+}
+
+/**
+ * Returns the option types (for {@link Base.getOptionTypes} / <code>static get _options()</code>)
+ * that correspond to inheriting options from a child widget class, without defining them on
+ * <code>base</code>. Only includes options that <code>base</code> does not already have and that
+ * are not in the blacklist.
+ *
+ * @param {typeof Widget} base - The widget class that will inherit (e.g. FrequencyResponse subclass).
+ * @param {typeof Widget} src - The child widget class whose option types should be inherited.
+ * @param {Array<string>} [blacklist=[]] - Option names that should not be inherited.
+ *
+ * @returns {Object<string, string>} A map of option names to type strings, suitable for merging into <code>_options</code>.
+ */
+export function optionTypesToInheritChildOptions(base, src, blacklist) {
+  if (!blacklist) blacklist = [];
+
+  const types = {};
+
+  for (const name in src.getOptionTypes()) {
+    if (base.hasOption(name)) continue;
+    if (blacklist.includes(name)) continue;
+    types[name] = src.getOptionType(name);
+  }
+
+  return types;
+}
+
+/**
+ * Returns the option defaults (for {@link Base.getDefaultOptions} / <code>static get options()</code>)
+ * that correspond to inheriting options from a child widget class. Only includes options that
+ * <code>base</code> does not already have and that are not in the blacklist.
+ *
+ * @param {typeof Widget} base - The widget class that will inherit (e.g. FrequencyResponse subclass).
+ * @param {typeof Widget} src - The child widget class whose option defaults should be inherited.
+ * @param {Array<string>} [blacklist=[]] - Option names that should not be inherited.
+ *
+ * @returns {Object<string, *>} A map of option names to default values, suitable for merging into <code>options</code>.
+ */
+export function defaultOptionsToInheritChildOptions(base, src, blacklist) {
+  if (!blacklist) blacklist = [];
+
+  const defaults = {};
+
+  for (const name in src.getOptionTypes()) {
+    if (base.hasOption(name)) continue;
+    if (blacklist.includes(name)) continue;
+    defaults[name] = src.getDefault(name);
+  }
+
+  return defaults;
 }
 
 export function defineChildWidget(widget, name, config) {
