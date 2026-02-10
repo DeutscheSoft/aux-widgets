@@ -140,7 +140,7 @@ export interface ICircularOptions extends IWidgetOptions, Omit<IRangedOptions, '
   /** The maximum degree of the rotation when value === max. */
   angle?: number;
   /** If a base value is set in degrees, circular starts drawing elements from this position. Overrides IRangedOptions.base to allow boolean. */
-  base?: number | boolean;
+  base?: number | false;
   /** Draw the base ring. */
   show_base?: boolean;
   /** Draw the value ring. */

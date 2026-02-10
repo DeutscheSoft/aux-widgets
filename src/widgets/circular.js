@@ -236,7 +236,7 @@ export class Circular extends Widget {
         hand: 'object',
         start: 'number',
         angle: 'number',
-        base: 'number|boolean',
+        base: 'number|false',
         show_base: 'boolean',
         show_value: 'boolean',
         show_hand: 'boolean',
