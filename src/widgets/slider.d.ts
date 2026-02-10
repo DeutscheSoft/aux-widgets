@@ -42,11 +42,7 @@ export interface ISliderOptions extends IWidgetOptions, IRangedOptions {
  * Events specific to the Slider widget.
  * Extends Widget events.
  */
-export interface ISliderEvents extends Omit<IWidgetEvents, 'doubleclick'> {
-  /** Fired when the slider receives a double click in order to reset to initial value.
-   *  Supports both the base Widget signature (MouseEvent) and Slider signature (number).
-   */
-  doubleclick: (eventOrValue: MouseEvent | number) => void;
+export interface ISliderEvents extends IWidgetEvents {
 }
 
 /**

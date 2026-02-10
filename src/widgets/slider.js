@@ -44,14 +44,6 @@ import { mergeStaticEvents } from '../widget_helpers.js';
 
 function dblClick() {
   this.userset('value', this.options.reset);
-  /**
-   * Is fired when the slider receives a double click in order to reset to initial value.
-   *
-   * @event Slider#doubleclick
-   *
-   * @param {number} value - The value of the widget.
-   */
-  this.emit('doubleclick', this.options.value);
 }
 
 function setBackground(style, horiz, vert, size) {
