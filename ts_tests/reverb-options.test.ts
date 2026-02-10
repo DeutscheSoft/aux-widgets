@@ -1,7 +1,7 @@
 import { Reverb, IReverbOptions } from '../src/widgets/reverb.js';
 
 // Valid Reverb options (extends Chart).
-const reverb: IReverbOptions = {
+const reverb: Partial<IReverbOptions> = {
   label: 'Reverb',
   timeframe: 5000,
   delay: 0,
@@ -21,8 +21,13 @@ const _reverbTimeframe: number | undefined = reverbWidget.get('timeframe');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 reverbWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+reverbWidget.on('resize', () => {});
+// @ts-expect-error 'not_an_event' is not a valid event name
+reverbWidget.on('not_an_event', () => {});
+
 // Invalid timeframe type should be rejected.
-const badReverb: IReverbOptions = {
+const badReverb: Partial<IReverbOptions> = {
   // @ts-expect-error timeframe must be a number
   timeframe: '5000',
 };

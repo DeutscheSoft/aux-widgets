@@ -1,7 +1,7 @@
 import { Dialog, IDialogOptions } from '../src/widgets/dialog.js';
 
 // Valid Dialog options (from examples/Dialog.html).
-const autoCloseDialog: IDialogOptions = {
+const autoCloseDialog: Partial<IDialogOptions> = {
   visible: false,
   toplevel: true,
   auto_close: true,
@@ -9,7 +9,7 @@ const autoCloseDialog: IDialogOptions = {
   anchor: 'center',
 };
 
-const modalDialog: IDialogOptions = {
+const modalDialog: Partial<IDialogOptions> = {
   visible: false,
   toplevel: true,
   auto_remove: false,
@@ -31,8 +31,13 @@ const _dialogAnchor: string | undefined = dialogWidget.get('anchor');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 dialogWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+dialogWidget.on('resize', () => {});
+// @ts-expect-error 'not_an_event' is not a valid event name
+dialogWidget.on('not_an_event', () => {});
+
 // Invalid anchor should be rejected.
-const badAnchor: IDialogOptions = {
+const badAnchor: Partial<IDialogOptions> = {
   // @ts-expect-error anchor must be a valid IAnchor
   anchor: 'middle',
 };

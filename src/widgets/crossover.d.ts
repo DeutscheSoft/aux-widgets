@@ -17,9 +17,9 @@ export type ICrossoverFilterType = IStandardBiquadFilterName | IBiquadTransform;
  */
 export interface ICrossoverBandOptions extends IEqBandOptions {
   /** The type of filter for the range below cutoff frequency. See EqBand for more information. */
-  lower?: ICrossoverFilterType;
+  lower: ICrossoverFilterType;
   /** The type of filter for the range above cutoff frequency. See EqBand for more information. */
-  upper?: ICrossoverFilterType;
+  upper: ICrossoverFilterType;
 }
 
 /**
@@ -56,7 +56,7 @@ export declare class CrossoverBand<
  */
 export interface ICrossoverGraphOptions extends IEqualizerGraphOptions {
   /** The index of the crossover band this graph represents. */
-  index?: number;
+  index: number;
 }
 
 /**
@@ -100,9 +100,9 @@ export declare class CrossoverGraph<
  */
 export interface ICrossoverOptions extends IEqualizerOptions {
   /** Define if bands are allowed to leap over each other. */
-  leap?: boolean;
+  leap: boolean;
   /** Set a minimal distance between bands. This has no effect if leap=true. The value is interpreted as a factor of the frequency of the next band, e.g. if distance is 0.2 and a band is at 1kHz, then a second lower band cannot be moved beyond 800Hz. */
-  distance?: number;
+  distance: number;
 }
 
 /**
@@ -144,12 +144,15 @@ export declare class Crossover<
 
   /**
    * Add a new band to the crossover.
-   * @param options - An object containing initial options for the CrossoverBand, or an instance of CrossoverBand.
-   * @param type - A widget class to be used for the new band (defaults to CrossoverBand).
-   * @returns The instance of CrossoverBand.
+   * When given an existing CrossoverBand, adds and returns it; when given options, creates a new band (using type if provided, else CrossoverBand).
    * @emits Equalizer#bandadded
    */
-  addBand(options: CrossoverBand | ICrossoverBandOptions, type?: typeof CrossoverBand): CrossoverBand;
+  addBand(band: EqBand): EqBand;
+  addBand(options: Partial<IEqBandOptions>): CrossoverBand;
+  addBand<T extends CrossoverBand>(
+    options: Partial<IEqBandOptions>,
+    type: new (options?: Partial<ICrossoverBandOptions>) => T
+  ): T;
 
   /**
    * Remove all bands from the crossover and reset the graphs.

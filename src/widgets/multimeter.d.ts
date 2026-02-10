@@ -49,15 +49,15 @@ export type IMultiMeterLayout = 'left' | 'right' | 'top' | 'bottom';
  */
 export interface IMultiMeterOptions extends IContainerOptions {
   /** The number of level meters. */
-  count?: number;
+  count: number;
   /** The label of the multi meter. Set to false to hide the label from the DOM. */
-  label?: string | false;
+  label: string | false;
   /** An Array containing labels for the level meters. Their order is the same as the meters. */
-  labels?: string[] | string | null;
+  labels: string[] | string | null;
   /** Layout of the meters. */
-  layout?: IMultiMeterLayout;
+  layout: IMultiMeterLayout;
   /** Whether to show the scale. */
-  show_scale?: boolean;
+  show_scale: boolean;
   /** Preset configuration name. */
   preset?: IMultiMeterPresetName;
   /** An Array containing values for the level meters. Their order is the same as the meters. */

@@ -15,15 +15,15 @@ export interface IContainerOptions extends Omit<IWidgetOptions, 'visible'> {
   /** The content of the container. It can either be a string which is interpreted as HTML or a DOM node. Note that this option will remove all child nodes from the container element including those added via appendChild. */
   content?: string | HTMLElement;
   /** The visible state of the container. Can be a boolean or one of the transition states ('hiding', 'showing', 'show', 'hide'). */
-  visible?: IContainerVisible;
+  visible: IContainerVisible;
   /** The duration in ms of the hiding CSS transition/animation of this container. If this option is set to -1, the transition duration will be determined by the computed style. */
-  hiding_duration?: number;
+  hiding_duration: number;
   /** The duration in ms of the showing CSS transition/animation of this container. If this option is set to -1, the transition duration will be determined by the computed style. */
-  showing_duration?: number;
+  showing_duration: number;
   /** Add child widgets on init. Will not be maintained on runtime! Just for convenience purposes on init. */
-  children?: unknown[]; // Array of Widget instances
+  children: unknown[]; // Array of Widget instances
   /** If false, child widgets stops rendering while the hiding animation of this container is running. */
-  render_while_hiding?: boolean;
+  render_while_hiding: boolean;
 }
 
 /**

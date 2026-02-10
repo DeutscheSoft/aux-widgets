@@ -54,25 +54,25 @@ export type IGridLine = IGridLineX | IGridLineY;
  */
 export interface IGridOptions extends IWidgetOptions {
   /** Array for vertical grid lines containing either numbers or objects. */
-  grid_x?: IGridLineX[] | number[];
+  grid_x: IGridLineX[] | number[];
   /** Array for horizontal grid lines containing either numbers or objects. */
-  grid_y?: IGridLineY[] | number[];
+  grid_y: IGridLineY[] | number[];
   /** A function returning a Range instance for vertical grid lines or an object containing options for a new Range. */
-  range_x?: IGridRange;
+  range_x: IGridRange;
   /** A function returning a Range instance for horizontal grid lines or an object containing options for a new Range. */
-  range_y?: IGridRange;
+  range_y: IGridRange;
   /** Width of the grid. */
-  width?: number;
+  width: number;
   /** Height of the grid. */
-  height?: number;
+  height: number;
   /** Value to start horizontal lines at this position instead of 0. */
-  x_min?: number | false;
+  x_min: number | false;
   /** Value to end horizontal lines at this position instead of maximum width. */
-  x_max?: number | false;
+  x_max: number | false;
   /** Value to start vertical lines at this position instead of 0. */
-  y_min?: number | false;
+  y_min: number | false;
   /** Value to end vertical lines at this position instead of maximum height. */
-  y_max?: number | false;
+  y_max: number | false;
 }
 
 /**

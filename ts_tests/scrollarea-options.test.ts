@@ -1,7 +1,7 @@
 import { ScrollArea, IScrollAreaOptions } from '../src/widgets/scrollarea.js';
 
 // ScrollArea only extends IWidgetOptions (no extra options).
-const opts: IScrollAreaOptions = {
+const opts: Partial<IScrollAreaOptions> = {
   class: 'my-scrollarea',
   visible: true,
 };
@@ -18,3 +18,8 @@ scrollareaWidget.set('visible', 123);
 const _scrollareaVisible: boolean | string | undefined = scrollareaWidget.get('visible');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 scrollareaWidget.get('not_an_option_key');
+
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+scrollareaWidget.on('resize', () => {});
+// @ts-expect-error 'not_an_event' is not a valid event name
+scrollareaWidget.on('not_an_event', () => {});

@@ -10,15 +10,15 @@ export type ILayout = 'horizontal' | 'vertical';
  */
 export interface IButtonOptions extends IWidgetOptions {
   /** Text for the button label. Set to false to remove the label from DOM. */
-  label?: string | false;
+  label: string | false;
   /** URL to an image file or an icon class. If set to false, the icon is removed from DOM. */
-  icon?: string | false;
+  icon: string | false;
   /** State of the button, reflected as class `.aux-active`. */
-  state?: boolean;
+  state: boolean;
   /** Define the arrangement of label and icon. 'vertical' means icon above the label, 'horizontal' places the icon left to the label. */
-  layout?: ILayout;
+  layout: ILayout;
   /** Enable delayed events. The value is set in milliseconds. If this is set to >0, Button fires some additional events, most importantly `press_start` after the delay has finished without the user leaving the button or lifting the pointer. */
-  delay?: number;
+  delay: number;
 }
 
 /**

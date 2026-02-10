@@ -21,23 +21,23 @@ export type IAnchor =
  */
 export interface IDialogOptions extends IContainerOptions {
   /** Origin of x and y coordinates. */
-  anchor?: IAnchor;
+  anchor: IAnchor;
   /** X-position of the dialog. Can be a number (pixels) or a string (CSS length). */
-  x?: number | string;
+  x: number | string | undefined;
   /** Y-position of the dialog. Can be a number (pixels) or a string (CSS length). */
-  y?: number | string;
+  y: number | string | undefined;
   /** Set dialog to visible=false if clicked outside in the document. */
-  auto_close?: boolean;
+  auto_close: boolean;
   /** Remove the dialogs DOM node after setting visible=false. */
-  auto_remove?: boolean;
+  auto_remove: boolean;
   /** Add the dialog DOM node to the topmost position in DOM on visible=true. Topmost means either a parenting AWML-ROOT or the BODY node. */
-  toplevel?: boolean;
+  toplevel: boolean;
   /** If modal window blocks all other elements. */
-  modal?: boolean;
+  modal: boolean;
   /** Reset the focus to the element which had the focus before opening the dialog on closing the dialog. */
-  reset_focus?: boolean;
+  reset_focus: boolean;
   /** Keep focus inside the dialog. */
-  contain_focus?: boolean;
+  contain_focus: boolean;
 }
 
 /**

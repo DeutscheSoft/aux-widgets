@@ -81,71 +81,71 @@ export interface IWindowDimensions {
  */
 export interface IWindowOptions extends IContainerOptions {
   /** Initial width, can be a CSS length or an integer (pixels). */
-  width?: number | string;
+  width: number | string;
   /** Initial height, can be a CSS length or an integer (pixels). */
-  height?: number | string;
+  height: number | string;
   /** X position of the window. */
-  x?: number;
+  x: number;
   /** Y position of the window. */
-  y?: number;
+  y: number;
   /** Minimum width of the window. */
-  min_width?: number;
+  min_width: number;
   /** Maximum width of the window, -1 ~ infinite. */
-  max_width?: number;
+  max_width: number;
   /** Minimum height of the window. */
-  min_height?: number;
+  min_height: number;
   /** Maximum height of the window, -1 ~ infinite. */
-  max_height?: number;
+  max_height: number;
   /** Anchor of the window. */
-  anchor?: IWindowAnchor;
+  anchor: IWindowAnchor;
   /** If modal window blocks all other elements. */
-  modal?: boolean;
+  modal: boolean;
   /** Docking of the window. */
-  dock?: IWindowAnchor | false;
+  dock: IWindowAnchor | false;
   /** Boolean or object with members x and y as boolean to determine the maximized state. */
-  maximize?: boolean | IWindowMaximize;
+  maximize: boolean | IWindowMaximize;
   /** Minimize window (does only make sense with a window manager application to keep track of it). */
-  minimize?: boolean;
+  minimize: boolean;
   /** Shrink rolls the window up into the title bar. */
-  shrink?: boolean;
+  shrink: boolean;
   /** The content of the window. Can be either a string, a HTMLElement or a Container to append to the content area. */
-  content?: string | HTMLElement;
+  content: string | HTMLElement;
   /** Initial position of the window. */
-  open?: IWindowAnchor;
+  open: IWindowAnchor;
   /** Z index for piling windows. */
-  z_index?: number;
+  z_index: number;
   /** Single element or array of header elements. */
-  header?: IWindowHeaderFooterElement | IWindowHeaderFooterElement[];
+  header: IWindowHeaderFooterElement | IWindowHeaderFooterElement[];
   /** Single element or array of footer elements. */
-  footer?: IWindowHeaderFooterElement | IWindowHeaderFooterElement[] | false;
+  footer: IWindowHeaderFooterElement | IWindowHeaderFooterElement[] | false;
   /** Window status. */
-  status?: string | false;
+  status: string | false;
   /** URL to window icon. */
-  icon?: string | false;
+  icon: string | false;
   /** Whether the window sticks to the viewport rather than the document. */
-  fixed?: boolean;
+  fixed: boolean;
   /** Auto-toggle the active-class when mouseovered. */
-  auto_active?: boolean;
+  auto_active: boolean;
   /** Set whether close destroys the window or not. */
-  auto_close?: boolean;
+  auto_close: boolean;
   /** Set whether maximize toggles the window or not. */
-  auto_maximize?: boolean;
+  auto_maximize: boolean;
   /** Set whether minimize toggles the window or not. */
-  auto_minimize?: boolean;
+  auto_minimize: boolean;
   /** Set whether shrink toggles the window or not. */
-  auto_shrink?: boolean;
+  auto_shrink: boolean;
   /** Set whether the window is draggable. */
-  draggable?: boolean;
+  draggable: boolean;
   /** Set whether the window is resizable. */
-  resizable?: boolean;
+  resizable: boolean;
   /** Resizing policy, continuous or stop. The first one resizes all children continuously while resizing. */
-  resizing?: IWindowResizing;
+  resizing: IWindowResizing;
   /** Action for double clicking the window header. */
-  header_action?: IWindowHeaderAction;
+  header_action: IWindowHeaderAction;
   /** Active state of the window. */
-  active?: boolean;
+  active: boolean;
   /** If set to !0 status message hides after [n] milliseconds. */
-  hide_status?: number;
+  hide_status: number;
 }
 
 /**

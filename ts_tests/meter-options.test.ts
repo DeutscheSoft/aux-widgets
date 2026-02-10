@@ -1,7 +1,7 @@
 import { Meter, IMeterOptions } from '../src/widgets/meter.js';
 
 // Valid Meter options.
-const levelMeter: IMeterOptions = {
+const levelMeter: Partial<IMeterOptions> = {
   min: -96,
   max: 24,
   value: 0,
@@ -16,7 +16,7 @@ const levelMeter: IMeterOptions = {
   paint_mode: 'value',
 };
 
-const withGradient: IMeterOptions = {
+const withGradient: Partial<IMeterOptions> = {
   min: 0,
   max: 100,
   value: 50,
@@ -40,8 +40,13 @@ const _meterValue: number | undefined = meterWidget.get('value');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 meterWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+meterWidget.on('set_value', (value: number) => { void value; });
+// @ts-expect-error 'not_an_event' is not a valid event name
+meterWidget.on('not_an_event', () => {});
+
 // Invalid layout should be rejected.
-const badLayout: IMeterOptions = {
+const badLayout: Partial<IMeterOptions> = {
   min: 0,
   max: 100,
   value: 50,

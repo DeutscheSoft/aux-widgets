@@ -36,35 +36,35 @@ export type IDynamicsHandleLabel = (
  */
 export interface IDynamicsOptions extends IChartOptions {
   /** Minimum decibels to display. */
-  min?: number;
+  min: number;
   /** Maximum decibels to display. */
-  max?: number;
+  max: number;
   /** Scale of the display, see Range for details. */
-  scale?: string;
+  scale: string;
   /** Type of the dynamics: 'compressor', 'expander', 'gate', 'limiter' or false to draw your own graph. */
-  type?: IDynamicsType;
+  type: IDynamicsType;
   /** Threshold of the dynamics. */
-  threshold?: number;
+  threshold: number;
   /** Ratio of the dynamics. */
-  ratio?: number;
+  ratio: number;
   /** Makeup of the dynamics. This raises the whole graph after all other properties are applied. */
-  makeup?: number;
+  makeup: number;
   /** Range of the dynamics. Only used in type 'expander'. The maximum gain reduction. */
-  range?: number;
+  range: number;
   /** Input gain of the dynamics. */
-  gain?: number;
+  gain: number;
   /** Input reference of the dynamics. */
-  reference?: number;
+  reference: number;
   /** Soft knee width of the compressor in dB. Replaces the hard knee of the compressor at the salient point by a quadratic curve. */
-  knee?: number;
+  knee: number;
   /** Callback to format the labels of the Grid. */
-  grid_labels?: IDynamicsGridLabels;
+  grid_labels: IDynamicsGridLabels;
   /** Draw a grid line every [n] decibels. */
-  db_grid?: number;
+  db_grid: number;
   /** Draw a handle to manipulate threshold and ratio. */
-  show_handle?: boolean;
+  show_handle: boolean;
   /** Function to format the handle label. */
-  handle_label?: IDynamicsHandleLabel | false;
+  handle_label: IDynamicsHandleLabel | false;
   /** @internal Last type value (computed internally). */
   _last_type?: IDynamicsType;
 }

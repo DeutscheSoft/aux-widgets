@@ -19,23 +19,23 @@ export interface IKnobOptions extends ICircularOptions {
   /** If true, bind the dblclick event to reset the value to the reset option. */
   bind_dblclick?: boolean;
   /** Step size. Used for instance by ScrollValue as the step size. */
-  step?: number;
+  step: number;
   /** Distance to drag between min and max. */
-  basis?: number;
+  basis: number;
   /** If options.direction is 'polar', this is the angle of separation between positive and negative value changes. */
-  blind_angle?: number;
+  blind_angle: number;
   /** Multiplier for increased stepping speed, e.g. used by ScrollValue when simultaneously pressing 'shift'. */
-  shift_up?: number;
+  shift_up: number;
   /** Multiplier for decreased stepping speed, e.g. used by ScrollValue when simultaneously pressing 'shift' and 'ctrl'. */
-  shift_down?: number;
+  shift_down: number;
   /** Direction for changing the value. Can be 'polar', 'vertical' or 'horizontal'. */
-  direction?: IDragDirection;
+  direction: IDragDirection;
   /** Defines the angle of the center of the positive value changes. 0 means straight upward. For instance, a value of 45 leads to increasing value when moving towards top and right. */
-  rotation?: number;
+  rotation: number;
   /** The preset to use. */
-  preset?: IPresetName | string;
+  preset: IPresetName | string;
   /** A set of available presets. */
-  presets?: Record<string, Partial<IKnobOptions>>;
+  presets: Record<string, Partial<IKnobOptions>>;
   /** @internal Last preset name (computed internally) */
   _lastPreset?: string | null;
 }

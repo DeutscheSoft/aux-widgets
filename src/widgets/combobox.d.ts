@@ -9,7 +9,7 @@ import { Value, IEditMode } from './value.js';
  */
 export interface IComboBoxOptions extends IWidgetOptions {
   /** The value of the combobox. */
-  value?: string | null;
+  value: string | null;
   /** The list of SelectEntry for the Select child widget. Each member can be a string, an object with Button properties and value, or a SelectEntry instance. */
   entries?: ISelectEntryInput[];
   /** A CSS class to be set on the Select list. This is a static option and can only be set once on initialization. */

@@ -30,33 +30,33 @@ export type IChartRange = Range | (() => Range) | IRangeOptions;
  */
 export interface IChartOptions extends IWidgetOptions {
   /** A label for the Chart. Set to false to remove the label from the DOM. */
-  label?: string | false;
+  label: string | false;
   /** Position of the label inside of the chart. */
-  label_position?: IChartLabelPosition;
+  label_position: IChartLabelPosition;
   /** An array containing objects to draw the vertical grid lines. */
-  grid_x?: IGridLine[] | number[];
+  grid_x: IGridLine[] | number[];
   /** An array containing objects to draw the horizontal grid lines. */
-  grid_y?: IGridLine[] | number[];
+  grid_y: IGridLine[] | number[];
   /** Either a function returning a Range or an object containing options for a new Range for the x axis. */
-  range_x?: IChartRange;
+  range_x: IChartRange;
   /** Either a function returning a Range or an object containing options for a new Range for the y axis. */
-  range_y?: IChartRange;
+  range_y: IChartRange;
   /** Either a function returning a Range or an object containing options for a new Range for the z axis. */
-  range_z?: IChartRange;
+  range_z: IChartRange;
   /** Multiplicator of square pixels on hit testing labels to gain importance. */
-  importance_label?: number;
+  importance_label: number;
   /** Multiplicator of square pixels on hit testing handles to gain importance. */
-  importance_handle?: number;
+  importance_handle: number;
   /** Multiplicator of square pixels on hit testing borders to gain importance. */
-  importance_border?: number;
+  importance_border: number;
   /** An array of options for creating ChartHandle on init. */
-  handles?: IChartHandleOptions[];
+  handles: IChartHandleOptions[];
   /** An array of options for creating Graph on init. */
-  graphs?: IGraphOptions[];
+  graphs: IGraphOptions[];
   /** Show or hide all handles. */
-  show_handles?: boolean;
+  show_handles: boolean;
   /** Keep the Chart as a square. */
-  square?: boolean;
+  square: boolean;
   /** The depth of the z axis (basis of options.range_z). */
   depth?: number;
   /** @internal The computed width of the element. */
@@ -64,7 +64,7 @@ export interface IChartOptions extends IWidgetOptions {
   /** @internal The computed height of the element. */
   _height?: number;
   /** @internal Whether the widget has been resized (computed internally). */
-  resized?: boolean;
+  resized: boolean;
   /** @deprecated Use CSS instead. */
   width?: number;
   /** @deprecated Use CSS instead. */

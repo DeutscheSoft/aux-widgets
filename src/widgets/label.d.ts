@@ -7,9 +7,9 @@ import { EffectiveEvents } from '../implements/base.js';
  */
 export interface ILabelOptions extends IWidgetOptions {
   /** The content of the label. Can be formatted via format. */
-  label?: string;
+  label: string;
   /** Optional format function. Can be false to disable formatting. */
-  format?: ((label: string) => string | number) | false;
+  format: ((label: string) => string | number) | false;
 }
 
 /**

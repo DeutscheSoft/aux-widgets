@@ -1,7 +1,7 @@
 import { Pager, IPagerOptions } from '../src/widgets/pager.js';
 
 // Valid Pager options.
-const pager: IPagerOptions = {
+const pager: Partial<IPagerOptions> = {
   position: 'top',
   show: 0,
   pages: [{ label: 'One', content: '<p>Page 1</p>' }, { label: 'Two', content: '<p>Page 2</p>' }],
@@ -20,8 +20,13 @@ const _pagerPosition: 'top' | 'right' | 'left' | 'bottom' | undefined = pagerWid
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 pagerWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+pagerWidget.on('resize', () => {});
+// @ts-expect-error 'not_an_event' is not a valid event name
+pagerWidget.on('not_an_event', () => {});
+
 // Invalid position should be rejected.
-const badPosition: IPagerOptions = {
+const badPosition: Partial<IPagerOptions> = {
   // @ts-expect-error position must be 'top' | 'right' | 'left' | 'bottom'
   position: 'center',
 };

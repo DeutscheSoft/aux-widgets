@@ -60,23 +60,23 @@ export interface IColorObject {
  */
 export interface IColorPickerOptions extends IContainerOptions {
   /** An object containing members h(ue), s(aturation) and l(ightness) as numerical values. */
-  hsl?: IHSLColor;
+  hsl: IHSLColor;
   /** An object containing members r(ed), g(reen) and b(lue) as numerical values. */
-  rgb?: IRGBColor;
+  rgb: IRGBColor;
   /** A HEX color value, either with or without leading #. */
-  hex?: string;
+  hex: string;
   /** A numerical value 0..1 for the hue. */
-  hue?: number;
+  hue: number;
   /** A numerical value 0..1 for the saturation. */
-  saturation?: number;
+  saturation: number;
   /** A numerical value 0..1 for the lightness. */
-  lightness?: number;
+  lightness: number;
   /** A numerical value 0..255 for the amount of red. */
-  red?: number;
+  red: number;
   /** A numerical value 0..255 for the amount of green. */
-  green?: number;
+  green: number;
   /** A numerical value 0..255 for the amount of blue. */
-  blue?: number;
+  blue: number;
   /** Set to false to hide the ValueKnob for hue. */
   show_hue?: boolean;
   /** Set to false to hide the ValueKnob for saturation. */

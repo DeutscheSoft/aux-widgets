@@ -1,7 +1,7 @@
 import { Drag3D, IDrag3DOptions } from '../src/widgets/drag3d.js';
 
 // Valid Drag3D options.
-const drag3d: IDrag3DOptions = {
+const drag3d: Partial<IDrag3DOptions> = {
   x: 0,
   y: 0,
   z: 0,
@@ -22,3 +22,8 @@ drag3dWidget.set('x', '0.5');
 const _drag3dX: number | undefined = drag3dWidget.get('x');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 drag3dWidget.get('not_an_option_key');
+
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+drag3dWidget.on('set_x', (value: number) => { void value; });
+// @ts-expect-error 'not_an_event' is not a valid event name
+drag3dWidget.on('not_an_event', () => {});

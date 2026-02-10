@@ -18,15 +18,15 @@ export type IValueKnobLayout = 'vertical' | 'horizontal' | 'left' | 'right';
  */
 export interface IValueKnobOptions extends Omit<IKnobOptions, 'size' | 'value'>, Omit<IValueOptions, 'size' | 'value'> {
   /** Layout of the knob. Select from 'horizontal', 'vertical' (default), 'left' and 'right'. */
-  layout?: IValueKnobLayout;
+  layout: IValueKnobLayout;
   /** Label of the knob. Set to false to hide the element from the DOM. This is blacklisted from the knob child widget. */
   label?: string | false;
   /** Set to false to hide the Value. This is blacklisted from the knob child widget. */
-  show_value?: boolean;
+  show_value: boolean;
   /** Set to false to hide the Knob. */
-  show_knob?: boolean;
+  show_knob: boolean;
   /** The value. */
-  value?: number;
+  value: number;
 }
 
 /**

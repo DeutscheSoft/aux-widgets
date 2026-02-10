@@ -1,7 +1,7 @@
 import { ChartHandle, IChartHandleOptions } from '../src/widgets/charthandle.js';
 
 // Valid ChartHandle options.
-const handle: IChartHandleOptions = {
+const handle: Partial<IChartHandleOptions> = {
   label: 'Handle',
   mode: 'line-vertical',
   x: 0.5,
@@ -25,8 +25,13 @@ const _charthandleX: number | undefined = charthandleWidget.get('x');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 charthandleWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+charthandleWidget.on('resize', () => {});
+// @ts-expect-error 'not_an_event' is not a valid event name
+charthandleWidget.on('not_an_event', () => {});
+
 // Invalid mode should be rejected.
-const badMode: IChartHandleOptions = {
+const badMode: Partial<IChartHandleOptions> = {
   label: 'x',
   // @ts-expect-error mode must be a valid IChartHandleMode
   mode: 'diagonal',

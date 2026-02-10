@@ -1,7 +1,7 @@
 import { Gauge, IGaugeOptions } from '../src/widgets/gauge.js';
 
 // Valid Gauge options (extends Circular).
-const gauge: IGaugeOptions = {
+const gauge: Partial<IGaugeOptions> = {
   min: 0,
   max: 100,
   value: 50,
@@ -11,7 +11,7 @@ const gauge: IGaugeOptions = {
   label: 'Level',
 };
 
-const gaugeWithLabelConfig: IGaugeOptions = {
+const gaugeWithLabelConfig: Partial<IGaugeOptions> = {
   min: 0,
   max: 360,
   value: 180,
@@ -31,8 +31,13 @@ const _gaugeValue: number | undefined = gaugeWidget.get('value');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 gaugeWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+gaugeWidget.on('set_value', (value: number) => { void value; });
+// @ts-expect-error 'not_an_event' is not a valid event name
+gaugeWidget.on('not_an_event', () => {});
+
 // Invalid label type should be rejected.
-const badLabel: IGaugeOptions = {
+const badLabel: Partial<IGaugeOptions> = {
   min: 0,
   max: 100,
   value: 50,

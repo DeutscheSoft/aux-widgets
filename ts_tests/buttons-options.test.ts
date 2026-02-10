@@ -1,7 +1,7 @@
 import { Buttons, IButtonsOptions } from '../src/widgets/buttons.js';
 
 // Valid Buttons options (extends Container).
-const horizontal: IButtonsOptions = {
+const horizontal: Partial<IButtonsOptions> = {
   buttons: ['A', 'B', 'C'],
   direction: 'horizontal',
   select: 0,
@@ -9,7 +9,7 @@ const horizontal: IButtonsOptions = {
   deselect: true,
 };
 
-const vertical: IButtonsOptions = {
+const vertical: Partial<IButtonsOptions> = {
   buttons: [{ label: 'One' }, { label: 'Two' }],
   direction: 'vertical',
   select: [0, 1],
@@ -29,8 +29,13 @@ const _buttonsDirection: 'horizontal' | 'vertical' | undefined = buttonsWidget.g
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 buttonsWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+buttonsWidget.on('resize', () => {});
+// @ts-expect-error 'not_an_event' is not a valid event name
+buttonsWidget.on('not_an_event', () => {});
+
 // Invalid direction should be rejected.
-const badDirection: IButtonsOptions = {
+const badDirection: Partial<IButtonsOptions> = {
   buttons: ['a'],
   // @ts-expect-error direction must be 'horizontal' | 'vertical'
   direction: 'grid',

@@ -1,7 +1,7 @@
 import { ProgressBar, IProgressBarOptions } from '../src/widgets/progressbar.js';
 
 // Valid ProgressBar options (extends Meter).
-const progressBar: IProgressBarOptions = {
+const progressBar: Partial<IProgressBarOptions> = {
   min: 0,
   max: 100,
   value: 45,
@@ -23,8 +23,13 @@ const _progressbarValue: number | undefined = progressbarWidget.get('value');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 progressbarWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+progressbarWidget.on('set_value', (value: number) => { void value; });
+// @ts-expect-error 'not_an_event' is not a valid event name
+progressbarWidget.on('not_an_event', () => {});
+
 // Invalid value type should be rejected.
-const badValue: IProgressBarOptions = {
+const badValue: Partial<IProgressBarOptions> = {
   min: 0,
   max: 100,
   // @ts-expect-error value must be a number

@@ -1,7 +1,7 @@
 import { Graph, IGraphOptions } from '../src/widgets/graph.js';
 
 // Valid Graph options.
-const graph: IGraphOptions = {
+const graph: Partial<IGraphOptions> = {
   range_x: { min: 0, max: 100 },
   range_y: { min: 0, max: 1 },
   type: 'L',
@@ -22,8 +22,13 @@ const _graphMode: 'line' | 'bottom' | 'top' | 'center' | 'base' | 'fill' | undef
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 graphWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+graphWidget.on('resize', () => {});
+// @ts-expect-error 'not_an_event' is not a valid event name
+graphWidget.on('not_an_event', () => {});
+
 // Invalid type should be rejected.
-const badType: IGraphOptions = {
+const badType: Partial<IGraphOptions> = {
   range_x: { min: 0, max: 1 },
   range_y: { min: 0, max: 1 },
   // @ts-expect-error type must be a valid IGraphType

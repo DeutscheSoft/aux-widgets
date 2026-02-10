@@ -17,31 +17,31 @@ export type IEditMode = 'onenter' | 'immediate';
  */
 export interface IValueOptions extends IWidgetOptions {
   /** The value. */
-  value?: number | string;
+  value: number | string;
   /** A formatting function used to display the value. */
-  format?: (value: number | string) => string | number;
+  format: (value: number | string) => string | number;
   /** Size attribute of the input element. null to unset. */
-  size?: number | null;
+  size: number | null;
   /** Maxlength attribute of the input element. null to unset. */
-  maxlength?: number | null;
+  maxlength: number | null;
   /** A function which is called to parse user input. Set to false to disable editing. */
-  set?: ((val: string) => number | string) | false;
+  set: ((val: string) => number | string) | false;
   /** Select the entire text if clicked. */
-  auto_select?: boolean;
+  auto_select: boolean;
   /** Sets the readonly attribute. */
-  readonly?: boolean;
+  readonly: boolean;
   /** Sets the placeholder attribute. */
-  placeholder?: string;
+  placeholder: string;
   /** Sets the type attribute. Type can be either 'text' or 'password'. */
-  type?: IInputType;
+  type: IInputType;
   /** Sets the event to trigger the userset event. Can be one out of 'onenter' or 'immediate'. */
-  editmode?: IEditMode;
+  editmode: IEditMode;
   /** Set a unique identifier to enable browsers internal auto completion. */
-  autocomplete?: string | false;
+  autocomplete: string | false;
   /** Set the value if user hits TAB. */
-  tab_to_set?: boolean;
+  tab_to_set: boolean;
   /** The ARIA role for the value input. Defaults to 'textbox'. */
-  role?: string;
+  role: string;
 }
 
 /**

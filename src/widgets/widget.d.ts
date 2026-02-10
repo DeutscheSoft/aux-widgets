@@ -57,37 +57,37 @@ export interface IWidgetOptions {
   /** A DOM element as container to inject the element into */
   container?: HTMLElement | SVGElement;
   /** Enable debug mode */
-  debug?: boolean;
+  debug: boolean;
   /** An id to set on the element. If omitted a random string is generated. */
   id?: string;
   /** CSS styles to be added directly to the main element */
   styles?: Record<string, string>;
   /** Disables all pointer events on the widget via CSS */
-  disabled?: boolean;
+  disabled: boolean;
   /** An element to be used as the main element */
   element?: HTMLElement | SVGElement;
   /** Toggles the class `.aux-inactive` */
-  active?: boolean;
+  active: boolean;
   /** Toggles the class `.aux-hide` and `.aux-show`. This option also enables and disables rendering */
-  visible?: boolean | string;
+  visible: boolean | string;
   /** Set a time in milliseconds for triggering double click event. If 0, no double click events are fired. */
-  dblclick?: number;
+  dblclick: number;
   /** Indicates if the widget is currently being interacted with */
-  interacting?: boolean;
+  interacting: boolean;
   /** Disable CSS transitions */
-  notransitions?: boolean;
+  notransitions: boolean | undefined;
   /** A time in milliseconds until transitions are activated */
-  notransitions_duration?: number;
+  notransitions_duration: number;
   /** A string to be set as title attribute on the main element to be displayed as tooltip */
   title?: string;
   /** Set tabindex to activate focus on widgets. Tabindex is set on the element returned by `getFocusElement`. */
-  tabindex?: number | boolean;
+  tabindex: number | boolean;
   /** ARIA role attribute */
-  role?: string;
+  role: string;
   /** Set an array of targets for ARIA values */
-  aria_targets?: boolean | (HTMLElement | SVGElement)[];
+  aria_targets: boolean | (HTMLElement | SVGElement)[];
   /** Toggles the class `.aux-focus` */
-  focus?: boolean;
+  focus: boolean;
 
   // ARIA attributes (converted from kebab-case to underscore_case)
   aria_activedescendant?: string;

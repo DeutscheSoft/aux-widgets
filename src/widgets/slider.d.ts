@@ -15,21 +15,21 @@ export type ISliderAlignment = 'horizontal' | 'vertical';
  */
 export interface ISliderOptions extends IWidgetOptions, IRangedOptions {
   /** The current value. */
-  value?: number;
+  value: number;
   /** The amount of frames contained in the background image. */
-  frames?: number;
+  frames: number;
   /** The direction of the frames in the image, next to ('horizontal') or among each other ('vertical'). */
-  alignment?: ISliderAlignment;
+  alignment: ISliderAlignment;
   /** The image containing all frames for the slider. Set to false to set the background image via external CSS. */
-  image?: string | false;
+  image: string | false;
   /** Direction for changing the value. Can be 'polar', 'vertical' or 'horizontal'. */
-  direction?: IDragDirection;
+  direction: IDragDirection;
   /** Defines the angle of the center of the positive value changes. 0 means straight upward. For instance, a value of 45 leads to increasing value when moving towards top and right. */
-  rotation?: number;
+  rotation: number;
   /** If options.direction is 'polar', this is the angle of separation between positive and negative value changes. */
-  blind_angle?: number;
+  blind_angle: number;
   /** Distance to drag between min and max in pixels. */
-  basis?: number;
+  basis: number;
   /** Reset to this value on double click. */
   reset?: number;
   /** @internal Width of the element (computed internally). */

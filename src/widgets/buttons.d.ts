@@ -11,7 +11,7 @@ export type IButtonsDirection = 'horizontal' | 'vertical';
 /**
  * Input type for creating buttons - can be a Button instance, options object, or label string.
  */
-export type IButtonsButtonInput = Button | IButtonOptions | string;
+export type IButtonsButtonInput = Button | Partial<IButtonOptions> | string;
 
 /**
  * Select type - can be a single index, array of indices, Button instance, or array of Button instances.
@@ -24,21 +24,21 @@ export type IButtonsSelect = number | number[] | Button | Button[];
  */
 export interface IButtonsOptions extends IContainerOptions {
   /** A list of Button instances, button options objects or label strings which is converted to button instances on init. */
-  buttons?: IButtonsButtonInput[];
+  buttons: IButtonsButtonInput[];
   /** The layout of the button list, either "horizontal" or "vertical". */
-  direction?: IButtonsDirection;
+  direction: IButtonsDirection;
   /** The Button or a list of Buttons, depending on multi_select, to highlight. Expects either the buttons index starting from zero or the Button instance(s) itself. Set to -1 or [] to de-select any selected button. */
-  select?: IButtonsSelect;
+  select: IButtonsSelect;
   /** A class to be used for instantiating new buttons. */
-  button_class?: typeof Button;
+  button_class: typeof Button;
   /** A role to be used for instantiating new buttons. */
-  button_role?: string;
+  button_role: string;
   /** Set to 0 to disable multiple selection, 1 for unlimited and any other number for a defined maximum amount of selectable buttons. */
-  multi_select?: number;
+  multi_select: number;
   /** Define if single-selection (options.multi_select=false) can be de-selected. */
-  deselect?: boolean;
+  deselect: boolean;
   /** @internal Focus state (computed internally). */
-  _focus?: number | false;
+  _focus: number | false;
 }
 
 /**

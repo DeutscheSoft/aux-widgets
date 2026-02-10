@@ -9,17 +9,17 @@ import { Range, IRangeOptions } from '../modules/range.js';
  */
 export interface IDrag3DOptions extends IContainerOptions {
   /** Value for x direction. */
-  x?: number;
+  x: number;
   /** Value for y direction. */
-  y?: number;
+  y: number;
   /** Value for z direction. */
-  z?: number;
+  z: number;
   /** Range for x direction. */
-  range_x?: IRangeOptions;
+  range_x: IRangeOptions;
   /** Range for y direction. */
-  range_y?: IRangeOptions;
+  range_y: IRangeOptions;
   /** Range for z direction. */
-  range_z?: IRangeOptions;
+  range_z: IRangeOptions;
   /**
    * DragValue and Range options are available via dot notation,
    * e.g. `drag_x.rotation` or `range_y.min`.

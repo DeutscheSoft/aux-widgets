@@ -7,9 +7,9 @@ import { EffectiveEvents } from '../implements/base.js';
  */
 export interface IIconOptions extends IWidgetOptions {
   /** The icon to show. It can either be a string which is interpreted as class name (if [A-Za-z0-9_\-]), a CSS custom property name (if it starts with `--`) or else as a file location. If it is a custom property name or a file location, it is used to set the `background-image` property. */
-  icon?: string | false;
+  icon: string | false;
   /** The ARIA role for the icon. Defaults to 'img'. */
-  role?: string;
+  role: string;
 }
 
 /**

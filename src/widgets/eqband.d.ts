@@ -13,21 +13,15 @@ import { Filter } from '../modules/filter.js';
  */
 export interface IEqBandOptions extends IChartHandleOptions {
   /** The type of the filter. Possible values are 'parametric', 'notch', 'low-shelf', 'high-shelf', 'lowpass[n]' or 'highpass[n]', or a custom biquad transform function. */
-  type?: IStandardBiquadFilterName | IBiquadTransform;
+  type: IStandardBiquadFilterName | IBiquadTransform;
   /** Frequency setting. This is an alias for the option x defined by ChartHandle. */
   freq?: number;
   /** Gain setting. This is an alias for the option y defined by ChartHandle. */
   gain?: number;
   /** Quality setting. This is an alias for the option z defined by ChartHandle. */
   q?: number;
-  /** Value of the x-coordinate (frequency). */
-  x?: number;
-  /** Value of the y-coordinate (gain). */
-  y?: number;
-  /** Value of the z-coordinate (quality/Q). */
-  z?: number;
   /** Set to false to not take this filter into account when drawing the response graph. */
-  active?: boolean;
+  active: boolean;
 }
 
 /**

@@ -1,7 +1,7 @@
 import { FileSelect, IFileSelectOptions } from '../src/widgets/fileselect.js';
 
 // Valid FileSelect options.
-const fileselect: IFileSelectOptions = {
+const fileselect: Partial<IFileSelectOptions> = {
   label: 'Choose file',
   accept: '.txt,.pdf,image/*',
   multiple: false,
@@ -21,8 +21,13 @@ const _fileselectMultiple: boolean | undefined = fileselectWidget.get('multiple'
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 fileselectWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+fileselectWidget.on('resize', () => {});
+// @ts-expect-error 'not_an_event' is not a valid event name
+fileselectWidget.on('not_an_event', () => {});
+
 // Invalid multiple type should be rejected.
-const badMultiple: IFileSelectOptions = {
+const badMultiple: Partial<IFileSelectOptions> = {
   label: 'x',
   // @ts-expect-error multiple must be a boolean
   multiple: 'true',

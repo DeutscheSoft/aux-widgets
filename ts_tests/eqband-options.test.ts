@@ -1,7 +1,7 @@
 import { EqBand, IEqBandOptions } from '../src/widgets/eqband.js';
 
 // Valid EqBand options (extends ChartHandle).
-const eqband: IEqBandOptions = {
+const eqband: Partial<IEqBandOptions> = {
   label: 'Band',
   mode: 'line-vertical',
   x: 1000,
@@ -27,8 +27,13 @@ const _eqbandGain: number | undefined = eqbandWidget.get('gain');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 eqbandWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+eqbandWidget.on('set_gain', (value?: number) => { void value; });
+// @ts-expect-error 'not_an_event' is not a valid event name
+eqbandWidget.on('not_an_event', () => {});
+
 // Invalid gain type should be rejected.
-const badEqband: IEqBandOptions = {
+const badEqband: Partial<IEqBandOptions> = {
   // @ts-expect-error gain must be a number
   gain: '-6',
 };

@@ -1,7 +1,7 @@
 import { Slider, ISliderOptions } from '../src/widgets/slider.js';
 
 // A fully specified, valid Slider options object should typecheck.
-const sliderOptions: ISliderOptions = {
+const sliderOptions: Partial<ISliderOptions> = {
   value: 0,
   frames: 16,
   alignment: 'horizontal',
@@ -27,6 +27,11 @@ const _sliderValue: number | undefined = slider.get('value');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 slider.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+slider.on('set_value', (value: number) => { void value; });
+// @ts-expect-error 'not_an_event' is not a valid event name
+slider.on('not_an_event', () => {});
+
 // Partial options must also be accepted by the constructor.
 new Slider({
   value: 50,
@@ -40,7 +45,7 @@ new Slider({
 });
 
 // Invalid alignment option should be rejected.
-const badAlignment: ISliderOptions = {
+const badAlignment: Partial<ISliderOptions> = {
   // @ts-expect-error alignment must be 'horizontal' | 'vertical'
   alignment: 'diagonal',
 };

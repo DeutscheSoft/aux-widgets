@@ -10,29 +10,29 @@ export interface ILevelMeterOptions extends IMeterOptions {
   /** If set to true, show the clipping LED. */
   show_clip?: boolean;
   /** If clipping is enabled, this is the threshold for the clipping effect. */
-  clipping?: number;
+  clipping: number;
   /** This is the clipping timeout. If set to false automatic clipping is disabled. If set to n the clipping effect times out after n ms, if set to -1 it remains forever. */
-  auto_clip?: number | boolean;
+  auto_clip: number | boolean;
   /** If clipping is enabled, this option is set to true when clipping happens. When automatic clipping is disabled, it can be set to true to set the clipping state. */
-  clip?: boolean;
+  clip: boolean;
   /** If set to true, show the hold value LED. */
-  show_hold?: boolean;
+  show_hold: boolean;
   /** Size of the hold value LED in the number of segments. */
-  hold_size?: number;
+  hold_size: number;
   /** If set to false the automatic hold LED is disabled, if set to n the hold value is reset after n ms and if set to -1 the hold value is not reset automatically. */
-  auto_hold?: number | boolean;
+  auto_hold: number | boolean;
   /** The top hold value. If set to false it will equal the meter level. */
-  top?: number | false;
+  top: number | false;
   /** The bottom hold value. This only exists if a base value is set and the value falls below the base. */
-  bottom?: number | false;
+  bottom: number | false;
   /** If set to false the automatic peak label is disabled, if set to n the peak label is reset after n ms and if set to -1 it remains forever. */
-  peak_value?: number | boolean;
+  peak_value: number | boolean;
   /** If set to a positive number, activates the automatic falling animation. The meter level will fall by this amount over the time set via falling_duration. */
-  falling?: number;
+  falling: number;
   /** This is the time in milliseconds for the falling animation. The level falls by falling in this period of time. */
-  falling_duration?: number;
+  falling_duration: number;
   /** Initial falling delay in milliseconds. This option can be used to delay the start of the falling animation in order to avoid flickering if internal and external falling are combined. */
-  falling_init?: number;
+  falling_init: number;
   /** @internal Value time (computed internally) */
   _value_time?: number;
   /** @internal Clip timer (computed internally) */

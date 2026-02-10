@@ -1,7 +1,7 @@
 import { Panorama, IPanoramaOptions } from '../src/widgets/panorama.js';
 
 // Valid Panorama options (extends Chart).
-const panorama: IPanoramaOptions = {
+const panorama: Partial<IPanoramaOptions> = {
   label: 'Panorama',
   mode: 'panorama',
   range: 1,
@@ -21,8 +21,13 @@ const _panoramaMode: 'panorama' | 'balance' | 'surround' | undefined = panoramaW
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 panoramaWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+panoramaWidget.on('resize', () => {});
+// @ts-expect-error 'not_an_event' is not a valid event name
+panoramaWidget.on('not_an_event', () => {});
+
 // Invalid mode should be rejected.
-const badMode: IPanoramaOptions = {
+const badMode: Partial<IPanoramaOptions> = {
   label: 'x',
   // @ts-expect-error mode must be 'panorama' | 'balance' | 'surround'
   mode: 'stereo',

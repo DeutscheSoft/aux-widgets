@@ -1,7 +1,7 @@
 import { Equalizer, IEqualizerOptions } from '../src/widgets/equalizer.js';
 
 // Valid Equalizer options (extends FrequencyResponse + EqualizerGraph).
-const equalizer: IEqualizerOptions = {
+const equalizer: Partial<IEqualizerOptions> = {
   label: 'EQ',
   show_bands: true,
 };
@@ -18,8 +18,13 @@ const _equalizerShowBands: boolean | undefined = equalizerWidget.get('show_bands
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 equalizerWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+equalizerWidget.on('resize', () => {});
+// @ts-expect-error 'not_an_event' is not a valid event name
+equalizerWidget.on('not_an_event', () => {});
+
 // Invalid show_bands type should be rejected.
-const badEqualizer: IEqualizerOptions = {
+const badEqualizer: Partial<IEqualizerOptions> = {
   // @ts-expect-error show_bands must be boolean
   show_bands: 1,
 };

@@ -7,15 +7,15 @@ import { EffectiveEvents } from '../implements/base.js';
  */
 export interface IConfirmButtonOptions extends IButtonOptions {
   /** Defines if the button acts as ConfirmButton or normal Button. */
-  confirm?: boolean;
+  confirm: boolean;
   /** Defines a time in milliseconds after the button resets to defaults if no second click happens. */
-  timeout?: number;
+  timeout: number;
   /** Defines a duration in milliseconds within further clicks are ignored. Set to avoid double-clicks being recognized as confirmation. */
-  interrupt?: number;
+  interrupt: number;
   /** The label to be used while in active state. */
-  label_confirm?: string | false;
+  label_confirm: string | false | undefined;
   /** The icon to be used while in active state. */
-  icon_confirm?: string | false;
+  icon_confirm: string | false | undefined;
 }
 
 /**

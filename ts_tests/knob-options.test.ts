@@ -1,7 +1,7 @@
 import { Knob, IKnobOptions } from '../src/widgets/knob.js';
 
 // Valid Knob options should typecheck.
-const knobOptions: IKnobOptions = {
+const knobOptions: Partial<IKnobOptions> = {
   reset: 0,
   bind_dblclick: true,
   step: 0.1,
@@ -30,6 +30,11 @@ const _knobValue: number | undefined = knob.get('value');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 knob.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+knob.on('set_value', (value: number) => { void value; });
+// @ts-expect-error 'not_an_event' is not a valid event name
+knob.on('not_an_event', () => {});
+
 // Partial options via constructor are allowed.
 new Knob({
   value: 0.5,
@@ -37,7 +42,7 @@ new Knob({
 });
 
 // Invalid preset type should be rejected.
-const badPreset: IKnobOptions = {
+const badPreset: Partial<IKnobOptions> = {
   // @ts-expect-error preset must be a string
   preset: 123,
 };

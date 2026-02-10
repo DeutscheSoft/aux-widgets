@@ -7,9 +7,9 @@ import { EffectiveEvents } from '../implements/base.js';
  */
 export interface IStateOptions extends IWidgetOptions {
   /** The state. To toggle between on|off set to 1|0. Set to fractions of 1 to change "brightness", e.g. 0.5. Values > 0 trigger setting the class .aux-state-on, while a state of 0 results in class .aux-state-off. */
-  state?: number | boolean;
+  state: number | boolean;
   /** A CSS color string for the state LED or false to set the background via external CSS. */
-  color?: string | false;
+  color: string | false;
 }
 
 /**

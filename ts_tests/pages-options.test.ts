@@ -1,7 +1,7 @@
 import { Pages, IPagesOptions } from '../src/widgets/pages.js';
 
 // Valid Pages options.
-const pages: IPagesOptions = {
+const pages: Partial<IPagesOptions> = {
   pages: ['<p>Page 1</p>', '<p>Page 2</p>'],
   show: 0,
   animation: 'horizontal',
@@ -21,8 +21,13 @@ const _pagesShow: number | undefined = pagesWidget.get('show');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 pagesWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+pagesWidget.on('resize', () => {});
+// @ts-expect-error 'not_an_event' is not a valid event name
+pagesWidget.on('not_an_event', () => {});
+
 // Invalid animation should be rejected.
-const badAnimation: IPagesOptions = {
+const badAnimation: Partial<IPagesOptions> = {
   pages: [],
   // @ts-expect-error animation must be 'horizontal' | 'vertical'
   animation: 'fade',

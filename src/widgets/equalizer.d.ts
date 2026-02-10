@@ -2,6 +2,7 @@ import { Graph, IGraphOptions, IGraphEvents } from './graph.js';
 import { FrequencyResponse, IFrequencyResponseOptions, IFrequencyResponseEvents } from './frequencyresponse.js';
 import { EffectiveEvents } from '../implements/base.js';
 import { EqBand, IEqBandOptions } from './eqband.js';
+import { Range } from '../modules/range.js';
 
 /**
  * Rendering filter function for EqualizerGraph.
@@ -15,17 +16,17 @@ export type IEqualizerGraphRenderingFilter = (band: EqBand) => boolean;
  * Options specific to the EqualizerGraph widget.
  * Extends Graph options.
  */
-export interface IEqualizerGraphOptions extends IGraphOptions {
+export interface IEqualizerGraphOptions extends Omit<IGraphOptions, 'range_x' | 'range_y'> {
   /** The distance between points on the x axis. Reduces CPU load in favour of accuracy and smoothness. */
-  accuracy?: number;
+  accuracy: number;
   /** The list of EqBands. */
-  bands?: EqBand[];
+  bands: EqBand[];
   /** If slope of the curve is too steep, oversample n times in order to not miss e.g. notch filters. */
-  oversampling?: number;
+  oversampling: number;
   /** Steepness of slope to oversample, i.e. y pixels difference per x pixel. */
-  threshold?: number;
+  threshold: number;
   /** A callback function which can be used to customize which equalizer bands are included when rendering the frequency response curve. This defaults to those bands which have their active option set to true. */
-  rendering_filter?: IEqualizerGraphRenderingFilter;
+  rendering_filter: IEqualizerGraphRenderingFilter;
 }
 
 /**
@@ -50,9 +51,9 @@ export declare class EqualizerGraph<
   /** The SVG path element. Has class .aux-graph */
   element: SVGPathElement;
   /** The range for the x axis. */
-  range_x: import('../modules/range.js').Range;
+  range_x: Range;
   /** The range for the y axis. */
-  range_y: import('../modules/range.js').Range;
+  range_y: Range;
 
   /**
    * Returns the functions representing the frequency response of all active filters.
@@ -90,7 +91,7 @@ export declare class EqualizerGraph<
  */
 export interface IEqualizerOptions extends IFrequencyResponseOptions, IEqualizerGraphOptions {
   /** Show or hide all bands. */
-  show_bands?: boolean;
+  show_bands: boolean;
 }
 
 /**
@@ -133,19 +134,25 @@ export declare class Equalizer<
 
   /**
    * Add a new band to the equalizer.
-   * @param options - An object containing initial options for the EqBand, or an instance of EqBand.
-   * @param type - A widget class to be used for the new band (defaults to EqBand).
-   * @returns The instance of EqBand.
+   * When given an existing EqBand, adds and returns it; when given options, creates a new band (using type if provided, else EqBand).
    * @emits Equalizer#bandadded
    */
-  addBand(options: EqBand | IEqBandOptions, type?: typeof EqBand): EqBand;
+  addBand(band: EqBand): EqBand;
+  addBand(options: Partial<IEqBandOptions>): EqBand;
+  addBand<T extends EqBand>(
+    options: Partial<IEqBandOptions>,
+    type: new (options?: Partial<IEqBandOptions>) => T
+  ): T;
 
   /**
    * Add multiple new EqBands to the equalizer.
    * @param bands - An array of options objects for the EqBand, or an array of EqBand instances.
    * @param type - A widget class to be used for the new bands (defaults to EqBand).
    */
-  addBands(bands: (EqBand | IEqBandOptions)[], type?: typeof EqBand): void;
+  addBands<T extends EqBand = EqBand>(
+    bands: (T | Partial<IEqBandOptions>)[],
+    type?: new (...args: any[]) => T
+  ): void;
 
   /**
    * Remove a band from the widget.

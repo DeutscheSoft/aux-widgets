@@ -23,13 +23,13 @@ export type IPagesPageInput = Page | Node | string;
  */
 export interface IPagesOptions extends IContainerOptions {
   /** List of pages to add on init. */
-  pages?: IPagesPageInput[];
+  pages: IPagesPageInput[];
   /** The page index to show. Set to -1 to hide all pages. */
-  show?: number;
+  show: number;
   /** Animation direction for page flips. */
-  animation?: IPagesAnimation;
+  animation: IPagesAnimation;
   /** Internal direction for animation. */
-  direction?: IPagesDirection;
+  direction: IPagesDirection;
 }
 
 /**
@@ -51,17 +51,17 @@ export interface IPagesEvents extends IContainerEvents {
  */
 export interface IPageOptions extends IContainerOptions {
   /** Label for the corresponding navigation button. */
-  label?: string;
+  label: string;
   /** Icon for the corresponding navigation button. */
-  icon?: string;
+  icon: string;
   /** Duration in ms for hiding transition. */
-  hiding_duration?: number;
+  hiding_duration: number;
   /** Duration in ms for showing transition. */
-  showing_duration?: number;
+  showing_duration: number;
   /** Role for the page element. */
-  role?: string;
+  role: string;
   /** Whether this page is active. */
-  active?: boolean;
+  active: boolean;
 }
 
 /**

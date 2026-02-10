@@ -13,15 +13,15 @@ import { Button } from './button.js';
  */
 export interface INavigationOptions extends IButtonsOptions {
   /** Set icons on previous/next buttons to standard arrows. */
-  icons?: boolean;
+  icons: boolean;
   /** Show or hide previous and next buttons. */
-  arrows?: boolean;
+  arrows: boolean;
   /** Enable automatic creation of the previous/next buttons. */
-  auto_arrows?: boolean;
+  auto_arrows: boolean;
   /** Internal resize state. */
-  resized?: boolean;
+  resized: boolean;
   /** Duration of the scrolling animation in milliseconds. */
-  scroll?: number;
+  scroll: number;
 }
 
 /**

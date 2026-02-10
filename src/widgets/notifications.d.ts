@@ -14,7 +14,7 @@ export type INotificationsStack = 'start' | 'end';
  */
 export interface INotificationsOptions extends IContainerOptions {
   /** Define the position a new Notification is appended to the container. */
-  stack?: INotificationsStack;
+  stack: INotificationsStack;
 }
 
 /**
@@ -52,11 +52,11 @@ export declare class Notifications<
  */
 export interface INotificationOptions extends IContainerOptions {
   /** Time in milliseconds after the notification disappears automatically. Set to 0 for permanent notification. */
-  timeout?: number;
+  timeout: number;
   /** Show an icon. Set to false to hide it from the DOM. */
-  icon?: string | false;
+  icon: string | false;
   /** Show a close button. */
-  show_close?: boolean;
+  show_close: boolean;
 }
 
 /**

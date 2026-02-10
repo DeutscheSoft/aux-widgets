@@ -1,7 +1,7 @@
 import { ConfirmButton, IConfirmButtonOptions } from '../src/widgets/confirmbutton.js';
 
 // Valid ConfirmButton options.
-const confirmBtn: IConfirmButtonOptions = {
+const confirmBtn: Partial<IConfirmButtonOptions> = {
   label: 'Delete',
   icon: 'trash',
   confirm: true,
@@ -24,8 +24,13 @@ const _confirmTimeout: number | undefined = confirmButtonWidget.get('timeout');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 confirmButtonWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+confirmButtonWidget.on('resize', () => {});
+// @ts-expect-error 'not_an_event' is not a valid event name
+confirmButtonWidget.on('not_an_event', () => {});
+
 // Invalid timeout type should be rejected.
-const badTimeout: IConfirmButtonOptions = {
+const badTimeout: Partial<IConfirmButtonOptions> = {
   label: 'x',
   // @ts-expect-error timeout must be a number
   timeout: '3000',

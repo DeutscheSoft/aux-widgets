@@ -95,61 +95,61 @@ export interface IChartHandleOptions extends IWidgetOptions {
   /** The name of the handle. */
   label?: string;
   /** Callback returning a Range for the x-axis or an object with options for a Range. This is usually the x_range of the parent chart. */
-  range_x?: IChartHandleRange;
+  range_x: IChartHandleRange;
   /** Callback returning a Range for the y-axis or an object with options for a Range. This is usually the y_range of the parent chart. */
-  range_y?: IChartHandleRange;
+  range_y: IChartHandleRange;
   /** Callback returning a Range for the z-axis or an object with options for a Range. */
-  range_z?: IChartHandleRange;
+  range_z: IChartHandleRange;
   /** Callback function for checking intersections. Returns a value describing the amount of intersection with other handle elements. */
-  intersect?: IChartHandleIntersectFunction;
+  intersect: IChartHandleIntersectFunction;
   /** Type of the handle. */
-  mode?: IChartHandleMode;
+  mode: IChartHandleMode;
   /** Possible label positions by order of preference. */
-  preferences?: IChartHandleLabelPosition[];
+  preferences: IChartHandleLabelPosition[];
   /** Label formatting function. Arguments are label, x, y, z. If set to false, no label is displayed. */
-  format_label?: IChartHandleFormatLabelFunction | false;
+  format_label: IChartHandleFormatLabelFunction | false;
   /** Value of the x-coordinate. */
-  x?: number;
+  x: number;
   /** Value of the y-coordinate. */
-  y?: number;
+  y: number;
   /** Value of the z-coordinate. */
-  z?: number;
+  z: number;
   /** Minimum size of the handle in px. */
-  min_size?: number;
+  min_size: number;
   /** Maximum size of the handle in px. */
-  max_size?: number;
+  max_size: number;
   /** Margin in px between the handle and the label. */
-  margin?: number;
+  margin: number;
   /** If not false, a small handle is drawn at the given position, which can be dragged to change the value of the z-coordinate. */
-  z_handle?: IChartHandleZHandlePosition | false;
+  z_handle: IChartHandleZHandlePosition | false;
   /** Size in px of the z-handle. */
-  z_handle_size?: number;
+  z_handle_size: number;
   /** Size of the z-handle in center positions. If this option is between 0 and 1, it is interpreted as a ratio, otherwise as a px size. */
-  z_handle_centered?: number;
+  z_handle_centered: number;
   /** Render the z-handle below the normal handle in the DOM. SVG doesn't know CSS attribute z-index, so this workaround is needed from time to time. */
-  z_handle_below?: boolean;
+  z_handle_below: boolean;
   /** Amount of pixels the handle has to be dragged before it starts to move. */
-  min_drag?: number;
+  min_drag: number;
   /** Minimum value of the x-coordinate. */
-  x_min?: number | false;
+  x_min: number | false;
   /** Maximum value of the x-coordinate. */
-  x_max?: number | false;
+  x_max: number | false;
   /** Minimum value of the y-coordinate. */
-  y_min?: number | false;
+  y_min: number | false;
   /** Maximum value of the y-coordinate. */
-  y_max?: number | false;
+  y_max: number | false;
   /** Minimum value of the z-coordinate. */
-  z_min?: number | false;
+  z_min: number | false;
   /** Maximum value of the z-coordinate. */
-  z_max?: number | false;
+  z_max: number | false;
   /** If set to true, additional lines are drawn at the coordinate values. */
-  show_axis?: boolean;
+  show_axis: boolean;
   /** Whether the handle is being hovered. */
-  hover?: boolean;
+  hover: boolean;
   /** Whether the handle is being dragged. */
-  dragging?: boolean;
+  dragging: boolean;
   /** Whether to show the handle. */
-  show_handle?: boolean;
+  show_handle: boolean;
 }
 
 /**

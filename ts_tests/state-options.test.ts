@@ -1,17 +1,17 @@
 import { State, IStateOptions } from '../src/widgets/state.js';
 
 // Valid State options.
-const onState: IStateOptions = {
+const onState: Partial<IStateOptions> = {
   state: true,
   color: '#00ff00',
 };
 
-const levelState: IStateOptions = {
+const levelState: Partial<IStateOptions> = {
   state: 0.5,
   color: 'red',
 };
 
-const noColor: IStateOptions = {
+const noColor: Partial<IStateOptions> = {
   state: 0,
   color: false,
 };
@@ -29,8 +29,13 @@ const _stateState: number | boolean | undefined = stateWidget.get('state');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 stateWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+stateWidget.on('set_state', (value: number | boolean) => { void value; });
+// @ts-expect-error 'not_an_event' is not a valid event name
+stateWidget.on('not_an_event', () => {});
+
 // Invalid color type should be rejected.
-const badColor: IStateOptions = {
+const badColor: Partial<IStateOptions> = {
   state: 1,
   // @ts-expect-error color must be string | false
   color: 0xff0000,

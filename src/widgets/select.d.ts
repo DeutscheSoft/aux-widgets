@@ -26,29 +26,29 @@ export type ISelectSortFunction = (a: SelectEntry, b: SelectEntry) => number;
  */
 export interface ISelectOptions extends IButtonOptions {
   /** The list of SelectEntry. Each member can be a string, an object with Button properties and value, or a SelectEntry instance. */
-  entries?: ISelectEntryInput[];
+  entries: ISelectEntryInput[];
   /** The index of the selected SelectEntry. Set to -1 to unselect any already selected entries. */
-  selected?: number;
+  selected: number;
   /** The value of the selected entry. */
-  value?: unknown;
+  value: unknown;
   /** The currently selected entry. */
-  selected_entry?: SelectEntry | null;
+  selected_entry: SelectEntry | null;
   /** If true, the Select is auto-sized to be as wide as the widest SelectEntry. */
-  auto_size?: boolean;
+  auto_size: boolean;
   /** Whether to show the select list. */
-  show_list?: boolean;
+  show_list: boolean;
   /** Sort function for entries. */
   sort?: ISelectSortFunction;
   /** Whether the widget has been resized. */
   resized?: boolean;
   /** Placeholder for the button label. Set to false to have an empty placeholder. This placeholder is shown when no entry is selected. */
-  placeholder?: string | false;
+  placeholder: string | false;
   /** A CSS class to be set on the list. This is a static option and can only be set once on initialization. */
-  list_class?: string;
+  list_class: string;
   /** Delay in milliseconds for typing to focus entries. */
-  typing_delay?: number;
+  typing_delay: number;
   /** Arrow icon name. */
-  arrow?: string;
+  arrow: string;
   /** @internal Whether any entry has an icon (computed internally). */
   _has_icon?: boolean;
   /** @internal Whether the list is shown (computed internally). */

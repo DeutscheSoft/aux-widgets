@@ -35,41 +35,41 @@ export interface IScaleLabel {
  */
 export interface IScaleOptions extends IWidgetOptions, Omit<IRangedOptions, 'base'> {
   /** The layout of the Scale. 'right' and 'left' are vertical layouts with the labels being drawn right and left of the scale, respectively. 'top' and 'bottom' are horizontal layouts for which the labels are drawn on top and below the scale, respectively. */
-  layout?: IScaleLayout;
+  layout: IScaleLayout;
   /** Minimal step size of the markers. */
-  division?: number;
+  division: number;
   /** Array of steps for labels and markers. */
-  levels?: number[];
+  levels: number[];
   /** Array of steps for labels only. */
   levels_labels?: number[];
   /** Base of the scale. If set to false it will default to the minimum value. Overrides IRangedOptions.base to allow boolean. */
-  base?: number | boolean;
+  base: number | boolean;
   /** Formatting function for the labels. */
-  labels?: (value: number) => string;
+  labels: (value: number) => string;
   /** Minimum gap in pixels between two adjacent markers. */
-  gap_dots?: number;
+  gap_dots: number;
   /** Minimum gap in pixels between two adjacent labels. */
-  gap_labels?: number;
+  gap_labels: number;
   /** If true, labels are drawn. */
-  show_labels?: boolean;
+  show_labels: boolean;
   /** If true, display a label and a dot for the 'max' value. */
-  show_max?: boolean;
+  show_max: boolean;
   /** If true, display a label and a dot for the 'min' value. */
-  show_min?: boolean;
+  show_min: boolean;
   /** If true, display a label and a dot for the 'base' value. */
-  show_base?: boolean;
+  show_base: boolean;
   /** This option can be used to specify fixed positions for the markers to be drawn at. false disables fixed dots. */
-  fixed_dots?: IScaleDot[] | number[] | false;
+  fixed_dots: IScaleDot[] | number[] | false;
   /** This option can be used to specify fixed positions for the labels to be drawn at. false disables fixed labels. */
-  fixed_labels?: IScaleLabel[] | number[] | false;
+  fixed_labels: IScaleLabel[] | number[] | false;
   /** If true, every dot which is located at the same position as a label has the .aux-marker class set. */
-  show_markers?: boolean;
+  show_markers: boolean;
   /** The value to set the pointers position to. Set to false to hide the pointer. */
-  pointer?: number | false;
+  pointer: number | false;
   /** The value to set the bars height to. Set to false to hide the bar. */
-  bar?: number | false;
+  bar: number | false;
   /** If true, avoid collisions between labels and dots. */
-  avoid_collisions?: boolean;
+  avoid_collisions: boolean;
   /** @internal Bar element (computed internally) */
   _bar?: HTMLDivElement;
   /** @internal Pointer element (computed internally) */

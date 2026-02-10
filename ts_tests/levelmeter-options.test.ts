@@ -1,7 +1,7 @@
 import { LevelMeter, ILevelMeterOptions } from '../src/widgets/levelmeter.js';
 
 // Valid LevelMeter options (extends Meter).
-const levelMeter: ILevelMeterOptions = {
+const levelMeter: Partial<ILevelMeterOptions> = {
   min: -96,
   max: 24,
   value: 0,
@@ -29,8 +29,13 @@ const _levelmeterValue: number | undefined = levelmeterWidget.get('value');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 levelmeterWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+levelmeterWidget.on('set_value', (value: number) => { void value; });
+// @ts-expect-error 'not_an_event' is not a valid event name
+levelmeterWidget.on('not_an_event', () => {});
+
 // Invalid clipping type should be rejected.
-const badClipping: ILevelMeterOptions = {
+const badClipping: Partial<ILevelMeterOptions> = {
   min: 0,
   max: 100,
   value: 50,

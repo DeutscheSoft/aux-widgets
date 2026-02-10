@@ -1,11 +1,11 @@
 import { Container, IContainerOptions } from '../src/widgets/container.js';
 
 // Valid Container options.
-const withContent: IContainerOptions = {
+const withContent: Partial<IContainerOptions> = {
   content: '<p>Hello</p>',
 };
 
-const withVisible: IContainerOptions = {
+const withVisible: Partial<IContainerOptions> = {
   visible: true,
   hiding_duration: 200,
   showing_duration: 300,
@@ -25,8 +25,13 @@ const _containerVisible: boolean | 'hiding' | 'showing' | 'show' | 'hide' | unde
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 containerWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+containerWidget.on('resize', () => {});
+// @ts-expect-error 'not_an_event' is not a valid event name
+containerWidget.on('not_an_event', () => {});
+
 // Invalid visible value should be rejected.
-const badVisible: IContainerOptions = {
+const badVisible: Partial<IContainerOptions> = {
   // @ts-expect-error visible must be boolean | 'hiding' | 'showing' | 'show' | 'hide'
   visible: 'fade',
 };

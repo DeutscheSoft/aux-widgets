@@ -22,11 +22,11 @@ export interface IGaugeLabel {
  */
 export interface IGaugeOptions extends ICircularOptions {
   /** Width of the element. */
-  width?: number;
+  width: number;
   /** Height of the SVG. */
-  height?: number;
+  height: number;
   /** Optional gauge label or label configuration. */
-  label?: string | IGaugeLabel;
+  label: string | IGaugeLabel;
 }
 
 /**

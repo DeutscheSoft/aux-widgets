@@ -8,7 +8,7 @@ import { Label } from './label.js';
  */
 export interface IFrameOptions extends IContainerOptions {
   /** The label of the frame. Set to false to remove it from the DOM. */
-  label?: string | false;
+  label: string | false;
 }
 
 /**

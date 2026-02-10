@@ -13,11 +13,11 @@ export type IPanoramaMode = 'panorama' | 'balance' | 'surround';
  */
 export interface IPanoramaOptions extends IChartOptions {
   /** Mode of the widget: 'panorama' only sets the x parameter and is displayed by a vertical line. 'balance' is a stereo to stereo transformer offering two vertical lines setting x and y. 'surround' offers a circular handle setting x and y parameters. */
-  mode?: IPanoramaMode;
+  mode: IPanoramaMode;
   /** Sets x and y range to {min:-n,max:n}. If more fine grained access is needed, range_x and range_y need to be set directly. */
-  range?: number;
+  range: number;
   /** Amount of digits for displaying values in labels. */
-  digits?: number;
+  digits: number;
 }
 
 /**

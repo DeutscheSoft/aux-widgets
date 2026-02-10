@@ -18,43 +18,43 @@ export type IClockLabelFunction = (date: Date, fps: number, months: string[], da
  */
 export interface IClockOptions extends IWidgetOptions {
   /** Thickness of the rings in percent of the maximum dimension. */
-  thickness?: number;
+  thickness: number;
   /** Margin between the Circular widgets in percent of the maximum dimension. */
-  margin?: number;
+  margin: number;
   /** Width and height of the widget. */
-  size?: number;
+  size: number;
   /** Show seconds ring. */
-  show_seconds?: boolean;
+  show_seconds: boolean;
   /** Show minutes ring. */
-  show_minutes?: boolean;
+  show_minutes: boolean;
   /** Show hours ring. */
-  show_hours?: boolean;
+  show_hours: boolean;
   /** The timeout of the redraw trigger. */
-  timeout?: number;
+  timeout: number;
   /** Set additional milliseconds to add to the timeout target system clock regularly. */
-  timeadd?: number;
+  timeadd: number;
   /** If a timeout is set, offset the system time in milliseconds. */
-  offset?: number;
+  offset: number;
   /** Framerate for calculating SMTP frames. */
-  fps?: number;
+  fps: number;
   /** Array containing all month names. */
-  months?: string[];
+  months: string[];
   /** Array containing all day names. */
-  days?: string[];
+  days: string[];
   /** Callback to format the main label. */
-  label?: IClockLabelFunction;
+  label: IClockLabelFunction;
   /** Callback to format the upper label. */
-  label_upper?: IClockLabelFunction;
+  label_upper: IClockLabelFunction;
   /** Callback to format the lower label. */
-  label_lower?: IClockLabelFunction;
+  label_lower: IClockLabelFunction;
   /** The scale of label_upper and label_lower compared to the main label. */
-  label_scale?: number;
+  label_scale: number;
   /** Margin between the rings and the main label in percent of the overall size. */
-  label_margin?: number;
+  label_margin: number;
   /** Position of the upper label as fraction of the overall height. */
-  label_upper_pos?: number;
+  label_upper_pos: number;
   /** Position of the lower label as fraction of the overall height. */
-  label_lower_pos?: number;
+  label_lower_pos: number;
   /** Set a specific time and date. To avoid auto-updates, set timeout to 0. Can be a Date, string, or number. */
   time?: Date | string | number;
   /** @internal Computed margin (computed internally). */

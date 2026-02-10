@@ -1,11 +1,11 @@
 import { Label, ILabelOptions } from '../src/widgets/label.js';
 
 // Valid Label options.
-const simpleLabel: ILabelOptions = {
+const simpleLabel: Partial<ILabelOptions> = {
   label: 'Hello',
 };
 
-const withFormat: ILabelOptions = {
+const withFormat: Partial<ILabelOptions> = {
   label: 'Count',
   format: (s) => s.toUpperCase(),
 };
@@ -23,8 +23,13 @@ const _labelLabel: string | false | undefined = labelWidget.get('label');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 labelWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+labelWidget.on('resize', () => {});
+// @ts-expect-error 'not_an_event' is not a valid event name
+labelWidget.on('not_an_event', () => {});
+
 // Invalid format type should be rejected.
-const badFormat: ILabelOptions = {
+const badFormat: Partial<ILabelOptions> = {
   label: 'x',
   // @ts-expect-error format must be ((label: string) => string | number) | false
   format: 123,

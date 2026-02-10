@@ -1,7 +1,7 @@
 import { ValueButton, IValueButtonOptions } from '../src/widgets/valuebutton.js';
 
 // Valid ValueButton options based on examples.
-const horizontalValueButton: IValueButtonOptions = {
+const horizontalValueButton: Partial<IValueButtonOptions> = {
   min: 0,
   max: 100,
   value: 50,
@@ -11,7 +11,7 @@ const horizontalValueButton: IValueButtonOptions = {
   layout: 'horizontal',
 };
 
-const verticalValueButton: IValueButtonOptions = {
+const verticalValueButton: Partial<IValueButtonOptions> = {
   min: 0,
   max: 100,
   value: 50,
@@ -38,6 +38,11 @@ const _valuebuttonValue: number | undefined = valuebuttonWidget.get('value');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 valuebuttonWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+valuebuttonWidget.on('set_value', (value: number) => { void value; });
+// @ts-expect-error 'not_an_event' is not a valid event name
+valuebuttonWidget.on('not_an_event', () => {});
+
 // Invalid value type should be rejected.
 new ValueButton({
   min: 0,
@@ -47,7 +52,7 @@ new ValueButton({
 });
 
 // Invalid drag direction should be rejected.
-const badDirection: IValueButtonOptions = {
+const badDirection: Partial<IValueButtonOptions> = {
   // @ts-expect-error direction must be 'polar' | 'vertical' | 'horizontal'
   direction: 'diagonal',
 };

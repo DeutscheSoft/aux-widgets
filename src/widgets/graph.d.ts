@@ -85,17 +85,17 @@ export interface IGraphOptions extends IWidgetOptions {
   /** Callback function returning a Range module for y axis or an object with options for a new Range. */
   range_y?: IGraphRange;
   /** The dots of the path. Can be a ready-to-use SVG-path-string or an array of objects. It may also be a function, in which case it is called with this graph widget as first and only argument. */
-  dots?: IGraphDots;
+  dots: IGraphDots | null;
   /** Type of the graph. 'L': normal (needs x,y), 'T': smooth quadratic Bézier (needs x, y), 'H[n]': smooth horizontal, 'Q': quadratic Bézier (needs: x1, y1, x, y), 'C': CurveTo (needs: x1, y1, x2, y2, x, y), 'S': SmoothCurve (needs: x1, y1, x, y). */
-  type?: IGraphType;
+  type: IGraphType;
   /** Drawing mode of the graph. 'line': line only, 'bottom': fill below the line, 'top': fill above the line, 'center': fill from the vertical center, 'base': fill from an arbitrary position (set with base), 'fill': close the curve using a Z directive. */
-  mode?: IGraphMode;
+  mode: IGraphMode;
   /** If mode is 'base', set the position of the base line to fill from between 0 (bottom) and 1 (top). */
-  base?: number;
+  base: number;
   /** Set the color of the path. Better use stroke and fill via CSS. */
-  color?: string;
+  color: string;
   /** Show a description for this graph in the charts key, false to turn it off. */
-  key?: string | false;
+  key: string | false;
 }
 
 /**

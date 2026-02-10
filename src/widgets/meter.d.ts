@@ -55,33 +55,33 @@ export type IMeterFillStyle =
  */
 export interface IMeterOptions extends IWidgetOptions, Omit<IRangedOptions, 'base'> {
   /** A string describing the layout of the meter. Possible values are 'left', 'right', 'top' and 'bottom'. */
-  layout?: IMeterLayout;
+  layout: IMeterLayout;
   /** Segment size. Pixel positions of the meter level are rounded to multiples of this size. This can be used to give the level meter a LED effect and to reduce processor load. */
-  segment?: number;
+  segment: number;
   /** Level value. */
-  value?: number;
+  value: number;
   /** The base value of the meter. If set to false, the base will coincide with the minimum value options.min. The meter level is drawn starting from the base to the value. Overrides IRangedOptions.base to allow boolean. */
-  base?: number | boolean;
+  base: number | boolean;
   /** Value to be displayed on the label. */
-  value_label?: number;
+  value_label: number;
   /** Function for formatting the label. */
-  format_value?: (value: number) => string;
+  format_value: (value: number) => string;
   /** If set to true a label is displayed. */
   show_label?: boolean;
   /** The title of the Meter. Set to false to hide it. */
-  label?: string | false;
+  label: string | false;
   /** Set to false to hide the scale. */
   show_scale?: boolean;
   /** Synchronize the value on the bar with the value label using format_value function. */
-  sync_value?: boolean;
+  sync_value: boolean;
   /** Color or gradient definition to draw the overlay. Can be either a string containing a valid CSS color, an array containing objects like [{value: -60, color: 'green'}, {value: 0, color: '#ff8800'}], an object with numerical strings as keys, or a function receiving the canvas' context, the widget's options, the canvas element and width and height. */
-  foreground?: IMeterFillStyle;
+  foreground: IMeterFillStyle;
   /** Color or gradient definition to draw the backdrop. Can be either a string containing a valid CSS color, an array containing objects like [{value: -60, color: 'green'}, {value: 0, color: '#ff8800'}], an object with numerical strings as keys, or a function. */
-  background?: IMeterFillStyle;
+  background: IMeterFillStyle;
   /** Deprecated. Use background, instead. */
-  gradient?: IMeterFillStyle | IGradientFunction;
+  gradient: IMeterFillStyle | IGradientFunction;
   /** Either 'value' or 'inverse'. The meter value is drawn using two canvas elements. With paint_mode='inverse' the foreground canvas shows the inverse of the metering value. In this mode the foreground acts as a mask and the background element represents the current metering value. With paint_mode='value' the foreground canvas shows the value itself. In this mode the meter is represented by the foreground element. */
-  paint_mode?: IPaintMode;
+  paint_mode: IPaintMode;
   /** @internal Canvas width (computed internally) */
   _width?: number;
   /** @internal Canvas height (computed internally) */

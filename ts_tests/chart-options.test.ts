@@ -1,7 +1,7 @@
 import { Chart, IChartOptions } from '../src/widgets/chart.js';
 
 // Valid Chart options.
-const chart: IChartOptions = {
+const chart: Partial<IChartOptions> = {
   label: 'Chart',
   label_position: 'top',
   range_x: { min: 0, max: 1 },
@@ -23,8 +23,13 @@ const _chartLabel: string | false | undefined = chartWidget.get('label');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 chartWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+chartWidget.on('resize', () => {});
+// @ts-expect-error 'not_an_event' is not a valid event name
+chartWidget.on('not_an_event', () => {});
+
 // Invalid label_position should be rejected.
-const badPos: IChartOptions = {
+const badPos: Partial<IChartOptions> = {
   label: 'x',
   // @ts-expect-error label_position must be a valid IChartLabelPosition
   label_position: 'middle',

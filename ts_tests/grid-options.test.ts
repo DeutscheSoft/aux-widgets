@@ -1,7 +1,7 @@
 import { Grid, IGridOptions } from '../src/widgets/grid.js';
 
 // Valid Grid options.
-const grid: IGridOptions = {
+const grid: Partial<IGridOptions> = {
   grid_x: [0, 0.5, 1],
   grid_y: [0, 0.5, 1],
   range_x: { min: 0, max: 100 },
@@ -23,8 +23,13 @@ const _gridWidth: number | undefined = gridWidget.get('width');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 gridWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+gridWidget.on('resize', () => {});
+// @ts-expect-error 'not_an_event' is not a valid event name
+gridWidget.on('not_an_event', () => {});
+
 // Invalid width type should be rejected.
-const badWidth: IGridOptions = {
+const badWidth: Partial<IGridOptions> = {
   // @ts-expect-error width must be a number
   width: '400',
 };

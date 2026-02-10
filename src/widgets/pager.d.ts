@@ -12,7 +12,7 @@ export type IPagerPosition = 'top' | 'right' | 'left' | 'bottom';
 /**
  * Page configuration for Pager initialization.
  */
-export type IPagerPageConfig = IButtonOptions & {
+export type IPagerPageConfig = Partial<IButtonOptions> & {
   /** Content of the page. */
   content: IPagesPageInput;
 };
@@ -23,11 +23,11 @@ export type IPagerPageConfig = IButtonOptions & {
  */
 export interface IPagerOptions extends IContainerOptions {
   /** The position of the Navigation widget. */
-  position?: IPagerPosition;
+  position: IPagerPosition;
   /** The page index to show. Set to -1 to hide all pages. */
-  show?: number | null;
+  show: number | null;
   /** Initial pages to add. */
-  pages?: IPagerPageConfig[];
+  pages: IPagerPageConfig[];
 }
 
 /**

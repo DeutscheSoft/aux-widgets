@@ -12,19 +12,19 @@ import { Scale } from './scale.js';
  */
 export interface IValueButtonOptions extends IButtonOptions, IRangedOptions {
   /** The value of the widget. */
-  value?: number;
+  value: number;
   /** Direction for changing the value. Can be 'polar', 'vertical' or 'horizontal'. */
-  direction?: IDragDirection;
+  direction: IDragDirection;
   /** Defines the angle of the center of the positive value changes. 0 means straight upward. For instance, a value of 45 leads to increasing value when moving towards top and right. */
-  rotation?: number;
+  rotation: number;
   /** If options.direction is 'polar', this is the angle of separation between positive and negative value changes. */
-  blind_angle?: number;
+  blind_angle: number;
   /** Snap value while dragging. */
-  snap?: number;
+  snap: number;
   /** Reset to this value on double click. */
   reset?: number;
   /** Distance to drag between min and max in pixels. */
-  basis?: number;
+  basis: number;
 }
 
 /**

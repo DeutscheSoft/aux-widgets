@@ -1,14 +1,14 @@
 import { Window, IWindowOptions } from '../src/widgets/window.js';
 
 // Valid Window options modeled after Dialog example usage.
-const autoCloseWindow: IWindowOptions = {
+const autoCloseWindow: Partial<IWindowOptions> = {
   auto_close: true,
   modal: false,
   anchor: 'center',
   content: 'This is a Dialog widget. Click anywhere outside to close.',
 };
 
-const modalWindow: IWindowOptions = {
+const modalWindow: Partial<IWindowOptions> = {
   modal: true,
   anchor: 'center',
   content: 'This is a modal Dialog widget.',
@@ -34,8 +34,13 @@ const _windowAnchor: string | undefined = windowWidget.get('anchor');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 windowWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+windowWidget.on('resize', () => {});
+// @ts-expect-error 'not_an_event' is not a valid event name
+windowWidget.on('not_an_event', () => {});
+
 // Invalid anchor option should be rejected.
-const badAnchor: IWindowOptions = {
+const badAnchor: Partial<IWindowOptions> = {
   // @ts-expect-error anchor must be a valid IWindowAnchor
   anchor: 'middle',
 };

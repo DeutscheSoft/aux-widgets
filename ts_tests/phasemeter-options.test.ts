@@ -1,7 +1,7 @@
 import { PhaseMeter, IPhaseMeterOptions } from '../src/widgets/phasemeter.js';
 
 // PhaseMeter extends LevelMeter options (same shape, different defaults).
-const phaseMeter: IPhaseMeterOptions = {
+const phaseMeter: Partial<IPhaseMeterOptions> = {
   min: -1,
   max: 1,
   base: 0,
@@ -22,3 +22,8 @@ phasemeterWidget.set('value', '0.5');
 const _phasemeterValue: number | undefined = phasemeterWidget.get('value');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 phasemeterWidget.get('not_an_option_key');
+
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+phasemeterWidget.on('set_value', (value: number) => { void value; });
+// @ts-expect-error 'not_an_event' is not a valid event name
+phasemeterWidget.on('not_an_event', () => {});

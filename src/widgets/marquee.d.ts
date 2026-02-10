@@ -13,11 +13,11 @@ export type IMarqueeEasing = 'ease' | 'linear' | 'ease-in' | 'ease-out' | 'ease-
  */
 export interface IMarqueeOptions extends IContainerOptions, Omit<ILabelOptions, 'visible'> {
   /** Speed of the movement in CSS pixels per second. */
-  speed?: number;
+  speed: number;
   /** Pause the animation on start and end for this amount of milliseconds. */
-  pause?: number;
+  pause: number;
   /** Function of the animation, one out of 'ease', 'linear', 'ease-in', 'ease-out', 'ease-in-out', 'cubic-bezier(n, n, n, n)'. */
-  easing?: IMarqueeEasing | string;
+  easing: IMarqueeEasing | string;
   /** @internal Inner width (computed internally). */
   _inner?: number;
   /** @internal Outer width (computed internally). */

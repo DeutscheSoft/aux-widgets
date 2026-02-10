@@ -7,15 +7,15 @@ import { EffectiveEvents } from '../implements/base.js';
  */
 export interface IToggleOptions extends IButtonOptions {
   /** If true, the button is toggled on click. */
-  toggle?: boolean;
+  toggle: boolean;
   /** Controls press behavior. If options.toggle is false and this option is 0, the toggle button will toggle until released. If options.toggle is true and this option is a positive integer, it is interpreted as a milliseconds timeout. When pressing a button longer than this timeout, it will be toggled until released, otherwise it will be toggled permanently. */
-  press?: number;
+  press: number;
   /** An optional icon which is only displayed when the button toggle state is true. Please note that this option only works if icon is also set. */
-  icon_active?: string | false;
+  icon_active: string | false;
   /** An optional label which is only displayed when the button toggle state is true. Please note that this option only works if label is also set. */
-  label_active?: string | false;
+  label_active: string | false;
   /** @internal */
-  icon_inactive?: string | false;
+  icon_inactive: string | false;
 }
 
 /**

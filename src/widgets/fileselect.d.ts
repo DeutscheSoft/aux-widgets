@@ -24,21 +24,21 @@ export type IFileSelectFormatMultiple = (count: number) => string;
  */
 export interface IFileSelectOptions extends IContainerOptions, Omit<IButtonOptions, 'visible'> {
   /** The allowed file types as suffices starting with a dot or as mime types with optional asterisk, e.g. ".txt,.zip,.png,.jpg,image/*,application/pdf" */
-  accept?: string;
+  accept: string;
   /** Defines if users can select multiple files. The label for the file name shows the amount of files selected instead of a single name and the label displaying the file size shows the sum of all selected files sizes. */
-  multiple?: boolean;
+  multiple: boolean;
   /** The label to show as file name if no file is selected. */
-  placeholder?: string;
+  placeholder: string;
   /** The selected files. */
-  files?: FileList | File[];
+  files: FileList | File[];
   /** The name of the selected file or false if no file is selected. Read-only property! */
-  filename?: string | false;
+  filename: string | false;
   /** The size of the selected file in bytes. Read-only property! */
-  filesize?: number;
+  filesize: number;
   /** The formatting function for the file size label. */
-  format_size?: IFileSelectFormatSize;
+  format_size: IFileSelectFormatSize;
   /** The formatting function for the multiple files label. */
-  format_multiple?: IFileSelectFormatMultiple;
+  format_multiple: IFileSelectFormatMultiple;
 }
 
 /**

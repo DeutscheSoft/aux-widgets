@@ -7,7 +7,7 @@ import { EffectiveEvents } from '../implements/base.js';
  */
 export interface IFrequencyResponseOptions extends IChartOptions {
   /** Distance in decibels between y axis grid lines. */
-  db_grid?: number;
+  db_grid: number;
   /** The type of the decibels scale. See Range for more details. */
   scale?: string | boolean;
   /** The depth of the z axis (basis of options.range_z). */

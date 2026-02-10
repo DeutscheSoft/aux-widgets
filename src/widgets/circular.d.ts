@@ -120,59 +120,59 @@ export interface ILabel {
  */
 export interface ICircularOptions extends IWidgetOptions, Omit<IRangedOptions, 'base'>, IWarningOptions {
   /** Sets the value on the hand and on the ring at the same time. */
-  value?: number;
+  value: number;
   /** Sets the value on the hand. */
-  value_hand?: number;
+  value_hand: number;
   /** Sets the value on the ring. */
-  value_ring?: number;
+  value_ring: number;
   /** The diameter of the circle. This is the base value for all following layout-related parameters. Keeping it set to 100 offers percentual lengths. Set the final size of the widget via CSS. */
-  size?: number;
+  size: number;
   /** The thickness of the circle. */
-  thickness?: number;
+  thickness: number;
   /** The margin between base and value circles. */
-  margin?: number;
+  margin: number;
   /** Draw the hand. */
-  show_hand?: boolean;
+  show_hand: boolean;
   /** Dimensions of the hand. */
-  hand?: IHandOptions;
+  hand: IHandOptions;
   /** The starting point in degrees. */
-  start?: number;
+  start: number;
   /** The maximum degree of the rotation when value === max. */
-  angle?: number;
+  angle: number;
   /** If a base value is set in degrees, circular starts drawing elements from this position. Overrides IRangedOptions.base to allow boolean. */
-  base?: number | false;
+  base: number | false;
   /** Draw the base ring. */
-  show_base?: boolean;
+  show_base: boolean;
   /** Draw the value ring. */
-  show_value?: boolean;
+  show_value: boolean;
   /** Horizontal displacement of the circle. */
-  x?: number;
+  x: number;
   /** Vertical displacement of the circle. */
-  y?: number;
+  y: number;
   /** Show/hide all dots. */
-  show_dots?: boolean;
+  show_dots: boolean;
   /** Default values for the individual dots specified in dots. */
-  dots_defaults?: IDotsDefaults;
+  dots_defaults: IDotsDefaults;
   /** An array of objects or numbers describing where dots should be placed along the circle. If it is a number, it is equivalent to an object containing just pos. */
-  dots?: (IDot | number)[];
+  dots: (IDot | number)[];
   /** Show/hide all markers. */
-  show_markers?: boolean;
+  show_markers: boolean;
   /** Default values for the individual markers specified in markers. */
-  markers_defaults?: IMarkersDefaults;
+  markers_defaults: IMarkersDefaults;
   /** An array containing objects which describe where markers are to be placed. */
-  markers?: IMarker[];
+  markers: IMarker[];
   /** Show/hide all labels. */
-  show_labels?: boolean;
+  show_labels: boolean;
   /** Default values for the individual labels specified in labels. */
-  labels_defaults?: ILabelsDefaults;
+  labels_defaults: ILabelsDefaults;
   /** An array containing objects or numbers which describe labels to be displayed. If it is a number, it is equivalent to an object containing just pos. */
-  labels?: (ILabel | number)[];
+  labels: (ILabel | number)[];
   /** Presets object for configuration presets. */
   presets?: Record<string, Partial<ICircularOptions>>;
   /** Name of the preset to use. */
   preset?: string;
   /** @internal Stroke width (computed internally) */
-  _stroke_width?: number;
+  _stroke_width: number;
   /** @internal Value coefficient for base (computed internally) */
   _coef_base?: number;
   /** @internal Value coefficient for ring (computed internally) */

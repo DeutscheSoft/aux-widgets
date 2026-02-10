@@ -1,7 +1,7 @@
 import { Circular, ICircularOptions } from '../src/widgets/circular.js';
 
 // Valid Circular options (used by Knob/Gauge).
-const circular: ICircularOptions = {
+const circular: Partial<ICircularOptions> = {
   min: 0,
   max: 100,
   value: 50,
@@ -29,8 +29,13 @@ const _circularValue: number | undefined = circularWidget.get('value');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 circularWidget.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+circularWidget.on('set_value', (value: number) => { void value; });
+// @ts-expect-error 'not_an_event' is not a valid event name
+circularWidget.on('not_an_event', () => {});
+
 // Invalid value type should be rejected.
-const badValue: ICircularOptions = {
+const badValue: Partial<ICircularOptions> = {
   min: 0,
   max: 100,
   // @ts-expect-error value must be a number

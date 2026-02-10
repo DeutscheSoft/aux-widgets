@@ -1,7 +1,7 @@
 import { ValueKnob, IValueKnobOptions } from '../src/widgets/valueknob.js';
 
 // Valid ValueKnob options should typecheck.
-const valueKnobOptions: IValueKnobOptions = {
+const valueKnobOptions: Partial<IValueKnobOptions> = {
   layout: 'vertical',
   label: 'Gain',
   show_value: true,
@@ -21,6 +21,11 @@ const _valueknobValue: number | undefined = valueKnob.get('value');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 valueKnob.get('not_an_option_key');
 
+// .on(event, handler) events API type-checking — event name and handler signature are typed
+valueKnob.on('set_value', (value: number) => { void value; });
+// @ts-expect-error 'not_an_event' is not a valid event name
+valueKnob.on('not_an_event', () => {});
+
 // Partial options via constructor are allowed.
 new ValueKnob({
   label: false,
@@ -28,7 +33,7 @@ new ValueKnob({
 });
 
 // Invalid layout should be rejected.
-const badLayout: IValueKnobOptions = {
+const badLayout: Partial<IValueKnobOptions> = {
   // @ts-expect-error layout must be 'vertical' | 'horizontal' | 'left' | 'right'
   layout: 'center',
 };

@@ -7,13 +7,13 @@ import { EffectiveEvents } from '../implements/base.js';
  */
 export interface IBitstringOptions extends IButtonsOptions {
   /** A function receiving the index as argument to format the buttons labels if the buttons are set as options.length and not as options.buttons. */
-  labels?: (index: number) => string;
+  labels: (index: number) => string;
   /** A function receiving the index as argument to format the buttons icons if the buttons are set as options.length and not as options.buttons. */
-  icons?: (index: number) => string | null;
+  icons: (index: number) => string | null;
   /** The length of the bitstring. Use this option to auto-generate the buttons. If you want to have more control over the buttons displayed, set them as options.buttons and set this option to false. */
-  length?: number | false;
+  length: number | false;
   /** The bitstring value. Can be a number (bitmask) or an array of booleans. */
-  bitstring?: number | boolean[];
+  bitstring: number | boolean[];
 }
 
 /**

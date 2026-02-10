@@ -12,13 +12,13 @@ import { Label } from './label.js';
  */
 export interface ISpreadOptions extends IWidgetOptions, Omit<IRangedOptions, 'base'>, IScaleOptions {
   /** The spread's lower position. This option is modified by user interaction. */
-  lower?: number;
+  lower: number;
   /** The spread's upper position. This option is modified by user interaction. */
-  upper?: number;
+  upper: number;
   /** The spread's layout. One out of 'top', 'left', 'right' or 'bottom', defining the spread's handles position in comparison to the scale. */
-  layout?: IScaleLayout;
+  layout: IScaleLayout;
   /** If true, a dblclick on the Spread will reset lower and upper to options.reset_lower and options.reset_upper. */
-  bind_dblclick?: boolean;
+  bind_dblclick: boolean;
   /** If true, a click on the Spread will reset lower and upper. */
   bind_click?: boolean;
   /** The reset value, which is used by the dblclick event and the reset method for the lower handle. */
@@ -28,11 +28,11 @@ export interface ISpreadOptions extends IWidgetOptions, Omit<IRangedOptions, 'ba
   /** If true, a Scale is added to the spread. */
   show_scale?: boolean;
   /** If true, two Value widgets are added to the spread. */
-  show_values?: boolean;
+  show_values: boolean;
   /** Add a label to the spread. Set to false to remove the label from the DOM. */
-  label?: string | false;
+  label: string | false;
   /** Set a cursor from standard cursors on drag or scroll. Set to false to disable. */
-  cursor?: string | false;
+  cursor: string | false;
   /** Direction for dragging. Computed from layout ('vertical' or 'horizontal'). */
   direction?: 'vertical' | 'horizontal';
 }
