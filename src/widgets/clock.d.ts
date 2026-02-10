@@ -10,7 +10,12 @@ import { Circular } from './circular.js';
  * @param days - Array of day names.
  * @returns The formatted label string.
  */
-export type IClockLabelFunction = (date: Date, fps: number, months: string[], days: string[]) => string;
+export type IClockLabelFunction = (
+  date: Date,
+  fps: number,
+  months: string[],
+  days: string[]
+) => string;
 
 /**
  * Options specific to the Clock widget.
@@ -89,7 +94,10 @@ export interface IClockCirculars {
 export declare class Clock<
   TOptions extends IClockOptions = IClockOptions,
   TEvents extends IClockEvents = IClockEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

@@ -17,7 +17,13 @@ dynamicsWidget.set('type', 'limiter');
 dynamicsWidget.set('type', 'saturator');
 
 // .get(key) API type-checking
-const _dynamicsType: 'compressor' | 'expander' | 'gate' | 'limiter' | false | undefined = dynamicsWidget.get('type');
+const _dynamicsType:
+  | 'compressor'
+  | 'expander'
+  | 'gate'
+  | 'limiter'
+  | false
+  | undefined = dynamicsWidget.get('type');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 dynamicsWidget.get('not_an_option_key');
 

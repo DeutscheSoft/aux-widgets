@@ -1,4 +1,9 @@
-import { Widget, IWidgetOptions, IWidgetEvents, EffectiveEvents } from './widget.js';
+import {
+  Widget,
+  IWidgetOptions,
+  IWidgetEvents,
+  EffectiveEvents,
+} from './widget.js';
 
 /**
  * Layout direction for Button and other widgets.
@@ -51,7 +56,10 @@ export interface IButtonEvents extends IWidgetEvents {
 export declare class Button<
   TOptions extends IButtonOptions = IButtonOptions,
   TEvents extends IButtonEvents = IButtonEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
   /**
    * Creates a new Button instance.

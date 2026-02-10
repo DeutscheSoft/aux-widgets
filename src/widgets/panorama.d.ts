@@ -35,7 +35,10 @@ export interface IPanoramaEvents extends IChartEvents {
 export declare class Panorama<
   TOptions extends IPanoramaOptions = IPanoramaOptions,
   TEvents extends IPanoramaEvents = IPanoramaEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Chart<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

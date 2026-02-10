@@ -24,7 +24,10 @@ export interface IProgressBarEvents extends IMeterEvents {
 export declare class ProgressBar<
   TOptions extends IProgressBarOptions = IProgressBarOptions,
   TEvents extends IProgressBarEvents = IProgressBarEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Meter<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

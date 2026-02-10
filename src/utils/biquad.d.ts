@@ -40,7 +40,9 @@ export interface IBiquadCoefficients {
  * Biquad transform function signature.
  * Takes filter parameters and returns biquad coefficients.
  */
-export type IBiquadTransform = (options: IBiquadTransformOptions) => IBiquadCoefficients;
+export type IBiquadTransform = (
+  options: IBiquadTransformOptions
+) => IBiquadCoefficients;
 
 /**
  * Frequency to gain function signature.
@@ -52,7 +54,9 @@ export type IFrequencyToGain = (frequency: number) => number;
  * Filter factory function signature.
  * Creates a frequency-to-gain function from filter options.
  */
-export type IFilterFactory = (options: IBiquadTransformOptions) => IFrequencyToGain;
+export type IFilterFactory = (
+  options: IBiquadTransformOptions
+) => IFrequencyToGain;
 
 /**
  * Standard biquad filter names.
@@ -75,63 +79,88 @@ export type IStandardBiquadFilterName =
 /**
  * Trivial filter that does not change the gain.
  */
-export declare function NULL(options: IBiquadTransformOptions): IBiquadCoefficients;
+export declare function NULL(
+  options: IBiquadTransformOptions
+): IBiquadCoefficients;
 
 /**
  * Low-Shelf filter.
  */
-export declare function lowShelf(options: IBiquadTransformOptions): IBiquadCoefficients;
+export declare function lowShelf(
+  options: IBiquadTransformOptions
+): IBiquadCoefficients;
 
 /**
  * High-Shelf filter.
  */
-export declare function highShelf(options: IBiquadTransformOptions): IBiquadCoefficients;
+export declare function highShelf(
+  options: IBiquadTransformOptions
+): IBiquadCoefficients;
 
 /**
  * Peak filter.
  */
-export declare function peaking(options: IBiquadTransformOptions): IBiquadCoefficients;
+export declare function peaking(
+  options: IBiquadTransformOptions
+): IBiquadCoefficients;
 
 /**
  * Notch filter.
  */
-export declare function notch(options: IBiquadTransformOptions): IBiquadCoefficients;
+export declare function notch(
+  options: IBiquadTransformOptions
+): IBiquadCoefficients;
 
 /**
  * Standard lowpass filter with transfer function H(s) = 1/(1+s).
  */
-export declare function lowPass1(options: IBiquadTransformOptions): IBiquadCoefficients;
+export declare function lowPass1(
+  options: IBiquadTransformOptions
+): IBiquadCoefficients;
 
 /**
  * Lowpass filter (2nd order).
  */
-export declare function lowPass2(options: IBiquadTransformOptions): IBiquadCoefficients;
+export declare function lowPass2(
+  options: IBiquadTransformOptions
+): IBiquadCoefficients;
 
 /**
  * Lowpass filter (4th order).
  */
-export declare function lowPass4(options: IBiquadTransformOptions): IBiquadCoefficients;
+export declare function lowPass4(
+  options: IBiquadTransformOptions
+): IBiquadCoefficients;
 
 /**
  * Standard highpass filter with transfer function H(s) = s/(1+s).
  */
-export declare function highPass1(options: IBiquadTransformOptions): IBiquadCoefficients;
+export declare function highPass1(
+  options: IBiquadTransformOptions
+): IBiquadCoefficients;
 
 /**
  * Highpass filter (2nd order).
  */
-export declare function highPass2(options: IBiquadTransformOptions): IBiquadCoefficients;
+export declare function highPass2(
+  options: IBiquadTransformOptions
+): IBiquadCoefficients;
 
 /**
  * Highpass filter (4th order).
  */
-export declare function highPass4(options: IBiquadTransformOptions): IBiquadCoefficients;
+export declare function highPass4(
+  options: IBiquadTransformOptions
+): IBiquadCoefficients;
 
 /**
  * A set of standard filters.
  * Each property is a filter factory function that implements the EqFilter interface.
  */
-export declare const standardBiquadFilters: Record<IStandardBiquadFilterName, IFilterFactory>;
+export declare const standardBiquadFilters: Record<
+  IStandardBiquadFilterName,
+  IFilterFactory
+>;
 
 /**
  * This function can be used to turn a series of biquad filter transformations

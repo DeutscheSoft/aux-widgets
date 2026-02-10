@@ -17,7 +17,11 @@ panoramaWidget.set('mode', 'balance');
 panoramaWidget.set('mode', 'stereo');
 
 // .get(key) API type-checking
-const _panoramaMode: 'panorama' | 'balance' | 'surround' | undefined = panoramaWidget.get('mode');
+const _panoramaMode:
+  | 'panorama'
+  | 'balance'
+  | 'surround'
+  | undefined = panoramaWidget.get('mode');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 panoramaWidget.get('not_an_option_key');
 

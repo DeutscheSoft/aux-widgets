@@ -1,5 +1,9 @@
 import { Graph, IGraphOptions, IGraphEvents } from './graph.js';
-import { FrequencyResponse, IFrequencyResponseOptions, IFrequencyResponseEvents } from './frequencyresponse.js';
+import {
+  FrequencyResponse,
+  IFrequencyResponseOptions,
+  IFrequencyResponseEvents,
+} from './frequencyresponse.js';
 import { EffectiveEvents } from '../implements/base.js';
 import { EqBand, IEqBandOptions } from './eqband.js';
 import { Range } from '../modules/range.js';
@@ -16,7 +20,8 @@ export type IEqualizerGraphRenderingFilter = (band: EqBand) => boolean;
  * Options specific to the EqualizerGraph widget.
  * Extends Graph options.
  */
-export interface IEqualizerGraphOptions extends Omit<IGraphOptions, 'range_x' | 'range_y'> {
+export interface IEqualizerGraphOptions
+  extends Omit<IGraphOptions, 'range_x' | 'range_y'> {
   /** The distance between points on the x axis. Reduces CPU load in favour of accuracy and smoothness. */
   accuracy: number;
   /** The list of EqBands. */
@@ -44,7 +49,10 @@ export interface IEqualizerGraphEvents extends IGraphEvents {
 export declare class EqualizerGraph<
   TOptions extends IEqualizerGraphOptions = IEqualizerGraphOptions,
   TEvents extends IEqualizerGraphEvents = IEqualizerGraphEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Graph<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
@@ -89,7 +97,9 @@ export declare class EqualizerGraph<
  * Options specific to the Equalizer widget.
  * Extends FrequencyResponse options and EqualizerGraph options (since baseline inherits options).
  */
-export interface IEqualizerOptions extends IFrequencyResponseOptions, IEqualizerGraphOptions {
+export interface IEqualizerOptions
+  extends IFrequencyResponseOptions,
+    IEqualizerGraphOptions {
   /** Show or hide all bands. */
   show_bands: boolean;
 }
@@ -115,7 +125,10 @@ export interface IEqualizerEvents extends IFrequencyResponseEvents {
 export declare class Equalizer<
   TOptions extends IEqualizerOptions = IEqualizerOptions,
   TEvents extends IEqualizerEvents = IEqualizerEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends FrequencyResponse<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

@@ -16,7 +16,9 @@ bitstringWidget.set('length', 8);
 bitstringWidget.set('length', '8');
 
 // .get(key) API type-checking
-const _bitstringLength: number | false | undefined = bitstringWidget.get('length');
+const _bitstringLength: number | false | undefined = bitstringWidget.get(
+  'length'
+);
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 bitstringWidget.get('not_an_option_key');
 

@@ -25,7 +25,10 @@ export interface IFrameEvents extends IContainerEvents {
 export declare class Frame<
   TOptions extends IFrameOptions = IFrameOptions,
   TEvents extends IFrameEvents = IFrameEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Container<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

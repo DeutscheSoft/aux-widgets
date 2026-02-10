@@ -42,8 +42,7 @@ export interface ISliderOptions extends IWidgetOptions, IRangedOptions {
  * Events specific to the Slider widget.
  * Extends Widget events.
  */
-export interface ISliderEvents extends IWidgetEvents {
-}
+export interface ISliderEvents extends IWidgetEvents {}
 
 /**
  * Slider is a Widget moving its background image according to its value.
@@ -54,7 +53,10 @@ export interface ISliderEvents extends IWidgetEvents {
 export declare class Slider<
   TOptions extends ISliderOptions = ISliderOptions,
   TEvents extends ISliderEvents = ISliderEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

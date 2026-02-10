@@ -38,7 +38,9 @@ const _valueValue: string | number | undefined = valueWidget.get('value');
 valueWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-valueWidget.on('set_value', (value: string | number) => { void value; });
+valueWidget.on('set_value', (value: string | number) => {
+  void value;
+});
 // @ts-expect-error 'not_an_event' is not a valid event name
 valueWidget.on('not_an_event', () => {});
 
@@ -53,4 +55,3 @@ const badType: Partial<IValueOptions> = {
   // @ts-expect-error type must be 'text' | 'password'
   type: 'email',
 };
-

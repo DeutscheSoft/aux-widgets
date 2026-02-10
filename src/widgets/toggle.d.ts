@@ -35,7 +35,10 @@ export interface IToggleEvents extends IButtonEvents {
 export declare class Toggle<
   TOptions extends IToggleOptions = IToggleOptions,
   TEvents extends IToggleEvents = IToggleEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Button<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

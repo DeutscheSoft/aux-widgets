@@ -9,7 +9,12 @@ import { Label } from './label.js';
  */
 export type ISelectEntryInput =
   | string
-  | { label?: string; value: unknown; icon?: string | false; [key: string]: unknown }
+  | {
+      label?: string;
+      value: unknown;
+      icon?: string | false;
+      [key: string]: unknown;
+    }
   | SelectEntry;
 
 /**
@@ -67,7 +72,12 @@ export interface ISelectEvents extends IButtonEvents {
   /** Fired when the list is cleared. */
   cleared: () => void;
   /** Fired when a selection was made by the user. The arguments are the value of the currently selected SelectEntry, its index, its label and the SelectEntry instance. */
-  select: (value: unknown, id: number, label: string, entry: SelectEntry) => void;
+  select: (
+    value: unknown,
+    id: number,
+    label: string,
+    entry: SelectEntry
+  ) => void;
 }
 
 /**
@@ -95,7 +105,10 @@ export interface ISelectEntryEvents extends IButtonEvents {
 export declare class SelectEntry<
   TOptions extends ISelectEntryOptions = ISelectEntryOptions,
   TEvents extends ISelectEntryEvents = ISelectEntryEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Button<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 }
@@ -106,7 +119,10 @@ export declare class SelectEntry<
 export declare class Select<
   TOptions extends ISelectOptions = ISelectOptions,
   TEvents extends ISelectEvents = ISelectEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Button<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

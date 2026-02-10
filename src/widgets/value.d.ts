@@ -68,7 +68,10 @@ export interface IValueEvents extends IWidgetEvents {
 export declare class Value<
   TOptions extends IValueOptions = IValueOptions,
   TEvents extends IValueEvents = IValueEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

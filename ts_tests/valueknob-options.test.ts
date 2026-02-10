@@ -22,7 +22,9 @@ const _valueknobValue: number | undefined = valueKnob.get('value');
 valueKnob.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-valueKnob.on('set_value', (value: number) => { void value; });
+valueKnob.on('set_value', (value: number) => {
+  void value;
+});
 // @ts-expect-error 'not_an_event' is not a valid event name
 valueKnob.on('not_an_event', () => {});
 
@@ -43,4 +45,3 @@ new ValueKnob({
   // @ts-expect-error value must be a number
   value: 'not-a-number',
 });
-

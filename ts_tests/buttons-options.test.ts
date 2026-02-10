@@ -25,7 +25,10 @@ buttonsWidget.set('direction', 'vertical');
 buttonsWidget.set('direction', 'grid');
 
 // .get(key) API type-checking
-const _buttonsDirection: 'horizontal' | 'vertical' | undefined = buttonsWidget.get('direction');
+const _buttonsDirection:
+  | 'horizontal'
+  | 'vertical'
+  | undefined = buttonsWidget.get('direction');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 buttonsWidget.get('not_an_option_key');
 

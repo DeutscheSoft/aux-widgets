@@ -17,7 +17,10 @@ export declare class Events {
    * @param name - The event name.
    * @param callback - The event callback.
    */
-  addEventListener(name: string, callback: (...args: unknown[]) => unknown): void;
+  addEventListener(
+    name: string,
+    callback: (...args: unknown[]) => unknown
+  ): void;
 
   /**
    * Removes an event handler.
@@ -31,7 +34,10 @@ export declare class Events {
    * @param name - The event name.
    * @param callback - The event callback.
    */
-  removeEventListener(name: string, callback: (...args: unknown[]) => unknown): void;
+  removeEventListener(
+    name: string,
+    callback: (...args: unknown[]) => unknown
+  ): void;
 
   /**
    * Returns true if the specified event handler is registered.
@@ -41,7 +47,10 @@ export declare class Events {
    * @param callback - The event callback (optional).
    * @returns True if the event handler is registered.
    */
-  hasEventListener(name: string, callback?: (...args: unknown[]) => unknown): boolean;
+  hasEventListener(
+    name: string,
+    callback?: (...args: unknown[]) => unknown
+  ): boolean;
 
   /**
    * Emit an event.

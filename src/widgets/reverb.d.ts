@@ -28,7 +28,10 @@ export interface IReverbReflectionsConfig {
 /**
  * Reflections input - can be an array of reflections, a configuration object, or false to disable.
  */
-export type IReverbReflections = IReverbReflection[] | IReverbReflectionsConfig | false;
+export type IReverbReflections =
+  | IReverbReflection[]
+  | IReverbReflectionsConfig
+  | false;
 
 /**
  * Options specific to the Reverb widget.
@@ -114,7 +117,10 @@ export interface IReverbEvents extends IChartEvents {
 export declare class Reverb<
   TOptions extends IReverbOptions = IReverbOptions,
   TEvents extends IReverbEvents = IReverbEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Chart<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

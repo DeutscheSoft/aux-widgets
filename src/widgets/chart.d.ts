@@ -105,7 +105,10 @@ export interface IChartEvents extends IWidgetEvents {
 export declare class Chart<
   TOptions extends IChartOptions = IChartOptions,
   TEvents extends IChartEvents = IChartEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
@@ -176,7 +179,10 @@ export declare class Chart<
    * @returns The instance of ChartHandle.
    * @emits Chart#handleadded
    */
-  addHandle(options: ChartHandle | IChartHandleOptions, type?: typeof ChartHandle): ChartHandle;
+  addHandle(
+    options: ChartHandle | IChartHandleOptions,
+    type?: typeof ChartHandle
+  ): ChartHandle;
 
   /**
    * Add multiple new ChartHandle to the widget. Options is an array of objects containing options for the new instances of ChartHandle.
@@ -205,5 +211,8 @@ export declare class Chart<
    * @param handle - The handle to exclude from intersection calculation.
    * @returns An object containing intersect (the amount of intersecting square pixels) and count (the amount of overlapping elements).
    */
-  intersect(X: [number, number, number, number], handle?: ChartHandle): IChartIntersectResult;
+  intersect(
+    X: [number, number, number, number],
+    handle?: ChartHandle
+  ): IChartIntersectResult;
 }

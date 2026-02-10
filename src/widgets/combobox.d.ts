@@ -24,7 +24,12 @@ export interface IComboBoxOptions extends IWidgetOptions {
  */
 export interface IComboBoxEvents extends IWidgetEvents {
   /** Fired when the user selects an entry from the list. */
-  select: (value: unknown, index: number, label: string, entry: SelectEntry) => void;
+  select: (
+    value: unknown,
+    index: number,
+    label: string,
+    entry: SelectEntry
+  ) => void;
 }
 
 /**
@@ -33,7 +38,10 @@ export interface IComboBoxEvents extends IWidgetEvents {
 export declare class ComboBox<
   TOptions extends IComboBoxOptions = IComboBoxOptions,
   TEvents extends IComboBoxEvents = IComboBoxEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

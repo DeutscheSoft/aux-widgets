@@ -5,7 +5,7 @@ import { Widget } from '../widgets/widget.js';
  * Filter function for ChildWidgets.
  * Can be a class constructor (to filter by instance type) or a predicate function.
  */
-export type IChildWidgetsFilter<T extends Widget = Widget> = 
+export type IChildWidgetsFilter<T extends Widget = Widget> =
   | (new (...args: unknown[]) => T)
   | ((child: Widget) => boolean);
 
@@ -99,5 +99,10 @@ export declare class ChildWidgets extends Events {
    * @param callback - The callback function that receives (child, position) and optionally returns a cleanup function.
    * @returns A cleanup function that unsubscribes all subscriptions.
    */
-  forEachAsync(callback: (child: Widget, position: number) => (() => void) | null | undefined): () => void;
+  forEachAsync(
+    callback: (
+      child: Widget,
+      position: number
+    ) => (() => void) | null | undefined
+  ): () => void;
 }

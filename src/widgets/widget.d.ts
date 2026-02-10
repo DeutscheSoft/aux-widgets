@@ -42,7 +42,11 @@ export interface IWidgetEvents extends IBaseEvents {
   /** Fired after a double click appeared. Arguments: event */
   doubleclick: (event: MouseEvent) => void;
   /** Fired on focus movement via keyboard. Arguments: { speed, direction, event } */
-  focus_move: (data: { speed: IFocusMoveSpeed; direction: IFocusMoveDirection; event: KeyboardEvent }) => void;
+  focus_move: (data: {
+    speed: IFocusMoveSpeed;
+    direction: IFocusMoveDirection;
+    event: KeyboardEvent;
+  }) => void;
   /** Fired when the visibility state changes. Arguments: visibility */
   visibility: (visible: boolean) => void;
 }
@@ -152,7 +156,10 @@ export interface IWidgetOptions {
 export declare class Widget<
   TOptions extends IWidgetOptions = IWidgetOptions,
   TEvents extends IWidgetEvents = IWidgetEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Base<TOptions, TEvents, TEffectiveEvents> {
   /**
    * Creates a new Widget instance.
@@ -166,7 +173,9 @@ export declare class Widget<
  * Infers the options type (TOptions) of a widget type.
  * Returns `never` if T does not extend Widget.
  */
-export type WidgetOptionsOf<T> = T extends Widget<infer O, any, any> ? O : never;
+export type WidgetOptionsOf<T> = T extends Widget<infer O, any, any>
+  ? O
+  : never;
 
 /**
  * Infers the effective events type (TEffectiveEvents) of a widget type.

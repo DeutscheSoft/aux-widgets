@@ -17,7 +17,9 @@ fileselectWidget.set('multiple', true);
 fileselectWidget.set('multiple', 'true');
 
 // .get(key) API type-checking
-const _fileselectMultiple: boolean | undefined = fileselectWidget.get('multiple');
+const _fileselectMultiple: boolean | undefined = fileselectWidget.get(
+  'multiple'
+);
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 fileselectWidget.get('not_an_option_key');
 

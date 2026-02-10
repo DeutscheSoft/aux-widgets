@@ -44,8 +44,7 @@ export interface IKnobOptions extends ICircularOptions {
  * Events specific to the Knob widget.
  * Extends Widget events.
  */
-export interface IKnobEvents extends IWidgetEvents {
-}
+export interface IKnobEvents extends IWidgetEvents {}
 
 /**
  * Knob is a Circular inside of an SVG which can be
@@ -56,7 +55,10 @@ export interface IKnobEvents extends IWidgetEvents {
 export declare class Knob<
   TOptions extends IKnobOptions = IKnobOptions,
   TEvents extends IKnobEvents = IKnobEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

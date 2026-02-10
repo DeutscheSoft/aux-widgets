@@ -19,7 +19,10 @@ navigationWidget.set('direction', 'vertical');
 navigationWidget.set('direction', 'grid');
 
 // .get(key) API type-checking
-const _navDirection: 'horizontal' | 'vertical' | undefined = navigationWidget.get('direction');
+const _navDirection:
+  | 'horizontal'
+  | 'vertical'
+  | undefined = navigationWidget.get('direction');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 navigationWidget.get('not_an_option_key');
 

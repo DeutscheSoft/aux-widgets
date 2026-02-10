@@ -1,4 +1,8 @@
-import { LevelMeter, ILevelMeterOptions, ILevelMeterEvents } from './levelmeter.js';
+import {
+  LevelMeter,
+  ILevelMeterOptions,
+  ILevelMeterEvents,
+} from './levelmeter.js';
 import { EffectiveEvents } from '../implements/base.js';
 
 /**
@@ -24,7 +28,10 @@ export interface IPhaseMeterEvents extends ILevelMeterEvents {
 export declare class PhaseMeter<
   TOptions extends IPhaseMeterOptions = IPhaseMeterOptions,
   TEvents extends IPhaseMeterEvents = IPhaseMeterEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends LevelMeter<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

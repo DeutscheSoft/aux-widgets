@@ -24,7 +24,9 @@ const _progressbarValue: number | undefined = progressbarWidget.get('value');
 progressbarWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-progressbarWidget.on('set_value', (value: number) => { void value; });
+progressbarWidget.on('set_value', (value: number) => {
+  void value;
+});
 // @ts-expect-error 'not_an_event' is not a valid event name
 progressbarWidget.on('not_an_event', () => {});
 

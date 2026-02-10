@@ -50,4 +50,3 @@ const badLabelButton: Partial<IButtonOptions> = {
   // @ts-expect-error label must be string | false
   label: 123,
 };
-

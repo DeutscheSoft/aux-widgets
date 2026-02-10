@@ -16,7 +16,9 @@ export type IValueKnobLayout = 'vertical' | 'horizontal' | 'left' | 'right';
  * Note: 'label' and 'show_value' are blacklisted from the knob child widget.
  * Note: 'size' and 'value' are omitted from both interfaces to avoid conflicts, then redefined with compatible types.
  */
-export interface IValueKnobOptions extends Omit<IKnobOptions, 'size' | 'value'>, Omit<IValueOptions, 'size' | 'value'> {
+export interface IValueKnobOptions
+  extends Omit<IKnobOptions, 'size' | 'value'>,
+    Omit<IValueOptions, 'size' | 'value'> {
   /** Layout of the knob. Select from 'horizontal', 'vertical' (default), 'left' and 'right'. */
   layout: IValueKnobLayout;
   /** Label of the knob. Set to false to hide the element from the DOM. This is blacklisted from the knob child widget. */
@@ -47,7 +49,10 @@ export interface IValueKnobEvents extends IWidgetEvents {
 export declare class ValueKnob<
   TOptions extends IValueKnobOptions = IValueKnobOptions,
   TEvents extends IValueKnobEvents = IValueKnobEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

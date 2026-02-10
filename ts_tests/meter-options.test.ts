@@ -41,7 +41,9 @@ const _meterValue: number | undefined = meterWidget.get('value');
 meterWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-meterWidget.on('set_value', (value: number) => { void value; });
+meterWidget.on('set_value', (value: number) => {
+  void value;
+});
 // @ts-expect-error 'not_an_event' is not a valid event name
 meterWidget.on('not_an_event', () => {});
 

@@ -14,7 +14,9 @@ equalizerWidget.set('show_bands', false);
 equalizerWidget.set('show_bands', 1);
 
 // .get(key) API type-checking
-const _equalizerShowBands: boolean | undefined = equalizerWidget.get('show_bands');
+const _equalizerShowBands: boolean | undefined = equalizerWidget.get(
+  'show_bands'
+);
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 equalizerWidget.get('not_an_option_key');
 

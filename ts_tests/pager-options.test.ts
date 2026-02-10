@@ -4,7 +4,10 @@ import { Pager, IPagerOptions } from '../src/index.js';
 const pager: Partial<IPagerOptions> = {
   position: 'top',
   show: 0,
-  pages: [{ label: 'One', content: '<p>Page 1</p>' }, { label: 'Two', content: '<p>Page 2</p>' }],
+  pages: [
+    { label: 'One', content: '<p>Page 1</p>' },
+    { label: 'Two', content: '<p>Page 2</p>' },
+  ],
 };
 
 const pagerWidget = new Pager(pager);
@@ -16,7 +19,12 @@ pagerWidget.set('position', 'bottom');
 pagerWidget.set('position', 'center');
 
 // .get(key) API type-checking
-const _pagerPosition: 'top' | 'right' | 'left' | 'bottom' | undefined = pagerWidget.get('position');
+const _pagerPosition:
+  | 'top'
+  | 'right'
+  | 'left'
+  | 'bottom'
+  | undefined = pagerWidget.get('position');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 pagerWidget.get('not_an_option_key');
 

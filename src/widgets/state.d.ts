@@ -32,7 +32,10 @@ export interface IStateEvents extends IWidgetEvents {
 export declare class State<
   TOptions extends IStateOptions = IStateOptions,
   TEvents extends IStateEvents = IStateEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

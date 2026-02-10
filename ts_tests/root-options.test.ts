@@ -16,7 +16,13 @@ rootWidget.set('visible', true);
 rootWidget.set('visible', 'fade');
 
 // .get(key) API type-checking
-const _rootVisible: boolean | 'hiding' | 'showing' | 'show' | 'hide' | undefined = rootWidget.get('visible');
+const _rootVisible:
+  | boolean
+  | 'hiding'
+  | 'showing'
+  | 'show'
+  | 'hide'
+  | undefined = rootWidget.get('visible');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 rootWidget.get('not_an_option_key');
 

@@ -45,9 +45,16 @@ export interface IDragCaptureOptions extends IModuleOptions {
  */
 export interface IDragCaptureEvents extends IModuleEvents {
   /** Fired when capturing started. If an event handler returns true, the dragging is started. */
-  startcapture: (state: IDragCaptureState, start: MouseEvent | TouchEvent, ev: MouseEvent | TouchEvent) => void | boolean;
+  startcapture: (
+    state: IDragCaptureState,
+    start: MouseEvent | TouchEvent,
+    ev: MouseEvent | TouchEvent
+  ) => void | boolean;
   /** Fired when a movement was captured. */
-  movecapture: (state: IDragCaptureState, ev: MouseEvent | TouchEvent) => void | boolean;
+  movecapture: (
+    state: IDragCaptureState,
+    ev: MouseEvent | TouchEvent
+  ) => void | boolean;
   /** Fired when capturing stopped. */
   stopcapture: (state: IDragCaptureState, ev?: MouseEvent | TouchEvent) => void;
 }
@@ -72,7 +79,10 @@ export interface IDragCaptureEvents extends IModuleEvents {
 export declare class DragCapture<
   TOptions extends IDragCaptureOptions = IDragCaptureOptions,
   TEvents extends IDragCaptureEvents = IDragCaptureEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Module<TOptions, TEvents, TEffectiveEvents> {
   constructor(widget: unknown, options?: Partial<TOptions>);
 

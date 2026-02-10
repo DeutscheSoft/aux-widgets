@@ -28,7 +28,9 @@ const _eqbandGain: number | undefined = eqbandWidget.get('gain');
 eqbandWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-eqbandWidget.on('set_gain', (value?: number) => { void value; });
+eqbandWidget.on('set_gain', (value?: number) => {
+  void value;
+});
 // @ts-expect-error 'not_an_event' is not a valid event name
 eqbandWidget.on('not_an_event', () => {});
 

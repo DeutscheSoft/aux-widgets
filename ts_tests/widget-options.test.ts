@@ -38,4 +38,3 @@ const badOptions: Partial<IWidgetOptions> = {
   // @ts-expect-error aria_* fields must be strings when present.
   aria_label: 123,
 };
-

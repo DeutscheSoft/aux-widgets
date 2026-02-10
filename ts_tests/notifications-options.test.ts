@@ -14,7 +14,10 @@ notificationsWidget.set('stack', 'end');
 notificationsWidget.set('stack', 'middle');
 
 // .get(key) API type-checking
-const _notificationsStack: 'start' | 'end' | undefined = notificationsWidget.get('stack');
+const _notificationsStack:
+  | 'start'
+  | 'end'
+  | undefined = notificationsWidget.get('stack');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 notificationsWidget.get('not_an_option_key');
 

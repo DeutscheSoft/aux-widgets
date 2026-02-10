@@ -1,5 +1,8 @@
 import { Base, IBaseEvents, EffectiveEvents } from '../implements/base.js';
-import { IStandardBiquadFilterName, IBiquadTransform } from '../utils/biquad.js';
+import {
+  IStandardBiquadFilterName,
+  IBiquadTransform,
+} from '../utils/biquad.js';
 
 /**
  * EqFilter interface - implemented by all Equalizer filters.
@@ -32,7 +35,10 @@ export type IFilterFactory = (options: {
   gain: number;
   q: number;
   sample_rate: number;
-}) => IEqFilter | { freq2gain: (frequency: number) => number } | ((frequency: number) => number);
+}) =>
+  | IEqFilter
+  | { freq2gain: (frequency: number) => number }
+  | ((frequency: number) => number);
 
 /**
  * Options specific to the Filter class.
@@ -67,7 +73,10 @@ export interface IFilterEvents extends IBaseEvents {
 export declare class Filter<
   TOptions extends IFilterOptions = IFilterOptions,
   TEvents extends IFilterEvents = IFilterEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Base<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

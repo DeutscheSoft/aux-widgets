@@ -15,7 +15,10 @@ import {
  * This is useful for event systems where different events (keys) have
  * different sets of subscribers.
  */
-export class SubscriberMap<TKey = string, TSubscriber extends (...args: any[]) => void = (...args: any[]) => void> {
+export class SubscriberMap<
+  TKey = string,
+  TSubscriber extends (...args: any[]) => void = (...args: any[]) => void
+> {
   /** @internal Map of keys to subscriber lists */
   subscribers: Map<TKey, SubscriberList<TSubscriber>>;
 

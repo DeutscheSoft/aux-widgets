@@ -44,7 +44,10 @@ export interface IGaugeEvents extends IWidgetEvents {
 export declare class Gauge<
   TOptions extends IGaugeOptions = IGaugeOptions,
   TEvents extends IGaugeEvents = IGaugeEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

@@ -22,7 +22,9 @@ export type IFileSelectFormatMultiple = (count: number) => string;
  * Options specific to the FileSelect widget.
  * Extends Container options and Button options (since button inherits options).
  */
-export interface IFileSelectOptions extends IContainerOptions, Omit<IButtonOptions, 'visible'> {
+export interface IFileSelectOptions
+  extends IContainerOptions,
+    Omit<IButtonOptions, 'visible'> {
   /** The allowed file types as suffices starting with a dot or as mime types with optional asterisk, e.g. ".txt,.zip,.png,.jpg,image/*,application/pdf" */
   accept: string;
   /** Defines if users can select multiple files. The label for the file name shows the amount of files selected instead of a single name and the label displaying the file size shows the sum of all selected files sizes. */
@@ -56,7 +58,10 @@ export interface IFileSelectEvents extends IWidgetEvents {
 export declare class FileSelect<
   TOptions extends IFileSelectOptions = IFileSelectOptions,
   TEvents extends IFileSelectEvents = IFileSelectEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Container<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

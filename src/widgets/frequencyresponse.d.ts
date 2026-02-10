@@ -30,7 +30,10 @@ export interface IFrequencyResponseEvents extends IChartEvents {
 export declare class FrequencyResponse<
   TOptions extends IFrequencyResponseOptions = IFrequencyResponseOptions,
   TEvents extends IFrequencyResponseEvents = IFrequencyResponseEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Chart<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

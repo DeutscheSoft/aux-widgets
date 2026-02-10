@@ -30,7 +30,9 @@ const _levelmeterValue: number | undefined = levelmeterWidget.get('value');
 levelmeterWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-levelmeterWidget.on('set_value', (value: number) => { void value; });
+levelmeterWidget.on('set_value', (value: number) => {
+  void value;
+});
 // @ts-expect-error 'not_an_event' is not a valid event name
 levelmeterWidget.on('not_an_event', () => {});
 

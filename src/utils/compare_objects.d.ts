@@ -10,7 +10,10 @@
  *      compareObjects({ a: 1, b: 2 }, { a: 1, b: 2 }); // true
  *      compareObjects({ a: 1 }, { a: 1, b: 2 }); // false
  */
-export function compareObjects(a: Record<string, unknown>, b: Record<string, unknown>): boolean;
+export function compareObjects(
+  a: Record<string, unknown>,
+  b: Record<string, unknown>
+): boolean;
 
 /**
  * Returns true if b shadows a, i.e. merging a and b results
@@ -26,4 +29,7 @@ export function compareObjects(a: Record<string, unknown>, b: Record<string, unk
  *      objectShadows({ a: 1 }, { a: 1, b: 2 }); // true
  *      objectShadows({ a: 1, b: 2 }, { a: 1 }); // false
  */
-export function objectShadows(a: Record<string, unknown>, b: Record<string, unknown>): boolean;
+export function objectShadows(
+  a: Record<string, unknown>,
+  b: Record<string, unknown>
+): boolean;

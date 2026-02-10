@@ -63,7 +63,10 @@ export interface IDragValueEvents extends IDragCaptureEvents {
  * value according to the dragged distance. DragValue is for example
  * used in Knob and ValueButton.
  */
-export declare class DragValue extends Base<IDragValueOptions, IDragValueEvents> {
+export declare class DragValue extends Base<
+  IDragValueOptions,
+  IDragValueEvents
+> {
   constructor(widget: unknown, options?: Partial<IDragValueOptions>);
 
   /** The parent widget. */

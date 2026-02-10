@@ -30,7 +30,9 @@ const _stateState: number | boolean | undefined = stateWidget.get('state');
 stateWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-stateWidget.on('set_state', (value: number | boolean) => { void value; });
+stateWidget.on('set_state', (value: number | boolean) => {
+  void value;
+});
 // @ts-expect-error 'not_an_event' is not a valid event name
 stateWidget.on('not_an_event', () => {});
 

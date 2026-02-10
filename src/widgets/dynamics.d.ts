@@ -6,7 +6,12 @@ import { Graph } from './graph.js';
 /**
  * Type of dynamics processor.
  */
-export type IDynamicsType = 'compressor' | 'expander' | 'gate' | 'limiter' | false;
+export type IDynamicsType =
+  | 'compressor'
+  | 'expander'
+  | 'gate'
+  | 'limiter'
+  | false;
 
 /**
  * Grid label formatting function.
@@ -85,7 +90,10 @@ export interface IDynamicsEvents extends IChartEvents {
 export declare class Dynamics<
   TOptions extends IDynamicsOptions = IDynamicsOptions,
   TEvents extends IDynamicsEvents = IDynamicsEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Chart<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
@@ -131,7 +139,10 @@ export interface ICompressorEvents extends IDynamicsEvents {
 export declare class Compressor<
   TOptions extends ICompressorOptions = ICompressorOptions,
   TEvents extends ICompressorEvents = ICompressorEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Dynamics<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
@@ -163,7 +174,10 @@ export interface IExpanderEvents extends IDynamicsEvents {
 export declare class Expander<
   TOptions extends IExpanderOptions = IExpanderOptions,
   TEvents extends IExpanderEvents = IExpanderEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Dynamics<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
@@ -193,7 +207,10 @@ export interface IGateEvents extends IDynamicsEvents {
 export declare class Gate<
   TOptions extends IGateOptions = IGateOptions,
   TEvents extends IGateEvents = IGateEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Dynamics<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
@@ -223,7 +240,10 @@ export interface ILimiterEvents extends IDynamicsEvents {
 export declare class Limiter<
   TOptions extends ILimiterOptions = ILimiterOptions,
   TEvents extends ILimiterEvents = ILimiterEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Dynamics<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

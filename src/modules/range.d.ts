@@ -47,7 +47,10 @@ export interface IRangeEvents extends IBaseEvents {
 export declare class Range<
   TOptions extends IRangeOptions = IRangeOptions,
   TEvents extends IRangeEvents = IRangeEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Base<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

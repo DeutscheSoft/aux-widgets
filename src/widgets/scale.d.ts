@@ -33,7 +33,9 @@ export interface IScaleLabel {
  * Options specific to the Scale widget.
  * Extends Widget and Ranged options.
  */
-export interface IScaleOptions extends IWidgetOptions, Omit<IRangedOptions, 'base'> {
+export interface IScaleOptions
+  extends IWidgetOptions,
+    Omit<IRangedOptions, 'base'> {
   /** The layout of the Scale. 'right' and 'left' are vertical layouts with the labels being drawn right and left of the scale, respectively. 'top' and 'bottom' are horizontal layouts for which the labels are drawn on top and below the scale, respectively. */
   layout: IScaleLayout;
   /** Minimal step size of the markers. */
@@ -94,7 +96,10 @@ export interface IScaleEvents extends IWidgetEvents {
 export declare class Scale<
   TOptions extends IScaleOptions = IScaleOptions,
   TEvents extends IScaleEvents = IScaleEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

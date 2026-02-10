@@ -42,7 +42,10 @@ export interface IDrag3DEvents extends IContainerEvents {
 export declare class Drag3D<
   TOptions extends IDrag3DOptions = IDrag3DOptions,
   TEvents extends IDrag3DEvents = IDrag3DEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Container<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

@@ -48,7 +48,10 @@ export interface IPagerEvents extends IContainerEvents {
 export declare class Pager<
   TOptions extends IPagerOptions = IPagerOptions,
   TEvents extends IPagerEvents = IPagerEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Container<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

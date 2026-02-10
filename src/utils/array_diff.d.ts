@@ -7,7 +7,10 @@
  * @param b - The second array.
  * @returns A tuple containing [items_in_a_not_in_b, items_in_b_not_in_a].
  */
-export function arrayDiff<T>(a: T[] | null | undefined, b: T[] | null | undefined): [T[], T[]];
+export function arrayDiff<T>(
+  a: T[] | null | undefined,
+  b: T[] | null | undefined
+): [T[], T[]];
 
 /**
  * Calculates the diff between two arrays. Then calls the function

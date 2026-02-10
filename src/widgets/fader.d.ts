@@ -1,4 +1,9 @@
-import { Widget, IWidgetOptions, IWidgetEvents, EffectiveEvents } from './widget.js';
+import {
+  Widget,
+  IWidgetOptions,
+  IWidgetEvents,
+  EffectiveEvents,
+} from './widget.js';
 import { IRangedOptions } from '../utils/ranged.js';
 import { IWarningOptions } from '../utils/warning.js';
 
@@ -15,7 +20,10 @@ export type IDirection = 'horizontal' | 'vertical';
 /**
  * Fader-specific options that extend Widget, Ranged, and Warning options.
  */
-export interface IFaderOptions extends IWidgetOptions, IRangedOptions, IWarningOptions {
+export interface IFaderOptions
+  extends IWidgetOptions,
+    IRangedOptions,
+    IWarningOptions {
   /** The fader's position. This option is modified by user interaction. */
   value: number;
   /** The fader's layout. One out of 'top', 'left', 'right' or 'bottom', defining the fader handles position in comparison to the scale. */
@@ -78,7 +86,10 @@ export interface IFaderEvents extends IWidgetEvents {
 export declare class Fader<
   TOptions extends IFaderOptions = IFaderOptions,
   TEvents extends IFaderEvents = IFaderEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
   /**
    * Creates a new Fader instance.

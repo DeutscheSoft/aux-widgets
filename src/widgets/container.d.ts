@@ -5,7 +5,12 @@ import { EffectiveEvents } from '../implements/base.js';
  * Visible state for Container.
  * Can be a boolean or one of the transition states.
  */
-export type IContainerVisible = boolean | 'hiding' | 'showing' | 'show' | 'hide';
+export type IContainerVisible =
+  | boolean
+  | 'hiding'
+  | 'showing'
+  | 'show'
+  | 'hide';
 
 /**
  * Options specific to the Container widget.
@@ -51,7 +56,10 @@ export interface IContainerEvents extends IWidgetEvents {
 export declare class Container<
   TOptions extends IContainerOptions = IContainerOptions,
   TEvents extends IContainerEvents = IContainerEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

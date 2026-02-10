@@ -93,7 +93,10 @@ export interface IGridEvents extends IWidgetEvents {
 export declare class Grid<
   TOptions extends IGridOptions = IGridOptions,
   TEvents extends IGridEvents = IGridEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

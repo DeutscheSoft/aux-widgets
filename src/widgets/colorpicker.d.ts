@@ -98,7 +98,10 @@ export interface IColorPickerEvents extends IContainerEvents {
 export declare class ColorPicker<
   TOptions extends IColorPickerOptions = IColorPickerOptions,
   TEvents extends IColorPickerEvents = IColorPickerEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Container<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

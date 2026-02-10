@@ -62,4 +62,3 @@ const badIconActive: Partial<IToggleOptions> = {
   // @ts-expect-error icon_active must be string | false
   icon_active: true,
 };
-

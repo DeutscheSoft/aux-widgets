@@ -27,6 +27,6 @@
  *      // Filters null/empty
  *      mergeObjects(null, { a: 1 }, null, { b: 2 }); // { a: 1, b: 2 }
  */
-export function mergeObjects<T extends Record<string, unknown> = Record<string, unknown>>(
-  ...args: Array<T | null | undefined>
-): T | Record<string, never>;
+export function mergeObjects<
+  T extends Record<string, unknown> = Record<string, unknown>
+>(...args: Array<T | null | undefined>): T | Record<string, never>;

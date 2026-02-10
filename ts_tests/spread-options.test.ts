@@ -27,7 +27,9 @@ const _spreadLower: number | undefined = spreadWidget.get('lower');
 spreadWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-spreadWidget.on('set_lower', (value: number) => { void value; });
+spreadWidget.on('set_lower', (value: number) => {
+  void value;
+});
 // @ts-expect-error 'not_an_event' is not a valid event name
 spreadWidget.on('not_an_event', () => {});
 

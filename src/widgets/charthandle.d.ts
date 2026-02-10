@@ -194,7 +194,10 @@ export interface IChartHandleEvents extends IWidgetEvents {
 export declare class ChartHandle<
   TOptions extends IChartHandleOptions = IChartHandleOptions,
   TEvents extends IChartHandleEvents = IChartHandleEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

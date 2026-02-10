@@ -1,7 +1,15 @@
-export function deferRender(callback: () => unknown): [number, number, () => unknown];
-export function deferMeasure(callback: () => unknown): [number, number, () => unknown];
-export function deferRenderNext(callback: () => unknown): [number, number, () => unknown];
-export function deferMeasureNext(callback: () => unknown): [number, number, () => unknown];
+export function deferRender(
+  callback: () => unknown
+): [number, number, () => unknown];
+export function deferMeasure(
+  callback: () => unknown
+): [number, number, () => unknown];
+export function deferRenderNext(
+  callback: () => unknown
+): [number, number, () => unknown];
+export function deferMeasureNext(
+  callback: () => unknown
+): [number, number, () => unknown];
 export function combineDefer(
   ...args: ([number, number, () => unknown] | unknown)[]
 ): [number, number, () => unknown] | null;

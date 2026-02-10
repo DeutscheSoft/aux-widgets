@@ -1,8 +1,15 @@
 import { EqBand, IEqBandOptions, IEqBandEvents } from './eqband.js';
-import { EqualizerGraph, IEqualizerGraphOptions, IEqualizerGraphEvents } from './equalizer.js';
+import {
+  EqualizerGraph,
+  IEqualizerGraphOptions,
+  IEqualizerGraphEvents,
+} from './equalizer.js';
 import { Equalizer, IEqualizerOptions, IEqualizerEvents } from './equalizer.js';
 import { EffectiveEvents } from '../implements/base.js';
-import { IStandardBiquadFilterName, IBiquadTransform } from '../utils/biquad.js';
+import {
+  IStandardBiquadFilterName,
+  IBiquadTransform,
+} from '../utils/biquad.js';
 import { Filter } from '../modules/filter.js';
 import { Range } from '../modules/range.js';
 
@@ -36,7 +43,10 @@ export interface ICrossoverBandEvents extends IEqBandEvents {
 export declare class CrossoverBand<
   TOptions extends ICrossoverBandOptions = ICrossoverBandOptions,
   TEvents extends ICrossoverBandEvents = ICrossoverBandEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends EqBand<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
@@ -75,7 +85,10 @@ export interface ICrossoverGraphEvents extends IEqualizerGraphEvents {
 export declare class CrossoverGraph<
   TOptions extends ICrossoverGraphOptions = ICrossoverGraphOptions,
   TEvents extends ICrossoverGraphEvents = ICrossoverGraphEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends EqualizerGraph<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
@@ -121,7 +134,10 @@ export interface ICrossoverEvents extends IEqualizerEvents {
 export declare class Crossover<
   TOptions extends ICrossoverOptions = ICrossoverOptions,
   TEvents extends ICrossoverEvents = ICrossoverEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Equalizer<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

@@ -10,7 +10,10 @@ import { Label } from './label.js';
  * Options specific to the Spread widget.
  * Extends Widget options with ranged options and Scale options.
  */
-export interface ISpreadOptions extends IWidgetOptions, Omit<IRangedOptions, 'base'>, IScaleOptions {
+export interface ISpreadOptions
+  extends IWidgetOptions,
+    Omit<IRangedOptions, 'base'>,
+    IScaleOptions {
   /** The spread's lower position. This option is modified by user interaction. */
   lower: number;
   /** The spread's upper position. This option is modified by user interaction. */
@@ -59,7 +62,10 @@ export interface ISpreadEvents extends Omit<IWidgetEvents, 'doubleclick'> {
 export declare class Spread<
   TOptions extends ISpreadOptions = ISpreadOptions,
   TEvents extends ISpreadEvents = ISpreadEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

@@ -24,6 +24,8 @@ const _drag3dX: number | undefined = drag3dWidget.get('x');
 drag3dWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-drag3dWidget.on('set_x', (value: number) => { void value; });
+drag3dWidget.on('set_x', (value: number) => {
+  void value;
+});
 // @ts-expect-error 'not_an_event' is not a valid event name
 drag3dWidget.on('not_an_event', () => {});

@@ -53,7 +53,9 @@ export type IMeterFillStyle =
  * Options specific to the Meter widget.
  * Extends Widget and Ranged options, and includes Scale widget options.
  */
-export interface IMeterOptions extends IWidgetOptions, Omit<IRangedOptions, 'base'> {
+export interface IMeterOptions
+  extends IWidgetOptions,
+    Omit<IRangedOptions, 'base'> {
   /** A string describing the layout of the meter. Possible values are 'left', 'right', 'top' and 'bottom'. */
   layout: IMeterLayout;
   /** Segment size. Pixel positions of the meter level are rounded to multiples of this size. This can be used to give the level meter a LED effect and to reduce processor load. */
@@ -123,7 +125,10 @@ export interface IMeterEvents extends IWidgetEvents {
 export declare class Meter<
   TOptions extends IMeterOptions = IMeterOptions,
   TEvents extends IMeterEvents = IMeterEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

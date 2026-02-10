@@ -3,7 +3,12 @@ import { IScaleCallback } from './transformations.js';
 /**
  * Scale name types supported by ranged widgets.
  */
-export type IScaleName = 'linear' | 'decibel' | 'log2' | 'frequency' | 'frequency-reverse';
+export type IScaleName =
+  | 'linear'
+  | 'decibel'
+  | 'log2'
+  | 'frequency'
+  | 'frequency-reverse';
 
 /**
  * Piecewise-linear scale array.

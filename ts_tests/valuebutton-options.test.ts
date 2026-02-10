@@ -39,7 +39,9 @@ const _valuebuttonValue: number | undefined = valuebuttonWidget.get('value');
 valuebuttonWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-valuebuttonWidget.on('set_value', (value: number) => { void value; });
+valuebuttonWidget.on('set_value', (value: number) => {
+  void value;
+});
 // @ts-expect-error 'not_an_event' is not a valid event name
 valuebuttonWidget.on('not_an_event', () => {});
 
@@ -56,4 +58,3 @@ const badDirection: Partial<IValueButtonOptions> = {
   // @ts-expect-error direction must be 'polar' | 'vertical' | 'horizontal'
   direction: 'diagonal',
 };
-

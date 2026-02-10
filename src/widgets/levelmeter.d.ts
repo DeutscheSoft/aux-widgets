@@ -69,7 +69,10 @@ export interface ILevelMeterEvents extends IMeterEvents {
 export declare class LevelMeter<
   TOptions extends ILevelMeterOptions = ILevelMeterOptions,
   TEvents extends ILevelMeterEvents = ILevelMeterEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Meter<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

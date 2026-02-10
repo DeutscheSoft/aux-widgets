@@ -19,7 +19,4 @@
  *        }
  *      });
  */
-export function eventOriginatedIn(
-  event: Event,
-  element: EventTarget
-): boolean;
+export function eventOriginatedIn(event: Event, element: EventTarget): boolean;

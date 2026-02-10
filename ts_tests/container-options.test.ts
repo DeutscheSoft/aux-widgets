@@ -21,7 +21,13 @@ containerWidget.set('visible', true);
 containerWidget.set('visible', 'fade');
 
 // .get(key) API type-checking
-const _containerVisible: boolean | 'hiding' | 'showing' | 'show' | 'hide' | undefined = containerWidget.get('visible');
+const _containerVisible:
+  | boolean
+  | 'hiding'
+  | 'showing'
+  | 'show'
+  | 'hide'
+  | undefined = containerWidget.get('visible');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 containerWidget.get('not_an_option_key');
 

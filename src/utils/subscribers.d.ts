@@ -11,10 +11,9 @@
  * Type representing a subscriber list.
  * Can be null (empty), a single function, or an array of functions.
  */
-export type SubscriberList<T extends (...args: any[]) => void = (...args: any[]) => void> =
-  | null
-  | T
-  | T[];
+export type SubscriberList<
+  T extends (...args: any[]) => void = (...args: any[]) => void
+> = null | T | T[];
 
 /**
  * Initialize a list of subscribers.
@@ -82,7 +81,9 @@ export function subscriberError(err: unknown): void;
  * Optimizes storage: single subscribers are stored as a function,
  * multiple subscribers as an array.
  */
-export class Subscribers<T extends (...args: any[]) => void = (...args: any[]) => void> {
+export class Subscribers<
+  T extends (...args: any[]) => void = (...args: any[]) => void
+> {
   /** @internal The subscriber list */
   subscribers: SubscriberList<T>;
 

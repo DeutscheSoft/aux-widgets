@@ -11,9 +11,5 @@
     "lib": ["DOM", "ES2019"],
     "baseUrl": ".."
   },
-  "include": [
-    "./**/*.ts",
-    "../src/*.d.ts","../src/**/*.d.ts"
-  ]
+  "include": ["./**/*.ts", "../src/*.d.ts", "../src/**/*.d.ts"]
 }
-

@@ -14,7 +14,9 @@ crossoverWidget.set('show_bands', false);
 crossoverWidget.set('show_bands', 1);
 
 // .get(key) API type-checking
-const _crossoverShowBands: boolean | undefined = crossoverWidget.get('show_bands');
+const _crossoverShowBands: boolean | undefined = crossoverWidget.get(
+  'show_bands'
+);
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 crossoverWidget.get('not_an_option_key');
 

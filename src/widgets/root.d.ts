@@ -9,7 +9,10 @@ import { EffectiveEvents } from '../implements/base.js';
 export declare class Root<
   TOptions extends IContainerOptions = IContainerOptions,
   TEvents extends IContainerEvents = IContainerEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Container<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

@@ -78,7 +78,10 @@ export interface IPageEvents extends IContainerEvents {
 export declare class Pages<
   TOptions extends IPagesOptions = IPagesOptions,
   TEvents extends IPagesEvents = IPagesEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Container<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
@@ -153,7 +156,10 @@ export declare class Pages<
 export declare class Page<
   TOptions extends IPageOptions = IPageOptions,
   TEvents extends IPageEvents = IPageEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Container<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 }

@@ -44,4 +44,3 @@ const badAnchor: Partial<IWindowOptions> = {
   // @ts-expect-error anchor must be a valid IWindowAnchor
   anchor: 'middle',
 };
-

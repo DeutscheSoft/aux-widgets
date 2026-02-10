@@ -1,10 +1,6 @@
 import { Container, IContainerEvents } from './container.js';
 import { EffectiveEvents } from '../implements/base.js';
-import {
-  Buttons,
-  IButtonsOptions,
-  IButtonsButtonInput,
-} from './buttons.js';
+import { Buttons, IButtonsOptions, IButtonsButtonInput } from './buttons.js';
 import { Button } from './button.js';
 
 /**
@@ -38,7 +34,10 @@ export interface INavigationEvents extends IContainerEvents {
 export declare class Navigation<
   TOptions extends INavigationOptions = INavigationOptions,
   TEvents extends INavigationEvents = INavigationEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Container<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

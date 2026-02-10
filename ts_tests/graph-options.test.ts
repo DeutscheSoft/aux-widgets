@@ -6,7 +6,10 @@ const graph: Partial<IGraphOptions> = {
   range_y: { min: 0, max: 1 },
   type: 'L',
   mode: 'line',
-  dots: [{ x: 0, y: 0 }, { x: 100, y: 1 }],
+  dots: [
+    { x: 0, y: 0 },
+    { x: 100, y: 1 },
+  ],
 };
 
 const graphWidget = new Graph(graph);
@@ -18,7 +21,14 @@ graphWidget.set('mode', 'fill');
 graphWidget.set('type', 'X');
 
 // .get(key) API type-checking
-const _graphMode: 'line' | 'bottom' | 'top' | 'center' | 'base' | 'fill' | undefined = graphWidget.get('mode');
+const _graphMode:
+  | 'line'
+  | 'bottom'
+  | 'top'
+  | 'center'
+  | 'base'
+  | 'fill'
+  | undefined = graphWidget.get('mode');
 // @ts-expect-error 'not_an_option_key' is not a valid option key
 graphWidget.get('not_an_option_key');
 

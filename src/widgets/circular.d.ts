@@ -118,7 +118,10 @@ export interface ILabel {
  * Options specific to the Circular widget.
  * Extends Widget, Ranged, and Warning options.
  */
-export interface ICircularOptions extends IWidgetOptions, Omit<IRangedOptions, 'base'>, IWarningOptions {
+export interface ICircularOptions
+  extends IWidgetOptions,
+    Omit<IRangedOptions, 'base'>,
+    IWarningOptions {
   /** Sets the value on the hand and on the ring at the same time. */
   value: number;
   /** Sets the value on the hand. */
@@ -209,7 +212,10 @@ export interface ICircularEvents extends IWidgetEvents {
 export declare class Circular<
   TOptions extends ICircularOptions = ICircularOptions,
   TEvents extends ICircularEvents = ICircularEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

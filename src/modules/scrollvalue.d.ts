@@ -45,7 +45,10 @@ export interface IScrollValueEvents extends IBaseEvents {
  * object. For instance, it is used by Knob to allow turning
  * the knob using the scroll wheel.
  */
-export declare class ScrollValue extends Base<IScrollValueOptions, IScrollValueEvents> {
+export declare class ScrollValue extends Base<
+  IScrollValueOptions,
+  IScrollValueEvents
+> {
   constructor(widget: unknown, options?: Partial<IScrollValueOptions>);
 
   /** The parent widget. */

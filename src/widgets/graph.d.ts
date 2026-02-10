@@ -5,7 +5,17 @@ import { Range, IRangeOptions } from '../modules/range.js';
 /**
  * Graph type options for drawing curves.
  */
-export type IGraphType = 'L' | 'T' | 'Q' | 'C' | 'S' | 'H1' | 'H2' | 'H3' | 'H4' | 'H5';
+export type IGraphType =
+  | 'L'
+  | 'T'
+  | 'Q'
+  | 'C'
+  | 'S'
+  | 'H1'
+  | 'H2'
+  | 'H3'
+  | 'H4'
+  | 'H5';
 
 /**
  * Drawing mode for the graph.
@@ -73,7 +83,10 @@ export type IGraphDot = IGraphDotL | IGraphDotQ | IGraphDotC;
 /**
  * Dots input type - can be a string (SVG path), array of dots, or a function returning one of these.
  */
-export type IGraphDots = string | IGraphDot[] | ((graph: Graph) => string | IGraphDot[]);
+export type IGraphDots =
+  | string
+  | IGraphDot[]
+  | ((graph: Graph) => string | IGraphDot[]);
 
 /**
  * Options specific to the Graph widget.
@@ -114,7 +127,10 @@ export interface IGraphEvents extends IWidgetEvents {
 export declare class Graph<
   TOptions extends IGraphOptions = IGraphOptions,
   TEvents extends IGraphEvents = IGraphEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

@@ -61,7 +61,10 @@ export interface IDialogEvents extends IContainerEvents {
 export declare class Dialog<
   TOptions extends IDialogOptions = IDialogOptions,
   TEvents extends IDialogEvents = IDialogEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Container<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

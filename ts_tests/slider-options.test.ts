@@ -28,7 +28,9 @@ const _sliderValue: number | undefined = slider.get('value');
 slider.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-slider.on('set_value', (value: number) => { void value; });
+slider.on('set_value', (value: number) => {
+  void value;
+});
 // @ts-expect-error 'not_an_event' is not a valid event name
 slider.on('not_an_event', () => {});
 
@@ -49,4 +51,3 @@ const badAlignment: Partial<ISliderOptions> = {
   // @ts-expect-error alignment must be 'horizontal' | 'vertical'
   alignment: 'diagonal',
 };
-

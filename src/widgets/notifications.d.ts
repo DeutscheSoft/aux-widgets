@@ -31,7 +31,10 @@ export interface INotificationsEvents extends IContainerEvents {
 export declare class Notifications<
   TOptions extends INotificationsOptions = INotificationsOptions,
   TEvents extends INotificationsEvents = INotificationsEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Container<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
@@ -76,7 +79,10 @@ export interface INotificationEvents extends IContainerEvents {
 export declare class Notification<
   TOptions extends INotificationOptions = INotificationOptions,
   TEvents extends INotificationEvents = INotificationEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Container<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

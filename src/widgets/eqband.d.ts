@@ -1,5 +1,8 @@
 import { EffectiveEvents } from '../implements/base.js';
-import { IStandardBiquadFilterName, IBiquadTransform } from '../utils/biquad.js';
+import {
+  IStandardBiquadFilterName,
+  IBiquadTransform,
+} from '../utils/biquad.js';
 import {
   ChartHandle,
   IChartHandleOptions,
@@ -41,7 +44,10 @@ export interface IEqBandEvents extends IChartHandleEvents {
 export declare class EqBand<
   TOptions extends IEqBandOptions = IEqBandOptions,
   TEvents extends IEqBandEvents = IEqBandEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends ChartHandle<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

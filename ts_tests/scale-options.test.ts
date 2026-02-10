@@ -17,7 +17,10 @@ const horizontalScale: Partial<IScaleOptions> = {
   base: 0,
   layout: 'bottom',
   fixed_dots: [0, 25, 50, 75, 100],
-  fixed_labels: [{ value: 0, label: '0' }, { value: 100, label: '100' }],
+  fixed_labels: [
+    { value: 0, label: '0' },
+    { value: 100, label: '100' },
+  ],
 };
 
 const scaleWidget = new Scale(verticalScale);
@@ -34,7 +37,9 @@ const _scalePointer: number | false | undefined = scaleWidget.get('pointer');
 scaleWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-scaleWidget.on('set_pointer', (value: number | false) => { void value; });
+scaleWidget.on('set_pointer', (value: number | false) => {
+  void value;
+});
 // @ts-expect-error 'not_an_event' is not a valid event name
 scaleWidget.on('not_an_event', () => {});
 

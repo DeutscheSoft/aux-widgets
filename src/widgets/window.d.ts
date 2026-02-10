@@ -195,7 +195,10 @@ export interface IWindowEvents extends IContainerEvents {
 export declare class Window<
   TOptions extends IWindowOptions = IWindowOptions,
   TEvents extends IWindowEvents = IWindowEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Container<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

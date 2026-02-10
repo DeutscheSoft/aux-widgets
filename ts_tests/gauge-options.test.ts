@@ -32,7 +32,9 @@ const _gaugeValue: number | undefined = gaugeWidget.get('value');
 gaugeWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-gaugeWidget.on('set_value', (value: number) => { void value; });
+gaugeWidget.on('set_value', (value: number) => {
+  void value;
+});
 // @ts-expect-error 'not_an_event' is not a valid event name
 gaugeWidget.on('not_an_event', () => {});
 

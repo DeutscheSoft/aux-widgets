@@ -33,7 +33,11 @@ export interface IResizeEvents extends IBaseEvents {
   /** Is fired when resizing stops. */
   resizestop: (event: MouseEvent | TouchEvent) => void;
   /** Is fired when resizing is in progress. */
-  resizing: (event: MouseEvent | TouchEvent, width: number, height: number) => void;
+  resizing: (
+    event: MouseEvent | TouchEvent,
+    width: number,
+    height: number
+  ) => void;
 }
 
 /**
@@ -43,7 +47,10 @@ export interface IResizeEvents extends IBaseEvents {
 export declare class Resize<
   TOptions extends IResizeOptions = IResizeOptions,
   TEvents extends IResizeEvents = IResizeEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Base<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 }

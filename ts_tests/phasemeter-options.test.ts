@@ -24,6 +24,8 @@ const _phasemeterValue: number | undefined = phasemeterWidget.get('value');
 phasemeterWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-phasemeterWidget.on('set_value', (value: number) => { void value; });
+phasemeterWidget.on('set_value', (value: number) => {
+  void value;
+});
 // @ts-expect-error 'not_an_event' is not a valid event name
 phasemeterWidget.on('not_an_event', () => {});

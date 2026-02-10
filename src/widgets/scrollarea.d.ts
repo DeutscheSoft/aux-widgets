@@ -25,7 +25,10 @@ export interface IScrollAreaEvents extends IWidgetEvents {
 export declare class ScrollArea<
   TOptions extends IScrollAreaOptions = IScrollAreaOptions,
   TEvents extends IScrollAreaEvents = IScrollAreaEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Widget<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

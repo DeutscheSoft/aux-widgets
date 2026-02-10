@@ -31,7 +31,9 @@ const _knobValue: number | undefined = knob.get('value');
 knob.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-knob.on('set_value', (value: number) => { void value; });
+knob.on('set_value', (value: number) => {
+  void value;
+});
 // @ts-expect-error 'not_an_event' is not a valid event name
 knob.on('not_an_event', () => {});
 
@@ -52,4 +54,3 @@ new Knob({
   // @ts-expect-error direction must be 'polar' | 'vertical' | 'horizontal'
   direction: 'diagonal',
 });
-
