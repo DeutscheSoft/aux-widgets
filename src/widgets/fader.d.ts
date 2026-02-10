@@ -62,8 +62,6 @@ export interface IFaderOptions extends IWidgetOptions, IRangedOptions, IWarningO
  * Fader-specific events that extend Widget events.
  */
 export interface IFaderEvents extends IWidgetEvents {
-  /** Fired when the handle receives a double click. Arguments: value */
-  doubleclick: (value: number) => void;
   /** Fired when the scale was changed. Arguments: key, value */
   scalechanged: (key: string, value: unknown) => void;
 }

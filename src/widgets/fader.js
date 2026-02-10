@@ -96,14 +96,6 @@ function clicked(ev) {
 }
 function dblClick() {
   this.userset('value', this.options.reset);
-  /**
-   * Is fired when the handle receives a double click.
-   *
-   * @event Fader#doubleclick
-   *
-   * @param {number} value - The value of the {@link Fader}.
-   */
-  this.emit('doubleclick', this.options.value);
 }
 
 /**
