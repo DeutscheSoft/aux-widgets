@@ -1,5 +1,5 @@
-import { Root } from '../src/widgets/root.js';
-import { IContainerOptions } from '../src/widgets/container.js';
+import { Root } from '../src/index.js';
+import { IContainerOptions } from '../src/index.js';
 
 // Root uses IContainerOptions.
 const opts: Partial<IContainerOptions> = {

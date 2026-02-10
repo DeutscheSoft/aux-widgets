@@ -1,4 +1,4 @@
-import { Chart, IChartOptions } from '../src/widgets/chart.js';
+import { Chart, IChartOptions } from '../src/index.js';
 
 // Valid Chart options.
 const chart: Partial<IChartOptions> = {

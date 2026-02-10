@@ -1,4 +1,4 @@
-import { ConfirmButton, IConfirmButtonOptions } from '../src/widgets/confirmbutton.js';
+import { ConfirmButton, IConfirmButtonOptions } from '../src/index.js';
 
 // Valid ConfirmButton options.
 const confirmBtn: Partial<IConfirmButtonOptions> = {

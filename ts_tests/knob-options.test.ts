@@ -1,4 +1,4 @@
-import { Knob, IKnobOptions } from '../src/widgets/knob.js';
+import { Knob, IKnobOptions } from '../src/index.js';
 
 // Valid Knob options should typecheck.
 const knobOptions: Partial<IKnobOptions> = {

@@ -1,4 +1,4 @@
-import { ValueButton, IValueButtonOptions } from '../src/widgets/valuebutton.js';
+import { ValueButton, IValueButtonOptions } from '../src/index.js';
 
 // Valid ValueButton options based on examples.
 const horizontalValueButton: Partial<IValueButtonOptions> = {

@@ -1,4 +1,4 @@
-import { ProgressBar, IProgressBarOptions } from '../src/widgets/progressbar.js';
+import { ProgressBar, IProgressBarOptions } from '../src/index.js';
 
 // Valid ProgressBar options (extends Meter).
 const progressBar: Partial<IProgressBarOptions> = {

@@ -13,7 +13,7 @@
   },
   "include": [
     "./**/*.ts",
-    "../src/widgets/**/*.d.ts"
+    "../src/*.d.ts","../src/**/*.d.ts"
   ]
 }
 

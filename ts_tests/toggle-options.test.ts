@@ -1,4 +1,4 @@
-import { Toggle, IToggleOptions } from '../src/widgets/toggle.js';
+import { Toggle, IToggleOptions } from '../src/index.js';
 
 // Valid Toggle options based on examples.
 const simpleToggle: Partial<IToggleOptions> = {

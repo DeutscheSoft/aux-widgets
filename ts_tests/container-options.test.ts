@@ -1,4 +1,4 @@
-import { Container, IContainerOptions } from '../src/widgets/container.js';
+import { Container, IContainerOptions } from '../src/index.js';
 
 // Valid Container options.
 const withContent: Partial<IContainerOptions> = {

@@ -1,4 +1,4 @@
-import { PhaseMeter, IPhaseMeterOptions } from '../src/widgets/phasemeter.js';
+import { PhaseMeter, IPhaseMeterOptions } from '../src/index.js';
 
 // PhaseMeter extends LevelMeter options (same shape, different defaults).
 const phaseMeter: Partial<IPhaseMeterOptions> = {

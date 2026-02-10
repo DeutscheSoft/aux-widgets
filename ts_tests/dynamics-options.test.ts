@@ -1,4 +1,4 @@
-import { Dynamics, IDynamicsOptions } from '../src/widgets/dynamics.js';
+import { Dynamics, IDynamicsOptions } from '../src/index.js';
 
 // Valid Dynamics options (extends Chart).
 const dynamics: Partial<IDynamicsOptions> = {

@@ -1,4 +1,4 @@
-import { Bitstring, IBitstringOptions } from '../src/widgets/bitstring.js';
+import { Bitstring, IBitstringOptions } from '../src/index.js';
 
 // Valid Bitstring options (extends Buttons).
 const bitstring: Partial<IBitstringOptions> = {

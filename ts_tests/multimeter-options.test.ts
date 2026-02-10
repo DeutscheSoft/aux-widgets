@@ -1,4 +1,4 @@
-import { MultiMeter, IMultiMeterOptions } from '../src/widgets/multimeter.js';
+import { MultiMeter, IMultiMeterOptions } from '../src/index.js';
 
 // Valid MultiMeter options (extends Container, levelmeter options as arrays/singles).
 const multimeter: Partial<IMultiMeterOptions> = {

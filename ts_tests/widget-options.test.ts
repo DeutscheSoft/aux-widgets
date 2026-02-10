@@ -1,4 +1,4 @@
-import { Widget, IWidgetOptions, IWidgetEvents } from '../src/widgets/widget.js';
+import { Widget, IWidgetOptions, IWidgetEvents } from '../src/index.js';
 
 // Basic valid widget options should typecheck.
 const widget = new Widget({

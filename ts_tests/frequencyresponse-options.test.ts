@@ -1,4 +1,4 @@
-import { FrequencyResponse, IFrequencyResponseOptions } from '../src/widgets/frequencyresponse.js';
+import { FrequencyResponse, IFrequencyResponseOptions } from '../src/index.js';
 
 // Valid FrequencyResponse options (extends Chart).
 const fr: Partial<IFrequencyResponseOptions> = {

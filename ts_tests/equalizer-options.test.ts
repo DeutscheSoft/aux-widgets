@@ -1,4 +1,4 @@
-import { Equalizer, IEqualizerOptions } from '../src/widgets/equalizer.js';
+import { Equalizer, IEqualizerOptions } from '../src/index.js';
 
 // Valid Equalizer options (extends FrequencyResponse + EqualizerGraph).
 const equalizer: Partial<IEqualizerOptions> = {

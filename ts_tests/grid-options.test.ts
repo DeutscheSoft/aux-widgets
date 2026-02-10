@@ -1,4 +1,4 @@
-import { Grid, IGridOptions } from '../src/widgets/grid.js';
+import { Grid, IGridOptions } from '../src/index.js';
 
 // Valid Grid options.
 const grid: Partial<IGridOptions> = {

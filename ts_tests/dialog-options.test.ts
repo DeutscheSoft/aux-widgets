@@ -1,4 +1,4 @@
-import { Dialog, IDialogOptions } from '../src/widgets/dialog.js';
+import { Dialog, IDialogOptions } from '../src/index.js';
 
 // Valid Dialog options (from examples/Dialog.html).
 const autoCloseDialog: Partial<IDialogOptions> = {

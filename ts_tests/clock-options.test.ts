@@ -1,4 +1,4 @@
-import { Clock, IClockOptions } from '../src/widgets/clock.js';
+import { Clock, IClockOptions } from '../src/index.js';
 
 // Valid Clock options.
 const clock: Partial<IClockOptions> = {

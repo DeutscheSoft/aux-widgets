@@ -1,4 +1,4 @@
-import { Spread, ISpreadOptions } from '../src/widgets/spread.js';
+import { Spread, ISpreadOptions } from '../src/index.js';
 
 // Valid Spread options.
 const spread: Partial<ISpreadOptions> = {

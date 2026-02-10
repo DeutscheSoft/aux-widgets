@@ -1,4 +1,4 @@
-import { Navigation, INavigationOptions } from '../src/widgets/navigation.js';
+import { Navigation, INavigationOptions } from '../src/index.js';
 
 // Valid Navigation options (extends Buttons).
 const nav: Partial<INavigationOptions> = {

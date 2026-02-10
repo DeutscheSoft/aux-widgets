@@ -1,4 +1,4 @@
-import { Pages, IPagesOptions } from '../src/widgets/pages.js';
+import { Pages, IPagesOptions } from '../src/index.js';
 
 // Valid Pages options.
 const pages: Partial<IPagesOptions> = {

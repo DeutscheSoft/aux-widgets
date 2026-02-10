@@ -1,4 +1,4 @@
-import { Gauge, IGaugeOptions } from '../src/widgets/gauge.js';
+import { Gauge, IGaugeOptions } from '../src/index.js';
 
 // Valid Gauge options (extends Circular).
 const gauge: Partial<IGaugeOptions> = {

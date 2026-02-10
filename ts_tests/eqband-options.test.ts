@@ -1,4 +1,4 @@
-import { EqBand, IEqBandOptions } from '../src/widgets/eqband.js';
+import { EqBand, IEqBandOptions } from '../src/index.js';
 
 // Valid EqBand options (extends ChartHandle).
 const eqband: Partial<IEqBandOptions> = {

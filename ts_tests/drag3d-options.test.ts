@@ -1,4 +1,4 @@
-import { Drag3D, IDrag3DOptions } from '../src/widgets/drag3d.js';
+import { Drag3D, IDrag3DOptions } from '../src/index.js';
 
 // Valid Drag3D options.
 const drag3d: Partial<IDrag3DOptions> = {

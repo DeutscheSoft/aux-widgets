@@ -25,6 +25,7 @@ export * from './widgets/chart.js';
 export * from './widgets/clock.js';
 export * from './widgets/colorpicker.js';
 export * from './widgets/colorpickerdialog.js';
+export * from './widgets/combobox.js';
 export * from './widgets/confirmbutton.js';
 export * from './widgets/container.js';
 export * from './widgets/crossover.js';

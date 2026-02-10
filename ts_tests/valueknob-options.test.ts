@@ -1,4 +1,4 @@
-import { ValueKnob, IValueKnobOptions } from '../src/widgets/valueknob.js';
+import { ValueKnob, IValueKnobOptions } from '../src/index.js';
 
 // Valid ValueKnob options should typecheck.
 const valueKnobOptions: Partial<IValueKnobOptions> = {

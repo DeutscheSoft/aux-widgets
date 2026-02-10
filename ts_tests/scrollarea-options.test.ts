@@ -1,4 +1,4 @@
-import { ScrollArea, IScrollAreaOptions } from '../src/widgets/scrollarea.js';
+import { ScrollArea, IScrollAreaOptions } from '../src/index.js';
 
 // ScrollArea only extends IWidgetOptions (no extra options).
 const opts: Partial<IScrollAreaOptions> = {

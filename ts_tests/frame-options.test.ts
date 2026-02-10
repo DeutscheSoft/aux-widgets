@@ -1,4 +1,4 @@
-import { Frame, IFrameOptions } from '../src/widgets/frame.js';
+import { Frame, IFrameOptions } from '../src/index.js';
 
 // Valid Frame options (extends Container).
 const frame: Partial<IFrameOptions> = {

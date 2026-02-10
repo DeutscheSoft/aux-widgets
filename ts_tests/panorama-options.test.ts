@@ -1,4 +1,4 @@
-import { Panorama, IPanoramaOptions } from '../src/widgets/panorama.js';
+import { Panorama, IPanoramaOptions } from '../src/index.js';
 
 // Valid Panorama options (extends Chart).
 const panorama: Partial<IPanoramaOptions> = {

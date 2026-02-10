@@ -1,4 +1,4 @@
-import { Fader, IFaderOptions } from '../src/widgets/fader.js';
+import { Fader, IFaderOptions } from '../src/index.js';
 
 // Valid Fader options should typecheck.
 const faderOptions: Partial<IFaderOptions> = {

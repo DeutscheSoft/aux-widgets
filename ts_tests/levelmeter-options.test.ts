@@ -1,4 +1,4 @@
-import { LevelMeter, ILevelMeterOptions } from '../src/widgets/levelmeter.js';
+import { LevelMeter, ILevelMeterOptions } from '../src/index.js';
 
 // Valid LevelMeter options (extends Meter).
 const levelMeter: Partial<ILevelMeterOptions> = {

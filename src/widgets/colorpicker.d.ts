@@ -5,30 +5,7 @@ import { ValueKnob } from './valueknob.js';
 import { Button } from './button.js';
 import { Range } from '../modules/range.js';
 import { DragValue } from '../modules/dragvalue.js';
-
-/**
- * HSL color object.
- */
-export interface IHSLColor {
-  /** Hue value (0..1). */
-  h: number;
-  /** Saturation value (0..1). */
-  s: number;
-  /** Lightness value (0..1). */
-  l: number;
-}
-
-/**
- * RGB color object.
- */
-export interface IRGBColor {
-  /** Red value (0..255). */
-  r: number;
-  /** Green value (0..255). */
-  g: number;
-  /** Blue value (0..255). */
-  b: number;
-}
+import type { IHSLColor, IRGBColor } from '../utils/colors.js';
 
 /**
  * Color object containing all color representations.

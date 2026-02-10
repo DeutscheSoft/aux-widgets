@@ -5,8 +5,8 @@ import {
   EffectiveEvents,
   IWidgetOptions,
   IWidgetEvents,
-} from '../src/widgets/widget.js';
-import { Fader, IFaderOptions, IFaderEvents } from '../src/widgets/fader.js';
+} from '../src/index.js';
+import { Fader, IFaderOptions, IFaderEvents } from '../src/index.js';
 
 // --- WidgetOptionsOf<T> ---
 

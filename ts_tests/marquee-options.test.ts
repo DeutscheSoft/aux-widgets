@@ -1,4 +1,4 @@
-import { Marquee, IMarqueeOptions } from '../src/widgets/marquee.js';
+import { Marquee, IMarqueeOptions } from '../src/index.js';
 
 // Valid Marquee options (extends Container + Label).
 const marquee: Partial<IMarqueeOptions> = {

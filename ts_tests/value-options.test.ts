@@ -1,4 +1,4 @@
-import { Value, IValueOptions } from '../src/widgets/value.js';
+import { Value, IValueOptions } from '../src/index.js';
 
 // Valid Value options based on examples.
 const simpleValue: Partial<IValueOptions> = {};

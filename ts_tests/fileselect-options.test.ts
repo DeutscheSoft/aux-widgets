@@ -1,4 +1,4 @@
-import { FileSelect, IFileSelectOptions } from '../src/widgets/fileselect.js';
+import { FileSelect, IFileSelectOptions } from '../src/index.js';
 
 // Valid FileSelect options.
 const fileselect: Partial<IFileSelectOptions> = {

@@ -1,4 +1,4 @@
-import { ComboBox, IComboBoxOptions } from '../src/widgets/combobox.js';
+import { ComboBox, IComboBoxOptions } from '../src/index.js';
 
 // Valid ComboBox options.
 const combobox: Partial<IComboBoxOptions> = {

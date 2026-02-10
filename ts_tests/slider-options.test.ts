@@ -1,4 +1,4 @@
-import { Slider, ISliderOptions } from '../src/widgets/slider.js';
+import { Slider, ISliderOptions } from '../src/index.js';
 
 // A fully specified, valid Slider options object should typecheck.
 const sliderOptions: Partial<ISliderOptions> = {

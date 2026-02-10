@@ -1,4 +1,4 @@
-import { Circular, ICircularOptions } from '../src/widgets/circular.js';
+import { Circular, ICircularOptions } from '../src/index.js';
 
 // Valid Circular options (used by Knob/Gauge).
 const circular: Partial<ICircularOptions> = {

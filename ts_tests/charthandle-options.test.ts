@@ -1,4 +1,4 @@
-import { ChartHandle, IChartHandleOptions } from '../src/widgets/charthandle.js';
+import { ChartHandle, IChartHandleOptions } from '../src/index.js';
 
 // Valid ChartHandle options.
 const handle: Partial<IChartHandleOptions> = {

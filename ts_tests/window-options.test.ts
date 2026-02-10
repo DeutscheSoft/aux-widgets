@@ -1,4 +1,4 @@
-import { Window, IWindowOptions } from '../src/widgets/window.js';
+import { Window, IWindowOptions } from '../src/index.js';
 
 // Valid Window options modeled after Dialog example usage.
 const autoCloseWindow: Partial<IWindowOptions> = {

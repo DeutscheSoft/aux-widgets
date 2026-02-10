@@ -1,4 +1,4 @@
-import { Select, ISelectOptions } from '../src/widgets/select.js';
+import { Select, ISelectOptions } from '../src/index.js';
 
 // Valid Select options.
 const withEntries: Partial<ISelectOptions> = {

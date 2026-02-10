@@ -6,6 +6,7 @@
   "main": "src/index.js",
   "module": "src/index.js",
   "browser": "src/index.js",
+  "types": "src/index.d.ts",
   "type": "module",
   "directories": {
     "doc": "doc",
@@ -30,14 +31,12 @@
     }
   ],
   "sideEffects": [
-    "./src/index.js",
     "./src/index.sideeffects.js",
     "./src/components.registration.js",
     "./src/components/*.registration.js",
     "./src/matrix.sideeffects.js",
     "./src/matrix/components.registration.js",
     "./src/matrix/components/*.registration.js",
-    "index.js",
     "*.sideeffects.js",
     "*.registration.js"
   ],

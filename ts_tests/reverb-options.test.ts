@@ -1,4 +1,4 @@
-import { Reverb, IReverbOptions } from '../src/widgets/reverb.js';
+import { Reverb, IReverbOptions } from '../src/index.js';
 
 // Valid Reverb options (extends Chart).
 const reverb: Partial<IReverbOptions> = {

@@ -1,4 +1,4 @@
-import { Pager, IPagerOptions } from '../src/widgets/pager.js';
+import { Pager, IPagerOptions } from '../src/index.js';
 
 // Valid Pager options.
 const pager: Partial<IPagerOptions> = {

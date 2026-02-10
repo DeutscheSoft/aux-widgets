@@ -1,4 +1,4 @@
-import { Notifications, INotificationsOptions } from '../src/widgets/notifications.js';
+import { Notifications, INotificationsOptions } from '../src/index.js';
 
 // Valid Notifications options.
 const opts: Partial<INotificationsOptions> = {

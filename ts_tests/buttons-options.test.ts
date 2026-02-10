@@ -1,4 +1,4 @@
-import { Buttons, IButtonsOptions } from '../src/widgets/buttons.js';
+import { Buttons, IButtonsOptions } from '../src/index.js';
 
 // Valid Buttons options (extends Container).
 const horizontal: Partial<IButtonsOptions> = {

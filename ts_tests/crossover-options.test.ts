@@ -1,4 +1,4 @@
-import { Crossover, ICrossoverOptions } from '../src/widgets/crossover.js';
+import { Crossover, ICrossoverOptions } from '../src/index.js';
 
 // Valid Crossover options (extends Equalizer).
 const crossover: Partial<ICrossoverOptions> = {

@@ -1,4 +1,4 @@
-import { Label, ILabelOptions } from '../src/widgets/label.js';
+import { Label, ILabelOptions } from '../src/index.js';
 
 // Valid Label options.
 const simpleLabel: Partial<ILabelOptions> = {

@@ -1,4 +1,4 @@
-import { Scale, IScaleOptions } from '../src/widgets/scale.js';
+import { Scale, IScaleOptions } from '../src/index.js';
 
 // Valid Scale options.
 const verticalScale: Partial<IScaleOptions> = {

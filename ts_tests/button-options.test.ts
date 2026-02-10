@@ -1,4 +1,4 @@
-import { Button, IButtonOptions } from '../src/widgets/button.js';
+import { Button, IButtonOptions } from '../src/index.js';
 
 // Valid Button options based on examples.
 const simpleButton: Partial<IButtonOptions> = {

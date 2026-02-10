@@ -1,4 +1,4 @@
-import { Icon, IIconOptions } from '../src/widgets/icon.js';
+import { Icon, IIconOptions } from '../src/index.js';
 
 // Valid Icon options.
 const withIcon: Partial<IIconOptions> = {

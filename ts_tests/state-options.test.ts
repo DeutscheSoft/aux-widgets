@@ -1,4 +1,4 @@
-import { State, IStateOptions } from '../src/widgets/state.js';
+import { State, IStateOptions } from '../src/index.js';
 
 // Valid State options.
 const onState: Partial<IStateOptions> = {

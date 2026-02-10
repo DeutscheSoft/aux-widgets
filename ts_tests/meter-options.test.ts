@@ -1,4 +1,4 @@
-import { Meter, IMeterOptions } from '../src/widgets/meter.js';
+import { Meter, IMeterOptions } from '../src/index.js';
 
 // Valid Meter options.
 const levelMeter: Partial<IMeterOptions> = {

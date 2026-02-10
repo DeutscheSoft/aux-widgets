@@ -1,4 +1,4 @@
-import { Graph, IGraphOptions } from '../src/widgets/graph.js';
+import { Graph, IGraphOptions } from '../src/index.js';
 
 // Valid Graph options.
 const graph: Partial<IGraphOptions> = {

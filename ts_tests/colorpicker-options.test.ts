@@ -1,4 +1,4 @@
-import { ColorPicker, IColorPickerOptions } from '../src/widgets/colorpicker.js';
+import { ColorPicker, IColorPickerOptions } from '../src/index.js';
 
 // Valid ColorPicker options.
 const colorpicker: Partial<IColorPickerOptions> = {
