@@ -44,38 +44,76 @@ import { addClass } from '../utils/dom.js';
  * @property {Number} [options.range_y] - {@link Range} for y direction.
  * @property {Number} [options.range_z] - {@link Range} for z direction.
  */
+const AXES = ['x', 'y', 'z'];
+
+function drag3dOptionTypes() {
+  const types = {
+    x: 'number',
+    y: 'number',
+    z: 'number',
+    range_x: 'object',
+    range_y: 'object',
+    range_z: 'object',
+  };
+  for (const i of AXES) {
+    for (const name in DragValue.getOptionTypes()) {
+      types['drag_' + i + '.' + name] = DragValue.getOptionType(name);
+    }
+    for (const name in Range.getOptionTypes()) {
+      types['range_' + i + '.' + name] = Range.getOptionType(name);
+    }
+  }
+  return types;
+}
+
+function drag3dOptionDefaults() {
+  return {
+    x: 0,
+    y: 0,
+    z: 0,
+    range_x: { min: 0, max: 1, basis: 200 },
+    range_y: { min: 0, max: 1, basis: 200 },
+    range_z: { min: 0, max: 1, basis: 200 },
+    'drag_x.rotation': 330,
+    'drag_y.rotation': 30,
+    'drag_z.rotation': 90,
+  };
+}
+
+function setCallback(childName) {
+  return function (val, key) {
+    if (this[childName]) this[childName].set(key.substring(childName.length + 1), val);
+  };
+}
+
+function drag3dStaticEvents() {
+  const events = {
+    set_range_x: (v) => (this.range_x = new Range(v)),
+    set_range_y: (v) => (this.range_y = new Range(v)),
+    set_range_z: (v) => (this.range_z = new Range(v)),
+  };
+  for (const i of AXES) {
+    for (const name in DragValue.getOptionTypes()) {
+      events['set_drag_' + i + '.' + name] = setCallback('drag_' + i);
+    }
+    for (const name in Range.getOptionTypes()) {
+      events['set_range_' + i + '.' + name] = setCallback('range_' + i);
+    }
+  }
+  return events;
+}
+
 export class Drag3D extends Container {
   static get _options() {
-    return {
-      x: 'number',
-      y: 'number',
-      z: 'number',
-      range_x: 'object',
-      range_y: 'object',
-      range_z: 'object',
-    };
+    return drag3dOptionTypes();
   }
 
   static get options() {
-    return {
-      x: 0,
-      y: 0,
-      z: 0,
-      range_x: { min: 0, max: 1, basis: 200 },
-      range_y: { min: 0, max: 1, basis: 200 },
-      range_z: { min: 0, max: 1, basis: 200 },
-      'drag_x.rotation': 330,
-      'drag_y.rotation': 30,
-      'drag_z.rotation': 90,
-    };
+    return drag3dOptionDefaults();
   }
 
   static get static_events() {
-    return {
-      set_range_x: (v) => (this.range_x = new Range(v)),
-      set_range_y: (v) => (this.range_y = new Range(v)),
-      set_range_z: (v) => (this.range_z = new Range(v)),
-    };
+    return drag3dStaticEvents();
   }
 
   initialize(options) {
@@ -162,25 +200,5 @@ export class Drag3D extends Container {
     this.drag_y.destroy();
     this.drag_z.destroy();
     super.destroy();
-  }
-}
-
-const setCallback = function (name) {
-  return function (val, key) {
-    if (this[name]) this[name].set(key.substring(name.length + 1), val);
-  };
-};
-
-for (const i in { x: 0, y: 0, z: 0 }) {
-  for (const name in DragValue.getOptionTypes()) {
-    Drag3D.addStaticEvent('set_drag_' + i + '.' + name, setCallback(name));
-    Drag3D.defineOption(
-      'drag_' + i + '.' + name,
-      DragValue.getOptionType(name)
-    );
-  }
-  for (const name in Range.getOptionTypes()) {
-    Drag3D.addStaticEvent('set_range_' + i + '.' + name, setCallback(name));
-    Drag3D.defineOption('range_' + i + '.' + name, Range.getOptionType(name));
   }
 }
