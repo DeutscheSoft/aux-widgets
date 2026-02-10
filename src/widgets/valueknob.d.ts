@@ -25,10 +25,8 @@ export interface IValueKnobOptions extends Omit<IKnobOptions, 'size' | 'value'>,
   show_value?: boolean;
   /** Set to false to hide the Knob. */
   show_knob?: boolean;
-  /** The diameter of the circle (from IKnobOptions). */
-  size?: number;
-  /** The value. Supports both number (from Knob) and number | string (from Value) for compatibility. */
-  value?: number | string;
+  /** The value. */
+  value?: number;
 }
 
 /**

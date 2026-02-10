@@ -150,7 +150,7 @@ export class ValueKnob extends Widget {
         show: true,
         inherit_options: true,
         toggle_class: true,
-        blacklist_options: ['label', 'show_value'],
+        blacklist_options: ['label', 'show_value', 'size'],
       },
       {
         name: 'value',
@@ -165,6 +165,7 @@ export class ValueKnob extends Widget {
           valuedone: valueDone,
         },
         toggle_class: true,
+        blacklist_options: ['size'],
       },
     ];
   }
