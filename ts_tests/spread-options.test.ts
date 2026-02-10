@@ -21,6 +21,11 @@ spreadWidget.set('lower', 30);
 // @ts-expect-error value for 'layout' must be 'left' | 'right' | 'top' | 'bottom'
 spreadWidget.set('layout', 'center');
 
+// .get(key) API type-checking
+const _spreadLower: number | undefined = spreadWidget.get('lower');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+spreadWidget.get('not_an_option_key');
+
 // Invalid layout should be rejected.
 const badLayout: ISpreadOptions = {
   min: 0,

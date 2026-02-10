@@ -35,6 +35,11 @@ meterWidget.set('value', 0.5);
 // @ts-expect-error value for 'layout' must be 'left' | 'right' | 'top' | 'bottom'
 meterWidget.set('layout', 'center');
 
+// .get(key) API type-checking
+const _meterValue: number | undefined = meterWidget.get('value');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+meterWidget.get('not_an_option_key');
+
 // Invalid layout should be rejected.
 const badLayout: IMeterOptions = {
   min: 0,

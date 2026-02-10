@@ -32,6 +32,11 @@ valueWidget.set('value', 100);
 // @ts-expect-error value for 'type' must be 'text' | 'password'
 valueWidget.set('type', 'email');
 
+// .get(key) API type-checking
+const _valueValue: string | number | undefined = valueWidget.get('value');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+valueWidget.get('not_an_option_key');
+
 // Invalid size type should be rejected.
 const badSize: IValueOptions = {
   // @ts-expect-error size must be number | null

@@ -20,6 +20,11 @@ charthandleWidget.set('x', 0.25);
 // @ts-expect-error value for 'x' must be number
 charthandleWidget.set('x', '0.25');
 
+// .get(key) API type-checking
+const _charthandleX: number | undefined = charthandleWidget.get('x');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+charthandleWidget.get('not_an_option_key');
+
 // Invalid mode should be rejected.
 const badMode: IChartHandleOptions = {
   label: 'x',

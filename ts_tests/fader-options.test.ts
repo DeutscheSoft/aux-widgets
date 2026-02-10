@@ -22,6 +22,11 @@ fader.set('value', 0.5);
 // @ts-expect-error value for 'value' must be number
 fader.set('value', '0.5');
 
+// .get(key) API type-checking
+const _faderValue: number | undefined = fader.get('value');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+fader.get('not_an_option_key');
+
 // Partial options via constructor are allowed.
 new Fader({
   value: 0.5,

@@ -16,6 +16,11 @@ valueKnob.set('value', 0.5);
 // @ts-expect-error value for 'value' must be number
 valueKnob.set('value', '0.5');
 
+// .get(key) API type-checking
+const _valueknobValue: number | undefined = valueKnob.get('value');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+valueKnob.get('not_an_option_key');
+
 // Partial options via constructor are allowed.
 new ValueKnob({
   label: false,

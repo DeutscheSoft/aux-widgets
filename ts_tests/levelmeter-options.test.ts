@@ -24,6 +24,11 @@ levelmeterWidget.set('value', -12);
 // @ts-expect-error value for 'value' must be number
 levelmeterWidget.set('value', '-12');
 
+// .get(key) API type-checking
+const _levelmeterValue: number | undefined = levelmeterWidget.get('value');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+levelmeterWidget.get('not_an_option_key');
+
 // Invalid clipping type should be rejected.
 const badClipping: ILevelMeterOptions = {
   min: 0,

@@ -25,6 +25,11 @@ knob.set('value', 0.5);
 // @ts-expect-error value for 'direction' must be 'polar' | 'vertical' | 'horizontal'
 knob.set('direction', 'diagonal');
 
+// .get(key) API type-checking
+const _knobValue: number | undefined = knob.get('value');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+knob.get('not_an_option_key');
+
 // Partial options via constructor are allowed.
 new Knob({
   value: 0.5,

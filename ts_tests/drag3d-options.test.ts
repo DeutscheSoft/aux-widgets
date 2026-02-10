@@ -17,3 +17,8 @@ new Drag3D({ x: 0.5, content: '' });
 drag3dWidget.set('x', 0.5);
 // @ts-expect-error value for 'x' must be number
 drag3dWidget.set('x', '0.5');
+
+// .get(key) API type-checking
+const _drag3dX: number | undefined = drag3dWidget.get('x');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+drag3dWidget.get('not_an_option_key');

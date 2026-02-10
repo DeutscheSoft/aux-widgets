@@ -16,6 +16,11 @@ frWidget.set('depth', 2);
 // @ts-expect-error value for 'depth' must be number
 frWidget.set('depth', '2');
 
+// .get(key) API type-checking
+const _frDepth: number | undefined = frWidget.get('depth');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+frWidget.get('not_an_option_key');
+
 // Invalid depth type should be rejected.
 const badFr: IFrequencyResponseOptions = {
   // @ts-expect-error depth must be a number

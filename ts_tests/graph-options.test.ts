@@ -17,6 +17,11 @@ graphWidget.set('mode', 'fill');
 // @ts-expect-error value for 'type' must be IGraphType
 graphWidget.set('type', 'X');
 
+// .get(key) API type-checking
+const _graphMode: 'line' | 'bottom' | 'top' | 'center' | 'base' | 'fill' | undefined = graphWidget.get('mode');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+graphWidget.get('not_an_option_key');
+
 // Invalid type should be rejected.
 const badType: IGraphOptions = {
   range_x: { min: 0, max: 1 },

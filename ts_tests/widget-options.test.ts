@@ -17,6 +17,11 @@ widget.set('visible', false);
 // @ts-expect-error value for 'aria_label' must be string
 widget.set('aria_label', 123);
 
+// .get(key) API type-checking
+const _widgetVisible: boolean | string | undefined = widget.get('visible');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+widget.get('not_an_option_key');
+
 // Partial options are allowed because the constructor takes Partial<TOptions>.
 new Widget({
   visible: false,

@@ -17,3 +17,8 @@ new PhaseMeter({ value: 0.5 });
 phasemeterWidget.set('value', 0.5);
 // @ts-expect-error value for 'value' must be number
 phasemeterWidget.set('value', '0.5');
+
+// .get(key) API type-checking
+const _phasemeterValue: number | undefined = phasemeterWidget.get('value');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+phasemeterWidget.get('not_an_option_key');

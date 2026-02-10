@@ -24,6 +24,11 @@ circularWidget.set('value', 75);
 // @ts-expect-error value for 'value' must be number
 circularWidget.set('value', '75');
 
+// .get(key) API type-checking
+const _circularValue: number | undefined = circularWidget.get('value');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+circularWidget.get('not_an_option_key');
+
 // Invalid value type should be rejected.
 const badValue: ICircularOptions = {
   min: 0,

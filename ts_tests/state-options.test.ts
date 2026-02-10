@@ -24,6 +24,11 @@ stateWidget.set('state', 0.5);
 // @ts-expect-error value for 'color' must be string | false
 stateWidget.set('color', 0xff0000);
 
+// .get(key) API type-checking
+const _stateState: number | boolean | undefined = stateWidget.get('state');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+stateWidget.get('not_an_option_key');
+
 // Invalid color type should be rejected.
 const badColor: IStateOptions = {
   state: 1,

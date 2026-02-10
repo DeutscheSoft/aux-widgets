@@ -13,6 +13,11 @@ notificationsWidget.set('stack', 'end');
 // @ts-expect-error value for 'stack' must be 'start' | 'end'
 notificationsWidget.set('stack', 'middle');
 
+// .get(key) API type-checking
+const _notificationsStack: 'start' | 'end' | undefined = notificationsWidget.get('stack');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+notificationsWidget.get('not_an_option_key');
+
 // Invalid stack should be rejected.
 const badStack: INotificationsOptions = {
   // @ts-expect-error stack must be 'start' | 'end'

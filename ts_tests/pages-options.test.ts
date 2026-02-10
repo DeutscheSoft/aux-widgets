@@ -16,6 +16,11 @@ pagesWidget.set('show', 1);
 // @ts-expect-error value for 'animation' must be 'horizontal' | 'vertical'
 pagesWidget.set('animation', 'fade');
 
+// .get(key) API type-checking
+const _pagesShow: number | undefined = pagesWidget.get('show');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+pagesWidget.get('not_an_option_key');
+
 // Invalid animation should be rejected.
 const badAnimation: IPagesOptions = {
   pages: [],

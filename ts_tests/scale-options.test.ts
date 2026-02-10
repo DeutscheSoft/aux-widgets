@@ -28,6 +28,11 @@ scaleWidget.set('pointer', 75);
 // @ts-expect-error value for 'layout' must be 'left' | 'right' | 'top' | 'bottom'
 scaleWidget.set('layout', 'center');
 
+// .get(key) API type-checking
+const _scalePointer: number | false | undefined = scaleWidget.get('pointer');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+scaleWidget.get('not_an_option_key');
+
 // Invalid layout should be rejected.
 const badLayout: IScaleOptions = {
   min: 0,

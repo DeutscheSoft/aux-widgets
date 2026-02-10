@@ -16,6 +16,11 @@ fileselectWidget.set('multiple', true);
 // @ts-expect-error value for 'multiple' must be boolean
 fileselectWidget.set('multiple', 'true');
 
+// .get(key) API type-checking
+const _fileselectMultiple: boolean | undefined = fileselectWidget.get('multiple');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+fileselectWidget.get('not_an_option_key');
+
 // Invalid multiple type should be rejected.
 const badMultiple: IFileSelectOptions = {
   label: 'x',

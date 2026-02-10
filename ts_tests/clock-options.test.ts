@@ -20,6 +20,11 @@ clockWidget.set('size', 150);
 // @ts-expect-error value for 'size' must be number
 clockWidget.set('size', '150');
 
+// .get(key) API type-checking
+const _clockSize: number | undefined = clockWidget.get('size');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+clockWidget.get('not_an_option_key');
+
 // Invalid size type should be rejected.
 const badSize: IClockOptions = {
   // @ts-expect-error size must be a number

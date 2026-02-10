@@ -26,6 +26,11 @@ selectWidget.set('selected', 1);
 // @ts-expect-error value for 'selected' must be number
 selectWidget.set('selected', '1');
 
+// .get(key) API type-checking
+const _selectSelected: number | undefined = selectWidget.get('selected');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+selectWidget.get('not_an_option_key');
+
 // Invalid selected type should be rejected.
 const badSelected: ISelectOptions = {
   entries: ['a'],

@@ -14,6 +14,11 @@ frameWidget.set('label', 'New Title');
 // @ts-expect-error value for 'label' must be string | false
 frameWidget.set('label', 123);
 
+// .get(key) API type-checking
+const _frameLabel: string | false | undefined = frameWidget.get('label');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+frameWidget.get('not_an_option_key');
+
 // Invalid label type should be rejected.
 const badLabel: IFrameOptions = {
   content: 'x',

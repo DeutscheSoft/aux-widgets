@@ -41,6 +41,11 @@ toggleWidget.set('state', true);
 // @ts-expect-error value for 'press' must be number
 toggleWidget.set('press', '250');
 
+// .get(key) API type-checking
+const _toggleState: boolean | undefined = toggleWidget.get('state');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+toggleWidget.get('not_an_option_key');
+
 // Invalid press type should be rejected.
 const badPress: IToggleOptions = {
   // @ts-expect-error press must be a number

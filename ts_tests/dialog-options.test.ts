@@ -26,6 +26,11 @@ dialogWidget.set('anchor', 'center');
 // @ts-expect-error value for 'anchor' must be valid IAnchor
 dialogWidget.set('anchor', 'middle');
 
+// .get(key) API type-checking
+const _dialogAnchor: string | undefined = dialogWidget.get('anchor');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+dialogWidget.get('not_an_option_key');
+
 // Invalid anchor should be rejected.
 const badAnchor: IDialogOptions = {
   // @ts-expect-error anchor must be a valid IAnchor

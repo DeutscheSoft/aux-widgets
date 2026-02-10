@@ -29,6 +29,11 @@ buttonWidget.set('label', 'OK');
 // @ts-expect-error value for 'label' must be string | false
 buttonWidget.set('label', 123);
 
+// .get(key) API type-checking
+const _buttonLabel: string | false | undefined = buttonWidget.get('label');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+buttonWidget.get('not_an_option_key');
+
 // Invalid layout should be rejected.
 const badLayoutButton: IButtonOptions = {
   // @ts-expect-error layout must be 'horizontal' | 'vertical'

@@ -17,6 +17,11 @@ colorpickerWidget.set('hue', 0.5);
 // @ts-expect-error value for 'hue' must be number
 colorpickerWidget.set('hue', '0.5');
 
+// .get(key) API type-checking
+const _colorpickerHue: number | undefined = colorpickerWidget.get('hue');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+colorpickerWidget.get('not_an_option_key');
+
 // Invalid hue type should be rejected.
 const badHue: IColorPickerOptions = {
   // @ts-expect-error hue must be a number 0..1

@@ -26,6 +26,11 @@ gaugeWidget.set('value', 75);
 // @ts-expect-error value for 'value' must be number
 gaugeWidget.set('value', '75');
 
+// .get(key) API type-checking
+const _gaugeValue: number | undefined = gaugeWidget.get('value');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+gaugeWidget.get('not_an_option_key');
+
 // Invalid label type should be rejected.
 const badLabel: IGaugeOptions = {
   min: 0,

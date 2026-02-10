@@ -16,6 +16,11 @@ panoramaWidget.set('mode', 'balance');
 // @ts-expect-error value for 'mode' must be IPanoramaMode
 panoramaWidget.set('mode', 'stereo');
 
+// .get(key) API type-checking
+const _panoramaMode: 'panorama' | 'balance' | 'surround' | undefined = panoramaWidget.get('mode');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+panoramaWidget.get('not_an_option_key');
+
 // Invalid mode should be rejected.
 const badMode: IPanoramaOptions = {
   label: 'x',

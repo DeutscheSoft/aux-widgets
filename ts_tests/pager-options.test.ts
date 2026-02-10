@@ -15,6 +15,11 @@ pagerWidget.set('position', 'bottom');
 // @ts-expect-error value for 'position' must be 'top' | 'right' | 'left' | 'bottom'
 pagerWidget.set('position', 'center');
 
+// .get(key) API type-checking
+const _pagerPosition: 'top' | 'right' | 'left' | 'bottom' | undefined = pagerWidget.get('position');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+pagerWidget.get('not_an_option_key');
+
 // Invalid position should be rejected.
 const badPosition: IPagerOptions = {
   // @ts-expect-error position must be 'top' | 'right' | 'left' | 'bottom'

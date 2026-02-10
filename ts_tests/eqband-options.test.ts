@@ -22,6 +22,11 @@ eqbandWidget.set('gain', -3);
 // @ts-expect-error value for 'gain' must be number
 eqbandWidget.set('gain', '-3');
 
+// .get(key) API type-checking
+const _eqbandGain: number | undefined = eqbandWidget.get('gain');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+eqbandWidget.get('not_an_option_key');
+
 // Invalid gain type should be rejected.
 const badEqband: IEqBandOptions = {
   // @ts-expect-error gain must be a number

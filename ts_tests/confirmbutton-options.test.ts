@@ -19,6 +19,11 @@ confirmButtonWidget.set('timeout', 2000);
 // @ts-expect-error value for 'timeout' must be number
 confirmButtonWidget.set('timeout', '2000');
 
+// .get(key) API type-checking
+const _confirmTimeout: number | undefined = confirmButtonWidget.get('timeout');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+confirmButtonWidget.get('not_an_option_key');
+
 // Invalid timeout type should be rejected.
 const badTimeout: IConfirmButtonOptions = {
   label: 'x',

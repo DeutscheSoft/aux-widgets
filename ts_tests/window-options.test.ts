@@ -29,6 +29,11 @@ windowWidget.set('anchor', 'top-left');
 // @ts-expect-error value for 'anchor' must be valid IWindowAnchor
 windowWidget.set('anchor', 'middle');
 
+// .get(key) API type-checking
+const _windowAnchor: string | undefined = windowWidget.get('anchor');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+windowWidget.get('not_an_option_key');
+
 // Invalid anchor option should be rejected.
 const badAnchor: IWindowOptions = {
   // @ts-expect-error anchor must be a valid IWindowAnchor

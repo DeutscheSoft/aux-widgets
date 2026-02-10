@@ -15,6 +15,11 @@ bitstringWidget.set('length', 8);
 // @ts-expect-error value for 'length' must be number | false
 bitstringWidget.set('length', '8');
 
+// .get(key) API type-checking
+const _bitstringLength: number | false | undefined = bitstringWidget.get('length');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+bitstringWidget.get('not_an_option_key');
+
 // Invalid length type should be rejected.
 const badLength: IBitstringOptions = {
   // @ts-expect-error length must be number | false

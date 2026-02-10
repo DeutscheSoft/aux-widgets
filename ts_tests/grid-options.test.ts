@@ -18,6 +18,11 @@ gridWidget.set('width', 500);
 // @ts-expect-error value for 'width' must be number
 gridWidget.set('width', '500');
 
+// .get(key) API type-checking
+const _gridWidth: number | undefined = gridWidget.get('width');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+gridWidget.get('not_an_option_key');
+
 // Invalid width type should be rejected.
 const badWidth: IGridOptions = {
   // @ts-expect-error width must be a number

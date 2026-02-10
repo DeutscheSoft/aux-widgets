@@ -22,6 +22,11 @@ slider.set('value', 50);
 // @ts-expect-error value for 'value' must be number
 slider.set('value', '50');
 
+// .get(key) API type-checking
+const _sliderValue: number | undefined = slider.get('value');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+slider.get('not_an_option_key');
+
 // Partial options must also be accepted by the constructor.
 new Slider({
   value: 50,

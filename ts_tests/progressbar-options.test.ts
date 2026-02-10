@@ -18,6 +18,11 @@ progressbarWidget.set('value', 50);
 // @ts-expect-error value for 'value' must be number
 progressbarWidget.set('value', '50');
 
+// .get(key) API type-checking
+const _progressbarValue: number | undefined = progressbarWidget.get('value');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+progressbarWidget.get('not_an_option_key');
+
 // Invalid value type should be rejected.
 const badValue: IProgressBarOptions = {
   min: 0,

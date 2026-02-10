@@ -18,6 +18,11 @@ chartWidget.set('label', 'My Chart');
 // @ts-expect-error value for 'label_position' must be IChartLabelPosition
 chartWidget.set('label_position', 'middle');
 
+// .get(key) API type-checking
+const _chartLabel: string | false | undefined = chartWidget.get('label');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+chartWidget.get('not_an_option_key');
+
 // Invalid label_position should be rejected.
 const badPos: IChartOptions = {
   label: 'x',

@@ -24,6 +24,11 @@ buttonsWidget.set('direction', 'vertical');
 // @ts-expect-error value for 'direction' must be 'horizontal' | 'vertical'
 buttonsWidget.set('direction', 'grid');
 
+// .get(key) API type-checking
+const _buttonsDirection: 'horizontal' | 'vertical' | undefined = buttonsWidget.get('direction');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+buttonsWidget.get('not_an_option_key');
+
 // Invalid direction should be rejected.
 const badDirection: IButtonsOptions = {
   buttons: ['a'],

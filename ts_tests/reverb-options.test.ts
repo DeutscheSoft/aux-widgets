@@ -16,6 +16,11 @@ reverbWidget.set('timeframe', 3000);
 // @ts-expect-error value for 'timeframe' must be number
 reverbWidget.set('timeframe', '3000');
 
+// .get(key) API type-checking
+const _reverbTimeframe: number | undefined = reverbWidget.get('timeframe');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+reverbWidget.get('not_an_option_key');
+
 // Invalid timeframe type should be rejected.
 const badReverb: IReverbOptions = {
   // @ts-expect-error timeframe must be a number

@@ -20,6 +20,11 @@ containerWidget.set('visible', true);
 // @ts-expect-error value for 'visible' must be boolean | 'hiding' | 'showing' | 'show' | 'hide'
 containerWidget.set('visible', 'fade');
 
+// .get(key) API type-checking
+const _containerVisible: boolean | 'hiding' | 'showing' | 'show' | 'hide' | undefined = containerWidget.get('visible');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+containerWidget.get('not_an_option_key');
+
 // Invalid visible value should be rejected.
 const badVisible: IContainerOptions = {
   // @ts-expect-error visible must be boolean | 'hiding' | 'showing' | 'show' | 'hide'

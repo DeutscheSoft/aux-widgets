@@ -16,6 +16,11 @@ comboboxWidget.set('value', 'b');
 // @ts-expect-error value for 'editmode' must be 'onenter' | 'immediate'
 comboboxWidget.set('editmode', 'onblur');
 
+// .get(key) API type-checking
+const _comboboxValue: string | number | null | undefined = comboboxWidget.get('value');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+comboboxWidget.get('not_an_option_key');
+
 // Invalid editmode should be rejected.
 const badEditmode: IComboBoxOptions = {
   value: 'x',

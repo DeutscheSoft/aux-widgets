@@ -33,6 +33,11 @@ valuebuttonWidget.set('value', 25);
 // @ts-expect-error value for 'value' must be number
 valuebuttonWidget.set('value', '25');
 
+// .get(key) API type-checking
+const _valuebuttonValue: number | undefined = valuebuttonWidget.get('value');
+// @ts-expect-error 'not_an_option_key' is not a valid option key
+valuebuttonWidget.get('not_an_option_key');
+
 // Invalid value type should be rejected.
 new ValueButton({
   min: 0,
