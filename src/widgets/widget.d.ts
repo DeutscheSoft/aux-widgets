@@ -69,7 +69,7 @@ export interface IWidgetOptions {
   /** Toggles the class `.aux-inactive` */
   active?: boolean;
   /** Toggles the class `.aux-hide` and `.aux-show`. This option also enables and disables rendering */
-  visible?: boolean;
+  visible?: boolean | string;
   /** Set a time in milliseconds for triggering double click event. If 0, no double click events are fired. */
   dblclick?: number;
   /** Indicates if the widget is currently being interacted with */
@@ -161,3 +161,5 @@ export declare class Widget<
    */
   constructor(options?: Partial<TOptions>);
 }
+
+export type { EffectiveEvents };
