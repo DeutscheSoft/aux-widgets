@@ -109,7 +109,7 @@ export interface IWindowOptions extends IContainerOptions {
   /** Shrink rolls the window up into the title bar. */
   shrink?: boolean;
   /** The content of the window. Can be either a string, a HTMLElement or a Container to append to the content area. */
-  content?: string | HTMLElement | Container;
+  content?: string | HTMLElement;
   /** Initial position of the window. */
   open?: IWindowAnchor;
   /** Z index for piling windows. */
@@ -118,8 +118,6 @@ export interface IWindowOptions extends IContainerOptions {
   header?: IWindowHeaderFooterElement | IWindowHeaderFooterElement[];
   /** Single element or array of footer elements. */
   footer?: IWindowHeaderFooterElement | IWindowHeaderFooterElement[] | false;
-  /** Window title. */
-  title?: string | false;
   /** Window status. */
   status?: string | false;
   /** URL to window icon. */
