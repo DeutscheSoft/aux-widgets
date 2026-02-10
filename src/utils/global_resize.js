@@ -21,7 +21,7 @@ import { EventMultiplexer } from './event_multiplexer.js';
 import { subscribeDOMEvent } from './events.js';
 import { combineSubscriptions } from './subscriptions.js';
 
-export const GlobalResize = new EventMultiplexer((cb) => {
+export const GlobalResize = /* @__PURE__ */ new EventMultiplexer((cb) => {
   const callback = () => cb();
   const unsubscribes = [
     subscribeDOMEvent(window, 'resize', callback),

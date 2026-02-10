@@ -19,4 +19,4 @@
 
 import { Scheduler } from './scheduler/scheduler.js';
 
-export const domScheduler = new Scheduler();
+export const domScheduler = /* @__PURE__ */ new Scheduler();

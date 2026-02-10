@@ -303,22 +303,24 @@ function uniq(a) {
   return a.filter((item, i, a) => a.indexOf(item) === i);
 }
 
-const generateScaleDependencies = uniq(
-  [
-    'layout',
-    'transformation',
-    'show_markers',
-    'show_labels',
-    'levels',
-    'levels_labels',
-    'gap_labels',
-    'gap_dots',
-    'avoid_collisions',
-    'min',
-    'max',
-    'base',
-  ].concat(createLabelDependencies, createDotDependencies)
-);
+const generateScaleDependencies = /* @__PURE__ */ (function () {
+  return uniq(
+    [
+      'layout',
+      'transformation',
+      'show_markers',
+      'show_labels',
+      'levels',
+      'levels_labels',
+      'gap_labels',
+      'gap_dots',
+      'avoid_collisions',
+      'min',
+      'max',
+      'base',
+    ].concat(createLabelDependencies, createDotDependencies)
+  );
+})();
 
 function generateScale(from, to, include_from, show_to) {
   const O = this.options;

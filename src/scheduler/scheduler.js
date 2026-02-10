@@ -40,7 +40,7 @@ function phaseName(phase) {
   }
 }
 
-const defaultSchedule = requestAnimationFrame.bind(window);
+const defaultSchedule = /* @__PURE__ */ requestAnimationFrame.bind(window);
 
 function handleError(scheduler, fun, error) {
   console.error(

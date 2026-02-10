@@ -45,31 +45,27 @@ export function removeEventListener(e, type, cb, options) {
 
 /* Detect if the 'passive' option is supported.
  * This code has been borrowed from mdn */
-let passiveSupported = false;
+const passiveSupported = /* @__PURE__ */ (function () {
+  let passiveSupported = false;
 
-try {
-  const options = Object.defineProperty({}, 'passive', {
-    get: function () {
-      passiveSupported = true;
-      return true;
-    },
-  });
+  try {
+    const options = Object.defineProperty({}, 'passive', {
+      get: function () {
+        passiveSupported = true;
+        return true;
+      },
+    });
 
-  window.addEventListener('test', null, options);
-  window.removeEventListener('test', null);
-} catch {
-  /* empty */
-}
+    window.addEventListener('test', null, options);
+    window.removeEventListener('test', null);
+  } catch {
+    /* empty */
+  }
+  return passiveSupported;
+})();
 
-let active_options, passive_options;
-
-if (passiveSupported) {
-  active_options = { passive: false };
-  passive_options = { passive: true };
-} else {
-  active_options = false;
-  passive_options = false;
-}
+const active_options = passiveSupported ? { passive: false } : false;
+const passive_options = passiveSupported ? { passive: true } : false;
 
 export function addActiveEventListener(e, type, cb) {
   addEventListener(e, type, cb, active_options);

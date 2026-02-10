@@ -673,8 +673,9 @@ export function isDocumentFragment(o) {
 /**
  * True if the current browser supports CSS transforms.
  */
-export const supports_transform =
-  'transform' in document.createElement('div').style;
+export const supports_transform = /* @__PURE__ */ (function () {
+  return 'transform' in document.createElement('div').style;
+})();
 
 /**
  * Check if a device is touch-enabled.

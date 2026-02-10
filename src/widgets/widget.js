@@ -52,18 +52,20 @@ import { domScheduler } from '../dom_scheduler.js';
 import { defineChildWidget } from '../child_widget.js';
 import { defineChildElement } from '../widget_helpers.js';
 
-const enableTimers = new ProximityTimers();
+const enableTimers = /* @__PURE__ */ new ProximityTimers();
 
 export const SymResize = Symbol('resize');
 export const SymResized = Symbol('resized');
 
-const rootWidgets = new Map();
+const rootWidgets = /* @__PURE__ */ new Map();
 
-const ariaOptions = Object.fromEntries(
-  ariaAttributes.map((attributeName) => {
-    return [attributeName.replace('-', '_'), 'string'];
-  })
-);
+const ariaOptions = /* @__PURE__ */ (function () {
+  return Object.fromEntries(
+    ariaAttributes.map((attributeName) => {
+      return [attributeName.replace('-', '_'), 'string'];
+    })
+  );
+})();
 
 function onVisibilityChange() {
   if (document.hidden) {

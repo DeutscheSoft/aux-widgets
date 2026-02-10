@@ -250,47 +250,49 @@ export function makeTransformation(
  * @property {Boolean} [options.set_ariavalue=false] - Define if aria-valuemin, aria-valuemax and aria-valuenow should be set.
  *
  */
-export const rangedRenderers = [
-  defineRender(
-    ['value', 'aria_valuenow', 'format_ariavalue', 'set_ariavalue'],
-    function (value, aria_valuenow, format_ariavalue, set_ariavalue) {
-      if (aria_valuenow !== void 0) return;
-      if (!set_ariavalue) return;
+export const rangedRenderers = /* @__PURE__ */ (function () {
+  return [
+    defineRender(
+      ['value', 'aria_valuenow', 'format_ariavalue', 'set_ariavalue'],
+      function (value, aria_valuenow, format_ariavalue, set_ariavalue) {
+        if (aria_valuenow !== void 0) return;
+        if (!set_ariavalue) return;
 
-      const targets = this.getARIATargets();
+        const targets = this.getARIATargets();
 
-      targets.forEach((element) => {
-        applyAttribute(element, 'aria-valuenow', format_ariavalue(value));
-      });
-    }
-  ),
-  defineRender(
-    ['min', 'aria_valuemin', 'format_ariavalue', 'set_ariavalue'],
-    function (min, aria_valuemin, format_ariavalue, set_ariavalue) {
-      if (aria_valuemin !== void 0) return;
-      if (!set_ariavalue) return;
+        targets.forEach((element) => {
+          applyAttribute(element, 'aria-valuenow', format_ariavalue(value));
+        });
+      }
+    ),
+    defineRender(
+      ['min', 'aria_valuemin', 'format_ariavalue', 'set_ariavalue'],
+      function (min, aria_valuemin, format_ariavalue, set_ariavalue) {
+        if (aria_valuemin !== void 0) return;
+        if (!set_ariavalue) return;
 
-      const targets = this.getARIATargets();
+        const targets = this.getARIATargets();
 
-      targets.forEach((element) => {
-        applyAttribute(element, 'aria-valuemin', format_ariavalue(min));
-      });
-    }
-  ),
-  defineRender(
-    ['max', 'aria_valuemax', 'format_ariavalue', 'set_ariavalue'],
-    function (max, aria_valuemax, format_ariavalue, set_ariavalue) {
-      if (aria_valuemax !== void 0) return;
-      if (!set_ariavalue) return;
+        targets.forEach((element) => {
+          applyAttribute(element, 'aria-valuemin', format_ariavalue(min));
+        });
+      }
+    ),
+    defineRender(
+      ['max', 'aria_valuemax', 'format_ariavalue', 'set_ariavalue'],
+      function (max, aria_valuemax, format_ariavalue, set_ariavalue) {
+        if (aria_valuemax !== void 0) return;
+        if (!set_ariavalue) return;
 
-      const targets = this.getARIATargets();
+        const targets = this.getARIATargets();
 
-      targets.forEach((element) => {
-        applyAttribute(element, 'aria-valuemax', format_ariavalue(max));
-      });
-    }
-  ),
-];
+        targets.forEach((element) => {
+          applyAttribute(element, 'aria-valuemax', format_ariavalue(max));
+        });
+      }
+    ),
+  ];
+})();
 
 function updateSnapModule() {
   const { snap, clip, min, max, base } = this.options;
