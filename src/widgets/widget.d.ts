@@ -162,4 +162,16 @@ export declare class Widget<
   constructor(options?: Partial<NoInfer<TOptions>>);
 }
 
+/**
+ * Infers the options type (TOptions) of a widget type.
+ * Returns `never` if T does not extend Widget.
+ */
+export type WidgetOptionsOf<T> = T extends Widget<infer O, any, any> ? O : never;
+
+/**
+ * Infers the effective events type (TEffectiveEvents) of a widget type.
+ * Returns `never` if T does not extend Widget.
+ */
+export type WidgetEventsOf<T> = T extends Widget<any, any, infer E> ? E : never;
+
 export type { EffectiveEvents };
