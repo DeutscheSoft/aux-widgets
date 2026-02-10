@@ -45,8 +45,6 @@ export interface IKnobOptions extends ICircularOptions {
  * Extends Widget events.
  */
 export interface IKnobEvents extends IWidgetEvents {
-  /** Fired when the knob receives a double click in order to reset to initial value. */
-  doubleclick: (value: number) => void;
 }
 
 /**

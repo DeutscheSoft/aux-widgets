@@ -48,14 +48,6 @@ const formatViewbox = FORMAT('0 0 %d %d');
 function dblClick() {
   if (!this.get('bind_dblclick')) return;
   this.userset('value', this.options.reset);
-  /**
-   * Is fired when the knob receives a double click in order to reset to initial value.
-   *
-   * @event Knob#doubleclick
-   *
-   * @param {number} value - The value of the widget.
-   */
-  this.emit('doubleclick', this.options.value);
 }
 function moduleRange() {
   return this.parent.circular;
