@@ -100,8 +100,16 @@
         return [all, scroll, widgets];
       }
 
+      let expectedHash;
+
       function updateHashSilent(hash) {
-        window.location.hash = hash;
+        if (expectedHash === undefined) {
+          setTimeout(() => {
+            window.location.hash = expectedHash;
+            expectedHash = undefined;
+          }, 500);
+        }
+        expectedHash = hash;
       }
 
       function updateScroll() {
