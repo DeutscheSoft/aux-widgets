@@ -133,33 +133,31 @@ export class ScrollBar extends Widget {
         this.addClass('aux-' + position);
         this.addClass('aux-' + (is_vert(position) ? 'vertical' : 'horizontal'));
       }),
-      defineRender(['position', 'content', 'clip', 'scroll'], function (
-        position,
-        content,
-        clip,
-        scroll
-      ) {
-        const element = this.element;
-        if (clip && content) {
-          const size = clip / content;
-          if (size >= 1) {
-            element.style.display = 'none';
-          } else {
-            element.style.display = 'block';
-            let pos = scroll / (content - clip);
-            pos = pos * (clip - size * clip);
-            if (is_vert(position)) {
-              outerHeight(element, true, clip * size);
-              element.style.top = pos + 'px';
+      defineRender(
+        ['position', 'content', 'clip', 'scroll'],
+        function (position, content, clip, scroll) {
+          const element = this.element;
+          if (clip && content) {
+            const size = clip / content;
+            if (size >= 1) {
+              element.style.display = 'none';
             } else {
-              outerWidth(element, true, clip * size);
-              element.style.left = pos + 'px';
+              element.style.display = 'block';
+              let pos = scroll / (content - clip);
+              pos = pos * (clip - size * clip);
+              if (is_vert(position)) {
+                outerHeight(element, true, clip * size);
+                element.style.top = pos + 'px';
+              } else {
+                outerWidth(element, true, clip * size);
+                element.style.left = pos + 'px';
+              }
             }
+          } else {
+            element.style.display = 'none';
           }
-        } else {
-          element.style.display = 'none';
         }
-      }),
+      ),
     ];
   }
 

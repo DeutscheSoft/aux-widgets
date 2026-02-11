@@ -74,25 +74,21 @@ export class Marquee extends Container {
 
   static get renderers() {
     return [
-      defineRender(['easing', 'speed', 'pause', '_inner', '_outer'], function (
-        easing,
-        speed,
-        pause,
-        _inner,
-        _outer
-      ) {
-        const range = _inner - _outer;
-        const msecs = (range / speed) * 1000;
-        const duration = Math.round(msecs + pause);
-        const perc = ((pause / 2 / duration) * 100).toFixed(2);
-        const to = (100 - perc).toFixed(2);
-        const id = this.label.get('id');
+      defineRender(
+        ['easing', 'speed', 'pause', '_inner', '_outer'],
+        function (easing, speed, pause, _inner, _outer) {
+          const range = _inner - _outer;
+          const msecs = (range / speed) * 1000;
+          const duration = Math.round(msecs + pause);
+          const perc = ((pause / 2 / duration) * 100).toFixed(2);
+          const to = (100 - perc).toFixed(2);
+          const id = this.label.get('id');
 
-        if (!(range > 0)) {
-          this._style.textContent = '';
-          addClass(this.element, 'aux-static');
-        } else {
-          this._style.textContent = `
+          if (!(range > 0)) {
+            this._style.textContent = '';
+            addClass(this.element, 'aux-static');
+          } else {
+            this._style.textContent = `
             #${id} {
               animation: ${id} ${duration}ms ${easing} infinite alternate;
             }
@@ -103,9 +99,10 @@ export class Marquee extends Container {
               100% { left: 100%; transform: translateX(-100%); }
             }
             `;
-          removeClass(this.element, 'aux-static');
+            removeClass(this.element, 'aux-static');
+          }
         }
-      }),
+      ),
     ];
   }
 

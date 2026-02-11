@@ -5,17 +5,25 @@ import { Timer } from './timers.js';
 /**
  * Helper type to extract options type from a Widget instance
  */
-type ExtractOptions<T> = T extends Widget<infer TOptions, any, any> ? TOptions : IWidgetOptions;
+type ExtractOptions<T> = T extends Widget<infer TOptions, any, any>
+  ? TOptions
+  : IWidgetOptions;
 
 /**
  * Helper type to extract events type from a Widget instance
  */
-type ExtractEvents<T> = T extends Widget<any, infer TEvents, any> ? TEvents : IWidgetEvents;
+type ExtractEvents<T> = T extends Widget<any, infer TEvents, any>
+  ? TEvents
+  : IWidgetEvents;
 
 /**
  * Helper type to extract effective events type from a Widget instance
  */
-type ExtractEffectiveEvents<T> = T extends Widget<any, any, infer TEffectiveEvents>
+type ExtractEffectiveEvents<T> = T extends Widget<
+  any,
+  any,
+  infer TEffectiveEvents
+>
   ? TEffectiveEvents
   : EffectiveEvents<ExtractOptions<T>, ExtractEvents<T>>;
 
@@ -27,9 +35,10 @@ type OptionName<TOptions> = keyof TOptions | `_${string}`;
 /**
  * Type for option values - extracts the type if K is a key of TOptions, otherwise unknown
  */
-type OptionValue<TOptions, K extends OptionName<TOptions>> = K extends keyof TOptions
-  ? TOptions[K]
-  : unknown;
+type OptionValue<
+  TOptions,
+  K extends OptionName<TOptions>
+> = K extends keyof TOptions ? TOptions[K] : unknown;
 
 /**
  * This function subscribes to those changes to option `name`
@@ -45,7 +54,9 @@ type OptionValue<TOptions, K extends OptionName<TOptions>> = K extends keyof TOp
  */
 export function observeUseraction<
   TWidget extends Widget<any, any, any> = Widget,
-  K extends OptionName<ExtractOptions<TWidget>> = OptionName<ExtractOptions<TWidget>>
+  K extends OptionName<ExtractOptions<TWidget>> = OptionName<
+    ExtractOptions<TWidget>
+  >
 >(
   widget: TWidget,
   name: K,
@@ -66,7 +77,9 @@ export function observeUseraction<
  */
 export function observeOption<
   TWidget extends Widget<any, any, any> = Widget,
-  K extends OptionName<ExtractOptions<TWidget>> = OptionName<ExtractOptions<TWidget>>
+  K extends OptionName<ExtractOptions<TWidget>> = OptionName<
+    ExtractOptions<TWidget>
+  >
 >(
   widget: TWidget,
   name: K,
@@ -87,7 +100,9 @@ export function observeOption<
  */
 export function interceptOption<
   TWidget extends Widget<any, any, any> = Widget,
-  K extends OptionName<ExtractOptions<TWidget>> = OptionName<ExtractOptions<TWidget>>
+  K extends OptionName<ExtractOptions<TWidget>> = OptionName<
+    ExtractOptions<TWidget>
+  >
 >(
   widget: TWidget,
   name: K,
@@ -104,7 +119,9 @@ export function interceptOption<
  */
 export class DebounceBinding<
   TWidget extends Widget<any, any, any> = Widget,
-  K extends OptionName<ExtractOptions<TWidget>> = OptionName<ExtractOptions<TWidget>>
+  K extends OptionName<ExtractOptions<TWidget>> = OptionName<
+    ExtractOptions<TWidget>
+  >
 > {
   /**
    * @param widget - The Widget.

@@ -203,120 +203,118 @@ export class Graph extends Widget {
         toggleClass(element, 'aux-filled', filled);
         toggleClass(element, 'aux-outline', !filled);
       }),
-      defineRender(['dots', 'type', 'mode', 'range_x', 'range_y'], function (
-        dots,
-        type,
-        mode,
-        range_x,
-        range_y
-      ) {
-        let path;
+      defineRender(
+        ['dots', 'type', 'mode', 'range_x', 'range_y'],
+        function (dots, type, mode, range_x, range_y) {
+          let path;
 
-        if (typeof dots === 'function') {
-          dots = dots(this);
-        }
-
-        if (typeof dots === 'string') {
-          path = dots;
-        } else if (!dots) {
-          path = '';
-        } else if (Array.isArray(dots)) {
-          // if we are drawing a line, _start will do the first point
-          let i = mode === 'line' ? 1 : 0;
-          const s = [];
-
-          if (dots.length > 0) {
-            _start.call(this, dots, s);
+          if (typeof dots === 'function') {
+            dots = dots(this);
           }
 
-          if (i === 0 && (dots[i].type || type).startsWith('H')) {
-            i++;
-            const dot = dots[i];
-            const X = getPixels(dot.x, range_x);
-            const Y = getPixels(dot.y, range_y);
+          if (typeof dots === 'string') {
+            path = dots;
+          } else if (!dots) {
+            path = '';
+          } else if (Array.isArray(dots)) {
+            // if we are drawing a line, _start will do the first point
+            let i = mode === 'line' ? 1 : 0;
+            const s = [];
 
-            s.push(' S' + X + ',' + Y + ' ' + X + ',' + Y);
-          }
-
-          for (; i < dots.length; i++) {
-            const dot = dots[i];
-            const _type = dot.type || type;
-            const t = _type.substring(0, 1);
-
-            switch (t) {
-              case 'L':
-              case 'T': {
-                const X = getPixels(dot.x, range_x);
-                const Y = getPixels(dot.y, range_y);
-
-                s.push(' ' + t + ' ' + X + ' ' + Y);
-                break;
-              }
-              case 'Q':
-              case 'S': {
-                const X = getPixels(dot.x, range_x);
-                const X1 = getPixels(dot.x1, range_x);
-                const Y = getPixels(dot.y, range_y);
-                const Y1 = getPixels(dot.y1, range_y);
-
-                s.push(' ' + t + ' ' + X1 + ',' + Y1 + ' ' + X + ',' + Y);
-                break;
-              }
-              case 'C': {
-                const X = getPixels(dot.x, range_x);
-                const X1 = getPixels(dot.x1, range_x);
-                const X2 = getPixels(dot.x2, range_x);
-                const Y = getPixels(dot.y, range_y);
-                const Y1 = getPixels(dot.y1, range_y);
-                const Y2 = getPixels(dot.y2, range_y);
-
-                s.push(
-                  ' ' +
-                    t +
-                    ' ' +
-                    X1 +
-                    ',' +
-                    Y1 +
-                    ' ' +
-                    X2 +
-                    ',' +
-                    Y2 +
-                    ' ' +
-                    X +
-                    ',' +
-                    Y
-                );
-                break;
-              }
-              case 'H': {
-                const f = _type.length > 1 ? parseFloat(type.substring(1)) : 3;
-                const X = getPixels(dot.x, range_x);
-                const Y = getPixels(dot.y, range_y);
-                const X1 = getPixels(
-                  dot.x - Math.round(dot.x - dots[i - 1].x) / f,
-                  range_x
-                );
-
-                s.push(' S ' + X1 + ',' + Y + ' ' + X + ',' + Y);
-                break;
-              }
-              default:
-                error('Unsupported graph type', _type);
+            if (dots.length > 0) {
+              _start.call(this, dots, s);
             }
+
+            if (i === 0 && (dots[i].type || type).startsWith('H')) {
+              i++;
+              const dot = dots[i];
+              const X = getPixels(dot.x, range_x);
+              const Y = getPixels(dot.y, range_y);
+
+              s.push(' S' + X + ',' + Y + ' ' + X + ',' + Y);
+            }
+
+            for (; i < dots.length; i++) {
+              const dot = dots[i];
+              const _type = dot.type || type;
+              const t = _type.substring(0, 1);
+
+              switch (t) {
+                case 'L':
+                case 'T': {
+                  const X = getPixels(dot.x, range_x);
+                  const Y = getPixels(dot.y, range_y);
+
+                  s.push(' ' + t + ' ' + X + ' ' + Y);
+                  break;
+                }
+                case 'Q':
+                case 'S': {
+                  const X = getPixels(dot.x, range_x);
+                  const X1 = getPixels(dot.x1, range_x);
+                  const Y = getPixels(dot.y, range_y);
+                  const Y1 = getPixels(dot.y1, range_y);
+
+                  s.push(' ' + t + ' ' + X1 + ',' + Y1 + ' ' + X + ',' + Y);
+                  break;
+                }
+                case 'C': {
+                  const X = getPixels(dot.x, range_x);
+                  const X1 = getPixels(dot.x1, range_x);
+                  const X2 = getPixels(dot.x2, range_x);
+                  const Y = getPixels(dot.y, range_y);
+                  const Y1 = getPixels(dot.y1, range_y);
+                  const Y2 = getPixels(dot.y2, range_y);
+
+                  s.push(
+                    ' ' +
+                      t +
+                      ' ' +
+                      X1 +
+                      ',' +
+                      Y1 +
+                      ' ' +
+                      X2 +
+                      ',' +
+                      Y2 +
+                      ' ' +
+                      X +
+                      ',' +
+                      Y
+                  );
+                  break;
+                }
+                case 'H': {
+                  const f =
+                    _type.length > 1 ? parseFloat(type.substring(1)) : 3;
+                  const X = getPixels(dot.x, range_x);
+                  const Y = getPixels(dot.y, range_y);
+                  const X1 = getPixels(
+                    dot.x - Math.round(dot.x - dots[i - 1].x) / f,
+                    range_x
+                  );
+
+                  s.push(' S ' + X1 + ',' + Y + ' ' + X + ',' + Y);
+                  break;
+                }
+                default:
+                  error('Unsupported graph type', _type);
+              }
+            }
+
+            if (dots.length > 0) {
+              _end.call(this, dots, s);
+            }
+
+            path = s.join('');
+          } else {
+            error('Unsupported "dots" type', dots);
+            path = '';
           }
 
-          if (dots.length > 0) {
-            _end.call(this, dots, s);
-          }
-
-          path = s.join('');
-        } else {
-          error('Unsupported "dots" type', dots);
-          path = '';
+          this.element.setAttribute('d', path);
         }
-
-        this.element.setAttribute('d', path);
-      }),
+      ),
     ];
   }
 

@@ -1,5 +1,5 @@
 <span>Drag3D: drag in the area to change x, y, z. Values are shown below.</span>
-<aux-container style="display: flex; flex-direction: column; gap: 0.5rem;">
+<aux-container style="display: flex; flex-direction: column; gap: 0.5rem">
   <aux-drag3d
     id="drag3d-readout"
     x="0.25"
@@ -8,13 +8,10 @@
     range_x="js:{min:0,max:1,basis:200}"
     range_y="js:{min:0,max:1,basis:200}"
     range_z="js:{min:0,max:1,basis:200}"
-    style="width: 200px; height: 200px; background: #eee; border-radius: 8px;"
+    style="width: 200px; height: 200px; background: #eee; border-radius: 8px"
   >
   </aux-drag3d>
-  <div
-    class="drag3d-readout"
-    style="font-family: monospace; font-size: 0.9rem;"
-  >
+  <div class="drag3d-readout" style="font-family: monospace; font-size: 0.9rem">
     x: <span data-x>—</span> · y: <span data-y>—</span> · z:
     <span data-z>—</span>
   </div>

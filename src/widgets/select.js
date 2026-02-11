@@ -215,82 +215,82 @@ export class Select extends Button {
 
         this.entries.forEach((entry) => _list.appendChild(entry.element));
       }),
-      defineMeasure(['show_list', 'list_class'], function (
-        show_list,
-        list_class
-      ) {
-        const { element, _list } = this;
+      defineMeasure(
+        ['show_list', 'list_class'],
+        function (show_list, list_class) {
+          const { element, _list } = this;
 
-        this._close_animation_finished.stop();
+          this._close_animation_finished.stop();
 
-        this.update('arrow', show_list ? 'arrowup' : 'arrowdown');
+          this.update('arrow', show_list ? 'arrowup' : 'arrowdown');
 
-        if (show_list) {
-          const ew = outerWidth(element, false);
-          const cw = width();
-          const ch = height();
-          const sx = scrollLeft();
-          const sy = scrollTop();
-
-          return deferRender(() => {
-            _list.className = 'aux-selectlist';
-            if (list_class) addClass(_list, list_class);
-            setStyles(_list, {
-              opacity: '0',
-              maxHeight: ch + 'px',
-              maxWidth: cw + 'px',
-              minWidth: ew + 'px',
-            });
-            this.set('_show_list', true);
-            document.body.appendChild(_list);
-            document.addEventListener('touchstart', this._globalTouchStart);
-            document.addEventListener('mousedown', this._globalTouchStart);
-
-            const lw = outerWidth(_list, true);
-            const lh = outerHeight(_list, true);
-
-            const top =
-              Math.min(
-                positionTop(element) + outerHeight(element, true),
-                ch + sy - lh
-              ) + 'px';
-            const left = Math.min(positionLeft(element), cw + sx - lw) + 'px';
+          if (show_list) {
+            const ew = outerWidth(element, false);
+            const cw = width();
+            const ch = height();
+            const sx = scrollLeft();
+            const sy = scrollTop();
 
             return deferRender(() => {
-              setStyles(_list, { top, left, opacity: '1' });
-              element.setAttribute('aria-expanded', 'true');
+              _list.className = 'aux-selectlist';
+              if (list_class) addClass(_list, list_class);
+              setStyles(_list, {
+                opacity: '0',
+                maxHeight: ch + 'px',
+                maxWidth: cw + 'px',
+                minWidth: ew + 'px',
+              });
+              this.set('_show_list', true);
+              document.body.appendChild(_list);
+              document.addEventListener('touchstart', this._globalTouchStart);
+              document.addEventListener('mousedown', this._globalTouchStart);
 
-              const current = this.current();
+              const lw = outerWidth(_list, true);
+              const lh = outerHeight(_list, true);
 
-              if (!current) return;
+              const top =
+                Math.min(
+                  positionTop(element) + outerHeight(element, true),
+                  ch + sy - lh
+                ) + 'px';
+              const left = Math.min(positionLeft(element), cw + sx - lw) + 'px';
 
-              return deferMeasure(() => {
-                const scrollTop =
-                  current.element.offsetTop - _list.offsetHeight / 2;
-                return deferRender(() => {
-                  _list.scrollTop = scrollTop;
+              return deferRender(() => {
+                setStyles(_list, { top, left, opacity: '1' });
+                element.setAttribute('aria-expanded', 'true');
+
+                const current = this.current();
+
+                if (!current) return;
+
+                return deferMeasure(() => {
+                  const scrollTop =
+                    current.element.offsetTop - _list.offsetHeight / 2;
+                  return deferRender(() => {
+                    _list.scrollTop = scrollTop;
+                  });
                 });
               });
             });
-          });
-        } else {
-          document.removeEventListener('touchstart', this._globalTouchStart);
-          document.removeEventListener('mousedown', this._globalTouchStart);
+          } else {
+            document.removeEventListener('touchstart', this._globalTouchStart);
+            document.removeEventListener('mousedown', this._globalTouchStart);
 
-          return deferRender(() => {
-            element.removeAttribute('aria-expanded');
-            setStyle(_list, 'opacity', '0');
+            return deferRender(() => {
+              element.removeAttribute('aria-expanded');
+              setStyle(_list, 'opacity', '0');
 
-            const duration = getDuration(_list);
+              const duration = getDuration(_list);
 
-            if (duration > 0) {
-              this._close_animation_finished.restart(duration);
-            } else {
-              this.set('_show_list', false);
-            }
-          });
+              if (duration > 0) {
+                this._close_animation_finished.restart(duration);
+              } else {
+                this.set('_show_list', false);
+              }
+            });
+          }
         }
-      }),
+      ),
       defineRender(['_show_list'], function (_show_list) {
         const { _list, _focus_entry_timer, _focus_element_timer } = this;
 
@@ -307,29 +307,30 @@ export class Select extends Button {
           _focus_entry_timer.restart(focusDelay);
         }
       }),
-      defineRender([SymResize, 'auto_size', SymEntriesChanged], function (
-        auto_size
-      ) {
-        if (auto_size) {
-          const S = this.sizer.element;
-          empty(S);
-          const frag = document.createDocumentFragment();
-          this.entries.forEach((entry) => {
-            const s = element('span', { class: 'aux-sizerentry' });
-            s.textContent = entry.get('label');
-            frag.appendChild(s);
-          });
-          S.appendChild(frag);
-          return deferMeasure(() => {
-            const width = outerWidth(S, true);
-            return deferRender(() => {
-              if (this.label) outerWidth(this.label.element, true, width);
+      defineRender(
+        [SymResize, 'auto_size', SymEntriesChanged],
+        function (auto_size) {
+          if (auto_size) {
+            const S = this.sizer.element;
+            empty(S);
+            const frag = document.createDocumentFragment();
+            this.entries.forEach((entry) => {
+              const s = element('span', { class: 'aux-sizerentry' });
+              s.textContent = entry.get('label');
+              frag.appendChild(s);
             });
-          });
-        } else {
-          if (this.label) this.label.element.style.width = null;
+            S.appendChild(frag);
+            return deferMeasure(() => {
+              const width = outerWidth(S, true);
+              return deferRender(() => {
+                if (this.label) outerWidth(this.label.element, true, width);
+              });
+            });
+          } else {
+            if (this.label) this.label.element.style.width = null;
+          }
         }
-      }),
+      ),
     ];
   }
 

@@ -72,13 +72,20 @@ export interface IBaseEvents extends INativeDOMEvents {
   /** Fired when an instance is initialized */
   initialized: () => void;
   /** Fired when an option is set. Arguments: key, value, previousValue */
-  set: <K extends string>(key: K, value: unknown, previousValue: unknown) => void;
+  set: <K extends string>(
+    key: K,
+    value: unknown,
+    previousValue: unknown
+  ) => void;
   /** Fired when an option is set via user interaction. Arguments: key, value */
   userset: (key: string, value: unknown) => void | false;
   /** Fired after a user action sets an option. Arguments: key, value */
   useraction: (key: string, value: unknown) => void;
   /** Fired when an element is delegated. Arguments: element, oldElement */
-  delegated: (element: HTMLElement | SVGElement | (HTMLElement | SVGElement)[], oldElement: (HTMLElement | SVGElement) | (HTMLElement | SVGElement)[] | null) => void;
+  delegated: (
+    element: HTMLElement | SVGElement | (HTMLElement | SVGElement)[],
+    oldElement: (HTMLElement | SVGElement) | (HTMLElement | SVGElement)[] | null
+  ) => void;
 }
 
 /**
@@ -98,7 +105,8 @@ export type OptionSetEvents<TOptions> = {
  * Effective events type that combines user-defined events with synthetic option events.
  * This is the actual event type used by Base class methods.
  */
-export type EffectiveEvents<TOptions, TEvents extends IBaseEvents> = TEvents & OptionSetEvents<TOptions>;
+export type EffectiveEvents<TOptions, TEvents extends IBaseEvents> = TEvents &
+  OptionSetEvents<TOptions>;
 
 /**
  * Base class that provides the core API for options management and event handling.
@@ -112,7 +120,10 @@ export type EffectiveEvents<TOptions, TEvents extends IBaseEvents> = TEvents & O
 export declare class Base<
   TOptions = Record<string, unknown>,
   TEvents extends IBaseEvents = IBaseEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > {
   /**
    * The options object containing all options.
@@ -221,10 +232,7 @@ export declare class Base<
    * @param args - Event arguments (type-checked based on the event handler signature)
    * @returns The return value from the event handler, or undefined
    */
-  emit<K extends keyof TEffectiveEvents>(
-    event: K,
-    ...args: any[]
-  ): any;
+  emit<K extends keyof TEffectiveEvents>(event: K, ...args: any[]): any;
 
   /**
    * Fire an event (alias for emit).
@@ -259,7 +267,5 @@ export declare class Base<
    * @param event - The event name
    * @returns True if the event has any listeners
    */
-  hasEventListeners<K extends keyof TEffectiveEvents>(
-    event: K
-  ): boolean;
+  hasEventListeners<K extends keyof TEffectiveEvents>(event: K): boolean;
 }

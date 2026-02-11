@@ -5,13 +5,21 @@ import { Label, ILabelOptions } from './label.js';
 /**
  * Easing function for animation.
  */
-export type IMarqueeEasing = 'ease' | 'linear' | 'ease-in' | 'ease-out' | 'ease-in-out' | `cubic-bezier(${number}, ${number}, ${number}, ${number})`;
+export type IMarqueeEasing =
+  | 'ease'
+  | 'linear'
+  | 'ease-in'
+  | 'ease-out'
+  | 'ease-in-out'
+  | `cubic-bezier(${number}, ${number}, ${number}, ${number})`;
 
 /**
  * Options specific to the Marquee widget.
  * Extends Container and Label options (since it inherits Label options).
  */
-export interface IMarqueeOptions extends IContainerOptions, Omit<ILabelOptions, 'visible'> {
+export interface IMarqueeOptions
+  extends IContainerOptions,
+    Omit<ILabelOptions, 'visible'> {
   /** Speed of the movement in CSS pixels per second. */
   speed: number;
   /** Pause the animation on start and end for this amount of milliseconds. */
@@ -38,7 +46,10 @@ export interface IMarqueeEvents extends IContainerEvents {
 export declare class Marquee<
   TOptions extends IMarqueeOptions = IMarqueeOptions,
   TEvents extends IMarqueeEvents = IMarqueeEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<TOptions, TEvents>
+  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
+    TOptions,
+    TEvents
+  >
 > extends Container<TOptions, TEvents, TEffectiveEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 

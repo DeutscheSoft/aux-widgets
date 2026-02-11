@@ -337,15 +337,15 @@ export class Button extends Widget {
         const E = this.element;
         toggleClass(E, 'aux-active', state);
       }),
-      defineRender(['label', 'aria_labelledby'], function (
-        label,
-        aria_labelledby
-      ) {
-        if (aria_labelledby !== void 0) return;
+      defineRender(
+        ['label', 'aria_labelledby'],
+        function (label, aria_labelledby) {
+          if (aria_labelledby !== void 0) return;
 
-        const value = label !== false ? this.label.get('id') : null;
-        applyAttribute(this.element, 'aria-labelledby', value);
-      }),
+          const value = label !== false ? this.label.get('id') : null;
+          applyAttribute(this.element, 'aria-labelledby', value);
+        }
+      ),
     ];
   }
 

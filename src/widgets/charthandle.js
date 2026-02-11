@@ -1024,39 +1024,39 @@ export class ChartHandle extends Widget {
           removeHandle.call(this);
         }
       }),
-      defineRender(['_handle_position', 'mode'], function (
-        _handle_position,
-        mode
-      ) {
-        const { _handle } = this;
+      defineRender(
+        ['_handle_position', 'mode'],
+        function (_handle_position, mode) {
+          const { _handle } = this;
 
-        if (!_handle_position) return;
+          if (!_handle_position) return;
 
-        const [x1, y1, x2, y2] = _handle_position;
+          const [x1, y1, x2, y2] = _handle_position;
 
-        if (mode === 'circular') {
-          const radius = (x2 - x1) / 2;
-          const cx = x1 + radius;
-          const cy = y1 + radius;
+          if (mode === 'circular') {
+            const radius = (x2 - x1) / 2;
+            const cx = x1 + radius;
+            const cy = y1 + radius;
 
-          _handle.setAttribute('r', radius.toFixed(2));
-          _handle.setAttribute('cx', cx.toFixed(2));
-          _handle.setAttribute('cy', cy.toFixed(2));
-        } else {
-          /* All other modes are drawn as rectangles */
-          _handle.setAttribute('x', toInteger(x1));
-          _handle.setAttribute('y', toInteger(y1));
-          _handle.setAttribute('width', toInteger(x2 - x1));
-          _handle.setAttribute('height', toInteger(y2 - y1));
+            _handle.setAttribute('r', radius.toFixed(2));
+            _handle.setAttribute('cx', cx.toFixed(2));
+            _handle.setAttribute('cy', cy.toFixed(2));
+          } else {
+            /* All other modes are drawn as rectangles */
+            _handle.setAttribute('x', toInteger(x1));
+            _handle.setAttribute('y', toInteger(y1));
+            _handle.setAttribute('width', toInteger(x2 - x1));
+            _handle.setAttribute('height', toInteger(y2 - y1));
+          }
         }
-      }),
-      defineRender(['_handle_position', 'z_handle'], function (
-        _handle_position,
-        z_handle
-      ) {
-        if (!_handle_position) return;
-        redrawZHandle.call(this, this.options, _handle_position);
-      }),
+      ),
+      defineRender(
+        ['_handle_position', 'z_handle'],
+        function (_handle_position, z_handle) {
+          if (!_handle_position) return;
+          redrawZHandle.call(this, this.options, _handle_position);
+        }
+      ),
       defineRecalculation(
         ['show_handle', 'format_label', 'x', 'y', 'z', 'label'],
         function (show_handle, format_label, x, y, z, label) {

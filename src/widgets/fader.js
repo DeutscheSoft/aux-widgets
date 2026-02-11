@@ -243,16 +243,15 @@ export class Fader extends Widget {
 
         this.set('basis', basis);
       }),
-      defineRecalculation(['value', 'transformation', 'snap_module'], function (
-        value,
-        transformation,
-        snap_module
-      ) {
-        const _value = snap_module.snap(transformation.clampValue(value));
-        const _position = transformation.valueToPixel(_value);
-        this.update('_value', _value);
-        this.update('_position', _position);
-      }),
+      defineRecalculation(
+        ['value', 'transformation', 'snap_module'],
+        function (value, transformation, snap_module) {
+          const _value = snap_module.snap(transformation.clampValue(value));
+          const _position = transformation.valueToPixel(_value);
+          this.update('_value', _value);
+          this.update('_position', _position);
+        }
+      ),
       supports_transform
         ? defineRender(['_position', 'layout'], function (position, layout) {
             const tmp = position + 'px';
@@ -274,17 +273,17 @@ export class Fader extends Widget {
               _handle.style.left = tmp;
             }
           }),
-      defineRender(['label', 'aria_labelledby'], function (
-        label,
-        aria_labelledby
-      ) {
-        if (aria_labelledby !== void 0) return;
+      defineRender(
+        ['label', 'aria_labelledby'],
+        function (label, aria_labelledby) {
+          if (aria_labelledby !== void 0) return;
 
-        const { _handle } = this;
+          const { _handle } = this;
 
-        const value = label !== false ? this.label.get('id') : null;
-        applyAttribute(_handle, 'aria-labelledby', value);
-      }),
+          const value = label !== false ? this.label.get('id') : null;
+          applyAttribute(_handle, 'aria-labelledby', value);
+        }
+      ),
       defineRender(
         ['label', 'aria_labelledby', 'value.aria_labelledby', 'show_value'],
         function (label, aria_labelledby, value_aria_labelledby, show_value) {

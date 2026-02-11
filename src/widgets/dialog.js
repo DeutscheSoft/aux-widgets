@@ -243,18 +243,17 @@ export class Dialog extends Container {
           element.removeAttribute('aria-modal');
         }
       }),
-      defineRender(['modal', 'visible', 'container'], function (
-        modal,
-        visible,
-        container
-      ) {
-        const _modal = this._modal;
-        if (modal && visible && container) {
-          if (_modal.parentNode !== container) container.appendChild(_modal);
-        } else {
-          _modal.remove();
+      defineRender(
+        ['modal', 'visible', 'container'],
+        function (modal, visible, container) {
+          const _modal = this._modal;
+          if (modal && visible && container) {
+            if (_modal.parentNode !== container) container.appendChild(_modal);
+          } else {
+            _modal.remove();
+          }
         }
-      }),
+      ),
     ];
   }
 

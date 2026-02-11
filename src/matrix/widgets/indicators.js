@@ -215,14 +215,13 @@ export class Indicators extends Container {
         style.width = _rect.width + 'px';
         style.height = _rect.height + 'px';
       }),
-      defineRender(['_columns', '_rows', 'size'], function (
-        _columns,
-        _rows,
-        size
-      ) {
-        this._scroller.style.width = _columns * size + 'px';
-        this._scroller.style.height = _rows * size + 'px';
-      }),
+      defineRender(
+        ['_columns', '_rows', 'size'],
+        function (_columns, _rows, size) {
+          this._scroller.style.width = _columns * size + 'px';
+          this._scroller.style.height = _rows * size + 'px';
+        }
+      ),
       defineRender(['connectionview', 'size'], function (connectionview, size) {
         this.connectionview_subs.unsubscribe();
 

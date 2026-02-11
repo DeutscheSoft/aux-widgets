@@ -109,20 +109,20 @@ export class ValueKnob extends Widget {
         );
         addClass(E, 'aux-' + layout);
       }),
-      defineRender(['label', 'aria_labelledby', 'show_value'], function (
-        label,
-        aria_labelledby
-      ) {
-        if (aria_labelledby !== void 0) return;
-        if (!this.value) return;
+      defineRender(
+        ['label', 'aria_labelledby', 'show_value'],
+        function (label, aria_labelledby) {
+          if (aria_labelledby !== void 0) return;
+          if (!this.value) return;
 
-        const { svg } = this.knob;
-        const { _input } = this.value;
+          const { svg } = this.knob;
+          const { _input } = this.value;
 
-        const value = label !== false ? this.label.get('id') : null;
-        applyAttribute(_input, 'aria-labelledby', value);
-        applyAttribute(svg, 'aria-labelledby', value);
-      }),
+          const value = label !== false ? this.label.get('id') : null;
+          applyAttribute(_input, 'aria-labelledby', value);
+          applyAttribute(svg, 'aria-labelledby', value);
+        }
+      ),
     ];
   }
 

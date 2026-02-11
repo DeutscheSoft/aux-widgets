@@ -131,14 +131,14 @@ const multimeterOptionDefaults = {
   presets: {
     mono: { count: 1, labels: ['C'] },
     stereo: { count: 2, labels: ['L', 'R'] },
-    '2.1': { count: 3, labels: ['L', 'R', 'LF'] },
-    '3': { count: 3, labels: ['L', 'C', 'R'] },
-    '3.1': { count: 4, labels: ['L', 'C', 'R', 'LF'] },
-    '4': { count: 4, labels: ['L', 'R', "L'", "R'"] },
-    '4.1': { count: 5, labels: ['L', 'R', "L'", "R'", 'LF'] },
-    '5': { count: 5, labels: ['L', 'C', 'R', "L'", 'R'] },
-    '5.1': { count: 6, labels: ['L', 'C', 'R', "L'", "R'", 'LF'] },
-    '7.1': {
+    2.1: { count: 3, labels: ['L', 'R', 'LF'] },
+    3: { count: 3, labels: ['L', 'C', 'R'] },
+    3.1: { count: 4, labels: ['L', 'C', 'R', 'LF'] },
+    4: { count: 4, labels: ['L', 'R', "L'", "R'"] },
+    4.1: { count: 5, labels: ['L', 'R', "L'", "R'", 'LF'] },
+    5: { count: 5, labels: ['L', 'C', 'R', "L'", 'R'] },
+    5.1: { count: 6, labels: ['L', 'C', 'R', "L'", "R'", 'LF'] },
+    7.1: {
       count: 6,
       labels: ['L', 'C', 'R', "L'", "L''", "R''", "R'", 'LF'],
     },
@@ -305,26 +305,25 @@ export class MultiMeter extends Container {
             throw new Error('unsupported layout');
         }
       }),
-      defineRender(['count', 'layout', 'show_scale'], function (
-        count,
-        layout,
-        show_scale
-      ) {
-        switch (layout) {
-          case 'top':
-          case 'left':
-            this.meters.forEach((meter, i, meters) =>
-              meter.set('show_scale', show_scale && i + 1 === meters.length)
-            );
-            break;
-          case 'bottom':
-          case 'right':
-            this.meters.forEach((meter, i) =>
-              meter.set('show_scale', show_scale && i === 0)
-            );
-            break;
+      defineRender(
+        ['count', 'layout', 'show_scale'],
+        function (count, layout, show_scale) {
+          switch (layout) {
+            case 'top':
+            case 'left':
+              this.meters.forEach((meter, i, meters) =>
+                meter.set('show_scale', show_scale && i + 1 === meters.length)
+              );
+              break;
+            case 'bottom':
+            case 'right':
+              this.meters.forEach((meter, i) =>
+                meter.set('show_scale', show_scale && i === 0)
+              );
+              break;
+          }
         }
-      }),
+      ),
     ];
   }
 

@@ -345,13 +345,12 @@ export class Meter extends Widget {
           ctx.fillRect(0, 0, _width, _height);
         }
       ),
-      defineMeasure(['_width', '_height', 'layout'], function (
-        _width,
-        _height,
-        layout
-      ) {
-        this.set('basis', vert(layout) ? _height : _width);
-      }),
+      defineMeasure(
+        ['_width', '_height', 'layout'],
+        function (_width, _height, layout) {
+          this.set('basis', vert(layout) ? _height : _width);
+        }
+      ),
       defineRender(
         [
           'paint_mode',
@@ -366,15 +365,15 @@ export class Meter extends Widget {
           return this.drawMeter();
         }
       ),
-      defineRender(['label', 'aria_labelledby'], function (
-        label,
-        aria_labelledby
-      ) {
-        if (aria_labelledby !== void 0) return;
+      defineRender(
+        ['label', 'aria_labelledby'],
+        function (label, aria_labelledby) {
+          if (aria_labelledby !== void 0) return;
 
-        const value = label !== false ? this.label.get('id') : null;
-        applyAttribute(this.element, 'aria-labelledby', value);
-      }),
+          const value = label !== false ? this.label.get('id') : null;
+          applyAttribute(this.element, 'aria-labelledby', value);
+        }
+      ),
       defineRecalculation(
         [
           'gradient',

@@ -133,39 +133,37 @@ export class Dynamics extends Chart {
         );
         addClass(element, 'aux-' + type);
       }),
-      defineMeasure(['min', 'max', 'grid_labels', 'db_grid'], function (
-        min,
-        max,
-        grid_labels,
-        db_grid
-      ) {
-        const grid_x = [];
-        const grid_y = [];
-        let cls;
-        for (let i = min; i <= max; i += db_grid) {
-          cls = i ? '' : 'aux-highlight';
-          grid_x.push({
-            pos: i,
-            label: i === min ? '' : grid_labels(i),
-            class: cls,
-          });
-          grid_y.push({
-            pos: i,
-            label: i === min ? '' : grid_labels(i),
-            class: cls,
-          });
-        }
-        if (this.grid) {
-          this.grid.set('grid_x', grid_x);
-          this.grid.set('grid_y', grid_y);
-        }
+      defineMeasure(
+        ['min', 'max', 'grid_labels', 'db_grid'],
+        function (min, max, grid_labels, db_grid) {
+          const grid_x = [];
+          const grid_y = [];
+          let cls;
+          for (let i = min; i <= max; i += db_grid) {
+            cls = i ? '' : 'aux-highlight';
+            grid_x.push({
+              pos: i,
+              label: i === min ? '' : grid_labels(i),
+              class: cls,
+            });
+            grid_y.push({
+              pos: i,
+              label: i === min ? '' : grid_labels(i),
+              class: cls,
+            });
+          }
+          if (this.grid) {
+            this.grid.set('grid_x', grid_x);
+            this.grid.set('grid_y', grid_y);
+          }
 
-        if (this.steady)
-          this.steady.set('dots', [
-            { x: min, y: min },
-            { x: max, y: max },
-          ]);
-      }),
+          if (this.steady)
+            this.steady.set('dots', [
+              { x: min, y: min },
+              { x: max, y: max },
+            ]);
+        }
+      ),
       defineMeasure(
         [
           'type',

@@ -130,13 +130,13 @@ export class VirtualTree extends Scroller {
           );
         }
       ),
-      defineMeasure(['virtualtreeview', '_amount'], function (
-        virtualtreeview,
-        _amount
-      ) {
-        if (!virtualtreeview) return;
-        virtualtreeview.setAmount(_amount);
-      }),
+      defineMeasure(
+        ['virtualtreeview', '_amount'],
+        function (virtualtreeview, _amount) {
+          if (!virtualtreeview) return;
+          virtualtreeview.setAmount(_amount);
+        }
+      ),
       defineRender(['_sizer_size', 'size'], function (_sizer_size, size) {
         this._sizer.style.height =
           this.calculateEntryPosition(_sizer_size) + 'px';
