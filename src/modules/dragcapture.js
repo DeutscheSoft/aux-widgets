@@ -19,34 +19,39 @@
 
 import { Module } from './module.js';
 
-/* this has no global symbol */
-function CaptureState(start) {
-  this.start = start;
-  this.prev = start;
-  this.current = start;
-}
-CaptureState.prototype = {
-  /* distance from start */
-  distance: function () {
+/** Base capture state; expects start/current/prev to have clientX/clientY. */
+class CaptureState {
+  constructor(start) {
+    this.start = start;
+    this.prev = start;
+    this.current = start;
+  }
+
+  /** Distance from start. */
+  distance() {
     const v = this.vDistance();
     return Math.sqrt(v[0] * v[0] + v[1] * v[1]);
-  },
-  setCurrent: function (ev) {
+  }
+
+  setCurrent(ev) {
     this.prev = this.current;
     this.current = ev;
     return true;
-  },
-  vDistance: function () {
+  }
+
+  vDistance() {
     const start = this.start;
     const current = this.current;
     return [current.clientX - start.clientX, current.clientY - start.clientY];
-  },
-  prevDistance: function () {
+  }
+
+  prevDistance() {
     const prev = this.prev;
     const current = this.current;
     return [current.clientX - prev.clientX, current.clientY - prev.clientY];
-  },
-};
+  }
+}
+
 /* general api */
 function startCapture(state, ev) {
   /* do nothing, let other handlers be called */
@@ -72,39 +77,40 @@ function moveCapture(ev) {
 }
 
 /* mouse handling */
-function MouseCaptureState(start) {
-  this.__mouseup = null;
-  this.__mousemove = null;
-  CaptureState.call(this, start);
-}
-MouseCaptureState.prototype = Object.assign(
-  Object.create(CaptureState.prototype),
-  {
-    setCurrent: function (ev) {
-      /* If the buttons have changed, we assume that the capture has ended */
-      if (!this.isDraggedBy(ev)) return false;
-      return CaptureState.prototype.setCurrent.call(this, ev);
-    },
-    init: function (widget) {
-      this.__mouseup = mouseUp.bind(widget);
-      this.__mousemove = mouseMove.bind(widget);
-      document.addEventListener('mousemove', this.__mousemove);
-      document.addEventListener('mouseup', this.__mouseup);
-    },
-    destroy: function () {
-      document.removeEventListener('mousemove', this.__mousemove);
-      document.removeEventListener('mouseup', this.__mouseup);
-      this.__mouseup = null;
-      this.__mousemove = null;
-    },
-    isDraggedBy: function (ev) {
-      const start = this.start;
-      if (start.buttons !== ev.buttons || start.which !== ev.which)
-        return false;
-      return true;
-    },
+class MouseCaptureState extends CaptureState {
+  constructor(start) {
+    super(start);
+    this.__mouseup = null;
+    this.__mousemove = null;
   }
-);
+
+  setCurrent(ev) {
+    /* If the buttons have changed, we assume that the capture has ended */
+    if (!this.isDraggedBy(ev)) return false;
+    return super.setCurrent(ev);
+  }
+
+  init(widget) {
+    this.__mouseup = mouseUp.bind(widget);
+    this.__mousemove = mouseMove.bind(widget);
+    document.addEventListener('mousemove', this.__mousemove);
+    document.addEventListener('mouseup', this.__mouseup);
+  }
+
+  destroy() {
+    document.removeEventListener('mousemove', this.__mousemove);
+    document.removeEventListener('mouseup', this.__mouseup);
+    this.__mouseup = null;
+    this.__mousemove = null;
+  }
+
+  isDraggedBy(ev) {
+    const start = this.start;
+    if (start.buttons !== ev.buttons || start.which !== ev.which) return false;
+    return true;
+  }
+}
+
 function mouseDown(ev) {
   const s = new MouseCaptureState(ev);
   const v = startCapture.call(this, s, ev);
@@ -144,51 +150,55 @@ function cloneTouch(t) {
   };
 }
 
-function TouchCaptureState(start) {
-  CaptureState.call(this, start);
-  let touch = start.changedTouches.item(0);
-  touch = cloneTouch(touch);
-  this.stouch = touch;
-  this.ptouch = touch;
-  this.ctouch = touch;
-}
-TouchCaptureState.prototype = Object.assign(
-  Object.create(CaptureState.prototype),
-  {
-    findTouch: function (ev) {
-      const id = this.stouch.identifier;
-      const touches = ev.changedTouches;
-      let touch;
-
-      for (let i = 0; i < touches.length; i++) {
-        touch = touches.item(i);
-        if (touch.identifier === id) return touch;
-      }
-
-      return null;
-    },
-    setCurrent: function (ev) {
-      const touch = cloneTouch(this.findTouch(ev));
-      this.ptouch = this.ctouch;
-      this.ctouch = touch;
-      return CaptureState.prototype.setCurrent.call(this, ev);
-    },
-    vDistance: function () {
-      const start = this.stouch;
-      const current = this.ctouch;
-      return [current.clientX - start.clientX, current.clientY - start.clientY];
-    },
-    prevDistance: function () {
-      const prev = this.ptouch;
-      const current = this.ctouch;
-      return [current.clientX - prev.clientX, current.clientY - prev.clientY];
-    },
-    destroy: function () {},
-    isDraggedBy: function (ev) {
-      return this.findTouch(ev) !== null;
-    },
+class TouchCaptureState extends CaptureState {
+  constructor(start) {
+    super(start);
+    let touch = start.changedTouches.item(0);
+    touch = cloneTouch(touch);
+    this.stouch = touch;
+    this.ptouch = touch;
+    this.ctouch = touch;
   }
-);
+
+  findTouch(ev) {
+    const id = this.stouch.identifier;
+    const touches = ev.changedTouches;
+    let touch;
+
+    for (let i = 0; i < touches.length; i++) {
+      touch = touches.item(i);
+      if (touch.identifier === id) return touch;
+    }
+
+    return null;
+  }
+
+  setCurrent(ev) {
+    const touch = cloneTouch(this.findTouch(ev));
+    this.ptouch = this.ctouch;
+    this.ctouch = touch;
+    return super.setCurrent(ev);
+  }
+
+  vDistance() {
+    const start = this.stouch;
+    const current = this.ctouch;
+    return [current.clientX - start.clientX, current.clientY - start.clientY];
+  }
+
+  prevDistance() {
+    const prev = this.ptouch;
+    const current = this.ctouch;
+    return [current.clientX - prev.clientX, current.clientY - prev.clientY];
+  }
+
+  destroy() {}
+
+  isDraggedBy(ev) {
+    return this.findTouch(ev) !== null;
+  }
+}
+
 function touchStart(ev) {
   /* if cancelable is false, this is an async touchstart, which happens
    * during scrolling */
