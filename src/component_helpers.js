@@ -436,7 +436,7 @@ function createComponent(base) {
   return BaseComponent;
 }
 
-const whenDefinedSubscribers = new SubscriberMap();
+const whenDefinedSubscribers = /* @__PURE__ */ new SubscriberMap();
 
 function subscribeWhenDefined(tagName, callback) {
   tagName = tagName.toLowerCase();

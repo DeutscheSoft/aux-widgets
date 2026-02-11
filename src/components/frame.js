@@ -26,4 +26,4 @@ import { Frame } from './../widgets/frame.js';
  * @class FrameComponent
  * @implements Component
  */
-export const FrameComponent = componentFromWidget(Frame);
+export const FrameComponent = /*@__PURE__*/ componentFromWidget(Frame);

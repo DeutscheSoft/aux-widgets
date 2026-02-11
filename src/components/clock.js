@@ -26,4 +26,4 @@ import { Clock } from './../widgets/clock.js';
  * @class ClockComponent
  * @implements Component
  */
-export const ClockComponent = componentFromWidget(Clock);
+export const ClockComponent = /*@__PURE__*/ componentFromWidget(Clock);

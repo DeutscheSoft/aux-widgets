@@ -27,4 +27,4 @@ import { Root } from './../widgets/root.js';
  * @class RootComponent
  * @implements Component
  */
-export const RootComponent = componentFromWidget(Root);
+export const RootComponent = /*@__PURE__*/ componentFromWidget(Root);

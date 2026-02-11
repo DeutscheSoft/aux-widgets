@@ -31,7 +31,7 @@ import { Graph } from './../widgets/graph.js';
  * @class ChartComponent
  * @implements Component
  */
-export const ChartComponent = componentFromWidget(Chart);
+export const ChartComponent = /*@__PURE__*/ componentFromWidget(Chart);
 
 /**
  * WebComponent for the ChartHandle widget. Available in the DOM as
@@ -40,7 +40,10 @@ export const ChartComponent = componentFromWidget(Chart);
  * @class ChartHandleComponent
  * @implements Component
  */
-export const ChartHandleComponent = subcomponentFromWidget(ChartHandle, Chart);
+export const ChartHandleComponent = /*@__PURE__*/ subcomponentFromWidget(
+  ChartHandle,
+  Chart
+);
 
 /**
  * WebComponent for the Graph widget. Available in the DOM as `aux-chart-graph`.
@@ -48,4 +51,7 @@ export const ChartHandleComponent = subcomponentFromWidget(ChartHandle, Chart);
  * @class GraphComponent
  * @implements Component
  */
-export const GraphComponent = subcomponentFromWidget(Graph, Chart);
+export const GraphComponent = /*@__PURE__*/ subcomponentFromWidget(
+  Graph,
+  Chart
+);

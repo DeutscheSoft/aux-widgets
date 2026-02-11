@@ -32,8 +32,8 @@ function getCoordsSingle(deg, inner, pos) {
     y: Math.sin(deg) * inner + pos,
   };
 }
-const formatTranslate = FORMAT('translate(%f, %f)');
-const formatViewbox = FORMAT('0 0 %d %d');
+const formatTranslate = /* @__PURE__ */ FORMAT('translate(%f, %f)');
+const formatViewbox = /* @__PURE__ */ FORMAT('0 0 %d %d');
 /**
  * Gauge draws a single {@link Circular} into a SVG image. It inherits
  * all options of {@link Circular}.

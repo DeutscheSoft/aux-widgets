@@ -27,4 +27,6 @@ import { ProgressBar } from './../widgets/progressbar.js';
  * @class ProgressBarComponent
  * @implements Component
  */
-export const ProgressBarComponent = componentFromWidget(ProgressBar);
+export const ProgressBarComponent = /*@__PURE__*/ componentFromWidget(
+  ProgressBar
+);

@@ -27,4 +27,6 @@ import { ConfirmButton } from './../widgets/confirmbutton.js';
  * @class ConfirmButtonComponent
  * @implements Component
  */
-export const ConfirmButtonComponent = componentFromWidget(ConfirmButton);
+export const ConfirmButtonComponent = /*@__PURE__*/ componentFromWidget(
+  ConfirmButton
+);

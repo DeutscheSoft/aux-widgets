@@ -32,7 +32,7 @@ import {
  * @class DynamicsComponent
  * @implements Component
  */
-export const DynamicsComponent = componentFromWidget(Dynamics);
+export const DynamicsComponent = /*@__PURE__*/ componentFromWidget(Dynamics);
 
 /**
  * WebComponent for the Compressor widget. Available in the DOM as
@@ -41,7 +41,9 @@ export const DynamicsComponent = componentFromWidget(Dynamics);
  * @class CompressorComponent
  * @implements Component
  */
-export const CompressorComponent = componentFromWidget(Compressor);
+export const CompressorComponent = /*@__PURE__*/ componentFromWidget(
+  Compressor
+);
 
 /**
  * WebComponent for the Expander widget. Available in the DOM as `aux-expander`.
@@ -49,7 +51,7 @@ export const CompressorComponent = componentFromWidget(Compressor);
  * @class ExpanderComponent
  * @implements Component
  */
-export const ExpanderComponent = componentFromWidget(Expander);
+export const ExpanderComponent = /*@__PURE__*/ componentFromWidget(Expander);
 
 /**
  * WebComponent for the Gate widget. Available in the DOM as `aux-gate`.
@@ -57,7 +59,7 @@ export const ExpanderComponent = componentFromWidget(Expander);
  * @class GateComponent
  * @implements Component
  */
-export const GateComponent = componentFromWidget(Gate);
+export const GateComponent = /*@__PURE__*/ componentFromWidget(Gate);
 
 /**
  * WebComponent for the Limiter widget. Available in the DOM as `aux-limiter`.
@@ -65,4 +67,4 @@ export const GateComponent = componentFromWidget(Gate);
  * @class LimiterComponent
  * @implements Component
  */
-export const LimiterComponent = componentFromWidget(Limiter);
+export const LimiterComponent = /*@__PURE__*/ componentFromWidget(Limiter);

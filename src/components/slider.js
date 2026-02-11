@@ -26,4 +26,4 @@ import { Slider } from './../widgets/slider.js';
  * @class SliderComponent
  * @implements Component
  */
-export const SliderComponent = componentFromWidget(Slider);
+export const SliderComponent = /*@__PURE__*/ componentFromWidget(Slider);

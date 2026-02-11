@@ -26,4 +26,4 @@ import { Bitstring } from './../widgets/bitstring.js';
  * @class BitstringComponent
  * @implements Component
  */
-export const BitstringComponent = componentFromWidget(Bitstring);
+export const BitstringComponent = /*@__PURE__*/ componentFromWidget(Bitstring);

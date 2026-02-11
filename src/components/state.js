@@ -26,4 +26,4 @@ import { State } from './../widgets/state.js';
  * @class StateComponent
  * @implements Component
  */
-export const StateComponent = componentFromWidget(State);
+export const StateComponent = /*@__PURE__*/ componentFromWidget(State);

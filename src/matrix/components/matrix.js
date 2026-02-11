@@ -27,4 +27,4 @@ import { Matrix } from './../widgets/matrix.js';
  * @class MatrixComponent
  * @implements Component
  */
-export const MatrixComponent = componentFromWidget(Matrix);
+export const MatrixComponent = /*@__PURE__*/ componentFromWidget(Matrix);

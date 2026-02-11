@@ -30,7 +30,7 @@ import { Scroller, ScrollHide } from './../widgets/scroller.js';
  * @class ScrollerComponent
  * @implements Component
  */
-export const ScrollerComponent = componentFromWidget(Scroller);
+export const ScrollerComponent = /*@__PURE__*/ componentFromWidget(Scroller);
 
 /**
  * WebComponent for the ScrollHide widget. Available in the DOM as
@@ -39,4 +39,7 @@ export const ScrollerComponent = componentFromWidget(Scroller);
  * @class ScrollHideComponent
  * @implements Component
  */
-export const ScrollHideComponent = subcomponentFromWidget(ScrollHide, Scroller);
+export const ScrollHideComponent = /*@__PURE__*/ subcomponentFromWidget(
+  ScrollHide,
+  Scroller
+);

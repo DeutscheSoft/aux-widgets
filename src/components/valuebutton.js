@@ -27,4 +27,6 @@ import { ValueButton } from './../widgets/valuebutton.js';
  * @class ValueButtonComponent
  * @implements Component
  */
-export const ValueButtonComponent = componentFromWidget(ValueButton);
+export const ValueButtonComponent = /*@__PURE__*/ componentFromWidget(
+  ValueButton
+);

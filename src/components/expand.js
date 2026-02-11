@@ -26,4 +26,4 @@ import { Expand } from './../widgets/expand.js';
  * @class ExpandComponent
  * @implements Component
  */
-export const ExpandComponent = componentFromWidget(Expand);
+export const ExpandComponent = /*@__PURE__*/ componentFromWidget(Expand);

@@ -27,4 +27,6 @@ import { ScrollArea } from './../widgets/scrollarea.js';
  * @class ScrollAreaComponent
  * @implements Component
  */
-export const ScrollAreaComponent = componentFromWidget(ScrollArea);
+export const ScrollAreaComponent = /*@__PURE__*/ componentFromWidget(
+  ScrollArea
+);

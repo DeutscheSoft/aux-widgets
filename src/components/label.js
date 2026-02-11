@@ -26,4 +26,4 @@ import { Label } from './../widgets/label.js';
  * @class LabelComponent
  * @implements Component
  */
-export const LabelComponent = componentFromWidget(Label);
+export const LabelComponent = /*@__PURE__*/ componentFromWidget(Label);

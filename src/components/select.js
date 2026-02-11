@@ -79,7 +79,7 @@ function removeEntry(select, entry) {
  * @class SelectComponent
  * @implements Component
  */
-export const SelectComponent = componentFromWidget(Select);
+export const SelectComponent = /*@__PURE__*/ componentFromWidget(Select);
 
 /**
  * WebComponent for the SelectEntry widget. Available in the DOM as
@@ -88,7 +88,7 @@ export const SelectComponent = componentFromWidget(Select);
  * @class SelectEntryComponent
  * @implements Component
  */
-export const SelectEntryComponent = subcomponentFromWidget(
+export const SelectEntryComponent = /*@__PURE__*/ subcomponentFromWidget(
   SelectEntry,
   Select,
   addEntry,

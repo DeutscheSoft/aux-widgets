@@ -27,4 +27,4 @@ import { Dialog } from './../widgets/dialog.js';
  * @class DialogComponent
  * @implements Component
  */
-export const DialogComponent = componentFromWidget(Dialog);
+export const DialogComponent = /*@__PURE__*/ componentFromWidget(Dialog);

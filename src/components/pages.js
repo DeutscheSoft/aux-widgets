@@ -27,4 +27,4 @@ import { Pages } from './../widgets/pages.js';
  * @class PagesComponent
  * @implements Component
  */
-export const PagesComponent = componentFromWidget(Pages);
+export const PagesComponent = /*@__PURE__*/ componentFromWidget(Pages);

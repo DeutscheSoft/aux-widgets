@@ -27,4 +27,6 @@ import { LevelMeter } from './../widgets/levelmeter.js';
  * @class LevelMeterComponent
  * @implements Component
  */
-export const LevelMeterComponent = componentFromWidget(LevelMeter);
+export const LevelMeterComponent = /*@__PURE__*/ componentFromWidget(
+  LevelMeter
+);

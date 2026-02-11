@@ -26,4 +26,4 @@ import { ValueKnob } from './../widgets/valueknob.js';
  * @class ValueKnobComponent
  * @implements Component
  */
-export const ValueKnobComponent = componentFromWidget(ValueKnob);
+export const ValueKnobComponent = /*@__PURE__*/ componentFromWidget(ValueKnob);

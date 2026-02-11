@@ -26,4 +26,4 @@ import { Marquee } from './../widgets/marquee.js';
  * @class MarqueeComponent
  * @implements Component
  */
-export const MarqueeComponent = componentFromWidget(Marquee);
+export const MarqueeComponent = /*@__PURE__*/ componentFromWidget(Marquee);

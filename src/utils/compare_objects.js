@@ -1,4 +1,4 @@
-const nullPrototype = Object.getPrototypeOf({});
+const nullPrototype = /* @__PURE__ */ Object.getPrototypeOf({});
 
 export function compareObjects(a, b) {
   if (a === b) return true;

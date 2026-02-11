@@ -76,31 +76,33 @@ export const warningEvents = {
   },
 };
 
-export const warningRenderers = [
-  defineRecalculation(
-    ['min', 'max', 'value', 'show_warning', '_value_time'],
-    function (min, max, value, show_warning, _value_time) {
-      let state = false;
+export const warningRenderers = /* @__PURE__ */ (function () {
+  return [
+    defineRecalculation(
+      ['min', 'max', 'value', 'show_warning', '_value_time'],
+      function (min, max, value, show_warning, _value_time) {
+        let state = false;
 
-      if (show_warning) {
-        if (!(min <= value && max >= value)) {
-          const warningDuration = 250 - (performance.now() - _value_time);
-          if (warningDuration > 0) {
-            this._warning_timer = startTimer(
-              this._warning_timer,
-              warningDuration
-            );
-            state = true;
+        if (show_warning) {
+          if (!(min <= value && max >= value)) {
+            const warningDuration = 250 - (performance.now() - _value_time);
+            if (warningDuration > 0) {
+              this._warning_timer = startTimer(
+                this._warning_timer,
+                warningDuration
+              );
+              state = true;
+            }
           }
         }
+
+        if (!state) this._warning_timer = cancelTimer(this._warning_timer);
+
+        this.update('_warning_state', state);
       }
-
-      if (!state) this._warning_timer = cancelTimer(this._warning_timer);
-
-      this.update('_warning_state', state);
-    }
-  ),
-  defineRender('_warning_state', function (_warning_state) {
-    toggleClass(this.element, 'aux-warn', _warning_state);
-  }),
-];
+    ),
+    defineRender('_warning_state', function (_warning_state) {
+      toggleClass(this.element, 'aux-warn', _warning_state);
+    }),
+  ];
+})();

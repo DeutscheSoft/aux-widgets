@@ -26,4 +26,4 @@ import { Scale } from './../widgets/scale.js';
  * @class ScaleComponent
  * @implements Component
  */
-export const ScaleComponent = componentFromWidget(Scale);
+export const ScaleComponent = /*@__PURE__*/ componentFromWidget(Scale);

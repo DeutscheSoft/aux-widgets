@@ -30,7 +30,7 @@ import { CrossoverBand } from './../widgets/crossover.js';
  * @class CrossoverComponent
  * @implements Component
  */
-export const CrossoverComponent = componentFromWidget(Crossover);
+export const CrossoverComponent = /*@__PURE__*/ componentFromWidget(Crossover);
 
 /**
  * WebComponent for the CrossoverBand widget. Available in the DOM as
@@ -39,7 +39,7 @@ export const CrossoverComponent = componentFromWidget(Crossover);
  * @class CrossoverBandComponent
  * @implements Component
  */
-export const CrossoverBandComponent = subcomponentFromWidget(
+export const CrossoverBandComponent = /*@__PURE__*/ subcomponentFromWidget(
   CrossoverBand,
   Crossover
 );

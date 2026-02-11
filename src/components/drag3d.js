@@ -26,4 +26,4 @@ import { Drag3D } from './../widgets/drag3d.js';
  * @class Drag3DComponent
  * @implements Component
  */
-export const Drag3DComponent = componentFromWidget(Drag3D);
+export const Drag3DComponent = /*@__PURE__*/ componentFromWidget(Drag3D);

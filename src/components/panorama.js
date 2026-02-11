@@ -26,4 +26,4 @@ import { Panorama } from './../widgets/panorama.js';
  * @class PanoramaComponent
  * @implements Component
  */
-export const PanoramaComponent = componentFromWidget(Panorama);
+export const PanoramaComponent = /*@__PURE__*/ componentFromWidget(Panorama);

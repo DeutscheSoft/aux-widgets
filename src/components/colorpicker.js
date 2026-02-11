@@ -27,4 +27,6 @@ import { ColorPicker } from './../widgets/colorpicker.js';
  * @class ColorPickerComponent
  * @implements Component
  */
-export const ColorPickerComponent = componentFromWidget(ColorPicker);
+export const ColorPickerComponent = /*@__PURE__*/ componentFromWidget(
+  ColorPicker
+);

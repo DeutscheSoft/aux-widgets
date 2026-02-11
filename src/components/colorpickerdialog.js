@@ -27,6 +27,6 @@ import { ColorPickerDialog } from './../widgets/colorpickerdialog.js';
  * @class ColorPickerDialogComponent
  * @implements Component
  */
-export const ColorPickerDialogComponent = componentFromWidget(
+export const ColorPickerDialogComponent = /*@__PURE__*/ componentFromWidget(
   ColorPickerDialog
 );

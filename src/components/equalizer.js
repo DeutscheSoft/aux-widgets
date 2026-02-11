@@ -30,7 +30,7 @@ import { EqBand } from './../widgets/eqband.js';
  * @class EqualizerComponent
  * @implements Component
  */
-export const EqualizerComponent = componentFromWidget(Equalizer);
+export const EqualizerComponent = /*@__PURE__*/ componentFromWidget(Equalizer);
 
 /**
  * WebComponent for the EqBand widget. Available in the DOM as
@@ -39,4 +39,7 @@ export const EqualizerComponent = componentFromWidget(Equalizer);
  * @class EqBandComponent
  * @implements Component
  */
-export const EqBandComponent = subcomponentFromWidget(EqBand, Equalizer);
+export const EqBandComponent = /*@__PURE__*/ subcomponentFromWidget(
+  EqBand,
+  Equalizer
+);

@@ -26,4 +26,6 @@ import { FileSelect } from './../widgets/fileselect.js';
  * @class FileSelectComponent
  * @implements Component
  */
-export const FileSelectComponent = componentFromWidget(FileSelect);
+export const FileSelectComponent = /*@__PURE__*/ componentFromWidget(
+  FileSelect
+);

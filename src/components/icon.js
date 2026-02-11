@@ -26,4 +26,4 @@ import { Icon } from './../widgets/icon.js';
  * @class IconComponent
  * @implements Component
  */
-export const IconComponent = componentFromWidget(Icon);
+export const IconComponent = /*@__PURE__*/ componentFromWidget(Icon);

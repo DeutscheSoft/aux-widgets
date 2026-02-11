@@ -26,4 +26,4 @@ import { Knob } from './../widgets/knob.js';
  * @class KnobComponent
  * @implements Component
  */
-export const KnobComponent = componentFromWidget(Knob);
+export const KnobComponent = /*@__PURE__*/ componentFromWidget(Knob);

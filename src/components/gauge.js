@@ -26,4 +26,4 @@ import { Gauge } from './../widgets/gauge.js';
  * @class GaugeComponent
  * @implements Component
  */
-export const GaugeComponent = componentFromWidget(Gauge);
+export const GaugeComponent = /*@__PURE__*/ componentFromWidget(Gauge);

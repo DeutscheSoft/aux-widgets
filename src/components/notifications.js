@@ -38,7 +38,9 @@ function removeNotification(notifications, notification) {
  * @class NotificationsComponent
  * @implements Component
  */
-export const NotificationsComponent = componentFromWidget(Notifications);
+export const NotificationsComponent = /*@__PURE__*/ componentFromWidget(
+  Notifications
+);
 
 /**
  * WebComponent for the Notification widget. Available in the DOM as
@@ -47,7 +49,7 @@ export const NotificationsComponent = componentFromWidget(Notifications);
  * @class NotificationComponent
  * @implements Component
  */
-export const NotificationComponent = subcomponentFromWidget(
+export const NotificationComponent = /*@__PURE__*/ subcomponentFromWidget(
   Notification,
   Notifications,
   addNotification,

@@ -61,17 +61,19 @@ function ROT(a) {
   return [+Math.sin(+a), +Math.cos(+a)];
 }
 
-const ZHANDLE_POSITION_circular = {
-  top: ROT(Math.PI),
-  center: [1e-10, 1e-10],
-  'top-right': ROT((Math.PI * 3) / 4),
-  right: ROT(Math.PI / 2),
-  'bottom-right': ROT(Math.PI / 4),
-  bottom: ROT(0),
-  'bottom-left': ROT((Math.PI * 7) / 4),
-  left: ROT((Math.PI * 3) / 2),
-  'top-left': ROT((Math.PI * 5) / 4),
-};
+const ZHANDLE_POSITION_circular = /* @__PURE__ */ (function () {
+  return {
+    top: ROT(Math.PI),
+    center: [1e-10, 1e-10],
+    'top-right': ROT((Math.PI * 3) / 4),
+    right: ROT(Math.PI / 2),
+    'bottom-right': ROT(Math.PI / 4),
+    bottom: ROT(0),
+    'bottom-left': ROT((Math.PI * 7) / 4),
+    left: ROT((Math.PI * 3) / 2),
+    'top-left': ROT((Math.PI * 5) / 4),
+  };
+})();
 
 function getZHandlePositionMovable(O, X) {
   const vec = ZHANDLE_POSITION_circular[O.z_handle];
@@ -226,47 +228,47 @@ function getLabelAlign(mode, pos) {
 const LABEL_POSITION = {
   'line-vertical': {
     top: [0, -1, 0, 0, 0, 1],
-    right: [1, 0, 0, -1 / 2, 1, 0],
-    left: [-1, 0, 0, -1 / 2, -1, 0],
+    right: [1, 0, 0, -0.5, 1, 0],
+    left: [-1, 0, 0, -0.5, -1, 0],
     bottom: [0, 1, 0, -1, 0, -1],
     'bottom-left': [-1, 1, 0, -1, -1, -1],
     'bottom-right': [1, 1, 0, -1, 1, -1],
     'top-right': [1, -1, 0, 0, 0, 1],
     'top-left': [-1, -1, 0, 0, -1, 1],
-    center: [0, 0, 0, -1 / 2, 0, 0],
+    center: [0, 0, 0, -0.5, 0, 0],
   },
   'line-horizontal': {
     top: [0, -1, 0, -1, 0, -1],
-    right: [1, 0, 0, -1 / 2, 1, 0],
-    left: [-1, 0, 0, -1 / 2, -1, 0],
+    right: [1, 0, 0, -0.5, 1, 0],
+    left: [-1, 0, 0, -0.5, -1, 0],
     bottom: [0, 1, 0, 0, 0, 1],
     'bottom-left': [-1, 1, 0, 0, 1, 1],
     'bottom-right': [1, 1, 0, 0, -1, 1],
     'top-right': [1, -1, 0, -1, -1, -1],
     'top-left': [-1, -1, 0, -1, 1, -1],
-    center: [0, 0, 0, -1 / 2, 0, 0],
+    center: [0, 0, 0, -0.5, 0, 0],
   },
   circular: {
     top: [0, -1, 0, -1, 0, -1],
-    right: [1, 0, 0, -1 / 2, 1, 0],
-    left: [-1, 0, 0, -1 / 2, -1, 0],
+    right: [1, 0, 0, -0.5, 1, 0],
+    left: [-1, 0, 0, -0.5, -1, 0],
     bottom: [0, 1, 0, 0, 0, 1],
     'bottom-left': [-0.707, 0.707, 0, 0, 0, 1],
     'bottom-right': [0.707, 0.707, 0, 0, 0, 1],
     'top-right': [0.707, -0.707, 0, -1, 0, -1],
     'top-left': [-0.707, -0.707, 0, -1, 0, -1],
-    center: [0, 0, 0, -1 / 2, 0, 0],
+    center: [0, 0, 0, -0.5, 0, 0],
   },
   block: {
     top: [0, -1, 0, 0, 0, 1],
     bottom: [0, 1, 0, -1, 0, -1],
-    right: [1, 0, 0, -1 / 2, -1, 0],
-    left: [-1, 0, 0, -1 / 2, 1, 0],
+    right: [1, 0, 0, -0.5, -1, 0],
+    left: [-1, 0, 0, -0.5, 1, 0],
     'bottom-left': [-1, 1, 0, -1, 1, -1],
     'bottom-right': [1, 1, 0, -1, -1, -1],
     'top-right': [1, -1, 0, 0, -1, 1],
     'top-left': [-1, -1, 0, 0, 1, 1],
-    center: [0, 0, 0, -1 / 2, 0, 0],
+    center: [0, 0, 0, -0.5, 0, 0],
   },
 };
 
@@ -343,7 +345,7 @@ function removeLine2() {
 
 /* Prints a line, making sure that an offset of 0.5 px aligns them on
  * pixel boundaries */
-const formatLine = FORMAT('M %.0f.5 %.0f.5 L %.0f.5 %.0f.5');
+const formatLine = /* @__PURE__ */ FORMAT('M %.0f.5 %.0f.5 L %.0f.5 %.0f.5');
 
 /* calculates the actual label positions based on given alignment
  * and dimensions */

@@ -27,4 +27,6 @@ import { MultiMeter } from './../widgets/multimeter.js';
  * @class MultiMeterComponent
  * @implements Component
  */
-export const MultiMeterComponent = componentFromWidget(MultiMeter);
+export const MultiMeterComponent = /*@__PURE__*/ componentFromWidget(
+  MultiMeter
+);

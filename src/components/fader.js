@@ -26,4 +26,4 @@ import { Fader } from '../widgets/fader.js';
  * @class FaderComponent
  * @implements Component
  */
-export const FaderComponent = componentFromWidget(Fader);
+export const FaderComponent = /*@__PURE__*/ componentFromWidget(Fader);

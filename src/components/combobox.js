@@ -26,4 +26,4 @@ import { ComboBox } from './../widgets/combobox.js';
  * @class ComboBoxComponent
  * @implements Component
  */
-export const ComboBoxComponent = componentFromWidget(ComboBox);
+export const ComboBoxComponent = /*@__PURE__*/ componentFromWidget(ComboBox);

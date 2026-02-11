@@ -26,4 +26,4 @@ import { Meter } from './../widgets/meter.js';
  * @class MeterComponent
  * @implements Component
  */
-export const MeterComponent = componentFromWidget(Meter);
+export const MeterComponent = /*@__PURE__*/ componentFromWidget(Meter);

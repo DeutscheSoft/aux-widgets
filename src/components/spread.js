@@ -26,4 +26,4 @@ import { Spread } from './../widgets/spread.js';
  * @class SpreadComponent
  * @implements Component
  */
-export const SpreadComponent = componentFromWidget(Spread);
+export const SpreadComponent = /*@__PURE__*/ componentFromWidget(Spread);

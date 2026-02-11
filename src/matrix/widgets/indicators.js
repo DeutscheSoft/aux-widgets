@@ -31,15 +31,13 @@ import { DragCapture } from '../../modules/dragcapture.js';
 import { resizeArrayMod } from '../models.js';
 import { defineRender, defineRecalculation } from '../../renderer.js';
 
-scrollbarSize();
-
 function onIndicatorClicked() {
   const indicators = this.parent;
 
   indicators.emit('indicatorClicked', this.source, this.sink);
 }
 
-const formatIndicatorTransform = FORMAT(
+const formatIndicatorTransform = /* @__PURE__ */ FORMAT(
   'translateY(%.2fpx) translateX(%.2fpx)'
 );
 
@@ -353,6 +351,7 @@ export class Indicators extends Container {
 
   draw(options, element) {
     super.draw(options, element);
+    scrollbarSize();
     addClass(element, 'aux-indicators');
     this.addSubscriptions(
       subscribeDOMEvent(this.element, 'scroll', (ev) => {

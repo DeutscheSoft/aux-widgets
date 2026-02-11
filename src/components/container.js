@@ -26,4 +26,4 @@ import { Container } from './../widgets/container.js';
  * @class ContainerComponent
  * @implements Component
  */
-export const ContainerComponent = componentFromWidget(Container);
+export const ContainerComponent = /*@__PURE__*/ componentFromWidget(Container);

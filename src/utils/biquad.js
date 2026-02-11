@@ -245,21 +245,23 @@ export function highPass4(O) {
  * @property {Filter~filter_factory} highpass3 - highPass3.
  * @property {Filter~filter_factory} highpass4 - highPass4.
  */
-export const standardBiquadFilters = {
-  null: biquadFilter(NULL),
-  'low-shelf': biquadFilter(lowShelf),
-  'high-shelf': biquadFilter(highShelf),
-  parametric: biquadFilter(peaking),
-  notch: biquadFilter(notch),
-  lowpass1: biquadFilter(lowPass1),
-  lowpass2: biquadFilter(lowPass2),
-  lowpass3: biquadFilter(lowPass1, lowPass2),
-  lowpass4: biquadFilter(lowPass4),
-  highpass1: biquadFilter(highPass1),
-  highpass2: biquadFilter(highPass2),
-  highpass3: biquadFilter(highPass1, highPass2),
-  highpass4: biquadFilter(highPass4),
-};
+export const standardBiquadFilters = /* @__PURE__ */ (function () {
+  return {
+    null: biquadFilter(NULL),
+    'low-shelf': biquadFilter(lowShelf),
+    'high-shelf': biquadFilter(highShelf),
+    parametric: biquadFilter(peaking),
+    notch: biquadFilter(notch),
+    lowpass1: biquadFilter(lowPass1),
+    lowpass2: biquadFilter(lowPass2),
+    lowpass3: biquadFilter(lowPass1, lowPass2),
+    lowpass4: biquadFilter(lowPass4),
+    highpass1: biquadFilter(highPass1),
+    highpass2: biquadFilter(highPass2),
+    highpass3: biquadFilter(highPass1, highPass2),
+    highpass4: biquadFilter(highPass4),
+  };
+})();
 
 function nullFilter() {
   return 0;

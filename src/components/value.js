@@ -26,4 +26,4 @@ import { Value } from './../widgets/value.js';
  * @class ValueComponent
  * @implements Component
  */
-export const ValueComponent = componentFromWidget(Value);
+export const ValueComponent = /*@__PURE__*/ componentFromWidget(Value);

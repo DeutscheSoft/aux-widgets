@@ -26,4 +26,4 @@ import { Toggle } from './../widgets/toggle.js';
  * @class ToggleComponent
  * @implements Component
  */
-export const ToggleComponent = componentFromWidget(Toggle);
+export const ToggleComponent = /*@__PURE__*/ componentFromWidget(Toggle);

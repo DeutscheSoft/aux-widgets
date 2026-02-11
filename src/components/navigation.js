@@ -27,4 +27,6 @@ import { Navigation } from './../widgets/navigation.js';
  * @class NavigationComponent
  * @implements Component
  */
-export const NavigationComponent = componentFromWidget(Navigation);
+export const NavigationComponent = /*@__PURE__*/ componentFromWidget(
+  Navigation
+);

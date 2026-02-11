@@ -24,7 +24,7 @@ import { makeSVG } from '../utils/svg.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { defineRender, deferMeasure, deferRender } from '../renderer.js';
 
-const formatViewbox = FORMAT('0 0 %d %d');
+const formatViewbox = /* @__PURE__ */ FORMAT('0 0 %d %d');
 
 function timeout() {
   if (this.__to) window.clearTimeout(this.__to);

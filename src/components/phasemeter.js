@@ -27,4 +27,6 @@ import { PhaseMeter } from './../widgets/phasemeter.js';
  * @class PhaseMeterComponent
  * @implements Component
  */
-export const PhaseMeterComponent = componentFromWidget(PhaseMeter);
+export const PhaseMeterComponent = /*@__PURE__*/ componentFromWidget(
+  PhaseMeter
+);

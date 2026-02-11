@@ -30,8 +30,6 @@ import { Scroller } from './../../widgets/scroller.js';
 import { VirtualTreeEntry } from './virtualtreeentry.js';
 import { resizeArrayMod } from '../models.js';
 
-scrollbarSize();
-
 function collapse(state) {
   const element = this.get('data');
   const parent = this.parent;
@@ -292,6 +290,7 @@ export class VirtualTree extends Scroller {
 
   draw(options, element) {
     super.draw(options, element);
+    scrollbarSize();
     element.classList.add('aux-virtualtree');
     this.addSubscriptions(
       subscribeDOMEvent(this.scrollhide.element, 'scroll', (ev) => {

@@ -26,4 +26,4 @@ import { Button } from './../widgets/button.js';
  * @class ButtonComponent
  * @implements Component
  */
-export const ButtonComponent = componentFromWidget(Button);
+export const ButtonComponent = /*@__PURE__*/ componentFromWidget(Button);

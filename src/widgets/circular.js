@@ -71,7 +71,9 @@ function createInternalMarker(marker, markerDefaults) {
   return createInternalDot(marker, markerDefaults);
 }
 
-const __rad = Math.PI / 180;
+const __rad = /* @__PURE__ */ (function () {
+  return Math.PI / 180;
+})();
 function _getCoords(deg, inner, outer, pos) {
   deg = +deg;
   inner = +inner;
@@ -95,12 +97,14 @@ function _getCoordsSingle(deg, inner, pos) {
     y: Math.sin(deg) * inner + pos,
   };
 }
-const formatPath = FORMAT(
+const formatPath = /* @__PURE__ */ FORMAT(
   'M %f,%f ' + 'A %f,%f 0 %d,%d %f,%f ' + 'L %f,%f ' + 'A %f,%f 0 %d,%d %f,%f z'
 );
-const formatTranslate = FORMAT('translate(%f, %f)');
-const formatTranslateRotate = FORMAT('translate(%f %f) rotate(%f %f %f)');
-const formatRotate = FORMAT('rotate(%f %f %f)');
+const formatTranslate = /* @__PURE__ */ FORMAT('translate(%f, %f)');
+const formatTranslateRotate = /* @__PURE__ */ FORMAT(
+  'translate(%f %f) rotate(%f %f %f)'
+);
+const formatRotate = /* @__PURE__ */ FORMAT('rotate(%f %f %f)');
 
 const SymLabelsChanged = Symbol('_labels changed');
 

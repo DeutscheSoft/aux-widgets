@@ -28,7 +28,7 @@ import { Page } from './../widgets/pages.js';
  * @class PagerComponent
  * @implements Component
  */
-export const PagerComponent = componentFromWidget(Pager);
+export const PagerComponent = /*@__PURE__*/ componentFromWidget(Pager);
 
 /**
  * WebComponent for the Page widget. Available in the DOM as
@@ -37,4 +37,4 @@ export const PagerComponent = componentFromWidget(Pager);
  * @class PageComponent
  * @implements Component
  */
-export const PageComponent = componentFromWidget(Page);
+export const PageComponent = /*@__PURE__*/ componentFromWidget(Page);

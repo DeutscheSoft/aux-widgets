@@ -27,4 +27,6 @@ import { VirtualTree } from './../widgets/virtualtree.js';
  * @class VirtualTreeComponent
  * @implements Component
  */
-export const VirtualTreeComponent = componentFromWidget(VirtualTree);
+export const VirtualTreeComponent = /*@__PURE__*/ componentFromWidget(
+  VirtualTree
+);

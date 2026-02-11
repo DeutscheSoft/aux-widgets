@@ -24,17 +24,60 @@ import { addClass, removeClass, toggleClass } from '../utils/dom.js';
 import { objectSub } from '../utils/object.js';
 import { defineRender } from '../renderer.js';
 
-const mapped_options = {
-  labels: 'label',
-  layout: 'layout',
+const multimeterOptionTypes = {
+  count: 'int',
+  label: 'boolean|string',
+  labels: 'array|string',
+  layout: 'string',
+  show_scale: 'boolean',
 };
+
+const multimeterShared = /* @__PURE__ */ (function () {
+  const mapped_options = {
+    labels: 'label',
+    layout: 'layout',
+  };
+
+  const multimeterStaticEvents = {
+    set_labels: mapChildOption,
+    set_layout: mapChildOption,
+  };
+
+  const levelmeterOwnOptions = objectSub(
+    LevelMeter.getOptionTypes(),
+    Container.getOptionTypes()
+  );
+
+  for (const key in levelmeterOwnOptions) {
+    if (!Object.prototype.hasOwnProperty.call(levelmeterOwnOptions, key))
+      continue;
+    if (Object.prototype.hasOwnProperty.call(multimeterOptionTypes, key))
+      continue;
+
+    const type = levelmeterOwnOptions[key];
+
+    if (type.search('array') !== -1) {
+      multimeterOptionTypes[key] = type;
+      mapped_options[key] = key;
+      multimeterStaticEvents['set_' + key] = mapChildOptionSimple;
+    } else {
+      multimeterOptionTypes[key] = 'array|' + type;
+      mapped_options[key] = key;
+      multimeterStaticEvents['set_' + key] = mapChildOption;
+    }
+  }
+  return {
+    mapped_options,
+    multimeterStaticEvents,
+  };
+})();
 
 function extractChildOptions(O, i) {
   const o = {};
 
-  for (const _key in mapped_options) {
+  for (const _key in multimeterShared.mapped_options) {
     if (!Object.prototype.hasOwnProperty.call(O, _key)) continue;
-    const ckey = mapped_options[_key];
+    const ckey = multimeterShared.mapped_options[_key];
     const value = O[_key];
     const _type = LevelMeter.getOptionType(_key) || '';
     if (Array.isArray(value) && _type.search('array') === -1) {
@@ -64,7 +107,8 @@ function removeMeter() {
 
 function mapChildOptionSimple(value, key) {
   const M = this.meters;
-  for (let i = 0; i < M.length; i++) M[i].set(mapped_options[key], value);
+  for (let i = 0; i < M.length; i++)
+    M[i].set(multimeterShared.mapped_options[key], value);
 }
 
 function mapChildOption(value, key) {
@@ -72,19 +116,11 @@ function mapChildOption(value, key) {
 
   if (Array.isArray(value)) {
     for (let i = 0; i < M.length && i < value.length; i++)
-      M[i].set(mapped_options[key], value[i]);
+      M[i].set(multimeterShared.mapped_options[key], value[i]);
   } else {
     for (let i = 0; i < M.length; i++) M[i].set(key, value);
   }
 }
-
-const multimeterOptionTypes = {
-  count: 'int',
-  label: 'boolean|string',
-  labels: 'array|string',
-  layout: 'string',
-  show_scale: 'boolean',
-};
 
 const multimeterOptionDefaults = {
   count: 2,
@@ -149,35 +185,6 @@ const multimeterOptionDefaults = {
     },
   },
 };
-
-const multimeterStaticEvents = {
-  set_labels: mapChildOption,
-  set_layout: mapChildOption,
-};
-
-const levelmeterOwnOptions = objectSub(
-  LevelMeter.getOptionTypes(),
-  Container.getOptionTypes()
-);
-
-for (const key in levelmeterOwnOptions) {
-  if (!Object.prototype.hasOwnProperty.call(levelmeterOwnOptions, key))
-    continue;
-  if (Object.prototype.hasOwnProperty.call(multimeterOptionTypes, key))
-    continue;
-
-  const type = levelmeterOwnOptions[key];
-
-  if (type.search('array') !== -1) {
-    multimeterOptionTypes[key] = type;
-    mapped_options[key] = key;
-    multimeterStaticEvents['set_' + key] = mapChildOptionSimple;
-  } else {
-    multimeterOptionTypes[key] = 'array|' + type;
-    mapped_options[key] = key;
-    multimeterStaticEvents['set_' + key] = mapChildOption;
-  }
-}
 
 /**
  * MultiMeter is a collection of {@link LevelMeter}s to show levels of channels
@@ -245,7 +252,7 @@ export class MultiMeter extends Container {
   }
 
   static get static_events() {
-    return multimeterStaticEvents;
+    return multimeterShared.multimeterStaticEvents;
   }
 
   static get renderers() {

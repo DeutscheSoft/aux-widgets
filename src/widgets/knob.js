@@ -44,7 +44,7 @@ import { objectAnd, objectSub } from '../utils/object.js';
 import { defineRender } from '../renderer.js';
 import { applyLegacyUsersetEventsRanged } from '../utils/legacy_userset_events.js';
 
-const formatViewbox = FORMAT('0 0 %d %d');
+const formatViewbox = /* @__PURE__ */ FORMAT('0 0 %d %d');
 function dblClick() {
   if (!this.get('bind_dblclick')) return;
   this.userset('value', this.options.reset);

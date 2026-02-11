@@ -26,4 +26,4 @@ import { Reverb } from './../widgets/reverb.js';
  * @class ReverbComponent
  * @implements Component
  */
-export const ReverbComponent = componentFromWidget(Reverb);
+export const ReverbComponent = /*@__PURE__*/ componentFromWidget(Reverb);
