@@ -69,9 +69,9 @@ longer introductory articles and usage examples in the directories
 
 ## Examples
 
-Several component examples can be found in separate HTML files in the
-`examples/` directory. When serving the repository from a HTTP server
-all examples can be viewed when opening the file `examples/index.html`.
+Several component examples can be found by serving the root of the project
+from a local webserver. Opening /examples.html will then show a playground
+with examples for all widgets.
 
 ## Demos
 
