@@ -12,3 +12,4 @@ doc/toolkit
 export/
 node_modules
 .vscode
+.DS_STORE
