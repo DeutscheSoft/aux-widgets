@@ -1,6 +1,6 @@
 {
   "name": "@deutschesoft/aux-widgets",
-  "version": "1.4.6",
+  "version": "1.5.0",
   "description": "AUX Audio Widget Library",
   "license": "GPL-3.0",
   "main": "src/index.js",
@@ -30,6 +30,5 @@
       "email": "arne@deuso.de"
     }
   ],
-
   "devDependencies": {}
 }
