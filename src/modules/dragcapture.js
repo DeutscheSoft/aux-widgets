@@ -19,32 +19,65 @@
 
 import { Module } from './module.js';
 
-/** Base capture state; expects start/current/prev to have clientX/clientY. */
+/**
+ * Base capture state for a single drag interaction.
+ *
+ * Expects `start` / `current` / `prev` to be DOM events with `clientX` / `clientY`
+ * (typically a `PointerEvent`).
+ *
+ * @template {PointerEvent} TEvent
+ */
 class CaptureState {
+  /**
+   * @param {TEvent} start
+   */
   constructor(start) {
+    /** @type {TEvent} */
     this.start = start;
+    /** @type {TEvent} */
     this.prev = start;
+    /** @type {TEvent} */
     this.current = start;
   }
 
-  /** Distance from start. */
+  /**
+   * Euclidean distance from the starting position in CSS pixels.
+   *
+   * @returns {number}
+   */
   distance() {
     const v = this.vDistance();
     return Math.sqrt(v[0] * v[0] + v[1] * v[1]);
   }
 
+  /**
+   * Update the current event.
+   *
+   * @param {TEvent} ev
+   * @returns {boolean} `false` when the capture should be considered ended.
+   */
   setCurrent(ev) {
     this.prev = this.current;
     this.current = ev;
     return true;
   }
 
+  /**
+   * Vector from the starting position to the current position.
+   *
+   * @returns {[number, number]} `[dx, dy]`
+   */
   vDistance() {
     const start = this.start;
     const current = this.current;
     return [current.clientX - start.clientX, current.clientY - start.clientY];
   }
 
+  /**
+   * Vector between the previous and current position.
+   *
+   * @returns {[number, number]} `[dx, dy]`
+   */
   prevDistance() {
     const prev = this.prev;
     const current = this.current;
@@ -53,6 +86,14 @@ class CaptureState {
 }
 
 /* general api */
+/**
+ * Start a new capture if none is currently active.
+ *
+ * @this {DragCapture}
+ * @param {CaptureState} state
+ * @param {PointerEvent} ev
+ * @returns {boolean|undefined} `true` when this instance captured the drag, `false` to ignore, `undefined` when no handler responded.
+ */
 function startCapture(state, ev) {
   /* do nothing, let other handlers be called */
   if (this.drag_state) return;
@@ -67,6 +108,13 @@ function startCapture(state, ev) {
 
   return v;
 }
+/**
+ * Advance the current capture using the given event.
+ *
+ * @this {DragCapture}
+ * @param {PointerEvent} ev
+ * @returns {boolean|undefined} `false` when the capture was stopped, otherwise `undefined`.
+ */
 function moveCapture(ev) {
   const d = this.drag_state;
 
@@ -76,43 +124,88 @@ function moveCapture(ev) {
   }
 }
 
-/* mouse handling */
-class MouseCaptureState extends CaptureState {
+/* pointer handling */
+/**
+ * Capture state for pointer-based drags.
+ *
+ * @extends {CaptureState<PointerEvent>}
+ */
+class PointerCaptureState extends CaptureState {
+  /**
+   * @param {PointerEvent} start
+   */
   constructor(start) {
     super(start);
-    this.__mouseup = null;
-    this.__mousemove = null;
+    /** @type {number} */
+    this.pointerId = start.pointerId;
+    /**
+     * Back-reference to the widget that owns this capture.
+     *
+     * @type {DragCapture|null}
+     */
+    this._widget = null;
   }
 
+  /**
+   * @param {PointerEvent} ev
+   * @returns {boolean}
+   */
   setCurrent(ev) {
-    /* If the buttons have changed, we assume that the capture has ended */
     if (!this.isDraggedBy(ev)) return false;
     return super.setCurrent(ev);
   }
 
+  /**
+   * Acquire pointer capture on the widget's node.
+   *
+   * @param {DragCapture} widget
+   */
   init(widget) {
-    this.__mouseup = mouseUp.bind(widget);
-    this.__mousemove = mouseMove.bind(widget);
-    document.addEventListener('mousemove', this.__mousemove);
-    document.addEventListener('mouseup', this.__mouseup);
+    this._widget = widget;
+    const node = widget.options.node || widget.element;
+    if (node.setPointerCapture) {
+      try {
+        node.setPointerCapture(this.pointerId);
+      } catch (e) {
+        /* ignore if capture fails */
+      }
+    }
   }
 
+  /** Release pointer capture if still held. */
   destroy() {
-    document.removeEventListener('mousemove', this.__mousemove);
-    document.removeEventListener('mouseup', this.__mouseup);
-    this.__mouseup = null;
-    this.__mousemove = null;
+    if (!this._widget) return;
+    const node = this._widget.options.node || this._widget.element;
+    if (node && node.releasePointerCapture) {
+      try {
+        node.releasePointerCapture(this.pointerId);
+      } catch (e) {
+        /* ignore if release fails or capture already lost */
+      }
+    }
+    this._widget = null;
   }
 
+  /**
+   * Check that the given event belongs to this capture.
+   *
+   * @param {PointerEvent} ev
+   * @returns {boolean}
+   */
   isDraggedBy(ev) {
-    const start = this.start;
-    if (start.buttons !== ev.buttons || start.which !== ev.which) return false;
-    return true;
+    return ev.pointerId === this.pointerId;
   }
 }
 
-function mouseDown(ev) {
-  const s = new MouseCaptureState(ev);
+/**
+ * Pointer down handler starting a new drag interaction.
+ *
+ * @this {DragCapture}
+ * @param {PointerEvent} ev
+ * @returns {boolean|undefined}
+ */
+function pointerDown(ev) {
+  const s = new PointerCaptureState(ev);
   const v = startCapture.call(this, s, ev);
 
   /* ignore this event if startCapture didn't return */
@@ -128,102 +221,17 @@ function mouseDown(ev) {
 
   return false;
 }
-function mouseMove(ev) {
-  moveCapture.call(this, ev);
-}
-function mouseUp(ev) {
-  this.stopCapture(ev);
-}
-
-/* touch handling */
-
-/*
- * Old Safari versions will keep the same Touch objects for the full lifetime
- * and simply update the coordinates, etc. This is a bug, which we work around by
- * cloning the information we need.
+/**
+ * Pointer move handler updating the active drag interaction.
+ *
+ * @this {DragCapture}
+ * @param {PointerEvent} ev
+ * @returns {boolean|undefined}
  */
-function cloneTouch(t) {
-  return {
-    clientX: t.clientX,
-    clientY: t.clientY,
-    identifier: t.identifier,
-  };
-}
-
-class TouchCaptureState extends CaptureState {
-  constructor(start) {
-    super(start);
-    let touch = start.changedTouches.item(0);
-    touch = cloneTouch(touch);
-    this.stouch = touch;
-    this.ptouch = touch;
-    this.ctouch = touch;
-  }
-
-  findTouch(ev) {
-    const id = this.stouch.identifier;
-    const touches = ev.changedTouches;
-    let touch;
-
-    for (let i = 0; i < touches.length; i++) {
-      touch = touches.item(i);
-      if (touch.identifier === id) return touch;
-    }
-
-    return null;
-  }
-
-  setCurrent(ev) {
-    const touch = cloneTouch(this.findTouch(ev));
-    this.ptouch = this.ctouch;
-    this.ctouch = touch;
-    return super.setCurrent(ev);
-  }
-
-  vDistance() {
-    const start = this.stouch;
-    const current = this.ctouch;
-    return [current.clientX - start.clientX, current.clientY - start.clientY];
-  }
-
-  prevDistance() {
-    const prev = this.ptouch;
-    const current = this.ctouch;
-    return [current.clientX - prev.clientX, current.clientY - prev.clientY];
-  }
-
-  destroy() {}
-
-  isDraggedBy(ev) {
-    return this.findTouch(ev) !== null;
-  }
-}
-
-function touchStart(ev) {
-  /* if cancelable is false, this is an async touchstart, which happens
-   * during scrolling */
-  if (!ev.cancelable) return;
-
-  const state = new TouchCaptureState(ev);
-  const v = startCapture.call(this, state, ev);
-
-  /* the startcapture event handler returned nothing. we do not handle this
-   * pointer */
-  if (v === void 0) return;
-
-  if (this.options.focus) this.options.focus.focus();
-
-  ev.preventDefault();
-  ev.stopPropagation();
-  return false;
-}
-function touchMove(ev) {
+function pointerMove(ev) {
   if (!this.drag_state) return;
-  /* we are scrolling, ignore the event */
-  if (!ev.cancelable) return;
-  /* if we cannot find the right touch, some other touchpoint
-   * triggered this event and we do not care about that */
-  if (!this.drag_state.findTouch(ev)) return;
+  /* if event does not belong to current pointer, ignore */
+  if (!this.drag_state.isDraggedBy(ev)) return;
   /* if movecapture returns false, the capture has ended */
   if (moveCapture.call(this, ev) !== false) {
     ev.preventDefault();
@@ -231,19 +239,46 @@ function touchMove(ev) {
     return false;
   }
 }
-function touchEnd(ev) {
-  if (!ev.cancelable) return;
+/**
+ * Pointer up handler finishing the active drag interaction.
+ *
+ * @this {DragCapture}
+ * @param {PointerEvent} ev
+ * @returns {boolean|undefined}
+ */
+function pointerUp(ev) {
   const s = this.drag_state;
-  /* either we are not dragging or it is another touch point */
-  if (!s || !s.findTouch(ev)) return;
+  if (!s || !s.isDraggedBy(ev)) return;
   this.stopCapture(ev);
   ev.stopPropagation();
   ev.preventDefault();
   return false;
 }
-function touchCancel(ev) {
-  return touchEnd.call(this, ev);
+/**
+ * Pointer cancellation handler, e.g. when the OS or browser aborts the drag.
+ *
+ * @this {DragCapture}
+ * @param {PointerEvent} ev
+ * @returns {boolean|undefined}
+ */
+function pointerCancel(ev) {
+  return pointerUp.call(this, ev);
 }
+/**
+ * Handle `lostpointercapture` by cancelling the current drag.
+ *
+ * @this {DragCapture}
+ * @param {PointerEvent} ev
+ * @returns {boolean|undefined}
+ */
+function lostPointerCapture(ev) {
+  return pointerCancel.call(this, ev);
+}
+/**
+ * Static events wired up by the `Module` base class.
+ *
+ * @type {{[K in string]: Function}}
+ */
 const static_events = {
   set_node: function (value) {
     this.delegateEvents(value);
@@ -257,11 +292,11 @@ const static_events = {
       if (old_element) this.stopCapture();
     },
   ],
-  touchstart: touchStart,
-  touchmove: touchMove,
-  touchend: touchEnd,
-  touchcancel: touchCancel,
-  mousedown: mouseDown,
+  pointerdown: pointerDown,
+  pointermove: pointerMove,
+  pointerup: pointerUp,
+  pointercancel: pointerCancel,
+  lostpointercapture: lostPointerCapture,
 };
 
 /**
@@ -321,6 +356,13 @@ const static_events = {
  * @param {DOMEvent} event - The event object of the current event.
  */
 export class DragCapture extends Module {
+  /**
+   * @typedef {Object} DragCaptureOptions
+   * @property {HTMLElement} [node] DOM element receiving pointer events.
+   * @property {boolean} [state]
+   * @property {HTMLElement|boolean} [focus]
+   */
+
   static get _options() {
     return {
       node: 'object',
@@ -336,10 +378,19 @@ export class DragCapture extends Module {
     };
   }
 
+  /**
+   * Events used by this module.
+   *
+   * @returns {typeof static_events}
+   */
   static get static_events() {
     return static_events;
   }
 
+  /**
+   * @param {import('../widgets/widget.js').Widget} widget
+   * @param {DragCaptureOptions} O
+   */
   initialize(widget, O) {
     super.initialize(widget, O);
     this.drag_state = null;
@@ -352,6 +403,11 @@ export class DragCapture extends Module {
     super.destroy();
   }
 
+  /**
+   * Stop the current capture, if any.
+   *
+   * @param {PointerEvent} [ev]
+   */
   stopCapture(ev) {
     const s = this.drag_state;
     if (s === null) return;
@@ -362,18 +418,39 @@ export class DragCapture extends Module {
     this.drag_state = null;
   }
 
+  /**
+   * Cancel the current drag interaction, if any.
+   *
+   * @param {PointerEvent} [ev]
+   */
   cancelDrag(ev) {
     this.stopCapture();
   }
 
+  /**
+   * Whether a drag interaction is currently active.
+   *
+   * @returns {boolean}
+   */
   dragging() {
     return this.options.state;
   }
 
+  /**
+   * Current capture state, if any.
+   *
+   * @returns {PointerCaptureState|null}
+   */
   state() {
     return this.drag_state;
   }
 
+  /**
+   * Check whether the given event belongs to the current drag interaction.
+   *
+   * @param {PointerEvent} ev
+   * @returns {boolean}
+   */
   isDraggedBy(ev) {
     return this.drag_state !== null && this.drag_state.isDraggedBy(ev);
   }
