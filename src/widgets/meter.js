@@ -102,8 +102,6 @@ class CanvasDrawingContext {
       this.currentState = emptyIntervals();
     }
 
-    let sizeDrawn = 0;
-
     diffIntervals(
       this.currentState,
       this.nextState,
@@ -114,7 +112,6 @@ class CanvasDrawingContext {
         } else {
           ctx.clearRect(start, 0, size, height);
         }
-        sizeDrawn += size;
       },
       (start, stop) => {
         const size = stop - start + 1;
@@ -123,7 +120,6 @@ class CanvasDrawingContext {
         } else {
           ctx.fillRect(start, 0, size, height);
         }
-        sizeDrawn += size;
       }
     );
 
