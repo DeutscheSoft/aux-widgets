@@ -4,7 +4,14 @@ export default [
       'prefer-const': 'error',
       'no-unused-vars': [
         'error',
-        { vars: 'all', args: 'none', ignoreRestSiblings: false },
+        {
+          vars: 'all',
+          args: 'none',
+          varsIgnorePattern: '^_',
+          caughtErrors: 'all',
+          caughtErrorsIgnorePattern: '^_',
+          ignoreRestSiblings: false
+        },
       ],
       'no-var': 'error',
       semi: 'error',

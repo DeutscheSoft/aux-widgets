@@ -166,7 +166,7 @@ class PointerCaptureState extends CaptureState {
     if (node.setPointerCapture) {
       try {
         node.setPointerCapture(this.pointerId);
-      } catch (e) {
+      } catch (_e) {
         /* ignore if capture fails */
       }
     }
@@ -179,7 +179,7 @@ class PointerCaptureState extends CaptureState {
     if (node && node.releasePointerCapture) {
       try {
         node.releasePointerCapture(this.pointerId);
-      } catch (e) {
+      } catch (_e) {
         /* ignore if release fails or capture already lost */
       }
     }
