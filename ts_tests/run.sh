@@ -11,5 +11,5 @@ TS_VERSION="${TS_VERSION:-5.6.3}"
 
 cd "${REPO_ROOT}"
 
-npx --package="typescript@${TS_VERSION}" -- tsc -p ts_tests/tsconfig.json
+npx -y --package="typescript@${TS_VERSION}" -- tsc -p ts_tests/tsconfig.json
 
