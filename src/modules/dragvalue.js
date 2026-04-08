@@ -109,7 +109,7 @@ function moveCaptureAbs(O, range, state) {
 
   const e = state.current;
 
-  if (e.ctrlKey && e.shiftKey) {
+  if (e.ctrlKey) {
     distance *= rangeOptions.shift_down;
   } else if (e.shiftKey) {
     distance *= rangeOptions.shift_up;
