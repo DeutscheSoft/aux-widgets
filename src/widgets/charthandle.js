@@ -1233,10 +1233,10 @@ export class ChartHandle extends Widget {
 
     let diff = direction * (range.options.step || 1) * rev;
 
-    if (e.getModifierState('Shift')) {
-      diff *= range.get('shift_up');
-    } else if (e.getModifierState('Control')) {
+    if (e.getModifierState('Control')) {
       diff *= range.get('shift_down');
+    } else if (e.getModifierState('Shift')) {
+      diff *= range.get('shift_up');
     }
 
     let z = this.get('z');
