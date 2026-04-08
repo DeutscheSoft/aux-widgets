@@ -1234,9 +1234,9 @@ export class ChartHandle extends Widget {
     let diff = direction * (range.options.step || 1) * rev;
 
     if (e.getModifierState('Shift')) {
-      diff *= range.get(
-        e.getModifierState('Control') ? 'shift_down' : 'shift_up'
-      );
+      diff *= range.get('shift_up');
+    } else if (e.getModifierState('Control')) {
+      diff *= range.get('shift_down');
     }
 
     let z = this.get('z');
