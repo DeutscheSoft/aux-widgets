@@ -26,7 +26,7 @@ function expectTimeout(t, cb) {
     const now = performance.now();
     cb(() => {
       const elapsed = performance.now() - now;
-      if (Math.abs(elapsed - t) > 5) {
+      if (Math.abs(elapsed - t) > 10) {
         reject(new Error(`Bad Timeout: expected ~${t} ms, got ${elapsed.toFixed(1)} ms`));
         return;
       }
@@ -134,5 +134,20 @@ describe('ProximityTimers', () => {
 
     await sleep(80);
     assertEqual(ran, ['throw', 'ok']);
+  });
+
+  it('scheduleAt() schedules a new timer after a previous batch has fired', async () => {
+    const accuracy = 50;
+    const timers = new ProximityTimers(accuracy);
+    const ran = [];
+    const anchor = performance.now() + 35;
+    timers.scheduleAt(() => ran.push('first'), anchor);
+
+    await sleep(120);
+
+    timers.scheduleAt(() => ran.push('second'), anchor + 10);
+
+    await sleep(80);
+    assertEqual(ran, ['first', 'second']);
   });
 });

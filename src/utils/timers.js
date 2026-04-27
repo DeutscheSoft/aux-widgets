@@ -130,6 +130,10 @@ export class ProximityTimers {
       this._calls = calls;
       this._target = target;
       setTimeout(() => {
+        if (this._calls === calls) {
+          this._calls = null;
+          this._target = 0;
+        }
         calls.forEach((cb) => {
           try {
             cb();
