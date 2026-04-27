@@ -137,7 +137,7 @@ export class ProximityTimers {
             error(err);
           }
         });
-      }, performance.now() - target);
+      }, Math.max(0, target - performance.now()));
     }
   }
 
