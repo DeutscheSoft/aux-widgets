@@ -101,6 +101,10 @@ export class Timer {
 }
 
 export class ProximityTimers {
+  /**
+   * @param accuracy - Maximum span (milliseconds) within which distinct target
+   *   times are merged into one timer. Defaults to 20.
+   */
   constructor(accuracy) {
     this._target = 0;
     this._calls = null;
@@ -108,8 +112,11 @@ export class ProximityTimers {
   }
 
   /**
-   * Schedule a method to be run at the given point
-   * in the future.
+   * Schedule a method to be run at the given absolute time on the same timeline
+   * as `performance.now()` (milliseconds).
+   *
+   * @param callback - The callback to run when the timer fires.
+   * @param target - Absolute time in milliseconds (e.g. `performance.now() + delay`).
    */
   scheduleAt(callback, target) {
     if (
@@ -135,7 +142,10 @@ export class ProximityTimers {
   }
 
   /**
-   * Schedule a method to be run in the given number of seconds.
+   * Schedule a method to be run after the given offset from now.
+   *
+   * @param callback - The callback to run when the timer fires.
+   * @param offset - Delay in milliseconds.
    */
   scheduleIn(callback, offset) {
     this.scheduleAt(callback, offset + performance.now());
