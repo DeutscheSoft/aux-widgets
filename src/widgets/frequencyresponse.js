@@ -26,6 +26,8 @@ function calculateGrid(range, step) {
   const grid = [];
   let i, cls;
 
+  if (!(step > 0)) return grid;
+
   for (i = min; i <= max; i += step) {
     if (i === 0) {
       cls = 'aux-highlight';
