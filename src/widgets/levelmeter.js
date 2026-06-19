@@ -48,22 +48,26 @@ import {
  *   clipping effect.
  * @property {Integer|Boolean} [options.auto_clip=false] - This is the clipping timeout. If set to
  *   <code>false</code> automatic clipping is disabled. If set to <code>n</code> the clipping effect
- *   times out after <code>n</code> ms, if set to <code>-1</code> it remains forever.
+ *   times out after <code>n</code> ms and {@link LevelMeter#resetClip} clears the clipping LED, if
+ *   set to <code>-1</code> it remains forever.
  * @property {Boolean} [options.clip=false] - If clipping is enabled, this option is set to
  *   <code>true</code> when clipping happens. When automatic clipping is disabled, it can be set to
  *   <code>true</code> to set the clipping state.
  * @property {Boolean} [options.show_hold=false] - If set to <code>true</code>, show the hold value LED.
  * @property {Integer} [options.hold_size=1] - Size of the hold value LED in the number of segments.
  * @property {Number|boolean} [options.auto_hold=false] - If set to <code>false</code> the automatic
- *   hold LED is disabled, if set to <code>n</code> the hold value is reset after <code>n</code> ms and
- *   if set to <code>-1</code> the hold value is not reset automatically.
- * @property {Number} [options.top=false] - The top hold value. If set to <code>false</code> it will
- *   equal the meter level.
+ *   hold LED is disabled, if set to <code>n</code> the hold LED is reset after <code>n</code> ms via
+ *   {@link LevelMeter#resetTop} and {@link LevelMeter#resetBottom} and if set to <code>-1</code> the
+ *   hold value is not reset automatically.
+ * @property {Number} [options.top=false] - The top hold value. If set to <code>false</code> the hold
+ *   LED is hidden until the next peak.
  * @property {Number} [options.bottom=false] - The bottom hold value. This only exists if a
- *   <code>base</code> value is set and the value falls below the base.
- * @property {Integer|Boolean} [options.peak_value=false] - If set to <code>false</code> the automatic peak
- *   label is disabled, if set to <code>n</code> the peak label is reset after <code>n</code> ms and
- *   if set to <code>-1</code> it remains forever.
+ *   <code>base</code> value is set and the value falls below the base. If set to <code>false</code>
+ *   the hold LED is hidden until the next trough.
+ * @property {Integer|Boolean} [options.peak_value=false] - If set to <code>false</code> the automatic
+ *   peak label is disabled, if set to <code>n</code> the peak label is reset to the base value after
+ *   <code>n</code> ms via {@link LevelMeter#resetValue} and if set to <code>-1</code> it remains
+ *   forever.
  * @property {Number} [options.falling=0] - If set to a positive number, activates the automatic falling
  *   animation. The meter level will fall by this amount over the time set via `options.falling_duration`.
  * @property {Number} [options.falling_duration=1000] - This is the time in milliseconds for the falling
@@ -154,8 +158,6 @@ export class LevelMeter extends Meter {
      */
     const O = this.options;
 
-    if (O.top === false) O.top = O.value;
-    if (O.bottom === false) O.bottom = O.value;
     if (O.falling < 0) O.falling = -O.falling;
 
     if (O.peak_value !== false) this.set('peak_value', O.peak_value);
@@ -214,7 +216,7 @@ export class LevelMeter extends Meter {
   }
 
   /**
-   * Resets the value.
+   * Resets the value label to the base value.
    *
    * @method LevelMeter#resetValue
    *
@@ -222,7 +224,8 @@ export class LevelMeter extends Meter {
    */
   resetValue() {
     this._value_timer = cancelTimer(this._value_timer);
-    this.set('value_label', this.effectiveValue());
+    const { base, min } = this.options;
+    this.set('value_label', base === false ? min : base);
     /**
      * Is fired when the value label was reset.
      *
@@ -250,7 +253,7 @@ export class LevelMeter extends Meter {
   }
 
   /**
-   * Resets the top hold.
+   * Resets the top hold LED.
    *
    * @method LevelMeter#resetTop
    *
@@ -258,7 +261,7 @@ export class LevelMeter extends Meter {
    */
   resetTop() {
     this._top_timer = cancelTimer(this._top_timer);
-    this.set('top', this.effectiveValue());
+    this.set('top', false);
     /**
      * Is fired when the top hold was reset.
      *
@@ -268,7 +271,7 @@ export class LevelMeter extends Meter {
   }
 
   /**
-   * Resets the bottom hold.
+   * Resets the bottom hold LED.
    *
    * @method LevelMeter#resetBottom
    *
@@ -276,7 +279,7 @@ export class LevelMeter extends Meter {
    */
   resetBottom() {
     this._bottom_timer = cancelTimer(this._bottom_timer);
-    this.set('bottom', this.effectiveValue());
+    this.set('bottom', false);
     /**
      * Is fired when the bottom hold was reset.
      *
@@ -319,7 +322,7 @@ export class LevelMeter extends Meter {
     if (!O.show_hold) return;
 
     // shorten things
-    let hold = +O.top;
+    let hold = O.top;
     const segment = O.segment | 0;
     const hold_size = O.hold_size * segment;
     let pos;
@@ -328,7 +331,7 @@ export class LevelMeter extends Meter {
 
     const pos_base = +transformation.valueToPixel(base);
 
-    if (hold > base) {
+    if (hold !== false && hold > base) {
       pos = Math.round(transformation.valueToPixel(hold));
       if (segment !== 1) pos = segment * Math.round(pos / segment);
 
@@ -339,9 +342,9 @@ export class LevelMeter extends Meter {
       }
     }
 
-    hold = +O.bottom;
+    hold = O.bottom;
 
-    if (hold < base) {
+    if (hold !== false && hold < base) {
       pos = Math.round(transformation.valueToPixel(hold));
       if (segment !== 1) pos = segment * (Math.round(pos / segment) | 0);
 
@@ -400,7 +403,7 @@ export class LevelMeter extends Meter {
         const auto_hold = O.auto_hold;
         const top = O.top;
 
-        if (value >= top) {
+        if (top === false || value >= top) {
           if (auto_hold >= 0)
             this._top_timer = startTimer(this._top_timer, auto_hold);
           this.set('top', value);
@@ -409,7 +412,7 @@ export class LevelMeter extends Meter {
         if (this.hasBase()) {
           const bottom = O.bottom;
 
-          if (value <= bottom) {
+          if (bottom === false || value <= bottom) {
             this.set('bottom', value);
             if (auto_hold >= 0)
               this._bottom_timer = startTimer(this._bottom_timer, auto_hold);
@@ -417,7 +420,7 @@ export class LevelMeter extends Meter {
         }
       }
     } else if (key === 'top' || key === 'bottom') {
-      value = this.options.snap_module.snap(value);
+      if (value !== false) value = this.options.snap_module.snap(value);
     }
     return super.set(key, value);
   }

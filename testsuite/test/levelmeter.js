@@ -98,19 +98,20 @@ describe('LevelMeter', () => {
     levelmeter.set('value', 0);
     assertEqual(levelmeter.get('top'), 24);
     await delay(200);
-    assertEqual(levelmeter.get('top'), 0);
+    assertEqual(levelmeter.get('top'), false);
   });
 
-  it('resetTop restarts auto_hold timer while top is above base', async () => {
+  it('resetTop clears top hold', async () => {
     const levelmeter = createMeter({ auto_hold: 100, show_hold: true });
     levelmeter.set('value', 24);
     assertEqual(levelmeter.get('top'), 24);
     await delay(20);
     levelmeter.resetTop();
-    assertEqual(levelmeter.get('top'), 24);
+    assertEqual(levelmeter.get('top'), false);
     levelmeter.set('value', 0);
-    await delay(200);
     assertEqual(levelmeter.get('top'), 0);
+    await delay(200);
+    assertEqual(levelmeter.get('top'), false);
   });
 
   it('auto_hold=false stops timer', async () => {
@@ -125,7 +126,7 @@ describe('LevelMeter', () => {
     assertEqual(levelmeter.get('top'), 24);
   });
 
-  it('resetting top restarts timer', async () => {
+  it('resetting top clears hold after auto_hold', async () => {
     const levelmeter = createMeter({ auto_hold: 100, show_hold: true });
     levelmeter.set('value', 24);
     assertEqual(levelmeter.get('top'), 24);
@@ -136,11 +137,12 @@ describe('LevelMeter', () => {
     await delay(60);
     assertEqual(levelmeter.get('top'), 25);
     await delay(60);
-    assertEqual(levelmeter.get('top'), 0);
+    assertEqual(levelmeter.get('top'), false);
   });
 
-  it('auto_hold with falling keeps updating top until level reaches min', async () => {
+  it('auto_hold with falling clears top hold after timeout', async () => {
     const levelmeter = createMeter({
+      value: 42,
       auto_hold: 100,
       show_hold: true,
       falling: 42,
@@ -148,15 +150,13 @@ describe('LevelMeter', () => {
       falling_init: 0,
     });
 
-    levelmeter.set('value', 42);
     assertEqual(levelmeter.get('top'), 42);
 
     await delay(120);
-    const topAfterFirstHold = levelmeter.get('top');
-    assert(topAfterFirstHold < 42 && topAfterFirstHold > 0);
+    assertEqual(levelmeter.get('top'), false);
 
     await delay(1000);
-    assertEqual(levelmeter.get('top'), 0);
+    assertEqual(levelmeter.get('top'), false);
   });
 
   it('auto_hold < 0', async () => {
@@ -185,13 +185,13 @@ describe('LevelMeter', () => {
 
   it('auto_hold -1 keeps top at peak while bar falls', async () => {
     const levelmeter = createMeter({
+      value: 42,
       auto_hold: -1,
       show_hold: true,
       falling: 42,
       falling_duration: 1000,
       falling_init: 0,
     });
-    levelmeter.set('value', 42);
     assertEqual(levelmeter.get('top'), 42);
     await delay(1200);
     assertEqual(levelmeter.get('top'), 42);
@@ -236,10 +236,10 @@ describe('LevelMeter', () => {
     levelmeter.set('value', 25);
     assertEqual(levelmeter.get('bottom'), 24);
     await delay(200);
-    assertEqual(levelmeter.get('bottom'), 25);
+    assertEqual(levelmeter.get('bottom'), false);
   });
 
-  it('resetBottom restarts auto_hold timer while bottom is below base', async () => {
+  it('resetBottom clears bottom hold', async () => {
     const levelmeter = createMeter({
       auto_hold: 100,
       show_hold: true,
@@ -250,10 +250,11 @@ describe('LevelMeter', () => {
     assertEqual(levelmeter.get('bottom'), 24);
     await delay(20);
     levelmeter.resetBottom();
-    assertEqual(levelmeter.get('bottom'), 24);
+    assertEqual(levelmeter.get('bottom'), false);
     levelmeter.set('value', 25);
-    await delay(200);
     assertEqual(levelmeter.get('bottom'), 25);
+    await delay(200);
+    assertEqual(levelmeter.get('bottom'), false);
   });
 
   it('auto_hold=false sbottoms timer', async () => {
@@ -273,7 +274,7 @@ describe('LevelMeter', () => {
     assertEqual(levelmeter.get('bottom'), 24);
   });
 
-  it('resetting bottom restarts timer', async () => {
+  it('resetting bottom clears hold after auto_hold', async () => {
     const levelmeter = createMeter({
       auto_hold: 100,
       show_hold: true,
@@ -289,7 +290,7 @@ describe('LevelMeter', () => {
     await delay(60);
     assertEqual(levelmeter.get('bottom'), 23);
     await delay(60);
-    assertEqual(levelmeter.get('bottom'), 25);
+    assertEqual(levelmeter.get('bottom'), false);
   });
 
   it('auto_hold < 0', async () => {
@@ -328,6 +329,7 @@ describe('LevelMeter', () => {
 
   it('auto_hold -1 keeps bottom at value while bar rises with falling', async () => {
     const levelmeter = createMeter({
+      value: 10,
       auto_hold: -1,
       show_hold: true,
       base: 30,
@@ -335,8 +337,7 @@ describe('LevelMeter', () => {
       falling_duration: 1000,
       falling_init: 0,
     });
-    levelmeter.set('bottom', 30);
-    levelmeter.set('value', 10);
+
     assertEqual(levelmeter.get('bottom'), 10);
     await delay(1200);
     assertEqual(levelmeter.get('bottom'), 10);
@@ -374,8 +375,9 @@ describe('LevelMeter', () => {
     assertEqual(levelmeter.get('bottom'), 25);
   });
 
-  it('auto_hold with falling keeps updating bottom until level reaches base', async () => {
+  it('auto_hold with falling clears bottom hold after timeout', async () => {
     const levelmeter = createMeter({
+      value: 10,
       auto_hold: 100,
       show_hold: true,
       base: 30,
@@ -384,16 +386,13 @@ describe('LevelMeter', () => {
       falling_init: 0,
     });
 
-    levelmeter.set('bottom', 30);
-    levelmeter.set('value', 10);
     assertEqual(levelmeter.get('bottom'), 10);
 
     await delay(120);
-    const bottomAfterFirstHold = levelmeter.get('bottom');
-    assert(bottomAfterFirstHold > 10 && bottomAfterFirstHold < 30);
+    assertEqual(levelmeter.get('bottom'), false);
 
     await delay(1000);
-    assertEqual(levelmeter.get('bottom'), 30);
+    assertEqual(levelmeter.get('bottom'), false);
   });
 
   // peak_value handling
@@ -405,24 +404,26 @@ describe('LevelMeter', () => {
     levelmeter.set('value', 23);
     assertEqual(levelmeter.get('value_label'), 24);
     await delay(200);
-    assertEqual(levelmeter.get('value_label'), 23);
+    assertEqual(levelmeter.get('value_label'), 0);
   });
 
-  it('resetValue restarts peak_value timer', async () => {
+  it('resetValue clears label to base', async () => {
     const levelmeter = createMeter({ show_value: true, peak_value: 100 });
     levelmeter.set('value', 24);
     assertEqual(levelmeter.get('value_label'), 24);
     await delay(20);
     levelmeter.resetValue();
-    assertEqual(levelmeter.get('value_label'), 24);
+    assertEqual(levelmeter.get('value_label'), 0);
     levelmeter.set('value', 23);
-    await delay(200);
     assertEqual(levelmeter.get('value_label'), 23);
+    await delay(200);
+    assertEqual(levelmeter.get('value_label'), 0);
   });
 
-  it('peak_value captures when value equals value_label', async () => {
+  it('peak_value does not re-arm when value equals value_label', async () => {
     const levelmeter = createMeter({ show_value: true, peak_value: 100 });
-    levelmeter.set('value_label', 24);
+    levelmeter.set('value', 24);
+    assertEqual(levelmeter.get('value_label'), 24);
     levelmeter.set('value', 0);
     levelmeter.set('value', 24);
     assertEqual(levelmeter.get('value_label'), 24);
@@ -430,11 +431,12 @@ describe('LevelMeter', () => {
     levelmeter.set('value', 23);
     assertEqual(levelmeter.get('value_label'), 24);
     await delay(200);
-    assertEqual(levelmeter.get('value_label'), 23);
+    assertEqual(levelmeter.get('value_label'), 0);
   });
 
-  it('peak_value with falling keeps updating value_label until level reaches min', async () => {
+  it('peak_value with falling clears label to base after timeout', async () => {
     const levelmeter = createMeter({
+      value: 42,
       show_value: true,
       peak_value: 100,
       falling: 42,
@@ -442,12 +444,10 @@ describe('LevelMeter', () => {
       falling_init: 0,
     });
 
-    levelmeter.set('value', 42);
     assertEqual(levelmeter.get('value_label'), 42);
 
     await delay(120);
-    const labelAfterFirstHold = levelmeter.get('value_label');
-    assert(labelAfterFirstHold < 42 && labelAfterFirstHold > 0);
+    assertEqual(levelmeter.get('value_label'), 0);
 
     await delay(1000);
     assertEqual(levelmeter.get('value_label'), 0);
@@ -477,7 +477,7 @@ describe('LevelMeter', () => {
     levelmeter.set('value', 23);
     assertEqual(levelmeter.get('value_label'), 25);
     await delay(200);
-    assertEqual(levelmeter.get('value_label'), 23);
+    assertEqual(levelmeter.get('value_label'), 0);
   });
 
   it('peak_value < 0', async () => {
@@ -496,13 +496,13 @@ describe('LevelMeter', () => {
 
   it('peak_value -1 keeps value_label at peak while bar falls', async () => {
     const levelmeter = createMeter({
+      value: 42,
       show_value: true,
       peak_value: -1,
       falling: 42,
       falling_duration: 1000,
       falling_init: 0,
     });
-    levelmeter.set('value', 42);
     assertEqual(levelmeter.get('value_label'), 42);
     await delay(1200);
     assertEqual(levelmeter.get('value_label'), 42);
