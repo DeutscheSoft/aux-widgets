@@ -173,7 +173,6 @@ class CanvasDrawingContext {
  * @property {Boolean} [options.show_label=false] - If set to <code>true</code> a label is displayed.
  * @property {Number} [options.label=false] - The title of the Meter. Set to `false` to hide it.
  * @property {Boolean} [options.show_scale=true] - Set to <code>false</code> to hide the scale.
- * @property {Number} [options.value_label=0] - The value to be drawn in the value label.
  * @property {Boolean} [options.sync_value=true] - Synchronize the value on the bar with
  *   the value label using `options.format_value` function.
  * @property {String|Object|Object[]|Function} [options.foreground] - Color or gradient definition to draw the overlay.

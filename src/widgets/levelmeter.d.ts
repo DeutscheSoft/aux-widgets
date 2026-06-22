@@ -11,7 +11,7 @@ export interface ILevelMeterOptions extends IMeterOptions {
   show_clip?: boolean;
   /** If clipping is enabled, this is the threshold for the clipping effect. */
   clipping: number;
-  /** This is the clipping timeout. If set to false automatic clipping is disabled. If set to n the clipping effect times out after n ms, if set to -1 it remains forever. */
+  /** This is the clipping timeout. If set to false automatic clipping is disabled. If set to n the clipping effect times out after n ms and resetClip clears the clipping LED, if set to -1 it remains forever. */
   auto_clip: number | boolean;
   /** If clipping is enabled, this option is set to true when clipping happens. When automatic clipping is disabled, it can be set to true to set the clipping state. */
   clip: boolean;
@@ -19,13 +19,13 @@ export interface ILevelMeterOptions extends IMeterOptions {
   show_hold: boolean;
   /** Size of the hold value LED in the number of segments. */
   hold_size: number;
-  /** If set to false the automatic hold LED is disabled, if set to n the hold value is reset after n ms and if set to -1 the hold value is not reset automatically. */
+  /** If set to false the automatic hold LED is disabled, if set to n the hold LED is reset after n ms via resetTop and resetBottom and if set to -1 the hold value is not reset automatically. */
   auto_hold: number | boolean;
-  /** The top hold value. If set to false it will equal the meter level. */
+  /** The top hold value. If set to false the hold LED is hidden until the next peak. */
   top: number | false;
-  /** The bottom hold value. This only exists if a base value is set and the value falls below the base. */
+  /** The bottom hold value. This only exists if a base value is set and the value falls below the base. If set to false the hold LED is hidden until the next trough. */
   bottom: number | false;
-  /** If set to false the automatic peak label is disabled, if set to n the peak label is reset after n ms and if set to -1 it remains forever. */
+  /** If set to false the automatic peak label is disabled, if set to n the peak label is reset to the base value after n ms via resetValue and if set to -1 it remains forever. */
   peak_value: number | boolean;
   /** If set to a positive number, activates the automatic falling animation. The meter level will fall by this amount over the time set via falling_duration. */
   falling: number;
@@ -85,7 +85,7 @@ export declare class LevelMeter<
   effectiveValue(): number;
 
   /**
-   * Resets the value.
+   * Resets the value label to the base value.
    * @emits LevelMeter#resetvalue
    */
   resetValue(): void;
@@ -97,13 +97,13 @@ export declare class LevelMeter<
   resetClip(): void;
 
   /**
-   * Resets the top hold.
+   * Resets the top hold LED.
    * @emits LevelMeter#resettop
    */
   resetTop(): void;
 
   /**
-   * Resets the bottom hold.
+   * Resets the bottom hold LED.
    * @emits LevelMeter#resetbottom
    */
   resetBottom(): void;

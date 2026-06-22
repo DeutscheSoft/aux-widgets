@@ -10,7 +10,7 @@ export default [
           varsIgnorePattern: '^_',
           caughtErrors: 'all',
           caughtErrorsIgnorePattern: '^_',
-          ignoreRestSiblings: false
+          ignoreRestSiblings: false,
         },
       ],
       'no-var': 'error',

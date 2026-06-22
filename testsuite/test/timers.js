@@ -27,7 +27,11 @@ function expectTimeout(t, cb) {
     cb(() => {
       const elapsed = performance.now() - now;
       if (Math.abs(elapsed - t) > 10) {
-        reject(new Error(`Bad Timeout: expected ~${t} ms, got ${elapsed.toFixed(1)} ms`));
+        reject(
+          new Error(
+            `Bad Timeout: expected ~${t} ms, got ${elapsed.toFixed(1)} ms`
+          )
+        );
         return;
       }
       resolve();
