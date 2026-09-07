@@ -63,10 +63,12 @@ function pressCancel(e) {
  * @property {Integer} [options.delay=0] - Delay all actions for n milliseconds. While actions are
  *   delayed, the widget has class <code>.aux-delayed</code>. Use to force users to press the button
  *   for a certain amount of time before it actually gets toggled.
- * @property {String|Boolean} [options.icon_active=false] - An optional icon which is only displayed
- *   when the button toggle state is <code>true</code>. Please note that this option only works if `icon` is also set.
- * @property {String|Boolean} [options.label_active=false] - An optional label which is only displayed
- *   when the button toggle state is <code>true</code>. Please note that this option only works if `label` is also set.
+ * @property {String|Boolean} [options.icon_active=false] - An optional icon which is displayed
+ *   when the button toggle state is <code>true</code>. If <code>icon</code> is <code>false</code>,
+ *   the icon element is only present while the toggle is active.
+ * @property {String|Boolean} [options.label_active=false] - An optional label which is displayed
+ *   when the button toggle state is <code>true</code>. If <code>label</code> is <code>false</code>,
+ *   the label element is only present while the toggle is active.
  */
 export class Toggle extends Button {
   static get _options() {
@@ -93,21 +95,40 @@ export class Toggle extends Button {
       press_start: pressStart,
       press_end: pressEnd,
       press_cancel: pressCancel,
+      set_state: function () {
+        this.syncLabel();
+        this.syncIcon();
+      },
+      set_label_active: function () {
+        this.syncLabel();
+      },
+      set_icon_active: function () {
+        this.syncIcon();
+      },
     };
   }
 
   static get renderers() {
     return [
-      defineRender(['state'], function (state) {
-        // FIXME: the dependencies seem wrong here.
-        const O = this.options;
-        let tmp = (state && O.label_active) || O.label;
-        if (tmp) this.label.set('label', tmp || '');
-        tmp = (state && O.icon_active) || O.icon;
-        if (tmp) this.icon.set('icon', tmp || '');
-        this.getFocusTargets()[0].setAttribute('aria-pressed', state);
-      }),
+      defineRender(
+        ['state', 'label', 'label_active', 'icon', 'icon_active'],
+        function (state) {
+          this.syncLabel();
+          this.syncIcon();
+          this.getFocusTargets()[0].setAttribute('aria-pressed', state);
+        }
+      ),
     ];
+  }
+
+  getLabelContent() {
+    const O = this.options;
+    return (O.state && O.label_active) || O.label;
+  }
+
+  getIconContent() {
+    const O = this.options;
+    return (O.state && O.icon_active) || O.icon;
   }
 
   draw(O, element) {

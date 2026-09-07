@@ -24,6 +24,10 @@ export interface IButtonOptions extends IWidgetOptions {
   layout: ILayout;
   /** Enable delayed events. The value is set in milliseconds. If this is set to >0, Button fires some additional events, most importantly `press_start` after the delay has finished without the user leaving the button or lifting the pointer. */
   delay: number;
+  /** @internal Whether the label child is present in the DOM. */
+  _show_label: boolean;
+  /** @internal Whether the icon child is present in the DOM. */
+  _show_icon: boolean;
 }
 
 /**

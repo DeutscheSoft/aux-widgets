@@ -286,6 +286,8 @@ export class Button extends Widget {
       state: 'boolean',
       layout: 'string',
       delay: 'int',
+      _show_label: 'boolean',
+      _show_icon: 'boolean',
     };
   }
 
@@ -298,6 +300,8 @@ export class Button extends Widget {
       delay: 0,
       role: 'button',
       tabindex: 0,
+      _show_label: false,
+      _show_icon: false,
     };
   }
 
@@ -308,6 +312,12 @@ export class Button extends Widget {
       contextmenu: dismiss,
       keydown: keyDown,
       keyup: keyUp,
+      set_label: function () {
+        this.syncLabel();
+      },
+      set_icon: function () {
+        this.syncIcon();
+      },
     };
   }
 
@@ -319,6 +329,73 @@ export class Button extends Widget {
     this.__init_target = null;
     this.__delayed_to = -1;
     super.initialize(options);
+    // Seed presence before initialize_children creates optional children.
+    this.options._show_label = this.getLabelPresence();
+    this.options._show_icon = this.getIconPresence();
+  }
+
+  initialized() {
+    this.applyLabelContent();
+    this.applyIconContent();
+    super.initialized();
+  }
+
+  /**
+   * Effective label content currently shown. Subclasses (e.g. Toggle) may
+   * override this to switch between inactive/active variants.
+   *
+   * @returns {String|Boolean}
+   */
+  getLabelContent() {
+    return this.options.label;
+  }
+
+  /**
+   * Effective icon content currently shown. Subclasses (e.g. Toggle) may
+   * override this to switch between inactive/active variants.
+   *
+   * @returns {String|Boolean}
+   */
+  getIconContent() {
+    return this.options.icon;
+  }
+
+  /**
+   * Whether the label child should exist in the DOM.
+   *
+   * @returns {Boolean}
+   */
+  getLabelPresence() {
+    return this.getLabelContent() !== false;
+  }
+
+  /**
+   * Whether the icon child should exist in the DOM.
+   *
+   * @returns {Boolean}
+   */
+  getIconPresence() {
+    return this.getIconContent() !== false;
+  }
+
+  applyLabelContent() {
+    const content = this.getLabelContent();
+    if (this.label && content !== false) this.label.set('label', content);
+  }
+
+  applyIconContent() {
+    const content = this.getIconContent();
+    if (this.icon && content !== false) this.icon.set('icon', content);
+  }
+
+  syncLabel() {
+    this.update('_show_label', this.getLabelPresence());
+    this.applyLabelContent();
+  }
+
+  syncIcon() {
+    this.update('_show_icon', this.getIconPresence());
+    this.applyIconContent();
   }
 
   draw(O, element) {
@@ -338,11 +415,12 @@ export class Button extends Widget {
         toggleClass(E, 'aux-active', state);
       }),
       defineRender(
-        ['label', 'aria_labelledby'],
-        function (label, aria_labelledby) {
+        ['_show_label', 'aria_labelledby'],
+        function (_show_label, aria_labelledby) {
           if (aria_labelledby !== void 0) return;
 
-          const value = label !== false ? this.label.get('id') : null;
+          const value =
+            _show_label !== false && this.label ? this.label.get('id') : null;
           applyAttribute(this.element, 'aria-labelledby', value);
         }
       ),
@@ -354,8 +432,9 @@ export class Button extends Widget {
       {
         name: 'icon',
         create: Icon,
-        option: 'icon',
+        option: '_show_icon',
         inherit_options: true,
+        blacklist_options: ['icon'],
         toggle_class: true,
         default_options: {
           role: 'presentation',
@@ -364,8 +443,9 @@ export class Button extends Widget {
       {
         name: 'label',
         create: Label,
-        option: 'label',
+        option: '_show_label',
         inherit_options: true,
+        blacklist_options: ['label'],
         toggle_class: true,
         static_events: {
           initialized: function () {

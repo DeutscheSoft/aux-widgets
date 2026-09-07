@@ -30,6 +30,11 @@ const nonTogglePress: Partial<IToggleOptions> = {
   toggle: false,
 };
 
+const activeOnlyToggle: Partial<IToggleOptions> = {
+  label_active: 'Active',
+  icon_active: 'success',
+};
+
 const toggleWidget = new Toggle(simpleToggle);
 new Toggle({
   toggle: true,

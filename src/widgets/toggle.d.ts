@@ -10,9 +10,9 @@ export interface IToggleOptions extends IButtonOptions {
   toggle: boolean;
   /** Controls press behavior. If options.toggle is false and this option is 0, the toggle button will toggle until released. If options.toggle is true and this option is a positive integer, it is interpreted as a milliseconds timeout. When pressing a button longer than this timeout, it will be toggled until released, otherwise it will be toggled permanently. */
   press: number;
-  /** An optional icon which is only displayed when the button toggle state is true. Please note that this option only works if icon is also set. */
+  /** An optional icon displayed when the button toggle state is true. If icon is false, the icon element exists only while active. */
   icon_active: string | false;
-  /** An optional label which is only displayed when the button toggle state is true. Please note that this option only works if label is also set. */
+  /** An optional label displayed when the button toggle state is true. If label is false, the label element exists only while active. */
   label_active: string | false;
   /** @internal */
   icon_inactive: string | false;
