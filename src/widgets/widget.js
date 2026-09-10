@@ -133,7 +133,7 @@ function dblClick(e) {
   const now = performance.now();
 
   if (lastClickTarget === this && lastClickTime + dblclick > now) {
-    // Pass the native MouseEvent through unchanged.
+    // Do not add properties onto the native MouseEvent; that throws in strict mode.
     this.emit('doubleclick', e);
   }
 
