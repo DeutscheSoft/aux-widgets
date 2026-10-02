@@ -15,9 +15,12 @@ const textValue: Partial<IValueOptions> = {
   placeholder: 'foobar',
   size: 10,
   auto_select: true,
-  format: (v) => `${v}`,
-  set: (val) => val,
-  value: '',
+  mode: 'string',
+};
+
+const badMode: Partial<IValueOptions> = {
+  // @ts-expect-error mode must be 'number' | 'string'
+  mode: 'integer',
 };
 
 // Constructor should accept partial options.
