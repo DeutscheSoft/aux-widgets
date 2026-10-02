@@ -226,4 +226,59 @@ describe('Buttons', () => {
       );
     });
   });
+
+  const subscribeSelect = (buttons) => {
+    const sent = [];
+    // Same order as an AWML preventChange binding: dynamic `userset`
+    // listeners run before static handlers and can forward the value.
+    buttons.subscribe('userset', (key, value) => {
+      if (key !== 'select') return;
+      sent.push(value);
+      return false;
+    });
+    return sent;
+  };
+
+  it('deselect=false still allows programmatic set to -1', () => {
+    const buttons = new Buttons({ buttons: ['1', '2'], select: 0 });
+    buttons.set('select', -1);
+    assert(buttons.get('select') === -1);
+    assert(!buttons.getButtons()[0].get('state'));
+  });
+
+  it('deselect=false does not send select=-1 for the selected button', () => {
+    const buttons = new Buttons({ buttons: ['1', '2'], select: 0 });
+    const sent = subscribeSelect(buttons);
+    const button = buttons.getButtons()[0];
+
+    button.element.dispatchEvent(new CustomEvent('click'));
+
+    assert(sent.length === 0);
+    assert(buttons.get('select') === 0);
+    assert(button.get('state'));
+  });
+
+  it('deselect=true sends select=-1 for the selected button', () => {
+    const buttons = new Buttons({
+      buttons: ['1', '2'],
+      select: 0,
+      deselect: true,
+    });
+    const sent = subscribeSelect(buttons);
+
+    buttons.getButtons()[0].element.dispatchEvent(new CustomEvent('click'));
+
+    assert(sent.length === 1);
+    assert(sent[0] === -1);
+  });
+
+  it('deselect=false still sends a different selection', () => {
+    const buttons = new Buttons({ buttons: ['1', '2'], select: 0 });
+    const sent = subscribeSelect(buttons);
+
+    buttons.getButtons()[1].element.dispatchEvent(new CustomEvent('click'));
+
+    assert(sent.length === 1);
+    assert(sent[0] === 1);
+  });
 });

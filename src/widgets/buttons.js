@@ -311,12 +311,6 @@ export class Buttons extends Container {
 
   static get static_events() {
     return {
-      userset: function (key, value) {
-        if (key !== 'select' || this.options.deselect) return;
-
-        if (value === -1 || (Array.isArray(value) && value.length === 0))
-          return false;
-      },
       set_select: function (value) {
         const list = this.buttons.getList();
         const current = [];
@@ -595,6 +589,20 @@ export class Buttons extends Container {
     if (!button) throw new Error('Unknown button.');
 
     return button.get('state');
+  }
+
+  userset(key, value) {
+    // Reject before `userset` is emitted. Bindings such as AWML with
+    // preventChange (used by the React integration) subscribe to `userset`
+    // and forward the value before static handlers run.
+    if (
+      key === 'select' &&
+      !this.options.deselect &&
+      (value === -1 || (Array.isArray(value) && value.length === 0))
+    )
+      return false;
+
+    return super.userset(key, value);
   }
 
   set(key, value) {
