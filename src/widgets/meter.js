@@ -53,6 +53,7 @@ import {
   clearIntervals,
   diffIntervals,
   emptyIntervals,
+  forEachInterval,
   invertIntervals,
 } from '../utils/intervals.js';
 
@@ -82,6 +83,9 @@ class CanvasDrawingContext {
    * @param {number} options.height
    * @param {number} options.width
    * @param {boolean} options.vertical
+   * @param {boolean} [options.fullRedraw=false]
+   *   If true, the whole canvas is repainted on every draw() instead of
+   *   only the intervals which changed.
    */
   constructor(canvas, options) {
     this.canvas = canvas;
@@ -92,6 +96,40 @@ class CanvasDrawingContext {
   }
 
   draw() {
+    if (this.options.fullRedraw) {
+      this.drawFull();
+    } else {
+      this.drawDiff();
+    }
+  }
+
+  /**
+   * Fills the whole canvas and then clears the intervals in nextState.
+   * Does not rely on any previously drawn state.
+   */
+  drawFull() {
+    const { ctx, options, nextState } = this;
+    const { width, height, vertical } = options;
+
+    ctx.fillStyle = options.fillStyle;
+    ctx.fillRect(0, 0, width, height);
+
+    forEachInterval(nextState, (start, stop) => {
+      const size = stop - start + 1;
+      if (vertical) {
+        ctx.clearRect(0, height - stop, width, size);
+      } else {
+        ctx.clearRect(start, 0, size, height);
+      }
+    });
+
+    clearIntervals(nextState);
+  }
+
+  /**
+   * Only repaints the intervals which differ from the previous state.
+   */
+  drawDiff() {
     const { ctx, options } = this;
 
     const { width, height, vertical } = options;
@@ -196,6 +234,10 @@ class CanvasDrawingContext {
  *   represents the current metering value.
  *   With `paint_mode=value` the foreground canvas shows the value itself. In this mode the meter is represented
  *   by the foreground element.
+ * @property {Boolean} [options.full_redraw=false] - By default, only the parts of the mask canvas which
+ *   changed since the last frame are repainted. On some platforms this can lead to rendering artifacts.
+ *   If set to <code>true</code>, the whole mask canvas is filled and the active part is cleared again on
+ *   every update. This is more robust, but more demanding on rendering performance.
  */
 
 export class Meter extends Widget {
@@ -215,6 +257,7 @@ export class Meter extends Widget {
         gradient: 'object|boolean|function',
         foreground: 'string|boolean|array|object',
         paint_mode: 'string',
+        full_redraw: 'boolean',
       },
     ];
   }
@@ -239,6 +282,7 @@ export class Meter extends Widget {
         set_ariavalue: true,
         aria_live: 'off',
         paint_mode: 'inverse',
+        full_redraw: false,
       },
     ];
   }
@@ -417,8 +461,14 @@ export class Meter extends Widget {
         }
       ),
       defineRecalculation(
-        ['_width', '_height', '_foreground_fillstyle', 'layout'],
-        function (width, height, fillStyle, layout) {
+        [
+          '_width',
+          '_height',
+          '_foreground_fillstyle',
+          'layout',
+          'full_redraw',
+        ],
+        function (width, height, fillStyle, layout, full_redraw) {
           this.update(
             '_draw_context',
             new CanvasDrawingContext(this._canvas, {
@@ -426,6 +476,7 @@ export class Meter extends Widget {
               width,
               height,
               vertical: vert(layout),
+              fullRedraw: !!full_redraw,
             })
           );
         }
