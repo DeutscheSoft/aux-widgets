@@ -167,6 +167,10 @@ function setAtoms(key) {
  * @property {boolean} [show_canvas=true] - Set to `false` to hide the color canvas.
  * @property {boolean} [show_grayscale=true] - Set to `false` to hide the grayscale.
  * @property {boolean} [show_indicator=true] - Set to `false` to hide the color indicator.
+ * @property {string|boolean} [label_apply="Apply"] - The label to be used for the apply button.
+ * @property {string|boolean} [icon_apply=false] - The icon to be used for the apply button.
+ * @property {string|boolean} [label_cancel="Cancel"] - The label to be used for the cancel button.
+ * @property {string|boolean} [icon_cancel=false] - The icon to be used for the cancel button.
  */
 
 export class ColorPicker extends Container {
@@ -181,6 +185,10 @@ export class ColorPicker extends Container {
       red: 'number',
       green: 'number',
       blue: 'number',
+      label_apply: 'string|boolean',
+      icon_apply: 'string|boolean',
+      label_cancel: 'string|boolean',
+      icon_cancel: 'string|boolean',
     };
   }
 
@@ -195,6 +203,10 @@ export class ColorPicker extends Container {
       red: 0,
       green: 0,
       blue: 0,
+      label_apply: 'Apply',
+      icon_apply: false,
+      label_cancel: 'Cancel',
+      icon_cancel: false,
     };
   }
 
@@ -458,7 +470,12 @@ export class ColorPicker extends Container {
         },
         default_options: {
           label: 'Apply',
+          icon: false,
           class: 'aux-apply',
+        },
+        map_options: {
+          label_apply: 'label',
+          icon_apply: 'icon',
         },
       },
       {
@@ -472,7 +489,12 @@ export class ColorPicker extends Container {
         },
         default_options: {
           label: 'Cancel',
+          icon: false,
           class: 'aux-cancel',
+        },
+        map_options: {
+          label_cancel: 'label',
+          icon_cancel: 'icon',
         },
       },
     ];
