@@ -84,6 +84,8 @@ export interface IMeterOptions
   gradient: IMeterFillStyle | IGradientFunction;
   /** Either 'value' or 'inverse'. The meter value is drawn using two canvas elements. With paint_mode='inverse' the foreground canvas shows the inverse of the metering value. In this mode the foreground acts as a mask and the background element represents the current metering value. With paint_mode='value' the foreground canvas shows the value itself. In this mode the meter is represented by the foreground element. */
   paint_mode: IPaintMode;
+  /** If true, the whole mask canvas is repainted on every update instead of only the changed parts. Avoids rendering artifacts on some platforms at the cost of performance. */
+  full_redraw: boolean;
   /** @internal Canvas width (computed internally) */
   _width?: number;
   /** @internal Canvas height (computed internally) */
