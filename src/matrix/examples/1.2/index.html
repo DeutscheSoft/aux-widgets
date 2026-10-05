@@ -52,7 +52,39 @@
         aux_matrix.sources = new VirtualTreeDataView(inputs, 10, null, sort);
         aux_matrix.sinks = new VirtualTreeDataView(outputs, 10, null, sort);
         // aux_matrix.sinks = matrix.createVirtualTreeDataView(0, null, sort);
-        aux_matrix.auxWidget.on('toggleConnection', (port1, port2) => {
+        const widget = aux_matrix.auxWidget;
+
+        const mayConnect = (source, sink) =>
+          source && sink && !source.isGroup && !sink.isGroup;
+
+        const forEachDiagonal = (indexRectangle, cb) => {
+          const sources = widget.get('sources');
+          const sinks = widget.get('sinks');
+          const row0 = Math.floor(indexRectangle.startRow);
+          const col0 = Math.floor(indexRectangle.startColumn);
+          const rows = Math.ceil(indexRectangle.endRow) - row0;
+          const cols = Math.ceil(indexRectangle.endColumn) - col0;
+          const n = Math.min(rows, cols);
+          for (let i = 0; i < n; i++) {
+            cb(sources.at(row0 + i), sinks.at(col0 + i));
+          }
+        };
+
+        const forEachInRectangle = (indexRectangle, cb) => {
+          const sources = widget.get('sources');
+          const sinks = widget.get('sinks');
+          const row0 = Math.floor(indexRectangle.startRow);
+          const col0 = Math.floor(indexRectangle.startColumn);
+          const row1 = Math.ceil(indexRectangle.endRow);
+          const col1 = Math.ceil(indexRectangle.endColumn);
+          for (let r = row0; r < row1; r++) {
+            for (let c = col0; c < col1; c++) {
+              cb(sources.at(r), sinks.at(c));
+            }
+          }
+        };
+
+        widget.on('toggleConnection', (port1, port2) => {
           console.log('wants to toggleConnection', port1, port2);
           const connection = matrix.getConnection(port1, port2);
           if (connection) {
@@ -60,6 +92,31 @@
           } else {
             matrix.connect(port1, port2);
           }
+        });
+
+        widget.on('connectDiagonal', (indexRectangle) => {
+          forEachDiagonal(indexRectangle, (source, sink) => {
+            if (!mayConnect(source, sink)) return;
+            if (!matrix.getConnection(source, sink)) {
+              matrix.connect(source, sink);
+            }
+          });
+        });
+
+        widget.on('disconnectDiagonal', (indexRectangle) => {
+          forEachDiagonal(indexRectangle, (source, sink) => {
+            if (!mayConnect(source, sink)) return;
+            const connection = matrix.getConnection(source, sink);
+            if (connection) matrix.deleteConnection(connection);
+          });
+        });
+
+        widget.on('disconnectAll', (indexRectangle) => {
+          forEachInRectangle(indexRectangle, (source, sink) => {
+            if (!mayConnect(source, sink)) return;
+            const connection = matrix.getConnection(source, sink);
+            if (connection) matrix.deleteConnection(connection);
+          });
         });
       });
     </script>
