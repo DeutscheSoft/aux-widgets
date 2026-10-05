@@ -493,14 +493,22 @@ document.addEventListener('DOMContentLoaded', () => {
     cb(node !== outputs);
     return null;
   };
-  const sources = matrix.createListDataView(AMOUNT + 1, filter_sources, sorter);
+  const sources = matrix.createVirtualTreeDataView(
+    AMOUNT + 1,
+    filter_sources,
+    sorter
+  );
   const ListWidget1 = createList(document.querySelector('#list1'), sources);
 
   const filter_sinks = (node, cb) => {
     cb(node !== inputs);
     return null;
   };
-  const sinks = matrix.createListDataView(AMOUNT + 1, filter_sinks, sorter);
+  const sinks = matrix.createVirtualTreeDataView(
+    AMOUNT + 1,
+    filter_sinks,
+    sorter
+  );
   const ListWidget2 = createList(document.querySelector('#list2'), sinks);
 
   const MatrixWidget = createMatrix(
