@@ -55,7 +55,9 @@ function calculateGrid(range, step) {
  *
  * @param {Object} [options={ }] - An object containing initial options.
  *
- * @property {Number} [options.db_grid=12] - Distance in decibels between y axis grid lines.
+ * @property {Number|Boolean} [options.db_grid=12] - Distance in decibels between y axis
+ *   grid lines. Set to <code>false</code> to disable automatic grid generation and keep a
+ *   custom {@link Chart#options.grid_y}.
  * @property {Object} [options.range_x={min:20, max:20000, scale:"frequency"}] - Either a function returning a {@link Range}
  *   or an object containing options for a new {@link Range}
  * @property {Object} [options.range_y={min:-36, max: 36, scale: "linear"}] - Either a function returning a {@link Range}
@@ -71,7 +73,7 @@ function calculateGrid(range, step) {
 export class FrequencyResponse extends Chart {
   static get _options() {
     return {
-      db_grid: 'number',
+      db_grid: 'boolean|number',
       scale: 'boolean',
       depth: 'number',
     };
@@ -79,7 +81,7 @@ export class FrequencyResponse extends Chart {
 
   static get options() {
     return {
-      db_grid: 12, // dB grid distance
+      db_grid: 12, // dB grid distance; false disables auto grid_y
       range_x: { min: 20, max: 20000, scale: 'frequency' }, // Range x options
       range_y: { min: -36, max: 36, scale: 'linear' }, // Range y options
       range_z: { min: 0.1, max: 10, scale: 'linear' },
@@ -125,10 +127,14 @@ export class FrequencyResponse extends Chart {
         this.range_y.set('scale', value);
       },
       set_db_grid: function (value) {
+        // false opts out of automatic grid_y management
+        if (value === false) return;
         this.set('grid_y', calculateGrid(this.range_y, value));
       },
       set_range_y: function () {
-        this.set('grid_y', calculateGrid(this.range_y, this.get('db_grid')));
+        const db_grid = this.get('db_grid');
+        if (db_grid === false) return;
+        this.set('grid_y', calculateGrid(this.range_y, db_grid));
       },
     };
   }
@@ -149,9 +155,6 @@ export class FrequencyResponse extends Chart {
      */
     addClass(this._handles, 'aux-charthandles');
 
-    // do not overwrite custom grids, please
-    if (this.options.db_grid && !this.options.grid_y.length)
-      this.set('db_grid', this.options.db_grid);
     this.range_y.on(
       'set',
       function (key, value) {
