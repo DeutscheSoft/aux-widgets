@@ -75,8 +75,25 @@ function onDragging(s, e) {
 }
 
 function onDragStop(state, e) {
-  if (this.get('_batch')) onBatchStart.call(this, e);
-  else onBatchEnd.call(this);
+  if (this.get('_batch')) {
+    onBatchStart.call(this, e);
+    return;
+  }
+
+  // DragCapture preventDefault() on pointerdown suppresses the native
+  // click event, so treat a short press as indicator activation here.
+  const start = getStartEvent(state);
+  let node = start && start.target;
+  while (node) {
+    const widget = node.auxWidget;
+    if (widget && widget.parent === this) {
+      onIndicatorClicked.call(widget);
+      break;
+    }
+    if (node === this.element) break;
+    node = node.parentElement;
+  }
+  onBatchEnd.call(this);
 }
 
 function onBatchStart() {
