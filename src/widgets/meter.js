@@ -41,6 +41,7 @@ import {
   applyMeterFillStyle,
   computeMeterFillStyle,
 } from '../utils/meter_fill_style.js';
+import { getCanvasContext2D } from '../utils/canvas.js';
 import {
   defineRender,
   defineMeasure,
@@ -104,7 +105,7 @@ class CanvasDrawingContext {
     this.options = options;
     this.currentState = null;
     this.nextState = emptyIntervals();
-    this.ctx = canvas.getContext('2d');
+    this.ctx = getCanvasContext2D(canvas);
   }
 
   draw() {
@@ -381,7 +382,7 @@ export class Meter extends Widget {
           if (!(_height > 0 && _width > 0)) return;
           const { _backdrop } = this;
           applyCanvasSize(_backdrop, _width, _height);
-          const ctx = _backdrop.getContext('2d');
+          const ctx = getCanvasContext2D(_backdrop);
           applyMeterFillStyle(this, _backdrop, _background_fillstyle);
           ctx.fillRect(0, 0, _width, _height);
         }
