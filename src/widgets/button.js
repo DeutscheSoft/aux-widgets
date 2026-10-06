@@ -27,7 +27,7 @@ import {
 import { Widget } from './widget.js';
 import { Icon } from './icon.js';
 import { Label } from './label.js';
-import { defineRender } from '../renderer.js';
+import { defineRecalculation, defineRender, childDependency } from '../renderer.js';
 import { isElementHit } from '../utils/isElementHit.js';
 
 function resetDelayTo() {
@@ -286,6 +286,10 @@ export class Button extends Widget {
       state: 'boolean',
       layout: 'string',
       delay: 'int',
+      _show_label: 'boolean',
+      _show_icon: 'boolean',
+      _label: 'string|boolean',
+      _icon: 'string|boolean',
     };
   }
 
@@ -298,6 +302,10 @@ export class Button extends Widget {
       delay: 0,
       role: 'button',
       tabindex: 0,
+      _show_label: false,
+      _show_icon: false,
+      _label: false,
+      _icon: false,
     };
   }
 
@@ -328,6 +336,14 @@ export class Button extends Widget {
 
   static get renderers() {
     return [
+      defineRecalculation(['label'], function (label) {
+        this.update('_label', label);
+        this.update('_show_label', label !== false);
+      }),
+      defineRecalculation(['icon'], function (icon) {
+        this.update('_icon', icon);
+        this.update('_show_icon', icon !== false);
+      }),
       defineRender('layout', function (layout) {
         const E = this.element;
         toggleClass(E, 'aux-vertical', layout === 'vertical');
@@ -338,12 +354,15 @@ export class Button extends Widget {
         toggleClass(E, 'aux-active', state);
       }),
       defineRender(
-        ['label', 'aria_labelledby'],
+        [childDependency('label'), 'aria_labelledby'],
         function (label, aria_labelledby) {
           if (aria_labelledby !== void 0) return;
 
-          const value = label !== false ? this.label.get('id') : null;
-          applyAttribute(this.element, 'aria-labelledby', value);
+          applyAttribute(
+            this.element,
+            'aria-labelledby',
+            label ? label.get('id') : null
+          );
         }
       ),
     ];
@@ -354,8 +373,12 @@ export class Button extends Widget {
       {
         name: 'icon',
         create: Icon,
-        option: 'icon',
+        option: '_show_icon',
         inherit_options: true,
+        blacklist_options: ['icon'],
+        map_options: {
+          _icon: 'icon',
+        },
         toggle_class: true,
         default_options: {
           role: 'presentation',
@@ -364,8 +387,12 @@ export class Button extends Widget {
       {
         name: 'label',
         create: Label,
-        option: 'label',
+        option: '_show_label',
         inherit_options: true,
+        blacklist_options: ['label'],
+        map_options: {
+          _label: 'label',
+        },
         toggle_class: true,
         static_events: {
           initialized: function () {

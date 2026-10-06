@@ -20,7 +20,7 @@
 import { addClass, toggleClass } from './utils/dom.js';
 import { warn } from './utils/log.js';
 import { Widget } from './widgets/widget.js';
-import { defineRender } from './renderer.js';
+import { defineRender, childDependency } from './renderer.js';
 
 function getChildOptions(parent, name, options, config) {
   let ret = {};
@@ -219,9 +219,14 @@ export function defineChildWidget(widget, name, config) {
    *     property will be true if it is true in the child.
    * @param {boolean} [config.no_resize=false] - If true, no `triggerResize` is called on the parent
    *     as soon as a child is added or removed.
+   *
+   * Creating or destroying the child invalidates the renderer dependency
+   * ``child:<name>`` (see {@link childDependency}), so parent renderers can
+   * depend on actual child presence instead of the show option alone.
    */
 
   const key = config.option || 'show_' + name;
+  const child_dep = childDependency(name);
   let tmp, m;
   const static_events = {};
   const map_interacting = config.map_interacting !== false;
@@ -289,6 +294,7 @@ export function defineChildWidget(widget, name, config) {
     const w = new ChildWidget(O);
     this[name] = w;
     this.addChild(w);
+    this.invalidate(child_dep);
   };
 
   const appendWidget = function () {
@@ -350,6 +356,7 @@ export function defineChildWidget(widget, name, config) {
             this.stopInteracting();
           }
           w.destroy();
+          this.invalidate(child_dep);
         }
         if (!config.no_resize) this.triggerResize();
       })

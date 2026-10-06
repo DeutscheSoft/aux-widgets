@@ -19,7 +19,7 @@
 
 import { addClass } from './../utils/dom.js';
 import { Button } from './button.js';
-import { defineRender } from '../renderer.js';
+import { defineRecalculation, defineRender } from '../renderer.js';
 
 function toggle(O) {
   if (this.userset('state', !O.state) === false) return;
@@ -63,10 +63,12 @@ function pressCancel(e) {
  * @property {Integer} [options.delay=0] - Delay all actions for n milliseconds. While actions are
  *   delayed, the widget has class <code>.aux-delayed</code>. Use to force users to press the button
  *   for a certain amount of time before it actually gets toggled.
- * @property {String|Boolean} [options.icon_active=false] - An optional icon which is only displayed
- *   when the button toggle state is <code>true</code>. Please note that this option only works if `icon` is also set.
- * @property {String|Boolean} [options.label_active=false] - An optional label which is only displayed
- *   when the button toggle state is <code>true</code>. Please note that this option only works if `label` is also set.
+ * @property {String|Boolean} [options.icon_active=false] - An optional icon which is displayed
+ *   when the button toggle state is <code>true</code>. If <code>icon</code> is <code>false</code>,
+ *   the icon element is only present while the toggle is active.
+ * @property {String|Boolean} [options.label_active=false] - An optional label which is displayed
+ *   when the button toggle state is <code>true</code>. If <code>label</code> is <code>false</code>,
+ *   the label element is only present while the toggle is active.
  */
 export class Toggle extends Button {
   static get _options() {
@@ -82,7 +84,6 @@ export class Toggle extends Button {
     return {
       label_active: false,
       icon_active: false,
-      icon_inactive: false,
       press: 0,
       toggle: true,
     };
@@ -98,13 +99,23 @@ export class Toggle extends Button {
 
   static get renderers() {
     return [
+      defineRecalculation(
+        ['label', 'label_active', 'state'],
+        function (label, label_active, state) {
+          const content = (state && label_active) || label;
+          this.update('_label', content);
+          this.update('_show_label', content !== false);
+        }
+      ),
+      defineRecalculation(
+        ['icon', 'icon_active', 'state'],
+        function (icon, icon_active, state) {
+          const content = (state && icon_active) || icon;
+          this.update('_icon', content);
+          this.update('_show_icon', content !== false);
+        }
+      ),
       defineRender(['state'], function (state) {
-        // FIXME: the dependencies seem wrong here.
-        const O = this.options;
-        let tmp = (state && O.label_active) || O.label;
-        if (tmp) this.label.set('label', tmp || '');
-        tmp = (state && O.icon_active) || O.icon;
-        if (tmp) this.icon.set('icon', tmp || '');
         this.getFocusTargets()[0].setAttribute('aria-pressed', state);
       }),
     ];

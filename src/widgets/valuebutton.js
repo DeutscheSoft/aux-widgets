@@ -32,7 +32,7 @@ import { ScrollValue } from '../modules/scrollvalue.js';
 import { addClass, createID, applyAttribute } from '../utils/dom.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
-import { defineRender } from '../renderer.js';
+import { defineRender, childDependency } from '../renderer.js';
 import { selectAriaAttribute } from '../utils/select_aria_attribute.js';
 import { mergeStaticEvents } from '../widget_helpers.js';
 
@@ -132,7 +132,12 @@ export class ValueButton extends Button {
     return [
       ...rangedRenderers,
       defineRender(
-        ['label', 'aria_labelledby', 'value.aria_labelledby', 'show_value'],
+        [
+          childDependency('label'),
+          'aria_labelledby',
+          'value.aria_labelledby',
+          'show_value',
+        ],
         function (label, aria_labelledby, value_aria_labelledby) {
           if (value_aria_labelledby !== void 0) return;
           if (!this.value) return;
@@ -141,7 +146,7 @@ export class ValueButton extends Button {
 
           const value = selectAriaAttribute(
             aria_labelledby,
-            label !== false ? this.label.get('id') : null
+            label ? label.get('id') : null
           );
 
           applyAttribute(_input, 'aria-labelledby', value);
