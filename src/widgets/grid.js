@@ -19,7 +19,7 @@
 
 import { defineRange } from '../utils/define_range.js';
 import { addClass, getStyle, empty } from '../utils/dom.js';
-import { makeSVG } from '../utils/svg.js';
+import { makeSVG, getBBox } from '../utils/svg.js';
 import { Widget, SymResize } from './widget.js';
 import { defineRender, deferRender, deferMeasure } from '../renderer.js';
 
@@ -90,13 +90,10 @@ function measureCoords(
     const label = labels[i];
     if (!label) return;
 
-    let bb;
-    try {
-      bb = label.getBBox();
-    } catch {
-      // if we are hidden, this may throw. we should force redraw at some later point, but its hard to do. the grid should really be deactivated by an option.
-      return;
-    }
+    // Zero-sized when hidden / unavailable (jsdom). Skip layout in that case;
+    // a later redraw is expected when the element becomes measurable again.
+    const bb = getBBox(label);
+    if (!bb.width && !bb.height) return;
 
     const { width, height } = bb;
     const [pt, pr, pb, pl] = getPadding(label);

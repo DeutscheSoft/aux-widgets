@@ -19,7 +19,7 @@
 
 import { FORMAT } from '../utils/sprintf.js';
 import { empty, addClass, getStyle } from '../utils/dom.js';
-import { makeSVG } from '../utils/svg.js';
+import { makeSVG, getBBox } from '../utils/svg.js';
 import {
   warningRenderers,
   warningEvents,
@@ -475,7 +475,7 @@ export class Circular extends Widget {
               const alignOffset = l.align === 'inner' ? -2 : 2;
 
               const pos = transformation.clampValue(l.pos);
-              const bb = element.getBBox();
+              const bb = getBBox(element);
               const _angle =
                 (transformation.valueToCoef(snap_module.snap(pos)) * angle +
                   start) %
