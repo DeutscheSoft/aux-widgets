@@ -49,7 +49,11 @@ function getStartEvent(state) {
   }
 }
 function onDragStart(state, start, e) {
-  return !this.get('_batch_open');
+  // When the batch UI is open, ignore the gesture entirely. Returning false
+  // would still preventDefault() pointerdown in DragCapture and suppress
+  // clicks on the batch buttons.
+  if (this.get('_batch_open')) return;
+  return true;
 }
 
 function onDragging(s, e) {
@@ -75,8 +79,25 @@ function onDragging(s, e) {
 }
 
 function onDragStop(state, e) {
-  if (this.get('_batch')) onBatchStart.call(this, e);
-  else onBatchEnd.call(this);
+  if (this.get('_batch')) {
+    onBatchStart.call(this, e);
+    return;
+  }
+
+  // DragCapture preventDefault() on pointerdown suppresses the native
+  // click event, so treat a short press as indicator activation here.
+  const start = getStartEvent(state);
+  let node = start && start.target;
+  while (node) {
+    const widget = node.auxWidget;
+    if (widget && widget.parent === this) {
+      onIndicatorClicked.call(widget);
+      break;
+    }
+    if (node === this.element) break;
+    node = node.parentElement;
+  }
+  onBatchEnd.call(this);
 }
 
 function onBatchStart() {
@@ -503,6 +524,9 @@ export class Indicators extends Container {
           class: 'aux-deselectdiagonal',
         },
         static_events: {
+          pointerdown: function (ev) {
+            ev.stopPropagation();
+          },
           mousedown: function (ev) {
             ev.stopPropagation();
             return false;
@@ -525,6 +549,9 @@ export class Indicators extends Container {
           class: 'aux-deselectall',
         },
         static_events: {
+          pointerdown: function (ev) {
+            ev.stopPropagation();
+          },
           mousedown: function (ev) {
             ev.stopPropagation();
             return false;
@@ -547,6 +574,9 @@ export class Indicators extends Container {
           class: 'aux-selectdiagonal',
         },
         static_events: {
+          pointerdown: function (ev) {
+            ev.stopPropagation();
+          },
           mousedown: function (ev) {
             ev.stopPropagation();
             return false;
@@ -568,6 +598,9 @@ export class Indicators extends Container {
           class: 'aux-cancel',
         },
         static_events: {
+          pointerdown: function (ev) {
+            ev.stopPropagation();
+          },
           mousedown: function (ev) {
             ev.stopPropagation();
             return false;
