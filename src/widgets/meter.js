@@ -62,6 +62,18 @@ function vert(layout) {
 }
 
 /**
+ * Apply one integer CSS-pixel size to both the canvas bitmap and its CSS box.
+ * The width/height attributes are integers anyway; bitmap, style and drawing
+ * must use the same values or the mask/backdrop will scale against each other.
+ */
+function applyCanvasSize(canvas, width, height) {
+  canvas.setAttribute('width', width);
+  canvas.setAttribute('height', height);
+  canvas.style.width = width + 'px';
+  canvas.style.height = height + 'px';
+}
+
+/**
  *
  * @param {number[]} to
  * @param {number} lhs
@@ -350,15 +362,8 @@ export class Meter extends Widget {
         }
       }),
       defineRender(['_width', '_height'], function (_width, _height) {
-        const { _canvas } = this;
-
         if (!(_height > 0 && _width > 0)) return;
-
-        _canvas.setAttribute('height', Math.round(_height));
-        _canvas.setAttribute('width', Math.round(_width));
-        /* FIXME: I am not sure why this is even necessary */
-        _canvas.style.width = _width + 'px';
-        _canvas.style.height = _height + 'px';
+        applyCanvasSize(this._canvas, _width, _height);
       }),
       defineRender(
         [
@@ -375,10 +380,7 @@ export class Meter extends Widget {
         function (_background_fillstyle, _width, _height) {
           if (!(_height > 0 && _width > 0)) return;
           const { _backdrop } = this;
-          _backdrop.setAttribute('height', Math.round(_height));
-          _backdrop.setAttribute('width', Math.round(_width));
-          _backdrop.style.width = _width + 'px';
-          _backdrop.style.height = _height + 'px';
+          applyCanvasSize(_backdrop, _width, _height);
           const ctx = _backdrop.getContext('2d');
           applyMeterFillStyle(this, _backdrop, _background_fillstyle);
           ctx.fillRect(0, 0, _width, _height);
@@ -536,11 +538,11 @@ export class Meter extends Widget {
 
     const _bar = this._bar;
 
-    const w = innerWidth(_bar, undefined, true);
-    const h = innerHeight(_bar, undefined, true);
-
-    this.set('_width', w);
-    this.set('_height', h);
+    // Round once here so bitmap, CSS size, fillRect and basis share one integer
+    // coordinate space. Canvas attributes cannot store fractional pixels; rounding
+    // only there would stretch the mask against the backdrop.
+    this.set('_width', Math.round(innerWidth(_bar, undefined, true)));
+    this.set('_height', Math.round(innerHeight(_bar, undefined, true)));
   }
 
   effectiveValue() {
