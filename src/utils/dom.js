@@ -446,9 +446,7 @@ export function outerWidth(element, margin, width, notransform) {
       const css = CSSSpace(element, 'padding', 'border');
       width -= css.left + css.right;
     }
-    width -= m;
-    // TODO: fixme
-    if (width < 0) return 0;
+    width = Math.max(0, width - m);
     element.style.width = width + 'px';
     return width;
   } else {
@@ -481,9 +479,7 @@ export function outerHeight(element, margin, height, notransform) {
       const css = CSSSpace(element, 'padding', 'border');
       height -= css.top + css.bottom;
     }
-    height -= m;
-    // TODO: fixme
-    if (height < 0) return 0;
+    height = Math.max(0, height - m);
     element.style.height = height + 'px';
     return height;
   } else {
@@ -508,8 +504,7 @@ export function innerWidth(element, width, notransform) {
   const x = css.left + css.right;
   if (width !== void 0) {
     if (boxSizing(element) === 'border-box') width += x;
-    // TODO: fixme
-    if (width < 0) return 0;
+    width = Math.max(0, width);
     element.style.width = width + 'px';
     return width;
   } else {
@@ -534,8 +529,7 @@ export function innerHeight(element, height, notransform) {
   const y = css.top + css.bottom;
   if (height !== void 0) {
     if (boxSizing(element) === 'border-box') height += y;
-    // TODO: fixme
-    if (height < 0) return 0;
+    height = Math.max(0, height);
     element.style.height = height + 'px';
     return height;
   } else {
