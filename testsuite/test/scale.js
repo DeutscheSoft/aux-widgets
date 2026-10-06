@@ -45,19 +45,19 @@ describe('Scale', () => {
     await waitForDrawn(scale);
   });
 
-  it("bar and dot aren't clamped", () => {
+  it("bar and pointer aren't clamped", () => {
     const scale = new Scale({
       min: -2,
       max: 2,
       bar: 10,
-      dot: 12,
+      pointer: 12,
     });
 
     assertEqual(scale.get('bar'), 10);
-    assertEqual(scale.get('dot'), 12);
+    assertEqual(scale.get('pointer'), 12);
     scale.set('bar', 7);
     assertEqual(scale.get('bar'), 7);
-    scale.set('dot', 9);
-    assertEqual(scale.get('dot'), 9);
+    scale.set('pointer', 9);
+    assertEqual(scale.get('pointer'), 9);
   });
 });
