@@ -27,7 +27,7 @@ import {
 } from './../utils/dom.js';
 import { Container } from './container.js';
 import { Label } from './label.js';
-import { defineRender } from '../renderer.js';
+import { defineRender, childDependency } from '../renderer.js';
 
 /**
  * Marquee is a {@link Label} inside a {@link Container}. Marquee
@@ -75,14 +75,23 @@ export class Marquee extends Container {
   static get renderers() {
     return [
       defineRender(
-        ['easing', 'speed', 'pause', '_inner', '_outer'],
-        function (easing, speed, pause, _inner, _outer) {
+        [
+          'easing',
+          'speed',
+          'pause',
+          '_inner',
+          '_outer',
+          childDependency('label'),
+        ],
+        function (easing, speed, pause, _inner, _outer, label) {
+          if (!label) return;
+
           const range = _inner - _outer;
           const msecs = (range / speed) * 1000;
           const duration = Math.round(msecs + pause);
           const perc = ((pause / 2 / duration) * 100).toFixed(2);
           const to = (100 - perc).toFixed(2);
-          const id = this.label.get('id');
+          const id = label.get('id');
 
           if (!(range > 0)) {
             this._style.textContent = '';
