@@ -49,6 +49,7 @@ import {
   defineMeasure,
   deferRender,
   deferMeasure,
+  childDependency,
 } from '../renderer.js';
 import { eventOriginatedIn } from '../utils/event_originated_in.js';
 
@@ -308,8 +309,8 @@ export class Select extends Button {
         }
       }),
       defineRender(
-        [SymResize, 'auto_size', SymEntriesChanged],
-        function (auto_size) {
+        [SymResize, 'auto_size', SymEntriesChanged, childDependency('label')],
+        function (auto_size, label) {
           if (auto_size) {
             const S = this.sizer.element;
             empty(S);
@@ -323,11 +324,11 @@ export class Select extends Button {
             return deferMeasure(() => {
               const width = outerWidth(S, true);
               return deferRender(() => {
-                if (this.label) outerWidth(this.label.element, true, width);
+                if (label) outerWidth(label.element, true, width);
               });
             });
-          } else {
-            if (this.label) this.label.element.style.width = null;
+          } else if (label) {
+            label.element.style.width = null;
           }
         }
       ),
