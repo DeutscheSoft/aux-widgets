@@ -108,8 +108,8 @@ export class ConfirmButton extends Button {
       confirm: 'boolean',
       timeout: 'number',
       interrupt: 'number',
-      label_confirm: 'string',
-      icon_confirm: 'string',
+      label_confirm: 'string|boolean',
+      icon_confirm: 'string|boolean',
     };
   }
 
