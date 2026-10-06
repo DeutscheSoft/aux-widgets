@@ -1,18 +1,23 @@
 {
   "name": "aux-testsuite",
   "version": "1.0.0",
-  "description": "mocha test suite for AUX",
-  "main": "index.html",
+  "description": "Vitest test suite for AUX",
+  "type": "module",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "node ./node_modules/.bin/http-server -c-1 -a 127.0.0.1"
+    "test": "vitest run",
+    "test:jsdom": "vitest run",
+    "test:watch": "vitest",
+    "test:browser": "vitest run --config vitest.browser.config.js"
   },
   "author": "Arne Goedeke",
   "private": true,
-  "dependencies": {
-    "http-server": "^14.1.1",
-    "mocha": "^6.2.1"
+  "devDependencies": {
+    "@vitest/browser": "^3.2.4",
+    "jsdom": "^26.1.0",
+    "playwright": "^1.54.2",
+    "vitest": "^3.2.4"
   }
 }

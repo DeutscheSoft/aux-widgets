@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { LevelMeter } from '../src/index.js';
+import { LevelMeter } from '../../src/index.js';
 import { waitForDrawn, assert, assertEqual, delay } from './helpers.js';
 
 describe('LevelMeter', () => {

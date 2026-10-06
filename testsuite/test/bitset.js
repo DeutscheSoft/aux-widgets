@@ -28,7 +28,7 @@ import {
   getFirstBit,
   getBitIndex,
   getLimbMask,
-} from '../src/scheduler/bitset.js';
+} from '../../src/scheduler/bitset.js';
 import { assert, assertError, compare } from './helpers.js';
 
 describe('bitset', () => {

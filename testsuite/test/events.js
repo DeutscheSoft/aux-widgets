@@ -17,8 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { Base } from '../src/index.js';
-import { Events } from '../src/events.js';
+import { Base } from '../../src/index.js';
+import { Events } from '../../src/events.js';
 
 for (let C of [Base, Events]) {
   describe('Events', () => {

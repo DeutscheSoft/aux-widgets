@@ -22,7 +22,7 @@ import {
   Buttons,
   ButtonComponent,
   ButtonsComponent,
-} from '../src/index.js';
+} from '../../src/index.js';
 
 import { waitForDrawn, assert, compare, compareOptions } from './helpers.js';
 
@@ -106,7 +106,7 @@ describe('Buttons', () => {
       //button.set('state', true);
       assert(button.get('state'));
     });
-    it('multi-select restriction ' + n, (done) => {
+    it('multi-select restriction ' + n, () => {
       {
         const ba = new Buttons({ multi_select: 1, buttons: ['1', '2', '3'] });
         var sel = [];
@@ -127,8 +127,8 @@ describe('Buttons', () => {
           assert(ba.get('select').length <= 2);
         }
       }
-      done();
     });
+
     n++;
   };
 

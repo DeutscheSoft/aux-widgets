@@ -17,13 +17,13 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { Widget, WidgetComponent } from '../src/index.js';
+import { Widget, WidgetComponent } from '../../src/index.js';
 import {
   interceptOption,
   observeOption,
   observeUseraction,
   DebounceBinding,
-} from '../src/utils/binding.js';
+} from '../../src/utils/binding.js';
 
 import { assert, assertError, sleep } from './helpers.js';
 

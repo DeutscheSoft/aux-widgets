@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { arrayDiff, forEachArrayDiff } from '../src/utils/array_diff.js';
+import { arrayDiff, forEachArrayDiff } from '../../src/utils/array_diff.js';
 import { assert, assertEqual } from './helpers.js';
 
 function forEachArrayDiffSim(a, b, removedCb, addedCb) {
@@ -54,12 +54,11 @@ function testDiffResult(a, b, removedExpected, addedExpected) {
 }
 
 describe('array_diff', () => {
-  it('arrayDiff()', (done) => {
+  it('arrayDiff()', () => {
     testDiffResult(null, [1], [], [1]);
     testDiffResult([1], null, [1], []);
     testDiffResult([1], [1], [], []);
     testDiffResult([1, 2, 3], [1, 3, 4], [2], [4]);
     testDiffResult([1, 1, 2, 3], [1, 2, 3], [], []);
-    done();
   });
 });

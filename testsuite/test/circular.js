@@ -1,4 +1,4 @@
-import { Circular } from '../src/index.js';
+import { Circular } from '../../src/index.js';
 import { assertEqual } from './helpers.js';
 
 describe('Circular', () => {

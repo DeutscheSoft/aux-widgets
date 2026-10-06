@@ -24,7 +24,7 @@ import {
   copyIntervals,
   invertIntervals,
   diffIntervals,
-} from '../src/utils/intervals.js';
+} from '../../src/utils/intervals.js';
 import { assert, assertEqual } from './helpers.js';
 
 const permutations = (arr) => {
@@ -123,7 +123,7 @@ function testInvertInterval(intervalsToInvert, expectedResult, min, max) {
 }
 
 describe('intervals', () => {
-  it('addInterval()', (done) => {
+  it('addInterval()', () => {
     assertEqual(emptyIntervals(), []);
     testAddInterval([[3, 4]], [3, 4]);
     testAddInterval(
@@ -174,18 +174,15 @@ describe('intervals', () => {
       ],
       [1, 14]
     );
-
-    done();
   });
 
-  it('invertIntervals()', (done) => {
+  it('invertIntervals()', () => {
     testInvertInterval(emptyIntervals(), [0, 10], 0, 10);
     testInvertInterval([1, 5], [0, 0, 6, 10], 0, 10);
     testInvertInterval([1, 4, 6, 7], [0, 0, 5, 5, 8, 10], 0, 10);
-    done();
   });
 
-  it('diffIntervals()', (done) => {
+  it('diffIntervals()', () => {
     testDiffInterval(
       emptyIntervals(),
       emptyIntervals(),
@@ -201,6 +198,5 @@ describe('intervals', () => {
       [1, 100],
       [2, 3, 10, 14, 20, 30]
     );
-    done();
   });
 });

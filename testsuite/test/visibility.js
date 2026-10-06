@@ -17,13 +17,13 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { Container, Widget } from '../src/index.js';
-import { checkVisibility } from '../src/utils/debug.js';
+import { Container, Widget } from '../../src/index.js';
+import { checkVisibility } from '../../src/utils/debug.js';
 
 import {
   defineComponent,
   componentFromWidget,
-} from '../src/component_helpers.js';
+} from '../../src/component_helpers.js';
 
 import { waitForDrawn, canvas } from './helpers.js';
 

@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { ProximityTimers, Timer } from '../src/index.js';
+import { ProximityTimers, Timer } from '../../src/index.js';
 
 import { assertEqual } from './helpers.js';
 
@@ -71,13 +71,16 @@ describe('Timers', () => {
       t.restart(40);
     });
   });
-  it('stop()', (done) => {
-    const t = new Timer(done);
+  it('stop()', async () => {
+    let fired = false;
+    const t = new Timer(() => {
+      fired = true;
+    });
     t.restart(40);
-    setTimeout(() => {
-      done();
-      t.stop();
-    }, 20);
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    t.stop();
+    await new Promise((resolve) => setTimeout(resolve, 40));
+    assertEqual(fired, false);
   });
 });
 

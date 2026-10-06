@@ -1,4 +1,4 @@
-import { ValueKnob } from '../src/index.js';
+import { ValueKnob } from '../../src/index.js';
 import { assertEqual } from './helpers.js';
 
 describe('ValueKnob', () => {

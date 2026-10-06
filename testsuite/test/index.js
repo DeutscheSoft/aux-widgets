@@ -17,52 +17,5 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { canvas } from './helpers.js';
-
-afterEach(() => {
-  const div = canvas();
-
-  while (div.lastChild) {
-    const element = div.lastChild;
-
-    if (element.auxWidget) element.auxWidget.destroy();
-
-    element.remove();
-  }
-});
-
-import './base_widgets.js';
-import './bitset.js';
-import './events.js';
-import './css_helpers.js';
-import './scheduler.js';
-import './widgets.js';
-import './timers.js';
-import './bindings.js';
-import './pager.js';
-import './select.js';
-import './visibility.js';
-import './buttons.js';
-import './options.js';
-import './pages.js';
-import './pager.js';
-import './subscriptions.js';
-import './regressions.js';
-import './range.js';
-import './icon.js';
-import './renderer.js';
-import './equalizer.js';
-import './frequencyresponse.js';
-import './sprintf.js';
-import './destroy.js';
-import './levelmeter.js';
-import './array_diff.js';
-import './knob.js';
-import './scale.js';
-import './fader.js';
-import './scale.js';
-import './circular.js';
-import './knob.js';
-import './valueknob.js';
-import './merge_objects.js';
-import './intervals.js';
+// Legacy browser entry. Tests are discovered by Vitest directly from test/**/*.js.
+// Shared teardown lives in setup.js.

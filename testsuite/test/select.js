@@ -17,7 +17,11 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { SelectComponent, SelectEntryComponent, Select } from '../src/index.js';
+import {
+  SelectComponent,
+  SelectEntryComponent,
+  Select,
+} from '../../src/index.js';
 
 import { assert, waitForDrawn } from './helpers.js';
 

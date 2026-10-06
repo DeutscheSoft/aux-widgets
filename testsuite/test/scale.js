@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { Scale } from '../src/index.js';
+import { Scale } from '../../src/index.js';
 import {
   waitForDrawn,
   assert,

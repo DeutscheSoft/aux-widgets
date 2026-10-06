@@ -1,4 +1,4 @@
-import { Fader } from '../src/index.js';
+import { Fader } from '../../src/index.js';
 import { assertEqual } from './helpers.js';
 
 describe('Fader', () => {

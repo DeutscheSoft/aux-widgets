@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { OptionsComponent, ButtonComponent } from '../src/index.js';
+import { OptionsComponent, ButtonComponent } from '../../src/index.js';
 
 import { canvas, assert } from './helpers.js';
 

@@ -23,51 +23,44 @@ import {
   isDocumentFragment,
   setContent,
   isDomNode,
-} from '../src/index.js';
+} from '../../src/index.js';
 import { assert } from './helpers.js';
 
 describe('CSSHelpers', () => {
   const div = document.createElement('DIV');
 
-  it('addClass()', (done) => {
+  it('addClass()', () => {
     addClass(div, 'a', ['b'], 'c  d');
     const c = div.classList;
-    if (
-      c.contains('a') &&
-      c.contains('b') &&
-      c.contains('c') &&
-      c.contains('d')
-    )
-      done();
-    else done(new Error('class not found'));
+    assert(
+      c.contains('a') && c.contains('b') && c.contains('c') && c.contains('d'),
+      'class not found'
+    );
     div.classList.remove('a', 'b', 'c', 'd');
   });
-  it('removeClass()', (done) => {
+  it('removeClass()', () => {
     addClass(div, 'a', ['b'], 'c  d');
     removeClass(div, 'a', ['b'], 'c  d');
     const c = div.classList;
-    if (
+    assert(
       !c.contains('a') &&
-      !c.contains('b') &&
-      !c.contains('c') &&
-      !c.contains('d')
-    )
-      done();
-    else done(new Error('class found'));
+        !c.contains('b') &&
+        !c.contains('c') &&
+        !c.contains('d'),
+      'class found'
+    );
   });
-  it('isDocumentFragment()', (done) => {
+  it('isDocumentFragment()', () => {
     assert(isDocumentFragment(document.createDocumentFragment()));
     assert(!isDocumentFragment(0));
     assert(!isDocumentFragment(document.createElement('div')));
-    done();
   });
-  it('isDomNode()', (done) => {
+  it('isDomNode()', () => {
     assert(isDomNode(document.createDocumentFragment()));
     assert(!isDomNode(0));
     assert(isDomNode(document.createElement('div')));
-    done();
   });
-  it('setContent()', (done) => {
+  it('setContent()', () => {
     const div = document.createElement('div');
 
     setContent(div, 'foobar');
@@ -83,7 +76,5 @@ describe('CSSHelpers', () => {
     // fragment is unchanged
     assert(fragment1.textContent, 'foo');
     assert(div.textContent, 'foo');
-
-    done();
   });
 });

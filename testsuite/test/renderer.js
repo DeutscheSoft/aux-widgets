@@ -23,7 +23,7 @@ import {
   MASK_RENDER,
   PHASE_CALCULATE,
   PHASE_RENDER,
-} from '../src/scheduler/scheduler.js';
+} from '../../src/scheduler/scheduler.js';
 import {
   Renderer,
   RenderState,
@@ -31,7 +31,7 @@ import {
   defineMeasure,
   deferRender,
   deferRenderNext,
-} from '../src/renderer.js';
+} from '../../src/renderer.js';
 import { makeCallback } from './helpers.js';
 
 function schedule(callback) {

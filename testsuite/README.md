@@ -1,8 +1,16 @@
 # Setup
 
-Run `npm ci` once to install the test framework.
+Run `npm ci` once to install the test framework. For browser runs, also install
+Chromium once:
+
+```
+npx playwright install chromium
+```
 
 # Running the testsuite
 
-Run `npm run test` to start a http server. Then, use a browser to go to
-[http://localhost:8080].
+- `npm test` — run all tests under jsdom (CI / console)
+- `npm run test:watch` — watch mode under jsdom
+- `npm run test:browser` — run all tests in headless Chromium
+
+Use `.only` on `describe` / `it` to focus individual tests in either mode.

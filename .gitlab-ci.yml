@@ -3,4 +3,5 @@ image: node:24-bookworm
 ci:
   script:
     - npm run lint
+    - npm ci --prefix testsuite
     - npm run test

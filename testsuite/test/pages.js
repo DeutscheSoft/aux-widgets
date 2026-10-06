@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { Page, Pages, PageComponent, PagesComponent } from '../src/index.js';
+import { Page, Pages, PageComponent, PagesComponent } from '../../src/index.js';
 
 import {
   waitForConnected,

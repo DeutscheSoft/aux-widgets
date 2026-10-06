@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { Knob } from '../src/index.js';
+import { Knob } from '../../src/index.js';
 import { waitForDrawn, assertEqual } from './helpers.js';
 
 describe('Knob', () => {

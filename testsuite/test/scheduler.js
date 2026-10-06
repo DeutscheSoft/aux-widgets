@@ -23,7 +23,7 @@ import {
   MASK_RENDER,
   PHASE_CALCULATE,
   PHASE_RENDER,
-} from '../src/scheduler/scheduler.js';
+} from '../../src/scheduler/scheduler.js';
 
 import { makeCallback } from './helpers.js';
 
