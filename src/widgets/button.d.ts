@@ -28,6 +28,10 @@ export interface IButtonOptions extends IWidgetOptions {
   _show_label: boolean;
   /** @internal Whether the icon child is present in the DOM. */
   _show_icon: boolean;
+  /** @internal Effective label content pushed to the Label child. */
+  _label: string | false;
+  /** @internal Effective icon content pushed to the Icon child. */
+  _icon: string | false;
 }
 
 /**

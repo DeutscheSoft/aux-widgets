@@ -19,7 +19,7 @@
 
 import { addClass } from './../utils/dom.js';
 import { Button } from './button.js';
-import { defineRender } from '../renderer.js';
+import { defineRecalculation, defineRender } from '../renderer.js';
 
 function toggle(O) {
   if (this.userset('state', !O.state) === false) return;
@@ -84,7 +84,6 @@ export class Toggle extends Button {
     return {
       label_active: false,
       icon_active: false,
-      icon_inactive: false,
       press: 0,
       toggle: true,
     };
@@ -95,40 +94,31 @@ export class Toggle extends Button {
       press_start: pressStart,
       press_end: pressEnd,
       press_cancel: pressCancel,
-      set_state: function () {
-        this.syncLabel();
-        this.syncIcon();
-      },
-      set_label_active: function () {
-        this.syncLabel();
-      },
-      set_icon_active: function () {
-        this.syncIcon();
-      },
     };
   }
 
   static get renderers() {
     return [
-      defineRender(
-        ['state', 'label', 'label_active', 'icon', 'icon_active'],
-        function (state) {
-          this.syncLabel();
-          this.syncIcon();
-          this.getFocusTargets()[0].setAttribute('aria-pressed', state);
+      defineRecalculation(
+        ['label', 'label_active', 'state'],
+        function (label, label_active, state) {
+          const content = (state && label_active) || label;
+          this.update('_label', content);
+          this.update('_show_label', content !== false);
         }
       ),
+      defineRecalculation(
+        ['icon', 'icon_active', 'state'],
+        function (icon, icon_active, state) {
+          const content = (state && icon_active) || icon;
+          this.update('_icon', content);
+          this.update('_show_icon', content !== false);
+        }
+      ),
+      defineRender(['state'], function (state) {
+        this.getFocusTargets()[0].setAttribute('aria-pressed', state);
+      }),
     ];
-  }
-
-  getLabelContent() {
-    const O = this.options;
-    return (O.state && O.label_active) || O.label;
-  }
-
-  getIconContent() {
-    const O = this.options;
-    return (O.state && O.icon_active) || O.icon;
   }
 
   draw(O, element) {

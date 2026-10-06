@@ -14,8 +14,6 @@ export interface IToggleOptions extends IButtonOptions {
   icon_active: string | false;
   /** An optional label displayed when the button toggle state is true. If label is false, the label element exists only while active. */
   label_active: string | false;
-  /** @internal */
-  icon_inactive: string | false;
 }
 
 /**
