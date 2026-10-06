@@ -545,9 +545,11 @@ export class Buttons extends Container {
 
     button.element.remove();
 
-    if (buttons.at(position) === button) {
-      // NOTE: if we remove a child which is a web component,
-      // it will itself call removeChild
+    // NOTE: if we remove a child which is a web component,
+    // disconnectedCallback already called removeChild. Do not use the
+    // `buttons` snapshot from above — ChildWidgets replaces its list on
+    // child_removed, so the old array would still contain this button.
+    if (this.hasChild(button)) {
       this.removeChild(button);
     }
 
