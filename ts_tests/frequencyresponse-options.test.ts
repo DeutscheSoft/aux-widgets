@@ -10,6 +10,10 @@ const fr: Partial<IFrequencyResponseOptions> = {
 
 const frWidget = new FrequencyResponse(fr);
 new FrequencyResponse({ scale: false });
+new FrequencyResponse({
+  db_grid: false,
+  grid_y: [{ pos: 0, label: '0dB' }],
+});
 
 // .set(key, value) API type-checking
 frWidget.set('depth', 2);

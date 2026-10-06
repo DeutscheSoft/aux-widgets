@@ -52,6 +52,7 @@ import './range.js';
 import './icon.js';
 import './renderer.js';
 import './equalizer.js';
+import './frequencyresponse.js';
 import './sprintf.js';
 import './destroy.js';
 import './levelmeter.js';
