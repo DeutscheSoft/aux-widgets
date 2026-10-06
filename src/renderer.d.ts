@@ -52,6 +52,10 @@ export function defineMultiPhaseRenderer(
   run: () => unknown,
   debug?: string
 ): unknown;
+/** Prefix for child-widget presence dependencies (`child:<name>`). */
+export const CHILD_DEPENDENCY_PREFIX: 'child:';
+/** Returns the renderer dependency string for child widget `name`. */
+export function childDependency(name: string): string;
 export class RenderState {
   constructor();
 }

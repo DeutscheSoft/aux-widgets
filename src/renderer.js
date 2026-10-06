@@ -296,36 +296,48 @@ export class Renderer {
  *   which need to be scheduled before possible dom modifications. That will
  *   usually trigger some internal options to be changed.
  *
+ * String dependencies are injected as arguments to ``run`` (in dependency
+ * order, ignoring non-string deps). Plain names read ``this.options[name]``.
+ * Names of the form ``child:<name>`` (see {@link childDependency}) read the
+ * child widget instance ``this[name]`` (or ``null`` if absent) and are
+ * invalidated by {@link defineChildWidget} when that child is created or
+ * destroyed.
  */
+
+export const CHILD_DEPENDENCY_PREFIX = 'child:';
+
+/**
+ * Returns the renderer dependency string for the presence of a child widget.
+ *
+ * @param {string} name - The child widget property name (e.g. ``'label'``).
+ * @returns {string} Dependency id ``child:<name>``.
+ */
+export function childDependency(name) {
+  return CHILD_DEPENDENCY_PREFIX + name;
+}
 
 export function defineTask(phase, dependencies, run, debug) {
   if (!debug) debug = false;
 
   if (!Array.isArray(dependencies)) dependencies = [dependencies];
 
-  const optionNames = dependencies.filter((dep) => typeof dep === 'string');
+  const stringDeps = dependencies.filter((dep) => typeof dep === 'string');
 
-  if (optionNames.length) {
-    const variableNames = optionNames.map((name) => {
-      return name.replaceAll('.', '_');
+  if (stringDeps.length) {
+    const argExpressions = stringDeps.map((name) => {
+      if (name.startsWith(CHILD_DEPENDENCY_PREFIX)) {
+        return `this[${JSON.stringify(
+          name.slice(CHILD_DEPENDENCY_PREFIX.length)
+        )}]`;
+      }
+      return `this.options[${JSON.stringify(name)}]`;
     });
-    const arglistIn = optionNames
-      .map((name, i) => {
-        if (name !== variableNames[i]) {
-          return `[${JSON.stringify(name)}]: ${variableNames[i]}`;
-        } else {
-          return name;
-        }
-      })
-      .join(', ');
-    const arglistOut = ['this', ...variableNames].join(', ');
 
     run = new Function(
       'renderFunction',
       `
       return function () {
-        const { ${arglistIn} } = this.options;
-        return renderFunction.call(${arglistOut});
+        return renderFunction.call(this, ${argExpressions.join(', ')});
       };
     `
     )(run);
