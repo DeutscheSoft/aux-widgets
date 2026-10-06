@@ -22,6 +22,9 @@
  * The callback will be called whenever the resize observer triggers.
  * Returns an unsubscription callback which can be used to stop the
  * observation.
+ *
+ * If ResizeObserver is unavailable (e.g. jsdom), returns a no-op
+ * unsubscription callback and does not observe.
  */
 export function observeResize(elements, callback) {
   if (typeof ResizeObserver === 'undefined') return () => {};
