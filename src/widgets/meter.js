@@ -457,13 +457,7 @@ export class Meter extends Widget {
         }
       ),
       defineRecalculation(
-        [
-          '_width',
-          '_height',
-          '_foreground_fillstyle',
-          'layout',
-          'full_redraw',
-        ],
+        ['_width', '_height', '_foreground_fillstyle', 'layout', 'full_redraw'],
         function (width, height, fillStyle, layout, full_redraw) {
           this.update(
             '_draw_context',
