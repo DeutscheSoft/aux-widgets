@@ -26,10 +26,13 @@ import { subscribeDOMEvent } from '../../utils/events.js';
 import { Button } from './../../widgets/button.js';
 import { ConfirmButton } from './../../widgets/confirmbutton.js';
 import { Container } from './../../widgets/container.js';
+import { DebounceTimer } from '../../utils/timers.js';
 import { Indicator } from './indicator.js';
 import { DragCapture } from '../../modules/dragcapture.js';
 import { resizeArrayMod } from '../models.js';
 import { defineRender, defineRecalculation } from '../../renderer.js';
+
+const RESIZE_DEBOUNCE_MS = 100;
 
 scrollbarSize();
 
@@ -330,6 +333,10 @@ export class Indicators extends Container {
     super.initialize(options);
     this.connectionview_subs = new Subscriptions();
     this.entries = [];
+    this._resize_debounce = new DebounceTimer(
+      () => super.triggerResize(),
+      RESIZE_DEBOUNCE_MS
+    );
 
     this.drag = new DragCapture(this, {
       node: this.element,
@@ -342,7 +349,12 @@ export class Indicators extends Container {
     this._dragging = false;
   }
 
+  triggerResize() {
+    this._resize_debounce.trigger();
+  }
+
   destroy() {
+    this._resize_debounce.destroy();
     super.destroy();
     this.connectionview_subs.unsubscribe();
   }

@@ -22,10 +22,13 @@ import { Subscriptions } from '../../utils/subscriptions.js';
 import { subscribeDOMEvent } from '../../utils/events.js';
 import { defineRecalculation } from '../../define_recalculation.js';
 import { defineRender, defineMeasure } from '../../renderer.js';
+import { DebounceTimer } from '../../utils/timers.js';
 
 import { Scroller } from './../../widgets/scroller.js';
 import { VirtualTreeEntry } from './virtualtreeentry.js';
 import { resizeArrayMod } from '../models.js';
+
+const RESIZE_DEBOUNCE_MS = 100;
 
 scrollbarSize();
 
@@ -158,6 +161,19 @@ export class VirtualTree extends Scroller {
     super.initialize(options);
     this.virtualtreeview_subs = new Subscriptions();
     this.entries = [];
+    this._resize_debounce = new DebounceTimer(
+      () => super.triggerResize(),
+      RESIZE_DEBOUNCE_MS
+    );
+  }
+
+  triggerResize() {
+    this._resize_debounce.trigger();
+  }
+
+  destroy() {
+    this._resize_debounce.destroy();
+    super.destroy();
   }
 
   _scrollDataTo(position) {
