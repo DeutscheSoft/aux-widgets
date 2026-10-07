@@ -624,7 +624,6 @@ export class Scale extends Widget {
           default:
             warn('Unsupported layout setting:', layout);
         }
-        this.triggerResize();
       }),
       defineRender(
         [
@@ -731,10 +730,8 @@ export class Scale extends Widget {
           );
         }
       ),
-      defineMeasure(SymResize, function () {
-        const O = this.options;
-
-        const basis = vert(O.layout)
+      defineMeasure(['layout', SymResize], function (layout) {
+        const basis = vert(layout)
           ? innerHeight(this.element, undefined, true)
           : innerWidth(this.element, undefined, true);
         this.update('basis', basis);
