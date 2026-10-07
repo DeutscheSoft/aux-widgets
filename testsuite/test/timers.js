@@ -17,9 +17,10 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { ProximityTimers, Timer } from '../src/index.js';
+import { ProximityTimers, Timer } from '../../src/index.js';
+import { SilentError } from './utils/silent_error.js';
 
-import { assertEqual } from './helpers.js';
+import { assertEqual } from './utils/helpers.js';
 
 function expectTimeout(t, cb) {
   return new Promise((resolve, reject) => {
@@ -71,13 +72,16 @@ describe('Timers', () => {
       t.restart(40);
     });
   });
-  it('stop()', (done) => {
-    const t = new Timer(done);
+  it('stop()', async () => {
+    let fired = false;
+    const t = new Timer(() => {
+      fired = true;
+    });
     t.restart(40);
-    setTimeout(() => {
-      done();
-      t.stop();
-    }, 20);
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    t.stop();
+    await new Promise((resolve) => setTimeout(resolve, 40));
+    assertEqual(fired, false);
   });
 });
 
@@ -132,7 +136,7 @@ describe('ProximityTimers', () => {
     const base = performance.now() + 20;
     timers.scheduleAt(() => {
       ran.push('throw');
-      throw new Error('first');
+      throw new SilentError('first');
     }, base);
     timers.scheduleAt(() => ran.push('ok'), base + 5);
 

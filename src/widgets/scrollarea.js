@@ -19,6 +19,7 @@
 
 import { Widget } from './widget.js';
 import { element, addClass } from '../utils/dom.js';
+import { createIntersectionObserver } from '../utils/create_intersection_observer.js';
 
 /**
  * The ScrollArea widget disables or enabled rendering in its child widgets
@@ -57,7 +58,7 @@ export class ScrollArea extends Widget {
         }
       });
     };
-    this._observer = new IntersectionObserver(visibilityChanged, {
+    this._observer = createIntersectionObserver(visibilityChanged, {
       root: this.element,
     });
   }
@@ -86,6 +87,7 @@ export class ScrollArea extends Widget {
   removeChild(child) {
     super.removeChild(child);
     this._elementToWidget.delete(child.element);
+    this._visible.delete(child);
     this._observer.unobserve(child.element);
   }
 

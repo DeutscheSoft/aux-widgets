@@ -34,7 +34,7 @@ import {
   Frame,
   Root,
   Widget,
-} from '../src/index.js';
+} from '../../src/index.js';
 
 /*
  * This file is part of AUX.
@@ -61,7 +61,7 @@ import {
   assertEqual,
   compare,
   objectMinus,
-} from './helpers.js';
+} from './utils/helpers.js';
 
 const widgets = [
   Container,
@@ -159,8 +159,7 @@ describe('Widgets', () => {
     }
   });
 
-  it('aria-label', async function () {
-    this.timeout(10000);
+  it('aria-label', async () => {
     for (const w of standalone_widgets) {
       const widget = new w({ aria_label: null });
       widget.show();
@@ -188,8 +187,7 @@ describe('Widgets', () => {
     }
   });
 
-  it('aria-labelledby', async function () {
-    this.timeout(10000);
+  it('aria-labelledby', async () => {
     for (const w of standalone_widgets) {
       const widget = new w({ aria_labelledby: null });
       widget.show();
@@ -231,8 +229,7 @@ describe('Widgets', () => {
     assert(!widget.element.classList.contains('aux-hide'));
   }
 
-  it('visible', async function () {
-    this.timeout(10000);
+  it('visible', async () => {
     for (const w of standalone_widgets) {
       const widget = new w();
 
@@ -291,7 +288,7 @@ describe('Widgets', () => {
 });
 
 describe('Chart', () => {
-  it('creating graphs', (done) => {
+  it('creating graphs', () => {
     const chart = new Chart();
 
     const g1 = chart.addGraph({});
@@ -304,9 +301,8 @@ describe('Chart', () => {
       console.error(g1.options, g2.options);
       throw new Error('Graph options mismatch.');
     }
-
-    done();
   });
+
   it('switching graphs position', async () => {
     const chart = new Chart();
 
@@ -331,7 +327,7 @@ describe('Chart', () => {
     if (g2.element !== g2.element.parentElement.lastChild)
       throw new Error('Graph.toFront() failed.');
   });
-  it('creating handles', (done) => {
+  it('creating handles', () => {
     const chart = new Chart();
 
     const h1 = chart.addHandle({});
@@ -344,9 +340,8 @@ describe('Chart', () => {
       console.error(h1.options, h2.options);
       throw new Error('Handle options mismatch.');
     }
-
-    done();
   });
+
   it('switching handles position', async () => {
     const chart = new Chart();
 
@@ -370,7 +365,7 @@ describe('Chart', () => {
 });
 
 describe('Equalizer', () => {
-  it('creating bands', (done) => {
+  it('creating bands', () => {
     const eq = new Equalizer();
 
     const b1 = eq.addBand({});
@@ -383,13 +378,11 @@ describe('Equalizer', () => {
       console.error(b1.options, b2.options);
       throw new Error('Options mismatch.');
     }
-
-    done();
   });
 });
 
 describe('Crossover', () => {
-  it('creating bands', (done) => {
+  it('creating bands', () => {
     const eq = new Crossover();
 
     const b1 = eq.addBand({});
@@ -402,8 +395,6 @@ describe('Crossover', () => {
       console.error(b1.options, b2.options);
       throw new Error('Options mismatch.');
     }
-
-    done();
   });
 });
 

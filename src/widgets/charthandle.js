@@ -26,7 +26,7 @@ import { FORMAT } from '../utils/sprintf.js';
 import { warn } from '../utils/log.js';
 import { addEventListener, removeEventListener } from '../utils/events.js';
 import { setText, removeClass, addClass, toggleClass } from '../utils/dom.js';
-import { makeSVG } from '../utils/svg.js';
+import { makeSVG, getBBox, getComputedTextLength } from '../utils/svg.js';
 import { Range } from '../modules/range.js';
 import { Timer } from '../utils/timers.js';
 import { defineRange } from '../utils/define_range.js';
@@ -1114,27 +1114,15 @@ export class ChartHandle extends Widget {
         const tspans = _label.childNodes;
 
         const width = Array.from(tspans).reduce(
-          (max, tspan) => Math.max(max, tspan.getComputedTextLength()),
+          (max, tspan) => Math.max(max, getComputedTextLength(tspan)),
           0
         );
 
         this.update('_label_width', width);
 
-        let height;
-
-        try {
-          height = _label.getBBox().height;
-        } catch {
-          height = 0;
-          /* _label is not in the DOM yet.
-           * This is probably because active=false
-           * which sets aux-inactive, which may result
-           * in display:none.
-           * When active is changed, this calculation is
-           * run again.
-           */
-        }
-        this.update('_label_height', height);
+        // getBBox already returns zeros when unavailable / not rendered
+        // (jsdom, display:none, not yet in DOM).
+        this.update('_label_height', getBBox(_label).height);
       }),
       defineRender(
         [

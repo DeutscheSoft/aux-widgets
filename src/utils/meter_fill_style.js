@@ -1,3 +1,5 @@
+import { getCanvasContext2D } from './canvas.js';
+
 function fromGradientObject(gradient) {
   const entries = [];
 
@@ -79,7 +81,7 @@ export function computeMeterFillStyle(definition, element, options) {
     if (length > 1 && entries[0].coef > entries[length - 1].coef)
       entries = entries.reverse();
 
-    const ctx = element.getContext('2d');
+    const ctx = getCanvasContext2D(element);
     const grd = ctx.createLinearGradient(
       0,
       0,
@@ -114,14 +116,14 @@ export function applyMeterFillStyle(widget, element, definition) {
 
     return definition.call(
       widget,
-      element.getContext('2d'),
+      getCanvasContext2D(element),
       options,
       element,
       _width,
       _height
     );
   } else {
-    const ctx = element.getContext('2d');
+    const ctx = getCanvasContext2D(element);
     if (ctx.fillStyle !== definition) {
       ctx.fillStyle = definition;
       return true;

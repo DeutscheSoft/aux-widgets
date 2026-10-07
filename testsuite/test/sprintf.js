@@ -17,21 +17,19 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { sprintf, FORMAT } from '../src/utils/sprintf.js';
-import { assert } from './helpers.js';
+import { sprintf, FORMAT } from '../../src/utils/sprintf.js';
+import { assert } from './utils/helpers.js';
 
 describe('sprintf', () => {
-  it('sprintf()', (done) => {
+  it('sprintf()', () => {
     assert(sprintf('%d', 234) === '234');
     assert(sprintf('%s', '234') === '234');
     assert(sprintf('%.1f', 1.45) === '1.5');
-    done();
   });
 
-  it('FORMAT()', (done) => {
+  it('FORMAT()', () => {
     assert(FORMAT('%d')(234) === '234');
     assert(FORMAT('%s')('234') === '234');
     assert(FORMAT('%.1f')(1.45) === '1.5');
-    done();
   });
 });

@@ -17,8 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { Subscription, Subscriptions } from '../src/utils/subscriptions.js';
-import { assert } from './helpers.js';
+import { Subscription, Subscriptions } from '../../src/utils/subscriptions.js';
+import { assert } from './utils/helpers.js';
 
 describe('Subscriptions', () => {
   it('basics', () => {

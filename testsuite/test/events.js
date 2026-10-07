@@ -17,8 +17,9 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { Base } from '../src/index.js';
-import { Events } from '../src/events.js';
+import { Base } from '../../src/index.js';
+import { Events } from '../../src/events.js';
+import { SilentError } from './utils/silent_error.js';
 
 for (let C of [Base, Events]) {
   describe('Events', () => {
@@ -170,7 +171,7 @@ for (let C of [Base, Events]) {
         };
 
         o.on('foo', () => {
-          throw new Error('ignore me');
+          throw new SilentError('ignore me');
         });
         o.on('foo', cb);
         o.emit('foo');
@@ -183,7 +184,7 @@ for (let C of [Base, Events]) {
 
         o.once('foo', () => {
           called = true;
-          throw new Error('ignore me');
+          throw new SilentError('ignore me');
         });
         o.emit('foo');
         if (!called) throw new Error('not called');

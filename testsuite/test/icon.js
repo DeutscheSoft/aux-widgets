@@ -17,8 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { Icon } from '../src/index.js';
-import { waitForDrawn, assert, compare, objectMinus } from './helpers.js';
+import { Icon } from '../../src/index.js';
+import { waitForDrawn, assert, compare, objectMinus } from './utils/helpers.js';
 
 describe('Icon', () => {
   it('Icon mode detection', async () => {

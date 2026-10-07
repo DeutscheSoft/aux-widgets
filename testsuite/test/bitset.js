@@ -28,8 +28,8 @@ import {
   getFirstBit,
   getBitIndex,
   getLimbMask,
-} from '../src/scheduler/bitset.js';
-import { assert, assertError, compare } from './helpers.js';
+} from '../../src/scheduler/bitset.js';
+import { assert, assertError, compare } from './utils/helpers.js';
 
 describe('bitset', () => {
   it('set, test and clear', () => {

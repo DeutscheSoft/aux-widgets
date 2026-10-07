@@ -1,5 +1,5 @@
-import { Fader } from '../src/index.js';
-import { assertEqual } from './helpers.js';
+import { Fader } from '../../src/index.js';
+import { assertEqual } from './utils/helpers.js';
 
 describe('Fader', () => {
   it('set() does not clamp', () => {

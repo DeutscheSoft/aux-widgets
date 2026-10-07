@@ -1,5 +1,5 @@
-import { ValueKnob } from '../src/index.js';
-import { assertEqual } from './helpers.js';
+import { ValueKnob } from '../../src/index.js';
+import { assertEqual } from './utils/helpers.js';
 
 describe('ValueKnob', () => {
   it('set() does not clamp', () => {

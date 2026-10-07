@@ -17,8 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { mergeObjects } from '../src/utils/merge_objects.js';
-import { assert, assertEqual, assertError } from './helpers.js';
+import { mergeObjects } from '../../src/utils/merge_objects.js';
+import { assert, assertEqual, assertError } from './utils/helpers.js';
 
 describe('merge_objects', () => {
   it('mergeObjects()', async () => {

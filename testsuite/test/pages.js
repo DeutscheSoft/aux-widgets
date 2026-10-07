@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { Page, Pages, PageComponent, PagesComponent } from '../src/index.js';
+import { Page, Pages, PageComponent, PagesComponent } from '../../src/index.js';
 
 import {
   waitForConnected,
@@ -25,7 +25,7 @@ import {
   assert,
   compare,
   compareOptions,
-} from './helpers.js';
+} from './utils/helpers.js';
 
 describe('Pages', () => {
   let n = 0;

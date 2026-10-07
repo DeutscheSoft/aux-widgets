@@ -20,7 +20,7 @@
 import { Widget } from './widget.js';
 import { Circular } from './circular.js';
 import { setText, element, addClass, getStyle } from '../utils/dom.js';
-import { makeSVG } from '../utils/svg.js';
+import { makeSVG, getBBox } from '../utils/svg.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { defineRender, deferMeasure, deferRender } from '../renderer.js';
 
@@ -292,7 +292,7 @@ export class Clock extends Widget {
             const svgwidth = this.svg.clientWidth;
             const svgheight = this.svg.clientHeight;
             const size = Math.min(svgwidth, svgheight);
-            let labelwidth = _label.getBBox().width;
+            let labelwidth = getBBox(_label).width;
             if (labelwidth === 0) return; // we are hidden
             const mleft = parseInt(getStyle(_label, 'margin-left')) || 0;
             const mright = parseInt(getStyle(_label, 'margin-right')) || 0;
@@ -308,7 +308,7 @@ export class Clock extends Widget {
               );
 
               return deferMeasure(() => {
-                labelwidth = _label.getBBox().width;
+                labelwidth = getBBox(_label).width;
 
                 return deferRender(() => {
                   this._label_upper.setAttribute(

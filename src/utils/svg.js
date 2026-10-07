@@ -130,3 +130,41 @@ export function makeSVG(tag, args) {
   }
   return el;
 }
+
+const EMPTY_BBOX = Object.freeze({ x: 0, y: 0, width: 0, height: 0 });
+
+/**
+ * Safe wrapper around {@link SVGGraphicsElement#getBBox}.
+ *
+ * Returns a zero-sized box when measurement fails. That covers both
+ * incomplete DOM environments (jsdom does not implement SVG geometry
+ * APIs) and browsers that throw when the element is not rendered
+ * (e.g. `display:none`).
+ *
+ * @param {SVGGraphicsElement} element
+ * @returns {{ x: number, y: number, width: number, height: number }}
+ */
+export function getBBox(element) {
+  try {
+    return element.getBBox();
+  } catch {
+    return EMPTY_BBOX;
+  }
+}
+
+/**
+ * Safe wrapper around {@link SVGTextContentElement#getComputedTextLength}.
+ *
+ * Returns `0` when measurement fails — same reasons as {@link getBBox}
+ * (jsdom / not rendered).
+ *
+ * @param {SVGTextContentElement} element
+ * @returns {number}
+ */
+export function getComputedTextLength(element) {
+  try {
+    return element.getComputedTextLength();
+  } catch {
+    return 0;
+  }
+}

@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { domScheduler } from '../src/dom_scheduler.js';
+import { domScheduler } from '../../../src/dom_scheduler.js';
 
 export function compare(a, b) {
   if (a === b) return true;
@@ -59,7 +59,6 @@ export function compareOptions(w1, w2) {
 
 export function assert(v, msg) {
   if (!v) {
-    debugger;
     throw new Error(msg || 'assertion failed.');
   }
 }

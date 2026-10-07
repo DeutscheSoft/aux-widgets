@@ -1,6 +1,6 @@
-import { FrequencyResponse, Equalizer } from '../src/index.js';
+import { FrequencyResponse, Equalizer } from '../../src/index.js';
 
-import { assert, compare } from './helpers.js';
+import { assert, compare } from './utils/helpers.js';
 
 describe('FrequencyResponse', () => {
   it('generates grid_y from db_grid by default', () => {

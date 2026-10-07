@@ -17,17 +17,16 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { Widget, WidgetComponent } from '../src/index.js';
-import '../src/components.js';
+import { Widget, WidgetComponent } from '../../src/index.js';
+import '../../src/components.js';
 
-import { assert, assertError } from './helpers.js';
+import { assert, assertError } from './utils/helpers.js';
 
 describe('Options', () => {
-  it('set()', (done) => {
+  it('set()', () => {
     const o = new Widget();
     o.set('disabled', true);
     if (o.options.disabled !== true) throw new Error('fail.');
-    done();
   });
 });
 
@@ -63,24 +62,26 @@ describe('Components', () => {
     o.removeAttribute('disabled');
     assert(!widget.get('disabled'));
   });
-  it('addEventListener', (done) => {
-    const o = document.createElement('aux-widget');
-    o.addEventListener('set_disabled', (ev) => {
-      done();
+  it('addEventListener', () => {
+    return new Promise((resolve) => {
+      const o = document.createElement('aux-widget');
+      o.addEventListener('set_disabled', () => {
+        resolve();
+      });
+      o.auxWidget.set('disabled', true);
     });
-    o.auxWidget.set('disabled', true);
   });
-  it('removeEventListener', (done) => {
+  it('removeEventListener', () => {
     const o = document.createElement('aux-widget');
-    const cb = (ev) => {
-      done(new Error('fail.'));
+    const cb = () => {
+      throw new Error('fail.');
     };
 
     o.addEventListener('set_disabled', cb);
     o.removeEventListener('set_disabled', cb);
     o.auxWidget.set('disabled', true);
-    done();
   });
+
   it('getOptionType()', () => {
     const o = new Widget();
 

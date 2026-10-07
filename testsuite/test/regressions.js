@@ -17,8 +17,8 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { Chart, Graph } from '../src/index.js';
-import { waitForDrawn, assert, compare, objectMinus } from './helpers.js';
+import { Chart, Graph } from '../../src/index.js';
+import { waitForDrawn, assert, compare, objectMinus } from './utils/helpers.js';
 
 describe('Regressions', () => {
   it('#230', () => {
