@@ -29,18 +29,35 @@
 /* jshint -W117 */
 
 /**
+ * Active log sink. Defaults to the global `console`. Replace via
+ * {@link setConsole} (e.g. from a test runner).
+ * @type {{ log?: Function, warn?: Function, error?: Function }|null}
+ */
+let _console = typeof console !== 'undefined' ? console : null;
+
+/**
+ * Install a custom console-like sink for {@link log}, {@link warn} and
+ * {@link error}. Pass `null` to restore the global `console`.
+ *
+ * @param {{ log?: Function, warn?: Function, error?: Function }|null} next
+ * @function setConsole
+ */
+export function setConsole(next) {
+  _console =
+    next === null ? (typeof console !== 'undefined' ? console : null) : next;
+}
+
+/**
  * Generates an error to the JavaScript console. This is virtually identical to console.error, however
  * it can safely be used in browsers which do not support it.
  *
  * @param {...*} args
  * @function error
  */
-
-/* jshint -W117 */
-
 export function error() {
   try {
-    console.error.apply(console, arguments);
+    if (_console && typeof _console.error === 'function')
+      _console.error.apply(_console, arguments);
   } catch {
     /* empty */
   }
@@ -55,11 +72,13 @@ export function error() {
  */
 export function warn() {
   try {
-    console.warn.apply(console, arguments);
+    if (_console && typeof _console.warn === 'function')
+      _console.warn.apply(_console, arguments);
   } catch {
     /* empty */
   }
 }
+
 /**
  * Generates a log message to the JavaScript console. This is virtually identical to console.log, however
  * it can safely be used in browsers which do not support it.
@@ -68,9 +87,9 @@ export function warn() {
  * @function log
  */
 export function log() {
-  if (!console) return;
   try {
-    console.log.apply(console, arguments);
+    if (_console && typeof _console.log === 'function')
+      _console.log.apply(_console, arguments);
   } catch {
     /* empty */
   }
