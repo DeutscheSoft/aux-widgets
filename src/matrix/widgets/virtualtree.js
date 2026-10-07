@@ -94,9 +94,6 @@ export class VirtualTree extends Scroller {
   }
   static get static_events() {
     return {
-      set_size: function (v) {
-        this.triggerResize();
-      },
       set_virtualtreeview: function (virtualtreeview) {
         this.virtualtreeview_subs.unsubscribe();
       },
@@ -289,7 +286,9 @@ export class VirtualTree extends Scroller {
   }
 
   triggerReposition() {
-    this.set('size', this.get('size'));
+    // Re-run the size render path (entry transforms). View height / amount
+    // already track `size` via defineRecalculation — no SymResize needed.
+    this.invalidate('size');
   }
 
   draw(options, element) {
