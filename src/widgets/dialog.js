@@ -18,7 +18,7 @@
  */
 
 import { Container } from './container.js';
-import { SymResize } from './widget.js';
+import { SymWindowResize } from './widget.js';
 import { translateAnchor } from '../utils/anchor.js';
 import {
   element,
@@ -255,7 +255,7 @@ export class Dialog extends Container {
           }
         }
       ),
-      defineMeasure(SymResize, function () {
+      defineMeasure(SymWindowResize, function () {
         if (this.options.visible) this.reposition();
       }),
     ];

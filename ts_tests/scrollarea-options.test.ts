@@ -22,6 +22,6 @@ const _scrollareaVisible: boolean | string | undefined = scrollareaWidget.get(
 scrollareaWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-scrollareaWidget.on('resize', () => {});
+scrollareaWidget.on('show', () => {});
 // @ts-expect-error 'not_an_event' is not a valid event name
 scrollareaWidget.on('not_an_event', () => {});

@@ -25,10 +25,6 @@ export interface IWidgetEvents extends IBaseEvents {
    *  Arguments: key, value
    */
   useraction: (key: string, value: unknown) => void;
-  /** Fired when a widget is being resized */
-  resize: () => void;
-  /** Fired after each rendering frame triggered by a resize event */
-  resized: () => void;
   /** Fired when a widget is hidden and is not rendered anymore */
   hide: () => void;
   /** Fired when a widget is shown and is being rendered */

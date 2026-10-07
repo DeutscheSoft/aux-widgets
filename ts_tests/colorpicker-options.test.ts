@@ -23,7 +23,7 @@ const _colorpickerHue: number | undefined = colorpickerWidget.get('hue');
 colorpickerWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-colorpickerWidget.on('resize', () => {});
+colorpickerWidget.on('show', () => {});
 // @ts-expect-error 'not_an_event' is not a valid event name
 colorpickerWidget.on('not_an_event', () => {});
 

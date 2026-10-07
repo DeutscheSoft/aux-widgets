@@ -109,7 +109,6 @@ export class Matrix extends Patchbay {
       defineRender('_virtualtree_size', function (_virtualtree_size) {
         const virtualtree = this.virtualtree_top;
         virtualtree.element.style.height = _virtualtree_size + 'px';
-        virtualtree.triggerResize();
       }),
     ];
   }

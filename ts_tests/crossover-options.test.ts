@@ -21,7 +21,7 @@ const _crossoverShowBands: boolean | undefined = crossoverWidget.get(
 crossoverWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-crossoverWidget.on('resize', () => {});
+crossoverWidget.on('show', () => {});
 // @ts-expect-error 'not_an_event' is not a valid event name
 crossoverWidget.on('not_an_event', () => {});
 

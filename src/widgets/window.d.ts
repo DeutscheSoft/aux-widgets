@@ -48,11 +48,6 @@ export type IWindowHeaderAction =
   | 'maximizehorizontal';
 
 /**
- * Resizing policy.
- */
-export type IWindowResizing = 'continuous' | 'stop';
-
-/**
  * Maximize state.
  */
 export interface IWindowMaximize {
@@ -138,8 +133,6 @@ export interface IWindowOptions extends IContainerOptions {
   draggable: boolean;
   /** Set whether the window is resizable. */
   resizable: boolean;
-  /** Resizing policy, continuous or stop. The first one resizes all children continuously while resizing. */
-  resizing: IWindowResizing;
   /** Action for double clicking the window header. */
   header_action: IWindowHeaderAction;
   /** Active state of the window. */

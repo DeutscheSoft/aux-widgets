@@ -24,7 +24,7 @@ const _labelLabel: string | false | undefined = labelWidget.get('label');
 labelWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-labelWidget.on('resize', () => {});
+labelWidget.on('show', () => {});
 // @ts-expect-error 'not_an_event' is not a valid event name
 labelWidget.on('not_an_event', () => {});
 

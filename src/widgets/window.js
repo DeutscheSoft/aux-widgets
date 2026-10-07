@@ -24,7 +24,7 @@ import { Container } from './container.js';
 import { Icon } from './icon.js';
 import { Label } from './label.js';
 import { Button } from './button.js';
-import { SymResize } from './widget.js';
+import { SymResize, SymWindowResize } from './widget.js';
 import { Drag } from '../modules/drag.js';
 import { Resize } from '../modules/resize.js';
 import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
@@ -172,8 +172,6 @@ function stopResize(el, ev) {
   unsetGlobalCursor('se-resize');
   this.resizing = false;
   removeClass(this.element, 'aux-resizing');
-  this.triggerResizeChildren();
-  calculateDimensions.call(this);
   /**
    * The user stops resizing the window.
    * @event Window.stopresize
@@ -182,24 +180,12 @@ function stopResize(el, ev) {
   this.emit('stopresize', ev);
 }
 function resizing(el, ev) {
-  if (this.options.resizing === 'continuous') {
-    this.triggerResizeChildren();
-    calculateDimensions.call(this);
-  }
   /**
    * The user resizes the window.
    * @event Window.resizing
    * @param {DOMEvent} event - The DOM event.
    */
   this.emit('resizing', ev);
-}
-function calculateDimensions() {
-  const x = outerWidth(this.element, true);
-  const y = outerHeight(this.element, true);
-  this.dimensions.width = this.options.width = x;
-  this.dimensions.height = this.options.height = y;
-  this.dimensions.x2 = x + this.dimensions.x1;
-  this.dimensions.y2 = y + this.dimensions.y1;
 }
 function calculatePosition() {
   const posx = positionLeft(this.element);
@@ -408,8 +394,6 @@ function statusTimeout() {
  * @property {Boolean} [options.auto_shrink=true] - Set whether shrink toggles the window or not
  * @property {Boolean} [options.draggable=true] - Set whether the window is draggable
  * @property {Boolean} [options.resizable=true] - Set whether the window is resizable
- * @property {String} [options.resizing="continuous"] - Resizing policy, `continuous` or `stop`.
- *   The first one resizes all children continuously while resizing.
  * @property {String} [options.header_action="maximize"] - Action for double clicking the window header, one out of
  *   `close`, `minimize`, `shrink`, `maximize`, `maximizevertical`, `maximizehorizontal`
  * @property {Boolean} [options.active=true] - Active state of the window.
@@ -455,7 +439,6 @@ export class Window extends Container {
       auto_shrink: 'boolean',
       draggable: 'boolean',
       resizable: 'boolean',
-      resizing: 'int',
       header_action: 'string',
       active: 'boolean',
       hide_status: 'int',
@@ -494,7 +477,6 @@ export class Window extends Container {
       auto_shrink: true,
       draggable: true,
       resizable: true,
-      resizing: 'continuous',
       header_action: 'maximize',
       active: true,
       hide_status: 0,
@@ -565,13 +547,18 @@ export class Window extends Container {
            */
           this.emit('dimensionschanged', this.dimensions);
 
+          if (this.drag) {
+            this.drag.update('min', {
+              x: 0 - this.options.width + 20,
+              y: 0,
+            });
+          }
+
           if (!setWidth && !setHeight) return null;
 
           return deferRender(() => {
             if (setWidth) outerWidth(element, true, dimensions.width);
             if (setHeight) outerHeight(element, true, dimensions.height);
-
-            this.triggerResize();
           });
         }
       ),
@@ -662,16 +649,35 @@ export class Window extends Container {
             setContent(this.content.element, content);
           }
         }
-        this.triggerResize();
       }),
       defineMeasure(SymResize, function () {
-        this.drag.update('min', { x: 0 - this.options.width + 20, y: 0 });
+        const { element, dimensions, options } = this;
+        const maximize = options.maximize;
+
+        this.update('_inner_width', innerWidth(element));
+        this.update('_inner_height', innerHeight(element));
+
+        // Adopt the laid-out size continuously (ResizeObserver → SymResize).
+        // When maximized, keep options.width/height as the restore size.
+        const width = outerWidth(element, true);
+        const height = outerHeight(element, true);
+        dimensions.width = width;
+        dimensions.height = height;
+        if (!maximize.x) options.width = width;
+        if (!maximize.y) options.height = height;
+        dimensions.x2 = dimensions.x1 + width;
+        dimensions.y2 = dimensions.y1 + height;
+        if (this.drag) {
+          this.drag.update('min', { x: 0 - options.width + 20, y: 0 });
+        }
+        this.emit('dimensionschanged', dimensions);
+      }),
+      defineMeasure(SymWindowResize, function () {
+        if (!this.drag) return;
         this.drag.update('max', {
           x: viewportWidth() - 20,
           y: viewportHeight() - 20,
         });
-        this.update('_inner_width', innerWidth(this.element));
-        this.update('_inner_height', innerHeight(this.element));
       }),
     ];
   }
@@ -750,10 +756,6 @@ export class Window extends Container {
    */
   toggleShrink() {
     this.set('shrink', !this.options.shrink);
-  }
-
-  getResizeTargets() {
-    return [this.element];
   }
 
   draw(O, element) {

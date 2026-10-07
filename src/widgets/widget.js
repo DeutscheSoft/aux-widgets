@@ -34,8 +34,7 @@ import {
   addSubscription,
   unsubscribeSubscriptions,
 } from '../utils/subscriptions.js';
-import { typecheckFunction } from '../utils/typecheck.js';
-import { GlobalResize } from '../utils/global_resize.js';
+import { GlobalFontLayout, GlobalResize } from '../utils/global_resize.js';
 import { GlobalVisibilityChange } from '../utils/global_visibility_change.js';
 import { ProximityTimers } from '../utils/timers.js';
 import { ariaAttributes } from '../aria_attributes.js';
@@ -45,7 +44,6 @@ import {
   Renderer,
   RenderState,
   defineRender,
-  defineMeasure,
   deferMeasure,
 } from '../renderer.js';
 import { domScheduler } from '../dom_scheduler.js';
@@ -54,10 +52,16 @@ import { defineChildElement } from '../widget_helpers.js';
 
 const enableTimers = /* @__PURE__ */ new ProximityTimers();
 
+/** Invalidated when a widget's observed box may have changed. */
 export const SymResize = Symbol('resize');
-export const SymResized = Symbol('resized');
+/**
+ * Invalidated on window/viewport resize (and load/font load). For work that
+ * depends on the viewport rather than the widget's own box.
+ */
+export const SymWindowResize = Symbol('windowResize');
 
-const rootWidgets = /* @__PURE__ */ new Map();
+/** Root widgets → their document visibilitychange handlers. */
+const rootVisibilityHandlers = /* @__PURE__ */ new Map();
 
 const ariaOptions = /* @__PURE__ */ (function () {
   return Object.fromEntries(
@@ -75,26 +79,62 @@ function onVisibilityChange() {
   }
 }
 
-function onResize() {
-  this.triggerResize();
-}
-
 function addRootWidget(widget) {
-  if (rootWidgets.has(widget)) throw new Error('Already registered.');
+  if (rootVisibilityHandlers.has(widget))
+    throw new Error('Already registered as root widget.');
 
-  const resized = onResize.bind(widget);
   const visibilityChanged = onVisibilityChange.bind(widget);
-
-  rootWidgets.set(widget, [resized, visibilityChanged]);
-  GlobalResize.add(resized);
+  rootVisibilityHandlers.set(widget, visibilityChanged);
   GlobalVisibilityChange.add(visibilityChanged);
 }
 
 function removeRootWidget(widget) {
-  const [resized, visibilityChanged] = rootWidgets.get(widget);
-
-  GlobalResize.delete(resized);
+  const visibilityChanged = rootVisibilityHandlers.get(widget);
+  if (!visibilityChanged) return;
   GlobalVisibilityChange.delete(visibilityChanged);
+  rootVisibilityHandlers.delete(widget);
+}
+
+function installResizeDependencies(widget) {
+  uninstallResizeDependencies(widget);
+
+  const renderer = widget.constructor.getRenderer();
+  let subs = initSubscriptions();
+
+  if (renderer.hasDependency(SymResize)) {
+    let targets = widget.getResizeTargets();
+    if (targets && targets.length) {
+      targets = targets.filter(Boolean);
+    }
+    if (!targets || !targets.length) {
+      targets = widget.element ? [widget.element] : [];
+    }
+    if (targets.length) {
+      subs = addSubscription(
+        subs,
+        observeResize(targets, () => widget.triggerResize())
+      );
+    }
+    const onFontLayout = () => widget.invalidate(SymResize);
+    GlobalFontLayout.add(onFontLayout);
+    subs = addSubscription(subs, () => GlobalFontLayout.delete(onFontLayout));
+    widget.invalidate(SymResize);
+  }
+
+  if (renderer.hasDependency(SymWindowResize)) {
+    const onWindowResize = () => widget.invalidate(SymWindowResize);
+    GlobalResize.add(onWindowResize);
+    subs = addSubscription(subs, () => GlobalResize.delete(onWindowResize));
+    widget.invalidate(SymWindowResize);
+  }
+
+  widget._resize_subscriptions = subs;
+}
+
+function uninstallResizeDependencies(widget) {
+  widget._resize_subscriptions = unsubscribeSubscriptions(
+    widget._resize_subscriptions
+  );
 }
 
 const SymDrawOnce = Symbol('drawOnce');
@@ -232,20 +272,6 @@ function onFocusKeyDown(e) {
  * Note that this happens both for user interaction and programmatical option changes.
  *
  * @event Widget#set
- */
-/**
- * The <code>resize</code> event is emitted whenever a widget is being resized. This event can
- * be used to e.g. measure its new size. Note that some widgets do internal adjustments after
- * the <code>resize</code> event. If that is relevant, the {@link Widget#resized} event can
- * be used instead.
- *
- * @event Widget#resize
- */
-/**
- * The <code>resized</code> event is emitted after each rendering frame, which was triggered by
- * a resize event.
- *
- * @event Widget#resized
  */
 /**
  * The <code>hide</code> event is emitted when a widget is hidden and is not rendered anymore.
@@ -403,13 +429,6 @@ export class Widget extends Base {
 
   static get renderers() {
     return [
-      defineMeasure(SymResize, function () {
-        this.resize();
-      }),
-      defineMeasure(SymResized, function () {
-        this.emit('resized');
-        this.resize();
-      }),
       defineRender('notransitions', function (notransitions) {
         toggleClass(this.element, 'aux-notransitions', notransitions);
       }),
@@ -556,6 +575,7 @@ export class Widget extends Base {
     this.draw_queue = null;
     this._creation_time = domScheduler.now();
     this._subscriptions = initSubscriptions();
+    this._resize_subscriptions = initSubscriptions();
     this._onfocuskeydown = null;
     this._drawn = false;
     this._initialDraw = () => {
@@ -591,6 +611,13 @@ export class Widget extends Base {
     return this.options.aria_targets || [this.element];
   }
 
+  /**
+   * Elements to observe for box changes when this widget depends on
+   * {@link SymResize}. Override to observe specific nodes. Default is
+   * <code>[this.element]</code> (via the installer when this returns null).
+   *
+   * @returns {Array<Element>|null}
+   */
   getResizeTargets() {
     return null;
   }
@@ -618,34 +645,15 @@ export class Widget extends Base {
     this._renderState.invalidateAll();
   }
 
+  /**
+   * Invalidates {@link SymResize} on this widget only. Does not recurse into
+   * children; widgets that care about their size install their own
+   * ResizeObserver when they depend on {@link SymResize}.
+   *
+   * @method Widget#triggerResize
+   */
   triggerResize() {
     this.invalidate(SymResize);
-
-    const C = this.children;
-
-    if (!C) return;
-
-    for (let i = 0; i < C.length; i++) {
-      C[i].triggerResize();
-    }
-  }
-
-  triggerResizeChildren() {
-    const C = this.children;
-
-    if (!C) return;
-
-    for (let i = 0; i < C.length; i++) {
-      C[i].triggerResize();
-    }
-  }
-
-  resize() {
-    this.emit('resize');
-
-    if (this.constructor.hasOption('resized')) this.set('resized', true);
-
-    if (this.hasEventListeners('resized')) this.invalidate(SymResized);
   }
 
   initialized() {
@@ -706,15 +714,6 @@ export class Widget extends Base {
     }
 
     if (O.container) O.container.appendChild(element);
-    this.triggerResize();
-
-    const resizeTargets = this.getResizeTargets();
-
-    if (resizeTargets && resizeTargets.length) {
-      this.addSubscriptions(
-        observeResize(resizeTargets, () => this.triggerResize())
-      );
-    }
   }
 
   addSubscriptions(...subs) {
@@ -747,6 +746,7 @@ export class Widget extends Base {
     }
 
     this._subscriptions = unsubscribeSubscriptions(this._subscriptions);
+    uninstallResizeDependencies(this);
 
     this.emit('destroy');
 
@@ -918,6 +918,7 @@ export class Widget extends Base {
       renderState.unpause();
     }
 
+    installResizeDependencies(this);
     this.emit('show');
     this.enableDrawChildren();
   }
@@ -930,13 +931,15 @@ export class Widget extends Base {
   /**
    * Stop drawing this widget.
    *
-   * @method Widget#enableDraw
+   * @method Widget#disableDraw
    *
    * @emits Widget#hide
    */
   disableDraw() {
     if (!this._drawn) return;
     this._drawn = false;
+
+    uninstallResizeDependencies(this);
 
     if (!this._initialDraw) {
       const renderState = this._renderState;
@@ -1095,7 +1098,6 @@ export class Widget extends Base {
     } else {
       child.disableDraw();
     }
-    child.triggerResize();
     this.emit('child_added', child);
   }
 
@@ -1205,35 +1207,6 @@ export class Widget extends Base {
   getChildren() {
     const C = this.children;
     return C !== null ? C : [];
-  }
-
-  /**
-   * Calls a callback whenever the widget resizes. This method will
-   * trigger one resize.
-   *
-   * @method Widget#observeResize
-   *
-   * @param {Function} cb
-   */
-  observeResize(cb) {
-    typecheckFunction(cb);
-
-    let triggered = false;
-    const callback = () => {
-      if (this.isDestructed()) return;
-      triggered = false;
-      if (!this.isDrawn()) {
-        this.triggerResize();
-        return;
-      }
-      cb(this);
-    };
-    this.triggerResize();
-    return this.subscribe('resize', () => {
-      if (triggered) return;
-      triggered = true;
-      domScheduler.scheduleNext(MASK_CALCULATE, callback);
-    });
   }
 }
 /**

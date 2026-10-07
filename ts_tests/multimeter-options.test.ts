@@ -20,7 +20,7 @@ const _multimeterPreset: string | undefined = multimeterWidget.get('preset');
 multimeterWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-multimeterWidget.on('resize', () => {});
+multimeterWidget.on('show', () => {});
 // @ts-expect-error 'not_an_event' is not a valid event name
 multimeterWidget.on('not_an_event', () => {});
 

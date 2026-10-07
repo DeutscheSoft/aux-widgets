@@ -24,7 +24,7 @@ const _iconIcon: string | false | undefined = iconWidget.get('icon');
 iconWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-iconWidget.on('resize', () => {});
+iconWidget.on('show', () => {});
 // @ts-expect-error 'not_an_event' is not a valid event name
 iconWidget.on('not_an_event', () => {});
 

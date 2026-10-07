@@ -35,7 +35,7 @@ const _buttonLabel: string | false | undefined = buttonWidget.get('label');
 buttonWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-buttonWidget.on('resize', () => {});
+buttonWidget.on('show', () => {});
 // @ts-expect-error 'not_an_event' is not a valid event name
 buttonWidget.on('not_an_event', () => {});
 

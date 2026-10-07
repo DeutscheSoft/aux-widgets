@@ -21,12 +21,33 @@ import { EventMultiplexer } from './event_multiplexer.js';
 import { subscribeDOMEvent } from './events.js';
 import { combineSubscriptions } from './subscriptions.js';
 
+/**
+ * Window resize / load / font load. Used for viewport-dependent work
+ * (e.g. dialog positioning), not for per-widget box measurement.
+ */
 export const GlobalResize = /* @__PURE__ */ new EventMultiplexer((cb) => {
   const callback = () => cb();
   const unsubscribes = [
     subscribeDOMEvent(window, 'resize', callback),
     subscribeDOMEvent(window, 'load', callback),
   ];
+
+  if (document.fonts)
+    unsubscribes.push(
+      subscribeDOMEvent(document.fonts, 'loadingdone', callback)
+    );
+
+  return combineSubscriptions(...unsubscribes);
+});
+
+/**
+ * Layout invalidation that may change metrics without changing an element's
+ * border box (font load / window load). Used together with ResizeObserver for
+ * SymResize-dependent widgets.
+ */
+export const GlobalFontLayout = /* @__PURE__ */ new EventMultiplexer((cb) => {
+  const callback = () => cb();
+  const unsubscribes = [subscribeDOMEvent(window, 'load', callback)];
 
   if (document.fonts)
     unsubscribes.push(

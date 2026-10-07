@@ -24,7 +24,7 @@ const _gridWidth: number | undefined = gridWidget.get('width');
 gridWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-gridWidget.on('resize', () => {});
+gridWidget.on('show', () => {});
 // @ts-expect-error 'not_an_event' is not a valid event name
 gridWidget.on('not_an_event', () => {});
 

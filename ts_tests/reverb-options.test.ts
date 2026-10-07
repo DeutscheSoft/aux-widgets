@@ -22,7 +22,7 @@ const _reverbTimeframe: number | undefined = reverbWidget.get('timeframe');
 reverbWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-reverbWidget.on('resize', () => {});
+reverbWidget.on('show', () => {});
 // @ts-expect-error 'not_an_event' is not a valid event name
 reverbWidget.on('not_an_event', () => {});
 
