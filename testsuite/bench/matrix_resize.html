@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>AUX Matrix Resize Bench</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../styles/default.css" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #111;
+        color: #ddd;
+      }
+      .aux-root,
+      .aux-matrix {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <script type="module" src="../../src/index.js"></script>
+    <script type="module" src="../../src/components.js"></script>
+    <script type="module">
+      import { MatrixData, VirtualTreeDataView } from '../../src/matrix/models.js';
+
+      const params = new URLSearchParams(location.search);
+      const groups = Math.max(1, Number(params.get('groups') || 500));
+      const portsPerGroup = Math.max(
+        1,
+        Number(params.get('ports') || 12)
+      );
+
+      const sort = (a, b) => {
+        const la = a.id;
+        const lb = b.id;
+        if (la === lb) return 0;
+        return la > lb ? 1 : -1;
+      };
+
+      window.matrix = new MatrixData();
+      const ports = Array.from({ length: portsPerGroup }, (_, j) => 'Ch' + (j + 1));
+      const inputs = matrix.addGroup({ label: 'Inputs', icon: 'speaker' });
+      const outputs = matrix.addGroup({ label: 'Outputs', icon: 'speaker' });
+
+      for (let i = 0; i < groups; i++) {
+        const ogroup = outputs.addGroup({
+          label: 'Output #' + (i + 1),
+          icon: 'mc5_1',
+        });
+        const igroup = inputs.addGroup({
+          label: 'Input #' + (i + 1),
+          icon: 'mc5_1',
+        });
+        for (let j = 0; j < ports.length; j++) {
+          igroup.addPort({
+            label: 'Channel ' + ports[j],
+            icon: 'disconnected',
+          });
+          ogroup.addPort({
+            label: 'Channel ' + ports[j],
+            icon: 'disconnected',
+          });
+        }
+      }
+
+      // Start with a generous view amount; SymResize / resize will adjust.
+      const initialAmount = Math.max(64, Number(params.get('amount') || 160));
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const aux_matrix = document.querySelector('aux-matrix');
+        aux_matrix.sources = new VirtualTreeDataView(
+          inputs,
+          initialAmount,
+          null,
+          sort
+        );
+        aux_matrix.sinks = new VirtualTreeDataView(
+          outputs,
+          initialAmount,
+          null,
+          sort
+        );
+        window.__matrixBenchReady = true;
+        window.__matrixBenchConfig = {
+          groups,
+          portsPerGroup,
+          initialAmount,
+        };
+      });
+    </script>
+  </head>
+  <body>
+    <aux-root>
+      <aux-matrix></aux-matrix>
+    </aux-root>
+  </body>
+</html>
