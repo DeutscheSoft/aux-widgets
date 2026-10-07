@@ -23,6 +23,10 @@ import { defineRender } from '../renderer.js';
 
 const SymEditing = Symbol('__editing changed');
 
+function stringValue(v) {
+  return v == null ? '' : '' + v;
+}
+
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
  * The event is emitted for the option <code>value</code>.
@@ -160,13 +164,19 @@ function submitCallback(e) {
  *
  * @param {Object} [options={ }] - An object containing initial options.
  *
- * @property {Number} [options.value=0] - The value.
- * @property {Function} [options.format=function (v) { return v; }] - A formatting
- *   function used to display the value.
+ * @property {Number|String} [options.value=0] - The value.
+ * @property {String} [options.mode="number"] - `"number"` parses user input with
+ *   `parseFloat`. `"string"` keeps it as text. A custom `format` or `set`
+ *   stays in place and is not replaced when `mode` changes.
+ * @property {Function} [options.format=function (v) { return '' + (v || 0); }] -
+ *   A function used to display the value. The default shows `null` and
+ *   `undefined` as an empty string when `options.mode` is `"string"`, and as
+ *   `0` otherwise.
  * @property {Null|Integer} [options.size=1] - Size attribute of the input element. `null` to unset.
  * @property {Null|Integer} [options.maxlength=null] - Maxlength attribute of the input element. `null` to unset.
- * @property {Function} [options.set=function (val) { return parseFloat(val || 0); }] -
- *   A function which is called to parse user input.
+ * @property {Function|Boolean} [options.set=function (val) { return parseFloat(val); }] -
+ *   A function which is called to parse user input. The default keeps the text
+ *   when `options.mode` is `"string"`. `false` disables editing.
  * @property {Boolean} [options.auto_select=false] - Select the entire text if clicked .
  * @property {Boolean} [options.readonly=false] - Sets the readonly attribute.
  * @property {String} [options.placeholder=""] - Sets the placeholder attribute.
@@ -179,6 +189,7 @@ export class Value extends Widget {
   static get _options() {
     return {
       value: 'number|string',
+      mode: 'string',
       format: 'function',
       size: 'number',
       maxlength: 'int',
@@ -196,8 +207,10 @@ export class Value extends Widget {
   static get options() {
     return {
       value: 0,
+      mode: 'number',
       format: function (v) {
-        return v;
+        if (this.options.mode === 'string') return stringValue(v);
+        return '' + (v || 0);
       },
       size: 3,
       maxlength: null,
@@ -206,6 +219,7 @@ export class Value extends Widget {
       // false to disable editing. A function has to return
       // the value treated by the parent widget.
       set: function (val) {
+        if (this.options.mode === 'string') return stringValue(val);
         val = parseFloat(val);
         if (isNaN(val)) return this.get('value');
         return parseFloat(val || 0);
@@ -241,10 +255,13 @@ export class Value extends Widget {
           E.removeAttribute('aria-placeholder');
         }
       }),
-      defineRender(['value', 'format', SymEditing], function (value, format) {
-        if (this.__editing) return;
-        this._input.value = format(value);
-      }),
+      defineRender(
+        ['value', 'format', SymEditing, 'mode'],
+        function (value, format) {
+          if (this.__editing) return;
+          this._input.value = format.call(this, value);
+        }
+      ),
       defineRender('readonly', function (readonly) {
         const E = this._input;
         if (readonly) E.setAttribute('readonly', 'readonly');

@@ -12,12 +12,23 @@ export type IInputType = 'text' | 'password';
 export type IEditMode = 'onenter' | 'immediate';
 
 /**
+ * How Value parses and displays its value.
+ * `"string"` keeps text. A custom `format` or `set` is left in place.
+ */
+export type IValueMode = 'number' | 'string';
+
+/**
  * Options specific to the Value widget.
  * Extends Widget options.
  */
 export interface IValueOptions extends IWidgetOptions {
   /** The value. */
   value: number | string;
+  /**
+   * `"number"` parses user input with parseFloat.
+   * `"string"` keeps it as text. Does not replace a custom format or set.
+   */
+  mode: IValueMode;
   /** A formatting function used to display the value. */
   format: (value: number | string) => string | number;
   /** Size attribute of the input element. null to unset. */
