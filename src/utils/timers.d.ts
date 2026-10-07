@@ -45,6 +45,28 @@ export declare class Timer {
 }
 
 /**
+ * Leading/trailing debounce based on time since the last successful run.
+ */
+export declare class DebounceTimer {
+  /**
+   * @param callback - Invoked on leading and trailing runs.
+   * @param delay - Positive debounce interval in milliseconds.
+   */
+  constructor(callback: () => void, delay: number);
+
+  /**
+   * Request a run. May invoke the callback immediately (leading) and/or
+   * schedule a trailing run.
+   */
+  trigger(): void;
+
+  /**
+   * Stop any pending trailing timer.
+   */
+  destroy(): void;
+}
+
+/**
  * ProximityTimers manages timers that are scheduled close together,
  * grouping callbacks that should fire at similar times.
  */
