@@ -26,5 +26,5 @@ npm run bench:matrix-resize > /tmp/resize-$(git rev-parse --abbrev-ref HEAD).jso
 ```
 
 Defaults: 3840×2160 viewport, 500 groups × 12 ports, matrix ~3600×2000 with
-±480px resize steps. Override with `MATRIX_RESIZE_*` env vars (see
-`bench/matrix_resize.mjs`).
+~12px/frame size changes (triangle wave, like dragging a window). Override
+with `MATRIX_RESIZE_*` env vars (see `bench/matrix_resize.mjs`).

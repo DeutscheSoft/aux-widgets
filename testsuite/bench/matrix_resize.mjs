@@ -30,7 +30,9 @@ const VIEWPORT_HEIGHT = Number(
 // Element size oscillates around these values (px).
 const BASE_WIDTH = Number(process.env.MATRIX_RESIZE_BASE_WIDTH || 3600);
 const BASE_HEIGHT = Number(process.env.MATRIX_RESIZE_BASE_HEIGHT || 2000);
-const DELTA = Number(process.env.MATRIX_RESIZE_DELTA || 480);
+// Per-frame size change while "dragging" a window corner. Keep this small —
+// a fast mouse drag is typically on the order of a few to ~20px per frame.
+const DELTA = Number(process.env.MATRIX_RESIZE_DELTA || 12);
 
 function contentType(filePath) {
   switch (path.extname(filePath)) {
@@ -91,7 +93,13 @@ function startStaticServer(root) {
 }
 
 /** Runs entirely in the page; keep self-contained (no imports). */
-async function measureInPage({ frames, syncRounds, baseWidth, baseHeight, delta }) {
+async function measureInPage({
+  frames,
+  syncRounds,
+  baseWidth,
+  baseHeight,
+  delta,
+}) {
   const matrixEl = document.querySelector('aux-matrix');
   if (!matrixEl?.auxWidget) throw new Error('aux-matrix not ready');
   const matrix = matrixEl.auxWidget;
@@ -129,7 +137,9 @@ async function measureInPage({ frames, syncRounds, baseWidth, baseHeight, delta 
   target.style.height = baseHeight + 'px';
   void target.offsetWidth;
   // Let virtualization settle at the large size before timing.
-  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  await new Promise((r) =>
+    requestAnimationFrame(() => requestAnimationFrame(r))
+  );
   await new Promise((r) => setTimeout(r, 100));
 
   // Re-walk after settle — visible cell count may have grown.
@@ -164,10 +174,13 @@ async function measureInPage({ frames, syncRounds, baseWidth, baseHeight, delta 
     function step(now) {
       if (i > 0) frameTimes.push(now - last);
       last = now;
-      // Alternate between base±delta so amount / visible cells keep changing.
-      const sign = i % 2 === 0 ? 1 : -1;
-      const w = baseWidth + sign * delta + (i % 17);
-      const h = baseHeight + sign * delta + (i % 13);
+      // Smooth back-and-forth like dragging a window edge (triangle wave).
+      const period = 40;
+      const phase = i % period;
+      const offset =
+        phase < period / 2 ? -delta * phase : -delta * (period - phase);
+      const w = baseWidth + offset;
+      const h = baseHeight + offset;
       target.style.width = w + 'px';
       target.style.height = h + 'px';
       void target.offsetWidth;
