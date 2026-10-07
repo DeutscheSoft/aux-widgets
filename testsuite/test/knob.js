@@ -18,7 +18,7 @@
  */
 
 import { Knob } from '../../src/index.js';
-import { waitForDrawn, assertEqual } from './helpers.js';
+import { waitForDrawn, assertEqual } from './utils/helpers.js';
 
 describe('Knob', () => {
   it('destroy while dragging', async () => {

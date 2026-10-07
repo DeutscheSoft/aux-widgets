@@ -61,7 +61,7 @@ import {
   assertEqual,
   compare,
   objectMinus,
-} from './helpers.js';
+} from './utils/helpers.js';
 
 const widgets = [
   Container,

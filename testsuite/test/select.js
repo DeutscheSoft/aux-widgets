@@ -23,7 +23,7 @@ import {
   Select,
 } from '../../src/index.js';
 
-import { assert, waitForDrawn } from './helpers.js';
+import { assert, waitForDrawn } from './utils/helpers.js';
 
 describe('Select', () => {
   const checkSelected = function (widget, entry) {

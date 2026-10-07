@@ -18,7 +18,7 @@
  */
 
 import { Subscription, Subscriptions } from '../../src/utils/subscriptions.js';
-import { assert } from './helpers.js';
+import { assert } from './utils/helpers.js';
 
 describe('Subscriptions', () => {
   it('basics', () => {

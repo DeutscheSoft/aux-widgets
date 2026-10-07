@@ -24,7 +24,7 @@ import {
   setContent,
   isDomNode,
 } from '../../src/index.js';
-import { assert } from './helpers.js';
+import { assert } from './utils/helpers.js';
 
 describe('CSSHelpers', () => {
   const div = document.createElement('DIV');

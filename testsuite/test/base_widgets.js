@@ -20,7 +20,7 @@
 import { Widget, WidgetComponent } from '../../src/index.js';
 import '../../src/components.js';
 
-import { assert, assertError } from './helpers.js';
+import { assert, assertError } from './utils/helpers.js';
 
 describe('Options', () => {
   it('set()', () => {

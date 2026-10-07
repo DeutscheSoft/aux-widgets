@@ -18,8 +18,9 @@
  */
 
 import { ProximityTimers, Timer } from '../../src/index.js';
+import { SilentError } from './utils/silent_error.js';
 
-import { assertEqual } from './helpers.js';
+import { assertEqual } from './utils/helpers.js';
 
 function expectTimeout(t, cb) {
   return new Promise((resolve, reject) => {
@@ -135,7 +136,7 @@ describe('ProximityTimers', () => {
     const base = performance.now() + 20;
     timers.scheduleAt(() => {
       ran.push('throw');
-      throw new Error('first');
+      throw new SilentError('first');
     }, base);
     timers.scheduleAt(() => ran.push('ok'), base + 5);
 

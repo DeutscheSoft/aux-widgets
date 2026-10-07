@@ -25,7 +25,7 @@ import {
   invertIntervals,
   diffIntervals,
 } from '../../src/utils/intervals.js';
-import { assert, assertEqual } from './helpers.js';
+import { assert, assertEqual } from './utils/helpers.js';
 
 const permutations = (arr) => {
   switch (arr.length) {

@@ -25,7 +25,7 @@ import {
   DebounceBinding,
 } from '../../src/utils/binding.js';
 
-import { assert, assertError, sleep } from './helpers.js';
+import { assert, assertError, sleep } from './utils/helpers.js';
 
 describe('Bindings', () => {
   it('observe_option', () => {

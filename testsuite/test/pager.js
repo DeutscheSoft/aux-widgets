@@ -20,7 +20,12 @@
 import { Page, Pager, PageComponent, PagerComponent } from '../../src/index.js';
 import '../../src/components.js';
 
-import { waitForDrawn, assert, compare, compareOptions } from './helpers.js';
+import {
+  waitForDrawn,
+  assert,
+  compare,
+  compareOptions,
+} from './utils/helpers.js';
 
 describe('Pager', () => {
   let n = 0;

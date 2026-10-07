@@ -62,7 +62,7 @@ import {
   ValueButton,
   ValueKnob,
 } from '../../src/index.js';
-import { assert, canvas, waitForDrawn } from './helpers.js';
+import { assert, canvas, waitForDrawn } from './utils/helpers.js';
 
 window.__test_eq_band = new EqBand({ freq: 1000, gain: 6, type: 'parametric' });
 

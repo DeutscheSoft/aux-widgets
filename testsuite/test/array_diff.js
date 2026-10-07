@@ -18,7 +18,7 @@
  */
 
 import { arrayDiff, forEachArrayDiff } from '../../src/utils/array_diff.js';
-import { assert, assertEqual } from './helpers.js';
+import { assert, assertEqual } from './utils/helpers.js';
 
 function forEachArrayDiffSim(a, b, removedCb, addedCb) {
   const [removed, added] = arrayDiff(a, b);

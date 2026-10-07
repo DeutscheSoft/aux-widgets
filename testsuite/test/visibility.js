@@ -25,7 +25,7 @@ import {
   componentFromWidget,
 } from '../../src/component_helpers.js';
 
-import { waitForDrawn, canvas } from './helpers.js';
+import { waitForDrawn, canvas } from './utils/helpers.js';
 
 const errors = [];
 

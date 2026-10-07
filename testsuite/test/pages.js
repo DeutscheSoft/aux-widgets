@@ -25,7 +25,7 @@ import {
   assert,
   compare,
   compareOptions,
-} from './helpers.js';
+} from './utils/helpers.js';
 
 describe('Pages', () => {
   let n = 0;

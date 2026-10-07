@@ -18,7 +18,7 @@
  */
 
 import { Icon } from '../../src/index.js';
-import { waitForDrawn, assert, compare, objectMinus } from './helpers.js';
+import { waitForDrawn, assert, compare, objectMinus } from './utils/helpers.js';
 
 describe('Icon', () => {
   it('Icon mode detection', async () => {

@@ -18,7 +18,7 @@
  */
 
 import { sprintf, FORMAT } from '../../src/utils/sprintf.js';
-import { assert } from './helpers.js';
+import { assert } from './utils/helpers.js';
 
 describe('sprintf', () => {
   it('sprintf()', () => {

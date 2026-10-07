@@ -18,7 +18,7 @@
  */
 
 import { mergeObjects } from '../../src/utils/merge_objects.js';
-import { assert, assertEqual, assertError } from './helpers.js';
+import { assert, assertEqual, assertError } from './utils/helpers.js';
 
 describe('merge_objects', () => {
   it('mergeObjects()', async () => {

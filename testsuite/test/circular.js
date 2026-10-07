@@ -1,5 +1,5 @@
 import { Circular } from '../../src/index.js';
-import { assertEqual } from './helpers.js';
+import { assertEqual } from './utils/helpers.js';
 
 describe('Circular', () => {
   it('set() does not clamp', () => {

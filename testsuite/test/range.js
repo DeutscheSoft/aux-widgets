@@ -1,4 +1,4 @@
-import { assert, assertError } from './helpers.js';
+import { assert, assertError } from './utils/helpers.js';
 import { Range } from '../../src/index.js';
 
 describe('Range', () => {

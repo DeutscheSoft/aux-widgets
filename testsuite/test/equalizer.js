@@ -1,6 +1,11 @@
 import { Equalizer, EqBand } from '../../src/index.js';
 
-import { waitForDrawn, assert, compare, compareOptions } from './helpers.js';
+import {
+  waitForDrawn,
+  assert,
+  compare,
+  compareOptions,
+} from './utils/helpers.js';
 
 describe('Equalizer', () => {
   it("setting 'bands' property", () => {

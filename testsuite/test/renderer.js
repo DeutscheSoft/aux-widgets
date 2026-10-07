@@ -32,7 +32,7 @@ import {
   deferRender,
   deferRenderNext,
 } from '../../src/renderer.js';
-import { makeCallback } from './helpers.js';
+import { makeCallback } from './utils/helpers.js';
 
 function schedule(callback) {
   Promise.resolve().then(callback);

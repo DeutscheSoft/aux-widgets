@@ -25,7 +25,7 @@ import {
   PHASE_RENDER,
 } from '../../src/scheduler/scheduler.js';
 
-import { makeCallback } from './helpers.js';
+import { makeCallback } from './utils/helpers.js';
 
 function schedule(callback) {
   Promise.resolve().then(callback);

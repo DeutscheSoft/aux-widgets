@@ -24,7 +24,7 @@ import {
   assertEqual,
   compare,
   objectMinus,
-} from './helpers.js';
+} from './utils/helpers.js';
 
 describe('Scale', () => {
   it('#306 - Infinite loop', async () => {

@@ -18,7 +18,7 @@
  */
 
 import { LevelMeter } from '../../src/index.js';
-import { waitForDrawn, assert, assertEqual, delay } from './helpers.js';
+import { waitForDrawn, assert, assertEqual, delay } from './utils/helpers.js';
 
 describe('LevelMeter', () => {
   const createMeter = (options) => {
