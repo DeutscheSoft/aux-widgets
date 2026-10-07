@@ -351,7 +351,6 @@ export class Circular extends Widget {
       }),
       defineMeasure(SymResize, function () {
         this.update('_stroke_width', this.getStroke());
-        this.invalidate('labels');
       }),
       defineRender(
         [
