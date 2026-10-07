@@ -17,6 +17,7 @@ export class Renderer {
   tasks: unknown[];
   constructor();
   getDependencyMap(): Map<unknown, unknown>;
+  hasDependency(dependency: unknown): boolean;
   run(
     frame: number,
     phase: number,
