@@ -38,6 +38,7 @@ import './css_helpers.js';
 import './scheduler.js';
 import './widgets.js';
 import './timers.js';
+import './debounce_timer.js';
 import './bindings.js';
 import './pager.js';
 import './select.js';

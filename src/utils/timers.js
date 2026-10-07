@@ -100,6 +100,58 @@ export class Timer {
   }
 }
 
+/**
+ * Leading/trailing debounce based on time since the last successful run.
+ *
+ * - If at least `delay` ms have passed since the last run (or it never ran),
+ *   {@link DebounceTimer#trigger} runs the callback immediately.
+ * - Otherwise the call is coalesced: a trailing run is scheduled `delay` ms
+ *   after the latest trigger (timer is restarted), and any pending timer is
+ *   always cleared on {@link DebounceTimer#destroy}.
+ */
+export class DebounceTimer {
+  /**
+   * @param {function(): void} callback - Invoked on leading and trailing runs.
+   * @param {number} delay - Debounce interval in milliseconds.
+   */
+  constructor(callback, delay) {
+    typecheckFunction(callback);
+    if (!(delay > 0)) throw new TypeError('Expected positive number.');
+
+    this._callback = callback;
+    this._delay = delay;
+    this._lastRun = Number.NEGATIVE_INFINITY;
+    this._timer = new Timer(() => this._run());
+  }
+
+  /**
+   * Request a run. May invoke the callback immediately (leading) and/or
+   * schedule a trailing run.
+   */
+  trigger() {
+    const now = performance.now();
+
+    if (now - this._lastRun >= this._delay) {
+      this._timer.stop();
+      this._run(now);
+    } else {
+      this._timer.restart(this._delay);
+    }
+  }
+
+  /**
+   * Stop any pending trailing timer. Does not change `_lastRun`.
+   */
+  destroy() {
+    this._timer.stop();
+  }
+
+  _run(now = performance.now()) {
+    this._lastRun = now;
+    this._callback();
+  }
+}
+
 export class ProximityTimers {
   /**
    * @param accuracy - Maximum span (milliseconds) within which distinct target
