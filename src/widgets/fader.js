@@ -224,13 +224,11 @@ export class Fader extends Widget {
         );
         addClass(E, vert(layout) ? 'aux-vertical' : 'aux-horizontal');
         addClass(E, 'aux-' + layout);
-        this.triggerResize();
       }),
-      defineMeasure(SymResize, function () {
+      defineMeasure(['layout', SymResize], function (layout) {
         const T = this._track,
           H = this._handle;
         let basis;
-        const layout = this.options.layout;
 
         this._padding = CSSSpace(T, 'padding', 'border');
 
