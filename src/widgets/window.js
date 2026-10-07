@@ -24,6 +24,7 @@ import { Container } from './container.js';
 import { Icon } from './icon.js';
 import { Label } from './label.js';
 import { Button } from './button.js';
+import { SymResize } from './widget.js';
 import { Drag } from '../modules/drag.js';
 import { Resize } from '../modules/resize.js';
 import { setGlobalCursor, unsetGlobalCursor } from '../utils/global_cursor.js';
@@ -663,6 +664,15 @@ export class Window extends Container {
         }
         this.triggerResize();
       }),
+      defineMeasure(SymResize, function () {
+        this.drag.update('min', { x: 0 - this.options.width + 20, y: 0 });
+        this.drag.update('max', {
+          x: viewportWidth() - 20,
+          y: viewportHeight() - 20,
+        });
+        this.update('_inner_width', innerWidth(this.element));
+        this.update('_inner_height', innerHeight(this.element));
+      }),
     ];
   }
 
@@ -744,14 +754,6 @@ export class Window extends Container {
 
   getResizeTargets() {
     return [this.element];
-  }
-
-  resize() {
-    this.drag.set('min', { x: 0 - this.options.width + 20, y: 0 });
-    this.drag.set('max', { x: viewportWidth() - 20, y: viewportHeight() - 20 });
-    this.set('_inner_width', innerWidth(this.element));
-    this.set('_inner_height', innerHeight(this.element));
-    super.resize();
   }
 
   draw(O, element) {

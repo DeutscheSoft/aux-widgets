@@ -26,7 +26,7 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { Widget } from './widget.js';
+import { SymResize, Widget } from './widget.js';
 import { Circular } from './circular.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
@@ -41,7 +41,7 @@ import { makeSVG } from '../utils/svg.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
 import { objectAnd, objectSub } from '../utils/object.js';
-import { defineRender } from '../renderer.js';
+import { defineMeasure, defineRender } from '../renderer.js';
 import { applyLegacyUsersetEventsRanged } from '../utils/legacy_userset_events.js';
 
 const formatViewbox = /* @__PURE__ */ FORMAT('0 0 %d %d');
@@ -193,6 +193,12 @@ export class Knob extends Widget {
 
   static get renderers() {
     return [
+      defineMeasure(SymResize, function () {
+        const width = innerWidth(this.element, undefined, true);
+        const height = innerHeight(this.element, undefined, true);
+        const size = Math.min(width, height);
+        this.update('size', size);
+      }),
       defineRender('size', function (size) {
         this.svg.setAttribute('viewBox', formatViewbox(size, size));
       }),
@@ -301,14 +307,6 @@ export class Knob extends Widget {
 
   getResizeTargets() {
     return [this.element];
-  }
-
-  resize() {
-    super.resize();
-    const width = innerWidth(this.element, undefined, true);
-    const height = innerHeight(this.element, undefined, true);
-    const size = Math.min(width, height);
-    this.set('size', size);
   }
 
   /**

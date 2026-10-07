@@ -350,7 +350,7 @@ export class Circular extends Widget {
         this._hand.style.display = show_hand ? 'block' : 'none';
       }),
       defineMeasure(SymResize, function () {
-        this.set('_stroke_width', this.getStroke());
+        this.update('_stroke_width', this.getStroke());
         this.invalidate('labels');
       }),
       defineRender(

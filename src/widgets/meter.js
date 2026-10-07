@@ -18,7 +18,7 @@
  */
 
 import { mergeStaticEvents } from '../widget_helpers.js';
-import { Widget } from './widget.js';
+import { SymResize, Widget } from './widget.js';
 import { Label } from './label.js';
 import {
   rangedEvents,
@@ -475,6 +475,15 @@ export class Meter extends Widget {
           );
         }
       ),
+      defineMeasure(SymResize, function () {
+        const _bar = this._bar;
+
+        // Round once here so bitmap, CSS size, fillRect and basis share one integer
+        // coordinate space. Canvas attributes cannot store fractional pixels; rounding
+        // only there would stretch the mask against the backdrop.
+        this.update('_width', Math.round(innerWidth(_bar, undefined, true)));
+        this.update('_height', Math.round(innerHeight(_bar, undefined, true)));
+      }),
     ];
   }
 
@@ -529,18 +538,6 @@ export class Meter extends Widget {
 
   getResizeTargets() {
     return [this._bar];
-  }
-
-  resize() {
-    super.resize();
-
-    const _bar = this._bar;
-
-    // Round once here so bitmap, CSS size, fillRect and basis share one integer
-    // coordinate space. Canvas attributes cannot store fractional pixels; rounding
-    // only there would stretch the mask against the backdrop.
-    this.set('_width', Math.round(innerWidth(_bar, undefined, true)));
-    this.set('_height', Math.round(innerHeight(_bar, undefined, true)));
   }
 
   effectiveValue() {

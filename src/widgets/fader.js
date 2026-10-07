@@ -242,7 +242,7 @@ export class Fader extends Widget {
           basis = innerWidth(T, undefined, true) - this._handle_size;
         }
 
-        this.set('basis', basis);
+        this.update('basis', basis);
       }),
       defineRecalculation(
         ['value', 'transformation', 'snap_module'],

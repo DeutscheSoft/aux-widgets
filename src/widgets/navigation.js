@@ -29,11 +29,8 @@ import {
 import { Button } from './button.js';
 import { Buttons } from './buttons.js';
 import { Container } from './container.js';
-import {
-  defineRender,
-  defineRecalculation,
-  childDependency,
-} from '../renderer.js';
+import { SymResize } from './widget.js';
+import { defineMeasure, defineRender, defineRecalculation, childDependency } from '../renderer.js';
 import { domScheduler } from '../dom_scheduler.js';
 import { MASK_RENDER } from '../scheduler/scheduler.js';
 
@@ -309,6 +306,11 @@ export class Navigation extends Container {
           }
         }
       ),
+      defineMeasure(SymResize, function () {
+        autoArrows.call(this);
+        this._scroll_top = this.buttons.element.scrollTop;
+        this._scroll_left = this.buttons.element.scrollLeft;
+      }),
     ];
   }
 
@@ -438,13 +440,6 @@ export class Navigation extends Container {
 
   getResizeTargets() {
     return [this.buttons.element];
-  }
-
-  resize() {
-    autoArrows.call(this);
-    this._scroll_top = this.buttons.element.scrollTop;
-    this._scroll_left = this.buttons.element.scrollLeft;
-    super.resize();
   }
 
   draw(O, element) {

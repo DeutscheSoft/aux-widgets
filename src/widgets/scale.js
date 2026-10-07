@@ -19,7 +19,7 @@
 
 /* jshint -W018 */
 
-import { Widget } from './widget.js';
+import { SymResize, Widget } from './widget.js';
 import {
   rangedEvents,
   rangedOptionsDefaults,
@@ -41,6 +41,7 @@ import {
 import { FORMAT } from '../utils/sprintf.js';
 import { warn } from '../utils/log.js';
 import {
+  defineMeasure,
   defineRender,
   deferRender,
   deferMeasure,
@@ -730,6 +731,14 @@ export class Scale extends Widget {
           );
         }
       ),
+      defineMeasure(SymResize, function () {
+        const O = this.options;
+
+        const basis = vert(O.layout)
+          ? innerHeight(this.element, undefined, true)
+          : innerWidth(this.element, undefined, true);
+        this.update('basis', basis);
+      }),
     ];
   }
 
@@ -872,16 +881,6 @@ export class Scale extends Widget {
 
   getResizeTargets() {
     return [this.element];
-  }
-
-  resize() {
-    super.resize();
-    const O = this.options;
-
-    const basis = vert(O.layout)
-      ? innerHeight(this.element, undefined, true)
-      : innerWidth(this.element, undefined, true);
-    this.update('basis', basis);
   }
 
   destroy() {

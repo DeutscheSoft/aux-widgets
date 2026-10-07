@@ -23,12 +23,13 @@ import { forEachArrayDiff } from '../utils/array_diff.js';
 import { FrequencyResponse } from './frequencyresponse.js';
 import { EqBand } from './eqband.js';
 import { Graph } from './graph.js';
+import { SymResize } from './widget.js';
 import {
   eventsToInheritChildOptions,
   optionTypesToInheritChildOptions,
   defaultOptionsToInheritChildOptions,
 } from '../child_widget.js';
-import { defineRecalculation } from '../renderer.js';
+import { defineMeasure, defineRecalculation } from '../renderer.js';
 
 function fastDrawPLinear(X, Y) {
   const ret = [];
@@ -190,6 +191,9 @@ export class EqualizerGraph extends Graph {
           this.set('dots', this.drawPath());
         }
       ),
+      defineMeasure(SymResize, function () {
+        this.invalidate('bands');
+      }),
     ];
   }
 
@@ -213,10 +217,6 @@ export class EqualizerGraph extends Graph {
    */
   drawPath() {
     return drawGraph.call(this, this.getFilterFunctions());
-  }
-
-  resize() {
-    this.invalidate('bands');
   }
 
   addBand(band) {

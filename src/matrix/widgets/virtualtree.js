@@ -25,6 +25,7 @@ import {
   defineMeasure,
   defineRecalculation,
 } from '../../renderer.js';
+import { SymResize } from '../../widgets/widget.js';
 
 import { Scroller } from './../../widgets/scroller.js';
 import { VirtualTreeEntry } from './virtualtreeentry.js';
@@ -107,6 +108,9 @@ export class VirtualTree extends Scroller {
 
   static get renderers() {
     return [
+      defineMeasure(SymResize, function () {
+        this.update('_view_height', this.element.offsetHeight);
+      }),
       defineRecalculation(
         ['_view_height', 'prerender_top', 'prerender_bottom', 'size'],
         function (_view_height, prerender_top, prerender_bottom, size) {
@@ -378,13 +382,6 @@ export class VirtualTree extends Scroller {
         setEntryPosition(entry, index);
       })
     );
-  }
-
-  resize() {
-    const E = this.element;
-    this.update('_view_height', E.offsetHeight);
-
-    super.resize();
   }
 
   /**

@@ -27,7 +27,8 @@ import {
 } from './../utils/dom.js';
 import { Container } from './container.js';
 import { Label } from './label.js';
-import { defineRender, childDependency } from '../renderer.js';
+import { SymResize } from './widget.js';
+import { defineMeasure, defineRender, childDependency } from '../renderer.js';
 
 /**
  * Marquee is a {@link Label} inside a {@link Container}. Marquee
@@ -74,6 +75,13 @@ export class Marquee extends Container {
 
   static get renderers() {
     return [
+      defineMeasure(SymResize, function () {
+        this.update('_outer', innerWidth(this.element, undefined, true));
+        this.update(
+          '_inner',
+          outerWidth(this.label.element, false, undefined, true)
+        );
+      }),
       defineRender(
         [
           'easing',
@@ -133,12 +141,6 @@ export class Marquee extends Container {
 
   getResizeTargets() {
     return [this.element, this.label.element];
-  }
-
-  resize() {
-    super.resize();
-    this.set('_outer', innerWidth(this.element, undefined, true));
-    this.set('_inner', outerWidth(this.label.element, false, undefined, true));
   }
 
   destroy() {

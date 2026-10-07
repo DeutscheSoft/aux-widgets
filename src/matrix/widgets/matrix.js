@@ -18,7 +18,8 @@
  */
 
 import { innerWidth, outerWidth, addClass } from './../../utils/dom.js';
-import { defineRender } from '../../renderer.js';
+import { defineMeasure, defineRender } from '../../renderer.js';
+import { SymResize } from '../../widgets/widget.js';
 
 import { Indicators } from './indicators.js';
 import { Indicator } from './indicator.js';
@@ -99,6 +100,12 @@ export class Matrix extends Patchbay {
 
   static get renderers() {
     return [
+      defineMeasure(SymResize, function () {
+        this.update(
+          '_virtualtree_size',
+          innerWidth(this.element) - outerWidth(this.virtualtree_left.element)
+        );
+      }),
       defineRender('_virtualtree_size', function (_virtualtree_size) {
         const virtualtree = this.virtualtree_top;
         virtualtree.element.style.height = _virtualtree_size + 'px';
@@ -188,14 +195,6 @@ export class Matrix extends Patchbay {
     this.virtualtree_top.scroll_y.drag.set('direction', 'horizontal');
     this.virtualtree_top.scroll_y.drag.set('reverse', true);
     setVirtualtreeviews.call(this);
-  }
-
-  resize() {
-    this.set(
-      '_virtualtree_size',
-      innerWidth(this.element) - outerWidth(this.virtualtree_left.element)
-    );
-    super.resize();
   }
 
   destroy() {
