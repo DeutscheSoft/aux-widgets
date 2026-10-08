@@ -27,7 +27,11 @@ import {
 import { Widget } from './widget.js';
 import { Icon } from './icon.js';
 import { Label } from './label.js';
-import { defineRecalculation, defineRender, childDependency } from '../renderer.js';
+import {
+  defineRecalculation,
+  defineRender,
+  childDependency,
+} from '../renderer.js';
 import { isElementHit } from '../utils/isElementHit.js';
 import { selectAriaAttribute } from '../utils/select_aria_attribute.js';
 
@@ -360,10 +364,7 @@ export class Button extends Widget {
           applyAttribute(
             this.element,
             'aria-labelledby',
-            selectAriaAttribute(
-              aria_labelledby,
-              label ? label.get('id') : null
-            )
+            selectAriaAttribute(aria_labelledby, label ? label.get('id') : null)
           );
         }
       ),

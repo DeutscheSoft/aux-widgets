@@ -280,10 +280,7 @@ export class Fader extends Widget {
           applyAttribute(
             this._handle,
             'aria-labelledby',
-            selectAriaAttribute(
-              aria_labelledby,
-              label ? label.get('id') : null
-            )
+            selectAriaAttribute(aria_labelledby, label ? label.get('id') : null)
           );
         }
       ),

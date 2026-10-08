@@ -415,10 +415,7 @@ export class Meter extends Widget {
           applyAttribute(
             this.element,
             'aria-labelledby',
-            selectAriaAttribute(
-              aria_labelledby,
-              label ? label.get('id') : null
-            )
+            selectAriaAttribute(aria_labelledby, label ? label.get('id') : null)
           );
         }
       ),
