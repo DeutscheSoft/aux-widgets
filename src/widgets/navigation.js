@@ -29,7 +29,7 @@ import {
 import { Button } from './button.js';
 import { Buttons } from './buttons.js';
 import { Container } from './container.js';
-import { defineRender } from '../renderer.js';
+import { defineRender, defineRecalculation, childDependency } from '../renderer.js';
 import { domScheduler } from '../dom_scheduler.js';
 import { MASK_RENDER } from '../scheduler/scheduler.js';
 
@@ -214,16 +214,6 @@ export class Navigation extends Container {
 
   static get static_events() {
     return {
-      set_direction: function (value) {
-        if (!this.get('icons')) return;
-        if (this.prev)
-          this.prev.set('icon', value === 'vertical' ? 'arrowup' : 'arrowleft'); //"\u25B2" : "\u25C0");
-        if (this.next)
-          this.next.set(
-            'icon',
-            value === 'vertical' ? 'arrowdown' : 'arrowright'
-          ); //"\u25BC" : "\u25B6");
-      },
       hide: function () {
         if (this._scroll_animation) {
           this._scroll_animation.pause();
@@ -233,14 +223,6 @@ export class Navigation extends Container {
         if (this._scroll_animation) {
           this._scroll_animation.start();
         }
-      },
-      set_select: function (val) {
-        if (this.prev) this.prev.set('disabled', val <= 0);
-        if (this.next)
-          this.next.set(
-            'disabled',
-            val === this.buttons.getButtons().length - 1
-          );
       },
       set_arrows: function (arrows) {
         this.set('show_prev', arrows);
@@ -259,6 +241,37 @@ export class Navigation extends Container {
       defineRender('arrows', function (arrows) {
         toggleClass(this.element, 'aux-over', arrows);
       }),
+      defineRecalculation(
+        [childDependency('prev'), 'direction', 'icons'],
+        function (prev, direction, icons) {
+          if (!prev || !icons) return;
+          prev.set('icon', direction === 'vertical' ? 'arrowup' : 'arrowleft');
+        }
+      ),
+      defineRecalculation(
+        [childDependency('next'), 'direction', 'icons'],
+        function (next, direction, icons) {
+          if (!next || !icons) return;
+          next.set(
+            'icon',
+            direction === 'vertical' ? 'arrowdown' : 'arrowright'
+          );
+        }
+      ),
+      defineRecalculation(
+        [childDependency('prev'), 'select'],
+        function (prev, select) {
+          if (!prev) return;
+          prev.set('disabled', select <= 0);
+        }
+      ),
+      defineRecalculation(
+        [childDependency('next'), 'select', childDependency('buttons')],
+        function (next, select, buttons) {
+          if (!next || !buttons) return;
+          next.set('disabled', select === buttons.getButtons().length - 1);
+        }
+      ),
       defineRender(
         [
           'direction',

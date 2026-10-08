@@ -29,6 +29,7 @@ import { Icon } from './icon.js';
 import { Label } from './label.js';
 import { defineRecalculation, defineRender, childDependency } from '../renderer.js';
 import { isElementHit } from '../utils/isElementHit.js';
+import { selectAriaAttribute } from '../utils/select_aria_attribute.js';
 
 function resetDelayTo() {
   window.clearTimeout(this.__delayed_to);
@@ -356,12 +357,13 @@ export class Button extends Widget {
       defineRender(
         [childDependency('label'), 'aria_labelledby'],
         function (label, aria_labelledby) {
-          if (aria_labelledby !== void 0) return;
-
           applyAttribute(
             this.element,
             'aria-labelledby',
-            label ? label.get('id') : null
+            selectAriaAttribute(
+              aria_labelledby,
+              label ? label.get('id') : null
+            )
           );
         }
       ),

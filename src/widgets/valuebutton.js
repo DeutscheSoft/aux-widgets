@@ -136,20 +136,20 @@ export class ValueButton extends Button {
           childDependency('label'),
           'aria_labelledby',
           'value.aria_labelledby',
-          'show_value',
+          childDependency('value'),
         ],
-        function (label, aria_labelledby, value_aria_labelledby) {
-          if (value_aria_labelledby !== void 0) return;
-          if (!this.value) return;
+        function (label, aria_labelledby, value_aria_labelledby, value) {
+          if (!value) return;
 
-          const { _input } = this.value;
-
-          const value = selectAriaAttribute(
-            aria_labelledby,
-            label ? label.get('id') : null
+          applyAttribute(
+            value._input,
+            'aria-labelledby',
+            selectAriaAttribute(
+              value_aria_labelledby,
+              aria_labelledby,
+              label ? label.get('id') : null
+            )
           );
-
-          applyAttribute(_input, 'aria-labelledby', value);
         }
       ),
     ];

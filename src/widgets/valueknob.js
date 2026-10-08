@@ -29,7 +29,8 @@ import {
   createID,
 } from '../utils/dom.js';
 import { applyLegacyUsersetEventsRanged } from '../utils/legacy_userset_events.js';
-import { defineRender } from '../renderer.js';
+import { defineRender, childDependency } from '../renderer.js';
+import { selectAriaAttribute } from '../utils/select_aria_attribute.js';
 
 /**
  * The <code>useraction</code> event is emitted when a widget gets modified by user interaction.
@@ -110,17 +111,33 @@ export class ValueKnob extends Widget {
         addClass(E, 'aux-' + layout);
       }),
       defineRender(
-        ['label', 'aria_labelledby', 'show_value'],
-        function (label, aria_labelledby) {
-          if (aria_labelledby !== void 0) return;
-          if (!this.value) return;
+        [childDependency('label'), 'aria_labelledby', childDependency('value')],
+        function (label, aria_labelledby, value) {
+          if (!value) return;
 
-          const { svg } = this.knob;
-          const { _input } = this.value;
+          applyAttribute(
+            value._input,
+            'aria-labelledby',
+            selectAriaAttribute(
+              aria_labelledby,
+              label ? label.get('id') : null
+            )
+          );
+        }
+      ),
+      defineRender(
+        [childDependency('label'), 'aria_labelledby', childDependency('knob')],
+        function (label, aria_labelledby, knob) {
+          if (!knob) return;
 
-          const value = label !== false ? this.label.get('id') : null;
-          applyAttribute(_input, 'aria-labelledby', value);
-          applyAttribute(svg, 'aria-labelledby', value);
+          applyAttribute(
+            knob.svg,
+            'aria-labelledby',
+            selectAriaAttribute(
+              aria_labelledby,
+              label ? label.get('id') : null
+            )
+          );
         }
       ),
     ];

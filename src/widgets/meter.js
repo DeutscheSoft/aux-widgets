@@ -46,7 +46,9 @@ import {
   defineRender,
   defineMeasure,
   defineRecalculation,
+  childDependency,
 } from '../renderer.js';
+import { selectAriaAttribute } from '../utils/select_aria_attribute.js';
 
 import { FORMAT } from '../utils/sprintf.js';
 import {
@@ -408,12 +410,16 @@ export class Meter extends Widget {
         }
       ),
       defineRender(
-        ['label', 'aria_labelledby'],
+        [childDependency('label'), 'aria_labelledby'],
         function (label, aria_labelledby) {
-          if (aria_labelledby !== void 0) return;
-
-          const value = label !== false ? this.label.get('id') : null;
-          applyAttribute(this.element, 'aria-labelledby', value);
+          applyAttribute(
+            this.element,
+            'aria-labelledby',
+            selectAriaAttribute(
+              aria_labelledby,
+              label ? label.get('id') : null
+            )
+          );
         }
       ),
       defineRecalculation(
