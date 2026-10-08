@@ -118,10 +118,7 @@ export class ValueKnob extends Widget {
           applyAttribute(
             value._input,
             'aria-labelledby',
-            selectAriaAttribute(
-              aria_labelledby,
-              label ? label.get('id') : null
-            )
+            selectAriaAttribute(aria_labelledby, label ? label.get('id') : null)
           );
         }
       ),
@@ -133,10 +130,7 @@ export class ValueKnob extends Widget {
           applyAttribute(
             knob.svg,
             'aria-labelledby',
-            selectAriaAttribute(
-              aria_labelledby,
-              label ? label.get('id') : null
-            )
+            selectAriaAttribute(aria_labelledby, label ? label.get('id') : null)
           );
         }
       ),

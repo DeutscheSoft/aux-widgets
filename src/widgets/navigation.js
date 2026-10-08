@@ -29,7 +29,11 @@ import {
 import { Button } from './button.js';
 import { Buttons } from './buttons.js';
 import { Container } from './container.js';
-import { defineRender, defineRecalculation, childDependency } from '../renderer.js';
+import {
+  defineRender,
+  defineRecalculation,
+  childDependency,
+} from '../renderer.js';
 import { domScheduler } from '../dom_scheduler.js';
 import { MASK_RENDER } from '../scheduler/scheduler.js';
 
