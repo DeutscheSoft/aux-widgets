@@ -37,12 +37,8 @@ export interface IComboBoxEvents extends IWidgetEvents {
  */
 export declare class ComboBox<
   TOptions extends IComboBoxOptions = IComboBoxOptions,
-  TEvents extends IComboBoxEvents = IComboBoxEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IComboBoxEvents = IComboBoxEvents
+> extends Widget<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV element. Has class .aux-combobox */

@@ -193,12 +193,8 @@ export interface IChartHandleEvents extends IWidgetEvents {
  */
 export declare class ChartHandle<
   TOptions extends IChartHandleOptions = IChartHandleOptions,
-  TEvents extends IChartHandleEvents = IChartHandleEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IChartHandleEvents = IChartHandleEvents
+> extends Widget<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main SVG group containing all handle elements. Has class .aux-charthandle */

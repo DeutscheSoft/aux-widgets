@@ -32,12 +32,8 @@ export interface IFrequencyResponseEvents extends IChartEvents {
  */
 export declare class FrequencyResponse<
   TOptions extends IFrequencyResponseOptions = IFrequencyResponseOptions,
-  TEvents extends IFrequencyResponseEvents = IFrequencyResponseEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Chart<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IFrequencyResponseEvents = IFrequencyResponseEvents
+> extends Chart<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-frequencyresponse */

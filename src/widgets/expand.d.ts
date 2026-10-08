@@ -6,11 +6,7 @@ export interface IExpandEvents extends IContainerEvents {}
 
 export declare class Expand<
   TOptions extends IExpandOptions = IExpandOptions,
-  TEvents extends IExpandEvents = IExpandEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IExpandEvents = IExpandEvents
+> extends Container<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 }

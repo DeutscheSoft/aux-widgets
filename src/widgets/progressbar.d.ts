@@ -23,12 +23,8 @@ export interface IProgressBarEvents extends IMeterEvents {
  */
 export declare class ProgressBar<
   TOptions extends IProgressBarOptions = IProgressBarOptions,
-  TEvents extends IProgressBarEvents = IProgressBarEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Meter<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IProgressBarEvents = IProgressBarEvents
+> extends Meter<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-progressbar */

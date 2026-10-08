@@ -43,12 +43,8 @@ export interface IEqBandEvents extends IChartHandleEvents {
  */
 export declare class EqBand<
   TOptions extends IEqBandOptions = IEqBandOptions,
-  TEvents extends IEqBandEvents = IEqBandEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends ChartHandle<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IEqBandEvents = IEqBandEvents
+> extends ChartHandle<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main SVG group. Has class .aux-eqband */

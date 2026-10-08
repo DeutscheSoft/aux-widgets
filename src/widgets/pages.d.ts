@@ -77,12 +77,8 @@ export interface IPageEvents extends IContainerEvents {
  */
 export declare class Pages<
   TOptions extends IPagesOptions = IPagesOptions,
-  TEvents extends IPagesEvents = IPagesEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IPagesEvents = IPagesEvents
+> extends Container<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV element. Has class .aux-pages */
@@ -155,11 +151,7 @@ export declare class Pages<
  */
 export declare class Page<
   TOptions extends IPageOptions = IPageOptions,
-  TEvents extends IPageEvents = IPageEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IPageEvents = IPageEvents
+> extends Container<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 }

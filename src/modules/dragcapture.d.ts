@@ -78,12 +78,8 @@ export interface IDragCaptureEvents extends IModuleEvents {
  */
 export declare class DragCapture<
   TOptions extends IDragCaptureOptions = IDragCaptureOptions,
-  TEvents extends IDragCaptureEvents = IDragCaptureEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Module<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IDragCaptureEvents = IDragCaptureEvents
+> extends Module<TOptions, TEvents> {
   constructor(widget: unknown, options?: Partial<TOptions>);
 
   /** @internal The current drag state (internal). */

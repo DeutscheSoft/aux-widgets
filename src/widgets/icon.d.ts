@@ -26,12 +26,8 @@ export interface IIconEvents extends IWidgetEvents {
  */
 export declare class Icon<
   TOptions extends IIconOptions = IIconOptions,
-  TEvents extends IIconEvents = IIconEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IIconEvents = IIconEvents
+> extends Widget<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV element. Has class .aux-icon */

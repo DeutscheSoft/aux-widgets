@@ -41,12 +41,8 @@ export interface IDrag3DEvents extends IContainerEvents {
  */
 export declare class Drag3D<
   TOptions extends IDrag3DOptions = IDrag3DOptions,
-  TEvents extends IDrag3DEvents = IDrag3DEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IDrag3DEvents = IDrag3DEvents
+> extends Container<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-drag3d */

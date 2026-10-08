@@ -49,12 +49,8 @@ export interface IValueButtonEvents extends Omit<IButtonEvents, 'doubleclick'> {
  */
 export declare class ValueButton<
   TOptions extends IValueButtonOptions = IValueButtonOptions,
-  TEvents extends IValueButtonEvents = IValueButtonEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Button<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IValueButtonEvents = IValueButtonEvents
+> extends Button<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-valuebutton */

@@ -33,12 +33,8 @@ export interface INavigationEvents extends IContainerEvents {
  */
 export declare class Navigation<
   TOptions extends INavigationOptions = INavigationOptions,
-  TEvents extends INavigationEvents = INavigationEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends INavigationEvents = INavigationEvents
+> extends Container<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-navigation */

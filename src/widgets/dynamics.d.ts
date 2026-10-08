@@ -89,12 +89,8 @@ export interface IDynamicsEvents extends IChartEvents {
  */
 export declare class Dynamics<
   TOptions extends IDynamicsOptions = IDynamicsOptions,
-  TEvents extends IDynamicsEvents = IDynamicsEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Chart<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IDynamicsEvents = IDynamicsEvents
+> extends Chart<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-dynamics */
@@ -138,12 +134,8 @@ export interface ICompressorEvents extends IDynamicsEvents {
  */
 export declare class Compressor<
   TOptions extends ICompressorOptions = ICompressorOptions,
-  TEvents extends ICompressorEvents = ICompressorEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Dynamics<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends ICompressorEvents = ICompressorEvents
+> extends Dynamics<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-compressor */
@@ -173,12 +165,8 @@ export interface IExpanderEvents extends IDynamicsEvents {
  */
 export declare class Expander<
   TOptions extends IExpanderOptions = IExpanderOptions,
-  TEvents extends IExpanderEvents = IExpanderEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Dynamics<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IExpanderEvents = IExpanderEvents
+> extends Dynamics<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-expander */
@@ -206,12 +194,8 @@ export interface IGateEvents extends IDynamicsEvents {
  */
 export declare class Gate<
   TOptions extends IGateOptions = IGateOptions,
-  TEvents extends IGateEvents = IGateEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Dynamics<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IGateEvents = IGateEvents
+> extends Dynamics<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-gate */
@@ -239,12 +223,8 @@ export interface ILimiterEvents extends IDynamicsEvents {
  */
 export declare class Limiter<
   TOptions extends ILimiterOptions = ILimiterOptions,
-  TEvents extends ILimiterEvents = ILimiterEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Dynamics<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends ILimiterEvents = ILimiterEvents
+> extends Dynamics<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-limiter */

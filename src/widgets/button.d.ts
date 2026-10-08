@@ -58,17 +58,11 @@ export interface IButtonEvents extends IWidgetEvents {
  *
  * @template TOptions - The options type for this button. Extends IButtonOptions.
  * @template TEvents - The events type for this button. Extends IButtonEvents.
- * @template TEffectiveEvents - The effective events type (defaults to EffectiveEvents<TOptions, TEvents>).
- *   Users can override this to add additional events or customize the event type.
  */
 export declare class Button<
   TOptions extends IButtonOptions = IButtonOptions,
-  TEvents extends IButtonEvents = IButtonEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IButtonEvents = IButtonEvents
+> extends Widget<TOptions, TEvents> {
   /**
    * Creates a new Button instance.
    *

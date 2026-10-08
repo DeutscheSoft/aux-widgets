@@ -93,12 +93,8 @@ export interface IClockCirculars {
  */
 export declare class Clock<
   TOptions extends IClockOptions = IClockOptions,
-  TEvents extends IClockEvents = IClockEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IClockEvents = IClockEvents
+> extends Widget<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV element. Has class .aux-clock */

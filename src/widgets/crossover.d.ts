@@ -42,12 +42,8 @@ export interface ICrossoverBandEvents extends IEqBandEvents {
  */
 export declare class CrossoverBand<
   TOptions extends ICrossoverBandOptions = ICrossoverBandOptions,
-  TEvents extends ICrossoverBandEvents = ICrossoverBandEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends EqBand<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends ICrossoverBandEvents = ICrossoverBandEvents
+> extends EqBand<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main SVG group. Has class .aux-crossoverband */
@@ -84,12 +80,8 @@ export interface ICrossoverGraphEvents extends IEqualizerGraphEvents {
  */
 export declare class CrossoverGraph<
   TOptions extends ICrossoverGraphOptions = ICrossoverGraphOptions,
-  TEvents extends ICrossoverGraphEvents = ICrossoverGraphEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends EqualizerGraph<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends ICrossoverGraphEvents = ICrossoverGraphEvents
+> extends EqualizerGraph<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The SVG path element. Has class .aux-graph */
@@ -133,12 +125,8 @@ export interface ICrossoverEvents extends IEqualizerEvents {
  */
 export declare class Crossover<
   TOptions extends ICrossoverOptions = ICrossoverOptions,
-  TEvents extends ICrossoverEvents = ICrossoverEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Equalizer<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends ICrossoverEvents = ICrossoverEvents
+> extends Equalizer<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-crossover */

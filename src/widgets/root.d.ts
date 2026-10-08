@@ -8,12 +8,8 @@ import { EffectiveEvents } from '../implements/base.js';
  */
 export declare class Root<
   TOptions extends IContainerOptions = IContainerOptions,
-  TEvents extends IContainerEvents = IContainerEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IContainerEvents = IContainerEvents
+> extends Container<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-root */

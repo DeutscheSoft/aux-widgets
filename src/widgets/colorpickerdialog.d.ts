@@ -6,11 +6,7 @@ export interface IColorPickerDialogEvents extends IDialogEvents {}
 
 export declare class ColorPickerDialog<
   TOptions extends IColorPickerDialogOptions = IColorPickerDialogOptions,
-  TEvents extends IColorPickerDialogEvents = IColorPickerDialogEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Dialog<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IColorPickerDialogEvents = IColorPickerDialogEvents
+> extends Dialog<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 }

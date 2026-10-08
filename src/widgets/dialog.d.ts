@@ -60,12 +60,8 @@ export interface IDialogEvents extends IContainerEvents {
  */
 export declare class Dialog<
   TOptions extends IDialogOptions = IDialogOptions,
-  TEvents extends IDialogEvents = IDialogEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IDialogEvents = IDialogEvents
+> extends Container<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV element. Has class .aux-dialog */

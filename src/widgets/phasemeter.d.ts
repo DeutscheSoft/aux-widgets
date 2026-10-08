@@ -27,12 +27,8 @@ export interface IPhaseMeterEvents extends ILevelMeterEvents {
  */
 export declare class PhaseMeter<
   TOptions extends IPhaseMeterOptions = IPhaseMeterOptions,
-  TEvents extends IPhaseMeterEvents = IPhaseMeterEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends LevelMeter<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IPhaseMeterEvents = IPhaseMeterEvents
+> extends LevelMeter<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-phasemeter */

@@ -29,12 +29,8 @@ export interface IBitstringEvents extends IButtonsEvents {
  */
 export declare class Bitstring<
   TOptions extends IBitstringOptions = IBitstringOptions,
-  TEvents extends IBitstringEvents = IBitstringEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Buttons<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IBitstringEvents = IBitstringEvents
+> extends Buttons<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-bitstring */

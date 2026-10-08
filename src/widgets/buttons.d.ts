@@ -61,12 +61,8 @@ export interface IButtonsEvents extends IContainerEvents {
  */
 export declare class Buttons<
   TOptions extends IButtonsOptions = IButtonsOptions,
-  TEvents extends IButtonsEvents = IButtonsEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IButtonsEvents = IButtonsEvents
+> extends Container<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-buttons */

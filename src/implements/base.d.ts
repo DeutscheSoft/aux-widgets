@@ -114,17 +114,16 @@ export type EffectiveEvents<TOptions, TEvents extends IBaseEvents> = TEvents &
  *
  * @template TOptions - The options type for this class.
  * @template TEvents - The events type for this class. Extends IBaseEvents.
- * @template TEffectiveEvents - The effective events type (defaults to EffectiveEvents<TOptions, TEvents>).
- *   Users can override this to add additional events or customize the event type.
  */
 export declare class Base<
   TOptions = Record<string, unknown>,
-  TEvents extends IBaseEvents = IBaseEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
+  TEvents extends IBaseEvents = IBaseEvents
 > {
+  /** @internal */
+  protected readonly __optionsType: TOptions;
+  /** @internal */
+  protected readonly __eventsType: TEvents;
+
   /**
    * The options object containing all options.
    * Options can be accessed directly via this property or using the `get()` method.
@@ -156,9 +155,9 @@ export declare class Base<
    * @param event - The event name
    * @param func - The function to call when the event happens
    */
-  on<K extends keyof TEffectiveEvents>(
+  on<K extends keyof EffectiveEvents<TOptions, TEvents>>(
     event: K,
-    func: TEffectiveEvents[K]
+    func: EffectiveEvents<TOptions, TEvents>[K]
   ): void;
 
   /**
@@ -168,9 +167,9 @@ export declare class Base<
    * @param event - The event name
    * @param func - The function to call when the event happens
    */
-  addEventListener<K extends keyof TEffectiveEvents>(
+  addEventListener<K extends keyof EffectiveEvents<TOptions, TEvents>>(
     event: K,
-    func: TEffectiveEvents[K]
+    func: EffectiveEvents<TOptions, TEvents>[K]
   ): void;
 
   /**
@@ -180,9 +179,9 @@ export declare class Base<
    * @param event - The event name
    * @param func - The function to remove
    */
-  off<K extends keyof TEffectiveEvents>(
+  off<K extends keyof EffectiveEvents<TOptions, TEvents>>(
     event: K,
-    func: TEffectiveEvents[K]
+    func: EffectiveEvents<TOptions, TEvents>[K]
   ): void;
 
   /**
@@ -192,9 +191,9 @@ export declare class Base<
    * @param event - The event name
    * @param func - The function to remove
    */
-  removeEventListener<K extends keyof TEffectiveEvents>(
+  removeEventListener<K extends keyof EffectiveEvents<TOptions, TEvents>>(
     event: K,
-    func: TEffectiveEvents[K]
+    func: EffectiveEvents<TOptions, TEvents>[K]
   ): void;
 
   /**
@@ -206,9 +205,9 @@ export declare class Base<
    * @param func - The function to call when the event happens
    * @returns A function to unsubscribe
    */
-  subscribe<K extends keyof TEffectiveEvents>(
+  subscribe<K extends keyof EffectiveEvents<TOptions, TEvents>>(
     event: K,
-    func: TEffectiveEvents[K]
+    func: EffectiveEvents<TOptions, TEvents>[K]
   ): () => void;
 
   /**
@@ -219,9 +218,9 @@ export declare class Base<
    * @param func - The function to call when the event happens
    * @returns A function to unsubscribe (can be called before the event fires)
    */
-  once<K extends keyof TEffectiveEvents>(
+  once<K extends keyof EffectiveEvents<TOptions, TEvents>>(
     event: K,
-    func: TEffectiveEvents[K]
+    func: EffectiveEvents<TOptions, TEvents>[K]
   ): () => void;
 
   /**
@@ -232,7 +231,10 @@ export declare class Base<
    * @param args - Event arguments (type-checked based on the event handler signature)
    * @returns The return value from the event handler, or undefined
    */
-  emit<K extends keyof TEffectiveEvents>(event: K, ...args: any[]): any;
+  emit<K extends keyof EffectiveEvents<TOptions, TEvents>>(
+    event: K,
+    ...args: any[]
+  ): any;
 
   /**
    * Fire an event (alias for emit).
@@ -242,7 +244,7 @@ export declare class Base<
    * @param args - Event arguments (type-checked based on the event handler signature)
    * @returns The return value from the event handler, or undefined
    */
-  dispatchEvent<K extends keyof TEffectiveEvents>(
+  dispatchEvent<K extends keyof EffectiveEvents<TOptions, TEvents>>(
     event: K,
     ...args: any[]
   ): any;
@@ -255,9 +257,9 @@ export declare class Base<
    * @param func - Optional: specific function to check for
    * @returns True if the event has listeners
    */
-  hasEventListener<K extends keyof TEffectiveEvents>(
+  hasEventListener<K extends keyof EffectiveEvents<TOptions, TEvents>>(
     event: K,
-    func?: TEffectiveEvents[K]
+    func?: EffectiveEvents<TOptions, TEvents>[K]
   ): boolean;
 
   /**
@@ -267,5 +269,7 @@ export declare class Base<
    * @param event - The event name
    * @returns True if the event has any listeners
    */
-  hasEventListeners<K extends keyof TEffectiveEvents>(event: K): boolean;
+  hasEventListeners<K extends keyof EffectiveEvents<TOptions, TEvents>>(
+    event: K
+  ): boolean;
 }

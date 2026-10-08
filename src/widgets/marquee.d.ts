@@ -45,12 +45,8 @@ export interface IMarqueeEvents extends IContainerEvents {
  */
 export declare class Marquee<
   TOptions extends IMarqueeOptions = IMarqueeOptions,
-  TEvents extends IMarqueeEvents = IMarqueeEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IMarqueeEvents = IMarqueeEvents
+> extends Container<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-marquee */

@@ -55,12 +55,8 @@ export interface IContainerEvents extends IWidgetEvents {
  */
 export declare class Container<
   TOptions extends IContainerOptions = IContainerOptions,
-  TEvents extends IContainerEvents = IContainerEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IContainerEvents = IContainerEvents
+> extends Widget<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV element. Has class .aux-container */

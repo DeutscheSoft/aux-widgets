@@ -1,4 +1,9 @@
-import { Base, IBaseEvents, EffectiveEvents } from '../implements/base.js';
+import {
+  Base,
+  IBaseEvents,
+  EffectiveEvents,
+  OptionSetEvents,
+} from '../implements/base.js';
 
 /**
  * Focus movement speed.
@@ -146,17 +151,11 @@ export interface IWidgetOptions {
  *
  * @template TOptions - The options type for this widget. Extends IWidgetOptions.
  * @template TEvents - The events type for this widget. Extends IWidgetEvents.
- * @template TEffectiveEvents - The effective events type (defaults to EffectiveEvents<TOptions, TEvents>).
- *   Users can override this to add additional events or customize the event type.
  */
 export declare class Widget<
   TOptions extends IWidgetOptions = IWidgetOptions,
-  TEvents extends IWidgetEvents = IWidgetEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Base<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IWidgetEvents = IWidgetEvents
+> extends Base<TOptions, TEvents> {
   /**
    * Creates a new Widget instance.
    *
@@ -166,17 +165,27 @@ export declare class Widget<
 }
 
 /**
- * Infers the options type (TOptions) of a widget type.
- * Returns `never` if T does not extend Widget.
+ * Options type of a widget (or other `Base` subclass).
+ * Returns `never` if `T` does not extend `Base`.
  */
-export type WidgetOptionsOf<T> = T extends Widget<infer O, any, any>
-  ? O
+export type WidgetOptionsOf<T> = T extends Base<infer O, any> ? O : never;
+
+/**
+ * Declared events of a widget (or other `Base` subclass), without synthetic
+ * `set_*` option events.
+ * Returns `never` if `T` does not extend `Base`.
+ */
+export type WidgetDeclaredEventsOf<T> = T extends Base<any, infer E>
+  ? E
   : never;
 
 /**
- * Infers the effective events type (TEffectiveEvents) of a widget type.
- * Returns `never` if T does not extend Widget.
+ * Effective events of a widget (or other `Base` subclass): declared events
+ * plus synthetic `set_${option}` events for each option.
+ * Returns `never` if `T` does not extend `Base`.
  */
-export type WidgetEventsOf<T> = T extends Widget<any, any, infer E> ? E : never;
+export type WidgetEventsOf<T> = T extends Base<any, any>
+  ? EffectiveEvents<WidgetOptionsOf<T>, WidgetDeclaredEventsOf<T>>
+  : never;
 
-export type { EffectiveEvents };
+export type { EffectiveEvents, OptionSetEvents };

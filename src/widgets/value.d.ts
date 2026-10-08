@@ -78,12 +78,8 @@ export interface IValueEvents extends IWidgetEvents {
  */
 export declare class Value<
   TOptions extends IValueOptions = IValueOptions,
-  TEvents extends IValueEvents = IValueEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IValueEvents = IValueEvents
+> extends Widget<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-value */

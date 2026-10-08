@@ -47,12 +47,8 @@ export interface IPagerEvents extends IContainerEvents {
  */
 export declare class Pager<
   TOptions extends IPagerOptions = IPagerOptions,
-  TEvents extends IPagerEvents = IPagerEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IPagerEvents = IPagerEvents
+> extends Container<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV element. Has class .aux-pager */

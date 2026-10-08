@@ -61,12 +61,8 @@ export interface ISpreadEvents extends Omit<IWidgetEvents, 'doubleclick'> {
  */
 export declare class Spread<
   TOptions extends ISpreadOptions = ISpreadOptions,
-  TEvents extends ISpreadEvents = ISpreadEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends ISpreadEvents = ISpreadEvents
+> extends Widget<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-spread */

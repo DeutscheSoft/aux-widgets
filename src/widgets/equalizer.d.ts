@@ -48,12 +48,8 @@ export interface IEqualizerGraphEvents extends IGraphEvents {
  */
 export declare class EqualizerGraph<
   TOptions extends IEqualizerGraphOptions = IEqualizerGraphOptions,
-  TEvents extends IEqualizerGraphEvents = IEqualizerGraphEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Graph<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IEqualizerGraphEvents = IEqualizerGraphEvents
+> extends Graph<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The SVG path element. Has class .aux-graph */
@@ -119,12 +115,8 @@ export interface IEqualizerEvents extends IFrequencyResponseEvents {
  */
 export declare class Equalizer<
   TOptions extends IEqualizerOptions = IEqualizerOptions,
-  TEvents extends IEqualizerEvents = IEqualizerEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends FrequencyResponse<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IEqualizerEvents = IEqualizerEvents
+> extends FrequencyResponse<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-equalizer */

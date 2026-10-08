@@ -57,12 +57,8 @@ export interface IFileSelectEvents extends IWidgetEvents {
  */
 export declare class FileSelect<
   TOptions extends IFileSelectOptions = IFileSelectOptions,
-  TEvents extends IFileSelectEvents = IFileSelectEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IFileSelectEvents = IFileSelectEvents
+> extends Container<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-fileselect */

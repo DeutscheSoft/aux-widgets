@@ -104,12 +104,8 @@ export interface ISelectEntryEvents extends IButtonEvents {
  */
 export declare class SelectEntry<
   TOptions extends ISelectEntryOptions = ISelectEntryOptions,
-  TEvents extends ISelectEntryEvents = ISelectEntryEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Button<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends ISelectEntryEvents = ISelectEntryEvents
+> extends Button<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 }
 
@@ -118,12 +114,8 @@ export declare class SelectEntry<
  */
 export declare class Select<
   TOptions extends ISelectOptions = ISelectOptions,
-  TEvents extends ISelectEvents = ISelectEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Button<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends ISelectEvents = ISelectEvents
+> extends Button<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-select */

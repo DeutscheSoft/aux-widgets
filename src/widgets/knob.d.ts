@@ -54,12 +54,8 @@ export interface IKnobEvents extends IWidgetEvents {}
  */
 export declare class Knob<
   TOptions extends IKnobOptions = IKnobOptions,
-  TEvents extends IKnobEvents = IKnobEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IKnobEvents = IKnobEvents
+> extends Widget<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-knob */

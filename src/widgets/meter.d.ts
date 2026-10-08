@@ -126,12 +126,8 @@ export interface IMeterEvents extends IWidgetEvents {
  */
 export declare class Meter<
   TOptions extends IMeterOptions = IMeterOptions,
-  TEvents extends IMeterEvents = IMeterEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IMeterEvents = IMeterEvents
+> extends Widget<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-meter */

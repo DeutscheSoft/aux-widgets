@@ -39,11 +39,7 @@ export interface IConfirmButtonEvents extends IButtonEvents {
  */
 export declare class ConfirmButton<
   TOptions extends IConfirmButtonOptions = IConfirmButtonOptions,
-  TEvents extends IConfirmButtonEvents = IConfirmButtonEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Button<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IConfirmButtonEvents = IConfirmButtonEvents
+> extends Button<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 }

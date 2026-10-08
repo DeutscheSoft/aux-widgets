@@ -45,11 +45,7 @@ export interface IDragEvents extends IBaseEvents {
  */
 export declare class Drag<
   TOptions extends IDragOptions = IDragOptions,
-  TEvents extends IDragEvents = IDragEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Base<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IDragEvents = IDragEvents
+> extends Base<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 }

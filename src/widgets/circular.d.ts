@@ -211,12 +211,8 @@ export interface ICircularEvents extends IWidgetEvents {
  */
 export declare class Circular<
   TOptions extends ICircularOptions = ICircularOptions,
-  TEvents extends ICircularEvents = ICircularEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends ICircularEvents = ICircularEvents
+> extends Widget<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main SVG element. Has class .aux-circular */

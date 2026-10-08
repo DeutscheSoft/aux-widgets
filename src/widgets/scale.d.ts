@@ -95,12 +95,8 @@ export interface IScaleEvents extends IWidgetEvents {
  */
 export declare class Scale<
   TOptions extends IScaleOptions = IScaleOptions,
-  TEvents extends IScaleEvents = IScaleEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IScaleEvents = IScaleEvents
+> extends Widget<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV element. Has class .aux-scale */

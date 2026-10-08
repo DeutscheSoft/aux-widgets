@@ -43,12 +43,8 @@ export interface IGaugeEvents extends IWidgetEvents {
  */
 export declare class Gauge<
   TOptions extends IGaugeOptions = IGaugeOptions,
-  TEvents extends IGaugeEvents = IGaugeEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IGaugeEvents = IGaugeEvents
+> extends Widget<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-gauge */

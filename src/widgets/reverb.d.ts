@@ -116,12 +116,8 @@ export interface IReverbEvents extends IChartEvents {
  */
 export declare class Reverb<
   TOptions extends IReverbOptions = IReverbOptions,
-  TEvents extends IReverbEvents = IReverbEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Chart<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IReverbEvents = IReverbEvents
+> extends Chart<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The Graph displaying the input signal as a vertical bar. */

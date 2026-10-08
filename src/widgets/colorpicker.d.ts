@@ -97,12 +97,8 @@ export interface IColorPickerEvents extends IContainerEvents {
  */
 export declare class ColorPicker<
   TOptions extends IColorPickerOptions = IColorPickerOptions,
-  TEvents extends IColorPickerEvents = IColorPickerEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IColorPickerEvents = IColorPickerEvents
+> extends Container<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-colorpicker */

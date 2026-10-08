@@ -90,12 +90,8 @@ export interface IMultiMeterEvents extends IContainerEvents {
  */
 export declare class MultiMeter<
   TOptions extends IMultiMeterOptions = IMultiMeterOptions,
-  TEvents extends IMultiMeterEvents = IMultiMeterEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IMultiMeterEvents = IMultiMeterEvents
+> extends Container<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-multimeter */

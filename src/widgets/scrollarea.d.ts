@@ -24,12 +24,8 @@ export interface IScrollAreaEvents extends IWidgetEvents {
  */
 export declare class ScrollArea<
   TOptions extends IScrollAreaOptions = IScrollAreaOptions,
-  TEvents extends IScrollAreaEvents = IScrollAreaEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IScrollAreaEvents = IScrollAreaEvents
+> extends Widget<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV element. Has class .aux-scroller */

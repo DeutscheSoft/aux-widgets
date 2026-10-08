@@ -2,41 +2,70 @@ import {
   Widget,
   WidgetOptionsOf,
   WidgetEventsOf,
+  WidgetDeclaredEventsOf,
   EffectiveEvents,
   IWidgetOptions,
   IWidgetEvents,
 } from '../src/index.js';
 import { Fader, IFaderOptions, IFaderEvents } from '../src/index.js';
+import { Button, IButtonEvents } from '../src/index.js';
+import {
+  Assert,
+  Eq,
+  HasKey,
+  LacksKey,
+  IsNever,
+  cast,
+  assertMutualAssignable,
+} from './helpers.js';
 
 // --- WidgetOptionsOf<T> ---
 
-// For a Widget subclass, WidgetOptionsOf infers its TOptions.
-const _faderOptions: WidgetOptionsOf<Fader> = (undefined as unknown) as IFaderOptions;
-const _toFaderOptions: IFaderOptions = (undefined as unknown) as WidgetOptionsOf<Fader>;
+assertMutualAssignable<WidgetOptionsOf<Fader>, IFaderOptions>();
+assertMutualAssignable<WidgetOptionsOf<Widget>, IWidgetOptions>();
 
-// For base Widget (no type args), options are IWidgetOptions.
-const _baseOptions: WidgetOptionsOf<Widget> = (undefined as unknown) as IWidgetOptions;
-const _toBaseOptions: IWidgetOptions = (undefined as unknown) as WidgetOptionsOf<Widget>;
-
-// When T does not extend Widget<>, result is never.
-const _neverOptions: never = (undefined as unknown) as WidgetOptionsOf<string>;
-const _neverOptionsNum: never = (undefined as unknown) as WidgetOptionsOf<number>;
-const _neverOptionsObj: never = (undefined as unknown) as WidgetOptionsOf<
-  Record<string, unknown>
+type _NeverOptions = Assert<IsNever<WidgetOptionsOf<string>>>;
+type _NeverOptionsNum = Assert<IsNever<WidgetOptionsOf<number>>>;
+type _NeverOptionsObj = Assert<
+  IsNever<WidgetOptionsOf<Record<string, unknown>>>
 >;
 
 // --- WidgetEventsOf<T> ---
 
-// For a Widget subclass, WidgetEventsOf infers its TEffectiveEvents.
 type FaderEffectiveEvents = EffectiveEvents<IFaderOptions, IFaderEvents>;
-const _faderEvents: WidgetEventsOf<Fader> = (undefined as unknown) as FaderEffectiveEvents;
-const _toFaderEvents: FaderEffectiveEvents = (undefined as unknown) as WidgetEventsOf<Fader>;
+assertMutualAssignable<WidgetEventsOf<Fader>, FaderEffectiveEvents>();
 
-// For base Widget, effective events match EffectiveEvents<IWidgetOptions, IWidgetEvents>.
 type BaseEffectiveEvents = EffectiveEvents<IWidgetOptions, IWidgetEvents>;
-const _baseEvents: WidgetEventsOf<Widget> = (undefined as unknown) as BaseEffectiveEvents;
-const _toBaseEvents: BaseEffectiveEvents = (undefined as unknown) as WidgetEventsOf<Widget>;
+assertMutualAssignable<WidgetEventsOf<Widget>, BaseEffectiveEvents>();
 
-// When T does not extend Widget<>, result is never.
-const _neverEvents: never = (undefined as unknown) as WidgetEventsOf<string>;
-const _neverEventsNum: never = (undefined as unknown) as WidgetEventsOf<boolean>;
+type _NeverEvents = Assert<IsNever<WidgetEventsOf<string>>>;
+type _NeverEventsNum = Assert<IsNever<WidgetEventsOf<boolean>>>;
+
+type _FaderEffHasScalechanged = Assert<
+  HasKey<WidgetEventsOf<Fader>, 'scalechanged'>
+>;
+type _FaderEffHasSetValue = Assert<HasKey<WidgetEventsOf<Fader>, 'set_value'>>;
+type _FaderEffHasClick = Assert<HasKey<WidgetEventsOf<Fader>, 'click'>>;
+
+// --- WidgetDeclaredEventsOf<T> ---
+
+type FaderDeclared = WidgetDeclaredEventsOf<Fader>;
+type ButtonDeclared = WidgetDeclaredEventsOf<Button>;
+
+type _FaderDeclHasScalechanged = Assert<HasKey<FaderDeclared, 'scalechanged'>>;
+type _FaderDeclLacksSetValue = Assert<LacksKey<FaderDeclared, 'set_value'>>;
+type _FaderDeclHasClick = Assert<HasKey<FaderDeclared, 'click'>>;
+type _FaderDeclHasUseraction = Assert<HasKey<FaderDeclared, 'useraction'>>;
+
+type _ButtonDeclHasPressStart = Assert<HasKey<ButtonDeclared, 'press_start'>>;
+type _ButtonDeclLacksSetLabel = Assert<LacksKey<ButtonDeclared, 'set_label'>>;
+
+assertMutualAssignable<FaderDeclared, IFaderEvents>();
+assertMutualAssignable<ButtonDeclared, IButtonEvents>();
+assertMutualAssignable<WidgetDeclaredEventsOf<Widget>, IWidgetEvents>();
+
+type _NeverDeclared = Assert<IsNever<WidgetDeclaredEventsOf<string>>>;
+
+// Value-level smoke (keeps cast() exercised)
+const _faderOptions: WidgetOptionsOf<Fader> = cast<IFaderOptions>();
+void _faderOptions;

@@ -187,12 +187,8 @@ export interface IWindowEvents extends IContainerEvents {
  */
 export declare class Window<
   TOptions extends IWindowOptions = IWindowOptions,
-  TEvents extends IWindowEvents = IWindowEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IWindowEvents = IWindowEvents
+> extends Container<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV element. Has class .aux-window */

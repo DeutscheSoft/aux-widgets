@@ -46,11 +46,7 @@ export interface IResizeEvents extends IBaseEvents {
  */
 export declare class Resize<
   TOptions extends IResizeOptions = IResizeOptions,
-  TEvents extends IResizeEvents = IResizeEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Base<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IResizeEvents = IResizeEvents
+> extends Base<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 }

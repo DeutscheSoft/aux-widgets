@@ -92,12 +92,8 @@ export interface IGridEvents extends IWidgetEvents {
  */
 export declare class Grid<
   TOptions extends IGridOptions = IGridOptions,
-  TEvents extends IGridEvents = IGridEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IGridEvents = IGridEvents
+> extends Widget<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main SVG group containing all grid elements. Has class .aux-grid */

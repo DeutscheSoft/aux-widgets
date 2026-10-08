@@ -22,12 +22,8 @@ export interface IModuleEvents extends IBaseEvents {
  */
 export declare class Module<
   TOptions extends IModuleOptions = IModuleOptions,
-  TEvents extends IModuleEvents = IModuleEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Base<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IModuleEvents = IModuleEvents
+> extends Base<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The parent widget this module is attached to. */

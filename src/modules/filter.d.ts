@@ -72,12 +72,8 @@ export interface IFilterEvents extends IBaseEvents {
  */
 export declare class Filter<
   TOptions extends IFilterOptions = IFilterOptions,
-  TEvents extends IFilterEvents = IFilterEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Base<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IFilterEvents = IFilterEvents
+> extends Base<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The frequency-to-gain function. This is computed internally and may be null until getFrequencyToGain() is called. */

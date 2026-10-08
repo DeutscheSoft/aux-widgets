@@ -24,12 +24,8 @@ export interface IFrameEvents extends IContainerEvents {
  */
 export declare class Frame<
   TOptions extends IFrameOptions = IFrameOptions,
-  TEvents extends IFrameEvents = IFrameEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends IFrameEvents = IFrameEvents
+> extends Container<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-frame */

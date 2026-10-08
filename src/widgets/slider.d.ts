@@ -52,12 +52,8 @@ export interface ISliderEvents extends IWidgetEvents {}
  */
 export declare class Slider<
   TOptions extends ISliderOptions = ISliderOptions,
-  TEvents extends ISliderEvents = ISliderEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
+  TEvents extends ISliderEvents = ISliderEvents
+> extends Widget<TOptions, TEvents> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-slider */
