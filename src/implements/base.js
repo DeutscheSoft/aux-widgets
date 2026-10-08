@@ -486,6 +486,7 @@ export class Base {
    * otherwise. If the option was set, it will emit a <code>useraction</code> event.
    *
    * @method Base#userset
+   * @protected
    *
    * @param {string} key - The name of the option.
    * @param {mixed} value - The value of the option.

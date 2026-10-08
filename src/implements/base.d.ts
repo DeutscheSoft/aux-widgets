@@ -146,7 +146,18 @@ export declare class Base<
    * @param key - The option name
    * @returns The option value, or undefined if not set
    */
-  get<K extends keyof TOptions>(key: K): TOptions[K] | undefined;
+  get<K extends keyof Options>(key: K): Options[K] | undefined;
+
+  /**
+   * Sets an option by user interaction. Emits `userset` (cancelable) then
+   * updates the option and emits `useraction`.
+   *
+   * @returns `false` if a `userset` handler cancelled the change, otherwise `true`
+   */
+  protected userset<K extends keyof Interactive & string>(
+    key: K,
+    value: Interactive[K]
+  ): boolean;
 
   /**
    * Register an event handler.
