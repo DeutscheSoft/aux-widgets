@@ -1,5 +1,9 @@
-import { Widget, IWidgetOptions, IWidgetEvents } from './widget.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Widget,
+  IWidgetOptions,
+  IWidgetEvents,
+  WidgetInteractiveOptions,
+} from './widget.js';
 
 /**
  * Visible state for Container.
@@ -40,6 +44,11 @@ export interface IContainerEvents extends IWidgetEvents {
 }
 
 /**
+ * Container options that may be changed through user interaction.
+ */
+export interface ContainerInteractiveOptions extends WidgetInteractiveOptions {}
+
+/**
  * Container represents a DIV element containing various
  * other widgets or DOMNodes.
  *
@@ -55,8 +64,9 @@ export interface IContainerEvents extends IWidgetEvents {
  */
 export declare class Container<
   TOptions extends IContainerOptions = IContainerOptions,
-  TEvents extends IContainerEvents = IContainerEvents
-> extends Widget<TOptions, TEvents> {
+  TEvents extends IContainerEvents = IContainerEvents,
+  Interactive extends ContainerInteractiveOptions = ContainerInteractiveOptions
+> extends Widget<TOptions, TEvents, Interactive> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV element. Has class .aux-container */

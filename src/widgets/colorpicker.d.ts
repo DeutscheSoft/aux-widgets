@@ -1,5 +1,9 @@
-import { Container, IContainerOptions, IContainerEvents } from './container.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Container,
+  IContainerOptions,
+  IContainerEvents,
+  ContainerInteractiveOptions,
+} from './container.js';
 import { Value } from './value.js';
 import { ValueKnob } from './valueknob.js';
 import { Button } from './button.js';
@@ -92,13 +96,39 @@ export interface IColorPickerEvents extends IContainerEvents {
 }
 
 /**
+ * ColorPicker options that may be changed through user interaction.
+ */
+export interface ColorPickerInteractiveOptions
+  extends ContainerInteractiveOptions {
+  /** An object containing members r(ed), g(reen) and b(lue) as numerical values. */
+  rgb: IColorPickerOptions['rgb'];
+  /** An object containing members h(ue), s(aturation) and l(ightness) as numerical values. */
+  hsl: IColorPickerOptions['hsl'];
+  /** A HEX color value, either with or without leading #. */
+  hex: IColorPickerOptions['hex'];
+  /** A numerical value 0..1 for the hue. */
+  hue: IColorPickerOptions['hue'];
+  /** A numerical value 0..1 for the saturation. */
+  saturation: IColorPickerOptions['saturation'];
+  /** A numerical value 0..1 for the lightness. */
+  lightness: IColorPickerOptions['lightness'];
+  /** A numerical value 0..255 for the amount of red. */
+  red: IColorPickerOptions['red'];
+  /** A numerical value 0..255 for the amount of green. */
+  green: IColorPickerOptions['green'];
+  /** A numerical value 0..255 for the amount of blue. */
+  blue: IColorPickerOptions['blue'];
+}
+
+/**
  * ColorPicker provides a collection of widgets to select a color in
  * RGB or HSL color space.
  */
 export declare class ColorPicker<
   TOptions extends IColorPickerOptions = IColorPickerOptions,
-  TEvents extends IColorPickerEvents = IColorPickerEvents
-> extends Container<TOptions, TEvents> {
+  TEvents extends IColorPickerEvents = IColorPickerEvents,
+  Interactive extends ColorPickerInteractiveOptions = ColorPickerInteractiveOptions
+> extends Container<TOptions, TEvents, Interactive> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-colorpicker */

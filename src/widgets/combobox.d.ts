@@ -1,5 +1,9 @@
-import { Widget, IWidgetOptions, IWidgetEvents } from './widget.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Widget,
+  IWidgetOptions,
+  IWidgetEvents,
+  WidgetInteractiveOptions,
+} from './widget.js';
 import { Select, SelectEntry, ISelectEntryInput } from './select.js';
 import { Value, IEditMode } from './value.js';
 
@@ -33,12 +37,21 @@ export interface IComboBoxEvents extends IWidgetEvents {
 }
 
 /**
+ * ComboBox options that may be changed through user interaction.
+ */
+export interface ComboBoxInteractiveOptions extends WidgetInteractiveOptions {
+  /** The value of the combobox. */
+  value: IComboBoxOptions['value'];
+}
+
+/**
  * Combobox is a combination of a Select and a Value.
  */
 export declare class ComboBox<
   TOptions extends IComboBoxOptions = IComboBoxOptions,
-  TEvents extends IComboBoxEvents = IComboBoxEvents
-> extends Widget<TOptions, TEvents> {
+  TEvents extends IComboBoxEvents = IComboBoxEvents,
+  Interactive extends ComboBoxInteractiveOptions = ComboBoxInteractiveOptions
+> extends Widget<TOptions, TEvents, Interactive> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV element. Has class .aux-combobox */

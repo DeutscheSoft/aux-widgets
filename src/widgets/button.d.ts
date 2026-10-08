@@ -2,7 +2,7 @@ import {
   Widget,
   IWidgetOptions,
   IWidgetEvents,
-  EffectiveEvents,
+  WidgetInteractiveOptions,
 } from './widget.js';
 
 /**
@@ -53,16 +53,23 @@ export interface IButtonEvents extends IWidgetEvents {
 }
 
 /**
+ * Button options that may be changed through user interaction.
+ */
+export interface ButtonInteractiveOptions extends WidgetInteractiveOptions {}
+
+/**
  * Button is a simple, clickable widget containing an Icon and a Label to trigger functions.
  * Button serves as base for other widgets, too, e.g. Toggle, ConfirmButton and Select.
  *
  * @template TOptions - The options type for this button. Extends IButtonOptions.
  * @template TEvents - The events type for this button. Extends IButtonEvents.
+ * @template Interactive - Options that may be set via user interaction.
  */
 export declare class Button<
   TOptions extends IButtonOptions = IButtonOptions,
-  TEvents extends IButtonEvents = IButtonEvents
-> extends Widget<TOptions, TEvents> {
+  TEvents extends IButtonEvents = IButtonEvents,
+  Interactive extends ButtonInteractiveOptions = ButtonInteractiveOptions
+> extends Widget<TOptions, TEvents, Interactive> {
   /**
    * Creates a new Button instance.
    *

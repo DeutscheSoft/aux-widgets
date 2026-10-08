@@ -1,5 +1,9 @@
-import { Widget, IWidgetOptions, IWidgetEvents } from './widget.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Widget,
+  IWidgetOptions,
+  IWidgetEvents,
+  WidgetInteractiveOptions,
+} from './widget.js';
 import { Range } from '../modules/range.js';
 import { DragCapture } from '../modules/dragcapture.js';
 
@@ -188,13 +192,27 @@ export interface IChartHandleEvents extends IWidgetEvents {
 }
 
 /**
+ * ChartHandle options that may be changed through user interaction.
+ */
+export interface ChartHandleInteractiveOptions
+  extends WidgetInteractiveOptions {
+  /** Value of the x-coordinate. */
+  x: IChartHandleOptions['x'];
+  /** Value of the y-coordinate. */
+  y: IChartHandleOptions['y'];
+  /** Value of the z-coordinate. */
+  z: IChartHandleOptions['z'];
+}
+
+/**
  * ChartHandle is a draggable SVG element, which can be used to represent and change
  * a value inside a FrequencyResponse and is drawn inside of a Chart.
  */
 export declare class ChartHandle<
   TOptions extends IChartHandleOptions = IChartHandleOptions,
-  TEvents extends IChartHandleEvents = IChartHandleEvents
-> extends Widget<TOptions, TEvents> {
+  TEvents extends IChartHandleEvents = IChartHandleEvents,
+  Interactive extends ChartHandleInteractiveOptions = ChartHandleInteractiveOptions
+> extends Widget<TOptions, TEvents, Interactive> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main SVG group containing all handle elements. Has class .aux-charthandle */

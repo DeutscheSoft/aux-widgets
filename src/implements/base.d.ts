@@ -109,26 +109,44 @@ export type EffectiveEvents<TOptions, TEvents extends IBaseEvents> = TEvents &
   OptionSetEvents<TOptions>;
 
 /**
+ * Union of `[key, value]` tuples for each property of `O`.
+ * Used to type `userset` / `useraction` handlers.
+ */
+export type OptionKV<O> = {
+  [K in keyof O]-?: [key: Extract<K, string>, value: O[K]];
+}[keyof O];
+
+/**
+ * Options that may be changed through user interaction (`userset` / `useraction`).
+ * Subclasses extend this the same way they extend their full options interfaces.
+ */
+export interface InteractiveOptions {}
+
+/**
  * Base class that provides the core API for options management and event handling.
  * Base does not define any options itself - it only provides the API.
  *
- * @template TOptions - The options type for this class.
- * @template TEvents - The events type for this class. Extends IBaseEvents.
+ * @template Options - The options type for this class.
+ * @template Events - The events type for this class. Extends IBaseEvents.
+ * @template Interactive - Options that may be set via user interaction.
  */
 export declare class Base<
-  TOptions = Record<string, unknown>,
-  TEvents extends IBaseEvents = IBaseEvents
+  Options = Record<string, unknown>,
+  Events extends IBaseEvents = IBaseEvents,
+  Interactive extends InteractiveOptions = InteractiveOptions
 > {
   /** @internal */
-  protected readonly __optionsType: TOptions;
+  protected readonly __optionsType: Options;
   /** @internal */
-  protected readonly __eventsType: TEvents;
+  protected readonly __eventsType: Events;
+  /** @internal */
+  protected readonly __interactiveOptionsType: Interactive;
 
   /**
    * The options object containing all options.
    * Options can be accessed directly via this property or using the `get()` method.
    */
-  options: TOptions;
+  options: Options;
 
   /**
    * Sets an option value.
@@ -138,7 +156,7 @@ export declare class Base<
    * @param value - The option value
    * @returns The value that was set
    */
-  set<K extends keyof TOptions>(key: K, value: TOptions[K]): TOptions[K];
+  set<K extends keyof Options>(key: K, value: Options[K]): Options[K];
 
   /**
    * Gets an option value.
@@ -166,9 +184,9 @@ export declare class Base<
    * @param event - The event name
    * @param func - The function to call when the event happens
    */
-  on<K extends keyof EffectiveEvents<TOptions, TEvents>>(
+  on<K extends keyof EffectiveEvents<Options, Events>>(
     event: K,
-    func: EffectiveEvents<TOptions, TEvents>[K]
+    func: EffectiveEvents<Options, Events>[K]
   ): void;
 
   /**
@@ -178,9 +196,9 @@ export declare class Base<
    * @param event - The event name
    * @param func - The function to call when the event happens
    */
-  addEventListener<K extends keyof EffectiveEvents<TOptions, TEvents>>(
+  addEventListener<K extends keyof EffectiveEvents<Options, Events>>(
     event: K,
-    func: EffectiveEvents<TOptions, TEvents>[K]
+    func: EffectiveEvents<Options, Events>[K]
   ): void;
 
   /**
@@ -190,9 +208,9 @@ export declare class Base<
    * @param event - The event name
    * @param func - The function to remove
    */
-  off<K extends keyof EffectiveEvents<TOptions, TEvents>>(
+  off<K extends keyof EffectiveEvents<Options, Events>>(
     event: K,
-    func: EffectiveEvents<TOptions, TEvents>[K]
+    func: EffectiveEvents<Options, Events>[K]
   ): void;
 
   /**
@@ -202,9 +220,9 @@ export declare class Base<
    * @param event - The event name
    * @param func - The function to remove
    */
-  removeEventListener<K extends keyof EffectiveEvents<TOptions, TEvents>>(
+  removeEventListener<K extends keyof EffectiveEvents<Options, Events>>(
     event: K,
-    func: EffectiveEvents<TOptions, TEvents>[K]
+    func: EffectiveEvents<Options, Events>[K]
   ): void;
 
   /**
@@ -216,9 +234,9 @@ export declare class Base<
    * @param func - The function to call when the event happens
    * @returns A function to unsubscribe
    */
-  subscribe<K extends keyof EffectiveEvents<TOptions, TEvents>>(
+  subscribe<K extends keyof EffectiveEvents<Options, Events>>(
     event: K,
-    func: EffectiveEvents<TOptions, TEvents>[K]
+    func: EffectiveEvents<Options, Events>[K]
   ): () => void;
 
   /**
@@ -229,9 +247,9 @@ export declare class Base<
    * @param func - The function to call when the event happens
    * @returns A function to unsubscribe (can be called before the event fires)
    */
-  once<K extends keyof EffectiveEvents<TOptions, TEvents>>(
+  once<K extends keyof EffectiveEvents<Options, Events>>(
     event: K,
-    func: EffectiveEvents<TOptions, TEvents>[K]
+    func: EffectiveEvents<Options, Events>[K]
   ): () => void;
 
   /**
@@ -242,7 +260,7 @@ export declare class Base<
    * @param args - Event arguments (type-checked based on the event handler signature)
    * @returns The return value from the event handler, or undefined
    */
-  emit<K extends keyof EffectiveEvents<TOptions, TEvents>>(
+  emit<K extends keyof EffectiveEvents<Options, Events>>(
     event: K,
     ...args: any[]
   ): any;
@@ -255,7 +273,7 @@ export declare class Base<
    * @param args - Event arguments (type-checked based on the event handler signature)
    * @returns The return value from the event handler, or undefined
    */
-  dispatchEvent<K extends keyof EffectiveEvents<TOptions, TEvents>>(
+  dispatchEvent<K extends keyof EffectiveEvents<Options, Events>>(
     event: K,
     ...args: any[]
   ): any;
@@ -268,9 +286,9 @@ export declare class Base<
    * @param func - Optional: specific function to check for
    * @returns True if the event has listeners
    */
-  hasEventListener<K extends keyof EffectiveEvents<TOptions, TEvents>>(
+  hasEventListener<K extends keyof EffectiveEvents<Options, Events>>(
     event: K,
-    func?: EffectiveEvents<TOptions, TEvents>[K]
+    func?: EffectiveEvents<Options, Events>[K]
   ): boolean;
 
   /**
@@ -280,7 +298,7 @@ export declare class Base<
    * @param event - The event name
    * @returns True if the event has any listeners
    */
-  hasEventListeners<K extends keyof EffectiveEvents<TOptions, TEvents>>(
+  hasEventListeners<K extends keyof EffectiveEvents<Options, Events>>(
     event: K
   ): boolean;
 }

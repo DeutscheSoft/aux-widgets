@@ -1,5 +1,9 @@
-import { Button, IButtonOptions, IButtonEvents } from './button.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Button,
+  IButtonOptions,
+  IButtonEvents,
+  ButtonInteractiveOptions,
+} from './button.js';
 
 /**
  * Options specific to the ConfirmButton widget.
@@ -37,9 +41,16 @@ export interface IConfirmButtonEvents extends IButtonEvents {
  * resets it, too. It receives class .aux-active while waiting for
  * the confirmation.
  */
+/**
+ * ConfirmButton options that may be changed through user interaction.
+ */
+export interface ConfirmButtonInteractiveOptions
+  extends ButtonInteractiveOptions {}
+
 export declare class ConfirmButton<
   TOptions extends IConfirmButtonOptions = IConfirmButtonOptions,
-  TEvents extends IConfirmButtonEvents = IConfirmButtonEvents
-> extends Button<TOptions, TEvents> {
+  TEvents extends IConfirmButtonEvents = IConfirmButtonEvents,
+  Interactive extends ConfirmButtonInteractiveOptions = ConfirmButtonInteractiveOptions
+> extends Button<TOptions, TEvents, Interactive> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 }
