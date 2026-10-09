@@ -71,19 +71,18 @@ export declare class Dialog<
 
   /**
    * Open the dialog. Optionally set x and y position regarding anchor.
+   * Uses Container#show so showing_duration can animate.
    * @param x - New X-position of the dialog.
    * @param y - New Y-position of the dialog.
    * @param focus - Element to receive focus after opening the dialog.
    */
-  open(x?: number | string, y?: number | string, focus?: HTMLElement): void;
+  open(x?: number | string, y?: number | string, focus?: HTMLElement): boolean;
 
   /**
-   * Close the dialog. The node is removed from DOM if auto_remove is set to true.
+   * Close the dialog. Uses Container#hide so hiding_duration can animate.
+   * The node is removed from DOM if auto_remove is set to true.
    */
-  close(): void;
+  close(): boolean;
 
-  /**
-   * Reposition the dialog to the current x and y position.
-   */
-  reposition(): void;
+  destroy(): void;
 }
