@@ -1,9 +1,5 @@
-import {
-  Widget,
-  IWidgetOptions,
-  IWidgetEvents,
-  WidgetInteractiveOptions,
-} from './widget.js';
+import { Widget, IWidgetOptions, IWidgetEvents } from './widget.js';
+import { ValueInteractiveOptions } from './value.js';
 import { IRangedOptions } from '../utils/ranged.js';
 import { IWarningOptions } from '../utils/warning.js';
 
@@ -76,8 +72,9 @@ export interface IFaderEvents extends IWidgetEvents {
 
 /**
  * Fader options that may be changed through user interaction.
+ * Extends {@link ValueInteractiveOptions} for the Value child (`userset_delegate`).
  */
-export interface FaderInteractiveOptions extends WidgetInteractiveOptions {
+export interface FaderInteractiveOptions extends ValueInteractiveOptions {
   /** The fader's position. This option is modified by user interaction. */
   value: IFaderOptions['value'];
 }

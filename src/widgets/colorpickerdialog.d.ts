@@ -4,15 +4,18 @@ import {
   IDialogEvents,
   DialogInteractiveOptions,
 } from './dialog.js';
+import { ColorPickerInteractiveOptions } from './colorpicker.js';
 
 export interface IColorPickerDialogOptions extends IDialogOptions {}
 export interface IColorPickerDialogEvents extends IDialogEvents {}
 
 /**
  * ColorPickerDialog options that may be changed through user interaction.
+ * Includes ColorPicker keys forwarded via `userset_delegate` on the child.
  */
 export interface ColorPickerDialogInteractiveOptions
-  extends DialogInteractiveOptions {}
+  extends DialogInteractiveOptions,
+    ColorPickerInteractiveOptions {}
 
 /**
  * ColorPickerDialog is a Dialog containing a ColorPicker.
