@@ -1,3 +1,7 @@
+/**
+ * Regression checks that widget type parameters infer without collapsing
+ * to `any` / overly wide unions when using the public helpers.
+ */
 import type {
   Fader,
   Button,
@@ -13,7 +17,15 @@ import type {
   WidgetEventsOf,
   WidgetDeclaredEventsOf,
 } from '../src/index.js';
-import { Assert, Eq, HasKey, LacksKey, IsAny, Not } from './helpers.js';
+import {
+  Assert,
+  Eq,
+  HasKey,
+  LacksKey,
+  IsAny,
+  Not,
+  assertMutualAssignable,
+} from './helpers.js';
 
 type InfBaseE<T> = T extends Base<any, infer E> ? E : never;
 type InfWidgetE<T> = T extends Widget<any, infer E> ? E : never;
@@ -36,3 +48,22 @@ type _DeclLacksSet = Assert<
 
 type _BaseE = Assert<Eq<InfBaseE<Fader>, IFaderEvents>>;
 type _WidgetE = Assert<Eq<InfWidgetE<Fader>, IFaderEvents>>;
+
+// Two-parameter `extends Widget<infer O, infer E>` still resolves with the
+// defaulted InteractiveOptions type parameter.
+type FaderParams = Fader extends Widget<infer O, infer Evt> ? [O, Evt] : never;
+assertMutualAssignable<FaderParams[0], IFaderOptions>();
+assertMutualAssignable<FaderParams[1], IFaderEvents>();
+
+type Expected = EffectiveEvents<
+  IFaderOptions,
+  IFaderEvents,
+  FaderInteractiveOptions
+>;
+type Explicit = WidgetEventsOf<Fader<IFaderOptions, IFaderEvents>>;
+assertMutualAssignable<Explicit, Expected>();
+assertMutualAssignable<WidgetEventsOf<Fader>, Expected>();
+
+type SetValueParams = Parameters<WidgetEventsOf<Fader>['set_value']>;
+const setValueArgs: SetValueParams = [1, 'value', 0];
+void setValueArgs;
