@@ -1,10 +1,11 @@
+import { Container, IContainerOptions, IContainerEvents } from './container.js';
 import {
-  Container,
-  IContainerOptions,
-  IContainerEvents,
-  ContainerInteractiveOptions,
-} from './container.js';
-import { Pages, Page, IPagesPageInput, IPageOptions } from './pages.js';
+  Pages,
+  Page,
+  IPagesPageInput,
+  IPageOptions,
+  PagesInteractiveOptions,
+} from './pages.js';
 import { Navigation } from './navigation.js';
 import { Button, IButtonOptions } from './button.js';
 
@@ -47,8 +48,10 @@ export interface IPagerEvents extends IContainerEvents {
 
 /**
  * Pager options that may be changed through user interaction.
+ * `show` comes from Pages (same key) and from Navigation `select` (remapped).
  */
-export interface PagerInteractiveOptions extends ContainerInteractiveOptions {
+export interface PagerInteractiveOptions
+  extends Omit<PagesInteractiveOptions, 'show'> {
   /** The page index to show. Set to -1 to hide all pages. */
   show: IPagerOptions['show'];
 }
