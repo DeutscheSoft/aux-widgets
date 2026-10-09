@@ -966,10 +966,23 @@ export class Widget extends Base {
    * during the next rendering step.
    *
    * @method Widget#show
+   *
+   * @param {boolean} [userset=false] - If true, change <code>visible</code> via
+   *   {@link Base#userset} (cancellable).
+   * @returns {boolean} False if a userset was cancelled, otherwise true.
    */
-  show() {
-    if (this.hidden()) this.set('visible', true);
+  show(userset) {
+    if (!this.hidden()) {
+      if (!this.isDrawn()) this.enableDraw();
+      return true;
+    }
+    if (userset) {
+      if (false === this.userset('visible', true)) return false;
+    } else {
+      this.set('visible', true);
+    }
     if (!this.isDrawn()) this.enableDraw();
+    return true;
   }
 
   /**
@@ -990,10 +1003,16 @@ export class Widget extends Base {
    * being applied to this widget in the next rendering step.
    *
    * @method Widget#hide
+   *
+   * @param {boolean} [userset=false] - If true, change <code>visible</code> via
+   *   {@link Base#userset} (cancellable).
+   * @returns {boolean} False if a userset was cancelled, otherwise true.
    */
-  hide() {
-    if (this.hidden()) return;
+  hide(userset) {
+    if (this.hidden()) return true;
+    if (userset) return this.userset('visible', false);
     this.set('visible', false);
+    return true;
   }
 
   /**

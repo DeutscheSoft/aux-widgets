@@ -162,6 +162,20 @@ export declare class Widget<
    * @param options - An object containing initial options. All options are optional.
    */
   constructor(options?: Partial<NoInfer<TOptions>>);
+
+  /**
+   * Make the widget visible.
+   * @param userset - If true, go through Base#userset('visible', true).
+   * @returns False if a userset was cancelled, otherwise true.
+   */
+  show(userset?: boolean): boolean;
+
+  /**
+   * Hide the widget.
+   * @param userset - If true, go through Base#userset('visible', false).
+   * @returns False if a userset was cancelled, otherwise true.
+   */
+  hide(userset?: boolean): boolean;
 }
 
 /**

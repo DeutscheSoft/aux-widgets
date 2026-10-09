@@ -78,8 +78,10 @@ export declare class Container<
 
   /**
    * Starts the transition of the visible to false.
+   * @param userset - If true, go through Base#userset (value may be false or 'hiding').
+   * @returns False if a userset was cancelled, otherwise true.
    */
-  hide(): void;
+  hide(userset?: boolean): boolean;
 
   /**
    * Immediately hides the container without transition.
@@ -88,8 +90,10 @@ export declare class Container<
 
   /**
    * Starts the transition of the visible to true.
+   * @param userset - If true, go through Base#userset (value may be true or 'showing').
+   * @returns False if a userset was cancelled, otherwise true.
    */
-  show(): void;
+  show(userset?: boolean): boolean;
 
   /**
    * Immediately shows the container without transition.
