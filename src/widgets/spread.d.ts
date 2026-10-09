@@ -1,5 +1,9 @@
-import { Widget, IWidgetOptions, IWidgetEvents } from './widget.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Widget,
+  IWidgetOptions,
+  IWidgetEvents,
+  WidgetInteractiveOptions,
+} from './widget.js';
 import { IRangedOptions } from '../utils/ranged.js';
 import { IScaleOptions, IScaleLayout, Scale } from './scale.js';
 import { DragValue } from '../modules/dragvalue.js';
@@ -54,6 +58,16 @@ export interface ISpreadEvents extends Omit<IWidgetEvents, 'doubleclick'> {
 }
 
 /**
+ * Spread options that may be changed through user interaction.
+ */
+export interface SpreadInteractiveOptions extends WidgetInteractiveOptions {
+  /** The spread's lower position. This option is modified by user interaction. */
+  lower: ISpreadOptions['lower'];
+  /** The spread's upper position. This option is modified by user interaction. */
+  upper: ISpreadOptions['upper'];
+}
+
+/**
  * Spread is a slidable control with a Scale next to it which
  * can be both dragged and scrolled. Spread implements Ranged
  * and inherits its options.
@@ -61,8 +75,9 @@ export interface ISpreadEvents extends Omit<IWidgetEvents, 'doubleclick'> {
  */
 export declare class Spread<
   TOptions extends ISpreadOptions = ISpreadOptions,
-  TEvents extends ISpreadEvents = ISpreadEvents
-> extends Widget<TOptions, TEvents> {
+  TEvents extends ISpreadEvents = ISpreadEvents,
+  Interactive extends SpreadInteractiveOptions = SpreadInteractiveOptions
+> extends Widget<TOptions, TEvents, Interactive> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-spread */

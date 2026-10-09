@@ -1,5 +1,9 @@
-import { Container, IContainerOptions, IContainerEvents } from './container.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Container,
+  IContainerOptions,
+  IContainerEvents,
+  ContainerInteractiveOptions,
+} from './container.js';
 
 /**
  * Anchor position for dialog placement.
@@ -52,6 +56,14 @@ export interface IDialogEvents extends IContainerEvents {
 }
 
 /**
+ * Dialog options that may be changed through user interaction.
+ */
+export interface DialogInteractiveOptions extends ContainerInteractiveOptions {
+  /** The visible state of the container. Can be a boolean or one of the transition states ('hiding', 'showing', 'show', 'hide'). */
+  visible: IDialogOptions['visible'];
+}
+
+/**
  * Dialog provides a hovering area which can be closed by clicking/tapping
  * anywhere on the screen. It can be automatically pushed to the topmost
  * DOM position as a child of an AWML-ROOT or the BODY element. On close
@@ -60,8 +72,9 @@ export interface IDialogEvents extends IContainerEvents {
  */
 export declare class Dialog<
   TOptions extends IDialogOptions = IDialogOptions,
-  TEvents extends IDialogEvents = IDialogEvents
-> extends Container<TOptions, TEvents> {
+  TEvents extends IDialogEvents = IDialogEvents,
+  Interactive extends DialogInteractiveOptions = DialogInteractiveOptions
+> extends Container<TOptions, TEvents, Interactive> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV element. Has class .aux-dialog */

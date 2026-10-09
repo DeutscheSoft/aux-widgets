@@ -1,4 +1,3 @@
-import { EffectiveEvents } from '../implements/base.js';
 import {
   IStandardBiquadFilterName,
   IBiquadTransform,
@@ -7,6 +6,7 @@ import {
   ChartHandle,
   IChartHandleOptions,
   IChartHandleEvents,
+  ChartHandleInteractiveOptions,
 } from './charthandle.js';
 import { Filter } from '../modules/filter.js';
 
@@ -36,6 +36,19 @@ export interface IEqBandEvents extends IChartHandleEvents {
 }
 
 /**
+ * EqBand options that may be changed through user interaction.
+ */
+export interface EqBandInteractiveOptions
+  extends ChartHandleInteractiveOptions {
+  /** Frequency setting. This is an alias for the option x defined by ChartHandle. */
+  freq: NonNullable<IEqBandOptions['freq']>;
+  /** Gain setting. This is an alias for the option y defined by ChartHandle. */
+  gain: NonNullable<IEqBandOptions['gain']>;
+  /** Quality setting. This is an alias for the option z defined by ChartHandle. */
+  q: NonNullable<IEqBandOptions['q']>;
+}
+
+/**
  * An EqBand extends a ChartHandle and holds a
  * dependent Filter. It is used as a fully functional representation
  * of a single equalizer band in Equalizer. EqBand needs a Chart
@@ -43,8 +56,9 @@ export interface IEqBandEvents extends IChartHandleEvents {
  */
 export declare class EqBand<
   TOptions extends IEqBandOptions = IEqBandOptions,
-  TEvents extends IEqBandEvents = IEqBandEvents
-> extends ChartHandle<TOptions, TEvents> {
+  TEvents extends IEqBandEvents = IEqBandEvents,
+  Interactive extends EqBandInteractiveOptions = EqBandInteractiveOptions
+> extends ChartHandle<TOptions, TEvents, Interactive> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main SVG group. Has class .aux-eqband */

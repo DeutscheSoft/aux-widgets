@@ -1,5 +1,9 @@
-import { Container, IContainerOptions, IContainerEvents } from './container.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Container,
+  IContainerOptions,
+  IContainerEvents,
+  ContainerInteractiveOptions,
+} from './container.js';
 import { ChildWidgets } from '../utils/child_widgets.js';
 
 /**
@@ -73,12 +77,21 @@ export interface IPageEvents extends IContainerEvents {
 }
 
 /**
+ * Pages options that may be changed through user interaction.
+ */
+export interface PagesInteractiveOptions extends ContainerInteractiveOptions {
+  /** The page index to show. Set to -1 to hide all pages. */
+  show: IPagesOptions['show'];
+}
+
+/**
  * Pages contains different Page widgets which can be switched via option.
  */
 export declare class Pages<
   TOptions extends IPagesOptions = IPagesOptions,
-  TEvents extends IPagesEvents = IPagesEvents
-> extends Container<TOptions, TEvents> {
+  TEvents extends IPagesEvents = IPagesEvents,
+  Interactive extends PagesInteractiveOptions = PagesInteractiveOptions
+> extends Container<TOptions, TEvents, Interactive> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV element. Has class .aux-pages */

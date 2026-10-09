@@ -1,5 +1,9 @@
-import { Button, IButtonOptions, IButtonEvents } from './button.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Button,
+  IButtonOptions,
+  IButtonEvents,
+  ButtonInteractiveOptions,
+} from './button.js';
 import { Icon } from './icon.js';
 import { Label } from './label.js';
 
@@ -110,12 +114,23 @@ export declare class SelectEntry<
 }
 
 /**
+ * Select options that may be changed through user interaction.
+ */
+export interface SelectInteractiveOptions extends ButtonInteractiveOptions {
+  /** The index of the selected SelectEntry. Set to -1 to unselect any already selected entries. */
+  selected: ISelectOptions['selected'];
+  /** The value of the selected entry. */
+  value: ISelectOptions['value'];
+}
+
+/**
  * Select provides a Button with a select list to choose from a list of SelectEntry.
  */
 export declare class Select<
   TOptions extends ISelectOptions = ISelectOptions,
-  TEvents extends ISelectEvents = ISelectEvents
-> extends Button<TOptions, TEvents> {
+  TEvents extends ISelectEvents = ISelectEvents,
+  Interactive extends SelectInteractiveOptions = SelectInteractiveOptions
+> extends Button<TOptions, TEvents, Interactive> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-select */

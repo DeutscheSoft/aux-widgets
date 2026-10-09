@@ -1,5 +1,9 @@
-import { Button, IButtonOptions, IButtonEvents } from './button.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Button,
+  IButtonOptions,
+  IButtonEvents,
+  ButtonInteractiveOptions,
+} from './button.js';
 import { IRangedOptions } from '../utils/ranged.js';
 import { DragValue, IDragDirection } from '../modules/dragvalue.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
@@ -43,14 +47,24 @@ export interface IValueButtonEvents extends Omit<IButtonEvents, 'doubleclick'> {
 }
 
 /**
+ * ValueButton options that may be changed through user interaction.
+ */
+export interface ValueButtonInteractiveOptions
+  extends ButtonInteractiveOptions {
+  /** The value of the widget. */
+  value: IValueButtonOptions['value'];
+}
+
+/**
  * ValueButton combines a Button, a Scale and a Value.
  * ValueButton uses DragValue and ScrollValue for setting its value.
  * It inherits all options of DragValue and Scale.
  */
 export declare class ValueButton<
   TOptions extends IValueButtonOptions = IValueButtonOptions,
-  TEvents extends IValueButtonEvents = IValueButtonEvents
-> extends Button<TOptions, TEvents> {
+  TEvents extends IValueButtonEvents = IValueButtonEvents,
+  Interactive extends ValueButtonInteractiveOptions = ValueButtonInteractiveOptions
+> extends Button<TOptions, TEvents, Interactive> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-valuebutton */

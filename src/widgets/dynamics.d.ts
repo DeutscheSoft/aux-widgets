@@ -1,5 +1,9 @@
-import { Chart, IChartOptions, IChartEvents } from './chart.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Chart,
+  IChartOptions,
+  IChartEvents,
+  ChartInteractiveOptions,
+} from './chart.js';
 import { ChartHandle } from './charthandle.js';
 import { Graph } from './graph.js';
 
@@ -83,14 +87,25 @@ export interface IDynamicsEvents extends IChartEvents {
 }
 
 /**
+ * Dynamics options that may be changed through user interaction.
+ */
+export interface DynamicsInteractiveOptions extends ChartInteractiveOptions {
+  /** Threshold of the dynamics. */
+  threshold: IDynamicsOptions['threshold'];
+  /** Ratio of the dynamics. */
+  ratio: IDynamicsOptions['ratio'];
+}
+
+/**
  * Dynamics are based on Chart and display the characteristics of dynamic
  * processors. They are square widgets drawing a Grid automatically based on
  * the range.
  */
 export declare class Dynamics<
   TOptions extends IDynamicsOptions = IDynamicsOptions,
-  TEvents extends IDynamicsEvents = IDynamicsEvents
-> extends Chart<TOptions, TEvents> {
+  TEvents extends IDynamicsEvents = IDynamicsEvents,
+  Interactive extends DynamicsInteractiveOptions = DynamicsInteractiveOptions
+> extends Chart<TOptions, TEvents, Interactive> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-dynamics */
@@ -134,8 +149,9 @@ export interface ICompressorEvents extends IDynamicsEvents {
  */
 export declare class Compressor<
   TOptions extends ICompressorOptions = ICompressorOptions,
-  TEvents extends ICompressorEvents = ICompressorEvents
-> extends Dynamics<TOptions, TEvents> {
+  TEvents extends ICompressorEvents = ICompressorEvents,
+  Interactive extends DynamicsInteractiveOptions = DynamicsInteractiveOptions
+> extends Dynamics<TOptions, TEvents, Interactive> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-compressor */
@@ -165,8 +181,9 @@ export interface IExpanderEvents extends IDynamicsEvents {
  */
 export declare class Expander<
   TOptions extends IExpanderOptions = IExpanderOptions,
-  TEvents extends IExpanderEvents = IExpanderEvents
-> extends Dynamics<TOptions, TEvents> {
+  TEvents extends IExpanderEvents = IExpanderEvents,
+  Interactive extends DynamicsInteractiveOptions = DynamicsInteractiveOptions
+> extends Dynamics<TOptions, TEvents, Interactive> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-expander */
@@ -194,8 +211,9 @@ export interface IGateEvents extends IDynamicsEvents {
  */
 export declare class Gate<
   TOptions extends IGateOptions = IGateOptions,
-  TEvents extends IGateEvents = IGateEvents
-> extends Dynamics<TOptions, TEvents> {
+  TEvents extends IGateEvents = IGateEvents,
+  Interactive extends DynamicsInteractiveOptions = DynamicsInteractiveOptions
+> extends Dynamics<TOptions, TEvents, Interactive> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-gate */
@@ -223,8 +241,9 @@ export interface ILimiterEvents extends IDynamicsEvents {
  */
 export declare class Limiter<
   TOptions extends ILimiterOptions = ILimiterOptions,
-  TEvents extends ILimiterEvents = ILimiterEvents
-> extends Dynamics<TOptions, TEvents> {
+  TEvents extends ILimiterEvents = ILimiterEvents,
+  Interactive extends DynamicsInteractiveOptions = DynamicsInteractiveOptions
+> extends Dynamics<TOptions, TEvents, Interactive> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-limiter */

@@ -2,7 +2,7 @@ import {
   Base,
   IBaseEvents,
   EffectiveEvents,
-  OptionSetEvents,
+  InteractiveOptions,
 } from '../implements/base.js';
 
 /**
@@ -146,16 +146,24 @@ export interface IWidgetOptions {
 }
 
 /**
+ * Widget options that may be changed through user interaction.
+ * Subclasses extend this alongside their `I*Options` interfaces.
+ */
+export interface WidgetInteractiveOptions extends InteractiveOptions {}
+
+/**
  * Widget is the base class for all widgets drawing DOM elements.
  * It extends Base and adds WidgetOptions. The core API (set, get, options, events) comes from Base.
  *
  * @template TOptions - The options type for this widget. Extends IWidgetOptions.
  * @template TEvents - The events type for this widget. Extends IWidgetEvents.
+ * @template Interactive - Options that may be set via user interaction.
  */
 export declare class Widget<
   TOptions extends IWidgetOptions = IWidgetOptions,
-  TEvents extends IWidgetEvents = IWidgetEvents
-> extends Base<TOptions, TEvents> {
+  TEvents extends IWidgetEvents = IWidgetEvents,
+  Interactive extends WidgetInteractiveOptions = WidgetInteractiveOptions
+> extends Base<TOptions, TEvents, Interactive> {
   /**
    * Creates a new Widget instance.
    *
@@ -182,15 +190,23 @@ export declare class Widget<
  * Options type of a widget (or other `Base` subclass).
  * Returns `never` if `T` does not extend `Base`.
  */
-export type WidgetOptionsOf<T> = T extends Base<infer O, any> ? O : never;
+export type WidgetOptionsOf<T> = T extends Base<infer O, any, any> ? O : never;
 
 /**
  * Declared events of a widget (or other `Base` subclass), without synthetic
  * `set_*` option events.
  * Returns `never` if `T` does not extend `Base`.
  */
-export type WidgetDeclaredEventsOf<T> = T extends Base<any, infer E>
+export type WidgetDeclaredEventsOf<T> = T extends Base<any, infer E, any>
   ? E
+  : never;
+
+/**
+ * Interactive options of a widget (or other `Base` subclass).
+ * Returns `never` if `T` does not extend `Base`.
+ */
+export type WidgetInteractiveOptionsOf<T> = T extends Base<any, any, infer I>
+  ? I
   : never;
 
 /**
@@ -198,8 +214,13 @@ export type WidgetDeclaredEventsOf<T> = T extends Base<any, infer E>
  * plus synthetic `set_${option}` events for each option.
  * Returns `never` if `T` does not extend `Base`.
  */
-export type WidgetEventsOf<T> = T extends Base<any, any>
+export type WidgetEventsOf<T> = T extends Base<any, any, any>
   ? EffectiveEvents<WidgetOptionsOf<T>, WidgetDeclaredEventsOf<T>>
   : never;
 
-export type { EffectiveEvents, OptionSetEvents };
+export type {
+  EffectiveEvents,
+  OptionSetEvents,
+  OptionKV,
+  InteractiveOptions,
+} from '../implements/base.js';

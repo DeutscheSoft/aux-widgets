@@ -1,5 +1,9 @@
-import { Widget, IWidgetOptions, IWidgetEvents } from './widget.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Widget,
+  IWidgetOptions,
+  IWidgetEvents,
+  WidgetInteractiveOptions,
+} from './widget.js';
 import { ICircularOptions, Circular, ILabel } from './circular.js';
 import { DragValue, IDragDirection } from '../modules/dragvalue.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
@@ -47,6 +51,14 @@ export interface IKnobOptions extends ICircularOptions {
 export interface IKnobEvents extends IWidgetEvents {}
 
 /**
+ * Knob options that may be changed through user interaction.
+ */
+export interface KnobInteractiveOptions extends WidgetInteractiveOptions {
+  /** Sets the value on the hand and on the ring at the same time. */
+  value: IKnobOptions['value'];
+}
+
+/**
  * Knob is a Circular inside of an SVG which can be
  * modified both by dragging and scrolling utilizing DragValue
  * and ScrollValue.
@@ -54,8 +66,9 @@ export interface IKnobEvents extends IWidgetEvents {}
  */
 export declare class Knob<
   TOptions extends IKnobOptions = IKnobOptions,
-  TEvents extends IKnobEvents = IKnobEvents
-> extends Widget<TOptions, TEvents> {
+  TEvents extends IKnobEvents = IKnobEvents,
+  Interactive extends KnobInteractiveOptions = KnobInteractiveOptions
+> extends Widget<TOptions, TEvents, Interactive> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-knob */

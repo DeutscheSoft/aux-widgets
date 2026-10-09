@@ -2,7 +2,7 @@ import {
   Widget,
   IWidgetOptions,
   IWidgetEvents,
-  EffectiveEvents,
+  WidgetInteractiveOptions,
 } from './widget.js';
 import { IRangedOptions } from '../utils/ranged.js';
 import { IWarningOptions } from '../utils/warning.js';
@@ -75,16 +75,26 @@ export interface IFaderEvents extends IWidgetEvents {
 }
 
 /**
+ * Fader options that may be changed through user interaction.
+ */
+export interface FaderInteractiveOptions extends WidgetInteractiveOptions {
+  /** The fader's position. This option is modified by user interaction. */
+  value: IFaderOptions['value'];
+}
+
+/**
  * Fader is a slidable control with a Scale next to it which can be both dragged and scrolled.
  * Fader implements Ranged and inherits its options. A Label and a Value are available optionally.
  *
  * @template TOptions - The options type for this fader. Extends IFaderOptions.
  * @template TEvents - The events type for this fader. Extends IFaderEvents.
+ * @template Interactive - Options that may be set via user interaction.
  */
 export declare class Fader<
   TOptions extends IFaderOptions = IFaderOptions,
-  TEvents extends IFaderEvents = IFaderEvents
-> extends Widget<TOptions, TEvents> {
+  TEvents extends IFaderEvents = IFaderEvents,
+  Interactive extends FaderInteractiveOptions = FaderInteractiveOptions
+> extends Widget<TOptions, TEvents, Interactive> {
   /**
    * Creates a new Fader instance.
    *

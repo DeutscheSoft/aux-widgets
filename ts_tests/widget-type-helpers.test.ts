@@ -18,6 +18,11 @@ import {
   cast,
   assertMutualAssignable,
 } from './helpers.js';
+import type {
+  FaderInteractiveOptions,
+  WidgetInteractiveOptions,
+  WidgetInteractiveOptionsOf,
+} from '../src/index.js';
 
 // --- WidgetOptionsOf<T> ---
 
@@ -65,6 +70,26 @@ assertMutualAssignable<ButtonDeclared, IButtonEvents>();
 assertMutualAssignable<WidgetDeclaredEventsOf<Widget>, IWidgetEvents>();
 
 type _NeverDeclared = Assert<IsNever<WidgetDeclaredEventsOf<string>>>;
+
+// --- WidgetInteractiveOptionsOf<T> ---
+
+assertMutualAssignable<
+  WidgetInteractiveOptionsOf<Fader>,
+  FaderInteractiveOptions
+>();
+assertMutualAssignable<
+  WidgetInteractiveOptionsOf<Widget>,
+  WidgetInteractiveOptions
+>();
+type _FaderInteractiveExtendsWidget = Assert<
+  FaderInteractiveOptions extends WidgetInteractiveOptions ? true : false
+>;
+type _FaderInteractiveHasValue = Assert<
+  HasKey<WidgetInteractiveOptionsOf<Fader>, 'value'>
+>;
+type _FaderInteractiveLacksLayout = Assert<
+  LacksKey<WidgetInteractiveOptionsOf<Fader>, 'layout'>
+>;
 
 // Value-level smoke (keeps cast() exercised)
 const _faderOptions: WidgetOptionsOf<Fader> = cast<IFaderOptions>();

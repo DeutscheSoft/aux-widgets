@@ -1,5 +1,4 @@
-import { Widget, IWidgetEvents } from './widget.js';
-import { EffectiveEvents } from '../implements/base.js';
+import { Widget, IWidgetEvents, WidgetInteractiveOptions } from './widget.js';
 import { Knob, IKnobOptions } from './knob.js';
 import { Value, IValueOptions } from './value.js';
 import { Label } from './label.js';
@@ -43,13 +42,22 @@ export interface IValueKnobEvents extends IWidgetEvents {
 }
 
 /**
+ * ValueKnob options that may be changed through user interaction.
+ */
+export interface ValueKnobInteractiveOptions extends WidgetInteractiveOptions {
+  /** The value. */
+  value: IValueKnobOptions['value'];
+}
+
+/**
  * ValueKnob combines a Knob, a Label and a Value whose value is synchronized.
  * It inherits all options from Knob and Value.
  */
 export declare class ValueKnob<
   TOptions extends IValueKnobOptions = IValueKnobOptions,
-  TEvents extends IValueKnobEvents = IValueKnobEvents
-> extends Widget<TOptions, TEvents> {
+  TEvents extends IValueKnobEvents = IValueKnobEvents,
+  Interactive extends ValueKnobInteractiveOptions = ValueKnobInteractiveOptions
+> extends Widget<TOptions, TEvents, Interactive> {
   constructor(options?: Partial<NoInfer<TOptions>>);
 
   /** The main DIV container. Has class .aux-valueknob */
