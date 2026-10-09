@@ -42,7 +42,6 @@ import { FORMAT } from '../utils/sprintf.js';
 import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
 import { objectAnd, objectSub } from '../utils/object.js';
 import { defineMeasure, defineRender } from '../renderer.js';
-import { applyLegacyUsersetEventsRanged } from '../utils/legacy_userset_events.js';
 
 const formatViewbox = /* @__PURE__ */ FORMAT('0 0 %d %d');
 function dblClick() {
@@ -327,21 +326,6 @@ export class Knob extends Widget {
    */
   removeLabel(x) {
     this.circular.removeLabel(x);
-  }
-
-  userset(key, value) {
-    if (key === 'value') {
-      const { transformation, snap_module } = this.circular.options;
-      return applyLegacyUsersetEventsRanged(
-        this,
-        transformation,
-        snap_module,
-        key,
-        value
-      );
-    } else {
-      return super.userset(key, value);
-    }
   }
 
   set(key, value) {

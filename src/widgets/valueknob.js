@@ -28,7 +28,6 @@ import {
   element,
   createID,
 } from '../utils/dom.js';
-import { applyLegacyUsersetEventsRanged } from '../utils/legacy_userset_events.js';
 import { defineRender, childDependency } from '../renderer.js';
 import { selectAriaAttribute } from '../utils/select_aria_attribute.js';
 
@@ -179,21 +178,6 @@ export class ValueKnob extends Widget {
         blacklist_options: ['size'],
       },
     ];
-  }
-
-  userset(key, value) {
-    if (key === 'value' && this.knob) {
-      const { transformation, snap_module } = this.knob.circular.options;
-      return applyLegacyUsersetEventsRanged(
-        this,
-        transformation,
-        snap_module,
-        key,
-        value
-      );
-    } else {
-      return super.userset(key, value);
-    }
   }
 
   initialize(options) {
