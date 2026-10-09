@@ -2,7 +2,7 @@ import {
   Base,
   IBaseEvents,
   EffectiveEvents,
-  InteractiveOptions,
+  IBaseInteractiveOptions,
 } from '../implements/base.js';
 
 /**
@@ -20,16 +20,6 @@ export type IFocusMoveDirection = 'up' | 'down' | 'left' | 'right';
  * Subclasses can extend this interface to add additional events.
  */
 export interface IWidgetEvents extends IBaseEvents {
-  /** Fired when an option is set via user interaction, BEFORE the option is updated.
-   *  This event can be used to cancel the modification by returning false.
-   *  Arguments: key, value
-   */
-  userset: (key: string, value: unknown) => void | false;
-  /** Fired after a user action sets an option, AFTER the option has been updated.
-   *  This event is triggered whenever the user changes a value, e.g. by moving a fader or similar.
-   *  Arguments: key, value
-   */
-  useraction: (key: string, value: unknown) => void;
   /** Fired when a widget is hidden and is not rendered anymore */
   hide: () => void;
   /** Fired when a widget is shown and is being rendered */
@@ -149,27 +139,27 @@ export interface IWidgetOptions {
  * Widget options that may be changed through user interaction.
  * Subclasses extend this alongside their `I*Options` interfaces.
  */
-export interface WidgetInteractiveOptions extends InteractiveOptions {}
+export interface WidgetInteractiveOptions extends IBaseInteractiveOptions {}
 
 /**
  * Widget is the base class for all widgets drawing DOM elements.
  * It extends Base and adds WidgetOptions. The core API (set, get, options, events) comes from Base.
  *
- * @template TOptions - The options type for this widget. Extends IWidgetOptions.
- * @template TEvents - The events type for this widget. Extends IWidgetEvents.
- * @template Interactive - Options that may be set via user interaction.
+ * @template Options - The options type for this widget. Extends IWidgetOptions.
+ * @template Events - The events type for this widget. Extends IWidgetEvents.
+ * @template InteractiveOptions - Options that may be set via user interaction.
  */
 export declare class Widget<
-  TOptions extends IWidgetOptions = IWidgetOptions,
-  TEvents extends IWidgetEvents = IWidgetEvents,
-  Interactive extends WidgetInteractiveOptions = WidgetInteractiveOptions
-> extends Base<TOptions, TEvents, Interactive> {
+  Options extends IWidgetOptions = IWidgetOptions,
+  Events extends IWidgetEvents = IWidgetEvents,
+  InteractiveOptions extends WidgetInteractiveOptions = WidgetInteractiveOptions
+> extends Base<Options, Events, InteractiveOptions> {
   /**
    * Creates a new Widget instance.
    *
    * @param options - An object containing initial options. All options are optional.
    */
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /**
    * Make the widget visible.
@@ -205,22 +195,32 @@ export type WidgetDeclaredEventsOf<T> = T extends Base<any, infer E, any>
  * Interactive options of a widget (or other `Base` subclass).
  * Returns `never` if `T` does not extend `Base`.
  */
-export type WidgetInteractiveOptionsOf<T> = T extends Base<any, any, infer I>
-  ? I
+export type WidgetInteractiveOptionsOf<T> = T extends Base<
+  any,
+  any,
+  infer InteractiveOptions
+>
+  ? InteractiveOptions
   : never;
 
 /**
  * Effective events of a widget (or other `Base` subclass): declared events
- * plus synthetic `set_${option}` events for each option.
+ * plus synthetic `set_${option}` events for each option, with `userset` /
+ * `useraction` narrowed to interactive options.
  * Returns `never` if `T` does not extend `Base`.
  */
 export type WidgetEventsOf<T> = T extends Base<any, any, any>
-  ? EffectiveEvents<WidgetOptionsOf<T>, WidgetDeclaredEventsOf<T>>
+  ? EffectiveEvents<
+      WidgetOptionsOf<T>,
+      WidgetDeclaredEventsOf<T>,
+      WidgetInteractiveOptionsOf<T>
+    >
   : never;
 
 export type {
   EffectiveEvents,
   OptionSetEvents,
   OptionKV,
-  InteractiveOptions,
+  OptionSetKV,
+  IBaseInteractiveOptions,
 } from '../implements/base.js';

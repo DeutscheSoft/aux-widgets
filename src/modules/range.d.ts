@@ -45,10 +45,10 @@ export interface IRangeEvents extends IBaseEvents {
  * an arbitrary scale.
  */
 export declare class Range<
-  TOptions extends IRangeOptions = IRangeOptions,
-  TEvents extends IRangeEvents = IRangeEvents
-> extends Base<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IRangeOptions = IRangeOptions,
+  Events extends IRangeEvents = IRangeEvents
+> extends Base<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /**
    * Convert a coefficient to a based value.

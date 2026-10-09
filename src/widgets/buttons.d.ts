@@ -72,11 +72,11 @@ export interface ButtonsInteractiveOptions extends ContainerInteractiveOptions {
  * to highlight buttons which can't be selected due to options.multi_select=n.
  */
 export declare class Buttons<
-  TOptions extends IButtonsOptions = IButtonsOptions,
-  TEvents extends IButtonsEvents = IButtonsEvents,
-  Interactive extends ButtonsInteractiveOptions = ButtonsInteractiveOptions
-> extends Container<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IButtonsOptions = IButtonsOptions,
+  Events extends IButtonsEvents = IButtonsEvents,
+  InteractiveOptions extends ButtonsInteractiveOptions = ButtonsInteractiveOptions
+> extends Container<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-buttons */
   element: HTMLDivElement;

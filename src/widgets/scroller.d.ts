@@ -12,10 +12,10 @@ import {
 } from './widget.js';
 
 export declare class ScrollHide<
-  TOptions extends IContainerOptions = IContainerOptions,
-  TEvents extends IContainerEvents = IContainerEvents
-> extends Container<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IContainerOptions = IContainerOptions,
+  Events extends IContainerEvents = IContainerEvents
+> extends Container<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 }
 
 export interface IScrollBarOptions extends IWidgetOptions {
@@ -36,11 +36,11 @@ export interface ScrollBarInteractiveOptions extends WidgetInteractiveOptions {
 }
 
 export declare class ScrollBar<
-  TOptions extends IScrollBarOptions = IScrollBarOptions,
-  TEvents extends IScrollBarEvents = IScrollBarEvents,
-  Interactive extends ScrollBarInteractiveOptions = ScrollBarInteractiveOptions
-> extends Widget<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IScrollBarOptions = IScrollBarOptions,
+  Events extends IScrollBarEvents = IScrollBarEvents,
+  InteractiveOptions extends ScrollBarInteractiveOptions = ScrollBarInteractiveOptions
+> extends Widget<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 }
 
 export interface IScrollerOptions extends IContainerOptions {}
@@ -53,9 +53,9 @@ export interface ScrollerInteractiveOptions
   extends ContainerInteractiveOptions {}
 
 export declare class Scroller<
-  TOptions extends IScrollerOptions = IScrollerOptions,
-  TEvents extends IScrollerEvents = IScrollerEvents,
-  Interactive extends ScrollerInteractiveOptions = ScrollerInteractiveOptions
-> extends Container<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IScrollerOptions = IScrollerOptions,
+  Events extends IScrollerEvents = IScrollerEvents,
+  InteractiveOptions extends ScrollerInteractiveOptions = ScrollerInteractiveOptions
+> extends Container<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 }

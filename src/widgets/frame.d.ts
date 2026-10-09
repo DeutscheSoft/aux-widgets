@@ -23,10 +23,10 @@ export interface IFrameEvents extends IContainerEvents {
  * Frame is a Container with a Label on top.
  */
 export declare class Frame<
-  TOptions extends IFrameOptions = IFrameOptions,
-  TEvents extends IFrameEvents = IFrameEvents
-> extends Container<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IFrameOptions = IFrameOptions,
+  Events extends IFrameEvents = IFrameEvents
+> extends Container<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-frame */
   element: HTMLDivElement;

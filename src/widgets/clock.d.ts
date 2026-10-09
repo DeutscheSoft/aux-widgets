@@ -92,10 +92,10 @@ export interface IClockCirculars {
  * and seconds. It additionally offers three freely formattable labels.
  */
 export declare class Clock<
-  TOptions extends IClockOptions = IClockOptions,
-  TEvents extends IClockEvents = IClockEvents
-> extends Widget<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IClockOptions = IClockOptions,
+  Events extends IClockEvents = IClockEvents
+> extends Widget<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV element. Has class .aux-clock */
   element: HTMLDivElement;

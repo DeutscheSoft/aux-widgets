@@ -63,6 +63,8 @@ export interface INativeDOMEvents {
 /**
  * Base events that can be emitted by Base class.
  * Subclasses can extend this interface to add additional events.
+ * Option-driven events (`set`, `userset`, `useraction`, `set_*`) come from
+ * {@link EffectiveEvents}, not from this interface.
  */
 export interface IBaseEvents extends INativeDOMEvents {
   /** Fired when an instance is being initialized */
@@ -71,16 +73,6 @@ export interface IBaseEvents extends INativeDOMEvents {
   initialize_children: () => void;
   /** Fired when an instance is initialized */
   initialized: () => void;
-  /** Fired when an option is set. Arguments: key, value, previousValue */
-  set: <K extends string>(
-    key: K,
-    value: unknown,
-    previousValue: unknown
-  ) => void;
-  /** Fired when an option is set via user interaction. Arguments: key, value */
-  userset: (key: string, value: unknown) => void | false;
-  /** Fired after a user action sets an option. Arguments: key, value */
-  useraction: (key: string, value: unknown) => void;
   /** Fired when an element is delegated. Arguments: element, oldElement */
   delegated: (
     element: HTMLElement | SVGElement | (HTMLElement | SVGElement)[],
@@ -91,22 +83,15 @@ export interface IBaseEvents extends INativeDOMEvents {
 /**
  * Synthetic events generated for each option.
  * For each option key K, a 'set_K' event is automatically created with signature:
- * (value: TOptions[K], key: K, prevValue: TOptions[K]) => void
+ * (value: Options[K], key: K, prevValue: Options[K]) => void
  */
-export type OptionSetEvents<TOptions> = {
-  [K in keyof TOptions as K extends string ? `set_${K}` : never]: (
-    value: TOptions[K],
+export type OptionSetEvents<Options> = {
+  [K in keyof Options as K extends string ? `set_${K}` : never]: (
+    value: Options[K],
     key: K,
-    prevValue: TOptions[K]
+    prevValue: Options[K]
   ) => void;
 };
-
-/**
- * Effective events type that combines user-defined events with synthetic option events.
- * This is the actual event type used by Base class methods.
- */
-export type EffectiveEvents<TOptions, TEvents extends IBaseEvents> = TEvents &
-  OptionSetEvents<TOptions>;
 
 /**
  * Union of `[key, value]` tuples for each property of `O`.
@@ -117,10 +102,33 @@ export type OptionKV<O> = {
 }[keyof O];
 
 /**
+ * Union of `[key, value, previousValue]` tuples for each property of `O`.
+ * Used to type the `set` event handler.
+ */
+export type OptionSetKV<O> = {
+  [K in keyof O]-?: [key: Extract<K, string>, value: O[K], previousValue: O[K]];
+}[keyof O];
+
+/**
  * Options that may be changed through user interaction (`userset` / `useraction`).
  * Subclasses extend this the same way they extend their full options interfaces.
  */
-export interface InteractiveOptions {}
+export interface IBaseInteractiveOptions {}
+
+/**
+ * Effective events: declared events plus option-driven `set` / `set_*` /
+ * `userset` / `useraction` from `Options` and `InteractiveOptions`.
+ */
+export type EffectiveEvents<
+  Options,
+  Events extends IBaseEvents,
+  InteractiveOptions extends IBaseInteractiveOptions = IBaseInteractiveOptions
+> = Omit<Events, 'set' | 'userset' | 'useraction'> &
+  OptionSetEvents<Options> & {
+    set: (...args: OptionSetKV<Options>) => void;
+    userset: (...args: OptionKV<InteractiveOptions>) => void | false;
+    useraction: (...args: OptionKV<InteractiveOptions>) => void;
+  };
 
 /**
  * Base class that provides the core API for options management and event handling.
@@ -128,25 +136,23 @@ export interface InteractiveOptions {}
  *
  * @template Options - The options type for this class.
  * @template Events - The events type for this class. Extends IBaseEvents.
- * @template Interactive - Options that may be set via user interaction.
+ * @template InteractiveOptions - Options that may be set via user interaction.
  */
 export declare class Base<
   Options = Record<string, unknown>,
   Events extends IBaseEvents = IBaseEvents,
-  Interactive extends InteractiveOptions = InteractiveOptions
+  InteractiveOptions extends IBaseInteractiveOptions = IBaseInteractiveOptions
 > {
-  /** @internal */
-  protected readonly __optionsType: Options;
-  /** @internal */
-  protected readonly __eventsType: Events;
-  /** @internal */
-  protected readonly __interactiveOptionsType: Interactive;
-
   /**
    * The options object containing all options.
    * Options can be accessed directly via this property or using the `get()` method.
    */
   options: Options;
+
+  /** @internal Anchors `Events` for inference (not used at runtime). */
+  protected readonly __eventsType: Events;
+  /** @internal Anchors `InteractiveOptions` for inference (not used at runtime). */
+  protected readonly __interactiveOptionsType: InteractiveOptions;
 
   /**
    * Sets an option value.
@@ -172,9 +178,9 @@ export declare class Base<
    *
    * @returns `false` if a `userset` handler cancelled the change, otherwise `true`
    */
-  protected userset<K extends keyof Interactive & string>(
+  protected userset<K extends keyof InteractiveOptions & string>(
     key: K,
-    value: Interactive[K]
+    value: InteractiveOptions[K]
   ): boolean;
 
   /**
@@ -184,9 +190,9 @@ export declare class Base<
    * @param event - The event name
    * @param func - The function to call when the event happens
    */
-  on<K extends keyof EffectiveEvents<Options, Events>>(
+  on<K extends keyof EffectiveEvents<Options, Events, InteractiveOptions>>(
     event: K,
-    func: EffectiveEvents<Options, Events>[K]
+    func: EffectiveEvents<Options, Events, InteractiveOptions>[K]
   ): void;
 
   /**
@@ -196,9 +202,11 @@ export declare class Base<
    * @param event - The event name
    * @param func - The function to call when the event happens
    */
-  addEventListener<K extends keyof EffectiveEvents<Options, Events>>(
+  addEventListener<
+    K extends keyof EffectiveEvents<Options, Events, InteractiveOptions>
+  >(
     event: K,
-    func: EffectiveEvents<Options, Events>[K]
+    func: EffectiveEvents<Options, Events, InteractiveOptions>[K]
   ): void;
 
   /**
@@ -208,9 +216,9 @@ export declare class Base<
    * @param event - The event name
    * @param func - The function to remove
    */
-  off<K extends keyof EffectiveEvents<Options, Events>>(
+  off<K extends keyof EffectiveEvents<Options, Events, InteractiveOptions>>(
     event: K,
-    func: EffectiveEvents<Options, Events>[K]
+    func: EffectiveEvents<Options, Events, InteractiveOptions>[K]
   ): void;
 
   /**
@@ -220,9 +228,11 @@ export declare class Base<
    * @param event - The event name
    * @param func - The function to remove
    */
-  removeEventListener<K extends keyof EffectiveEvents<Options, Events>>(
+  removeEventListener<
+    K extends keyof EffectiveEvents<Options, Events, InteractiveOptions>
+  >(
     event: K,
-    func: EffectiveEvents<Options, Events>[K]
+    func: EffectiveEvents<Options, Events, InteractiveOptions>[K]
   ): void;
 
   /**
@@ -234,9 +244,11 @@ export declare class Base<
    * @param func - The function to call when the event happens
    * @returns A function to unsubscribe
    */
-  subscribe<K extends keyof EffectiveEvents<Options, Events>>(
+  subscribe<
+    K extends keyof EffectiveEvents<Options, Events, InteractiveOptions>
+  >(
     event: K,
-    func: EffectiveEvents<Options, Events>[K]
+    func: EffectiveEvents<Options, Events, InteractiveOptions>[K]
   ): () => void;
 
   /**
@@ -247,9 +259,9 @@ export declare class Base<
    * @param func - The function to call when the event happens
    * @returns A function to unsubscribe (can be called before the event fires)
    */
-  once<K extends keyof EffectiveEvents<Options, Events>>(
+  once<K extends keyof EffectiveEvents<Options, Events, InteractiveOptions>>(
     event: K,
-    func: EffectiveEvents<Options, Events>[K]
+    func: EffectiveEvents<Options, Events, InteractiveOptions>[K]
   ): () => void;
 
   /**
@@ -260,7 +272,7 @@ export declare class Base<
    * @param args - Event arguments (type-checked based on the event handler signature)
    * @returns The return value from the event handler, or undefined
    */
-  emit<K extends keyof EffectiveEvents<Options, Events>>(
+  emit<K extends keyof EffectiveEvents<Options, Events, InteractiveOptions>>(
     event: K,
     ...args: any[]
   ): any;
@@ -273,10 +285,9 @@ export declare class Base<
    * @param args - Event arguments (type-checked based on the event handler signature)
    * @returns The return value from the event handler, or undefined
    */
-  dispatchEvent<K extends keyof EffectiveEvents<Options, Events>>(
-    event: K,
-    ...args: any[]
-  ): any;
+  dispatchEvent<
+    K extends keyof EffectiveEvents<Options, Events, InteractiveOptions>
+  >(event: K, ...args: any[]): any;
 
   /**
    * Check if an event has listeners.
@@ -286,9 +297,11 @@ export declare class Base<
    * @param func - Optional: specific function to check for
    * @returns True if the event has listeners
    */
-  hasEventListener<K extends keyof EffectiveEvents<Options, Events>>(
+  hasEventListener<
+    K extends keyof EffectiveEvents<Options, Events, InteractiveOptions>
+  >(
     event: K,
-    func?: EffectiveEvents<Options, Events>[K]
+    func?: EffectiveEvents<Options, Events, InteractiveOptions>[K]
   ): boolean;
 
   /**
@@ -298,7 +311,7 @@ export declare class Base<
    * @param event - The event name
    * @returns True if the event has any listeners
    */
-  hasEventListeners<K extends keyof EffectiveEvents<Options, Events>>(
-    event: K
-  ): boolean;
+  hasEventListeners<
+    K extends keyof EffectiveEvents<Options, Events, InteractiveOptions>
+  >(event: K): boolean;
 }

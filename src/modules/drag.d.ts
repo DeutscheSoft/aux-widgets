@@ -44,8 +44,8 @@ export interface IDragEvents extends IBaseEvents {
  * Drag enables dragging of elements on the screen positioned absolutely or by CSS transformation.
  */
 export declare class Drag<
-  TOptions extends IDragOptions = IDragOptions,
-  TEvents extends IDragEvents = IDragEvents
-> extends Base<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IDragOptions = IDragOptions,
+  Events extends IDragEvents = IDragEvents
+> extends Base<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 }

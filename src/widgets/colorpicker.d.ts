@@ -125,11 +125,11 @@ export interface ColorPickerInteractiveOptions
  * RGB or HSL color space.
  */
 export declare class ColorPicker<
-  TOptions extends IColorPickerOptions = IColorPickerOptions,
-  TEvents extends IColorPickerEvents = IColorPickerEvents,
-  Interactive extends ColorPickerInteractiveOptions = ColorPickerInteractiveOptions
-> extends Container<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IColorPickerOptions = IColorPickerOptions,
+  Events extends IColorPickerEvents = IColorPickerEvents,
+  InteractiveOptions extends ColorPickerInteractiveOptions = ColorPickerInteractiveOptions
+> extends Container<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-colorpicker */
   element: HTMLDivElement;

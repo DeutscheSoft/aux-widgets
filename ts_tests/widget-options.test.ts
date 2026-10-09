@@ -27,7 +27,7 @@ widget.on('show', () => {});
 // @ts-expect-error 'not_an_event' is not a valid event name
 widget.on('not_an_event', () => {});
 
-// Partial options are allowed because the constructor takes Partial<TOptions>.
+// Partial options are allowed because the constructor takes Partial<Options>.
 new Widget({
   visible: false,
   focus: true,

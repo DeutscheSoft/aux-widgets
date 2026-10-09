@@ -18,9 +18,9 @@ export interface ColorPickerDialogInteractiveOptions
  * ColorPickerDialog is a Dialog containing a ColorPicker.
  */
 export declare class ColorPickerDialog<
-  TOptions extends IColorPickerDialogOptions = IColorPickerDialogOptions,
-  TEvents extends IColorPickerDialogEvents = IColorPickerDialogEvents,
-  Interactive extends ColorPickerDialogInteractiveOptions = ColorPickerDialogInteractiveOptions
-> extends Dialog<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IColorPickerDialogOptions = IColorPickerDialogOptions,
+  Events extends IColorPickerDialogEvents = IColorPickerDialogEvents,
+  InteractiveOptions extends ColorPickerDialogInteractiveOptions = ColorPickerDialogInteractiveOptions
+> extends Dialog<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 }

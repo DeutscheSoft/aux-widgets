@@ -135,11 +135,11 @@ export interface ReverbInteractiveOptions extends ChartInteractiveOptions {
  * parameters of a typical classic reverb.
  */
 export declare class Reverb<
-  TOptions extends IReverbOptions = IReverbOptions,
-  TEvents extends IReverbEvents = IReverbEvents,
-  Interactive extends ReverbInteractiveOptions = ReverbInteractiveOptions
-> extends Chart<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IReverbOptions = IReverbOptions,
+  Events extends IReverbEvents = IReverbEvents,
+  InteractiveOptions extends ReverbInteractiveOptions = ReverbInteractiveOptions
+> extends Chart<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The Graph displaying the input signal as a vertical bar. */
   input: Graph;

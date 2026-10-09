@@ -34,9 +34,9 @@ export interface ExpandInteractiveOptions extends ContainerInteractiveOptions {
 }
 
 export declare class Expand<
-  TOptions extends IExpandOptions = IExpandOptions,
-  TEvents extends IExpandEvents = IExpandEvents,
-  Interactive extends ExpandInteractiveOptions = ExpandInteractiveOptions
-> extends Container<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IExpandOptions = IExpandOptions,
+  Events extends IExpandEvents = IExpandEvents,
+  InteractiveOptions extends ExpandInteractiveOptions = ExpandInteractiveOptions
+> extends Container<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 }

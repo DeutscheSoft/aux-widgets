@@ -74,11 +74,11 @@ export interface SpreadInteractiveOptions extends WidgetInteractiveOptions {
  * A Label and a Value are available optionally.
  */
 export declare class Spread<
-  TOptions extends ISpreadOptions = ISpreadOptions,
-  TEvents extends ISpreadEvents = ISpreadEvents,
-  Interactive extends SpreadInteractiveOptions = SpreadInteractiveOptions
-> extends Widget<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends ISpreadOptions = ISpreadOptions,
+  Events extends ISpreadEvents = ISpreadEvents,
+  InteractiveOptions extends SpreadInteractiveOptions = SpreadInteractiveOptions
+> extends Widget<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-spread */
   element: HTMLDivElement;

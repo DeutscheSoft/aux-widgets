@@ -48,11 +48,11 @@ export interface ComboBoxInteractiveOptions extends WidgetInteractiveOptions {
  * Combobox is a combination of a Select and a Value.
  */
 export declare class ComboBox<
-  TOptions extends IComboBoxOptions = IComboBoxOptions,
-  TEvents extends IComboBoxEvents = IComboBoxEvents,
-  Interactive extends ComboBoxInteractiveOptions = ComboBoxInteractiveOptions
-> extends Widget<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IComboBoxOptions = IComboBoxOptions,
+  Events extends IComboBoxEvents = IComboBoxEvents,
+  InteractiveOptions extends ComboBoxInteractiveOptions = ComboBoxInteractiveOptions
+> extends Widget<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV element. Has class .aux-combobox */
   element: HTMLDivElement;

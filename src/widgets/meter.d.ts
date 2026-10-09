@@ -125,10 +125,10 @@ export interface IMeterEvents extends IWidgetEvents {
  * the opacity of the mask to the desired value.
  */
 export declare class Meter<
-  TOptions extends IMeterOptions = IMeterOptions,
-  TEvents extends IMeterEvents = IMeterEvents
-> extends Widget<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IMeterOptions = IMeterOptions,
+  Events extends IMeterEvents = IMeterEvents
+> extends Widget<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-meter */
   element: HTMLDivElement;

@@ -68,11 +68,11 @@ export interface FileSelectInteractiveOptions
  * FileSelect is a file selector widget. It inherits all options of Button.
  */
 export declare class FileSelect<
-  TOptions extends IFileSelectOptions = IFileSelectOptions,
-  TEvents extends IFileSelectEvents = IFileSelectEvents,
-  Interactive extends FileSelectInteractiveOptions = FileSelectInteractiveOptions
-> extends Container<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IFileSelectOptions = IFileSelectOptions,
+  Events extends IFileSelectEvents = IFileSelectEvents,
+  InteractiveOptions extends FileSelectInteractiveOptions = FileSelectInteractiveOptions
+> extends Container<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-fileselect */
   element: HTMLDivElement;

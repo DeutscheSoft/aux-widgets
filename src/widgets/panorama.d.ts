@@ -33,10 +33,10 @@ export interface IPanoramaEvents extends IChartEvents {
  * or balance on stereo and surround channels.
  */
 export declare class Panorama<
-  TOptions extends IPanoramaOptions = IPanoramaOptions,
-  TEvents extends IPanoramaEvents = IPanoramaEvents
-> extends Chart<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IPanoramaOptions = IPanoramaOptions,
+  Events extends IPanoramaEvents = IPanoramaEvents
+> extends Chart<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The ChartHandle displaying/setting the position on panorama and surround modes. In panorama mode it affects the x parameter, in surround it affects both, x and y parameters. */
   handle1: ChartHandle;

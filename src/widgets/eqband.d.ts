@@ -55,11 +55,11 @@ export interface EqBandInteractiveOptions
  * or any other derivate to be drawn in.
  */
 export declare class EqBand<
-  TOptions extends IEqBandOptions = IEqBandOptions,
-  TEvents extends IEqBandEvents = IEqBandEvents,
-  Interactive extends EqBandInteractiveOptions = EqBandInteractiveOptions
-> extends ChartHandle<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IEqBandOptions = IEqBandOptions,
+  Events extends IEqBandEvents = IEqBandEvents,
+  InteractiveOptions extends EqBandInteractiveOptions = EqBandInteractiveOptions
+> extends ChartHandle<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main SVG group. Has class .aux-eqband */
   element: SVGGElement;

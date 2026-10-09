@@ -71,11 +71,11 @@ export interface DialogInteractiveOptions extends ContainerInteractiveOptions {
  * makes positioning the dialog window straight forward.
  */
 export declare class Dialog<
-  TOptions extends IDialogOptions = IDialogOptions,
-  TEvents extends IDialogEvents = IDialogEvents,
-  Interactive extends DialogInteractiveOptions = DialogInteractiveOptions
-> extends Container<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IDialogOptions = IDialogOptions,
+  Events extends IDialogEvents = IDialogEvents,
+  InteractiveOptions extends DialogInteractiveOptions = DialogInteractiveOptions
+> extends Container<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV element. Has class .aux-dialog */
   element: HTMLDivElement;

@@ -61,19 +61,19 @@ export interface ButtonInteractiveOptions extends WidgetInteractiveOptions {}
  * Button is a simple, clickable widget containing an Icon and a Label to trigger functions.
  * Button serves as base for other widgets, too, e.g. Toggle, ConfirmButton and Select.
  *
- * @template TOptions - The options type for this button. Extends IButtonOptions.
- * @template TEvents - The events type for this button. Extends IButtonEvents.
- * @template Interactive - Options that may be set via user interaction.
+ * @template Options - The options type for this button. Extends IButtonOptions.
+ * @template Events - The events type for this button. Extends IButtonEvents.
+ * @template InteractiveOptions - Options that may be set via user interaction.
  */
 export declare class Button<
-  TOptions extends IButtonOptions = IButtonOptions,
-  TEvents extends IButtonEvents = IButtonEvents,
-  Interactive extends ButtonInteractiveOptions = ButtonInteractiveOptions
-> extends Widget<TOptions, TEvents, Interactive> {
+  Options extends IButtonOptions = IButtonOptions,
+  Events extends IButtonEvents = IButtonEvents,
+  InteractiveOptions extends ButtonInteractiveOptions = ButtonInteractiveOptions
+> extends Widget<Options, Events, InteractiveOptions> {
   /**
    * Creates a new Button instance.
    *
    * @param options - An object containing initial options. All options are optional.
    */
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  constructor(options?: Partial<NoInfer<Options>>);
 }

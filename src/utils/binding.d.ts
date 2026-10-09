@@ -1,41 +1,58 @@
-import { Widget, IWidgetOptions, IWidgetEvents } from '../widgets/widget.js';
+import {
+  Widget,
+  IWidgetOptions,
+  IWidgetEvents,
+  WidgetInteractiveOptions,
+} from '../widgets/widget.js';
 import { EffectiveEvents } from '../implements/base.js';
 import { Timer } from './timers.js';
 
 /**
  * Helper type to extract options type from a Widget instance
  */
-type ExtractOptions<T> = T extends Widget<infer TOptions, any>
-  ? TOptions
+type ExtractOptions<T> = T extends Widget<infer Options, any>
+  ? Options
   : IWidgetOptions;
 
 /**
  * Helper type to extract events type from a Widget instance
  */
-type ExtractEvents<T> = T extends Widget<any, infer TEvents>
-  ? TEvents
+type ExtractEvents<T> = T extends Widget<any, infer Events>
+  ? Events
   : IWidgetEvents;
+
+/**
+ * Helper type to extract interactive options from a Widget instance
+ */
+type ExtractInteractive<T> = T extends Widget<
+  any,
+  any,
+  infer InteractiveOptions
+>
+  ? InteractiveOptions
+  : WidgetInteractiveOptions;
 
 /**
  * Helper type to extract effective events type from a Widget instance
  */
 type ExtractEffectiveEvents<T> = EffectiveEvents<
   ExtractOptions<T>,
-  ExtractEvents<T>
+  ExtractEvents<T>,
+  ExtractInteractive<T>
 >;
 
 /**
- * Type for option names - can be a key of TOptions or a string starting with '_'
+ * Type for option names - can be a key of Options or a string starting with '_'
  */
-type OptionName<TOptions> = keyof TOptions | `_${string}`;
+type OptionName<Options> = keyof Options | `_${string}`;
 
 /**
- * Type for option values - extracts the type if K is a key of TOptions, otherwise unknown
+ * Type for option values - extracts the type if K is a key of Options, otherwise unknown
  */
 type OptionValue<
-  TOptions,
-  K extends OptionName<TOptions>
-> = K extends keyof TOptions ? TOptions[K] : unknown;
+  Options,
+  K extends OptionName<Options>
+> = K extends keyof Options ? Options[K] : unknown;
 
 /**
  * This function subscribes to those changes to option `name`

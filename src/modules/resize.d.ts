@@ -45,8 +45,8 @@ export interface IResizeEvents extends IBaseEvents {
  * element while the user drags a handle.
  */
 export declare class Resize<
-  TOptions extends IResizeOptions = IResizeOptions,
-  TEvents extends IResizeEvents = IResizeEvents
-> extends Base<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IResizeOptions = IResizeOptions,
+  Events extends IResizeEvents = IResizeEvents
+> extends Base<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 }

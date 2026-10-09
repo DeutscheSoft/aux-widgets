@@ -67,10 +67,10 @@ export interface ILevelMeterEvents extends IMeterEvents {
  * values and more.
  */
 export declare class LevelMeter<
-  TOptions extends ILevelMeterOptions = ILevelMeterOptions,
-  TEvents extends ILevelMeterEvents = ILevelMeterEvents
-> extends Meter<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends ILevelMeterOptions = ILevelMeterOptions,
+  Events extends ILevelMeterEvents = ILevelMeterEvents
+> extends Meter<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The State instance for the clipping LED. */
   clip: State;

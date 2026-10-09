@@ -86,19 +86,19 @@ export interface FaderInteractiveOptions extends WidgetInteractiveOptions {
  * Fader is a slidable control with a Scale next to it which can be both dragged and scrolled.
  * Fader implements Ranged and inherits its options. A Label and a Value are available optionally.
  *
- * @template TOptions - The options type for this fader. Extends IFaderOptions.
- * @template TEvents - The events type for this fader. Extends IFaderEvents.
- * @template Interactive - Options that may be set via user interaction.
+ * @template Options - The options type for this fader. Extends IFaderOptions.
+ * @template Events - The events type for this fader. Extends IFaderEvents.
+ * @template InteractiveOptions - Options that may be set via user interaction.
  */
 export declare class Fader<
-  TOptions extends IFaderOptions = IFaderOptions,
-  TEvents extends IFaderEvents = IFaderEvents,
-  Interactive extends FaderInteractiveOptions = FaderInteractiveOptions
-> extends Widget<TOptions, TEvents, Interactive> {
+  Options extends IFaderOptions = IFaderOptions,
+  Events extends IFaderEvents = IFaderEvents,
+  InteractiveOptions extends FaderInteractiveOptions = FaderInteractiveOptions
+> extends Widget<Options, Events, InteractiveOptions> {
   /**
    * Creates a new Fader instance.
    *
    * @param options - An object containing initial options. All options are optional.
    */
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  constructor(options?: Partial<NoInfer<Options>>);
 }

@@ -42,10 +42,10 @@ export interface IGaugeEvents extends IWidgetEvents {
  * Gauge draws a single Circular into a SVG image.
  */
 export declare class Gauge<
-  TOptions extends IGaugeOptions = IGaugeOptions,
-  TEvents extends IGaugeEvents = IGaugeEvents
-> extends Widget<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IGaugeOptions = IGaugeOptions,
+  Events extends IGaugeEvents = IGaugeEvents
+> extends Widget<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-gauge */
   element: HTMLDivElement;

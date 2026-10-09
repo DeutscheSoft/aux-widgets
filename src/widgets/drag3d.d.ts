@@ -56,11 +56,11 @@ export interface Drag3DInteractiveOptions extends ContainerInteractiveOptions {
  * updates the x/y/z values, so it can be paired with custom rendering.
  */
 export declare class Drag3D<
-  TOptions extends IDrag3DOptions = IDrag3DOptions,
-  TEvents extends IDrag3DEvents = IDrag3DEvents,
-  Interactive extends Drag3DInteractiveOptions = Drag3DInteractiveOptions
-> extends Container<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IDrag3DOptions = IDrag3DOptions,
+  Events extends IDrag3DEvents = IDrag3DEvents,
+  InteractiveOptions extends Drag3DInteractiveOptions = Drag3DInteractiveOptions
+> extends Container<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-drag3d */
   element: HTMLDivElement;

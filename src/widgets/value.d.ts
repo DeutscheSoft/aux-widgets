@@ -89,11 +89,11 @@ export interface ValueInteractiveOptions extends WidgetInteractiveOptions {
  * strings or numbers.
  */
 export declare class Value<
-  TOptions extends IValueOptions = IValueOptions,
-  TEvents extends IValueEvents = IValueEvents,
-  Interactive extends ValueInteractiveOptions = ValueInteractiveOptions
-> extends Widget<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IValueOptions = IValueOptions,
+  Events extends IValueEvents = IValueEvents,
+  InteractiveOptions extends ValueInteractiveOptions = ValueInteractiveOptions
+> extends Widget<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-value */
   element: HTMLDivElement;

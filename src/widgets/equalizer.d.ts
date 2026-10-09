@@ -47,10 +47,10 @@ export interface IEqualizerGraphEvents extends IGraphEvents {
  * resulting frequency response curve.
  */
 export declare class EqualizerGraph<
-  TOptions extends IEqualizerGraphOptions = IEqualizerGraphOptions,
-  TEvents extends IEqualizerGraphEvents = IEqualizerGraphEvents
-> extends Graph<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IEqualizerGraphOptions = IEqualizerGraphOptions,
+  Events extends IEqualizerGraphEvents = IEqualizerGraphEvents
+> extends Graph<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The SVG path element. Has class .aux-graph */
   element: SVGPathElement;
@@ -114,10 +114,10 @@ export interface IEqualizerEvents extends IFrequencyResponseEvents {
  * Additional EqualizerGraphs can be added. The Equalizer inherits all options of EqualizerGraph.
  */
 export declare class Equalizer<
-  TOptions extends IEqualizerOptions = IEqualizerOptions,
-  TEvents extends IEqualizerEvents = IEqualizerEvents
-> extends FrequencyResponse<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IEqualizerOptions = IEqualizerOptions,
+  Events extends IEqualizerEvents = IEqualizerEvents
+> extends FrequencyResponse<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-equalizer */
   element: HTMLDivElement;

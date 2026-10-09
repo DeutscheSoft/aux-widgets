@@ -43,11 +43,11 @@ export interface ToggleInteractiveOptions extends ButtonInteractiveOptions {
  * controlled by the two options press and toggle.
  */
 export declare class Toggle<
-  TOptions extends IToggleOptions = IToggleOptions,
-  TEvents extends IToggleEvents = IToggleEvents,
-  Interactive extends ToggleInteractiveOptions = ToggleInteractiveOptions
-> extends Button<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IToggleOptions = IToggleOptions,
+  Events extends IToggleEvents = IToggleEvents,
+  InteractiveOptions extends ToggleInteractiveOptions = ToggleInteractiveOptions
+> extends Button<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /**
    * Toggle the button state.

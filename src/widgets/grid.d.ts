@@ -91,10 +91,10 @@ export interface IGridEvents extends IWidgetEvents {
  * SVG group containing all the labels and lines.
  */
 export declare class Grid<
-  TOptions extends IGridOptions = IGridOptions,
-  TEvents extends IGridEvents = IGridEvents
-> extends Widget<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IGridOptions = IGridOptions,
+  Events extends IGridEvents = IGridEvents
+> extends Widget<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main SVG group containing all grid elements. Has class .aux-grid */
   element: SVGGElement;

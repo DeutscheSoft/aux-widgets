@@ -58,11 +58,11 @@ export interface PagerInteractiveOptions extends ContainerInteractiveOptions {
  * which are switchable via a Navigation.
  */
 export declare class Pager<
-  TOptions extends IPagerOptions = IPagerOptions,
-  TEvents extends IPagerEvents = IPagerEvents,
-  Interactive extends PagerInteractiveOptions = PagerInteractiveOptions
-> extends Container<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IPagerOptions = IPagerOptions,
+  Events extends IPagerEvents = IPagerEvents,
+  InteractiveOptions extends PagerInteractiveOptions = PagerInteractiveOptions
+> extends Container<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV element. Has class .aux-pager */
   element: HTMLDivElement;

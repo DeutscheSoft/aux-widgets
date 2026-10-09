@@ -107,10 +107,10 @@ export interface ISelectEntryEvents extends IButtonEvents {
  * SelectEntry provides a Button as an entry for Select.
  */
 export declare class SelectEntry<
-  TOptions extends ISelectEntryOptions = ISelectEntryOptions,
-  TEvents extends ISelectEntryEvents = ISelectEntryEvents
-> extends Button<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends ISelectEntryOptions = ISelectEntryOptions,
+  Events extends ISelectEntryEvents = ISelectEntryEvents
+> extends Button<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 }
 
 /**
@@ -127,11 +127,11 @@ export interface SelectInteractiveOptions extends ButtonInteractiveOptions {
  * Select provides a Button with a select list to choose from a list of SelectEntry.
  */
 export declare class Select<
-  TOptions extends ISelectOptions = ISelectOptions,
-  TEvents extends ISelectEvents = ISelectEvents,
-  Interactive extends SelectInteractiveOptions = SelectInteractiveOptions
-> extends Button<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends ISelectOptions = ISelectOptions,
+  Events extends ISelectEvents = ISelectEvents,
+  InteractiveOptions extends SelectInteractiveOptions = SelectInteractiveOptions
+> extends Button<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-select */
   element: HTMLDivElement;

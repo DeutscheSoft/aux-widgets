@@ -88,11 +88,11 @@ export interface PagesInteractiveOptions extends ContainerInteractiveOptions {
  * Pages contains different Page widgets which can be switched via option.
  */
 export declare class Pages<
-  TOptions extends IPagesOptions = IPagesOptions,
-  TEvents extends IPagesEvents = IPagesEvents,
-  Interactive extends PagesInteractiveOptions = PagesInteractiveOptions
-> extends Container<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IPagesOptions = IPagesOptions,
+  Events extends IPagesEvents = IPagesEvents,
+  InteractiveOptions extends PagesInteractiveOptions = PagesInteractiveOptions
+> extends Container<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV element. Has class .aux-pages */
   element: HTMLDivElement;
@@ -163,8 +163,8 @@ export declare class Pages<
  * Page is the child widget to be used in Pages.
  */
 export declare class Page<
-  TOptions extends IPageOptions = IPageOptions,
-  TEvents extends IPageEvents = IPageEvents
-> extends Container<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IPageOptions = IPageOptions,
+  Events extends IPageEvents = IPageEvents
+> extends Container<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 }

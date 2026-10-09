@@ -54,11 +54,11 @@ export interface ValueKnobInteractiveOptions extends WidgetInteractiveOptions {
  * It inherits all options from Knob and Value.
  */
 export declare class ValueKnob<
-  TOptions extends IValueKnobOptions = IValueKnobOptions,
-  TEvents extends IValueKnobEvents = IValueKnobEvents,
-  Interactive extends ValueKnobInteractiveOptions = ValueKnobInteractiveOptions
-> extends Widget<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IValueKnobOptions = IValueKnobOptions,
+  Events extends IValueKnobEvents = IValueKnobEvents,
+  InteractiveOptions extends ValueKnobInteractiveOptions = ValueKnobInteractiveOptions
+> extends Widget<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-valueknob */
   element: HTMLDivElement;

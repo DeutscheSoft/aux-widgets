@@ -26,10 +26,10 @@ export interface IPhaseMeterEvents extends ILevelMeterEvents {
  * PhaseMeter is a LevelMeter configured to display phase correlation.
  */
 export declare class PhaseMeter<
-  TOptions extends IPhaseMeterOptions = IPhaseMeterOptions,
-  TEvents extends IPhaseMeterEvents = IPhaseMeterEvents
-> extends LevelMeter<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IPhaseMeterOptions = IPhaseMeterOptions,
+  Events extends IPhaseMeterEvents = IPhaseMeterEvents
+> extends LevelMeter<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-phasemeter */
   element: HTMLDivElement;

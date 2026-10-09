@@ -61,11 +61,11 @@ export interface ValueButtonInteractiveOptions
  * It inherits all options of DragValue and Scale.
  */
 export declare class ValueButton<
-  TOptions extends IValueButtonOptions = IValueButtonOptions,
-  TEvents extends IValueButtonEvents = IValueButtonEvents,
-  Interactive extends ValueButtonInteractiveOptions = ValueButtonInteractiveOptions
-> extends Button<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IValueButtonOptions = IValueButtonOptions,
+  Events extends IValueButtonEvents = IValueButtonEvents,
+  InteractiveOptions extends ValueButtonInteractiveOptions = ValueButtonInteractiveOptions
+> extends Button<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-valuebutton */
   element: HTMLDivElement;

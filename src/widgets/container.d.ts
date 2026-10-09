@@ -63,11 +63,11 @@ export interface ContainerInteractiveOptions extends WidgetInteractiveOptions {}
  * showChild and toggleChild.
  */
 export declare class Container<
-  TOptions extends IContainerOptions = IContainerOptions,
-  TEvents extends IContainerEvents = IContainerEvents,
-  Interactive extends ContainerInteractiveOptions = ContainerInteractiveOptions
-> extends Widget<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IContainerOptions = IContainerOptions,
+  Events extends IContainerEvents = IContainerEvents,
+  InteractiveOptions extends ContainerInteractiveOptions = ContainerInteractiveOptions
+> extends Widget<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV element. Has class .aux-container */
   element: HTMLDivElement;

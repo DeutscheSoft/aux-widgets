@@ -63,11 +63,11 @@ export interface SliderInteractiveOptions extends WidgetInteractiveOptions {
  * It inherits all options of DragValue and Ranged.
  */
 export declare class Slider<
-  TOptions extends ISliderOptions = ISliderOptions,
-  TEvents extends ISliderEvents = ISliderEvents,
-  Interactive extends SliderInteractiveOptions = SliderInteractiveOptions
-> extends Widget<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends ISliderOptions = ISliderOptions,
+  Events extends ISliderEvents = ISliderEvents,
+  InteractiveOptions extends SliderInteractiveOptions = SliderInteractiveOptions
+> extends Widget<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-slider */
   element: HTMLDivElement;

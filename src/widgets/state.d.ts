@@ -30,10 +30,10 @@ export interface IStateEvents extends IWidgetEvents {
  * a DIV element with class .aux-mask. options.state changes the opacity of the mask element.
  */
 export declare class State<
-  TOptions extends IStateOptions = IStateOptions,
-  TEvents extends IStateEvents = IStateEvents
-> extends Widget<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IStateOptions = IStateOptions,
+  Events extends IStateEvents = IStateEvents
+> extends Widget<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-state */
   element: HTMLDivElement;

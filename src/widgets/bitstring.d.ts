@@ -40,11 +40,11 @@ export interface BitstringInteractiveOptions extends ButtonsInteractiveOptions {
  * Bitstring is a specialized Buttons widget to display and control arrays of bits.
  */
 export declare class Bitstring<
-  TOptions extends IBitstringOptions = IBitstringOptions,
-  TEvents extends IBitstringEvents = IBitstringEvents,
-  Interactive extends BitstringInteractiveOptions = BitstringInteractiveOptions
-> extends Buttons<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IBitstringOptions = IBitstringOptions,
+  Events extends IBitstringEvents = IBitstringEvents,
+  InteractiveOptions extends BitstringInteractiveOptions = BitstringInteractiveOptions
+> extends Buttons<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-bitstring */
   element: HTMLDivElement;

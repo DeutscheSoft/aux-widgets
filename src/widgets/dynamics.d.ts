@@ -102,11 +102,11 @@ export interface DynamicsInteractiveOptions extends ChartInteractiveOptions {
  * the range.
  */
 export declare class Dynamics<
-  TOptions extends IDynamicsOptions = IDynamicsOptions,
-  TEvents extends IDynamicsEvents = IDynamicsEvents,
-  Interactive extends DynamicsInteractiveOptions = DynamicsInteractiveOptions
-> extends Chart<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IDynamicsOptions = IDynamicsOptions,
+  Events extends IDynamicsEvents = IDynamicsEvents,
+  InteractiveOptions extends DynamicsInteractiveOptions = DynamicsInteractiveOptions
+> extends Chart<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-dynamics */
   element: HTMLDivElement;
@@ -148,11 +148,11 @@ export interface ICompressorEvents extends IDynamicsEvents {
  * Compressor is a pre-configured Dynamics widget.
  */
 export declare class Compressor<
-  TOptions extends ICompressorOptions = ICompressorOptions,
-  TEvents extends ICompressorEvents = ICompressorEvents,
-  Interactive extends DynamicsInteractiveOptions = DynamicsInteractiveOptions
-> extends Dynamics<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends ICompressorOptions = ICompressorOptions,
+  Events extends ICompressorEvents = ICompressorEvents,
+  InteractiveOptions extends DynamicsInteractiveOptions = DynamicsInteractiveOptions
+> extends Dynamics<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-compressor */
   element: HTMLDivElement;
@@ -180,11 +180,11 @@ export interface IExpanderEvents extends IDynamicsEvents {
  * Expander is a pre-configured Dynamics widget.
  */
 export declare class Expander<
-  TOptions extends IExpanderOptions = IExpanderOptions,
-  TEvents extends IExpanderEvents = IExpanderEvents,
-  Interactive extends DynamicsInteractiveOptions = DynamicsInteractiveOptions
-> extends Dynamics<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IExpanderOptions = IExpanderOptions,
+  Events extends IExpanderEvents = IExpanderEvents,
+  InteractiveOptions extends DynamicsInteractiveOptions = DynamicsInteractiveOptions
+> extends Dynamics<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-expander */
   element: HTMLDivElement;
@@ -210,11 +210,11 @@ export interface IGateEvents extends IDynamicsEvents {
  * Gate is a pre-configured Dynamics widget.
  */
 export declare class Gate<
-  TOptions extends IGateOptions = IGateOptions,
-  TEvents extends IGateEvents = IGateEvents,
-  Interactive extends DynamicsInteractiveOptions = DynamicsInteractiveOptions
-> extends Dynamics<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IGateOptions = IGateOptions,
+  Events extends IGateEvents = IGateEvents,
+  InteractiveOptions extends DynamicsInteractiveOptions = DynamicsInteractiveOptions
+> extends Dynamics<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-gate */
   element: HTMLDivElement;
@@ -240,11 +240,11 @@ export interface ILimiterEvents extends IDynamicsEvents {
  * Limiter is a pre-configured Dynamics widget.
  */
 export declare class Limiter<
-  TOptions extends ILimiterOptions = ILimiterOptions,
-  TEvents extends ILimiterEvents = ILimiterEvents,
-  Interactive extends DynamicsInteractiveOptions = DynamicsInteractiveOptions
-> extends Dynamics<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends ILimiterOptions = ILimiterOptions,
+  Events extends ILimiterEvents = ILimiterEvents,
+  InteractiveOptions extends DynamicsInteractiveOptions = DynamicsInteractiveOptions
+> extends Dynamics<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-limiter */
   element: HTMLDivElement;

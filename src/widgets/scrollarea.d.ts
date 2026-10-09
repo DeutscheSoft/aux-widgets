@@ -23,10 +23,10 @@ export interface IScrollAreaEvents extends IWidgetEvents {
  * IntersectionObserver.
  */
 export declare class ScrollArea<
-  TOptions extends IScrollAreaOptions = IScrollAreaOptions,
-  TEvents extends IScrollAreaEvents = IScrollAreaEvents
-> extends Widget<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IScrollAreaOptions = IScrollAreaOptions,
+  Events extends IScrollAreaEvents = IScrollAreaEvents
+> extends Widget<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV element. Has class .aux-scroller */
   element: HTMLDivElement;

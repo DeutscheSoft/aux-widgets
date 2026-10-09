@@ -177,11 +177,7 @@ export class Dialog extends Container {
           let target = container;
           if (toplevel) {
             let p = container || element.parentElement;
-            while (
-              p &&
-              p.tagName !== 'AWML-ROOT' &&
-              p.tagName !== 'BODY'
-            ) {
+            while (p && p.tagName !== 'AWML-ROOT' && p.tagName !== 'BODY') {
               p = p.parentElement;
             }
             target = p || document.body;

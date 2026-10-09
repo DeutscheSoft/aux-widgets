@@ -65,11 +65,11 @@ export interface KnobInteractiveOptions extends WidgetInteractiveOptions {
  * It inherits all options of Circular and DragValue.
  */
 export declare class Knob<
-  TOptions extends IKnobOptions = IKnobOptions,
-  TEvents extends IKnobEvents = IKnobEvents,
-  Interactive extends KnobInteractiveOptions = KnobInteractiveOptions
-> extends Widget<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IKnobOptions = IKnobOptions,
+  Events extends IKnobEvents = IKnobEvents,
+  InteractiveOptions extends KnobInteractiveOptions = KnobInteractiveOptions
+> extends Widget<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-knob */
   element: HTMLDivElement;

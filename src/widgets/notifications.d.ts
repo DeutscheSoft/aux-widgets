@@ -29,10 +29,10 @@ export interface INotificationsEvents extends IContainerEvents {
  * Notifications is a Container displaying Notification popups.
  */
 export declare class Notifications<
-  TOptions extends INotificationsOptions = INotificationsOptions,
-  TEvents extends INotificationsEvents = INotificationsEvents
-> extends Container<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends INotificationsOptions = INotificationsOptions,
+  Events extends INotificationsEvents = INotificationsEvents
+> extends Container<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /**
    * Create and show a new notification.
@@ -73,10 +73,10 @@ export interface INotificationEvents extends IContainerEvents {
  * Notification is a Container to be used in Notifications.
  */
 export declare class Notification<
-  TOptions extends INotificationOptions = INotificationOptions,
-  TEvents extends INotificationEvents = INotificationEvents
-> extends Container<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends INotificationOptions = INotificationOptions,
+  Events extends INotificationEvents = INotificationEvents
+> extends Container<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-notification */
   element: HTMLDivElement;

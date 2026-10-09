@@ -112,11 +112,11 @@ export interface IChartEvents extends IWidgetEvents {
 export interface ChartInteractiveOptions extends WidgetInteractiveOptions {}
 
 export declare class Chart<
-  TOptions extends IChartOptions = IChartOptions,
-  TEvents extends IChartEvents = IChartEvents,
-  Interactive extends ChartInteractiveOptions = ChartInteractiveOptions
-> extends Widget<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IChartOptions = IChartOptions,
+  Events extends IChartEvents = IChartEvents,
+  InteractiveOptions extends ChartInteractiveOptions = ChartInteractiveOptions
+> extends Widget<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-chart */
   element: HTMLDivElement;

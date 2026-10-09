@@ -42,11 +42,11 @@ export interface NavigationInteractiveOptions
   extends ButtonsInteractiveOptions {}
 
 export declare class Navigation<
-  TOptions extends INavigationOptions = INavigationOptions,
-  TEvents extends INavigationEvents = INavigationEvents,
-  Interactive extends NavigationInteractiveOptions = NavigationInteractiveOptions
-> extends Container<TOptions, TEvents, Interactive> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends INavigationOptions = INavigationOptions,
+  Events extends INavigationEvents = INavigationEvents,
+  InteractiveOptions extends NavigationInteractiveOptions = NavigationInteractiveOptions
+> extends Container<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-navigation */
   element: HTMLDivElement;

@@ -94,10 +94,10 @@ export interface IScaleEvents extends IWidgetEvents {
  * Scale mixes in Ranged and inherits all its options.
  */
 export declare class Scale<
-  TOptions extends IScaleOptions = IScaleOptions,
-  TEvents extends IScaleEvents = IScaleEvents
-> extends Widget<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IScaleOptions = IScaleOptions,
+  Events extends IScaleEvents = IScaleEvents
+> extends Widget<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV element. Has class .aux-scale */
   element: HTMLDivElement;

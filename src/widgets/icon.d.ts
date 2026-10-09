@@ -25,10 +25,10 @@ export interface IIconEvents extends IWidgetEvents {
  * icons from the AUX font or dedicated image files as CSS background.
  */
 export declare class Icon<
-  TOptions extends IIconOptions = IIconOptions,
-  TEvents extends IIconEvents = IIconEvents
-> extends Widget<TOptions, TEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IIconOptions = IIconOptions,
+  Events extends IIconEvents = IIconEvents
+> extends Widget<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV element. Has class .aux-icon */
   element: HTMLDivElement;
