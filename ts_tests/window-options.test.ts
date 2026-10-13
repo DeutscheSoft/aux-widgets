@@ -35,7 +35,7 @@ const _windowAnchor: string | undefined = windowWidget.get('anchor');
 windowWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-windowWidget.on('resize', () => {});
+windowWidget.on('show', () => {});
 // @ts-expect-error 'not_an_event' is not a valid event name
 windowWidget.on('not_an_event', () => {});
 

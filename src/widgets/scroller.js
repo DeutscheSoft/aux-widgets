@@ -18,7 +18,7 @@
  */
 
 import { Container } from './container.js';
-import { Widget } from './widget.js';
+import { SymResize, Widget } from './widget.js';
 import {
   addClass,
   element,
@@ -28,7 +28,7 @@ import {
   outerHeight,
 } from '../utils/dom.js';
 import { DragValue } from '../modules/dragvalue.js';
-import { defineRender } from '../renderer.js';
+import { defineMeasure, defineRender } from '../renderer.js';
 import { mergeStaticEvents } from '../widget_helpers.js';
 
 import {
@@ -241,6 +241,14 @@ export class Scroller extends Container {
       defineRender('scroll_y', function (scroll_y) {
         this[scroll_y ? 'addClass' : 'removeClass']('aux-scrolly');
       }),
+      defineMeasure(SymResize, function () {
+        this._changed();
+        this.scroll_x.update('clip', innerWidth(this.element, undefined, true));
+        this.scroll_y.update(
+          'clip',
+          innerHeight(this.element, undefined, true)
+        );
+      }),
     ];
   }
 
@@ -274,13 +282,6 @@ export class Scroller extends Container {
 
   getResizeTargets() {
     return [this.element];
-  }
-
-  resize() {
-    this._changed();
-    this.scroll_x.update('clip', innerWidth(this.element, undefined, true));
-    this.scroll_y.update('clip', innerHeight(this.element, undefined, true));
-    super.resize();
   }
 
   appendChild(child) {

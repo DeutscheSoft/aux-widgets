@@ -294,10 +294,10 @@ export class Chart extends Widget {
           w = h = Math.min(h, w);
         }
 
-        this.set('_width', w);
-        this.range_x.set('basis', w);
-        this.set('_height', h);
-        this.range_y.set('basis', h);
+        this.update('_width', w);
+        this.range_x.update('basis', w);
+        this.update('_height', h);
+        this.range_y.update('basis', h);
       }),
     ];
   }

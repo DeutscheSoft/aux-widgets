@@ -21,6 +21,7 @@ import { Container } from './container.js';
 import { Value } from './value.js';
 import { ValueKnob } from './valueknob.js';
 import { Button } from './button.js';
+import { SymResize } from './widget.js';
 import { Range } from '../modules/range.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { addClass } from '../utils/dom.js';
@@ -32,7 +33,7 @@ import {
   HSLToRGB,
   hexToRGB,
 } from '../utils/colors.js';
-import { defineRender } from '../renderer.js';
+import { defineMeasure, defineRender } from '../renderer.js';
 
 const color_options = [
   'rgb',
@@ -248,6 +249,11 @@ export class ColorPicker extends Container {
           this._grayscale.style.opacity = 1 - saturation;
         }
       ),
+      defineMeasure(SymResize, function () {
+        const rect = this._canvas.getBoundingClientRect();
+        this.range_x.update('basis', rect.width);
+        this.range_y.update('basis', rect.height);
+      }),
     ];
   }
 
@@ -590,12 +596,6 @@ export class ColorPicker extends Container {
 
   getResizeTargets() {
     return [this._canvas];
-  }
-
-  resize() {
-    const rect = this._canvas.getBoundingClientRect();
-    this.range_x.set('basis', rect.width);
-    this.range_y.set('basis', rect.height);
   }
 
   draw(O, element) {

@@ -18,6 +18,7 @@
  */
 
 import { Container } from './container.js';
+import { SymWindowResize } from './widget.js';
 import { translateAnchor } from '../utils/anchor.js';
 import {
   element,
@@ -26,7 +27,7 @@ import {
   observeDOM,
   setDelayedFocus,
 } from '../utils/dom.js';
-import { defineRender } from '../renderer.js';
+import { defineMeasure, defineRender } from '../renderer.js';
 
 function autocloseCallback(e) {
   let curr = e.target;
@@ -254,6 +255,9 @@ export class Dialog extends Container {
           }
         }
       ),
+      defineMeasure(SymWindowResize, function () {
+        if (this.options.visible) this.reposition();
+      }),
     ];
   }
 
@@ -281,10 +285,6 @@ export class Dialog extends Container {
 
     observeDOM(this.element, handleTabbing.bind(this));
     handleTabbing.call(this);
-  }
-
-  resize() {
-    if (this.options.visible) this.reposition();
   }
 
   draw(O, element) {

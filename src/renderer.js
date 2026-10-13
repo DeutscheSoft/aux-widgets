@@ -241,7 +241,16 @@ export class Renderer {
   }
 
   addTask(task) {
+    // Tasks must be registered before the dependency map is first built
+    // (e.g. by scheduleTasks / hasDependency). RenderState also sizes its
+    // runnable bitset from taskCount at construction time.
+    if (this._dependencyMap)
+      throw new Error('Cannot addTask after the dependency map has been used.');
     this.tasks.push(task);
+  }
+
+  hasDependency(dependency) {
+    return this.getDependencyMap().has(dependency);
   }
 
   scheduleTasks(dependency, runnable) {

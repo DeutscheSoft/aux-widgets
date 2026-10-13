@@ -185,7 +185,15 @@ export class EqualizerGraph extends Graph {
   static get renderers() {
     return [
       defineRecalculation(
-        ['bands', 'accuracy', 'rendering_filter', 'oversampling', 'threshold'],
+        [
+          'bands',
+          'accuracy',
+          'rendering_filter',
+          'oversampling',
+          'threshold',
+          'range_x',
+          'range_y',
+        ],
         function () {
           this.set('dots', this.drawPath());
         }
@@ -213,10 +221,6 @@ export class EqualizerGraph extends Graph {
    */
   drawPath() {
     return drawGraph.call(this, this.getFilterFunctions());
-  }
-
-  resize() {
-    this.invalidate('bands');
   }
 
   addBand(band) {

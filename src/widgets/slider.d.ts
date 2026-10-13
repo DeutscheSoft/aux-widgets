@@ -72,9 +72,4 @@ export declare class Slider<
    * @returns An array containing the main element.
    */
   getResizeElements(): HTMLElement[];
-
-  /**
-   * Resize the widget and update internal width/height values.
-   */
-  resize(): void;
 }

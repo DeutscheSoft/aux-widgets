@@ -26,7 +26,7 @@ const _clockSize: number | undefined = clockWidget.get('size');
 clockWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-clockWidget.on('resize', () => {});
+clockWidget.on('show', () => {});
 // @ts-expect-error 'not_an_event' is not a valid event name
 clockWidget.on('not_an_event', () => {});
 

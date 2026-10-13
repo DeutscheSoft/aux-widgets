@@ -26,7 +26,7 @@ const _panoramaMode:
 panoramaWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-panoramaWidget.on('resize', () => {});
+panoramaWidget.on('show', () => {});
 // @ts-expect-error 'not_an_event' is not a valid event name
 panoramaWidget.on('not_an_event', () => {});
 

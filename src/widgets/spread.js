@@ -224,7 +224,7 @@ export class Spread extends Widget {
             outerWidth(_lower, true, undefined, true) * 2;
         }
 
-        this.set('basis', basis);
+        this.update('basis', basis);
       }),
       defineRender('layout', function (layout) {
         const element = this.element;

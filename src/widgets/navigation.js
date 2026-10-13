@@ -26,16 +26,24 @@ import {
   outerWidth,
   outerHeight,
 } from '../utils/dom.js';
+import { observeResize } from '../utils/observe_resize.js';
 import { Button } from './button.js';
 import { Buttons } from './buttons.js';
 import { Container } from './container.js';
+import { SymResize } from './widget.js';
 import {
+  defineMeasure,
   defineRender,
   defineRecalculation,
   childDependency,
 } from '../renderer.js';
 import { domScheduler } from '../dom_scheduler.js';
 import { MASK_RENDER } from '../scheduler/scheduler.js';
+
+/** Buttons strip / arrow widgets changed size — remeasure clip. */
+const SymClipSize = Symbol('navigationClipSize');
+/** A navigation button changed size — remeasure button positions. */
+const SymButtonPositions = Symbol('navigationButtonPositions');
 
 function easeLinear(t) {
   return t;
@@ -159,11 +167,33 @@ function nextDblClicked() {
   this.parent.userset('select', this.parent.buttons.getButtons().length - 1);
 }
 
-function measure_clip() {
+function measureClip() {
   const buttons = this.buttons;
 
   this.update('_clip_height', innerHeight(buttons.element, undefined, true));
   this.update('_clip_width', innerWidth(buttons.element, undefined, true));
+}
+
+function measureButtonPositions() {
+  const positions = this.options._button_positions;
+  let list_width = 0;
+  let list_height = 0;
+
+  positions.forEach((info, button) => {
+    const element = button.element;
+
+    info.width = outerWidth(element, false, undefined, true);
+    info.height = outerHeight(element, false, undefined, true);
+    info.left = element.offsetLeft;
+    info.top = element.offsetTop;
+
+    list_width = Math.max(list_width, info.width + info.left);
+    list_height = Math.max(list_height, info.height + info.top);
+  });
+
+  this.update('_list_width', list_width);
+  this.update('_list_height', list_height);
+  this.invalidate('_button_positions');
 }
 
 /**
@@ -309,6 +339,19 @@ export class Navigation extends Container {
           }
         }
       ),
+      defineMeasure(SymResize, function () {
+        autoArrows.call(this);
+        this._scroll_top = this.buttons.element.scrollTop;
+        this._scroll_left = this.buttons.element.scrollLeft;
+      }),
+      defineMeasure(SymClipSize, function () {
+        measureClip.call(this);
+        autoArrows.call(this);
+      }),
+      defineMeasure(SymButtonPositions, function () {
+        measureButtonPositions.call(this);
+        autoArrows.call(this);
+      }),
     ];
   }
 
@@ -373,59 +416,39 @@ export class Navigation extends Container {
   initialized() {
     super.initialized();
 
+    const invalidateButtons = () => this.invalidate(SymButtonPositions);
+    const buttonObserver =
+      typeof ResizeObserver !== 'undefined'
+        ? new ResizeObserver(invalidateButtons)
+        : null;
+
+    const clipElements = [this.buttons.element];
+    if (this.prev) clipElements.push(this.prev.element);
+    if (this.next) clipElements.push(this.next.element);
+
     this.addSubscriptions(
       this.buttons.buttons.forEachAsync((button) => {
-        let measured = false;
         const positions = this.get('_button_positions');
-        const updateLength = () => {
-          let list_width = 0;
-          let list_height = 0;
-
-          positions.forEach((info) => {
-            list_width = Math.max(list_width, info.width + info.left);
-            list_height = Math.max(list_height, info.height + info.top);
-          });
-
-          this.update('_list_width', list_width);
-          this.update('_list_height', list_height);
-        };
-
         const info = {
           width: 0,
           height: 0,
           left: 0,
           top: 0,
         };
-        const measure = (_button) => {
-          const element = _button.element;
-
-          info.width = outerWidth(element, false, undefined, true);
-          info.height = outerHeight(element, false, undefined, true);
-          info.left = element.offsetLeft;
-          info.top = element.offsetTop;
-
-          if (!measured) {
-            measured = true;
-            positions.set(_button, info);
-          }
-          updateLength();
-          this.invalidate('_button_positions');
-        };
-
-        let sub = button.observeResize(measure);
+        positions.set(button, info);
+        if (buttonObserver) buttonObserver.observe(button.element);
+        invalidateButtons();
 
         return () => {
-          if (!sub) return;
-          sub();
-          sub = null;
-          if (measured) {
-            positions.delete(button);
-            updateLength();
-            this.invalidate('_button_positions');
-          }
+          if (buttonObserver) buttonObserver.unobserve(button.element);
+          positions.delete(button);
+          invalidateButtons();
         };
       }),
-      this.buttons.observeResize(measure_clip.bind(this)),
+      () => {
+        if (buttonObserver) buttonObserver.disconnect();
+      },
+      observeResize(clipElements, () => this.invalidate(SymClipSize)),
       this.buttons.subscribe('scroll', () => {
         this._scroll_top = this.buttons.element.scrollTop;
         this._scroll_left = this.buttons.element.scrollLeft;
@@ -438,13 +461,6 @@ export class Navigation extends Container {
 
   getResizeTargets() {
     return [this.buttons.element];
-  }
-
-  resize() {
-    autoArrows.call(this);
-    this._scroll_top = this.buttons.element.scrollTop;
-    this._scroll_left = this.buttons.element.scrollLeft;
-    super.resize();
   }
 
   draw(O, element) {
@@ -508,10 +524,6 @@ export class Navigation extends Container {
         },
         append: function () {
           this.element.appendChild(this.prev.element);
-          if (!this.prev.__measure_clip) {
-            this.prev.observeResize(measure_clip.bind(this));
-            this.prev.__measure_clip = true;
-          }
         },
       },
       {
@@ -529,10 +541,6 @@ export class Navigation extends Container {
         },
         append: function () {
           this.element.appendChild(this.next.element);
-          if (!this.next.__measure_clip) {
-            this.next.observeResize(measure_clip.bind(this));
-            this.next.__measure_clip = true;
-          }
         },
       },
     ];

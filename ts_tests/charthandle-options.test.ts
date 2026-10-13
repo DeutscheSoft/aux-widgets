@@ -26,7 +26,7 @@ const _charthandleX: number | undefined = charthandleWidget.get('x');
 charthandleWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-charthandleWidget.on('resize', () => {});
+charthandleWidget.on('show', () => {});
 // @ts-expect-error 'not_an_event' is not a valid event name
 charthandleWidget.on('not_an_event', () => {});
 

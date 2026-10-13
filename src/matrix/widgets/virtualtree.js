@@ -25,10 +25,14 @@ import {
   defineMeasure,
   defineRecalculation,
 } from '../../renderer.js';
+import { SymResize } from '../../widgets/widget.js';
+import { DebounceTimer } from '../../utils/timers.js';
 
 import { Scroller } from './../../widgets/scroller.js';
 import { VirtualTreeEntry } from './virtualtreeentry.js';
 import { resizeArrayMod } from '../models.js';
+
+const RESIZE_DEBOUNCE_MS = 100;
 
 function collapse(state) {
   const element = this.get('data');
@@ -93,9 +97,6 @@ export class VirtualTree extends Scroller {
   }
   static get static_events() {
     return {
-      set_size: function (v) {
-        this.triggerResize();
-      },
       set_virtualtreeview: function (virtualtreeview) {
         this.virtualtreeview_subs.unsubscribe();
       },
@@ -107,6 +108,9 @@ export class VirtualTree extends Scroller {
 
   static get renderers() {
     return [
+      defineMeasure(SymResize, function () {
+        this.update('_view_height', this.element.offsetHeight);
+      }),
       defineRecalculation(
         ['_view_height', 'prerender_top', 'prerender_bottom', 'size'],
         function (_view_height, prerender_top, prerender_bottom, size) {
@@ -168,6 +172,10 @@ export class VirtualTree extends Scroller {
     super.initialize(options);
     this.virtualtreeview_subs = new Subscriptions();
     this.entries = [];
+    this._resize_debounce = new DebounceTimer(
+      () => super.triggerResize(),
+      RESIZE_DEBOUNCE_MS
+    );
   }
 
   _scrollDataTo(position) {
@@ -285,7 +293,18 @@ export class VirtualTree extends Scroller {
   }
 
   triggerReposition() {
-    this.set('size', this.get('size'));
+    // Re-run the size render path (entry transforms). View height / amount
+    // already track `size` via defineRecalculation — no SymResize needed.
+    this.invalidate('size');
+  }
+
+  triggerResize() {
+    this._resize_debounce.trigger();
+  }
+
+  destroy() {
+    this._resize_debounce.destroy();
+    super.destroy();
   }
 
   draw(options, element) {
@@ -378,13 +397,6 @@ export class VirtualTree extends Scroller {
         setEntryPosition(entry, index);
       })
     );
-  }
-
-  resize() {
-    const E = this.element;
-    this.update('_view_height', E.offsetHeight);
-
-    super.resize();
   }
 
   /**

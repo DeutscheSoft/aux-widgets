@@ -26,10 +26,18 @@ import { subscribeDOMEvent } from '../../utils/events.js';
 import { Button } from './../../widgets/button.js';
 import { ConfirmButton } from './../../widgets/confirmbutton.js';
 import { Container } from './../../widgets/container.js';
+import { SymResize } from './../../widgets/widget.js';
+import { DebounceTimer } from '../../utils/timers.js';
 import { Indicator } from './indicator.js';
 import { DragCapture } from '../../modules/dragcapture.js';
 import { resizeArrayMod } from '../models.js';
-import { defineRender, defineRecalculation } from '../../renderer.js';
+import {
+  defineMeasure,
+  defineRender,
+  defineRecalculation,
+} from '../../renderer.js';
+
+const RESIZE_DEBOUNCE_MS = 100;
 
 function onIndicatorClicked() {
   const indicators = this.parent;
@@ -205,6 +213,11 @@ export class Indicators extends Container {
 
   static get renderers() {
     return [
+      defineMeasure(SymResize, function () {
+        const bbox = this.element.getBoundingClientRect();
+        this.update('_xinit', bbox.x);
+        this.update('_yinit', bbox.y);
+      }),
       defineRecalculation(
         ['_x0', '_y0', '_xd', '_yd', '_xinit', '_yinit'],
         function (_x0, _y0, _xd, _yd, _xinit, _yinit) {
@@ -348,6 +361,10 @@ export class Indicators extends Container {
     super.initialize(options);
     this.connectionview_subs = new Subscriptions();
     this.entries = [];
+    this._resize_debounce = new DebounceTimer(
+      () => super.triggerResize(),
+      RESIZE_DEBOUNCE_MS
+    );
 
     this.drag = new DragCapture(this, {
       node: this.element,
@@ -360,7 +377,12 @@ export class Indicators extends Container {
     this._dragging = false;
   }
 
+  triggerResize() {
+    this._resize_debounce.trigger();
+  }
+
   destroy() {
+    this._resize_debounce.destroy();
     super.destroy();
     this.connectionview_subs.unsubscribe();
   }
@@ -390,13 +412,6 @@ export class Indicators extends Container {
         this.emit('scrollChanged', element.scrollTop, element.scrollLeft);
       })
     );
-  }
-
-  resize() {
-    super.resize();
-    const bbox = this.element.getBoundingClientRect();
-    this.update('_xinit', bbox.x);
-    this.update('_yinit', bbox.y);
   }
 
   _calculateRectangle() {

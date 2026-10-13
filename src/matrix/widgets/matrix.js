@@ -18,7 +18,9 @@
  */
 
 import { innerWidth, outerWidth, addClass } from './../../utils/dom.js';
-import { defineRender } from '../../renderer.js';
+import { defineMeasure, defineRender } from '../../renderer.js';
+import { SymResize } from '../../widgets/widget.js';
+import { DebounceTimer } from '../../utils/timers.js';
 
 import { Indicators } from './indicators.js';
 import { Indicator } from './indicator.js';
@@ -29,6 +31,7 @@ import { ScrollDetector } from './scroll_detector.js';
 import { ConnectionDataView } from '../models.js';
 
 const scrollDetectorTimeout = 200;
+const RESIZE_DEBOUNCE_MS = 100;
 
 function setVirtualtreeviews() {
   const O = this.options;
@@ -99,10 +102,15 @@ export class Matrix extends Patchbay {
 
   static get renderers() {
     return [
+      defineMeasure(SymResize, function () {
+        this.update(
+          '_virtualtree_size',
+          innerWidth(this.element) - outerWidth(this.virtualtree_left.element)
+        );
+      }),
       defineRender('_virtualtree_size', function (_virtualtree_size) {
         const virtualtree = this.virtualtree_top;
         virtualtree.element.style.height = _virtualtree_size + 'px';
-        virtualtree.triggerResize();
       }),
     ];
   }
@@ -127,6 +135,10 @@ export class Matrix extends Patchbay {
     this._scroll_left = new ScrollDetector(scrollDetectorTimeout);
     this._scroll_top = new ScrollDetector(scrollDetectorTimeout);
     this._scroll_matrix = new ScrollDetector(scrollDetectorTimeout);
+    this._resize_debounce = new DebounceTimer(
+      () => super.triggerResize(),
+      RESIZE_DEBOUNCE_MS
+    );
   }
 
   scrollTo(options) {
@@ -190,15 +202,12 @@ export class Matrix extends Patchbay {
     setVirtualtreeviews.call(this);
   }
 
-  resize() {
-    this.set(
-      '_virtualtree_size',
-      innerWidth(this.element) - outerWidth(this.virtualtree_left.element)
-    );
-    super.resize();
+  triggerResize() {
+    this._resize_debounce.trigger();
   }
 
   destroy() {
+    this._resize_debounce.destroy();
     this._scroll_left.destroy();
     this._scroll_top.destroy();
     this._scroll_matrix.destroy();

@@ -26,7 +26,7 @@
  * @param {string} name - The name of the option which was changed due to the users action
  * @param {mixed} value - The new value of the option
  */
-import { Widget } from './widget.js';
+import { SymResize, Widget } from './widget.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
 import { warning } from '../utils/warning.js';
@@ -39,7 +39,7 @@ import {
 } from '../utils/ranged.js';
 import { focusMoveDefault, announceFocusMoveKeys } from '../utils/keyboard.js';
 import { warn } from '../utils/log.js';
-import { defineRender } from '../renderer.js';
+import { defineMeasure, defineRender } from '../renderer.js';
 import { mergeStaticEvents } from '../widget_helpers.js';
 
 function dblClick() {
@@ -129,6 +129,11 @@ export class Slider extends Widget {
   static get renderers() {
     return [
       ...rangedRenderers,
+      defineMeasure(SymResize, function () {
+        const E = this.element;
+        this.update('_width', outerWidth(E, false, undefined, true));
+        this.update('_height', outerHeight(E, false, undefined, true));
+      }),
       defineRender('image', function (image) {
         const style = this.element.style;
         if (image) style['background-image'] = "url('" + image + "')";
@@ -226,12 +231,6 @@ export class Slider extends Widget {
 
   getResizeElements() {
     return [this.element];
-  }
-
-  resize() {
-    const E = this.element;
-    this.set('_width', outerWidth(E, false, undefined, true));
-    this.set('_height', outerHeight(E, false, undefined, true));
   }
 
   set(key, value) {

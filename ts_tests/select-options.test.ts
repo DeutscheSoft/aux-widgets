@@ -32,7 +32,7 @@ const _selectSelected: number | undefined = selectWidget.get('selected');
 selectWidget.get('not_an_option_key');
 
 // .on(event, handler) events API type-checking — event name and handler signature are typed
-selectWidget.on('resize', () => {});
+selectWidget.on('show', () => {});
 // @ts-expect-error 'not_an_event' is not a valid event name
 selectWidget.on('not_an_event', () => {});
 

@@ -6,7 +6,8 @@ Widgets are organized in a tree. This tree will usually be similar to the DOM
 tree, where each widget consists of at least one DOM element. There may be
 several disconnected widget trees at the same time. The root of a widget tree
 should always be a widget which is a subclass of Root. The Root widget takes
-care of tracking resize events and (possibly) document visibility changes.
+care of document visibility changes (so drawing can be paused when the page is
+hidden).
 
 By default all Widgets are represented by DOM Elements with `display: inline-block`.
 When laying out an interface they can therefore be absolutely positioned inside
@@ -18,46 +19,23 @@ However, utilizing CSS features like grid and flexbox is recommended.
 
 All widgets can be given a size using CSS alone.
 This makes it possible to build fully responsive layouts by using CSS only.
-Some widgets need to redraw parts of themselves when they are resized.
-The Root widgets therefore fires a `resize` event on the full widget tree.
-In cases where the size of widgets is purely determined by CSS, this is sufficient.
-If however, parts of the layout require dynamic resizing using Javascript, there are simple
-techniques that need to be used.
 
-The simplest case is when a widget should be resized using javascript whenever the window size changes.
-There are certain situations in which purely relying on CSS is not enough.
-In that case, the way to do that is to register for the `resize` even on the widget to be resized
-and set the appropriate style attributes when the resize event occurs.
+## Resize handling
 
-For example:
+Widgets that need to remeasure when their box changes declare a renderer
+dependency on `SymResize`. Those widgets automatically install a
+`ResizeObserver` on `getResizeTargets()` (or `this.element` by default), and
+also remeasure after font/window `load` when text metrics may change without
+the border box changing.
 
-    chart.add_event('resize', function() {
-        var width, height;
-        /* calculate new size */
+Viewport-dependent work (for example dialog repositioning) uses
+`SymWindowResize` instead; those widgets subscribe to the global window resize
+signal without walking the widget tree.
 
-        this.set_style('width', width);
-        this.set_style('height', height);
-    });
+There is no recursive resize cascade: resizing the window does not invalidate
+every descendant. Only widgets that declare a resize dependency do work.
 
-This way the widget itself (and all its children) will be able to correctly determine their new size
-and redraw themselves if necessary.
-
-In the more general case when widgets are resized dynamically in the absence of window resize events,
-it is necessary to call the `resize()` method on the part of the widget tree that is affected by
-the size change.
-
-For example:
-
-    function shrink_chart() {
-        chart.set_style('width', 400);
-        chart.set_style('height', 200);
-
-        chart.resize();
-    }
-
-    function grow_chart() {
-        chart.set_style('width', 400);
-        chart.set_style('height', 400);
-
-        chart.resize();
-    }
+If you change a widget's size from JavaScript (for example by setting styles),
+widgets that observe their own element will pick that up via `ResizeObserver`.
+You can also call `triggerResize()` on a widget that depends on `SymResize` to
+invalidate its measure tasks explicitly; this does not recurse into children.

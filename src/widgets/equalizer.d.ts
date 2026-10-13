@@ -76,11 +76,6 @@ export declare class EqualizerGraph<
   drawPath(): string;
 
   /**
-   * Resizes the graph and invalidates the bands.
-   */
-  resize(): void;
-
-  /**
    * Add a band to the graph.
    * @param band - The EqBand to add.
    */

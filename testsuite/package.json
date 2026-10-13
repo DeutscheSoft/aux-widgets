@@ -10,7 +10,8 @@
     "test": "vitest run",
     "test:jsdom": "vitest run",
     "test:watch": "vitest",
-    "test:browser": "vitest run --config vitest.browser.config.js"
+    "test:browser": "vitest run --config vitest.browser.config.js",
+    "bench:matrix-resize": "node ./bench/matrix_resize.mjs"
   },
   "author": "Arne Goedeke",
   "private": true,
