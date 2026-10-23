@@ -346,11 +346,11 @@ export class Widget extends Base {
   }
 
   static getRenderers() {
+    this.maybeInitialize();
     let _renderers = getOwnProperty(this, '_renderers');
 
     if (!_renderers) {
       const parent = Object.getPrototypeOf(this);
-
       const parentRenderers = parent.getRenderers ? parent.getRenderers() : [];
 
       this._renderers = _renderers = parentRenderers.concat(
@@ -384,19 +384,24 @@ export class Widget extends Base {
   }
 
   static getRenderer() {
-    let renderer = this._renderer;
+    let renderer = getOwnProperty(this, '_renderer');
 
-    if (Object.prototype.hasOwnProperty.call(this, '_renderer'))
-      return renderer;
-
-    this._renderer = renderer = new Renderer();
-
-    this.getRenderers().forEach((task) => renderer.addTask(task));
+    if (!renderer) {
+      renderer = new Renderer();
+      this.getRenderers().forEach((task) => renderer.addTask(task));
+      this._renderer = renderer;
+    }
 
     return renderer;
   }
 
   static addTask(task) {
+    if (getOwnProperty(this, '_renderer')) {
+      throw new Error(
+        this.name +
+          '.addTask(): cannot add tasks after getRenderer() has been used.'
+      );
+    }
     this.getRenderers().push(task);
   }
 
