@@ -486,13 +486,17 @@ export class ConnectionDataView extends Events {
       );
     }
 
-    virtualtreeview1.subscribeScrollView((offset) => {
-      this.emit('scrollView', offset, 0);
-    });
+    this._addSubscription(
+      virtualtreeview1.subscribeScrollView((offset) => {
+        this.emit('scrollView', offset, 0);
+      })
+    );
 
-    virtualtreeview2.subscribeScrollView((offset) => {
-      this.emit('scrollView', 0, offset);
-    });
+    this._addSubscription(
+      virtualtreeview2.subscribeScrollView((offset) => {
+        this.emit('scrollView', 0, offset);
+      })
+    );
   }
 
   getConnectionFor(row_element, column_element) {
