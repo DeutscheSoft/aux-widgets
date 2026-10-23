@@ -262,9 +262,7 @@ export class Indicators extends Container {
         };
 
         const removeIndicator = (indicator) => {
-          indicator.element.remove();
-          indicator.off('click', onIndicatorClicked);
-          this.removeChild(indicator);
+          this._removeIndicator(indicator);
         };
 
         sub.add(
@@ -353,10 +351,24 @@ export class Indicators extends Container {
     this._resize_debounce.trigger();
   }
 
+  _removeIndicator(indicator) {
+    indicator.element.remove();
+    indicator.off('click', onIndicatorClicked);
+    this.removeChild(indicator);
+    indicator.destroy();
+  }
+
   destroy() {
     this._resize_debounce.destroy();
-    super.destroy();
     this.connectionview_subs.unsubscribe();
+    this.entries.forEach((row) => {
+      if (!row) return;
+      row.forEach((indicator) => {
+        if (indicator) this._removeIndicator(indicator);
+      });
+    });
+    this.entries = [];
+    super.destroy();
   }
 
   createIndicator() {
