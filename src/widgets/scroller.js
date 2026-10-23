@@ -28,6 +28,7 @@ import {
   outerHeight,
 } from '../utils/dom.js';
 import { DragValue } from '../modules/dragvalue.js';
+import { subscribeDOMEvent } from '../utils/events.js';
 import { defineRender } from '../renderer.js';
 import { mergeStaticEvents } from '../widget_helpers.js';
 
@@ -183,6 +184,11 @@ export class ScrollBar extends Widget {
     this.set('position', this.options.position);
   }
 
+  destroy() {
+    this.drag.destroy();
+    super.destroy();
+  }
+
   draw(O, element) {
     /**
      * @member {HTMLDivElement} Scroller#element - The scrollbar handle.
@@ -253,6 +259,7 @@ export class Scroller extends Container {
     super.initialize(options);
     this._changed = changed.bind(this);
     this.observer = new MutationObserver(this._changed);
+    this.addSubscriptions(() => this.observer.disconnect());
   }
 
   draw(O, element) {
@@ -266,10 +273,11 @@ export class Scroller extends Container {
       this.scrollhide.element.appendChild(this.__elementChildren[i]);
     }
 
-    this.scroll_x.addEventListener('userset', usersetScrollX);
-    this.scroll_y.addEventListener('userset', usersetScrollY);
-
-    this.scrollhide.element.addEventListener('scroll', this._changed);
+    this.addSubscriptions(
+      this.scroll_x.subscribe('userset', usersetScrollX),
+      this.scroll_y.subscribe('userset', usersetScrollY),
+      subscribeDOMEvent(this.scrollhide.element, 'scroll', this._changed)
+    );
 
     super.draw(O, element);
   }
