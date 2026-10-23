@@ -123,13 +123,13 @@ export class VirtualTree extends Scroller {
           );
         }
       ),
-      defineMeasure(['virtualtreeview', '_amount'], function (
-        virtualtreeview,
-        _amount
-      ) {
-        if (!virtualtreeview) return;
-        virtualtreeview.setAmount(_amount);
-      }),
+      defineMeasure(
+        ['virtualtreeview', '_amount'],
+        function (virtualtreeview, _amount) {
+          if (!virtualtreeview) return;
+          virtualtreeview.setAmount(_amount);
+        }
+      ),
       defineRender(['_sizer_size', 'size'], function (_sizer_size, size) {
         this._sizer.style.height =
           this.calculateEntryPosition(_sizer_size) + 'px';
@@ -171,8 +171,16 @@ export class VirtualTree extends Scroller {
     this._resize_debounce.trigger();
   }
 
+  _removeEntry(entry) {
+    entry.element.remove();
+    entry.off('collapse', collapse);
+    this.removeChild(entry);
+    entry.destroy();
+  }
+
   destroy() {
     this._resize_debounce.destroy();
+    this.virtualtreeview_subs.unsubscribe();
     super.destroy();
   }
 
