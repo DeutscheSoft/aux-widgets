@@ -147,18 +147,20 @@ export class Indicator extends Button {
     );
     this.maybeSubscribeData(sink, this.sink_subscriptions, '_onSinkChanged');
 
+    this.connection_subscriptions.unsubscribe();
+
     if (!connection) return;
 
     if (connection instanceof Set) {
-      connection.forEach((connection) => {
-        this.maybeSubscribeData(
-          connection,
+      connection.forEach((item) => {
+        this.subscribeData(
+          item,
           this.connection_subscriptions,
           '_onConnectionChanged'
         );
       });
     } else {
-      this.maybeSubscribeData(
+      this.subscribeData(
         connection,
         this.connection_subscriptions,
         '_onConnectionChanged'
@@ -166,8 +168,7 @@ export class Indicator extends Button {
     }
   }
 
-  maybeSubscribeData(data, subscriptions, methodName) {
-    subscriptions.unsubscribe();
+  subscribeData(data, subscriptions, methodName) {
     if (!data || !this[methodName]) return;
 
     subscriptions.add(
@@ -175,6 +176,11 @@ export class Indicator extends Button {
         this[methodName](key, value, data);
       })
     );
+  }
+
+  maybeSubscribeData(data, subscriptions, methodName) {
+    subscriptions.unsubscribe();
+    this.subscribeData(data, subscriptions, methodName);
   }
 
   draw(options, element) {
