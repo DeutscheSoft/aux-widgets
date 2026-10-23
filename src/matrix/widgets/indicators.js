@@ -360,6 +360,7 @@ export class Indicators extends Container {
 
   destroy() {
     this._resize_debounce.destroy();
+    this.drag.destroy();
     this.connectionview_subs.unsubscribe();
     this.entries.forEach((row) => {
       if (!row) return;
