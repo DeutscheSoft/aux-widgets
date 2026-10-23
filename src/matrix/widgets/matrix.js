@@ -35,24 +35,28 @@ const RESIZE_DEBOUNCE_MS = 100;
 function setVirtualtreeviews() {
   const O = this.options;
   if (!O.sources || !O.sinks) return;
+
+  let connectionview;
+
   switch (O.signal_flow) {
-    case 'top-left': {
-      const connectionview = new ConnectionDataView(O.sinks, O.sources);
-      this.connectionview = connectionview;
+    case 'top-left':
+      connectionview = new ConnectionDataView(O.sinks, O.sources);
       this.virtualtree_top.set('virtualtreeview', O.sources);
       this.virtualtree_left.set('virtualtreeview', O.sinks);
-      this.indicators.set('connectionview', connectionview);
       break;
-    }
-    case 'left-top': {
-      const connectionview = new ConnectionDataView(O.sources, O.sinks);
-      this.connectionview = connectionview;
+    case 'left-top':
+      connectionview = new ConnectionDataView(O.sources, O.sinks);
       this.virtualtree_left.set('virtualtreeview', O.sources);
       this.virtualtree_top.set('virtualtreeview', O.sinks);
-      this.indicators.set('connectionview', connectionview);
       break;
-    }
+    default:
+      return;
   }
+
+  const previous = this.connectionview;
+  this.connectionview = connectionview;
+  this.indicators.set('connectionview', connectionview);
+  if (previous) previous.destroy();
 }
 
 /**
@@ -214,6 +218,10 @@ export class Matrix extends Patchbay {
     this._scroll_top.destroy();
     this._scroll_matrix.destroy();
     super.destroy();
+    if (this.connectionview) {
+      this.connectionview.destroy();
+      this.connectionview = null;
+    }
   }
 
   static get child_widgets() {
