@@ -181,6 +181,10 @@ export class VirtualTree extends Scroller {
   destroy() {
     this._resize_debounce.destroy();
     this.virtualtreeview_subs.unsubscribe();
+    this.entries.forEach((entry) => {
+      if (entry) this._removeEntry(entry);
+    });
+    this.entries = [];
     super.destroy();
   }
 
@@ -368,10 +372,7 @@ export class VirtualTree extends Scroller {
         };
 
         const remove = (entry) => {
-          entry.element.remove();
-          entry.off('collapse', collapse);
-          this.removeChild(entry);
-          entry.destroy();
+          this._removeEntry(entry);
         };
 
         resizeArrayMod(
