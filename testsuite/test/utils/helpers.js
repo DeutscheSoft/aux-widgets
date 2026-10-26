@@ -66,7 +66,7 @@ export function assert(v, msg) {
 export function assertError(cb, msg) {
   let ok = true;
   try {
-    w2.removeChild(c1);
+    cb();
     ok = false;
   } catch (err) {}
 
