@@ -131,6 +131,14 @@ export class Subscriptions extends Subscription {
    *   an array of functions, or an object with an `unsubscribe` method.
    */
   add(subscription: SubscriptionInput): void;
+
+  /**
+   * Returns an unsubscribe callback for this set.
+   * If exactly one subscription is active, that function is returned directly
+   * (ownership is transferred; this set becomes closed).
+   * Otherwise returns a function that unsubscribes all.
+   */
+  toUnsubscribe(): SubscriptionCallback;
 }
 
 /**
