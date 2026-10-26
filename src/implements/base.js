@@ -27,6 +27,7 @@ import {
   removeEvent,
   mergeStaticEvents,
 } from './../widget_helpers.js';
+import { bindOption } from './../utils/binding.js';
 
 function callHandler(self, fun, args) {
   try {
@@ -466,6 +467,21 @@ export class Base {
     )
       return;
     this.set(key, value);
+  }
+
+  /**
+   * Install a binding between an option and a value stream.
+   * See {@link module:utils/binding} for options and behavior.
+   *
+   * @method Base#bind
+   *
+   * @param {string} name - The option name.
+   * @param {Object} source - Object with optional `subscribe` and/or `set`.
+   * @param {Object} [options] - Binding options.
+   * @returns {function} Unsubscribe function.
+   */
+  bind(name, source, options) {
+    return bindOption(this, name, source, options);
   }
 
   /**

@@ -1,4 +1,39 @@
 /**
+ * A value stream that can drive and/or observe a widget option via {@link Base.bind}.
+ */
+export interface BindingSource<T = unknown> {
+  /** Push values into the widget option. */
+  subscribe?: (callback: (value: T) => void) => () => void;
+  /** Receive values from the widget option. */
+  set?: (value: T) => void;
+}
+
+/**
+ * Options for {@link Base.bind} / `bindOption`.
+ * Directions are named from the widget’s point of view.
+ */
+export interface BindingOptions {
+  /** Which widget event drives `source.set`. Default `'useraction'`. */
+  event?: 'useraction' | 'set' | 'userset';
+  /** If false, do not apply values from `subscribe`. Default true. */
+  receive?: boolean;
+  /** If false, do not call `source.set` from widget events. Default true. */
+  send?: boolean;
+  /**
+   * If true (default), apply incoming values with `widget.update`;
+   * if false, use `widget.set`.
+   */
+  update?: boolean;
+  /**
+   * If true, ignore `subscribe` values while `interacting` is true;
+   * after interaction ends, wait `suppressTimeout` then apply the last pending value.
+   */
+  suppressWhileInteracting?: boolean;
+  /** Grace time in ms after interaction ends (default 500). */
+  suppressTimeout?: number;
+}
+
+/**
  * Native DOM events supported by Base.
  * These events are automatically delegated from the DOM element.
  */
@@ -165,12 +200,37 @@ export declare class Base<
   set<K extends keyof Options>(key: K, value: Options[K]): Options[K];
 
   /**
+   * Conditionally sets an option unless it already has the requested value.
+   *
+   * @param key - The option name
+   * @param value - The option value
+   */
+  update<K extends keyof Options>(key: K, value: Options[K]): void;
+
+  /**
    * Gets an option value.
    *
    * @param key - The option name
    * @returns The option value, or undefined if not set
    */
   get<K extends keyof Options>(key: K): Options[K] | undefined;
+
+  /**
+   * Install a binding between an option and a value stream.
+   * Directions are named from the widget’s point of view
+   * (`receive` = source → widget, `send` = widget → source).
+   * `name` may be a declared option or a `_`-prefixed name.
+   *
+   * @param name - The option name
+   * @param source - Object with optional `subscribe` and/or `set`
+   * @param options - Binding options
+   * @returns Unsubscribe function
+   */
+  bind<K extends (keyof Options & string) | `_${string}`>(
+    name: K,
+    source: BindingSource<K extends keyof Options ? Options[K] : unknown>,
+    options?: BindingOptions
+  ): () => void;
 
   /**
    * Sets an option by user interaction. Emits `userset` (cancelable) then
