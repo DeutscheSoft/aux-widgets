@@ -18,7 +18,6 @@
  */
 
 import { Container } from './container.js';
-import { SymWindowResize } from './widget.js';
 import { translateAnchor } from '../utils/anchor.js';
 import {
   element,
