@@ -1,37 +1,130 @@
-/**
- * A value stream that can drive and/or observe a widget option via {@link Base.bind}.
- */
-export interface BindingSource<T = unknown> {
-  /** Push values into the widget option. */
-  subscribe?: (callback: (value: T) => void) => () => void;
-  /** Receive values from the widget option. */
-  set?: (value: T) => void;
-}
+import type {
+  ReadableValue,
+  WritableValue,
+  ReadwriteValue,
+} from '../values.interface.js';
+
+export type { ReadableValue, WritableValue, ReadwriteValue };
+
+/** Widget event that drives `source.set`. */
+export type BindingSendEvent = 'useraction' | 'set' | 'userset';
 
 /**
- * Options for {@link Base.bind} / `bindOption`.
- * Directions are named from the widget’s point of view.
+ * Optional logger for {@link BindingCommonOptions.debug}.
+ * Same calling convention as `console.log` (`%o` / `%s` formatting optional).
  */
-export interface BindingOptions {
-  /** Which widget event drives `source.set`. Default `'useraction'`. */
-  event?: 'useraction' | 'set' | 'userset';
-  /** If false, do not apply values from `subscribe`. Default true. */
-  receive?: boolean;
-  /** If false, do not call `source.set` from widget events. Default true. */
-  send?: boolean;
+export type BindingDebugLog = (message?: any, ...optionalParams: any[]) => void;
+
+type BindingCommonOptions = {
+  /**
+   * Log install, receive, send, suppress, and teardown for this binding.
+   * `true` uses the aux `log` sink (usually `console.log`); a function is
+   * called like `console.log` instead.
+   */
+  debug?: boolean | BindingDebugLog;
+};
+
+type BindingReceiveSideOptions = {
   /**
    * If true (default), apply incoming values with `widget.update`;
    * if false, use `widget.set`.
    */
   update?: boolean;
   /**
-   * If true, ignore `subscribe` values while `interacting` is true;
-   * after interaction ends, wait `suppressTimeout` then apply the last pending value.
+   * If true (default), ignore `subscribe` values while `interacting` is true;
+   * after interaction ends, wait `suppressTimeout` then apply the last pending
+   * value. No-op if the widget has no `interacting` option. Pass `false` to
+   * apply incoming values during interaction.
    */
   suppressWhileInteracting?: boolean;
   /** Grace time in ms after interaction ends (default 500). */
   suppressTimeout?: number;
-}
+};
+
+type BindingSendSideOptions = {
+  /** Which widget event drives `source.set`. Default `'useraction'`. */
+  event?: BindingSendEvent;
+};
+
+/**
+ * Options when the source is {@link ReadableValue}-only (receive direction).
+ * `receive: false`, `send: true`, and `event` are not allowed.
+ */
+export type ReceiveOnlyBindingOptions = BindingCommonOptions &
+  BindingReceiveSideOptions & {
+    receive?: true;
+    send?: false;
+  };
+
+/**
+ * Options when the source is {@link WritableValue}-only (send direction).
+ * `send: false`, `receive: true`, and receive-side options are not allowed.
+ */
+export type SendOnlyBindingOptions = BindingCommonOptions &
+  BindingSendSideOptions & {
+    send?: true;
+    receive?: false;
+  };
+
+/**
+ * Options when the source is a {@link ReadwriteValue}.
+ * At least one direction must remain active (`receive`/`send` not both false).
+ */
+export type BindingOptions =
+  | (BindingCommonOptions &
+      BindingReceiveSideOptions &
+      BindingSendSideOptions & {
+        receive?: true;
+        send?: true;
+      })
+  | (BindingCommonOptions &
+      BindingReceiveSideOptions & {
+        receive?: true;
+        send: false;
+      })
+  | (BindingCommonOptions &
+      BindingSendSideOptions & {
+        send?: true;
+        receive: false;
+      });
+
+/**
+ * Binding options allowed for a given value type.
+ * Useful when the source is known first (e.g. `bind` overloads).
+ *
+ * - {@link ReadwriteValue} → {@link BindingOptions}
+ * - {@link ReadableValue} → {@link ReceiveOnlyBindingOptions}
+ * - {@link WritableValue} → {@link SendOnlyBindingOptions}
+ */
+export type BindingOptionsForValue<V> = [V] extends [
+  ReadableValue<any> & WritableValue<any>
+]
+  ? BindingOptions
+  : [V] extends [ReadableValue<any>]
+  ? ReceiveOnlyBindingOptions
+  : [V] extends [WritableValue<any>]
+  ? SendOnlyBindingOptions
+  : never;
+
+/**
+ * Value type required for a given binding-options object.
+ * Useful when options are chosen first (e.g. React props) and the source is
+ * supplied later — duplex options require {@link ReadwriteValue}.
+ *
+ * Defaults (both directions on) → {@link ReadwriteValue}`<T>`
+ * `send: false` → {@link ReadableValue}`<T>`
+ * `receive: false` → {@link WritableValue}`<T>`
+ * both false → `never`
+ */
+export type ValueForBindingOptions<O, T = unknown> = [O] extends [
+  { receive: false; send: false }
+]
+  ? never
+  : [O] extends [{ receive: false }]
+  ? WritableValue<T>
+  : [O] extends [{ send: false }]
+  ? ReadableValue<T>
+  : ReadwriteValue<T>;
 
 /**
  * Native DOM events supported by Base.
@@ -222,14 +315,32 @@ export declare class Base<
    * `name` may be a declared option or a `_`-prefixed name.
    *
    * @param name - The option name
-   * @param source - Object with optional `subscribe` and/or `set`
-   * @param options - Binding options
+   * @param source - {@link ReadwriteValue}
+   * @param options - Binding options (both directions by default)
    * @returns Unsubscribe function
    */
   bind<K extends (keyof Options & string) | `_${string}`>(
     name: K,
-    source: BindingSource<K extends keyof Options ? Options[K] : unknown>,
+    source: ReadwriteValue<K extends keyof Options ? Options[K] : unknown>,
     options?: BindingOptions
+  ): () => void;
+  /**
+   * @param source - {@link ReadableValue} (receive-only)
+   * @param options - Receive-only binding options
+   */
+  bind<K extends (keyof Options & string) | `_${string}`>(
+    name: K,
+    source: ReadableValue<K extends keyof Options ? Options[K] : unknown>,
+    options?: ReceiveOnlyBindingOptions
+  ): () => void;
+  /**
+   * @param source - {@link WritableValue} (send-only)
+   * @param options - Send-only binding options
+   */
+  bind<K extends (keyof Options & string) | `_${string}`>(
+    name: K,
+    source: WritableValue<K extends keyof Options ? Options[K] : unknown>,
+    options?: SendOnlyBindingOptions
   ): () => void;
 
   /**

@@ -1,7 +1,27 @@
 import { Widget, WidgetOptionsOf } from '../widgets/widget.js';
-import type { BindingSource, BindingOptions } from '../implements/base.js';
+import type {
+  BindingOptions,
+  ReceiveOnlyBindingOptions,
+  SendOnlyBindingOptions,
+  BindingOptionsForValue,
+  ValueForBindingOptions,
+} from '../implements/base.js';
+import type {
+  ReadableValue,
+  WritableValue,
+  ReadwriteValue,
+} from '../values.interface.js';
 
-export type { BindingSource, BindingOptions };
+export type {
+  BindingOptions,
+  ReceiveOnlyBindingOptions,
+  SendOnlyBindingOptions,
+  BindingOptionsForValue,
+  ValueForBindingOptions,
+  ReadableValue,
+  WritableValue,
+  ReadwriteValue,
+};
 
 /**
  * Option names for bindings: a declared option key, or a `_`-prefixed name.
@@ -132,6 +152,28 @@ export function bindOption<
 >(
   widget: TWidget,
   name: K,
-  source: BindingSource<OptionValue<WidgetOptionsOf<TWidget>, K>>,
+  source: ReadwriteValue<OptionValue<WidgetOptionsOf<TWidget>, K>>,
   options?: BindingOptions
+): () => void;
+export function bindOption<
+  TWidget extends Widget<any, any> = Widget,
+  K extends OptionName<WidgetOptionsOf<TWidget>> = OptionName<
+    WidgetOptionsOf<TWidget>
+  >
+>(
+  widget: TWidget,
+  name: K,
+  source: ReadableValue<OptionValue<WidgetOptionsOf<TWidget>, K>>,
+  options?: ReceiveOnlyBindingOptions
+): () => void;
+export function bindOption<
+  TWidget extends Widget<any, any> = Widget,
+  K extends OptionName<WidgetOptionsOf<TWidget>> = OptionName<
+    WidgetOptionsOf<TWidget>
+  >
+>(
+  widget: TWidget,
+  name: K,
+  source: WritableValue<OptionValue<WidgetOptionsOf<TWidget>, K>>,
+  options?: SendOnlyBindingOptions
 ): () => void;

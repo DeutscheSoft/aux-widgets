@@ -25,9 +25,27 @@
  * @module utils/binding
  */
 
-import { warn } from './log.js';
+import { log, warn } from './log.js';
 import { Timer } from './timers.js';
 import { Subscriptions } from './subscriptions.js';
+
+/**
+ * @param {boolean|function|undefined} debug
+ * @param {Object} widget
+ * @param {string} name
+ * @returns {null|function}
+ */
+function makeBindLogger(debug, widget, name) {
+  if (!debug) return null;
+  if (typeof debug === 'function') {
+    return (fmt, ...args) => {
+      debug('bind(%s): ' + fmt, name, ...args);
+    };
+  }
+  return (fmt, ...args) => {
+    log('bind(%o, %s): ' + fmt, widget, name, ...args);
+  };
+}
 
 function assertOption(widget, name) {
   if (!widget.getOptionType(name) && !String(name).startsWith('_'))
@@ -204,8 +222,13 @@ export class InteractionSuppress {
  * @param {boolean} [options.receive=true] - Apply values from `source.subscribe`.
  * @param {boolean} [options.send=true] - Call `source.set` from widget events.
  * @param {boolean} [options.update=true] - Use `widget.update` for incoming values.
- * @param {boolean} [options.suppressWhileInteracting=false]
+ * @param {boolean} [options.suppressWhileInteracting=true] - Hold incoming
+ *   values while the widget is interacting (no-op without an `interacting`
+ *   option). Pass `false` to apply immediately during interaction.
  * @param {number} [options.suppressTimeout=500]
+ * @param {boolean|function} [options.debug=false] - Log install / receive /
+ *   send / suppress / teardown. `true` uses the aux log sink; a function is
+ *   called like `console.log`.
  * @returns {function} Unsubscribe function.
  */
 export function bindOption(widget, name, source, options) {
@@ -232,10 +255,22 @@ export function bindOption(widget, name, source, options) {
   const suppressTimeout =
     options.suppressTimeout === void 0 ? 500 : options.suppressTimeout;
   const suppress =
-    !!options.suppressWhileInteracting && !!widget.getOptionType('interacting');
+    receive &&
+    options.suppressWhileInteracting !== false &&
+    !!widget.getOptionType('interacting');
+  const dbg = makeBindLogger(options.debug, widget, name);
 
   if (event !== 'useraction' && event !== 'set' && event !== 'userset')
     throw new Error('Invalid binding event: ' + event);
+
+  if (dbg)
+    dbg(
+      'install receive=%o send=%o event=%o suppress=%o',
+      receive,
+      send,
+      event,
+      suppress
+    );
 
   const subscriptions = new Subscriptions();
   // Assume source.set may synchronously notify subscribe (e.g. a local
@@ -257,16 +292,16 @@ export function bindOption(widget, name, source, options) {
   const wrap = receive && send ? guardLoop : (fun) => fun;
 
   if (receive) {
-    const apply = wrap(
-      useUpdate
-        ? (value) => widget.update(name, value)
-        : (value) => widget.set(name, value)
-    );
+    const apply = wrap((value) => {
+      if (dbg) dbg('receive %o', value);
+      return useUpdate ? widget.update(name, value) : widget.set(name, value);
+    });
 
     if (suppress) {
       const gate = new InteractionSuppress(widget, apply, suppressTimeout);
       subscriptions.add(
         source.subscribe((value) => {
+          if (dbg && gate.isLocked()) dbg('suppress %o', value);
           gate.set(value);
         })
       );
@@ -277,7 +312,10 @@ export function bindOption(widget, name, source, options) {
   }
 
   if (send) {
-    const emit = wrap((value) => source.set(value));
+    const emit = wrap((value) => {
+      if (dbg) dbg('send %o', value);
+      source.set(value);
+    });
 
     if (event === 'set') {
       subscriptions.add(observeOption(widget, name, emit, false));
@@ -288,5 +326,9 @@ export function bindOption(widget, name, source, options) {
     }
   }
 
-  return subscriptions.toUnsubscribe();
+  const unbind = subscriptions.toUnsubscribe();
+  return () => {
+    if (dbg) dbg('unsubscribe');
+    unbind();
+  };
 }

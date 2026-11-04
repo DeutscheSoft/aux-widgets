@@ -395,12 +395,11 @@ describe('Base.bind', () => {
     unbind();
   });
 
-  it('suppressWhileInteracting with timeout', async () => {
+  it('suppressWhileInteracting defaults to true', async () => {
     const o = new Widget();
     const src = makeSource();
     const unbind = o.bind('disabled', src, {
       send: false,
-      suppressWhileInteracting: true,
       suppressTimeout: 50,
     });
 
@@ -416,9 +415,22 @@ describe('Base.bind', () => {
     unbind();
   });
 
+  it('suppressWhileInteracting false applies during interaction', () => {
+    const o = new Widget();
+    const src = makeSource();
+    const unbind = o.bind('disabled', src, {
+      send: false,
+      suppressWhileInteracting: false,
+    });
+
+    o.startInteracting();
+    src.push(true);
+    assert(o.get('disabled') === true);
+    unbind();
+  });
+
   it('suppressWhileInteracting ignored without interacting option', () => {
-    // Base has no interacting; use a plain object that looks enough like Base
-    // for bindOption's option check — Widget always has interacting, so strip it.
+    // Widget always has interacting, so strip it for this case.
     const o = new Widget();
     const original = o.getOptionType.bind(o);
     o.getOptionType = (name) =>
@@ -427,7 +439,6 @@ describe('Base.bind', () => {
     const src = makeSource();
     const unbind = o.bind('disabled', src, {
       send: false,
-      suppressWhileInteracting: true,
       suppressTimeout: 50,
     });
 
@@ -559,5 +570,56 @@ describe('Base.bind', () => {
     unbind();
     src.push(true);
     assert(o.get('disabled') === false);
+  });
+
+  it('accepts Observable-style subscribe teardown', () => {
+    const o = new Widget();
+    const subscribers = [];
+    let closed = false;
+    const src = {
+      subscribe(cb) {
+        subscribers.push(cb);
+        return {
+          unsubscribe() {
+            closed = true;
+            const i = subscribers.indexOf(cb);
+            if (i !== -1) subscribers.splice(i, 1);
+          },
+        };
+      },
+      set() {},
+    };
+
+    const unbind = o.bind('disabled', src, { send: false });
+    subscribers.slice().forEach((cb) => cb(true));
+    assert(o.get('disabled') === true);
+    unbind();
+    assert(closed);
+    assert(subscribers.length === 0);
+    subscribers.slice().forEach((cb) => cb(false));
+    assert(o.get('disabled') === true);
+  });
+
+  it('debug logs install, receive, send, unsubscribe', () => {
+    const o = new Widget();
+    const messages = [];
+    const src = makeSource();
+    const unbind = o.bind('disabled', src, {
+      debug: (...args) => {
+        messages.push(args.map(String).join(' '));
+      },
+    });
+
+    assert(messages.length >= 1);
+    assert(messages[0].indexOf('install') !== -1);
+
+    src.push(true);
+    assert(messages.some((m) => m.indexOf('receive') !== -1));
+
+    o.userset('disabled', false);
+    assert(messages.some((m) => m.indexOf('send') !== -1));
+
+    unbind();
+    assert(messages.some((m) => m.indexOf('unsubscribe') !== -1));
   });
 });

@@ -30,6 +30,7 @@ export * from './utils/events.js';
 export * from './utils/timers.js';
 export * from './utils/global_events.js';
 export * from './utils/binding.js';
+export * from './values.interface.js';
 
 export * from './implements/base.js';
 
