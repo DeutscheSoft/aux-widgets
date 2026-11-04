@@ -356,7 +356,7 @@ export class VirtualTreeDataView extends Events {
         super_group = this.groups.get(element);
         treePosition = super_group.treePosition;
       } else if (element !== void 0) {
-        if (!super_group) {
+        if (!super_group || super_group.group !== element.parent) {
           super_group = this.groups.get(element.parent);
         }
         treePosition = super_group.getTreePositionFor(element);
