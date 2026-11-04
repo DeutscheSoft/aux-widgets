@@ -31,14 +31,10 @@ export interface IFrequencyResponseEvents extends IChartEvents {
  * on the ranges.
  */
 export declare class FrequencyResponse<
-  TOptions extends IFrequencyResponseOptions = IFrequencyResponseOptions,
-  TEvents extends IFrequencyResponseEvents = IFrequencyResponseEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Chart<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IFrequencyResponseOptions = IFrequencyResponseOptions,
+  Events extends IFrequencyResponseEvents = IFrequencyResponseEvents
+> extends Chart<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-frequencyresponse */
   element: HTMLDivElement;

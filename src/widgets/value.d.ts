@@ -1,5 +1,9 @@
-import { Widget, IWidgetOptions, IWidgetEvents } from './widget.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Widget,
+  IWidgetOptions,
+  IWidgetEvents,
+  WidgetInteractiveOptions,
+} from './widget.js';
 
 /**
  * Input type options.
@@ -73,18 +77,23 @@ export interface IValueEvents extends IWidgetEvents {
 }
 
 /**
+ * Value options that may be changed through user interaction.
+ */
+export interface ValueInteractiveOptions extends WidgetInteractiveOptions {
+  /** The value. */
+  value: IValueOptions['value'];
+}
+
+/**
  * Value is a formatted and editable text field displaying values as
  * strings or numbers.
  */
 export declare class Value<
-  TOptions extends IValueOptions = IValueOptions,
-  TEvents extends IValueEvents = IValueEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IValueOptions = IValueOptions,
+  Events extends IValueEvents = IValueEvents,
+  InteractiveOptions extends ValueInteractiveOptions = ValueInteractiveOptions
+> extends Widget<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-value */
   element: HTMLDivElement;

@@ -69,4 +69,43 @@ describe('Subscriptions', () => {
       assert(called === 2);
     }
   });
+
+  it('toUnsubscribe returns the single subscription', () => {
+    let called = 0;
+    const cleanup = () => called++;
+    const subs = new Subscriptions();
+    subs.add(cleanup);
+
+    const unsub = subs.toUnsubscribe();
+    assert(unsub === cleanup);
+    assert(subs.closed);
+
+    unsub();
+    assert(called === 1);
+  });
+
+  it('toUnsubscribe wraps multiple subscriptions', () => {
+    let called = 0;
+    const a = () => called++;
+    const b = () => called++;
+    const subs = new Subscriptions();
+    subs.add(a);
+    subs.add(b);
+
+    const unsub = subs.toUnsubscribe();
+    assert(unsub !== a);
+    assert(unsub !== b);
+    assert(!subs.closed);
+
+    unsub();
+    assert(subs.closed);
+    assert(called === 2);
+  });
+
+  it('toUnsubscribe with none is a no-op', () => {
+    const subs = new Subscriptions();
+    const unsub = subs.toUnsubscribe();
+    unsub();
+    assert(subs.closed);
+  });
 });

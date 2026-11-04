@@ -1,5 +1,9 @@
-import { Chart, IChartOptions, IChartEvents } from './chart.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Chart,
+  IChartOptions,
+  IChartEvents,
+  ChartInteractiveOptions,
+} from './chart.js';
 import { ChartHandle } from './charthandle.js';
 import { Graph } from './graph.js';
 
@@ -83,19 +87,26 @@ export interface IDynamicsEvents extends IChartEvents {
 }
 
 /**
+ * Dynamics options that may be changed through user interaction.
+ */
+export interface DynamicsInteractiveOptions extends ChartInteractiveOptions {
+  /** Threshold of the dynamics. */
+  threshold: IDynamicsOptions['threshold'];
+  /** Ratio of the dynamics. */
+  ratio: IDynamicsOptions['ratio'];
+}
+
+/**
  * Dynamics are based on Chart and display the characteristics of dynamic
  * processors. They are square widgets drawing a Grid automatically based on
  * the range.
  */
 export declare class Dynamics<
-  TOptions extends IDynamicsOptions = IDynamicsOptions,
-  TEvents extends IDynamicsEvents = IDynamicsEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Chart<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IDynamicsOptions = IDynamicsOptions,
+  Events extends IDynamicsEvents = IDynamicsEvents,
+  InteractiveOptions extends DynamicsInteractiveOptions = DynamicsInteractiveOptions
+> extends Chart<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-dynamics */
   element: HTMLDivElement;
@@ -137,14 +148,11 @@ export interface ICompressorEvents extends IDynamicsEvents {
  * Compressor is a pre-configured Dynamics widget.
  */
 export declare class Compressor<
-  TOptions extends ICompressorOptions = ICompressorOptions,
-  TEvents extends ICompressorEvents = ICompressorEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Dynamics<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends ICompressorOptions = ICompressorOptions,
+  Events extends ICompressorEvents = ICompressorEvents,
+  InteractiveOptions extends DynamicsInteractiveOptions = DynamicsInteractiveOptions
+> extends Dynamics<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-compressor */
   element: HTMLDivElement;
@@ -172,14 +180,11 @@ export interface IExpanderEvents extends IDynamicsEvents {
  * Expander is a pre-configured Dynamics widget.
  */
 export declare class Expander<
-  TOptions extends IExpanderOptions = IExpanderOptions,
-  TEvents extends IExpanderEvents = IExpanderEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Dynamics<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IExpanderOptions = IExpanderOptions,
+  Events extends IExpanderEvents = IExpanderEvents,
+  InteractiveOptions extends DynamicsInteractiveOptions = DynamicsInteractiveOptions
+> extends Dynamics<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-expander */
   element: HTMLDivElement;
@@ -205,14 +210,11 @@ export interface IGateEvents extends IDynamicsEvents {
  * Gate is a pre-configured Dynamics widget.
  */
 export declare class Gate<
-  TOptions extends IGateOptions = IGateOptions,
-  TEvents extends IGateEvents = IGateEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Dynamics<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IGateOptions = IGateOptions,
+  Events extends IGateEvents = IGateEvents,
+  InteractiveOptions extends DynamicsInteractiveOptions = DynamicsInteractiveOptions
+> extends Dynamics<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-gate */
   element: HTMLDivElement;
@@ -238,14 +240,11 @@ export interface ILimiterEvents extends IDynamicsEvents {
  * Limiter is a pre-configured Dynamics widget.
  */
 export declare class Limiter<
-  TOptions extends ILimiterOptions = ILimiterOptions,
-  TEvents extends ILimiterEvents = ILimiterEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Dynamics<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends ILimiterOptions = ILimiterOptions,
+  Events extends ILimiterEvents = ILimiterEvents,
+  InteractiveOptions extends DynamicsInteractiveOptions = DynamicsInteractiveOptions
+> extends Dynamics<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-limiter */
   element: HTMLDivElement;

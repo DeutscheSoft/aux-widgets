@@ -152,6 +152,29 @@ export class Subscriptions extends Subscription {
 
     this.sub = addSubscription(this.sub, subscription);
   }
+
+  /**
+   * Returns an unsubscribe callback for this set.
+   * If exactly one subscription is active, that function is returned directly
+   * (ownership is transferred; this set becomes closed).
+   * Otherwise returns a function that unsubscribes all.
+   *
+   * @returns {function(): void}
+   */
+  toUnsubscribe() {
+    let sub = this.sub;
+
+    if (sub === null) return () => {};
+
+    if (Array.isArray(sub) && sub.length === 1) sub = sub[0];
+
+    if (typeof sub === 'function') {
+      this.sub = null;
+      return sub;
+    }
+
+    return () => this.unsubscribe();
+  }
 }
 
 export function combineSubscriptions(...args) {

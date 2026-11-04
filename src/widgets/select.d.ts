@@ -1,5 +1,9 @@
-import { Button, IButtonOptions, IButtonEvents } from './button.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Button,
+  IButtonOptions,
+  IButtonEvents,
+  ButtonInteractiveOptions,
+} from './button.js';
 import { Icon } from './icon.js';
 import { Label } from './label.js';
 
@@ -103,28 +107,31 @@ export interface ISelectEntryEvents extends IButtonEvents {
  * SelectEntry provides a Button as an entry for Select.
  */
 export declare class SelectEntry<
-  TOptions extends ISelectEntryOptions = ISelectEntryOptions,
-  TEvents extends ISelectEntryEvents = ISelectEntryEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Button<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends ISelectEntryOptions = ISelectEntryOptions,
+  Events extends ISelectEntryEvents = ISelectEntryEvents
+> extends Button<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
+}
+
+/**
+ * Select options that may be changed through user interaction.
+ */
+export interface SelectInteractiveOptions extends ButtonInteractiveOptions {
+  /** The index of the selected SelectEntry. Set to -1 to unselect any already selected entries. */
+  selected: ISelectOptions['selected'];
+  /** The value of the selected entry. */
+  value: ISelectOptions['value'];
 }
 
 /**
  * Select provides a Button with a select list to choose from a list of SelectEntry.
  */
 export declare class Select<
-  TOptions extends ISelectOptions = ISelectOptions,
-  TEvents extends ISelectEvents = ISelectEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Button<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends ISelectOptions = ISelectOptions,
+  Events extends ISelectEvents = ISelectEvents,
+  InteractiveOptions extends SelectInteractiveOptions = SelectInteractiveOptions
+> extends Button<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-select */
   element: HTMLDivElement;

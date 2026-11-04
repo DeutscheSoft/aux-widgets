@@ -1,5 +1,9 @@
-import { Container, IContainerOptions, IContainerEvents } from './container.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Container,
+  IContainerOptions,
+  IContainerEvents,
+  ContainerInteractiveOptions,
+} from './container.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { Range, IRangeOptions } from '../modules/range.js';
 
@@ -35,19 +39,28 @@ export interface IDrag3DEvents extends IContainerEvents {
 }
 
 /**
+ * Drag3D options that may be changed through user interaction.
+ */
+export interface Drag3DInteractiveOptions extends ContainerInteractiveOptions {
+  /** Value for x direction. */
+  x: IDrag3DOptions['x'];
+  /** Value for y direction. */
+  y: IDrag3DOptions['y'];
+  /** Value for z direction. */
+  z: IDrag3DOptions['z'];
+}
+
+/**
  * Drag3D is a Container that provides a three-axis drag controller (x/y/z).
  * It does not draw any visuals by itself; it only captures drag gestures and
  * updates the x/y/z values, so it can be paired with custom rendering.
  */
 export declare class Drag3D<
-  TOptions extends IDrag3DOptions = IDrag3DOptions,
-  TEvents extends IDrag3DEvents = IDrag3DEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IDrag3DOptions = IDrag3DOptions,
+  Events extends IDrag3DEvents = IDrag3DEvents,
+  InteractiveOptions extends Drag3DInteractiveOptions = Drag3DInteractiveOptions
+> extends Container<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-drag3d */
   element: HTMLDivElement;

@@ -1,5 +1,9 @@
-import { Button, IButtonOptions, IButtonEvents } from './button.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Button,
+  IButtonOptions,
+  IButtonEvents,
+  ButtonInteractiveOptions,
+} from './button.js';
 
 /**
  * Options specific to the Toggle widget.
@@ -26,19 +30,24 @@ export interface IToggleEvents extends IButtonEvents {
 }
 
 /**
+ * Toggle options that may be changed through user interaction.
+ */
+export interface ToggleInteractiveOptions extends ButtonInteractiveOptions {
+  /** State of the button, reflected as class `.aux-active`. */
+  state: IToggleOptions['state'];
+}
+
+/**
  * A toggle button. The toggle button can either be pressed (which means that it will
  * switch its state as long as it is pressed) or toggled permanently. Its behavior is
  * controlled by the two options press and toggle.
  */
 export declare class Toggle<
-  TOptions extends IToggleOptions = IToggleOptions,
-  TEvents extends IToggleEvents = IToggleEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Button<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IToggleOptions = IToggleOptions,
+  Events extends IToggleEvents = IToggleEvents,
+  InteractiveOptions extends ToggleInteractiveOptions = ToggleInteractiveOptions
+> extends Button<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /**
    * Toggle the button state.

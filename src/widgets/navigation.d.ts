@@ -1,6 +1,10 @@
 import { Container, IContainerEvents } from './container.js';
-import { EffectiveEvents } from '../implements/base.js';
-import { Buttons, IButtonsOptions, IButtonsButtonInput } from './buttons.js';
+import {
+  Buttons,
+  IButtonsOptions,
+  IButtonsButtonInput,
+  ButtonsInteractiveOptions,
+} from './buttons.js';
 import { Button } from './button.js';
 
 /**
@@ -31,15 +35,18 @@ export interface INavigationEvents extends IContainerEvents {
 /**
  * Navigation is a Container including a Buttons widget for navigating between pages.
  */
+/**
+ * Navigation options that may be changed through user interaction.
+ */
+export interface NavigationInteractiveOptions
+  extends ButtonsInteractiveOptions {}
+
 export declare class Navigation<
-  TOptions extends INavigationOptions = INavigationOptions,
-  TEvents extends INavigationEvents = INavigationEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends INavigationOptions = INavigationOptions,
+  Events extends INavigationEvents = INavigationEvents,
+  InteractiveOptions extends NavigationInteractiveOptions = NavigationInteractiveOptions
+> extends Container<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-navigation */
   element: HTMLDivElement;

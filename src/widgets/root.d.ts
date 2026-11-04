@@ -7,14 +7,10 @@ import { EffectiveEvents } from '../implements/base.js';
  * can be used directly instead.
  */
 export declare class Root<
-  TOptions extends IContainerOptions = IContainerOptions,
-  TEvents extends IContainerEvents = IContainerEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IContainerOptions = IContainerOptions,
+  Events extends IContainerEvents = IContainerEvents
+> extends Container<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-root */
   element: HTMLDivElement;

@@ -1,5 +1,9 @@
-import { Buttons, IButtonsOptions, IButtonsEvents } from './buttons.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Buttons,
+  IButtonsOptions,
+  IButtonsEvents,
+  ButtonsInteractiveOptions,
+} from './buttons.js';
 
 /**
  * Options specific to the Bitstring widget.
@@ -25,17 +29,22 @@ export interface IBitstringEvents extends IButtonsEvents {
 }
 
 /**
+ * Bitstring options that may be changed through user interaction.
+ */
+export interface BitstringInteractiveOptions extends ButtonsInteractiveOptions {
+  /** The bitstring value. Can be a number (bitmask) or an array of booleans. */
+  bitstring: IBitstringOptions['bitstring'];
+}
+
+/**
  * Bitstring is a specialized Buttons widget to display and control arrays of bits.
  */
 export declare class Bitstring<
-  TOptions extends IBitstringOptions = IBitstringOptions,
-  TEvents extends IBitstringEvents = IBitstringEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Buttons<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IBitstringOptions = IBitstringOptions,
+  Events extends IBitstringEvents = IBitstringEvents,
+  InteractiveOptions extends BitstringInteractiveOptions = BitstringInteractiveOptions
+> extends Buttons<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-bitstring */
   element: HTMLDivElement;

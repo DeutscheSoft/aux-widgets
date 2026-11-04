@@ -210,14 +210,10 @@ export interface ICircularEvents extends IWidgetEvents {
  * Clock to draw hours, minutes and seconds. Circular is based on Range.
  */
 export declare class Circular<
-  TOptions extends ICircularOptions = ICircularOptions,
-  TEvents extends ICircularEvents = ICircularEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends ICircularOptions = ICircularOptions,
+  Events extends ICircularEvents = ICircularEvents
+> extends Widget<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main SVG element. Has class .aux-circular */
   element: SVGElement;

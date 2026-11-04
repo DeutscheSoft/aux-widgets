@@ -1,6 +1,9 @@
-import { EffectiveEvents } from '../implements/base.js';
 import { IWidgetEvents } from './widget.js';
-import { Container, IContainerOptions } from './container.js';
+import {
+  Container,
+  IContainerOptions,
+  ContainerInteractiveOptions,
+} from './container.js';
 import { Button, IButtonOptions } from './button.js';
 import { Label } from './label.js';
 
@@ -53,17 +56,23 @@ export interface IFileSelectEvents extends IWidgetEvents {
 }
 
 /**
+ * FileSelect options that may be changed through user interaction.
+ */
+export interface FileSelectInteractiveOptions
+  extends ContainerInteractiveOptions {
+  /** The selected files. */
+  files: IFileSelectOptions['files'];
+}
+
+/**
  * FileSelect is a file selector widget. It inherits all options of Button.
  */
 export declare class FileSelect<
-  TOptions extends IFileSelectOptions = IFileSelectOptions,
-  TEvents extends IFileSelectEvents = IFileSelectEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IFileSelectOptions = IFileSelectOptions,
+  Events extends IFileSelectEvents = IFileSelectEvents,
+  InteractiveOptions extends FileSelectInteractiveOptions = FileSelectInteractiveOptions
+> extends Container<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-fileselect */
   element: HTMLDivElement;

@@ -1,6 +1,10 @@
-import { Chart, IChartOptions, IChartEvents } from './chart.js';
-import { EffectiveEvents } from '../implements/base.js';
-import { ChartHandle } from './charthandle.js';
+import {
+  Chart,
+  IChartOptions,
+  IChartEvents,
+  ChartInteractiveOptions,
+} from './chart.js';
+import { ChartHandle, ChartHandleInteractiveOptions } from './charthandle.js';
 
 /**
  * Mode options for Panorama widget.
@@ -29,18 +33,23 @@ export interface IPanoramaEvents extends IChartEvents {
 }
 
 /**
+ * Panorama options that may be changed through user interaction.
+ * Includes ChartHandle keys forwarded via `userset_delegate` on handle1.
+ */
+export interface PanoramaInteractiveOptions
+  extends ChartInteractiveOptions,
+    ChartHandleInteractiveOptions {}
+
+/**
  * Panorama is a Chart with a single handle to set panorama
  * or balance on stereo and surround channels.
  */
 export declare class Panorama<
-  TOptions extends IPanoramaOptions = IPanoramaOptions,
-  TEvents extends IPanoramaEvents = IPanoramaEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Chart<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IPanoramaOptions = IPanoramaOptions,
+  Events extends IPanoramaEvents = IPanoramaEvents,
+  InteractiveOptions extends PanoramaInteractiveOptions = PanoramaInteractiveOptions
+> extends Chart<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The ChartHandle displaying/setting the position on panorama and surround modes. In panorama mode it affects the x parameter, in surround it affects both, x and y parameters. */
   handle1: ChartHandle;

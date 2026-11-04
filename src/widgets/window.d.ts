@@ -186,14 +186,10 @@ export interface IWindowEvents extends IContainerEvents {
  * This widget is a flexible overlay window.
  */
 export declare class Window<
-  TOptions extends IWindowOptions = IWindowOptions,
-  TEvents extends IWindowEvents = IWindowEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IWindowOptions = IWindowOptions,
+  Events extends IWindowEvents = IWindowEvents
+> extends Container<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV element. Has class .aux-window */
   element: HTMLDivElement;

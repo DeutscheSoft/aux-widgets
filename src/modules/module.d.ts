@@ -21,14 +21,10 @@ export interface IModuleEvents extends IBaseEvents {
  * Modules extend Base and have a parent widget reference.
  */
 export declare class Module<
-  TOptions extends IModuleOptions = IModuleOptions,
-  TEvents extends IModuleEvents = IModuleEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Base<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IModuleOptions = IModuleOptions,
+  Events extends IModuleEvents = IModuleEvents
+> extends Base<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The parent widget this module is attached to. */
   parent: unknown;
@@ -38,7 +34,7 @@ export declare class Module<
    * @param widget - The parent widget.
    * @param options - The module options.
    */
-  protected initialize(widget: unknown, options?: Partial<TOptions>): void;
+  protected initialize(widget: unknown, options?: Partial<Options>): void;
 
   /**
    * Destroy the module and clean up resources.

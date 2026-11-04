@@ -71,14 +71,10 @@ export interface IFilterEvents extends IBaseEvents {
  * a given frequency for different types of biquad filters.
  */
 export declare class Filter<
-  TOptions extends IFilterOptions = IFilterOptions,
-  TEvents extends IFilterEvents = IFilterEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Base<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IFilterOptions = IFilterOptions,
+  Events extends IFilterEvents = IFilterEvents
+> extends Base<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The frequency-to-gain function. This is computed internally and may be null until getFrequencyToGain() is called. */
   frequencyToGain: ((frequency: number) => number) | null;

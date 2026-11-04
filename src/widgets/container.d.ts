@@ -1,5 +1,9 @@
-import { Widget, IWidgetOptions, IWidgetEvents } from './widget.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Widget,
+  IWidgetOptions,
+  IWidgetEvents,
+  WidgetInteractiveOptions,
+} from './widget.js';
 
 /**
  * Visible state for Container.
@@ -40,6 +44,11 @@ export interface IContainerEvents extends IWidgetEvents {
 }
 
 /**
+ * Container options that may be changed through user interaction.
+ */
+export interface ContainerInteractiveOptions extends WidgetInteractiveOptions {}
+
+/**
  * Container represents a DIV element containing various
  * other widgets or DOMNodes.
  *
@@ -54,14 +63,11 @@ export interface IContainerEvents extends IWidgetEvents {
  * showChild and toggleChild.
  */
 export declare class Container<
-  TOptions extends IContainerOptions = IContainerOptions,
-  TEvents extends IContainerEvents = IContainerEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IContainerOptions = IContainerOptions,
+  Events extends IContainerEvents = IContainerEvents,
+  InteractiveOptions extends ContainerInteractiveOptions = ContainerInteractiveOptions
+> extends Widget<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV element. Has class .aux-container */
   element: HTMLDivElement;
@@ -72,8 +78,10 @@ export declare class Container<
 
   /**
    * Starts the transition of the visible to false.
+   * @param userset - If true, go through Base#userset (value may be false or 'hiding').
+   * @returns False if a userset was cancelled, otherwise true.
    */
-  hide(): void;
+  hide(userset?: boolean): boolean;
 
   /**
    * Immediately hides the container without transition.
@@ -82,8 +90,10 @@ export declare class Container<
 
   /**
    * Starts the transition of the visible to true.
+   * @param userset - If true, go through Base#userset (value may be true or 'showing').
+   * @returns False if a userset was cancelled, otherwise true.
    */
-  show(): void;
+  show(userset?: boolean): boolean;
 
   /**
    * Immediately shows the container without transition.

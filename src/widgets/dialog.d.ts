@@ -1,5 +1,9 @@
-import { Container, IContainerOptions, IContainerEvents } from './container.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Container,
+  IContainerOptions,
+  IContainerEvents,
+  ContainerInteractiveOptions,
+} from './container.js';
 
 /**
  * Anchor position for dialog placement.
@@ -52,6 +56,14 @@ export interface IDialogEvents extends IContainerEvents {
 }
 
 /**
+ * Dialog options that may be changed through user interaction.
+ */
+export interface DialogInteractiveOptions extends ContainerInteractiveOptions {
+  /** The visible state of the container. Can be a boolean or one of the transition states ('hiding', 'showing', 'show', 'hide'). */
+  visible: IDialogOptions['visible'];
+}
+
+/**
  * Dialog provides a hovering area which can be closed by clicking/tapping
  * anywhere on the screen. It can be automatically pushed to the topmost
  * DOM position as a child of an AWML-ROOT or the BODY element. On close
@@ -59,14 +71,11 @@ export interface IDialogEvents extends IContainerEvents {
  * makes positioning the dialog window straight forward.
  */
 export declare class Dialog<
-  TOptions extends IDialogOptions = IDialogOptions,
-  TEvents extends IDialogEvents = IDialogEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IDialogOptions = IDialogOptions,
+  Events extends IDialogEvents = IDialogEvents,
+  InteractiveOptions extends DialogInteractiveOptions = DialogInteractiveOptions
+> extends Container<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV element. Has class .aux-dialog */
   element: HTMLDivElement;
@@ -75,19 +84,18 @@ export declare class Dialog<
 
   /**
    * Open the dialog. Optionally set x and y position regarding anchor.
+   * Uses Container#show so showing_duration can animate.
    * @param x - New X-position of the dialog.
    * @param y - New Y-position of the dialog.
    * @param focus - Element to receive focus after opening the dialog.
    */
-  open(x?: number | string, y?: number | string, focus?: HTMLElement): void;
+  open(x?: number | string, y?: number | string, focus?: HTMLElement): boolean;
 
   /**
-   * Close the dialog. The node is removed from DOM if auto_remove is set to true.
+   * Close the dialog. Uses Container#hide so hiding_duration can animate.
+   * The node is removed from DOM if auto_remove is set to true.
    */
-  close(): void;
+  close(): boolean;
 
-  /**
-   * Reposition the dialog to the current x and y position.
-   */
-  reposition(): void;
+  destroy(): void;
 }

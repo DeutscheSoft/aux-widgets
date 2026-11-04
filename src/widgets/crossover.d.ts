@@ -41,14 +41,10 @@ export interface ICrossoverBandEvents extends IEqBandEvents {
  * CrossoverBand is an EqBand with an additional filter.
  */
 export declare class CrossoverBand<
-  TOptions extends ICrossoverBandOptions = ICrossoverBandOptions,
-  TEvents extends ICrossoverBandEvents = ICrossoverBandEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends EqBand<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends ICrossoverBandOptions = ICrossoverBandOptions,
+  Events extends ICrossoverBandEvents = ICrossoverBandEvents
+> extends EqBand<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main SVG group. Has class .aux-crossoverband */
   element: SVGGElement;
@@ -83,14 +79,10 @@ export interface ICrossoverGraphEvents extends IEqualizerGraphEvents {
  * with the upper filter of the previous band.
  */
 export declare class CrossoverGraph<
-  TOptions extends ICrossoverGraphOptions = ICrossoverGraphOptions,
-  TEvents extends ICrossoverGraphEvents = ICrossoverGraphEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends EqualizerGraph<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends ICrossoverGraphOptions = ICrossoverGraphOptions,
+  Events extends ICrossoverGraphEvents = ICrossoverGraphEvents
+> extends EqualizerGraph<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The SVG path element. Has class .aux-graph */
   element: SVGPathElement;
@@ -132,14 +124,10 @@ export interface ICrossoverEvents extends IEqualizerEvents {
  * as response handles.
  */
 export declare class Crossover<
-  TOptions extends ICrossoverOptions = ICrossoverOptions,
-  TEvents extends ICrossoverEvents = ICrossoverEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Equalizer<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends ICrossoverOptions = ICrossoverOptions,
+  Events extends ICrossoverEvents = ICrossoverEvents
+> extends Equalizer<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-crossover */
   element: HTMLDivElement;

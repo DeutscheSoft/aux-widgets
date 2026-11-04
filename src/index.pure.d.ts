@@ -28,6 +28,7 @@ export * from './utils/warning.js';
 export * from './utils/svg.js';
 export * from './utils/events.js';
 export * from './utils/timers.js';
+export * from './utils/global_events.js';
 export * from './utils/binding.js';
 
 export * from './implements/base.js';

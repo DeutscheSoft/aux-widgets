@@ -1,9 +1,5 @@
-import {
-  Widget,
-  IWidgetOptions,
-  IWidgetEvents,
-  EffectiveEvents,
-} from './widget.js';
+import { Widget, IWidgetOptions, IWidgetEvents } from './widget.js';
+import { ValueInteractiveOptions } from './value.js';
 import { IRangedOptions } from '../utils/ranged.js';
 import { IWarningOptions } from '../utils/warning.js';
 
@@ -75,26 +71,31 @@ export interface IFaderEvents extends IWidgetEvents {
 }
 
 /**
+ * Fader options that may be changed through user interaction.
+ * Extends {@link ValueInteractiveOptions} for the Value child (`userset_delegate`).
+ */
+export interface FaderInteractiveOptions extends ValueInteractiveOptions {
+  /** The fader's position. This option is modified by user interaction. */
+  value: IFaderOptions['value'];
+}
+
+/**
  * Fader is a slidable control with a Scale next to it which can be both dragged and scrolled.
  * Fader implements Ranged and inherits its options. A Label and a Value are available optionally.
  *
- * @template TOptions - The options type for this fader. Extends IFaderOptions.
- * @template TEvents - The events type for this fader. Extends IFaderEvents.
- * @template TEffectiveEvents - The effective events type (defaults to EffectiveEvents<TOptions, TEvents>).
- *   Users can override this to add additional events or customize the event type.
+ * @template Options - The options type for this fader. Extends IFaderOptions.
+ * @template Events - The events type for this fader. Extends IFaderEvents.
+ * @template InteractiveOptions - Options that may be set via user interaction.
  */
 export declare class Fader<
-  TOptions extends IFaderOptions = IFaderOptions,
-  TEvents extends IFaderEvents = IFaderEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
+  Options extends IFaderOptions = IFaderOptions,
+  Events extends IFaderEvents = IFaderEvents,
+  InteractiveOptions extends FaderInteractiveOptions = FaderInteractiveOptions
+> extends Widget<Options, Events, InteractiveOptions> {
   /**
    * Creates a new Fader instance.
    *
    * @param options - An object containing initial options. All options are optional.
    */
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  constructor(options?: Partial<NoInfer<Options>>);
 }

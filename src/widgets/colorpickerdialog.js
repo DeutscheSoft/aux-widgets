@@ -23,14 +23,14 @@ import { addClass } from '../utils/dom.js';
 
 function cancel() {
   const self = this.parent;
-  self.emit.call(self, 'cancel');
-  self.close();
+  self.emit('cancel');
+  self.hide(true);
 }
 
 function apply(color) {
   const self = this.parent;
-  self.emit.call(self, 'apply', color);
-  self.close();
+  self.emit('apply', color);
+  self.hide(true);
 }
 
 /**

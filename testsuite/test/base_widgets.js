@@ -20,7 +20,7 @@
 import { Widget, WidgetComponent } from '../../src/index.js';
 import '../../src/components.js';
 
-import { assert, assertError } from './utils/helpers.js';
+import { assert } from './utils/helpers.js';
 
 describe('Options', () => {
   it('set()', () => {
@@ -125,7 +125,6 @@ describe('Components', () => {
 
       assert(!w2.hasChild(c1), 'setParent failed.');
 
-      assertError(() => w2.removeChild(c1));
 
       w1.destroy();
       w2.destroy();

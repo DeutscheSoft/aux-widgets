@@ -24,6 +24,7 @@ import { Label } from './label.js';
 import { Icon } from './icon.js';
 import { createID } from '../utils/dom.js';
 import { Timer } from '../utils/timers.js';
+import { GlobalEventHandler } from '../utils/global_events.js';
 import { SymResize } from './widget.js';
 
 import {
@@ -243,8 +244,7 @@ export class Select extends Button {
               });
               this.set('_show_list', true);
               document.body.appendChild(_list);
-              document.addEventListener('touchstart', this._globalTouchStart);
-              document.addEventListener('mousedown', this._globalTouchStart);
+              this._outside_pointer.activate();
 
               const lw = outerWidth(_list, true);
               const lh = outerHeight(_list, true);
@@ -274,8 +274,7 @@ export class Select extends Button {
               });
             });
           } else {
-            document.removeEventListener('touchstart', this._globalTouchStart);
-            document.removeEventListener('mousedown', this._globalTouchStart);
+            this._outside_pointer.deactivate();
 
             return deferRender(() => {
               element.removeAttribute('aria-expanded');
@@ -364,15 +363,19 @@ export class Select extends Button {
     this._list = element('div', 'aux-selectlist');
     this._list.setAttribute('role', 'listbox');
 
-    this._globalTouchStart = (e) => {
-      if (
-        eventOriginatedIn(e, this._list) ||
-        eventOriginatedIn(e, this.element)
-      )
-        return;
+    this._outside_pointer = new GlobalEventHandler(
+      document,
+      ['touchstart', 'mousedown'],
+      (e) => {
+        if (
+          eventOriginatedIn(e, this._list) ||
+          eventOriginatedIn(e, this.element)
+        )
+          return;
 
-      this.showList(false);
-    };
+        this.showList(false);
+      }
+    );
 
     const sel = this.options.selected;
     const val = this.options.value;
@@ -396,8 +399,7 @@ export class Select extends Button {
     this._close_animation_finished.stop();
     this._focus_element_timer.stop();
     this._focus_entry_timer.stop();
-    document.removeEventListener('touchstart', this._globalTouchStart);
-    document.removeEventListener('mousedown', this._globalTouchStart);
+    this._outside_pointer.destroy();
     super.destroy();
   }
 

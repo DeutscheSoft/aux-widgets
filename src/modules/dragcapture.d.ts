@@ -77,14 +77,10 @@ export interface IDragCaptureEvents extends IModuleEvents {
  * distance from the start position etc.
  */
 export declare class DragCapture<
-  TOptions extends IDragCaptureOptions = IDragCaptureOptions,
-  TEvents extends IDragCaptureEvents = IDragCaptureEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Module<TOptions, TEvents, TEffectiveEvents> {
-  constructor(widget: unknown, options?: Partial<TOptions>);
+  Options extends IDragCaptureOptions = IDragCaptureOptions,
+  Events extends IDragCaptureEvents = IDragCaptureEvents
+> extends Module<Options, Events> {
+  constructor(widget: unknown, options?: Partial<Options>);
 
   /** @internal The current drag state (internal). */
   drag_state: IDragCaptureState | null;
@@ -94,7 +90,7 @@ export declare class DragCapture<
    * @param widget - The parent widget.
    * @param options - The drag capture options.
    */
-  protected initialize(widget: unknown, options?: Partial<TOptions>): void;
+  protected initialize(widget: unknown, options?: Partial<Options>): void;
 
   /**
    * Stop the current capture.

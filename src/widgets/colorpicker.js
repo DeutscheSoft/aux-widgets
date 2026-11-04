@@ -92,15 +92,15 @@ function apply() {
 function fEvent(e, useraction) {
   const O = this.options;
   if (useraction) {
-    this.emit('userset', 'rgb', O.rgb);
-    this.emit('userset', 'hsl', O.hsl);
-    this.emit('userset', 'hex', O.hex);
-    this.emit('userset', 'hue', O.hue);
-    this.emit('userset', 'saturation', O.saturation);
-    this.emit('userset', 'lightness', O.lightness);
-    this.emit('userset', 'red', O.red);
-    this.emit('userset', 'green', O.green);
-    this.emit('userset', 'blue', O.blue);
+    this.userset('rgb', O.rgb);
+    this.userset('hsl', O.hsl);
+    this.userset('hex', O.hex);
+    this.userset('hue', O.hue);
+    this.userset('saturation', O.saturation);
+    this.userset('lightness', O.lightness);
+    this.userset('red', O.red);
+    this.userset('green', O.green);
+    this.userset('blue', O.blue);
   }
   this.emit(e, {
     rgb: O.rgb,

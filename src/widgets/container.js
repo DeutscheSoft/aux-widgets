@@ -248,13 +248,23 @@ export class Container extends Widget {
 
   /**
    * Starts the transition of the <code>visible</code> to <code>false</code>.
+   * When <code>hiding_duration</code> is 0 (default) or transitions are
+   * disabled, jumps to <code>false</code> immediately.
    *
    * @method Container#hide
    *
+   * @param {boolean} [userset=false] - If true, change <code>visible</code> via
+   *   {@link Base#userset} (cancellable). The value may be <code>false</code>
+   *   or <code>'hiding'</code>.
+   *
+   * @returns {boolean} False if a userset was cancelled, otherwise true.
    */
-  hide() {
-    if (this.hidden()) return;
-    this.update('visible', this.transitionsDisabled() ? false : 'hiding');
+  hide(userset) {
+    if (this.transitionsDisabled()) return super.hide(userset);
+    if (this.hidden()) return true;
+    if (userset) return this.userset('visible', 'hiding');
+    this.update('visible', 'hiding');
+    return true;
   }
 
   forceHide() {
@@ -267,15 +277,24 @@ export class Container extends Widget {
 
   /**
    * Starts the transition of the <code>visible</code> to <code>true</code>.
+   * When <code>showing_duration</code> is 0 (default) or transitions are
+   * disabled, jumps to <code>true</code> immediately.
    *
    * @method Container#show
    *
+   * @param {boolean} [userset=false] - If true, change <code>visible</code> via
+   *   {@link Base#userset} (cancellable). The value may be <code>true</code>
+   *   or <code>'showing'</code>.
+   *
+   * @returns {boolean} False if a userset was cancelled, otherwise true.
    */
-  show() {
+  show(userset) {
+    if (this.transitionsDisabled()) return super.show(userset);
     if (!this.isDrawn()) this.enableDraw();
-    if (!this.hidden()) return;
-
-    this.update('visible', this.transitionsDisabled() ? true : 'showing');
+    if (!this.hidden()) return true;
+    if (userset) return this.userset('visible', 'showing');
+    this.update('visible', 'showing');
+    return true;
   }
 
   forceShow() {

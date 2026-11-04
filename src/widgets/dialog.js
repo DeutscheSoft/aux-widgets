@@ -18,58 +18,15 @@
  */
 
 import { Container } from './container.js';
-import { SymWindowResize } from './widget.js';
 import { translateAnchor } from '../utils/anchor.js';
 import {
   element,
   addClass,
   getFocusableElements,
   observeDOM,
-  setDelayedFocus,
 } from '../utils/dom.js';
-import { defineMeasure, defineRender } from '../renderer.js';
-
-function autocloseCallback(e) {
-  let curr = e.target;
-  while (curr) {
-    // TODO: if a dialog is opened out of a dialog both should avoid
-    // closing any of those on click. former version:
-    //if (curr === this.element) return;
-    // this closes tagger in Cabasa Dante Tagger when interacting
-    // with the colorpicker.
-    // workaround for the moment:
-    // don't close on click on any dialog
-    if (curr.classList.contains('aux-dialog')) return;
-    curr = curr.parentElement;
-  }
-  this.close();
-}
-
-function activateAutoclose() {
-  if (this._autoclose_active) return;
-  setTimeout(
-    function () {
-      document.body.addEventListener('click', this._autoclose_cb, {
-        capture: false,
-      });
-    }.bind(this),
-    50
-  );
-  this._autoclose_active = true;
-}
-
-function deactivateAutoclose() {
-  if (!this._autoclose_active) return;
-  setTimeout(
-    function () {
-      document.body.removeEventListener('click', this._autoclose_cb, {
-        capture: false,
-      });
-    }.bind(this),
-    50
-  );
-  this._autoclose_active = false;
-}
+import { defineRender } from '../renderer.js';
+import { GlobalEventHandler } from '../utils/global_events.js';
 
 function keepInside(e) {
   if (e.key === 'Tab' || e.keyCode === 9) {
@@ -168,55 +125,21 @@ export class Dialog extends Container {
 
   static get static_events() {
     return {
-      hide: function () {
-        deactivateAutoclose.call(this);
-        if (this.options.auto_remove) {
-          this.element.remove();
-          this._modal.remove();
-        }
-        this.emit('close');
-      },
       set_visible: function (val) {
-        const O = this.options;
-        const C = O.container;
-
         if (val === true) {
-          if (O.auto_close) activateAutoclose.call(this);
-          if (O.modal) C.appendChild(this._modal);
-          this.triggerResize();
-        } else {
-          deactivateAutoclose.call(this);
-        }
-
-        if (val === 'showing') {
-          if (C) {
-            C.appendChild(this.element);
-            if (O.modal) C.appendChild(this._modal);
-          }
-          this.reposition();
-        }
-
-        if (val) {
-          if (O.toplevel && C.tagName !== 'AWML-ROOT' && C.tagName !== 'BODY') {
-            let p = this.element;
-            while (
-              (p = p.parentElement) &&
-              p.tagName !== 'AWML-ROOT' &&
-              p.tagName !== 'BODY'
-            );
-            p.appendChild(this.element);
-            if (O.modal) p.appendChild(this._modal);
-          }
-        } else {
-          O.container = this.element.parentElement;
-          this._modal.remove();
-        }
-      },
-      set_auto_close: function (val) {
-        if (val) {
-          if (!this.hidden()) activateAutoclose.call(this);
-        } else {
-          deactivateAutoclose.call(this);
+          /**
+           * Is fired when the dialog is opened.
+           *
+           * @event Dialog#open
+           */
+          this.emit('open');
+        } else if (val === false) {
+          /**
+           * Is fired when the dialog is closed.
+           *
+           * @event Dialog#close
+           */
+          this.emit('close');
         }
       },
       set_contain_focus: handleTabbing,
@@ -245,18 +168,62 @@ export class Dialog extends Container {
         }
       }),
       defineRender(
-        ['modal', 'visible', 'container'],
-        function (modal, visible, container) {
-          const _modal = this._modal;
-          if (modal && visible && container) {
-            if (_modal.parentNode !== container) container.appendChild(_modal);
-          } else {
-            _modal.remove();
+        ['visible', 'container', 'toplevel'],
+        function (visible, container, toplevel) {
+          if (!visible) return;
+
+          const element = this.element;
+          let target = container;
+          if (toplevel) {
+            let p = container || element.parentElement;
+            while (p && p.tagName !== 'AWML-ROOT' && p.tagName !== 'BODY') {
+              p = p.parentElement;
+            }
+            target = p || document.body;
+          }
+          if (!target) return;
+
+          const appended = element.parentNode !== target;
+          if (appended) target.appendChild(element);
+
+          if (appended || visible === true || visible === 'showing') {
+            this.triggerResize();
           }
         }
       ),
-      defineMeasure(SymWindowResize, function () {
-        if (this.options.visible) this.reposition();
+      defineRender(['visible', 'modal'], function (visible, modal) {
+        const _modal = this._modal;
+        if (!visible || !modal) {
+          _modal.remove();
+          return;
+        }
+        const target = this.element.parentNode;
+        if (target && _modal.parentNode !== target) target.appendChild(_modal);
+      }),
+      // Runs in the render frame after the opening/closing event, so no extra delay.
+      defineRender(['visible', 'reset_focus'], function (visible, reset_focus) {
+        if (visible === true) {
+          const focus = this._openFocus;
+          this._openFocus = void 0;
+          if (focus) {
+            focus.focus();
+          } else if (focus === null) {
+            const E = getFocusableElements(this.element);
+            if (E[0]) E[0].focus();
+          }
+        } else if (visible === false && reset_focus && this._previousFocus) {
+          this._previousFocus.focus();
+        }
+      }),
+      // Render frame is after the opening click, so activating here is safe.
+      defineRender(['visible', 'auto_close'], function (visible, auto_close) {
+        this._autoclose.setActive(auto_close && visible === true);
+      }),
+      defineRender(['visible', 'auto_remove'], function (visible, auto_remove) {
+        if (visible === false && auto_remove) {
+          this.element.remove();
+          this._modal.remove();
+        }
       }),
     ];
   }
@@ -277,14 +244,38 @@ export class Dialog extends Container {
     this._modal.addEventListener('mousedown', off, { capture: true });
     this._modal.addEventListener('touchstart', off, { capture: true });
 
-    this._autoclose_active = false;
-    this._autoclose_cb = autocloseCallback.bind(this);
+    this._autoclose = new GlobalEventHandler(
+      document.body,
+      'click',
+      (e) => {
+        let curr = e.target;
+        while (curr) {
+          // TODO: if a dialog is opened out of a dialog both should avoid
+          // closing any of those on click. former version:
+          //if (curr === this.element) return;
+          // this closes tagger in Cabasa Dante Tagger when interacting
+          // with the colorpicker.
+          // workaround for the moment:
+          // don't close on click on any dialog
+          if (curr.classList.contains('aux-dialog')) return;
+          curr = curr.parentElement;
+        }
+        this.hide(true);
+      },
+      { capture: false }
+    );
     this._tabbing_cb = keepInside.bind(this);
     this._tabeventtargets = [];
     this.set('contain_focus', O.contain_focus);
 
-    observeDOM(this.element, handleTabbing.bind(this));
+    const mo = observeDOM(this.element, handleTabbing.bind(this));
+    if (mo) this.addSubscriptions(() => mo.disconnect());
     handleTabbing.call(this);
+  }
+
+  destroy() {
+    this._autoclose.destroy();
+    super.destroy();
   }
 
   draw(O, element) {
@@ -294,6 +285,7 @@ export class Dialog extends Container {
 
   /**
    * Open the dialog. Optionally set x and y position regarding `anchor`.
+   * Goes through {@link Container#show} so `showing_duration` can animate.
    *
    * @method Dialog#open
    *
@@ -303,53 +295,20 @@ export class Dialog extends Container {
    */
   open(x, y, focus) {
     this._previousFocus = document.activeElement;
+    // null → first focusable; element → that target. Cleared in the focus renderer.
+    this._openFocus = typeof focus !== 'undefined' ? focus : null;
     if (typeof x !== 'undefined') this.set('x', x);
     if (typeof y !== 'undefined') this.set('y', y);
-    this.userset('visible', true);
-    /**
-     * Is fired when the dialog is opened.
-     *
-     * @event Dialog#open
-     */
-    this.emit('open');
-
-    if (!focus) {
-      const E = getFocusableElements(this.element);
-      if (E[0]) {
-        setDelayedFocus(E[0]);
-      }
-    } else {
-      setDelayedFocus(focus);
-    }
+    return this.show();
   }
 
   /**
-   * Close the dialog. The node is removed from DOM if `auto_remove` is set to `true`.
+   * Close the dialog. Goes through {@link Container#hide} so `hiding_duration`
+   * can animate. The node is removed from DOM if `auto_remove` is set to `true`.
    *
    * @method Dialog#close
    */
   close() {
-    this.userset('visible', false);
-    /**
-     * Is fired when the dialog is closed.
-     *
-     * @event Dialog#close
-     */
-    this.emit('close');
-    if (this._previousFocus && this.options.reset_focus) {
-      setDelayedFocus(this._previousFocus);
-    }
-  }
-
-  /**
-   * Reposition the dialog to the current `x` and `y` position.
-   *
-   * @method Dialog#reposition
-   */
-  reposition() {
-    const O = this.options;
-    this.set('anchor', O.anchor);
-    this.set('x', O.x);
-    this.set('y', O.y);
+    return this.hide();
   }
 }

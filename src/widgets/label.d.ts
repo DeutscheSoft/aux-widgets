@@ -24,14 +24,10 @@ export interface ILabelEvents extends IWidgetEvents {
  * Label is a simple text field displaying strings.
  */
 export declare class Label<
-  TOptions extends ILabelOptions = ILabelOptions,
-  TEvents extends ILabelEvents = ILabelEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends ILabelOptions = ILabelOptions,
+  Events extends ILabelEvents = ILabelEvents
+> extends Widget<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-label */
   element: HTMLDivElement;

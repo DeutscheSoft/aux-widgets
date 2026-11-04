@@ -1,5 +1,9 @@
-import { Widget, IWidgetOptions, IWidgetEvents } from './widget.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Widget,
+  IWidgetOptions,
+  IWidgetEvents,
+  WidgetInteractiveOptions,
+} from './widget.js';
 import { IRangedOptions } from '../utils/ranged.js';
 import { DragValue, IDragDirection } from '../modules/dragvalue.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
@@ -45,20 +49,25 @@ export interface ISliderOptions extends IWidgetOptions, IRangedOptions {
 export interface ISliderEvents extends IWidgetEvents {}
 
 /**
+ * Slider options that may be changed through user interaction.
+ */
+export interface SliderInteractiveOptions extends WidgetInteractiveOptions {
+  /** The current value. */
+  value: ISliderOptions['value'];
+}
+
+/**
  * Slider is a Widget moving its background image according to its value.
  * It can be used to show strips of e.g. 3D-rendered faders or knobs.
  * Slider uses DragValue and ScrollValue for setting its value.
  * It inherits all options of DragValue and Ranged.
  */
 export declare class Slider<
-  TOptions extends ISliderOptions = ISliderOptions,
-  TEvents extends ISliderEvents = ISliderEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends ISliderOptions = ISliderOptions,
+  Events extends ISliderEvents = ISliderEvents,
+  InteractiveOptions extends SliderInteractiveOptions = SliderInteractiveOptions
+> extends Widget<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-slider */
   element: HTMLDivElement;

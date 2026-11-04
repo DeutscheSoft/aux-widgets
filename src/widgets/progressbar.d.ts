@@ -22,14 +22,10 @@ export interface IProgressBarEvents extends IMeterEvents {
  * ProgressBar is a pre-configured Meter to display progress in percent.
  */
 export declare class ProgressBar<
-  TOptions extends IProgressBarOptions = IProgressBarOptions,
-  TEvents extends IProgressBarEvents = IProgressBarEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Meter<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IProgressBarOptions = IProgressBarOptions,
+  Events extends IProgressBarEvents = IProgressBarEvents
+> extends Meter<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-progressbar */
   element: HTMLDivElement;

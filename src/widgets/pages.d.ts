@@ -1,5 +1,9 @@
-import { Container, IContainerOptions, IContainerEvents } from './container.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Container,
+  IContainerOptions,
+  IContainerEvents,
+  ContainerInteractiveOptions,
+} from './container.js';
 import { ChildWidgets } from '../utils/child_widgets.js';
 
 /**
@@ -73,17 +77,22 @@ export interface IPageEvents extends IContainerEvents {
 }
 
 /**
+ * Pages options that may be changed through user interaction.
+ */
+export interface PagesInteractiveOptions extends ContainerInteractiveOptions {
+  /** The page index to show. Set to -1 to hide all pages. */
+  show: IPagesOptions['show'];
+}
+
+/**
  * Pages contains different Page widgets which can be switched via option.
  */
 export declare class Pages<
-  TOptions extends IPagesOptions = IPagesOptions,
-  TEvents extends IPagesEvents = IPagesEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IPagesOptions = IPagesOptions,
+  Events extends IPagesEvents = IPagesEvents,
+  InteractiveOptions extends PagesInteractiveOptions = PagesInteractiveOptions
+> extends Container<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV element. Has class .aux-pages */
   element: HTMLDivElement;
@@ -154,12 +163,8 @@ export declare class Pages<
  * Page is the child widget to be used in Pages.
  */
 export declare class Page<
-  TOptions extends IPageOptions = IPageOptions,
-  TEvents extends IPageEvents = IPageEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IPageOptions = IPageOptions,
+  Events extends IPageEvents = IPageEvents
+> extends Container<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 }

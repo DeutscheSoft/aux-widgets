@@ -1,5 +1,9 @@
-import { Chart, IChartOptions, IChartEvents } from './chart.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Chart,
+  IChartOptions,
+  IChartEvents,
+  ChartInteractiveOptions,
+} from './chart.js';
 import { Graph } from './graph.js';
 import { ChartHandle } from './charthandle.js';
 
@@ -111,18 +115,31 @@ export interface IReverbEvents extends IChartEvents {
 }
 
 /**
+ * Reverb options that may be changed through user interaction.
+ */
+export interface ReverbInteractiveOptions extends ChartInteractiveOptions {
+  /** The initial delay of the input signal, not to be confused with predelay. */
+  delay: NonNullable<IReverbOptions['delay']>;
+  /** The gain for the input signal. */
+  gain: NonNullable<IReverbOptions['gain']>;
+  /** The predelay of the diffuse reverb. */
+  predelay: NonNullable<IReverbOptions['predelay']>;
+  /** The level of the diffuse reverb. */
+  rlevel: NonNullable<IReverbOptions['rlevel']>;
+  /** The duration of the diffuse reverb. This acts in conjunction with the reference option. */
+  rtime: NonNullable<IReverbOptions['rtime']>;
+}
+
+/**
  * Reverb is a Chart with various handles to set and display
  * parameters of a typical classic reverb.
  */
 export declare class Reverb<
-  TOptions extends IReverbOptions = IReverbOptions,
-  TEvents extends IReverbEvents = IReverbEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Chart<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IReverbOptions = IReverbOptions,
+  Events extends IReverbEvents = IReverbEvents,
+  InteractiveOptions extends ReverbInteractiveOptions = ReverbInteractiveOptions
+> extends Chart<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The Graph displaying the input signal as a vertical bar. */
   input: Graph;

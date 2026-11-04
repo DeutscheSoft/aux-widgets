@@ -89,14 +89,10 @@ export interface IMultiMeterEvents extends IContainerEvents {
  * Meter which are passed to all instantiated level meters.
  */
 export declare class MultiMeter<
-  TOptions extends IMultiMeterOptions = IMultiMeterOptions,
-  TEvents extends IMultiMeterEvents = IMultiMeterEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IMultiMeterOptions = IMultiMeterOptions,
+  Events extends IMultiMeterEvents = IMultiMeterEvents
+> extends Container<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-multimeter */
   element: HTMLDivElement;

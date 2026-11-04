@@ -1,6 +1,11 @@
 import { Container, IContainerOptions, IContainerEvents } from './container.js';
-import { EffectiveEvents } from '../implements/base.js';
-import { Pages, Page, IPagesPageInput, IPageOptions } from './pages.js';
+import {
+  Pages,
+  Page,
+  IPagesPageInput,
+  IPageOptions,
+  PagesInteractiveOptions,
+} from './pages.js';
 import { Navigation } from './navigation.js';
 import { Button, IButtonOptions } from './button.js';
 
@@ -42,18 +47,25 @@ export interface IPagerEvents extends IContainerEvents {
 }
 
 /**
+ * Pager options that may be changed through user interaction.
+ * `show` comes from Pages (same key) and from Navigation `select` (remapped).
+ */
+export interface PagerInteractiveOptions
+  extends Omit<PagesInteractiveOptions, 'show'> {
+  /** The page index to show. Set to -1 to hide all pages. */
+  show: IPagerOptions['show'];
+}
+
+/**
  * Pager provides multiple containers for displaying contents via Pages
  * which are switchable via a Navigation.
  */
 export declare class Pager<
-  TOptions extends IPagerOptions = IPagerOptions,
-  TEvents extends IPagerEvents = IPagerEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IPagerOptions = IPagerOptions,
+  Events extends IPagerEvents = IPagerEvents,
+  InteractiveOptions extends PagerInteractiveOptions = PagerInteractiveOptions
+> extends Container<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV element. Has class .aux-pager */
   element: HTMLDivElement;

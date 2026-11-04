@@ -1,5 +1,9 @@
-import { Container, IContainerOptions, IContainerEvents } from './container.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Container,
+  IContainerOptions,
+  IContainerEvents,
+  ContainerInteractiveOptions,
+} from './container.js';
 import { Button, IButtonOptions } from './button.js';
 import { ChildWidgets } from '../utils/child_widgets.js';
 
@@ -53,6 +57,14 @@ export interface IButtonsEvents extends IContainerEvents {
 }
 
 /**
+ * Buttons options that may be changed through user interaction.
+ */
+export interface ButtonsInteractiveOptions extends ContainerInteractiveOptions {
+  /** The Button or a list of Buttons, depending on multi_select, to highlight. Expects either the buttons index starting from zero or the Button instance(s) itself. Set to -1 or [] to de-select any selected button. */
+  select: IButtonsOptions['select'];
+}
+
+/**
  * Buttons is a list of Buttons, arranged
  * either vertically or horizontally. Single buttons can be selected by clicking.
  * If multi_select is enabled, buttons can be added and removed from
@@ -60,14 +72,11 @@ export interface IButtonsEvents extends IContainerEvents {
  * to highlight buttons which can't be selected due to options.multi_select=n.
  */
 export declare class Buttons<
-  TOptions extends IButtonsOptions = IButtonsOptions,
-  TEvents extends IButtonsEvents = IButtonsEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IButtonsOptions = IButtonsOptions,
+  Events extends IButtonsEvents = IButtonsEvents,
+  InteractiveOptions extends ButtonsInteractiveOptions = ButtonsInteractiveOptions
+> extends Container<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-buttons */
   element: HTMLDivElement;

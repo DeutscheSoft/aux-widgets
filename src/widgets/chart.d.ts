@@ -1,5 +1,9 @@
-import { Widget, IWidgetOptions, IWidgetEvents } from './widget.js';
-import { EffectiveEvents } from '../implements/base.js';
+import {
+  Widget,
+  IWidgetOptions,
+  IWidgetEvents,
+  WidgetInteractiveOptions,
+} from './widget.js';
 import { Range, IRangeOptions } from '../modules/range.js';
 import { Graph, IGraphOptions } from './graph.js';
 import { ChartHandle, IChartHandleOptions } from './charthandle.js';
@@ -102,15 +106,17 @@ export interface IChartEvents extends IWidgetEvents {
  * Chart is an SVG image containing one or more Graphs. Chart
  * extends Widget and contains a Grid and two Ranges.
  */
+/**
+ * Chart options that may be changed through user interaction.
+ */
+export interface ChartInteractiveOptions extends WidgetInteractiveOptions {}
+
 export declare class Chart<
-  TOptions extends IChartOptions = IChartOptions,
-  TEvents extends IChartEvents = IChartEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Widget<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IChartOptions = IChartOptions,
+  Events extends IChartEvents = IChartEvents,
+  InteractiveOptions extends ChartInteractiveOptions = ChartInteractiveOptions
+> extends Widget<Options, Events, InteractiveOptions> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-chart */
   element: HTMLDivElement;

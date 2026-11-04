@@ -67,8 +67,6 @@ import {
   childDependency,
 } from '../renderer.js';
 import { selectAriaAttribute } from '../utils/select_aria_attribute.js';
-import { applyLegacyUsersetEventsRanged } from '../utils/legacy_userset_events.js';
-
 function vert(layout) {
   return layout === 'left' || layout === 'right';
 }
@@ -304,21 +302,6 @@ export class Fader extends Widget {
         }
       ),
     ];
-  }
-
-  userset(key, value) {
-    if (key === 'value') {
-      const { transformation, snap_module } = this.options;
-      return applyLegacyUsersetEventsRanged(
-        this,
-        transformation,
-        snap_module,
-        key,
-        value
-      );
-    } else {
-      return super.userset(key, value);
-    }
   }
 
   initialize(options) {

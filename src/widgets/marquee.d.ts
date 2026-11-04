@@ -44,14 +44,10 @@ export interface IMarqueeEvents extends IContainerEvents {
  * Marquee is a Label inside a Container. Marquee inherits all options of Label.
  */
 export declare class Marquee<
-  TOptions extends IMarqueeOptions = IMarqueeOptions,
-  TEvents extends IMarqueeEvents = IMarqueeEvents,
-  TEffectiveEvents extends EffectiveEvents<TOptions, TEvents> = EffectiveEvents<
-    TOptions,
-    TEvents
-  >
-> extends Container<TOptions, TEvents, TEffectiveEvents> {
-  constructor(options?: Partial<NoInfer<TOptions>>);
+  Options extends IMarqueeOptions = IMarqueeOptions,
+  Events extends IMarqueeEvents = IMarqueeEvents
+> extends Container<Options, Events> {
+  constructor(options?: Partial<NoInfer<Options>>);
 
   /** The main DIV container. Has class .aux-marquee */
   element: HTMLDivElement;
