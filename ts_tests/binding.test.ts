@@ -7,6 +7,7 @@ import {
   ReadableValue,
   WritableValue,
   ReadwriteValue,
+  SubjectLike,
   BindingOptions,
   ReceiveOnlyBindingOptions,
   SendOnlyBindingOptions,
@@ -17,6 +18,7 @@ import {
   observeUseraction,
   interceptOption,
   InteractionSuppress,
+  fromSubject,
 } from '../src/index.js';
 import {
   cast,
@@ -84,8 +86,27 @@ const _writableOnly: WritableValue<number> = {
   },
 };
 
+const _subjectLike: SubjectLike<number> = {
+  subscribe: (cb) => {
+    cb(1);
+    return { unsubscribe() {} };
+  },
+  next: (value) => {
+    const _n: number = value;
+    void _n;
+  },
+};
+
+const _fromSubject: ReadwriteValue<number> = fromSubject(_subjectLike);
+_fromSubject.set(2);
+
+// @ts-expect-error fromSubject requires next
+fromSubject(_readableOnly);
+
 // @ts-expect-error ReadwriteValue<number> rejects string in set
 numberSource.set('nope');
+
+void _fromSubject;
 
 numberSource.subscribe((value) => {
   const _n: number = value;

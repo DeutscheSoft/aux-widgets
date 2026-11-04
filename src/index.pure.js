@@ -31,6 +31,7 @@ export * from './utils/events.js';
 export * from './utils/timers.js';
 export * from './utils/global_events.js';
 export * from './utils/binding.js';
+export * from './utils/from_subject.js';
 
 export { Base } from './implements/base.js';
 

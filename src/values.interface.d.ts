@@ -14,7 +14,7 @@ export type Unsubscribe = (() => void) | { unsubscribe(): void };
  * `subscribe` may return either an unsubscribe function or
  * `{ unsubscribe() }` so RxJS `Observable` (and similar) can be used directly
  * as a {@link ReadableValue}. Duplex write still needs {@link WritableValue.set}
- * (map `Subject.next` onto `set`, or use `fromSubscribable`).
+ * (e.g. `fromSubject` for a {@link SubjectLike}).
  */
 export interface ReadableValue<T = unknown> {
   /**
@@ -39,3 +39,12 @@ export interface WritableValue<T = unknown> {
  * A value that is both readable and writable.
  */
 export type ReadwriteValue<T = unknown> = ReadableValue<T> & WritableValue<T>;
+
+/**
+ * Observable + push sink (RxJS `Subject` / `BehaviorSubject` shape).
+ * Already a {@link ReadableValue}; use `fromSubject` to expose
+ * {@link WritableValue.set} via `next`.
+ */
+export interface SubjectLike<T = unknown> extends ReadableValue<T> {
+  next(value: T): void;
+}
