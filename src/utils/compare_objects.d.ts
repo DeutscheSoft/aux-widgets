@@ -1,5 +1,5 @@
 /**
- * Compares two plain objects (with null prototype) for equality.
+ * Compares two plain objects (prototype `Object.prototype`) for equality.
  * Returns true if both objects have the same keys and values.
  *
  * @param a - First object to compare
