@@ -18,13 +18,11 @@ export type SubscriptionCallback = () => void;
  * - `null` (no subscription)
  * - A single callback function
  * - An array of callback functions
- * - An object with an `unsubscribe` method
  */
 export type SubscriptionInput =
   | null
   | SubscriptionCallback
-  | SubscriptionCallback[]
-  | { unsubscribe: () => void };
+  | SubscriptionCallback[];
 
 /**
  * Internal representation of subscriptions.
@@ -47,7 +45,7 @@ export function initSubscriptions(): null;
  * This function may modify the first argument.
  *
  * @param subscriptions - The existing subscriptions (can be `null`, a function, or an array)
- * @param subscription - The subscription to add (can be `null`, a function, an array, or an object with `unsubscribe`)
+ * @param subscription - The subscription to add (can be `null`, a function, or an array)
  * @returns The updated subscriptions (may be the same reference as the first argument)
  */
 export function addSubscription(
@@ -71,7 +69,6 @@ export function unsubscribeSubscriptions(
  * A subscription can be:
  * - A callback function
  * - An array of callback functions
- * - An object with an `unsubscribe` method (which will be bound)
  *
  * @example
  *      const subscription = new Subscription(() => {
@@ -85,7 +82,7 @@ export class Subscription {
    * Creates a new Subscription instance.
    *
    * @param subscription - The subscription to wrap. If `undefined`, creates an empty subscription.
-   *   Can be a function, array of functions, or an object with an `unsubscribe` method.
+   *   Can be a function, array of functions, or `null`.
    * @throws {TypeError} If the subscription type is not supported
    */
   constructor(subscription?: SubscriptionInput);
@@ -128,7 +125,7 @@ export class Subscriptions extends Subscription {
    * Adds a subscription to this set.
    *
    * @param subscription - The subscription to add. Can be a function,
-   *   an array of functions, or an object with an `unsubscribe` method.
+   *   an array of functions, or `null`.
    */
   add(subscription: SubscriptionInput): void;
 

@@ -19,12 +19,13 @@ import {
   interceptOption,
   InteractionSuppress,
   fromSubject,
+  fromObservable,
+  ObservableLike,
+  Unsubscribe,
+  WidgetBindings,
+  BindingDescriptorForWidget,
 } from '../src/index.js';
-import {
-  cast,
-  assertAssignable,
-  assertMutualAssignable,
-} from './helpers.js';
+import { cast, assertAssignable, assertMutualAssignable } from './helpers.js';
 
 const fader = cast<Fader>();
 const widget = cast<Widget>();
@@ -100,6 +101,16 @@ const _subjectLike: SubjectLike<number> = {
 const _fromSubject: ReadwriteValue<number> = fromSubject(_subjectLike);
 _fromSubject.set(2);
 
+const _observableLike: ObservableLike<number> = {
+  subscribe: (cb) => {
+    cb(1);
+    return { unsubscribe() {} };
+  },
+};
+const _fromObservable: ReadableValue<number> = fromObservable(_observableLike);
+const _unsub: Unsubscribe = _fromObservable.subscribe(() => {});
+_unsub();
+
 // @ts-expect-error fromSubject requires next
 fromSubject(_readableOnly);
 
@@ -107,6 +118,7 @@ fromSubject(_readableOnly);
 numberSource.set('nope');
 
 void _fromSubject;
+void _fromObservable;
 
 numberSource.subscribe((value) => {
   const _n: number = value;
@@ -128,10 +140,12 @@ fader.bind('value', numberSource, {
 
 fader.bind(
   'value',
-  { set: (v) => {
-    const _n: number = v;
-    void _n;
-  } },
+  {
+    set: (v) => {
+      const _n: number = v;
+      void _n;
+    },
+  },
   { send: true, receive: false }
 );
 
@@ -256,10 +270,14 @@ observeOption(fader, 'not_real', () => {});
 
 // --- InteractionSuppress ---
 
-const gate = new InteractionSuppress<number>(fader, (value) => {
-  const _n: number = value;
-  void _n;
-}, 500);
+const gate = new InteractionSuppress<number>(
+  fader,
+  (value) => {
+    const _n: number = value;
+    void _n;
+  },
+  500
+);
 
 gate.set(1);
 // @ts-expect-error set expects number
@@ -306,7 +324,10 @@ assertMutualAssignable<
 >();
 
 // both directions off → never
-assertAssignable<ValueForBindingOptions<{ receive: false; send: false }>, never>();
+assertAssignable<
+  ValueForBindingOptions<{ receive: false; send: false }>,
+  never
+>();
 
 // Options-first API: inferred source requirement
 function acceptSourceForOptions<O extends BindingOptions, T>(
@@ -329,3 +350,60 @@ acceptSourceForOptions({ send: false }, _writableOnly);
 
 // @ts-expect-error receive:false requires WritableValue
 acceptSourceForOptions({ receive: false }, _readableOnly);
+
+// --- WidgetBindings<TWidget> ---
+
+const faderBindings = new WidgetBindings(fader);
+const widgetBindings = new WidgetBindings(widget);
+
+faderBindings.update({ name: 'value', source: numberSource });
+faderBindings.update([
+  { name: 'value', source: numberSource },
+  {
+    name: 'label',
+    source: {
+      set: (v: string) => {},
+      subscribe: (cb) => {
+        cb('');
+        return () => {};
+      },
+    },
+  },
+]);
+faderBindings.update({
+  name: 'value',
+  source: _readableOnly,
+  send: false,
+});
+faderBindings.update(null);
+faderBindings.dispose();
+
+widgetBindings.update({
+  name: 'disabled',
+  source: { set: (v: boolean) => {} },
+});
+
+type FaderBinding = BindingDescriptorForWidget<Fader>;
+assertAssignable<
+  { name: 'value'; source: ReadwriteValue<number> },
+  FaderBinding
+>();
+
+const _stringSource: ReadwriteValue<string> = {
+  subscribe: (cb) => {
+    cb('x');
+    return () => {};
+  },
+  set: (v) => {
+    void v;
+  },
+};
+
+// @ts-expect-error value option is number, not string source
+faderBindings.update({ name: 'value', source: _stringSource });
+
+// @ts-expect-error not a Fader option
+faderBindings.update({ name: 'disabled', source: numberSource });
+
+// @ts-expect-error readable-only cannot enable send
+faderBindings.update({ name: 'value', source: _readableOnly, send: true });

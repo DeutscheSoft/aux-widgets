@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { fromSubject } from '../../src/index.js';
+import { fromObservable, fromSubject } from '../../src/index.js';
 import { assert, assertError } from './utils/helpers.js';
 
 function makeSubject(initial) {
@@ -27,6 +27,9 @@ function makeSubject(initial) {
   return {
     get value() {
       return value;
+    },
+    get subscriberCount() {
+      return subscribers.length;
     },
     subscribe(cb) {
       subscribers.push(cb);
@@ -45,13 +48,78 @@ function makeSubject(initial) {
   };
 }
 
+function makeObservable() {
+  const subscribers = [];
+
+  return {
+    get subscriberCount() {
+      return subscribers.length;
+    },
+    subscribe(cb) {
+      subscribers.push(cb);
+      return {
+        unsubscribe() {
+          const i = subscribers.indexOf(cb);
+          if (i !== -1) subscribers.splice(i, 1);
+        },
+      };
+    },
+    push(v) {
+      subscribers.slice().forEach((cb) => cb(v));
+    },
+  };
+}
+
+describe('fromObservable', () => {
+  it('normalizes object teardown to a function', () => {
+    const observable = makeObservable();
+    const readable = fromObservable(observable);
+    const seen = [];
+
+    const unsubscribe = readable.subscribe((v) => seen.push(v));
+    assert(typeof unsubscribe === 'function');
+    assert(observable.subscriberCount === 1);
+
+    observable.push(1);
+    assert(seen[0] === 1);
+
+    unsubscribe();
+    assert(observable.subscriberCount === 0);
+    observable.push(2);
+    assert(seen.length === 1);
+  });
+
+  it('forwards function teardown unchanged', () => {
+    let closed = false;
+    const readable = fromObservable({
+      subscribe(cb) {
+        cb(7);
+        return () => {
+          closed = true;
+        };
+      },
+    });
+
+    const unsubscribe = readable.subscribe(() => {});
+    assert(typeof unsubscribe === 'function');
+    unsubscribe();
+    assert(closed);
+  });
+
+  it('requires subscribe', () => {
+    assertError(() => fromObservable(null));
+    assertError(() => fromObservable({}));
+  });
+});
+
 describe('fromSubject', () => {
-  it('maps set to next and forwards subscribe', () => {
+  it('maps set to next and returns a function from subscribe', () => {
     const subject = makeSubject(1);
     const value = fromSubject(subject);
     const seen = [];
 
-    const sub = value.subscribe((v) => seen.push(v));
+    const unsubscribe = value.subscribe((v) => seen.push(v));
+    assert(typeof unsubscribe === 'function');
     assert(seen.length === 1);
     assert(seen[0] === 1);
 
@@ -59,8 +127,8 @@ describe('fromSubject', () => {
     assert(subject.value === 2);
     assert(seen[1] === 2);
 
-    if (typeof sub === 'function') sub();
-    else sub.unsubscribe();
+    unsubscribe();
+    assert(subject.subscriberCount === 0);
 
     value.set(3);
     assert(seen.length === 2);

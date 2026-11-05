@@ -18,15 +18,59 @@
  */
 
 /**
- * Adapt Subject-like streams to {@link ReadwriteValue}.
+ * Adapt Observable / Subject-like streams to aux value contracts.
  *
  * @module utils/from_subject
  */
 
 /**
- * Wraps a {@link SubjectLike} as a {@link ReadwriteValue} by mapping
- * `set(value)` to `subject.next(value)`. `subscribe` is forwarded unchanged
- * (including Observable-style `{ unsubscribe() }` teardown).
+ * Normalize an Observable-like `subscribe` teardown to an {@link Unsubscribe}
+ * function.
+ *
+ * @param {(() => void) | { unsubscribe: function } | null | undefined} subscription
+ * @returns {() => void}
+ */
+function toUnsubscribe(subscription) {
+  if (subscription == null) return () => {};
+
+  if (typeof subscription === 'function') return subscription;
+
+  if (
+    typeof subscription === 'object' &&
+    typeof subscription.unsubscribe === 'function'
+  ) {
+    return () => subscription.unsubscribe();
+  }
+
+  throw new TypeError(
+    'Expected unsubscribe function or object with unsubscribe().'
+  );
+}
+
+/**
+ * Wraps an {@link ObservableLike} as a {@link ReadableValue} by normalizing
+ * `subscribe` teardown to a function (RxJS `{ unsubscribe() }` → `() => …`).
+ *
+ * @template T
+ * @param {{ subscribe: function }} observable
+ * @returns {{ subscribe: function }}
+ */
+export function fromObservable(observable) {
+  if (!observable || typeof observable.subscribe !== 'function') {
+    throw new TypeError('Expected ObservableLike with subscribe().');
+  }
+
+  return {
+    subscribe(subscriber) {
+      return toUnsubscribe(observable.subscribe(subscriber));
+    },
+  };
+}
+
+/**
+ * Wraps a {@link SubjectLike} as a {@link ReadwriteValue} by normalizing
+ * subscribe teardown (via {@link fromObservable}) and mapping `set(value)` to
+ * `subject.next(value)`.
  *
  * @template T
  * @param {{ subscribe: function, next: function }} subject
@@ -41,10 +85,10 @@ export function fromSubject(subject) {
     throw new TypeError('Expected SubjectLike with subscribe() and next().');
   }
 
+  const readable = fromObservable(subject);
+
   return {
-    subscribe(subscriber) {
-      return subject.subscribe(subscriber);
-    },
+    subscribe: readable.subscribe,
     set(value) {
       return subject.next(value);
     },

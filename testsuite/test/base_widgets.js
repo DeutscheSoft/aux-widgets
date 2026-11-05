@@ -125,7 +125,6 @@ describe('Components', () => {
 
       assert(!w2.hasChild(c1), 'setParent failed.');
 
-
       w1.destroy();
       w2.destroy();
       c1.destroy();

@@ -555,10 +555,14 @@ describe('Base.bind', () => {
       o.bind('disabled', {});
     });
     assertError(() => {
-      o.bind('disabled', {
-        subscribe: () => () => {},
-        set: () => {},
-      }, { receive: false, send: false });
+      o.bind(
+        'disabled',
+        {
+          subscribe: () => () => {},
+          set: () => {},
+        },
+        { receive: false, send: false }
+      );
     });
   });
 
@@ -572,32 +576,26 @@ describe('Base.bind', () => {
     assert(o.get('disabled') === false);
   });
 
-  it('accepts Observable-style subscribe teardown', () => {
+  it('unbind after destroy is a no-op', () => {
     const o = new Widget();
-    const subscribers = [];
-    let closed = false;
+    let sourceClosed = false;
     const src = {
       subscribe(cb) {
-        subscribers.push(cb);
-        return {
-          unsubscribe() {
-            closed = true;
-            const i = subscribers.indexOf(cb);
-            if (i !== -1) subscribers.splice(i, 1);
-          },
+        const unsub = makeSource().subscribe(cb);
+        return () => {
+          sourceClosed = true;
+          unsub();
         };
       },
       set() {},
     };
+    const unbind = o.bind('disabled', src);
 
-    const unbind = o.bind('disabled', src, { send: false });
-    subscribers.slice().forEach((cb) => cb(true));
-    assert(o.get('disabled') === true);
+    o.destroy();
+    assert(o.isDestructed());
     unbind();
-    assert(closed);
-    assert(subscribers.length === 0);
-    subscribers.slice().forEach((cb) => cb(false));
-    assert(o.get('disabled') === true);
+    unbind();
+    assert(sourceClosed);
   });
 
   it('debug logs install, receive, send, unsubscribe', () => {

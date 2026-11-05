@@ -1,9 +1,8 @@
 /**
  * Teardown returned from {@link ReadableValue.subscribe}.
- * A bare function or an RxJS-style subscription object are both accepted;
- * callers such as `bind` / `Subscriptions.add` normalize either form.
+ * Always a bare function — wrap RxJS Observables with `fromObservable`.
  */
-export type Unsubscribe = (() => void) | { unsubscribe(): void };
+export type Unsubscribe = () => void;
 
 /**
  * A readable stream of values. Stateful implementations should emit the
@@ -11,10 +10,9 @@ export type Unsubscribe = (() => void) | { unsubscribe(): void };
  * There is no `replay` flag on `subscribe` — use an operator such as
  * `skipSync` when the initial synchronous delivery must be ignored.
  *
- * `subscribe` may return either an unsubscribe function or
- * `{ unsubscribe() }` so RxJS `Observable` (and similar) can be used directly
- * as a {@link ReadableValue}. Duplex write still needs {@link WritableValue.set}
- * (e.g. `fromSubject` for a {@link SubjectLike}).
+ * `subscribe` always returns an {@link Unsubscribe} function. RxJS
+ * `Observable` / `Subject` are not {@link ReadableValue}s directly — use
+ * `fromObservable` (receive) or `fromSubject` (duplex via `next` → `set`).
  */
 export interface ReadableValue<T = unknown> {
   /**
@@ -22,7 +20,7 @@ export interface ReadableValue<T = unknown> {
    *
    * @param subscriber - Called with every value (including a synchronous
    *   current value when the source is stateful).
-   * @returns Unsubscribe function or `{ unsubscribe(): void }`.
+   * @returns Unsubscribe function.
    */
   subscribe(subscriber: (value: T) => void): Unsubscribe;
 }
@@ -39,12 +37,3 @@ export interface WritableValue<T = unknown> {
  * A value that is both readable and writable.
  */
 export type ReadwriteValue<T = unknown> = ReadableValue<T> & WritableValue<T>;
-
-/**
- * Observable + push sink (RxJS `Subject` / `BehaviorSubject` shape).
- * Already a {@link ReadableValue}; use `fromSubject` to expose
- * {@link WritableValue.set} via `next`.
- */
-export interface SubjectLike<T = unknown> extends ReadableValue<T> {
-  next(value: T): void;
-}

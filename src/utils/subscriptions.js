@@ -104,18 +104,12 @@ export class Subscription {
       this.sub = initSubscriptions();
     } else if (
       typeof subscription === 'function' ||
-      Array.isArray(subscription)
+      Array.isArray(subscription) ||
+      subscription === null
     ) {
       this.sub = subscription;
     } else {
-      if (
-        typeof subscription === 'object' &&
-        typeof subscription.unsubscribe === 'function'
-      ) {
-        this.sub = subscription.unsubscribe.bind(subscription);
-      } else {
-        throw new TypeError('Unsupported argument.');
-      }
+      throw new TypeError('Unsupported argument.');
     }
   }
 
@@ -143,13 +137,6 @@ export class Subscriptions extends Subscription {
    * Add a subscription.
    */
   add(subscription) {
-    if (
-      typeof subscription === 'object' &&
-      typeof subscription.unsubscribe === 'function'
-    ) {
-      subscription = subscription.unsubscribe.bind(subscription);
-    }
-
     this.sub = addSubscription(this.sub, subscription);
   }
 

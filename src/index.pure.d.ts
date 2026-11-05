@@ -31,6 +31,8 @@ export * from './utils/timers.js';
 export * from './utils/global_events.js';
 export * from './utils/binding.js';
 export * from './utils/from_subject.js';
+export * from './utils/get_current_value.js';
+export * from './utils/widget_bindings.js';
 export * from './values.interface.js';
 
 export * from './implements/base.js';

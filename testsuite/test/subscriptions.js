@@ -43,7 +43,7 @@ describe('Subscriptions', () => {
 
       subs1.add(() => called++);
 
-      const subs2 = new Subscriptions(subs1);
+      const subs2 = new Subscriptions(() => subs1.unsubscribe());
 
       subs1.add(() => called++);
 
@@ -60,7 +60,7 @@ describe('Subscriptions', () => {
 
       const subs2 = new Subscriptions();
 
-      subs2.add(subs1);
+      subs2.add(() => subs1.unsubscribe());
 
       subs1.add(() => called++);
 
