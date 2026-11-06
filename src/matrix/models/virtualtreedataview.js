@@ -173,7 +173,16 @@ export class VirtualTreeDataView extends Events {
 
   _updateSize(parent, diff) {
     parent.updateSize(diff);
+    /**
+     * Is fired when the number of entries in the list changes.
+     * Also emitted as `sizeChanged`.
+     *
+     * @event VirtualTreeDataView#size_changed
+     *
+     * @param {Integer} size - The new number of entries.
+     */
     this.emit('sizeChanged', this.root.size);
+    this.emit('size_changed', this.root.size);
   }
 
   _updateIndex(startIndex) {
@@ -215,8 +224,28 @@ export class VirtualTreeDataView extends Events {
 
     if (list_index < this.startIndex) {
       this.startIndex++;
+      /**
+       * Is fired when the index of the first visible entry changes.
+       * Also emitted as `startIndexChanged`.
+       *
+       * @event VirtualTreeDataView#start_index_changed
+       *
+       * @param {Integer} start_index - The new start index.
+       * @param {Integer} [previous_start_index] - The previous start index.
+       */
       this.emit('startIndexChanged', this.startIndex);
+      this.emit('start_index_changed', this.startIndex);
+      /**
+       * Is fired when the visible window moves.
+       * Also emitted as `scrollView`.
+       *
+       * @event VirtualTreeDataView#scroll_view
+       *
+       * @param {Integer} offset - How far the start index moved. Positive
+       *   values move towards the end of the list.
+       */
       this.emit('scrollView', 1);
+      this.emit('scroll_view', 1);
     } else {
       notify_interval = [list_index, void 0];
     }
@@ -235,7 +264,16 @@ export class VirtualTreeDataView extends Events {
     if (notify_interval)
       this._notifyRegion(notify_interval[0], notify_interval[1]);
 
+    /**
+     * Is fired when an entry is added to the list.
+     * Also emitted as `childAdded`.
+     *
+     * @event VirtualTreeDataView#child_added
+     *
+     * @param {TreeNodeData} child - The entry that was added.
+     */
     this.emit('childAdded', child);
+    this.emit('child_added', child);
 
     return sub;
   }
@@ -274,11 +312,15 @@ export class VirtualTreeDataView extends Events {
     if (list_index < startIndex) {
       this.startIndex -= size;
       this.emit('startIndexChanged', this.startIndex, startIndex);
+      this.emit('start_index_changed', this.startIndex, startIndex);
       this.emit('scrollView', this.startIndex - startIndex);
+      this.emit('scroll_view', this.startIndex - startIndex);
     } else if (this.size < startIndex + this.amount && startIndex > 0) {
       this.startIndex = Math.max(0, startIndex - size);
       this.emit('startIndexChanged', this.startIndex, startIndex);
+      this.emit('start_index_changed', this.startIndex, startIndex);
       this.emit('scrollView', this.startIndex - startIndex);
+      this.emit('scroll_view', this.startIndex - startIndex);
       notify_interval = [this.startIndex, void 0];
     } else {
       notify_interval = [this.startIndex, void 0];
@@ -291,7 +333,16 @@ export class VirtualTreeDataView extends Events {
       notify_interval = intervalUnion(notify_interval, parent.getInterval());
     }
 
+    /**
+     * Is fired when an entry is removed from the list.
+     * Also emitted as `childRemoved`.
+     *
+     * @event VirtualTreeDataView#child_removed
+     *
+     * @param {TreeNodeData} child - The entry that was removed.
+     */
     this.emit('childRemoved', child);
+    this.emit('child_removed', child);
 
     if (notify_interval)
       this._notifyRegion(notify_interval[0], notify_interval[1]);
@@ -383,7 +434,14 @@ export class VirtualTreeDataView extends Events {
     this._forEachWithTreePosition(from, to, (i, element, treePosition) => {
       callSubscribers(subscribers, i, element, treePosition);
     });
+    /**
+     * Is fired after the entries currently in view have been updated.
+     * Also emitted as `elementsChanged`.
+     *
+     * @event VirtualTreeDataView#elements_changed
+     */
     this.emit('elementsChanged');
+    this.emit('elements_changed');
   }
 
   _filterCollapsed(node, continuation) {
@@ -433,6 +491,11 @@ export class VirtualTreeDataView extends Events {
     fillList(this.root);
 
     this._notifyRegion();
+    /**
+     * Is fired after the list has been sorted.
+     *
+     * @event VirtualTreeDataView#sorted
+     */
     this.emit('sorted');
   }
 
@@ -602,7 +665,16 @@ export class VirtualTreeDataView extends Events {
     const oldAmount = this.amount;
     this.amount = amount;
 
+    /**
+     * Is fired when the number of entries the view displays changes.
+     * Also emitted as `amountChanged`.
+     *
+     * @event VirtualTreeDataView#amount_changed
+     *
+     * @param {Integer} amount - The new number of visible entries.
+     */
     this.emit('amountChanged', amount);
+    this.emit('amount_changed', amount);
 
     if (amount <= oldAmount) return;
 
@@ -614,7 +686,9 @@ export class VirtualTreeDataView extends Events {
     if (size < startIndex + this.amount && startIndex > 0) {
       this.startIndex = Math.max(0, size - this.amount);
       this.emit('startIndexChanged', this.startIndex, startIndex);
+      this.emit('start_index_changed', this.startIndex, startIndex);
       this.emit('scrollView', this.startIndex - startIndex);
+      this.emit('scroll_view', this.startIndex - startIndex);
     }
   }
 
@@ -624,7 +698,9 @@ export class VirtualTreeDataView extends Events {
     this.startIndex += offset;
 
     this.emit('startIndexChanged', this.startIndex, this.startIndex - offset);
+    this.emit('start_index_changed', this.startIndex, this.startIndex - offset);
     this.emit('scrollView', offset);
+    this.emit('scroll_view', offset);
 
     if (offset > 0) {
       const end = this.startIndex + this.amount;

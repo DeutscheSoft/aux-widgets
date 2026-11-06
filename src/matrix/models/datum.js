@@ -41,7 +41,17 @@ export class Datum extends Events {
 
   set(name, value) {
     this.properties[name] = value;
+    /**
+     * Is fired when a property value is set.
+     * Also emitted as `propertyChanged`.
+     *
+     * @event Datum#property_changed
+     *
+     * @param {string} name - The property name.
+     * @param {*} value - The new value.
+     */
     this.emit('propertyChanged', name, value);
+    this.emit('property_changed', name, value);
     return value;
   }
 

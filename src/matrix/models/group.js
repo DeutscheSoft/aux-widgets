@@ -31,6 +31,7 @@ import {
 
 function onChildTreechanged() {
   this.parent.emit('treeChanged');
+  this.parent.emit('tree_changed');
 }
 
 /**
@@ -52,8 +53,8 @@ export class GroupData extends TreeNodeData {
   /**
    * Add a child to this group.
    *
-   * @emits childAdded
-   * @emits treeChanged
+   * @emits GroupData#child_added
+   * @emits GroupData#tree_changed
    */
   addChild(child) {
     if (!(child instanceof TreeNodeData))
@@ -69,8 +70,27 @@ export class GroupData extends TreeNodeData {
     child.setParent(this);
     children.add(child);
 
+    /**
+     * Is fired when a child is added to this group.
+     * Also emitted as `childAdded`.
+     *
+     * @event GroupData#child_added
+     *
+     * @param {TreeNodeData} child - The child that was added.
+     */
     this.emit('childAdded', child);
+    this.emit('child_added', child);
+    /**
+     * Is fired when the children of this group change.
+     * Also emitted as `treeChanged`.
+     *
+     * @event GroupData#tree_changed
+     *
+     * @param {GroupData} [group] - This group, when a child was added or
+     *   removed here. Omitted when a descendant group changed.
+     */
     this.emit('treeChanged', this);
+    this.emit('tree_changed', this);
 
     child.on('treeChanged', onChildTreechanged);
   }
@@ -78,8 +98,8 @@ export class GroupData extends TreeNodeData {
   /**
    * Removed a child node.
    *
-   * @emits childRemoved
-   * @emits treeChanged
+   * @emits GroupData#child_removed
+   * @emits GroupData#tree_changed
    */
   deleteChild(child) {
     if (!(child instanceof TreeNodeData))
@@ -96,8 +116,18 @@ export class GroupData extends TreeNodeData {
 
     child.off('treeChanged', onChildTreechanged);
 
+    /**
+     * Is fired when a child is removed from this group.
+     * Also emitted as `childRemoved`.
+     *
+     * @event GroupData#child_removed
+     *
+     * @param {TreeNodeData} child - The child that was removed.
+     */
     this.emit('childRemoved', child);
+    this.emit('child_removed', child);
     this.emit('treeChanged', this);
+    this.emit('tree_changed', this);
   }
 
   /**
