@@ -67,15 +67,16 @@ function getStartEvent(state) {
   }
 }
 function onDragStart(state, start, e) {
-  // When the batch UI is open, ignore the gesture entirely. Returning false
+  // Returning undefined leaves the pointer event alone. Returning false
   // would still preventDefault() pointerdown in DragCapture and suppress
-  // clicks on the batch buttons.
-  if (this.get('_batch_open')) return;
+  // clicks on indicators or on the batch buttons.
+  if (!this.options.batch || this.get('_batch_open')) return;
   return true;
 }
 
 function onDragging(s, e) {
   const O = this.options;
+  if (!O.batch) return false;
   const state = this.drag.state();
   const px = state.vDistance();
   const x = px[0];
@@ -97,6 +98,10 @@ function onDragging(s, e) {
 }
 
 function onDragStop(state, e) {
+  if (!this.options.batch) {
+    onBatchEnd.call(this);
+    return;
+  }
   if (this.get('_batch')) {
     onBatchStart.call(this, e);
     return;
@@ -378,7 +383,7 @@ export class Indicators extends Container {
 
     this.drag = new DragCapture(this, {
       node: this.element,
-      active: options.batch,
+      active: this.options.batch,
       onstartcapture: onDragStart.bind(this),
       onmovecapture: onDragging.bind(this),
       onstopcapture: onDragStop.bind(this),

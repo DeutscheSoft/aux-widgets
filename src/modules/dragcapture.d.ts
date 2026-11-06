@@ -33,6 +33,8 @@ export interface IDragCaptureState {
 export interface IDragCaptureOptions extends IModuleOptions {
   /** The DOM element receiving the drag events. If not set the widgets element is used. */
   node?: HTMLElement | SVGElement | null;
+  /** Enable or disable dragging. */
+  active?: boolean;
   /** @internal Whether dragging is currently active (computed internally). */
   state?: boolean;
   /** Focus this element on drag start. Set to false if no focus should be set. */
