@@ -1,5 +1,4 @@
-/*
- * Matrix module exports are not yet fully typed. This declaration allows
- * the barrel to resolve.
+/**
+ * Matrix data models (widgets / components typings land later).
  */
-export {};
+export * from './matrix/models.js';
