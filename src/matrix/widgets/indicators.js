@@ -373,7 +373,7 @@ export class Indicators extends Container {
 
     this.drag = new DragCapture(this, {
       node: this.element,
-      active: options.batch,
+      active: this.options.batch,
       onstartcapture: onDragStart.bind(this),
       onmovecapture: onDragging.bind(this),
       onstopcapture: onDragStop.bind(this),
