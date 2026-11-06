@@ -26,7 +26,25 @@ import { defineRender } from '../../renderer.js';
 function pointerEnter(e) {
   this.sink.set('hovered', true);
   this.source.set('hovered', true);
+  /**
+   * Is fired on the parent {@link Matrix} when the pointer enters an
+   * indicator. Also emitted as `indicatorEnter`.
+   *
+   * @event Matrix#indicator_enter
+   *
+   * @param {Object} detail - The indicator under the pointer.
+   * @param {TreeNodeData} detail.source - The source port or group.
+   * @param {TreeNodeData} detail.sink - The sink port or group.
+   * @param {Event} detail.event - The pointer event.
+   * @param {Indicator} detail.indicator - The indicator.
+   */
   this.parent.parent.emit('indicatorEnter', {
+    sink: this.sink,
+    source: this.source,
+    event: e,
+    indicator: this,
+  });
+  this.parent.parent.emit('indicator_enter', {
     sink: this.sink,
     source: this.source,
     event: e,
@@ -36,7 +54,25 @@ function pointerEnter(e) {
 function pointerLeave(e) {
   this.sink.set('hovered', false);
   this.source.set('hovered', false);
+  /**
+   * Is fired on the parent {@link Matrix} when the pointer leaves an
+   * indicator. Also emitted as `indicatorLeave`.
+   *
+   * @event Matrix#indicator_leave
+   *
+   * @param {Object} detail - The indicator under the pointer.
+   * @param {TreeNodeData} detail.source - The source port or group.
+   * @param {TreeNodeData} detail.sink - The sink port or group.
+   * @param {Event} detail.event - The pointer event.
+   * @param {Indicator} detail.indicator - The indicator.
+   */
   this.parent.parent.emit('indicatorLeave', {
+    sink: this.sink,
+    source: this.source,
+    event: e,
+    indicator: this,
+  });
+  this.parent.parent.emit('indicator_leave', {
     sink: this.sink,
     source: this.source,
     event: e,

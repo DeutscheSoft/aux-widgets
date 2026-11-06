@@ -177,3 +177,51 @@ test('Connections', () => {
     assert(tmp.length === 0);
   }
 });
+
+test('camelCase events are also emitted in snake_case', () => {
+  const matrix = new MatrixData();
+  const group = matrix.addGroup({ label: 'group' });
+  const children = [];
+
+  group.on('childAdded', (child) => children.push(['childAdded', child]));
+  group.on('child_added', (child) => children.push(['child_added', child]));
+  group.on('treeChanged', (node) => children.push(['treeChanged', node]));
+  group.on('tree_changed', (node) => children.push(['tree_changed', node]));
+
+  const port = group.addPort({ label: 'port' });
+
+  assert(children.length === 4);
+  assert(children[0][0] === 'childAdded' && children[0][1] === port);
+  assert(children[1][0] === 'child_added' && children[1][1] === port);
+  assert(children[2][0] === 'treeChanged' && children[2][1] === group);
+  assert(children[3][0] === 'tree_changed' && children[3][1] === group);
+
+  const props = [];
+
+  port.on('propertyChanged', (name, value) => {
+    props.push(['propertyChanged', name, value]);
+  });
+  port.on('property_changed', (name, value) => {
+    props.push(['property_changed', name, value]);
+  });
+  port.set('label', 'renamed');
+  assert(props.length === 2);
+  assert(props[0][1] === 'label' && props[0][2] === 'renamed');
+  assert(props[1][0] === 'property_changed' && props[1][2] === 'renamed');
+
+  const added = [];
+
+  matrix.on('connectionAdded', (connection) => {
+    added.push(['connectionAdded', connection]);
+  });
+  matrix.on('connection_added', (connection) => {
+    added.push(['connection_added', connection]);
+  });
+
+  const other = group.addPort({ label: 'other' });
+  const connection = matrix.connect(port, other);
+
+  assert(added.length === 2);
+  assert(added[0][1] === connection);
+  assert(added[1][0] === 'connection_added' && added[1][1] === connection);
+});

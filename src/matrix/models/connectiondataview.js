@@ -489,12 +489,14 @@ export class ConnectionDataView extends Events {
     this._addSubscription(
       virtualtreeview1.subscribeScrollView((offset) => {
         this.emit('scrollView', offset, 0);
+        this.emit('scroll_view', offset, 0);
       })
     );
 
     this._addSubscription(
       virtualtreeview2.subscribeScrollView((offset) => {
         this.emit('scrollView', 0, offset);
+        this.emit('scroll_view', 0, offset);
       })
     );
   }

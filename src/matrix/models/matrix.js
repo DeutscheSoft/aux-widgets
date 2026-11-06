@@ -206,14 +206,32 @@ export class MatrixData extends Datum {
 
     if (connection.to !== connection.from)
       this._lowRegisterConnection(connection.to, connection.from, connection);
+    /**
+     * Is fired when a connection has been added.
+     * Also emitted as `connectionAdded`.
+     *
+     * @event MatrixData#connection_added
+     *
+     * @param {ConnectionData} connection - The new connection.
+     */
     this.emit('connectionAdded', connection);
+    this.emit('connection_added', connection);
   }
 
   _unregisterConnection(connection) {
     this._lowUnregisterConnection(connection.from, connection.to, connection);
     if (connection.to !== connection.from)
       this._lowUnregisterConnection(connection.to, connection.from, connection);
+    /**
+     * Is fired when a connection has been removed.
+     * Also emitted as `connectionRemoved`.
+     *
+     * @event MatrixData#connection_removed
+     *
+     * @param {ConnectionData} connection - The connection that was removed.
+     */
     this.emit('connectionRemoved', connection);
+    this.emit('connection_removed', connection);
   }
 
   /**

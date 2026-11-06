@@ -299,6 +299,11 @@ export class VirtualTreeEntry extends VirtualTreeEntryBase {
         },
         static_events: {
           click: function () {
+            /**
+             * Is fired when the collapse button is clicked.
+             *
+             * @event VirtualTreeEntry#collapse
+             */
             this.parent.emit('collapse');
           },
         },
