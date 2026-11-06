@@ -315,12 +315,14 @@ export class VirtualTree extends Scroller {
       subscribeDOMEvent(this.scrollhide.element, 'scroll', (ev) => {
         /**
          * Is fired on scrolling the list.
+         * Also emitted as `scrollTopChanged`.
          *
-         * @event VirtualTree#scrollTopChanged
+         * @event VirtualTree#scroll_top_changed
          *
          * @param {Integer} scroll - The amount of pixels scrolled from top.
          */
         this.emit('scrollTopChanged', this.scrollhide.element.scrollTop);
+        this.emit('scroll_top_changed', this.scrollhide.element.scrollTop);
       })
     );
     if (options.virtualtreeview)

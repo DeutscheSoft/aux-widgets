@@ -42,7 +42,17 @@ const RESIZE_DEBOUNCE_MS = 100;
 function onIndicatorClicked() {
   const indicators = this.parent;
 
+  /**
+   * Is fired when an indicator is clicked.
+   * Also emitted as `indicatorClicked`.
+   *
+   * @event Indicators#indicator_clicked
+   *
+   * @param {TreeNodeData} source - The source port or group.
+   * @param {TreeNodeData} sink - The sink port or group.
+   */
   indicators.emit('indicatorClicked', this.source, this.sink);
+  indicators.emit('indicator_clicked', this.source, this.sink);
 }
 
 const formatIndicatorTransform = /* @__PURE__ */ FORMAT(
@@ -400,8 +410,9 @@ export class Indicators extends Container {
         onBatchEnd.call(this);
         /**
          * Is fired on scrolling the area.
+         * Also emitted as `scrollChanged`.
          *
-         * @event Indicators#scrollChanged
+         * @event Indicators#scroll_changed
          *
          * @param {Integer} scroll_top - The scroll position from top.
          * @param {Integer} scroll_left - The scroll position from left.
@@ -410,6 +421,7 @@ export class Indicators extends Container {
         const element = this.element;
         // jshint +W123
         this.emit('scrollChanged', element.scrollTop, element.scrollLeft);
+        this.emit('scroll_changed', element.scrollTop, element.scrollLeft);
       })
     );
   }
@@ -486,21 +498,57 @@ export class Indicators extends Container {
   _onConnectDiagonalConfirmed() {
     const rectangle = this._calculateRectangle();
     const indexRectangle = this._calculateIndexRectangle(rectangle);
+    /**
+     * Is fired when connecting the diagonal of the batch selection is
+     * confirmed. Also emitted as `connectDiagonal`.
+     *
+     * @event Indicators#connect_diagonal
+     *
+     * @param {Object} index_rectangle - Selection in list indexes
+     *   (`startColumn`, `endColumn`, `startRow`, `endRow`).
+     * @param {Object} rectangle - Selection in pixels (`x`, `y`, `width`,
+     *   `height`, `flip_x`, `flip_y`).
+     */
     this.emit('connectDiagonal', indexRectangle, rectangle);
+    this.emit('connect_diagonal', indexRectangle, rectangle);
     onBatchEnd.call(this);
   }
 
   _onDisconnectDiagonalConfirmed() {
     const rectangle = this._calculateRectangle();
     const indexRectangle = this._calculateIndexRectangle(rectangle);
+    /**
+     * Is fired when disconnecting the diagonal of the batch selection is
+     * confirmed. Also emitted as `disconnectDiagonal`.
+     *
+     * @event Indicators#disconnect_diagonal
+     *
+     * @param {Object} index_rectangle - Selection in list indexes
+     *   (`startColumn`, `endColumn`, `startRow`, `endRow`).
+     * @param {Object} rectangle - Selection in pixels (`x`, `y`, `width`,
+     *   `height`, `flip_x`, `flip_y`).
+     */
     this.emit('disconnectDiagonal', indexRectangle, rectangle);
+    this.emit('disconnect_diagonal', indexRectangle, rectangle);
     onBatchEnd.call(this);
   }
 
   _onDisconnectAllConfirmed() {
     const rectangle = this._calculateRectangle();
     const indexRectangle = this._calculateIndexRectangle(rectangle);
+    /**
+     * Is fired when disconnecting all connections in the batch selection
+     * is confirmed. Also emitted as `disconnectAll`.
+     *
+     * @event Indicators#disconnect_all
+     *
+     * @param {Object} index_rectangle - Selection in list indexes
+     *   (`startColumn`, `endColumn`, `startRow`, `endRow`).
+     * @param {Object} rectangle - Selection in pixels (`x`, `y`, `width`,
+     *   `height`, `flip_x`, `flip_y`).
+     */
     this.emit('disconnectAll', indexRectangle, rectangle);
+    this.emit('disconnect_all', indexRectangle, rectangle);
     onBatchEnd.call(this);
   }
 

@@ -487,11 +487,24 @@ export class ConnectionDataView extends Events {
     }
 
     virtualtreeview1.subscribeScrollView((offset) => {
+      /**
+       * Is fired when one of the two lists scrolls.
+       * Also emitted as `scrollView`.
+       *
+       * @event ConnectionDataView#scroll_view
+       *
+       * @param {Integer} row_offset - Change of the row start index. `0`
+       *   when the columns scrolled.
+       * @param {Integer} column_offset - Change of the column start index.
+       *   `0` when the rows scrolled.
+       */
       this.emit('scrollView', offset, 0);
+      this.emit('scroll_view', offset, 0);
     });
 
     virtualtreeview2.subscribeScrollView((offset) => {
       this.emit('scrollView', 0, offset);
+      this.emit('scroll_view', 0, offset);
     });
   }
 

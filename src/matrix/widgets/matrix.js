@@ -194,7 +194,17 @@ export class Matrix extends Patchbay {
       });
     });
     this.indicators.on('indicatorClicked', (source, sink) => {
+      /**
+       * Is fired when an indicator is clicked.
+       * Also emitted as `toggleConnection`.
+       *
+       * @event Matrix#toggle_connection
+       *
+       * @param {TreeNodeData} source - The source port or group.
+       * @param {TreeNodeData} sink - The sink port or group.
+       */
       this.emit('toggleConnection', source, sink);
+      this.emit('toggle_connection', source, sink);
     });
 
     this.virtualtree_top.scroll_y.drag.set('direction', 'horizontal');
@@ -250,13 +260,49 @@ export class Matrix extends Patchbay {
         },
         static_events: {
           connectDiagonal: function (...args) {
+            /**
+             * Is fired when connecting the diagonal of the batch selection
+             * is confirmed. Also emitted as `connectDiagonal`.
+             *
+             * @event Matrix#connect_diagonal
+             *
+             * @param {Object} index_rectangle - Selection in list indexes
+             *   (`startColumn`, `endColumn`, `startRow`, `endRow`).
+             * @param {Object} rectangle - Selection in pixels (`x`, `y`,
+             *   `width`, `height`, `flip_x`, `flip_y`).
+             */
             this.parent.emit('connectDiagonal', ...args);
+            this.parent.emit('connect_diagonal', ...args);
           },
           disconnectDiagonal: function (...args) {
+            /**
+             * Is fired when disconnecting the diagonal of the batch
+             * selection is confirmed. Also emitted as `disconnectDiagonal`.
+             *
+             * @event Matrix#disconnect_diagonal
+             *
+             * @param {Object} index_rectangle - Selection in list indexes
+             *   (`startColumn`, `endColumn`, `startRow`, `endRow`).
+             * @param {Object} rectangle - Selection in pixels (`x`, `y`,
+             *   `width`, `height`, `flip_x`, `flip_y`).
+             */
             this.parent.emit('disconnectDiagonal', ...args);
+            this.parent.emit('disconnect_diagonal', ...args);
           },
           disconnectAll: function (...args) {
+            /**
+             * Is fired when disconnecting all connections in the batch
+             * selection is confirmed. Also emitted as `disconnectAll`.
+             *
+             * @event Matrix#disconnect_all
+             *
+             * @param {Object} index_rectangle - Selection in list indexes
+             *   (`startColumn`, `endColumn`, `startRow`, `endRow`).
+             * @param {Object} rectangle - Selection in pixels (`x`, `y`,
+             *   `width`, `height`, `flip_x`, `flip_y`).
+             */
             this.parent.emit('disconnectAll', ...args);
+            this.parent.emit('disconnect_all', ...args);
           },
         },
       },
