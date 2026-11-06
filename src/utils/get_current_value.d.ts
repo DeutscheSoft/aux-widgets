@@ -1,3 +1,8 @@
+/**
+ * This file exists in both `@deutschesoft/aux-widgets` and `@deutschesoft/awml`
+ * (`src/utils/get_current_value.d.ts`) and must be kept in sync.
+ */
+
 import type { ReadableValue } from '../values.interface.js';
 
 /**

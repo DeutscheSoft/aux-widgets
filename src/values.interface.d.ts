@@ -1,4 +1,9 @@
 /**
+ * This file exists in both `@deutschesoft/aux-widgets` and `@deutschesoft/awml`
+ * (`src/values.interface.d.ts`) and must be kept in sync.
+ */
+
+/**
  * Teardown returned from {@link ReadableValue.subscribe}.
  * Always a bare function — wrap RxJS Observables with `fromObservable`.
  */
