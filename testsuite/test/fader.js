@@ -13,4 +13,17 @@ describe('Fader', () => {
     fader.set('value', 7);
     assertEqual(fader.get('value'), 7);
   });
+
+  it('value userset keeps the fader value key', () => {
+    const fader = new Fader({ show_value: true, value: 0 });
+    const keys = [];
+
+    fader.on('userset', (key) => {
+      keys.push(key);
+    });
+    fader.value.userset('value', 0.25);
+
+    assertEqual(keys, ['value']);
+    assertEqual(fader.get('value'), 0.25);
+  });
 });
