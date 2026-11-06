@@ -1,4 +1,5 @@
 /**
- * Matrix data models (widgets / components typings land later).
+ * Matrix data models and widgets.
  */
 export * from './matrix/models.js';
+export * from './matrix/widgets.js';

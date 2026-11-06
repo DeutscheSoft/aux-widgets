@@ -10,6 +10,7 @@ import {
   IWidgetEvents,
   WidgetInteractiveOptions,
 } from './widget.js';
+import type { DragValue } from '../modules/dragvalue.js';
 
 export declare class ScrollHide<
   Options extends IContainerOptions = IContainerOptions,
@@ -41,9 +42,17 @@ export declare class ScrollBar<
   InteractiveOptions extends ScrollBarInteractiveOptions = ScrollBarInteractiveOptions
 > extends Widget<Options, Events, InteractiveOptions> {
   constructor(options?: Partial<NoInfer<Options>>);
+
+  /** Drag helper used to scrub the scrollbar. */
+  drag: DragValue;
 }
 
-export interface IScrollerOptions extends IContainerOptions {}
+export interface IScrollerOptions extends IContainerOptions {
+  /** Show the horizontal scrollbar. */
+  scroll_x: boolean;
+  /** Show the vertical scrollbar. */
+  scroll_y: boolean;
+}
 export interface IScrollerEvents extends IContainerEvents {}
 
 /**
@@ -58,4 +67,11 @@ export declare class Scroller<
   InteractiveOptions extends ScrollerInteractiveOptions = ScrollerInteractiveOptions
 > extends Container<Options, Events, InteractiveOptions> {
   constructor(options?: Partial<NoInfer<Options>>);
+
+  /** Inner container that hides native scrollbars. */
+  scrollhide: ScrollHide;
+  /** Horizontal scrollbar. */
+  scroll_x: ScrollBar;
+  /** Vertical scrollbar. */
+  scroll_y: ScrollBar;
 }
