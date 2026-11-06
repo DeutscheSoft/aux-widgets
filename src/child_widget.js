@@ -163,6 +163,25 @@ export function defaultOptionsToInheritChildOptions(base, src, blacklist) {
   return defaults;
 }
 
+function mappedParentKey(map_options, childKey) {
+  if (!map_options) return;
+
+  let match;
+
+  for (const parentKey in map_options) {
+    if (parentKey === childKey) continue;
+
+    let targets = map_options[parentKey];
+    if (!Array.isArray(targets)) targets = [targets];
+    if (targets.indexOf(childKey) === -1) continue;
+
+    if (match !== void 0) return;
+    match = parentKey;
+  }
+
+  return match;
+}
+
 export function defineChildWidget(widget, name, config) {
   /**
    * @function defineChildWidget
@@ -197,10 +216,13 @@ export function defineChildWidget(widget, name, config) {
    *     parent widget also sets the same option on the child widget. If <code>false</code>,
    *     the options of the child widget can be accessed via <code>options[config.name + "." + option]</code>
    *     in the parent widget.
-   * @param {array} [config.map_options=[]] - An array containing option names to be
-   *     mapped between parent and child widget. If one of these options is set
-   *     on the parent widget, it also gets set on the child widget. This is
-   *     a fine-grained version of <code>config.inherit-options</code>.
+   * @param {object} [config.map_options] - Option names mapped between parent and
+   *     child. Keys are parent options, values are the child option or an array
+   *     of child options. Setting the parent option also sets the child option.
+   *     A <code>userset</code> of a child option whose name differs from the
+   *     parent option is forwarded as that parent option.
+   *     <code>userset_delegate</code> and <code>inherit_options</code> forward
+   *     the child option name unchanged.
    * @param {boolean} [config.userset_ignore=false] - Do not care about the <code>userset</code>
    *     event of the parent widget, only keep track of <code>set</code>.
    * @param {boolean} [config.userset_delegate=false] - Delegates all user interaction from
@@ -231,17 +253,22 @@ export function defineChildWidget(widget, name, config) {
   const static_events = {};
   const map_interacting = config.map_interacting !== false;
 
-  if (!config.userset_ignore)
-    static_events.userset =
-      config.inherit_options || config.userset_delegate
-        ? function (key, value) {
-            this.parent.userset(key, value);
-            return false;
-          }
-        : function (key, value) {
-            this.parent.userset(name + '.' + key, value);
-            return false;
-          };
+  if (!config.userset_ignore) {
+    const sameKey = config.inherit_options || config.userset_delegate;
+
+    static_events.userset = function (key, value) {
+      if (!sameKey) {
+        const parentKey = mappedParentKey(config.map_options, key);
+        if (parentKey !== void 0) {
+          this.parent.userset(parentKey, value);
+          return false;
+        }
+      }
+
+      this.parent.userset(sameKey ? key : name + '.' + key, value);
+      return false;
+    };
+  }
 
   if ((m = config.static_events)) Object.assign(static_events, m);
 
