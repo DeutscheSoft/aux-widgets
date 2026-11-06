@@ -70,6 +70,8 @@ function setVirtualtreeviews() {
  *   the signal flow. Can be either `top-left` or `left-top`. This defines
  *   the position of sinks and sources {@link VirtualTreeView} on the
  *   screen.
+ * @property {Boolean} [options.batch=true] - Enable the batch connection
+ *   rectangle in {@link Indicators}. Set to `false` to disable it.
  *
  * @extends Patchbay
  *
@@ -81,6 +83,7 @@ export class Matrix extends Patchbay {
       _virtualtree_size: 'number',
       indicator_class: 'object',
       signal_flow: 'string',
+      batch: 'boolean',
     };
   }
 
@@ -89,6 +92,7 @@ export class Matrix extends Patchbay {
       _virtualtree_size: 0,
       indicator_class: Indicator,
       signal_flow: 'left-top',
+      batch: true,
     };
   }
 
@@ -247,6 +251,7 @@ export class Matrix extends Patchbay {
         map_options: {
           size: 'size',
           indicator_class: 'indicator_class',
+          batch: 'batch',
         },
         static_events: {
           connectDiagonal: function (...args) {

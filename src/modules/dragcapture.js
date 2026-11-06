@@ -205,6 +205,8 @@ class PointerCaptureState extends CaptureState {
  * @returns {boolean|undefined}
  */
 function pointerDown(ev) {
+  if (!this.options.active) return;
+
   const s = new PointerCaptureState(ev);
   const v = startCapture.call(this, s, ev);
 
@@ -283,6 +285,9 @@ const static_events = {
   set_node: function (value) {
     this.delegateEvents(value);
   },
+  set_active: function (value) {
+    if (!value) this.cancelDrag();
+  },
   contextmenu: function () {
     return false;
   },
@@ -325,6 +330,7 @@ const static_events = {
  * @param {Object} [options={ }] - An object containing initial options.
  *
  * @property {HTMLElement} [options.node] - The DOM element receiving the drag events. If not set the widgets element is used.
+ * @property {Boolean} [options.active=true] - Enable or disable dragging.
  * @property {HTMLElement|Boolean} [options.focus=false] - Focus this element on scroll. Set to `false`
  *   if no focus should be set.
  *
@@ -359,6 +365,7 @@ export class DragCapture extends Module {
   /**
    * @typedef {Object} DragCaptureOptions
    * @property {HTMLElement} [node] DOM element receiving pointer events.
+   * @property {boolean} [active=true] Enable or disable dragging.
    * @property {boolean} [state]
    * @property {HTMLElement|boolean} [focus]
    */
@@ -366,6 +373,7 @@ export class DragCapture extends Module {
   static get _options() {
     return {
       node: 'object',
+      active: 'boolean',
       state: 'boolean' /* internal, undocumented */,
       focus: 'object|boolean',
     };
@@ -373,6 +381,7 @@ export class DragCapture extends Module {
 
   static get options() {
     return {
+      active: true,
       state: false,
       focus: false,
     };
