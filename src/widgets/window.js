@@ -32,8 +32,10 @@ import { translateAnchor } from '../utils/anchor.js';
 import {
   addClass,
   removeClass,
-  outerWidth,
-  outerHeight,
+  getOuterWidth,
+  setOuterWidth,
+  getOuterHeight,
+  setOuterHeight,
   positionLeft,
   positionTop,
   width as viewportWidth,
@@ -525,7 +527,7 @@ export class Window extends Container {
             }
             setWidth = true;
           } else {
-            dimensions.width = outerWidth(element);
+            dimensions.width = getOuterWidth(element);
           }
           if (height >= 0) {
             height = clipSize(height, min_height, max_height);
@@ -536,7 +538,7 @@ export class Window extends Container {
             }
             setHeight = true;
           } else {
-            dimensions.height = outerHeight(element, true);
+            dimensions.height = getOuterHeight(element, true);
           }
           dimensions.x2 = dimensions.x1 + dimensions.width;
           dimensions.y2 = dimensions.y1 + dimensions.height;
@@ -557,8 +559,8 @@ export class Window extends Container {
           if (!setWidth && !setHeight) return null;
 
           return deferRender(() => {
-            if (setWidth) outerWidth(element, true, dimensions.width);
-            if (setHeight) outerHeight(element, true, dimensions.height);
+            if (setWidth) setOuterWidth(element, true, dimensions.width);
+            if (setHeight) setOuterHeight(element, true, dimensions.height);
           });
         }
       ),
@@ -659,8 +661,8 @@ export class Window extends Container {
 
         // Adopt the laid-out size continuously (ResizeObserver → SymResize).
         // When maximized, keep options.width/height as the restore size.
-        const width = outerWidth(element, true);
-        const height = outerHeight(element, true);
+        const width = getOuterWidth(element, true);
+        const height = getOuterHeight(element, true);
         dimensions.width = width;
         dimensions.height = height;
         if (!maximize.x) options.width = width;

@@ -253,36 +253,56 @@ export function positionLeft(
 export function fixed(element: HTMLElement): boolean;
 
 /**
- * Gets or sets the outer width of an element as CSS pixels. The box sizing
+ * Returns the outer width of an element as CSS pixels. The box sizing
  * method is taken into account.
- * @param element - The element to evaluate / manipulate
- * @param margin - Determine if margin is included
- * @param width - If defined, the element's outer width is set to this value
+ * @param element - The element to evaluate
+ * @param margin - Include the horizontal margin
  * @param notransform - Don't take transformations into account
- * @returns The outer width (when getting) or the set width (when setting)
  */
-export function outerWidth(
+export function getOuterWidth(
   element: HTMLElement,
   margin?: boolean,
-  width?: number,
   notransform?: boolean
 ): number;
 
 /**
- * Gets or sets the outer height of an element as CSS pixels. The box sizing
+ * Sets the outer width of an element as CSS pixels. The box sizing
  * method is taken into account.
- * @param element - The element to evaluate / manipulate
- * @param margin - Determine if margin is included
- * @param height - If defined, the element's outer height is set to this value
- * @param notransform - Don't take transformations into account
- * @returns The outer height (when getting) or the set height (when setting)
+ * @param element - The element to manipulate
+ * @param margin - Include the horizontal margin in `width`
+ * @param width - The outer width
  */
-export function outerHeight(
+export function setOuterWidth(
+  element: HTMLElement,
+  margin: boolean,
+  width: number
+): void;
+
+/**
+ * Returns the outer height of an element as CSS pixels. The box sizing
+ * method is taken into account.
+ * @param element - The element to evaluate
+ * @param margin - Include the vertical margin
+ * @param notransform - Don't take transformations into account
+ */
+export function getOuterHeight(
   element: HTMLElement,
   margin?: boolean,
-  height?: number,
   notransform?: boolean
 ): number;
+
+/**
+ * Sets the outer height of an element as CSS pixels. The box sizing
+ * method is taken into account.
+ * @param element - The element to manipulate
+ * @param margin - Include the vertical margin in `height`
+ * @param height - The outer height
+ */
+export function setOuterHeight(
+  element: HTMLElement,
+  margin: boolean,
+  height: number
+): void;
 
 /**
  * Gets or sets the inner width of an element as CSS pixels. The box sizing

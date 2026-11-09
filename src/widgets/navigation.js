@@ -23,8 +23,8 @@ import {
   toggleClass,
   innerHeight,
   innerWidth,
-  outerWidth,
-  outerHeight,
+  getOuterWidth,
+  getOuterHeight,
 } from '../utils/dom.js';
 import { observeResize } from '../utils/observe_resize.js';
 import { Button } from './button.js';
@@ -137,9 +137,9 @@ function autoArrows() {
   if (B.length) {
     const lastb = B[B.length - 1].element;
     if (vert) {
-      list = lastb.offsetTop + outerHeight(lastb, true, undefined, true);
+      list = lastb.offsetTop + getOuterHeight(lastb, true, true);
     } else {
-      list = lastb.offsetLeft + outerWidth(lastb, true, undefined, true);
+      list = lastb.offsetLeft + getOuterWidth(lastb, true, true);
     }
   } else {
     list = 0;
@@ -182,8 +182,8 @@ function measureButtonPositions() {
   positions.forEach((info, button) => {
     const element = button.element;
 
-    info.width = outerWidth(element, false, undefined, true);
-    info.height = outerHeight(element, false, undefined, true);
+    info.width = getOuterWidth(element, false, true);
+    info.height = getOuterHeight(element, false, true);
     info.left = element.offsetLeft;
     info.top = element.offsetTop;
 

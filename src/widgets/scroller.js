@@ -24,8 +24,8 @@ import {
   element,
   innerWidth,
   innerHeight,
-  outerWidth,
-  outerHeight,
+  setOuterWidth,
+  setOuterHeight,
 } from '../utils/dom.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { defineMeasure, defineRender } from '../renderer.js';
@@ -146,10 +146,10 @@ export class ScrollBar extends Widget {
               let pos = scroll / (content - clip);
               pos = pos * (clip - size * clip);
               if (is_vert(position)) {
-                outerHeight(element, true, clip * size);
+                setOuterHeight(element, true, clip * size);
                 element.style.top = pos + 'px';
               } else {
-                outerWidth(element, true, clip * size);
+                setOuterWidth(element, true, clip * size);
                 element.style.left = pos + 'px';
               }
             }

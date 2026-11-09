@@ -425,69 +425,93 @@ export function fixed(e) {
 }
 
 /**
- * Gets or sets the outer width of an element as CSS pixels. The box sizing
+ * Returns the outer width of an element as CSS pixels. The box sizing
  * method is taken into account.
- * @param {HTMLElement} element - the element to evaluate / manipulate
- * @param {boolean} margin - Determine if margin is included
- * @param {number} width - If defined the elements outer width is set to this value
- * @param {boolean} notransform - Don't take transformations into account.
+ * @param {HTMLElement} element - The element to evaluate.
+ * @param {boolean} margin - Include the horizontal margin. Optional.
+ * @param {boolean} notransform - Don't take transformations into account. Optional.
  * @returns {number}
- * @function outerWidth
+ * @function getOuterWidth
  */
-export function outerWidth(element, margin, width, notransform) {
+export function getOuterWidth(element, margin, notransform) {
   let m = 0;
   if (margin) {
     const cs = getComputedStyle(element);
     m += parseFloat(cs.getPropertyValue('margin-left'));
     m += parseFloat(cs.getPropertyValue('margin-right'));
   }
-  if (width !== void 0) {
-    if (boxSizing(element) === 'content-box') {
-      const css = CSSSpace(element, 'padding', 'border');
-      width -= css.left + css.right;
-    }
-    width = Math.max(0, width - m);
-    element.style.width = width + 'px';
-    return width;
-  } else {
-    let w;
-    if (notransform) w = element.offsetWidth;
-    else w = element.getBoundingClientRect().width;
-    return w + m;
-  }
+  const w = notransform
+    ? element.offsetWidth
+    : element.getBoundingClientRect().width;
+  return w + m;
 }
 
 /**
- * Gets or sets the outer height of an element as CSS pixels. The box sizing
+ * Sets the outer width of an element as CSS pixels. The box sizing
  * method is taken into account.
- * @param {HTMLElement} element - the element to evaluate / manipulate
- * @param {boolean} margin - Determine if margin is included
- * @param {number} height - If defined the elements outer height is set to this value
- * @param {boolean} notransform - Don't take transformations into account.
- * @returns {number}
- * @function outerHeight
+ * @param {HTMLElement} element - The element to manipulate.
+ * @param {boolean} margin - Include the horizontal margin in `width`.
+ * @param {number} width - The outer width.
+ * @function setOuterWidth
  */
-export function outerHeight(element, margin, height, notransform) {
+export function setOuterWidth(element, margin, width) {
   let m = 0;
   if (margin) {
-    const cs = getComputedStyle(element, null);
+    const cs = getComputedStyle(element);
+    m += parseFloat(cs.getPropertyValue('margin-left'));
+    m += parseFloat(cs.getPropertyValue('margin-right'));
+  }
+  if (boxSizing(element) === 'content-box') {
+    const css = CSSSpace(element, 'padding', 'border');
+    width -= css.left + css.right;
+  }
+  width = Math.max(0, width - m);
+  element.style.width = width + 'px';
+}
+
+/**
+ * Returns the outer height of an element as CSS pixels. The box sizing
+ * method is taken into account.
+ * @param {HTMLElement} element - The element to evaluate.
+ * @param {boolean} margin - Include the vertical margin. Optional.
+ * @param {boolean} notransform - Don't take transformations into account. Optional.
+ * @returns {number}
+ * @function getOuterHeight
+ */
+export function getOuterHeight(element, margin, notransform) {
+  let m = 0;
+  if (margin) {
+    const cs = getComputedStyle(element);
     m += parseFloat(cs.getPropertyValue('margin-top'));
     m += parseFloat(cs.getPropertyValue('margin-bottom'));
   }
-  if (height !== void 0) {
-    if (boxSizing(element) === 'content-box') {
-      const css = CSSSpace(element, 'padding', 'border');
-      height -= css.top + css.bottom;
-    }
-    height = Math.max(0, height - m);
-    element.style.height = height + 'px';
-    return height;
-  } else {
-    let h;
-    if (notransform) h = element.offsetHeight;
-    else h = element.getBoundingClientRect().height;
-    return h + m;
+  const h = notransform
+    ? element.offsetHeight
+    : element.getBoundingClientRect().height;
+  return h + m;
+}
+
+/**
+ * Sets the outer height of an element as CSS pixels. The box sizing
+ * method is taken into account.
+ * @param {HTMLElement} element - The element to manipulate.
+ * @param {boolean} margin - Include the vertical margin in `height`.
+ * @param {number} height - The outer height.
+ * @function setOuterHeight
+ */
+export function setOuterHeight(element, margin, height) {
+  let m = 0;
+  if (margin) {
+    const cs = getComputedStyle(element);
+    m += parseFloat(cs.getPropertyValue('margin-top'));
+    m += parseFloat(cs.getPropertyValue('margin-bottom'));
   }
+  if (boxSizing(element) === 'content-box') {
+    const css = CSSSpace(element, 'padding', 'border');
+    height -= css.top + css.bottom;
+  }
+  height = Math.max(0, height - m);
+  element.style.height = height + 'px';
 }
 
 /**

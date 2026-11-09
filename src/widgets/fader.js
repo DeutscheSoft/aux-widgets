@@ -52,9 +52,9 @@ import {
   removeClass,
   supports_transform,
   CSSSpace,
-  outerHeight,
+  getOuterHeight,
   innerHeight,
-  outerWidth,
+  getOuterWidth,
   innerWidth,
   createID,
   applyAttribute,
@@ -231,10 +231,10 @@ export class Fader extends Widget {
         this._padding = CSSSpace(T, 'padding', 'border');
 
         if (vert(layout)) {
-          this._handle_size = outerHeight(H, true, undefined, true);
+          this._handle_size = getOuterHeight(H, true, true);
           basis = innerHeight(T, undefined, true) - this._handle_size;
         } else {
-          this._handle_size = outerWidth(H, true, undefined, true);
+          this._handle_size = getOuterWidth(H, true, true);
           basis = innerWidth(T, undefined, true) - this._handle_size;
         }
 

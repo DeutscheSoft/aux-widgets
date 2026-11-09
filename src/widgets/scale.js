@@ -30,8 +30,8 @@ import { mergeStaticEvents } from '../widget_helpers.js';
 import {
   setContent,
   addClass,
-  outerWidth,
-  outerHeight,
+  getOuterWidth,
+  getOuterHeight,
   element,
   removeClass,
   toggleClass,
@@ -282,8 +282,8 @@ function measureDimensions(data) {
   const height = [];
 
   for (let i = 0; i < nodes.length; i++) {
-    width.push(outerWidth(nodes[i], false, void 0, true));
-    height.push(outerHeight(nodes[i], false, void 0, true));
+    width.push(getOuterWidth(nodes[i], false, true));
+    height.push(getOuterHeight(nodes[i], false, true));
   }
 
   data.width = width;

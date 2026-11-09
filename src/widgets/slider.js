@@ -30,7 +30,12 @@ import { SymResize, Widget } from './widget.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { ScrollValue } from '../modules/scrollvalue.js';
 import { warning } from '../utils/warning.js';
-import { element, addClass, outerWidth, outerHeight } from '../utils/dom.js';
+import {
+  element,
+  addClass,
+  getOuterWidth,
+  getOuterHeight,
+} from '../utils/dom.js';
 import {
   rangedEvents,
   rangedOptionsDefaults,
@@ -131,8 +136,8 @@ export class Slider extends Widget {
       ...rangedRenderers,
       defineMeasure(SymResize, function () {
         const E = this.element;
-        this.update('_width', outerWidth(E, false, undefined, true));
-        this.update('_height', outerHeight(E, false, undefined, true));
+        this.update('_width', getOuterWidth(E, false, true));
+        this.update('_height', getOuterHeight(E, false, true));
       }),
       defineRender('image', function (image) {
         const style = this.element.style;
