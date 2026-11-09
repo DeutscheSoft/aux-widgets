@@ -45,6 +45,41 @@ describe('Scale', () => {
     await waitForDrawn(scale);
   });
 
+  it('calculates an unset base from min without marking it', async () => {
+    const scale = new Scale({
+      min: -96,
+      max: 6,
+      levels: [1, 6, 12],
+      layout: 'right',
+      scale: 'linear',
+    });
+    scale.setStyles({ height: '200px', width: '50px' });
+
+    await waitForDrawn(scale);
+
+    assertEqual(scale.element.querySelector('.aux-base'), null);
+    assert(scale.element.querySelector('.aux-label') !== null);
+  });
+
+  it('marks an explicit base', async () => {
+    const scale = new Scale({
+      min: -96,
+      max: 6,
+      base: 0,
+      levels: [1, 6, 12],
+      layout: 'right',
+      scale: 'linear',
+    });
+    scale.setStyles({ height: '200px', width: '50px' });
+
+    await waitForDrawn(scale);
+
+    const marked = scale.element.querySelector('.aux-label.aux-base');
+
+    assert(marked !== null);
+    assertEqual(marked.textContent, '0.00');
+  });
+
   it("bar and pointer aren't clamped", () => {
     const scale = new Scale({
       min: -2,

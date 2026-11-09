@@ -44,7 +44,7 @@ export interface IScaleOptions
   levels: number[];
   /** Array of steps for labels only. */
   levels_labels?: number[];
-  /** Base of the scale. If set to false it will default to the minimum value. Overrides IRangedOptions.base to allow boolean. */
+  /** Base of the scale. If set to false, ticks and labels are calculated from the minimum and no base marker is drawn. Overrides IRangedOptions.base to allow boolean. */
   base: number | boolean;
   /** Formatting function for the labels. */
   labels: (value: number) => string;

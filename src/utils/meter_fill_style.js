@@ -30,6 +30,7 @@ export function computeMeterFillStyle(definition, element, options) {
     snap_module,
     layout,
     base,
+    min,
     segment,
   } = options;
 
@@ -38,7 +39,7 @@ export function computeMeterFillStyle(definition, element, options) {
   } else if (typeof definition === 'function') {
     return definition;
   } else if (typeof definition === 'object') {
-    const basePx = transformation.valueToPixel(base);
+    const basePx = transformation.valueToPixel(base === false ? min : base);
     const vert = layout === 'left' || layout === 'right';
 
     let entries = (Array.isArray(definition)

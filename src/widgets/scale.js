@@ -220,6 +220,18 @@ const createLabelDependencies = [
   'base',
 ];
 
+function scaleOrigin(base, min) {
+  return base === false ? min : base;
+}
+
+function markBase(node, base, min, max, value) {
+  if (base === false) return;
+
+  const effectiveBase = Math.max(Math.min(max, base), min);
+
+  if (effectiveBase === value) addClass(node, 'aux-base');
+}
+
 function createLabel(value, position) {
   const { basis, labels, layout, min, max, base } = this.options;
   const elem = document.createElement('SPAN');
@@ -234,9 +246,7 @@ function createLabel(value, position) {
 
   setContent(elem, labels(value));
 
-  const effectiveBase = Math.max(Math.min(max, base), min);
-
-  if (effectiveBase === value) addClass(elem, 'aux-base');
+  markBase(elem, base, min, max, value);
   if (max === value) addClass(elem, 'aux-max');
   if (min === value) addClass(elem, 'aux-min');
 
@@ -268,9 +278,7 @@ function createDot(value, position) {
     elem.style.left = (position / basis) * 100 + '%';
   }
 
-  const effectiveBase = Math.max(Math.min(max, base), min);
-
-  if (effectiveBase === value) addClass(elem, 'aux-base');
+  markBase(elem, base, min, max, value);
   if (max === value) addClass(elem, 'aux-max');
   if (min === value) addClass(elem, 'aux-min');
 
@@ -341,7 +349,6 @@ function generateScale(from, to, include_from, show_to) {
   } = O;
 
   let labels;
-  const effectiveBase = Math.min(max, Math.max(min, base));
 
   if (show_labels || show_markers)
     labels = {
@@ -411,9 +418,8 @@ function generateScale(from, to, include_from, show_to) {
   if (show_labels) {
     createDOMNodes.call(this, labels, createLabel.bind(this));
 
-    if (labels.values.length && labels.values[0] === effectiveBase) {
-      addClass(labels.nodes[0], 'aux-base');
-    }
+    if (labels.values.length)
+      markBase(labels.nodes[0], base, min, max, labels.values[0]);
   }
 
   const render_cb = () => {
@@ -490,8 +496,9 @@ const SymBarChanged = Symbol('_bar changed');
  *   labels are drawn on top and below the scale, respectively.
  * @property {Integer} [options.division=1] - Minimal step size of the markers.
  * @property {Array<Number>} [options.levels=[1]] - Array of steps for labels and markers.
- * @property {Number} [options.base=false]] - Base of the scale. If set to <code>false</code> it will
- *   default to the minimum value.
+ * @property {Number|Boolean} [options.base=false] - Base of the scale. If set to
+ *   <code>false</code>, ticks and labels are calculated from <code>options.min</code>
+ *   and no label or marker is marked as the base.
  * @property {Function} [options.labels=FORMAT("%.2f")] - Formatting function for the labels.
  * @property {Integer} [options.gap_dots=4] - Minimum gap in pixels between two adjacent markers.
  * @property {Integer} [options.gap_labels=40] - Minimum gap in pixels between two adjacent labels.
@@ -634,27 +641,38 @@ export class Scale extends Widget {
           'bar',
           'base',
           'basis',
+          'min',
         ],
-        function (layout, snap_module, transformation, bar, base, basis) {
+        function (
+          layout,
+          snap_module,
+          transformation,
+          bar,
+          base,
+          basis,
+          minimum
+        ) {
           const _bar = this._bar;
 
           if (!_bar) return;
 
           const tmpval = transformation.valueToPixel(snap_module.snap(bar));
-          const tmpbase = transformation.valueToPixel(base);
-          const min = Math.min(tmpval, tmpbase);
-          const max = Math.max(tmpval, tmpbase);
+          const tmpbase = transformation.valueToPixel(
+            scaleOrigin(base, minimum)
+          );
+          const low = Math.min(tmpval, tmpbase);
+          const high = Math.max(tmpval, tmpbase);
 
           const style = _bar.style;
 
           if (vert(layout)) {
-            style.top = ((basis - max) / basis) * 100 + '%';
-            style.bottom = (min / basis) * 100 + '%';
+            style.top = ((basis - high) / basis) * 100 + '%';
+            style.bottom = (low / basis) * 100 + '%';
             style.removeProperty('left');
             style.removeProperty('right');
           } else {
-            style.right = ((basis - max) / basis) * 100 + '%';
-            style.left = (min / basis) * 100 + '%';
+            style.right = ((basis - high) / basis) * 100 + '%';
+            style.left = (low / basis) * 100 + '%';
             style.removeProperty('top');
             style.removeProperty('bottom');
           }
@@ -720,12 +738,14 @@ export class Scale extends Widget {
 
           removeDotsAndLabels(this.element);
 
+          const origin = scaleOrigin(base, min);
+
           return combineDefer(
-            base !== min
-              ? generateScale.call(this, base, min, base === max, show_min)
+            origin !== min
+              ? generateScale.call(this, origin, min, origin === max, show_min)
               : null,
-            base !== max
-              ? generateScale.call(this, base, max, true, show_max)
+            origin !== max
+              ? generateScale.call(this, origin, max, true, show_max)
               : null
           );
         }
@@ -798,9 +818,7 @@ export class Scale extends Widget {
       node.style.left = (position / basis) * 100 + '%';
     }
 
-    const effectiveBase = Math.max(Math.min(max, base), min);
-
-    if (effectiveBase === value) addClass(node, 'aux-base');
+    markBase(node, base, min, max, value);
     if (max === value) addClass(node, 'aux-max');
     if (min === value) addClass(node, 'aux-min');
 
@@ -864,8 +882,7 @@ export class Scale extends Widget {
 
     setContent(node, label);
 
-    const effectiveBase = Math.max(Math.min(max, base), min);
-    if (effectiveBase === value) addClass(node, 'aux-base');
+    markBase(node, base, min, max, value);
     if (max === value) addClass(node, 'aux-max');
     if (min === value) addClass(node, 'aux-min');
 

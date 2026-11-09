@@ -177,7 +177,7 @@ export class LevelMeter extends Meter {
 
     if (!falling) return;
 
-    const base = +O.base;
+    const base = this.effectiveBase();
     const value = this.effectiveValue();
 
     if (value === base) return;
@@ -198,7 +198,6 @@ export class LevelMeter extends Meter {
   effectiveValue() {
     const {
       value,
-      base,
       falling,
       falling_duration,
       falling_init,
@@ -207,7 +206,7 @@ export class LevelMeter extends Meter {
 
     return effectiveValue(
       value,
-      base,
+      this.effectiveBase(),
       falling,
       falling_duration,
       falling_init,
@@ -314,7 +313,7 @@ export class LevelMeter extends Meter {
    */
   calculateMeter(to) {
     const O = this.options;
-    const base = +O.base;
+    const base = this.effectiveBase();
     const transformation = O.transformation;
 
     super.calculateMeter(to);
@@ -360,7 +359,8 @@ export class LevelMeter extends Meter {
   set(key, value) {
     if (key === 'value') {
       const O = this.options;
-      const { base, falling } = O;
+      const { falling } = O;
+      const base = this.effectiveBase();
 
       if (falling) {
         const effectiveValue = this.effectiveValue();
