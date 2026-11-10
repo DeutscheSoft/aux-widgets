@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { LevelMeter } from '../../src/index.js';
+import { LevelMeter, MultiMeter } from '../../src/index.js';
 import { waitForDrawn, assert, assertEqual, delay } from './utils/helpers.js';
 
 describe('LevelMeter', () => {
@@ -506,6 +506,45 @@ describe('LevelMeter', () => {
     assertEqual(levelmeter.get('value_label'), 42);
     await delay(1200);
     assertEqual(levelmeter.get('value_label'), 42);
+  });
+
+  it('keeps an explicit scale base', () => {
+    const levelmeter = new LevelMeter({
+      min: -96,
+      max: 6,
+      'scale.base': 0,
+    });
+
+    assertEqual(levelmeter.get('base'), false);
+    assertEqual(levelmeter.get('scale.base'), 0);
+    assertEqual(levelmeter.scale.get('base'), 0);
+  });
+
+  it('leaves an unset base false', () => {
+    const levelmeter = new LevelMeter({ min: -96, max: 6 });
+
+    assertEqual(levelmeter.get('base'), false);
+    assertEqual(levelmeter.scale.get('base'), false);
+    assertEqual(levelmeter.effectiveBase(), -96);
+  });
+
+  it('keeps scale.base on a multimeter channel', async () => {
+    const multimeter = new MultiMeter({
+      count: 2,
+      min: -96,
+      max: 6,
+      'scale.base': 0,
+    });
+
+    await waitForDrawn(multimeter);
+
+    const withScale = multimeter.meters.filter((meter) => meter.scale);
+
+    assertEqual(withScale.length, 1);
+    assertEqual(withScale[0].get('base'), false);
+    assertEqual(withScale[0].get('scale.base'), 0);
+    assertEqual(withScale[0].scale.get('base'), 0);
+    multimeter.meters.forEach((meter) => assertEqual(meter.get('base'), false));
   });
 
   it('peak_value !== false resets sync_value', async () => {

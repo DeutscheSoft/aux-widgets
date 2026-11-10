@@ -21,6 +21,7 @@ import { mergeStaticEvents } from '../widget_helpers.js';
 import { SymResize, Widget } from './widget.js';
 import { Label } from './label.js';
 import {
+  makeSnapModule,
   rangedEvents,
   rangedOptionsDefaults,
   rangedRenderers,
@@ -62,6 +63,15 @@ import {
 
 function vert(layout) {
   return layout === 'left' || layout === 'right';
+}
+
+function syncSnapModule() {
+  const { snap, clip, min, max } = this.options;
+
+  this.update(
+    'snap_module',
+    makeSnapModule(snap, clip, min, max, this.effectiveBase())
+  );
 }
 
 /**
@@ -299,12 +309,11 @@ export class Meter extends Widget {
 
   static get static_events() {
     return mergeStaticEvents(rangedEvents, {
-      set_base: function (value) {
-        if (value === false) {
-          const O = this.options;
-          O.base = value = O.min;
-        }
-      },
+      set_base: syncSnapModule,
+      set_min: syncSnapModule,
+      set_max: syncSnapModule,
+      set_snap: syncSnapModule,
+      set_clip: syncSnapModule,
       set_value: function (val) {
         if (this.options.sync_value) this.set('value_label', val);
       },
@@ -318,8 +327,8 @@ export class Meter extends Widget {
         this.triggerResize();
       },
       initialized: function () {
+        syncSnapModule.call(this);
         this.set('value', this.get('value'));
-        this.set('base', this.get('base'));
       },
     });
   }
@@ -520,7 +529,6 @@ export class Meter extends Widget {
     this._current_meters = [];
 
     this.set('label', O.label);
-    this.set('base', O.base);
   }
 
   destroy() {
@@ -549,7 +557,7 @@ export class Meter extends Widget {
     const O = this.options;
     // Set the mask elements according to options.value to show a value in
     // the meter bar
-    const base = O.base;
+    const base = this.effectiveBase();
     const segment = O.segment | 0;
     const transformation = O.transformation;
 
@@ -584,9 +592,13 @@ export class Meter extends Widget {
     _draw_context.draw();
   }
 
+  effectiveBase() {
+    const { base, min } = this.options;
+    return base === false ? min : base;
+  }
+
   hasBase() {
-    const O = this.options;
-    return O.base > O.min;
+    return this.effectiveBase() > this.options.min;
   }
 
   static get child_widgets() {
