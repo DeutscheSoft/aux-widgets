@@ -20,6 +20,8 @@
 import {
   initSubscribers,
   subscribersIsEmpty,
+  hasSubscriber,
+  forEachSubscriber,
   addSubscriber,
   removeSubscriber,
   callSubscribers,
@@ -183,6 +185,65 @@ describe('subscribers', () => {
   it('rejects non-function subscribers', () => {
     assertError(() => addSubscriber(initSubscribers(), null));
     assertError(() => removeSubscriber(initSubscribers(), null));
+    assertError(() => hasSubscriber(initSubscribers(), null));
+  });
+
+  it('hasSubscriber() checks membership', () => {
+    const [a, b] = makeCallbacks(2);
+    let subscribers = initSubscribers();
+
+    assert(!hasSubscriber(subscribers, a));
+
+    subscribers = addSubscriber(subscribers, a);
+    assert(hasSubscriber(subscribers, a));
+    assert(!hasSubscriber(subscribers, b));
+
+    subscribers = addSubscriber(subscribers, b);
+    assert(hasSubscriber(subscribers, a));
+    assert(hasSubscriber(subscribers, b));
+
+    subscribers = addAll(subscribers, makeCallbacks(TO_SET - 2));
+    assert(subscribers instanceof Set);
+    assert(hasSubscriber(subscribers, a));
+    assert(hasSubscriber(subscribers, b));
+  });
+
+  it('forEachSubscriber() visits each subscriber and can stop early', () => {
+    const [a, b, c] = makeCallbacks(3);
+    let subscribers = addAll(initSubscribers(), [a, b, c]);
+    const seen = [];
+
+    assert(
+      forEachSubscriber(subscribers, (cb) => {
+        seen.push(cb);
+      }) === void 0
+    );
+    assert(seen.length === 3);
+    assert(seen[0] === a);
+    assert(seen[1] === b);
+    assert(seen[2] === c);
+
+    const stopped = [];
+    assert(
+      forEachSubscriber(subscribers, (cb) => {
+        stopped.push(cb);
+        if (cb === b) return 'stop';
+      }) === 'stop'
+    );
+    assert(stopped.length === 2);
+    assert(stopped[0] === a);
+    assert(stopped[1] === b);
+
+    let single = null;
+    assert(
+      forEachSubscriber(a, (cb) => {
+        single = cb;
+        return 42;
+      }) === 42
+    );
+    assert(single === a);
+
+    assert(forEachSubscriber(initSubscribers(), () => 'x') === void 0);
   });
 
   it('keeps calling remaining subscribers if one throws', () => {

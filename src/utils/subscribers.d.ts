@@ -31,6 +31,35 @@ export function subscribersIsEmpty(
 ): subscribers is null;
 
 /**
+ * Returns true if the given callback is in the list of subscribers.
+ *
+ * @param subscribers - The subscriber list
+ * @param cb - The callback function to look up
+ * @throws {TypeError} If cb is not a function or subscribers is invalid
+ */
+export function hasSubscriber<T extends (...args: any[]) => void>(
+  subscribers: SubscriberList<T>,
+  cb: T
+): boolean;
+
+/**
+ * Call callback for each subscriber.
+ *
+ * If callback returns a value other than undefined, iteration stops and that
+ * value is returned.
+ *
+ * @param subscribers - The subscriber list
+ * @param callback - Called once per subscriber
+ */
+export function forEachSubscriber<
+  T extends (...args: any[]) => void,
+  R = undefined
+>(
+  subscribers: SubscriberList<T>,
+  callback: (cb: T) => R | void
+): R | undefined;
+
+/**
  * Add a subscriber to the given subscribers. Returns the new subscribers.
  * Empty lists use `null`, a single subscriber is stored as the function
  * itself, a small number of subscribers as an array, and a larger number as a

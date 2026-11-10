@@ -49,6 +49,49 @@ export function subscribersIsEmpty(subscribers) {
   return subscribers === null;
 }
 
+/**
+ * Returns true if the given callback is in the list of subscribers.
+ */
+export function hasSubscriber(subscribers, cb) {
+  if (typeof cb !== 'function') throw new TypeError('Expected function.');
+
+  if (subscribers === null) {
+    return false;
+  } else if (typeof subscribers === 'function') {
+    return subscribers === cb;
+  } else if (Array.isArray(subscribers)) {
+    return subscribers.includes(cb);
+  } else if (subscribers instanceof Set) {
+    return subscribers.has(cb);
+  } else expectedSubscribers();
+}
+
+/**
+ * Call callback for each subscriber.
+ *
+ * If callback returns a value other than undefined, iteration stops and that
+ * value is returned.
+ */
+export function forEachSubscriber(subscribers, callback) {
+  if (subscribers === null) return;
+
+  if (typeof subscribers === 'function') {
+    return callback(subscribers);
+  } else if (Array.isArray(subscribers)) {
+    for (let i = 0; i < subscribers.length; i++) {
+      const result = callback(subscribers[i]);
+
+      if (result !== void 0) return result;
+    }
+  } else if (subscribers instanceof Set) {
+    for (const cb of subscribers) {
+      const result = callback(cb);
+
+      if (result !== void 0) return result;
+    }
+  } else expectedSubscribers();
+}
+
 function subscriberAlreadyAdded() {
   throw new Error('Adding subscriber twice.');
 }
