@@ -1,67 +1,48 @@
 import { compareObjects } from '../../src/utils/compare_objects.js';
+import { suite } from '../suite.js';
 
 function compareObjectsNaive(a, b) {
   return typeof a === 'object' && JSON.stringify(a) === JSON.stringify(b);
 }
 
-export function define(benchmark) {
-  const suites = [];
+export function define() {
+  const identical = { a: 1, b: 2, c: 3, d: 4 };
+  const same = { ...identical };
+  const empty = {};
+  const different = { ...identical, b: 3 };
 
-  {
-    const bench = benchmark.createSuite('compareObjects#identical');
-    const a = { a: 1, b: 2, c: 3, d: 4 };
-
-    bench.add('', () => {
-      compareObjects(a, a);
-    });
-    bench.ref('ref', () => {
-      compareObjectsNaive(a, a);
-    });
-
-    suites.push(bench);
-  }
-
-  {
-    const bench = benchmark.createSuite('compareObjects#same');
-    const a = { a: 1, b: 2, c: 3, d: 4 };
-    const b = { ...a };
-    bench.add('', () => {
-      compareObjects(a, b);
-    });
-    bench.ref('ref', () => {
-      compareObjectsNaive(a, b);
-    });
-
-    suites.push(bench);
-  }
-
-  {
-    const bench = benchmark.createSuite('compareObjects#with empty');
-    const a = { a: 1, b: 2, c: 3, d: 4 };
-    const b = {};
-    bench.add('', () => {
-      compareObjects(a, b);
-    });
-    bench.ref('ref', () => {
-      compareObjectsNaive(a, b);
-    });
-
-    suites.push(bench);
-  }
-
-  {
-    const bench = benchmark.createSuite('compareObjects#different');
-    const a = { a: 1, b: 2, c: 3, d: 4 };
-    const b = { ...a, b: 3 };
-    bench.add('', () => {
-      compareObjects(a, b);
-    });
-    bench.ref('ref', () => {
-      compareObjectsNaive(a, b);
-    });
-
-    suites.push(bench);
-  }
-
-  return suites;
+  return [
+    suite('compareObjects#identical', {
+      compareObjects: () => {
+        compareObjects(identical, identical);
+      },
+      naive: () => {
+        compareObjectsNaive(identical, identical);
+      },
+    }),
+    suite('compareObjects#same', {
+      compareObjects: () => {
+        compareObjects(identical, same);
+      },
+      naive: () => {
+        compareObjectsNaive(identical, same);
+      },
+    }),
+    suite('compareObjects#with empty', {
+      compareObjects: () => {
+        compareObjects(identical, empty);
+      },
+      naive: () => {
+        compareObjectsNaive(identical, empty);
+      },
+    }),
+    suite('compareObjects#different', {
+      compareObjects: () => {
+        compareObjects(identical, different);
+      },
+      naive: () => {
+        compareObjectsNaive(identical, different);
+      },
+    }),
+  ];
 }

@@ -1,5 +1,3 @@
-import benchmarkify from 'benchmarkify';
-
 const fileNames = ['array_diff', 'merge_objects', 'compare_objects'];
 
 async function run() {
@@ -9,11 +7,17 @@ async function run() {
     })
   );
 
-  const benchmark = new benchmarkify('aux').printHeader();
+  const benches = suiteFactories.flatMap((define) => define());
 
-  const suites = suiteFactories.map((define) => define(benchmark)).flat();
+  console.log(
+    `aux  node ${process.version}  ${process.platform} ${process.arch}`
+  );
 
-  await benchmark.run(suites);
+  for (const bench of benches) {
+    console.log(`\n${bench.name}`);
+    bench.runSync();
+    console.table(bench.table());
+  }
 }
 
 run().catch((err) => {
