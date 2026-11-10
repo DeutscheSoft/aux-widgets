@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301  USA
  */
 
-import { innerWidth, outerWidth, addClass } from './../../utils/dom.js';
+import { getInnerWidth, getOuterWidth, addClass } from './../../utils/dom.js';
 import { defineMeasure, defineRender } from '../../renderer.js';
 import { SymResize } from '../../widgets/widget.js';
 import { DebounceTimer } from '../../utils/timers.js';
@@ -109,7 +109,8 @@ export class Matrix extends Patchbay {
       defineMeasure(SymResize, function () {
         this.update(
           '_virtualtree_size',
-          innerWidth(this.element) - outerWidth(this.virtualtree_left.element)
+          getInnerWidth(this.element) -
+            getOuterWidth(this.virtualtree_left.element)
         );
       }),
       defineRender('_virtualtree_size', function (_virtualtree_size) {

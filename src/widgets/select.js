@@ -30,13 +30,14 @@ import { SymResize } from './widget.js';
 import {
   element,
   addClass,
-  outerWidth,
+  getOuterWidth,
+  setOuterWidth,
   width,
   height,
   scrollLeft,
   scrollTop,
   setStyles,
-  outerHeight,
+  getOuterHeight,
   positionTop,
   positionLeft,
   setStyle,
@@ -227,7 +228,7 @@ export class Select extends Button {
           this.update('arrow', show_list ? 'arrowup' : 'arrowdown');
 
           if (show_list) {
-            const ew = outerWidth(element, false);
+            const ew = getOuterWidth(element, false);
             const cw = width();
             const ch = height();
             const sx = scrollLeft();
@@ -246,12 +247,12 @@ export class Select extends Button {
               document.body.appendChild(_list);
               this._outside_pointer.activate();
 
-              const lw = outerWidth(_list, true);
-              const lh = outerHeight(_list, true);
+              const lw = getOuterWidth(_list, true);
+              const lh = getOuterHeight(_list, true);
 
               const top =
                 Math.min(
-                  positionTop(element) + outerHeight(element, true),
+                  positionTop(element) + getOuterHeight(element, true),
                   ch + sy - lh
                 ) + 'px';
               const left = Math.min(positionLeft(element), cw + sx - lw) + 'px';
@@ -321,9 +322,9 @@ export class Select extends Button {
             });
             S.appendChild(frag);
             return deferMeasure(() => {
-              const width = outerWidth(S, true);
+              const width = getOuterWidth(S, true);
               return deferRender(() => {
-                if (label) outerWidth(label.element, true, width);
+                if (label) setOuterWidth(label.element, true, width);
               });
             });
           } else if (label) {

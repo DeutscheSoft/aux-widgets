@@ -21,8 +21,8 @@ import {
   element,
   addClass,
   removeClass,
-  innerWidth,
-  outerWidth,
+  getInnerWidth,
+  getOuterWidth,
   createID,
 } from './../utils/dom.js';
 import { Container } from './container.js';
@@ -76,11 +76,8 @@ export class Marquee extends Container {
   static get renderers() {
     return [
       defineMeasure(SymResize, function () {
-        this.update('_outer', innerWidth(this.element, undefined, true));
-        this.update(
-          '_inner',
-          outerWidth(this.label.element, false, undefined, true)
-        );
+        this.update('_outer', getInnerWidth(this.element, true));
+        this.update('_inner', getOuterWidth(this.label.element, false, true));
       }),
       defineRender(
         [

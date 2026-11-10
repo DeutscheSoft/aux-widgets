@@ -22,10 +22,10 @@ import { SymResize, Widget } from './widget.js';
 import {
   addClass,
   element,
-  innerWidth,
-  innerHeight,
-  outerWidth,
-  outerHeight,
+  getInnerWidth,
+  getInnerHeight,
+  setOuterWidth,
+  setOuterHeight,
 } from '../utils/dom.js';
 import { DragValue } from '../modules/dragvalue.js';
 import { defineMeasure, defineRender } from '../renderer.js';
@@ -146,10 +146,10 @@ export class ScrollBar extends Widget {
               let pos = scroll / (content - clip);
               pos = pos * (clip - size * clip);
               if (is_vert(position)) {
-                outerHeight(element, true, clip * size);
+                setOuterHeight(element, true, clip * size);
                 element.style.top = pos + 'px';
               } else {
-                outerWidth(element, true, clip * size);
+                setOuterWidth(element, true, clip * size);
                 element.style.left = pos + 'px';
               }
             }
@@ -243,11 +243,8 @@ export class Scroller extends Container {
       }),
       defineMeasure(SymResize, function () {
         this._changed();
-        this.scroll_x.update('clip', innerWidth(this.element, undefined, true));
-        this.scroll_y.update(
-          'clip',
-          innerHeight(this.element, undefined, true)
-        );
+        this.scroll_x.update('clip', getInnerWidth(this.element, true));
+        this.scroll_y.update('clip', getInnerHeight(this.element, true));
       }),
     ];
   }

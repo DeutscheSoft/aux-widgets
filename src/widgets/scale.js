@@ -30,13 +30,13 @@ import { mergeStaticEvents } from '../widget_helpers.js';
 import {
   setContent,
   addClass,
-  outerWidth,
-  outerHeight,
+  getOuterWidth,
+  getOuterHeight,
   element,
   removeClass,
   toggleClass,
-  innerHeight,
-  innerWidth,
+  getInnerHeight,
+  getInnerWidth,
 } from '../utils/dom.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { warn } from '../utils/log.js';
@@ -282,8 +282,8 @@ function measureDimensions(data) {
   const height = [];
 
   for (let i = 0; i < nodes.length; i++) {
-    width.push(outerWidth(nodes[i], false, void 0, true));
-    height.push(outerHeight(nodes[i], false, void 0, true));
+    width.push(getOuterWidth(nodes[i], false, true));
+    height.push(getOuterHeight(nodes[i], false, true));
   }
 
   data.width = width;
@@ -732,8 +732,8 @@ export class Scale extends Widget {
       ),
       defineMeasure(['layout', SymResize], function (layout) {
         const basis = vert(layout)
-          ? innerHeight(this.element, undefined, true)
-          : innerWidth(this.element, undefined, true);
+          ? getInnerHeight(this.element, true)
+          : getInnerWidth(this.element, true);
         this.update('basis', basis);
       }),
     ];

@@ -32,8 +32,8 @@ import {
   toggleClass,
   removeClass,
   insertAfter,
-  innerWidth,
-  innerHeight,
+  getInnerWidth,
+  getInnerHeight,
   createID,
   applyAttribute,
 } from '../utils/dom.js';
@@ -481,8 +481,8 @@ export class Meter extends Widget {
         // Round once here so bitmap, CSS size, fillRect and basis share one integer
         // coordinate space. Canvas attributes cannot store fractional pixels; rounding
         // only there would stretch the mask against the backdrop.
-        this.update('_width', Math.round(innerWidth(_bar, undefined, true)));
-        this.update('_height', Math.round(innerHeight(_bar, undefined, true)));
+        this.update('_width', Math.round(getInnerWidth(_bar, true)));
+        this.update('_height', Math.round(getInnerHeight(_bar, true)));
       }),
     ];
   }

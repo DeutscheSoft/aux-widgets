@@ -33,8 +33,8 @@ import { ScrollValue } from '../modules/scrollvalue.js';
 import {
   element,
   addClass,
-  innerWidth,
-  innerHeight,
+  getInnerWidth,
+  getInnerHeight,
   removeClass,
 } from '../utils/dom.js';
 import { makeSVG } from '../utils/svg.js';
@@ -193,8 +193,8 @@ export class Knob extends Widget {
   static get renderers() {
     return [
       defineMeasure(SymResize, function () {
-        const width = innerWidth(this.element, undefined, true);
-        const height = innerHeight(this.element, undefined, true);
+        const width = getInnerWidth(this.element, true);
+        const height = getInnerHeight(this.element, true);
         const size = Math.min(width, height);
         this.update('size', size);
       }),

@@ -21,10 +21,10 @@ import {
   addClass,
   removeClass,
   toggleClass,
-  innerHeight,
-  innerWidth,
-  outerWidth,
-  outerHeight,
+  getInnerHeight,
+  getInnerWidth,
+  getOuterWidth,
+  getOuterHeight,
 } from '../utils/dom.js';
 import { observeResize } from '../utils/observe_resize.js';
 import { Button } from './button.js';
@@ -131,15 +131,15 @@ function autoArrows() {
   const B = this.buttons.getButtons();
   const vert = O.direction === 'vertical';
   const cons = vert
-    ? innerHeight(this.buttons.element, undefined, true)
-    : innerWidth(this.buttons.element, undefined, true);
+    ? getInnerHeight(this.buttons.element, true)
+    : getInnerWidth(this.buttons.element, true);
   let list;
   if (B.length) {
     const lastb = B[B.length - 1].element;
     if (vert) {
-      list = lastb.offsetTop + outerHeight(lastb, true, undefined, true);
+      list = lastb.offsetTop + getOuterHeight(lastb, true, true);
     } else {
-      list = lastb.offsetLeft + outerWidth(lastb, true, undefined, true);
+      list = lastb.offsetLeft + getOuterWidth(lastb, true, true);
     }
   } else {
     list = 0;
@@ -170,8 +170,8 @@ function nextDblClicked() {
 function measureClip() {
   const buttons = this.buttons;
 
-  this.update('_clip_height', innerHeight(buttons.element, undefined, true));
-  this.update('_clip_width', innerWidth(buttons.element, undefined, true));
+  this.update('_clip_height', getInnerHeight(buttons.element, true));
+  this.update('_clip_width', getInnerWidth(buttons.element, true));
 }
 
 function measureButtonPositions() {
@@ -182,8 +182,8 @@ function measureButtonPositions() {
   positions.forEach((info, button) => {
     const element = button.element;
 
-    info.width = outerWidth(element, false, undefined, true);
-    info.height = outerHeight(element, false, undefined, true);
+    info.width = getOuterWidth(element, false, true);
+    info.height = getOuterHeight(element, false, true);
     info.left = element.offsetLeft;
     info.top = element.offsetTop;
 
@@ -385,7 +385,7 @@ export class Navigation extends Container {
         console.log(O, 'clip_size', clip_size, 'list_size', list_size, 'offset', offset,
                     'button_size', button_size);
 
-        console.log('innerHeight', innerHeight(this.buttons.element));
+        console.log('innerHeight', getInnerHeight(this.buttons.element));
         */
 
     let pos = Math.min(
