@@ -24,10 +24,12 @@ import {
   forEachSubscriber,
   addSubscriber,
   removeSubscriber,
+  mergeSubscribers,
   callSubscribers,
   Subscribers,
 } from '../../src/utils/subscribers.js';
 import { assert, assertError } from './utils/helpers.js';
+import { SilentError } from './utils/silent_error.js';
 
 const TO_SET = 32;
 const TO_ARRAY = 16;
@@ -208,6 +210,28 @@ describe('subscribers', () => {
     assert(hasSubscriber(subscribers, b));
   });
 
+  it('mergeSubscribers() concatenates without mutating or duplicating', () => {
+    const [a, b, c] = makeCallbacks(3);
+    const left = addAll(initSubscribers(), [a, b]);
+    const right = addAll(initSubscribers(), [b, c]);
+    const merged = mergeSubscribers(left, right);
+    const seen = [];
+
+    forEachSubscriber(merged, (cb) => {
+      seen.push(cb);
+    });
+
+    assert(seen.length === 3);
+    assert(seen[0] === a);
+    assert(seen[1] === b);
+    assert(seen[2] === c);
+    assert(left.length === 2);
+    assert(right.length === 2);
+    assert(mergeSubscribers(null, a) === a);
+    assert(mergeSubscribers(a, null) === a);
+    assert(subscribersIsEmpty(mergeSubscribers(null, null)));
+  });
+
   it('forEachSubscriber() visits each subscriber and can stop early', () => {
     const [a, b, c] = makeCallbacks(3);
     let subscribers = addAll(initSubscribers(), [a, b, c]);
@@ -250,7 +274,7 @@ describe('subscribers', () => {
     const a = makeCallback();
     const boom = () => {
       boom.calls++;
-      throw new Error('boom');
+      throw new SilentError('boom');
     };
     const b = makeCallback();
 

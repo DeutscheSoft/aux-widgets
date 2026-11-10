@@ -54,10 +54,7 @@ export function hasSubscriber<T extends (...args: any[]) => void>(
 export function forEachSubscriber<
   T extends (...args: any[]) => void,
   R = undefined
->(
-  subscribers: SubscriberList<T>,
-  callback: (cb: T) => R | void
-): R | undefined;
+>(subscribers: SubscriberList<T>, callback: (cb: T) => R | void): R | undefined;
 
 /**
  * Add a subscriber to the given subscribers. Returns the new subscribers.
@@ -74,6 +71,20 @@ export function forEachSubscriber<
 export function addSubscriber<T extends (...args: any[]) => void>(
   subscribers: SubscriberList<T>,
   cb: T
+): SubscriberList<T>;
+
+/**
+ * Merge two subscriber lists. Returns a new list with the subscribers from
+ * `a` followed by any subscribers from `b` that are not already present.
+ * Neither argument is modified.
+ *
+ * @param a - The first subscriber list
+ * @param b - The second subscriber list
+ * @returns The merged subscriber list
+ */
+export function mergeSubscribers<T extends (...args: any[]) => void>(
+  a: SubscriberList<T> | null | undefined,
+  b: SubscriberList<T> | null | undefined
 ): SubscriberList<T>;
 
 /**

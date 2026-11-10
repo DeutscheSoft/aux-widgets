@@ -135,6 +135,36 @@ function subscribersFromSet(subscribers) {
   return subscribers;
 }
 
+function cloneSubscribers(subscribers) {
+  if (subscribers === null) {
+    return null;
+  } else if (typeof subscribers === 'function') {
+    return subscribers;
+  } else if (Array.isArray(subscribers)) {
+    return subscribers.slice();
+  } else if (subscribers instanceof Set) {
+    return new Set(subscribers);
+  } else expectedSubscribers();
+}
+
+/**
+ * Merge two subscriber lists. Returns a new list with the subscribers from
+ * `a` followed by any subscribers from `b` that are not already present.
+ * Neither argument is modified.
+ */
+export function mergeSubscribers(a, b) {
+  if (a == null) return cloneSubscribers(b ?? null);
+  if (b == null) return cloneSubscribers(a);
+
+  let result = cloneSubscribers(a);
+
+  forEachSubscriber(b, (cb) => {
+    if (!hasSubscriber(result, cb)) result = addSubscriber(result, cb);
+  });
+
+  return result;
+}
+
 /**
  * Removes a subscriber callback from the list of subscribers and
  * returns the resulting list of subscribers.
