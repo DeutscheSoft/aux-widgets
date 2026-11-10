@@ -25,6 +25,12 @@
 
 import { warn } from './log.js';
 
+// Grow into a Set once the list is large enough that array remove gets
+// expensive. Shrink back to an array at a lower size so a list near the
+// boundary does not convert on every add and remove.
+const TO_SET = 32;
+const TO_ARRAY = 16;
+
 function expectedSubscribers() {
   throw new TypeError('Expected list of subscribers.');
 }
@@ -43,6 +49,10 @@ export function subscribersIsEmpty(subscribers) {
   return subscribers === null;
 }
 
+function subscriberAlreadyAdded() {
+  throw new Error('Adding subscriber twice.');
+}
+
 /**
  * Add a subscriber to the given subscribers. Returns the new subscribers.
  */
@@ -52,14 +62,34 @@ export function addSubscriber(subscribers, cb) {
   if (subscribers === null) {
     return cb;
   } else if (typeof subscribers === 'function') {
+    if (subscribers === cb) subscriberAlreadyAdded();
+
     return [subscribers, cb];
   } else if (Array.isArray(subscribers)) {
-    return subscribers.concat([cb]);
+    if (subscribers.includes(cb)) subscriberAlreadyAdded();
+
+    subscribers.push(cb);
+    return subscribers.length >= TO_SET ? new Set(subscribers) : subscribers;
+  } else if (subscribers instanceof Set) {
+    if (subscribers.has(cb)) subscriberAlreadyAdded();
+
+    subscribers.add(cb);
+    return subscribers;
   } else expectedSubscribers();
 }
 
 function subscriberNotFound() {
   throw new Error('Subscriber not found.');
+}
+
+function subscribersFromSet(subscribers) {
+  const size = subscribers.size;
+
+  if (size === 0) return null;
+  if (size === 1) return subscribers.values().next().value;
+  if (size <= TO_ARRAY) return Array.from(subscribers);
+
+  return subscribers;
 }
 
 /**
@@ -81,6 +111,10 @@ export function removeSubscriber(subscribers, cb) {
     if (tmp.length === subscribers.length) subscriberNotFound();
 
     return tmp.length === 1 ? tmp[0] : tmp;
+  } else if (subscribers instanceof Set) {
+    if (!subscribers.delete(cb)) subscriberNotFound();
+
+    return subscribersFromSet(subscribers);
   } else expectedSubscribers();
 }
 
@@ -104,6 +138,14 @@ export function callSubscribers(subscribers, ...args) {
     for (let i = 0; i < subscribers.length; i++) {
       try {
         subscribers[i](...args);
+      } catch (err) {
+        subscriberError(err);
+      }
+    }
+  } else if (subscribers instanceof Set) {
+    for (const cb of subscribers) {
+      try {
+        cb(...args);
       } catch (err) {
         subscriberError(err);
       }
