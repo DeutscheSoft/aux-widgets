@@ -16,21 +16,34 @@ function hasSilentError(args) {
   return false;
 }
 
+function formatArg(arg) {
+  if (typeof arg === 'string') return arg;
+  if (arg instanceof Error) return arg.name + ': ' + arg.message;
+  if (arg && typeof arg === 'object' && arg.constructor)
+    return arg.constructor.name;
+  return String(arg);
+}
+
+function unexpectedConsole(method, args) {
+  const summary = Array.from(args, formatArg).join(' ');
+  throw new Error('Unexpected console.' + method + ': ' + summary);
+}
+
 /**
- * Console-like sink that forwards to the real console except when any
- * argument is a {@link SilentError}.
+ * Console-like sink for the library logger.
+ * {@link SilentError} arguments are ignored; any other output fails the test.
  */
 export const testConsole = {
   log(...args) {
     if (hasSilentError(args)) return;
-    console.log(...args);
+    unexpectedConsole('log', args);
   },
   warn(...args) {
     if (hasSilentError(args)) return;
-    console.warn(...args);
+    unexpectedConsole('warn', args);
   },
   error(...args) {
     if (hasSilentError(args)) return;
-    console.error(...args);
+    unexpectedConsole('error', args);
   },
 };

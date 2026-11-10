@@ -18,21 +18,18 @@
  */
 
 import { warn } from './utils/log.js';
+import {
+  addSubscriber,
+  removeSubscriber,
+  hasSubscriber,
+  forEachSubscriber,
+  subscribersIsEmpty,
+} from './utils/subscribers.js';
 
 function addEventHandler(to, event, fun) {
   if (to === null) to = new Map();
 
-  let tmp = to.get(event);
-
-  if (!tmp) {
-    tmp = fun;
-  } else if (Array.isArray(tmp)) {
-    tmp = tmp.concat([fun]);
-  } else {
-    tmp = [tmp, fun];
-  }
-
-  to.set(event, tmp);
+  to.set(event, addSubscriber(to.get(event) || null, fun));
 
   return to;
 }
@@ -42,15 +39,11 @@ function removeEventHandler(to, event, fun) {
 
   let tmp = to.get(event);
 
-  if (Array.isArray(tmp)) {
-    tmp = tmp.filter((f) => f !== fun);
-    if (tmp.length === 1) tmp = tmp[0];
-    else if (tmp.length === 0) tmp = null;
-  } else if (tmp === fun) {
-    tmp = null;
-  }
+  if (tmp === void 0 || !hasSubscriber(tmp, fun)) return to;
 
-  if (tmp === null) {
+  tmp = removeSubscriber(tmp, fun);
+
+  if (subscribersIsEmpty(tmp)) {
     to.delete(event);
     if (to.size === 0) to = null;
   } else {
@@ -69,21 +62,7 @@ function hasEventHandler(handlers, name, callback) {
 
   if (typeof callback === 'undefined') return true;
 
-  if (typeof callback !== 'function') throw new TypeError('Expected function.');
-
-  if (Array.isArray(tmp)) {
-    return tmp.indexOf(callback) !== -1;
-  } else {
-    return tmp === callback;
-  }
-}
-
-function callEventHandler(fun, self, args) {
-  try {
-    return fun.apply(self, args);
-  } catch (e) {
-    warn('event handler', fun, 'threw', e);
-  }
+  return hasSubscriber(tmp, callback);
 }
 
 function emitEvent(handlers, name, self, args) {
@@ -93,16 +72,13 @@ function emitEvent(handlers, name, self, args) {
 
   if (tmp === void 0) return;
 
-  if (Array.isArray(tmp)) {
-    for (let i = 0; i < tmp.length; i++) {
-      const ret = callEventHandler(tmp[i], self, args);
-
-      if (ret !== void 0) return ret;
+  return forEachSubscriber(tmp, (fun) => {
+    try {
+      return fun.apply(self, args);
+    } catch (e) {
+      warn('event handler', fun, 'threw', e);
     }
-    return;
-  } else {
-    return callEventHandler(tmp, self, args);
-  }
+  });
 }
 
 /**

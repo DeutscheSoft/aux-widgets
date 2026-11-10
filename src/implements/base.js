@@ -28,22 +28,16 @@ import {
   mergeStaticEvents,
 } from './../widget_helpers.js';
 import { bindOption } from './../utils/binding.js';
+import { forEachSubscriber, hasSubscriber } from './../utils/subscribers.js';
 
-function callHandler(self, fun, args) {
-  try {
-    return fun.apply(self, args);
-  } catch (e) {
-    warn('event handler', fun, 'threw', e);
-  }
-}
 function dispatchEvents(self, handlers, args) {
-  let v;
-  if (Array.isArray(handlers)) {
-    for (let i = 0; i < handlers.length; i++) {
-      v = callHandler(self, handlers[i], args);
-      if (v !== void 0) return v;
+  return forEachSubscriber(handlers, (fun) => {
+    try {
+      return fun.apply(self, args);
+    } catch (e) {
+      warn('event handler', fun, 'threw', e);
     }
-  } else return callHandler(self, handlers, args);
+  });
 }
 const __native_events = {
   // mouse
@@ -577,6 +571,9 @@ export class Base {
 
     if (arguments.length !== 2) throw new Error('Bad number of arguments.');
 
+    if (this.hasEventListener(event, func))
+      throw new Error('Event handler already registered.');
+
     const __events = this.__events;
 
     if (isNativeEvent(event) && this.is_initialized) {
@@ -592,19 +589,13 @@ export class Base {
   }
 
   hasEventListener(event, func) {
-    const ev = this.__events;
-
-    const handlers = ev[event];
+    const handlers = this.__events[event];
 
     if (!handlers) return false;
 
     if (typeof func === 'undefined') return true;
 
-    if (Array.isArray(handlers)) {
-      return handlers.includes(func);
-    }
-
-    return handlers === func;
+    return hasSubscriber(handlers, func);
   }
 
   subscribe(event, func) {

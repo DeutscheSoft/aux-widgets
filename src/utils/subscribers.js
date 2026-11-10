@@ -25,6 +25,12 @@
 
 import { warn } from './log.js';
 
+// Grow into a Set once the list is large enough that array remove gets
+// expensive. Shrink back to an array at a lower size so a list near the
+// boundary does not convert on every add and remove.
+const TO_SET = 32;
+const TO_ARRAY = 16;
+
 function expectedSubscribers() {
   throw new TypeError('Expected list of subscribers.');
 }
@@ -44,6 +50,53 @@ export function subscribersIsEmpty(subscribers) {
 }
 
 /**
+ * Returns true if the given callback is in the list of subscribers.
+ */
+export function hasSubscriber(subscribers, cb) {
+  if (typeof cb !== 'function') throw new TypeError('Expected function.');
+
+  if (subscribers === null) {
+    return false;
+  } else if (typeof subscribers === 'function') {
+    return subscribers === cb;
+  } else if (Array.isArray(subscribers)) {
+    return subscribers.includes(cb);
+  } else if (subscribers instanceof Set) {
+    return subscribers.has(cb);
+  } else expectedSubscribers();
+}
+
+/**
+ * Call callback for each subscriber.
+ *
+ * If callback returns a value other than undefined, iteration stops and that
+ * value is returned.
+ */
+export function forEachSubscriber(subscribers, callback) {
+  if (subscribers === null) return;
+
+  if (typeof subscribers === 'function') {
+    return callback(subscribers);
+  } else if (Array.isArray(subscribers)) {
+    for (let i = 0; i < subscribers.length; i++) {
+      const result = callback(subscribers[i]);
+
+      if (result !== void 0) return result;
+    }
+  } else if (subscribers instanceof Set) {
+    for (const cb of subscribers) {
+      const result = callback(cb);
+
+      if (result !== void 0) return result;
+    }
+  } else expectedSubscribers();
+}
+
+function subscriberAlreadyAdded() {
+  throw new Error('Adding subscriber twice.');
+}
+
+/**
  * Add a subscriber to the given subscribers. Returns the new subscribers.
  */
 export function addSubscriber(subscribers, cb) {
@@ -52,14 +105,64 @@ export function addSubscriber(subscribers, cb) {
   if (subscribers === null) {
     return cb;
   } else if (typeof subscribers === 'function') {
+    if (subscribers === cb) subscriberAlreadyAdded();
+
     return [subscribers, cb];
   } else if (Array.isArray(subscribers)) {
-    return subscribers.concat([cb]);
+    if (subscribers.includes(cb)) subscriberAlreadyAdded();
+
+    subscribers.push(cb);
+    return subscribers.length >= TO_SET ? new Set(subscribers) : subscribers;
+  } else if (subscribers instanceof Set) {
+    if (subscribers.has(cb)) subscriberAlreadyAdded();
+
+    subscribers.add(cb);
+    return subscribers;
   } else expectedSubscribers();
 }
 
 function subscriberNotFound() {
   throw new Error('Subscriber not found.');
+}
+
+function subscribersFromSet(subscribers) {
+  const size = subscribers.size;
+
+  if (size === 0) return null;
+  if (size === 1) return subscribers.values().next().value;
+  if (size <= TO_ARRAY) return Array.from(subscribers);
+
+  return subscribers;
+}
+
+function cloneSubscribers(subscribers) {
+  if (subscribers === null) {
+    return null;
+  } else if (typeof subscribers === 'function') {
+    return subscribers;
+  } else if (Array.isArray(subscribers)) {
+    return subscribers.slice();
+  } else if (subscribers instanceof Set) {
+    return new Set(subscribers);
+  } else expectedSubscribers();
+}
+
+/**
+ * Merge two subscriber lists. Returns a new list with the subscribers from
+ * `a` followed by any subscribers from `b` that are not already present.
+ * Neither argument is modified.
+ */
+export function mergeSubscribers(a, b) {
+  if (a == null) return cloneSubscribers(b ?? null);
+  if (b == null) return cloneSubscribers(a);
+
+  let result = cloneSubscribers(a);
+
+  forEachSubscriber(b, (cb) => {
+    if (!hasSubscriber(result, cb)) result = addSubscriber(result, cb);
+  });
+
+  return result;
 }
 
 /**
@@ -81,6 +184,10 @@ export function removeSubscriber(subscribers, cb) {
     if (tmp.length === subscribers.length) subscriberNotFound();
 
     return tmp.length === 1 ? tmp[0] : tmp;
+  } else if (subscribers instanceof Set) {
+    if (!subscribers.delete(cb)) subscriberNotFound();
+
+    return subscribersFromSet(subscribers);
   } else expectedSubscribers();
 }
 
@@ -104,6 +211,14 @@ export function callSubscribers(subscribers, ...args) {
     for (let i = 0; i < subscribers.length; i++) {
       try {
         subscribers[i](...args);
+      } catch (err) {
+        subscriberError(err);
+      }
+    }
+  } else if (subscribers instanceof Set) {
+    for (const cb of subscribers) {
+      try {
+        cb(...args);
       } catch (err) {
         subscriberError(err);
       }

@@ -20,6 +20,7 @@
 import { Base } from '../../src/index.js';
 import { Events } from '../../src/events.js';
 import { SilentError } from './utils/silent_error.js';
+import { assert, assertError } from './utils/helpers.js';
 
 for (let C of [Base, Events]) {
   describe('Events', () => {
@@ -44,6 +45,24 @@ for (let C of [Base, Events]) {
         o.emit('foo');
         if (!called) throw new Error('not called');
       }
+    });
+    it('rejects duplicate handlers', () => {
+      const o = new C();
+      const cb = () => {};
+
+      o.on('foo', cb);
+      assertError(() => o.on('foo', cb));
+      assertError(() => o.subscribe('foo', cb));
+    });
+    it('binds this to the emitter', () => {
+      const o = new C();
+      let self = null;
+
+      o.on('foo', function () {
+        self = this;
+      });
+      o.emit('foo');
+      assert(self === o);
     });
     it('off()', () => {
       {
@@ -71,6 +90,38 @@ for (let C of [Base, Events]) {
         o.emit('foo');
         if (called) throw new Error('called');
       }
+      {
+        const o = new C();
+        const cb = () => {};
+
+        o.off('foo', cb);
+        o.on('foo', () => {});
+        o.off('foo', cb);
+      }
+    });
+    it('handles many subscribers', () => {
+      const o = new C();
+      const calls = [];
+      const callbacks = [];
+
+      for (let i = 0; i < 40; i++) {
+        const cb = () => {
+          calls.push(i);
+        };
+        callbacks.push(cb);
+        o.on('foo', cb);
+      }
+
+      o.emit('foo');
+      assert(calls.length === 40);
+
+      for (let i = 0; i < 25; i++) o.off('foo', callbacks[i]);
+
+      calls.length = 0;
+      o.emit('foo');
+      assert(calls.length === 15);
+      assert(o.hasEventListener('foo', callbacks[25]));
+      assert(!o.hasEventListener('foo', callbacks[0]));
     });
     it('subscribe()', () => {
       const o = new C();

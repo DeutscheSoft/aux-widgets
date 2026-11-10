@@ -4,16 +4,18 @@
  * Subscribers are represented as:
  * - `null` for an empty list
  * - A single function for one subscriber
- * - An array of functions for multiple subscribers
+ * - An array of functions for a small number of subscribers
+ * - A `Set` of functions for a larger number of subscribers
  */
 
 /**
  * Type representing a subscriber list.
- * Can be null (empty), a single function, or an array of functions.
+ * Can be null (empty), a single function, an array of functions, or a Set of
+ * functions.
  */
 export type SubscriberList<
   T extends (...args: any[]) => void = (...args: any[]) => void
-> = null | T | T[];
+> = null | T | T[] | Set<T>;
 
 /**
  * Initialize a list of subscribers.
@@ -29,18 +31,60 @@ export function subscribersIsEmpty(
 ): subscribers is null;
 
 /**
+ * Returns true if the given callback is in the list of subscribers.
+ *
+ * @param subscribers - The subscriber list
+ * @param cb - The callback function to look up
+ * @throws {TypeError} If cb is not a function or subscribers is invalid
+ */
+export function hasSubscriber<T extends (...args: any[]) => void>(
+  subscribers: SubscriberList<T>,
+  cb: T
+): boolean;
+
+/**
+ * Call callback for each subscriber.
+ *
+ * If callback returns a value other than undefined, iteration stops and that
+ * value is returned.
+ *
+ * @param subscribers - The subscriber list
+ * @param callback - Called once per subscriber
+ */
+export function forEachSubscriber<
+  T extends (...args: any[]) => void,
+  R = undefined
+>(subscribers: SubscriberList<T>, callback: (cb: T) => R | void): R | undefined;
+
+/**
  * Add a subscriber to the given subscribers. Returns the new subscribers.
- * The subscriber list is optimized: single subscribers are stored as a function,
- * multiple subscribers as an array.
+ * Empty lists use `null`, a single subscriber is stored as the function
+ * itself, a small number of subscribers as an array, and a larger number as a
+ * `Set`.
  *
  * @param subscribers - The current subscriber list
  * @param cb - The callback function to add
  * @returns The new subscriber list
  * @throws {TypeError} If cb is not a function or subscribers is invalid
+ * @throws {Error} If the subscriber is already present
  */
 export function addSubscriber<T extends (...args: any[]) => void>(
   subscribers: SubscriberList<T>,
   cb: T
+): SubscriberList<T>;
+
+/**
+ * Merge two subscriber lists. Returns a new list with the subscribers from
+ * `a` followed by any subscribers from `b` that are not already present.
+ * Neither argument is modified.
+ *
+ * @param a - The first subscriber list
+ * @param b - The second subscriber list
+ * @returns The merged subscriber list
+ */
+export function mergeSubscribers<T extends (...args: any[]) => void>(
+  a: SubscriberList<T> | null | undefined,
+  b: SubscriberList<T> | null | undefined
 ): SubscriberList<T>;
 
 /**
@@ -49,7 +93,7 @@ export function addSubscriber<T extends (...args: any[]) => void>(
  *
  * @param subscribers - The current subscriber list
  * @param cb - The callback function to remove
- * @returns The new subscriber list (may be null, a function, or an array)
+ * @returns The new subscriber list
  * @throws {TypeError} If cb is not a function or subscribers is invalid
  * @throws {Error} If the subscriber is not found
  */
@@ -78,8 +122,9 @@ export function subscriberError(err: unknown): void;
 
 /**
  * A class for representing a list of subscribers.
- * Optimizes storage: single subscribers are stored as a function,
- * multiple subscribers as an array.
+ * Empty lists use `null`, a single subscriber is stored as the function
+ * itself, a small number of subscribers as an array, and a larger number as a
+ * `Set`.
  */
 export class Subscribers<
   T extends (...args: any[]) => void = (...args: any[]) => void
@@ -92,6 +137,7 @@ export class Subscribers<
   /**
    * Add a subscriber.
    * @param cb - The callback function to add
+   * @throws {Error} If the subscriber is already present
    */
   add(cb: T): void;
 
