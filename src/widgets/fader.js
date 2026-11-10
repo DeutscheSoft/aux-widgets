@@ -53,9 +53,9 @@ import {
   supports_transform,
   CSSSpace,
   getOuterHeight,
-  innerHeight,
+  getInnerHeight,
   getOuterWidth,
-  innerWidth,
+  getInnerWidth,
   createID,
   applyAttribute,
 } from '../utils/dom.js';
@@ -232,10 +232,10 @@ export class Fader extends Widget {
 
         if (vert(layout)) {
           this._handle_size = getOuterHeight(H, true, true);
-          basis = innerHeight(T, undefined, true) - this._handle_size;
+          basis = getInnerHeight(T, true) - this._handle_size;
         } else {
           this._handle_size = getOuterWidth(H, true, true);
-          basis = innerWidth(T, undefined, true) - this._handle_size;
+          basis = getInnerWidth(T, true) - this._handle_size;
         }
 
         this.update('basis', basis);

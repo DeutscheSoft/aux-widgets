@@ -22,8 +22,8 @@ import {
   getStyle,
   element,
   addClass,
-  innerWidth,
-  innerHeight,
+  getInnerWidth,
+  getInnerHeight,
 } from '../utils/dom.js';
 import { defineRange } from '../utils/define_range.js';
 import { makeSVG } from '../utils/svg.js';
@@ -287,8 +287,8 @@ export class Chart extends Widget {
         const SVG = this.svg;
 
         const tmp = CSSSpace(SVG, 'border', 'padding');
-        let w = innerWidth(E, undefined, true) - tmp.left - tmp.right;
-        let h = innerHeight(E, undefined, true) - tmp.top - tmp.bottom;
+        let w = getInnerWidth(E, true) - tmp.left - tmp.right;
+        let h = getInnerHeight(E, true) - tmp.top - tmp.bottom;
 
         if (square) {
           w = h = Math.min(h, w);

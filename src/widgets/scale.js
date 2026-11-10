@@ -35,8 +35,8 @@ import {
   element,
   removeClass,
   toggleClass,
-  innerHeight,
-  innerWidth,
+  getInnerHeight,
+  getInnerWidth,
 } from '../utils/dom.js';
 import { FORMAT } from '../utils/sprintf.js';
 import { warn } from '../utils/log.js';
@@ -732,8 +732,8 @@ export class Scale extends Widget {
       ),
       defineMeasure(['layout', SymResize], function (layout) {
         const basis = vert(layout)
-          ? innerHeight(this.element, undefined, true)
-          : innerWidth(this.element, undefined, true);
+          ? getInnerHeight(this.element, true)
+          : getInnerWidth(this.element, true);
         this.update('basis', basis);
       }),
     ];

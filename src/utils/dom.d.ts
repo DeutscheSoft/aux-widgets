@@ -305,32 +305,42 @@ export function setOuterHeight(
 ): void;
 
 /**
- * Gets or sets the inner width of an element as CSS pixels. The box sizing
+ * Returns the inner width of an element as CSS pixels. The box sizing
  * method is taken into account.
- * @param element - The element to evaluate / manipulate
- * @param width - If defined, the element's inner width is set to this value
+ * @param element - The element to evaluate
  * @param notransform - Don't take transformations into account
- * @returns The inner width (when getting) or the set width (when setting)
  */
-export function innerWidth(
+export function getInnerWidth(
   element: HTMLElement,
-  width?: number,
   notransform?: boolean
 ): number;
 
 /**
- * Gets or sets the inner height of an element as CSS pixels. The box sizing
+ * Sets the inner width of an element as CSS pixels. The box sizing
  * method is taken into account.
- * @param element - The element to evaluate / manipulate
- * @param height - If defined, the element's inner height is set to this value
- * @param notransform - Don't take transformations into account
- * @returns The inner height (when getting) or the set height (when setting)
+ * @param element - The element to manipulate
+ * @param width - The inner width
  */
-export function innerHeight(
+export function setInnerWidth(element: HTMLElement, width: number): void;
+
+/**
+ * Returns the inner height of an element as CSS pixels. The box sizing
+ * method is taken into account.
+ * @param element - The element to evaluate
+ * @param notransform - Don't take transformations into account
+ */
+export function getInnerHeight(
   element: HTMLElement,
-  height?: number,
   notransform?: boolean
 ): number;
+
+/**
+ * Sets the inner height of an element as CSS pixels. The box sizing
+ * method is taken into account.
+ * @param element - The element to manipulate
+ * @param height - The inner height
+ */
+export function setInnerHeight(element: HTMLElement, height: number): void;
 
 // ============================================================================
 // Utility Functions

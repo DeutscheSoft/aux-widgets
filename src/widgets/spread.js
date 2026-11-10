@@ -47,9 +47,9 @@ import {
   removeClass,
   supports_transform,
   getOuterHeight,
-  innerHeight,
+  getInnerHeight,
   getOuterWidth,
-  innerWidth,
+  getInnerWidth,
 } from '../utils/dom.js';
 import {
   defineRender,
@@ -216,12 +216,11 @@ export class Spread extends Widget {
 
         if (vert(layout)) {
           basis =
-            innerHeight(_track, undefined, true) -
+            getInnerHeight(_track, true) -
             getOuterHeight(_lower, true, true) * 2;
         } else {
           basis =
-            innerWidth(_track, undefined, true) -
-            getOuterWidth(_lower, true, true) * 2;
+            getInnerWidth(_track, true) - getOuterWidth(_lower, true, true) * 2;
         }
 
         this.update('basis', basis);

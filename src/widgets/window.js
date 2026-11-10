@@ -39,8 +39,8 @@ import {
   positionLeft,
   positionTop,
   width as viewportWidth,
-  innerWidth,
-  innerHeight,
+  getInnerWidth,
+  getInnerHeight,
   height as viewportHeight,
   toggleClass,
   setContent,
@@ -656,8 +656,8 @@ export class Window extends Container {
         const { element, dimensions, options } = this;
         const maximize = options.maximize;
 
-        this.update('_inner_width', innerWidth(element));
-        this.update('_inner_height', innerHeight(element));
+        this.update('_inner_width', getInnerWidth(element));
+        this.update('_inner_height', getInnerHeight(element));
 
         // Adopt the laid-out size continuously (ResizeObserver → SymResize).
         // When maximized, keep options.width/height as the restore size.

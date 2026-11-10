@@ -22,8 +22,8 @@ import { SymResize, Widget } from './widget.js';
 import {
   addClass,
   element,
-  innerWidth,
-  innerHeight,
+  getInnerWidth,
+  getInnerHeight,
   setOuterWidth,
   setOuterHeight,
 } from '../utils/dom.js';
@@ -243,11 +243,8 @@ export class Scroller extends Container {
       }),
       defineMeasure(SymResize, function () {
         this._changed();
-        this.scroll_x.update('clip', innerWidth(this.element, undefined, true));
-        this.scroll_y.update(
-          'clip',
-          innerHeight(this.element, undefined, true)
-        );
+        this.scroll_x.update('clip', getInnerWidth(this.element, true));
+        this.scroll_y.update('clip', getInnerHeight(this.element, true));
       }),
     ];
   }

@@ -21,8 +21,8 @@ import {
   addClass,
   removeClass,
   toggleClass,
-  innerHeight,
-  innerWidth,
+  getInnerHeight,
+  getInnerWidth,
   getOuterWidth,
   getOuterHeight,
 } from '../utils/dom.js';
@@ -131,8 +131,8 @@ function autoArrows() {
   const B = this.buttons.getButtons();
   const vert = O.direction === 'vertical';
   const cons = vert
-    ? innerHeight(this.buttons.element, undefined, true)
-    : innerWidth(this.buttons.element, undefined, true);
+    ? getInnerHeight(this.buttons.element, true)
+    : getInnerWidth(this.buttons.element, true);
   let list;
   if (B.length) {
     const lastb = B[B.length - 1].element;
@@ -170,8 +170,8 @@ function nextDblClicked() {
 function measureClip() {
   const buttons = this.buttons;
 
-  this.update('_clip_height', innerHeight(buttons.element, undefined, true));
-  this.update('_clip_width', innerWidth(buttons.element, undefined, true));
+  this.update('_clip_height', getInnerHeight(buttons.element, true));
+  this.update('_clip_width', getInnerWidth(buttons.element, true));
 }
 
 function measureButtonPositions() {
@@ -385,7 +385,7 @@ export class Navigation extends Container {
         console.log(O, 'clip_size', clip_size, 'list_size', list_size, 'offset', offset,
                     'button_size', button_size);
 
-        console.log('innerHeight', innerHeight(this.buttons.element));
+        console.log('innerHeight', getInnerHeight(this.buttons.element));
         */
 
     let pos = Math.min(

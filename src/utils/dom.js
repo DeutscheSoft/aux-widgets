@@ -515,53 +515,69 @@ export function setOuterHeight(element, margin, height) {
 }
 
 /**
- * Gets or sets the inner width of an element as CSS pixels. The box sizing
+ * Returns the inner width of an element as CSS pixels. The box sizing
  * method is taken into account.
- * @param {HTMLElement} element - the element to evaluate / manipulate
- * @param {number} width - If defined the elements inner width is set to this value
- * @param {boolean} notransform - Don't take transformations into account.
+ * @param {HTMLElement} element - The element to evaluate.
+ * @param {boolean} notransform - Don't take transformations into account. Optional.
  * @returns {number}
- * @function innerWidth
+ * @function getInnerWidth
  */
-export function innerWidth(element, width, notransform) {
+export function getInnerWidth(element, notransform) {
   const css = CSSSpace(element, 'padding', 'border');
   const x = css.left + css.right;
-  if (width !== void 0) {
-    if (boxSizing(element) === 'border-box') width += x;
-    width = Math.max(0, width);
-    element.style.width = width + 'px';
-    return width;
-  } else {
-    let w;
-    if (notransform) w = element.offsetWidth;
-    else w = element.getBoundingClientRect().width;
-    return w - x;
-  }
+  const w = notransform
+    ? element.offsetWidth
+    : element.getBoundingClientRect().width;
+  return w - x;
 }
 
 /**
- * Gets or sets the inner height of an element as CSS pixels. The box sizing
+ * Sets the inner width of an element as CSS pixels. The box sizing
  * method is taken into account.
- * @param {HTMLElement} element - the element to evaluate / manipulate
- * @param {number} height - If defined the elements outer height is set to this value
- * @param {boolean} notransform - Don't take transformations into account.
- * @returns {number}
- * @function innerHeight
+ * @param {HTMLElement} element - The element to manipulate.
+ * @param {number} width - The inner width.
+ * @function setInnerWidth
  */
-export function innerHeight(element, height, notransform) {
+export function setInnerWidth(element, width) {
+  if (boxSizing(element) === 'border-box') {
+    const css = CSSSpace(element, 'padding', 'border');
+    width += css.left + css.right;
+  }
+  width = Math.max(0, width);
+  element.style.width = width + 'px';
+}
+
+/**
+ * Returns the inner height of an element as CSS pixels. The box sizing
+ * method is taken into account.
+ * @param {HTMLElement} element - The element to evaluate.
+ * @param {boolean} notransform - Don't take transformations into account. Optional.
+ * @returns {number}
+ * @function getInnerHeight
+ */
+export function getInnerHeight(element, notransform) {
   const css = CSSSpace(element, 'padding', 'border');
   const y = css.top + css.bottom;
-  if (height !== void 0) {
-    if (boxSizing(element) === 'border-box') height += y;
-    height = Math.max(0, height);
-    element.style.height = height + 'px';
-    return height;
-  } else {
-    let h;
-    if (notransform) h = element.offsetHeight;
-    else h = element.getBoundingClientRect().height;
-    return h - y;
+  const h = notransform
+    ? element.offsetHeight
+    : element.getBoundingClientRect().height;
+  return h - y;
+}
+
+/**
+ * Sets the inner height of an element as CSS pixels. The box sizing
+ * method is taken into account.
+ * @param {HTMLElement} element - The element to manipulate.
+ * @param {number} height - The inner height.
+ * @function setInnerHeight
+ */
+export function setInnerHeight(element, height) {
+  if (boxSizing(element) === 'border-box') {
+    const css = CSSSpace(element, 'padding', 'border');
+    height += css.top + css.bottom;
   }
+  height = Math.max(0, height);
+  element.style.height = height + 'px';
 }
 
 /**
