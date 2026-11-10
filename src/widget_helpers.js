@@ -19,52 +19,56 @@
 
 import { toggleClass, element } from './utils/dom.js';
 import { defineRender } from './renderer.js';
+import {
+  addSubscriber,
+  removeSubscriber,
+  hasSubscriber,
+  subscribersIsEmpty,
+  mergeSubscribers,
+} from './utils/subscribers.js';
 
 export function addEvent(to, event, fun) {
-  const tmp = to[event];
-
-  if (!tmp) {
-    to[event] = fun;
-  } else if (Array.isArray(tmp)) {
-    to[event] = tmp.concat([fun]);
-  } else {
-    to[event] = [tmp, fun];
-  }
+  to[event] = addSubscriber(to[event] || null, fun);
 }
 
 export function removeEvent(from, event, fun) {
   const tmp = from[event];
-  if (!tmp) return;
-  if (Array.isArray(tmp)) {
-    from[event] = tmp.filter((f) => f !== fun);
-    if (tmp.length === 1) from[event] = tmp[0];
-    else if (tmp.length === 0) delete from[event];
-  } else if (tmp === fun) {
-    delete from[event];
-  }
-}
 
-function arrayify(x) {
-  if (!Array.isArray(x)) x = [x];
-  return x;
+  if (!tmp || !hasSubscriber(tmp, fun)) return;
+
+  const next = removeSubscriber(tmp, fun);
+
+  if (subscribersIsEmpty(next)) delete from[event];
+  else from[event] = next;
 }
 
 export function mergeStaticEvents(a, b, ...rest) {
-  if (!a || !b) return Object.assign({}, a || b || {});
+  // Clone every subscriber list so subclasses never share mutable
+  // arrays/Sets with a parent. addSubscriber may push in place; sharing
+  // those lists would let child addStaticEvent pollute the parent.
+  if (!a || !b) {
+    const src = a || b || {};
+    const result = {};
+    for (const event in src) {
+      result[event] = mergeSubscribers(null, src[event]);
+    }
+    return rest.length ? mergeStaticEvents(result, ...rest) : result;
+  }
 
-  const result = Object.assign({}, a, b);
+  const result = {};
 
   for (const event in a) {
-    if (!(event in b)) continue;
-
-    result[event] = arrayify(a[event]).concat(arrayify(b[event]));
+    result[event] =
+      event in b
+        ? mergeSubscribers(a[event], b[event])
+        : mergeSubscribers(null, a[event]);
   }
 
-  if (rest.length) {
-    return mergeStaticEvents(result, ...rest);
+  for (const event in b) {
+    if (!(event in a)) result[event] = mergeSubscribers(null, b[event]);
   }
 
-  return result;
+  return rest.length ? mergeStaticEvents(result, ...rest) : result;
 }
 
 export function addStaticEvent(w, event, fun) {
