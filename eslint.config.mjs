@@ -18,9 +18,7 @@ export default [
     },
     ignores: [
       'testsuite/**/*.js',
-      'backstop/**/*.js',
-      'cypress/**/*.js',
-      'doc/**/*.js',
+
     ],
   },
 ];
