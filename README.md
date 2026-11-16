@@ -13,8 +13,7 @@ the required widgets or components from the main file `src/index.js`.
 AUX widgets are implemented as JavaScript widgets. Some of those widgets
 have corresponding WebComponents. All widgets can be found under
 `src/widgets/` and the corresponding components are located at
-`src/components/`. The document `doc/docs/Components.md` describes how
-the components work.
+`src/components/`.
 
 Default themes can be found in the `styles` directory. The document
 `doc/docs/Themeing.md` describes how to create themes based no the
@@ -49,23 +48,6 @@ can't be replaced by transpilation.
 AUX was designed to be lightweight and fast while keeping the full
 flexibility which comes with CSS. AUX widgets offer consistent and intuitive
 APIs.
-
-## Documentation
-
-The complete API documentation can be found at [http://docs.deuso.de/].
-
-Alternatively, the documentation can be directly built from the source
-code. The documentation in the source files uses the common jsdoc
-syntax and [JSDoc 3](https://usejsdoc.org). can be used to generate the
-documentation. If you have jsdoc installed, simply run
-
-    npm run build
-
-inside the `doc` directory.
-
-Apart from the documentation inside the source tree, there are several
-longer introductory articles and usage examples in the directories
-`doc/docs/`.
 
 ## Examples
 
