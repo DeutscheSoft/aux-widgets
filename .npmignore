@@ -5,6 +5,7 @@
 /jshint/
 /prettier/
 /testsuite/
+/ts_tests
 /tools/
 *toolkit.all.js
 *toolkit.min.js
