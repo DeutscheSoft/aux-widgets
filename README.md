@@ -1,77 +1,44 @@
 # ![AUX](aux_logo_4c.svg)
 
-AUX is a JavaScript widget library with special focus on building low
-latency user interfaces for audio applications. It contains a wide range
-of widgets such as faders, knobs, levelmeters and equalizers.
+AUX is a JavaScript widget library for low-latency audio UIs — faders, knobs,
+levelmeters, equalizers, and more. It has no external dependencies and relies
+on ES modules and CSS variables.
 
 ## Repository structure
 
-The JavaScript code in this repository uses ES6 modules. When
-integrating AUX into an application it should be sufficient to import
-the required widgets or components from the main file `src/index.js`.
-
-AUX widgets are implemented as JavaScript widgets. Some of those widgets
-have corresponding WebComponents. All widgets can be found under
-`src/widgets/` and the corresponding components are located at
-`src/components/`.
-
-Default themes can be found in the `styles` directory. The document
-`doc/docs/Themeing.md` describes how to create themes based no the
-default theme(s) contained in this repository.
+Widgets live in `src/widgets/`. Default themes are under `styles/`; see
+[`doc/docs/Theming.md`](doc/docs/Theming.md) for building your own.
 
 ## Installation
 
-AUX can be installed using `npm`. In order to gain access to all components,
-simply import them all using
+```
+npm i @deutschesoft/aux-widgets
+```
 
-    import '@deutschesoft/aux-widgets';
+```js
+import { Fader, Knob } from '@deutschesoft/aux-widgets';
+```
 
-and include the default theme into your web application.
-
-## Design Goals
-
-AUX is written in pure JavaScript and has no external dependencies. It
-is supposed to run in browsers which support ECMAScript 6. When transpiled to
-ECMAScript 5 it should work in modern versions of Chrome, Edge, Firefox and
-Safari.
-
-The following table lists the essential features defining the minimum
-versions of browers required. CSS Variables are used dynamically so they
-can't be replaced by transpilation.
-
-|       Feature | Edge | Firefox | Chrome | Safari | Safari iOS |
-| ------------: | :--: | :-----: | :----: | :----: | :--------: |
-|      CSS Vars |  16  |   31    |   49   |  9.1   |    9.3     |
-|   ES6 Modules |  16  |   60    |   61   |   11   |     11     |
-| WebComponents |  79  |   63    |   67   |  10.1  |    10.3    |
-
-AUX was designed to be lightweight and fast while keeping the full
-flexibility which comes with CSS. AUX widgets offer consistent and intuitive
-APIs.
+All widgets are re-exported from that package entry. Include a default theme
+stylesheet in your app as well.
 
 ## Examples
 
-Several component examples can be found by serving the root of the project
-from a local webserver. Opening /examples.html will then show a playground
-with examples for all widgets.
+Serve the project root and open `/examples.html` for a playground of all
+widgets.
 
 ## Demos
 
-Several online demos of interfaces using AUX can be found at
-[http://demo.deuso.de].
-
-## Reporting Bugs
-
-If you find a bug in this software, please report it to our issue
-tracker at [https://gitlab.deuso.de/WebUI/AUX].
+Online demos: [http://demo.deuso.de](http://demo.deuso.de).
 
 ## License
 
-AUX is released unter the the terms of the GPLv3. See the file `COPYING`
-for details.
+AUX is released under the terms of the GPLv3. See `COPYING` for details.
+Commercial licensing and support are available from
+[DeusO GmbH](https://deuso.de/).
 
-Copyright (c) 2013-2024 Markus Schmidt <markus@deuso.de>
+Copyright (c) 2013-2026 Markus Schmidt <markus@deuso.de>
 
-Copyright (c) 2014-2024 Arne G&ouml;deke <arne@deuso.de>
+Copyright (c) 2014-2026 Arne G&ouml;deke <arne@deuso.de>
 
-Copyright (c) 2014-2024 DeusO GmbH
+Copyright (c) 2014-2026 DeusO GmbH
